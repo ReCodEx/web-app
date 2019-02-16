@@ -43,8 +43,7 @@ class BoxForm extends Component {
     } = this.props;
 
     const currentBoxType = boxTypes.find(box => box.type === selectedType);
-    const getPortsArray = ports =>
-      Object.keys(ports).map(port => ({ name: port, ...ports[port] }));
+    const getPortsArray = ports => Object.keys(ports).map(port => ({ name: port, ...ports[port] }));
 
     return (
       <Modal show={show} onHide={onHide} keyboard>
@@ -76,17 +75,9 @@ class BoxForm extends Component {
             name="type"
             tabIndex={2}
             component={SelectField}
-            options={[
-              { key: '', name: '...' },
-              ...boxTypes.map(({ name, type }) => ({ key: type, name })),
-            ]}
+            options={[{ key: '', name: '...' }, ...boxTypes.map(({ name, type }) => ({ key: type, name }))]}
             required
-            label={
-              <FormattedMessage
-                id="app.pipelineEditor.BoxForm.type"
-                defaultMessage="Type:"
-              />
-            }
+            label={<FormattedMessage id="app.pipelineEditor.BoxForm.type" defaultMessage="Type:" />}
           />
 
           {currentBoxType && (
@@ -95,12 +86,7 @@ class BoxForm extends Component {
               prefix="portsIn"
               component={PortsField}
               ports={getPortsArray(currentBoxType.portsIn)}
-              label={
-                <FormattedMessage
-                  id="app.pipelineEditor.BoxForm.portsIn"
-                  defaultMessage="Inputs:"
-                />
-              }
+              label={<FormattedMessage id="app.pipelineEditor.BoxForm.portsIn" defaultMessage="Inputs:" />}
             />
           )}
 
@@ -110,12 +96,7 @@ class BoxForm extends Component {
               prefix="portsOut"
               component={PortsField}
               ports={getPortsArray(currentBoxType.portsOut)}
-              label={
-                <FormattedMessage
-                  id="app.pipelineEditor.BoxForm.portsOut"
-                  defaultMessage="Outputs:"
-                />
-              }
+              label={<FormattedMessage id="app.pipelineEditor.BoxForm.portsOut" defaultMessage="Outputs:" />}
             />
           )}
         </Modal.Body>
@@ -135,18 +116,9 @@ class BoxForm extends Component {
               asyncValidating={asyncValidating}
               reset={reset}
               messages={{
-                success: (
-                  <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-                ),
-                submit: (
-                  <FormattedMessage id="generic.save" defaultMessage="Save" />
-                ),
-                submitting: (
-                  <FormattedMessage
-                    id="generic.saving"
-                    defaultMessage="Saving..."
-                  />
-                ),
+                success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+                submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+                submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
               }}
             />
             <Button onClick={onHide}>
@@ -154,11 +126,7 @@ class BoxForm extends Component {
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
             <span style={{ display: 'inline-block', width: '5px' }} />
-            <ConfirmDeleteButton
-              id="delete-box"
-              onClick={onDelete}
-              small={false}
-            />
+            <ConfirmDeleteButton id="delete-box" onClick={onDelete} small={false} />
           </p>
         </Modal.Footer>
       </Modal>
@@ -190,27 +158,18 @@ BoxForm.propTypes = {
   onDelete: PropTypes.func.isRequired,
 };
 
-const validate = (
-  { name, type, portsIn = {}, portsOut = {} },
-  { boxTypes, existingBoxes }
-) => {
+const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, existingBoxes }) => {
   const errors = {};
 
   if (!name || name.length === 0) {
     errors['name'] = (
-      <FormattedMessage
-        id="app.pipelineEditor.BoxForm.emptyName"
-        defaultMessage="Name cannot be empty."
-      />
+      <FormattedMessage id="app.pipelineEditor.BoxForm.emptyName" defaultMessage="Name cannot be empty." />
     );
   }
 
   if (!type) {
     errors['type'] = (
-      <FormattedMessage
-        id="app.pipelineEditor.BoxForm.missingType"
-        defaultMessage="You must select some type."
-      />
+      <FormattedMessage id="app.pipelineEditor.BoxForm.missingType" defaultMessage="You must select some type." />
     );
   } else {
     const boxType = boxTypes.find(box => box.type === type);
@@ -228,8 +187,7 @@ const validate = (
         if (portsIn[portName] && portsIn[portName].length > 0) {
           const intendedVariableName = portsIn[portName].value;
           const portType = boxType.portsIn[portName].type;
-          const existingVariableType =
-            existingVariablesTypes[intendedVariableName];
+          const existingVariableType = existingVariablesTypes[intendedVariableName];
           if (existingVariableType && existingVariableType.type !== portType) {
             portsInErrors[portName] = {
               value: (
@@ -259,11 +217,7 @@ const validate = (
       // check that one box does not have the same var as input and output
       for (let portIn of portsInNames) {
         for (let portOut of portsOutNames) {
-          if (
-            portsIn[portIn] &&
-            portsOut[portOut] &&
-            portsIn[portIn].value === portsOut[portOut].value
-          ) {
+          if (portsIn[portIn] && portsOut[portOut] && portsIn[portIn].value === portsOut[portOut].value) {
             portsOutErrors[portOut] = {
               value: (
                 <FormattedMessage

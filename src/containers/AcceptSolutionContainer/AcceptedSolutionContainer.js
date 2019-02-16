@@ -3,26 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import AcceptSolution from '../../components/buttons/AcceptSolution';
-import {
-  acceptSolution,
-  unacceptSolution,
-} from '../../redux/modules/solutions';
+import { acceptSolution, unacceptSolution } from '../../redux/modules/solutions';
 import { isAccepted, isAcceptPending } from '../../redux/selectors/solutions';
 
-const AcceptSolutionContainer = ({
-  accepted,
-  acceptPending,
-  accept,
-  unaccept,
-}) => {
-  return (
-    <AcceptSolution
-      accepted={accepted}
-      acceptPending={acceptPending}
-      accept={accept}
-      unaccept={unaccept}
-    />
-  );
+const AcceptSolutionContainer = ({ accepted, acceptPending, accept, unaccept }) => {
+  return <AcceptSolution accepted={accepted} acceptPending={acceptPending} accept={accept} unaccept={unaccept} />;
 };
 
 AcceptSolutionContainer.propTypes = {

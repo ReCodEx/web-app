@@ -37,12 +37,7 @@ class EditLimitsForm extends Component {
 
     return (
       <FormBox
-        title={
-          <FormattedMessage
-            id="app.editLimitsBox.title"
-            defaultMessage="Execution Limits"
-          />
-        }
+        title={<FormattedMessage id="app.editLimitsBox.title" defaultMessage="Execution Limits" />}
         unlimitedHeight
         noPadding
         success={submitSucceeded}
@@ -52,16 +47,9 @@ class EditLimitsForm extends Component {
             <div className="text-center">
               {dirty && (
                 <span>
-                  <Button
-                    type="reset"
-                    onClick={reset}
-                    bsStyle={'danger'}
-                    className="btn-flat">
+                  <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
                     <RefreshIcon gapRight />
-                    <FormattedMessage
-                      id="generic.reset"
-                      defaultMessage="Reset"
-                    />
+                    <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>
                 </span>
               )}
@@ -74,30 +62,10 @@ class EditLimitsForm extends Component {
                 hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
                 messages={{
-                  submit: (
-                    <FormattedMessage
-                      id="app.editLimitsForm.submit"
-                      defaultMessage="Save Limits"
-                    />
-                  ),
-                  submitting: (
-                    <FormattedMessage
-                      id="app.editLimitsForm.submitting"
-                      defaultMessage="Saving Limits..."
-                    />
-                  ),
-                  success: (
-                    <FormattedMessage
-                      id="app.editLimitsForm.success"
-                      defaultMessage="Limits Saved"
-                    />
-                  ),
-                  validating: (
-                    <FormattedMessage
-                      id="generic.validating"
-                      defaultMessage="Validating..."
-                    />
-                  ),
+                  submit: <FormattedMessage id="app.editLimitsForm.submit" defaultMessage="Save Limits" />,
+                  submitting: <FormattedMessage id="app.editLimitsForm.submitting" defaultMessage="Saving Limits..." />,
+                  success: <FormattedMessage id="app.editLimitsForm.success" defaultMessage="Limits Saved" />,
+                  validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
                 }}
               />
             </div>
@@ -113,10 +81,7 @@ class EditLimitsForm extends Component {
                   onOff
                   disabled={readOnly}
                   label={
-                    <FormattedMessage
-                      id="app.editLimitsForm.preciseTime"
-                      defaultMessage="Precise Time Measurement"
-                    />
+                    <FormattedMessage id="app.editLimitsForm.preciseTime" defaultMessage="Precise Time Measurement" />
                   }
                 />
               </div>
@@ -142,9 +107,7 @@ class EditLimitsForm extends Component {
             <tr>
               <th />
               {environments.map(environment => (
-                <th
-                  key={`th-${environment.id}`}
-                  className={styles.limitsTableHeading}>
+                <th key={`th-${environment.id}`} className={styles.limitsTableHeading}>
                   {environment.name}
                 </th>
               ))}
@@ -158,8 +121,7 @@ class EditLimitsForm extends Component {
                   <th className={styles.limitsTableHeading}>{test.name}</th>
 
                   {environments.map(environment => {
-                    const id =
-                      encodeNumId(test.id) + '.' + encodeId(environment.id);
+                    const id = encodeNumId(test.id) + '.' + encodeId(environment.id);
                     return (
                       <td
                         key={`td.${id}`}
@@ -173,21 +135,9 @@ class EditLimitsForm extends Component {
                           testsCount={tests.length}
                           environmentsCount={environments.length}
                           disabled={readOnly}
-                          cloneVertically={cloneVertically(
-                            'editLimits',
-                            test.id,
-                            environment.id
-                          )}
-                          cloneHorizontally={cloneHorizontally(
-                            'editLimits',
-                            test.id,
-                            environment.id
-                          )}
-                          cloneAll={cloneAll(
-                            'editLimits',
-                            test.id,
-                            environment.id
-                          )}
+                          cloneVertically={cloneVertically('editLimits', test.id, environment.id)}
+                          cloneHorizontally={cloneHorizontally('editLimits', test.id, environment.id)}
+                          cloneAll={cloneAll('editLimits', test.id, environment.id)}
                         />
                       </td>
                     );
@@ -238,10 +188,7 @@ EditLimitsForm.propTypes = {
 
 const validate = ({ limits }, { constraints, environments }) => {
   const errors = {};
-  const brokenEnvironments = validateLimitsTimeTotals(
-    limits,
-    constraints.totalTime
-  );
+  const brokenEnvironments = validateLimitsTimeTotals(limits, constraints.totalTime);
 
   if (brokenEnvironments && brokenEnvironments.length > 0) {
     errors._error = (
@@ -265,13 +212,6 @@ export default reduxForm({
   form: 'editLimits',
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-  immutableProps: [
-    'environments',
-    'tests',
-    'cloneHorizontally',
-    'cloneVertically',
-    'cloneAll',
-    'handleSubmit',
-  ],
+  immutableProps: ['environments', 'tests', 'cloneHorizontally', 'cloneVertically', 'cloneAll', 'handleSubmit'],
   validate,
 })(injectIntl(EditLimitsForm));

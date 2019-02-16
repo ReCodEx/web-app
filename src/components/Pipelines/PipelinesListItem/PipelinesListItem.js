@@ -51,10 +51,7 @@ const PipelinesListItem = ({
           placement="bottom"
           overlay={
             <Tooltip id={`${id}-compilation`}>
-              <FormattedMessage
-                id="app.pipelinesList.compilationIconTooltip"
-                defaultMessage="Compilation pipeline"
-              />
+              <FormattedMessage id="app.pipelinesList.compilationIconTooltip" defaultMessage="Compilation pipeline" />
             </Tooltip>
           }>
           <Icon icon="cogs" />
@@ -79,10 +76,7 @@ const PipelinesListItem = ({
           placement="bottom"
           overlay={
             <Tooltip id={`${id}-judgeOnly`}>
-              <FormattedMessage
-                id="app.pipelinesList.judgeOnlyIconTooltip"
-                defaultMessage="Judge-only pipeline"
-              />
+              <FormattedMessage id="app.pipelinesList.judgeOnlyIconTooltip" defaultMessage="Judge-only pipeline" />
             </Tooltip>
           }>
           <Icon icon="balance-scale" />
@@ -129,11 +123,7 @@ const PipelinesListItem = ({
       <Link to={PIPELINE_URI_FACTORY(id)}>{name}</Link>
     </td>
 
-    {showAuthor && (
-      <td>
-        {author ? <UsersNameContainer userId={author} /> : <i>ReCodEx</i>}
-      </td>
-    )}
+    {showAuthor && <td>{author ? <UsersNameContainer userId={author} /> : <i>ReCodEx</i>}</td>}
 
     {showCreatedAt && (
       <td>
@@ -141,9 +131,7 @@ const PipelinesListItem = ({
       </td>
     )}
 
-    <td className="text-right text-nowrap">
-      {createActions && createActions(id)}
-    </td>
+    <td className="text-right text-nowrap">{createActions && createActions(id)}</td>
   </tr>
 );
 

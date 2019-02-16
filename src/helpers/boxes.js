@@ -29,18 +29,12 @@ const transformPortTypes = (ports, boxTypePorts, variableTypes) =>
   Object.keys(boxTypePorts).reduce(
     (acc, name) => ({
       ...acc,
-      [name]: ports[name]
-        ? ports[name]
-        : { value: '', type: boxTypePorts[name].type },
+      [name]: ports[name] ? ports[name] : { value: '', type: boxTypePorts[name].type },
     }),
     {}
   );
 
-export const transformPipelineDataForApi = (
-  boxTypes,
-  { boxes, variables },
-  extractedVariables
-) => {
+export const transformPipelineDataForApi = (boxTypes, { boxes, variables }, extractedVariables) => {
   const variableTypes = getVariablesTypes(boxTypes, boxes);
   const transformedData = {
     boxes: boxes.map(box => {
@@ -49,21 +43,13 @@ export const transformPipelineDataForApi = (
       if (Object.keys(boxType.portsIn).length === 0) {
         delete box.portsIn;
       } else {
-        box.portsIn = transformPortTypes(
-          box.portsIn,
-          boxType.portsIn,
-          variableTypes
-        );
+        box.portsIn = transformPortTypes(box.portsIn, boxType.portsIn, variableTypes);
       }
 
       if (Object.keys(boxType.portsOut).length === 0) {
         delete box.portsOut;
       } else {
-        box.portsOut = transformPortTypes(
-          box.portsOut,
-          boxType.portsOut,
-          variableTypes
-        );
+        box.portsOut = transformPortTypes(box.portsOut, boxType.portsOut, variableTypes);
       }
 
       return box;
@@ -143,14 +129,10 @@ const flattenPorts = boxes =>
   );
 
 export const extractVariables = (boxes = []) => {
-  const inputs = flattenPorts(
-    boxes.map(box => ({ ...box.portsIn })).filter(ports => ports)
-  ).filter(({ value }) => value.length > 0);
+  const inputs = flattenPorts(boxes.map(box => ({ ...box.portsIn })).filter(ports => ports)).filter(
+    ({ value }) => value.length > 0
+  );
 
   // remove duplicities
-  return inputs.reduce(
-    (acc, port) =>
-      !acc.find(item => item.name === port.name) ? [...acc, port] : acc,
-    []
-  );
+  return inputs.reduce((acc, port) => (!acc.find(item => item.name === port.name) ? [...acc, port] : acc), []);
 };

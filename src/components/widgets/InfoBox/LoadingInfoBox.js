@@ -5,20 +5,9 @@ import InfoBox from './InfoBox';
 
 const LoadingInfoBox = ({
   title = <FormattedMessage id="generic.loading" defaultMessage="Loading..." />,
-  description = (
-    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  ),
+  description = <FormattedMessage id="generic.loading" defaultMessage="Loading..." />,
   ...props
-}) => (
-  <InfoBox
-    icon="sync"
-    spin
-    title={title}
-    description={description}
-    color="gray"
-    {...props}
-  />
-);
+}) => <InfoBox icon="sync" spin title={title} description={description} color="gray" {...props} />;
 
 LoadingInfoBox.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),

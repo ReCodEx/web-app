@@ -10,28 +10,13 @@ import FormBox from '../../widgets/FormBox';
 import { PasswordField, PasswordStrength } from '../Fields';
 import { validatePasswordStrength } from '../../../redux/modules/auth';
 
-const ChangePasswordForm = ({
-  submitting,
-  handleSubmit,
-  hasFailed = false,
-  hasSucceeded = false,
-  invalid,
-}) => (
+const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSucceeded = false, invalid }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.changePasswordForm.title"
-        defaultMessage="Change your ReCodEx password"
-      />
-    }
+    title={<FormattedMessage id="app.changePasswordForm.title" defaultMessage="Change your ReCodEx password" />}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button
-          type="submit"
-          onClick={handleSubmit}
-          bsStyle="success"
-          disabled={invalid || submitting || hasSucceeded}>
+        <Button type="submit" onClick={handleSubmit} bsStyle="success" disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
@@ -42,18 +27,12 @@ const ChangePasswordForm = ({
                 />
               </span>
             ) : (
-              <FormattedMessage
-                id="app.changePasswordForm.changePassword"
-                defaultMessage="Change Password"
-              />
+              <FormattedMessage id="app.changePasswordForm.changePassword" defaultMessage="Change Password" />
             )
           ) : (
             <span>
               <LoadingIcon gapRight />
-              <FormattedMessage
-                id="app.changePasswordForm.processing"
-                defaultMessage="Changing..."
-              />
+              <FormattedMessage id="app.changePasswordForm.processing" defaultMessage="Changing..." />
             </span>
           )}
         </Button>
@@ -70,10 +49,7 @@ const ChangePasswordForm = ({
 
     {hasFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.changePasswordForm.failed"
-          defaultMessage="Changing password failed."
-        />
+        <FormattedMessage id="app.changePasswordForm.failed" defaultMessage="Changing password failed." />
       </Alert>
     )}
 
@@ -81,32 +57,17 @@ const ChangePasswordForm = ({
       name="password"
       required
       component={PasswordField}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.password"
-          defaultMessage="New Password:"
-        />
-      }
+      label={<FormattedMessage id="app.changePasswordForm.password" defaultMessage="New Password:" />}
     />
     <Field
       name="passwordCheck"
       component={PasswordField}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.passwordCheck"
-          defaultMessage="New Password (again):"
-        />
-      }
+      label={<FormattedMessage id="app.changePasswordForm.passwordCheck" defaultMessage="New Password (again):" />}
     />
     <Field
       name="passwordStrength"
       component={PasswordStrength}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.passwordStrength"
-          defaultMessage="Password Strength:"
-        />
-      }
+      label={<FormattedMessage id="app.changePasswordForm.passwordStrength" defaultMessage="Password Strength:" />}
     />
   </FormBox>
 );

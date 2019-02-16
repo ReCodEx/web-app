@@ -6,12 +6,7 @@ import TestResultsTable from '../TestResultsTable';
 
 const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog }) => (
   <Box
-    title={
-      <FormattedMessage
-        id="app.submission.evaluation.title.testResults"
-        defaultMessage="Test Results"
-      />
-    }
+    title={<FormattedMessage id="app.submission.evaluation.title.testResults" defaultMessage="Test Results" />}
     noPadding={true}
     collapsable={true}
     isOpen={true}

@@ -62,13 +62,7 @@ class Box extends Component {
   }
 
   render() {
-    const {
-      title,
-      type = 'default',
-      solid = false,
-      collapsable = false,
-      className = '',
-    } = this.props;
+    const { title, type = 'default', solid = false, collapsable = false, className = '' } = this.props;
     const { isOpen = true } = this.state;
 
     return (
@@ -84,19 +78,14 @@ class Box extends Component {
           <h3 className="box-title">{title}</h3>
           {collapsable && (
             <div className="box-tools pull-right">
-              <button
-                type="button"
-                className="btn btn-box-tool"
-                onClick={this.toggleDetails}>
+              <button type="button" className="btn btn-box-tool" onClick={this.toggleDetails}>
                 <Icon icon={isOpen ? 'minus' : 'plus'} />
               </button>
             </div>
           )}
         </div>
         <div>
-          {collapsable && (
-            <Collapse isOpened={isOpen}>{this.renderBody()}</Collapse>
-          )}
+          {collapsable && <Collapse isOpened={isOpen}>{this.renderBody()}</Collapse>}
 
           {!collapsable && this.renderBody()}
         </div>

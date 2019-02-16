@@ -83,26 +83,12 @@ const createRoutes = getState => {
   };
 
   return (
-    <Route
-      path={`${URL_PATH_PREFIX}/`}
-      component={App}
-      onEnter={checkEmptyRoute}>
-      <Route
-        exact
-        path={`${URL_PATH_PREFIX}/login-extern/:service`}
-        component={LoginExternFinalization}
-      />
-      <Route
-        path={`${URL_PATH_PREFIX}/:lang`}
-        component={LayoutContainer}
-        onEnter={checkLanguage}>
+    <Route path={`${URL_PATH_PREFIX}/`} component={App} onEnter={checkEmptyRoute}>
+      <Route exact path={`${URL_PATH_PREFIX}/login-extern/:service`} component={LoginExternFinalization} />
+      <Route path={`${URL_PATH_PREFIX}/:lang`} component={LayoutContainer} onEnter={checkLanguage}>
         <IndexRoute component={Home} />
         <Route path="login" component={Login} onEnter={onlyUnauth} />
-        <Route
-          path="registration"
-          component={Registration}
-          onEnter={onlyUnauth}
-        />
+        <Route path="registration" component={Registration} onEnter={onlyUnauth} />
         <Route path="faq" component={FAQ} />
         <Route path="email-verification" component={EmailVerification} />
         <Route path="app" onEnter={requireAuth}>
@@ -126,10 +112,7 @@ const createRoutes = getState => {
               <Route path="assignments" component={ExerciseAssignments} />
               <Route path="edit-config" component={EditExerciseConfig} />
               <Route path="edit-limits" component={EditExerciseLimits} />
-              <Route
-                path="reference-solution/:referenceSolutionId"
-                component={ReferenceSolution}
-              />
+              <Route path="reference-solution/:referenceSolutionId" component={ReferenceSolution} />
             </Route>
           </Route>
           <Route path="pipelines">

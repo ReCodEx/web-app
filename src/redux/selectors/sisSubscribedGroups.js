@@ -7,9 +7,7 @@ export const sisSubscribedGroupsSelector = (userId, year, term) =>
   createSelector(
     getResources,
     resources =>
-      resources &&
-      resources.get(userId) &&
-      resources.getIn([userId, `${year}-${term}`])
+      resources && resources.get(userId) && resources.getIn([userId, `${year}-${term}`])
         ? resources.getIn([userId, `${year}-${term}`])
         : Map()
   );

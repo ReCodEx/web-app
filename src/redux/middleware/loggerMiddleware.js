@@ -1,8 +1,4 @@
-const middleware = (
-  noDOM,
-  verbose,
-  fullException
-) => store => next => action => {
+const middleware = (noDOM, verbose, fullException) => store => next => action => {
   /* eslint no-console: ["error", { allow: ["log", "error", "debug"] }] */
   var actionType = action.type;
   const logger = noDOM ? console.log : console.debug; // older nodejs do not have console.debug()

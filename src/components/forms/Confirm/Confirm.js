@@ -63,9 +63,7 @@ class Confirm extends Component {
   render() {
     const { children, className = '' } = this.props;
     return (
-      <span
-        style={{ display: 'inline-block', position: 'relative' }}
-        className={className}>
+      <span style={{ display: 'inline-block', position: 'relative' }} className={className}>
         {React.cloneElement(children, {
           onClick: e => this.askForConfirmation(e),
         })}
@@ -75,11 +73,7 @@ class Confirm extends Component {
   }
 }
 
-const stringOrFormattedMessage = PropTypes.oneOfType([
-  PropTypes.string,
-  PropTypes.element,
-  FormattedMessage,
-]);
+const stringOrFormattedMessage = PropTypes.oneOfType([PropTypes.string, PropTypes.element, FormattedMessage]);
 
 Confirm.propTypes = {
   id: PropTypes.string.isRequired,

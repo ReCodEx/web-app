@@ -14,23 +14,15 @@ import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
-import EditGroupForm, {
-  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES,
-} from '../../components/forms/EditGroupForm';
+import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import { EditIcon } from '../../components/icons';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import { fetchUser } from '../../redux/modules/users';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
-import {
-  instanceSelector,
-  isAdminOfInstance,
-} from '../../redux/selectors/instances';
+import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances';
 import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
-import {
-  notArchivedGroupsSelector,
-  fetchManyGroupsStatus,
-} from '../../redux/selectors/groups';
+import { notArchivedGroupsSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { transformLocalizedTextsFormData } from '../../helpers/localizedData';
@@ -38,8 +30,7 @@ import { transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 
 class Instance extends Component {
-  static loadAsync = ({ instanceId }, dispatch) =>
-    Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
+  static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -69,12 +60,7 @@ class Instance extends Component {
       <Page
         resource={instance}
         title={instance => instance.name}
-        description={
-          <FormattedMessage
-            id="app.instance.description"
-            defaultMessage="Instance overview"
-          />
-        }
+        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.instance.description" />,
@@ -87,14 +73,10 @@ class Instance extends Component {
               <Row>
                 <Col sm={12} md={6}>
                   <p>
-                    <LinkContainer
-                      to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
+                    <LinkContainer to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
-                        <FormattedMessage
-                          id="app.instance.edit"
-                          defaultMessage="Edit instance"
-                        />
+                        <FormattedMessage id="app.instance.edit" defaultMessage="Edit instance" />
                       </Button>
                     </LinkContainer>
                   </p>
@@ -104,13 +86,7 @@ class Instance extends Component {
 
             <Row>
               <Col sm={12} md={6}>
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.instance.detailTitle"
-                      defaultMessage="Instance Description"
-                    />
-                  }>
+                <Box title={<FormattedMessage id="app.instance.detailTitle" defaultMessage="Instance Description" />}>
                   <Markdown source={data.description} />
                 </Box>
 
@@ -123,25 +99,15 @@ class Instance extends Component {
               </Col>
               <Col sm={12} md={6}>
                 <Box
-                  title={
-                    <FormattedMessage
-                      id="app.instance.groupsTitle"
-                      defaultMessage="Groups Hierarchy"
-                    />
-                  }
+                  title={<FormattedMessage id="app.instance.groupsTitle" defaultMessage="Groups Hierarchy" />}
                   extraPadding
                   unlimitedHeight>
                   <div>
                     {data.rootGroupId !== null && (
-                      <FetchManyResourceRenderer
-                        fetchManyStatus={fetchGroupsStatus}>
+                      <FetchManyResourceRenderer fetchManyStatus={fetchGroupsStatus}>
                         {() =>
                           groups.size > 0 ? (
-                            <GroupTree
-                              id={data.rootGroupId}
-                              isAdmin={isSuperAdmin || isAdmin}
-                              groups={groups}
-                            />
+                            <GroupTree id={data.rootGroupId} isAdmin={isSuperAdmin || isAdmin} groups={groups} />
                           ) : (
                             <FormattedMessage
                               id="app.instance.groups.noGroups"
@@ -223,9 +189,7 @@ export default withLinks(
             localizedTexts: transformLocalizedTextsFormData(localizedTexts),
             instanceId,
           })
-        ).then(() =>
-          Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
-        ),
+        ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
       loadAsync: () => Instance.loadAsync({ instanceId }, dispatch),
     })
   )(Instance)

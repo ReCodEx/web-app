@@ -7,23 +7,14 @@ import { defaultMemoize } from 'reselect';
 
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
-import {
-  EditIcon,
-  MaybeBonusAssignmentIcon,
-  VisibleIcon,
-  WarningIcon,
-} from '../../../icons';
+import { EditIcon, MaybeBonusAssignmentIcon, VisibleIcon, WarningIcon } from '../../../icons';
 import DeleteShadowAssignmentButtonContainer from '../../../../containers/DeleteShadowAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
 import DateTime from '../../../widgets/DateTime';
 import { safeGet } from '../../../../helpers/common';
 
 const getUserPoints = defaultMemoize((points, userId) =>
-  safeGet(
-    points,
-    [({ awardeeId }) => awardeeId === userId, 'points'],
-    <span>&mdash;</span>
-  )
+  safeGet(points, [({ awardeeId }) => awardeeId === userId, 'points'], <span>&mdash;</span>)
 );
 
 const getUserPointsNote = defaultMemoize((points, userId) =>
@@ -31,28 +22,14 @@ const getUserPointsNote = defaultMemoize((points, userId) =>
 );
 
 const ShadowAssignmentsTableRow = ({
-  item: {
-    id,
-    localizedTexts,
-    createdAt,
-    isBonus,
-    isPublic,
-    maxPoints,
-    points,
-    permissionHints,
-  },
+  item: { id, localizedTexts, createdAt, isBonus, isPublic, maxPoints, points, permissionHints },
   userId,
   isAdmin,
-  links: {
-    SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
-    SHADOW_ASSIGNMENT_EDIT_URI_FACTORY,
-  },
+  links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
 }) => (
   <tr>
     <td className="text-nowrap shrink-col">
-      {permissionHints.update && (
-        <VisibleIcon visible={isPublic} gapLeft gapRight />
-      )}
+      {permissionHints.update && <VisibleIcon visible={isPublic} gapLeft gapRight />}
       <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} gapLeft gapRight />
     </td>
 
@@ -63,10 +40,7 @@ const ShadowAssignmentsTableRow = ({
           noNameMessage={
             <i>
               <WarningIcon className="text-warning" gapRight />
-              <FormattedMessage
-                id="app.shadowAssignment.noName"
-                defaultMessage="no name"
-              />
+              <FormattedMessage id="app.shadowAssignment.noName" defaultMessage="no name" />
             </i>
           }
         />
@@ -101,9 +75,7 @@ const ShadowAssignmentsTableRow = ({
         </LinkContainer>
       )}
 
-      {permissionHints.remove && (
-        <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />
-      )}
+      {permissionHints.remove && <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />}
     </td>
   </tr>
 );

@@ -9,10 +9,7 @@ const DifficultyIcon = ({ difficulty }) => {
       return (
         <span className="text-success">
           <Icon icon={['far', 'smile']} gapRight />
-          <FormattedMessage
-            id="app.exercises.difficultyIcon.easy"
-            defaultMessage="Easy"
-          />
+          <FormattedMessage id="app.exercises.difficultyIcon.easy" defaultMessage="Easy" />
         </span>
       );
 
@@ -21,10 +18,7 @@ const DifficultyIcon = ({ difficulty }) => {
       return (
         <span className="text-warning">
           <Icon icon={['far', 'meh']} gapRight />
-          <FormattedMessage
-            id="app.exercises.difficultyIcon.medium"
-            defaultMessage="Medium"
-          />
+          <FormattedMessage id="app.exercises.difficultyIcon.medium" defaultMessage="Medium" />
         </span>
       );
 
@@ -32,10 +26,7 @@ const DifficultyIcon = ({ difficulty }) => {
       return (
         <span className="text-danger">
           <Icon icon={['far', 'frown']} gapRight />
-          <FormattedMessage
-            id="app.exercises.difficultyIcon.hard"
-            defaultMessage="Hard"
-          />
+          <FormattedMessage id="app.exercises.difficultyIcon.hard" defaultMessage="Hard" />
         </span>
       );
 

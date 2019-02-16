@@ -7,10 +7,7 @@ import Icon from '../../icons';
 const Login = ({ onClick }) => (
   <Button bsStyle="success" onClick={onClick}>
     <Icon icon="university" gapRight />
-    <FormattedMessage
-      id="app.casLoginButton.login"
-      defaultMessage="Authenticate through CAS"
-    />
+    <FormattedMessage id="app.casLoginButton.login" defaultMessage="Authenticate through CAS" />
   </Button>
 );
 

@@ -8,10 +8,7 @@ const FailedAssignmentDetails = () => (
     title={
       <span>
         <WarningIcon gapRight />
-        <FormattedMessage
-          id="app.assignment.error"
-          defaultMessage="Exercise assignment could not be loaded."
-        />
+        <FormattedMessage id="app.assignment.error" defaultMessage="Exercise assignment could not be loaded." />
       </span>
     }
     noPadding={false}

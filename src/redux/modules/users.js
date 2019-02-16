@@ -1,11 +1,7 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
@@ -18,12 +14,9 @@ import { arrayToObject } from '../../helpers/common';
 
 export const additionalActionTypes = {
   VALIDATE_REGISTRATION_DATA: 'recodex/users/VALIDATE_REGISTRATION_DATA',
-  VALIDATE_REGISTRATION_DATA_PENDING:
-    'recodex/users/VALIDATE_REGISTRATION_DATA_PENDING',
-  VALIDATE_REGISTRATION_DATA_FULFILLED:
-    'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
-  VALIDATE_REGISTRATION_DATA_REJECTED:
-    'recodex/users/VALIDATE_REGISTRATION_DATA_REJECTED',
+  VALIDATE_REGISTRATION_DATA_PENDING: 'recodex/users/VALIDATE_REGISTRATION_DATA_PENDING',
+  VALIDATE_REGISTRATION_DATA_FULFILLED: 'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
+  VALIDATE_REGISTRATION_DATA_REJECTED: 'recodex/users/VALIDATE_REGISTRATION_DATA_REJECTED',
   CREATE_LOCAL_LOGIN: 'recodex/users/CREATE_LOCAL_LOGIN',
   CREATE_LOCAL_LOGIN_PENDING: 'recodex/users/CREATE_LOCAL_LOGIN_PENDING',
   CREATE_LOCAL_LOGIN_FULFILLED: 'recodex/users/CREATE_LOCAL_LOGIN_FULFILLED',
@@ -61,8 +54,7 @@ export const validateRegistrationData = (email, password) =>
   });
 
 export const updateProfile = actions.updateResource;
-export const updateSettings = (id, body) =>
-  actions.updateResource(id, body, `/users/${id}/settings`);
+export const updateSettings = (id, body) => actions.updateResource(id, body, `/users/${id}/settings`);
 export const deleteUser = actions.removeResource;
 
 export const fetchSupervisors = groupId =>
@@ -109,170 +101,117 @@ const reducer = handleActions(
     [actionTypes.UPDATE_FULFILLED]: (state, { payload, meta: { id } }) =>
       state.setIn(
         ['resources', id, 'data'],
-        fromJS(
-          payload.user && typeof payload.user === 'object'
-            ? payload.user
-            : payload
-        )
+        fromJS(payload.user && typeof payload.user === 'object' ? payload.user : payload)
       ),
 
-    [emailVerificationActionTypes.EMAIL_VERIFICATION_FULFILLED]: (
-      state,
-      { meta: { userId } }
-    ) =>
+    [emailVerificationActionTypes.EMAIL_VERIFICATION_FULFILLED]: (state, { meta: { userId } }) =>
       state.hasIn(['resources', userId])
         ? state.updateIn(['resources', userId, 'data'], userData =>
             userData === null ? null : userData.set('isVerified', true)
           )
         : state,
 
-    [groupsActionTypes.JOIN_GROUP_PENDING]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
-        list => list.push(groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
+        list.push(groupId)
       );
     },
 
-    [groupsActionTypes.JOIN_GROUP_REJECTED]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.JOIN_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
-        list => list.filter(id => id !== groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
+        list.filter(id => id !== groupId)
       );
     },
 
-    [groupsActionTypes.LEAVE_GROUP_PENDING]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.LEAVE_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
-        list => list.filter(id => id !== groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
+        list.filter(id => id !== groupId)
       );
     },
 
-    [groupsActionTypes.LEAVE_GROUP_REJECTED]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.LEAVE_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'studentOf'],
-        list => list.push(groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
+        list.push(groupId)
       );
     },
 
-    [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
-        list => list.push(groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
+        list.push(groupId)
       );
     },
 
-    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (
-      state,
-      { meta: { userId }, payload }
-    ) => {
+    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (state, { meta: { userId }, payload }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
-        list => list.push(payload.id)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
+        list.push(payload.id)
       );
     },
 
-    [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
-        list => list.filter(id => id !== groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
+        list.filter(id => id !== groupId)
       );
     },
 
-    [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
-        list => list.filter(id => id !== groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
+        list.filter(id => id !== groupId)
       );
     },
 
-    [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (
-      state,
-      { meta: { groupId, userId } }
-    ) => {
+    [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
       if (!state.getIn(['resources', userId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'],
-        list => list.push(groupId)
+      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
+        list.push(groupId)
       );
     },
 
-    [additionalActionTypes.CREATE_LOCAL_LOGIN_PENDING]: (
-      state,
-      { meta: { id } }
-    ) => state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], true),
+    [additionalActionTypes.CREATE_LOCAL_LOGIN_PENDING]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], true),
 
-    [additionalActionTypes.CREATE_LOCAL_LOGIN_REJECTED]: (
-      state,
-      { meta: { id } }
-    ) =>
+    [additionalActionTypes.CREATE_LOCAL_LOGIN_REJECTED]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], false),
 
-    [additionalActionTypes.CREATE_LOCAL_LOGIN_FULFILLED]: (
-      state,
-      { payload, meta: { id } }
-    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
+    [additionalActionTypes.CREATE_LOCAL_LOGIN_FULFILLED]: (state, { payload, meta: { id } }) =>
+      state.setIn(['resources', id, 'data'], fromJS(payload)),
 
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
-    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
-      state,
-      { payload: { items }, meta: { endpoint } }
-    ) =>
+    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (state, { payload: { items }, meta: { endpoint } }) =>
       endpoint === 'users'
         ? state.mergeIn(
             ['resources'],
@@ -322,15 +261,10 @@ const reducer = handleActions(
     [additionalActionTypes.SET_IS_ALLOWED_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'isAllowed-pending'], true),
 
-    [additionalActionTypes.SET_IS_ALLOWED_REJECTED]: (
-      state,
-      { meta: { id } }
-    ) => state.setIn(['resources', id, 'data', 'isAllowed-pending'], false),
+    [additionalActionTypes.SET_IS_ALLOWED_REJECTED]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'data', 'isAllowed-pending'], false),
 
-    [additionalActionTypes.SET_IS_ALLOWED_FULFILLED]: (
-      state,
-      { payload: data, meta: { id } }
-    ) =>
+    [additionalActionTypes.SET_IS_ALLOWED_FULFILLED]: (state, { payload: data, meta: { id } }) =>
       data && data.id
         ? state.setIn(
             ['resources', data.id],

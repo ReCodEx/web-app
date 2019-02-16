@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
 
 const getExerciseEnvironmentConfigs = state => state.exerciseEnvironmentConfigs;
-const getResources = exerciseEnvironmentConfigs =>
-  exerciseEnvironmentConfigs.get('resources');
+const getResources = exerciseEnvironmentConfigs => exerciseEnvironmentConfigs.get('resources');
 
 export const exerciseEnvironmentConfigsSelector = createSelector(
   getExerciseEnvironmentConfigs,

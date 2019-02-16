@@ -9,16 +9,10 @@ const LoadingGroupDetail = () => (
     title={
       <span>
         <LoadingIcon gapRight />
-        <FormattedMessage
-          id="app.groupDetail.loading"
-          defaultMessage="Loading description of the group..."
-        />
+        <FormattedMessage id="app.groupDetail.loading" defaultMessage="Loading description of the group..." />
       </span>
     }>
-    <FormattedMessage
-      id="app.groupDetail.loading"
-      defaultMessage="Loading description of the group..."
-    />
+    <FormattedMessage id="app.groupDetail.loading" defaultMessage="Loading description of the group..." />
   </Box>
 );
 

@@ -2,17 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import {
-  loggedInUserIdSelector,
-  selectedInstanceId,
-  accessTokenSelector,
-} from '../../redux/selectors/auth';
+import { loggedInUserIdSelector, selectedInstanceId, accessTokenSelector } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser, getUserSettings } from '../../redux/selectors/users';
-import {
-  isTokenValid,
-  isTokenInNeedOfRefreshment,
-} from '../../redux/helpers/token';
+import { isTokenValid, isTokenInNeedOfRefreshment } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { logout, refresh, selectInstance } from '../../redux/modules/auth';
@@ -30,8 +23,7 @@ import './recodex.css';
 
 library.add(regularIcons, solidIcons, brandIcons);
 
-const customLoadGroups = routes =>
-  routes.filter(route => route.customLoadGroups).length > 0;
+const customLoadGroups = routes => routes.filter(route => route.customLoadGroups).length > 0;
 
 class App extends Component {
   static loadAsync = (params, dispatch, { userId, routes }) =>
@@ -44,9 +36,7 @@ class App extends Component {
                 const user = getJsData(getUser(userId)(state));
                 dispatch(selectInstance(user.privateData.instancesIds[0]));
               }
-              return !customLoadGroups(routes)
-                ? dispatch(fetchAllGroups())
-                : Promise.resolve();
+              return !customLoadGroups(routes) ? dispatch(fetchAllGroups()) : Promise.resolve();
             })
           ),
           dispatch(fetchUsersInstancesIfNeeded(userId)),
@@ -60,8 +50,7 @@ class App extends Component {
   componentWillReceiveProps(newProps) {
     if (
       this.props.userId !== newProps.userId ||
-      (customLoadGroups(this.props.routes) &&
-        !customLoadGroups(newProps.routes))
+      (customLoadGroups(this.props.routes) && !customLoadGroups(newProps.routes))
     ) {
       newProps.loadAsync(newProps.userId, newProps.routes);
     }
@@ -138,8 +127,7 @@ export default connect(
     };
   },
   dispatch => ({
-    loadAsync: (userId, routes) =>
-      App.loadAsync({}, dispatch, { userId, routes }),
+    loadAsync: (userId, routes) => App.loadAsync({}, dispatch, { userId, routes }),
     refreshToken: () => dispatch(refresh()),
     logout: () => dispatch(logout('/')),
   })

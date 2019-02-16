@@ -31,26 +31,17 @@ const Upload = ({
   <div>
     <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
       <p>
-        <FormattedMessage
-          id="app.submitSolution.dragAndDrop"
-          defaultMessage="Drag and drop files here."
-        />
+        <FormattedMessage id="app.submitSolution.dragAndDrop" defaultMessage="Drag and drop files here." />
       </p>
       <p>
         <Button bsStyle="primary">
           <UploadIcon gapRight />
-          <FormattedMessage
-            id="app.submitSolution.addFile"
-            defaultMessage="Add File(s)"
-          />
+          <FormattedMessage id="app.submitSolution.addFile" defaultMessage="Add File(s)" />
         </Button>
       </p>
     </DropZone>
 
-    {(uploadingFiles.length > 0 ||
-      attachedFiles.length > 0 ||
-      failedFiles.length > 0 ||
-      removedFiles.length > 0) && (
+    {(uploadingFiles.length > 0 || attachedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) && (
       <UploadsTable
         uploadingFiles={uploadingFiles}
         attachedFiles={attachedFiles}

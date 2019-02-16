@@ -13,16 +13,10 @@ const getLocalizedX = field => (entity, locale) => {
     entity &&
     entity.localizedTexts &&
     entity.localizedTexts.length > 0 &&
-    (entity.localizedTexts.find(
-      text => text && text.locale === locale && text._enabled !== false
-    ) ||
-      entity.localizedTexts.find(
-        text => text && text.locale === 'en' && text._enabled !== false
-      ) ||
+    (entity.localizedTexts.find(text => text && text.locale === locale && text._enabled !== false) ||
+      entity.localizedTexts.find(text => text && text.locale === 'en' && text._enabled !== false) ||
       entity.localizedTexts.find(text => text && text._enabled !== false));
-  return (
-    (localizedText && localizedText[field]) || (entity && entity[field]) || ''
-  );
+  return (localizedText && localizedText[field]) || (entity && entity[field]) || '';
 };
 
 const getLocalizedResourceX = field => (resource, locale) => {
@@ -33,11 +27,7 @@ const getLocalizedResourceX = field => (resource, locale) => {
     (localizedTexts.find(text => text.get('locale') === locale) ||
       localizedTexts.find(text => text.get('locale') === 'en') ||
       localizedTexts.get(0));
-  return (
-    (localizedText && localizedText.get(field)) ||
-    (resource && resource.getIn(['data', field])) ||
-    ''
-  );
+  return (localizedText && localizedText.get(field)) || (resource && resource.getIn(['data', field])) || '';
 };
 
 export const getLocalizedName = getLocalizedX('name');
@@ -51,27 +41,18 @@ export const getOtherLocalizedNames = (entity, locale) => {
     entity &&
     entity.localizedTexts &&
     entity.localizedTexts
-      .filter(
-        text =>
-          text && text.name && text.name !== name && text._enabled !== false
-      )
+      .filter(text => text && text.name && text.name !== name && text._enabled !== false)
       .map(({ name, locale }) => ({ name, locale }))
   );
 };
 
-export const getGroupCanonicalLocalizedName = (
-  group,
-  groupsAccessor,
-  locale,
-  separator = ' / '
-) => {
+export const getGroupCanonicalLocalizedName = (group, groupsAccessor, locale, separator = ' / ') => {
   if (typeof group === 'string') {
     group = groupsAccessor(group);
     group = group && group.toJS();
   }
 
-  var res =
-    group && group.localizedTexts ? getLocalizedName(group, locale) : '??';
+  var res = group && group.localizedTexts ? getLocalizedName(group, locale) : '??';
   if (group.parentGroupsIds && groupsAccessor) {
     const parentRes = group.parentGroupsIds
       .filter((_, i) => i > 0) // skip the first one (the root group)
@@ -100,9 +81,7 @@ export const getLocalizedTextsInitialValues = (localizedTexts, defaults) => {
       locale,
       _enabled: Boolean(text),
     };
-    Object.keys(defaults).forEach(
-      prop => (res[prop] = (text && text[prop]) || defaults[prop])
-    );
+    Object.keys(defaults).forEach(prop => (res[prop] = (text && text[prop]) || defaults[prop]));
     return res;
   });
 };
@@ -112,9 +91,7 @@ export const getLocalizedTextsInitialValues = (localizedTexts, defaults) => {
  * @param {array} formData localizedTexts from redux form data
  */
 export const transformLocalizedTextsFormData = formData => {
-  return formData
-    .filter(({ _enabled }) => _enabled)
-    .map(({ _enabled, ...data }) => data);
+  return formData.filter(({ _enabled }) => _enabled).map(({ _enabled, ...data }) => data);
 };
 
 /**
@@ -124,16 +101,9 @@ export const transformLocalizedTextsFormData = formData => {
  * @param formData {array} localizedTexts form data
  * @param internalValidation {function} injected internal validator called on every enabled localized text
  */
-export const validateLocalizedTextsFormData = (
-  errors,
-  formData,
-  internalValidation = null
-) => {
+export const validateLocalizedTextsFormData = (errors, formData, internalValidation = null) => {
   // Ensure that at least one localized text version is enabled.
-  const enabledCount = formData.reduce(
-    (acc, data) => acc + (data && data._enabled ? 1 : 0),
-    0
-  );
+  const enabledCount = formData.reduce((acc, data) => acc + (data && data._enabled ? 1 : 0), 0);
   if (enabledCount < 1) {
     errors._error = (
       <FormattedMessage

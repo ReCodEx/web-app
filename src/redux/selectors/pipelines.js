@@ -59,8 +59,7 @@ export const pipelineEnvironmentsSelector = id =>
   createSelector(
     [getPipeline(id), runtimeEnvironmentSelector],
     (pipeline, envSelector) => {
-      const envIds =
-        pipeline && pipeline.getIn(['data', 'runtimeEnvironmentIds']);
+      const envIds = pipeline && pipeline.getIn(['data', 'runtimeEnvironmentIds']);
       return envIds && envSelector ? envIds.toArray().map(envSelector) : null;
     }
   );

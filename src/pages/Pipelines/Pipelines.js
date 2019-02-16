@@ -7,10 +7,7 @@ import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
-import PaginationContainer, {
-  createSortingIcon,
-  showRangeInfo,
-} from '../../containers/PaginationContainer';
+import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import PageContent from '../../components/layout/PageContent';
@@ -32,38 +29,21 @@ const submitHandler = defaultMemoize(setFilters => search => {
 });
 
 class Pipelines extends Component {
-  headingCreator = ({
-    offset,
-    limit,
-    totalCount,
-    orderByColumn,
-    orderByDescending,
-    setOrderBy,
-  }) => (
+  headingCreator = ({ offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy }) => (
     <tr>
       <th className="shrink-col" />
       <th className="shrink-col" />
       <th className="shrink-col" />
       <th>
         <FormattedMessage id="generic.name" defaultMessage="Name" />
-        {createSortingIcon(
-          'name',
-          orderByColumn,
-          orderByDescending,
-          setOrderBy
-        )}
+        {createSortingIcon('name', orderByColumn, orderByDescending, setOrderBy)}
       </th>
       <th>
         <FormattedMessage id="generic.author" defaultMessage="Author" />
       </th>
       <th>
         <FormattedMessage id="generic.created" defaultMessage="Created" />
-        {createSortingIcon(
-          'createdAt',
-          orderByColumn,
-          orderByDescending,
-          setOrderBy
-        )}
+        {createSortingIcon('createdAt', orderByColumn, orderByDescending, setOrderBy)}
       </th>
       <td>{showRangeInfo(offset, limit, totalCount)}</td>
     </tr>
@@ -75,9 +55,7 @@ class Pipelines extends Component {
       push,
       links: { PIPELINE_EDIT_URI_FACTORY },
     } = this.props;
-    createPipeline().then(({ value: pipeline }) =>
-      push(PIPELINE_EDIT_URI_FACTORY(pipeline.id))
-    );
+    createPipeline().then(({ value: pipeline }) => push(PIPELINE_EDIT_URI_FACTORY(pipeline.id)));
   };
 
   render() {
@@ -88,36 +66,18 @@ class Pipelines extends Component {
 
     return (
       <PageContent
-        title={
-          <FormattedMessage
-            id="app.pipelines.title"
-            defaultMessage="Pipeline list"
-          />
-        }
+        title={<FormattedMessage id="app.pipelines.title" defaultMessage="Pipeline list" />}
         description={
-          <FormattedMessage
-            id="app.pipelines.description"
-            defaultMessage="List and modify available pipelines."
-          />
+          <FormattedMessage id="app.pipelines.description" defaultMessage="List and modify available pipelines." />
         }
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.pipelines.title"
-                defaultMessage="Pipeline list"
-              />
-            ),
+            text: <FormattedMessage id="app.pipelines.title" defaultMessage="Pipeline list" />,
             iconName: 'random',
           },
         ]}>
         <Box
-          title={
-            <FormattedMessage
-              id="app.pipelines.listTitle"
-              defaultMessage="Pipelines"
-            />
-          }
+          title={<FormattedMessage id="app.pipelines.listTitle" defaultMessage="Pipelines" />}
           footer={
             <p className="text-center">
               <Button
@@ -128,10 +88,7 @@ class Pipelines extends Component {
                   this.newPipeline();
                 }}>
                 <AddIcon gapRight />
-                <FormattedMessage
-                  id="app.pipelines.createNew"
-                  defaultMessage="Create New Pipeline"
-                />
+                <FormattedMessage id="app.pipelines.createNew" defaultMessage="Create New Pipeline" />
               </Button>
             </p>
           }
@@ -147,16 +104,7 @@ class Pipelines extends Component {
                 onSubmit={submitHandler(setFilters)}
               />
             )}>
-            {({
-              data,
-              offset,
-              limit,
-              totalCount,
-              orderByColumn,
-              orderByDescending,
-              setOrderBy,
-              reload,
-            }) => (
+            {({ data, offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy, reload }) => (
               <PipelinesList
                 pipelines={data}
                 heading={this.headingCreator({
@@ -173,10 +121,7 @@ class Pipelines extends Component {
                       <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
                         <Button bsSize="xs" bsStyle="warning">
                           <EditIcon gapRight />
-                          <FormattedMessage
-                            id="generic.edit"
-                            defaultMessage="Edit"
-                          />
+                          <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                         </Button>
                       </LinkContainer>
                       <DeletePipelineButtonContainer
@@ -210,8 +155,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
 
       return {
-        isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state),
+        isAuthorOfPipeline: pipelineId => canEditPipeline(userId, pipelineId)(state),
       };
     },
     dispatch => ({

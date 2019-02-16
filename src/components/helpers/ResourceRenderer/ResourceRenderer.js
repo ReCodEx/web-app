@@ -30,20 +30,14 @@ const defaultLoadingBulky = noIcons => (
 const defaultFailed = noIcons => (
   <span>
     {!noIcons && <WarningIcon gapRight />}
-    <FormattedMessage
-      id="app.resourceRenderer.loadingFailed"
-      defaultMessage="Loading failed."
-    />
+    <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
   </span>
 );
 
 const defaultFailedBulky = noIcons => (
   <p className="text-center text-danger larger em-padding">
     {!noIcons && <WarningIcon gapRight />}
-    <FormattedMessage
-      id="app.resourceRenderer.loadingFailed"
-      defaultMessage="Loading failed."
-    />
+    <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
   </p>
 );
 
@@ -92,19 +86,14 @@ class ResourceRenderer extends Component {
   // Perform rendering of the childs whilst keeping resource data cached ...
   renderReady = resources => {
     const { children: ready, returnAsArray = false } = this.props;
-    if (
-      this.oldResources === null ||
-      !shallowResourcesEqual(this.oldResources, resources)
-    ) {
+    if (this.oldResources === null || !shallowResourcesEqual(this.oldResources, resources)) {
       this.oldData = resources
         .filter(res => !isDeleting(res))
         .filter(res => !isDeleted(res))
         .filter(res => !isPosting(res))
         .map((res, idx) =>
           // If a particular resource did not change, re-use its old data
-          this.oldResources &&
-          this.oldResources[idx] === res &&
-          this.oldResources[idx].get('data') === res.get('data')
+          this.oldResources && this.oldResources[idx] === res && this.oldResources[idx].get('data') === res.get('data')
             ? this.oldData[idx]
             : getJsData(res)
         );
@@ -117,27 +106,15 @@ class ResourceRenderer extends Component {
     const {
       noIcons = false,
       bulkyLoading = false,
-      loading = bulkyLoading
-        ? defaultLoadingBulky(noIcons)
-        : defaultLoading(noIcons),
-      failed = bulkyLoading
-        ? defaultFailedBulky(noIcons)
-        : defaultFailed(noIcons),
+      loading = bulkyLoading ? defaultLoadingBulky(noIcons) : defaultLoading(noIcons),
+      failed = bulkyLoading ? defaultFailedBulky(noIcons) : defaultFailed(noIcons),
       resource,
       hiddenUntilReady = false,
       forceLoading = false,
     } = this.props;
 
-    const resources = Array.isArray(resource)
-      ? resource
-      : List.isList(resource)
-      ? resource.toArray()
-      : [resource];
-    const stillLoading =
-      !resource ||
-      resources.find(res => !res) ||
-      resources.some(isLoading) ||
-      forceLoading;
+    const resources = Array.isArray(resource) ? resource : List.isList(resource) ? resource.toArray() : [resource];
+    const stillLoading = !resource || resources.find(res => !res) || resources.some(isLoading) || forceLoading;
 
     return stillLoading
       ? hiddenUntilReady
@@ -155,11 +132,7 @@ ResourceRenderer.propTypes = {
   loading: PropTypes.element,
   failed: PropTypes.element,
   children: PropTypes.func.isRequired,
-  resource: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-    ImmutablePropTypes.list,
-  ]),
+  resource: PropTypes.oneOfType([PropTypes.object, PropTypes.array, ImmutablePropTypes.list]),
   hiddenUntilReady: PropTypes.bool,
   forceLoading: PropTypes.bool,
   noIcons: PropTypes.bool,

@@ -9,26 +9,16 @@ import DateTime from '../../widgets/DateTime';
 import { BugIcon } from '../../icons';
 import './EvaluationTable.css';
 
-const EvaluationTable = ({
-  evaluations,
-  renderButtons,
-  selectedRowId = '',
-}) => (
+const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => (
   <Table>
     <thead>
       <tr>
         <th />
         <th>
-          <FormattedMessage
-            id="app.evaluationTable.evaluatedAt"
-            defaultMessage="Evaluated at:"
-          />
+          <FormattedMessage id="app.evaluationTable.evaluatedAt" defaultMessage="Evaluated at:" />
         </th>
         <th>
-          <FormattedMessage
-            id="app.evaluationTable.score"
-            defaultMessage="Score:"
-          />
+          <FormattedMessage id="app.evaluationTable.score" defaultMessage="Score:" />
         </th>
         <th />
       </tr>
@@ -47,11 +37,7 @@ const EvaluationTable = ({
         .map((e, idx) => (
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
             <td>
-              <AssignmentStatusIcon
-                id={e.id}
-                status={e.evaluationStatus}
-                accepted={false}
-              />
+              <AssignmentStatusIcon id={e.id} status={e.evaluationStatus} accepted={false} />
               {e.isDebug && (
                 <OverlayTrigger
                   placement="bottom"
@@ -69,11 +55,7 @@ const EvaluationTable = ({
             </td>
             {e.evaluation && (
               <td>
-                <DateTime
-                  unixts={e.evaluation.evaluatedAt}
-                  showRelative
-                  showSeconds
-                />
+                <DateTime unixts={e.evaluation.evaluatedAt} showRelative showSeconds />
               </td>
             )}
             {e.evaluation && (
@@ -90,10 +72,7 @@ const EvaluationTable = ({
             {!e.evaluation && (
               <td colSpan="2">
                 <i>
-                  <FormattedMessage
-                    id="app.evaluationTable.notAvailable"
-                    defaultMessage="Evaluation not available"
-                  />
+                  <FormattedMessage id="app.evaluationTable.notAvailable" defaultMessage="Evaluation not available" />
                 </i>
               </td>
             )}
@@ -104,10 +83,7 @@ const EvaluationTable = ({
       {evaluations.length === 0 && (
         <tr>
           <td className="text-center" colSpan={3}>
-            <FormattedMessage
-              id="app.evaluationTable.empty"
-              defaultMessage="There are no evaluations in this list."
-            />
+            <FormattedMessage id="app.evaluationTable.empty" defaultMessage="There are no evaluations in this list." />
           </td>
         </tr>
       )}

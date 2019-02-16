@@ -12,8 +12,7 @@ import { actionTypes as submissionEvaluationActionTypes } from './submissionEval
 
 const resourceName = 'solutions';
 const needsRefetching = item =>
-  defaultNeedsRefetching(item) ||
-  item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
+  defaultNeedsRefetching(item) || item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
 
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
@@ -27,19 +26,13 @@ const { actions, actionTypes, reduceActions } = factory({
 
 export const additionalActionTypes = {
   LOAD_USERS_SOLUTIONS: 'recodex/solutions/LOAD_USERS_SOLUTIONS',
-  LOAD_USERS_SOLUTIONS_PENDING:
-    'recodex/solutions/LOAD_USERS_SOLUTIONS_PENDING',
-  LOAD_USERS_SOLUTIONS_FULFILLED:
-    'recodex/solutions/LOAD_USERS_SOLUTIONS_FULFILLED',
-  LOAD_USERS_SOLUTIONS_REJECTED:
-    'recodex/solutions/LOAD_USERS_SOLUTIONS_REJECTED',
+  LOAD_USERS_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_USERS_SOLUTIONS_PENDING',
+  LOAD_USERS_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_USERS_SOLUTIONS_FULFILLED',
+  LOAD_USERS_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_USERS_SOLUTIONS_REJECTED',
   LOAD_ASSIGNMENT_SOLUTIONS: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS',
-  LOAD_ASSIGNMENT_SOLUTIONS_PENDING:
-    'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_PENDING',
-  LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED:
-    'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED',
-  LOAD_ASSIGNMENT_SOLUTIONS_REJECTED:
-    'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_REJECTED',
+  LOAD_ASSIGNMENT_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_PENDING',
+  LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED',
+  LOAD_ASSIGNMENT_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_REJECTED',
   SET_BONUS_POINTS: 'recodex/solutions/SET_BONUS_POINTS',
   SET_BONUS_POINTS_PENDING: 'recodex/solutions/SET_BONUS_POINTS_PENDING',
   SET_BONUS_POINTS_FULFILLED: 'recodex/solutions/SET_BONUS_POINTS_FULFILLED',
@@ -88,12 +81,7 @@ export const unacceptSolution = id =>
     meta: { id },
   });
 
-export const resubmitSolution = (
-  id,
-  isPrivate,
-  progressObserverId = null,
-  isDebug = true
-) =>
+export const resubmitSolution = (id, isPrivate, progressObserverId = null, isDebug = true) =>
   createApiAction({
     type: submissionActionTypes.SUBMIT,
     method: 'POST',
@@ -110,8 +98,7 @@ export const resubmitAllSolutions = assignmentId =>
     meta: { assignmentId },
   });
 
-export const fetchManyAssignmentSolutionsEndpoint = assignmentId =>
-  `/exercise-assignments/${assignmentId}/solutions`;
+export const fetchManyAssignmentSolutionsEndpoint = assignmentId => `/exercise-assignments/${assignmentId}/solutions`;
 
 export const fetchManyUserSolutionsEndpoint = (userId, assignmentId) =>
   `/exercise-assignments/${assignmentId}/users/${userId}/solutions`;
@@ -141,10 +128,7 @@ export const fetchUsersSolutions = (userId, assignmentId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [submissionActionTypes.SUBMIT_FULFILLED]: (
-      state,
-      { payload: { solution }, meta: { submissionType } }
-    ) =>
+    [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload: { solution }, meta: { submissionType } }) =>
       submissionType === 'assignmentSolution' && solution && solution.id
         ? state.setIn(
             ['resources', solution.id],
@@ -155,29 +139,20 @@ const reducer = handleActions(
           )
         : state,
 
-    [additionalActionTypes.LOAD_USERS_SOLUTIONS_PENDING]:
-      reduceActions[actionTypes.FETCH_MANY_PENDING],
-    [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]:
-      reduceActions[actionTypes.FETCH_MANY_FULFILLED],
-    [additionalActionTypes.LOAD_USERS_SOLUTIONS_REJECTED]:
-      reduceActions[actionTypes.FETCH_MANY_REJECTED],
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_PENDING]: reduceActions[actionTypes.FETCH_MANY_PENDING],
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.LOAD_USERS_SOLUTIONS_REJECTED]: reduceActions[actionTypes.FETCH_MANY_REJECTED],
 
-    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_PENDING]:
-      reduceActions[actionTypes.FETCH_MANY_PENDING],
-    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]:
-      reduceActions[actionTypes.FETCH_MANY_FULFILLED],
-    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_REJECTED]:
-      reduceActions[actionTypes.FETCH_MANY_REJECTED],
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_PENDING]: reduceActions[actionTypes.FETCH_MANY_PENDING],
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_REJECTED]: reduceActions[actionTypes.FETCH_MANY_REJECTED],
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
       state,
       { meta: { solutionId, overriddenPoints, bonusPoints } }
     ) =>
       state
-        .setIn(
-          ['resources', solutionId, 'data', 'bonusPoints'],
-          Number(bonusPoints)
-        )
+        .setIn(['resources', solutionId, 'data', 'bonusPoints'], Number(bonusPoints))
         .setIn(
           ['resources', solutionId, 'data', 'overriddenPoints'],
           overriddenPoints !== null ? Number(overriddenPoints) : null
@@ -221,29 +196,18 @@ const reducer = handleActions(
         )
       ),
 
-    [submissionEvaluationActionTypes.REMOVE_FULFILLED]: (
-      state,
-      { meta: { solutionId, id: evaluationId } }
-    ) => {
+    [submissionEvaluationActionTypes.REMOVE_FULFILLED]: (state, { meta: { solutionId, id: evaluationId } }) => {
       if (!solutionId || !evaluationId) {
         return state;
       }
 
       // Remove the submit from internal list
-      let newState = state.updateIn(
-        ['resources', solutionId, 'data', 'submissions'],
-        submissions =>
-          submissions.filter(submission => submission !== evaluationId)
+      let newState = state.updateIn(['resources', solutionId, 'data', 'submissions'], submissions =>
+        submissions.filter(submission => submission !== evaluationId)
       );
 
       // If last submit was deleted, this whole entity is invalid (needs reloading)
-      return state.getIn([
-        'resources',
-        solutionId,
-        'data',
-        'lastSubmission',
-        'id',
-      ]) === evaluationId
+      return state.getIn(['resources', solutionId, 'data', 'lastSubmission', 'id']) === evaluationId
         ? newState.setIn(['resources', solutionId, 'didInvalidate'], true)
         : newState;
     },

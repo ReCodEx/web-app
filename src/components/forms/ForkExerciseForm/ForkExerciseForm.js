@@ -69,9 +69,7 @@ class ForkExerciseForm extends Component {
                     </p>
                   </td>
                   <td className="text-right">
-                    <Button
-                      bsStyle="primary"
-                      onClick={() => this.viewForkedExercise()}>
+                    <Button bsStyle="primary" onClick={() => this.viewForkedExercise()}>
                       <FormattedMessage
                         id="app.forkExerciseForm.showForkedExerciseButton"
                         defaultMessage="Show the Forked Exercise"
@@ -90,10 +88,7 @@ class ForkExerciseForm extends Component {
             {submitFailed && (
               <Alert bsStyle="danger">
                 <WarningIcon gapRight />
-                <FormattedMessage
-                  id="generic.savingFailed"
-                  defaultMessage="Saving failed. Please try again later."
-                />
+                <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
               </Alert>
             )}
             <Form inline className="forkForm">
@@ -108,16 +103,10 @@ class ForkExerciseForm extends Component {
                       addEmptyOption={true}
                       emptyOptionCaption={formatMessage(messages.emptyOption)}
                       options={groups
-                        .filter(group =>
-                          hasPermissions(group, 'createExercise')
-                        )
+                        .filter(group => hasPermissions(group, 'createExercise'))
                         .map(group => ({
                           key: group.id,
-                          name: getGroupCanonicalLocalizedName(
-                            group,
-                            groupsAccessor,
-                            locale
-                          ),
+                          name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
                         }))
                         .sort((a, b) => a.name.localeCompare(b.name, locale))}
                     />
@@ -131,23 +120,12 @@ class ForkExerciseForm extends Component {
                       handleSubmit={handleSubmit}
                       defaultIcon={<Icon icon="code-branch" gapRight />}
                       messages={{
-                        submit: (
-                          <FormattedMessage
-                            id="app.forkExerciseForm.submit"
-                            defaultMessage="Fork exercise"
-                          />
-                        ),
+                        submit: <FormattedMessage id="app.forkExerciseForm.submit" defaultMessage="Fork exercise" />,
                         submitting: (
-                          <FormattedMessage
-                            id="app.forkExerciseForm.submitting"
-                            defaultMessage="Forking..."
-                          />
+                          <FormattedMessage id="app.forkExerciseForm.submitting" defaultMessage="Forking..." />
                         ),
                         success: (
-                          <FormattedMessage
-                            id="app.forkExerciseForm.success"
-                            defaultMessage="Exercise forked"
-                          />
+                          <FormattedMessage id="app.forkExerciseForm.success" defaultMessage="Exercise forked" />
                         ),
                       }}
                     />
@@ -182,8 +160,7 @@ const mapStateToProps = (state, { exerciseId, forkId }) => {
   const fork = getFork(exerciseId, forkId)(state);
   return {
     forkStatus: fork ? fork.status : null,
-    forkedExerciseId:
-      fork && fork.status === forkStatuses.FULFILLED ? fork.exerciseId : null,
+    forkedExerciseId: fork && fork.status === forkStatuses.FULFILLED ? fork.exerciseId : null,
   };
 };
 

@@ -7,13 +7,7 @@ import { Breadcrumb } from 'react-bootstrap';
 import Icon from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
-const BreadcrumbItem = ({
-  text,
-  link = null,
-  iconName = null,
-  isActive = false,
-  links,
-}) => {
+const BreadcrumbItem = ({ text, link = null, iconName = null, isActive = false, links }) => {
   const content = (
     <Breadcrumb.Item active={isActive}>
       {!!iconName && <Icon icon={iconName} />} {text}
@@ -21,9 +15,7 @@ const BreadcrumbItem = ({
   );
 
   return link !== null ? (
-    <LinkContainer
-      to={typeof link === 'function' ? link(links) : link}
-      active={isActive}>
+    <LinkContainer to={typeof link === 'function' ? link(links) : link} active={isActive}>
       {content}
     </LinkContainer>
   ) : (
@@ -32,11 +24,7 @@ const BreadcrumbItem = ({
 };
 
 BreadcrumbItem.propTypes = {
-  text: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    FormattedMessage,
-  ]).isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.element, FormattedMessage]).isRequired,
   iconName: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   link: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   isActive: PropTypes.bool.isRequired,

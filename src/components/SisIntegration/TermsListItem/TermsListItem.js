@@ -8,12 +8,8 @@ const TermsListItem = ({ data, createActions }) => (
   <tr>
     <td>{data.year}</td>
     <td>
-      {data.term === 1 && (
-        <FormattedMessage id="app.termsList.winter" defaultMessage="Winter" />
-      )}
-      {data.term === 2 && (
-        <FormattedMessage id="app.termsList.summer" defaultMessage="Summer" />
-      )}
+      {data.term === 1 && <FormattedMessage id="app.termsList.winter" defaultMessage="Winter" />}
+      {data.term === 2 && <FormattedMessage id="app.termsList.summer" defaultMessage="Summer" />}
       {data.term !== 1 && data.term !== 2 && <span>{data.term}</span>}
     </td>
     <td>
@@ -25,9 +21,7 @@ const TermsListItem = ({ data, createActions }) => (
     <td>
       <DateTime unixts={data.advertiseUntil} showTime={false} />
     </td>
-    <td className="text-right">
-      {createActions && createActions(data.id, data)}
-    </td>
+    <td className="text-right">{createActions && createActions(data.id, data)}</td>
   </tr>
 );
 

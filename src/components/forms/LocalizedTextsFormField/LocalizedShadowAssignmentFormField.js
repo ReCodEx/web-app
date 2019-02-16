@@ -8,10 +8,7 @@ import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentL
 const LocalizedShadowAssigmentFormField = ({ prefix, data: enabled }) => (
   <Well>
     <SharedLocalizedFields prefix={prefix} enabled={enabled} />
-    <SharedExerciseAssignmentLocalizedFields
-      prefix={prefix}
-      enabled={enabled}
-    />
+    <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
   </Well>
 );
 

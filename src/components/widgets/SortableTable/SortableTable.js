@@ -50,19 +50,11 @@ class SortableTable extends Component {
 
   getHeaderSuffixRow = () => {
     const { columns } = this.props;
-    if (
-      columns.reduce(
-        (res, { headerSuffix }) => res || headerSuffix !== null,
-        false
-      )
-    ) {
+    if (columns.reduce((res, { headerSuffix }) => res || headerSuffix !== null, false)) {
       return (
         <tr>
           {columns.map(column => (
-            <th
-              key={column.id}
-              style={column.getHeaderSuffixStyle()}
-              className={column.getHeaderSuffixClassName()}>
+            <th key={column.id} style={column.getHeaderSuffixStyle()} className={column.getHeaderSuffixClassName()}>
               {column.headerSuffix}
             </th>
           ))}
@@ -90,10 +82,7 @@ class SortableTable extends Component {
           <thead>
             <tr>
               {columns.map(column => (
-                <th
-                  key={`header-${column.id}`}
-                  style={column.getHeaderStyle()}
-                  className={column.getHeaderClassName()}>
+                <th key={`header-${column.id}`} style={column.getHeaderStyle()} className={column.getHeaderClassName()}>
                   {column.header}
                   {column.comparator && data.length > 1 && (
                     <span>
@@ -105,12 +94,7 @@ class SortableTable extends Component {
                       />
 
                       {sortColumn === column.id && !defaultOrder && (
-                        <CloseIcon
-                          smallGapLeft
-                          timid
-                          className="text-danger"
-                          onClick={() => this.orderBy(null)}
-                        />
+                        <CloseIcon smallGapLeft timid className="text-danger" onClick={() => this.orderBy(null)} />
                       )}
                     </span>
                   )}
@@ -122,17 +106,12 @@ class SortableTable extends Component {
         )}
         <tbody>
           {data.length > 0 ? (
-            this.sortData(data, sortColumn, ascendant).map((row, idx) =>
-              rowRenderer(row, idx, columns)
-            )
+            this.sortData(data, sortColumn, ascendant).map((row, idx) => rowRenderer(row, idx, columns))
           ) : (
             <tr>
               <td colSpan={columns.length}>
                 {empty || (
-                  <FormattedMessage
-                    id="generic.noRecordsInTable"
-                    defaultMessage="There are no records in the table."
-                  />
+                  <FormattedMessage id="generic.noRecordsInTable" defaultMessage="There are no records in the table." />
                 )}
               </td>
             </tr>

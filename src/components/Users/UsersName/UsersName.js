@@ -22,20 +22,11 @@ const UsersName = ({
   links: { USER_URI_FACTORY },
   currentUserId,
 }) => {
-  const email =
-    privateData &&
-    privateData.email &&
-    showEmail &&
-    encodeURIComponent(privateData.email);
+  const email = privateData && privateData.email && showEmail && encodeURIComponent(privateData.email);
   return (
     <span className={styles.wrapper}>
       <span className={styles.avatar}>
-        <AvatarContainer
-          avatarUrl={avatarUrl}
-          fullName={fullName}
-          firstName={firstName}
-          size={size}
-        />
+        <AvatarContainer avatarUrl={avatarUrl} fullName={fullName} firstName={firstName} size={size} />
       </span>
       {}
       <span
@@ -59,9 +50,7 @@ const UsersName = ({
           </small>
         )}
         <span className={styles.notVerified}>
-          {!isVerified && (
-            <NotVerified userId={id} currentUserId={currentUserId} />
-          )}
+          {!isVerified && <NotVerified userId={id} currentUserId={currentUserId} />}
         </span>
       </span>
     </span>

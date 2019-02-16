@@ -4,8 +4,7 @@ import { fetchManyEndpoint } from '../modules/submissionEvaluations';
 import { getSolution } from './solutions';
 
 const getSubmissionEvaluations = state => state.submissionEvaluations;
-const getResources = submissionEvaluations =>
-  submissionEvaluations.get('resources');
+const getResources = submissionEvaluations => submissionEvaluations.get('resources');
 
 export const submissionEvaluationsSelector = createSelector(
   getSubmissionEvaluations,

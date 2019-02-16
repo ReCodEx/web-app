@@ -27,22 +27,15 @@ const dateTime = ({
   <span
     className={classnames({
       'text-nowrap': noWrap,
-      'text-warning':
-        isDeadline &&
-        isAfter(unixts - deadlineWarningTime) &&
-        !isAfter(unixts - deadlineDangerTime),
-      'text-danger':
-        isDeadline && isAfter(unixts - deadlineDangerTime) && !isAfter(unixts),
-      'text-bold':
-        isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts),
+      'text-warning': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts - deadlineDangerTime),
+      'text-danger': isDeadline && isAfter(unixts - deadlineDangerTime) && !isAfter(unixts),
+      'text-bold': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts),
       'text-muted': isDeadline && isAfter(unixts),
     })}>
     {isDeadline && isAfter(unixts - deadlineAlertTime) && !isAfter(unixts) && (
       <Icon icon={['far', 'bell']} className="faa-shake animated" gapRight />
     )}
-    {isDeadline && isAfter(unixts) && (
-      <Icon icon="skull" className="half-opaque" gapRight />
-    )}
+    {isDeadline && isAfter(unixts) && <Icon icon="skull" className="half-opaque" gapRight />}
     {showDate && (
       <span
         className={classnames({
@@ -59,10 +52,7 @@ const dateTime = ({
           'text-nowrap': true,
           'halfem-margin-right': showRelative,
         })}>
-        <FormattedTime
-          value={unixts * 1000}
-          format={showSeconds ? '24hourWithSeconds' : '24hour'}
-        />
+        <FormattedTime value={unixts * 1000} format={showSeconds ? '24hourWithSeconds' : '24hour'} />
       </span>
     )}
     &#8203;

@@ -20,10 +20,7 @@ const ExternalRegistrationForm = ({
 }) => (
   <FormBox
     title={
-      <FormattedMessage
-        id="app.externalRegistrationForm.title"
-        defaultMessage="Create ReCodEx account using CAS"
-      />
+      <FormattedMessage id="app.externalRegistrationForm.title" defaultMessage="Create ReCodEx account using CAS" />
     }
     type={submitSucceeded ? 'success' : undefined}
     footer={
@@ -37,23 +34,10 @@ const ExternalRegistrationForm = ({
           dirty={anyTouched}
           invalid={invalid || instances.size === 0}
           messages={{
-            submit: (
-              <FormattedMessage
-                id="app.registrationForm.createAccount"
-                defaultMessage="Create account"
-              />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.registrationForm.processing"
-                defaultMessage="Creating account..."
-              />
-            ),
+            submit: <FormattedMessage id="app.registrationForm.createAccount" defaultMessage="Create account" />,
+            submitting: <FormattedMessage id="app.registrationForm.processing" defaultMessage="Creating account..." />,
             success: (
-              <FormattedMessage
-                id="app.registrationForm.success"
-                defaultMessage="Your account has been created."
-              />
+              <FormattedMessage id="app.registrationForm.success" defaultMessage="Your account has been created." />
             ),
           }}
         />
@@ -73,35 +57,20 @@ const ExternalRegistrationForm = ({
       required
       component={TextField}
       maxLength={64}
-      label={
-        <FormattedMessage
-          id="app.externalRegistrationForm.username"
-          defaultMessage="CAS login (UKČO):"
-        />
-      }
+      label={<FormattedMessage id="app.externalRegistrationForm.username" defaultMessage="CAS login (UKČO):" />}
     />
     <Field
       name="password"
       required
       component={PasswordField}
-      label={
-        <FormattedMessage
-          id="app.externalRegistrationForm.password"
-          defaultMessage="Password:"
-        />
-      }
+      label={<FormattedMessage id="app.externalRegistrationForm.password" defaultMessage="Password:" />}
     />
 
     <Field
       name="instanceId"
       required
       component={SelectField}
-      label={
-        <FormattedMessage
-          id="app.externalRegistrationForm.instance"
-          defaultMessage="Instance:"
-        />
-      }
+      label={<FormattedMessage id="app.externalRegistrationForm.instance" defaultMessage="Instance:" />}
       addEmptyOption
       options={instances.map(({ id: key, name }) => ({ key, name }))}
     />

@@ -7,10 +7,7 @@ const LoadingAssignmentTableRow = ({ colSpan = 1 }) => (
   <tr>
     <td className="text-center" colSpan={colSpan}>
       <LoadingIcon gapRight />
-      <FormattedMessage
-        id="app.assignmentsTableRow.loading"
-        defaultMessage="Loading assignments..."
-      />
+      <FormattedMessage id="app.assignmentsTableRow.loading" defaultMessage="Loading assignments..." />
     </td>
   </tr>
 );

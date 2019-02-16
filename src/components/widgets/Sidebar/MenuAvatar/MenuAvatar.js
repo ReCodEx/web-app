@@ -39,11 +39,7 @@ const MenuAvatar = ({
         }}>
         {title}
       </span>
-      {notificationsCount > 0 && (
-        <small className="label pull-right bg-yellow">
-          {notificationsCount}
-        </small>
-      )}
+      {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
     </a>
   </li>
 );

@@ -55,9 +55,7 @@ class EvaluationProgressContainer extends Component {
 
     if (
       monitor !== null &&
-      (!this.state.monitor ||
-        monitor.url !== this.state.monitor.url ||
-        monitor.id !== this.state.monitor.id)
+      (!this.state.monitor || monitor.url !== this.state.monitor.url || monitor.id !== this.state.monitor.id)
     ) {
       if (typeof WebSocket === 'function') {
         this.setState({ monitor, realTimeProcessing: true });
@@ -122,9 +120,7 @@ class EvaluationProgressContainer extends Component {
       this.availableMessages = Object.assign([], Object.values(randomMessages));
     }
 
-    const randomIndex = Math.floor(
-      Math.random() * this.availableMessages.length
-    );
+    const randomIndex = Math.floor(Math.random() * this.availableMessages.length);
     return this.availableMessages.splice(randomIndex, 1).pop();
   };
 
@@ -164,11 +160,7 @@ class EvaluationProgressContainer extends Component {
   };
 
   userCloseAction = () => {
-    const {
-      finishSubmissionProcessing,
-      dropObserver,
-      onUserClose,
-    } = this.props;
+    const { finishSubmissionProcessing, dropObserver, onUserClose } = this.props;
     finishSubmissionProcessing();
     this.closeSocket();
     dropObserver();

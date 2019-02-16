@@ -17,12 +17,7 @@ const EditUserSettingsForm = ({
   invalid,
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.editUserSettings.title"
-        defaultMessage="Edit settings"
-      />
-    }
+    title={<FormattedMessage id="app.editUserSettings.title" defaultMessage="Edit settings" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
@@ -35,28 +30,16 @@ const EditUserSettingsForm = ({
           invalid={invalid}
           dirty={anyTouched}
           messages={{
-            submit: (
-              <FormattedMessage id="generic.save" defaultMessage="Save" />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="generic.saving"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            ),
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
           }}
         />
       </div>
     }>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.editUserSettings.failed"
-          defaultMessage="Cannot save profile settings."
-        />
+        <FormattedMessage id="app.editUserSettings.failed" defaultMessage="Cannot save profile settings." />
       </Alert>
     )}
 
@@ -65,10 +48,7 @@ const EditUserSettingsForm = ({
       component={CheckboxField}
       onOff
       label={
-        <FormattedMessage
-          id="app.editUserSettings.vimMode"
-          defaultMessage="Use Vim mode in source code editors."
-        />
+        <FormattedMessage id="app.editUserSettings.vimMode" defaultMessage="Use Vim mode in source code editors." />
       }
     />
 
@@ -89,10 +69,7 @@ const EditUserSettingsForm = ({
       component={CheckboxField}
       onOff
       label={
-        <FormattedMessage
-          id="app.editUserSettings.openedSidebar"
-          defaultMessage="Sidebar is unfolded by default."
-        />
+        <FormattedMessage id="app.editUserSettings.openedSidebar" defaultMessage="Sidebar is unfolded by default." />
       }
     />
 
@@ -112,19 +89,11 @@ const EditUserSettingsForm = ({
       name="defaultLanguage"
       tabIndex={1}
       component={LanguageSelectField}
-      label={
-        <FormattedMessage
-          id="app.editUserSettings.defaultLanguage"
-          defaultMessage="Default language:"
-        />
-      }
+      label={<FormattedMessage id="app.editUserSettings.defaultLanguage" defaultMessage="Default language:" />}
     />
 
     <h3>
-      <FormattedMessage
-        id="app.editUserSettings.emailsTitle"
-        defaultMessage="Emails:"
-      />
+      <FormattedMessage id="app.editUserSettings.emailsTitle" defaultMessage="Emails:" />
     </h3>
 
     <Field
@@ -132,10 +101,7 @@ const EditUserSettingsForm = ({
       component={CheckboxField}
       onOff
       label={
-        <FormattedMessage
-          id="app.editUserSettings.newAssignmentEmails"
-          defaultMessage="Notify about new assignments"
-        />
+        <FormattedMessage id="app.editUserSettings.newAssignmentEmails" defaultMessage="Notify about new assignments" />
       }
     />
 

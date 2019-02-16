@@ -55,16 +55,9 @@ class Header extends Component {
         <div className="navbar navbar-static-top" role="navigation">
           <ClientOnly>
             <MediaQuery maxWidth={767} values={{ deviceWidth: 1368 }}>
-              <a
-                href="#"
-                className="sidebar-toggle"
-                role="button"
-                onClick={this.toggleSidebarVisibility}>
+              <a href="#" className="sidebar-toggle" role="button" onClick={this.toggleSidebarVisibility}>
                 <span className="sr-only">
-                  <FormattedMessage
-                    id="app.header.toggleSidebar"
-                    defaultMessage="Show/hide sidebar"
-                  />
+                  <FormattedMessage id="app.header.toggleSidebar" defaultMessage="Show/hide sidebar" />
                 </span>
               </a>
             </MediaQuery>
@@ -76,10 +69,7 @@ class Header extends Component {
                 onClick={this.toggleSidebarSize}
                 style={{ fontFamily: 'sans' }}>
                 <span className="sr-only">
-                  <FormattedMessage
-                    id="app.header.toggleSidebarSize"
-                    defaultMessage="Expand/minimize sidebar"
-                  />
+                  <FormattedMessage id="app.header.toggleSidebarSize" defaultMessage="Expand/minimize sidebar" />
                 </span>
               </a>
             </MediaQuery>
@@ -88,12 +78,7 @@ class Header extends Component {
             <ul className="nav navbar-nav">
               <HeaderNotificationsContainer />
               {availableLangs.map(lang => (
-                <HeaderLanguageSwitching
-                  lang={lang}
-                  active={currentLang === lang}
-                  key={lang}
-                  currentUrl={currentUrl}
-                />
+                <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />
               ))}
             </ul>
           </div>

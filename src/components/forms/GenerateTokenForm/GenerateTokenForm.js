@@ -1,22 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  FormattedHTMLMessage,
-  injectIntl,
-  defineMessages,
-  intlShape,
-} from 'react-intl';
+import { FormattedMessage, FormattedHTMLMessage, injectIntl, defineMessages, intlShape } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import {
-  Alert,
-  Well,
-  OverlayTrigger,
-  Tooltip,
-  Grid,
-  Row,
-  Col,
-} from 'react-bootstrap';
+import { Alert, Well, OverlayTrigger, Tooltip, Grid, Row, Col } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import FormBox from '../../widgets/FormBox';
@@ -84,12 +70,7 @@ const GenerateTokenForm = ({
   intl: { formatMessage },
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.generateTokenForm.title"
-        defaultMessage="Generate Application Token"
-      />
-    }
+    title={<FormattedMessage id="app.generateTokenForm.title" defaultMessage="Generate Application Token" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
@@ -101,18 +82,12 @@ const GenerateTokenForm = ({
               placement="bottom"
               overlay={
                 <Tooltip id={lastToken}>
-                  <FormattedMessage
-                    id="app.generateTokenForm.copied"
-                    defaultMessage="Copied!"
-                  />
+                  <FormattedMessage id="app.generateTokenForm.copied" defaultMessage="Copied!" />
                 </Tooltip>
               }>
               <Button bsStyle="info">
                 <CopyIcon gapRight fixedWidth />
-                <FormattedMessage
-                  id="app.generateTokenForm.copyToClipboard"
-                  defaultMessage="Copy to Clipboard"
-                />
+                <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
               </Button>
             </OverlayTrigger>
           </CopyToClipboard>
@@ -126,42 +101,21 @@ const GenerateTokenForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: (
-              <FormattedMessage
-                id="app.generateTokenForm.generate"
-                defaultMessage="Generate"
-              />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.generateTokenForm.generating"
-                defaultMessage="Generating..."
-              />
-            ),
-            success: (
-              <FormattedMessage
-                id="app.generateTokenForm.generated"
-                defaultMessage="Generated"
-              />
-            ),
+            submit: <FormattedMessage id="app.generateTokenForm.generate" defaultMessage="Generate" />,
+            submitting: <FormattedMessage id="app.generateTokenForm.generating" defaultMessage="Generating..." />,
+            success: <FormattedMessage id="app.generateTokenForm.generated" defaultMessage="Generated" />,
           }}
         />
       </div>
     }>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="generic.savingFailed"
-          defaultMessage="Saving failed. Please try again later."
-        />
+        <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>
     )}
 
     <h4>
-      <FormattedMessage
-        id="app.generateTokenForm.scopes"
-        defaultMessage="Scopes:"
-      />
+      <FormattedMessage id="app.generateTokenForm.scopes" defaultMessage="Scopes:" />
     </h4>
     <Grid fluid>
       <Row>
@@ -195,12 +149,7 @@ const GenerateTokenForm = ({
           return { name: formatMessage(value), key };
         })
       )}
-      label={
-        <FormattedMessage
-          id="app.generateTokenForm.expiration"
-          defaultMessage="Expires In:"
-        />
-      }
+      label={<FormattedMessage id="app.generateTokenForm.expiration" defaultMessage="Expires In:" />}
       ignoreDirty
     />
 
@@ -208,10 +157,7 @@ const GenerateTokenForm = ({
       <div>
         <hr />
         <h4>
-          <FormattedMessage
-            id="app.generateTokenForm.lastToken"
-            defaultMessage="Last Token:"
-          />
+          <FormattedMessage id="app.generateTokenForm.lastToken" defaultMessage="Last Token:" />
         </h4>
         <Well className="tokenWell">
           <code>{lastToken}</code>

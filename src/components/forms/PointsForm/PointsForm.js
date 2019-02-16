@@ -20,12 +20,7 @@ const PointsForm = ({
   maxPoints,
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.pointsForm.title"
-        defaultMessage="Awarded Points"
-      />
-    }
+    title={<FormattedMessage id="app.pointsForm.title" defaultMessage="Awarded Points" />}
     type={submitSucceeded ? 'success' : undefined}
     isOpen={true}
     collapsable={true}
@@ -40,28 +35,16 @@ const PointsForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: (
-              <FormattedMessage id="generic.save" defaultMessage="Save" />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="generic.saving"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            ),
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
           }}
         />
       </div>
     }>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.pointsForm.failed"
-          defaultMessage="Cannot save the bonus points."
-        />
+        <FormattedMessage id="app.pointsForm.failed" defaultMessage="Cannot save the bonus points." />
       </Alert>
     )}
 
@@ -70,11 +53,7 @@ const PointsForm = ({
         <Col sm={12}>
           <p>
             <b>
-              <FormattedMessage
-                id="app.pointsForm.scoredPoints"
-                defaultMessage="Scored points from last evaluation"
-              />
-              :
+              <FormattedMessage id="app.pointsForm.scoredPoints" defaultMessage="Scored points from last evaluation" />:
             </b>
             &nbsp;&nbsp;
             {scoredPoints !== null ? scoredPoints : '-'} / {maxPoints}
@@ -89,12 +68,7 @@ const PointsForm = ({
             validateMax={10000}
             maxLength={6}
             nullable
-            label={
-              <FormattedMessage
-                id="app.pointsForm.pointsOverride"
-                defaultMessage="Points override:"
-              />
-            }
+            label={<FormattedMessage id="app.pointsForm.pointsOverride" defaultMessage="Points override:" />}
           />
         </Col>
         <Col sm={6}>
@@ -103,12 +77,7 @@ const PointsForm = ({
             validateMin={-10000}
             validateMax={10000}
             maxLength={6}
-            label={
-              <FormattedMessage
-                id="app.pointsForm.bonusPoints"
-                defaultMessage="Bonus points:"
-              />
-            }
+            label={<FormattedMessage id="app.pointsForm.bonusPoints" defaultMessage="Bonus points:" />}
           />
         </Col>
       </Row>

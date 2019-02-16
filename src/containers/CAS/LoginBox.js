@@ -4,22 +4,12 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import LoginButton from '../../components/buttons/CAS/LoginButton';
 import Box from '../../components/widgets/Box';
-import {
-  externalLogin,
-  externalLoginFailed,
-  loginServices,
-  statusTypes,
-} from '../../redux/modules/auth';
+import { externalLogin, externalLoginFailed, loginServices, statusTypes } from '../../redux/modules/auth';
 import { statusSelector } from '../../redux/selectors/auth';
 
 const LoginBox = ({ login, fail, status }) => (
   <Box
-    title={
-      <FormattedMessage
-        id="app.cas.login.title"
-        defaultMessage="Authenticate throught CAS UK"
-      />
-    }
+    title={<FormattedMessage id="app.cas.login.title" defaultMessage="Authenticate throught CAS UK" />}
     footer={
       <div className="text-center">
         <LoginButton onLogin={login} onFailed={fail} loginStatus={status} />
@@ -51,8 +41,7 @@ export default connect(
     status: statusSelector(loginServices.external.CAS_UK_TICKET)(state),
   }),
   dispatch => ({
-    fail: () =>
-      dispatch(externalLoginFailed(loginServices.external.CAS_UK_TICKET)),
+    fail: () => dispatch(externalLoginFailed(loginServices.external.CAS_UK_TICKET)),
     login: (ticket, clientUrl, popupWindow = null) => {
       const login = externalLogin(loginServices.external.CAS_UK_TICKET);
       return dispatch(login({ ticket, clientUrl }, popupWindow));

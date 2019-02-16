@@ -30,10 +30,7 @@ class EditTestsForm extends Component {
       <div>
         {submitFailed && (
           <Alert bsStyle="danger">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
@@ -66,31 +63,20 @@ class EditTestsForm extends Component {
                   change('tests', [
                     ...formValues.tests,
                     {
-                      name:
-                        'Test ' +
-                        (formValues.tests.length + 1)
-                          .toString()
-                          .padStart(2, '0'),
+                      name: 'Test ' + (formValues.tests.length + 1).toString().padStart(2, '0'),
                       weight: '100',
                     },
                   ])
                 }
                 bsStyle={'primary'}>
                 <AddIcon gapRight />
-                <FormattedMessage
-                  id="app.editTestsTest.add"
-                  defaultMessage="Add Test"
-                />
+                <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
               </Button>
             )}
 
             {dirty && !submitting && !submitSucceeded && (
               <span>
-                <Button
-                  type="reset"
-                  onClick={reset}
-                  bsStyle={'danger'}
-                  className="btn-flat">
+                <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
@@ -106,24 +92,9 @@ class EditTestsForm extends Component {
               hasFailed={submitFailed}
               handleSubmit={handleSubmit}
               messages={{
-                submit: (
-                  <FormattedMessage
-                    id="app.editTestsForm.submit"
-                    defaultMessage="Save Tests"
-                  />
-                ),
-                submitting: (
-                  <FormattedMessage
-                    id="app.editTestsForm.submitting"
-                    defaultMessage="Saving Tests..."
-                  />
-                ),
-                success: (
-                  <FormattedMessage
-                    id="app.editTestsForm.success"
-                    defaultMessage="Tests Saved."
-                  />
-                ),
+                submit: <FormattedMessage id="app.editTestsForm.submit" defaultMessage="Save Tests" />,
+                submitting: <FormattedMessage id="app.editTestsForm.submitting" defaultMessage="Saving Tests..." />,
+                success: <FormattedMessage id="app.editTestsForm.success" defaultMessage="Tests Saved." />,
               }}
             />
           </div>
@@ -157,10 +128,7 @@ const validate = ({ isUniform, tests }) => {
     const testErrors = {};
     if (!test.name || test.name === '') {
       testErrors.name = (
-        <FormattedMessage
-          id="app.editTestsForm.validation.testName"
-          defaultMessage="Please fill test name."
-        />
+        <FormattedMessage id="app.editTestsForm.validation.testName" defaultMessage="Please fill test name." />
       );
     } else if (!test.name.match(/^[-a-zA-Z0-9_()[\].! ]+$/)) {
       testErrors.name = (

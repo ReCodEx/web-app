@@ -67,28 +67,12 @@ class EditExerciseLimits extends Component {
     ]);
 
   doesHardwareGroupChangeDropLimits = defaultMemoize(
-    (
-      currentHwGroupId,
-      limits,
-      tests,
-      exerciseRuntimeEnvironments,
-      hardwareGroups
-    ) => {
+    (currentHwGroupId, limits, tests, exerciseRuntimeEnvironments, hardwareGroups) => {
       const limitsData =
-        currentHwGroupId &&
-        getLimitsInitValues(
-          limits,
-          tests,
-          exerciseRuntimeEnvironments,
-          currentHwGroupId
-        );
+        currentHwGroupId && getLimitsInitValues(limits, tests, exerciseRuntimeEnvironments, currentHwGroupId);
 
       return targetHwGroupId => {
-        if (
-          !targetHwGroupId ||
-          !currentHwGroupId ||
-          targetHwGroupId === currentHwGroupId
-        ) {
+        if (!targetHwGroupId || !currentHwGroupId || targetHwGroupId === currentHwGroupId) {
           return false;
         }
         const constraints = getLimitsConstraints(
@@ -102,45 +86,28 @@ class EditExerciseLimits extends Component {
   );
 
   transformAndSendHardwareGroups = defaultMemoize((hwGroupId, limits) => {
-    const {
-      setExerciseHardwareGroups,
-      setExerciseLimits,
-      reloadExercise,
-      invalidateExercise,
-    } = this.props;
+    const { setExerciseHardwareGroups, setExerciseLimits, reloadExercise, invalidateExercise } = this.props;
     const limitsData = limits && limits[hwGroupId];
     return formData =>
-      setExerciseHardwareGroups(
-        formData.hardwareGroup ? [formData.hardwareGroup] : []
-      )
+      setExerciseHardwareGroups(formData.hardwareGroup ? [formData.hardwareGroup] : [])
         .then(({ value: exercise }) => {
           invalidateExercise(); // prevent UI from showing intermediate state of the transaction
           return limitsData
             ? setExerciseLimits({
-                [formData.hardwareGroup]: saturateLimitsConstraints(
-                  limitsData,
-                  exercise.hardwareGroups
-                ),
+                [formData.hardwareGroup]: saturateLimitsConstraints(limitsData, exercise.hardwareGroups),
               })
             : Promise.resolve();
         })
         .then(reloadExercise);
   });
 
-  transformAndSendLimitsValues = defaultMemoize(
-    (hwGroupId, tests, exerciseRuntimeEnvironments) => {
-      const { setExerciseLimits, reloadExercise } = this.props;
-      return formData =>
-        setExerciseLimits(
-          transformLimitsValues(
-            formData,
-            hwGroupId,
-            exerciseRuntimeEnvironments,
-            tests
-          )
-        ).then(reloadExercise);
-    }
-  );
+  transformAndSendLimitsValues = defaultMemoize((hwGroupId, tests, exerciseRuntimeEnvironments) => {
+    const { setExerciseLimits, reloadExercise } = this.props;
+    return formData =>
+      setExerciseLimits(transformLimitsValues(formData, hwGroupId, exerciseRuntimeEnvironments, tests)).then(
+        reloadExercise
+      );
+  });
 
   render() {
     const {
@@ -187,12 +154,7 @@ class EditExerciseLimits extends Component {
             }),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.editExerciseLimits.title"
-                defaultMessage="Edit tests limits"
-              />
-            ),
+            text: <FormattedMessage id="app.editExerciseLimits.title" defaultMessage="Edit tests limits" />,
             iconName: ['far', 'edit'],
           },
         ]}>
@@ -220,9 +182,7 @@ class EditExerciseLimits extends Component {
               </Col>
             </Row>
 
-            {Boolean(
-              exercise.hardwareGroups && exercise.hardwareGroups.length > 1
-            ) && (
+            {Boolean(exercise.hardwareGroups && exercise.hardwareGroups.length > 1) && (
               <Row>
                 <Col sm={12}>
                   <div className="alert alert-danger">
@@ -244,9 +204,7 @@ class EditExerciseLimits extends Component {
               </Row>
             )}
 
-            <ResourceRenderer
-              resource={hardwareGroups.toArray()}
-              returnAsArray={true}>
+            <ResourceRenderer resource={hardwareGroups.toArray()} returnAsArray={true}>
               {hwgs => (
                 <Row>
                   {exercise.permissionHints.setLimits && (
@@ -254,27 +212,21 @@ class EditExerciseLimits extends Component {
                       <EditHardwareGroupForm
                         initialValues={{
                           hardwareGroup:
-                            exercise.hardwareGroups &&
-                            exercise.hardwareGroups.length === 1
+                            exercise.hardwareGroups && exercise.hardwareGroups.length === 1
                               ? exercise.hardwareGroups[0].id
                               : '',
                         }}
                         hardwareGroups={hwgs}
-                        addEmptyOption={
-                          !exercise.hardwareGroups ||
-                          exercise.hardwareGroups.length !== 1
-                        }
+                        addEmptyOption={!exercise.hardwareGroups || exercise.hardwareGroups.length !== 1}
                         warnDropLimits={this.doesHardwareGroupChangeDropLimits(
-                          exercise.hardwareGroups.length > 0 &&
-                            exercise.hardwareGroups[0].id,
+                          exercise.hardwareGroups.length > 0 && exercise.hardwareGroups[0].id,
                           limits,
                           tests,
                           exercise.runtimeEnvironments,
                           hwgs
                         )}
                         onSubmit={this.transformAndSendHardwareGroups(
-                          exercise.hardwareGroups.length > 0 &&
-                            exercise.hardwareGroups[0].id,
+                          exercise.hardwareGroups.length > 0 && exercise.hardwareGroups[0].id,
                           limits,
                           tests,
                           exercise.runtimeEnvironments
@@ -284,16 +236,11 @@ class EditExerciseLimits extends Component {
                   )}
                   <Col sm={12} md={6}>
                     {exercise.hardwareGroups.map(h => (
-                      <HardwareGroupMetadata
-                        key={h.id}
-                        hardwareGroup={h}
-                        isSuperAdmin={isSuperAdmin}
-                      />
+                      <HardwareGroupMetadata key={h.id} hardwareGroup={h} isSuperAdmin={isSuperAdmin} />
                     ))}
                     {Boolean(
                       targetHardwareGroup &&
-                        (exercise.hardwareGroups.length !== 1 ||
-                          targetHardwareGroup !== exercise.hardwareGroups[0].id)
+                        (exercise.hardwareGroups.length !== 1 || targetHardwareGroup !== exercise.hardwareGroups[0].id)
                     ) && (
                       <div>
                         <div className="text-center text-muted em-margin-bottom">
@@ -303,9 +250,7 @@ class EditExerciseLimits extends Component {
                         </div>
                         <HardwareGroupMetadata
                           key={targetHardwareGroup}
-                          hardwareGroup={hwgs.find(
-                            h => h.id === targetHardwareGroup
-                          )}
+                          hardwareGroup={hwgs.find(h => h.id === targetHardwareGroup)}
                           isSuperAdmin={isSuperAdmin}
                         />
                       </div>
@@ -317,9 +262,7 @@ class EditExerciseLimits extends Component {
 
             <Row>
               <Col sm={12}>
-                {tests.length > 0 &&
-                exercise.runtimeEnvironments.length > 0 &&
-                exercise.hardwareGroups.length > 0 ? (
+                {tests.length > 0 && exercise.runtimeEnvironments.length > 0 && exercise.hardwareGroups.length > 0 ? (
                   <EditLimitsForm
                     onSubmit={this.transformAndSendLimitsValues(
                       exercise.hardwareGroups[0].id,
@@ -328,10 +271,7 @@ class EditExerciseLimits extends Component {
                     )}
                     environments={exercise.runtimeEnvironments}
                     tests={tests}
-                    constraints={getLimitsConstraints(
-                      exercise.hardwareGroups,
-                      preciseTime
-                    )}
+                    constraints={getLimitsConstraints(exercise.hardwareGroups, preciseTime)}
                     initialValues={getLimitsInitValues(
                       limits,
                       tests,
@@ -391,19 +331,16 @@ EditExerciseLimits.propTypes = {
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-const cloneVerticallyWrapper = defaultMemoize(
-  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-    dispatch(cloneVertically(formName, testName, runtimeEnvironmentId, field))
+const cloneVerticallyWrapper = defaultMemoize(dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+  dispatch(cloneVertically(formName, testName, runtimeEnvironmentId, field))
 );
 
-const cloneHorizontallyWrapper = defaultMemoize(
-  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-    dispatch(cloneHorizontally(formName, testName, runtimeEnvironmentId, field))
+const cloneHorizontallyWrapper = defaultMemoize(dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+  dispatch(cloneHorizontally(formName, testName, runtimeEnvironmentId, field))
 );
 
-const cloneAllWrapper = defaultMemoize(
-  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-    dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
+const cloneAllWrapper = defaultMemoize(dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+  dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
 );
 
 const editLimitsFormSelector = formValueSelector('editLimits');
@@ -419,24 +356,18 @@ export default withLinks(
         exerciseTests: exerciseTestsSelector(exerciseId)(state),
         hardwareGroups: hardwareGroupsSelector(state),
         preciseTime: editLimitsFormSelector(state, 'preciseTime'),
-        targetHardwareGroup: editHardwareGroupFormSelector(
-          state,
-          'hardwareGroup'
-        ),
+        targetHardwareGroup: editHardwareGroupFormSelector(state, 'hardwareGroup'),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
       };
     },
     (dispatch, { params: { exerciseId } }) => ({
       loadAsync: () => EditExerciseLimits.loadAsync({ exerciseId }, dispatch),
-      setExerciseHardwareGroups: hwGroups =>
-        dispatch(setExerciseHardwareGroups(exerciseId, hwGroups)),
-      setExerciseLimits: limits =>
-        dispatch(setExerciseLimits(exerciseId, { limits })),
+      setExerciseHardwareGroups: hwGroups => dispatch(setExerciseHardwareGroups(exerciseId, hwGroups)),
+      setExerciseLimits: limits => dispatch(setExerciseLimits(exerciseId, { limits })),
       cloneVertically: cloneVerticallyWrapper(dispatch),
       cloneHorizontally: cloneHorizontallyWrapper(dispatch),
       cloneAll: cloneAllWrapper(dispatch),
-      fetchExerciseLimits: envId =>
-        dispatch(fetchExerciseLimits(exerciseId, envId)),
+      fetchExerciseLimits: envId => dispatch(fetchExerciseLimits(exerciseId, envId)),
       reloadExercise: () => dispatch(fetchExercise(exerciseId)),
       invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
     })

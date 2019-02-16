@@ -30,15 +30,10 @@ const prepareFileCandidates = (prefix, suffix, files) => {
   const candidates = {};
   files
     .filter(
-      ({ name }) =>
-        name.startsWith(prefix) &&
-        name.endsWith(suffix) &&
-        name.length > prefix.length + suffix.length
+      ({ name }) => name.startsWith(prefix) && name.endsWith(suffix) && name.length > prefix.length + suffix.length
     )
     .forEach(file => {
-      const root = file.name
-        .substr(prefix.length, file.name.length - prefix.length - suffix.length)
-        .toLowerCase(); // the root is what is left of name after removing prefix and suffix
+      const root = file.name.substr(prefix.length, file.name.length - prefix.length - suffix.length).toLowerCase(); // the root is what is left of name after removing prefix and suffix
       collisions = collisions || candidates[root] !== undefined;
       candidates[root] = file.name;
     });
@@ -127,14 +122,7 @@ const computeMatchingPenaltyAndFinalize = ({ fileTests, testFiles }) => {
 };
 
 // Compute best possible matching between tests and files for given prefix and suffix.
-const computeMatching = ({
-  prefix,
-  suffix,
-  firstTestId,
-  tests,
-  files,
-  fileName,
-}) => {
+const computeMatching = ({ prefix, suffix, firstTestId, tests, files, fileName }) => {
   const candidates = prepareFileCandidates(prefix, suffix, files);
   if (!candidates) {
     return null;
@@ -210,23 +198,19 @@ const computePossiblePrefixesSuffixes = fileName => {
 
 // Find best matching for given fileName for all tests using given list of files.
 const bestMatchFileNames = (fileName, firstTestId, tests, files) => {
-  return computePossiblePrefixesSuffixes(fileName).reduce(
-    (bestMatching, { prefix, suffix }) => {
-      const matching = computeMatching({
-        prefix,
-        suffix,
-        firstTestId,
-        tests,
-        files,
-        fileName,
-      });
-      return matching !== null &&
-        (bestMatching === null || bestMatching.penalty > matching.penalty)
-        ? matching // a better matching was found
-        : bestMatching;
-    },
-    null
-  );
+  return computePossiblePrefixesSuffixes(fileName).reduce((bestMatching, { prefix, suffix }) => {
+    const matching = computeMatching({
+      prefix,
+      suffix,
+      firstTestId,
+      tests,
+      files,
+      fileName,
+    });
+    return matching !== null && (bestMatching === null || bestMatching.penalty > matching.penalty)
+      ? matching // a better matching was found
+      : bestMatching;
+  }, null);
 };
 
 /**
@@ -239,16 +223,10 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
   ['stdin-file', 'expected-output']
     .filter(f => template[f])
     .forEach(field => {
-      const matches = bestMatchFileNames(
-        template[field],
-        firstTestId,
-        tests,
-        files
-      );
+      const matches = bestMatchFileNames(template[field], firstTestId, tests, files);
 
       if (matches) {
-        transformations[field] = testId =>
-          matches.testFiles[testId] || undefined;
+        transformations[field] = testId => matches.testFiles[testId] || undefined;
       }
     });
 
@@ -264,10 +242,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
       inputFiles
         .map(({ name, file, matches }) => ({
           // convert the template into an instance by selecting appropriate file
-          name:
-            name === file && matches && matches.testFiles[testId]
-              ? matches.testFiles[testId]
-              : name,
+          name: name === file && matches && matches.testFiles[testId] ? matches.testFiles[testId] : name,
           file: matches ? matches.testFiles[testId] || undefined : file, // apply matches if possible, use original file name if no matching was established
         }))
         .filter(({ file }) => file); // remove records which do not have apropriate file
@@ -278,13 +253,11 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
     const extraFiles = {};
     const entryPoint = {};
     for (const envId in template['extra-files']) {
-      extraFiles[envId] = template['extra-files'][envId].map(
-        ({ name, file }) => ({
-          name,
-          file,
-          matches: bestMatchFileNames(file, firstTestId, tests, files),
-        })
-      );
+      extraFiles[envId] = template['extra-files'][envId].map(({ name, file }) => ({
+        name,
+        file,
+        matches: bestMatchFileNames(file, firstTestId, tests, files),
+      }));
       if (template['entry-point'][envId] !== undefined) {
         entryPoint[envId] = template['entry-point'][envId];
       }
@@ -295,10 +268,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
       for (const envId in extraFiles) {
         transformed[envId] = extraFiles[envId]
           .map(({ name, file, matches }) => ({
-            name:
-              name === file && matches && matches.testFiles[testId]
-                ? matches.testFiles[testId]
-                : name,
+            name: name === file && matches && matches.testFiles[testId] ? matches.testFiles[testId] : name,
             file: (matches && matches.testFiles[testId]) || file,
           }))
           .filter(({ file }) => file); // remove records which do not have apropriate file
@@ -331,29 +301,16 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
 
 // Get test config record from the redux-form store
 const getTestConfig = ({ form }, formName, testKey) =>
-  form[formName].values.config[testKey] ||
-  form[formName].initial.config[testKey] ||
-  null;
+  form[formName].values.config[testKey] || form[formName].initial.config[testKey] || null;
 
 /*
  * Main filling function. It fills all tests based on the first test template.
  */
-const exerciseConfigFormSmartFill = (
-  formName,
-  firstTestId,
-  tests,
-  files,
-  properties
-) => (dispatch, getState) => {
+const exerciseConfigFormSmartFill = (formName, firstTestId, tests, files, properties) => (dispatch, getState) => {
   const state = getState();
   const firstTestKey = encodeNumId(firstTestId);
   const template = getTestConfig(state, formName, firstTestKey);
-  const transformations = prepareTransformations(
-    template,
-    firstTestId,
-    tests,
-    files
-  );
+  const transformations = prepareTransformations(template, firstTestId, tests, files);
   return Promise.all(
     tests
       .filter(({ id }) => encodeNumId(id) !== firstTestKey)
@@ -362,17 +319,9 @@ const exerciseConfigFormSmartFill = (
         return Promise.all(
           properties
             .map(field => {
-              const value = transformations[field]
-                ? transformations[field](test.id, template[field])
-                : template[field];
+              const value = transformations[field] ? transformations[field](test.id, template[field]) : template[field];
               return value !== undefined
-                ? dispatch(
-                    change(
-                      formName,
-                      ['config', testKey, field].join('.'),
-                      value
-                    )
-                  )
+                ? dispatch(change(formName, ['config', testKey, field].join('.'), value))
                 : undefined;
             })
             .filter(d => d)
@@ -381,12 +330,7 @@ const exerciseConfigFormSmartFill = (
   );
 };
 
-export const exerciseConfigFormSmartFillAll = (
-  formName,
-  firstTestId,
-  tests,
-  files
-) =>
+export const exerciseConfigFormSmartFillAll = (formName, firstTestId, tests, files) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
     'stdin-file',
     'input-files',
@@ -403,45 +347,16 @@ export const exerciseConfigFormSmartFillAll = (
     'jar-files',
   ]);
 
-export const exerciseConfigFormSmartFillInput = (
-  formName,
-  firstTestId,
-  tests,
-  files
-) =>
-  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
-    'stdin-file',
-    'input-files',
-  ]);
+export const exerciseConfigFormSmartFillInput = (formName, firstTestId, tests, files) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['stdin-file', 'input-files']);
 
-export const exerciseConfigFormSmartFillArgs = (
-  formName,
-  firstTestId,
-  tests,
-  files
-) =>
-  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
-    'run-args',
-  ]);
+export const exerciseConfigFormSmartFillArgs = (formName, firstTestId, tests, files) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['run-args']);
 
-export const exerciseConfigFormSmartFillOutput = (
-  formName,
-  firstTestId,
-  tests,
-  files
-) =>
-  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
-    'expected-output',
-    'useOutFile',
-    'actual-output',
-  ]);
+export const exerciseConfigFormSmartFillOutput = (formName, firstTestId, tests, files) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['expected-output', 'useOutFile', 'actual-output']);
 
-export const exerciseConfigFormSmartFillJudge = (
-  formName,
-  firstTestId,
-  tests,
-  files
-) =>
+export const exerciseConfigFormSmartFillJudge = (formName, firstTestId, tests, files) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
     'useCustomJudge',
     'judge-type',
@@ -449,17 +364,8 @@ export const exerciseConfigFormSmartFillJudge = (
     'judge-args',
   ]);
 
-export const exerciseConfigFormSmartFillCompilation = (
-  formName,
-  firstTestId,
-  tests,
-  files
-) =>
-  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
-    'extra-files',
-    'entry-point',
-    'jar-files',
-  ]);
+export const exerciseConfigFormSmartFillCompilation = (formName, firstTestId, tests, files) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['extra-files', 'entry-point', 'jar-files']);
 
 /*
  * Advanced config form.
@@ -500,22 +406,14 @@ export const advancedExerciseConfigFormFill = (
     const variableKeys =
       variableName === null
         ? Object.keys(variableValues) // all variable names
-        : (Array.isArray(variableName) ? variableName : [variableName]).map(
-            name => encodeId(name)
-          );
+        : (Array.isArray(variableName) ? variableName : [variableName]).map(name => encodeId(name));
 
     variableKeys.forEach(variableKey =>
       tests
         .map(({ id }) => encodeNumId(id))
         .filter(key => key !== sourceTestKey)
         .forEach(testKey =>
-          dispatch(
-            change(
-              formName,
-              `config.${testKey}[${idx}].${variableKey}`,
-              variableValues[variableKey]
-            )
-          )
+          dispatch(change(formName, `config.${testKey}[${idx}].${variableKey}`, variableValues[variableKey]))
         )
     );
   });

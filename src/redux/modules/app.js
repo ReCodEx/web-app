@@ -10,25 +10,15 @@ const initialState = fromJS({
   pendingFetchOperations: 0,
 });
 
-export const newPendingFetchOperation = createAction(
-  actionTypes.NEW_PENDING_FETCH_OPERATION
-);
-export const completedFetchOperation = createAction(
-  actionTypes.COMPLETED_FETCH_OPERATION
-);
+export const newPendingFetchOperation = createAction(actionTypes.NEW_PENDING_FETCH_OPERATION);
+export const completedFetchOperation = createAction(actionTypes.COMPLETED_FETCH_OPERATION);
 
 export default handleActions(
   {
     [actionTypes.NEW_PENDING_FETCH_OPERATION]: state =>
-      state.update(
-        'pendingFetchOperations',
-        pendingFetchOperations => pendingFetchOperations + 1
-      ),
+      state.update('pendingFetchOperations', pendingFetchOperations => pendingFetchOperations + 1),
     [actionTypes.COMPLETED_FETCH_OPERATION]: state =>
-      state.update(
-        'pendingFetchOperations',
-        pendingFetchOperations => pendingFetchOperations - 1
-      ),
+      state.update('pendingFetchOperations', pendingFetchOperations => pendingFetchOperations - 1),
   },
   initialState
 );

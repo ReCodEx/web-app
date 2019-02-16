@@ -13,8 +13,7 @@ import {
 import { studentsOfGroupSelector } from '../../redux/selectors/users';
 
 class ShadowAssignmentPointsContainer extends Component {
-  static loadAsync = ({ groupId }, dispatch) =>
-    dispatch(fetchStudents(groupId));
+  static loadAsync = ({ groupId }, dispatch) => dispatch(fetchStudents(groupId));
 
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = newProps => {
@@ -24,15 +23,7 @@ class ShadowAssignmentPointsContainer extends Component {
   };
 
   render() {
-    const {
-      students,
-      points,
-      maxPoints,
-      permissionHints,
-      createPoints,
-      updatePoints,
-      removePoints,
-    } = this.props;
+    const { students, points, maxPoints, permissionHints, createPoints, updatePoints, removePoints } = this.props;
     return (
       <ShadowAssignmentPointsTable
         students={students}
@@ -65,17 +56,11 @@ export default connect(
     students: studentsOfGroupSelector(state, groupId),
   }),
   (dispatch, { groupId, id }) => ({
-    loadAsync: () =>
-      ShadowAssignmentPointsContainer.loadAsync({ groupId }, dispatch),
+    loadAsync: () => ShadowAssignmentPointsContainer.loadAsync({ groupId }, dispatch),
     createPoints: ({ awardeeId, points, note, awardedAt }) =>
-      dispatch(
-        createShadowAssignmentPoints(id, awardeeId, points, note, awardedAt)
-      ),
+      dispatch(createShadowAssignmentPoints(id, awardeeId, points, note, awardedAt)),
     updatePoints: ({ pointsId, points, note, awardedAt }) =>
-      dispatch(
-        updateShadowAssignmentPoints(id, pointsId, points, note, awardedAt)
-      ),
-    removePoints: pointsId =>
-      dispatch(removeShadowAssignmentPoints(id, pointsId)),
+      dispatch(updateShadowAssignmentPoints(id, pointsId, points, note, awardedAt)),
+    removePoints: pointsId => dispatch(removeShadowAssignmentPoints(id, pointsId)),
   })
 )(ShadowAssignmentPointsContainer);

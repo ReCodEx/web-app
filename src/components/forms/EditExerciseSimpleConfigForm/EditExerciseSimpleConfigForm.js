@@ -62,12 +62,7 @@ class EditExerciseSimpleConfigForm extends Component {
           </div>
         )}
         <FormBox
-          title={
-            <FormattedMessage
-              id="app.editExercise.editConfig"
-              defaultMessage="Edit Exercise Configuration"
-            />
-          }
+          title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Edit Exercise Configuration" />}
           unlimitedHeight
           noPadding
           success={submitSucceeded}
@@ -78,10 +73,7 @@ class EditExerciseSimpleConfigForm extends Component {
                 <span>
                   <Button type="reset" onClick={reset} bsStyle="danger">
                     <RefreshIcon gapRight />
-                    <FormattedMessage
-                      id="generic.reset"
-                      defaultMessage="Reset"
-                    />
+                    <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>
                 </span>
               )}
@@ -100,10 +92,7 @@ class EditExerciseSimpleConfigForm extends Component {
           }>
           {submitFailed && (
             <Alert bsStyle="danger">
-              <FormattedMessage
-                id="generic.savingFailed"
-                defaultMessage="Saving failed. Please try again later."
-              />
+              <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
             </Alert>
           )}
           <ResourceRenderer resource={supplementaryFiles.toArray()}>
@@ -112,27 +101,16 @@ class EditExerciseSimpleConfigForm extends Component {
                 {exerciseTests
                   .sort((a, b) => a.name.localeCompare(b.name, locale))
                   .map((test, idx) => {
-                    const testData =
-                      formValues &&
-                      formValues.config &&
-                      formValues.config[encodeNumId(test.id)];
+                    const testData = formValues && formValues.config && formValues.config[encodeNumId(test.id)];
                     return dataOnly ? (
                       <EditExerciseSimpleConfigDataTest
                         key={idx}
-                        environmentsWithEntryPoints={
-                          environmentsWithEntryPoints
-                        }
+                        environmentsWithEntryPoints={environmentsWithEntryPoints}
                         supplementaryFiles={files}
                         testName={test.name}
                         test={'config.' + encodeNumId(test.id)}
-                        testErrors={
-                          formErrors && formErrors[encodeNumId(test.id)]
-                        }
-                        smartFill={
-                          idx === 0
-                            ? smartFill(test.id, exerciseTests, files)
-                            : undefined
-                        }
+                        testErrors={formErrors && formErrors[encodeNumId(test.id)]}
+                        smartFill={idx === 0 ? smartFill(test.id, exerciseTests, files) : undefined}
                         change={change}
                       />
                     ) : (
@@ -143,19 +121,13 @@ class EditExerciseSimpleConfigForm extends Component {
                         jarFiles={testData && testData['jar-files']}
                         useOutFile={testData && testData.useOutFile}
                         useCustomJudge={testData && testData.useCustomJudge}
-                        environmentsWithEntryPoints={
-                          environmentsWithEntryPoints
-                        }
+                        environmentsWithEntryPoints={environmentsWithEntryPoints}
                         supplementaryFiles={files}
                         testName={test.name}
                         test={'config.' + encodeNumId(test.id)}
-                        testErrors={
-                          formErrors && formErrors[encodeNumId(test.id)]
-                        }
+                        testErrors={formErrors && formErrors[encodeNumId(test.id)]}
                         smartFill={
-                          idx === 0 && exerciseTests.length > 1
-                            ? smartFill(test.id, exerciseTests, files)
-                            : undefined
+                          idx === 0 && exerciseTests.length > 1 ? smartFill(test.id, exerciseTests, files) : undefined
                         }
                         change={change}
                       />
@@ -200,11 +172,7 @@ const validate = (formData, { dataOnly }) => {
     const test = formData.config[testKey];
     // Check the input file names for duplicities
     if (test['input-files'] && test['input-files'].length > 1) {
-      const nameIndex = createIndex(
-        test['input-files']
-          .map(({ name }) => name && name.trim())
-          .filter(name => name)
-      );
+      const nameIndex = createIndex(test['input-files'].map(({ name }) => name && name.trim()).filter(name => name));
 
       // Traverse the index and place an error to all duplicates ...
       for (const name in nameIndex) {
@@ -228,9 +196,7 @@ const validate = (formData, { dataOnly }) => {
     for (const envId in test['extra-files']) {
       const extraFiles = test['extra-files'][envId];
       if (extraFiles && extraFiles.length > 1) {
-        const nameIndex = createIndex(
-          extraFiles.map(({ name }) => name && name.trim()).filter(name => name)
-        );
+        const nameIndex = createIndex(extraFiles.map(({ name }) => name && name.trim()).filter(name => name));
 
         // Traverse the index and place an error to all duplicates ...
         for (const name in nameIndex) {
@@ -269,9 +235,7 @@ const validate = (formData, { dataOnly }) => {
     }
 
     if (jarFiles && jarFiles.length > 1) {
-      const nameIndex = createIndex(
-        jarFiles.map(name => name && name.trim()).filter(name => name)
-      );
+      const nameIndex = createIndex(jarFiles.map(name => name && name.trim()).filter(name => name));
 
       // Traverse the index and place an error to all duplicates ...
       for (const name in nameIndex) {
@@ -306,10 +270,7 @@ const warn = formData => {
     const test = formData.config[testKey];
     for (const envId in test['entry-point']) {
       const entryPoint = test['entry-point'][envId];
-      envEntryPointDefaults[envId] = warnEntryPointStateFunction(
-        envEntryPointDefaults[envId],
-        entryPoint === ''
-      );
+      envEntryPointDefaults[envId] = warnEntryPointStateFunction(envEntryPointDefaults[envId], entryPoint === '');
     }
   }
 
@@ -342,35 +303,12 @@ export default connect(
   },
   dispatch => ({
     smartFill: (testId, tests, files) => ({
-      all: () =>
-        dispatch(
-          exerciseConfigFormSmartFillAll(FORM_NAME, testId, tests, files)
-        ),
-      input: () =>
-        dispatch(
-          exerciseConfigFormSmartFillInput(FORM_NAME, testId, tests, files)
-        ),
-      args: () =>
-        dispatch(
-          exerciseConfigFormSmartFillArgs(FORM_NAME, testId, tests, files)
-        ),
-      output: () =>
-        dispatch(
-          exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)
-        ),
-      judge: () =>
-        dispatch(
-          exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)
-        ),
-      compilation: () =>
-        dispatch(
-          exerciseConfigFormSmartFillCompilation(
-            FORM_NAME,
-            testId,
-            tests,
-            files
-          )
-        ),
+      all: () => dispatch(exerciseConfigFormSmartFillAll(FORM_NAME, testId, tests, files)),
+      input: () => dispatch(exerciseConfigFormSmartFillInput(FORM_NAME, testId, tests, files)),
+      args: () => dispatch(exerciseConfigFormSmartFillArgs(FORM_NAME, testId, tests, files)),
+      output: () => dispatch(exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)),
+      judge: () => dispatch(exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)),
+      compilation: () => dispatch(exerciseConfigFormSmartFillCompilation(FORM_NAME, testId, tests, files)),
     }),
   })
 )(
@@ -378,12 +316,7 @@ export default connect(
     form: FORM_NAME,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-    immutableProps: [
-      'formValues',
-      'supplementaryFiles',
-      'exerciseTests',
-      'handleSubmit',
-    ],
+    immutableProps: ['formValues', 'supplementaryFiles', 'exerciseTests', 'handleSubmit'],
     validate,
     warn,
   })(injectIntl(EditExerciseSimpleConfigForm))

@@ -11,10 +11,7 @@ import { MarkdownTextAreaField } from '../Fields';
 const LocalizedExerciseFormField = ({ prefix, data: enabled }) => (
   <Well>
     <SharedLocalizedFields prefix={prefix} enabled={enabled} />
-    <SharedExerciseAssignmentLocalizedFields
-      prefix={prefix}
-      enabled={enabled}
-    />
+    <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
 
     <Field
       name={`${prefix}.description`}

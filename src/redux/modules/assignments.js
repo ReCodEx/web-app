@@ -3,11 +3,7 @@ import { fromJS, List } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { arrayToObject } from '../../helpers/common';
 
 import { additionalActionTypes as solutionsActionTypes } from './solutions';
@@ -26,11 +22,9 @@ export const additionalActionTypes = {
   SYNC_ASSIGNMENT: 'recodex/assignment/SYNC_ASSIGNMENT',
   SYNC_ASSIGNMENT_PENDING: 'recodex/assignment/SYNC_ASSIGNMENT_PENDING',
   SYNC_ASSIGNMENT_FULFILLED: 'recodex/assignment/SYNC_ASSIGNMENT_FULFILLED',
-  DOWNLOAD_BEST_SOLUTIONS_ARCHIVE:
-    'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE',
+  DOWNLOAD_BEST_SOLUTIONS_ARCHIVE: 'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE',
   LOAD_EXERCISE_ASSIGNMENTS: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS',
-  LOAD_EXERCISE_ASSIGNMENTS_FULFILLED:
-    'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS_FULFILLED',
+  LOAD_EXERCISE_ASSIGNMENTS_FULFILLED: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS_FULFILLED',
 };
 
 /**
@@ -46,8 +40,7 @@ export const fetchAssignmentsForGroup = groupId =>
     endpoint: `/groups/${groupId}/assignments`,
   });
 
-export const create = (groupId, exerciseId) =>
-  actions.addResource({ groupId, exerciseId });
+export const create = (groupId, exerciseId) => actions.addResource({ groupId, exerciseId });
 export const editAssignment = actions.updateResource;
 export const deleteAssignment = actions.removeResource;
 
@@ -88,122 +81,57 @@ export const fetchExerciseAssignments = exerciseId =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (
-      state,
-      { payload, meta: { assignmentId } }
-    ) => state.setIn(['resources', assignmentId, 'data'], fromJS(payload)),
+    [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (state, { payload, meta: { assignmentId } }) =>
+      state.setIn(['resources', assignmentId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.LOAD_EXERCISE_ASSIGNMENTS_FULFILLED]: (
-      state,
-      { payload }
-    ) =>
+    [additionalActionTypes.LOAD_EXERCISE_ASSIGNMENTS_FULFILLED]: (state, { payload }) =>
       state.mergeIn(
         ['resources'],
-        arrayToObject(
-          payload,
-          ({ id }) => id,
-          data => createRecord({ state: resourceStatus.FULFILLED, data })
-        )
+        arrayToObject(payload, ({ id }) => id, data => createRecord({ state: resourceStatus.FULFILLED, data }))
       ),
 
-    [submissionActionTypes.SUBMIT_FULFILLED]: (
-      state,
-      { payload: { solution }, meta: { submissionType } }
-    ) => {
-      if (
-        submissionType !== 'assignmentSolution' ||
-        !solution ||
-        !solution.id
-      ) {
+    [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload: { solution }, meta: { submissionType } }) => {
+      if (submissionType !== 'assignmentSolution' || !solution || !solution.id) {
         return state;
       }
 
-      if (
-        !state.hasIn([
-          'solutions',
-          solution.exerciseAssignmentId,
-          solution.solution.userId,
-        ])
-      ) {
-        state = state.setIn(
-          [
-            'solutions',
-            solution.exerciseAssignmentId,
-            solution.solution.userId,
-          ],
-          List()
-        );
+      if (!state.hasIn(['solutions', solution.exerciseAssignmentId, solution.solution.userId])) {
+        state = state.setIn(['solutions', solution.exerciseAssignmentId, solution.solution.userId], List());
       }
 
-      return state.updateIn(
-        ['solutions', solution.exerciseAssignmentId, solution.solution.userId],
-        solutions => solutions.push(solution.id)
+      return state.updateIn(['solutions', solution.exerciseAssignmentId, solution.solution.userId], solutions =>
+        solutions.push(solution.id)
       );
     },
 
-    [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (
-      state,
-      { payload, meta: { userId, assignmentId } }
-    ) =>
-      state.setIn(
-        ['solutions', assignmentId, userId],
-        fromJS(payload.map(solution => solution.id))
-      ),
+    [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
+      state.setIn(['solutions', assignmentId, userId], fromJS(payload.map(solution => solution.id))),
 
-    [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: (
-      state,
-      { payload, meta: { assignmentId } }
-    ) => {
+    [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: (state, { payload, meta: { assignmentId } }) => {
       payload.forEach(function(solution) {
-        if (
-          !state.hasIn(['solutions', assignmentId, solution.solution.userId])
-        ) {
-          state = state.setIn(
-            ['solutions', assignmentId, solution.solution.userId],
-            List()
-          );
+        if (!state.hasIn(['solutions', assignmentId, solution.solution.userId])) {
+          state = state.setIn(['solutions', assignmentId, solution.solution.userId], List());
         }
 
-        state = state.updateIn(
-          ['solutions', assignmentId, solution.solution.userId],
-          solutions => {
-            if (!solutions.includes(solution.id)) {
-              return solutions.push(solution.id);
-            }
-            return solutions;
+        state = state.updateIn(['solutions', assignmentId, solution.solution.userId], solutions => {
+          if (!solutions.includes(solution.id)) {
+            return solutions.push(solution.id);
           }
-        );
+          return solutions;
+        });
       });
 
       return state;
     },
 
-    [solutionsActionTypes.RESUBMIT_ALL_PENDING]: (
-      state,
-      { meta: { assignmentId } }
-    ) =>
-      state.setIn(
-        ['resources', assignmentId, 'data', 'resubmit-all-pending'],
-        true
-      ),
+    [solutionsActionTypes.RESUBMIT_ALL_PENDING]: (state, { meta: { assignmentId } }) =>
+      state.setIn(['resources', assignmentId, 'data', 'resubmit-all-pending'], true),
 
-    [solutionsActionTypes.RESUBMIT_ALL_REJECTED]: (
-      state,
-      { meta: { assignmentId } }
-    ) =>
-      state.setIn(
-        ['resources', assignmentId, 'data', 'resubmit-all-pending'],
-        false
-      ),
+    [solutionsActionTypes.RESUBMIT_ALL_REJECTED]: (state, { meta: { assignmentId } }) =>
+      state.setIn(['resources', assignmentId, 'data', 'resubmit-all-pending'], false),
 
-    [solutionsActionTypes.RESUBMIT_ALL_FULFILLED]: (
-      state,
-      { meta: { assignmentId } }
-    ) =>
-      state.setIn(
-        ['resources', assignmentId, 'data', 'resubmit-all-pending'],
-        false
-      ),
+    [solutionsActionTypes.RESUBMIT_ALL_FULFILLED]: (state, { meta: { assignmentId } }) =>
+      state.setIn(['resources', assignmentId, 'data', 'resubmit-all-pending'], false),
   }),
   initialState
 );

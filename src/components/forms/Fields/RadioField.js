@@ -5,9 +5,7 @@ import { FormGroup, HelpBlock, Radio } from 'react-bootstrap';
 
 const RadioField = ({ input, meta: { error, warning }, options }) => {
   return (
-    <FormGroup
-      validationState={error ? 'error' : warning ? 'warning' : undefined}
-      controlId={input.name}>
+    <FormGroup validationState={error ? 'error' : warning ? 'warning' : undefined} controlId={input.name}>
       {options.map(({ key, name }, idx) => (
         <Radio
           key={`radio${idx}-${key}`}

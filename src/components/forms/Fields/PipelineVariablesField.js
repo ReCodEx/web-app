@@ -4,12 +4,7 @@ import { Field, FieldArray } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Row, Col, Grid } from 'react-bootstrap';
-import {
-  TextField,
-  SelectField,
-  ExpandingTextField,
-  ExpandingSelectField,
-} from '../Fields';
+import { TextField, SelectField, ExpandingTextField, ExpandingSelectField } from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const isArray = (firstVal, type = '') =>
@@ -21,30 +16,13 @@ const isArray = (firstVal, type = '') =>
 
 const firstValue = value => (Array.isArray(value) ? value[0] || '' : value);
 
-const PipelineVariablesField = ({
-  input,
-  label,
-  variables,
-  supplementaryFiles,
-  intl,
-}) => (
+const PipelineVariablesField = ({ input, label, variables, supplementaryFiles, intl }) => (
   <Grid fluid>
     <Row>
       <h4>{label}</h4>
-      {variables.length === 0 && (
-        <FormattedMessage
-          id="app.portsField.empty"
-          defaultMessage="There are no ports."
-        />
-      )}
+      {variables.length === 0 && <FormattedMessage id="app.portsField.empty" defaultMessage="There are no ports." />}
       {variables
-        .reduce(
-          (acc, variable) =>
-            acc.find(used => used.value === variable.value)
-              ? acc
-              : [...acc, variable],
-          []
-        )
+        .reduce((acc, variable) => (acc.find(used => used.value === variable.value) ? acc : [...acc, variable]), [])
         .map(({ value, type }, i) => (
           <Col lg={6} key={i}>
             {(type === 'remote-file' || type === 'remote-file[]') && (
@@ -56,9 +34,7 @@ const PipelineVariablesField = ({
                       component={ExpandingSelectField}
                       options={[{ key: '', name: '...' }].concat(
                         supplementaryFiles
-                          .sort((a, b) =>
-                            a.name.localeCompare(b.name, intl.locale)
-                          )
+                          .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                           .filter((item, pos, arr) => arr.indexOf(item) === pos)
                           .map(data => ({
                             key: data.hashName,
@@ -73,9 +49,7 @@ const PipelineVariablesField = ({
                       component={SelectField}
                       options={[{ key: '', name: '...' }].concat(
                         supplementaryFiles
-                          .sort((a, b) =>
-                            a.name.localeCompare(b.name, intl.locale)
-                          )
+                          .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                           .filter((item, pos, arr) => arr.indexOf(item) === pos)
                           .map(data => ({
                             key: data.hashName,

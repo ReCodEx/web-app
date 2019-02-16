@@ -22,9 +22,6 @@ export const create = actions.addResource;
 export const editTerm = actions.updateResource;
 export const deleteTerm = actions.removeResource;
 
-const reducer = handleActions(
-  Object.assign({}, reduceActions, {}),
-  initialState
-);
+const reducer = handleActions(Object.assign({}, reduceActions, {}), initialState);
 
 export default reducer;

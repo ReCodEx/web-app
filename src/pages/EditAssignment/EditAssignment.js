@@ -21,12 +21,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  fetchAssignment,
-  editAssignment,
-  syncWithExercise,
-  validateAssignment,
-} from '../../redux/modules/assignments';
+import { fetchAssignment, editAssignment, syncWithExercise, validateAssignment } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { getExerciseOfAssignmentJS } from '../../redux/selectors/exercises';
@@ -104,12 +99,7 @@ class EditAssignment extends Component {
     return (
       <Page
         resource={assignment}
-        title={
-          <FormattedMessage
-            id="app.editAssignment.title"
-            defaultMessage="Edit assignment settings"
-          />
-        }
+        title={<FormattedMessage id="app.editAssignment.title" defaultMessage="Edit assignment settings" />}
         description={
           <FormattedMessage
             id="app.editAssignment.description"
@@ -121,12 +111,7 @@ class EditAssignment extends Component {
             resource: assignment,
             iconName: 'puzzle-piece',
             breadcrumb: assignment => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.title"
-                  defaultMessage="Exercise"
-                />
-              ),
+              text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
               link: EXERCISE_URI_FACTORY(assignment && assignment.exerciseId),
             }),
           },
@@ -148,20 +133,14 @@ class EditAssignment extends Component {
                   <HierarchyLineContainer groupId={assignment.groupId} />
                   {assignment.permissionHints.viewDetail && (
                     <p>
-                      <LinkContainer
-                        to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                      <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
                         <Button bsStyle="primary">
                           <ResultsIcon gapRight />
-                          <FormattedMessage
-                            id="app.assignment.viewResults"
-                            defaultMessage="Student Results"
-                          />
+                          <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
                         </Button>
                       </LinkContainer>
                       {assignment.permissionHints.resubmitSolutions && (
-                        <ResubmitAllSolutionsContainer
-                          assignmentId={assignment.id}
-                        />
+                        <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
                       )}
                     </p>
                   )}
@@ -186,19 +165,13 @@ class EditAssignment extends Component {
                   />
                 }
                 unlimitedHeight>
-                <ResourceRenderer
-                  resource={runtimeEnvironments.toArray()}
-                  returnAsArray={true}>
+                <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
                   {envs => (
                     <EditAssignmentForm
                       form="editAssignment"
                       userId={userId}
                       editTexts
-                      initialValues={
-                        assignment
-                          ? prepareEditFormInitialValues(assignment)
-                          : {}
-                      }
+                      initialValues={assignment ? prepareEditFormInitialValues(assignment) : {}}
                       onSubmit={this.editAssignmentSubmitHandler}
                       firstDeadline={firstDeadline}
                       allowSecondDeadline={allowSecondDeadline}
@@ -215,10 +188,7 @@ class EditAssignment extends Component {
                 <Box
                   type="danger"
                   title={
-                    <FormattedMessage
-                      id="app.editAssignment.deleteAssignment"
-                      defaultMessage="Delete the assignment"
-                    />
+                    <FormattedMessage id="app.editAssignment.deleteAssignment" defaultMessage="Delete the assignment" />
                   }>
                   <div>
                     <p>
@@ -230,9 +200,7 @@ class EditAssignment extends Component {
                     <p className="text-center">
                       <DeleteAssignmentButtonContainer
                         id={assignmentId}
-                        onDeleted={() =>
-                          push(GROUP_DETAIL_URI_FACTORY(this.groupId))
-                        }
+                        onDeleted={() => push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
                       />
                     </p>
                   </div>
@@ -278,10 +246,7 @@ export default connect(
       exercise: getExerciseOfAssignmentJS(state)(assignmentId),
       runtimeEnvironments: runtimeEnvironmentsSelector(state),
       firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
-      allowSecondDeadline: editAssignmentFormSelector(
-        state,
-        'allowSecondDeadline'
-      ),
+      allowSecondDeadline: editAssignmentFormSelector(state, 'allowSecondDeadline'),
       visibility: editAssignmentFormSelector(state, 'visibility'),
       allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
     };
@@ -292,7 +257,6 @@ export default connect(
     loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
     editAssignment: data => dispatch(editAssignment(assignmentId, data)),
     exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
-    validateAssignment: version =>
-      dispatch(validateAssignment(assignmentId, version)),
+    validateAssignment: version => dispatch(validateAssignment(assignmentId, version)),
   })
 )(withLinks(EditAssignment));

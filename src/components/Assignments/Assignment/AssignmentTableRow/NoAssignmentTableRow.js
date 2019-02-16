@@ -4,10 +4,7 @@ import { FormattedMessage } from 'react-intl';
 const NoAssignmentTableRow = () => (
   <tr>
     <td className="text-center">
-      <FormattedMessage
-        id="app.assignmentsTable.noAssignments"
-        defaultMessage="There are no assignments."
-      />
+      <FormattedMessage id="app.assignmentsTable.noAssignments" defaultMessage="There are no assignments." />
     </td>
   </tr>
 );

@@ -18,11 +18,7 @@ const MakeRemoveSupervisorButtonContainer = ({
   ...props
 }) =>
   isSupervisor ? (
-    <RemoveSupervisorButton
-      {...props}
-      onClick={() => removeSupervisor(groupId, userId)}
-      bsSize="xs"
-    />
+    <RemoveSupervisorButton {...props} onClick={() => removeSupervisor(groupId, userId)} bsSize="xs" />
   ) : (
     <MakeSupervisorButton
       {...props}

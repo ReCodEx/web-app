@@ -31,13 +31,10 @@ export const actionTypes = {
   DROP_OBSERVER: 'recodex/evaluationProgress/DROP_OBSERVER',
 };
 
-export const init = createAction(
-  actionTypes.INIT,
-  (webSocketChannelId, expectedTasksCount) => ({
-    webSocketChannelId,
-    expectedTasksCount,
-  })
-);
+export const init = createAction(actionTypes.INIT, (webSocketChannelId, expectedTasksCount) => ({
+  webSocketChannelId,
+  expectedTasksCount,
+}));
 export const completedTask = createAction(actionTypes.COMPLETED_TASK);
 export const skippedTask = createAction(actionTypes.SKIPPED_TASK);
 export const failedTask = createAction(actionTypes.FAILED_TASK);
@@ -57,24 +54,15 @@ const increment = (state, type, isOK = true) =>
     .updateIn(['progress', 'total'], total => total + 1)
     .updateIn(['progress', type], val => val + 1)
     .update('soFarSoGood', soFarSoGood => soFarSoGood && isOK)
-    .update(
-      'isFinished',
-      isFinished => isFinished || willBeFinishedAfterIncrementing(state)
-    );
+    .update('isFinished', isFinished => isFinished || willBeFinishedAfterIncrementing(state));
 
-const pushMessage = (state, msg) =>
-  msg ? state.update('messages', messages => messages.push(msg)) : state;
+const pushMessage = (state, msg) => (msg ? state.update('messages', messages => messages.push(msg)) : state);
 
 export default handleActions(
   {
-    [actionTypes.INIT]: (
-      state,
-      { payload: { webSocketChannelId, expectedTasksCount } }
-    ) =>
+    [actionTypes.INIT]: (state, { payload: { webSocketChannelId, expectedTasksCount } }) =>
       webSocketChannelId
-        ? initialState
-            .set('webSocketChannelId', webSocketChannelId)
-            .set('expectedTasksCount', expectedTasksCount)
+        ? initialState.set('webSocketChannelId', webSocketChannelId).set('expectedTasksCount', expectedTasksCount)
         : initialState.set('isFinished', true),
 
     [submissionActionTypes.SUBMIT_FULFILLED]: (
@@ -83,9 +71,7 @@ export default handleActions(
     ) => {
       const webSocketChannel =
         submissionType === 'referenceSolution'
-          ? payload.submissions &&
-            payload.submissions.length > 0 &&
-            payload.submissions[0].webSocketChannel
+          ? payload.submissions && payload.submissions.length > 0 && payload.submissions[0].webSocketChannel
           : payload.webSocketChannel;
 
       const newState = webSocketChannel
@@ -96,22 +82,16 @@ export default handleActions(
       return newState.set('progressObserverId', progressObserverId);
     },
 
-    [actionTypes.COMPLETED_TASK]: (state, { payload: msg }) =>
-      pushMessage(increment(state, 'completed'), msg),
+    [actionTypes.COMPLETED_TASK]: (state, { payload: msg }) => pushMessage(increment(state, 'completed'), msg),
 
-    [actionTypes.SKIPPED_TASK]: (state, { payload: msg }) =>
-      pushMessage(increment(state, 'skipped', false), msg),
+    [actionTypes.SKIPPED_TASK]: (state, { payload: msg }) => pushMessage(increment(state, 'skipped', false), msg),
 
-    [actionTypes.FAILED_TASK]: (state, { payload: msg }) =>
-      pushMessage(increment(state, 'failed', false), msg),
+    [actionTypes.FAILED_TASK]: (state, { payload: msg }) => pushMessage(increment(state, 'failed', false), msg),
 
-    [actionTypes.ADD_MESSAGE]: (state, { payload: msg }) =>
-      pushMessage(state, msg),
+    [actionTypes.ADD_MESSAGE]: (state, { payload: msg }) => pushMessage(state, msg),
 
     [actionTypes.FINISH]: state =>
-      state
-        .set('isFinished', true)
-        .set('expectedTasksCount', state.getIn(['progress', 'total'])), // maybe all the expected tasks did not arrive, stretch the progress to 100%
+      state.set('isFinished', true).set('expectedTasksCount', state.getIn(['progress', 'total'])), // maybe all the expected tasks did not arrive, stretch the progress to 100%
 
     [actionTypes.DROP_OBSERVER]: state => state.set('progressObserverId', null),
   },

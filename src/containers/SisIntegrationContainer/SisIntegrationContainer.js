@@ -41,9 +41,7 @@ class SisIntegrationContainer extends Component {
           accessible &&
           terms
             .filter(({ isAdvertised }) => isAdvertised)
-            .map(({ year, term }) =>
-              dispatch(fetchSisSubscribedGroups(loggedInUserId, year, term))
-            )
+            .map(({ year, term }) => dispatch(fetchSisSubscribedGroups(loggedInUserId, year, term)))
       );
 
   render() {
@@ -88,14 +86,10 @@ class SisIntegrationContainer extends Component {
                     .map((term, i) => (
                       <div key={i}>
                         <h4>
-                          <FormattedMessage
-                            id="app.sisIntegration.yearTerm"
-                            defaultMessage="Year and term:"
-                          />{' '}
+                          <FormattedMessage id="app.sisIntegration.yearTerm" defaultMessage="Year and term:" />{' '}
                           {`${term.year}-${term.term}`}
                         </h4>
-                        <ResourceRenderer
-                          resource={sisGroups(term.year, term.term)}>
+                        <ResourceRenderer resource={sisGroups(term.year, term.term)}>
                           {groups => (
                             <div>
                               {groups && groups.length > 0 ? (
@@ -103,16 +97,10 @@ class SisIntegrationContainer extends Component {
                                   <thead>
                                     <tr>
                                       <th>
-                                        <FormattedMessage
-                                          id="generic.name"
-                                          defaultMessage="Name"
-                                        />
+                                        <FormattedMessage id="generic.name" defaultMessage="Name" />
                                       </th>
                                       <th>
-                                        <FormattedMessage
-                                          id="app.sisIntegration.courseId"
-                                          defaultMessage="Course ID"
-                                        />
+                                        <FormattedMessage id="app.sisIntegration.courseId" defaultMessage="Course ID" />
                                       </th>
                                       <th>
                                         <FormattedMessage
@@ -127,13 +115,7 @@ class SisIntegrationContainer extends Component {
                                     {groups &&
                                       groups.map((group, i) => (
                                         <tr key={i}>
-                                          <td>
-                                            {getGroupCanonicalLocalizedName(
-                                              group,
-                                              groupsAccessor,
-                                              locale
-                                            )}
-                                          </td>
+                                          <td>{getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}</td>
                                           <td>
                                             {sisGroupBindingsExist(group) && (
                                               <span>
@@ -152,10 +134,7 @@ class SisIntegrationContainer extends Component {
                                           </td>
                                           <td>
                                             {group.primaryAdminsIds.map(id => (
-                                              <UsersNameContainer
-                                                key={id}
-                                                userId={id}
-                                              />
+                                              <UsersNameContainer key={id} userId={id} />
                                             ))}
                                           </td>
                                           <td className="text-right">
@@ -165,17 +144,10 @@ class SisIntegrationContainer extends Component {
                                                   group.organizational ||
                                                   // this is inacurate, but public groups are visible to students who cannot see detail until they join
                                                   group.public
-                                                    ? GROUP_INFO_URI_FACTORY(
-                                                        group.id
-                                                      )
-                                                    : GROUP_DETAIL_URI_FACTORY(
-                                                        group.id
-                                                      )
+                                                    ? GROUP_INFO_URI_FACTORY(group.id)
+                                                    : GROUP_DETAIL_URI_FACTORY(group.id)
                                                 }>
-                                                <Button
-                                                  bsStyle="primary"
-                                                  bsSize="xs"
-                                                  className="btn-flat">
+                                                <Button bsStyle="primary" bsSize="xs" className="btn-flat">
                                                   <GroupIcon gapRight />
                                                   <FormattedMessage
                                                     id="app.group.detail"
@@ -238,14 +210,12 @@ export default withLinks(
       return {
         sisStatus: sisStateSelector(state),
         currentUserId,
-        sisGroups: (year, term) =>
-          sisSubscribedGroupsSelector(currentUserId, year, term)(state),
+        sisGroups: (year, term) => sisSubscribedGroupsSelector(currentUserId, year, term)(state),
         groupsAccessor: groupDataAccessorSelector(state),
       };
     },
     dispatch => ({
-      loadData: loggedInUserId =>
-        SisIntegrationContainer.loadData(dispatch, loggedInUserId),
+      loadData: loggedInUserId => SisIntegrationContainer.loadData(dispatch, loggedInUserId),
     })
   )(injectIntl(SisIntegrationContainer))
 );

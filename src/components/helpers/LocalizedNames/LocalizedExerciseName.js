@@ -4,16 +4,9 @@ import { injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Icon from '../../icons';
-import {
-  getLocalizedName,
-  getOtherLocalizedNames,
-} from '../../../helpers/localizedData';
+import { getLocalizedName, getOtherLocalizedNames } from '../../../helpers/localizedData';
 
-const LocalizedExerciseName = ({
-  entity,
-  noNameMessage = '??',
-  intl: { locale },
-}) => {
+const LocalizedExerciseName = ({ entity, noNameMessage = '??', intl: { locale } }) => {
   const otherNames = getOtherLocalizedNames(entity, locale);
   const name = getLocalizedName(entity, locale);
   return name ? (

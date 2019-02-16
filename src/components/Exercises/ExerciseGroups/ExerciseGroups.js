@@ -28,11 +28,7 @@ class ExerciseGroups extends Component {
           ev.stopPropagation();
           attachExerciseToGroup(groupId);
         }}>
-        {groupId === attachingGroupId ? (
-          <LoadingIcon gapRight />
-        ) : (
-          <Icon icon="paperclip" gapRight />
-        )}
+        {groupId === attachingGroupId ? <LoadingIcon gapRight /> : <Icon icon="paperclip" gapRight />}
         <FormattedMessage id="app.exercise.attach" defaultMessage="Attach" />
       </Button>
     );
@@ -44,58 +40,32 @@ class ExerciseGroups extends Component {
       <Button
         bsStyle="danger"
         bsSize="xs"
-        disabled={
-          Boolean(detachingGroupId) ||
-          groupsIds.length <= 1 /* last one standing */
-        }
+        disabled={Boolean(detachingGroupId) || groupsIds.length <= 1 /* last one standing */}
         onClick={ev => {
           ev.stopPropagation();
           detachExerciseFromGroup(groupId);
         }}>
-        {groupId === detachingGroupId ? (
-          <LoadingIcon gapRight />
-        ) : (
-          <Icon icon="unlink" gapRight />
-        )}
+        {groupId === detachingGroupId ? <LoadingIcon gapRight /> : <Icon icon="unlink" gapRight />}
         <FormattedMessage id="app.exercise.detach" defaultMessage="Detach" />
       </Button>
     );
   };
 
   buttonsCreator = attachedGroupsIds => groupId => {
-    return (
-      <span>
-        {attachedGroupsIds[groupId]
-          ? this.detachButton(groupId)
-          : this.attachButton(groupId)}
-      </span>
-    );
+    return <span>{attachedGroupsIds[groupId] ? this.detachButton(groupId) : this.attachButton(groupId)}</span>;
   };
 
   render() {
-    const {
-      groupsIds = [],
-      rootGroupId,
-      groups,
-      showButtons = false,
-    } = this.props;
+    const { groupsIds = [], rootGroupId, groups, showButtons = false } = this.props;
     return (
       <Box
-        title={
-          <FormattedMessage
-            id="app.exercise.groups"
-            defaultMessage="Groups of Residence"
-          />
-        }
+        title={<FormattedMessage id="app.exercise.groups" defaultMessage="Groups of Residence" />}
         footer={
           showButtons ? (
             <div className="text-center">
               <Button bsStyle="primary" onClick={this.openDialog}>
                 <Icon icon="paperclip" gapRight />
-                <FormattedMessage
-                  id="app.exercise.manageGroupAttachments"
-                  defaultMessage="Manage Group Attachments"
-                />
+                <FormattedMessage id="app.exercise.manageGroupAttachments" defaultMessage="Manage Group Attachments" />
               </Button>
             </div>
           ) : null
@@ -112,20 +82,14 @@ class ExerciseGroups extends Component {
                   <td>
                     <GroupsNameContainer groupId={groupId} />
                   </td>
-                  <td className="text-right">
-                    {showButtons && this.detachButton(groupId)}
-                  </td>
+                  <td className="text-right">{showButtons && this.detachButton(groupId)}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
 
           {showButtons && (
-            <Modal
-              show={this.state.dialogOpen}
-              backdrop="static"
-              onHide={this.closeDialog}
-              bsSize="large">
+            <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage
@@ -139,9 +103,7 @@ class ExerciseGroups extends Component {
                   id={rootGroupId}
                   groups={groups}
                   onlyEditable
-                  buttonsCreator={this.buttonsCreator(
-                    arrayToObject(groupsIds, identity, () => true)
-                  )}
+                  buttonsCreator={this.buttonsCreator(arrayToObject(groupsIds, identity, () => true))}
                 />
               </Modal.Body>
             </Modal>

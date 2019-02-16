@@ -4,11 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import {
-  isReady,
-  isLoading,
-  getJsData,
-} from '../../../../redux/helpers/resourceManager';
+import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
 import ShadowAssignmentsTableRow from './ShadowAssignmentsTableRow';
 import { compareShadowAssignments } from '../../../helpers/assignments';
 import { LoadingIcon } from '../../../icons';
@@ -35,24 +31,15 @@ const ShadowAssignmentsTable = ({
 
           <th className="text-center text-nowrap">
             {!isAdmin ? (
-              <FormattedMessage
-                id="app.assignments.points"
-                defaultMessage="Points"
-              />
+              <FormattedMessage id="app.assignments.points" defaultMessage="Points" />
             ) : (
-              <FormattedMessage
-                id="app.assignments.maxPoints"
-                defaultMessage="Max. Points"
-              />
+              <FormattedMessage id="app.assignments.maxPoints" defaultMessage="Max. Points" />
             )}
           </th>
 
           {!isAdmin && (
             <th>
-              <FormattedMessage
-                id="app.shadowAssignmentPointsDetail.note"
-                defaultMessage="Note"
-              />
+              <FormattedMessage id="app.shadowAssignmentPointsDetail.note" defaultMessage="Note" />
             </th>
           )}
 
@@ -76,10 +63,7 @@ const ShadowAssignmentsTable = ({
         <tr>
           <td className="text-center em-padding" colSpan={isAdmin ? 4 : 3}>
             <LoadingIcon gapRight />
-            <FormattedMessage
-              id="app.shadowAssignmentsTable.loading"
-              defaultMessage="Loading shadow assignments..."
-            />
+            <FormattedMessage id="app.shadowAssignmentsTable.loading" defaultMessage="Loading shadow assignments..." />
           </td>
         </tr>
       )}
@@ -94,11 +78,7 @@ const ShadowAssignmentsTable = ({
             item={assignment}
             userId={userId}
             locale={locale}
-            stats={
-              Object.keys(stats).length !== 0
-                ? stats.assignments.find(item => item.id === assignment.id)
-                : null
-            }
+            stats={Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null}
             isAdmin={isAdmin}
           />
         ))}

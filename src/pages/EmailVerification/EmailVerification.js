@@ -41,10 +41,7 @@ class EmailVerification extends Component {
         let token = window.location.hash.substr(1);
         let decodedToken = decode(token);
 
-        if (
-          isTokenValid(decodedToken) &&
-          isInScope(decodedToken, 'email-verification')
-        ) {
+        if (isTokenValid(decodedToken) && isInScope(decodedToken, 'email-verification')) {
           this.setState({ token, decodedToken });
           const { verifyEmail } = this.props;
           verifyEmail(decodedToken.sub, token);
@@ -63,17 +60,9 @@ class EmailVerification extends Component {
 
     return (
       <PageContent
-        title={
-          <FormattedMessage
-            id="app.emailVerification.title"
-            defaultMessage="Email verification"
-          />
-        }
+        title={<FormattedMessage id="app.emailVerification.title" defaultMessage="Email verification" />}
         description={
-          <FormattedMessage
-            id="app.emailVerification.description"
-            defaultMessage="Your email will be verified."
-          />
+          <FormattedMessage id="app.emailVerification.description" defaultMessage="Your email will be verified." />
         }
         breadcrumbs={[
           {
@@ -104,10 +93,7 @@ class EmailVerification extends Component {
                 </Alert>
                 {userId !== null && (
                   <p className="text-center">
-                    <ResendVerificationEmailContainer
-                      bsSize="sm"
-                      userId={userId}
-                    />
+                    <ResendVerificationEmailContainer bsSize="sm" userId={userId} />
                   </p>
                 )}
               </div>
@@ -116,10 +102,7 @@ class EmailVerification extends Component {
             {decodedToken && (
               <Box
                 title={
-                  <FormattedMessage
-                    id="app.emailVerification.progress"
-                    defaultMessage="Email verification progress"
-                  />
+                  <FormattedMessage id="app.emailVerification.progress" defaultMessage="Email verification progress" />
                 }>
                 <div>
                   {getVerificationStatus(decodedToken.sub) === 'FULFILLED' && (
@@ -173,8 +156,7 @@ export default withLinks(
   connect(
     state => ({
       userId: loggedInUserIdSelector(state),
-      getVerificationStatus: userId =>
-        verificationStatusSelector(userId)(state),
+      getVerificationStatus: userId => verificationStatusSelector(userId)(state),
     }),
     dispatch => ({
       verifyEmail: (userId, token) => dispatch(verifyEmail(userId, token)),

@@ -11,12 +11,7 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, {
-  SuccessOrFailureIcon,
-  UserIcon,
-  VisibleIcon,
-  CodeIcon,
-} from '../../icons';
+import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon, CodeIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
@@ -37,9 +32,7 @@ const ExerciseDetail = ({
   locale,
   links: { EXERCISE_URI_FACTORY },
 }) => (
-  <Box
-    title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
-    noPadding>
+  <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding>
     <Table responsive condensed>
       <tbody>
         <tr>
@@ -59,10 +52,7 @@ const ExerciseDetail = ({
             <Icon icon={['far', 'file-alt']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.exercise.description"
-              defaultMessage="Short description"
-            />
+            <FormattedMessage id="app.exercise.description" defaultMessage="Short description" />
             :
             <br />
             <span className="text-muted small">
@@ -73,12 +63,7 @@ const ExerciseDetail = ({
             </span>
           </th>
           <td>
-            <Markdown
-              source={getLocalizedDescription(
-                { description, localizedTexts },
-                locale
-              )}
-            />
+            <Markdown source={getLocalizedDescription({ description, localizedTexts }, locale)} />
           </td>
         </tr>
 
@@ -87,11 +72,7 @@ const ExerciseDetail = ({
             <Icon icon="graduation-cap" />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.exercise.difficulty"
-              defaultMessage="Difficulty"
-            />
-            :
+            <FormattedMessage id="app.exercise.difficulty" defaultMessage="Difficulty" />:
           </th>
           <td>
             <DifficultyIcon difficulty={difficulty} />
@@ -103,11 +84,7 @@ const ExerciseDetail = ({
             <CodeIcon />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.exercise.runtimes"
-              defaultMessage="Runtime environments"
-            />
-            :
+            <FormattedMessage id="app.exercise.runtimes" defaultMessage="Runtime environments" />:
           </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
@@ -119,11 +96,7 @@ const ExerciseDetail = ({
             <Icon icon={['far', 'clock']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="generic.createdAt"
-              defaultMessage="Created at"
-            />
-            :
+            <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:
           </th>
           <td>
             <DateTime unixts={createdAt} showRelative />
@@ -138,11 +111,7 @@ const ExerciseDetail = ({
             <FormattedMessage id="generic.version" defaultMessage="Version" />:
           </th>
           <td>
-            <Version
-              version={version}
-              createdAt={createdAt}
-              updatedAt={updatedAt}
-            />
+            <Version version={version} createdAt={createdAt} updatedAt={updatedAt} />
           </td>
         </tr>
 
@@ -151,11 +120,7 @@ const ExerciseDetail = ({
             <VisibleIcon />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.exercise.isPublic"
-              defaultMessage="Is public"
-            />
-            :
+            <FormattedMessage id="app.exercise.isPublic" defaultMessage="Is public" />:
           </th>
           <td>
             <SuccessOrFailureIcon success={isPublic} />
@@ -167,11 +132,7 @@ const ExerciseDetail = ({
             <Icon icon="unlock-alt" />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.exercise.isLocked"
-              defaultMessage="Is locked"
-            />
-            :
+            <FormattedMessage id="app.exercise.isLocked" defaultMessage="Is locked" />:
           </th>
           <td>
             <SuccessOrFailureIcon success={isLocked} />
@@ -184,20 +145,14 @@ const ExerciseDetail = ({
               <Icon icon="code-branch" />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage
-                id="app.exercise.forked"
-                defaultMessage="Forked from"
-              />
-              :
+              <FormattedMessage id="app.exercise.forked" defaultMessage="Forked from" />:
             </th>
             <td>
               <ResourceRenderer resource={forkedFrom}>
                 {({ id, name, localizedTexts, version }) => (
                   <span>
                     <Link to={EXERCISE_URI_FACTORY(id)}>
-                      <LocalizedExerciseName
-                        entity={{ name, localizedTexts }}
-                      />
+                      <LocalizedExerciseName entity={{ name, localizedTexts }} />
                     </Link>
                     &nbsp;&nbsp;(v
                     <FormattedNumber value={version} />)

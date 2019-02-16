@@ -24,12 +24,7 @@ import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
-import {
-  getUser,
-  isStudent,
-  isSupervisor,
-  isLoggedAsSuperAdmin,
-} from '../../redux/selectors/users';
+import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { statisticsSelector } from '../../redux/selectors/stats';
 import {
@@ -45,11 +40,9 @@ import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { EMPTY_OBJ, safeGet } from '../../helpers/common';
 
-const studentOfCount = user =>
-  safeGet(user, ['privateData', 'groups', 'studentOf', 'length'], 0);
+const studentOfCount = user => safeGet(user, ['privateData', 'groups', 'studentOf', 'length'], 0);
 
-const supervisorOfCount = user =>
-  safeGet(user, ['privateData', 'groups', 'supervisorOf', 'length'], 0);
+const supervisorOfCount = user => safeGet(user, ['privateData', 'groups', 'supervisorOf', 'length'], 0);
 
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
@@ -77,15 +70,10 @@ class Dashboard extends Component {
           dispatch(fetchUserIfNeeded(userId)).then(() => {
             const state = getState();
             const user = getJsData(getUser(userId)(state));
-            const groups = user.privateData.groups.studentOf.concat(
-              user.privateData.groups.supervisorOf
-            );
+            const groups = user.privateData.groups.studentOf.concat(user.privateData.groups.supervisorOf);
             return Promise.all(
               groups.map(groupId =>
-                Promise.all([
-                  dispatch(fetchAssignmentsForGroup(groupId)),
-                  dispatch(fetchGroupsStatsIfNeeded(groupId)),
-                ])
+                Promise.all([dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupsStatsIfNeeded(groupId))])
               )
             );
           })
@@ -94,9 +82,7 @@ class Dashboard extends Component {
     ]);
 
   usersStatistics(statistics) {
-    return (
-      statistics.find(stat => stat.userId === this.props.userId) || EMPTY_OBJ
-    );
+    return statistics.find(stat => stat.userId === this.props.userId) || EMPTY_OBJ;
   }
 
   render() {
@@ -116,26 +102,13 @@ class Dashboard extends Component {
     return (
       <Page
         resource={user}
-        title={
-          <FormattedMessage
-            id="app.dashboard.title"
-            defaultMessage="Dashboard"
-          />
-        }
+        title={<FormattedMessage id="app.dashboard.title" defaultMessage="Dashboard" />}
         description={
-          <FormattedMessage
-            id="app.user.description"
-            defaultMessage="Complete progress of the user in all groups."
-          />
+          <FormattedMessage id="app.user.description" defaultMessage="Complete progress of the user in all groups." />
         }
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.user.title"
-                defaultMessage="User's profile"
-              />
-            ),
+            text: <FormattedMessage id="app.user.title" defaultMessage="User's profile" />,
             iconName: 'user',
           },
         ]}>
@@ -151,10 +124,7 @@ class Dashboard extends Component {
                   <div className="callout callout-success">
                     <h4>
                       <InfoIcon gapRight />
-                      <FormattedMessage
-                        id="app.dashboard.studentNoGroupsTitle"
-                        defaultMessage="No Group Memberships"
-                      />
+                      <FormattedMessage id="app.dashboard.studentNoGroupsTitle" defaultMessage="No Group Memberships" />
                     </h4>
                     <p>
                       <FormattedMessage
@@ -173,10 +143,7 @@ class Dashboard extends Component {
                   <div className="callout callout-success">
                     <h4>
                       <InfoIcon gapRight />
-                      <FormattedMessage
-                        id="app.dashboard.supervisorNoGroupsTitle"
-                        defaultMessage="No Groups"
-                      />
+                      <FormattedMessage id="app.dashboard.supervisorNoGroupsTitle" defaultMessage="No Groups" />
                     </h4>
                     <p>
                       <FormattedMessage
@@ -189,33 +156,22 @@ class Dashboard extends Component {
               </Row>
             )}
 
-            {(studentOf.size !== studentOfCount(user) ||
-              supervisorOf.size !== supervisorOfCount(user)) && (
+            {(studentOf.size !== studentOfCount(user) || supervisorOf.size !== supervisorOfCount(user)) && (
               <div className="text-center">
                 <LoadingIcon size="2x" />
               </div>
             )}
 
             {studentOf.size > 0 && (
-              <ResourceRenderer
-                resource={studentOf.toArray()}
-                returnAsArray={true}>
+              <ResourceRenderer resource={studentOf.toArray()} returnAsArray={true}>
                 {groups => (
                   <div>
                     <h2 className="page-heading">
-                      <FormattedMessage
-                        id="app.dashboard.memberOf"
-                        defaultMessage="Groups you are member of"
-                      />
+                      <FormattedMessage id="app.dashboard.memberOf" defaultMessage="Groups you are member of" />
                     </h2>
 
                     {groups
-                      .sort((a, b) =>
-                        getLocalizedName(a, locale).localeCompare(
-                          getLocalizedName(b, locale),
-                          locale
-                        )
-                      )
+                      .sort((a, b) => getLocalizedName(a, locale).localeCompare(getLocalizedName(b, locale), locale))
                       .map(group => (
                         <div key={group.id}>
                           {
@@ -223,9 +179,7 @@ class Dashboard extends Component {
                               loading={
                                 <Row>
                                   <Col lg={4}>
-                                    <LoadingInfoBox
-                                      title={getLocalizedName(group, locale)}
-                                    />
+                                    <LoadingInfoBox title={getLocalizedName(group, locale)} />
                                   </Col>
                                 </Row>
                               }
@@ -233,12 +187,8 @@ class Dashboard extends Component {
                               {statistics => (
                                 <Row>
                                   <Col lg={4}>
-                                    <Link
-                                      to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                      <UsersStats
-                                        {...group}
-                                        stats={this.usersStatistics(statistics)}
-                                      />
+                                    <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                      <UsersStats {...group} stats={this.usersStatistics(statistics)} />
                                     </Link>
                                   </Col>
                                   <Col lg={8}>
@@ -249,28 +199,16 @@ class Dashboard extends Component {
                                       isOpen
                                       footer={
                                         <p className="text-center">
-                                          <LinkContainer
-                                            to={GROUP_INFO_URI_FACTORY(
-                                              group.id
-                                            )}>
+                                          <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
                                             <Button bsSize="sm">
                                               <InfoIcon gapRight />
-                                              <FormattedMessage
-                                                id="app.group.info"
-                                                defaultMessage="Group Info"
-                                              />
+                                              <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                             </Button>
                                           </LinkContainer>
-                                          <LinkContainer
-                                            to={GROUP_DETAIL_URI_FACTORY(
-                                              group.id
-                                            )}>
+                                          <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                             <Button bsSize="sm">
                                               <GroupIcon gapRight />
-                                              <FormattedMessage
-                                                id="app.group.detail"
-                                                defaultMessage="Group Detail"
-                                              />
+                                              <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
                                             </Button>
                                           </LinkContainer>
                                         </p>
@@ -278,16 +216,9 @@ class Dashboard extends Component {
                                       unlimitedHeight>
                                       <AssignmentsTable
                                         userId={user.id}
-                                        assignments={groupAssignments.get(
-                                          group.id
-                                        )}
-                                        assignmentEnvironmentsSelector={
-                                          assignmentEnvironmentsSelector
-                                        }
-                                        statuses={
-                                          this.usersStatistics(statistics)
-                                            .assignments
-                                        }
+                                        assignments={groupAssignments.get(group.id)}
+                                        assignmentEnvironmentsSelector={assignmentEnvironmentsSelector}
+                                        statuses={this.usersStatistics(statistics).assignments}
                                       />
                                     </Box>
                                   </Col>
@@ -306,29 +237,20 @@ class Dashboard extends Component {
               <Row>
                 <Col sm={12}>
                   <h2 className="page-heading">
-                    <FormattedMessage
-                      id="app.dashboard.supervisorOf"
-                      defaultMessage="Groups you supervise"
-                    />
+                    <FormattedMessage id="app.dashboard.supervisorOf" defaultMessage="Groups you supervise" />
                   </h2>
 
-                  <ResourceRenderer
-                    resource={supervisorOf.toArray()}
-                    returnAsArray={true}>
+                  <ResourceRenderer resource={supervisorOf.toArray()} returnAsArray={true}>
                     {groups => (
                       <div>
                         {groups
                           .sort((a, b) =>
-                            getLocalizedName(a, locale).localeCompare(
-                              getLocalizedName(b, locale),
-                              locale
-                            )
+                            getLocalizedName(a, locale).localeCompare(getLocalizedName(b, locale), locale)
                           )
                           .map(group => (
                             <Row key={group.id}>
                               <Col lg={12}>
-                                <ResourceRenderer
-                                  resource={statistics.get(group.id)}>
+                                <ResourceRenderer resource={statistics.get(group.id)}>
                                   {statistics => (
                                     <Box
                                       title={<GroupsName {...group} noLink />}
@@ -337,35 +259,21 @@ class Dashboard extends Component {
                                       isOpen
                                       footer={
                                         <p className="text-center">
-                                          <LinkContainer
-                                            to={GROUP_INFO_URI_FACTORY(
-                                              group.id
-                                            )}>
+                                          <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
                                             <Button bsSize="sm">
                                               <InfoIcon gapRight />
-                                              <FormattedMessage
-                                                id="app.group.info"
-                                                defaultMessage="Group Info"
-                                              />
+                                              <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                             </Button>
                                           </LinkContainer>
-                                          <LinkContainer
-                                            to={GROUP_DETAIL_URI_FACTORY(
-                                              group.id
-                                            )}>
+                                          <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                             <Button bsSize="sm">
                                               <GroupIcon gapRight />
-                                              <FormattedMessage
-                                                id="app.group.detail"
-                                                defaultMessage="Group Detail"
-                                              />
+                                              <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
                                             </Button>
                                           </LinkContainer>
                                         </p>
                                       }>
-                                      <StudentsListContainer
-                                        groupId={group.id}
-                                      />
+                                      <StudentsListContainer groupId={group.id} />
                                     </Box>
                                   )}
                                 </ResourceRenderer>

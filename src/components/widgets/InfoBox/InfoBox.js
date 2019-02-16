@@ -6,15 +6,7 @@ import classnames from 'classnames';
 import Icon from '../../icons';
 import GroupsName from '../../Groups/GroupsName';
 
-const InfoBox = ({
-  title,
-  value,
-  icon = 'info',
-  spin = false,
-  progress,
-  description = '',
-  color = 'green',
-}) => (
+const InfoBox = ({ title, value, icon = 'info', spin = false, progress, description = '', color = 'green' }) => (
   <div
     className={classnames({
       'info-box': true,
@@ -47,10 +39,7 @@ InfoBox.propTypes = {
   ]),
   icon: PropTypes.string,
   spin: PropTypes.bool,
-  description: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  description: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })]),
   progress: PropTypes.number,
   color: PropTypes.string,
 };

@@ -39,10 +39,7 @@ class SourceCodeViewerContainer extends Component {
               <Modal.Header closeButton>
                 <Modal.Title>
                   <LoadingIcon gapRight />
-                  <FormattedMessage
-                    id="generic.loading"
-                    defaultMessage="Loading..."
-                  />
+                  <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
                 </Modal.Title>
               </Modal.Header>
             </div>
@@ -57,10 +54,7 @@ class SourceCodeViewerContainer extends Component {
               <Modal.Footer>
                 <Button disabled>
                   <DownloadIcon gapRight />
-                  <FormattedMessage
-                    id="app.sourceCodeViewer.downloadButton"
-                    defaultMessage="Download file"
-                  />
+                  <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
                 </Button>
               </Modal.Footer>
             </div>
@@ -97,10 +91,7 @@ class SourceCodeViewerContainer extends Component {
                   </div>
                 )}
                 <div>
-                  <SourceCodeViewer
-                    content={content.content}
-                    name={file.name}
-                  />
+                  <SourceCodeViewer content={content.content} name={file.name} />
                 </div>
               </Modal.Body>
             </div>
@@ -108,10 +99,7 @@ class SourceCodeViewerContainer extends Component {
               <Modal.Footer>
                 <Button onClick={() => download(file.id)}>
                   <DownloadIcon gapRight />
-                  <FormattedMessage
-                    id="app.sourceCodeViewer.downloadButton"
-                    defaultMessage="Download file"
-                  />
+                  <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
                 </Button>
               </Modal.Footer>
             </div>
@@ -138,11 +126,7 @@ export default connect(
     content: getFilesContent(fileId)(state),
   }),
   (dispatch, { fileId }) => ({
-    loadAsync: () =>
-      Promise.all([
-        dispatch(fetchFileIfNeeded(fileId)),
-        dispatch(fetchContentIfNeeded(fileId)),
-      ]),
+    loadAsync: () => Promise.all([dispatch(fetchFileIfNeeded(fileId)), dispatch(fetchContentIfNeeded(fileId))]),
     download: id => dispatch(download(id)),
   })
 )(SourceCodeViewerContainer);

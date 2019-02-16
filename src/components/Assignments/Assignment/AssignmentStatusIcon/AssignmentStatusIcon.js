@@ -13,10 +13,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
           accepted={accepted}
           icon={<Icon icon={['far', 'thumbs-up']} className="text-green" />}
           message={
-            <FormattedMessage
-              id="app.assignemntStatusIcon.ok"
-              defaultMessage="Assignment is successfully completed."
-            />
+            <FormattedMessage id="app.assignemntStatusIcon.ok" defaultMessage="Assignment is successfully completed." />
           }
         />
       );

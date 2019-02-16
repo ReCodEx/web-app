@@ -24,12 +24,7 @@ class Badge extends Component {
     return (
       <div className="user-panel">
         <div className="pull-left image">
-          <AvatarContainer
-            avatarUrl={avatarUrl}
-            fullName={fullName}
-            firstName={firstName}
-            size={size}
-          />
+          <AvatarContainer avatarUrl={avatarUrl} fullName={fullName} firstName={firstName} size={size} />
         </div>
         <div className="info">
           <p>
@@ -44,10 +39,7 @@ class Badge extends Component {
             placement="right"
             overlay={
               <Tooltip id="tokenExpiration">
-                <FormattedMessage
-                  id="app.badge.sessionExpiration"
-                  defaultMessage="Session expiration:"
-                />{' '}
+                <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
                 <FormattedRelative value={expiration} />
               </Tooltip>
             }>
@@ -74,8 +66,7 @@ Badge.propTypes = {
   name: PropTypes.shape({ firstName: PropTypes.string.isRequired }).isRequired,
   avatarUrl: PropTypes.string,
   expiration: PropTypes.number.isRequired,
-  privateData: PropTypes.shape({ settings: PropTypes.object.isRequired })
-    .isRequired,
+  privateData: PropTypes.shape({ settings: PropTypes.object.isRequired }).isRequired,
   logout: PropTypes.func,
   size: PropTypes.number,
   links: PropTypes.object,

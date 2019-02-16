@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import {
-  FormGroup,
-  FormControl,
-  ControlLabel,
-  HelpBlock,
-} from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import styles from './commonStyles.less';
@@ -22,9 +17,7 @@ const SelectField = ({
   associatedButton = null,
   ...props
 }) => (
-  <FormGroup
-    controlId={input.name}
-    validationState={error ? 'error' : warning ? 'warning' : undefined}>
+  <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
     {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
 
     <table className="full-width">
@@ -53,9 +46,7 @@ const SelectField = ({
               ))}
             </FormControl>
           </td>
-          {associatedButton && (
-            <td className="valign-top">{associatedButton}</td>
-          )}
+          {associatedButton && <td className="valign-top">{associatedButton}</td>}
         </tr>
       </tbody>
     </table>

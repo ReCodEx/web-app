@@ -67,8 +67,7 @@ export const hasSucceeded = service =>
 
 export const isLoggedIn = createSelector(
   getAuth,
-  auth =>
-    Boolean(auth.get('userId')) && isTokenValid(auth.get('accessToken').toJS())
+  auth => Boolean(auth.get('userId')) && isTokenValid(auth.get('accessToken').toJS())
 );
 
 export const isChanging = createSelector(

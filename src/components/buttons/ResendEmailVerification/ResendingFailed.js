@@ -8,10 +8,7 @@ const ResendingFailed = ({ resend, ...props }) => {
   return (
     <FlatButton onClick={resend} bsStyle="danger" {...props}>
       <FailureIcon gapRight />
-      <FormattedMessage
-        id="app.resendEmailVerification.failed"
-        defaultMessage="Resending failed"
-      />
+      <FormattedMessage id="app.resendEmailVerification.failed" defaultMessage="Resending failed" />
     </FlatButton>
   );
 };

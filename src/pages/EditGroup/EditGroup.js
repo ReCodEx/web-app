@@ -9,26 +9,17 @@ import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
-import EditGroupForm, {
-  EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT,
-} from '../../components/forms/EditGroupForm';
+import EditGroupForm, { EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT } from '../../components/forms/EditGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import { BanIcon, InfoIcon } from '../../components/icons';
 
-import {
-  fetchGroup,
-  fetchGroupIfNeeded,
-  editGroup,
-} from '../../redux/modules/groups';
+import { fetchGroup, fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  isSupervisorOf,
-  isLoggedAsSuperAdmin,
-} from '../../redux/selectors/users';
+import { isSupervisorOf, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import {
   getLocalizedName,
   getLocalizedTextsInitialValues,
@@ -51,24 +42,13 @@ class EditGroup extends Component {
   }
 
   getInitialValues = defaultMemoize(
-    ({
-      localizedTexts,
-      externalId,
-      public: isPublic,
-      privateData: { publicStats, threshold },
-    }) => ({
-      localizedTexts: getLocalizedTextsInitialValues(
-        localizedTexts,
-        EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT
-      ),
+    ({ localizedTexts, externalId, public: isPublic, privateData: { publicStats, threshold } }) => ({
+      localizedTexts: getLocalizedTextsInitialValues(localizedTexts, EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
       externalId,
       isPublic,
       publicStats,
       hasThreshold: threshold !== null && threshold !== undefined,
-      threshold:
-        threshold !== null && threshold !== undefined
-          ? String(Number(threshold) * 100)
-          : '0',
+      threshold: threshold !== null && threshold !== undefined ? String(Number(threshold) * 100) : '0',
     })
   );
 
@@ -89,20 +69,10 @@ class EditGroup extends Component {
       <Page
         resource={group}
         title={group => getLocalizedName(group, locale)}
-        description={
-          <FormattedMessage
-            id="app.editGroup.description"
-            defaultMessage="Change group settings"
-          />
-        }
+        description={<FormattedMessage id="app.editGroup.description" defaultMessage="Change group settings" />}
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.group.info"
-                defaultMessage="Group Info"
-              />
-            ),
+            text: <FormattedMessage id="app.group.info" defaultMessage="Group Info" />,
             iconName: 'users',
             link: GROUP_INFO_URI_FACTORY(groupId),
           },
@@ -112,12 +82,7 @@ class EditGroup extends Component {
             link: GROUP_DETAIL_URI_FACTORY(groupId),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.editGroup.title"
-                defaultMessage="Edit Group"
-              />
-            ),
+            text: <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />,
             iconName: ['far', 'edit'],
           },
         ]}>
@@ -137,26 +102,18 @@ class EditGroup extends Component {
               </Row>
             )}
 
-            <GroupArchivedWarning
-              archived={group.archived}
-              directlyArchived={group.directlyArchived}
-            />
+            <GroupArchivedWarning archived={group.archived} directlyArchived={group.directlyArchived} />
 
             {hasPermissions(group, 'update') && (
               <React.Fragment>
                 <Row>
                   <Col lg={3}>
                     <p>
-                      <OrganizationalGroupButtonContainer
-                        id={group.id}
-                        locale={locale}
-                      />
+                      <OrganizationalGroupButtonContainer id={group.id} locale={locale} />
                     </p>
                   </Col>
                   <Col lg={9}>
-                    <p
-                      className="small text-muted"
-                      style={{ padding: '0.75em' }}>
+                    <p className="small text-muted" style={{ padding: '0.75em' }}>
                       <InfoIcon gapRight />
                       <FormattedMessage
                         id="app.editGroup.organizationalExplain"
@@ -169,16 +126,11 @@ class EditGroup extends Component {
                   <Row>
                     <Col lg={3}>
                       <p>
-                        <ArchiveGroupButtonContainer
-                          id={group.id}
-                          onChange={reload}
-                        />
+                        <ArchiveGroupButtonContainer id={group.id} onChange={reload} />
                       </p>
                     </Col>
                     <Col lg={9}>
-                      <p
-                        className="small text-muted"
-                        style={{ padding: '0.75em' }}>
+                      <p className="small text-muted" style={{ padding: '0.75em' }}>
                         <InfoIcon gapRight />
                         <FormattedMessage
                           id="app.editGroup.archivedExplain"
@@ -205,12 +157,7 @@ class EditGroup extends Component {
             {hasPermissions(group, 'remove') && (
               <Box
                 type="danger"
-                title={
-                  <FormattedMessage
-                    id="app.editGroup.deleteGroup"
-                    defaultMessage="Delete the group"
-                  />
-                }>
+                title={<FormattedMessage id="app.editGroup.deleteGroup" defaultMessage="Delete the group" />}>
                 <div>
                   <p>
                     <FormattedMessage
@@ -222,12 +169,9 @@ class EditGroup extends Component {
                     <DeleteGroupButtonContainer
                       id={group.id}
                       disabled={
-                        group.parentGroupId === null ||
-                        (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
+                        group.parentGroupId === null || (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
                       }
-                      onDeleted={() =>
-                        push(GROUP_INFO_URI_FACTORY(group.parentGroupId))
-                      }
+                      onDeleted={() => push(GROUP_INFO_URI_FACTORY(group.parentGroupId))}
                     />
 
                     {group.parentGroupId === null && (
@@ -239,16 +183,14 @@ class EditGroup extends Component {
                       </HelpBlock>
                     )}
 
-                    {group.parentGroupId !== null &&
-                      group.childGroups &&
-                      group.childGroups.length > 0 && (
-                        <HelpBlock>
-                          <FormattedMessage
-                            id="app.editGroup.cannotDeleteGroupWithSubgroups"
-                            defaultMessage="Group with nested sub-groups cannot be deleted."
-                          />
-                        </HelpBlock>
-                      )}
+                    {group.parentGroupId !== null && group.childGroups && group.childGroups.length > 0 && (
+                      <HelpBlock>
+                        <FormattedMessage
+                          id="app.editGroup.cannotDeleteGroupWithSubgroups"
+                          defaultMessage="Group with nested sub-groups cannot be deleted."
+                        />
+                      </HelpBlock>
+                    )}
                   </p>
                 </div>
               </Box>
@@ -295,14 +237,7 @@ export default withLinks(
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
       reload: () => dispatch(fetchGroup(groupId)),
-      editGroup: ({
-        localizedTexts,
-        externalId,
-        isPublic,
-        publicStats,
-        threshold,
-        hasThreshold,
-      }) => {
+      editGroup: ({ localizedTexts, externalId, isPublic, publicStats, threshold, hasThreshold }) => {
         let transformedData = {
           localizedTexts: transformLocalizedTextsFormData(localizedTexts),
           externalId,

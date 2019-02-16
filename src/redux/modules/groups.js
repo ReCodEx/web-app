@@ -107,10 +107,7 @@ export const validateAddGroup = (name, instanceId, parentGroupId = null) =>
     type: 'VALIDATE_ADD_GROUP_DATA',
     endpoint: '/groups/validate-add-group-data',
     method: 'POST',
-    body:
-      parentGroupId === null
-        ? { name, instanceId }
-        : { name, instanceId, parentGroupId },
+    body: parentGroupId === null ? { name, instanceId } : { name, instanceId, parentGroupId },
   });
 
 export const createGroup = actions.addResource;
@@ -145,11 +142,7 @@ export const makeSupervisor = (groupId, userId) => dispatch =>
       method: 'POST',
       meta: { groupId, userId },
     })
-  ).catch(() =>
-    dispatch(
-      addNotification('Cannot make this person supervisor of the group.', false)
-    )
-  ); // @todo: Make translatable
+  ).catch(() => dispatch(addNotification('Cannot make this person supervisor of the group.', false))); // @todo: Make translatable
 
 export const removeSupervisor = (groupId, userId) => dispatch =>
   dispatch(
@@ -170,11 +163,7 @@ export const addAdmin = (groupId, userId) => dispatch =>
       meta: { groupId, userId },
       body: { userId },
     })
-  ).catch(() =>
-    dispatch(
-      addNotification('Cannot make this person admin of the group.', false)
-    )
-  ); // @todo: Make translatable
+  ).catch(() => dispatch(addNotification('Cannot make this person admin of the group.', false))); // @todo: Make translatable
 
 export const removeAdmin = (groupId, userId) => dispatch =>
   dispatch(
@@ -184,14 +173,7 @@ export const removeAdmin = (groupId, userId) => dispatch =>
       method: 'DELETE',
       meta: { groupId, userId },
     })
-  ).catch(() =>
-    dispatch(
-      addNotification(
-        'Cannot remove this person from admins of the group.',
-        false
-      )
-    )
-  ); // @todo: Make translatable
+  ).catch(() => dispatch(addNotification('Cannot remove this person from admins of the group.', false))); // @todo: Make translatable
 
 export const setOrganizational = (groupId, organizational) =>
   createApiAction({
@@ -224,16 +206,12 @@ const reducer = handleActions(
 
       // update the new hierarchy inside the local state
       const { payload: group } = action;
-      if (
-        group.parentGroupId === null ||
-        !state.getIn(['resources', group.parentGroupId])
-      ) {
+      if (group.parentGroupId === null || !state.getIn(['resources', group.parentGroupId])) {
         return state;
       }
 
-      return state.updateIn(
-        ['resources', group.parentGroupId, 'data', 'childGroups'],
-        children => children.push(group.id)
+      return state.updateIn(['resources', group.parentGroupId, 'data', 'childGroups'], children =>
+        children.push(group.id)
       );
     },
 
@@ -250,133 +228,72 @@ const reducer = handleActions(
       );
     },
 
-    [additionalActionTypes.JOIN_GROUP_PENDING]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) =>
+    [additionalActionTypes.JOIN_GROUP_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
       state.hasIn(['resources', groupId, 'data', 'privateData', 'students'])
-        ? state.updateIn(
-            ['resources', groupId, 'data', 'privateData', 'students'],
-            students => students.push(userId)
+        ? state.updateIn(['resources', groupId, 'data', 'privateData', 'students'], students => students.push(userId))
+        : state,
+
+    [additionalActionTypes.JOIN_GROUP_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
+      state.hasIn(['resources', groupId, 'data', 'privateData', 'students'])
+        ? state.updateIn(['resources', groupId, 'data', 'privateData', 'students'], students =>
+            students.filter(id => id !== userId)
           )
         : state,
 
-    [additionalActionTypes.JOIN_GROUP_REJECTED]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) =>
-      state.hasIn(['resources', groupId, 'data', 'privateData', 'students'])
-        ? state.updateIn(
-            ['resources', groupId, 'data', 'privateData', 'students'],
-            students => students.filter(id => id !== userId)
-          )
-        : state,
-
-    [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'students'],
-        students => students.filter(id => id !== userId)
+    [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'privateData', 'students'], students =>
+        students.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.ADD_ADMIN_PENDING]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'primaryAdminsIds'],
-        admins => admins.filter(id => id !== userId).concat([userId])
+    [additionalActionTypes.ADD_ADMIN_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins =>
+        admins.filter(id => id !== userId).concat([userId])
       ),
 
-    [additionalActionTypes.ADD_ADMIN_REJECTED]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'primaryAdminsIds'],
-        admins => admins.filter(id => id !== userId)
+    [additionalActionTypes.ADD_ADMIN_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins => admins.filter(id => id !== userId)),
+
+    [additionalActionTypes.ADD_ADMIN_FULFILLED]: (state, { payload, meta: { groupId } }) =>
+      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.REMOVE_ADMIN_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins => admins.filter(id => id !== userId)),
+
+    [additionalActionTypes.REMOVE_ADMIN_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins =>
+        admins.filter(id => id !== userId).concat([userId])
       ),
 
-    [additionalActionTypes.ADD_ADMIN_FULFILLED]: (
-      state,
-      { payload, meta: { groupId } }
-    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.REMOVE_ADMIN_FULFILLED]: (state, { payload, meta: { groupId } }) =>
+      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.REMOVE_ADMIN_PENDING]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'primaryAdminsIds'],
-        admins => admins.filter(id => id !== userId)
-      ),
+    [additionalActionTypes.SET_ORGANIZATIONAL_PENDING]: (state, { payload, meta: { groupId } }) =>
+      state.setIn(['resources', groupId, 'pending-organizational'], true),
 
-    [additionalActionTypes.REMOVE_ADMIN_REJECTED]: (
-      state,
-      { payload, meta: { groupId, userId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'primaryAdminsIds'],
-        admins => admins.filter(id => id !== userId).concat([userId])
-      ),
-
-    [additionalActionTypes.REMOVE_ADMIN_FULFILLED]: (
-      state,
-      { payload, meta: { groupId } }
-    ) => state.setIn(['resources', groupId, 'data'], fromJS(payload)),
-
-    [additionalActionTypes.SET_ORGANIZATIONAL_PENDING]: (
-      state,
-      { payload, meta: { groupId } }
-    ) => state.setIn(['resources', groupId, 'pending-organizational'], true),
-
-    [additionalActionTypes.SET_ORGANIZATIONAL_FULFILLED]: (
-      state,
-      { payload, meta: { groupId } }
-    ) =>
+    [additionalActionTypes.SET_ORGANIZATIONAL_FULFILLED]: (state, { payload, meta: { groupId } }) =>
       state
         .deleteIn(['resources', groupId, 'pending-organizational'])
         .setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.SET_ORGANIZATIONAL_REJECTED]: (
-      state,
-      { payload, meta: { groupId } }
-    ) => state.deleteIn(['resources', groupId, 'pending-organizational']),
+    [additionalActionTypes.SET_ORGANIZATIONAL_REJECTED]: (state, { payload, meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-organizational']),
 
-    [additionalActionTypes.SET_ARCHIVED_PENDING]: (
-      state,
-      { payload, meta: { groupId } }
-    ) => state.setIn(['resources', groupId, 'pending-archived'], true),
+    [additionalActionTypes.SET_ARCHIVED_PENDING]: (state, { payload, meta: { groupId } }) =>
+      state.setIn(['resources', groupId, 'pending-archived'], true),
 
-    [additionalActionTypes.SET_ARCHIVED_FULFILLED]: (
-      state,
-      { payload, meta: { groupId } }
-    ) =>
-      state
-        .deleteIn(['resources', groupId, 'pending-archived'])
-        .setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.SET_ARCHIVED_FULFILLED]: (state, { payload, meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-archived']).setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.SET_ARCHIVED_REJECTED]: (
-      state,
-      { payload, meta: { groupId } }
-    ) => state.deleteIn(['resources', groupId, 'pending-archived']),
+    [additionalActionTypes.SET_ARCHIVED_REJECTED]: (state, { payload, meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-archived']),
 
-    [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (
-      state,
-      { payload, ...rest }
-    ) => {
+    [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
       const groups = [...payload.supervisor, ...payload.student];
       return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, {
         ...rest,
@@ -384,17 +301,12 @@ const reducer = handleActions(
       });
     },
 
-    [assignmentsActionTypes.UPDATE_FULFILLED]: (
-      state,
-      { payload: { id: assignmentId, groupId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'assignments'],
-        assignments =>
-          assignments
-            .push(assignmentId)
-            .toSet()
-            .toList()
+    [assignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: assignmentId, groupId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'privateData', 'assignments'], assignments =>
+        assignments
+          .push(assignmentId)
+          .toSet()
+          .toList()
       ),
 
     [assignmentsActionTypes.ADD_FULFILLED]: (
@@ -406,19 +318,14 @@ const reducer = handleActions(
         },
       }
     ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'assignments'],
-        assignments =>
-          assignments
-            .push(assignmentId)
-            .toSet()
-            .toList()
+      state.updateIn(['resources', groupId, 'data', 'privateData', 'assignments'], assignments =>
+        assignments
+          .push(assignmentId)
+          .toSet()
+          .toList()
       ),
 
-    [assignmentsActionTypes.REMOVE_FULFILLED]: (
-      state,
-      { meta: { id: assignmentId } }
-    ) =>
+    [assignmentsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: assignmentId } }) =>
       state.update('resources', groups =>
         groups.map(group =>
           group.updateIn(['data', 'privateData', 'assignments'], assignments =>
@@ -427,53 +334,33 @@ const reducer = handleActions(
         )
       ),
 
-    [shadowAssignmentsActionTypes.UPDATE_FULFILLED]: (
-      state,
-      { payload: { id: shadowAssignmentId, groupId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'shadowAssignments'],
-        assignments =>
-          assignments
-            .push(shadowAssignmentId)
-            .toSet()
-            .toList()
+    [shadowAssignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: shadowAssignmentId, groupId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'privateData', 'shadowAssignments'], assignments =>
+        assignments
+          .push(shadowAssignmentId)
+          .toSet()
+          .toList()
       ),
 
-    [shadowAssignmentsActionTypes.ADD_FULFILLED]: (
-      state,
-      { payload: { id: shadowAssignmentId, groupId } }
-    ) =>
-      state.updateIn(
-        ['resources', groupId, 'data', 'privateData', 'shadowAssignments'],
-        assignments =>
-          assignments
-            .push(shadowAssignmentId)
-            .toSet()
-            .toList()
+    [shadowAssignmentsActionTypes.ADD_FULFILLED]: (state, { payload: { id: shadowAssignmentId, groupId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'privateData', 'shadowAssignments'], assignments =>
+        assignments
+          .push(shadowAssignmentId)
+          .toSet()
+          .toList()
       ),
 
-    [shadowAssignmentsActionTypes.REMOVE_FULFILLED]: (
-      state,
-      { meta: { id: shadowAssignmentId } }
-    ) =>
+    [shadowAssignmentsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: shadowAssignmentId } }) =>
       state.update('resources', groups =>
         groups.map(group =>
-          group.updateIn(
-            ['data', 'privateData', 'shadowAssignments'],
-            assignments => assignments.filter(id => id !== shadowAssignmentId)
+          group.updateIn(['data', 'privateData', 'shadowAssignments'], assignments =>
+            assignments.filter(id => id !== shadowAssignmentId)
           )
         )
       ),
 
-    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (
-      state,
-      { payload: data }
-    ) =>
-      state.setIn(
-        ['resources', data.id],
-        createRecord({ state: resourceStatus.FULFILLED, data })
-      ),
+    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (state, { payload: data }) =>
+      state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
   }),
   initialState
 );

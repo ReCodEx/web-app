@@ -4,20 +4,9 @@ import { connect } from 'react-redux';
 
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector } from '../../redux/selectors/users';
-import Avatar, {
-  LoadingAvatar,
-  FailedAvatar,
-  FakeAvatar,
-} from '../../components/widgets/Avatar';
+import Avatar, { LoadingAvatar, FailedAvatar, FakeAvatar } from '../../components/widgets/Avatar';
 
-const AvatarContainer = ({
-  currentUser,
-  avatarUrl,
-  fullName,
-  firstName,
-  size = 45,
-  ...props
-}) => (
+const AvatarContainer = ({ currentUser, avatarUrl, fullName, firstName, size = 45, ...props }) => (
   <ResourceRenderer
     loading={<LoadingAvatar size={size} />}
     failed={<FailedAvatar size={size} />}

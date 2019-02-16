@@ -10,13 +10,7 @@ import {
   createGetFailedFiles,
 } from '../../redux/selectors/upload';
 
-import {
-  init,
-  uploadFile,
-  removeFile,
-  returnFile,
-  removeFailedFile,
-} from '../../redux/modules/upload';
+import { init, uploadFile, removeFile, returnFile, removeFailedFile } from '../../redux/modules/upload';
 
 class UploadContainer extends Component {
   componentWillMount() {
@@ -84,13 +78,8 @@ export default connect(
   }),
   (dispatch, { id, onChange }) => ({
     init: () => dispatch(init(id)),
-    uploadFile: payload =>
-      appendThen(dispatch(uploadFile(id, payload)), onChange),
-    uploadFiles: files =>
-      appendThen(
-        Promise.all(files.map(file => dispatch(uploadFile(id, file)))),
-        onChange
-      ),
+    uploadFile: payload => appendThen(dispatch(uploadFile(id, payload)), onChange),
+    uploadFiles: files => appendThen(Promise.all(files.map(file => dispatch(uploadFile(id, file)))), onChange),
     removeFailedFile: payload => dispatch(removeFailedFile(id, payload)),
     removeFile: payload => {
       dispatch(removeFile(id, payload));

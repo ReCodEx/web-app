@@ -14,9 +14,7 @@ const BrokerButtons = ({
   freezeActionStatus = null,
   unfreezeActionStatus = null,
 }) => {
-  const pending =
-    freezeActionStatus === resourceStatus.PENDING ||
-    unfreezeActionStatus === resourceStatus.PENDING;
+  const pending = freezeActionStatus === resourceStatus.PENDING || unfreezeActionStatus === resourceStatus.PENDING;
   return (
     <div className="em-margin-bottom em-margin-right">
       <ButtonGroup>
@@ -69,10 +67,7 @@ const BrokerButtons = ({
             <Icon icon="sun" gapRight />
           )}
 
-          <FormattedMessage
-            id="app.broker.unfreeze"
-            defaultMessage="Unfreeze"
-          />
+          <FormattedMessage id="app.broker.unfreeze" defaultMessage="Unfreeze" />
         </Button>
       </ButtonGroup>
     </div>

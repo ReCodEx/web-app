@@ -18,10 +18,7 @@ class EvaluationProgress extends Component {
   state = { messagesCount: 0 };
 
   componentDidUpdate() {
-    if (
-      this.props.messages &&
-      this.state.messagesCount < this.props.messages.size
-    ) {
+    if (this.props.messages && this.state.messagesCount < this.props.messages.size) {
       this.setState({ messagesCount: this.props.messages.size });
       setTimeout(this.scrollToBottom, 10);
     }
@@ -52,10 +49,7 @@ class EvaluationProgress extends Component {
       <Modal show={isOpen} backdrop="static" onHide={onClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <FormattedMessage
-              id="app.evaluationProgress.title"
-              defaultMessage="Solution is being evaluated"
-            />
+            <FormattedMessage id="app.evaluationProgress.title" defaultMessage="Solution is being evaluated" />
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -81,11 +75,7 @@ class EvaluationProgress extends Component {
                           'text-danger': !wasSuccessful,
                         })}>
                         <strong>
-                          <Icon
-                            icon={
-                              wasSuccessful ? 'check-circle' : 'times-circle'
-                            }
-                          />
+                          <Icon icon={wasSuccessful ? 'check-circle' : 'times-circle'} />
                         </strong>
                       </td>
                       <td>{text}</td>
@@ -111,10 +101,7 @@ class EvaluationProgress extends Component {
               bsStyle={finished ? 'success' : 'default'}
               onClick={finishProcessing}
               disabled={!showContinueButton}>
-              <FormattedMessage
-                id="app.evaluationProgress.continue"
-                defaultMessage="See The Results"
-              />
+              <FormattedMessage id="app.evaluationProgress.continue" defaultMessage="See The Results" />
             </Button>
           </p>
         </Modal.Footer>

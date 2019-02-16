@@ -6,20 +6,12 @@ import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
-import {
-  DatetimeField,
-  CheckboxField,
-  RadioField,
-  NumericTextField,
-} from '../Fields';
+import { DatetimeField, CheckboxField, RadioField, NumericTextField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import AssignmentFormGroupsList from './AssignmentFormGroupsList';
 import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess';
-import {
-  validateDeadline,
-  validateTwoDeadlines,
-} from '../../helpers/validation';
+import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation';
 import {
   getGroupCanonicalLocalizedName,
   getLocalizedTextsInitialValues,
@@ -60,9 +52,7 @@ export const prepareInitialValues = defaultMemoize(
     visibleFrom = null,
   }) => ({
     groups,
-    localizedTexts:
-      localizedTexts &&
-      getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
+    localizedTexts: localizedTexts && getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
     firstDeadline:
       firstDeadline !== undefined
         ? moment.unix(firstDeadline)
@@ -167,12 +157,7 @@ const VISIBILITY_STATES = [
   },
   {
     key: 'visible',
-    name: (
-      <FormattedMessage
-        id="app.editAssignmentForm.visibility.visible"
-        defaultMessage="Visible to students"
-      />
-    ),
+    name: <FormattedMessage id="app.editAssignmentForm.visibility.visible" defaultMessage="Visible to students" />,
   },
   {
     key: 'visibleFrom',
@@ -187,9 +172,7 @@ const VISIBILITY_STATES = [
 
 const SUBMIT_BUTTON_MESSAGES_DEFAULT = {
   submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-  submitting: (
-    <FormattedMessage id="generic.saving" defaultMessage="Saving..." />
-  ),
+  submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
   success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
 };
 
@@ -223,11 +206,7 @@ class EditAssignmentForm extends Component {
       this.allGroups = newProps.groups
         .filter(g => !g.organizational && !g.archived)
         .sort((a, b) =>
-          getGroupCanonicalLocalizedName(
-            a,
-            groupsAccessor,
-            locale
-          ).localeCompare(
+          getGroupCanonicalLocalizedName(a, groupsAccessor, locale).localeCompare(
             getGroupCanonicalLocalizedName(b, groupsAccessor, locale),
             locale
           )
@@ -291,43 +270,25 @@ class EditAssignmentForm extends Component {
       <React.Fragment>
         {submitFailed && (
           <Alert bsStyle="danger">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
-        {editTexts && (
-          <FieldArray
-            name="localizedTexts"
-            component={LocalizedTextsFormField}
-            fieldType="assignment"
-          />
-        )}
+        {editTexts && <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="assignment" />}
 
         {groupsAccessor && (
           <AssignmentFormGroupsList
             groups={this.state.open ? this.allGroups : this.myGroups}
             groupsAccessor={groupsAccessor}
             isOpen={this.state.open}
-            toggleOpenState={
-              this.allGroups.length !== this.myGroups.length
-                ? this.toggleOpenState
-                : null
-            }
+            toggleOpenState={this.allGroups.length !== this.myGroups.length ? this.toggleOpenState : null}
           />
         )}
 
         <Field
           name="firstDeadline"
           component={DatetimeField}
-          label={
-            <FormattedMessage
-              id="app.editAssignmentForm.firstDeadline"
-              defaultMessage="First deadline:"
-            />
-          }
+          label={<FormattedMessage id="app.editAssignmentForm.firstDeadline" defaultMessage="First deadline:" />}
         />
 
         <NumericTextField
@@ -367,12 +328,7 @@ class EditAssignmentForm extends Component {
             disabled={!firstDeadline || allowSecondDeadline !== true}
             isValidDate={date => date.isSameOrAfter(firstDeadline)}
             component={DatetimeField}
-            label={
-              <FormattedMessage
-                id="app.editAssignmentForm.secondDeadline"
-                defaultMessage="Second deadline:"
-              />
-            }
+            label={<FormattedMessage id="app.editAssignmentForm.secondDeadline" defaultMessage="Second deadline:" />}
           />
         )}
 
@@ -494,11 +450,8 @@ class EditAssignmentForm extends Component {
                   component={CheckboxField}
                   onOff
                   label={
-                    runtimeEnvironments &&
-                    Array.isArray(runtimeEnvironments) &&
-                    runtimeEnvironments.length > 0
-                      ? runtimeEnvironments.find(env => env.id === item)
-                          .longName
+                    runtimeEnvironments && Array.isArray(runtimeEnvironments) && runtimeEnvironments.length > 0
+                      ? runtimeEnvironments.find(env => env.id === item).longName
                       : ''
                   }
                 />
@@ -510,19 +463,12 @@ class EditAssignmentForm extends Component {
         <hr />
 
         <h4>
-          <FormattedMessage
-            id="app.editAssignmentForm.visibility"
-            defaultMessage="Visibility"
-          />
+          <FormattedMessage id="app.editAssignmentForm.visibility" defaultMessage="Visibility" />
         </h4>
         <Grid fluid>
           <Row>
             <Col md={4}>
-              <Field
-                name="visibility"
-                component={RadioField}
-                options={VISIBILITY_STATES}
-              />
+              <Field name="visibility" component={RadioField} options={VISIBILITY_STATES} />
 
               {false && (
                 <table>
@@ -530,16 +476,9 @@ class EditAssignmentForm extends Component {
                     {Object.keys(VISIBILITY_STATES).map(state => (
                       <tr key={state}>
                         <td className="em-padding valign-middle">
-                          <Field
-                            name="visibility"
-                            component="input"
-                            type="radio"
-                            value={state}
-                          />
+                          <Field name="visibility" component="input" type="radio" value={state} />
                         </td>
-                        <td className="valign-middle">
-                          {VISIBILITY_STATES[state]}
-                        </td>
+                        <td className="valign-middle">{VISIBILITY_STATES[state]}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -551,12 +490,7 @@ class EditAssignmentForm extends Component {
                 <Field
                   name="visibleFrom"
                   component={DatetimeField}
-                  label={
-                    <FormattedMessage
-                      id="app.editAssignmentForm.visibleFrom"
-                      defaultMessage="Publish date:"
-                    />
-                  }
+                  label={<FormattedMessage id="app.editAssignmentForm.visibleFrom" defaultMessage="Publish date:" />}
                 />
               </Col>
             )}
@@ -618,11 +552,7 @@ EditAssignmentForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
   reset: PropTypes.func.isRequired,
-  firstDeadline: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-    PropTypes.object,
-  ]), // object == moment.js instance
+  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]), // object == moment.js instance
   allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   runtimeEnvironments: PropTypes.array,
   visibility: PropTypes.string,
@@ -649,9 +579,7 @@ const validate = (
 
   if (
     groupsAccessor &&
-    (!groups ||
-      Object.keys(groups).length === 0 ||
-      Object.values(groups).filter(val => val).length < 1)
+    (!groups || Object.keys(groups).length === 0 || Object.values(groups).filter(val => val).length < 1)
   ) {
     errors._error = (
       <FormattedMessage
@@ -662,45 +590,33 @@ const validate = (
   }
 
   if (editTexts) {
-    validateLocalizedTextsFormData(
-      errors,
-      localizedTexts,
-      ({ name, text, link }) => {
-        const textErrors = {};
-        if (!name.trim()) {
-          textErrors.name = (
-            <FormattedMessage
-              id="app.editAssignmentForm.validation.emptyName"
-              defaultMessage="Please fill the name of the assignment."
-            />
-          );
-        }
-
-        if (!text.trim() && !link.trim()) {
-          textErrors.text = (
-            <FormattedMessage
-              id="app.editAssignmentForm.validation.localizedText.text"
-              defaultMessage="Please fill the description or provide an external link below."
-            />
-          );
-        }
-
-        return textErrors;
+    validateLocalizedTextsFormData(errors, localizedTexts, ({ name, text, link }) => {
+      const textErrors = {};
+      if (!name.trim()) {
+        textErrors.name = (
+          <FormattedMessage
+            id="app.editAssignmentForm.validation.emptyName"
+            defaultMessage="Please fill the name of the assignment."
+          />
+        );
       }
-    );
+
+      if (!text.trim() && !link.trim()) {
+        textErrors.text = (
+          <FormattedMessage
+            id="app.editAssignmentForm.validation.localizedText.text"
+            defaultMessage="Please fill the description or provide an external link below."
+          />
+        );
+      }
+
+      return textErrors;
+    });
   }
 
-  validateTwoDeadlines(
-    errors,
-    formatMessage,
-    firstDeadline,
-    secondDeadline,
-    allowSecondDeadline
-  );
+  validateTwoDeadlines(errors, formatMessage, firstDeadline, secondDeadline, allowSecondDeadline);
 
-  const formEnabledRuntimes = runtimeEnvironmentIds.filter(
-    key => enabledRuntime[key]
-  );
+  const formEnabledRuntimes = runtimeEnvironmentIds.filter(key => enabledRuntime[key]);
   if (formEnabledRuntimes.length === 0) {
     errors._error = (
       <FormattedMessage

@@ -64,10 +64,7 @@ const TreeViewLeaf = ({
         placement="bottom"
         overlay={
           <Tooltip id={`${id}-archived-tooltip`}>
-            <FormattedMessage
-              id="app.groupTree.treeViewLeaf.archivedTooltip"
-              defaultMessage="The group is archived"
-            />
+            <FormattedMessage id="app.groupTree.treeViewLeaf.archivedTooltip" defaultMessage="The group is archived" />
           </Tooltip>
         }>
         <GroupIcon archived={true} className="text-muted" gapLeft />
@@ -78,10 +75,7 @@ const TreeViewLeaf = ({
         placement="bottom"
         overlay={
           <Tooltip id={`${id}-public-tooltip`}>
-            <FormattedMessage
-              id="app.groupTree.treeViewLeaf.publicTooltip"
-              defaultMessage="The group is public"
-            />
+            <FormattedMessage id="app.groupTree.treeViewLeaf.publicTooltip" defaultMessage="The group is public" />
           </Tooltip>
         }>
         <Icon icon="eye" className="text-muted" gapLeft />

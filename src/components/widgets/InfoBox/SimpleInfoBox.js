@@ -2,12 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../../icons';
 
-const SimpleInfoBox = ({
-  title,
-  description = '',
-  icon = 'info',
-  color = 'yellow',
-}) => (
+const SimpleInfoBox = ({ title, description = '', icon = 'info', color = 'yellow' }) => (
   <div className="info-box">
     <span className={'info-box-icon bg-' + color}>
       <Icon icon={icon} />

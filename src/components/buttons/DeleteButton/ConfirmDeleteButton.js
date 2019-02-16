@@ -19,11 +19,7 @@ const ConfirmDeleteButton = ({
   ...props
 }) => (
   <Confirm id={id} onConfirmed={onClick} question={question}>
-    <Button
-      disabled={disabled || !id}
-      bsStyle="danger"
-      bsSize={small ? 'sm' : undefined}
-      {...props}>
+    <Button disabled={disabled || !id} bsStyle="danger" bsSize={small ? 'sm' : undefined} {...props}>
       <DeleteIcon gapRight />
       <FormattedMessage id="generic.delete" defaultMessage="Delete" />
     </Button>

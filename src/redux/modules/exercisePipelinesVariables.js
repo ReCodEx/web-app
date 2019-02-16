@@ -10,11 +10,7 @@ export const actionTypes = {
   FETCH_REJECTED: 'recodex/exercisePipelinesVariables/FETCH_REJECTED',
 };
 
-export const fetchExercisePipelinesVariables = (
-  exerciseId,
-  runtimeEnvironmentId,
-  pipelinesIds
-) =>
+export const fetchExercisePipelinesVariables = (exerciseId, runtimeEnvironmentId, pipelinesIds) =>
   createApiAction({
     type: actionTypes.FETCH,
     method: 'POST',
@@ -31,14 +27,8 @@ const reducer = handleActions(
         ? state.setIn([exerciseId, 'state'], resourceStatus.RELOADING)
         : state.set(exerciseId, createRecord()),
 
-    [actionTypes.FETCH_FULFILLED]: (
-      state,
-      { payload: data, meta: { exerciseId } }
-    ) =>
-      state.set(
-        exerciseId,
-        createRecord({ state: resourceStatus.FULFILLED, data })
-      ),
+    [actionTypes.FETCH_FULFILLED]: (state, { payload: data, meta: { exerciseId } }) =>
+      state.set(exerciseId, createRecord({ state: resourceStatus.FULFILLED, data })),
 
     [actionTypes.FETCH_REJECTED]: (state, { meta: { exerciseId } }) =>
       state.set(exerciseId, createRecord({ state: resourceStatus.FAILED })),

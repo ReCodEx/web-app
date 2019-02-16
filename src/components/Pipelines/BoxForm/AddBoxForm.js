@@ -10,19 +10,9 @@ import { createBoxFromFormInputs } from '../../../helpers/boxes';
 const AddBoxForm = ({ add, onHide, boxTypes, ...props }) => (
   <BoxForm
     {...props}
-    title={
-      <FormattedMessage
-        id="app.pipelineEditor.AddBoxForm.title"
-        defaultMessage="Add a box"
-      />
-    }
+    title={<FormattedMessage id="app.pipelineEditor.AddBoxForm.title" defaultMessage="Add a box" />}
     onSubmit={data => {
-      const {
-        name,
-        portsIn = {},
-        portsOut = {},
-        type,
-      } = createBoxFromFormInputs(data, boxTypes);
+      const { name, portsIn = {}, portsOut = {}, type } = createBoxFromFormInputs(data, boxTypes);
       add(name, portsIn, portsOut, type);
       onHide();
     }}

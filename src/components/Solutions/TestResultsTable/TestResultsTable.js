@@ -25,12 +25,7 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) => (
     <small>
       {hasValue(value) && '('}
       {(ratio || ratio === 0) && (
-        <FormattedNumber
-          value={ratio}
-          style="percent"
-          minimumFractionDigits={1}
-          maximumFactionDigits={3}
-        />
+        <FormattedNumber value={ratio} style="percent" minimumFractionDigits={1} maximumFactionDigits={3} />
       )}
       {hasValue(value) && ') '}
       {hasValue(value) && pretty(value * multiplier)}
@@ -38,17 +33,8 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) => (
   </span>
 );
 
-const showTimeResults = (
-  key,
-  wallTime,
-  wallTimeRatio,
-  wallTimeExceeded,
-  cpuTime,
-  cpuTimeRatio,
-  cpuTimeExceeded
-) => {
-  const showWall =
-    Boolean(wallTimeRatio) || (wallTimeExceeded && !cpuTimeExceeded);
+const showTimeResults = (key, wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded) => {
+  const showWall = Boolean(wallTimeRatio) || (wallTimeExceeded && !cpuTimeExceeded);
   const showCpu = Boolean(cpuTimeRatio) || cpuTimeExceeded || !showWall;
   return (
     <table style={{ display: 'inline-block' }}>
@@ -70,13 +56,7 @@ const showTimeResults = (
               </OverlayTrigger>
             </td>
             <td className="text-left">
-              {tickOrCrossAndRatioOrValue(
-                cpuTimeExceeded === false,
-                cpuTimeRatio,
-                cpuTime,
-                prettyMs,
-                1000
-              )}
+              {tickOrCrossAndRatioOrValue(cpuTimeExceeded === false, cpuTimeRatio, cpuTime, prettyMs, 1000)}
             </td>
           </tr>
         )}
@@ -97,13 +77,7 @@ const showTimeResults = (
               </OverlayTrigger>
             </td>
             <td className="text-left">
-              {tickOrCrossAndRatioOrValue(
-                wallTimeExceeded === false,
-                wallTimeRatio,
-                wallTime,
-                prettyMs,
-                1000
-              )}
+              {tickOrCrossAndRatioOrValue(wallTimeExceeded === false, wallTimeRatio, wallTime, prettyMs, 1000)}
             </td>
           </tr>
         )}
@@ -170,55 +144,30 @@ class TestResultsTable extends Component {
           <b>
             {status === 'OK' && (
               <span className="text-success">
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.statusOK"
-                  defaultMessage="OK"
-                />
+                <FormattedMessage id="app.submissions.testResultsTable.statusOK" defaultMessage="OK" />
               </span>
             )}
             {status === 'SKIPPED' && (
               <span className="text-warning">
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.statusSkipped"
-                  defaultMessage="SKIPPED"
-                />
+                <FormattedMessage id="app.submissions.testResultsTable.statusSkipped" defaultMessage="SKIPPED" />
               </span>
             )}
             {status === 'FAILED' && (
               <span className="text-danger">
-                <FormattedMessage
-                  id="app.submissions.testResultsTable.statusFailed"
-                  defaultMessage="FAILED"
-                />
+                <FormattedMessage id="app.submissions.testResultsTable.statusFailed" defaultMessage="FAILED" />
               </span>
             )}
           </b>
         </td>
 
         <td className="text-center">
-          {tickOrCrossAndRatioOrValue(
-            memoryExceeded === false,
-            memoryRatio,
-            memory,
-            prettyPrintBytes,
-            1024
-          )}
+          {tickOrCrossAndRatioOrValue(memoryExceeded === false, memoryRatio, memory, prettyPrintBytes, 1024)}
         </td>
         <td className="text-center">
-          {showTimeResults(
-            testName,
-            wallTime,
-            wallTimeRatio,
-            wallTimeExceeded,
-            cpuTime,
-            cpuTimeRatio,
-            cpuTimeExceeded
-          )}
+          {showTimeResults(testName, wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded)}
         </td>
 
-        <td className="text-center">
-          {exitCodeMapping(runtimeEnvironmentId, exitCode)}
-        </td>
+        <td className="text-center">{exitCodeMapping(runtimeEnvironmentId, exitCode)}</td>
 
         {showJudgeLog && (
           <td className="text-right">
@@ -229,15 +178,9 @@ class TestResultsTable extends Component {
                 bsSize="xs"
                 onClick={() => this.toggleLogOpen(testName)}>
                 {this.isLogOpen(testName) ? (
-                  <FormattedMessage
-                    id="app.submissions.testResultsTable.hideLog"
-                    defaultMessage="Hide Log"
-                  />
+                  <FormattedMessage id="app.submissions.testResultsTable.hideLog" defaultMessage="Hide Log" />
                 ) : (
-                  <FormattedMessage
-                    id="app.submissions.testResultsTable.showLog"
-                    defaultMessage="Show Log"
-                  />
+                  <FormattedMessage id="app.submissions.testResultsTable.showLog" defaultMessage="Show Log" />
                 )}
               </Button>
             )}
@@ -265,18 +208,9 @@ class TestResultsTable extends Component {
 
   render() {
     const { results, showJudgeLog = false } = this.props;
-    const showLogButton =
-      showJudgeLog &&
-      results.reduce(
-        (out, { judgeLog = '' }) => out || Boolean(judgeLog),
-        false
-      );
+    const showLogButton = showJudgeLog && results.reduce((out, { judgeLog = '' }) => out || Boolean(judgeLog), false);
     const allLogsClosed =
-      showLogButton &&
-      results.reduce(
-        (out, { testName }) => out && !this.isLogOpen(testName),
-        true
-      );
+      showLogButton && results.reduce((out, { testName }) => out && !this.isLogOpen(testName), true);
 
     return (
       <Table responsive style={{}}>
@@ -370,15 +304,9 @@ class TestResultsTable extends Component {
                     bsSize="xs"
                     onClick={this.setAllLogsState(allLogsClosed)}>
                     {allLogsClosed ? (
-                      <FormattedMessage
-                        id="generic.showAll"
-                        defaultMessage="Show All"
-                      />
+                      <FormattedMessage id="generic.showAll" defaultMessage="Show All" />
                     ) : (
-                      <FormattedMessage
-                        id="generic.hideAll"
-                        defaultMessage="Hide All"
-                      />
+                      <FormattedMessage id="generic.hideAll" defaultMessage="Hide All" />
                     )}
                   </Button>
                 )}
@@ -388,9 +316,7 @@ class TestResultsTable extends Component {
         </thead>
         <tbody>
           {results.map(result =>
-            this.isLogOpen(result.testName)
-              ? [this.renderRow(result), this.renderLog(result)]
-              : this.renderRow(result)
+            this.isLogOpen(result.testName) ? [this.renderRow(result), this.renderLog(result)] : this.renderRow(result)
           )}
         </tbody>
       </Table>

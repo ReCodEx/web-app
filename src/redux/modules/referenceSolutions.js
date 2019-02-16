@@ -1,10 +1,6 @@
 import { handleActions } from 'redux-actions';
 
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
@@ -38,11 +34,7 @@ export const fetchReferenceSolutions = exerciseId =>
     meta: { exerciseId },
   });
 
-export const resubmitReferenceSolution = (
-  solutionId,
-  progressObserverId = null,
-  isDebug = false
-) =>
+export const resubmitReferenceSolution = (solutionId, progressObserverId = null, isDebug = false) =>
   createApiAction({
     type: additionalSubmissionActionTypes.SUBMIT,
     endpoint: `/reference-solutions/${solutionId}/resubmit`,
@@ -64,9 +56,7 @@ const reducer = handleActions(
       state,
       { payload: { referenceSolution }, meta: { submissionType } }
     ) =>
-      submissionType === 'referenceSolution' &&
-      referenceSolution &&
-      referenceSolution.id
+      submissionType === 'referenceSolution' && referenceSolution && referenceSolution.id
         ? state.setIn(
             ['resources', referenceSolution.id],
             createRecord({
@@ -89,15 +79,10 @@ const reducer = handleActions(
         state
       ),
 
-    [referenceSolutionEvaluationsActionTypes.REMOVE_FULFILLED]: (
-      state,
-      { meta: { solutionId, id: evaluationId } }
-    ) =>
+    [referenceSolutionEvaluationsActionTypes.REMOVE_FULFILLED]: (state, { meta: { solutionId, id: evaluationId } }) =>
       solutionId && evaluationId
-        ? state.updateIn(
-            ['resources', solutionId, 'data', 'submissions'],
-            submissions =>
-              submissions.filter(submission => submission !== evaluationId)
+        ? state.updateIn(['resources', solutionId, 'data', 'submissions'], submissions =>
+            submissions.filter(submission => submission !== evaluationId)
           )
         : state,
   }),

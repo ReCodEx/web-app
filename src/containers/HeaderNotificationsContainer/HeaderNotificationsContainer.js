@@ -5,10 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import HeaderNotificationsDropdown from '../../components/widgets/HeaderNotificationsDropdown';
 import { hideNotification } from '../../redux/modules/notifications';
-import {
-  newNotificationsSelector,
-  oldNotificationsSelector,
-} from '../../redux/selectors/notifications';
+import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications';
 
 class HeaderNotificationsContainer extends Component {
   state = { isOpen: false, showAll: false };
@@ -67,14 +64,8 @@ class HeaderNotificationsContainer extends Component {
   open = () => this.setState({ isOpen: true });
 
   componentWillReceiveProps = newProps => {
-    const oldVisible = this.props.newNotifications.reduce(
-      (acc, notification) => acc + notification.count,
-      0
-    );
-    const newVisible = newProps.newNotifications.reduce(
-      (acc, notification) => acc + notification.count,
-      0
-    );
+    const oldVisible = this.props.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
+    const newVisible = newProps.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
     if (oldVisible !== newVisible) {
       this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
     }

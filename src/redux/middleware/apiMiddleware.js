@@ -1,9 +1,4 @@
-import {
-  createApiCallPromise,
-  getHeaders,
-  isTwoHundredCode,
-  abortAllPendingRequests,
-} from '../helpers/api/tools';
+import { createApiCallPromise, getHeaders, isTwoHundredCode, abortAllPendingRequests } from '../helpers/api/tools';
 import { actionTypes as authActionTypes } from '../modules/auth';
 
 export const CALL_API = 'recodex-api/CALL';

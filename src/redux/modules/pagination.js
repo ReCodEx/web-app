@@ -46,24 +46,16 @@ const initialState = Map();
  */
 export const registerPaginationComponent = createAction(actionTypes.REGISTER);
 
-export const setPaginationOffset = componentId =>
-  createAction(actionTypes.SET_OFFSET, null, () => ({ componentId }));
+export const setPaginationOffset = componentId => createAction(actionTypes.SET_OFFSET, null, () => ({ componentId }));
 
-export const setPaginationLimit = componentId =>
-  createAction(actionTypes.SET_LIMIT, null, () => ({ componentId }));
+export const setPaginationLimit = componentId => createAction(actionTypes.SET_LIMIT, null, () => ({ componentId }));
 
 export const setPaginationOffsetLimit = componentId =>
-  createAction(
-    actionTypes.SET_OFFSET_LIMIT,
-    (offset, limit) => ({ offset, limit }),
-    () => ({ componentId })
-  );
+  createAction(actionTypes.SET_OFFSET_LIMIT, (offset, limit) => ({ offset, limit }), () => ({ componentId }));
 
-export const setPaginationOrderBy = componentId =>
-  createAction(actionTypes.SET_ORDERBY, null, () => ({ componentId }));
+export const setPaginationOrderBy = componentId => createAction(actionTypes.SET_ORDERBY, null, () => ({ componentId }));
 
-export const encodeOrderBy = (column, descending = false) =>
-  descending ? `!${column}` : column;
+export const encodeOrderBy = (column, descending = false) => (descending ? `!${column}` : column);
 
 export const decodeOrderBy = orderBy => {
   const descending = orderBy && orderBy.startsWith('!');
@@ -71,8 +63,7 @@ export const decodeOrderBy = orderBy => {
   return { column, descending };
 };
 
-export const setPaginationFilters = componentId =>
-  createAction(actionTypes.SET_FILTERS, null, () => ({ componentId }));
+export const setPaginationFilters = componentId => createAction(actionTypes.SET_FILTERS, null, () => ({ componentId }));
 
 export const fetchPaginated = (componentId, endpoint) => (
   locale = null,
@@ -140,13 +131,8 @@ export default handleActions(
     [actionTypes.SET_LIMIT]: (state, { payload, meta: { componentId } }) =>
       state.setIn([componentId, 'limit'], Number(payload)),
 
-    [actionTypes.SET_OFFSET_LIMIT]: (
-      state,
-      { payload: { offset, limit }, meta: { componentId } }
-    ) =>
-      state
-        .setIn([componentId, 'offset'], Number(offset))
-        .setIn([componentId, 'limit'], Number(limit)),
+    [actionTypes.SET_OFFSET_LIMIT]: (state, { payload: { offset, limit }, meta: { componentId } }) =>
+      state.setIn([componentId, 'offset'], Number(offset)).setIn([componentId, 'limit'], Number(limit)),
 
     [actionTypes.SET_FILTERS]: (state, { payload, meta: { componentId } }) =>
       state
@@ -155,24 +141,14 @@ export default handleActions(
         .setIn([componentId, 'filters'], fromJS(payload)),
 
     [actionTypes.SET_ORDERBY]: (state, { payload, meta: { componentId } }) =>
-      state
-        .setIn([componentId, 'didInvalidate'], true)
-        .setIn([componentId, 'orderBy'], payload),
+      state.setIn([componentId, 'didInvalidate'], true).setIn([componentId, 'orderBy'], payload),
 
-    [actionTypes.FETCH_PAGINATED_PENDING]: (
-      state,
-      { meta: { componentId, started } }
-    ) =>
-      componentId
-        ? state.setIn([componentId, 'pending'], Number(started))
-        : state,
+    [actionTypes.FETCH_PAGINATED_PENDING]: (state, { meta: { componentId, started } }) =>
+      componentId ? state.setIn([componentId, 'pending'], Number(started)) : state,
 
     [actionTypes.FETCH_PAGINATED_FULFILLED]: (
       state,
-      {
-        payload: { items, totalCount, orderBy, filters, offset },
-        meta: { componentId, started, forceInvalidate },
-      }
+      { payload: { items, totalCount, orderBy, filters, offset }, meta: { componentId, started, forceInvalidate } }
     ) => {
       if (!componentId || state.getIn([componentId, 'pending']) !== started) {
         return state;
@@ -206,10 +182,7 @@ export default handleActions(
         .mergeIn([componentId, 'data'], preprocessItems(items, offset));
     },
 
-    [actionTypes.FETCH_PAGINATED_REJECTED]: (
-      state,
-      { meta: { componentId, started } }
-    ) =>
+    [actionTypes.FETCH_PAGINATED_REJECTED]: (state, { meta: { componentId, started } }) =>
       componentId && state.getIn([componentId, 'pending']) === started
         ? state.setIn([componentId, 'pending'], false)
         : state,

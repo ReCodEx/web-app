@@ -15,11 +15,9 @@ const initialState = fromJS({
 
 export default handleActions(
   {
-    [actionTypes.TOGGLE_VISIBILITY]: state =>
-      state.update('visible', visible => !visible),
+    [actionTypes.TOGGLE_VISIBILITY]: state => state.update('visible', visible => !visible),
 
-    [actionTypes.TOGGLE_SIZE]: state =>
-      state.update('collapsed', collapsed => !collapsed),
+    [actionTypes.TOGGLE_SIZE]: state => state.update('collapsed', collapsed => !collapsed),
 
     [actionTypes.COLLAPSE]: state => state.set('collapsed', true),
 

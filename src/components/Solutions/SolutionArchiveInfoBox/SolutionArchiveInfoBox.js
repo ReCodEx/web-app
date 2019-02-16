@@ -25,8 +25,7 @@ const SolutionArchiveInfoBox = ({ id, intl: { formatMessage } }) => (
 
 SolutionArchiveInfoBox.propTypes = {
   id: PropTypes.string.isRequired,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired })
-    .isRequired,
+  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired,
 };
 
 export default injectIntl(SolutionArchiveInfoBox);

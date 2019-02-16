@@ -55,12 +55,8 @@ class MenuGroup extends Component {
       overflowX: 'hidden',
     };
 
-    const itemsNotificationsCount = item =>
-      notifications[item.getIn(['data', 'id'])];
-    const notificationsCount = items.reduce(
-      (acc, item) => acc + itemsNotificationsCount(item),
-      0
-    );
+    const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
+    const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
 
     return (
       <li
@@ -79,16 +75,8 @@ class MenuGroup extends Component {
             {title}
           </span>
           <span className="pull-right-container">
-            {notificationsCount > 0 && (
-              <small className="label pull-right bg-blue">
-                {notificationsCount}
-              </small>
-            )}
-            <Icon
-              icon="angle-left"
-              className="pull-right"
-              style={{ height: '15px' }}
-            />
+            {notificationsCount > 0 && <small className="label pull-right bg-blue">{notificationsCount}</small>}
+            <Icon icon="angle-left" className="pull-right" style={{ height: '15px' }} />
           </span>
         </a>
         <ul className="treeview-menu" style={dropdownStyles}>
@@ -101,9 +89,7 @@ class MenuGroup extends Component {
                 title={getLocalizedName(
                   {
                     name: item.getIn(['data', 'name']),
-                    localizedTexts: item
-                      .getIn(['data', 'localizedTexts'])
-                      .toJS(),
+                    localizedTexts: item.getIn(['data', 'localizedTexts']).toJS(),
                   },
                   locale
                 )}

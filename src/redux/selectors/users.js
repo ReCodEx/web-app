@@ -3,28 +3,18 @@ import { createSelector } from 'reselect';
 import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common';
 import { isReady, getJsData } from '../helpers/resourceManager';
 import { extractLanguageFromUrl } from '../../links';
-import {
-  isStudentRole,
-  isSupervisorRole,
-  isSuperadminRole,
-} from '../../components/helpers/usersRoles';
+import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles';
 
 import { fetchManyEndpoint } from '../modules/users';
 import { loggedInUserIdSelector } from './auth';
-import {
-  groupSelectorCreator,
-  studentsOfGroup,
-  supervisorsOfGroup,
-  groupsSelector,
-} from './groups';
+import { groupSelectorCreator, studentsOfGroup, supervisorsOfGroup, groupsSelector } from './groups';
 import { pipelineSelector } from './pipelines';
 
 const getParam = (state, id) => id;
 
 const getUsers = state => state.users;
 const getResources = users => users.get('resources');
-const getLang = state =>
-  extractLanguageFromUrl(state.routing.locationBeforeTransitions.pathname);
+const getLang = state => extractLanguageFromUrl(state.routing.locationBeforeTransitions.pathname);
 
 /**
  * Select users part of the state
@@ -54,8 +44,7 @@ export const readyUsersDataSelector = createSelector(
       .map(getJsData)
       .sort(
         (a, b) =>
-          a.name.lastName.localeCompare(b.name.lastName, lang) ||
-          a.name.firstName.localeCompare(b.name.firstName, lang)
+          a.name.lastName.localeCompare(b.name.lastName, lang) || a.name.firstName.localeCompare(b.name.firstName, lang)
       )
       .toArray()
 );
@@ -109,10 +98,7 @@ export const isSupervisor = userId =>
 export const getUserSettings = userId =>
   createSelector(
     getUser(userId),
-    user =>
-      isReady(user)
-        ? user.getIn(['data', 'privateData', 'settings']).toJS()
-        : EMPTY_OBJ
+    user => (isReady(user) ? user.getIn(['data', 'privateData', 'settings']).toJS() : EMPTY_OBJ)
   );
 
 export const loggedInUserSelector = createSelector(
@@ -139,45 +125,33 @@ export const isLoggedAsSupervisor = createSelector(
 export const memberOfInstancesIdsSelector = userId =>
   createSelector(
     getUser(userId),
-    user =>
-      user && isReady(user)
-        ? user.getIn(['data', 'privateData', 'instancesIds'], EMPTY_LIST)
-        : EMPTY_LIST
+    user => (user && isReady(user) ? user.getIn(['data', 'privateData', 'instancesIds'], EMPTY_LIST) : EMPTY_LIST)
   );
 
 export const studentOfGroupsIdsSelector = userId =>
   createSelector(
     getUser(userId),
     user =>
-      user && isReady(user)
-        ? user.getIn(['data', 'privateData', 'groups', 'studentOf'], EMPTY_LIST)
-        : EMPTY_LIST
+      user && isReady(user) ? user.getIn(['data', 'privateData', 'groups', 'studentOf'], EMPTY_LIST) : EMPTY_LIST
   );
 
 export const supervisorOfGroupsIdsSelector = userId =>
   createSelector(
     getUser(userId),
     user =>
-      user && isReady(user)
-        ? user.getIn(
-            ['data', 'privateData', 'groups', 'supervisorOf'],
-            EMPTY_LIST
-          )
-        : EMPTY_LIST
+      user && isReady(user) ? user.getIn(['data', 'privateData', 'groups', 'supervisorOf'], EMPTY_LIST) : EMPTY_LIST
   );
 
 export const isStudentOf = (userId, groupId) =>
   createSelector(
     [studentOfGroupsIdsSelector(userId), studentsOfGroup(groupId)],
-    (groupIds, studentsIds) =>
-      groupIds.indexOf(groupId) >= 0 || studentsIds.indexOf(userId) >= 0
+    (groupIds, studentsIds) => groupIds.indexOf(groupId) >= 0 || studentsIds.indexOf(userId) >= 0
   );
 
 export const isSupervisorOf = (userId, groupId) =>
   createSelector(
     [supervisorOfGroupsIdsSelector(userId), supervisorsOfGroup(groupId)],
-    (groupIds, supervisorsIds) =>
-      groupIds.indexOf(groupId) >= 0 || supervisorsIds.indexOf(userId) >= 0
+    (groupIds, supervisorsIds) => groupIds.indexOf(groupId) >= 0 || supervisorsIds.indexOf(userId) >= 0
   );
 
 export const isAdminOf = (userId, groupId) =>
@@ -193,11 +167,7 @@ export const isAdminOf = (userId, groupId) =>
 
 export const isMemberOf = (userId, groupId) =>
   createSelector(
-    [
-      isStudentOf(userId, groupId),
-      isSupervisorOf(userId, groupId),
-      isAdminOf(userId, groupId),
-    ],
+    [isStudentOf(userId, groupId), isSupervisorOf(userId, groupId), isAdminOf(userId, groupId)],
     (student, supervisor, admin) => student || supervisor || admin
   );
 
@@ -211,10 +181,7 @@ export const canEditPipeline = (userId, pipelineId) =>
   createSelector(
     [pipelineSelector(pipelineId), isLoggedAsSuperAdmin],
     (pipeline, isSuperAdmin) =>
-      isSuperAdmin ||
-      (pipeline &&
-        isReady(pipeline) &&
-        pipeline.getIn(['data', 'author']) === userId)
+      isSuperAdmin || (pipeline && isReady(pipeline) && pipeline.getIn(['data', 'author']) === userId)
   );
 
 export const notificationsSelector = createSelector(
@@ -225,9 +192,7 @@ export const notificationsSelector = createSelector(
           (notifications, group) =>
             Object.assign({}, notifications, {
               [group.id]:
-                group.stats.assignments.total -
-                group.stats.assignments.completed -
-                group.stats.assignments.missed,
+                group.stats.assignments.total - group.stats.assignments.completed - group.stats.assignments.missed,
             }),
           {}
         )
@@ -238,9 +203,7 @@ export const userIsAllowed = createSelector(
   usersSelector,
   users => id => {
     const user = users && users.get(id);
-    return user && isReady(user)
-      ? user.getIn(['data', 'privateData', 'isAllowed'], null)
-      : null;
+    return user && isReady(user) ? user.getIn(['data', 'privateData', 'isAllowed'], null) : null;
   }
 );
 
@@ -248,8 +211,6 @@ export const userIsAllowedPending = createSelector(
   usersSelector,
   users => id => {
     const user = users && users.get(id);
-    return user && isReady(user)
-      ? user.getIn(['data', 'isAllowed-pending'], false)
-      : null;
+    return user && isReady(user) ? user.getIn(['data', 'isAllowed-pending'], false) : null;
   }
 );

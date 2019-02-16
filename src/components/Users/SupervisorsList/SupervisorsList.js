@@ -2,17 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import SupervisorsListItem, {
-  LoadingSupervisorsListItem,
-} from '../SupervisorsListItem';
+import SupervisorsListItem, { LoadingSupervisorsListItem } from '../SupervisorsListItem';
 
-const SupervisorsList = ({
-  groupId,
-  users,
-  isLoaded = true,
-  isAdmin,
-  primaryAdminsIds,
-}) => (
+const SupervisorsList = ({ groupId, users, isLoaded = true, isAdmin, primaryAdminsIds }) => (
   <Table hover>
     <tbody>
       {isLoaded &&
@@ -29,10 +21,7 @@ const SupervisorsList = ({
       {users.length === 0 && isLoaded && (
         <tr>
           <td className="text-center">
-            <FormattedMessage
-              id="app.userList.noSupervisors"
-              defaultMessage="There are no supervisors on the list."
-            />
+            <FormattedMessage id="app.userList.noSupervisors" defaultMessage="There are no supervisors on the list." />
           </td>
         </tr>
       )}

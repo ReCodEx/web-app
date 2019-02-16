@@ -4,13 +4,7 @@ import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import Confirm from '../../forms/Confirm';
 
-const FlatButton = ({
-  className = '',
-  onClick = null,
-  confirm = null,
-  confirmId = null,
-  ...props
-}) =>
+const FlatButton = ({ className = '', onClick = null, confirm = null, confirmId = null, ...props }) =>
   confirm ? (
     <Confirm id={confirmId} onConfirmed={onClick} question={confirm}>
       <Button

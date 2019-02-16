@@ -19,10 +19,7 @@ const FilterArchiveGroupsForm = ({
     <Well bsSize="sm">
       {submitFailed && (
         <Alert bsStyle="danger">
-          <FormattedMessage
-            id="generic.operationFailed"
-            defaultMessage="Operation failed. Please try again later."
-          />
+          <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
         </Alert>
       )}
 
@@ -35,11 +32,7 @@ const FilterArchiveGroupsForm = ({
               maxLength={255}
               label={
                 <span>
-                  <FormattedMessage
-                    id="app.filterArchiveGroupsForm.searchName"
-                    defaultMessage="Search by name"
-                  />
-                  :
+                  <FormattedMessage id="app.filterArchiveGroupsForm.searchName" defaultMessage="Search by name" />:
                 </span>
               }
             />
@@ -70,18 +63,8 @@ const FilterArchiveGroupsForm = ({
                 invalid={invalid}
                 dirty={dirty}
                 messages={{
-                  submit: (
-                    <FormattedMessage
-                      id="generic.setFilters"
-                      defaultMessage="Set Filters"
-                    />
-                  ),
-                  success: (
-                    <FormattedMessage
-                      id="generic.filtersSet"
-                      defaultMessage="Filters Set"
-                    />
-                  ),
+                  submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                  success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
                 }}
               />
             </div>

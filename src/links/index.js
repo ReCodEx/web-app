@@ -28,22 +28,14 @@ export const linksFactory = lang => {
   const EXERCISES_URI = `${prefix}/app/exercises`;
   const EXERCISE_CREATE_URI_FACTORY = () => `${EXERCISES_URI}`;
   const EXERCISE_URI_FACTORY = id => `${EXERCISES_URI}/${id}`;
-  const EXERCISE_ASSIGNMENTS_URI_FACTORY = id =>
-    `${EXERCISES_URI}/${id}/assignments`;
+  const EXERCISE_ASSIGNMENTS_URI_FACTORY = id => `${EXERCISES_URI}/${id}/assignments`;
   const EXERCISE_EDIT_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit`;
-  const EXERCISE_EDIT_CONFIG_URI_FACTORY = id =>
-    `${EXERCISE_URI_FACTORY(id)}/edit-config`;
-  const EXERCISE_EDIT_LIMITS_URI_FACTORY = id =>
-    `${EXERCISE_URI_FACTORY(id)}/edit-limits`;
+  const EXERCISE_EDIT_CONFIG_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit-config`;
+  const EXERCISE_EDIT_LIMITS_URI_FACTORY = id => `${EXERCISE_URI_FACTORY(id)}/edit-limits`;
 
   // reference solution
-  const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (
-    exerciseId,
-    referenceSolutionId
-  ) =>
-    `${EXERCISE_URI_FACTORY(
-      exerciseId
-    )}/reference-solution/${referenceSolutionId}`;
+  const EXERCISE_REFERENCE_SOLUTION_URI_FACTORY = (exerciseId, referenceSolutionId) =>
+    `${EXERCISE_URI_FACTORY(exerciseId)}/reference-solution/${referenceSolutionId}`;
 
   // pipeline details
   const PIPELINES_URI = `${prefix}/app/pipelines`;
@@ -55,19 +47,14 @@ export const linksFactory = lang => {
   const ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/assignment/${id}`;
   const ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY = (id, userId) =>
     `${ASSIGNMENT_DETAIL_URI_FACTORY(id)}/user/${userId}`;
-  const ASSIGNMENT_EDIT_URI_FACTORY = id =>
-    `${ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
-  const SUBMIT_SOLUTION_URI_FACTORY = id =>
-    `${prefix}/app/assignment/${id}/submit`;
+  const ASSIGNMENT_EDIT_URI_FACTORY = id => `${ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
+  const SUBMIT_SOLUTION_URI_FACTORY = id => `${prefix}/app/assignment/${id}/submit`;
   const SOLUTION_DETAIL_URI_FACTORY = (assignmentId, submissionId) =>
     `${prefix}/app/assignment/${assignmentId}/solution/${submissionId}`;
-  const ASSIGNMENT_STATS_URI_FACTORY = assignmentId =>
-    `${prefix}/app/assignment/${assignmentId}/stats`;
+  const ASSIGNMENT_STATS_URI_FACTORY = assignmentId => `${prefix}/app/assignment/${assignmentId}/stats`;
 
-  const SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY = id =>
-    `${prefix}/app/shadow-assignment/${id}`;
-  const SHADOW_ASSIGNMENT_EDIT_URI_FACTORY = id =>
-    `${SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
+  const SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY = id => `${prefix}/app/shadow-assignment/${id}`;
+  const SHADOW_ASSIGNMENT_EDIT_URI_FACTORY = id => `${SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(id)}/edit`;
 
   // group archive
   const ARCHIVE_URI = `${prefix}/app/archive`;
@@ -80,8 +67,7 @@ export const linksFactory = lang => {
   // administration
   const ADMIN_URI = `${prefix}/admin`;
   const ADMIN_INSTANCES_URI = `${ADMIN_URI}/instances`;
-  const ADMIN_EDIT_INSTANCE_URI_FACTORY = instanceId =>
-    `${ADMIN_INSTANCES_URI}/${instanceId}/edit`;
+  const ADMIN_EDIT_INSTANCE_URI_FACTORY = instanceId => `${ADMIN_INSTANCES_URI}/${instanceId}/edit`;
 
   // failures details
   const FAILURES_URI = `${prefix}/app/submission-failures`;
@@ -93,8 +79,7 @@ export const linksFactory = lang => {
   const DOWNLOAD = fileId => `${API_BASE}/uploaded-files/${fileId}/download`;
 
   // special links
-  const LOGIN_EXTERN_FINALIZATION = service =>
-    `${URL_PATH_PREFIX}/login-extern/${service}`;
+  const LOGIN_EXTERN_FINALIZATION = service => `${URL_PATH_PREFIX}/login-extern/${service}`;
 
   // broker links
   const BROKER_URI = `${prefix}/app/broker`;
@@ -163,8 +148,7 @@ export const removeFirstSegment = url => {
   return url.substr(langPartLength);
 };
 
-export const changeLanguage = (url, lang) =>
-  `${URL_PATH_PREFIX}/${lang}${removeFirstSegment(url)}`;
+export const changeLanguage = (url, lang) => `${URL_PATH_PREFIX}/${lang}${removeFirstSegment(url)}`;
 
 export const extractLanguageFromUrl = url => {
   if (url.length === 0) {
@@ -183,10 +167,6 @@ export const extractLanguageFromUrl = url => {
 export const isAbsolute = url => url.match('^(https?:)?//.+') !== null;
 
 export const makeAbsolute = url =>
-  typeof window === 'undefined'
-    ? url
-    : `${window.location.origin}/${
-        url.indexOf('/') === 0 ? url.substr(1) : url
-      }`;
+  typeof window === 'undefined' ? url : `${window.location.origin}/${url.indexOf('/') === 0 ? url.substr(1) : url}`;
 
 export const absolute = url => (isAbsolute(url) ? url : makeAbsolute(url));

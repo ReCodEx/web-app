@@ -15,12 +15,7 @@ const LocalizedGroupFormField = ({ prefix, data: enabled }) => (
       name={`${prefix}.description`}
       component={MarkdownTextAreaField}
       disabled={!enabled}
-      label={
-        <FormattedMessage
-          id="app.editGroupForm.description"
-          defaultMessage="Group description:"
-        />
-      }
+      label={<FormattedMessage id="app.editGroupForm.description" defaultMessage="Group description:" />}
     />
   </Well>
 );

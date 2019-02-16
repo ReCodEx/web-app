@@ -23,10 +23,7 @@ import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from './redux/selectors/users';
 import createRoutes from './pages/routes';
-import {
-  TOKEN_COOKIES_KEY,
-  INSTANCEID_COOKIES_KEY,
-} from './redux/middleware/authMiddleware';
+import { TOKEN_COOKIES_KEY, INSTANCEID_COOKIES_KEY } from './redux/middleware/authMiddleware';
 
 addLocaleData([...cs]);
 
@@ -60,13 +57,8 @@ const config = fs.readFileSync('etc/env.json', 'utf8');
 const parsedConfig = JSON.parse(config);
 const urlPrefix = parsedConfig.URL_PATH_PREFIX || '';
 
-const bundle =
-  process.env.BUNDLE ||
-  getFileName('public/bundle-*.js', `${urlPrefix}/`) ||
-  `${urlPrefix}/bundle.js`;
-const style =
-  getFileName('public/style-*.css', `${urlPrefix}/`) ||
-  `${urlPrefix}/style.css`;
+const bundle = process.env.BUNDLE || getFileName('public/bundle-*.js', `${urlPrefix}/`) || `${urlPrefix}/bundle.js`;
+const style = getFileName('public/style-*.css', `${urlPrefix}/`) || `${urlPrefix}/style.css`;
 
 let app = new Express();
 const ejs = require('ejs').__express;
@@ -126,44 +118,41 @@ app.get('*', (req, res) => {
   const history = syncHistoryWithStore(memoryHistory, store);
   const location = req.originalUrl;
 
-  match(
-    { history, routes: createRoutes(store.getState), location },
-    (error, redirectLocation, renderProps) => {
-      if (redirectLocation) {
-        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-      } else if (error) {
-        // @todo use the 500.ejs view
-        res.status(500).send(error.message);
-      } else if (renderProps == null) {
-        // this should never happen but just for sure - if router failed
-        res.status(404).send('Not found');
-      } else {
-        const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
-        const isSuperadmin = isLoggedAsSuperAdmin(store.getState());
-        const loadAsync = renderProps.components
-          .filter(component => component)
-          .map(component => {
-            // there might be several layers of wrapping - connect, withLinks, ...
-            while (component.WrappedComponent) {
-              component = component.WrappedComponent;
-            }
-            return component;
+  match({ history, routes: createRoutes(store.getState), location }, (error, redirectLocation, renderProps) => {
+    if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (error) {
+      // @todo use the 500.ejs view
+      res.status(500).send(error.message);
+    } else if (renderProps == null) {
+      // this should never happen but just for sure - if router failed
+      res.status(404).send('Not found');
+    } else {
+      const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
+      const isSuperadmin = isLoggedAsSuperAdmin(store.getState());
+      const loadAsync = renderProps.components
+        .filter(component => component)
+        .map(component => {
+          // there might be several layers of wrapping - connect, withLinks, ...
+          while (component.WrappedComponent) {
+            component = component.WrappedComponent;
+          }
+          return component;
+        })
+        .filter(component => component.loadAsync)
+        .map(component =>
+          component.loadAsync(renderProps.params, store.dispatch, {
+            userId,
+            isSuperadmin,
+            instanceId,
           })
-          .filter(component => component.loadAsync)
-          .map(component =>
-            component.loadAsync(renderProps.params, store.dispatch, {
-              userId,
-              isSuperadmin,
-              instanceId,
-            })
-          );
+        );
 
-        Promise.all(loadAsync)
-          .then(() => renderPage(res, store, renderProps))
-          .catch(() => renderWithoutSSR(res, renderProps));
-      }
+      Promise.all(loadAsync)
+        .then(() => renderPage(res, store, renderProps))
+        .catch(() => renderWithoutSSR(res, renderProps));
     }
-  );
+  });
 });
 
 const port = parsedConfig['PORT'];

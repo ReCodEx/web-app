@@ -45,30 +45,18 @@ const Comment = ({
           <Link to={USER_URI_FACTORY(user.id)}>{user.name}</Link>
         </span>
         {status === 'posted' && <Posted right={!right} postedAt={postedAt} />}
-        {status === 'failed' && (
-          <Failed right={!right} repost={() => repost && repost(id)} />
-        )}
+        {status === 'failed' && <Failed right={!right} repost={() => repost && repost(id)} />}
         {status === 'pending' && <Posting right={!right} />}
       </div>
       <AvatarContainer
         avatarUrl={user.avatarUrl}
         fullName={user.name}
-        firstName={
-          (user.firstName && user.firstName.substring(0, 1)) ||
-          user.avatarLetter ||
-          '?'
-        }
+        firstName={(user.firstName && user.firstName.substring(0, 1)) || user.avatarLetter || '?'}
         size={40}
         altClassName="direct-chat-img"
       />
       <div className="direct-chat-text">
-        {isFromCurrentUser && (
-          <DeleteIcon
-            gapLeft
-            className="pull-right"
-            onClick={() => deleteComment(id)}
-          />
-        )}
+        {isFromCurrentUser && <DeleteIcon gapLeft className="pull-right" onClick={() => deleteComment(id)} />}
         {isFromCurrentUser && togglePrivacy && (
           <OverlayTrigger
             placement="left"
@@ -88,9 +76,7 @@ const Comment = ({
               </Tooltip>
             }>
             <Icon
-              icon={
-                isToggling ? 'circle-notch' : isPrivate ? 'lock' : 'unlock-alt'
-              }
+              icon={isToggling ? 'circle-notch' : isPrivate ? 'lock' : 'unlock-alt'}
               onClick={() => togglePrivacy(id)}
               className="pull-right"
               spin={isToggling}

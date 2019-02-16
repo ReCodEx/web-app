@@ -9,12 +9,7 @@ import classnames from 'classnames';
  * failed for some reason.
  */
 const Avatar = ({ src, size = 45, title = 'avatar', altClassName = '' }) => (
-  <img
-    src={src}
-    alt={title}
-    width={size}
-    className={classnames('img-circle', altClassName)}
-  />
+  <img src={src} alt={title} width={size} className={classnames('img-circle', altClassName)} />
 );
 
 Avatar.propTypes = {

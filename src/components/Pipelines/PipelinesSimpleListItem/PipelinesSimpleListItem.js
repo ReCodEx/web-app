@@ -5,13 +5,7 @@ import { Link } from 'react-router';
 
 import withLinks from '../../../helpers/withLinks';
 
-const PipelinesSimpleListItem = ({
-  id,
-  name,
-  author,
-  createActions,
-  links: { PIPELINE_URI_FACTORY },
-}) => (
+const PipelinesSimpleListItem = ({ id, name, author, createActions, links: { PIPELINE_URI_FACTORY } }) => (
   <tr>
     <td>
       <strong>

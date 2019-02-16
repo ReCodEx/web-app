@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  loadAceEditor,
-  getAceModeFromExtension,
-} from '../../helpers/AceEditorLoader';
+import { loadAceEditor, getAceModeFromExtension } from '../../helpers/AceEditorLoader';
 let AceEditor = loadAceEditor();
 
 const SourceCodeViewer = (

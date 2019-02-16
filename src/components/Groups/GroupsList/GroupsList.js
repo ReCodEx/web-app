@@ -12,31 +12,23 @@ const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) => (
     {(...groups) => (
       <Table hover {...props}>
         <tbody>
-          {groups.map(
-            ({
-              id,
-              name,
-              localizedTexts,
-              organizational,
-              public: isPublic,
-            }) => (
-              <tr key={id}>
-                <td className="text-center">
-                  <GroupIcon />
-                </td>
-                <td>
-                  <GroupsName
-                    id={id}
-                    name={name}
-                    localizedTexts={localizedTexts}
-                    organizational={organizational}
-                    isPublic={isPublic}
-                  />
-                </td>
-                <td className="text-right">{renderButtons(id)}</td>
-              </tr>
-            )
-          )}
+          {groups.map(({ id, name, localizedTexts, organizational, public: isPublic }) => (
+            <tr key={id}>
+              <td className="text-center">
+                <GroupIcon />
+              </td>
+              <td>
+                <GroupsName
+                  id={id}
+                  name={name}
+                  localizedTexts={localizedTexts}
+                  organizational={organizational}
+                  isPublic={isPublic}
+                />
+              </td>
+              <td className="text-right">{renderButtons(id)}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     )}

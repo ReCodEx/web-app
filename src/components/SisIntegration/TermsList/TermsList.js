@@ -21,10 +21,7 @@ const TermsList = ({ terms = [], createActions, intl, ...rest }) => (
           <FormattedMessage id="app.termsList.end" defaultMessage="End" />
         </th>
         <th>
-          <FormattedMessage
-            id="app.termsList.advertiseUntil"
-            defaultMessage="Advertise Until"
-          />
+          <FormattedMessage id="app.termsList.advertiseUntil" defaultMessage="Advertise Until" />
         </th>
         <th />
       </tr>
@@ -37,10 +34,7 @@ const TermsList = ({ terms = [], createActions, intl, ...rest }) => (
       {terms.length === 0 && (
         <tr>
           <td className="text-center">
-            <FormattedMessage
-              id="app.termsList.noTerms"
-              defaultMessage="There are no SIS terms in this list."
-            />
+            <FormattedMessage id="app.termsList.noTerms" defaultMessage="There are no SIS terms in this list." />
           </td>
         </tr>
       )}

@@ -6,12 +6,7 @@ import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import PipelinesListItem from '../PipelinesListItem';
 import { identity } from '../../../helpers/common';
 
-const PipelinesList = ({
-  pipelines = [],
-  heading = null,
-  createActions,
-  intl: { locale },
-}) => (
+const PipelinesList = ({ pipelines = [], heading = null, createActions, intl: { locale } }) => (
   <Table hover>
     {Boolean(heading) && <thead>{heading}</thead>}
 
@@ -34,10 +29,7 @@ const PipelinesList = ({
       {pipelines.length === 0 && (
         <tr>
           <td className="text-center" colSpan={7}>
-            <FormattedMessage
-              id="app.pipelinesList.empty"
-              defaultMessage="There are no pipelines in this list."
-            />
+            <FormattedMessage id="app.pipelinesList.empty" defaultMessage="There are no pipelines in this list." />
           </td>
         </tr>
       )}

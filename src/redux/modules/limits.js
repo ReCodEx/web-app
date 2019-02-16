@@ -29,19 +29,11 @@ export const setExerciseLimits = actions.updateResource;
  */
 
 // Get a single value by its test name, environment ID, and field identifier
-const getFormLimitsOf = (
-  { form },
-  formName,
-  testId,
-  runtimeEnvironmentId,
-  field
-) => {
+const getFormLimitsOf = ({ form }, formName, testId, runtimeEnvironmentId, field) => {
   const testEnc = encodeNumId(testId);
   const envEnc = encodeId(runtimeEnvironmentId);
   return (
-    form[formName].values.limits[testEnc][envEnc][field] ||
-    form[formName].initial.limits[testId][envEnc][field] ||
-    null
+    form[formName].values.limits[testEnc][envEnc][field] || form[formName].initial.limits[testId][envEnc][field] || null
   );
 };
 
@@ -58,11 +50,7 @@ const getTargetFormKeys = (
   return form && form[formName] && form[formName].registeredFields
     ? Object.keys(form[formName].registeredFields).filter(key => {
         const [, test, env, f] = key.split('.');
-        return (
-          (!testEnc || test === testEnc) &&
-          (!envEnc || env === envEnc) &&
-          f === field
-        );
+        return (!testEnc || test === testEnc) && (!envEnc || env === envEnc) && f === field;
       })
     : [];
 };
@@ -75,13 +63,7 @@ export const cloneVertically = (
   field // field identifier (memory or time)
 ) => (dispatch, getState) => {
   const state = getState();
-  const value = getFormLimitsOf(
-    state,
-    formName,
-    testId,
-    runtimeEnvironmentId,
-    field
-  );
+  const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
   if (value !== null) {
     getTargetFormKeys(
       state,
@@ -101,13 +83,7 @@ export const cloneHorizontally = (
   field // field identifier (memory or time)
 ) => (dispatch, getState) => {
   const state = getState();
-  const value = getFormLimitsOf(
-    state,
-    formName,
-    testId,
-    runtimeEnvironmentId,
-    field
-  );
+  const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
   if (value !== null) {
     getTargetFormKeys(
       state,
@@ -127,13 +103,7 @@ export const cloneAll = (
   field // field identifier (memory or time)
 ) => (dispatch, getState) => {
   const state = getState();
-  const value = getFormLimitsOf(
-    state,
-    formName,
-    testId,
-    runtimeEnvironmentId,
-    field
-  );
+  const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
   if (value !== null) {
     getTargetFormKeys(
       state,

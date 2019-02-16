@@ -8,10 +8,7 @@ import { Col, Row } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import {
-  fetchAssignmentIfNeeded,
-  syncWithExercise,
-} from '../../redux/modules/assignments';
+import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments';
 import { canSubmit } from '../../redux/modules/canSubmit';
 import {
   init,
@@ -21,19 +18,11 @@ import {
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
-import {
-  getAssignment,
-  assignmentEnvironmentsSelector,
-  getUserSolutions,
-} from '../../redux/selectors/assignments';
+import { getAssignment, assignmentEnvironmentsSelector, getUserSolutions } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  isStudentOf,
-  isSupervisorOf,
-  isAdminOf,
-} from '../../redux/selectors/users';
+import { isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
 
 import Page from '../../components/layout/Page';
@@ -74,8 +63,7 @@ class Assignment extends Component {
     if (
       this.props.params.assignmentId !== newProps.params.assignmentId ||
       this.props.userId !== newProps.userId ||
-      (!this.props.userId &&
-        this.props.loggedInUserId !== newProps.loggedInUserId)
+      (!this.props.userId && this.props.loggedInUserId !== newProps.loggedInUserId)
     ) {
       newProps.loadAsync(newProps.userId || newProps.loggedInUserId);
     }
@@ -116,51 +104,29 @@ class Assignment extends Component {
       <Page
         resource={assignment}
         title={assignment => getLocalizedName(assignment, locale)}
-        description={
-          <FormattedMessage
-            id="app.assignment.title"
-            defaultMessage="Exercise Assignment"
-          />
-        }
+        description={<FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />}
         breadcrumbs={[
           {
             resource: assignment,
             iconName: 'users',
             breadcrumb: assignment => ({
-              text: (
-                <FormattedMessage
-                  id="app.group.title"
-                  defaultMessage="Group detail"
-                />
-              ),
-              link: ({ GROUP_DETAIL_URI_FACTORY }) =>
-                GROUP_DETAIL_URI_FACTORY(assignment.groupId),
+              text: <FormattedMessage id="app.group.title" defaultMessage="Group detail" />,
+              link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
             }),
           },
           {
             resource: assignment,
             iconName: 'puzzle-piece',
             breadcrumb: assignment => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.title"
-                  defaultMessage="Exercise"
-                />
-              ),
+              text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
               link: ({ EXERCISE_URI_FACTORY }) =>
-                isAdminOf(assignment.groupId) ||
-                isSupervisorOf(assignment.groupId)
+                isAdminOf(assignment.groupId) || isSupervisorOf(assignment.groupId)
                   ? EXERCISE_URI_FACTORY(assignment.exerciseId)
                   : '#',
             }),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.assignment.title"
-                defaultMessage="Exercise Assignment"
-              />
-            ),
+            text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
             iconName: 'hourglass-start',
           },
         ]}>
@@ -174,42 +140,27 @@ class Assignment extends Component {
                     <UsersNameContainer userId={userId} />
                   </p>
                 )}
-                {(isSupervisorOf(assignment.groupId) ||
-                  isAdminOf(assignment.groupId)) && ( // includes superadmin
+                {(isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)) && ( // includes superadmin
                   <p>
-                    <LinkContainer
-                      to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                    <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
-                        <FormattedMessage
-                          id="app.assignment.editSettings"
-                          defaultMessage="Edit Assignment Settings"
-                        />
+                        <FormattedMessage id="app.assignment.editSettings" defaultMessage="Edit Assignment Settings" />
                       </Button>
                     </LinkContainer>
-                    <LinkContainer
-                      to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                    <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
                       <Button bsStyle="primary">
                         <ResultsIcon gapRight />
-                        <FormattedMessage
-                          id="app.assignment.viewResults"
-                          defaultMessage="Student Results"
-                        />
+                        <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
                       </Button>
                     </LinkContainer>
-                    <ResubmitAllSolutionsContainer
-                      assignmentId={assignment.id}
-                    />
+                    <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
                   </p>
                 )}
               </Col>
             </Row>
-            {(isSupervisorOf(assignment.groupId) ||
-              isAdminOf(assignment.groupId)) && ( // includes superadmin
-              <AssignmentSync
-                syncInfo={assignment.exerciseSynchronizationInfo}
-                exerciseSync={exerciseSync}
-              />
+            {(isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)) && ( // includes superadmin
+              <AssignmentSync syncInfo={assignment.exerciseSynchronizationInfo} exerciseSync={exerciseSync} />
             )}
 
             <Row>
@@ -225,12 +176,8 @@ class Assignment extends Component {
                   <Col lg={6}>
                     <AssignmentDetails
                       {...assignment}
-                      isAfterFirstDeadline={this.isAfter(
-                        assignment.firstDeadline
-                      )}
-                      isAfterSecondDeadline={this.isAfter(
-                        assignment.secondDeadline
-                      )}
+                      isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
+                      isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
                       canSubmit={canSubmitObj}
                       runtimeEnvironments={runtimes}
                       isStudent={isStudentOf(assignment.groupId)}
@@ -239,14 +186,9 @@ class Assignment extends Component {
                     {isStudentOf(assignment.groupId) && (
                       <div>
                         <p className="text-center">
-                          <ResourceRenderer
-                            loading={<SubmitSolutionButton disabled={true} />}
-                            resource={canSubmit}>
+                          <ResourceRenderer loading={<SubmitSolutionButton disabled={true} />} resource={canSubmit}>
                             {canSubmitObj => (
-                              <SubmitSolutionButton
-                                onClick={init(assignment.id)}
-                                disabled={!canSubmitObj.canSubmit}
-                              />
+                              <SubmitSolutionButton onClick={init(assignment.id)} disabled={!canSubmitObj.canSubmit} />
                             )}
                           </ResourceRenderer>
                         </p>
@@ -262,11 +204,7 @@ class Assignment extends Component {
                     )}
 
                     {(isStudentOf(assignment.groupId) ||
-                      (userId &&
-                        hasPermissions(
-                          assignment,
-                          'viewAssignmentSolutions'
-                        ))) && ( // includes superadmin
+                      (userId && hasPermissions(assignment, 'viewAssignmentSolutions'))) && ( // includes superadmin
                       <FetchManyResourceRenderer
                         fetchManyStatus={fetchManyStatus}
                         loading={<LoadingSolutionsTable />}
@@ -274,14 +212,9 @@ class Assignment extends Component {
                         {() => (
                           <SolutionsTable
                             title={
-                              <FormattedMessage
-                                id="app.solutionsTable.title"
-                                defaultMessage="Submitted Solutions"
-                              />
+                              <FormattedMessage id="app.solutionsTable.title" defaultMessage="Submitted Solutions" />
                             }
-                            solutions={this.sortSolutions(solutions).map(
-                              getJsData
-                            )}
+                            solutions={this.sortSolutions(solutions).map(getJsData)}
                             assignmentId={assignment.id}
                             runtimeEnvironments={runtimes}
                             noteMaxlen={64}
@@ -330,29 +263,20 @@ export default withLinks(
       return {
         assignment: getAssignment(state)(assignmentId),
         submitting: isSubmitting(state),
-        runtimeEnvironments: assignmentEnvironmentsSelector(state)(
-          assignmentId
-        ),
+        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
         userId,
         loggedInUserId,
         isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
-        isSupervisorOf: groupId =>
-          isSupervisorOf(loggedInUserId, groupId)(state),
+        isSupervisorOf: groupId => isSupervisorOf(loggedInUserId, groupId)(state),
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutions(userId || loggedInUserId, assignmentId)(
-          state
-        ),
-        fetchManyStatus: fetchManyUserSolutionsStatus(
-          userId || loggedInUserId,
-          assignmentId
-        )(state),
+        solutions: getUserSolutions(userId || loggedInUserId, assignmentId)(state),
+        fetchManyStatus: fetchManyUserSolutionsStatus(userId || loggedInUserId, assignmentId)(state),
       };
     },
     (dispatch, { params: { assignmentId } }) => ({
       init: userId => () => dispatch(init(userId, assignmentId)),
-      loadAsync: userId =>
-        Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
+      loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
       exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
     })
   )(injectIntl(Assignment))

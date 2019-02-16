@@ -34,24 +34,14 @@ const EditShadowAssignmentPointsForm = ({
             maxLength={6}
             validateMin={-10000}
             validateMax={10000}
-            label={
-              <FormattedMessage
-                id="app.editShadowAssignmentPointsForm.points"
-                defaultMessage="Points:"
-              />
-            }
+            label={<FormattedMessage id="app.editShadowAssignmentPointsForm.points" defaultMessage="Points:" />}
           />
         </Col>
         <Col md={12} lg={6}>
           <Field
             name="awardedAt"
             component={DatetimeField}
-            label={
-              <FormattedMessage
-                id="app.editShadowAssignmentPointsForm.awardedAt"
-                defaultMessage="Awarded at:"
-              />
-            }
+            label={<FormattedMessage id="app.editShadowAssignmentPointsForm.awardedAt" defaultMessage="Awarded at:" />}
           />
         </Col>
       </Row>
@@ -61,12 +51,7 @@ const EditShadowAssignmentPointsForm = ({
             name="note"
             component={TextField}
             maxLength={255}
-            label={
-              <FormattedMessage
-                id="app.editShadowAssignmentPointsForm.note"
-                defaultMessage="Note:"
-              />
-            }
+            label={<FormattedMessage id="app.editShadowAssignmentPointsForm.note" defaultMessage="Note:" />}
           />
         </Col>
       </Row>
@@ -87,12 +72,8 @@ const EditShadowAssignmentPointsForm = ({
         invalid={invalid}
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-          submitting: (
-            <FormattedMessage id="generic.saving" defaultMessage="Saving..." />
-          ),
-          success: (
-            <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-          ),
+          submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+          success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
         }}
       />
     </div>

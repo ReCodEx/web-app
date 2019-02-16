@@ -9,17 +9,10 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import Icon, { EditIcon, CodeIcon } from '../../icons';
 
-const ReferenceSolutionStatus = ({
-  description,
-  solution: { userId, createdAt },
-  exerciseId,
-}) => (
+const ReferenceSolutionStatus = ({ description, solution: { userId, createdAt }, exerciseId }) => (
   <Box
     title={
-      <FormattedMessage
-        id="app.referenceSolutionDetail.title.details"
-        defaultMessage="Reference solution detail"
-      />
+      <FormattedMessage id="app.referenceSolutionDetail.title.details" defaultMessage="Reference solution detail" />
     }
     noPadding={true}
     collapsable={true}
@@ -31,26 +24,16 @@ const ReferenceSolutionStatus = ({
             <CodeIcon />
           </td>
           <th>
-            <FormattedMessage
-              id="app.referenceSolutionDetail.exercise"
-              defaultMessage="Exercise"
-            />
-            :
+            <FormattedMessage id="app.referenceSolutionDetail.exercise" defaultMessage="Exercise" />:
           </th>
-          <td>
-            {exerciseId && <ExercisesNameContainer exerciseId={exerciseId} />}
-          </td>
+          <td>{exerciseId && <ExercisesNameContainer exerciseId={exerciseId} />}</td>
         </tr>
         <tr>
           <td className="text-center">
             <EditIcon />
           </td>
           <th>
-            <FormattedMessage
-              id="generic.description"
-              defaultMessage="Description"
-            />
-            :
+            <FormattedMessage id="generic.description" defaultMessage="Description" />:
           </th>
           <td>{description}</td>
         </tr>
@@ -59,11 +42,7 @@ const ReferenceSolutionStatus = ({
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
-            <FormattedMessage
-              id="generic.uploadedAt"
-              defaultMessage="Uploaded at"
-            />
-            :
+            <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />:
           </th>
           <td>
             <DateTime unixts={createdAt} showRelative />

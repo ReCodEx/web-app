@@ -8,8 +8,7 @@ const getParam = (state, id) => id;
 const getExercises = state => state.exercises;
 const getResources = exercises => exercises && exercises.get('resources');
 const getGroupExercises = state => state.groupExercises;
-const getRuntimeEnvironments = exercise =>
-  exercise && exercise.getIn(['data', 'runtimeEnvironments'], EMPTY_LIST);
+const getRuntimeEnvironments = exercise => exercise && exercise.getIn(['data', 'runtimeEnvironments'], EMPTY_LIST);
 
 export const exercisesSelector = createSelector(
   getExercises,
@@ -25,8 +24,7 @@ export const exerciseForkedFromSelector = defaultMemoize(exerciseId =>
   createSelector(
     exercisesSelector,
     exercises => {
-      const fokredId =
-        exercises && exercises.getIn([exerciseId, 'data', 'forkedFrom']);
+      const fokredId = exercises && exercises.getIn([exerciseId, 'data', 'forkedFrom']);
       return fokredId && exercises.get(fokredId);
     }
   )
@@ -44,9 +42,7 @@ export const getExerciseOfAssignmentJS = createSelector(
     const assignment = assignmentSelector(assignmentId);
     const id = isReady(assignment) && assignment.getIn(['data', 'exerciseId']);
     const exercise = id && exercises.getIn(['resources', id]);
-    return isReady(exercise) && exercise.get('data')
-      ? exercise.get('data').toJS()
-      : null;
+    return isReady(exercise) && exercise.get('data') ? exercise.get('data').toJS() : null;
   }
 );
 
@@ -77,25 +73,15 @@ export const getExercisesByIdsSelector = ids =>
   createSelector(
     exercisesSelector,
     exercises =>
-      exercises &&
-      exercises
-        .filter(isReady)
-        .filter(exercise => ids.indexOf(exercise.getIn(['data', 'id'])) >= 0)
+      exercises && exercises.filter(isReady).filter(exercise => ids.indexOf(exercise.getIn(['data', 'id'])) >= 0)
   );
 
 export const getExercisesForGroup = createSelector(
   [exercisesSelector, getGroupExercises, getParam],
   (exercises, groupExercises, groupId) => {
-    const groupExIds = groupExercises[groupId]
-      ? groupExercises[groupId]
-      : EMPTY_ARRAY;
+    const groupExIds = groupExercises[groupId] ? groupExercises[groupId] : EMPTY_ARRAY;
     return (
-      exercises &&
-      exercises
-        .filter(isReady)
-        .filter(
-          exercise => groupExIds.indexOf(exercise.getIn(['data', 'id'])) >= 0
-        )
+      exercises && exercises.filter(isReady).filter(exercise => groupExIds.indexOf(exercise.getIn(['data', 'id'])) >= 0)
     );
   }
 );

@@ -9,16 +9,10 @@ const FailedBadge = props => (
     </div>
     <div className="pull-left info">
       <p>
-        <FormattedMessage
-          id="app.badge.failedLoading"
-          defaultMessage="Failed to load the data"
-        />
+        <FormattedMessage id="app.badge.failedLoading" defaultMessage="Failed to load the data" />
       </p>
       <p>
-        <FormattedMessage
-          id="app.badge.failedLoadingInfo"
-          defaultMessage="Please check your Internet connection."
-        />
+        <FormattedMessage id="app.badge.failedLoadingInfo" defaultMessage="Please check your Internet connection." />
       </p>
     </div>
   </div>

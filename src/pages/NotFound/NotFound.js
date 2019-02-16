@@ -4,12 +4,7 @@ import PageContent from '../../components/layout/PageContent';
 
 const NotFound = () => (
   <PageContent
-    title={
-      <FormattedMessage
-        id="app.notFound.title"
-        defaultMessage="Page not found"
-      />
-    }
+    title={<FormattedMessage id="app.notFound.title" defaultMessage="Page not found" />}
     description={
       <FormattedMessage
         id="app.notFound.description"

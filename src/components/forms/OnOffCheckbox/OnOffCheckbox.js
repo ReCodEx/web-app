@@ -9,14 +9,7 @@ import 'react-toggle/style.css';
 
 import './OnOffCheckbox.css'; // eslint-disable-line import/no-deprecated
 
-const OnOffCheckbox = ({
-  children,
-  name,
-  className,
-  disabled,
-  checked,
-  ...props
-}) => (
+const OnOffCheckbox = ({ children, name, className, disabled, checked, ...props }) => (
   <ControlLabel
     htmlFor={name}
     className={classnames({

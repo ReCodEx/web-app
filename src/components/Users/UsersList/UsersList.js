@@ -10,21 +10,13 @@ const UsersList = ({ heading = null, users = [], createActions, ...rest }) => (
 
     <tbody>
       {users.map((user, i) => (
-        <UsersListItem
-          user={user}
-          createActions={createActions}
-          key={`user-${user ? user.id : i}`}
-          {...rest}
-        />
+        <UsersListItem user={user} createActions={createActions} key={`user-${user ? user.id : i}`} {...rest} />
       ))}
 
       {users.length === 0 && (
         <tr>
           <td className="text-center text-muted">
-            <FormattedMessage
-              id="app.userList.noUsers"
-              defaultMessage="No users match selected filters."
-            />
+            <FormattedMessage id="app.userList.noUsers" defaultMessage="No users match selected filters." />
           </td>
         </tr>
       )}

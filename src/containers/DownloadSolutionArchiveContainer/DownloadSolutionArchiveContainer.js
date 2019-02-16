@@ -12,11 +12,7 @@ const DownloadResultArchiveContainer = ({
   downloadRefSolutionArchive,
   isReference = false,
 }) => (
-  <a
-    href="#"
-    onClick={
-      isReference ? downloadRefSolutionArchive : downloadSolutionArchive
-    }>
+  <a href="#" onClick={isReference ? downloadRefSolutionArchive : downloadSolutionArchive}>
     <SolutionArchiveInfoBox id={solutionId} />
   </a>
 );

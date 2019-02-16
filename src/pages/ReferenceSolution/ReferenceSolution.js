@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  FormattedMessage,
-  defineMessages,
-  intlShape,
-  injectIntl,
-} from 'react-intl';
+import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defaultMemoize } from 'reselect';
 
@@ -14,10 +9,7 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import withLinks from '../../helpers/withLinks';
 import Page from '../../components/layout/Page';
 
-import {
-  fetchReferenceSolutionIfNeeded,
-  fetchReferenceSolution,
-} from '../../redux/modules/referenceSolutions';
+import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 
 import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
@@ -43,9 +35,7 @@ const messages = defineMessages({
 });
 
 const exerciseHasRuntime = defaultMemoize(
-  (exercise, runtimeId) =>
-    exercise.runtimeEnvironments.find(({ id }) => id === runtimeId) !==
-    undefined
+  (exercise, runtimeId) => exercise.runtimeEnvironments.find(({ id }) => id === runtimeId) !== undefined
 );
 
 class ReferenceSolution extends Component {
@@ -53,9 +43,7 @@ class ReferenceSolution extends Component {
     Promise.all([
       dispatch(fetchReferenceSolutionIfNeeded(referenceSolutionId)),
       dispatch(fetchExerciseIfNeeded(exerciseId)),
-      dispatch(
-        fetchReferenceSolutionEvaluationsForSolution(referenceSolutionId)
-      ),
+      dispatch(fetchReferenceSolutionEvaluationsForSolution(referenceSolutionId)),
     ]);
 
   componentWillMount() {
@@ -63,10 +51,7 @@ class ReferenceSolution extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (
-      this.props.params.referenceSolutionId !==
-      newProps.params.referenceSolutionId
-    ) {
+    if (this.props.params.referenceSolutionId !== newProps.params.referenceSolutionId) {
       newProps.loadAsync();
     }
   }
@@ -88,39 +73,21 @@ class ReferenceSolution extends Component {
       <Page
         title={formatMessage(messages.title)}
         resource={referenceSolution}
-        description={
-          <FormattedMessage
-            id="app.exercise.overview"
-            defaultMessage="Exercise overview"
-          />
-        }
+        description={<FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />}
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.exercises.title"
-                defaultMessage="Exercises List"
-              />
-            ),
+            text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />,
             iconName: 'puzzle-piece',
             link: EXERCISES_URI,
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.exercise.overview"
-                defaultMessage="Exercise overview"
-              />
-            ),
+            text: <FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />,
             iconName: ['far', 'lightbulb'],
             link: EXERCISE_URI_FACTORY(exerciseId),
           },
           {
             text: (
-              <FormattedMessage
-                id="app.exercise.referenceSolutionDetail"
-                defaultMessage="Reference solution detail"
-              />
+              <FormattedMessage id="app.exercise.referenceSolutionDetail" defaultMessage="Reference solution detail" />
             ),
             iconName: ['far', 'gem'],
           },
@@ -138,10 +105,7 @@ class ReferenceSolution extends Component {
                           defaultMessage="The exercise is broken. This reference solution may not be resubmitted at the moment."
                         />
                       </p>
-                    ) : !exerciseHasRuntime(
-                        exercise,
-                        referenceSolution.runtimeEnvironmentId
-                      ) ? (
+                    ) : !exerciseHasRuntime(exercise, referenceSolution.runtimeEnvironmentId) ? (
                       <p className="callout callout-info">
                         <FormattedMessage
                           id="app.referenceSolution.exerciseNoLongerHasEnvironment"
@@ -150,16 +114,8 @@ class ReferenceSolution extends Component {
                       </p>
                     ) : (
                       <p>
-                        <ResubmitReferenceSolutionContainer
-                          id={referenceSolution.id}
-                          isDebug={false}
-                          locale={locale}
-                        />
-                        <ResubmitReferenceSolutionContainer
-                          id={referenceSolution.id}
-                          isDebug={true}
-                          locale={locale}
-                        />
+                        <ResubmitReferenceSolutionContainer id={referenceSolution.id} isDebug={false} locale={locale} />
+                        <ResubmitReferenceSolutionContainer id={referenceSolution.id} isDebug={true} locale={locale} />
                       </p>
                     )}
                   </React.Fragment>
@@ -207,28 +163,17 @@ export default withLinks(
       (state, { params: { exerciseId, referenceSolutionId } }) => ({
         referenceSolution: getReferenceSolution(referenceSolutionId)(state),
         exercise: getExercise(exerciseId)(state),
-        evaluations: evaluationsForReferenceSolutionSelector(
-          referenceSolutionId
-        )(state),
+        evaluations: evaluationsForReferenceSolutionSelector(referenceSolutionId)(state),
         fetchStatus: fetchManyStatus(referenceSolutionId)(state),
       }),
       (dispatch, { params }) => ({
         loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
         refreshSolutionEvaluations: () => {
           dispatch(fetchReferenceSolution(params.referenceSolutionId));
-          dispatch(
-            fetchReferenceSolutionEvaluationsForSolution(
-              params.referenceSolutionId
-            )
-          );
+          dispatch(fetchReferenceSolutionEvaluationsForSolution(params.referenceSolutionId));
         },
         deleteEvaluation: evaluationId =>
-          dispatch(
-            deleteReferenceSolutionEvaluation(
-              params.referenceSolutionId,
-              evaluationId
-            )
-          ),
+          dispatch(deleteReferenceSolutionEvaluation(params.referenceSolutionId, evaluationId)),
       })
     )(ReferenceSolution)
   )

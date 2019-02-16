@@ -4,8 +4,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'sisPossibleParents';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: courseId =>
-    `/extensions/sis/remote-courses/${courseId}/possible-parents`,
+  apiEndpointFactory: courseId => `/extensions/sis/remote-courses/${courseId}/possible-parents`,
 });
 
 /**
@@ -14,9 +13,6 @@ const { actions, reduceActions } = factory({
 
 export const fetchSisPossibleParentsIfNeeded = actions.fetchOneIfNeeded;
 
-const reducer = handleActions(
-  Object.assign({}, reduceActions, {}),
-  initialState
-);
+const reducer = handleActions(Object.assign({}, reduceActions, {}), initialState);
 
 export default reducer;

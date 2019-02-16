@@ -35,10 +35,8 @@ export const resolveFailure = (id, data) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.RESOLVE_FULFILLED]: (
-      state,
-      { meta: { id }, payload }
-    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
+    [additionalActionTypes.RESOLVE_FULFILLED]: (state, { meta: { id }, payload }) =>
+      state.setIn(['resources', id, 'data'], fromJS(payload)),
   }),
   initialState
 );

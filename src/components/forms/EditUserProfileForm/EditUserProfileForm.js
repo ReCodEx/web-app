@@ -8,12 +8,7 @@ import isEmail from 'validator/lib/isEmail';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { validateRegistrationData } from '../../../redux/modules/users';
-import {
-  TextField,
-  PasswordField,
-  PasswordStrength,
-  CheckboxField,
-} from '../Fields';
+import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
 
 const EditUserProfileForm = ({
   submitting,
@@ -30,12 +25,7 @@ const EditUserProfileForm = ({
   reset,
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.editUserProfileForm.title"
-        defaultMessage="Edit Profile"
-      />
-    }
+    title={<FormattedMessage id="app.editUserProfileForm.title" defaultMessage="Edit Profile" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
@@ -50,28 +40,16 @@ const EditUserProfileForm = ({
           asyncValidating={asyncValidating}
           tabIndex={9}
           messages={{
-            submit: (
-              <FormattedMessage id="generic.save" defaultMessage="Save" />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="generic.saving"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            ),
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
           }}
         />
       </div>
     }>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="generic.savingFailed"
-          defaultMessage="Saving failed. Please try again later."
-        />
+        <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>
     )}
 
@@ -80,12 +58,7 @@ const EditUserProfileForm = ({
       component={TextField}
       maxLength={42}
       required
-      label={
-        <FormattedMessage
-          id="app.editUserProfile.degreesBeforeName"
-          defaultMessage="Prefix Title:"
-        />
-      }
+      label={<FormattedMessage id="app.editUserProfile.degreesBeforeName" defaultMessage="Prefix Title:" />}
     />
 
     <Field
@@ -94,12 +67,7 @@ const EditUserProfileForm = ({
       maxLength={100}
       required
       disabled={disabledNameChange}
-      label={
-        <FormattedMessage
-          id="app.editUserProfile.firstName"
-          defaultMessage="Given Name:"
-        />
-      }
+      label={<FormattedMessage id="app.editUserProfile.firstName" defaultMessage="Given Name:" />}
     />
 
     <Field
@@ -108,12 +76,7 @@ const EditUserProfileForm = ({
       maxLength={255}
       required
       disabled={disabledNameChange}
-      label={
-        <FormattedMessage
-          id="app.editUserProfile.lastName"
-          defaultMessage="Surname:"
-        />
-      }
+      label={<FormattedMessage id="app.editUserProfile.lastName" defaultMessage="Surname:" />}
     />
 
     <Field
@@ -121,12 +84,7 @@ const EditUserProfileForm = ({
       component={TextField}
       maxLength={42}
       required
-      label={
-        <FormattedMessage
-          id="app.editUserProfile.degreesAfterName"
-          defaultMessage="Suffix Title:"
-        />
-      }
+      label={<FormattedMessage id="app.editUserProfile.degreesAfterName" defaultMessage="Suffix Title:" />}
     />
 
     <Field
@@ -134,12 +92,7 @@ const EditUserProfileForm = ({
       component={TextField}
       autoComplete="off"
       maxLength={255}
-      label={
-        <FormattedMessage
-          id="app.changePasswordForm.email"
-          defaultMessage="Email:"
-        />
-      }
+      label={<FormattedMessage id="app.changePasswordForm.email" defaultMessage="Email:" />}
     />
 
     <Field
@@ -157,10 +110,7 @@ const EditUserProfileForm = ({
     {allowChangePassword && (
       <div>
         <h3>
-          <FormattedMessage
-            id="app.editUserProfile.passwordTitle"
-            defaultMessage="Change your password"
-          />
+          <FormattedMessage id="app.editUserProfile.passwordTitle" defaultMessage="Change your password" />
         </h3>
         <p className="text-muted">
           <FormattedMessage
@@ -189,12 +139,7 @@ const EditUserProfileForm = ({
             name="oldPassword"
             component={PasswordField}
             autoComplete="off"
-            label={
-              <FormattedMessage
-                id="app.changePasswordForm.oldPassword"
-                defaultMessage="Old Password:"
-              />
-            }
+            label={<FormattedMessage id="app.changePasswordForm.oldPassword" defaultMessage="Old Password:" />}
           />
         )}
 
@@ -202,35 +147,20 @@ const EditUserProfileForm = ({
           name="password"
           component={PasswordField}
           autoComplete="off"
-          label={
-            <FormattedMessage
-              id="app.changePasswordForm.password"
-              defaultMessage="New Password:"
-            />
-          }
+          label={<FormattedMessage id="app.changePasswordForm.password" defaultMessage="New Password:" />}
         />
 
         <Field
           name="passwordStrength"
           component={PasswordStrength}
-          label={
-            <FormattedMessage
-              id="app.changePasswordForm.passwordStrength"
-              defaultMessage="Password Strength:"
-            />
-          }
+          label={<FormattedMessage id="app.changePasswordForm.passwordStrength" defaultMessage="Password Strength:" />}
         />
 
         <Field
           name="passwordConfirm"
           tabIndex={8}
           component={PasswordField}
-          label={
-            <FormattedMessage
-              id="app.changePasswordForm.passwordCheck"
-              defaultMessage="New Password (again):"
-            />
-          }
+          label={<FormattedMessage id="app.changePasswordForm.passwordCheck" defaultMessage="New Password (again):" />}
         />
       </div>
     )}
@@ -254,10 +184,7 @@ EditUserProfileForm.propTypes = {
   disabledNameChange: PropTypes.bool,
 };
 
-const validate = (
-  { firstName, lastName, email, oldPassword, password, passwordConfirm },
-  { allowChangePassword }
-) => {
+const validate = ({ firstName, lastName, email, oldPassword, password, passwordConfirm }, { allowChangePassword }) => {
   const errors = {};
 
   if (!firstName) {
@@ -280,10 +207,7 @@ const validate = (
 
   if (!lastName) {
     errors['lastName'] = (
-      <FormattedMessage
-        id="app.editUserProfile.validation.emptyLastName"
-        defaultMessage="Last name cannot be empty."
-      />
+      <FormattedMessage id="app.editUserProfile.validation.emptyLastName" defaultMessage="Last name cannot be empty." />
     );
   }
 
@@ -332,13 +256,7 @@ const validate = (
         );
       }
 
-      if (
-        password &&
-        password.length > 0 &&
-        oldPassword &&
-        oldPassword.length > 0 &&
-        password === oldPassword
-      ) {
+      if (password && password.length > 0 && oldPassword && oldPassword.length > 0 && password === oldPassword) {
         errors['password'] = (
           <FormattedMessage
             id="app.editUserProfile.validation.samePasswords"
@@ -372,9 +290,7 @@ const asyncValidate = ({ email, password = '' }, dispatch) => {
           );
         }
 
-        dispatch(
-          change('edit-user-profile', 'passwordStrength', passwordScore)
-        );
+        dispatch(change('edit-user-profile', 'passwordStrength', passwordScore));
 
         if (Object.keys(errors).length > 0) {
           throw errors;

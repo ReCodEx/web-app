@@ -22,32 +22,19 @@ const EditTerm = ({
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
-        <FormattedMessage
-          id="app.editSisTerm.title"
-          defaultMessage="Edit SIS Term"
-        />
+        <FormattedMessage id="app.editSisTerm.title" defaultMessage="Edit SIS Term" />
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Field
         name="beginning"
         component={DatetimeField}
-        label={
-          <FormattedMessage
-            id="app.editSisTerm.beginning"
-            defaultMessage="Beginning of the term:"
-          />
-        }
+        label={<FormattedMessage id="app.editSisTerm.beginning" defaultMessage="Beginning of the term:" />}
       />
       <Field
         name="end"
         component={DatetimeField}
-        label={
-          <FormattedMessage
-            id="app.editSisTerm.end"
-            defaultMessage="End of the term:"
-          />
-        }
+        label={<FormattedMessage id="app.editSisTerm.end" defaultMessage="End of the term:" />}
       />
       <Field
         name="advertiseUntil"
@@ -71,12 +58,8 @@ const EditTerm = ({
         invalid={invalid}
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-          submitting: (
-            <FormattedMessage id="generic.saving" defaultMessage="Saving..." />
-          ),
-          success: (
-            <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-          ),
+          submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+          success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
         }}
       />
 
@@ -106,19 +89,13 @@ const validate = ({ beginning, end, advertiseUntil }) => {
 
   if (!beginning) {
     errors['beginning'] = (
-      <FormattedMessage
-        id="app.editSisTerm.validation.noBeginning"
-        defaultMessage="Start of the term is required."
-      />
+      <FormattedMessage id="app.editSisTerm.validation.noBeginning" defaultMessage="Start of the term is required." />
     );
   }
 
   if (!end) {
     errors['end'] = (
-      <FormattedMessage
-        id="app.editSisTerm.validation.noEnd"
-        defaultMessage="End of the term is required."
-      />
+      <FormattedMessage id="app.editSisTerm.validation.noEnd" defaultMessage="End of the term is required." />
     );
   }
 

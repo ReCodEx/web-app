@@ -12,9 +12,7 @@ const AddSupervisor = ({ groupId, instanceId }) => (
     instanceId={instanceId}
     id={`add-supervisor-${groupId}`}
     rolesFilter={ROLES_FILTER}
-    createActions={({ id }) => (
-      <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
-    )}
+    createActions={({ id }) => <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />}
   />
 );
 

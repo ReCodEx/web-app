@@ -7,12 +7,7 @@ import Layout from '../../components/layout/Layout';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { anyPendingFetchOperations } from '../../redux/selectors/app';
-import {
-  toggleSize,
-  toggleVisibility,
-  collapse,
-  unroll,
-} from '../../redux/modules/sidebar';
+import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
@@ -49,8 +44,7 @@ class LayoutContainer extends Component {
       (typeof this.context.userSettings.openedSidebar === 'undefined' &&
         typeof newContext.userSettings.openedSidebar !== 'undefined') ||
       (typeof this.context.userSettings.openedSidebar !== 'undefined' &&
-        this.context.userSettings.openedSidebar !==
-          newContext.userSettings.openedSidebar)
+        this.context.userSettings.openedSidebar !== newContext.userSettings.openedSidebar)
     ) {
       this.resizeSidebarToDefault(newProps, newContext);
     }
@@ -68,9 +62,7 @@ class LayoutContainer extends Component {
   }
 
   getDefaultOpenedSidebar = ({ userSettings }) =>
-    userSettings && typeof userSettings.openedSidebar !== 'undefined'
-      ? userSettings.openedSidebar
-      : true;
+    userSettings && typeof userSettings.openedSidebar !== 'undefined' ? userSettings.openedSidebar : true;
 
   getLang = props => {
     let lang = props.params.lang;
@@ -94,8 +86,7 @@ class LayoutContainer extends Component {
   getChildContext = () => ({
     links: this.state.links,
     lang: this.state.lang,
-    isActive: link =>
-      !isAbsolute(link) && this.context.router.isActive(link, true),
+    isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true),
   });
 
   maybeHideSidebar = e => {
@@ -111,9 +102,7 @@ class LayoutContainer extends Component {
 
   getDefaultLang = () => {
     const { userSettings } = this.context;
-    return userSettings && userSettings.defaultLanguage
-      ? userSettings.defaultLanguage
-      : 'en';
+    return userSettings && userSettings.defaultLanguage ? userSettings.defaultLanguage : 'en';
   };
 
   getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
@@ -135,10 +124,7 @@ class LayoutContainer extends Component {
     moment.locale(lang);
 
     return (
-      <IntlProvider
-        locale={lang}
-        messages={this.getMessages(lang)}
-        formats={ADDITIONAL_INTL_FORMATS}>
+      <IntlProvider locale={lang} messages={this.getMessages(lang)} formats={ADDITIONAL_INTL_FORMATS}>
         <Layout
           sidebar={sidebar}
           isLoggedIn={isLoggedIn}

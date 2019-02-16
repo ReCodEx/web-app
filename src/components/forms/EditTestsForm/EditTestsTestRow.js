@@ -8,13 +8,7 @@ import { TextField, NumericTextField } from '../Fields';
 import { RemoveIcon } from '../../icons';
 import './EditTests.css';
 
-const EditTestsTestRow = ({
-  test,
-  onRemove,
-  isUniform,
-  percent,
-  readOnly = false,
-}) => (
+const EditTestsTestRow = ({ test, onRemove, isUniform, percent, readOnly = false }) => (
   <tr>
     <td>
       <Field
@@ -42,16 +36,9 @@ const EditTestsTestRow = ({
     <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{percent}</td>
     {!readOnly && (
       <td style={{ verticalAlign: 'middle' }}>
-        <Button
-          onClick={onRemove}
-          bsStyle={'danger'}
-          bsSize="xs"
-          className="btn-flat pull-right">
+        <Button onClick={onRemove} bsStyle={'danger'} bsSize="xs" className="btn-flat pull-right">
           <RemoveIcon gapRight />
-          <FormattedMessage
-            id="app.editTestsTest.remove"
-            defaultMessage="Remove"
-          />
+          <FormattedMessage id="app.editTestsTest.remove" defaultMessage="Remove" />
         </Button>
       </td>
     )}

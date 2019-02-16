@@ -20,10 +20,7 @@ const LocalizedAssigmentFormField = ({ prefix, data: enabled }) => (
     </Alert>
 
     <SharedLocalizedFields prefix={prefix} enabled={enabled} />
-    <SharedExerciseAssignmentLocalizedFields
-      prefix={prefix}
-      enabled={enabled}
-    />
+    <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
 
     <Field
       name={`${prefix}.studentHint`}

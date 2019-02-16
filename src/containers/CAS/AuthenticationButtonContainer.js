@@ -17,11 +17,7 @@ class AuthenticationButtonContainer extends Component {
     const ticket = e.data; // the message should be the ticket
     const { links, onTicketObtained } = this.props;
 
-    if (
-      ticket !== null &&
-      e.source === this.casWindow &&
-      this.casWindow !== null
-    ) {
+    if (ticket !== null && e.source === this.casWindow && this.casWindow !== null) {
       // cancel the window and the interval
       const clientUrl = absolute(links.LOGIN_EXTERN_FINALIZATION('cas-uk'));
       this.casWindow.postMessage('received', e.origin);
@@ -41,10 +37,7 @@ class AuthenticationButtonContainer extends Component {
       } else {
         // the window is open, now periodically check if the user has already logged in
         window.addEventListener('message', this.messageHandler);
-        this.pollPopupClosed = window.setInterval(
-          this.pollPopupClosedHandler,
-          100
-        );
+        this.pollPopupClosed = window.setInterval(this.pollPopupClosedHandler, 100);
       }
     } else {
       this.casWindow.focus(); // no need to create the window again

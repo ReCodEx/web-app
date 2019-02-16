@@ -1,18 +1,13 @@
 import { handleActions } from 'redux-actions';
 
-import factory, {
-  initialState,
-  resourceStatus,
-  createRecord,
-} from '../helpers/resourceManager';
+import factory, { initialState, resourceStatus, createRecord } from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
 
 const resourceName = 'submissionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: evaluationId =>
-    `/assignment-solutions/evaluation/${evaluationId}`,
+  apiEndpointFactory: evaluationId => `/assignment-solutions/evaluation/${evaluationId}`,
 });
 
 /**
@@ -33,8 +28,7 @@ export const deleteSubmissionEvaluation = (solutionId, evaluationId) => {
   return action;
 };
 
-export const fetchManyEndpoint = id =>
-  `/assignment-solutions/${id}/evaluations`;
+export const fetchManyEndpoint = id => `/assignment-solutions/${id}/evaluations`;
 
 export const fetchSubmissionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
@@ -77,20 +71,13 @@ const reducer = handleActions(
           )
         : state,
 
-    [additionalActionTypes.DELETE_EVALUATION_PENDING]: (
-      state,
-      { meta: { id } }
-    ) => state.setIn(['resources', id, 'state'], resourceStatus.DELETING),
+    [additionalActionTypes.DELETE_EVALUATION_PENDING]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'state'], resourceStatus.DELETING),
 
-    [additionalActionTypes.DELETE_EVALUATION_REJECTED]: (
-      state,
-      { meta: { id } }
-    ) => state.setIn(['resources', id, 'state'], resourceStatus.FULFILLED),
+    [additionalActionTypes.DELETE_EVALUATION_REJECTED]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'state'], resourceStatus.FULFILLED),
 
-    [additionalActionTypes.DELETE_EVALUATION_FULFILLED]: (
-      state,
-      { meta: { id } }
-    ) =>
+    [additionalActionTypes.DELETE_EVALUATION_FULFILLED]: (state, { meta: { id } }) =>
       state.update('resources', resources =>
         resources.map((item, itemId) =>
           item.get('data') !== null

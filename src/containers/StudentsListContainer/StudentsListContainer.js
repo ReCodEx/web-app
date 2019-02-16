@@ -59,10 +59,6 @@ export default connect(
     };
   },
   (dispatch, { groupId }) => ({
-    loadAsync: () =>
-      Promise.all([
-        dispatch(fetchGroupIfNeeded(groupId)),
-        dispatch(fetchStudents(groupId)),
-      ]),
+    loadAsync: () => Promise.all([dispatch(fetchGroupIfNeeded(groupId)), dispatch(fetchStudents(groupId))]),
   })
 )(StudentsListContainer);

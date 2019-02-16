@@ -23,11 +23,7 @@ export const isProcessing = createSelector(
 );
 export const isSubmitting = createSelector(
   getStatus,
-  state =>
-    state === CREATING ||
-    state === VALIDATING ||
-    state === SENDING ||
-    state === FAILED
+  state => state === CREATING || state === VALIDATING || state === SENDING || state === FAILED
 );
 export const isValidating = createSelector(
   getStatus,
@@ -71,17 +67,9 @@ export const getPresubmitEnvironments = createSelector(
 
 export const getPresubmitVariables = createSelector(
   [getPresubmit],
-  presubmit =>
-    ((presubmit && presubmit.get('submitVariables')) || EMPTY_LIST).toJS()
+  presubmit => ((presubmit && presubmit.get('submitVariables')) || EMPTY_LIST).toJS()
 );
 
 // Selector helper function for presubmit variables
 export const hasEntryPoint = (vars, env) =>
-  Boolean(
-    env &&
-      safeGet(vars, [
-        v => v.runtimeEnvironmentId === env,
-        'variables',
-        v => v.name === 'entry-point',
-      ])
-  );
+  Boolean(env && safeGet(vars, [v => v.runtimeEnvironmentId === env, 'variables', v => v.name === 'entry-point']));

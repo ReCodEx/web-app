@@ -8,21 +8,14 @@ const Page = ({
   title,
   description,
   resource,
-  loadingTitle = (
-    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  ),
+  loadingTitle = <FormattedMessage id="generic.loading" defaultMessage="Loading..." />,
   loadingDescription = (
     <FormattedMessage
       id="app.page.loadingDescription"
       defaultMessage="Please wait while we are getting things ready."
     />
   ),
-  failedTitle = (
-    <FormattedMessage
-      id="app.page.failed"
-      defaultMessage="Cannot load the page"
-    />
-  ),
+  failedTitle = <FormattedMessage id="app.page.failed" defaultMessage="Cannot load the page" />,
   failedDescription = (
     <FormattedMessage
       id="app.page.failedDescription"
@@ -34,21 +27,13 @@ const Page = ({
 }) => (
   <ResourceRenderer
     resource={resource}
-    loading={
-      <PageContent title={loadingTitle} description={loadingDescription} />
-    }
-    failed={
-      <PageContent title={failedTitle} description={failedDescription} />
-    }>
+    loading={<PageContent title={loadingTitle} description={loadingDescription} />}
+    failed={<PageContent title={failedTitle} description={failedDescription} />}>
     {(...resources) => (
       <PageContent
         {...props}
         title={typeof title === 'function' ? title(...resources) : title}
-        description={
-          typeof description === 'function'
-            ? description(...resources)
-            : description
-        }>
+        description={typeof description === 'function' ? description(...resources) : description}>
         {typeof children === 'function' ? children(...resources) : children}
       </PageContent>
     )}
@@ -68,10 +53,8 @@ Page.propTypes = {
   loadingDescription: stringOrFormattedMessage,
   failedTitle: stringOrFormattedMessage,
   failedDescription: stringOrFormattedMessage,
-  title: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage])
-    .isRequired,
-  description: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage])
-    .isRequired,
+  title: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]).isRequired,
+  description: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]).isRequired,
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 };
 

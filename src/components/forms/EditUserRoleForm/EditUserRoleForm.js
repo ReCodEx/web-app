@@ -5,12 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import { Alert, Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import {
-  knownRoles,
-  roleLabels,
-  roleDescriptions,
-  UserRoleIcon,
-} from '../../helpers/usersRoles';
+import { knownRoles, roleLabels, roleDescriptions, UserRoleIcon } from '../../helpers/usersRoles';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
@@ -24,12 +19,7 @@ const EditUserRoleForm = ({
   invalid,
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.editUserRoleForm.title"
-        defaultMessage="Set User's Role"
-      />
-    }
+    title={<FormattedMessage id="app.editUserRoleForm.title" defaultMessage="Set User's Role" />}
     type={submitSucceeded ? 'success' : undefined}
     noPadding
     footer={
@@ -42,28 +32,16 @@ const EditUserRoleForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: (
-              <FormattedMessage id="generic.save" defaultMessage="Save" />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="generic.saving"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            ),
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
           }}
         />
       </div>
     }>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="generic.savingFailed"
-          defaultMessage="Saving failed. Please try again later."
-        />
+        <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>
     )}
 
@@ -90,9 +68,7 @@ const EditUserRoleForm = ({
               })}>
               {roleLabels[role]}
             </td>
-            <td className="small text-muted valign-middle">
-              {roleDescriptions[role]}
-            </td>
+            <td className="small text-muted valign-middle">{roleDescriptions[role]}</td>
           </tr>
         ))}
       </tbody>

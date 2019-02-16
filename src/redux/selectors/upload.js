@@ -29,18 +29,7 @@ export const createGetRemovedFiles = id =>
 
 export const createAllUploaded = id =>
   createSelector(
-    [
-      createGetUploadingFiles(id),
-      createGetUploadedFiles(id),
-      createGetFailedFiles(id),
-    ],
+    [createGetUploadingFiles(id), createGetUploadedFiles(id), createGetFailedFiles(id)],
     (uploading, uploaded, failed) =>
-      Boolean(
-        uploading &&
-          uploading.length === 0 &&
-          uploaded &&
-          uploaded.length > 0 &&
-          failed &&
-          failed.length === 0
-      )
+      Boolean(uploading && uploading.length === 0 && uploaded && uploaded.length > 0 && failed && failed.length === 0)
   );

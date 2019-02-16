@@ -34,9 +34,7 @@ export const downloadHelper = ({
       } = result;
       if (ok === false) {
         const msg =
-          status === 404
-            ? 'The file could not be found on the server.'
-            : `This file cannot be downloaded (${status}).`;
+          status === 404 ? 'The file could not be found on the server.' : `This file cannot be downloaded (${status}).`;
         throw new Error(msg);
       }
 

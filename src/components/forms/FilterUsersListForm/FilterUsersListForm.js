@@ -21,10 +21,7 @@ const FilterUsersListForm = ({
     <Well bsSize="sm">
       {submitFailed && (
         <Alert bsStyle="danger">
-          <FormattedMessage
-            id="generic.operationFailed"
-            defaultMessage="Operation failed. Please try again later."
-          />
+          <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
         </Alert>
       )}
 
@@ -37,11 +34,7 @@ const FilterUsersListForm = ({
               maxLength={255}
               label={
                 <span>
-                  <FormattedMessage
-                    id="app.filterUsersListForm.searchName"
-                    defaultMessage="Search by name"
-                  />
-                  :
+                  <FormattedMessage id="app.filterUsersListForm.searchName" defaultMessage="Search by name" />:
                 </span>
               }
             />
@@ -50,15 +43,8 @@ const FilterUsersListForm = ({
         <Row>
           <Col sm={9} md={10}>
             {knownRoles.map(role => (
-              <span
-                key={`${role}-${locale}`}
-                className="text-nowrap pull-left em-padding-right">
-                <Field
-                  name={`roles.${role}`}
-                  component={CheckboxField}
-                  onOff
-                  label={roleLabelsPlural[role]}
-                />
+              <span key={`${role}-${locale}`} className="text-nowrap pull-left em-padding-right">
+                <Field name={`roles.${role}`} component={CheckboxField} onOff label={roleLabelsPlural[role]} />
               </span>
             ))}
           </Col>
@@ -73,18 +59,8 @@ const FilterUsersListForm = ({
                 invalid={invalid}
                 disabled={onSubmit === null}
                 messages={{
-                  submit: (
-                    <FormattedMessage
-                      id="generic.setFilters"
-                      defaultMessage="Set Filters"
-                    />
-                  ),
-                  success: (
-                    <FormattedMessage
-                      id="generic.filtersSet"
-                      defaultMessage="Filters Set"
-                    />
-                  ),
+                  submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                  success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
                 }}
               />
             </div>

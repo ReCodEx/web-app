@@ -25,16 +25,8 @@ export const getActionTypes = (prefix, actions, postfixes = ['']) =>
  * @param {string} resourceName Name of the resource
  * @param {string} prefix       Unique prefix for the actions
  */
-const actionTypesFactory = (
-  resourceName,
-  prefix = defaultPrefix(resourceName)
-) => ({
-  ...getActionTypes(prefix, twoPhaseActions, [
-    '',
-    '_PENDING',
-    '_FULFILLED',
-    '_REJECTED',
-  ]),
+const actionTypesFactory = (resourceName, prefix = defaultPrefix(resourceName)) => ({
+  ...getActionTypes(prefix, twoPhaseActions, ['', '_PENDING', '_FULFILLED', '_REJECTED']),
   ...getActionTypes(prefix, onePhaseActions),
 });
 

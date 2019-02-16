@@ -7,15 +7,7 @@ import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
 import { ExercisePrefixIcons } from '../../icons';
 
-const ExercisesName = ({
-  id,
-  name,
-  localizedTexts,
-  isLocked,
-  isBroken,
-  noLink,
-  links: { EXERCISE_URI_FACTORY },
-}) => (
+const ExercisesName = ({ id, name, localizedTexts, isLocked, isBroken, noLink, links: { EXERCISE_URI_FACTORY } }) => (
   <span>
     <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
     {noLink ? (

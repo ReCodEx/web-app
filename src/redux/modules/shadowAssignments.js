@@ -41,8 +41,7 @@ export const fetchShadowAssignmentsForGroup = groupId =>
     endpoint: `/groups/${groupId}/shadow-assignments`,
   });
 
-export const createShadowAssignment = groupId =>
-  actions.addResource({ groupId });
+export const createShadowAssignment = groupId => actions.addResource({ groupId });
 export const editShadowAssignment = actions.updateResource;
 export const deleteShadowAssignment = actions.removeResource;
 
@@ -98,32 +97,17 @@ export const removeShadowAssignmentPoints = (shadowAssignmentId, pointsId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.CREATE_POINTS_FULFILLED]: (
-      state,
-      { payload, meta: { shadowAssignmentId } }
-    ) =>
-      state.updateIn(
-        ['resources', shadowAssignmentId, 'data', 'points'],
-        points => points.push(fromJS(payload))
+    [additionalActionTypes.CREATE_POINTS_FULFILLED]: (state, { payload, meta: { shadowAssignmentId } }) =>
+      state.updateIn(['resources', shadowAssignmentId, 'data', 'points'], points => points.push(fromJS(payload))),
+
+    [additionalActionTypes.UPDATE_POINTS_FULFILLED]: (state, { payload, meta: { shadowAssignmentId, pointsId } }) =>
+      state.updateIn(['resources', shadowAssignmentId, 'data', 'points'], points =>
+        points.filter(p => p.get('id') !== pointsId).push(fromJS(payload))
       ),
 
-    [additionalActionTypes.UPDATE_POINTS_FULFILLED]: (
-      state,
-      { payload, meta: { shadowAssignmentId, pointsId } }
-    ) =>
-      state.updateIn(
-        ['resources', shadowAssignmentId, 'data', 'points'],
-        points =>
-          points.filter(p => p.get('id') !== pointsId).push(fromJS(payload))
-      ),
-
-    [additionalActionTypes.REMOVE_POINTS_FULFILLED]: (
-      state,
-      { meta: { shadowAssignmentId, pointsId } }
-    ) =>
-      state.updateIn(
-        ['resources', shadowAssignmentId, 'data', 'points'],
-        points => points.filter(p => p.get('id') !== pointsId)
+    [additionalActionTypes.REMOVE_POINTS_FULFILLED]: (state, { meta: { shadowAssignmentId, pointsId } }) =>
+      state.updateIn(['resources', shadowAssignmentId, 'data', 'points'], points =>
+        points.filter(p => p.get('id') !== pointsId)
       ),
   }),
   initialState

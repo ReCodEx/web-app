@@ -8,13 +8,7 @@ import Icon from '../../icons';
 import Button from '../../widgets/FlatButton';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 
-const AssignmentFormGroupsList = ({
-  groups,
-  groupsAccessor,
-  isOpen,
-  toggleOpenState,
-  intl: { locale },
-}) => (
+const AssignmentFormGroupsList = ({ groups, groupsAccessor, isOpen, toggleOpenState, intl: { locale } }) => (
   <React.Fragment>
     {groups.map((group, i) => (
       <Field
@@ -32,18 +26,12 @@ const AssignmentFormGroupsList = ({
           {isOpen ? (
             <span>
               <Icon icon="minus-square" gapRight />
-              <FormattedMessage
-                id="app.multiAssignForm.showMyGroups"
-                defaultMessage="Show My Groups Only"
-              />
+              <FormattedMessage id="app.multiAssignForm.showMyGroups" defaultMessage="Show My Groups Only" />
             </span>
           ) : (
             <span>
               <Icon icon="plus-square" gapRight />
-              <FormattedMessage
-                id="app.multiAssignForm.showAllGroups"
-                defaultMessage="Show All Groups"
-              />
+              <FormattedMessage id="app.multiAssignForm.showAllGroups" defaultMessage="Show All Groups" />
             </span>
           )}
         </Button>

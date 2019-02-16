@@ -10,16 +10,12 @@ export const getPipelineFile = id =>
     pipelineFiles => pipelineFiles.get(id)
   );
 
-export const pipelineFilesSelector = state =>
-  state.pipelineFiles.get('resources');
+export const pipelineFilesSelector = state => state.pipelineFiles.get('resources');
 
 export const createGetPipelineFiles = ids =>
   createSelector(
     pipelineFilesSelector,
-    pipelineFiles =>
-      pipelineFiles
-        .filter(isReady)
-        .filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
+    pipelineFiles => pipelineFiles.filter(isReady).filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
   );
 
 export const getSupplementaryFilesForPipeline = defaultMemoize(pipelineId =>
@@ -28,9 +24,7 @@ export const getSupplementaryFilesForPipeline = defaultMemoize(pipelineId =>
     (pipeline, pipelineFiles) => {
       const ids = pipeline && pipeline.getIn(['data', 'supplementaryFilesIds']);
       return ids && pipelineFiles
-        ? pipelineFiles
-            .filter(isReady)
-            .filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
+        ? pipelineFiles.filter(isReady).filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
         : EMPTY_MAP;
     }
   )

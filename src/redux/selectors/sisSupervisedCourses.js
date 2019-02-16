@@ -5,8 +5,7 @@ import { loggedInUserIdSelector } from './auth';
 
 const getResources = state => state.sisSupervisedCourses.get('resources');
 
-const getSisStateTerms = state =>
-  state.sisStatus.getIn(['resources', 'status', 'data', 'terms']);
+const getSisStateTerms = state => state.sisStatus.getIn(['resources', 'status', 'data', 'terms']);
 
 export const sisSupervisedCoursesSelector = createSelector(
   [getResources, getSisStateTerms, loggedInUserIdSelector],

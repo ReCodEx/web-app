@@ -14,37 +14,17 @@ class Exercises extends Component {
   render() {
     return (
       <PageContent
-        title={
-          <FormattedMessage
-            id="app.exercises.title"
-            defaultMessage="Exercise List"
-          />
-        }
+        title={<FormattedMessage id="app.exercises.title" defaultMessage="Exercise List" />}
         description={
-          <FormattedMessage
-            id="app.instance.description"
-            defaultMessage="List and assign exercises to your groups."
-          />
+          <FormattedMessage id="app.instance.description" defaultMessage="List and assign exercises to your groups." />
         }
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.exercises.title"
-                defaultMessage="Exercise List"
-              />
-            ),
+            text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercise List" />,
             iconName: 'puzzle-piece',
           },
         ]}>
-        <Box
-          title={
-            <FormattedMessage
-              id="app.exercises.listTitle"
-              defaultMessage="Exercises"
-            />
-          }
-          unlimitedHeight>
+        <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
           <ExercisesListContainer id="exercises-all" showGroups />
         </Box>
       </PageContent>

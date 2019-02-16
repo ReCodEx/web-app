@@ -3,9 +3,7 @@ import Viz from 'viz.js/viz-lite';
 const subnode = (node, port) => `"${node}__${port}"`;
 
 const createDependency = (from, to, clusterTo = null) => {
-  const dep =
-    `${from} -> ${to}` +
-    (clusterTo === null ? '' : `[lhead = cluster_${clusterTo}]`);
+  const dep = `${from} -> ${to}` + (clusterTo === null ? '' : `[lhead = cluster_${clusterTo}]`);
   return dep;
 };
 
@@ -15,12 +13,7 @@ const createDotForPorts = (name, ports) =>
     .filter(value => value.length > 0)
     .map(port => `${subnode(name, port)} [label="${port}"]`);
 
-const createDotForNodeFactory = dependencies => (
-  name,
-  portsIn = {},
-  portsOut = {},
-  i
-) => {
+const createDotForNodeFactory = dependencies => (name, portsIn = {}, portsOut = {}, i) => {
   let hasFullSupport = true;
   const inputs = createDotForPorts(name, portsIn);
   const outputs = createDotForPorts(name, portsOut);
@@ -29,11 +22,7 @@ const createDotForNodeFactory = dependencies => (
       subgraph cluster_${i} {
         label = "${name}";
         id = "B-${name}";
-        ${
-          !hasFullSupport
-            ? 'fontcolor = "red"; color = "red";'
-            : 'color = "black"; style = "filled, solid";'
-        }
+        ${!hasFullSupport ? 'fontcolor = "red"; color = "red";' : 'color = "black"; style = "filled, solid";'}
         fillcolor = "#f9f9f9";
         subgraph cluster_inputs {
           style = "filled, solid";
@@ -53,11 +42,7 @@ const createDotForNodeFactory = dependencies => (
           fontcolor = black;
           ${outputs.join(';')}
         }
-        ${
-          inputs.length === 0 && outputs.length === 0
-            ? `"E-${name}" [label="void"]`
-            : ''
-        }
+        ${inputs.length === 0 && outputs.length === 0 ? `"E-${name}" [label="void"]` : ''}
       }`;
 };
 
@@ -77,14 +62,10 @@ const createDotForGraph = (nodes, commands) => `
 
 export const convertGraphToDot = ({ nodes, dependencies }) => {
   const createDotForDependency = createDotForDependencyFactory(nodes);
-  const commands = dependencies.map(({ from, to, name }) =>
-    createDotForDependency(from, to, name)
-  );
+  const commands = dependencies.map(({ from, to, name }) => createDotForDependency(from, to, name));
 
   const createDotForNode = createDotForNodeFactory(dependencies);
-  const nodesDot = nodes.map(({ name, portsIn, portsOut }, i) =>
-    createDotForNode(name, portsIn, portsOut, i)
-  );
+  const nodesDot = nodes.map(({ name, portsIn, portsOut }, i) => createDotForNode(name, portsIn, portsOut, i));
 
   return createDotForGraph(nodesDot, commands);
 };

@@ -19,11 +19,7 @@ import {
   isReady,
 } from './status';
 
-import {
-  defaultApiEndpointFactory,
-  defaultSelectorFactory,
-  defaultNeedsRefetching,
-} from './utils';
+import { defaultApiEndpointFactory, defaultSelectorFactory, defaultNeedsRefetching } from './utils';
 
 export {
   actionTypesFactory,

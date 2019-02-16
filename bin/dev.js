@@ -24,14 +24,14 @@ app.get('*', (req, res) => {
       htmlAttributes: 'lang="cs"',
       title: '<title>ReCodEx</title>',
       meta: '',
-      link: ''
+      link: '',
     },
     reduxState: undefined,
     skin: SKIN,
     style: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/style.css`,
     bundle: `http://localhost:${WEBPACK_DEV_SERVER_PORT}/bundle.js`,
-	config: fileConfig,
-	urlPrefix
+    config: fileConfig,
+    urlPrefix,
   });
 });
 
@@ -41,7 +41,7 @@ var server = new WebpackDevServer(webpack(config), {
   quiet: false,
   noInfo: false,
   publicPath: '/',
-  stats: { colors: true }
+  stats: { colors: true },
 });
 
 server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
@@ -53,9 +53,5 @@ server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
 });
 
 app.listen(PORT, () => {
-  console.log(
-    `${colors.green('WebApp')} is running on ${colors.underline(
-      `http://localhost:${PORT}`
-    )}`
-  );
+  console.log(`${colors.green('WebApp')} is running on ${colors.underline(`http://localhost:${PORT}`)}`);
 });

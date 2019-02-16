@@ -17,16 +17,10 @@ const ReferenceSolutionsTable = ({
       <tr>
         <th />
         <th>
-          <FormattedMessage
-            id="generic.uploadedAt"
-            defaultMessage="Uploaded at"
-          />
+          <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />
         </th>
         <th>
-          <FormattedMessage
-            id="generic.runtimeShortest"
-            defaultMessage="Runtime"
-          />
+          <FormattedMessage id="generic.runtimeShortest" defaultMessage="Runtime" />
         </th>
         <th>
           <FormattedMessage id="generic.author" defaultMessage="Author" />

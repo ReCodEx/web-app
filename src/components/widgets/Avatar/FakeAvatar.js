@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 
 const getSize = (size, small) => (small ? size * (2 / 3) : size);
 
-const FakeAvatar = ({
-  size = 45,
-  borderWidth = 2,
-  light = false,
-  children,
-  small = false,
-  altClassName = '',
-}) => (
+const FakeAvatar = ({ size = 45, borderWidth = 2, light = false, children, small = false, altClassName = '' }) => (
   <span
     style={{
       display: 'inline-block',
@@ -36,8 +29,7 @@ FakeAvatar.propTypes = {
   size: PropTypes.number,
   borderWidth: PropTypes.number,
   light: PropTypes.bool,
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-    .isRequired,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   small: PropTypes.bool,
   altClassName: PropTypes.string,
 };

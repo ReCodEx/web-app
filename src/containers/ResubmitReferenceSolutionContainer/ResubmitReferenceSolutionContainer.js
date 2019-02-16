@@ -4,22 +4,13 @@ import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
-import {
-  resubmitReferenceSolution,
-  fetchReferenceSolution,
-} from '../../redux/modules/referenceSolutions';
+import { resubmitReferenceSolution, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchReferenceSolutionEvaluationsForSolution } from '../../redux/modules/referenceSolutionEvaluations';
-import {
-  isProcessing,
-  getMonitorParams,
-  getSubmittedSolutionId,
-} from '../../redux/selectors/submission';
+import { isProcessing, getMonitorParams, getSubmittedSolutionId } from '../../redux/selectors/submission';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 
-const getResubmitObserverId = defaultMemoize(
-  (id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id
-);
+const getResubmitObserverId = defaultMemoize((id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id);
 
 class ResubmitReferenceSolutionContainer extends Component {
   isMeTheObserver = () => {
@@ -28,14 +19,7 @@ class ResubmitReferenceSolutionContainer extends Component {
   };
 
   render() {
-    const {
-      id,
-      resubmit,
-      isProcessing,
-      monitor,
-      refreshSolutionEvaluations,
-      isDebug = true,
-    } = this.props;
+    const { id, resubmit, isProcessing, monitor, refreshSolutionEvaluations, isDebug = true } = this.props;
     return (
       <span>
         <ResubmitSolution
@@ -72,13 +56,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  resubmit: (progressObserverId, isDebug) =>
-    dispatch(resubmitReferenceSolution(id, progressObserverId, isDebug)),
+  resubmit: (progressObserverId, isDebug) => dispatch(resubmitReferenceSolution(id, progressObserverId, isDebug)),
   refreshSolutionEvaluations: () =>
-    Promise.all([
-      dispatch(fetchReferenceSolution(id)),
-      dispatch(fetchReferenceSolutionEvaluationsForSolution(id)),
-    ]),
+    Promise.all([dispatch(fetchReferenceSolution(id)), dispatch(fetchReferenceSolutionEvaluationsForSolution(id))]),
 });
 
 export default connect(

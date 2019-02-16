@@ -17,8 +17,7 @@ const Icon = ({
   onDoubleClick,
   ...props
 }) => {
-  const passedClassNames =
-    typeof className === 'string' ? { [className]: true } : className;
+  const passedClassNames = typeof className === 'string' ? { [className]: true } : className;
   return (
     <FontAwesomeIcon
       {...props}

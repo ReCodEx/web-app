@@ -8,38 +8,21 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 const UserSwitching = ({ users = [], currentUser, loginAs, open }) => (
   <ResourceRenderer resource={currentUser}>
     {activeUser =>
-      users.filter(switching => switching.user.id !== activeUser.id).length >
-      0 ? (
+      users.filter(switching => switching.user.id !== activeUser.id).length > 0 ? (
         <ul className="sidebar-menu">
-          <MenuTitle
-            title={
-              <FormattedMessage
-                id="app.userSwitching.loginAs"
-                defaultMessage="Login as"
-              />
-            }
-          />
+          <MenuTitle title={<FormattedMessage id="app.userSwitching.loginAs" defaultMessage="Login as" />} />
 
-          {users.map(
-            ({
-              user: {
-                id,
-                fullName,
-                name: { firstName },
-                avatarUrl,
-              },
-            }) => (
-              <MenuAvatar
-                avatarUrl={avatarUrl}
-                key={id}
-                title={fullName}
-                firstName={firstName}
-                useGravatar={activeUser.privateData.settings.useGravatar}
-                onClick={() => loginAs(id)}
-                isActive={id === activeUser.id}
-              />
-            )
-          )}
+          {users.map(({ user: { id, fullName, name: { firstName }, avatarUrl } }) => (
+            <MenuAvatar
+              avatarUrl={avatarUrl}
+              key={id}
+              title={fullName}
+              firstName={firstName}
+              useGravatar={activeUser.privateData.settings.useGravatar}
+              onClick={() => loginAs(id)}
+              isActive={id === activeUser.id}
+            />
+          ))}
         </ul>
       ) : null
     }

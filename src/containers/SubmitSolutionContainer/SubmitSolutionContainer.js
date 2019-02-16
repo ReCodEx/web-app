@@ -19,10 +19,7 @@ import {
   hasEntryPoint,
 } from '../../redux/selectors/submission';
 
-import {
-  createGetUploadedFiles,
-  createAllUploaded,
-} from '../../redux/selectors/upload';
+import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote } from '../../redux/modules/submission';
@@ -57,11 +54,7 @@ class SubmitSolutionContainer extends Component {
     }
 
     // If entry point is no longer valid ...
-    if (
-      this.state.entryPoint &&
-      attachedFiles &&
-      !attachedFiles.find(f => f.name === this.state.entryPoint)
-    ) {
+    if (this.state.entryPoint && attachedFiles && !attachedFiles.find(f => f.name === this.state.entryPoint)) {
       this.setState({ entryPoint: null });
     }
   }
@@ -74,10 +67,7 @@ class SubmitSolutionContainer extends Component {
       return null;
     }
 
-    const defaultEntryPoint =
-      attachedFiles &&
-      attachedFiles.length > 0 &&
-      attachedFiles.map(f => f.name).sort()[0];
+    const defaultEntryPoint = attachedFiles && attachedFiles.length > 0 && attachedFiles.map(f => f.name).sort()[0];
 
     return entryPoint || defaultEntryPoint;
   };
@@ -129,10 +119,7 @@ class SubmitSolutionContainer extends Component {
       isReferenceSolution = false,
       afterEvaluationFinishes,
       push,
-      links: {
-        EXERCISE_REFERENCE_SOLUTION_URI_FACTORY,
-        SOLUTION_DETAIL_URI_FACTORY,
-      },
+      links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY, SOLUTION_DETAIL_URI_FACTORY },
     } = this.props;
     return isReferenceSolution
       ? push(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
@@ -167,11 +154,7 @@ class SubmitSolutionContainer extends Component {
         <SubmitSolution
           userId={userId}
           isOpen={isOpen}
-          canSubmit={
-            canSubmit &&
-            Boolean(presubmitEnvironments) &&
-            presubmitEnvironments.length > 0
-          }
+          canSubmit={canSubmit && Boolean(presubmitEnvironments) && presubmitEnvironments.length > 0}
           isValidating={isValidating}
           isSending={isSending}
           hasFailed={hasFailed}
@@ -256,31 +239,14 @@ export default withLinks(
     (dispatch, { id, userId, onSubmit, onReset, presubmitValidation }) => ({
       changeNote: note => dispatch(changeNote(note)),
       cancel: () => dispatch(cancel()),
-      submitSolution: (
-        note,
-        files,
-        runtimeEnvironmentId = null,
-        entryPoint = null,
-        progressObserverId = null
-      ) =>
-        dispatch(
-          onSubmit(
-            userId,
-            id,
-            note,
-            files,
-            runtimeEnvironmentId,
-            entryPoint,
-            progressObserverId
-          )
-        ),
+      submitSolution: (note, files, runtimeEnvironmentId = null, entryPoint = null, progressObserverId = null) =>
+        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint, progressObserverId)),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
       afterEvaluationFinishes: link =>
-        Promise.all([
-          dispatch(fetchUsersSolutions(userId, id)),
-          dispatch(canSubmit(id)),
-        ]).then(() => dispatch(push(link))),
+        Promise.all([dispatch(fetchUsersSolutions(userId, id)), dispatch(canSubmit(id))]).then(() =>
+          dispatch(push(link))
+        ),
       push: url => dispatch(push(url)),
     })
   )(SubmitSolutionContainer)

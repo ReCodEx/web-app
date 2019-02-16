@@ -17,27 +17,16 @@ const PipelinesSimpleList = ({ pipelines, createActions, intl, ...rest }) => (
         </th>
         {createActions && (
           <th>
-            <FormattedMessage
-              id="app.pipelinesSimpleList.actions"
-              defaultMessage="Actions"
-            />
+            <FormattedMessage id="app.pipelinesSimpleList.actions" defaultMessage="Actions" />
           </th>
         )}
       </tr>
     </thead>
     <tbody>
       {pipelines
-        .sort(
-          (a, b) =>
-            a.name.localeCompare(b.name, intl.locale) ||
-            b.createdAt - a.createdAt
-        )
+        .sort((a, b) => a.name.localeCompare(b.name, intl.locale) || b.createdAt - a.createdAt)
         .map((pipeline, i) => (
-          <ExercisePipelinesListItem
-            {...pipeline}
-            createActions={createActions}
-            key={i}
-          />
+          <ExercisePipelinesListItem {...pipeline} createActions={createActions} key={i} />
         ))}
 
       {pipelines.length === 0 && (

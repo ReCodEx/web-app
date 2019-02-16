@@ -5,59 +5,57 @@ import { encodeId, encodeNumId, safeGet } from '../common';
 /*
  * Memory and Time limits
  */
-export const getLimitsInitValues = defaultMemoize(
-  (limits, tests, environments, hwGroup) => {
-    let res = {};
-    let wallTimeCount = 0;
-    let cpuTimeCount = 0;
-    limits = limits && limits[hwGroup];
+export const getLimitsInitValues = defaultMemoize((limits, tests, environments, hwGroup) => {
+  let res = {};
+  let wallTimeCount = 0;
+  let cpuTimeCount = 0;
+  limits = limits && limits[hwGroup];
 
-    tests.forEach(test => {
-      const testEnc = encodeNumId(test.id);
-      res[testEnc] = {};
-      environments.forEach(environment => {
-        const envId = encodeId(environment.id);
-        let lim = safeGet(limits, [environment.id, String(test.id)]);
+  tests.forEach(test => {
+    const testEnc = encodeNumId(test.id);
+    res[testEnc] = {};
+    environments.forEach(environment => {
+      const envId = encodeId(environment.id);
+      let lim = safeGet(limits, [environment.id, String(test.id)]);
 
-        // Prepare time object and aggregate data for heuristics ...
-        const time = {};
-        if (lim && lim['wall-time']) {
-          time['wall-time'] = String(lim['wall-time']);
-          ++wallTimeCount;
-        }
-        if (lim && lim['cpu-time']) {
-          time['cpu-time'] = String(lim['cpu-time']);
-          ++cpuTimeCount;
-        }
-        res[testEnc][envId] = {
-          memory: lim ? String(lim.memory) : '0',
-          time,
-        };
-      });
-    });
-
-    // Use heuristics to decide, which time will be used, and postprocess the data
-    const preciseTime = cpuTimeCount >= wallTimeCount;
-    const primaryTime = preciseTime ? 'cpu-time' : 'wall-time';
-    const secondaryTime = preciseTime ? 'wall-time' : 'cpu-time';
-    for (const testEnc in res) {
-      for (const envId in res[testEnc]) {
-        const time = res[testEnc][envId].time;
-        res[testEnc][envId].time =
-          time[primaryTime] !== undefined
-            ? time[primaryTime]
-            : time[secondaryTime] !== undefined
-            ? time[secondaryTime]
-            : '0';
+      // Prepare time object and aggregate data for heuristics ...
+      const time = {};
+      if (lim && lim['wall-time']) {
+        time['wall-time'] = String(lim['wall-time']);
+        ++wallTimeCount;
       }
-    }
+      if (lim && lim['cpu-time']) {
+        time['cpu-time'] = String(lim['cpu-time']);
+        ++cpuTimeCount;
+      }
+      res[testEnc][envId] = {
+        memory: lim ? String(lim.memory) : '0',
+        time,
+      };
+    });
+  });
 
-    return {
-      limits: res,
-      preciseTime,
-    };
+  // Use heuristics to decide, which time will be used, and postprocess the data
+  const preciseTime = cpuTimeCount >= wallTimeCount;
+  const primaryTime = preciseTime ? 'cpu-time' : 'wall-time';
+  const secondaryTime = preciseTime ? 'wall-time' : 'cpu-time';
+  for (const testEnc in res) {
+    for (const envId in res[testEnc]) {
+      const time = res[testEnc][envId].time;
+      res[testEnc][envId].time =
+        time[primaryTime] !== undefined
+          ? time[primaryTime]
+          : time[secondaryTime] !== undefined
+          ? time[secondaryTime]
+          : '0';
+    }
   }
-);
+
+  return {
+    limits: res,
+    preciseTime,
+  };
+});
 
 const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
   let res = {
@@ -72,12 +70,7 @@ const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
  * The data have to be re-assembled, since they use different format and keys are encoded.
  * The dispatching function is invoked for every environment and all promise is returned.
  */
-export const transformLimitsValues = (
-  formData,
-  hwGroupId,
-  runtimeEnvironments,
-  tests
-) => {
+export const transformLimitsValues = (formData, hwGroupId, runtimeEnvironments, tests) => {
   const data = {};
   runtimeEnvironments.forEach(environment => {
     const envId = encodeId(environment.id);
@@ -110,10 +103,7 @@ const combineHardwareGroupLimitsConstraints = exerciseHwGroups => {
   exerciseHwGroups.forEach(({ metadata }) =>
     Object.keys(LIMITS_CONSTRAINTS_DEFAULTS).forEach(key => {
       if (metadata[key]) {
-        res[key] =
-          res[key] !== undefined
-            ? Math.min(res[key], metadata[key])
-            : metadata[key];
+        res[key] = res[key] !== undefined ? Math.min(res[key], metadata[key]) : metadata[key];
       }
     })
   );
@@ -127,36 +117,32 @@ const combineHardwareGroupLimitsConstraints = exerciseHwGroups => {
 };
 
 // Compute limit constraints from hwGroup metadata
-export const getLimitsConstraints = defaultMemoize(
-  (exerciseHwGroups, preciseTime) => {
-    const res = combineHardwareGroupLimitsConstraints(exerciseHwGroups);
-    return {
-      memory: { min: 128, max: res.memory },
-      time: {
-        min: 0.1,
-        max: res[preciseTime ? 'cpuTimePerTest' : 'wallTimePerTest'],
-      },
-      totalTime: {
-        min: 0.1,
-        max: res[preciseTime ? 'cpuTimePerExercise' : 'wallTimePerExercise'],
-      },
-    };
-  }
-);
+export const getLimitsConstraints = defaultMemoize((exerciseHwGroups, preciseTime) => {
+  const res = combineHardwareGroupLimitsConstraints(exerciseHwGroups);
+  return {
+    memory: { min: 128, max: res.memory },
+    time: {
+      min: 0.1,
+      max: res[preciseTime ? 'cpuTimePerTest' : 'wallTimePerTest'],
+    },
+    totalTime: {
+      min: 0.1,
+      max: res[preciseTime ? 'cpuTimePerExercise' : 'wallTimePerExercise'],
+    },
+  };
+});
 
 // Compute complete list for visualization of a single
-export const getLimitsConstraintsOfSingleGroup = defaultMemoize(
-  exerciseHwGroup => {
-    const res = combineHardwareGroupLimitsConstraints([exerciseHwGroup]);
-    for (const key in res) {
-      res[key] = {
-        min: key === 'memory' ? 128 : 0.1,
-        max: res[key],
-      };
-    }
-    return res;
+export const getLimitsConstraintsOfSingleGroup = defaultMemoize(exerciseHwGroup => {
+  const res = combineHardwareGroupLimitsConstraints([exerciseHwGroup]);
+  for (const key in res) {
+    res[key] = {
+      min: key === 'memory' ? 128 : 0.1,
+      max: res[key],
+    };
   }
-);
+  return res;
+});
 
 export const validateLimitsField = (value, range) => {
   const num = Number(value);
@@ -183,9 +169,7 @@ export const validateLimitsTimeTotals = (limits, range) => {
     })
   );
 
-  return Object.keys(sums).filter(
-    env => sums[env] > range.max || sums[env] < range.min
-  );
+  return Object.keys(sums).filter(env => sums[env] > range.max || sums[env] < range.min);
 };
 
 /**
@@ -202,18 +186,12 @@ export const validateLimitsConstraints = ({ limits }, constraints) => {
   let envTimeSums = {};
   const fieldChecks = Object.keys(limits).every(test => {
     return Object.keys(limits[test]).every(envEnc => {
-      const memory = validateLimitsField(
-        safeGet(limits, [test, envEnc, 'memory']),
-        constraints.memory
-      );
+      const memory = validateLimitsField(safeGet(limits, [test, envEnc, 'memory']), constraints.memory);
       if (Number.isNaN(memory) || memory === false) {
         return false;
       }
 
-      const time = validateLimitsField(
-        safeGet(limits, [test, envEnc, 'time']),
-        constraints.time
-      );
+      const time = validateLimitsField(safeGet(limits, [test, envEnc, 'time']), constraints.time);
       if (Number.isNaN(time) || time === false) {
         return false;
       }
@@ -225,22 +203,11 @@ export const validateLimitsConstraints = ({ limits }, constraints) => {
 
   return (
     fieldChecks &&
-    Object.values(envTimeSums).every(
-      sum =>
-        sum >= constraints.totalTime.min && sum <= constraints.totalTime.max
-    )
+    Object.values(envTimeSums).every(sum => sum >= constraints.totalTime.min && sum <= constraints.totalTime.max)
   );
 };
 
-const saturateField = (
-  limits,
-  envId,
-  test,
-  fieldName,
-  max,
-  min = 0.1,
-  patchFactor = null
-) => {
+const saturateField = (limits, envId, test, fieldName, max, min = 0.1, patchFactor = null) => {
   let value = safeGet(limits, [envId, test, fieldName]);
   if (value !== undefined) {
     if (patchFactor) {
@@ -276,13 +243,7 @@ export const saturateLimitsConstraints = (limits, exerciseHwGroups) => {
     Object.keys(limits[envId]).forEach(test => {
       saturateField(limits, envId, test, 'memory', memory, 128);
       cpuSum += saturateField(limits, envId, test, 'cpu-time', cpuTimePerTest);
-      wallSum += saturateField(
-        limits,
-        envId,
-        test,
-        'wall-time',
-        wallTimePerTest
-      );
+      wallSum += saturateField(limits, envId, test, 'wall-time', wallTimePerTest);
     });
 
     // Attempt to adjust for total limits if necessary...
@@ -293,15 +254,7 @@ export const saturateLimitsConstraints = (limits, exerciseHwGroups) => {
       // Multiply all times by patch factor...
       cpuSum = 0;
       Object.keys(limits[envId]).forEach(test => {
-        cpuSum += saturateField(
-          limits,
-          envId,
-          test,
-          'cpu-time',
-          cpuTimePerTest,
-          0.1,
-          patchFactor
-        );
+        cpuSum += saturateField(limits, envId, test, 'cpu-time', cpuTimePerTest, 0.1, patchFactor);
       });
     }
 
@@ -312,15 +265,7 @@ export const saturateLimitsConstraints = (limits, exerciseHwGroups) => {
       // Multiply all times by patch factor...
       wallSum = 0;
       Object.keys(limits[envId]).forEach(test => {
-        wallSum += saturateField(
-          limits,
-          envId,
-          test,
-          'wall-time',
-          wallTimePerTest,
-          0.1,
-          patchFactor
-        );
+        wallSum += saturateField(limits, envId, test, 'wall-time', wallTimePerTest, 0.1, patchFactor);
       });
     }
 

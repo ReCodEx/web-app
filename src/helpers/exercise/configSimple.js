@@ -1,10 +1,5 @@
 import { defaultMemoize } from 'reselect';
-import {
-  safeGet,
-  encodeNumId,
-  identity,
-  EMPTY_ARRAY,
-} from '../../helpers/common';
+import { safeGet, encodeNumId, identity, EMPTY_ARRAY } from '../../helpers/common';
 
 export const DATA_ONLY_ID = 'data-linux';
 
@@ -12,24 +7,13 @@ export const DATA_ONLY_ID = 'data-linux';
  * Base class for all pipeline variables being edited in the config form.
  */
 class Variable {
-  constructor(
-    name,
-    type,
-    allEnvs = true,
-    defaultValue = undefined,
-    compilationPipeline = false
-  ) {
+  constructor(name, type, allEnvs = true, defaultValue = undefined, compilationPipeline = false) {
     this.name = name; // variable name
     this.formProp = name; // redux-form property name
     this.type = type; // variable type (in pipeline)
     this.isArray = type.endsWith('[]');
     this.allEnvs = allEnvs; // whether the value of the variable is the same in all environments
-    this.defaultValue =
-      defaultValue !== undefined
-        ? defaultValue
-        : this.isArray
-        ? EMPTY_ARRAY
-        : '';
+    this.defaultValue = defaultValue !== undefined ? defaultValue : this.isArray ? EMPTY_ARRAY : '';
     this.pipelineFilter = {
       isCompilationPipeline: Boolean(compilationPipeline),
     };
@@ -105,28 +89,20 @@ class Variable {
     }
 
     // At least one of the runtimes must match.
-    return this.runtimeFilter.reduce(
-      (res, runtime) => res || pipeline.runtimeEnvironmentIds.includes(runtime),
-      false
-    );
+    return this.runtimeFilter.reduce((res, runtime) => res || pipeline.runtimeEnvironmentIds.includes(runtime), false);
   }
 
   // Internal reusable function that fetches value of a variable (by given parameters) from a list of pipelines.
   static _getValueFromPipelines(pipelines, name, type, isArray, defaultValue) {
     const variable = pipelines.reduce(
-      (acc, pipeline) =>
-        acc || pipeline.variables.find(variable => variable.name === name),
+      (acc, pipeline) => acc || pipeline.variables.find(variable => variable.name === name),
       null
     );
 
     let value;
     if (variable) {
       if (variable.type !== type) {
-        throw new Error(
-          `Variable '${name}' is of type '${
-            variable.type
-          }', but type '${type}' expected.`
-        );
+        throw new Error(`Variable '${name}' is of type '${variable.type}', but type '${type}' expected.`);
       }
       value = variable.value;
       if (isArray && !value) {
@@ -138,22 +114,12 @@ class Variable {
       value = defaultValue;
     }
 
-    return value !== undefined
-      ? isArray && !Array.isArray(value)
-        ? [value]
-        : value
-      : null;
+    return value !== undefined ? (isArray && !Array.isArray(value) ? [value] : value) : null;
   }
 
   // Fetches value of the variable using this descriptor from a list of pipelines.
   getValueFromPipelines(pipelines) {
-    return Variable._getValueFromPipelines(
-      pipelines,
-      this.name,
-      this.type,
-      this.isArray,
-      this.defaultValue
-    );
+    return Variable._getValueFromPipelines(pipelines, this.name, this.type, this.isArray, this.defaultValue);
   }
 
   /**
@@ -165,11 +131,7 @@ class Variable {
   getInitial(config, testId, environmentsIds) {
     if (this.allEnvs) {
       // All environments are set as one (configuration is taken from the first)
-      const pipelines = safeGet(
-        config,
-        [0, 'tests', t => t.name === testId, 'pipelines'],
-        EMPTY_ARRAY
-      );
+      const pipelines = safeGet(config, [0, 'tests', t => t.name === testId, 'pipelines'], EMPTY_ARRAY);
 
       const value = this.getValueFromPipelines(pipelines);
       return value !== null ? { [this.formProp]: value } : null;
@@ -193,9 +155,7 @@ class Variable {
    * Returns an array of variables to be set.
    */
   transform(formDataTest, environmentId) {
-    let value = this.allEnvs
-      ? formDataTest[this.formProp]
-      : formDataTest[this.formProp][environmentId];
+    let value = this.allEnvs ? formDataTest[this.formProp] : formDataTest[this.formProp][environmentId];
     value = value === undefined ? this.defaultValue : value;
     value = this.isArray ? value : value.trim();
     value = this.transformPostprocess(value, formDataTest, environmentId);
@@ -226,13 +186,7 @@ class FileListVariable extends Variable {
 
   getValueFromPipelines(pipelines) {
     const files = super.getValueFromPipelines(pipelines);
-    const names = Variable._getValueFromPipelines(
-      pipelines,
-      this.nameActuals,
-      'file[]',
-      true,
-      this.defaultValue
-    );
+    const names = Variable._getValueFromPipelines(pipelines, this.nameActuals, 'file[]', true, this.defaultValue);
 
     return files.map((value, i) => ({
       file: value,
@@ -242,9 +196,7 @@ class FileListVariable extends Variable {
 
   transform(formDataTest, environmentId) {
     // Find the value in question ...
-    let value = this.allEnvs
-      ? formDataTest[this.formProp]
-      : formDataTest[this.formProp][environmentId];
+    let value = this.allEnvs ? formDataTest[this.formProp] : formDataTest[this.formProp][environmentId];
     value = value === undefined ? this.defaultValue : value;
 
     // Split it into files and their actual names ...
@@ -278,25 +230,18 @@ const PIPELINE_VARS_DESCRIPTORS = [
   new Variable('run-args', 'string[]'),
   new Variable('actual-output', 'file').setPipelineFilter('producesFiles'),
   new Variable('stdin-file', 'remote-file'),
-  new Variable(
-    'judge-type',
-    'string',
-    true,
-    'recodex-judge-normal'
-  ).setTransformPostprocess((value, formDataTest) =>
+  new Variable('judge-type', 'string', true, 'recodex-judge-normal').setTransformPostprocess((value, formDataTest) =>
     formDataTest.useCustomJudge ? '' : value
   ),
-  new Variable('custom-judge', 'remote-file').setTransformPostprocess(
-    (value, formDataTest) => (formDataTest.useCustomJudge ? value : '')
+  new Variable('custom-judge', 'remote-file').setTransformPostprocess((value, formDataTest) =>
+    formDataTest.useCustomJudge ? value : ''
   ),
-  new Variable('judge-args', 'string[]').setTransformPostprocess(
-    (value, formDataTest) => (formDataTest.useCustomJudge ? value : [])
+  new Variable('judge-args', 'string[]').setTransformPostprocess((value, formDataTest) =>
+    formDataTest.useCustomJudge ? value : []
   ),
   new FileListVariable('input-files', 'actual-inputs'),
   new FileListVariable('extra-files', 'extra-file-names', false, true),
-  new Variable('jar-files', 'remote-file[]', false, [], true).setRuntimeFilter(
-    'java'
-  ),
+  new Variable('jar-files', 'remote-file[]', false, [], true).setRuntimeFilter('java'),
   new Variable('entry-point', 'file', false)
     .setPipelineFilter('hasEntryPoint')
     .setTransformPostprocess(value => value || '$entry-point'),
@@ -315,43 +260,39 @@ PIPELINE_VARS_DESCRIPTORS.forEach(v => {
 /**
  * Prepare the initial form data for configuration form ...
  */
-export const getSimpleConfigInitValues = defaultMemoize(
-  (config, tests, exerciseEnvironmentsConfig) => {
-    const environmentsIds = exerciseEnvironmentsConfig.map(
-      env => env.runtimeEnvironmentId
-    );
+export const getSimpleConfigInitValues = defaultMemoize((config, tests, exerciseEnvironmentsConfig) => {
+  const environmentsIds = exerciseEnvironmentsConfig.map(env => env.runtimeEnvironmentId);
 
-    let res = {};
-    for (let test of tests) {
-      let testObj = { name: test.id };
+  let res = {};
+  for (let test of tests) {
+    let testObj = { name: test.id };
 
-      // Load pipelines into test container ...
-      PIPELINE_VARS_DESCRIPTORS.forEach(variable => {
-        const vals = variable.getInitial(config, test.id, environmentsIds);
-        if (vals) {
-          testObj = { ...testObj, ...vals };
-        }
-      });
-
-      if (!environmentsIds.includes(DATA_ONLY_ID)) {
-        // Special derived properties, which are present only in non-data-only exercises.
-        testObj.useOutFile = Boolean(testObj['actual-output']);
-        testObj.useCustomJudge = Boolean(testObj['custom-judge']);
-        if (testObj.useCustomJudge) {
-          testObj['judge-type'] = '';
-        }
-      } else {
-        testObj.useCustomJudge = true;
+    // Load pipelines into test container ...
+    PIPELINE_VARS_DESCRIPTORS.forEach(variable => {
+      const vals = variable.getInitial(config, test.id, environmentsIds);
+      if (vals) {
+        testObj = { ...testObj, ...vals };
       }
+    });
 
-      res[encodeNumId(test.id)] = testObj;
+    if (!environmentsIds.includes(DATA_ONLY_ID)) {
+      // Special derived properties, which are present only in non-data-only exercises.
+      testObj.useOutFile = Boolean(testObj['actual-output']);
+      testObj.useCustomJudge = Boolean(testObj['custom-judge']);
+      if (testObj.useCustomJudge) {
+        testObj['judge-type'] = '';
+      }
+    } else {
+      testObj.useCustomJudge = true;
     }
 
-    return {
-      config: res,
-    };
+    res[encodeNumId(test.id)] = testObj;
   }
-);
+
+  return {
+    config: res,
+  };
+});
 
 // Merge new variables with original variables from the pipeline.
 const mergeVariables = (newVars, origVars) => {
@@ -363,47 +304,30 @@ const mergeVariables = (newVars, origVars) => {
 
 // Filter out all pipelines relevant for current environment and settings ...
 const getRelevantPipelines = (pipelines, envId, useOutFile) => {
-  pipelines = pipelines.filter(pipeline =>
-    pipeline.runtimeEnvironmentIds.includes(envId)
-  );
+  pipelines = pipelines.filter(pipeline => pipeline.runtimeEnvironmentIds.includes(envId));
 
   if (envId === DATA_ONLY_ID) {
-    pipelines = pipelines.filter(
-      pipeline => pipeline.parameters.judgeOnlyPipeline
-    );
+    pipelines = pipelines.filter(pipeline => pipeline.parameters.judgeOnlyPipeline);
   } else {
     // We need to select execution pipeline type based on a checkbox (for non-data-only exercises)
     pipelines = pipelines.filter(
       pipeline =>
         !pipeline.parameters.judgeOnlyPipeline &&
         (!pipeline.parameters.isExecutionPipeline ||
-          (useOutFile
-            ? pipeline.parameters.producesFiles
-            : pipeline.parameters.producesStdout))
+          (useOutFile ? pipeline.parameters.producesFiles : pipeline.parameters.producesStdout))
     );
   }
 
   return pipelines.sort(
     // make sure compilation pipeline is first
-    (a, b) =>
-      a.parameters.isCompilationPipeline
-        ? -1
-        : b.parameters.isCompilationPipeline
-        ? 1
-        : 0
+    (a, b) => (a.parameters.isCompilationPipeline ? -1 : b.parameters.isCompilationPipeline ? 1 : 0)
   );
 };
 
 /**
  * Assemble the data to be sent to the endpoint from the form data ...
  */
-export const transformSimpleConfigValues = (
-  formData,
-  pipelines,
-  environments,
-  tests,
-  originalConfig
-) => {
+export const transformSimpleConfigValues = (formData, pipelines, environments, tests, originalConfig) => {
   let envs = [];
   for (const environment of environments) {
     const envId = environment.runtimeEnvironmentId;
@@ -414,11 +338,7 @@ export const transformSimpleConfigValues = (
       const testName = t.id;
       const test = formData.config[encodeNumId(testName)];
 
-      const pipelinesConfig = getRelevantPipelines(
-        pipelines,
-        envId,
-        test.useOutFile
-      ).map(pipeline => {
+      const pipelinesConfig = getRelevantPipelines(pipelines, envId, test.useOutFile).map(pipeline => {
         // Load original variables from the pipeline conifg ...
         const originalVariables =
           safeGet(originalConfig, [
@@ -432,9 +352,9 @@ export const transformSimpleConfigValues = (
 
         // Construct new variables from the form data ...
         const variables = [];
-        PIPELINE_VARS_DESCRIPTORS.filter(v =>
-          v.isApplicableForPipeline(pipeline)
-        ).forEach(v => variables.push(...v.transform(test, envId)));
+        PIPELINE_VARS_DESCRIPTORS.filter(v => v.isApplicableForPipeline(pipeline)).forEach(v =>
+          variables.push(...v.transform(test, envId))
+        );
 
         return {
           name: pipeline.id,

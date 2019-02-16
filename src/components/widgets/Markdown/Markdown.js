@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const md = require('markdown-it')().use(
-  require('@iktakahiro/markdown-it-katex')
-);
+const md = require('markdown-it')().use(require('@iktakahiro/markdown-it-katex'));
 
 const Markdown = ({ source }) => (
   <div

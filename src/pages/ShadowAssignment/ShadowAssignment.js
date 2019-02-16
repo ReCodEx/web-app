@@ -25,8 +25,7 @@ import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions, EMPTY_OBJ } from '../../helpers/common';
 
 class ShadowAssignment extends Component {
-  static loadAsync = ({ assignmentId }, dispatch) =>
-    dispatch(fetchShadowAssignmentIfNeeded(assignmentId));
+  static loadAsync = ({ assignmentId }, dispatch) => dispatch(fetchShadowAssignmentIfNeeded(assignmentId));
 
   componentWillMount() {
     this.props.loadAsync();
@@ -54,34 +53,18 @@ class ShadowAssignment extends Component {
       <Page
         resource={shadowAssignment}
         title={shadowAssignment => getLocalizedName(shadowAssignment, locale)}
-        description={
-          <FormattedMessage
-            id="app.shadowAssignment.title"
-            defaultMessage="Shadow Assignment"
-          />
-        }
+        description={<FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />}
         breadcrumbs={[
           {
             resource: shadowAssignment,
             iconName: 'users',
             breadcrumb: shadowAssignment => ({
-              text: (
-                <FormattedMessage
-                  id="app.group.title"
-                  defaultMessage="Group detail"
-                />
-              ),
-              link: ({ GROUP_DETAIL_URI_FACTORY }) =>
-                GROUP_DETAIL_URI_FACTORY(shadowAssignment.groupId),
+              text: <FormattedMessage id="app.group.title" defaultMessage="Group detail" />,
+              link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(shadowAssignment.groupId),
             }),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.shadowAssignment.title"
-                defaultMessage="Shadow Assignment"
-              />
-            ),
+            text: <FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />,
             iconName: 'hourglass-start',
           },
         ]}>
@@ -92,10 +75,7 @@ class ShadowAssignment extends Component {
                 <HierarchyLineContainer groupId={shadowAssignment.groupId} />
                 {hasPermissions(shadowAssignment, 'update') && (
                   <p>
-                    <LinkContainer
-                      to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(
-                        shadowAssignment.id
-                      )}>
+                    <LinkContainer to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id)}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
                         <FormattedMessage
@@ -120,9 +100,7 @@ class ShadowAssignment extends Component {
               <Col lg={6}>
                 <ShadowAssignmentDetail {...shadowAssignment} />
                 {!hasPermissions(shadowAssignment, 'viewAllPoints') && (
-                  <ShadowAssignmentPointsDetail
-                    {...this.findPoints(shadowAssignment.points)}
-                  />
+                  <ShadowAssignmentPointsDetail {...this.findPoints(shadowAssignment.points)} />
                 )}
               </Col>
             </Row>

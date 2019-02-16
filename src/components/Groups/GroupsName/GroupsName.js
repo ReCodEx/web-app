@@ -21,9 +21,7 @@ const GroupsName = ({
       <Link
         to={
           // this is inacurate, but public groups are visible to students who cannot see detail until they join
-          organizational || isPublic
-            ? GROUP_INFO_URI_FACTORY(id)
-            : GROUP_DETAIL_URI_FACTORY(id)
+          organizational || isPublic ? GROUP_INFO_URI_FACTORY(id) : GROUP_DETAIL_URI_FACTORY(id)
         }>
         <LocalizedGroupName entity={{ localizedTexts }} />
       </Link>

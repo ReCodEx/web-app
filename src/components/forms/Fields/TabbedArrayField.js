@@ -27,12 +27,7 @@ class TabbedArrayField extends Component {
       id,
       ContentComponent,
       renderTitle = identity,
-      emptyMessage = (
-        <FormattedMessage
-          id="app.tabbedArrayField.empty"
-          defaultMessage="There are currently no tabs."
-        />
-      ),
+      emptyMessage = <FormattedMessage id="app.tabbedArrayField.empty" defaultMessage="There are currently no tabs." />,
       removeQuestion = (
         <FormattedMessage
           id="app.tabbedArrayField.reallyRemoveQuestion"
@@ -50,11 +45,7 @@ class TabbedArrayField extends Component {
     return (
       <div>
         {fields.length > 0 && (
-          <Tabs
-            id={id}
-            className="nav-tabs-custom"
-            activeKey={this.state.activeTab}
-            onSelect={this.changeTab}>
+          <Tabs id={id} className="nav-tabs-custom" activeKey={this.state.activeTab} onSelect={this.changeTab}>
             {indices.map((fieldIdx, tabIdx) => {
               const prefix = `${fields.name}[${fieldIdx}]`;
               const fieldData = fields.get(fieldIdx);
@@ -83,9 +74,7 @@ class TabbedArrayField extends Component {
                   <ContentComponent
                     {...props}
                     prefix={prefix}
-                    data={
-                      tabDataSelector && tabDataSelector(fields.get(fieldIdx))
-                    }
+                    data={tabDataSelector && tabDataSelector(fields.get(fieldIdx))}
                   />
                 </Tab>
               );

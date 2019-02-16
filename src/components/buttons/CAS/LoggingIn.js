@@ -6,10 +6,7 @@ import { LoadingIcon } from '../../icons';
 const LoggingIn = () => (
   <Button disabled>
     <LoadingIcon gapRight />
-    <FormattedMessage
-      id="app.casLoginButton.loggingIn"
-      defaultMessage="Logging in..."
-    />
+    <FormattedMessage id="app.casLoginButton.loggingIn" defaultMessage="Logging in..." />
   </Button>
 );
 

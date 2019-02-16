@@ -25,57 +25,26 @@ const getPercent = level => percentPerLevel * (Number(level) + 1);
 const getTitle = level => {
   switch (Number(level)) {
     case 0:
-      return (
-        <FormattedMessage
-          id="app.passwordStrength.worst"
-          defaultMessage="Unsatisfactory"
-        />
-      );
+      return <FormattedMessage id="app.passwordStrength.worst" defaultMessage="Unsatisfactory" />;
 
     case 1:
-      return (
-        <FormattedMessage
-          id="app.passwordStrength.bad"
-          defaultMessage="Are you sure?"
-        />
-      );
+      return <FormattedMessage id="app.passwordStrength.bad" defaultMessage="Are you sure?" />;
 
     case 2:
-      return (
-        <FormattedMessage
-          id="app.passwordStrength.somewhatOk"
-          defaultMessage="You can do better."
-        />
-      );
+      return <FormattedMessage id="app.passwordStrength.somewhatOk" defaultMessage="You can do better." />;
 
     case 3:
-      return (
-        <FormattedMessage id="app.passwordStrength.ok" defaultMessage="OK" />
-      );
+      return <FormattedMessage id="app.passwordStrength.ok" defaultMessage="OK" />;
 
     case 4:
-      return (
-        <FormattedMessage
-          id="app.passwordStrength.good"
-          defaultMessage="Good"
-        />
-      );
+      return <FormattedMessage id="app.passwordStrength.good" defaultMessage="Good" />;
 
     default:
-      return (
-        <FormattedMessage
-          id="app.passwordStrength.unknown"
-          defaultMessage="..."
-        />
-      );
+      return <FormattedMessage id="app.passwordStrength.unknown" defaultMessage="..." />;
   }
 };
 
-const PasswordStrength = ({
-  input: { name, value: level },
-  meta: { dirty },
-  label,
-}) => (
+const PasswordStrength = ({ input: { name, value: level }, meta: { dirty }, label }) => (
   <FormGroup controlId={name}>
     {dirty && (
       <ProgressBar

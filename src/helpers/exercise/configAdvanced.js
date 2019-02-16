@@ -26,13 +26,7 @@ export const getPipelinesInitialValues = defaultMemoize(config => ({
  * @param {number} pipelineIdx
  * @param {string} pipelineId
  */
-const getConfigVariables = (
-  config,
-  runtimeId,
-  testId,
-  pipelineIdx,
-  pipelineId
-) => {
+const getConfigVariables = (config, runtimeId, testId, pipelineIdx, pipelineId) => {
   const pipeline = safeGet(config, [
     ({ name }) => name === runtimeId,
     'tests',
@@ -65,22 +59,12 @@ const getConfigVariableValue = (
   variableType = null,
   defaultValue = undefined
 ) => {
-  const variables = getConfigVariables(
-    config,
-    runtimeId,
-    testId,
-    pipelineIdx,
-    pipelineId
-  );
+  const variables = getConfigVariables(config, runtimeId, testId, pipelineIdx, pipelineId);
   return (
     variables &&
     safeGet(
       variables,
-      [
-        ({ name, type }) =>
-          name === variableName && (!variableType || type === variableType),
-        'value',
-      ],
+      [({ name, type }) => name === variableName && (!variableType || type === variableType), 'value'],
       defaultValue
     )
   );
@@ -114,32 +98,19 @@ const mergeConfigVariables = (oldVars, pipelineVars) => {
  * @param {array} tests List of tests of the exercise.
  * @param {array} pipelinesVariables Descriptors of variables which are expected to be set for each pipeline.
  */
-export const assembleNewConfig = (
-  oldConfig,
-  runtimeId,
-  tests,
-  pipelinesVariables
-) => ({
+export const assembleNewConfig = (oldConfig, runtimeId, tests, pipelinesVariables) => ({
   config: [
     {
       name: runtimeId,
       tests: tests.map(({ id: testId }) => ({
         name: testId,
-        pipelines: pipelinesVariables.map(
-          ({ id: pipelineId, variables }, pipelineIdx) => ({
-            name: pipelineId,
-            variables: mergeConfigVariables(
-              getConfigVariables(
-                oldConfig,
-                runtimeId,
-                testId,
-                pipelineIdx,
-                pipelineId
-              ),
-              variables
-            ),
-          })
-        ),
+        pipelines: pipelinesVariables.map(({ id: pipelineId, variables }, pipelineIdx) => ({
+          name: pipelineId,
+          variables: mergeConfigVariables(
+            getConfigVariables(oldConfig, runtimeId, testId, pipelineIdx, pipelineId),
+            variables
+          ),
+        })),
       })),
     },
   ],
@@ -152,34 +123,27 @@ export const assembleNewConfig = (
  * @param {Object[]} tests
  * @param {Object[]} pipelinesVariables
  */
-export const getAdvancedConfigInitValues = (
-  exerciseConfig,
-  runtimeId,
-  tests,
-  pipelinesVariables
-) => {
+export const getAdvancedConfigInitValues = (exerciseConfig, runtimeId, tests, pipelinesVariables) => {
   const config = {};
 
   if (runtimeId && tests && pipelinesVariables) {
     tests.forEach(({ id: testId }) => {
-      config[encodeNumId(testId)] = pipelinesVariables.map(
-        ({ id: pipelineId, variables }, pipelineIdx) => {
-          const res = {};
-          variables.forEach(({ name, type, value }) => {
-            res[encodeId(name)] = getConfigVariableValue(
-              exerciseConfig,
-              runtimeId,
-              testId,
-              pipelineIdx,
-              pipelineId,
-              name,
-              type,
-              value
-            );
-          });
-          return res;
-        }
-      );
+      config[encodeNumId(testId)] = pipelinesVariables.map(({ id: pipelineId, variables }, pipelineIdx) => {
+        const res = {};
+        variables.forEach(({ name, type, value }) => {
+          res[encodeId(name)] = getConfigVariableValue(
+            exerciseConfig,
+            runtimeId,
+            testId,
+            pipelineIdx,
+            pipelineId,
+            name,
+            type,
+            value
+          );
+        });
+        return res;
+      });
     });
   }
   return { config };
@@ -192,31 +156,20 @@ export const getAdvancedConfigInitValues = (
  * @param {Object[]} tests
  * @param {Object[]} pipelinesVariables
  */
-export const transformAdvancedConfigValues = (
-  { config },
-  runtimeId,
-  tests,
-  pipelinesVariables
-) => ({
+export const transformAdvancedConfigValues = ({ config }, runtimeId, tests, pipelinesVariables) => ({
   config: [
     {
       name: runtimeId,
       tests: tests.map(({ id: testId }) => ({
         name: testId,
-        pipelines: pipelinesVariables.map(
-          ({ id: pipelineId, variables }, pipelineIdx) => ({
-            name: pipelineId,
-            variables: variables.map(({ name, type }) => ({
-              name,
-              type,
-              value: safeGet(config, [
-                encodeNumId(testId),
-                pipelineIdx,
-                encodeId(name),
-              ]),
-            })),
-          })
-        ),
+        pipelines: pipelinesVariables.map(({ id: pipelineId, variables }, pipelineIdx) => ({
+          name: pipelineId,
+          variables: variables.map(({ name, type }) => ({
+            name,
+            type,
+            value: safeGet(config, [encodeNumId(testId), pipelineIdx, encodeId(name)]),
+          })),
+        })),
       })),
     },
   ],
