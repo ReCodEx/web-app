@@ -7,8 +7,7 @@ import moment from 'moment';
 import DateTime from '../widgets/DateTime';
 
 const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom = null }) => {
-  const isVisible =
-    isPublic && (!visibleFrom || visibleFrom <= moment().unix());
+  const isVisible = isPublic && (!visibleFrom || visibleFrom <= moment().unix());
   return (
     <span>
       <OverlayTrigger
@@ -16,15 +15,9 @@ const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom = null }) => {
         overlay={
           <Tooltip id={id}>
             {isVisible ? (
-              <FormattedMessage
-                id="app.maybeVisibleIcon.isVisible"
-                defaultMessage="Is visible to students"
-              />
+              <FormattedMessage id="app.maybeVisibleIcon.isVisible" defaultMessage="Is visible to students" />
             ) : (
-              <FormattedMessage
-                id="app.maybeVisibleIcon.isHidden"
-                defaultMessage="Is hidden from student"
-              />
+              <FormattedMessage id="app.maybeVisibleIcon.isHidden" defaultMessage="Is hidden from student" />
             )}
           </Tooltip>
         }>

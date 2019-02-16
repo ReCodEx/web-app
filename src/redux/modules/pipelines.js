@@ -1,17 +1,10 @@
 import { handleActions } from 'redux-actions';
 import { Map, List } from 'immutable';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles';
-import {
-  actionTypes as paginationActionTypes,
-  fetchPaginated,
-} from './pagination';
+import { actionTypes as paginationActionTypes, fetchPaginated } from './pagination';
 
 import { arrayToObject } from '../../helpers/common';
 
@@ -79,50 +72,31 @@ export const validatePipeline = (id, version) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [pipelineFilesActionTypes.ADD_FILES_FULFILLED]: (
-      state,
-      { payload: files, meta: { pipelineId } }
-    ) =>
-      state.hasIn(['resources', pipelineId])
-        ? updateFiles(state, pipelineId, files, 'supplementaryFilesIds')
-        : state,
+    [pipelineFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { pipelineId } }) =>
+      state.hasIn(['resources', pipelineId]) ? updateFiles(state, pipelineId, files, 'supplementaryFilesIds') : state,
 
-    [additionalActionTypes.FORK_PIPELINE_PENDING]: (
-      state,
-      { meta: { id, forkId } }
-    ) =>
+    [additionalActionTypes.FORK_PIPELINE_PENDING]: (state, { meta: { id, forkId } }) =>
       state.updateIn(['resources', id, 'data'], pipeline => {
         if (!pipeline.has('forks')) {
           pipeline = pipeline.set('forks', new Map());
         }
 
-        return pipeline.update('forks', forks =>
-          forks.set(forkId, { status: forkStatuses.PENDING })
-        );
+        return pipeline.update('forks', forks => forks.set(forkId, { status: forkStatuses.PENDING }));
       }),
 
-    [additionalActionTypes.FORK_PIPELINE_REJECTED]: (
-      state,
-      { meta: { id, forkId } }
-    ) =>
+    [additionalActionTypes.FORK_PIPELINE_REJECTED]: (state, { meta: { id, forkId } }) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.REJECTED,
       }),
 
-    [additionalActionTypes.FORK_PIPELINE_FULFILLED]: (
-      state,
-      { payload: { id: pipelineId }, meta: { id, forkId } }
-    ) =>
+    [additionalActionTypes.FORK_PIPELINE_FULFILLED]: (state, { payload: { id: pipelineId }, meta: { id, forkId } }) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.FULFILLED,
         pipelineId,
       }),
 
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
-    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
-      state,
-      { payload: { items }, meta: { endpoint } }
-    ) =>
+    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (state, { payload: { items }, meta: { endpoint } }) =>
       endpoint === 'pipelines'
         ? state.mergeIn(
             ['resources'],
@@ -144,8 +118,6 @@ const reducer = handleActions(
 );
 
 const updateFiles = (state, pipelineId, files, field) =>
-  state.updateIn(['resources', pipelineId, 'data', field], list =>
-    List(files.map(file => file.id))
-  );
+  state.updateIn(['resources', pipelineId, 'data', field], list => List(files.map(file => file.id)));
 
 export default reducer;

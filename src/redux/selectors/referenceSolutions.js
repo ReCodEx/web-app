@@ -18,8 +18,6 @@ export const referenceSolutionsSelector = exerciseId =>
   createSelector(
     allReferenceSolutionsSelector,
     referenceSolutions => {
-      return referenceSolutions.filter(
-        solution => solution.getIn(['data', 'exerciseId']) === exerciseId
-      );
+      return referenceSolutions.filter(solution => solution.getIn(['data', 'exerciseId']) === exerciseId);
     }
   );

@@ -6,24 +6,15 @@ import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
-import {
-  fetchBrokerStats,
-  freezeBroker,
-  unfreezeBroker,
-} from '../../redux/modules/broker';
-import {
-  brokerStatsSelector,
-  brokerFreezeSelector,
-  brokerUnfreezeSelector,
-} from '../../redux/selectors/broker';
+import { fetchBrokerStats, freezeBroker, unfreezeBroker } from '../../redux/modules/broker';
+import { brokerStatsSelector, brokerFreezeSelector, brokerUnfreezeSelector } from '../../redux/selectors/broker';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons';
 import StatsList from '../../components/Broker/StatsList/StatsList';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 class Broker extends Component {
-  static loadAsync = (params, dispatch) =>
-    Promise.all([dispatch(fetchBrokerStats())]);
+  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchBrokerStats())]);
 
   componentWillMount = () => this.props.loadAsync();
 
@@ -39,17 +30,9 @@ class Broker extends Component {
     } = this.props;
     return (
       <PageContent
-        title={
-          <FormattedMessage
-            id="app.broker.title"
-            defaultMessage="Broker Management"
-          />
-        }
+        title={<FormattedMessage id="app.broker.title" defaultMessage="Broker Management" />}
         description={
-          <FormattedMessage
-            id="app.broker.description"
-            defaultMessage="Management of broker backend service"
-          />
+          <FormattedMessage id="app.broker.description" defaultMessage="Management of broker backend service" />
         }>
         {isSuperAdmin && (
           <React.Fragment>
@@ -62,9 +45,7 @@ class Broker extends Component {
             />
             <Row>
               <Col lg={6}>
-                <ResourceRenderer resource={stats}>
-                  {stats => <StatsList stats={stats} />}
-                </ResourceRenderer>
+                <ResourceRenderer resource={stats}>{stats => <StatsList stats={stats} />}</ResourceRenderer>
               </Col>
             </Row>
           </React.Fragment>
@@ -95,9 +76,7 @@ export default connect(
   dispatch => ({
     loadAsync: () => Broker.loadAsync({}, dispatch),
     refreshBrokerStats: () => dispatch(fetchBrokerStats()),
-    freezeBroker: () =>
-      dispatch(freezeBroker()).then(() => dispatch(fetchBrokerStats())),
-    unfreezeBroker: () =>
-      dispatch(unfreezeBroker()).then(() => dispatch(fetchBrokerStats())),
+    freezeBroker: () => dispatch(freezeBroker()).then(() => dispatch(fetchBrokerStats())),
+    unfreezeBroker: () => dispatch(unfreezeBroker()).then(() => dispatch(fetchBrokerStats())),
   })
 )(Broker);

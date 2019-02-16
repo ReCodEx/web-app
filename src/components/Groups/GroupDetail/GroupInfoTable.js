@@ -10,12 +10,7 @@ import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { objectMap, identity } from '../../../helpers/common';
 
 const knownBindingProviderLabels = {
-  sis: (
-    <FormattedMessage
-      id="app.groupDetail.bindings.sis"
-      defaultMessage="SIS UK scheduling event codes"
-    />
-  ),
+  sis: <FormattedMessage id="app.groupDetail.bindings.sis" defaultMessage="SIS UK scheduling event codes" />,
 };
 
 const getDescription = (localizedTexts, locale) => {
@@ -40,13 +35,7 @@ const GroupInfoTable = ({
     localizedTexts,
     primaryAdminsIds,
     public: isPublic = false,
-    privateData: {
-      threshold,
-      publicStats,
-      parentGroupId,
-      bindings,
-      ...privateGroup
-    },
+    privateData: { threshold, publicStats, parentGroupId, bindings, ...privateGroup },
   },
   groups,
   supervisors,
@@ -55,12 +44,7 @@ const GroupInfoTable = ({
 }) => (
   <div>
     <Box
-      title={
-        <FormattedMessage
-          id="app.groupDetail.description"
-          defaultMessage="Group Description"
-        />
-      }
+      title={<FormattedMessage id="app.groupDetail.description" defaultMessage="Group Description" />}
       description={getDescription(localizedTexts, locale)}
       type="primary"
       collapsable
@@ -85,10 +69,7 @@ const GroupInfoTable = ({
           {!organizational && (
             <tr>
               <th>
-                <FormattedMessage
-                  id="app.groupDetail.isPublic"
-                  defaultMessage="Everyone can see and join this group"
-                />
+                <FormattedMessage id="app.groupDetail.isPublic" defaultMessage="Everyone can see and join this group" />
                 :
               </th>
               <td>

@@ -1,9 +1,5 @@
 import { handleActions } from 'redux-actions';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 const resourceName = 'pipelineFiles';
@@ -61,16 +57,11 @@ const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [actionTypes.ADD_FILES_FULFILLED]: (state, { payload, meta: { files } }) =>
       payload.reduce(
-        (state, data) =>
-          state.setIn(
-            ['resources', data.id],
-            createRecord({ data, state: resourceStatus.FULFILLED })
-          ),
+        (state, data) => state.setIn(['resources', data.id], createRecord({ data, state: resourceStatus.FULFILLED })),
         state
       ),
 
-    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) =>
-      state.deleteIn(['resources', fileId]),
+    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) => state.deleteIn(['resources', fileId]),
   }),
   initialState
 );

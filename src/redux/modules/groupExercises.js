@@ -3,8 +3,7 @@ import { actionTypes } from './exercises';
 
 const initialState = {};
 
-const isGroupExercisesAction = ({ meta: { endpoint } }) =>
-  /^\/groups\/[a-zA-Z0-9-]+\/exercises/.test(endpoint);
+const isGroupExercisesAction = ({ meta: { endpoint } }) => /^\/groups\/[a-zA-Z0-9-]+\/exercises/.test(endpoint);
 
 const extractGroupIdFromTheEndpoint = endpoint => {
   const matches = /^\/groups\/([a-zA-Z0-9-]+)\/exercises/.exec(endpoint);

@@ -5,14 +5,8 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import {
-  fetchAllFailures,
-  resolveFailure,
-} from '../../redux/modules/submissionFailures';
-import {
-  fetchManyStatus,
-  readySubmissionFailuresSelector,
-} from '../../redux/selectors/submissionFailures';
+import { fetchAllFailures, resolveFailure } from '../../redux/modules/submissionFailures';
+import { fetchManyStatus, readySubmissionFailuresSelector } from '../../redux/selectors/submissionFailures';
 import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList';
 import Box from '../../components/widgets/Box/Box';
 import ResolveFailure from '../../components/SubmissionFailures/ResolveFailure/ResolveFailure';
@@ -21,8 +15,7 @@ import { Button } from 'react-bootstrap';
 class SubmissionFailures extends Component {
   state = { isOpen: false, activeId: null };
 
-  static loadAsync = (params, dispatch) =>
-    Promise.all([dispatch(fetchAllFailures)]);
+  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllFailures)]);
 
   componentWillMount() {
     this.props.loadAsync();
@@ -37,10 +30,7 @@ class SubmissionFailures extends Component {
         loading={
           <PageContent
             title={
-              <FormattedMessage
-                id="app.submissionFailures.loading"
-                defaultMessage="Loading list of failures..."
-              />
+              <FormattedMessage id="app.submissionFailures.loading" defaultMessage="Loading list of failures..." />
             }
             description={
               <FormattedMessage
@@ -53,10 +43,7 @@ class SubmissionFailures extends Component {
         failed={
           <PageContent
             title={
-              <FormattedMessage
-                id="app.submissionFailures.failed"
-                defaultMessage="Cannot load the list of failures"
-              />
+              <FormattedMessage id="app.submissionFailures.failed" defaultMessage="Cannot load the list of failures" />
             }
             description={
               <FormattedMessage
@@ -68,12 +55,7 @@ class SubmissionFailures extends Component {
         }>
         {() => (
           <PageContent
-            title={
-              <FormattedMessage
-                id="app.submissionFailures.title"
-                defaultMessage="Submission Failures"
-              />
-            }
+            title={<FormattedMessage id="app.submissionFailures.title" defaultMessage="Submission Failures" />}
             description={
               <FormattedMessage
                 id="app.submissionFailures.description"
@@ -82,22 +64,12 @@ class SubmissionFailures extends Component {
             }
             breadcrumbs={[
               {
-                text: (
-                  <FormattedMessage
-                    id="app.submissionFailures.title"
-                    defaultMessage="Submission Failures"
-                  />
-                ),
+                text: <FormattedMessage id="app.submissionFailures.title" defaultMessage="Submission Failures" />,
                 iconName: 'bomb',
               },
             ]}>
             <Box
-              title={
-                <FormattedMessage
-                  id="app.submissionFailures.listTitle"
-                  defaultMessage="Submission Failures"
-                />
-              }
+              title={<FormattedMessage id="app.submissionFailures.listTitle" defaultMessage="Submission Failures" />}
               unlimitedHeight
               noPadding>
               <div>
@@ -108,21 +80,14 @@ class SubmissionFailures extends Component {
                       bsStyle="warning"
                       className="btn-flat"
                       bsSize="xs"
-                      onClick={() =>
-                        this.setState({ isOpen: true, activeId: id })
-                      }>
-                      <FormattedMessage
-                        id="app.submissionFailures.resolve"
-                        defaultMessage="Resolve"
-                      />
+                      onClick={() => this.setState({ isOpen: true, activeId: id })}>
+                      <FormattedMessage id="app.submissionFailures.resolve" defaultMessage="Resolve" />
                     </Button>
                   )}
                 />
                 <ResolveFailure
                   isOpen={this.state.isOpen}
-                  onClose={() =>
-                    this.setState({ isOpen: false, activeId: null })
-                  }
+                  onClose={() => this.setState({ isOpen: false, activeId: null })}
                   onSubmit={data =>
                     resolveFailure(this.state.activeId, data).then(() =>
                       this.setState({ isOpen: false, activeId: null })

@@ -26,8 +26,7 @@ const getGroupsStatsData = groupId =>
 export const getUsersStatistics = (groupId, userId) =>
   createSelector(
     getGroupsStatsData(groupId),
-    group =>
-      group !== null ? group.find(stats => stats.userId === userId) : null
+    group => (group !== null ? group.find(stats => stats.userId === userId) : null)
   );
 
 export const getStatuses = (groupId, userId) =>

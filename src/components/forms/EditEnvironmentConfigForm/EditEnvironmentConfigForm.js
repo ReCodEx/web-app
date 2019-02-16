@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import {
-  FormattedMessage,
-  FormattedHTMLMessage,
-  intlShape,
-  injectIntl,
-} from 'react-intl';
+import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
 import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables';
@@ -49,10 +44,7 @@ class EditEnvironmentConfigForm extends Component {
     return (
       <FormBox
         title={
-          <FormattedMessage
-            id="app.editEnvironmentConfig.title"
-            defaultMessage="Runtime Environment Configuration"
-          />
+          <FormattedMessage id="app.editEnvironmentConfig.title" defaultMessage="Runtime Environment Configuration" />
         }
         type={submitSucceeded ? 'success' : undefined}
         footer={
@@ -127,10 +119,7 @@ class EditEnvironmentConfigForm extends Component {
                 defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.\{c,h\}</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here."
               />
             </p>
-            <FieldArray
-              name="variables"
-              component={EditEnvironmentConfigVariables}
-            />
+            <FieldArray name="variables" component={EditEnvironmentConfigVariables} />
           </React.Fragment>
         )}
 
@@ -145,10 +134,7 @@ class EditEnvironmentConfigForm extends Component {
 
         {submitFailed && (
           <Alert bsStyle="danger" className="em-margin-top">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
@@ -283,18 +269,13 @@ export default connect((state, { runtimeEnvironments }) => {
   const values = getFormValues('editEnvironmentConfig')(state);
   const selectedRuntimeId = values && values.environmentId;
   const defaultVariables = selectedRuntimeId
-    ? safeGet(runtimeEnvironments, [
-        ({ id }) => id === selectedRuntimeId,
-        'defaultVariables',
-      ])
+    ? safeGet(runtimeEnvironments, [({ id }) => id === selectedRuntimeId, 'defaultVariables'])
     : null;
 
   return {
     selectedRuntimeId,
     defaultVariables,
-    hasDefaultVariables:
-      Boolean(defaultVariables) &&
-      compareVariablesForEquality(values.variables, defaultVariables),
+    hasDefaultVariables: Boolean(defaultVariables) && compareVariablesForEquality(values.variables, defaultVariables),
   };
 })(
   reduxForm({

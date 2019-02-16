@@ -7,18 +7,13 @@ import { EMPTY_OBJ } from '../../helpers/common';
 export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   const jsonScoreConfig = yaml.safeLoad(scoreConfig);
   const testWeights = jsonScoreConfig.testWeights || EMPTY_OBJ;
-  const sortedTests = exerciseTests.sort((a, b) =>
-    a.name.localeCompare(b.name, locale)
-  );
+  const sortedTests = exerciseTests.sort((a, b) => a.name.localeCompare(b.name, locale));
 
   let res = [];
   let allWeightsSame = true;
   let lastWeight = null;
   for (const test of sortedTests) {
-    const testWeight =
-      testWeights[test.name] !== undefined
-        ? Number(testWeights[test.name])
-        : 100;
+    const testWeight = testWeights[test.name] !== undefined ? Number(testWeights[test.name]) : 100;
     if (lastWeight !== null && testWeight !== lastWeight) {
       allWeightsSame = false;
     }
@@ -40,8 +35,7 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
  * Gather data of EditTestsForm and prepare them to be sent to Tests endpoint and ScoreConfig endpoint.
  */
 export const transformTestsValues = formData => {
-  const uniformScore =
-    formData.isUniform === true || formData.isUniform === 'true';
+  const uniformScore = formData.isUniform === true || formData.isUniform === 'true';
   let scoreConfigData = {
     testWeights: {},
   };

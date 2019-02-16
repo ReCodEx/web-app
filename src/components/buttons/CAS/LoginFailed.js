@@ -7,10 +7,7 @@ import { WarningIcon } from '../../icons';
 const LoginFailed = ({ onClick }) => (
   <Button bsStyle="danger" onClick={onClick}>
     <WarningIcon gapRight />
-    <FormattedMessage
-      id="app.casLoginButton.failed"
-      defaultMessage="Try Again"
-    />
+    <FormattedMessage id="app.casLoginButton.failed" defaultMessage="Try Again" />
   </Button>
 );
 

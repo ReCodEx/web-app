@@ -19,12 +19,7 @@ import { resourceStatus, isReadyOrReloading } from './status';
  * @param {RecordDescriptor} record The properties of the record
  * @return {object} ImmutableJS map with the properties of the record
  */
-const createRecord = ({
-  data = null,
-  state = resourceStatus.PENDING,
-  didInvalidate = false,
-  lastUpdate = null,
-} = {}) =>
+const createRecord = ({ data = null, state = resourceStatus.PENDING, didInvalidate = false, lastUpdate = null } = {}) =>
   fromJS({
     state,
     data,
@@ -38,8 +33,7 @@ export default createRecord;
  * @param   {object}      resource  Resource's data
  * @return  {object|null}
  */
-export const getData = resource =>
-  isReadyOrReloading(resource) ? resource.get('data') : null;
+export const getData = resource => (isReadyOrReloading(resource) ? resource.get('data') : null);
 
 /**
  * @param   {object}      resource  Resource's data
@@ -54,5 +48,4 @@ export const getJsData = resource => {
  * @param   {object}      resource  Resource's data
  * @return  {string|null}
  */
-export const getId = resource =>
-  isReadyOrReloading(resource) ? getJsData(resource).id : null;
+export const getId = resource => (isReadyOrReloading(resource) ? getJsData(resource).id : null);

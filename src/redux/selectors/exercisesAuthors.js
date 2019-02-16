@@ -4,17 +4,12 @@ import { isReady, isLoading } from '../helpers/resourceManager';
 import { usersSelector } from './users';
 
 const exericsesAuthorsAllSelector = state => state.exercisesAuthors.get('all');
-const exericsesAuthorsOfGroupSelector = groupId => state =>
-  state.exercisesAuthors.getIn(['groups', groupId]);
+const exericsesAuthorsOfGroupSelector = groupId => state => state.exercisesAuthors.getIn(['groups', groupId]);
 
 export const getAllExericsesAuthors = createSelector(
   [exericsesAuthorsAllSelector, usersSelector],
   (authors, users) =>
-    (authors &&
-      isReady(authors) &&
-      users &&
-      authors.get('data').map(id => users.get(id))) ||
-    EMPTY_LIST
+    (authors && isReady(authors) && users && authors.get('data').map(id => users.get(id))) || EMPTY_LIST
 );
 
 export const getAllExericsesAuthorsIsLoading = createSelector(
@@ -26,11 +21,7 @@ export const getExercisesAuthorsOfGroup = defaultMemoize(groupId =>
   createSelector(
     [exericsesAuthorsOfGroupSelector(groupId), usersSelector],
     (authors, users) =>
-      (authors &&
-        isReady(authors) &&
-        users &&
-        authors.get('data').map(id => users.get(id))) ||
-      EMPTY_LIST
+      (authors && isReady(authors) && users && authors.get('data').map(id => users.get(id))) || EMPTY_LIST
   )
 );
 

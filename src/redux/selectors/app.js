@@ -1,3 +1,2 @@
 export const getApp = state => state.app;
-export const anyPendingFetchOperations = state =>
-  getApp(state).get('pendingFetchOperations') > 0;
+export const anyPendingFetchOperations = state => getApp(state).get('pendingFetchOperations') > 0;

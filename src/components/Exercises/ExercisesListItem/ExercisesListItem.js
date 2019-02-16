@@ -60,11 +60,7 @@ const ExercisesListItem = ({
     <td>
       <UsersNameContainer userId={authorId} />
     </td>
-    <td className="small">
-      {runtimeEnvironments && (
-        <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
-      )}
-    </td>
+    <td className="small">{runtimeEnvironments && <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}</td>
     {showGroups && (
       <td className="small">
         {groupsIds.length > 0 ? (
@@ -75,10 +71,7 @@ const ExercisesListItem = ({
           ))
         ) : (
           <i className="text-muted">
-            <FormattedMessage
-              id="app.exercisesListItem.noGroups"
-              defaultMessage="no groups"
-            />
+            <FormattedMessage id="app.exercisesListItem.noGroups" defaultMessage="no groups" />
           </i>
         )}
       </td>
@@ -105,56 +98,34 @@ const ExercisesListItem = ({
 
     <td className="text-right text-nowrap">
       {showAssignButton && assignExercise && (
-        <AssignExerciseButton
-          isLocked={isLocked}
-          isBroken={isBroken}
-          assignExercise={() => assignExercise(id)}
-        />
+        <AssignExerciseButton isLocked={isLocked} isBroken={isBroken} assignExercise={() => assignExercise(id)} />
       )}
       {permissionHints.update && (
         <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
           <Button bsSize="xs" bsStyle="warning">
             <EditIcon gapRight />
-            <FormattedMessage
-              id="app.exercises.listEdit"
-              defaultMessage="Settings"
-            />
+            <FormattedMessage id="app.exercises.listEdit" defaultMessage="Settings" />
           </Button>
         </LinkContainer>
       )}
       {permissionHints.viewPipelines && permissionHints.viewScoreConfig && (
         <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
-          <Button
-            bsSize="xs"
-            bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}>
+          <Button bsSize="xs" bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}>
             <EditIcon gapRight />
-            <FormattedMessage
-              id="app.exercises.listEditConfig"
-              defaultMessage="Tests"
-            />
+            <FormattedMessage id="app.exercises.listEditConfig" defaultMessage="Tests" />
           </Button>
         </LinkContainer>
       )}
       {permissionHints.viewLimits && (
         <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}>
-          <Button
-            bsSize="xs"
-            bsStyle={permissionHints.setLimits ? 'warning' : 'default'}>
+          <Button bsSize="xs" bsStyle={permissionHints.setLimits ? 'warning' : 'default'}>
             <EditIcon gapRight />
-            <FormattedMessage
-              id="app.exercises.listEditLimits"
-              defaultMessage="Limits"
-            />
+            <FormattedMessage id="app.exercises.listEditLimits" defaultMessage="Limits" />
           </Button>
         </LinkContainer>
       )}
       {permissionHints.remove && (
-        <DeleteExerciseButtonContainer
-          id={id}
-          bsSize="xs"
-          resourceless={true}
-          onDeleted={reload}
-        />
+        <DeleteExerciseButtonContainer id={id} bsSize="xs" resourceless={true} onDeleted={reload} />
       )}
     </td>
   </tr>

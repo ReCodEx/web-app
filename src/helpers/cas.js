@@ -1,12 +1,10 @@
 export const createCASLoginUrl = serviceUrl =>
-  `https://idp.cuni.cz/cas/login?service=${encodeURIComponent(
-    serviceUrl
-  )}&renew=true`;
+  `https://idp.cuni.cz/cas/login?service=${encodeURIComponent(serviceUrl)}&renew=true`;
 
 export const createCASValidationUrl = (ticket, serviceUrl, backendUrl) =>
-  `https://idp.cuni.cz/cas/p3/serviceValidate?ticket=${encodeURIComponent(
-    ticket
-  )}&service=${encodeURIComponent(serviceUrl)}&format=json`;
+  `https://idp.cuni.cz/cas/p3/serviceValidate?ticket=${encodeURIComponent(ticket)}&service=${encodeURIComponent(
+    serviceUrl
+  )}&format=json`;
 
 export const getTicketFromUrl = url => {
   const match = url.match(/[?&]ticket=([^&\b]+)/);
@@ -14,27 +12,15 @@ export const getTicketFromUrl = url => {
 };
 
 export const getProxyTicket = ({ serviceResponse }) => {
-  return serviceResponse.authenticationSuccess
-    ? serviceResponse.authenticationSuccess.proxyGrantingTicket
-    : null;
+  return serviceResponse.authenticationSuccess ? serviceResponse.authenticationSuccess.proxyGrantingTicket : null;
 };
 
 export const openCASWindow = serviceUrl =>
   typeof window !== 'undefined'
-    ? window.open(
-        createCASLoginUrl(serviceUrl),
-        'CAS',
-        'modal=true,width=1024,height=850,centerscreen=yes'
-      )
+    ? window.open(createCASLoginUrl(serviceUrl), 'CAS', 'modal=true,width=1024,height=850,centerscreen=yes')
     : null;
 
-export const validateServiceTicket = (
-  serviceTicket,
-  serviceUrl,
-  backendUrl,
-  onTicketObtained,
-  onFailed
-) =>
+export const validateServiceTicket = (serviceTicket, serviceUrl, backendUrl, onTicketObtained, onFailed) =>
   fetch(createCASValidationUrl(serviceTicket, serviceUrl, backendUrl), {
     mode: 'no-cors',
   })

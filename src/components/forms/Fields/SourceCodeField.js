@@ -7,28 +7,14 @@ import ClientOnly from '../../helpers/ClientOnly';
 import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 // load the ACE editor only when rendering in the browser
-import {
-  loadAceEditor,
-  getAceModeFromExtension,
-} from '../../helpers/AceEditorLoader';
+import { loadAceEditor, getAceModeFromExtension } from '../../helpers/AceEditorLoader';
 let AceEditor = loadAceEditor();
 
 const SourceCodeField = (
-  {
-    input,
-    mode,
-    meta: { error, warning },
-    label = null,
-    children,
-    tabIndex,
-    onBlur,
-    ...props
-  },
+  { input, mode, meta: { error, warning }, label = null, children, tabIndex, onBlur, ...props },
   { userSettings: { vimMode = false, darkTheme = false } }
 ) => (
-  <FormGroup
-    controlId={input.name}
-    validationState={error ? 'error' : warning ? 'warning' : undefined}>
+  <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
     {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
     <ClientOnly>
       <AceEditor

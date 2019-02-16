@@ -8,11 +8,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
-import {
-  createGroup,
-  fetchGroupIfNeeded,
-  fetchAllGroups,
-} from '../../redux/modules/groups';
+import { createGroup, fetchGroupIfNeeded, fetchAllGroups } from '../../redux/modules/groups';
 import { fetchSupervisors, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
@@ -25,22 +21,14 @@ import {
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
 
 import Page from '../../components/layout/Page';
-import GroupInfoTable, {
-  LoadingGroupDetail,
-  FailedGroupDetail,
-} from '../../components/Groups/GroupDetail';
+import GroupInfoTable, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 import SupervisorsList from '../../components/Users/SupervisorsList';
-import {
-  getLocalizedName,
-  transformLocalizedTextsFormData,
-} from '../../helpers/localizedData';
+import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
-import EditGroupForm, {
-  EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES,
-} from '../../components/forms/EditGroupForm';
+import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 import { BanIcon } from '../../components/icons';
@@ -92,8 +80,7 @@ class GroupInfo extends Component {
         resource: group,
         iconName: 'university',
         breadcrumb: data => ({
-          link: ({ INSTANCE_URI_FACTORY }) =>
-            INSTANCE_URI_FACTORY(data.privateData.instanceId),
+          link: ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.privateData.instanceId),
           text: 'Instance',
         }),
       },
@@ -127,34 +114,21 @@ class GroupInfo extends Component {
       <Page
         resource={group}
         title={group => getLocalizedName(group, locale)}
-        description={
-          <FormattedMessage
-            id="app.group.description"
-            defaultMessage="Group overview and assignments"
-          />
-        }
+        description={<FormattedMessage id="app.group.description" defaultMessage="Group overview and assignments" />}
         breadcrumbs={this.getBreadcrumbs()}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
         {data => (
           <div>
-            <HierarchyLine
-              groupId={data.id}
-              parentGroupsIds={data.parentGroupsIds}
-            />
+            <HierarchyLine groupId={data.id} parentGroupsIds={data.parentGroupsIds} />
 
             <GroupTopButtons
               group={data}
               userId={userId}
-              canLeaveJoin={
-                !isAdmin && !isSupervisor && (data.public || isStudent)
-              }
+              canLeaveJoin={!isAdmin && !isSupervisor && (data.public || isStudent)}
             />
 
-            <GroupArchivedWarning
-              archived={data.archived}
-              directlyArchived={data.directlyArchived}
-            />
+            <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />
 
             {!hasPermissions(data, 'viewDetail') && (
               <Row>
@@ -207,10 +181,7 @@ class GroupInfo extends Component {
                       users={supervisors}
                       isAdmin={isAdmin}
                       primaryAdminsIds={data.primaryAdminsIds}
-                      isLoaded={
-                        supervisors.length ===
-                        data.privateData.supervisors.length
-                      }
+                      isLoaded={supervisors.length === data.privateData.supervisors.length}
                     />
                   </Box>
                 )}
@@ -218,27 +189,16 @@ class GroupInfo extends Component {
                 {hasPermissions(data, 'setAdmin') && !data.archived && (
                   <Box
                     title={
-                      <FormattedMessage
-                        id="app.group.adminsView.addSupervisor"
-                        defaultMessage="Add Supervisor"
-                      />
+                      <FormattedMessage id="app.group.adminsView.addSupervisor" defaultMessage="Add Supervisor" />
                     }>
-                    <AddSupervisor
-                      instanceId={data.privateData.instanceId}
-                      groupId={data.id}
-                    />
+                    <AddSupervisor instanceId={data.privateData.instanceId} groupId={data.id} />
                   </Box>
                 )}
               </Col>
               <Col sm={6}>
                 {hasPermissions(data, 'viewSubgroups') && (
                   <Box
-                    title={
-                      <FormattedMessage
-                        id="app.groupDetail.subgroups"
-                        defaultMessage="Subgroups Hierarchy"
-                      />
-                    }
+                    title={<FormattedMessage id="app.groupDetail.subgroups" defaultMessage="Subgroups Hierarchy" />}
                     unlimitedHeight
                     extraPadding>
                     <GroupTree
@@ -323,9 +283,7 @@ const mapDispatchToProps = (dispatch, { params }) => ({
         instanceId,
         parentGroupId: params.groupId,
       })
-    ).then(() =>
-      Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])
-    ),
+    ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
   push: url => dispatch(push(url)),
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId)),

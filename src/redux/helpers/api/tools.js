@@ -3,10 +3,7 @@ import { addNotification } from '../../modules/notifications';
 import { flatten } from 'flat';
 import { canUseDOM } from 'exenv';
 
-import {
-  newPendingFetchOperation,
-  completedFetchOperation,
-} from '../../modules/app';
+import { newPendingFetchOperation, completedFetchOperation } from '../../modules/app';
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
 import { safeGet } from '../../../helpers/common';
@@ -33,26 +30,16 @@ const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
 
 const maybeQuestionMark = (endpoint, query) =>
-  Object.keys(query).length === 0
-    ? ''
-    : endpoint.indexOf('?') === -1
-    ? '?'
-    : '&';
+  Object.keys(query).length === 0 ? '' : endpoint.indexOf('?') === -1 ? '?' : '&';
 
 const encodeQueryItem = (flatten, name, value) => {
   if (Array.isArray(value)) {
     // Encode array so PHP wrapper can decode it as array
-    value.forEach(nestedValue =>
-      encodeQueryItem(flatten, `${name}[]`, nestedValue)
-    );
+    value.forEach(nestedValue => encodeQueryItem(flatten, `${name}[]`, nestedValue));
   } else if (typeof value === 'object') {
     // Encode object as associative array
     Object.keys(value).forEach(nestedName =>
-      encodeQueryItem(
-        flatten,
-        `${name}[${encodeURIComponent(nestedName)}]`,
-        value[nestedName]
-      )
+      encodeQueryItem(flatten, `${name}[${encodeURIComponent(nestedName)}]`, value[nestedName])
     );
   } else {
     flatten.push(name + '=' + encodeURIComponent(value));
@@ -62,9 +49,7 @@ const encodeQueryItem = (flatten, name, value) => {
 const generateQuery = query => {
   const flatten = [];
   if (query) {
-    Object.keys(query).forEach(name =>
-      encodeQueryItem(flatten, encodeURIComponent(name), query[name])
-    );
+    Object.keys(query).forEach(name => encodeQueryItem(flatten, encodeURIComponent(name), query[name]));
   }
   return flatten.join('&');
 };
@@ -107,19 +92,9 @@ const encodeBody = (body, method, encodeAsMultipart) => {
   }
 };
 
-let requestAbortController =
-  canUseDOM && 'AbortController' in window
-    ? new window.AbortController()
-    : null;
+let requestAbortController = canUseDOM && 'AbortController' in window ? new window.AbortController() : null;
 
-export const createRequest = (
-  endpoint,
-  query = {},
-  method,
-  headers,
-  body,
-  uploadFiles
-) =>
+export const createRequest = (endpoint, query = {}, method, headers, body, uploadFiles) =>
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
     method,
     headers,
@@ -131,16 +106,11 @@ export const abortAllPendingRequests = () => {
   if (requestAbortController) {
     requestAbortController.abort();
   }
-  requestAbortController =
-    canUseDOM && 'AbortController' in window
-      ? new window.AbortController()
-      : null;
+  requestAbortController = canUseDOM && 'AbortController' in window ? new window.AbortController() : null;
 };
 
 export const getHeaders = (headers, accessToken, skipContentType) => {
-  const usedHeaders = skipContentType
-    ? headers
-    : { 'Content-Type': 'application/json', ...headers };
+  const usedHeaders = skipContentType ? headers : { 'Content-Type': 'application/json', ...headers };
   if (accessToken) {
     return {
       Authorization: `Bearer ${accessToken}`,
@@ -174,17 +144,10 @@ export const createApiCallPromise = (
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {
       canUseDOM && dispatch(completedFetchOperation());
-      if (
-        res.status === 401 &&
-        !isTokenValid(decode(accessToken)) &&
-        dispatch
-      ) {
+      if (res.status === 401 && !isTokenValid(decode(accessToken)) && dispatch) {
         dispatch(logout('/'));
         dispatch(
-          addNotification(
-            'Your session expired and you were automatically logged out of the ReCodEx system.',
-            false
-          )
+          addNotification('Your session expired and you were automatically logged out of the ReCodEx system.', false)
         );
         return Promise.reject(res);
       }
@@ -206,12 +169,7 @@ export const createApiCallPromise = (
 const detectUnreachableServer = (err, dispatch) => {
   canUseDOM && dispatch(completedFetchOperation());
   if (err.message && err.message === 'Failed to fetch') {
-    dispatch(
-      addNotification(
-        'The API server is unreachable. Please check your Internet connection.',
-        false
-      )
-    );
+    dispatch(addNotification('The API server is unreachable. Please check your Internet connection.', false));
   } else {
     throw err;
   }

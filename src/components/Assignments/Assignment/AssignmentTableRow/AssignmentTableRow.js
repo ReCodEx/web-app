@@ -7,12 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
-import {
-  EditIcon,
-  ResultsIcon,
-  MaybeBonusAssignmentIcon,
-  MaybeVisibleAssignmentIcon,
-} from '../../../icons';
+import { EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisibleAssignmentIcon } from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
 import DateTime from '../../../widgets/DateTime';
@@ -55,11 +50,7 @@ const AssignmentTableRow = ({
   <tr>
     <td className="text-nowrap shrink-col">
       {isAdmin ? (
-        <MaybeVisibleAssignmentIcon
-          id={id}
-          isPublic={isPublic}
-          visibleFrom={visibleFrom}
-        />
+        <MaybeVisibleAssignmentIcon id={id} isPublic={isPublic} visibleFrom={visibleFrom} />
       ) : (
         <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
       )}
@@ -68,12 +59,7 @@ const AssignmentTableRow = ({
 
     {showNames && (
       <td>
-        <Link
-          to={
-            userId
-              ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId)
-              : ASSIGNMENT_DETAIL_URI_FACTORY(id)
-          }>
+        <Link to={userId ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId) : ASSIGNMENT_DETAIL_URI_FACTORY(id)}>
           <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
         </Link>
       </td>
@@ -100,12 +86,8 @@ const AssignmentTableRow = ({
         {stats.points && stats.points.gained !== null ? (
           <span>
             {stats.points.gained}
-            {stats.points.bonus > 0 && (
-              <span style={{ color: 'green' }}>+{stats.points.bonus}</span>
-            )}
-            {stats.points.bonus < 0 && (
-              <span style={{ color: 'red' }}>{stats.points.bonus}</span>
-            )}
+            {stats.points.bonus > 0 && <span style={{ color: 'green' }}>+{stats.points.bonus}</span>}
+            {stats.points.bonus < 0 && <span style={{ color: 'red' }}>{stats.points.bonus}</span>}
           </span>
         ) : null}
       </td>
@@ -113,18 +95,11 @@ const AssignmentTableRow = ({
     <td className="text-nowrap">
       <DateTime unixts={firstDeadline} isDeadline />
     </td>
-    <td className="text-center text-nowrap shrink-col">
-      {maxPointsBeforeFirstDeadline}
-    </td>
+    <td className="text-center text-nowrap shrink-col">{maxPointsBeforeFirstDeadline}</td>
     <td className="text-nowrap">
-      <DateTime
-        unixts={allowSecondDeadline ? secondDeadline : null}
-        isDeadline
-      />
+      <DateTime unixts={allowSecondDeadline ? secondDeadline : null} isDeadline />
     </td>
-    <td className="text-center text-nowrap shrink-col">
-      {allowSecondDeadline ? maxPointsBeforeSecondDeadline : ''}
-    </td>
+    <td className="text-center text-nowrap shrink-col">{allowSecondDeadline ? maxPointsBeforeSecondDeadline : ''}</td>
     {isAdmin && (
       <td className="text-right">
         <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(id)}>

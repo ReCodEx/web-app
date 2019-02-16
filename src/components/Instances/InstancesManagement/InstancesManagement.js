@@ -8,27 +8,13 @@ import InstancesTable from '../InstancesTable';
 
 const InstancesManagement = ({ instances }) => (
   <Page
-    title={
-      <FormattedMessage id="app.instances.title" defaultMessage="Instances" />
-    }
-    description={
-      <FormattedMessage
-        id="app.instances.description"
-        defaultMessage="Management of all instances"
-      />
-    }
+    title={<FormattedMessage id="app.instances.title" defaultMessage="Instances" />}
+    description={<FormattedMessage id="app.instances.description" defaultMessage="Management of all instances" />}
     resource={instances.toArray()}>
     {(...instances) => (
       <Row>
         <Col lg={6}>
-          <Box
-            title={
-              <FormattedMessage
-                id="app.instances.listTitle"
-                defaultMessage="List of instances"
-              />
-            }
-            noPadding>
+          <Box title={<FormattedMessage id="app.instances.listTitle" defaultMessage="List of instances" />} noPadding>
             <InstancesTable instances={instances} />
           </Box>
         </Col>

@@ -20,14 +20,7 @@ export const statusTypes = {
  * Actions
  */
 
-export const createAccount = (
-  firstName,
-  lastName,
-  email,
-  password,
-  passwordConfirm,
-  instanceId
-) =>
+export const createAccount = (firstName, lastName, email, password, passwordConfirm, instanceId) =>
   createApiAction({
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
@@ -36,12 +29,7 @@ export const createAccount = (
     meta: { instanceId },
   });
 
-export const createExternalAccount = (
-  instanceId,
-  serviceId,
-  credentials,
-  authType = 'default'
-) =>
+export const createExternalAccount = (instanceId, serviceId, credentials, authType = 'default') =>
   createApiAction({
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
@@ -56,14 +44,11 @@ const initialState = fromJS({
 
 const reducer = handleActions(
   {
-    [actionTypes.CREATING_ACCOUNT_PENDING]: (state, action) =>
-      state.set('status', statusTypes.CREATING_ACCOUNT),
+    [actionTypes.CREATING_ACCOUNT_PENDING]: (state, action) => state.set('status', statusTypes.CREATING_ACCOUNT),
 
-    [actionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) =>
-      state.set('status', statusTypes.ACCOUNT_CREATED),
+    [actionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) => state.set('status', statusTypes.ACCOUNT_CREATED),
 
-    [actionTypes.CREATE_ACCOUNT_REJECTED]: (state, action) =>
-      state.set('status', statusTypes.ACCOUNT_CREATING_FAILED),
+    [actionTypes.CREATE_ACCOUNT_REJECTED]: (state, action) => state.set('status', statusTypes.ACCOUNT_CREATING_FAILED),
   },
   initialState
 );

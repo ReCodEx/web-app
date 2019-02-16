@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Well, Grid, Row, Col } from 'react-bootstrap';
-import {
-  FormattedMessage,
-  injectIntl,
-  defineMessages,
-  intlShape,
-} from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages, intlShape } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
@@ -172,8 +167,7 @@ class EditExerciseSimpleConfigTest extends Component {
           </Col>
         </Row>
         {this.state.compilationOpen === true ||
-        (this.state.compilationOpen === null &&
-          this.hasCompilationExtraFiles()) ? (
+        (this.state.compilationOpen === null && this.hasCompilationExtraFiles()) ? (
           <Well>
             <h4 className="compilation-close" onClick={this.compilationClose}>
               <Icon icon={['far', 'minus-square']} gapRight />
@@ -195,17 +189,12 @@ class EditExerciseSimpleConfigTest extends Component {
                     {exercise.runtimeEnvironments
                       .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                       .map(env => {
-                        const possibleEntryPoints = this.getPossibleEntryPoints(
-                          env.id
-                        );
+                        const possibleEntryPoints = this.getPossibleEntryPoints(env.id);
                         return (
                           <td key={env.id}>
                             {exercise.runtimeEnvironments.length > 1 && (
                               <h4>
-                                <EnvironmentsListItem
-                                  runtimeEnvironment={env}
-                                  longNames
-                                />
+                                <EnvironmentsListItem runtimeEnvironment={env} longNames />
                               </h4>
                             )}
 
@@ -215,12 +204,7 @@ class EditExerciseSimpleConfigTest extends Component {
                                   /*
                                    * A special case for Java only !!!
                                    */
-                                  <Col
-                                    lg={
-                                      exercise.runtimeEnvironments.length === 1
-                                        ? 6
-                                        : 12
-                                    }>
+                                  <Col lg={exercise.runtimeEnvironments.length === 1 ? 6 : 12}>
                                     <FieldArray
                                       name={`${test}.jar-files.${env.id}`}
                                       component={ExpandingSelectField}
@@ -238,8 +222,7 @@ class EditExerciseSimpleConfigTest extends Component {
                                         />
                                       }
                                     />
-                                    {exercise.runtimeEnvironments.length !==
-                                      1 && <hr />}
+                                    {exercise.runtimeEnvironments.length !== 1 && <hr />}
                                   </Col>
                                 )
                                 /*
@@ -247,13 +230,7 @@ class EditExerciseSimpleConfigTest extends Component {
                                  */
                                 }
 
-                                <Col
-                                  lg={
-                                    exercise.runtimeEnvironments.length === 1 &&
-                                    env.id === 'java'
-                                      ? 6
-                                      : 12
-                                  }>
+                                <Col lg={exercise.runtimeEnvironments.length === 1 && env.id === 'java' ? 6 : 12}>
                                   <FieldArray
                                     name={`${test}.extra-files.${env.id}`}
                                     component={ExpandingInputFilesField}
@@ -283,9 +260,7 @@ class EditExerciseSimpleConfigTest extends Component {
                                     <Field
                                       name={`${test}.entry-point.${env.id}`}
                                       component={SelectField}
-                                      options={this.getPossibleEntryPoints(
-                                        env.id
-                                      )}
+                                      options={this.getPossibleEntryPoints(env.id)}
                                       addEmptyOption={true}
                                       label={
                                         <FormattedMessage
@@ -316,11 +291,7 @@ class EditExerciseSimpleConfigTest extends Component {
                       defaultMessage="Do you really wish to overwrite compilation and execution configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }>
-                  <Button
-                    bsStyle="primary"
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle="primary" className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillCompilation"
@@ -332,9 +303,7 @@ class EditExerciseSimpleConfigTest extends Component {
             )}
           </Well>
         ) : (
-          <div
-            className="text-muted compilation-open"
-            onClick={this.compilationOpen}>
+          <div className="text-muted compilation-open" onClick={this.compilationOpen}>
             <Icon icon={['far', 'plus-square']} gapRight />
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.compilationTitle"
@@ -345,10 +314,7 @@ class EditExerciseSimpleConfigTest extends Component {
         <Row>
           <Col md={6} lg={3}>
             <h4>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.inputTitle"
-                defaultMessage="Input"
-              />
+              <FormattedMessage id="app.editExerciseSimpleConfigTests.inputTitle" defaultMessage="Input" />
             </h4>
             <FieldArray
               name={`${test}.input-files`}
@@ -362,10 +328,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }
               rightLabel={
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigTests.inputFilesRename"
-                  defaultMessage="Rename as:"
-                />
+                <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesRename" defaultMessage="Rename as:" />
               }
             />
             <Field
@@ -373,12 +336,7 @@ class EditExerciseSimpleConfigTest extends Component {
               component={SelectField}
               options={supplementaryFilesOptions}
               addEmptyOption={true}
-              label={
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigTests.inputStdin"
-                  defaultMessage="Stdin:"
-                />
-              }
+              label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Stdin:" />}
             />
             {Boolean(smartFill) && (
               <div className="smart-fill-tinybar">
@@ -391,11 +349,7 @@ class EditExerciseSimpleConfigTest extends Component {
                       defaultMessage="Do you really wish to overwrite input configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }>
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillInput"
@@ -408,10 +362,7 @@ class EditExerciseSimpleConfigTest extends Component {
           </Col>
           <Col md={6} lg={3}>
             <h4>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.cmdlineTitle"
-                defaultMessage="Command Line"
-              />
+              <FormattedMessage id="app.editExerciseSimpleConfigTests.cmdlineTitle" defaultMessage="Command Line" />
             </h4>
             <FieldArray
               name={`${test}.run-args`}
@@ -435,11 +386,7 @@ class EditExerciseSimpleConfigTest extends Component {
                       defaultMessage="Do you really wish to overwrite command line configuration of all subsequent tests using the first test as a template?"
                     />
                   }>
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillArgs"
@@ -452,10 +399,7 @@ class EditExerciseSimpleConfigTest extends Component {
           </Col>
           <Col md={6} lg={3}>
             <h4>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.outputTitle"
-                defaultMessage="Output"
-              />
+              <FormattedMessage id="app.editExerciseSimpleConfigTests.outputTitle" defaultMessage="Output" />
             </h4>
             <Field
               name={`${test}.useOutFile`}
@@ -475,10 +419,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 validate={validateOutputFile}
                 maxLength={64}
                 label={
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigTests.outputFile"
-                    defaultMessage="Output file:"
-                  />
+                  <FormattedMessage id="app.editExerciseSimpleConfigTests.outputFile" defaultMessage="Output file:" />
                 }
               />
             )}
@@ -506,11 +447,7 @@ class EditExerciseSimpleConfigTest extends Component {
                       defaultMessage="Do you really wish to overwrite output configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }>
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillOutput"
@@ -523,10 +460,7 @@ class EditExerciseSimpleConfigTest extends Component {
           </Col>
           <Col md={6} lg={3}>
             <h4>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.judgeTitle"
-                defaultMessage="Judge"
-              />
+              <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeTitle" defaultMessage="Judge" />
             </h4>
             <Field
               name={`${test}.useCustomJudge`}
@@ -595,12 +529,7 @@ class EditExerciseSimpleConfigTest extends Component {
                     name: intl.formatMessage(messages.diff),
                   },
                 ]}
-                label={
-                  <FormattedMessage
-                    id="app.editExerciseSimpleConfigTests.judgeType"
-                    defaultMessage="Judge:"
-                  />
-                }
+                label={<FormattedMessage id="app.editExerciseSimpleConfigTests.judgeType" defaultMessage="Judge:" />}
               />
             )}
             {useCustomJudge && (
@@ -627,11 +556,7 @@ class EditExerciseSimpleConfigTest extends Component {
                       defaultMessage="Do you really wish to overwrite judge configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }>
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillJudge"
@@ -654,15 +579,9 @@ class EditExerciseSimpleConfigTest extends Component {
                   defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                 />
               }>
-              <Button
-                bsStyle={'primary'}
-                className="btn-flat"
-                disabled={Boolean(testErrors)}>
+              <Button bsStyle={'primary'} className="btn-flat" disabled={Boolean(testErrors)}>
                 <Icon icon="arrows-alt" gapRight />
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.smartFillAll"
-                  defaultMessage="Smart Fill All"
-                />
+                <FormattedMessage id="app.editExerciseConfigForm.smartFillAll" defaultMessage="Smart Fill All" />
               </Button>
             </Confirm>
           </div>

@@ -7,10 +7,7 @@ import Icon from '../../icons';
 const RemoveSupervisorButton = ({ onClick, ...props }) => (
   <Button {...props} onClick={onClick} bsStyle="warning" className="btn-flat">
     <Icon icon="user-times" gapRight />
-    <FormattedMessage
-      id="app.groups.removeSupervisorButton"
-      defaultMessage="Remove supervisor"
-    />
+    <FormattedMessage id="app.groups.removeSupervisorButton" defaultMessage="Remove supervisor" />
   </Button>
 );
 

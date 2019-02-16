@@ -10,8 +10,7 @@ import { fetchInstanceLincences } from '../../redux/modules/licences';
 import { getLicencesOfInstance } from '../../redux/selectors/licences';
 
 class LicencesTableContainer extends Component {
-  static loadAsync = ({ instanceId }, dispatch) =>
-    dispatch(fetchInstanceLincences(instanceId));
+  static loadAsync = ({ instanceId }, dispatch) => dispatch(fetchInstanceLincences(instanceId));
 
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = newProps => {
@@ -41,7 +40,6 @@ export default connect(
     licences: getLicencesOfInstance(instance.id)(state),
   }),
   (dispatch, { instance }) => ({
-    loadAsync: () =>
-      LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch),
+    loadAsync: () => LicencesTableContainer.loadAsync({ instanceId: instance.id }, dispatch),
   })
 )(LicencesTableContainer);

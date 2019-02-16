@@ -8,15 +8,7 @@ import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';
 
-const SupplementaryFilesTableRow = ({
-  id,
-  name,
-  size,
-  uploadedAt,
-  downloadFile,
-  removeFile,
-  viewOnly,
-}) => (
+const SupplementaryFilesTableRow = ({ id, name, size, uploadedAt, downloadFile, removeFile, viewOnly }) => (
   <tr>
     <td>
       {downloadFile ? (

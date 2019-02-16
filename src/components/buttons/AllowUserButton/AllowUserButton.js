@@ -5,14 +5,7 @@ import Button from '../../widgets/FlatButton';
 import { LoadingIcon, LockIcon, UnlockIcon } from '../../icons';
 import Confirm from '../../forms/Confirm';
 
-const AllowUserButton = ({
-  id,
-  isAllowed,
-  pending = false,
-  setIsAllowed,
-  disabled = false,
-  ...props
-}) => (
+const AllowUserButton = ({ id, isAllowed, pending = false, setIsAllowed, disabled = false, ...props }) => (
   <Confirm
     id={`allow-${id}`}
     onConfirmed={() => setIsAllowed(!isAllowed)}
@@ -29,17 +22,8 @@ const AllowUserButton = ({
         />
       )
     }>
-    <Button
-      disabled={disabled || pending || pending === null}
-      bsStyle={isAllowed ? 'danger' : 'success'}
-      {...props}>
-      {pending ? (
-        <LoadingIcon gapRight />
-      ) : isAllowed ? (
-        <LockIcon gapRight />
-      ) : (
-        <UnlockIcon gapRight />
-      )}
+    <Button disabled={disabled || pending || pending === null} bsStyle={isAllowed ? 'danger' : 'success'} {...props}>
+      {pending ? <LoadingIcon gapRight /> : isAllowed ? <LockIcon gapRight /> : <UnlockIcon gapRight />}
       {isAllowed ? (
         <FormattedMessage id="generic.disable" defaultMessage="Disable" />
       ) : (

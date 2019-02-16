@@ -6,17 +6,8 @@ import DeleteButton from '../../components/buttons/DeleteButton';
 import { deleteShadowAssignment } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 
-const DeleteShadowAssignmentButtonContainer = ({
-  shadowAssignment,
-  deleteShadowAssignment,
-  onDeleted,
-  ...props
-}) => (
-  <DeleteButton
-    {...props}
-    resource={shadowAssignment}
-    deleteResource={deleteShadowAssignment}
-  />
+const DeleteShadowAssignmentButtonContainer = ({ shadowAssignment, deleteShadowAssignment, onDeleted, ...props }) => (
+  <DeleteButton {...props} resource={shadowAssignment} deleteResource={deleteShadowAssignment} />
 );
 
 DeleteShadowAssignmentButtonContainer.propTypes = {
@@ -31,7 +22,6 @@ export default connect(
     shadowAssignment: getShadowAssignment(state)(id),
   }),
   (dispatch, { id, onDeleted }) => ({
-    deleteShadowAssignment: () =>
-      dispatch(deleteShadowAssignment(id)).then(() => onDeleted && onDeleted()),
+    deleteShadowAssignment: () => dispatch(deleteShadowAssignment(id)).then(() => onDeleted && onDeleted()),
   })
 )(DeleteShadowAssignmentButtonContainer);

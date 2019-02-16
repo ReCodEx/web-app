@@ -46,10 +46,7 @@ const PipelineDetail = ({
             <Icon icon={['far', 'file-alt']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.pipeline.description"
-              defaultMessage="Pipeline overview:"
-            />
+            <FormattedMessage id="app.pipeline.description" defaultMessage="Pipeline overview:" />
           </th>
           <td>
             <Markdown source={description} />
@@ -61,10 +58,7 @@ const PipelineDetail = ({
             <Icon icon="puzzle-piece" />
           </td>
           <th>
-            <FormattedMessage
-              id="app.pipeline.exercises"
-              defaultMessage="Exercises:"
-            />
+            <FormattedMessage id="app.pipeline.exercises" defaultMessage="Exercises:" />
           </th>
           <td>
             {exercisesIds.length !== 0 ? (
@@ -75,10 +69,7 @@ const PipelineDetail = ({
               ))
             ) : (
               <i>
-                <FormattedMessage
-                  id="app.pipeline.publicExercise"
-                  defaultMessage="Public"
-                />
+                <FormattedMessage id="app.pipeline.publicExercise" defaultMessage="Public" />
               </i>
             )}
           </td>
@@ -89,11 +80,7 @@ const PipelineDetail = ({
             <CodeIcon />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.pipeline.runtimes"
-              defaultMessage="Runtime environments"
-            />
-            :
+            <FormattedMessage id="app.pipeline.runtimes" defaultMessage="Runtime environments" />:
           </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
@@ -105,11 +92,7 @@ const PipelineDetail = ({
             <Icon icon="stream" />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.pipeline.parameters"
-              defaultMessage="Parameters"
-            />
-            :
+            <FormattedMessage id="app.pipeline.parameters" defaultMessage="Parameters" />:
           </th>
           <td>
             <ParametersList parameters={parameters} />
@@ -121,11 +104,7 @@ const PipelineDetail = ({
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
-            <FormattedMessage
-              id="app.pipeline.createdAt"
-              defaultMessage="Created at"
-            />
-            :
+            <FormattedMessage id="app.pipeline.createdAt" defaultMessage="Created at" />:
           </th>
           <td>
             <DateTime unixts={createdAt} showRelative />
@@ -137,17 +116,10 @@ const PipelineDetail = ({
             <Icon icon={['far', 'copy']} />
           </td>
           <th>
-            <FormattedMessage
-              id="app.pipeline.version"
-              defaultMessage="Version:"
-            />
+            <FormattedMessage id="app.pipeline.version" defaultMessage="Version:" />
           </th>
           <td>
-            <Version
-              version={version}
-              createdAt={createdAt}
-              updatedAt={updatedAt}
-            />
+            <Version version={version} createdAt={createdAt} updatedAt={updatedAt} />
           </td>
         </tr>
       </tbody>

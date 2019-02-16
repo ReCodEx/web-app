@@ -23,13 +23,7 @@ const ExpandingTextField = ({
         {fields.map((field, index) => (
           <tr key={index}>
             <td width="100%" className="valign-top">
-              <Field
-                name={field}
-                component={TextField}
-                label={''}
-                validate={validateEach}
-                {...props}
-              />
+              <Field name={field} component={TextField} label={''} validate={validateEach} {...props} />
             </td>
             <td className="valign-top">
               <OverlayTrigger
@@ -72,10 +66,7 @@ const ExpandingTextField = ({
       {fields.length === 0 && (
         <span style={{ paddingRight: '2em' }}>
           {noItems || (
-            <FormattedMessage
-              id="app.expandingTextField.noItems"
-              defaultMessage="There are no items yet..."
-            />
+            <FormattedMessage id="app.expandingTextField.noItems" defaultMessage="There are no items yet..." />
           )}
         </span>
       )}
@@ -83,10 +74,7 @@ const ExpandingTextField = ({
         placement="right"
         overlay={
           <Tooltip id={Date.now()}>
-            <FormattedMessage
-              id="app.expandingTextField.tooltip.add"
-              defaultMessage="Append a new item."
-            />
+            <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
           </Tooltip>
         }>
         <FlatButton onClick={() => fields.push('')}>

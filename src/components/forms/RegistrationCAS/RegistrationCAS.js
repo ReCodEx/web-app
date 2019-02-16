@@ -33,12 +33,7 @@ class RegistrationCAS extends Component {
     const { instances } = this.props;
     return (
       <Box
-        title={
-          <FormattedMessage
-            id="app.cas.registration.title"
-            defaultMessage="Register Account Bound to CAS"
-          />
-        }
+        title={<FormattedMessage id="app.cas.registration.title" defaultMessage="Register Account Bound to CAS" />}
         footer={
           <div className="text-center">
             <AuthenticationButtonContainer
@@ -67,15 +62,9 @@ class RegistrationCAS extends Component {
 
           {/* We are NOT creating a redux-form here, so we build FormControl manually (instead of using SelectField). */}
           <ControlLabel>
-            <FormattedMessage
-              id="app.externalRegistrationForm.instance"
-              defaultMessage="Instance:"
-            />
+            <FormattedMessage id="app.externalRegistrationForm.instance" defaultMessage="Instance:" />
           </ControlLabel>
-          <FormControl
-            componentClass="select"
-            bsClass="form-control full-width"
-            onChange={this.changeInstance}>
+          <FormControl componentClass="select" bsClass="form-control full-width" onChange={this.changeInstance}>
             {instances.map(({ id, name }) => (
               <option key={id} value={id}>
                 {name}

@@ -6,10 +6,7 @@ import { connect } from 'react-redux';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { getUser, loggedInUserSelector } from '../../redux/selectors/users';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import UsersName, {
-  LoadingUsersName,
-  FailedUsersName,
-} from '../../components/Users/UsersName';
+import UsersName, { LoadingUsersName, FailedUsersName } from '../../components/Users/UsersName';
 import { LoadingIcon, FailureIcon } from '../../components/icons';
 
 import './UsersNameContainer.css';
@@ -30,14 +27,7 @@ class UsersNameContainer extends Component {
   };
 
   render() {
-    const {
-      user,
-      large,
-      noLink,
-      currentUser,
-      isSimple = false,
-      showEmail = null,
-    } = this.props;
+    const { user, large, noLink, currentUser, isSimple = false, showEmail = null } = this.props;
     const size = large ? 45 : 20;
     return (
       <ResourceRenderer

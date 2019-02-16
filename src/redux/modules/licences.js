@@ -25,10 +25,7 @@ export const addLicence = (instanceId, body) =>
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     // the default behavior must be overriden - different indexing
-    [actionTypes.ADD_PENDING]: (
-      state,
-      { payload, meta: { tmpId: instanceId } }
-    ) =>
+    [actionTypes.ADD_PENDING]: (state, { payload, meta: { tmpId: instanceId } }) =>
       state.updateIn(['resources', instanceId, 'data'], licences =>
         licences.push(fromJS({ id: instanceId, ...payload }))
       ),
@@ -38,14 +35,9 @@ const reducer = handleActions(
         licences.filter(licence => licence.get('id') !== instanceId)
       ),
 
-    [actionTypes.ADD_FULFILLED]: (
-      state,
-      { payload, meta: { tmpId: instanceId } }
-    ) =>
+    [actionTypes.ADD_FULFILLED]: (state, { payload, meta: { tmpId: instanceId } }) =>
       state.updateIn(['resources', instanceId, 'data'], licences =>
-        licences
-          .filter(licence => licence.get('id') !== instanceId)
-          .push(fromJS(payload))
+        licences.filter(licence => licence.get('id') !== instanceId).push(fromJS(payload))
       ),
   }),
   initialState

@@ -7,10 +7,7 @@ import Icon from '../../icons';
 const RemoveGroupAdminButton = ({ onClick, ...props }) => (
   <Button {...props} onClick={onClick} bsStyle="danger" className="btn-flat">
     <Icon icon="user-secret" gapRight />
-    <FormattedMessage
-      id="app.groups.removeGroupAdminButton"
-      defaultMessage="Remove group admin"
-    />
+    <FormattedMessage id="app.groups.removeGroupAdminButton" defaultMessage="Remove group admin" />
   </Button>
 );
 

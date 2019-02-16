@@ -51,10 +51,7 @@ class ChangePassword extends Component {
         let token = window.location.hash.substr(1);
         let decodedToken = decode(token);
 
-        if (
-          !isTokenValid(decodedToken) ||
-          !isInScope(decodedToken, 'change-password')
-        ) {
+        if (!isTokenValid(decodedToken) || !isInScope(decodedToken, 'change-password')) {
           token = null;
           decodedToken = null;
         }
@@ -105,12 +102,7 @@ class ChangePassword extends Component {
 
     return (
       <PageContent
-        title={
-          <FormattedMessage
-            id="app.changePassword.title"
-            defaultMessage="Change forgotten password"
-          />
-        }
+        title={<FormattedMessage id="app.changePassword.title" defaultMessage="Change forgotten password" />}
         description={
           <FormattedMessage
             id="app.changePassword.description"
@@ -153,10 +145,7 @@ class ChangePassword extends Component {
                   hasSucceeded={hasSucceeded}
                 />
                 <p>
-                  <FormattedMessage
-                    id="app.changePassword.tokenExpiresIn"
-                    defaultMessage="Token expires: "
-                  />{' '}
+                  <FormattedMessage id="app.changePassword.tokenExpiresIn" defaultMessage="Token expires: " />{' '}
                   <FormattedRelative value={decodedToken.exp * 1000} />
                 </p>
               </div>
@@ -186,8 +175,7 @@ export default withLinks(
       hasSucceeded: hasSucceeded(state),
     }),
     dispatch => ({
-      changePassword: (password, accessToken) =>
-        dispatch(changePassword(password, accessToken)),
+      changePassword: (password, accessToken) => dispatch(changePassword(password, accessToken)),
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('changePassword')),
     })

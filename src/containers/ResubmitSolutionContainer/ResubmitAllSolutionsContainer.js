@@ -6,18 +6,8 @@ import { ResubmitAllSolutions } from '../../components/buttons/ResubmitSolution'
 import { resubmitAllSolutions } from '../../redux/modules/solutions';
 import { isResubmitAllPending } from '../../redux/selectors/assignments';
 
-const ResubmitAllSolutionsContainer = ({
-  assignmentId,
-  resubmit,
-  isResubmitting,
-}) => {
-  return (
-    <ResubmitAllSolutions
-      id={assignmentId}
-      resubmit={resubmit}
-      isResubmitting={isResubmitting}
-    />
-  );
+const ResubmitAllSolutionsContainer = ({ assignmentId, resubmit, isResubmitting }) => {
+  return <ResubmitAllSolutions id={assignmentId} resubmit={resubmit} isResubmitting={isResubmitting} />;
 };
 
 ResubmitAllSolutionsContainer.propTypes = {

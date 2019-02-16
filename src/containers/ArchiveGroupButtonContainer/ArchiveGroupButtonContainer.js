@@ -5,23 +5,14 @@ import { connect } from 'react-redux';
 
 import ArchiveGroupButton from '../../components/buttons/ArchiveGroupButton';
 import { setArchived } from '../../redux/modules/groups';
-import {
-  groupSelector,
-  groupArchivedPendingChange,
-} from '../../redux/selectors/groups';
+import { groupSelector, groupArchivedPendingChange } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { identity } from '../../helpers/common';
 
 class ArchiveGroupButtonContainer extends Component {
   render() {
-    const {
-      group,
-      pending,
-      setArchived,
-      bsSize = undefined,
-      ...props
-    } = this.props;
+    const { group, pending, setArchived, bsSize = undefined, ...props } = this.props;
     return (
       <ResourceRenderer resource={group}>
         {({ directlyArchived, permissionHints }) =>

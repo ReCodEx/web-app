@@ -26,13 +26,7 @@ const submitHandler = defaultMemoize((rolesFilter, setFilters) => search => {
   return setFilters(filters);
 });
 
-const AddUserContainer = ({
-  id,
-  filters,
-  createActions,
-  user,
-  rolesFilter = null,
-}) => (
+const AddUserContainer = ({ id, filters, createActions, user, rolesFilter = null }) => (
   <ResourceRenderer resource={user}>
     {user => (
       <PaginationContainer
@@ -57,13 +51,7 @@ const AddUserContainer = ({
           />
         )}>
         {({ data }) => {
-          return (
-            <UsersList
-              users={data}
-              loggedUserId={user.id}
-              createActions={createActions}
-            />
-          );
+          return <UsersList users={data} loggedUserId={user.id} createActions={createActions} />;
         }}
       </PaginationContainer>
     )}

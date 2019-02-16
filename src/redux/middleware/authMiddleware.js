@@ -11,17 +11,13 @@ import { changeLanguage } from '../../links';
 import { safeGet } from '../../helpers/common';
 import { getConfigVar } from '../helpers/api/tools';
 
-const PERSISTENT_TOKENS_KEY_PREFIX =
-  getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
+const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 
-export const TOKEN_LOCAL_STORAGE_KEY =
-  PERSISTENT_TOKENS_KEY_PREFIX + '/accessToken';
+export const TOKEN_LOCAL_STORAGE_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '/accessToken';
 export const TOKEN_COOKIES_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '_accessToken';
 
-export const INSTANCEID_LOCAL_STORAGE_KEY =
-  PERSISTENT_TOKENS_KEY_PREFIX + '/instanceId';
-export const INSTANCEID_COOKIES_KEY =
-  PERSISTENT_TOKENS_KEY_PREFIX + '_instanceId';
+export const INSTANCEID_LOCAL_STORAGE_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '/instanceId';
+export const INSTANCEID_COOKIES_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '_instanceId';
 
 /**
  * Store security token to both local storage and cookies.
@@ -133,21 +129,10 @@ const middleware = store => next => action => {
     case actionTypes.LOGIN_SUCCESS:
     case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
       storeToken(action.payload.accessToken);
-      storeInstanceId(
-        safeGet(
-          action,
-          ['meta', 'instanceId'],
-          action.payload.user.privateData.instancesIds[0]
-        )
-      );
+      storeInstanceId(safeGet(action, ['meta', 'instanceId'], action.payload.user.privateData.instancesIds[0]));
       if (typeof window !== 'undefined') {
         store.dispatch(
-          push(
-            changeLanguage(
-              window.location.pathname,
-              action.payload.user.privateData.settings.defaultLanguage
-            )
-          )
+          push(changeLanguage(window.location.pathname, action.payload.user.privateData.settings.defaultLanguage))
         );
       }
       break;

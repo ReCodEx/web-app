@@ -1,10 +1,6 @@
 import { handleActions } from 'redux-actions';
 
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { downloadHelper } from '../helpers/api/download';
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
 import { arrayToObject } from '../../helpers/common';
@@ -12,8 +8,7 @@ import { arrayToObject } from '../../helpers/common';
 const resourceName = 'referenceSolutionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: evaluationId =>
-    `/reference-solutions/evaluation/${evaluationId}`,
+  apiEndpointFactory: evaluationId => `/reference-solutions/evaluation/${evaluationId}`,
 });
 
 /**
@@ -27,8 +22,7 @@ export const additionalActionTypes = {
 };
 
 export const fetchReferenceSolutionEvaluation = actions.fetchResource;
-export const fetchReferenceSolutionEvaluationIfNeeded =
-  actions.fetchOneIfNeeded;
+export const fetchReferenceSolutionEvaluationIfNeeded = actions.fetchOneIfNeeded;
 export const deleteReferenceSolutionEvaluation = (solutionId, evaluationId) => {
   const action = actions.removeResource(evaluationId);
   action.request.meta.solutionId = solutionId;

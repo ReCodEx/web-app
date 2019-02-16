@@ -4,22 +4,13 @@ import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
-import {
-  resubmitSolution,
-  fetchUsersSolutions,
-} from '../../redux/modules/solutions';
-import {
-  isProcessing,
-  getMonitorParams,
-  getSubmittedSolutionId,
-} from '../../redux/selectors/submission';
+import { resubmitSolution, fetchUsersSolutions } from '../../redux/modules/solutions';
+import { isProcessing, getMonitorParams, getSubmittedSolutionId } from '../../redux/selectors/submission';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 
-const getResubmitObserverId = defaultMemoize(
-  (id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id
-);
+const getResubmitObserverId = defaultMemoize((id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id);
 
 class ResubmitSolutionContainer extends Component {
   isMeTheObserver = () => {
@@ -28,15 +19,7 @@ class ResubmitSolutionContainer extends Component {
   };
 
   render() {
-    const {
-      id,
-      userId,
-      resubmit,
-      monitor,
-      isProcessing,
-      fetchSubmissions,
-      isDebug = true,
-    } = this.props;
+    const { id, userId, resubmit, monitor, isProcessing, fetchSubmissions, isDebug = true } = this.props;
 
     return (
       <span>
@@ -76,12 +59,8 @@ const mapStateToProps = state => ({
   progressObserverId: getProgressObserverId(state),
 });
 
-const mapDispatchToProps = (
-  dispatch,
-  { id, isPrivate = false, assignmentId }
-) => ({
-  resubmit: (progressObserverId, isDebug) =>
-    dispatch(resubmitSolution(id, isPrivate, progressObserverId, isDebug)),
+const mapDispatchToProps = (dispatch, { id, isPrivate = false, assignmentId }) => ({
+  resubmit: (progressObserverId, isDebug) => dispatch(resubmitSolution(id, isPrivate, progressObserverId, isDebug)),
   fetchSubmissions: userId =>
     Promise.all([
       dispatch(fetchSubmissionEvaluationsForSolution(id)),

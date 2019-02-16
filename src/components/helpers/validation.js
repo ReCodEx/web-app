@@ -3,19 +3,13 @@ import { defineMessages } from 'react-intl';
 import isNumeric from 'validator/lib/isNumeric';
 
 export const isPositiveInteger = n =>
-  typeof n !== 'undefined' &&
-  (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) > 0;
+  typeof n !== 'undefined' && (typeof n === 'number' || isNumeric(n)) && parseInt(n) > 0;
 
 export const isNegativeInteger = n =>
-  typeof n !== 'undefined' &&
-  (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) < 0;
+  typeof n !== 'undefined' && (typeof n === 'number' || isNumeric(n)) && parseInt(n) < 0;
 
 export const isNonNegativeInteger = n =>
-  typeof n !== 'undefined' &&
-  (typeof n === 'number' || isNumeric(n)) &&
-  parseInt(n) >= 0;
+  typeof n !== 'undefined' && (typeof n === 'number' || isNumeric(n)) && parseInt(n) >= 0;
 
 /*
  * Deadline Validators
@@ -90,12 +84,7 @@ export const validateTwoDeadlines = (
   validateDeadline(errors, formatMessage, firstDeadline, firstDeadlineErrorKey);
 
   if (allowSecondDeadline) {
-    validateDeadline(
-      errors,
-      formatMessage,
-      secondDeadline,
-      secondDeadlineErrorKey
-    );
+    validateDeadline(errors, formatMessage, secondDeadline, secondDeadlineErrorKey);
 
     if (
       !errors[firstDeadlineErrorKey] &&
@@ -103,12 +92,9 @@ export const validateTwoDeadlines = (
       !firstDeadline.isSameOrBefore(secondDeadline) &&
       !firstDeadline.isSameOrBefore(secondDeadline, 'hour')
     ) {
-      errors[secondDeadlineErrorKey] = formatMessage(
-        messages.secondDeadlineBeforeFirstDeadline,
-        {
-          firstDeadline,
-        }
-      );
+      errors[secondDeadlineErrorKey] = formatMessage(messages.secondDeadlineBeforeFirstDeadline, {
+        firstDeadline,
+      });
     }
   }
 };

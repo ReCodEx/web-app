@@ -7,20 +7,9 @@ import { FormattedMessage } from 'react-intl';
 const PortsField = ({ label, prefix, ports }) => (
   <div>
     <h4>{label}</h4>
-    {ports.length === 0 && (
-      <FormattedMessage
-        id="app.portsField.empty"
-        defaultMessage="There are no ports."
-      />
-    )}
+    {ports.length === 0 && <FormattedMessage id="app.portsField.empty" defaultMessage="There are no ports." />}
     {ports.map(({ name, type, value }) => (
-      <Field
-        key={name}
-        name={`${prefix}.${name}.value`}
-        component={PortField}
-        label={name}
-        portType={type}
-      />
+      <Field key={name} name={`${prefix}.${name}.value`} component={PortField} label={name} portType={type} />
     ))}
   </div>
 );

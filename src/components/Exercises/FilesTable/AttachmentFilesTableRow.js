@@ -9,14 +9,7 @@ import DateTime from '../../widgets/DateTime';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';
 
-const AttachmentFilesTableRow = ({
-  id,
-  name,
-  size,
-  uploadedAt,
-  removeFile,
-  links: { DOWNLOAD },
-}) => (
+const AttachmentFilesTableRow = ({ id, name, size, uploadedAt, removeFile, links: { DOWNLOAD } }) => (
   <tr>
     <td>{name}</td>
     <td>

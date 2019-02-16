@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
-import Icon, {
-  SuccessIcon,
-  SuccessOrFailureIcon,
-  CodeIcon,
-  VisibleIcon,
-} from '../../../icons';
+import Icon, { SuccessIcon, SuccessOrFailureIcon, CodeIcon, VisibleIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import DateTime from '../../../widgets/DateTime';
@@ -32,11 +27,7 @@ const AssignmentDetails = ({
   permissionHints,
   isStudent,
 }) => (
-  <Box
-    title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
-    noPadding
-    collapsable
-    isOpen={isOpen}>
+  <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding collapsable isOpen={isOpen}>
     <Table responsive condensed>
       <tbody>
         {permissionHints.update && (
@@ -45,42 +36,27 @@ const AssignmentDetails = ({
               <VisibleIcon />
             </td>
             <th>
-              <FormattedMessage
-                id="app.assignment.visible"
-                defaultMessage="Visible"
-              />
-              :
+              <FormattedMessage id="app.assignment.visible" defaultMessage="Visible" />:
             </th>
             <td>
-              <SuccessOrFailureIcon
-                success={
-                  isPublic && (!visibleFrom || visibleFrom * 1000 <= Date.now())
-                }
-              />
+              <SuccessOrFailureIcon success={isPublic && (!visibleFrom || visibleFrom * 1000 <= Date.now())} />
             </td>
           </tr>
         )}
 
-        {permissionHints.update &&
-          isPublic &&
-          visibleFrom &&
-          visibleFrom * 1000 > Date.now() && (
-            <tr>
-              <td className="text-center shrink-col em-padding-left em-padding-right">
-                <Icon icon={['far', 'clock']} />
-              </td>
-              <th>
-                <FormattedMessage
-                  id="app.assignment.visibleFrom"
-                  defaultMessage="Visible from"
-                />
-                :
-              </th>
-              <td>
-                <DateTime unixts={visibleFrom} showRelative />
-              </td>
-            </tr>
-          )}
+        {permissionHints.update && isPublic && visibleFrom && visibleFrom * 1000 > Date.now() && (
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <Icon icon={['far', 'clock']} />
+            </td>
+            <th>
+              <FormattedMessage id="app.assignment.visibleFrom" defaultMessage="Visible from" />:
+            </th>
+            <td>
+              <DateTime unixts={visibleFrom} showRelative />
+            </td>
+          </tr>
+        )}
 
         <tr
           className={classnames({
@@ -93,11 +69,7 @@ const AssignmentDetails = ({
             </strong>
           </td>
           <th>
-            <FormattedMessage
-              id="app.assignment.deadline"
-              defaultMessage="Deadline"
-            />
-            :
+            <FormattedMessage id="app.assignment.deadline" defaultMessage="Deadline" />:
           </th>
           <td>
             <DateTime unixts={firstDeadline} isDeadline showRelative />
@@ -109,11 +81,7 @@ const AssignmentDetails = ({
             <Icon icon="cloud-upload-alt" />
           </td>
           <th>
-            <FormattedMessage
-              id="app.assignment.maxPointsFirst"
-              defaultMessage="Max. points before 1st deadline"
-            />
-            :
+            <FormattedMessage id="app.assignment.maxPointsFirst" defaultMessage="Max. points before 1st deadline" />:
           </th>
           <td>{maxPointsBeforeFirstDeadline}</td>
         </tr>
@@ -131,11 +99,7 @@ const AssignmentDetails = ({
                 </strong>
               </td>
               <th>
-                <FormattedMessage
-                  id="app.assignment.secondDeadline"
-                  defaultMessage="Second deadline"
-                />
-                :
+                <FormattedMessage id="app.assignment.secondDeadline" defaultMessage="Second deadline" />:
               </th>
               <td>
                 <DateTime unixts={secondDeadline} isDeadline showRelative />
@@ -163,11 +127,7 @@ const AssignmentDetails = ({
             <Icon icon="cloud-upload-alt" />
           </td>
           <th>
-            <FormattedMessage
-              id="app.assignment.maxPointsCurrent"
-              defaultMessage="Max. points (at present time)"
-            />
-            :
+            <FormattedMessage id="app.assignment.maxPointsCurrent" defaultMessage="Max. points (at present time)" />:
           </th>
           <td>
             {!isAfterFirstDeadline
@@ -183,15 +143,9 @@ const AssignmentDetails = ({
             <Icon icon="ban" />
           </td>
           <th>
-            <FormattedMessage
-              id="app.assignment.submissionsCountLimit"
-              defaultMessage="Submission count limit"
-            />
-            :
+            <FormattedMessage id="app.assignment.submissionsCountLimit" defaultMessage="Submission count limit" />:
           </th>
-          <td>
-            {submissionsCountLimit === null ? '-' : submissionsCountLimit}
-          </td>
+          <td>{submissionsCountLimit === null ? '-' : submissionsCountLimit}</td>
         </tr>
 
         {isStudent && (
@@ -200,11 +154,7 @@ const AssignmentDetails = ({
               <Icon icon="coffee" />
             </td>
             <th>
-              <FormattedMessage
-                id="app.assignment.alreadySubmitted"
-                defaultMessage="Already submitted"
-              />
-              :
+              <FormattedMessage id="app.assignment.alreadySubmitted" defaultMessage="Already submitted" />:
             </th>
             <td>{canSubmit.submittedCount}</td>
           </tr>
@@ -216,11 +166,7 @@ const AssignmentDetails = ({
               <Icon icon="unlock-alt" />
             </td>
             <th>
-              <FormattedMessage
-                id="app.assignment.canSubmit"
-                defaultMessage="Can submit more solutions"
-              />
-              :
+              <FormattedMessage id="app.assignment.canSubmit" defaultMessage="Can submit more solutions" />:
             </th>
             <td>
               <SuccessOrFailureIcon success={canSubmit.canSubmit} />
@@ -234,11 +180,7 @@ const AssignmentDetails = ({
               <Icon icon="plus-circle" />
             </td>
             <th>
-              <FormattedMessage
-                id="app.assignment.isBonus"
-                defaultMessage="Bonus assignment"
-              />
-              :
+              <FormattedMessage id="app.assignment.isBonus" defaultMessage="Bonus assignment" />:
             </th>
             <td>
               <SuccessIcon />

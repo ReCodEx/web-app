@@ -10,50 +10,26 @@ import { TextField, PasswordField } from '../Fields';
 import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 
-const LoginCASForm = ({
-  invalid,
-  handleSubmit,
-  submitFailed: hasFailed,
-  submitting,
-  hasSucceeded,
-}) => (
+const LoginCASForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.loginCASForm.title"
-        defaultMessage="Sign into ReCodEx using CAS UK"
-      />
-    }
+    title={<FormattedMessage id="app.loginCASForm.title" defaultMessage="Sign into ReCodEx using CAS UK" />}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button
-          type="submit"
-          bsStyle="success"
-          onClick={handleSubmit}
-          disabled={invalid || submitting || hasSucceeded}>
+        <Button type="submit" bsStyle="success" onClick={handleSubmit} disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
                 <SuccessIcon gapRight />
-                <FormattedMessage
-                  id="app.loginCASForm.success"
-                  defaultMessage="You are successfully signed in"
-                />
+                <FormattedMessage id="app.loginCASForm.success" defaultMessage="You are successfully signed in" />
               </span>
             ) : (
-              <FormattedMessage
-                id="app.loginCASForm.login"
-                defaultMessage="Sign in"
-              />
+              <FormattedMessage id="app.loginCASForm.login" defaultMessage="Sign in" />
             )
           ) : (
             <span>
               <LoadingIcon gapRight />
-              <FormattedMessage
-                id="app.loginCASForm.processing"
-                defaultMessage="Signing in..."
-              />
+              <FormattedMessage id="app.loginCASForm.processing" defaultMessage="Signing in..." />
             </span>
           )}
         </Button>
@@ -61,10 +37,7 @@ const LoginCASForm = ({
     }>
     {hasFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.loginCASForm.failed"
-          defaultMessage="Login failed. Please check your credentials."
-        />
+        <FormattedMessage id="app.loginCASForm.failed" defaultMessage="Login failed. Please check your credentials." />
       </Alert>
     )}
 
@@ -73,23 +46,13 @@ const LoginCASForm = ({
       required
       component={TextField}
       maxLength={64}
-      label={
-        <FormattedMessage
-          id="app.loginCASForm.ukco"
-          defaultMessage="UKCO (student's number):"
-        />
-      }
+      label={<FormattedMessage id="app.loginCASForm.ukco" defaultMessage="UKCO (student's number):" />}
     />
     <Field
       name="password"
       required
       component={PasswordField}
-      label={
-        <FormattedMessage
-          id="app.loginCASForm.password"
-          defaultMessage="Password:"
-        />
-      }
+      label={<FormattedMessage id="app.loginCASForm.password" defaultMessage="Password:" />}
     />
   </FormBox>
 );
@@ -107,19 +70,13 @@ const validate = ({ ukco, password }) => {
   const errors = {};
   if (!ukco) {
     errors['ukco'] = (
-      <FormattedMessage
-        id="app.loginCASForm.validation.emptyUKCO"
-        defaultMessage="UKCO address cannot be empty."
-      />
+      <FormattedMessage id="app.loginCASForm.validation.emptyUKCO" defaultMessage="UKCO address cannot be empty." />
     );
   }
 
   if (!password) {
     errors['password'] = (
-      <FormattedMessage
-        id="app.loginCASForm.validation.emptyPassword"
-        defaultMessage="Password cannot be empty."
-      />
+      <FormattedMessage id="app.loginCASForm.validation.emptyPassword" defaultMessage="Password cannot be empty." />
     );
   }
 

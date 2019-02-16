@@ -51,35 +51,25 @@ const reducer = handleActions(
   Object.assign(
     {},
     {
-      [actionTypes.BROKER_STATS_FETCH_PENDING]: state =>
-        state.set('stats', createRecord()),
+      [actionTypes.BROKER_STATS_FETCH_PENDING]: state => state.set('stats', createRecord()),
 
       [actionTypes.BROKER_STATS_FETCH_FULFILLED]: (state, { payload }) =>
-        state.set(
-          'stats',
-          createRecord({ state: resourceStatus.FULFILLED, data: payload })
-        ),
+        state.set('stats', createRecord({ state: resourceStatus.FULFILLED, data: payload })),
 
       [actionTypes.BROKER_STATS_FETCH_REJECTED]: state =>
         state.set('stats', createRecord({ state: resourceStatus.FAILED })),
 
-      [actionTypes.BROKER_FREEZE_PENDING]: state =>
-        state.set('freezeActionStatus', resourceStatus.PENDING),
+      [actionTypes.BROKER_FREEZE_PENDING]: state => state.set('freezeActionStatus', resourceStatus.PENDING),
 
-      [actionTypes.BROKER_FREEZE_FULFILLED]: state =>
-        state.set('freezeActionStatus', resourceStatus.FULFILLED),
+      [actionTypes.BROKER_FREEZE_FULFILLED]: state => state.set('freezeActionStatus', resourceStatus.FULFILLED),
 
-      [actionTypes.BROKER_FREEZE_REJECTED]: state =>
-        state.set('freezeActionStatus', resourceStatus.FAILED),
+      [actionTypes.BROKER_FREEZE_REJECTED]: state => state.set('freezeActionStatus', resourceStatus.FAILED),
 
-      [actionTypes.BROKER_UNFREEZE_PENDING]: state =>
-        state.set('unfreezeActionStatus', resourceStatus.PENDING),
+      [actionTypes.BROKER_UNFREEZE_PENDING]: state => state.set('unfreezeActionStatus', resourceStatus.PENDING),
 
-      [actionTypes.BROKER_UNFREEZE_FULFILLED]: state =>
-        state.set('unfreezeActionStatus', resourceStatus.FULFILLED),
+      [actionTypes.BROKER_UNFREEZE_FULFILLED]: state => state.set('unfreezeActionStatus', resourceStatus.FULFILLED),
 
-      [actionTypes.BROKER_UNFREEZE_REJECTED]: state =>
-        state.set('unfreezeActionStatus', resourceStatus.FAILED),
+      [actionTypes.BROKER_UNFREEZE_REJECTED]: state => state.set('unfreezeActionStatus', resourceStatus.FAILED),
     }
   ),
   fromJS({

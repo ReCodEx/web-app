@@ -14,11 +14,7 @@ const GroupTopButtons = ({
   userId,
   canLeaveJoin,
   students = null,
-  links: {
-    GROUP_EDIT_URI_FACTORY,
-    GROUP_DETAIL_URI_FACTORY,
-    GROUP_INFO_URI_FACTORY,
-  },
+  links: { GROUP_EDIT_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_INFO_URI_FACTORY },
 }) => {
   const studentEmails =
     !group.organizational &&
@@ -38,10 +34,7 @@ const GroupTopButtons = ({
         <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
           <Button bsStyle="warning">
             <EditIcon gapRight />
-            <FormattedMessage
-              id="app.editGroup.title"
-              defaultMessage="Edit Group"
-            />
+            <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
           </Button>
         </LinkContainer>
       )}
@@ -57,30 +50,20 @@ const GroupTopButtons = ({
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
           <Button bsStyle="primary">
             <GroupIcon gapRight />
-            <FormattedMessage
-              id="app.group.detail"
-              defaultMessage="Group Detail"
-            />
+            <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
           </Button>
         </LinkContainer>
       )}
 
       {canLeaveJoin && !group.organizational && (
-        <LeaveJoinGroupButtonContainer
-          userId={userId}
-          groupId={group.id}
-          bsSize={null}
-        />
+        <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} bsSize={null} />
       )}
 
       {studentEmails && (
         <a href={`mailto:?bcc=${studentEmails}`} className="pull-right">
           <Button bsStyle="default">
             <MailIcon gapRight />
-            <FormattedMessage
-              id="app.group.mailtoAll"
-              defaultMessage="Mail to All Students"
-            />
+            <FormattedMessage id="app.group.mailtoAll" defaultMessage="Mail to All Students" />
           </Button>
         </a>
       )}

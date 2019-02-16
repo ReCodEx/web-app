@@ -7,13 +7,7 @@ import ConfirmDeleteButton from '../../components/buttons/DeleteButton/ConfirmDe
 import { deleteUser } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
 
-const DeleteUserButtonContainer = ({
-  resourceless = false,
-  user,
-  deleteUser,
-  onDeleted,
-  ...props
-}) =>
+const DeleteUserButtonContainer = ({ resourceless = false, user, deleteUser, onDeleted, ...props }) =>
   resourceless ? (
     <ConfirmDeleteButton {...props} onClick={deleteUser} />
   ) : (
@@ -33,7 +27,6 @@ export default connect(
     user: getUser(id)(state),
   }),
   (dispatch, { id, onDeleted }) => ({
-    deleteUser: () =>
-      dispatch(deleteUser(id)).then(() => onDeleted && onDeleted()),
+    deleteUser: () => dispatch(deleteUser(id)).then(() => onDeleted && onDeleted()),
   })
 )(DeleteUserButtonContainer);

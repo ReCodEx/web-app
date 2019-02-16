@@ -29,23 +29,14 @@ class EditExercisePipelinesForm extends Component {
 
     return (
       <FormBox
-        title={
-          <FormattedMessage
-            id="app.editExercisePipelines.title"
-            defaultMessage="Selected Pipelines"
-          />
-        }
+        title={<FormattedMessage id="app.editExercisePipelines.title" defaultMessage="Selected Pipelines" />}
         type={submitSucceeded ? 'success' : undefined}
         noPadding
         footer={
           <div className="text-center">
             {dirty && (
               <span>
-                <Button
-                  type="reset"
-                  onClick={reset}
-                  bsStyle={'danger'}
-                  className="btn-flat">
+                <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
@@ -63,19 +54,11 @@ class EditExercisePipelinesForm extends Component {
             />
           </div>
         }>
-        <FieldArray
-          name="pipelines"
-          component={EditExercisePipelinesTable}
-          pipelines={pipelines}
-          readOnly={readOnly}
-        />
+        <FieldArray name="pipelines" component={EditExercisePipelinesTable} pipelines={pipelines} readOnly={readOnly} />
 
         {submitFailed && (
           <Alert bsStyle="danger" className="em-margin">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 

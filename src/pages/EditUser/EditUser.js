@@ -5,13 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
-import {
-  fetchUserIfNeeded,
-  updateProfile,
-  updateSettings,
-  makeLocalLogin,
-  setRole,
-} from '../../redux/modules/users';
+import { fetchUserIfNeeded, updateProfile, updateSettings, makeLocalLogin, setRole } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/FlatButton';
@@ -24,15 +18,11 @@ import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
 import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
 import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
-import {
-  lastGeneratedToken,
-  loggedInUserIdSelector,
-} from '../../redux/selectors/auth';
+import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { safeGet } from '../../helpers/common';
 
 class EditUser extends Component {
-  static loadAsync = ({ userId }, dispatch) =>
-    dispatch(fetchUserIfNeeded(userId));
+  static loadAsync = ({ userId }, dispatch) => dispatch(fetchUserIfNeeded(userId));
 
   componentWillMount() {
     this.props.loadAsync();
@@ -74,28 +64,16 @@ class EditUser extends Component {
         resource={user}
         title={user => (
           <span>
-            {!safeGet(user, ['privateData', 'isAllowed']) && (
-              <BanIcon gapRight />
-            )}
+            {!safeGet(user, ['privateData', 'isAllowed']) && <BanIcon gapRight />}
 
             {safeGet(user, ['privateData', 'role']) && (
-              <UserRoleIcon
-                role={user.privateData.role}
-                showTooltip
-                tooltipId={'user-role'}
-                gapRight
-              />
+              <UserRoleIcon role={user.privateData.role} showTooltip tooltipId={'user-role'} gapRight />
             )}
 
             {user.fullName}
           </span>
         )}
-        description={
-          <FormattedMessage
-            id="app.editUser.description"
-            defaultMessage="Edit user's profile"
-          />
-        }
+        description={<FormattedMessage id="app.editUser.description" defaultMessage="Edit user's profile" />}
         breadcrumbs={[
           {
             resource: user,
@@ -106,12 +84,7 @@ class EditUser extends Component {
             }),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.editUser.title"
-                defaultMessage="Edit user's profile"
-              />
-            ),
+            text: <FormattedMessage id="app.editUser.title" defaultMessage="Edit user's profile" />,
             iconName: ['far', 'edit'],
           },
         ]}>
@@ -122,40 +95,25 @@ class EditUser extends Component {
                 {!data.privateData.isLocal && (
                   <Button bsStyle="warning" onClick={makeLocalLogin}>
                     <LocalIcon gapRight />
-                    <FormattedMessage
-                      id="app.editUser.makeLocal"
-                      defaultMessage="Create local account"
-                    />
+                    <FormattedMessage id="app.editUser.makeLocal" defaultMessage="Create local account" />
                   </Button>
                 )}
 
-                {isSuperAdmin &&
-                  data.id !== loggedUserId &&
-                  data.privateData.isAllowed && (
-                    <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
-                      <TransferIcon gapRight />
-                      <FormattedMessage
-                        id="app.users.takeOver"
-                        defaultMessage="Login as"
-                      />
-                    </Button>
-                  )}
-
-                {isSuperAdmin && data.id !== loggedUserId && (
-                  <AllowUserButtonContainer id={data.id} />
+                {isSuperAdmin && data.id !== loggedUserId && data.privateData.isAllowed && (
+                  <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
+                    <TransferIcon gapRight />
+                    <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
+                  </Button>
                 )}
+
+                {isSuperAdmin && data.id !== loggedUserId && <AllowUserButtonContainer id={data.id} />}
               </p>
             )}
 
             <Row>
               <Col lg={6}>
                 <EditUserProfileForm
-                  onSubmit={formData =>
-                    this.updateProfile(
-                      formData,
-                      isSuperAdmin || !data.privateData.isExternal
-                    )
-                  }
+                  onSubmit={formData => this.updateProfile(formData, isSuperAdmin || !data.privateData.isExternal)}
                   initialValues={{
                     firstName: data.name.firstName,
                     lastName: data.name.lastName,
@@ -167,16 +125,11 @@ class EditUser extends Component {
                   }}
                   allowChangePassword={data.privateData.isLocal}
                   emptyLocalPassword={data.privateData.emptyLocalPassword}
-                  disabledNameChange={
-                    data.privateData.isExternal && !isSuperAdmin
-                  }
+                  disabledNameChange={data.privateData.isExternal && !isSuperAdmin}
                 />
               </Col>
               <Col lg={6}>
-                <EditUserSettingsForm
-                  onSubmit={updateSettings}
-                  initialValues={data.privateData.settings}
-                />
+                <EditUserSettingsForm onSubmit={updateSettings} initialValues={data.privateData.settings} />
               </Col>
             </Row>
 
@@ -246,12 +199,7 @@ export default connect(
     makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
     generateToken: formData =>
       dispatch(
-        generateToken(
-          formData.expiration,
-          Object.keys(formData.scopes).filter(
-            key => formData.scopes[key] === true
-          )
-        )
+        generateToken(formData.expiration, Object.keys(formData.scopes).filter(key => formData.scopes[key] === true))
       ),
     setRole: role => dispatch(setRole(userId, role)),
     takeOver: userId => dispatch(takeOver(userId)),

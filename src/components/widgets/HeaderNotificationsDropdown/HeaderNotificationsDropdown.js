@@ -33,14 +33,10 @@ const HeaderNotificationsDropdown = ({
         <Icon icon={['fas', 'bell']} className="faa-shake animated" />
       )}
       {newNotifications.size > 0 && (
-        <Label bsStyle="danger">
-          {newNotifications.reduce((acc, n) => acc + n.count, 0)}
-        </Label>
+        <Label bsStyle="danger">{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Label>
       )}
     </a>
-    <ul
-      className={classnames(['dropdown-menu', styles.dropdownMenu])}
-      onClick={markClick}>
+    <ul className={classnames(['dropdown-menu', styles.dropdownMenu])} onClick={markClick}>
       <li className="header">
         <FormattedMessage
           id="app.notifications.title"
@@ -51,27 +47,17 @@ const HeaderNotificationsDropdown = ({
       <li>
         <ul className="menu">
           {newNotifications.map(notification => (
-            <HeaderNotification
-              key={notification.id}
-              hide={hideNotification}
-              {...notification}
-              isNew={true}
-            />
+            <HeaderNotification key={notification.id} hide={hideNotification} {...notification} isNew={true} />
           ))}
           {showAll &&
-            oldNotifications.map(notification => (
-              <HeaderNotification key={notification.id} {...notification} />
-            ))}
+            oldNotifications.map(notification => <HeaderNotification key={notification.id} {...notification} />)}
         </ul>
       </li>
       {oldNotifications.size > 0 && (
         <li className="footer">
           <a href="#" onClick={toggleShowAll}>
             {showAll ? (
-              <FormattedMessage
-                id="app.notifications.hideAll"
-                defaultMessage="Only new notifications"
-              />
+              <FormattedMessage id="app.notifications.hideAll" defaultMessage="Only new notifications" />
             ) : (
               <FormattedMessage
                 id="app.notifications.showAll"

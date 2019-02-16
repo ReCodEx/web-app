@@ -6,10 +6,7 @@ import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { push } from 'react-router-redux';
 import { defaultMemoize } from 'reselect';
 
-import PaginationContainer, {
-  createSortingIcon,
-  showRangeInfo,
-} from '../PaginationContainer';
+import PaginationContainer, { createSortingIcon, showRangeInfo } from '../PaginationContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FilterExercisesListForm from '../../components/forms/FilterExercisesListForm';
 import { fetchExercisesAuthorsIfNeeded } from '../../redux/modules/exercisesAuthors';
@@ -24,28 +21,24 @@ import { create as assignExercise } from '../../redux/modules/assignments';
 
 import withLinks from '../../helpers/withLinks';
 
-const filterInitialValues = defaultMemoize(
-  ({ search = '', authorsIds = [] }) => ({
-    search,
-    author: authorsIds.length > 0 ? authorsIds[0] : null,
-  })
-);
+const filterInitialValues = defaultMemoize(({ search = '', authorsIds = [] }) => ({
+  search,
+  author: authorsIds.length > 0 ? authorsIds[0] : null,
+}));
 
-const transformAndSetFilterData = defaultMemoize(
-  (setFilters, rootGroup) => ({ search, author }) => {
-    const data = {};
-    if (search.trim()) {
-      data.search = search.trim();
-    }
-    if (author) {
-      data.authorsIds = [author];
-    }
-    if (rootGroup) {
-      data.groupsIds = [rootGroup];
-    }
-    return setFilters(data);
+const transformAndSetFilterData = defaultMemoize((setFilters, rootGroup) => ({ search, author }) => {
+  const data = {};
+  if (search.trim()) {
+    data.search = search.trim();
   }
-);
+  if (author) {
+    data.authorsIds = [author];
+  }
+  if (rootGroup) {
+    data.groupsIds = [rootGroup];
+  }
+  return setFilters(data);
+});
 
 class ExercisesListContainer extends Component {
   constructor(props) {
@@ -67,64 +60,34 @@ class ExercisesListContainer extends Component {
     }
   }
 
-  static loadData = ({ rootGroup, fetchExercisesAuthorsIfNeeded }) =>
-    fetchExercisesAuthorsIfNeeded(rootGroup);
+  static loadData = ({ rootGroup, fetchExercisesAuthorsIfNeeded }) => fetchExercisesAuthorsIfNeeded(rootGroup);
 
-  headingCreator = ({
-    offset,
-    limit,
-    totalCount,
-    orderByColumn,
-    orderByDescending,
-    setOrderBy,
-  }) => {
+  headingCreator = ({ offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy }) => {
     const { showGroups } = this.props;
     return (
       <tr>
         <th className="shrink-col" />
         <th>
           <FormattedMessage id="generic.name" defaultMessage="Name" />
-          {createSortingIcon(
-            'name',
-            orderByColumn,
-            orderByDescending,
-            setOrderBy
-          )}
+          {createSortingIcon('name', orderByColumn, orderByDescending, setOrderBy)}
         </th>
         <th>
           <FormattedMessage id="generic.author" defaultMessage="Author" />
         </th>
         <th>
-          <FormattedMessage
-            id="generic.runtimesShort"
-            defaultMessage="Runtimes/Languages"
-          />
+          <FormattedMessage id="generic.runtimesShort" defaultMessage="Runtimes/Languages" />
         </th>
         {showGroups && (
           <th>
-            <FormattedMessage
-              id="app.exercisesList.groups"
-              defaultMessage="Groups"
-            />
+            <FormattedMessage id="app.exercisesList.groups" defaultMessage="Groups" />
           </th>
         )}
         <th>
-          <FormattedMessage
-            id="app.exercisesList.difficulty"
-            defaultMessage="Difficulty"
-          />
+          <FormattedMessage id="app.exercisesList.difficulty" defaultMessage="Difficulty" />
         </th>
         <th>
-          <FormattedMessage
-            id="app.exercisesList.created"
-            defaultMessage="Created"
-          />
-          {createSortingIcon(
-            'createdAt',
-            orderByColumn,
-            orderByDescending,
-            setOrderBy
-          )}
+          <FormattedMessage id="app.exercisesList.created" defaultMessage="Created" />
+          {createSortingIcon('createdAt', orderByColumn, orderByDescending, setOrderBy)}
         </th>
         <td>{showRangeInfo(offset, limit, totalCount)}</td>
       </tr>
@@ -140,9 +103,7 @@ class ExercisesListContainer extends Component {
         authors={authors}
         authorsLoading={authorsLoading}
         loggedUserId={loggedUserId}
-        onSubmit={
-          setFilters ? transformAndSetFilterData(setFilters, rootGroup) : null
-        }
+        onSubmit={setFilters ? transformAndSetFilterData(setFilters, rootGroup) : null}
         initialValues={filterInitialValues(filters)}
       />
     );
@@ -154,18 +115,11 @@ class ExercisesListContainer extends Component {
       push,
       links: { ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
-    assignExercise(exerciseId).then(({ value: assigment }) =>
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id))
-    );
+    assignExercise(exerciseId).then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
   };
 
   render() {
-    const {
-      id,
-      showGroups = false,
-      showAssignButton = false,
-      rootGroup = null,
-    } = this.props;
+    const { id, showGroups = false, showAssignButton = false, rootGroup = null } = this.props;
     return (
       <PaginationContainer
         id={id}
@@ -173,16 +127,7 @@ class ExercisesListContainer extends Component {
         defaultOrderBy="name"
         defaultFilters={this.defaultFilters}
         filtersCreator={this.filtersCreator}>
-        {({
-          data,
-          offset,
-          limit,
-          totalCount,
-          orderByColumn,
-          orderByDescending,
-          setOrderBy,
-          reload,
-        }) => (
+        {({ data, offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy, reload }) => (
           <ExercisesList
             exercises={data}
             showGroups={showGroups}
@@ -223,18 +168,14 @@ export default withLinks(
   connect(
     (state, { rootGroup = null }) => ({
       loggedUserId: loggedInUserIdSelector(state),
-      authors: rootGroup
-        ? getExercisesAuthorsOfGroup(rootGroup)(state)
-        : getAllExericsesAuthors(state),
+      authors: rootGroup ? getExercisesAuthorsOfGroup(rootGroup)(state) : getAllExericsesAuthors(state),
       authorsLoading: rootGroup
         ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
         : getAllExericsesAuthorsIsLoading(state),
     }),
     (dispatch, { rootGroup = null }) => ({
-      fetchExercisesAuthorsIfNeeded: groupId =>
-        dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
-      assignExercise: exerciseId =>
-        dispatch(assignExercise(rootGroup, exerciseId)),
+      fetchExercisesAuthorsIfNeeded: groupId => dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
+      assignExercise: exerciseId => dispatch(assignExercise(rootGroup, exerciseId)),
       push: url => dispatch(push(url)),
     })
   )(injectIntl(ExercisesListContainer))

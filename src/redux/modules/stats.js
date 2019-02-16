@@ -23,18 +23,14 @@ const reducer = handleActions(
         if (!stats) {
           stats = List();
         }
-        return stats
-          .filter(userStats => userStats.get('userId') !== payload.userId)
-          .push(fromJS(payload));
+        return stats.filter(userStats => userStats.get('userId') !== payload.userId).push(fromJS(payload));
       }),
     [additionalSolutionsActionTypes.UNACCEPT_FULFILLED]: (state, { payload }) =>
       state.updateIn(['resources', payload.groupId, 'data'], stats => {
         if (!stats) {
           stats = List();
         }
-        return stats
-          .filter(userStats => userStats.get('userId') !== payload.userId)
-          .push(fromJS(payload));
+        return stats.filter(userStats => userStats.get('userId') !== payload.userId).push(fromJS(payload));
       }),
   }),
   initialState

@@ -11,10 +11,7 @@ const MaybeBonusAssignmentIcon = ({ id, isBonus, ...props }) =>
         placement="right"
         overlay={
           <Tooltip id={id}>
-            <FormattedMessage
-              id="app.maybeBonusAssignmentIcon.isBonus"
-              defaultMessage="Is Bonus"
-            />
+            <FormattedMessage id="app.maybeBonusAssignmentIcon.isBonus" defaultMessage="Is Bonus" />
           </Tooltip>
         }>
         <BonusIcon {...props} className="text-muted" />

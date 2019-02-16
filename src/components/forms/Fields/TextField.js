@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import {
-  FormGroup,
-  FormControl,
-  ControlLabel,
-  HelpBlock,
-} from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import styles from './commonStyles.less';
@@ -44,11 +39,7 @@ const TextField = ({
 TextField.propTypes = {
   type: PropTypes.string,
   input: PropTypes.shape({
-    value: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
+    value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,

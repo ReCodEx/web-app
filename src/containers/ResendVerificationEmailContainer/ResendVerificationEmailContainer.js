@@ -9,12 +9,7 @@ import ResendEmail, {
   ResendingEmail,
 } from '../../components/buttons/ResendEmailVerification';
 
-const ResendVerificationEmailContainer = ({
-  userId,
-  state,
-  resend,
-  ...props
-}) => {
+const ResendVerificationEmailContainer = ({ userId, state, resend, ...props }) => {
   switch (state) {
     case 'PENDING':
       return <ResendingEmail {...props} />;

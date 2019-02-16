@@ -5,22 +5,13 @@ import { Table } from 'react-bootstrap';
 
 const pipelineParams = {
   isCompilationPipeline: (
-    <FormattedMessage
-      id="app.pipelineParams.isCompilationPipeline"
-      defaultMessage="Compilation pipeline"
-    />
+    <FormattedMessage id="app.pipelineParams.isCompilationPipeline" defaultMessage="Compilation pipeline" />
   ),
   isExecutionPipeline: (
-    <FormattedMessage
-      id="app.pipelineParams.isExecutionPipeline"
-      defaultMessage="Execution pipeline"
-    />
+    <FormattedMessage id="app.pipelineParams.isExecutionPipeline" defaultMessage="Execution pipeline" />
   ),
   judgeOnlyPipeline: (
-    <FormattedMessage
-      id="app.pipelineParams.judgeOnlyPipeline"
-      defaultMessage="Judge-only pipeline"
-    />
+    <FormattedMessage id="app.pipelineParams.judgeOnlyPipeline" defaultMessage="Judge-only pipeline" />
   ),
   producesStdout: (
     <FormattedMessage

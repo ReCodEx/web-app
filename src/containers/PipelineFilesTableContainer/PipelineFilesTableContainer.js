@@ -5,10 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
 import FilesTableContainer from '../FilesTableContainer';
-import {
-  SupplementaryFilesTableHeaderRow,
-  SupplementaryFilesTableRow,
-} from '../../components/Exercises/FilesTable';
+import { SupplementaryFilesTableHeaderRow, SupplementaryFilesTableRow } from '../../components/Exercises/FilesTable';
 
 import {
   fetchSupplementaryFilesForPipeline,
@@ -34,12 +31,7 @@ const PipelineFilesTableContainer = ({
     addFiles={addFiles}
     removeFile={removeFile}
     downloadFile={downloadFile}
-    title={
-      <FormattedMessage
-        id="app.pipelineFilesTable.title"
-        defaultMessage="Supplementary files"
-      />
-    }
+    title={<FormattedMessage id="app.pipelineFilesTable.title" defaultMessage="Supplementary files" />}
     description={
       <FormattedMessage
         id="app.pipelineFilesTable.description"

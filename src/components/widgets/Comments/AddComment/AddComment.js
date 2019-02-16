@@ -1,19 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  FormattedHTMLMessage,
-  injectIntl,
-  intlShape,
-  defineMessages,
-} from 'react-intl';
-import {
-  Form,
-  FormGroup,
-  FormControl,
-  InputGroup,
-  HelpBlock,
-} from 'react-bootstrap';
+import { FormattedMessage, FormattedHTMLMessage, injectIntl, intlShape, defineMessages } from 'react-intl';
+import { Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-bootstrap';
 
 import Button from '../../FlatButton';
 import Icon from '../../../icons';
@@ -66,24 +54,15 @@ class AddComment extends Component {
                 bsStyle={isPrivate ? 'success' : 'primary'}
                 disabled={text.length === 0 || !addComment}
                 onClick={this.addComment}>
-                <FormattedMessage
-                  id="app.comments.addComment"
-                  defaultMessage="Send"
-                />
+                <FormattedMessage id="app.comments.addComment" defaultMessage="Send" />
               </Button>
               <Button bsStyle="default" onClick={refresh}>
-                <FormattedMessage
-                  id="generic.refresh"
-                  defaultMessage="Refresh"
-                />
+                <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
               </Button>
             </InputGroup.Button>
           </InputGroup>
           <HelpBlock>
-            <Button
-              onClick={this.togglePrivate}
-              bsSize="xs"
-              disabled={!addComment}>
+            <Button onClick={this.togglePrivate} bsSize="xs" disabled={!addComment}>
               {isPrivate ? (
                 <Icon icon="lock" className="text-success" />
               ) : (

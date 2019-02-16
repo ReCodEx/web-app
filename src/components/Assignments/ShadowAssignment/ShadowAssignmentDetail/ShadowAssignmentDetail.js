@@ -2,27 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import Icon, {
-  BonusIcon,
-  VisibleIcon,
-  SuccessOrFailureIcon,
-} from '../../../icons';
+import Icon, { BonusIcon, VisibleIcon, SuccessOrFailureIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 import DateTime from '../../../widgets/DateTime';
 import Version from '../../../widgets/Version/Version';
 
-const ShadowAssignmentDetail = ({
-  maxPoints,
-  isBonus,
-  isPublic,
-  createdAt,
-  updatedAt,
-  version,
-  permissionHints,
-}) => (
-  <Box
-    title={<FormattedMessage id="generic.details" defaultMessage="Details" />}
-    noPadding>
+const ShadowAssignmentDetail = ({ maxPoints, isBonus, isPublic, createdAt, updatedAt, version, permissionHints }) => (
+  <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding>
     <Table responsive condensed>
       <tbody>
         <tr>
@@ -30,11 +16,7 @@ const ShadowAssignmentDetail = ({
             <Icon icon="cloud-upload-alt" />
           </td>
           <th>
-            <FormattedMessage
-              id="app.shadowAssignment.maxPoints"
-              defaultMessage="Points limit"
-            />
-            :
+            <FormattedMessage id="app.shadowAssignment.maxPoints" defaultMessage="Points limit" />:
           </th>
           <td>
             <FormattedNumber value={maxPoints} />
@@ -46,11 +28,7 @@ const ShadowAssignmentDetail = ({
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
-            <FormattedMessage
-              id="generic.createdAt"
-              defaultMessage="Created at"
-            />
-            :
+            <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:
           </th>
           <td>
             <DateTime unixts={createdAt} />
@@ -65,11 +43,7 @@ const ShadowAssignmentDetail = ({
             <FormattedMessage id="generic.version" defaultMessage="Version" />:
           </th>
           <td>
-            <Version
-              version={version}
-              createdAt={createdAt}
-              updatedAt={updatedAt}
-            />
+            <Version version={version} createdAt={createdAt} updatedAt={updatedAt} />
           </td>
         </tr>
 
@@ -78,11 +52,7 @@ const ShadowAssignmentDetail = ({
             <BonusIcon />
           </td>
           <th>
-            <FormattedMessage
-              id="app.shadowAssignment.isBonus"
-              defaultMessage="Is bonus"
-            />
-            :
+            <FormattedMessage id="app.shadowAssignment.isBonus" defaultMessage="Is bonus" />:
           </th>
           <td>
             <SuccessOrFailureIcon success={isBonus} />
@@ -95,11 +65,7 @@ const ShadowAssignmentDetail = ({
               <VisibleIcon />
             </td>
             <th>
-              <FormattedMessage
-                id="app.shadowAssignment.isPublic"
-                defaultMessage="Is visible to students"
-              />
-              :
+              <FormattedMessage id="app.shadowAssignment.isPublic" defaultMessage="Is visible to students" />:
             </th>
             <td>
               <SuccessOrFailureIcon success={isPublic} />

@@ -2,11 +2,7 @@ import { createSelector } from 'reselect';
 import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY } from '../../helpers/common';
 
 import { fetchAllGroupsEndpoint } from '../modules/groups';
-import {
-  studentOfGroupsIdsSelector,
-  supervisorOfGroupsIdsSelector,
-  isLoggedAsSuperAdmin,
-} from './users';
+import { studentOfGroupsIdsSelector, supervisorOfGroupsIdsSelector, isLoggedAsSuperAdmin } from './users';
 import { getAssignments } from './assignments';
 import { getShadowAssignments } from './shadowAssignments';
 import { isReady, getId, getJsData } from '../helpers/resourceManager';
@@ -26,15 +22,10 @@ export const notArchivedGroupsSelector = state =>
     .filter(isReady)
     .filter(group => group.getIn(['data', 'archived']) === false);
 
-export const filterGroups = (ids, groups) =>
-  groups.filter(isReady).filter(group => ids.contains(getId(group)));
+export const filterGroups = (ids, groups) => groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
 export const filterNonOrganizationalActiveGroups = groups =>
-  groups.filter(
-    group =>
-      !group.getIn(['data', 'organizational'], false) &&
-      !group.getIn(['data', 'archived'], false)
-  );
+  groups.filter(group => !group.getIn(['data', 'organizational'], false) && !group.getIn(['data', 'archived'], false));
 
 export const groupSelector = createSelector(
   [groupsSelector, getParam],
@@ -72,10 +63,7 @@ export const studentOfSelector2 = userId =>
       groups
         .filter(isReady)
         .map(getJsData)
-        .filter(
-          group =>
-            group.privateData && group.privateData.students.indexOf(userId) >= 0
-        )
+        .filter(group => group.privateData && group.privateData.students.indexOf(userId) >= 0)
   );
 
 export const supervisorOfSelector2 = userId =>
@@ -85,11 +73,7 @@ export const supervisorOfSelector2 = userId =>
       groups
         .filter(isReady)
         .map(getJsData)
-        .filter(
-          group =>
-            group.privateData &&
-            group.privateData.supervisors.indexOf(userId) >= 0
-        )
+        .filter(group => group.privateData && group.privateData.supervisors.indexOf(userId) >= 0)
   );
 
 export const adminOfSelector = userId =>
@@ -99,18 +83,11 @@ export const adminOfSelector = userId =>
       groups
         .filter(isReady)
         .map(getJsData)
-        .filter(
-          group =>
-            group.privateData && group.privateData.admins.indexOf(userId) >= 0
-        )
+        .filter(group => group.privateData && group.privateData.admins.indexOf(userId) >= 0)
   );
 
 export const groupsUserCanEditSelector = createSelector(
-  [
-    loggedInUserIdSelector,
-    groupsSelector,
-    state => isLoggedAsSuperAdmin(state),
-  ],
+  [loggedInUserIdSelector, groupsSelector, state => isLoggedAsSuperAdmin(state)],
   (userId, groups, isSuperAdmin) =>
     groups.filter(isReady).filter(group => {
       if (isSuperAdmin) {
@@ -119,8 +96,7 @@ export const groupsUserCanEditSelector = createSelector(
       const groupData = getJsData(group);
       return (
         groupData.privateData &&
-        (groupData.privateData.supervisors.indexOf(userId) >= 0 ||
-          groupData.privateData.admins.indexOf(userId) >= 0)
+        (groupData.privateData.supervisors.indexOf(userId) >= 0 || groupData.privateData.admins.indexOf(userId) >= 0)
       );
     })
 );
@@ -133,15 +109,11 @@ export const groupsUserCanAssignToSelector = createSelector(
 const usersOfGroup = (type, groupId) =>
   createSelector(
     groupSelectorCreator(groupId),
-    group =>
-      group && isReady(group)
-        ? group.getIn(['data', 'privateData', type], EMPTY_LIST)
-        : EMPTY_LIST
+    group => (group && isReady(group) ? group.getIn(['data', 'privateData', type], EMPTY_LIST) : EMPTY_LIST)
   );
 
 export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
-export const supervisorsOfGroup = groupId =>
-  usersOfGroup('supervisors', groupId);
+export const supervisorsOfGroup = groupId => usersOfGroup('supervisors', groupId);
 export const adminsOfGroup = groupId => usersOfGroup('admins', groupId);
 
 export const groupsAssignmentsSelector = createSelector(
@@ -165,9 +137,7 @@ const getGroupParentIds = (id, groups) => {
   if (group && isReady(group)) {
     const data = group.get('data');
     return data.get('parentGroupId') !== null
-      ? [data.get('id')].concat(
-          getGroupParentIds(data.get('parentGroupId'), groups)
-        )
+      ? [data.get('id')].concat(getGroupParentIds(data.get('parentGroupId'), groups))
       : [data.get('id')];
   } else {
     return EMPTY_ARRAY;

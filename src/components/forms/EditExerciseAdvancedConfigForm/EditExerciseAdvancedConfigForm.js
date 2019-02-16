@@ -43,12 +43,7 @@ class EditExerciseAdvancedConfigForm extends Component {
 
     return (
       <FormBox
-        title={
-          <FormattedMessage
-            id="app.editExercise.editConfig"
-            defaultMessage="Edit Exercise Configuration"
-          />
-        }
+        title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Edit Exercise Configuration" />}
         unlimitedHeight
         noPadding
         success={submitSucceeded}
@@ -78,10 +73,7 @@ class EditExerciseAdvancedConfigForm extends Component {
         }>
         {submitFailed && (
           <Alert bsStyle="danger">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
@@ -103,14 +95,8 @@ class EditExerciseAdvancedConfigForm extends Component {
                       supplementaryFiles={files}
                       testName={test.name}
                       test={'config.' + encodeNumId(test.id)}
-                      testErrors={
-                        formErrors && formErrors[encodeNumId(test.id)]
-                      }
-                      rawFill={
-                        exerciseTests.length > 1
-                          ? rawFill(test.id, exerciseTests)
-                          : undefined
-                      }
+                      testErrors={formErrors && formErrors[encodeNumId(test.id)]}
+                      rawFill={exerciseTests.length > 1 ? rawFill(test.id, exerciseTests) : undefined}
                     />
                   ))}
               </Table>
@@ -153,22 +139,10 @@ export default connect(
   },
   dispatch => ({
     rawFill: (testId, tests) => ({
-      all: () =>
-        dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests)),
-      pipeline: pipelineIdx => () =>
-        dispatch(
-          advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx)
-        ),
+      all: () => dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests)),
+      pipeline: pipelineIdx => () => dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx)),
       variable: (pipelineIdx, variableName) => () =>
-        dispatch(
-          advancedExerciseConfigFormFill(
-            FORM_NAME,
-            testId,
-            tests,
-            pipelineIdx,
-            variableName
-          )
-        ),
+        dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx, variableName)),
     }),
   })
 )(
@@ -176,11 +150,6 @@ export default connect(
     form: FORM_NAME,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-    immutableProps: [
-      'formValues',
-      'supplementaryFiles',
-      'exerciseTests',
-      'handleSubmit',
-    ],
+    immutableProps: ['formValues', 'supplementaryFiles', 'exerciseTests', 'handleSubmit'],
   })(injectIntl(EditExerciseAdvancedConfigForm))
 );

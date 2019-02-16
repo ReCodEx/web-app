@@ -70,9 +70,7 @@ class EditExercisePipelinesTable extends Component {
                 </ControlLabel>
                 <FormControl
                   componentClass="select"
-                  onChange={e =>
-                    this.setState({ selectedPipeline: e.target.value })
-                  }
+                  onChange={e => this.setState({ selectedPipeline: e.target.value })}
                   value={this.state.selectedPipeline || ''}>
                   <option value={null} />
                   {pipelines
@@ -95,10 +93,7 @@ class EditExercisePipelinesTable extends Component {
                   bsStyle="primary"
                   disabled={!this.state.selectedPipeline}>
                   <AddIcon gapRight />
-                  <FormattedMessage
-                    id="app.editExercisePipelines.addPipeline"
-                    defaultMessage="Add Pipeline"
-                  />
+                  <FormattedMessage id="app.editExercisePipelines.addPipeline" defaultMessage="Add Pipeline" />
                 </Button>
               </td>
             </tr>

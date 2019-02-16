@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
-import {
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-  defineMessages,
-} from 'react-intl';
+import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
@@ -75,54 +70,28 @@ const EditExerciseForm = ({
           handleSubmit={handleSubmit}
           asyncValidating={asyncValidating}
           messages={{
-            submit: (
-              <FormattedMessage id="generic.save" defaultMessage="Save" />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="generic.saving"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            ),
-            validating: (
-              <FormattedMessage
-                id="generic.validating"
-                defaultMessage="Validating..."
-              />
-            ),
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+            validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
           }}
         />
       </div>
     }>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="generic.savingFailed"
-          defaultMessage="Saving failed. Please try again later."
-        />
+        <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>
     )}
 
-    <FieldArray
-      name="localizedTexts"
-      component={LocalizedTextsFormField}
-      fieldType="exercise"
-    />
+    <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="exercise" />
 
     <Field
       name="difficulty"
       component={SelectField}
       options={difficultyOptions(formatMessage)}
       addEmptyOption={true}
-      label={
-        <FormattedMessage
-          id="app.editExerciseForm.difficulty"
-          defaultMessage="Difficulty"
-        />
-      }
+      label={<FormattedMessage id="app.editExerciseForm.difficulty" defaultMessage="Difficulty" />}
     />
 
     <Field
@@ -170,32 +139,28 @@ EditExerciseForm.propTypes = {
 
 const validate = ({ difficulty, localizedTexts }) => {
   const errors = {};
-  validateLocalizedTextsFormData(
-    errors,
-    localizedTexts,
-    ({ name, text, link }) => {
-      const textErrors = {};
-      if (!name.trim()) {
-        textErrors.name = (
-          <FormattedMessage
-            id="app.editExerciseForm.validation.emptyName"
-            defaultMessage="Please fill the name of the exercise."
-          />
-        );
-      }
-
-      if (!text.trim() && !link.trim()) {
-        textErrors.text = (
-          <FormattedMessage
-            id="app.editAssignmentForm.validation.localizedText.text"
-            defaultMessage="Please fill the description or provide an external link below."
-          />
-        );
-      }
-
-      return textErrors;
+  validateLocalizedTextsFormData(errors, localizedTexts, ({ name, text, link }) => {
+    const textErrors = {};
+    if (!name.trim()) {
+      textErrors.name = (
+        <FormattedMessage
+          id="app.editExerciseForm.validation.emptyName"
+          defaultMessage="Please fill the name of the exercise."
+        />
+      );
     }
-  );
+
+    if (!text.trim() && !link.trim()) {
+      textErrors.text = (
+        <FormattedMessage
+          id="app.editAssignmentForm.validation.localizedText.text"
+          defaultMessage="Please fill the description or provide an external link below."
+        />
+      );
+    }
+
+    return textErrors;
+  });
 
   if (!difficulty) {
     errors.difficulty = (
@@ -235,12 +200,7 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
 
 // Actually, this is reimplementation of default behavior from documentation.
 // For some reason, the asyncValidation is by default called also for every change event (which is not documented).
-const shouldAsyncValidate = ({
-  syncValidationPasses,
-  trigger,
-  pristine,
-  initialized,
-}) => {
+const shouldAsyncValidate = ({ syncValidationPasses, trigger, pristine, initialized }) => {
   if (!syncValidationPasses) {
     return false;
   }

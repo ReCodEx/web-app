@@ -6,9 +6,7 @@ import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import SolutionDetail, {
-  FailedSubmissionDetail,
-} from '../../components/Solutions/SolutionDetail';
+import SolutionDetail, { FailedSubmissionDetail } from '../../components/Solutions/SolutionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
@@ -17,33 +15,22 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchGroupsStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import {
-  fetchSolution,
-  fetchSolutionIfNeeded,
-} from '../../redux/modules/solutions';
+import { fetchSolution, fetchSolutionIfNeeded } from '../../redux/modules/solutions';
 import {
   fetchSubmissionEvaluationsForSolution,
   deleteSubmissionEvaluation,
 } from '../../redux/modules/submissionEvaluations';
 import { getSolution } from '../../redux/selectors/solutions';
-import {
-  getAssignment,
-  assignmentEnvironmentsSelector,
-} from '../../redux/selectors/assignments';
+import { getAssignment, assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import {
-  evaluationsForSubmissionSelector,
-  fetchManyStatus,
-} from '../../redux/selectors/submissionEvaluations';
+import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { getLocalizedName } from '../../helpers/localizedData';
 import { WarningIcon } from '../../components/icons';
 
 const assignmentHasRuntime = defaultMemoize(
   (assignment, runtimeId) =>
-    assignment.runtimeEnvironmentIds.find(id => id === runtimeId) !==
-      undefined &&
-    assignment.disabledRuntimeEnvironmentIds.find(id => id === runtimeId) ===
-      undefined
+    assignment.runtimeEnvironmentIds.find(id => id === runtimeId) !== undefined &&
+    assignment.disabledRuntimeEnvironmentIds.find(id => id === runtimeId) === undefined
 );
 
 class Solution extends Component {
@@ -84,90 +71,51 @@ class Solution extends Component {
       <Page
         resource={assignment}
         title={assignment => getLocalizedName(assignment, locale)}
-        description={
-          <FormattedMessage
-            id="app.submission.evaluation.title"
-            defaultMessage="Solution evaluation"
-          />
-        }
+        description={<FormattedMessage id="app.submission.evaluation.title" defaultMessage="Solution evaluation" />}
         breadcrumbs={[
           {
             resource: assignment,
             iconName: 'users',
             breadcrumb: assignment => ({
-              text: (
-                <FormattedMessage
-                  id="app.group.title"
-                  defaultMessage="Group detail"
-                />
-              ),
-              link: ({ GROUP_DETAIL_URI_FACTORY }) =>
-                GROUP_DETAIL_URI_FACTORY(assignment.groupId),
+              text: <FormattedMessage id="app.group.title" defaultMessage="Group detail" />,
+              link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
             }),
           },
           {
             resource: assignment,
             iconName: 'puzzle-piece',
             breadcrumb: assignment => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.title"
-                  defaultMessage="Exercise"
-                />
-              ),
+              text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
               link: ({ EXERCISE_URI_FACTORY }) =>
-                assignment.permissionHints &&
-                assignment.permissionHints.viewDescription // not ideal, but closest we can get with permissions
+                assignment.permissionHints && assignment.permissionHints.viewDescription // not ideal, but closest we can get with permissions
                   ? EXERCISE_URI_FACTORY(assignment.exerciseId)
                   : '#',
             }),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.assignment.title"
-                defaultMessage="Exercise Assignment"
-              />
-            ),
+            text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
             iconName: 'hourglass-start',
-            link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) =>
-              ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
+            link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.solution.title"
-                defaultMessage="The Solution"
-              />
-            ),
+            text: <FormattedMessage id="app.solution.title" defaultMessage="The Solution" />,
             iconName: 'user',
           },
         ]}>
-        <ResourceRenderer
-          failed={<FailedSubmissionDetail />}
-          resource={[solution, assignment]}>
+        <ResourceRenderer failed={<FailedSubmissionDetail />} resource={[solution, assignment]}>
           {(solution, assignment) => (
             <div>
               <HierarchyLineContainer groupId={assignment.groupId} />
-              {((solution.permissionHints &&
-                solution.permissionHints.setAccepted) ||
-                (assignment.permissionHints &&
-                  assignment.permissionHints.resubmitSubmissions)) && (
+              {((solution.permissionHints && solution.permissionHints.setAccepted) ||
+                (assignment.permissionHints && assignment.permissionHints.resubmitSubmissions)) && (
                 <p>
-                  {solution.permissionHints &&
-                    solution.permissionHints.setAccepted && (
-                      <AcceptSolutionContainer
-                        id={solution.id}
-                        locale={locale}
-                      />
-                    )}
+                  {solution.permissionHints && solution.permissionHints.setAccepted && (
+                    <AcceptSolutionContainer id={solution.id} locale={locale} />
+                  )}
 
                   {assignment.permissionHints &&
                   assignment.permissionHints.resubmitSubmissions &&
-                  assignmentHasRuntime(
-                    assignment,
-                    solution.runtimeEnvironmentId
-                  ) ? (
+                  assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) ? (
                     <React.Fragment>
                       <ResubmitSolutionContainer
                         id={solution.id}
@@ -186,11 +134,7 @@ class Solution extends Component {
                     </React.Fragment>
                   ) : (
                     <span>
-                      <WarningIcon
-                        largeGapLeft
-                        gapRight
-                        className="text-warning"
-                      />
+                      <WarningIcon largeGapLeft gapRight className="text-warning" />
                       <FormattedMessage
                         id="app.solution.environmentNotAllowedCannotResubmit"
                         defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
@@ -256,8 +200,8 @@ export default connect(
         dispatch(fetchSubmissionEvaluationsForSolution(params.solutionId)),
       ]),
     deleteEvaluation: evaluationId =>
-      dispatch(
-        deleteSubmissionEvaluation(params.solutionId, evaluationId)
-      ).then(() => dispatch(fetchSolutionIfNeeded(params.solutionId))),
+      dispatch(deleteSubmissionEvaluation(params.solutionId, evaluationId)).then(() =>
+        dispatch(fetchSolutionIfNeeded(params.solutionId))
+      ),
   })
 )(injectIntl(Solution));

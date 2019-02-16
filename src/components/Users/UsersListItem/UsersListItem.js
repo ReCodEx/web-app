@@ -15,23 +15,11 @@ const createEmailLink = user => {
   return <a href={`mailto:${urlEncoded}`}>{email}</a>;
 };
 
-const UsersListItem = ({
-  user,
-  emailColumn = false,
-  createdAtColumn = false,
-  createActions,
-  loggedUserId = '',
-}) =>
+const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, createActions, loggedUserId = '' }) =>
   user ? (
     <tr>
       <td>
-        {user.privateData && (
-          <UserRoleIcon
-            showTooltip
-            tooltipId={`role-${user.id}`}
-            role={user.privateData.role}
-          />
-        )}
+        {user.privateData && <UserRoleIcon showTooltip tooltipId={`role-${user.id}`} role={user.privateData.role} />}
         {user.privateData && !user.privateData.isAllowed && (
           <OverlayTrigger
             placement="bottom"
@@ -48,11 +36,7 @@ const UsersListItem = ({
         )}
       </td>
       <td>
-        <UsersName
-          {...user}
-          currentUserId={loggedUserId}
-          showEmail={emailColumn ? null : 'full'}
-        />
+        <UsersName {...user} currentUserId={loggedUserId} showEmail={emailColumn ? null : 'full'} />
       </td>
 
       {emailColumn && <td>{createEmailLink(user)}</td>}
@@ -76,12 +60,7 @@ const UsersListItem = ({
     </tr>
   ) : (
     <tr>
-      <td
-        colSpan={
-          (createActions ? 2 : 1) +
-          Number(emailColumn) +
-          Number(createdAtColumn)
-        }>
+      <td colSpan={(createActions ? 2 : 1) + Number(emailColumn) + Number(createdAtColumn)}>
         <LoadingIcon gapRight />
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </td>

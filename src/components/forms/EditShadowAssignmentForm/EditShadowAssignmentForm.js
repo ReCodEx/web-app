@@ -51,36 +51,20 @@ const EditShadowAssignmentForm = ({
             handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
             asyncValidating={asyncValidating}
             messages={{
-              submit: (
-                <FormattedMessage id="generic.save" defaultMessage="Save" />
-              ),
-              submitting: (
-                <FormattedMessage
-                  id="generic.saving"
-                  defaultMessage="Saving ..."
-                />
-              ),
-              success: (
-                <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-              ),
+              submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving ..." />,
+              success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
             }}
           />
         </div>
       }>
       {submitFailed && (
         <Alert bsStyle="danger">
-          <FormattedMessage
-            id="generic.savingFailed"
-            defaultMessage="Saving failed. Please try again later."
-          />
+          <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
         </Alert>
       )}
 
-      <FieldArray
-        name="localizedTexts"
-        component={LocalizedTextsFormField}
-        fieldType="shadowAssignment"
-      />
+      <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="shadowAssignment" />
 
       <NumericTextField
         name="maxPoints"
@@ -88,10 +72,7 @@ const EditShadowAssignmentForm = ({
         validateMax={10000}
         maxLength={5}
         label={
-          <FormattedMessage
-            id="app.editShadowAssignmentForm.maxPoints"
-            defaultMessage="Maximal amount of points:"
-          />
+          <FormattedMessage id="app.editShadowAssignmentForm.maxPoints" defaultMessage="Maximal amount of points:" />
         }
       />
 
@@ -118,10 +99,7 @@ const EditShadowAssignmentForm = ({
               component={CheckboxField}
               onOff
               label={
-                <FormattedMessage
-                  id="app.editShadowAssignmentForm.isPublic"
-                  defaultMessage="Visible to students"
-                />
+                <FormattedMessage id="app.editShadowAssignmentForm.isPublic" defaultMessage="Visible to students" />
               }
             />
           </Col>

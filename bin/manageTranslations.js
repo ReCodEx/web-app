@@ -1,5 +1,5 @@
 import manageTranslations from 'react-intl-translations-manager';
-import fs from 'fs'
+import fs from 'fs';
 
 const translationsDirectory = './src/locales/';
 
@@ -7,7 +7,7 @@ manageTranslations({
   messagesDirectory: './tmp/messages',
   translationsDirectory,
   languages: ['en', 'cs'],
-  detectDuplicateIds: false
+  detectDuplicateIds: false,
 });
 
 const enData = JSON.parse(fs.readFileSync(translationsDirectory + 'en.json', 'utf8'));

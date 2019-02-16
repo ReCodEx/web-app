@@ -6,18 +6,9 @@ import Box from '../Box';
 /**
  * A wrapper of Box adjusted for holding forms inside of the body.
  */
-const FormBox = ({
-  onSubmit,
-  succeeded = false,
-  dirty = false,
-  children,
-  ...props
-}) => (
+const FormBox = ({ onSubmit, succeeded = false, dirty = false, children, ...props }) => (
   <Form method="POST" onSubmit={onSubmit}>
-    <Box
-      type={succeeded ? 'success' : dirty ? 'warning' : 'default'}
-      {...props}
-      unlimitedHeight>
+    <Box type={succeeded ? 'success' : dirty ? 'warning' : 'default'} {...props} unlimitedHeight>
       <div>{children}</div>
     </Box>
   </Form>

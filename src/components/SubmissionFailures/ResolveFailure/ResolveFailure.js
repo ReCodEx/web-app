@@ -32,10 +32,7 @@ const ResolveFailure = ({
   <Modal show={isOpen} backdrop="static" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
-        <FormattedMessage
-          id="app.submissionFailures.resolveTitle"
-          defaultMessage="Resolve Failure"
-        />
+        <FormattedMessage id="app.submissionFailures.resolveTitle" defaultMessage="Resolve Failure" />
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
@@ -43,24 +40,14 @@ const ResolveFailure = ({
         name="note"
         component={TextField}
         maxLength={255}
-        label={
-          <FormattedMessage
-            id="app.submissionFailures.resolveNote"
-            defaultMessage="Resolve note:"
-          />
-        }
+        label={<FormattedMessage id="app.submissionFailures.resolveNote" defaultMessage="Resolve note:" />}
         validate={maxNoteLength}
       />
       <Field
         name="sendEmail"
         component={CheckboxField}
         onOff
-        label={
-          <FormattedMessage
-            id="app.submissionFailures.sendEmail"
-            defaultMessage="Send email"
-          />
-        }
+        label={<FormattedMessage id="app.submissionFailures.sendEmail" defaultMessage="Send email" />}
       />
     </Modal.Body>
     <Modal.Footer>
@@ -74,12 +61,8 @@ const ResolveFailure = ({
         invalid={invalid}
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-          submitting: (
-            <FormattedMessage id="generic.saving" defaultMessage="Saving..." />
-          ),
-          success: (
-            <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-          ),
+          submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+          success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
         }}
       />
 

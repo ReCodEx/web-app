@@ -1,10 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { Map, List, fromJS } from 'immutable';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
@@ -32,22 +28,15 @@ export const additionalActionTypes = {
   FORK_EXERCISE_FULFILLED: 'recodex/exercises/FORK_EXERCISE_FULFILLED',
   GET_PIPELINE_VARIABLES: 'recodex/exercises/GET_PIPELINE_VARIABLES',
   SET_HARDWARE_GROUPS: 'recodex/exercises/SET_HARDWARE_GROUPS',
-  SET_HARDWARE_GROUPS_FULFILLED:
-    'recodex/exercises/SET_HARDWARE_GROUPS_FULFILLED',
+  SET_HARDWARE_GROUPS_FULFILLED: 'recodex/exercises/SET_HARDWARE_GROUPS_FULFILLED',
   ATTACH_EXERCISE_GROUP: 'recodex/exercises/ATTACH_EXERCISE_GROUP',
-  ATTACH_EXERCISE_GROUP_PENDING:
-    'recodex/exercises/ATTACH_EXERCISE_GROUP_PENDING',
-  ATTACH_EXERCISE_GROUP_REJECTED:
-    'recodex/exercises/ATTACH_EXERCISE_GROUP_REJECTED',
-  ATTACH_EXERCISE_GROUP_FULFILLED:
-    'recodex/exercises/ATTACH_EXERCISE_GROUP_FULFILLED',
+  ATTACH_EXERCISE_GROUP_PENDING: 'recodex/exercises/ATTACH_EXERCISE_GROUP_PENDING',
+  ATTACH_EXERCISE_GROUP_REJECTED: 'recodex/exercises/ATTACH_EXERCISE_GROUP_REJECTED',
+  ATTACH_EXERCISE_GROUP_FULFILLED: 'recodex/exercises/ATTACH_EXERCISE_GROUP_FULFILLED',
   DETACH_EXERCISE_GROUP: 'recodex/exercises/DETACH_EXERCISE_GROUP',
-  DETACH_EXERCISE_GROUP_PENDING:
-    'recodex/exercises/DETACH_EXERCISE_GROUP_PENDING',
-  DETACH_EXERCISE_GROUP_REJECTED:
-    'recodex/exercises/DETACH_EXERCISE_GROUP_REJECTED',
-  DETACH_EXERCISE_GROUP_FULFILLED:
-    'recodex/exercises/DETACH_EXERCISE_GROUP_FULFILLED',
+  DETACH_EXERCISE_GROUP_PENDING: 'recodex/exercises/DETACH_EXERCISE_GROUP_PENDING',
+  DETACH_EXERCISE_GROUP_REJECTED: 'recodex/exercises/DETACH_EXERCISE_GROUP_REJECTED',
+  DETACH_EXERCISE_GROUP_FULFILLED: 'recodex/exercises/DETACH_EXERCISE_GROUP_FULFILLED',
 };
 
 export const loadExercise = actions.pushResource;
@@ -84,8 +73,7 @@ export const forkExercise = (id, forkId, formData = null) => {
 
 export const create = actions.addResource;
 export const editExercise = actions.updateResource;
-export const editRuntimeConfigs = (id, body) =>
-  actions.updateResource(id, body, `/exercises/${id}/runtime-configs`);
+export const editRuntimeConfigs = (id, body) => actions.updateResource(id, body, `/exercises/${id}/runtime-configs`);
 export const deleteExercise = actions.removeResource;
 
 export const validateExercise = (id, version) =>
@@ -96,15 +84,8 @@ export const validateExercise = (id, version) =>
     body: { version },
   });
 
-export const getVariablesForPipelines = (
-  exerciseId,
-  runtimeEnvironmentId,
-  pipelinesIds
-) => {
-  const body =
-    runtimeEnvironmentId === 'default'
-      ? { pipelinesIds }
-      : { runtimeEnvironmentId, pipelinesIds };
+export const getVariablesForPipelines = (exerciseId, runtimeEnvironmentId, pipelinesIds) => {
+  const body = runtimeEnvironmentId === 'default' ? { pipelinesIds } : { runtimeEnvironmentId, pipelinesIds };
   return createApiAction({
     type: additionalActionTypes.GET_PIPELINE_VARIABLES,
     method: 'POST',
@@ -151,17 +132,12 @@ export const detachExerciseFromGroup = (exerciseId, groupId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.SET_HARDWARE_GROUPS_FULFILLED]: (
-      state,
-      { payload, meta: { id } }
-    ) => state.setIn(['resources', id, 'data'], fromJS(payload)),
+    [additionalActionTypes.SET_HARDWARE_GROUPS_FULFILLED]: (state, { payload, meta: { id } }) =>
+      state.setIn(['resources', id, 'data'], fromJS(payload)),
 
     // Forking ...
 
-    [additionalActionTypes.FORK_EXERCISE_PENDING]: (
-      state,
-      { meta: { id, forkId } }
-    ) =>
+    [additionalActionTypes.FORK_EXERCISE_PENDING]: (state, { meta: { id, forkId } }) =>
       state.updateIn(['resources', id, 'data'], exercise => {
         if (!exercise.has('forks')) {
           exercise = exercise.set('forks', Map());
@@ -174,18 +150,12 @@ const reducer = handleActions(
         );
       }),
 
-    [additionalActionTypes.FORK_EXERCISE_REJECTED]: (
-      state,
-      { meta: { id, forkId } }
-    ) =>
+    [additionalActionTypes.FORK_EXERCISE_REJECTED]: (state, { meta: { id, forkId } }) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.REJECTED,
       }),
 
-    [additionalActionTypes.FORK_EXERCISE_FULFILLED]: (
-      state,
-      { payload: { id: exerciseId }, meta: { id, forkId } }
-    ) =>
+    [additionalActionTypes.FORK_EXERCISE_FULFILLED]: (state, { payload: { id: exerciseId }, meta: { id, forkId } }) =>
       state.setIn(['resources', id, 'data', 'forks', forkId], {
         status: forkStatuses.FULFILLED,
         exerciseId,
@@ -193,40 +163,21 @@ const reducer = handleActions(
 
     // Files ...
 
-    [supplementaryFilesActionTypes.ADD_FILES_FULFILLED]: (
-      state,
-      { payload: files, meta: { exerciseId } }
-    ) =>
-      state.hasIn(['resources', exerciseId])
-        ? updateFiles(state, exerciseId, files, 'supplementaryFilesIds')
-        : state,
+    [supplementaryFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { exerciseId } }) =>
+      state.hasIn(['resources', exerciseId]) ? updateFiles(state, exerciseId, files, 'supplementaryFilesIds') : state,
 
-    [attachmentFilesActionTypes.ADD_FILES_FULFILLED]: (
-      state,
-      { payload: files, meta: { exerciseId } }
-    ) =>
-      state.hasIn(['resources', exerciseId])
-        ? updateFiles(state, exerciseId, files, 'attachmentFilesIds')
-        : state,
+    [attachmentFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { exerciseId } }) =>
+      state.hasIn(['resources', exerciseId]) ? updateFiles(state, exerciseId, files, 'attachmentFilesIds') : state,
 
     // Attach exercise group ...
 
-    [additionalActionTypes.ATTACH_EXERCISE_GROUP_PENDING]: (
-      state,
-      { meta: { exerciseId, groupId } }
-    ) =>
+    [additionalActionTypes.ATTACH_EXERCISE_GROUP_PENDING]: (state, { meta: { exerciseId, groupId } }) =>
       state.hasIn(['resources', exerciseId, 'data']) &&
       !state.hasIn(['resources', exerciseId, 'data', 'groupsIds', groupId])
-        ? state.setIn(
-            ['resources', exerciseId, 'data', 'attachingGroupId'],
-            groupId
-          )
+        ? state.setIn(['resources', exerciseId, 'data', 'attachingGroupId'], groupId)
         : state,
 
-    [additionalActionTypes.ATTACH_EXERCISE_GROUP_FULFILLED]: (
-      state,
-      { payload: data, meta: { exerciseId } }
-    ) =>
+    [additionalActionTypes.ATTACH_EXERCISE_GROUP_FULFILLED]: (state, { payload: data, meta: { exerciseId } }) =>
       state.setIn(
         ['resources', exerciseId],
         createRecord({
@@ -237,35 +188,20 @@ const reducer = handleActions(
         })
       ),
 
-    [additionalActionTypes.ATTACH_EXERCISE_GROUP_REJECTED]: (
-      state,
-      { meta: { exerciseId, groupId } }
-    ) =>
-      state.getIn(['resources', exerciseId, 'data', 'attachingGroupId']) ===
-      groupId
+    [additionalActionTypes.ATTACH_EXERCISE_GROUP_REJECTED]: (state, { meta: { exerciseId, groupId } }) =>
+      state.getIn(['resources', exerciseId, 'data', 'attachingGroupId']) === groupId
         ? state.deleteIn(['resources', exerciseId, 'data', 'attachingGroupId'])
         : state,
 
     // Detach exercises group ...
 
-    [additionalActionTypes.DETACH_EXERCISE_GROUP_PENDING]: (
-      state,
-      { meta: { exerciseId, groupId } }
-    ) =>
+    [additionalActionTypes.DETACH_EXERCISE_GROUP_PENDING]: (state, { meta: { exerciseId, groupId } }) =>
       state.hasIn(['resources', exerciseId, 'data', 'groupsIds']) &&
-      state
-        .getIn(['resources', exerciseId, 'data', 'groupsIds'])
-        .includes(groupId)
-        ? state.setIn(
-            ['resources', exerciseId, 'data', 'detachingGroupId'],
-            groupId
-          )
+      state.getIn(['resources', exerciseId, 'data', 'groupsIds']).includes(groupId)
+        ? state.setIn(['resources', exerciseId, 'data', 'detachingGroupId'], groupId)
         : state,
 
-    [additionalActionTypes.DETACH_EXERCISE_GROUP_FULFILLED]: (
-      state,
-      { payload: data, meta: { exerciseId } }
-    ) =>
+    [additionalActionTypes.DETACH_EXERCISE_GROUP_FULFILLED]: (state, { payload: data, meta: { exerciseId } }) =>
       state.setIn(
         ['resources', exerciseId],
         createRecord({
@@ -276,20 +212,13 @@ const reducer = handleActions(
         })
       ),
 
-    [additionalActionTypes.DETACH_EXERCISE_GROUP_REJECTED]: (
-      state,
-      { meta: { exerciseId, groupId } }
-    ) =>
-      state.getIn(['resources', exerciseId, 'data', 'detachingGroupId']) ===
-      groupId
+    [additionalActionTypes.DETACH_EXERCISE_GROUP_REJECTED]: (state, { meta: { exerciseId, groupId } }) =>
+      state.getIn(['resources', exerciseId, 'data', 'detachingGroupId']) === groupId
         ? state.deleteIn(['resources', exerciseId, 'data', 'detachingGroupId'])
         : state,
 
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
-    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (
-      state,
-      { payload: { items }, meta: { endpoint } }
-    ) =>
+    [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (state, { payload: { items }, meta: { endpoint } }) =>
       endpoint === 'exercises'
         ? state.mergeIn(
             ['resources'],
@@ -311,8 +240,6 @@ const reducer = handleActions(
 );
 
 const updateFiles = (state, exerciseId, files, field) =>
-  state.updateIn(['resources', exerciseId, 'data', field], list =>
-    List(files.map(file => file.id))
-  );
+  state.updateIn(['resources', exerciseId, 'data', field], list => List(files.map(file => file.id)));
 
 export default reducer;

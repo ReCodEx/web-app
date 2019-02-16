@@ -16,10 +16,7 @@ const defaultLoading = noIcons => (
 const defaultFailed = noIcons => (
   <span>
     {!noIcons && <WarningIcon gapRight />}
-    <FormattedMessage
-      id="app.resourceRenderer.loadingFailed"
-      defaultMessage="Loading failed."
-    />
+    <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
   </span>
 );
 
@@ -32,8 +29,7 @@ const FetchManyResourceRenderer = ({
   hiddenUntilReady = false,
   forceLoading = false,
 }) => {
-  const stillLoading =
-    !fetchManyStatus || isLoading(fetchManyStatus) || forceLoading;
+  const stillLoading = !fetchManyStatus || isLoading(fetchManyStatus) || forceLoading;
   return stillLoading
     ? hiddenUntilReady
       ? null

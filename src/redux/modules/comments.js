@@ -51,22 +51,13 @@ export const postComment = (user, threadId, text, isPrivate) =>
   });
 
 export const repostComment = (threadId, tmpId) => (dispatch, getState) => {
-  const comment = commentsSelector(getState(), threadId).find(
-    cmt => cmt.get('id') === tmpId
-  );
+  const comment = commentsSelector(getState(), threadId).find(cmt => cmt.get('id') === tmpId);
   if (comment) {
     dispatch({
       type: actionTypes.REMOVE_COMMENT,
       payload: { threadId, id: tmpId },
     });
-    dispatch(
-      postComment(
-        comment.get('user'),
-        threadId,
-        comment.get('text'),
-        comment.get('isPrivate')
-      )
-    ).catch(() => {});
+    dispatch(postComment(comment.get('user'), threadId, comment.get('text'), comment.get('isPrivate'))).catch(() => {});
   }
 };
 
@@ -92,13 +83,9 @@ export const deleteComment = (threadId, commentId) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [actionTypes.UPDATE_FULFILLED]:
-      reduceActions[resourceActionTypes.FETCH_FULFILLED],
+    [actionTypes.UPDATE_FULFILLED]: reduceActions[resourceActionTypes.FETCH_FULFILLED],
 
-    [actionTypes.POST_COMMENT_PENDING]: (
-      state,
-      { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }
-    ) => {
+    [actionTypes.POST_COMMENT_PENDING]: (state, { payload: { text, isPrivate }, meta: { tmpId, user, threadId } }) => {
       const correctUserData = Object.assign({}, user, {
         name: user.fullName || user.name,
       });
@@ -109,90 +96,42 @@ const reducer = handleActions(
         user: correctUserData,
         isPrivate: isPrivate === 'yes',
       });
-      return state.updateIn(
-        ['resources', threadId, 'data', 'comments'],
-        comments => comments.push(resource)
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments => comments.push(resource));
+    },
+
+    [actionTypes.POST_COMMENT_FULFILLED]: (state, { payload, meta: { threadId, tmpId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === tmpId ? fromJS(payload) : comment))
       );
     },
 
-    [actionTypes.POST_COMMENT_FULFILLED]: (
-      state,
-      { payload, meta: { threadId, tmpId } }
-    ) => {
-      return state.updateIn(
-        ['resources', threadId, 'data', 'comments'],
-        comments =>
-          comments.map(comment =>
-            comment.get('id') === tmpId ? fromJS(payload) : comment
-          )
+    [actionTypes.POST_COMMENT_REJECTED]: (state, { meta: { threadId, tmpId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === tmpId ? comment.set('status', 'failed') : comment))
       );
     },
 
-    [actionTypes.POST_COMMENT_REJECTED]: (
-      state,
-      { meta: { threadId, tmpId } }
-    ) => {
-      return state.updateIn(
-        ['resources', threadId, 'data', 'comments'],
-        comments =>
-          comments.map(comment =>
-            comment.get('id') === tmpId
-              ? comment.set('status', 'failed')
-              : comment
-          )
+    [actionTypes.TOGGLE_PRIVACY_PENDING]: (state, { payload, meta: { threadId, commentId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === commentId ? comment.set('isToggling', true) : comment))
       );
     },
 
-    [actionTypes.TOGGLE_PRIVACY_PENDING]: (
-      state,
-      { payload, meta: { threadId, commentId } }
-    ) => {
-      return state.updateIn(
-        ['resources', threadId, 'data', 'comments'],
-        comments =>
-          comments.map(comment =>
-            comment.get('id') === commentId
-              ? comment.set('isToggling', true)
-              : comment
-          )
+    [actionTypes.TOGGLE_PRIVACY_FULFILLED]: (state, { payload, meta: { threadId, commentId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === commentId ? fromJS(payload) : comment))
       );
     },
 
-    [actionTypes.TOGGLE_PRIVACY_FULFILLED]: (
-      state,
-      { payload, meta: { threadId, commentId } }
-    ) => {
-      return state.updateIn(
-        ['resources', threadId, 'data', 'comments'],
-        comments =>
-          comments.map(comment =>
-            comment.get('id') === commentId ? fromJS(payload) : comment
-          )
+    [actionTypes.TOGGLE_PRIVACY_REJECTED]: (state, { payload, meta: { threadId, commentId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === commentId ? comment.set('isToggling', false) : comment))
       );
     },
 
-    [actionTypes.TOGGLE_PRIVACY_REJECTED]: (
-      state,
-      { payload, meta: { threadId, commentId } }
-    ) => {
-      return state.updateIn(
-        ['resources', threadId, 'data', 'comments'],
-        comments =>
-          comments.map(comment =>
-            comment.get('id') === commentId
-              ? comment.set('isToggling', false)
-              : comment
-          )
-      );
-    },
-
-    [actionTypes.DELETE_COMMENT_FULFILLED]: (
-      state,
-      { meta: { threadId, commentId } }
-    ) => {
-      return state.updateIn(
-        ['resources', threadId, 'data', 'comments'],
-        comments => comments.filter(cmt => cmt.get('id') !== commentId)
+    [actionTypes.DELETE_COMMENT_FULFILLED]: (state, { meta: { threadId, commentId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.filter(cmt => cmt.get('id') !== commentId)
       );
     },
   }),

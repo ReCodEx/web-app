@@ -7,9 +7,7 @@ import { injectIntl } from 'react-intl';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import ExercisesName, {
-  LoadingExercisesName,
-} from '../../components/Exercises/ExercisesName';
+import ExercisesName, { LoadingExercisesName } from '../../components/Exercises/ExercisesName';
 
 class ExercisesNameContainer extends Component {
   componentWillMount() {
@@ -34,9 +32,7 @@ class ExercisesNameContainer extends Component {
     } = this.props;
     return (
       <ResourceRenderer resource={exercise} loading={<LoadingExercisesName />}>
-        {exercise => (
-          <ExercisesName {...exercise} noLink={noLink} locale={locale} />
-        )}
+        {exercise => <ExercisesName {...exercise} noLink={noLink} locale={locale} />}
       </ResourceRenderer>
     );
   }

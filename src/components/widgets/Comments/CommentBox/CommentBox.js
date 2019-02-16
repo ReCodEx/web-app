@@ -30,12 +30,7 @@ class CommentBox extends Component {
 
     return (
       <Box
-        title={
-          <FormattedMessage
-            id="app.comments.title"
-            defaultMessage="Comments and Notes"
-          />
-        }
+        title={<FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />}
         noPadding={false}
         collapsable
         footer={footer}

@@ -25,12 +25,7 @@ class SisCreateGroupForm extends Component {
 
     return (
       <FormBox
-        title={
-          <FormattedMessage
-            id="app.sisCreateGroupForm.title"
-            defaultMessage="Create ReCodEx group from SIS"
-          />
-        }
+        title={<FormattedMessage id="app.sisCreateGroupForm.title" defaultMessage="Create ReCodEx group from SIS" />}
         succeeded={submitSucceeded}
         dirty={anyTouched}
         footer={
@@ -44,23 +39,10 @@ class SisCreateGroupForm extends Component {
               hasFailed={submitFailed}
               handleSubmit={handleSubmit}
               messages={{
-                submit: (
-                  <FormattedMessage
-                    id="app.sisCreateGroupForm.submit"
-                    defaultMessage="Create"
-                  />
-                ),
-                submitting: (
-                  <FormattedMessage
-                    id="app.sisCreateGroupForm.submitting"
-                    defaultMessage="Creating..."
-                  />
-                ),
+                submit: <FormattedMessage id="app.sisCreateGroupForm.submit" defaultMessage="Create" />,
+                submitting: <FormattedMessage id="app.sisCreateGroupForm.submitting" defaultMessage="Creating..." />,
                 success: (
-                  <FormattedMessage
-                    id="app.sisCreateGroupForm.success"
-                    defaultMessage="The group was created."
-                  />
+                  <FormattedMessage id="app.sisCreateGroupForm.success" defaultMessage="The group was created." />
                 ),
               }}
             />
@@ -79,20 +61,11 @@ class SisCreateGroupForm extends Component {
           name="parentGroupId"
           required
           component={SelectField}
-          label={
-            <FormattedMessage
-              id="app.sisCreateGroupForm.parentGroup"
-              defaultMessage="Parent group:"
-            />
-          }
+          label={<FormattedMessage id="app.sisCreateGroupForm.parentGroup" defaultMessage="Parent group:" />}
           options={groups
             .map(group => ({
               key: group.id,
-              name: getGroupCanonicalLocalizedName(
-                group,
-                groupsAccessor,
-                locale
-              ),
+              name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
             }))
             .sort((a, b) => a.name.localeCompare(b.name, locale))}
           addEmptyOption
@@ -120,10 +93,7 @@ const validate = ({ parentGroupId }) => {
 
   if (!parentGroupId) {
     errors['parentGroupId'] = (
-      <FormattedMessage
-        id="app.sisCreateGroupForm.emptyParentGroup"
-        defaultMessage="Please fill the parent group."
-      />
+      <FormattedMessage id="app.sisCreateGroupForm.emptyParentGroup" defaultMessage="Please fill the parent group." />
     );
   }
 

@@ -7,21 +7,11 @@ import ConfirmDeleteButton from '../../components/buttons/DeleteButton/ConfirmDe
 import { deleteExercise } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 
-const DeleteExerciseButtonContainer = ({
-  resourceless = false,
-  exercise,
-  deleteExercise,
-  onDeleted,
-  ...props
-}) =>
+const DeleteExerciseButtonContainer = ({ resourceless = false, exercise, deleteExercise, onDeleted, ...props }) =>
   resourceless ? (
     <ConfirmDeleteButton {...props} onClick={deleteExercise} />
   ) : (
-    <DeleteButton
-      {...props}
-      resource={exercise}
-      deleteResource={deleteExercise}
-    />
+    <DeleteButton {...props} resource={exercise} deleteResource={deleteExercise} />
   );
 
 DeleteExerciseButtonContainer.propTypes = {

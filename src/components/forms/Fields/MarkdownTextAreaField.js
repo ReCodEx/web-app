@@ -44,10 +44,7 @@ class MarkdownTextAreaField extends Component {
               name={`${name}.togglePreview`}
               checked={showPreview}
               onChange={() => this.toggleShowPreview()}>
-              <FormattedMessage
-                id="app.markdownTextArea.showPreview"
-                defaultMessage="Preview"
-              />
+              <FormattedMessage id="app.markdownTextArea.showPreview" defaultMessage="Preview" />
             </OnOffCheckbox>
           </Col>
           <Col sm={8}>
@@ -66,21 +63,14 @@ class MarkdownTextAreaField extends Component {
         {showPreview && (
           <div>
             <h4>
-              <FormattedMessage
-                id="app.markdownTextArea.preview"
-                defaultMessage="Preview:"
-              />
+              <FormattedMessage id="app.markdownTextArea.preview" defaultMessage="Preview:" />
             </h4>
             <div className={styles.preview}>
               {value.length === 0 && (
                 <p>
                   <small>
                     (
-                    <FormattedMessage
-                      id="app.markdownTextArea.empty"
-                      defaultMessage="Empty"
-                    />
-                    )
+                    <FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
                   </small>
                 </p>
               )}

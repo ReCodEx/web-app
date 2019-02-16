@@ -23,9 +23,7 @@ const StatusIcon = ({ id, message, icon, accepted = false }) => (
         <Icon icon="check-circle" className="text-green" />
       </OverlayTrigger>
     ) : (
-      <OverlayTrigger
-        placement="bottom"
-        overlay={<Tooltip id={id}>{message}</Tooltip>}>
+      <OverlayTrigger placement="bottom" overlay={<Tooltip id={id}>{message}</Tooltip>}>
         {icon}
       </OverlayTrigger>
     )}

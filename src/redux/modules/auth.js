@@ -146,12 +146,7 @@ export const generateToken = (expiration, scopes) =>
   });
 
 const closeAuthPopupWindow = popupWindow => {
-  if (
-    popupWindow &&
-    !popupWindow.closed &&
-    popupWindow.close &&
-    popupWindow.postMessage
-  ) {
+  if (popupWindow && !popupWindow.closed && popupWindow.close && popupWindow.postMessage) {
     // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)
     try {
       popupWindow.postMessage('die', window.location.origin);
@@ -162,12 +157,9 @@ const closeAuthPopupWindow = popupWindow => {
   }
 };
 
-export const selectInstance = createAction(
-  actionTypes.SELECT_INSTANCE,
-  instanceId => ({
-    instanceId,
-  })
-);
+export const selectInstance = createAction(actionTypes.SELECT_INSTANCE, instanceId => ({
+  instanceId,
+}));
 
 /**
  * Authentication reducer.
@@ -198,26 +190,17 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
       [actionTypes.LOGIN_REQUEST]: (state, { meta: { service } }) =>
         state.setIn(['status', service], statusTypes.LOGGING_IN),
 
-      [actionTypes.LOGIN_SUCCESS]: (
-        state,
-        { payload: { accessToken, user }, meta: { service, popupWindow } }
-      ) => {
+      [actionTypes.LOGIN_SUCCESS]: (state, { payload: { accessToken, user }, meta: { service, popupWindow } }) => {
         closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGGED_IN)
           .set('jwt', accessToken)
           .set('accessToken', decodeAndValidateAccessToken(accessToken))
           .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
-          .set(
-            'instanceId',
-            safeGet(user, ['privateData', 'instancesIds', 0], null)
-          );
+          .set('instanceId', safeGet(user, ['privateData', 'instancesIds', 0], null));
       },
 
-      [actionTypes.LOGIN_FAILIURE]: (
-        state,
-        { meta: { service, popupWindow } }
-      ) => {
+      [actionTypes.LOGIN_FAILIURE]: (state, { meta: { service, popupWindow } }) => {
         closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGIN_FAILED)
@@ -229,10 +212,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
 
       [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (
         state,
-        {
-          payload: { accessToken },
-          meta: { instanceId = null, service = LOCAL_LOGIN },
-        }
+        { payload: { accessToken }, meta: { instanceId = null, service = LOCAL_LOGIN } }
       ) =>
         state
           .setIn(['status', service], statusTypes.LOGGED_IN)
@@ -243,53 +223,36 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
 
       [actionTypes.LOGOUT]: (state, action) =>
         state
-          .update('status', services =>
-            services.map(() => statusTypes.LOGGED_OUT)
-          )
+          .update('status', services => services.map(() => statusTypes.LOGGED_OUT))
           .set('jwt', null)
           .set('accessToken', null)
           .set('userId', null)
           .set('instanceId', null),
 
-      [actionTypes.CHANGE_PASSWORD_PENDING]: (state, action) =>
-        state.set('changePasswordStatus', 'PENDING'),
+      [actionTypes.CHANGE_PASSWORD_PENDING]: (state, action) => state.set('changePasswordStatus', 'PENDING'),
 
-      [actionTypes.CHANGE_PASSWORD_FAILED]: (state, action) =>
-        state.set('changePasswordStatus', 'FAILED'),
+      [actionTypes.CHANGE_PASSWORD_FAILED]: (state, action) => state.set('changePasswordStatus', 'FAILED'),
 
-      [actionTypes.CHANGE_PASSWORD_FULFILLED]: (state, action) =>
-        state.set('changePasswordStatus', 'FULFILLED'),
+      [actionTypes.CHANGE_PASSWORD_FULFILLED]: (state, action) => state.set('changePasswordStatus', 'FULFILLED'),
 
-      [actionTypes.RESET_PASSWORD_PENDING]: (state, action) =>
-        state.set('resetPasswordStatus', 'PENDING'),
+      [actionTypes.RESET_PASSWORD_PENDING]: (state, action) => state.set('resetPasswordStatus', 'PENDING'),
 
-      [actionTypes.RESET_PASSWORD_FAILED]: (state, action) =>
-        state.set('resetPasswordStatus', 'FAILED'),
+      [actionTypes.RESET_PASSWORD_FAILED]: (state, action) => state.set('resetPasswordStatus', 'FAILED'),
 
-      [actionTypes.RESET_PASSWORD_FULFILLED]: (state, action) =>
-        state.set('resetPasswordStatus', 'FULFILLED'),
+      [actionTypes.RESET_PASSWORD_FULFILLED]: (state, action) => state.set('resetPasswordStatus', 'FULFILLED'),
 
-      [usersActionTypes.UPDATE_FULFILLED]: (
-        state,
-        { payload: { accessToken = null } }
-      ) =>
+      [usersActionTypes.UPDATE_FULFILLED]: (state, { payload: { accessToken = null } }) =>
         accessToken
           ? state
               .set('jwt', accessToken)
               .set('accessToken', decodeAndValidateAccessToken(accessToken))
-              .set(
-                'userId',
-                getUserId(decodeAndValidateAccessToken(accessToken))
-              )
+              .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
           : state,
 
-      [actionTypes.GENERATE_TOKEN_FULFILLED]: (
-        state,
-        { payload: { accessToken } }
-      ) => state.set('lastGeneratedToken', accessToken),
+      [actionTypes.GENERATE_TOKEN_FULFILLED]: (state, { payload: { accessToken } }) =>
+        state.set('lastGeneratedToken', accessToken),
 
-      [actionTypes.SELECT_INSTANCE]: (state, { payload: { instanceId } }) =>
-        state.set('instanceId', instanceId),
+      [actionTypes.SELECT_INSTANCE]: (state, { payload: { instanceId } }) => state.set('instanceId', instanceId),
     },
     initialState
   );

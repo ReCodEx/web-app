@@ -13,12 +13,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
   const constraints = getLimitsConstraintsOfSingleGroup(hardwareGroup);
   return (
     <Box
-      title={
-        <FormattedMessage
-          id="app.hardwareGroupMetadata.title"
-          defaultMessage="Hardware Group Metadata"
-        />
-      }
+      title={<FormattedMessage id="app.hardwareGroupMetadata.title" defaultMessage="Hardware Group Metadata" />}
       description={<h5 className="text-bold">{hardwareGroup.name}</h5>}
       type="primary"
       unlimitedHeight>
@@ -27,10 +22,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
           {Boolean(isSuperAdmin) && (
             <tr>
               <th>
-                <FormattedMessage
-                  id="app.hardwareGroupMetadata.id"
-                  defaultMessage="Internal Identifier:"
-                />
+                <FormattedMessage id="app.hardwareGroupMetadata.id" defaultMessage="Internal Identifier:" />
               </th>
               <td>
                 <code>{hardwareGroup.id}</code>
@@ -40,20 +32,14 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
           {Boolean(isSuperAdmin) && (
             <tr>
               <th>
-                <FormattedMessage
-                  id="app.hardwareGroupMetadata.description"
-                  defaultMessage="Internal Description:"
-                />
+                <FormattedMessage id="app.hardwareGroupMetadata.description" defaultMessage="Internal Description:" />
               </th>
               <td>{hardwareGroup.description}</td>
             </tr>
           )}
           <tr>
             <th>
-              <FormattedMessage
-                id="app.hardwareGroupMetadata.memoryConstraints"
-                defaultMessage="Memory Constraints:"
-              />
+              <FormattedMessage id="app.hardwareGroupMetadata.memoryConstraints" defaultMessage="Memory Constraints:" />
             </th>
             <td>
               <span>
@@ -70,8 +56,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                   <Icon icon="braille" />
                 </OverlayTrigger>
                 &nbsp;&nbsp;
-                {prettyPrintBytes(constraints.memory.min * 1024)} ...{' '}
-                {prettyPrintBytes(constraints.memory.max * 1024)}
+                {prettyPrintBytes(constraints.memory.min * 1024)} ... {prettyPrintBytes(constraints.memory.max * 1024)}
               </span>
             </td>
           </tr>
@@ -83,10 +68,8 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
               />
             </th>
             <td>
-              {constraints.cpuTimePerTest.min ===
-                constraints.wallTimePerTest.min &&
-              constraints.cpuTimePerTest.max ===
-                constraints.wallTimePerTest.max ? (
+              {constraints.cpuTimePerTest.min === constraints.wallTimePerTest.min &&
+              constraints.cpuTimePerTest.max === constraints.wallTimePerTest.max ? (
                 <span className="text-nowrap">
                   <OverlayTrigger
                     placement="top"
@@ -149,10 +132,8 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
               />
             </th>
             <td>
-              {constraints.cpuTimePerExercise.min ===
-                constraints.wallTimePerExercise.min &&
-              constraints.cpuTimePerExercise.max !==
-                constraints.wallTimePerExercise.max ? (
+              {constraints.cpuTimePerExercise.min === constraints.wallTimePerExercise.min &&
+              constraints.cpuTimePerExercise.max !== constraints.wallTimePerExercise.max ? (
                 <span className="text-nowrap">
                   <OverlayTrigger
                     placement="top"
@@ -201,9 +182,8 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
                     <Icon icon={['far', 'clock']} />
                   </OverlayTrigger>
                   &nbsp;&nbsp;
-                  {prettyMs(
-                    constraints.wallTimePerExercise.min * 1000
-                  )} ... {prettyMs(constraints.wallTimePerExercise.max * 1000)}
+                  {prettyMs(constraints.wallTimePerExercise.min * 1000)} ...{' '}
+                  {prettyMs(constraints.wallTimePerExercise.max * 1000)}
                 </span>
               )}
             </td>

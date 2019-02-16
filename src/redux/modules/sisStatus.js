@@ -13,9 +13,6 @@ const { actions, reduceActions } = factory({
 
 export const fetchSisStatusIfNeeded = () => actions.fetchOneIfNeeded('status');
 
-const reducer = handleActions(
-  Object.assign({}, reduceActions, {}),
-  initialState
-);
+const reducer = handleActions(Object.assign({}, reduceActions, {}), initialState);
 
 export default reducer;

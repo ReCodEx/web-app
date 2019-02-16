@@ -21,10 +21,7 @@ const AssignmentFormMultiassignSuccess = ({
   <React.Fragment>
     <div className="callout callout-success">
       <h4>
-        <FormattedMessage
-          id="app.multiAssignForm.successHeading"
-          defaultMessage="Exercise Assigned"
-        />
+        <FormattedMessage id="app.multiAssignForm.successHeading" defaultMessage="Exercise Assigned" />
       </h4>
       <p>
         <FormattedMessage
@@ -43,17 +40,12 @@ const AssignmentFormMultiassignSuccess = ({
               <td className="text-nowrap shrink-col">
                 <Icon icon="check" />
               </td>
-              <td>
-                {getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
-              </td>
+              <td>{getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}</td>
               <td className="text-right">
                 <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                   <Button bsSize="xs" bsStyle="primary" className="btn-flat">
                     <GroupIcon gapRight />
-                    <FormattedMessage
-                      id="app.group.detail"
-                      defaultMessage="Group Detail"
-                    />
+                    <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
                   </Button>
                 </LinkContainer>
               </td>
@@ -63,15 +55,9 @@ const AssignmentFormMultiassignSuccess = ({
     </Table>
 
     <div className="text-center">
-      <Button
-        bsStyle="warning"
-        className="btn-flat"
-        onClick={acknowledgeSuccess}>
+      <Button bsStyle="warning" className="btn-flat" onClick={acknowledgeSuccess}>
         <Icon icon={['far', 'smile']} gapRight />
-        <FormattedMessage
-          id="generic.acknowledge"
-          defaultMessage="Acknowledge"
-        />
+        <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
       </Button>
     </div>
   </React.Fragment>

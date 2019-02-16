@@ -14,7 +14,4 @@ export const exerciseConfigSelector = exerciseId =>
   );
 
 export const exerciseConfigFormErrors = (state, formName) =>
-  (state.form[formName] &&
-    state.form[formName].syncErrors &&
-    state.form[formName].syncErrors.config) ||
-  null;
+  (state.form[formName] && state.form[formName].syncErrors && state.form[formName].syncErrors.config) || null;

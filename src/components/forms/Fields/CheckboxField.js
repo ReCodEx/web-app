@@ -19,15 +19,7 @@ const CheckboxField = ({
   /* eslint-disable no-unneeded-ternary */
   return (
     <FormGroup
-      validationState={
-        error
-          ? 'error'
-          : warning
-          ? 'warning'
-          : dirty && !ignoreDirty
-          ? 'success'
-          : undefined
-      }
+      validationState={error ? 'error' : warning ? 'warning' : dirty && !ignoreDirty ? 'success' : undefined}
       controlId={input.name}>
       <Component {...props} {...input} checked={input.value ? true : false}>
         {label}
@@ -39,10 +31,7 @@ const CheckboxField = ({
                 {error || warning}
               </Tooltip>
             }>
-            <WarningIcon
-              gapLeft
-              className={error ? 'text-danger' : 'text-warning'}
-            />
+            <WarningIcon gapLeft className={error ? 'text-danger' : 'text-warning'} />
           </OverlayTrigger>
         )}
       </Component>

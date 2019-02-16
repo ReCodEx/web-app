@@ -13,13 +13,9 @@ const computeMap = (groups, filter) => {
 };
 
 export const computeVisibleGroupsMap = defaultMemoize(groups =>
-  computeMap(groups, group =>
-    group.getIn(['data', 'permissionHints', 'viewDetail'])
-  )
+  computeMap(groups, group => group.getIn(['data', 'permissionHints', 'viewDetail']))
 );
 
 export const computeEditableGroupsMap = defaultMemoize(groups =>
-  computeMap(groups, group =>
-    group.getIn(['data', 'permissionHints', 'update'])
-  )
+  computeMap(groups, group => group.getIn(['data', 'permissionHints', 'update']))
 );

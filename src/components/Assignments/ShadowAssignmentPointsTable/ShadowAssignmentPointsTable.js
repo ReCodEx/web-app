@@ -31,8 +31,7 @@ class ShadowAssignmentPointsTable extends Component {
   closeDialog = () => this.setState({ dialogOpen: false });
 
   getPointsFormInitialValues = defaultMemoize((awardeeId, pointsId) => {
-    const studentPoints =
-      pointsId && this.props.points.find(({ id }) => id === pointsId);
+    const studentPoints = pointsId && this.props.points.find(({ id }) => id === pointsId);
     return studentPoints === null
       ? {
           pointsId: null,
@@ -84,10 +83,7 @@ class ShadowAssignmentPointsTable extends Component {
     return (
       <Box
         title={
-          <FormattedMessage
-            id="app.shadowAssignmentPointsTable.title"
-            defaultMessage="Shadow Assignment Points"
-          />
+          <FormattedMessage id="app.shadowAssignmentPointsTable.title" defaultMessage="Shadow Assignment Points" />
         }
         collapsable
         isOpen
@@ -98,75 +94,37 @@ class ShadowAssignmentPointsTable extends Component {
             <thead>
               <tr>
                 <th>
-                  <FormattedMessage
-                    id="app.shadowAssignmentPointsTable.user"
-                    defaultMessage="User"
-                  />
+                  <FormattedMessage id="app.shadowAssignmentPointsTable.user" defaultMessage="User" />
                 </th>
                 <th className="text-center text-nowrap">
-                  <FormattedMessage
-                    id="app.shadowAssignmentPointsTable.receivedPoints"
-                    defaultMessage="Points"
-                  />
+                  <FormattedMessage id="app.shadowAssignmentPointsTable.receivedPoints" defaultMessage="Points" />
                 </th>
                 <th className="text-nowrap">
-                  <FormattedMessage
-                    id="app.shadowAssignmentPointsTable.awardedAt"
-                    defaultMessage="Awarded At"
-                  />
+                  <FormattedMessage id="app.shadowAssignmentPointsTable.awardedAt" defaultMessage="Awarded At" />
                 </th>
                 <th>
-                  <FormattedMessage
-                    id="app.shadowAssignmentPointsTable.note"
-                    defaultMessage="Note"
-                  />
+                  <FormattedMessage id="app.shadowAssignmentPointsTable.note" defaultMessage="Note" />
                 </th>
                 <th />
               </tr>
             </thead>
             <tbody>
               {students.sort(nameComparator).map(student => {
-                const points = safeGet(
-                  studentPoints,
-                  [student.id, 'points'],
-                  null
-                );
-                const pointsId = safeGet(
-                  studentPoints,
-                  [student.id, 'id'],
-                  null
-                );
-                const awardedAt = safeGet(
-                  studentPoints,
-                  [student.id, 'awardedAt'],
-                  null
-                );
+                const points = safeGet(studentPoints, [student.id, 'points'], null);
+                const pointsId = safeGet(studentPoints, [student.id, 'id'], null);
+                const awardedAt = safeGet(studentPoints, [student.id, 'awardedAt'], null);
                 return (
                   <tr key={student.id}>
                     <td className="text-nowrap">
-                      <UsersNameContainer
-                        userId={student.id}
-                        showEmail="icon"
-                      />
+                      <UsersNameContainer userId={student.id} showEmail="icon" />
                     </td>
-                    <td className="text-center text-nowrap">
-                      {points !== null ? points : <span>&mdash;</span>}
-                    </td>
-                    <td>
-                      {awardedAt && (
-                        <DateTime unixts={awardedAt} showRelative />
-                      )}
-                    </td>
-                    <td>
-                      {safeGet(studentPoints, [student.id, 'note'], null)}
-                    </td>
+                    <td className="text-center text-nowrap">{points !== null ? points : <span>&mdash;</span>}</td>
+                    <td>{awardedAt && <DateTime unixts={awardedAt} showRelative />}</td>
+                    <td>{safeGet(studentPoints, [student.id, 'note'], null)}</td>
                     {points === null ? (
                       <td className="shrink-col text-nowrap text-right">
                         {permissionHints.createPoints && (
-                          <Button
-                            bsStyle="success"
-                            onClick={() => this.openDialog(student.id)}
-                            bsSize="xs">
+                          <Button bsStyle="success" onClick={() => this.openDialog(student.id)} bsSize="xs">
                             <Icon gapRight icon={['far', 'star']} />
                             <FormattedMessage
                               id="app.shadowAssignmentPointsTable.createPointsButton"
@@ -178,12 +136,7 @@ class ShadowAssignmentPointsTable extends Component {
                     ) : (
                       <td className="shrink-col text-nowrap text-right">
                         {permissionHints.updatePoints && (
-                          <Button
-                            bsStyle="warning"
-                            onClick={() =>
-                              this.openDialog(student.id, pointsId)
-                            }
-                            bsSize="xs">
+                          <Button bsStyle="warning" onClick={() => this.openDialog(student.id, pointsId)} bsSize="xs">
                             <EditIcon gapRight />
                             <FormattedMessage
                               id="app.shadowAssignmentPointsTable.updatePointsButton"
@@ -218,11 +171,7 @@ class ShadowAssignmentPointsTable extends Component {
               })}
             </tbody>
           </Table>
-          <Modal
-            show={this.state.dialogOpen}
-            backdrop="static"
-            onHide={this.closeDialog}
-            bsSize="large">
+          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -232,17 +181,10 @@ class ShadowAssignmentPointsTable extends Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <UsersNameContainer
-                userId={this.state.dialogStudentId}
-                showEmail="icon"
-                large
-              />
+              <UsersNameContainer userId={this.state.dialogStudentId} showEmail="icon" large />
               <hr />
               <EditShadowAssignmentPointsForm
-                initialValues={this.getPointsFormInitialValues(
-                  this.state.dialogStudentId,
-                  this.state.dialogPointsId
-                )}
+                initialValues={this.getPointsFormInitialValues(this.state.dialogStudentId, this.state.dialogPointsId)}
                 onSubmit={this.submitPointsForm}
                 maxPoints={maxPoints}
               />

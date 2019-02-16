@@ -32,12 +32,7 @@ class EditEnvironmentSimpleForm extends Component {
               .sort((a, b) => a.longName.localeCompare(b.longName, locale))
               .map((environment, i) => (
                 <Col key={i} xs={12} sm={6}>
-                  <Field
-                    name={`${environment.id}`}
-                    component={CheckboxField}
-                    onOff
-                    label={environment.longName}
-                  />
+                  <Field name={`${environment.id}`} component={CheckboxField} onOff label={environment.longName} />
                 </Col>
               ))}
           </Row>
@@ -45,10 +40,7 @@ class EditEnvironmentSimpleForm extends Component {
 
         {submitFailed && (
           <Alert bsStyle="danger">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
@@ -57,11 +49,7 @@ class EditEnvironmentSimpleForm extends Component {
         <div className="text-center">
           {dirty && (
             <span>
-              <Button
-                type="reset"
-                onClick={reset}
-                bsStyle={'danger'}
-                className="btn-flat">
+              <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
                 <RefreshIcon gapRight />
                 <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>{' '}
@@ -77,12 +65,7 @@ class EditEnvironmentSimpleForm extends Component {
             hasFailed={submitFailed}
             handleSubmit={handleSubmit}
             messages={{
-              submit: (
-                <FormattedMessage
-                  id="app.editEnvironmentSimpleForm.submit"
-                  defaultMessage="Save Environments"
-                />
-              ),
+              submit: <FormattedMessage id="app.editEnvironmentSimpleForm.submit" defaultMessage="Save Environments" />,
               submitting: (
                 <FormattedMessage
                   id="app.editEnvironmentSimpleForm.submitting"
@@ -90,10 +73,7 @@ class EditEnvironmentSimpleForm extends Component {
                 />
               ),
               success: (
-                <FormattedMessage
-                  id="app.editEnvironmentSimpleForm.success"
-                  defaultMessage="Environments Saved."
-                />
+                <FormattedMessage id="app.editEnvironmentSimpleForm.success" defaultMessage="Environments Saved." />
               ),
             }}
           />
@@ -119,9 +99,7 @@ EditEnvironmentSimpleForm.propTypes = {
 
 const validate = formData => {
   const errors = {};
-  const allowedEnvrionmentsCount = Object.values(formData).filter(
-    value => value === true || value === 'true'
-  ).length;
+  const allowedEnvrionmentsCount = Object.values(formData).filter(value => value === true || value === 'true').length;
 
   if (allowedEnvrionmentsCount === 0) {
     errors['_error'] = (

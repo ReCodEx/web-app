@@ -13,10 +13,7 @@ const EMPTY_VALUE = { file: '', name: '' };
 
 const validate = value =>
   !value || value.trim() === '' ? (
-    <FormattedMessage
-      id="app.expandingInputFilesField.validateEmpty"
-      defaultMessage="This value must not be empty."
-    />
+    <FormattedMessage id="app.expandingInputFilesField.validateEmpty" defaultMessage="This value must not be empty." />
   ) : (
     undefined
   );
@@ -41,12 +38,8 @@ const ExpandingInputFilesField = ({
       <table>
         <thead>
           <tr>
-            <th width="50%">
-              {Boolean(leftLabel) && <ControlLabel>{leftLabel}</ControlLabel>}
-            </th>
-            <th width="50%">
-              {Boolean(rightLabel) && <ControlLabel>{rightLabel}</ControlLabel>}
-            </th>
+            <th width="50%">{Boolean(leftLabel) && <ControlLabel>{leftLabel}</ControlLabel>}</th>
+            <th width="50%">{Boolean(rightLabel) && <ControlLabel>{rightLabel}</ControlLabel>}</th>
             <th />
           </tr>
         </thead>
@@ -61,11 +54,7 @@ const ExpandingInputFilesField = ({
                   options={options}
                   addEmptyOption={true}
                   validate={validate}
-                  onChange={handleSelectChange(
-                    fields.get(index),
-                    `${field}.name`,
-                    change
-                  )}
+                  onChange={handleSelectChange(fields.get(index), `${field}.name`, change)}
                   {...props}
                 />
               </td>
@@ -104,10 +93,7 @@ const ExpandingInputFilesField = ({
       {fields.length === 0 && (
         <span style={{ paddingRight: '2em' }}>
           {noItems || (
-            <FormattedMessage
-              id="app.expandingInputFilesField.noFiles"
-              defaultMessage="There are no files yet..."
-            />
+            <FormattedMessage id="app.expandingInputFilesField.noFiles" defaultMessage="There are no files yet..." />
           )}
         </span>
       )}
@@ -115,10 +101,7 @@ const ExpandingInputFilesField = ({
         placement="right"
         overlay={
           <Tooltip id={Date.now()}>
-            <FormattedMessage
-              id="app.expandingInputFilesField.tooltip.add"
-              defaultMessage="Add another file."
-            />
+            <FormattedMessage id="app.expandingInputFilesField.tooltip.add" defaultMessage="Add another file." />
           </Tooltip>
         }>
         <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>

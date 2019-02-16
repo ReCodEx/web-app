@@ -5,40 +5,22 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { LoadingIcon } from '../../icons';
 import BreadcrumbItem from './BreadcrumbItem';
 
-const ResourceDependentBreadcrumbItem = ({
-  resource,
-  iconName,
-  isActive,
-  breadcrumb,
-}) => (
+const ResourceDependentBreadcrumbItem = ({ resource, iconName, isActive, breadcrumb }) => (
   <ResourceRenderer
     resource={resource}
     loading={
       <BreadcrumbItem
         text={
           <span>
-            {iconName ? (
-              <Icon icon={iconName} gapRight />
-            ) : (
-              <LoadingIcon gapRight />
-            )}
-            <FormattedMessage
-              id="generic.loading"
-              defaultMessage="Loading..."
-            />
+            {iconName ? <Icon icon={iconName} gapRight /> : <LoadingIcon gapRight />}
+            <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </span>
         }
         isActive={isActive}
       />
     }
     failed={null}>
-    {data => (
-      <BreadcrumbItem
-        iconName={iconName}
-        {...breadcrumb(data)}
-        isActive={isActive}
-      />
-    )}
+    {data => <BreadcrumbItem iconName={iconName} {...breadcrumb(data)} isActive={isActive} />}
   </ResourceRenderer>
 );
 

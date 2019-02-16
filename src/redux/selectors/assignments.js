@@ -16,21 +16,15 @@ export const getAssignment = createSelector(
 export const getExerciseAssignments = createSelector(
   [getAssignmentResources, (state, exerciseId) => exerciseId],
   (assignments, exerciseId) =>
-    assignments.filter(
-      assignment =>
-        isReady(assignment) &&
-        assignment.getIn(['data', 'exerciseId']) === exerciseId
-    )
+    assignments.filter(assignment => isReady(assignment) && assignment.getIn(['data', 'exerciseId']) === exerciseId)
 );
 
 export const assignmentEnvironmentsSelector = createSelector(
   [getAssignment, runtimeEnvironmentSelector],
   (assignmentSelector, envSelector) => id => {
     const assignment = assignmentSelector(id);
-    const envIds =
-      assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
-    const disabledEnvIds =
-      assignment && assignment.getIn(['data', 'disabledRuntimeEnvironmentIds']);
+    const envIds = assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
+    const disabledEnvIds = assignment && assignment.getIn(['data', 'disabledRuntimeEnvironmentIds']);
     return envIds && disabledEnvIds && envSelector
       ? envIds
           .toArray()
@@ -44,11 +38,7 @@ export const getUserSolutions = (userId, assignmentId) =>
   createSelector(
     [getSolutions, getAssignments],
     (solutions, assignments) => {
-      const assignmentSolutions = assignments.getIn([
-        'solutions',
-        assignmentId,
-        userId,
-      ]);
+      const assignmentSolutions = assignments.getIn(['solutions', assignmentId, userId]);
       if (!assignmentSolutions) {
         return EMPTY_LIST;
       }

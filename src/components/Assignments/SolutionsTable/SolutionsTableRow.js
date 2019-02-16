@@ -22,9 +22,7 @@ const getStatusDesc = (status, lastSubmission) => {
   if (status === null) {
     status = 'work-in-progress';
   }
-  return status === 'work-in-progress' && !lastSubmission
-    ? 'missing-submission'
-    : status;
+  return status === 'work-in-progress' && !lastSubmission ? 'missing-submission' : status;
 };
 
 const SolutionsTableRow = ({
@@ -51,9 +49,7 @@ const SolutionsTableRow = ({
     !hasNote || noteMaxlen === null || trimmedNote.length <= noteMaxlen ? (
       trimmedNote
     ) : (
-      <OverlayTrigger
-        placement="left"
-        overlay={<Tooltip id={id}>{trimmedNote}</Tooltip>}>
+      <OverlayTrigger placement="left" overlay={<Tooltip id={id}>{trimmedNote}</Tooltip>}>
         <span>{trimmedNote.substr(0, noteMaxlen - 3).trim()}&hellip;</span>
       </OverlayTrigger>
     );
@@ -68,33 +64,18 @@ const SolutionsTableRow = ({
             'valign-middle': true,
             'text-nowrap': !compact,
           })}>
-          <AssignmentStatusIcon
-            id={id}
-            status={getStatusDesc(status, lastSubmission)}
-            accepted={accepted}
-          />
-          <CommentsIcon
-            id={id}
-            commentsStats={commentsStats}
-            gapLeft={!splitOnTwoLines}
-          />
+          <AssignmentStatusIcon id={id} status={getStatusDesc(status, lastSubmission)} accepted={accepted} />
+          <CommentsIcon id={id} commentsStats={commentsStats} gapLeft={!splitOnTwoLines} />
         </td>
 
         <td className="text-nowrap">
-          <DateTime
-            unixts={createdAt}
-            showOverlay
-            overlayTooltipId={`datetime-${id}`}
-          />
+          <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
 
         <td className="text-center text-nowrap">
           {showScoreAndPoints(status) ? (
             <strong className="text-success">
-              <FormattedNumber
-                style="percent"
-                value={lastSubmission.evaluation.score}
-              />
+              <FormattedNumber style="percent" value={lastSubmission.evaluation.score} />
             </strong>
           ) : (
             <span className="text-danger">-</span>
@@ -104,11 +85,7 @@ const SolutionsTableRow = ({
         <td className="text-center text-nowrap">
           {showScoreAndPoints(status) ? (
             <strong className="text-success">
-              <Points
-                points={actualPoints}
-                bonusPoints={bonusPoints}
-                maxPoints={maxPoints}
-              />
+              <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} />
             </strong>
           ) : (
             <span className="text-danger">-</span>
@@ -117,10 +94,7 @@ const SolutionsTableRow = ({
 
         <td className="text-center text-nowrap">
           {runtimeEnvironment ? (
-            <EnvironmentsListItem
-              runtimeEnvironment={runtimeEnvironment}
-              longNames={!compact}
-            />
+            <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames={!compact} />
           ) : (
             '-'
           )}
@@ -140,16 +114,12 @@ const SolutionsTableRow = ({
           })}
           rowSpan={splitOnTwoLines ? 2 : 1}>
           {permissionHints && permissionHints.viewDetail && (
-            <Link
-              to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}
-              className="btn btn-flat btn-default btn-xs">
+            <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)} className="btn btn-flat btn-default btn-xs">
               <SendIcon gapRight />
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
             </Link>
           )}
-          {permissionHints && permissionHints.delete && (
-            <DeleteSolutionButtonContainer id={id} bsSize="xs" />
-          )}
+          {permissionHints && permissionHints.delete && <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
         </td>
       </tr>
 
@@ -157,11 +127,7 @@ const SolutionsTableRow = ({
         <tr>
           <td colSpan={4} className={styles.noteRow}>
             <b>
-              <FormattedMessage
-                id="app.solutionsTable.note"
-                defaultMessage="Note"
-              />
-              :
+              <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />:
             </b>
             &nbsp;
             {noteElement}

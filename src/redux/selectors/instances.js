@@ -23,8 +23,7 @@ export const selectedInstance = createSelector(
 
 export const publicInstancesSelector = createSelector(
   instancesSelector,
-  instances =>
-    instances.filter(instance => instance.getIn(['data', 'isOpen']) === true)
+  instances => instances.filter(instance => instance.getIn(['data', 'isOpen']) === true)
 );
 
 export const instanceByIdSelector = instanceId =>
@@ -36,12 +35,8 @@ export const instanceByIdSelector = instanceId =>
 export const loggedInUserMemberOfInstances = createSelector(
   [loggedInUserSelector, instancesSelector],
   (user, instances) => {
-    const instancesIds =
-      user &&
-      isReady(user) &&
-      user.getIn(['data', 'privateData', 'instancesIds']);
-    const userInstances =
-      instancesIds && instancesIds.map(id => instances.get(id));
+    const instancesIds = user && isReady(user) && user.getIn(['data', 'privateData', 'instancesIds']);
+    const userInstances = instancesIds && instancesIds.map(id => instances.get(id));
     return userInstances || EMPTY_LIST;
   }
 );
@@ -49,8 +44,5 @@ export const loggedInUserMemberOfInstances = createSelector(
 export const isAdminOfInstance = (userId, instanceId) =>
   createSelector(
     instanceByIdSelector(instanceId),
-    instance =>
-      !!instance &&
-      isReady(instance) &&
-      instance.getIn(['data', 'admin']) === userId
+    instance => !!instance && isReady(instance) && instance.getIn(['data', 'admin']) === userId
   );

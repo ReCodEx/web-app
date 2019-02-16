@@ -1,13 +1,7 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
-import {
-  createRecord,
-  resourceStatus,
-  defaultNeedsRefetching,
-  isLoading,
-  getJsData,
-} from '../helpers/resourceManager';
+import { createRecord, resourceStatus, defaultNeedsRefetching, isLoading, getJsData } from '../helpers/resourceManager';
 import { selectedInstanceId } from '../selectors/auth';
 
 export const actionTypes = {
@@ -32,10 +26,7 @@ const fakeResult = item => ({
 
 const archivedPromises = {};
 
-export const fetchExercisesAuthors = (groupId = null) => (
-  dispatch,
-  getState
-) => {
+export const fetchExercisesAuthors = (groupId = null) => (dispatch, getState) => {
   const instanceId = selectedInstanceId(getState());
   const query = { instanceId };
   if (groupId) {
@@ -52,17 +43,12 @@ export const fetchExercisesAuthors = (groupId = null) => (
   return archivedPromises[groupId];
 };
 
-export const fetchExercisesAuthorsIfNeeded = groupId => (
-  dispatch,
-  getState
-) => {
+export const fetchExercisesAuthorsIfNeeded = groupId => (dispatch, getState) => {
   const item = getState().exercisesAuthors.getIn(itemPath(groupId));
   if (!defaultNeedsRefetching(item)) {
     return fakeResult(item);
   }
-  return item && isLoading(item)
-    ? archivedPromises[groupId]
-    : fetchExercisesAuthors(groupId)(dispatch, getState);
+  return item && isLoading(item) ? archivedPromises[groupId] : fetchExercisesAuthors(groupId)(dispatch, getState);
 };
 
 /*
@@ -83,10 +69,7 @@ export default handleActions(
       );
     },
 
-    [actionTypes.FETCH_FULFILLED]: (
-      state,
-      { meta: { instanceId, groupId }, payload }
-    ) => {
+    [actionTypes.FETCH_FULFILLED]: (state, { meta: { instanceId, groupId }, payload }) => {
       if (state.get('instanceId') !== instanceId) {
         return state;
       }
@@ -100,17 +83,11 @@ export default handleActions(
       );
     },
 
-    [actionTypes.FETCH_REJECTED]: (
-      state,
-      { meta: { instanceId, groupId } }
-    ) => {
+    [actionTypes.FETCH_REJECTED]: (state, { meta: { instanceId, groupId } }) => {
       if (state.get('instanceId') !== instanceId) {
         return state;
       }
-      return state.setIn(
-        itemPath(groupId),
-        createRecord({ state: resourceStatus.FAILED })
-      );
+      return state.setIn(itemPath(groupId), createRecord({ state: resourceStatus.FAILED }));
     },
   },
   createInitialState()

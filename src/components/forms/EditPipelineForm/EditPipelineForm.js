@@ -6,12 +6,7 @@ import { reduxForm, Field, touch, formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert, Grid, Row, Col } from 'react-bootstrap';
 
-import {
-  TextField,
-  MarkdownTextAreaField,
-  PipelineField,
-  PipelineVariablesField,
-} from '../Fields';
+import { TextField, MarkdownTextAreaField, PipelineField, PipelineVariablesField } from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
@@ -68,40 +63,19 @@ class EditPipelineForm extends Component {
               handleSubmit={handleSubmit}
               asyncValidating={asyncValidating}
               messages={{
-                submit: (
-                  <FormattedMessage
-                    id="app.editPipelineForm.submit"
-                    defaultMessage="Save changes"
-                  />
-                ),
+                submit: <FormattedMessage id="app.editPipelineForm.submit" defaultMessage="Save changes" />,
                 submitting: (
-                  <FormattedMessage
-                    id="app.editPipelineForm.submitting"
-                    defaultMessage="Saving changes..."
-                  />
+                  <FormattedMessage id="app.editPipelineForm.submitting" defaultMessage="Saving changes..." />
                 ),
-                success: (
-                  <FormattedMessage
-                    id="app.editPipelineForm.success"
-                    defaultMessage="Settings were saved."
-                  />
-                ),
-                validating: (
-                  <FormattedMessage
-                    id="generic.validating"
-                    defaultMessage="Validating..."
-                  />
-                ),
+                success: <FormattedMessage id="app.editPipelineForm.success" defaultMessage="Settings were saved." />,
+                validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
               }}
             />
           </div>
         }>
         {submitFailed && (
           <Alert bsStyle="danger">
-            <FormattedMessage
-              id="generic.savingFailed"
-              defaultMessage="Saving failed. Please try again later."
-            />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
@@ -112,12 +86,7 @@ class EditPipelineForm extends Component {
                 name="name"
                 component={TextField}
                 maxLength={255}
-                label={
-                  <FormattedMessage
-                    id="app.editPipelineForm.name"
-                    defaultMessage="Pipeline name:"
-                  />
-                }
+                label={<FormattedMessage id="app.editPipelineForm.name" defaultMessage="Pipeline name:" />}
               />
 
               <Field
@@ -138,12 +107,7 @@ class EditPipelineForm extends Component {
               <Field
                 name="pipeline.boxes"
                 component={PipelineField}
-                label={
-                  <FormattedMessage
-                    id="app.editPipelineFields.pipeline"
-                    defaultMessage="The pipeline:"
-                  />
-                }
+                label={<FormattedMessage id="app.editPipelineFields.pipeline" defaultMessage="The pipeline:" />}
               />
             </Col>
 
@@ -234,12 +198,8 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
 
 export default connect(
   (state, { pipeline }) => ({
-    variables: extractVariables(
-      formValueSelector('editPipeline')(state, 'pipeline.boxes')
-    ),
-    supplementaryFiles: createGetPipelineFiles(pipeline.supplementaryFilesIds)(
-      state
-    ),
+    variables: extractVariables(formValueSelector('editPipeline')(state, 'pipeline.boxes')),
+    supplementaryFiles: createGetPipelineFiles(pipeline.supplementaryFilesIds)(state),
   }),
   (dispatch, { pipeline }) => ({
     loadAsync: () => EditPipelineForm.loadAsync({ pipeline }, dispatch),

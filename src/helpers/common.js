@@ -25,9 +25,7 @@ export const safeGet = (obj, path, def = undefined) => {
  */
 export const safeSet = (obj, path, value) => {
   if (!obj || !Array.isArray(path)) {
-    throw new Error(
-      'The safeSet method expects there is a nonempty object/array with nonempty path given.'
-    );
+    throw new Error('The safeSet method expects there is a nonempty object/array with nonempty path given.');
   }
 
   // Find the target entity, construct the path if necessary.
@@ -187,11 +185,7 @@ export const hasPermissions = (entity, ...fields) => {
   if (!entity || fields.length === 0) {
     return false;
   }
-  return fields.reduce(
-    (acc, field) =>
-      acc && Boolean(safeGet(entity, ['permissionHints', field], false)),
-    true
-  );
+  return fields.reduce((acc, field) => acc && Boolean(safeGet(entity, ['permissionHints', field], false)), true);
 };
 
 /**
@@ -203,9 +197,5 @@ export const hasOneOfPermissions = (entity, ...fields) => {
   if (!entity || fields.length === 0) {
     return false;
   }
-  return fields.reduce(
-    (acc, field) =>
-      acc || Boolean(safeGet(entity, ['permissionHints', field], false)),
-    false
-  );
+  return fields.reduce((acc, field) => acc || Boolean(safeGet(entity, ['permissionHints', field], false)), false);
 };

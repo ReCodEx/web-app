@@ -8,13 +8,7 @@ import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 
 const LicencesTable = ({ instance, licences }) => (
-  <Box
-    title={
-      <FormattedMessage
-        id="app.instance.licencesTitle"
-        defaultMessage="Licences"
-      />
-    }>
+  <Box title={<FormattedMessage id="app.instance.licencesTitle" defaultMessage="Licences" />}>
     <React.Fragment>
       <p>
         <FormattedMessage
@@ -29,22 +23,13 @@ const LicencesTable = ({ instance, licences }) => (
         <thead>
           <tr>
             <th>
-              <FormattedMessage
-                id="app.licencesTable.note"
-                defaultMessage="Note"
-              />
+              <FormattedMessage id="app.licencesTable.note" defaultMessage="Note" />
             </th>
             <th>
-              <FormattedMessage
-                id="app.licencesTable.isValid"
-                defaultMessage="Without revocation"
-              />
+              <FormattedMessage id="app.licencesTable.isValid" defaultMessage="Without revocation" />
             </th>
             <th>
-              <FormattedMessage
-                id="app.licencesTable.validUntil"
-                defaultMessage="Valid until"
-              />
+              <FormattedMessage id="app.licencesTable.validUntil" defaultMessage="Valid until" />
             </th>
           </tr>
         </thead>
@@ -53,23 +38,12 @@ const LicencesTable = ({ instance, licences }) => (
             .sort((a, b) => (a.validUntil < b.validUntil ? 1 : -1))
             .map(({ id, validUntil, isValid, note }) => (
               <tr key={id}>
-                <td>
-                  {!isValid || validUntil * 1000 < Date.now() ? (
-                    <strike>{note}</strike>
-                  ) : (
-                    note
-                  )}
-                </td>
+                <td>{!isValid || validUntil * 1000 < Date.now() ? <strike>{note}</strike> : note}</td>
                 <td className="text-center">
                   <SuccessOrFailureIcon success={isValid} />
                 </td>
                 <td>
-                  <DateTime
-                    unixts={validUntil}
-                    showTime={false}
-                    showRelative
-                    isDeadline
-                  />
+                  <DateTime unixts={validUntil} showTime={false} showRelative isDeadline />
                 </td>
               </tr>
             ))}
@@ -77,10 +51,7 @@ const LicencesTable = ({ instance, licences }) => (
           {licences.length === 0 && (
             <tr>
               <td colSpan={3}>
-                <FormattedMessage
-                  id="app.licencesTable.noLicences"
-                  defaultMessage="There are no licences."
-                />
+                <FormattedMessage id="app.licencesTable.noLicences" defaultMessage="There are no licences." />
               </td>
             </tr>
           )}

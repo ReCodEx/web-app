@@ -10,12 +10,7 @@ import AddBoxForm from '../BoxForm/AddBoxForm';
 import EditBoxForm from '../BoxForm/EditBoxForm';
 import PipelineVisualisation from '../PipelineVisualisation';
 
-import {
-  addNode,
-  replaceNode,
-  removeNode,
-  createGraphFromNodes,
-} from '../../../helpers/pipelineGraph';
+import { addNode, replaceNode, removeNode, createGraphFromNodes } from '../../../helpers/pipelineGraph';
 
 import './pipeline.css';
 
@@ -46,9 +41,7 @@ class PipelineVisualEditor extends Component {
 
   onClick = target => {
     let boxId = this.findTopmostCluster(target);
-    const nodeToEdit = boxId
-      ? this.state.graph.nodes.find(node => node.name === boxId)
-      : null;
+    const nodeToEdit = boxId ? this.state.graph.nodes.find(node => node.name === boxId) : null;
 
     this.setState({ nodeToEdit });
   };
@@ -109,18 +102,11 @@ class PipelineVisualEditor extends Component {
           <p className="text-center">
             <Button onClick={this.showAddNodeForm}>
               <AddIcon />
-              <FormattedMessage
-                id="app.pipelineVisualEditor.addBoxButton"
-                defaultMessage="Add box"
-              />
+              <FormattedMessage id="app.pipelineVisualEditor.addBoxButton" defaultMessage="Add box" />
             </Button>
           </p>
         </Well>
-        <AddBoxForm
-          add={this.addNode}
-          show={addItem}
-          onHide={this.onHideModal}
-        />
+        <AddBoxForm add={this.addNode} show={addItem} onHide={this.onHideModal} />
         <EditBoxForm
           item={nodeToEdit}
           edit={data => this.editNode(nodeToEdit, data)}

@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  FormattedMessage,
-  defineMessages,
-  intlShape,
-  injectIntl,
-} from 'react-intl';
+import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
@@ -33,12 +28,7 @@ const AddSisTermForm = ({
   intl: { formatMessage },
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.addSisTermForm.title"
-        defaultMessage="Add new term"
-      />
-    }
+    title={<FormattedMessage id="app.addSisTermForm.title" defaultMessage="Add new term" />}
     type={submitSucceeded ? 'success' : undefined}
     isOpen={true}
     collapsable={false}
@@ -53,34 +43,16 @@ const AddSisTermForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: (
-              <FormattedMessage
-                id="app.addSisTermForm.submit"
-                defaultMessage="Save new term"
-              />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.addSisTermForm.processing"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage
-                id="app.addSisTermForm.success"
-                defaultMessage="The term is saved."
-              />
-            ),
+            submit: <FormattedMessage id="app.addSisTermForm.submit" defaultMessage="Save new term" />,
+            submitting: <FormattedMessage id="app.addSisTermForm.processing" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="app.addSisTermForm.success" defaultMessage="The term is saved." />,
           }}
         />
       </div>
     }>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="app.addSisTermForm.failed"
-          defaultMessage="Cannot save the new SIS term."
-        />
+        <FormattedMessage id="app.addSisTermForm.failed" defaultMessage="Cannot save the new SIS term." />
       </Alert>
     )}
 
@@ -89,16 +61,12 @@ const AddSisTermForm = ({
       validateMin={2000}
       validateMax={2099}
       maxLength={4}
-      label={
-        <FormattedMessage id="app.addSisTermForm.year" defaultMessage="Year:" />
-      }
+      label={<FormattedMessage id="app.addSisTermForm.year" defaultMessage="Year:" />}
     />
     <Field
       name="term"
       component={SelectField}
-      label={
-        <FormattedMessage id="app.addSisTermForm.term" defaultMessage="Term:" />
-      }
+      label={<FormattedMessage id="app.addSisTermForm.term" defaultMessage="Term:" />}
       options={[
         { name: formatMessage(messages.winterTerm), key: 1 },
         { name: formatMessage(messages.summerTerm), key: 2 },

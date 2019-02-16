@@ -9,17 +9,13 @@ import { reset } from 'redux-form';
 import Page from '../../components/layout/Page';
 import EditInstanceForm from '../../components/forms/EditInstanceForm';
 
-import {
-  fetchInstanceIfNeeded,
-  editInstance,
-} from '../../redux/modules/instances';
+import { fetchInstanceIfNeeded, editInstance } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
 import withLinks from '../../helpers/withLinks';
 
 class EditInstance extends Component {
-  static loadAsync = ({ instanceId }, dispatch) =>
-    Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
+  static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
 
   componentWillMount = () => this.props.loadAsync();
   componentWillReceiveProps = props => {
@@ -46,39 +42,19 @@ class EditInstance extends Component {
       <Page
         resource={instance}
         title={instance => instance.name}
-        description={
-          <FormattedMessage
-            id="app.editInstance.description"
-            defaultMessage="Change instance settings"
-          />
-        }
+        description={<FormattedMessage id="app.editInstance.description" defaultMessage="Change instance settings" />}
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.instance.title"
-                defaultMessage="Instance"
-              />
-            ),
+            text: <FormattedMessage id="app.instance.title" defaultMessage="Instance" />,
             iconName: 'university',
             link: INSTANCE_URI_FACTORY(instanceId),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.editInstance.title"
-                defaultMessage="Edit instance"
-              />
-            ),
+            text: <FormattedMessage id="app.editInstance.title" defaultMessage="Edit instance" />,
             iconName: ['far', 'edit'],
           },
         ]}>
-        {instance => (
-          <EditInstanceForm
-            initialValues={this.getInitialValues(instance)}
-            onSubmit={editInstance}
-          />
-        )}
+        {instance => <EditInstanceForm initialValues={this.getInitialValues(instance)} onSubmit={editInstance} />}
       </Page>
     );
   }

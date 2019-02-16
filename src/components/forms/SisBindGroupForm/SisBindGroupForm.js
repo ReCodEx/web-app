@@ -22,12 +22,7 @@ const SisBindGroupForm = ({
   intl: { locale },
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.sisBindGroupForm.title"
-        defaultMessage="Bind existing ReCodEx group to SIS"
-      />
-    }
+    title={<FormattedMessage id="app.sisBindGroupForm.title" defaultMessage="Bind existing ReCodEx group to SIS" />}
     succeeded={submitSucceeded}
     dirty={anyTouched}
     footer={
@@ -41,24 +36,9 @@ const SisBindGroupForm = ({
           hasFailed={submitFailed}
           handleSubmit={handleSubmit}
           messages={{
-            submit: (
-              <FormattedMessage
-                id="app.sisBindGroupForm.submit"
-                defaultMessage="Bind"
-              />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.sisBindGroupForm.submitting"
-                defaultMessage="Binding..."
-              />
-            ),
-            success: (
-              <FormattedMessage
-                id="app.sisBindGroupForm.success"
-                defaultMessage="The group was bound."
-              />
-            ),
+            submit: <FormattedMessage id="app.sisBindGroupForm.submit" defaultMessage="Bind" />,
+            submitting: <FormattedMessage id="app.sisBindGroupForm.submitting" defaultMessage="Binding..." />,
+            success: <FormattedMessage id="app.sisBindGroupForm.success" defaultMessage="The group was bound." />,
           }}
         />
       </div>
@@ -76,12 +56,7 @@ const SisBindGroupForm = ({
       name="groupId"
       required
       component={SelectField}
-      label={
-        <FormattedMessage
-          id="app.sisBindGroupForm.group"
-          defaultMessage="Group:"
-        />
-      }
+      label={<FormattedMessage id="app.sisBindGroupForm.group" defaultMessage="Group:" />}
       options={groups
         .map(group => ({
           key: group.id,
@@ -111,10 +86,7 @@ const validate = ({ groupId }) => {
 
   if (!groupId) {
     errors['groupId'] = (
-      <FormattedMessage
-        id="app.sisBindGroupForm.emptyGroup"
-        defaultMessage="Please fill the group."
-      />
+      <FormattedMessage id="app.sisBindGroupForm.emptyGroup" defaultMessage="Please fill the group." />
     );
   }
 

@@ -28,17 +28,11 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
     <div>
       <Row style={{ marginTop: '80px' }}>
         <Col sm={6}>
-          <Image
-            src={`${URL_PATH_PREFIX}/public/logo.png`}
-            className="img-responsive center-block"
-          />
+          <Image src={`${URL_PATH_PREFIX}/public/logo.png`} className="img-responsive center-block" />
         </Col>
         <Col sm={6}>
           <h2>
-            <FormattedMessage
-              id="app.homepage.whatIsRecodex"
-              defaultMessage="What is ReCodEx?"
-            />
+            <FormattedMessage id="app.homepage.whatIsRecodex" defaultMessage="What is ReCodEx?" />
           </h2>
           <p>
             <FormattedMessage
@@ -51,10 +45,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
       <Row style={{ marginTop: '40px' }}>
         <Col sm={6}>
           <h2>
-            <FormattedMessage
-              id="app.homepage.aboutTitle"
-              defaultMessage="About"
-            />
+            <FormattedMessage id="app.homepage.aboutTitle" defaultMessage="About" />
           </h2>
           <p>
             <FormattedHTMLMessage
@@ -77,10 +68,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
         </Col>
         <Col sm={6}>
           <h2>
-            <FormattedMessage
-              id="app.homepage.acknowledgementTitle"
-              defaultMessage="Acknowledgement"
-            />
+            <FormattedMessage id="app.homepage.acknowledgementTitle" defaultMessage="Acknowledgement" />
           </h2>
           <Row>
             <Col sm={6}>
@@ -115,10 +103,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
         </Col>
         <Col sm={6}>
           <h2>
-            <FormattedMessage
-              id="app.homepage.whereToReportBugs"
-              defaultMessage="Where can I report bugs?"
-            />
+            <FormattedMessage id="app.homepage.whereToReportBugs" defaultMessage="Where can I report bugs?" />
           </h2>
           <p>
             <FormattedMessage
@@ -127,16 +112,9 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
             />
           </p>
           <p className="text-center">
-            <a
-              href={GITHUB_BUGS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-flat btn-default">
+            <a href={GITHUB_BUGS_URL} target="_blank" rel="noopener noreferrer" className="btn btn-flat btn-default">
               <Icon icon={['fab', 'github']} gapRight />
-              <FormattedMessage
-                defaultMessage="ReCodEx Webapp Repository"
-                id="app.homepage.githubWebappRepository"
-              />
+              <FormattedMessage defaultMessage="ReCodEx Webapp Repository" id="app.homepage.githubWebappRepository" />
             </a>
           </p>
         </Col>

@@ -15,18 +15,12 @@ const _validateBrackets = value => {
   const [prefix, ...tokens] = value.split('{');
   return (
     prefix.match(/^[-a-zA-Z0-9_.,*?]*$/) &&
-    tokens.reduce(
-      (res, token) =>
-        res && token.match(/^[-a-zA-Z0-9_.,]+}[-a-zA-Z0-9_.,*?]*$/),
-      true
-    )
+    tokens.reduce((res, token) => res && token.match(/^[-a-zA-Z0-9_.,]+}[-a-zA-Z0-9_.,*?]*$/), true)
   );
 };
 
 const validateWildcard = value => {
-  return !value ||
-    !value.match(/^[-a-zA-Z0-9_.,{}*?]+$/) ||
-    !_validateBrackets(value) ? (
+  return !value || !value.match(/^[-a-zA-Z0-9_.,{}*?]+$/) || !_validateBrackets(value) ? (
     <FormattedMessage
       id="app.editEnvironmentConfig.validateWildcard"
       defaultMessage="This value is not a valid file name or wildcard."
@@ -36,10 +30,7 @@ const validateWildcard = value => {
   );
 };
 
-const VARIABLE_TYPES_OPTIONS = [
-  { name: 'file', key: 'file' },
-  { name: 'file[]', key: 'file[]' },
-];
+const VARIABLE_TYPES_OPTIONS = [{ name: 'file', key: 'file' }, { name: 'file[]', key: 'file[]' }];
 
 const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
   <div>
@@ -49,29 +40,17 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
           <tr>
             <th width="40%">
               <ControlLabel>
-                <FormattedMessage
-                  id="app.editEnvironmentConfig.variableName"
-                  defaultMessage="Source Files Variable"
-                />
-                :
+                <FormattedMessage id="app.editEnvironmentConfig.variableName" defaultMessage="Source Files Variable" />:
               </ControlLabel>
             </th>
             <th width="40%">
               <ControlLabel>
-                <FormattedMessage
-                  id="app.editEnvironmentConfig.variableValue"
-                  defaultMessage="Wildcard Pattern"
-                />
-                :
+                <FormattedMessage id="app.editEnvironmentConfig.variableValue" defaultMessage="Wildcard Pattern" />:
               </ControlLabel>
             </th>
             <th width="20%">
               <ControlLabel>
-                <FormattedMessage
-                  id="app.editEnvironmentConfig.variableType"
-                  defaultMessage="Type"
-                />
-                :
+                <FormattedMessage id="app.editEnvironmentConfig.variableType" defaultMessage="Type" />:
               </ControlLabel>
             </th>
             <th />
@@ -99,12 +78,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                 />
               </td>
               <td className="valign-top">
-                <Field
-                  name={`${field}.type`}
-                  component={SelectField}
-                  label={''}
-                  options={VARIABLE_TYPES_OPTIONS}
-                />
+                <Field name={`${field}.type`} component={SelectField} label={''} options={VARIABLE_TYPES_OPTIONS} />
               </td>
               <td className="valign-top">
                 <OverlayTrigger
@@ -142,10 +116,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
         placement="right"
         overlay={
           <Tooltip id={Date.now()}>
-            <FormattedMessage
-              id="app.editEnvironmentConfig.tooltip.add"
-              defaultMessage="Add another variable."
-            />
+            <FormattedMessage id="app.editEnvironmentConfig.tooltip.add" defaultMessage="Add another variable." />
           </Tooltip>
         }>
         <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>

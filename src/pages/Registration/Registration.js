@@ -14,10 +14,7 @@ import RegistrationForm from '../../components/forms/RegistrationForm';
 import ExternalRegistrationForm from '../../components/forms/ExternalRegistrationForm';
 import RegistrationCAS from '../../components/forms/RegistrationCAS';
 
-import {
-  createAccount,
-  createExternalAccount,
-} from '../../redux/modules/registration';
+import { createAccount, createExternalAccount } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
 import { publicInstancesSelector } from '../../redux/selectors/instances';
 import { hasSucceeded } from '../../redux/selectors/registration';
@@ -70,23 +67,11 @@ class Registration extends Component {
     } = this.props;
 
     const registratorsCount =
-      (ALLOW_NORMAL_REGISTRATION ? 1 : 0) +
-      (ALLOW_LDAP_REGISTRATION ? 1 : 0) +
-      (ALLOW_CAS_REGISTRATION ? 1 : 0);
+      (ALLOW_NORMAL_REGISTRATION ? 1 : 0) + (ALLOW_LDAP_REGISTRATION ? 1 : 0) + (ALLOW_CAS_REGISTRATION ? 1 : 0);
     return (
       <PageContent
-        title={
-          <FormattedMessage
-            id="app.registration.title"
-            defaultMessage="Create a new ReCodEx account"
-          />
-        }
-        description={
-          <FormattedMessage
-            id="app.registration.description"
-            defaultMessage="Start using ReCodEx today"
-          />
-        }
+        title={<FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCodEx account" />}
+        description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCodEx today" />}
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.homepage.title" />,
@@ -124,10 +109,7 @@ class Registration extends Component {
                   mdOffset={registratorsCount === 1 ? 3 : 0}
                   sm={12}
                   smOffset={0}>
-                  <ExternalRegistrationForm
-                    instances={instances}
-                    onSubmit={createExternalAccount()}
-                  />
+                  <ExternalRegistrationForm instances={instances} onSubmit={createExternalAccount()} />
                 </Col>
               )}
               {ALLOW_CAS_REGISTRATION && (
@@ -138,10 +120,7 @@ class Registration extends Component {
                   mdOffset={registratorsCount === 1 ? 3 : 0}
                   sm={12}
                   smOffset={0}>
-                  <RegistrationCAS
-                    instances={instances}
-                    onSubmit={createExternalAccount('cas')}
-                  />
+                  <RegistrationCAS instances={instances} onSubmit={createExternalAccount('cas')} />
                 </Col>
               )}
             </Row>
@@ -172,35 +151,12 @@ export default withLinks(
     }),
     dispatch => ({
       loadAsync: () => Promise.all([dispatch(fetchInstances())]),
-      createAccount: ({
-        firstName,
-        lastName,
-        email,
-        password,
-        passwordConfirm,
-        instanceId,
-      }) =>
-        dispatch(
-          createAccount(
-            firstName,
-            lastName,
-            email,
-            password,
-            passwordConfirm,
-            instanceId
-          )
-        ),
-      createExternalAccount: (authType = 'default') => ({
-        instanceId,
-        serviceId,
-        ...credentials
-      }) =>
-        dispatch(
-          createExternalAccount(instanceId, serviceId, credentials, authType)
-        ),
+      createAccount: ({ firstName, lastName, email, password, passwordConfirm, instanceId }) =>
+        dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId)),
+      createExternalAccount: (authType = 'default') => ({ instanceId, serviceId, ...credentials }) =>
+        dispatch(createExternalAccount(instanceId, serviceId, credentials, authType)),
       push: url => dispatch(push(url)),
-      triggerAsyncValidation: () =>
-        dispatch(startAsyncValidation('registration')),
+      triggerAsyncValidation: () => dispatch(startAsyncValidation('registration')),
       reset: () => {
         dispatch(reset('registration'));
         dispatch(reset('external-registration'));

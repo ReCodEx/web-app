@@ -74,8 +74,7 @@ class ExternalLinkPreview extends Component {
         }
 
         const isMarkdown =
-          contentType.indexOf('markdown') > 0 ||
-          (contentType.startsWith('text/plain') && url.endsWith('.md'));
+          contentType.indexOf('markdown') > 0 || (contentType.startsWith('text/plain') && url.endsWith('.md'));
 
         return resp
           .text()
@@ -118,47 +117,27 @@ class ExternalLinkPreview extends Component {
     return url !== null ? (
       <div>
         {text && (
-          <OnOffCheckbox
-            checked={isMarkdown}
-            onChange={this.toggleIsMarkdown}
-            className="pull-right">
-            <FormattedMessage
-              id="app.externalLinkPreview.showAsMarkdown"
-              defaultMessage="Show as markdown"
-            />
+          <OnOffCheckbox checked={isMarkdown} onChange={this.toggleIsMarkdown} className="pull-right">
+            <FormattedMessage id="app.externalLinkPreview.showAsMarkdown" defaultMessage="Show as markdown" />
           </OnOffCheckbox>
         )}
 
         {(!text || !isMarkdown) && (
           <h3>
-            <FormattedMessage
-              id="app.externalLinkPreview.title"
-              defaultMessage="Preview"
-            />
+            <FormattedMessage id="app.externalLinkPreview.title" defaultMessage="Preview" />
           </h3>
         )}
 
         {pending && (
           <Well>
             <LoadingIcon gapRight />
-            <FormattedMessage
-              id="generic.loading"
-              defaultMessage="Loading..."
-            />
+            <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </Well>
         )}
 
         {error && <Alert bsStyle="warning">{error}</Alert>}
 
-        {text && (
-          <div>
-            {isMarkdown ? (
-              <Markdown source={text} />
-            ) : (
-              <pre style={{ marginTop: '20px' }}>{text}</pre>
-            )}
-          </div>
-        )}
+        {text && <div>{isMarkdown ? <Markdown source={text} /> : <pre style={{ marginTop: '20px' }}>{text}</pre>}</div>}
       </div>
     ) : (
       <div />

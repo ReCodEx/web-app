@@ -17,9 +17,7 @@ const CommentThread = ({
 }) => (
   <CommentBox
     commentsCount={comments.length}
-    footer={
-      addComment && <AddComment addComment={addComment} refresh={refresh} />
-    }>
+    footer={addComment && <AddComment addComment={addComment} refresh={refresh} />}>
     <div>
       {comments.map((comment, i) =>
         comment.user.id === currentUserId ? (

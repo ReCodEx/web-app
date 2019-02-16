@@ -23,31 +23,18 @@ class NumericTextField extends Component {
   };
 
   validate = value => {
-    const {
-      validateMin = null,
-      validateMax = null,
-      nullable = false,
-    } = this.props;
+    const { validateMin = null, validateMax = null, nullable = false } = this.props;
     if (value === null && nullable) {
       return undefined;
     }
 
-    if (
-      typeof value === 'undefined' ||
-      (typeof value !== 'number' && !isNumeric(value))
-    ) {
+    if (typeof value === 'undefined' || (typeof value !== 'number' && !isNumeric(value))) {
       return (
-        <FormattedMessage
-          id="app.numericTextField.validationFailed"
-          defaultMessage="The value must be a number."
-        />
+        <FormattedMessage id="app.numericTextField.validationFailed" defaultMessage="The value must be a number." />
       );
     }
 
-    if (
-      (validateMin !== null && validateMin > value) ||
-      (validateMax !== null && value > validateMax)
-    ) {
+    if ((validateMin !== null && validateMin > value) || (validateMax !== null && value > validateMax)) {
       return validateMin !== null && validateMax !== null ? (
         <FormattedMessage
           id="app.numericTextField.validationFailedMinMax"
@@ -73,14 +60,7 @@ class NumericTextField extends Component {
   };
 
   render() {
-    const {
-      name,
-      maxLength = 11,
-      validateMin = null,
-      validateMax = null,
-      nullable,
-      ...props
-    } = this.props;
+    const { name, maxLength = 11, validateMin = null, validateMax = null, nullable, ...props } = this.props;
     return (
       <Field
         name={name}
@@ -88,11 +68,7 @@ class NumericTextField extends Component {
         format={this.format}
         parse={this.parse}
         maxLength={maxLength}
-        validate={
-          validateMin !== null && validateMax !== null
-            ? this.validate
-            : undefined
-        }
+        validate={validateMin !== null && validateMax !== null ? this.validate : undefined}
         {...props}
       />
     );

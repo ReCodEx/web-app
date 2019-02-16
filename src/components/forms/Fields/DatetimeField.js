@@ -40,9 +40,7 @@ class DatetimeField extends Component {
     const { lang } = this.context;
 
     return (
-      <FormGroup
-        controlId={input.name}
-        validationState={error ? 'error' : warning ? 'warning' : undefined}>
+      <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
         {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
         <Datetime
           {...input}
@@ -73,11 +71,7 @@ DatetimeField.propTypes = {
   ]),
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.object,
-    ]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
   }).isRequired,
   meta: PropTypes.shape({
     active: PropTypes.bool,

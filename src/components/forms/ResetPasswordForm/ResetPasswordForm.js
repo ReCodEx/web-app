@@ -10,50 +10,26 @@ import { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import { EmailField } from '../Fields';
 
-const ResetPasswordForm = ({
-  submitting,
-  handleSubmit,
-  hasFailed = false,
-  hasSucceeded = false,
-  invalid,
-}) => (
+const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSucceeded = false, invalid }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.resetPassword.title"
-        defaultMessage="Reset forgotten password"
-      />
-    }
+    title={<FormattedMessage id="app.resetPassword.title" defaultMessage="Reset forgotten password" />}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button
-          type="submit"
-          onClick={handleSubmit}
-          bsStyle="success"
-          disabled={invalid || submitting || hasSucceeded}>
+        <Button type="submit" onClick={handleSubmit} bsStyle="success" disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
                 <SuccessIcon gapRight />
-                <FormattedMessage
-                  id="app.resetPassword.success"
-                  defaultMessage="Processing was finished."
-                />
+                <FormattedMessage id="app.resetPassword.success" defaultMessage="Processing was finished." />
               </span>
             ) : (
-              <FormattedMessage
-                id="app.resetPassword.resetPassword"
-                defaultMessage="Reset password"
-              />
+              <FormattedMessage id="app.resetPassword.resetPassword" defaultMessage="Reset password" />
             )
           ) : (
             <span>
               <LoadingIcon gapRight />
-              <FormattedMessage
-                id="app.resetPassword.processing"
-                defaultMessage="Resetting your password..."
-              />
+              <FormattedMessage id="app.resetPassword.processing" defaultMessage="Resetting your password..." />
             </span>
           )}
         </Button>
@@ -81,12 +57,7 @@ const ResetPasswordForm = ({
       name="username"
       required
       component={EmailField}
-      label={
-        <FormattedMessage
-          id="app.resetPassword.email"
-          defaultMessage="E-mail address:"
-        />
-      }
+      label={<FormattedMessage id="app.resetPassword.email" defaultMessage="E-mail address:" />}
     />
   </FormBox>
 );
@@ -104,10 +75,7 @@ const validate = ({ username }) => {
   const errors = {};
   if (!username) {
     errors['username'] = (
-      <FormattedMessage
-        id="app.resetPassword.validation.emptyEmail"
-        defaultMessage="E-mail address cannot be empty."
-      />
+      <FormattedMessage id="app.resetPassword.validation.emptyEmail" defaultMessage="E-mail address cannot be empty." />
     );
   } else if (!isEmail(username)) {
     errors['username'] = (

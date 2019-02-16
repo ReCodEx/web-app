@@ -36,22 +36,14 @@ const LeaveJoinGroupButtonContainer = ({
         bsSize={bsSize}
       />
     ) : (
-      <RemoveFromGroupButton
-        {...props}
-        onClick={() => leaveGroup(groupId, userId)}
-        bsSize={bsSize}
-      />
+      <RemoveFromGroupButton {...props} onClick={() => leaveGroup(groupId, userId)} bsSize={bsSize} />
     )
   ) : (
     <JoinGroupButton
       {...props}
       onClick={() =>
         joinGroup(groupId, userId).then(() =>
-          Promise.all([
-            fetchGroup(groupId),
-            fetchAssignmentsForGroup(groupId),
-            fetchGroupsStatsIfNeeded(groupId),
-          ])
+          Promise.all([fetchGroup(groupId), fetchAssignmentsForGroup(groupId), fetchGroupsStatsIfNeeded(groupId)])
         )
       }
       bsSize={bsSize}

@@ -5,12 +5,7 @@ import PointsForm from '../../components/forms/PointsForm';
 
 import { setPoints, fetchSolution } from '../../redux/modules/solutions';
 
-const PointsContainer = ({
-  overriddenPoints = null,
-  bonusPoints,
-  setPoints,
-  ...props
-}) => (
+const PointsContainer = ({ overriddenPoints = null, bonusPoints, setPoints, ...props }) => (
   <PointsForm
     onSubmit={setPoints}
     initialValues={{
@@ -32,8 +27,8 @@ export default connect(
   (state, props) => ({}),
   (dispatch, { submissionId }) => ({
     setPoints: ({ overriddenPoints, bonusPoints }) =>
-      dispatch(setPoints(submissionId, overriddenPoints, bonusPoints)).then(
-        () => dispatch(fetchSolution(submissionId))
+      dispatch(setPoints(submissionId, overriddenPoints, bonusPoints)).then(() =>
+        dispatch(fetchSolution(submissionId))
       ),
   })
 )(PointsContainer);

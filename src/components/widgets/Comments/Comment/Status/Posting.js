@@ -12,10 +12,7 @@ const Posting = ({ right }) => (
       'pull-left': !right,
     })}>
     <LoadingIcon gapRight />
-    <FormattedMessage
-      id="app.comments.publishing"
-      defaultMessage="Publishing..."
-    />
+    <FormattedMessage id="app.comments.publishing" defaultMessage="Publishing..." />
   </span>
 );
 

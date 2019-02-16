@@ -87,14 +87,9 @@ const submit = (endpoint, submissionType = 'assignmentSolution') => (
   });
 };
 
-export const submitAssignmentSolution = submit(
-  id => `/exercise-assignments/${id}/submit`
-);
+export const submitAssignmentSolution = submit(id => `/exercise-assignments/${id}/submit`);
 
-export const submitReferenceSolution = submit(
-  id => `/reference-solutions/exercise/${id}/submit`,
-  'referenceSolution'
-);
+export const submitReferenceSolution = submit(id => `/reference-solutions/exercise/${id}/submit`, 'referenceSolution');
 
 export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
 
@@ -104,9 +99,7 @@ export const finishProcessing = createAction(actionTypes.PROCESSING_FINISHED);
 
 const presubmit = endpoint => (id, files) => {
   if (!files || !files.length) {
-    return createAction(
-      actionTypes.PRESUBMIT_RESET
-    )(/* immediate instantiation without payload */);
+    return createAction(actionTypes.PRESUBMIT_RESET)(/* immediate instantiation without payload */);
   }
 
   var submitBody = {
@@ -121,13 +114,9 @@ const presubmit = endpoint => (id, files) => {
   });
 };
 
-export const presubmitAssignmentSolution = presubmit(
-  id => `/exercise-assignments/${id}/pre-submit`
-);
+export const presubmitAssignmentSolution = presubmit(id => `/exercise-assignments/${id}/pre-submit`);
 
-export const presubmitReferenceSolution = presubmit(
-  id => `/reference-solutions/exercise/${id}/pre-submit`
-);
+export const presubmitReferenceSolution = presubmit(id => `/reference-solutions/exercise/${id}/pre-submit`);
 
 /**
  * Reducer takes mainly care about all the state of individual attachments
@@ -145,27 +134,17 @@ const reducer = handleActions(
     [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
       state.set('note', payload).set('status', submissionStatus.CREATING),
 
-    [actionTypes.SUBMIT_PENDING]: state =>
-      state.set('status', submissionStatus.SENDING),
+    [actionTypes.SUBMIT_PENDING]: state => state.set('status', submissionStatus.SENDING),
 
-    [actionTypes.SUBMIT_REJECTED]: state =>
-      state.set('status', submissionStatus.FAILED),
+    [actionTypes.SUBMIT_REJECTED]: state => state.set('status', submissionStatus.FAILED),
 
-    [actionTypes.SUBMIT_FULFILLED]: (
-      state,
-      { payload, meta: { submissionType } }
-    ) => {
+    [actionTypes.SUBMIT_FULFILLED]: (state, { payload, meta: { submissionType } }) => {
       // extract submission and ws channel correctly based on the solution type
       const { webSocketChannel = null } =
         submissionType === 'referenceSolution'
-          ? payload.submissions &&
-            payload.submissions.length > 0 &&
-            payload.submissions[0]
+          ? payload.submissions && payload.submissions.length > 0 && payload.submissions[0]
           : payload;
-      const solution =
-        submissionType === 'referenceSolution'
-          ? payload.referenceSolution
-          : payload.solution;
+      const solution = submissionType === 'referenceSolution' ? payload.referenceSolution : payload.solution;
       const solutionId = solution && solution.id;
       return solutionId && webSocketChannel
         ? state
@@ -180,41 +159,30 @@ const reducer = handleActions(
 
     [actionTypes.CANCEL]: (state, { payload }) => initialState,
 
-    [actionTypes.PROCESSING_FINISHED]: (state, { payload }) =>
-      state.set('status', submissionStatus.FINISHED),
+    [actionTypes.PROCESSING_FINISHED]: (state, { payload }) => state.set('status', submissionStatus.FINISHED),
 
     // wait until all the files are uploaded successfully:
-    [uploadActionTypes.UPLOAD_PENDING]: (
-      state,
-      { payload, meta: { fileName } }
-    ) => state.set('status', submissionStatus.CREATING),
-
-    [uploadActionTypes.REMOVE_FILE]: (state, { payload }) =>
+    [uploadActionTypes.UPLOAD_PENDING]: (state, { payload, meta: { fileName } }) =>
       state.set('status', submissionStatus.CREATING),
 
-    [uploadActionTypes.RETURN_FILE]: (state, { payload }) =>
-      state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.REMOVE_FILE]: (state, { payload }) => state.set('status', submissionStatus.CREATING),
 
-    [uploadActionTypes.REMOVE_FAILED_FILE]: (state, { payload }) =>
-      state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.RETURN_FILE]: (state, { payload }) => state.set('status', submissionStatus.CREATING),
+
+    [uploadActionTypes.REMOVE_FAILED_FILE]: (state, { payload }) => state.set('status', submissionStatus.CREATING),
 
     [uploadActionTypes.UPLOAD_REJECTED]: (state, { meta: { fileName } }) =>
       state.set('status', submissionStatus.FAILED),
 
     // Presubmit check operations
-    [actionTypes.PRESUBMIT_RESET]: state =>
-      state.set('presubmit', null).set('status', submissionStatus.CREATING),
+    [actionTypes.PRESUBMIT_RESET]: state => state.set('presubmit', null).set('status', submissionStatus.CREATING),
 
-    [actionTypes.PRESUBMIT_PENDING]: state =>
-      state.set('presubmit', null).set('status', submissionStatus.VALIDATING),
+    [actionTypes.PRESUBMIT_PENDING]: state => state.set('presubmit', null).set('status', submissionStatus.VALIDATING),
 
-    [actionTypes.PRESUBMIT_REJECTED]: state =>
-      state.set('status', submissionStatus.FAILED),
+    [actionTypes.PRESUBMIT_REJECTED]: state => state.set('status', submissionStatus.FAILED),
 
     [actionTypes.PRESUBMIT_FULFILLED]: (state, { payload }) =>
-      state
-        .set('presubmit', fromJS(payload))
-        .set('status', submissionStatus.CREATING),
+      state.set('presubmit', fromJS(payload)).set('status', submissionStatus.CREATING),
   },
   initialState
 );

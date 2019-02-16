@@ -15,7 +15,7 @@ try {
 
 const extractCss = new MiniCssExtractPlugin({ filename: 'style.css' });
 const gitRevisionPlugin = new GitRevisionPlugin({
-  versionCommand: 'describe --always --tags'
+  versionCommand: 'describe --always --tags',
 });
 
 module.exports = {
@@ -24,16 +24,16 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '..', 'public'),
-    publicPath: '/public/'
+    publicPath: '/public/',
   },
   mode: 'development',
   resolve: {
     alias: {
-      moment: 'moment/moment.js'
-    }
+      moment: 'moment/moment.js',
+    },
   },
   node: {
-    fs: 'empty'
+    fs: 'empty',
   },
   module: {
     rules: [
@@ -41,25 +41,25 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         include: /src/,
-        use: ['babel-loader?cacheDirectory']
+        use: ['babel-loader?cacheDirectory'],
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.less$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'less-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'less-loader'],
       },
       {
         test: /\.scss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'sass-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader?modules', 'sass-loader'],
       },
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
-        use: ['file-loader']
-      }
-    ]
+        use: ['file-loader'],
+      },
+    ],
   },
   plugins: [
     extractCss,
@@ -67,12 +67,10 @@ module.exports = {
       'process.env': {
         NODE_ENV: "'" + process.env.NODE_ENV + "'",
         REDUX_DEV_SERVER_PORT: "'" + process.env.REDUX_DEV_SERVER_PORT + "'",
-        LOGGER_MIDDLEWARE_VERBOSE:
-          "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
-        LOGGER_MIDDLEWARE_EXCEPTIONS:
-          "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
-        VERSION: JSON.stringify(gitRevisionPlugin.version())
-      }
-    })
-  ]
+        LOGGER_MIDDLEWARE_VERBOSE: "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
+        LOGGER_MIDDLEWARE_EXCEPTIONS: "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
+        VERSION: JSON.stringify(gitRevisionPlugin.version()),
+      },
+    }),
+  ],
 };

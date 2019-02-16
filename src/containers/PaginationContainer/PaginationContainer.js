@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import {
-  Grid,
-  Row,
-  Col,
-  Pagination,
-  ButtonGroup,
-  Button,
-} from 'react-bootstrap';
+import { Grid, Row, Col, Pagination, ButtonGroup, Button } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { SortedIcon, LoadingIcon } from '../../components/icons';
@@ -38,23 +31,13 @@ import styles from './PaginationContainer.less';
 const DEFAULT_LIMITS = [25, 50, 100, 200];
 
 // Helper that creates sorting icon in the heading
-export const createSortingIcon = (
-  colName,
-  orderByColumn,
-  orderByDescending,
-  setOrderBy
-) =>
+export const createSortingIcon = (colName, orderByColumn, orderByDescending, setOrderBy) =>
   setOrderBy ? (
     <SortedIcon
       active={orderByColumn === colName}
       descending={orderByDescending}
       gapLeft
-      onClick={() =>
-        setOrderBy(
-          colName,
-          orderByColumn === colName ? !orderByDescending : false
-        )
-      }
+      onClick={() => setOrderBy(colName, orderByColumn === colName ? !orderByDescending : false)}
     />
   ) : (
     <LoadingIcon gapLeft />
@@ -79,13 +62,7 @@ export const showRangeInfo = (offset, limit, totalCount) =>
 // Pagination container for paginating generic contents loaded via endpoints following pagination protocol...
 class PaginationContainer extends Component {
   static init(props) {
-    const {
-      defaultOrderBy,
-      defaultOrderDescending = false,
-      defaultFilters,
-      limits = DEFAULT_LIMITS,
-      register,
-    } = props;
+    const { defaultOrderBy, defaultOrderDescending = false, defaultFilters, limits = DEFAULT_LIMITS, register } = props;
     const initials = {
       limit: props.defaultLimit || limits[0],
     };
@@ -136,10 +113,7 @@ class PaginationContainer extends Component {
    */
   showLimitsButtons = () => {
     const { limit, limits = DEFAULT_LIMITS, totalCount } = this.props;
-    return (
-      limits.length > 0 &&
-      ((limits.length > 1 && totalCount > limits[0]) || limits[0] !== limit)
-    );
+    return limits.length > 0 && ((limits.length > 1 && totalCount > limits[0]) || limits[0] !== limit);
   };
 
   /**
@@ -157,9 +131,7 @@ class PaginationContainer extends Component {
         key={amount}
         active={limit === amount}
         bsStyle={limit === amount ? 'primary' : 'default'}
-        onClick={() =>
-          setPage(locale, Math.floor(offset / amount) * amount, amount)
-        }>
+        onClick={() => setPage(locale, Math.floor(offset / amount) * amount, amount)}>
         {amount}
       </Button>
     );
@@ -249,18 +221,11 @@ class PaginationContainer extends Component {
     } = this.props;
 
     // Decode order by parameter ...
-    const {
-      column: orderByColumn,
-      descending: orderByDescending,
-    } = decodeOrderBy(orderBy);
+    const { column: orderByColumn, descending: orderByDescending } = decodeOrderBy(orderBy);
 
     return (
       <div>
-        {filtersCreator && (
-          <div>
-            {filtersCreator(filters, isPending ? null : this.setFilters)}
-          </div>
-        )}
+        {filtersCreator && <div>{filtersCreator(filters, isPending ? null : this.setFilters)}</div>}
 
         {hideAllItems ? (
           hideAllMessage
@@ -292,11 +257,7 @@ class PaginationContainer extends Component {
                       <ButtonGroup bsSize="small">
                         {limits
                           .map((l, idx) =>
-                            idx < 1 ||
-                            totalCount > limits[idx - 1] ||
-                            l === limit
-                              ? this.createLimitButton(l)
-                              : null
+                            idx < 1 || totalCount > limits[idx - 1] || l === limit ? this.createLimitButton(l) : null
                           )
                           .filter(identity)}
                       </ButtonGroup>
@@ -326,10 +287,7 @@ class PaginationContainer extends Component {
         ) : (
           <div className="text-center larger em-maring">
             <LoadingIcon gapRight />
-            <FormattedMessage
-              id="generic.loading"
-              defaultMessage="Loading..."
-            />
+            <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </div>
         )}
       </div>
@@ -378,10 +336,8 @@ export default connect(
     };
   },
   (dispatch, { id, endpoint }) => ({
-    register: initials =>
-      dispatch(registerPaginationComponent({ id, ...initials })),
-    reload: (_id, _endpoint, locale) =>
-      dispatch(fetchPaginated(_id, _endpoint)(locale, null, null, true)), // true = force invalidate
+    register: initials => dispatch(registerPaginationComponent({ id, ...initials })),
+    reload: (_id, _endpoint, locale) => dispatch(fetchPaginated(_id, _endpoint)(locale, null, null, true)), // true = force invalidate
     setPage: (locale, offset, limit) =>
       dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)).then(() =>
         // fetch the data first, then change the range properties (better visualization)
@@ -395,7 +351,6 @@ export default connect(
       dispatch(setPaginationFilters(id)(filters));
       return dispatch(fetchPaginated(id, endpoint)(locale, 0)); // offset is 0, change of filters resets the position
     },
-    fetchPaginated: (locale, offset, limit) =>
-      dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)),
+    fetchPaginated: (locale, offset, limit) => dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)),
   })
 )(injectIntl(PaginationContainer));

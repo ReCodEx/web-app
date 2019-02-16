@@ -5,14 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 const StatsList = ({ stats }) => (
-  <Box
-    title={
-      <FormattedMessage
-        id="app.broker.stats"
-        defaultMessage="Current Statistics"
-      />
-    }
-    noPadding>
+  <Box title={<FormattedMessage id="app.broker.stats" defaultMessage="Current Statistics" />} noPadding>
     <Table responsive condensed hover>
       <tbody>
         {Object.keys(stats).map(name => (

@@ -6,17 +6,8 @@ import DeleteButton from '../../components/buttons/DeleteButton';
 import { getSolution } from '../../redux/selectors/solutions';
 import { deleteSolution } from '../../redux/modules/solutions';
 
-const DeleteSolutionButtonContainer = ({
-  submission,
-  deleteSolution,
-  onDeleted,
-  ...props
-}) => (
-  <DeleteButton
-    {...props}
-    resource={submission}
-    deleteResource={deleteSolution}
-  />
+const DeleteSolutionButtonContainer = ({ submission, deleteSolution, onDeleted, ...props }) => (
+  <DeleteButton {...props} resource={submission} deleteResource={deleteSolution} />
 );
 
 DeleteSolutionButtonContainer.propTypes = {

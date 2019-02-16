@@ -5,10 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
 import FilesTableContainer from '../FilesTableContainer';
-import {
-  AttachmentFilesTableRow,
-  AttachmentFilesTableHeaderRow,
-} from '../../components/Exercises/FilesTable';
+import { AttachmentFilesTableRow, AttachmentFilesTableHeaderRow } from '../../components/Exercises/FilesTable';
 
 import {
   fetchAttachmentFiles,
@@ -33,12 +30,7 @@ const AttachmentFilesTableContainer = ({
     loadFiles={loadFiles}
     addFiles={addFiles}
     removeFile={removeFile}
-    title={
-      <FormattedMessage
-        id="app.attachmentFilesTable.title"
-        defaultMessage="Attached files"
-      />
-    }
+    title={<FormattedMessage id="app.attachmentFilesTable.title" defaultMessage="Attached files" />}
     description={
       <FormattedMessage
         id="app.attachmentFilesTable.description"

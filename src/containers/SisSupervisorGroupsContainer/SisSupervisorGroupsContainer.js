@@ -4,26 +4,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Box from '../../components/widgets/Box';
-import {
-  Table,
-  Accordion,
-  Panel,
-  Row,
-  Col,
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
+import { Table, Accordion, Panel, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAllGroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
-import {
-  fetchSisSupervisedCourses,
-  sisCreateGroup,
-  sisBindGroup,
-} from '../../redux/modules/sisSupervisedCourses';
+import { fetchSisSupervisedCourses, sisCreateGroup, sisBindGroup } from '../../redux/modules/sisSupervisedCourses';
 import { fetchSisPossibleParentsIfNeeded } from '../../redux/modules/sisPossibleParents';
 import { sisPossibleParentsSelector } from '../../redux/selectors/sisPossibleParents';
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
@@ -84,17 +72,12 @@ class SisSupervisorGroupsContainer extends Component {
                 .then(res => res.value)
                 .then(courses =>
                   courses.map(course =>
-                    dispatch(
-                      fetchSisPossibleParentsIfNeeded(course.course.code)
-                    )
+                    dispatch(fetchSisPossibleParentsIfNeeded(course.course.code))
                       .then(res => res.value)
                       .then(groups =>
-                        unique(
-                          groups.reduce(
-                            (acc, group) => acc.concat(group.parentGroupsIds),
-                            []
-                          )
-                        ).map(groupId => dispatch(fetchGroupIfNeeded(groupId)))
+                        unique(groups.reduce((acc, group) => acc.concat(group.parentGroupsIds), [])).map(groupId =>
+                          dispatch(fetchGroupIfNeeded(groupId))
+                        )
                       )
                   )
                 )
@@ -156,30 +139,18 @@ class SisSupervisorGroupsContainer extends Component {
                     .map((term, i) => (
                       <div key={i}>
                         <h4>
-                          <FormattedMessage
-                            id="app.sisSupervisor.yearTerm"
-                            defaultMessage="Year and term:"
-                          />{' '}
+                          <FormattedMessage id="app.sisSupervisor.yearTerm" defaultMessage="Year and term:" />{' '}
                           {`${term.year}-${term.term}`}
                         </h4>
-                        <ResourceRenderer
-                          resource={sisCourses.get(
-                            `${term.year}-${term.term}`
-                          )}>
+                        <ResourceRenderer resource={sisCourses.get(`${term.year}-${term.term}`)}>
                           {courses => (
                             <div>
                               {courses && Object.keys(courses).length > 0 ? (
                                 <Accordion>
                                   {Object.values(courses)
                                     .sort((a, b) =>
-                                      getLocalizedData(
-                                        a.course.captions,
-                                        locale
-                                      ).localeCompare(
-                                        getLocalizedData(
-                                          b.course.captions,
-                                          locale
-                                        ),
+                                      getLocalizedData(a.course.captions, locale).localeCompare(
+                                        getLocalizedData(b.course.captions, locale),
                                         locale
                                       )
                                     )
@@ -195,11 +166,8 @@ class SisSupervisorGroupsContainer extends Component {
                                                     <OverlayTrigger
                                                       placement="bottom"
                                                       overlay={
-                                                        <Tooltip
-                                                          id={`course-tooltip-${i}`}>
-                                                          {course.course
-                                                            .type ===
-                                                          'lecture' ? (
+                                                        <Tooltip id={`course-tooltip-${i}`}>
+                                                          {course.course.type === 'lecture' ? (
                                                             <FormattedMessage
                                                               id="app.sisSupervisor.lecture"
                                                               defaultMessage="Lecture"
@@ -212,79 +180,41 @@ class SisSupervisorGroupsContainer extends Component {
                                                           )}
                                                         </Tooltip>
                                                       }>
-                                                      {course.course.type ===
-                                                      'lecture' ? (
-                                                        <Icon
-                                                          icon="chalkboard-teacher"
-                                                          gapRight
-                                                          fixedWidth
-                                                        />
+                                                      {course.course.type === 'lecture' ? (
+                                                        <Icon icon="chalkboard-teacher" gapRight fixedWidth />
                                                       ) : (
-                                                        <Icon
-                                                          icon="laptop"
-                                                          gapRight
-                                                          fixedWidth
-                                                        />
+                                                        <Icon icon="laptop" gapRight fixedWidth />
                                                       )}
                                                     </OverlayTrigger>
                                                   </td>
                                                   <td className="full-width">
-                                                    {getLocalizedData(
-                                                      course.course.captions,
-                                                      locale
-                                                    )}{' '}
-                                                    (
-                                                    <code>
-                                                      {course.course.code}
-                                                    </code>
-                                                    )
-                                                    {course.groups.length >
-                                                      0 && (
-                                                      <GroupIcon gapLeft />
-                                                    )}
+                                                    {getLocalizedData(course.course.captions, locale)} (
+                                                    <code>{course.course.code}</code>)
+                                                    {course.groups.length > 0 && <GroupIcon gapLeft />}
                                                   </td>
                                                   <td className="text-nowrap">
-                                                    {
-                                                      getLocalizedData(
-                                                        days,
-                                                        locale
-                                                      )[course.course.dayOfWeek]
-                                                    }{' '}
+                                                    {getLocalizedData(days, locale)[course.course.dayOfWeek]}{' '}
                                                     {course.course.time}{' '}
                                                     {course.course.fortnightly
-                                                      ? getLocalizedData(
-                                                          oddEven,
-                                                          locale
-                                                        )[
-                                                          course.course.oddWeeks
-                                                            ? 0
-                                                            : 1
+                                                      ? getLocalizedData(oddEven, locale)[
+                                                          course.course.oddWeeks ? 0 : 1
                                                         ]
                                                       : ''}
                                                   </td>
-                                                  <td className="text-nowrap em-padding-left">
-                                                    {course.course.room}
-                                                  </td>
+                                                  <td className="text-nowrap em-padding-left">{course.course.room}</td>
                                                 </tr>
                                               </tbody>
                                             </table>
                                           </div>
                                         }
                                         eventKey={i}
-                                        bsStyle={
-                                          course.course.type === 'lecture'
-                                            ? 'info'
-                                            : 'success'
-                                        }>
+                                        bsStyle={course.course.type === 'lecture' ? 'info' : 'success'}>
                                         {course.groups.length > 0 ? (
                                           <Table hover>
                                             <thead>
                                               <tr>
                                                 <th>
-                                                  <FormattedMessage
-                                                    id="generic.name"
-                                                    defaultMessage="Name"
-                                                  />
+                                                  <FormattedMessage id="generic.name" defaultMessage="Name" />
                                                 </th>
                                                 <th>
                                                   <FormattedMessage
@@ -299,38 +229,22 @@ class SisSupervisorGroupsContainer extends Component {
                                               {course.groups.map((group, i) => (
                                                 <tr key={i}>
                                                   <td>
-                                                    {getGroupCanonicalLocalizedName(
-                                                      group,
-                                                      groupsAccessor,
-                                                      locale
-                                                    )}
+                                                    {getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
                                                   </td>
                                                   <td>
-                                                    {group.primaryAdminsIds.map(
-                                                      id => (
-                                                        <UsersNameContainer
-                                                          key={id}
-                                                          userId={id}
-                                                        />
-                                                      )
-                                                    )}
+                                                    {group.primaryAdminsIds.map(id => (
+                                                      <UsersNameContainer key={id} userId={id} />
+                                                    ))}
                                                   </td>
                                                   <td className="text-right">
                                                     <span>
                                                       <LinkContainer
                                                         to={
                                                           group.organizational
-                                                            ? GROUP_INFO_URI_FACTORY(
-                                                                group.id
-                                                              )
-                                                            : GROUP_DETAIL_URI_FACTORY(
-                                                                group.id
-                                                              )
+                                                            ? GROUP_INFO_URI_FACTORY(group.id)
+                                                            : GROUP_DETAIL_URI_FACTORY(group.id)
                                                         }>
-                                                        <Button
-                                                          bsStyle="primary"
-                                                          bsSize="xs"
-                                                          className="btn-flat">
+                                                        <Button bsStyle="primary" bsSize="xs" className="btn-flat">
                                                           <GroupIcon gapRight />
                                                           <FormattedMessage
                                                             id="app.group.detail"
@@ -358,16 +272,10 @@ class SisSupervisorGroupsContainer extends Component {
                                         )}
                                         <Row>
                                           <Col xs={6}>
-                                            <ResourceRenderer
-                                              resource={sisPossibleParents.get(
-                                                course.course.code
-                                              )}>
+                                            <ResourceRenderer resource={sisPossibleParents.get(course.course.code)}>
                                               {possibleParents => (
                                                 <SisCreateGroupForm
-                                                  form={
-                                                    'sisCreateGroup' +
-                                                    course.course.code
-                                                  }
+                                                  form={'sisCreateGroup' + course.course.code}
                                                   onSubmit={data =>
                                                     createGroup(
                                                       course.course.code,
@@ -378,32 +286,18 @@ class SisSupervisorGroupsContainer extends Component {
                                                     )
                                                   }
                                                   groups={possibleParents}
-                                                  groupsAccessor={
-                                                    groupsAccessor
-                                                  }
+                                                  groupsAccessor={groupsAccessor}
                                                 />
                                               )}
                                             </ResourceRenderer>
                                           </Col>
                                           <Col xs={6}>
                                             <SisBindGroupForm
-                                              form={
-                                                'sisBindGroup' +
-                                                course.course.code
-                                              }
+                                              form={'sisBindGroup' + course.course.code}
                                               onSubmit={data =>
-                                                bindGroup(
-                                                  course.course.code,
-                                                  data,
-                                                  currentUserId,
-                                                  term.year,
-                                                  term.term
-                                                )
+                                                bindGroup(course.course.code, data, currentUserId, term.year, term.term)
                                               }
-                                              groups={filterGroupsForBinding(
-                                                groups,
-                                                course.groups
-                                              )}
+                                              groups={filterGroupsForBinding(groups, course.groups)}
                                               groupsAccessor={groupsAccessor}
                                             />
                                           </Col>
@@ -465,14 +359,10 @@ export default injectIntl(
         };
       },
       dispatch => ({
-        loadData: loggedInUserId =>
-          SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
+        loadData: loggedInUserId => SisSupervisorGroupsContainer.loadData(dispatch, loggedInUserId),
         createGroup: (courseId, data, userId, year, term) =>
-          dispatch(sisCreateGroup(courseId, data, userId, year, term)).then(
-            () => dispatch(fetchAllGroups())
-          ),
-        bindGroup: (courseId, data, userId, year, term) =>
-          dispatch(sisBindGroup(courseId, data, userId, year, term)),
+          dispatch(sisCreateGroup(courseId, data, userId, year, term)).then(() => dispatch(fetchAllGroups())),
+        bindGroup: (courseId, data, userId, year, term) => dispatch(sisBindGroup(courseId, data, userId, year, term)),
       })
     )(SisSupervisorGroupsContainer)
   )

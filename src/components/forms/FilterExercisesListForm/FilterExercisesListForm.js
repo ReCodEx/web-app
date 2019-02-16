@@ -41,18 +41,11 @@ const FilterExercisesListForm = ({
     <Well bsSize="sm">
       {submitFailed && (
         <Alert bsStyle="danger">
-          <FormattedMessage
-            id="generic.operationFailed"
-            defaultMessage="Operation failed. Please try again later."
-          />
+          <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
         </Alert>
       )}
 
-      <ResourceRenderer
-        resource={authors}
-        returnAsArray
-        forceLoading={authorsLoading}
-        bulkyLoading>
+      <ResourceRenderer resource={authors} returnAsArray forceLoading={authorsLoading} bulkyLoading>
         {authors => (
           <Grid fluid>
             <Row>
@@ -63,11 +56,7 @@ const FilterExercisesListForm = ({
                   maxLength={255}
                   label={
                     <span>
-                      <FormattedMessage
-                        id="app.filterExercisesListForm.searchName"
-                        defaultMessage="Search by name"
-                      />
-                      :
+                      <FormattedMessage id="app.filterExercisesListForm.searchName" defaultMessage="Search by name" />:
                     </span>
                   }
                 />
@@ -81,31 +70,17 @@ const FilterExercisesListForm = ({
                   options={authorsToOptions(authors, locale)}
                   label={
                     <span>
-                      <FormattedMessage
-                        id="app.filterExercisesListForm.author"
-                        defaultMessage="Author"
-                      />
-                      :
+                      <FormattedMessage id="app.filterExercisesListForm.author" defaultMessage="Author" />:
                     </span>
                   }
                   associatedButton={
                     <div className="text-nowrap">
-                      <Button
-                        className="btn-flat"
-                        onClick={() => change('author', null)}>
-                        <FormattedMessage
-                          id="app.filterExercisesListForm.allButton"
-                          defaultMessage="All"
-                        />
+                      <Button className="btn-flat" onClick={() => change('author', null)}>
+                        <FormattedMessage id="app.filterExercisesListForm.allButton" defaultMessage="All" />
                       </Button>
                       {authors.find(author => author.id === loggedUserId) && (
-                        <Button
-                          className="btn-flat"
-                          onClick={() => change('author', loggedUserId)}>
-                          <FormattedMessage
-                            id="app.filterExercisesListForm.mineButton"
-                            defaultMessage="Mine"
-                          />
+                        <Button className="btn-flat" onClick={() => change('author', loggedUserId)}>
+                          <FormattedMessage id="app.filterExercisesListForm.mineButton" defaultMessage="Mine" />
                         </Button>
                       )}
                     </div>
@@ -122,18 +97,8 @@ const FilterExercisesListForm = ({
                     invalid={invalid}
                     disabled={onSubmit === null}
                     messages={{
-                      submit: (
-                        <FormattedMessage
-                          id="generic.setFilters"
-                          defaultMessage="Set Filters"
-                        />
-                      ),
-                      success: (
-                        <FormattedMessage
-                          id="generic.filtersSet"
-                          defaultMessage="Filters Set"
-                        />
-                      ),
+                      submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                      success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
                     }}
                   />
                 </div>

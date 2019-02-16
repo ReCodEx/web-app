@@ -33,8 +33,7 @@ const actionCreatorsFactory = ({
     value: getJsData(item),
   });
 
-  const fetchIfNeeded = (...ids) => (dispatch, getState) =>
-    Promise.all(ids.map(id => dispatch(fetchOneIfNeeded(id))));
+  const fetchIfNeeded = (...ids) => (dispatch, getState) => Promise.all(ids.map(id => dispatch(fetchOneIfNeeded(id))));
 
   const fetchOneIfNeeded = id => (dispatch, getState) => {
     if (needsRefetching(getItem(id, getState))) {
@@ -42,9 +41,7 @@ const actionCreatorsFactory = ({
     }
 
     const item = getItem(id, getState);
-    return isLoading(item)
-      ? archivedPromises[id]
-      : Promise.resolve(fakeResult(item));
+    return isLoading(item) ? archivedPromises[id] : Promise.resolve(fakeResult(item));
   };
 
   const fetchResource = id =>
@@ -61,11 +58,7 @@ const actionCreatorsFactory = ({
     resource => ({ id: resource.get('id') })
   );
 
-  const addResource = (
-    body,
-    tmpId = Math.random().toString(),
-    endpoint = apiEndpointFactory('')
-  ) =>
+  const addResource = (body, tmpId = Math.random().toString(), endpoint = apiEndpointFactory('')) =>
     createApiAction({
       type: actionTypes.ADD,
       method: 'POST',

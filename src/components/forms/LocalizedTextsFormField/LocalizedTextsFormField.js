@@ -22,11 +22,7 @@ const renderTitle = ({ locale, _enabled }) => (
   <span>
     <OverlayTrigger
       placement="bottom"
-      overlay={
-        <Tooltip id={`editLocalizedTextForm-${locale}`}>
-          {knownLocalesNames[locale] || '??'}
-        </Tooltip>
-      }>
+      overlay={<Tooltip id={`editLocalizedTextForm-${locale}`}>{knownLocalesNames[locale] || '??'}</Tooltip>}>
       <span>{locale}</span>
     </OverlayTrigger>
 

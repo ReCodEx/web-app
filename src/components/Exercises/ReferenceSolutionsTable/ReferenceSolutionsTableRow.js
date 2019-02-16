@@ -27,10 +27,7 @@ const ReferenceSolutionsTableRow = ({
         <td colSpan={3}>
           {description || (
             <i className="text-muted small">
-              <FormattedMessage
-                id="app.referenceSolutionTable.noDescription"
-                defaultMessage="no description given"
-              />
+              <FormattedMessage id="app.referenceSolutionTable.noDescription" defaultMessage="no description given" />
             </i>
           )}
         </td>
@@ -40,19 +37,9 @@ const ReferenceSolutionsTableRow = ({
       </tr>
       <tr>
         <td className="text-nowrap">
-          <DateTime
-            unixts={createdAt}
-            showOverlay
-            overlayTooltipId={`datetime-${id}`}
-          />
+          <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
-        <td className="text-nowrap">
-          {rte ? (
-            <EnvironmentsListItem runtimeEnvironment={rte} longNames />
-          ) : (
-            '-'
-          )}
-        </td>
+        <td className="text-nowrap">{rte ? <EnvironmentsListItem runtimeEnvironment={rte} longNames /> : '-'}</td>
         <td className="text-nowrap">
           <UsersNameContainer userId={userId} isSimple />
         </td>

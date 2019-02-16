@@ -12,12 +12,7 @@ import UploadContainer from '../../../containers/UploadContainer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const FilesTable = ({
-  title = (
-    <FormattedMessage
-      id="app.filesTable.title"
-      defaultMessage="Attached files"
-    />
-  ),
+  title = <FormattedMessage id="app.filesTable.title" defaultMessage="Attached files" />,
   description = null,
   attachments,
   canSubmit,
@@ -39,15 +34,9 @@ const FilesTable = ({
       {!viewOnly && <UploadContainer id={uploadId} />}
       {!viewOnly && newFiles && newFiles.length > 0 && (
         <p className="text-center">
-          <Button
-            bsStyle="success"
-            disabled={!canSubmit}
-            onClick={() => addFiles(newFiles)}>
+          <Button bsStyle="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
             <SendIcon gapRight />
-            <FormattedMessage
-              id="app.filesTable.addFiles"
-              defaultMessage="Save files"
-            />
+            <FormattedMessage id="app.filesTable.addFiles" defaultMessage="Save files" />
           </Button>
         </p>
       )}
@@ -79,10 +68,7 @@ const FilesTable = ({
             {attachments.length === 0 && (
               <p className="text-center em-padding">
                 <Icon icon={['far', 'folder-open']} gapRight />
-                <FormattedMessage
-                  id="app.filesTable.empty"
-                  defaultMessage="There are no uploaded files yet."
-                />
+                <FormattedMessage id="app.filesTable.empty" defaultMessage="There are no uploaded files yet." />
               </p>
             )}
 
@@ -90,10 +76,7 @@ const FilesTable = ({
               <div className="text-center">
                 <Button bsStyle="primary" onClick={downloadArchive}>
                   <DownloadIcon gapRight />
-                  <FormattedMessage
-                    id="app.filesTable.downloadArchive"
-                    defaultMessage="Download All"
-                  />
+                  <FormattedMessage id="app.filesTable.downloadArchive" defaultMessage="Download All" />
                 </Button>
               </div>
             )}

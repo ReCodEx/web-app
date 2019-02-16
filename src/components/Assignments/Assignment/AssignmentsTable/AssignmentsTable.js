@@ -5,22 +5,13 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 
-import {
-  isReady,
-  isLoading,
-  getJsData,
-} from '../../../../redux/helpers/resourceManager';
-import AssignmentTableRow, {
-  NoAssignmentTableRow,
-  LoadingAssignmentTableRow,
-} from '../AssignmentTableRow';
+import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
+import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
 import { compareAssignments } from '../../../helpers/assignments';
 
 const fetchAssignmentStatus = (statuses, assignmentId) => {
   const assignStatus =
-    statuses && Array.isArray(statuses)
-      ? statuses.find(assignStatus => assignStatus.id === assignmentId)
-      : null;
+    statuses && Array.isArray(statuses) ? statuses.find(assignStatus => assignStatus.id === assignmentId) : null;
   return assignStatus ? assignStatus.status : '';
 };
 
@@ -44,66 +35,42 @@ const AssignmentsTable = ({
 
           {showNames && (
             <th>
-              <FormattedMessage
-                id="app.assignments.name"
-                defaultMessage="Assignment name"
-              />
+              <FormattedMessage id="app.assignments.name" defaultMessage="Assignment name" />
             </th>
           )}
 
           {showGroups && groupsAccessor && (
             <th>
-              <FormattedMessage
-                id="app.assignments.group"
-                defaultMessage="Assigned in group"
-              />
+              <FormattedMessage id="app.assignments.group" defaultMessage="Assigned in group" />
             </th>
           )}
 
           {assignmentEnvironmentsSelector && (
             <th>
-              <FormattedMessage
-                id="generic.runtimesShort"
-                defaultMessage="Runtimes/Languages"
-              />
+              <FormattedMessage id="generic.runtimesShort" defaultMessage="Runtimes/Languages" />
             </th>
           )}
 
           {!isAdmin && Object.keys(stats).length !== 0 && (
             <th className="text-center text-nowrap">
-              <FormattedMessage
-                id="app.assignments.points"
-                defaultMessage="Points"
-              />
+              <FormattedMessage id="app.assignments.points" defaultMessage="Points" />
             </th>
           )}
 
           <th className="text-nowrap shrink-col">
-            <FormattedMessage
-              id="app.assignments.deadline"
-              defaultMessage="Deadline"
-            />
+            <FormattedMessage id="app.assignments.deadline" defaultMessage="Deadline" />
           </th>
 
           <th className="text-nowrap shrink-col">
-            <FormattedMessage
-              id="app.assignments.maxPointsShort"
-              defaultMessage="Max. points"
-            />
+            <FormattedMessage id="app.assignments.maxPointsShort" defaultMessage="Max. points" />
           </th>
 
           <th className="text-nowrap shrink-col">
-            <FormattedMessage
-              id="app.assignments.secondDeadline"
-              defaultMessage="Second deadline"
-            />
+            <FormattedMessage id="app.assignments.secondDeadline" defaultMessage="Second deadline" />
           </th>
 
           <th className="text-nowrap shrink-col">
-            <FormattedMessage
-              id="app.assignments.maxPointsShort"
-              defaultMessage="Max. points"
-            />
+            <FormattedMessage id="app.assignments.maxPointsShort" defaultMessage="Max. points" />
           </th>
 
           {isAdmin && <th />}
@@ -114,9 +81,7 @@ const AssignmentsTable = ({
       {assignments.size === 0 && <NoAssignmentTableRow />}
 
       {assignments.some(isLoading) && (
-        <LoadingAssignmentTableRow
-          colSpan={5 + (assignmentEnvironmentsSelector ? 1 : 0)}
-        />
+        <LoadingAssignmentTableRow colSpan={5 + (assignmentEnvironmentsSelector ? 1 : 0)} />
       )}
 
       {assignments
@@ -127,18 +92,11 @@ const AssignmentsTable = ({
           <AssignmentTableRow
             key={assignment.id}
             item={assignment}
-            runtimeEnvironments={
-              assignmentEnvironmentsSelector &&
-              assignmentEnvironmentsSelector(assignment.id)
-            }
+            runtimeEnvironments={assignmentEnvironmentsSelector && assignmentEnvironmentsSelector(assignment.id)}
             userId={userId}
             status={fetchAssignmentStatus(statuses, assignment.id)}
             locale={locale}
-            stats={
-              Object.keys(stats).length !== 0
-                ? stats.assignments.find(item => item.id === assignment.id)
-                : null
-            }
+            stats={Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null}
             isAdmin={isAdmin}
             showNames={showNames}
             showGroups={showGroups}

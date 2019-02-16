@@ -8,10 +8,7 @@ import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 
 import { TextField, CheckboxField, NumericTextField } from '../Fields';
-import {
-  getLocalizedTextsInitialValues,
-  validateLocalizedTextsFormData,
-} from '../../../helpers/localizedData';
+import { getLocalizedTextsInitialValues, validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 
 export const EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT = {
   name: '',
@@ -23,10 +20,7 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   publicStats: false,
   hasThreshold: false,
   threshold: '',
-  localizedTexts: getLocalizedTextsInitialValues(
-    [],
-    EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT
-  ),
+  localizedTexts: getLocalizedTextsInitialValues([], EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
 };
 
 const EditGroupForm = ({
@@ -49,15 +43,9 @@ const EditGroupForm = ({
   <FormBox
     title={
       createNew ? (
-        <FormattedMessage
-          id="app.editGroupForm.titleNew"
-          defaultMessage="Create Subgroup"
-        />
+        <FormattedMessage id="app.editGroupForm.titleNew" defaultMessage="Create Subgroup" />
       ) : (
-        <FormattedMessage
-          id="app.editGroupForm.titleEdit"
-          defaultMessage="Edit Group"
-        />
+        <FormattedMessage id="app.editGroupForm.titleEdit" defaultMessage="Edit Group" />
       )
     }
     type={submitSucceeded ? 'success' : undefined}
@@ -73,25 +61,12 @@ const EditGroupForm = ({
           invalid={invalid}
           messages={{
             submit: createNew ? (
-              <FormattedMessage
-                id="app.editGroupForm.createGroup"
-                defaultMessage="Create Group"
-              />
+              <FormattedMessage id="app.editGroupForm.createGroup" defaultMessage="Create Group" />
             ) : (
-              <FormattedMessage
-                id="app.editGroupForm.saveGroup"
-                defaultMessage="Save Group"
-              />
+              <FormattedMessage id="app.editGroupForm.saveGroup" defaultMessage="Save Group" />
             ),
-            submitting: (
-              <FormattedMessage
-                id="generic.saving"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            ),
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
           }}
         />
       </div>
@@ -101,18 +76,11 @@ const EditGroupForm = ({
     unlimitedheight>
     {submitFailed && (
       <Alert bsStyle="danger">
-        <FormattedMessage
-          id="generic.savingFailed"
-          defaultMessage="Saving failed. Please try again later."
-        />
+        <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>
     )}
 
-    <FieldArray
-      name="localizedTexts"
-      component={LocalizedTextsFormField}
-      fieldType="group"
-    />
+    <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="group" />
 
     {isSuperAdmin && (
       <Field

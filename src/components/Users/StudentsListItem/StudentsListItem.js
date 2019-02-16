@@ -4,13 +4,7 @@ import { FormattedHTMLMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const StudentsListItem = ({
-  id,
-  fullName,
-  avatarUrl,
-  stats,
-  renderActions,
-}) => (
+const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) => (
   <tr>
     <td>
       <UsersNameContainer userId={id} />
@@ -19,14 +13,8 @@ const StudentsListItem = ({
       {stats && (
         <ProgressBar
           className="progress-xs"
-          now={
-            stats.points.total > 0
-              ? Math.min(1, stats.points.gained / stats.points.total) * 100
-              : 0
-          }
-          bsStyle={
-            !stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'
-          }
+          now={stats.points.total > 0 ? Math.min(1, stats.points.gained / stats.points.total) * 100 : 0}
+          bsStyle={!stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'}
         />
       )}
     </td>

@@ -5,17 +5,9 @@ import Button from '../../widgets/FlatButton';
 import { FailureIcon } from '../../icons';
 
 const DeletingFailedButton = ({ onClick, ...props }) => (
-  <Button
-    bsStyle="default"
-    bsSize="sm"
-    className="btn-flat"
-    onClick={onClick}
-    {...props}>
+  <Button bsStyle="default" bsSize="sm" className="btn-flat" onClick={onClick} {...props}>
     <FailureIcon gapRight />
-    <FormattedMessage
-      id="generic.deleteFailed"
-      defaultMessage="Delete Failed"
-    />
+    <FormattedMessage id="generic.deleteFailed" defaultMessage="Delete Failed" />
   </Button>
 );
 

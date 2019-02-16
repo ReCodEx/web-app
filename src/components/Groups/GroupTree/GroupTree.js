@@ -7,16 +7,12 @@ import Button from '../../widgets/FlatButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import GroupsName from '../GroupsName';
-import {
-  computeVisibleGroupsMap,
-  computeEditableGroupsMap,
-} from '../../helpers/group.js';
+import { computeVisibleGroupsMap, computeEditableGroupsMap } from '../../helpers/group.js';
 import { getLocalizedResourceName } from '../../../helpers/localizedData';
 import { GroupIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
-const conditionalEmphasize = (content, condition) =>
-  condition ? <strong>{content}</strong> : content;
+const conditionalEmphasize = (content, condition) => (condition ? <strong>{content}</strong> : content);
 
 class GroupTree extends Component {
   renderLoading = level => (
@@ -24,9 +20,7 @@ class GroupTree extends Component {
       <TreeViewItem
         level={level}
         loading
-        title={
-          <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-        }
+        title={<FormattedMessage id="generic.loading" defaultMessage="Loading..." />}
       />
     </TreeView>
   );
@@ -40,24 +34,13 @@ class GroupTree extends Component {
       buttonsCreator(groupId, isRoot)
     ) : (
       <span>
-        <LinkContainer
-          to={
-            showInfoLink
-              ? GROUP_INFO_URI_FACTORY(groupId)
-              : GROUP_DETAIL_URI_FACTORY(groupId)
-          }>
+        <LinkContainer to={showInfoLink ? GROUP_INFO_URI_FACTORY(groupId) : GROUP_DETAIL_URI_FACTORY(groupId)}>
           <Button bsStyle="primary" bsSize="xs" className="btn-flat">
             <GroupIcon gapRight />
             {showInfoLink ? (
-              <FormattedMessage
-                id="app.group.info"
-                defaultMessage="Group Info"
-              />
+              <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
             ) : (
-              <FormattedMessage
-                id="app.group.detail"
-                defaultMessage="Group Detail"
-              />
+              <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
             )}
           </Button>
         </LinkContainer>
@@ -76,9 +59,7 @@ class GroupTree extends Component {
       .sort((id1, id2) => {
         const name1 = getLocalizedResourceName(groups.get(id1), locale);
         const name2 = getLocalizedResourceName(groups.get(id2), locale);
-        return name1 !== undefined && name2 !== undefined
-          ? name1.localeCompare(name2, locale)
-          : 0;
+        return name1 !== undefined && name2 !== undefined ? name1.localeCompare(name2, locale) : 0;
       })
       .map(id => (
         <GroupTree
@@ -106,9 +87,7 @@ class GroupTree extends Component {
     } = this.props;
 
     const onAncestralPath = ancestralPath && ancestralPath.length > 0;
-    const group = onAncestralPath
-      ? groups.get(ancestralPath[0])
-      : groups.get(id);
+    const group = onAncestralPath ? groups.get(ancestralPath[0]) : groups.get(id);
     if (!group || !isReady(group)) {
       return this.renderLoading(level);
     }
@@ -137,12 +116,7 @@ class GroupTree extends Component {
         {level !== 0 || onAncestralPath ? (
           <TreeViewItem
             title={conditionalEmphasize(
-              <GroupsName
-                id={groupId}
-                name={name}
-                localizedTexts={localizedTexts}
-                noLink
-              />,
+              <GroupsName id={groupId} name={name} localizedTexts={localizedTexts} noLink />,
               currentGroupId === groupId
             )}
             id={groupId}
@@ -154,14 +128,9 @@ class GroupTree extends Component {
             forceOpen={onAncestralPath}
             isOpen={currentGroupId === groupId || isOpen}
             actions={
-              (currentGroupId !== groupId || forceRootButtons) &&
-              permissionHints.viewDetail
+              (currentGroupId !== groupId || forceRootButtons) && permissionHints.viewDetail
                 ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
-                  this.renderButtons(
-                    groupId,
-                    organizational || isPublic,
-                    currentGroupId === groupId
-                  )
+                  this.renderButtons(groupId, organizational || isPublic, currentGroupId === groupId)
                 : undefined
             }>
             {onAncestralPath
@@ -174,11 +143,7 @@ class GroupTree extends Component {
                     visibleGroupsMap={visibleGroupsMap}
                   />,
                 ]
-              : this.renderChildGroups(
-                  childGroups,
-                  actualVisibleGroupsMap,
-                  level
-                )}
+              : this.renderChildGroups(childGroups, actualVisibleGroupsMap, level)}
           </TreeViewItem>
         ) : (
           this.renderChildGroups(childGroups, actualVisibleGroupsMap, 0)

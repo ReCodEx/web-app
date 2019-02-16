@@ -5,12 +5,7 @@ import ConfirmDeleteButton from './ConfirmDeleteButton';
 import DeletingButton from './DeletingButton';
 import DeletedButton from './DeletedButton';
 import DeletingFailedButton from './DeletingFailedButton';
-import {
-  isReady,
-  isLoading,
-  isDeleting,
-  isDeleted,
-} from '../../../redux/helpers/resourceManager';
+import { isReady, isLoading, isDeleting, isDeleted } from '../../../redux/helpers/resourceManager';
 
 const DeleteButton = ({ resource, deleteResource, disabled, ...props }) => {
   if (!resource || isDeleted(resource)) {
@@ -18,32 +13,18 @@ const DeleteButton = ({ resource, deleteResource, disabled, ...props }) => {
   }
 
   if (isLoading(resource)) {
-    return (
-      <ConfirmDeleteButton {...props} disabled={disabled} onClick={() => {}} />
-    );
+    return <ConfirmDeleteButton {...props} disabled={disabled} onClick={() => {}} />;
   }
 
   if (isReady(resource)) {
-    return (
-      <ConfirmDeleteButton
-        {...props}
-        disabled={disabled}
-        onClick={deleteResource}
-      />
-    );
+    return <ConfirmDeleteButton {...props} disabled={disabled} onClick={deleteResource} />;
   }
 
   if (isDeleting(resource)) {
     return <DeletingButton {...props} disabled={disabled} />;
   }
 
-  return (
-    <DeletingFailedButton
-      {...props}
-      onClick={deleteResource}
-      disabled={disabled}
-    />
-  );
+  return <DeletingFailedButton {...props} onClick={deleteResource} disabled={disabled} />;
 };
 
 DeleteButton.propTypes = {

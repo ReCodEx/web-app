@@ -27,12 +27,7 @@ class HierarchyLineContainer extends Component {
     const { group } = this.props;
     return (
       <ResourceRenderer resource={group}>
-        {group => (
-          <HierarchyLine
-            groupId={group.id}
-            parentGroupsIds={group.parentGroupsIds}
-          />
-        )}
+        {group => <HierarchyLine groupId={group.id} parentGroupsIds={group.parentGroupsIds} />}
       </ResourceRenderer>
     );
   }

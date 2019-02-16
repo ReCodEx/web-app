@@ -1,9 +1,5 @@
 import { handleActions } from 'redux-actions';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { fromJS } from 'immutable';
 
@@ -37,15 +33,9 @@ const reducer = handleActions(
       state.setIn(['resources', userId, `${year}-${term}`], createRecord()),
 
     [actionTypes.FETCH_REJECTED]: (state, { meta: { userId, year, term } }) =>
-      state.setIn(
-        ['resources', userId, `${year}-${term}`],
-        createRecord({ state: resourceStatus.FAILED })
-      ),
+      state.setIn(['resources', userId, `${year}-${term}`], createRecord({ state: resourceStatus.FAILED })),
 
-    [actionTypes.FETCH_FULFILLED]: (
-      state,
-      { payload, meta: { userId, year, term } }
-    ) =>
+    [actionTypes.FETCH_FULFILLED]: (state, { payload, meta: { userId, year, term } }) =>
       state.setIn(
         ['resources', userId, `${year}-${term}`],
         createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })

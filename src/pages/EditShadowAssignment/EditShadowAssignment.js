@@ -13,10 +13,7 @@ import EditShadowAssignmentForm from '../../components/forms/EditShadowAssignmen
 import DeleteShadowAssignmentButtonContainer from '../../containers/DeleteShadowAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import {
-  getLocalizedTextsInitialValues,
-  transformLocalizedTextsFormData,
-} from '../../helpers/localizedData';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 
 import {
   fetchShadowAssignment,
@@ -47,28 +44,18 @@ class EditShadowAssignment extends Component {
     }
   };
 
-  static loadAsync = ({ assignmentId }, dispatch) =>
-    dispatch(fetchShadowAssignment(assignmentId));
+  static loadAsync = ({ assignmentId }, dispatch) => dispatch(fetchShadowAssignment(assignmentId));
 
-  getInitialValues = defaultMemoize(
-    ({ localizedTexts, isPublic, isBonus, maxPoints }) => ({
-      sendNotification: true,
-      isPublic,
-      isBonus,
-      maxPoints,
-      localizedTexts: getLocalizedTextsInitialValues(
-        localizedTexts,
-        localizedTextDefaults
-      ),
-    })
-  );
+  getInitialValues = defaultMemoize(({ localizedTexts, isPublic, isBonus, maxPoints }) => ({
+    sendNotification: true,
+    isPublic,
+    isBonus,
+    maxPoints,
+    localizedTexts: getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
+  }));
 
   editShadowAssignmentSubmitHandler = formData => {
-    const {
-      shadowAssignment,
-      editShadowAssignment,
-      validateShadowAssignment,
-    } = this.props;
+    const { shadowAssignment, editShadowAssignment, validateShadowAssignment } = this.props;
     const version = shadowAssignment.getIn(['data', 'version']);
 
     // validate assignment version
@@ -91,9 +78,7 @@ class EditShadowAssignment extends Component {
         const { localizedTexts, ...data } = formData;
         return editShadowAssignment({
           ...data,
-          localizedTexts: transformLocalizedTextsFormData(
-            formData.localizedTexts
-          ),
+          localizedTexts: transformLocalizedTextsFormData(formData.localizedTexts),
           version,
         });
       });
@@ -111,12 +96,7 @@ class EditShadowAssignment extends Component {
     return (
       <Page
         resource={shadowAssignment}
-        title={
-          <FormattedMessage
-            id="app.editShadowAssignment.title"
-            defaultMessage="Edit Shadow Assignment"
-          />
-        }
+        title={<FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Edit Shadow Assignment" />}
         description={
           <FormattedMessage
             id="app.editShadowAssignment.description"
@@ -130,12 +110,7 @@ class EditShadowAssignment extends Component {
             link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.editShadowAssignment.title"
-                defaultMessage="Edit Shadow Assignment"
-              />
-            ),
+            text: <FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Edit Shadow Assignment" />,
             iconName: ['far', 'edit'],
           },
         ]}>
@@ -149,11 +124,7 @@ class EditShadowAssignment extends Component {
               </Row>
 
               <EditShadowAssignmentForm
-                initialValues={
-                  shadowAssignment
-                    ? this.getInitialValues(shadowAssignment)
-                    : {}
-                }
+                initialValues={shadowAssignment ? this.getInitialValues(shadowAssignment) : {}}
                 onSubmit={this.editShadowAssignmentSubmitHandler}
                 beingPublished={!shadowAssignment.isPublic && isPublic}
               />
@@ -177,9 +148,7 @@ class EditShadowAssignment extends Component {
                     <p className="text-center">
                       <DeleteShadowAssignmentButtonContainer
                         id={assignmentId}
-                        onDeleted={() =>
-                          push(GROUP_DETAIL_URI_FACTORY(this.groupId))
-                        }
+                        onDeleted={() => push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
                       />
                     </p>
                   </div>
@@ -224,7 +193,6 @@ export default connect(
     editShadowAssignment: data => {
       return dispatch(editShadowAssignment(assignmentId, data));
     },
-    validateShadowAssignment: version =>
-      dispatch(validateShadowAssignment(assignmentId, version)),
+    validateShadowAssignment: version => dispatch(validateShadowAssignment(assignmentId, version)),
   })
 )(withLinks(EditShadowAssignment));

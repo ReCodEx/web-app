@@ -1,14 +1,9 @@
 import { createSelector } from 'reselect';
-import {
-  EMPTY_OBJ,
-  EMPTY_ARRAY,
-  simpleScalarMemoize,
-} from '../../helpers/common';
+import { EMPTY_OBJ, EMPTY_ARRAY, simpleScalarMemoize } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 
 const getPagination = componentId => state => state.pagination.get(componentId);
-const getEndpointResources = endpoint => state =>
-  state[endpoint].get('resources');
+const getEndpointResources = endpoint => state => state[endpoint].get('resources');
 
 /**
  * Public selectors
@@ -56,33 +51,29 @@ export const getPaginationIsPending = simpleScalarMemoize(componentId =>
   )
 );
 
-export const getPaginationDataJS = simpleScalarMemoize(
-  (componentId, endpoint) =>
-    createSelector(
-      [getPagination(componentId), getEndpointResources(endpoint)],
-      (pagination, resources) => {
-        const totalCount = pagination && pagination.get('totalCount');
-        if (!pagination || !resources || !totalCount) {
-          return EMPTY_ARRAY;
-        }
-
-        // Get the right range of offsets
-        let offset = pagination.get('offset');
-        const offsetEnd = Math.min(
-          offset + pagination.get('limit'),
-          totalCount
-        );
-
-        // Collect entities by their IDs
-        const res = [];
-        while (offset < offsetEnd) {
-          const id = pagination.getIn(['data', offset], null);
-          const entity = id && resources.get(id);
-          const entityData = isReady(entity) && entity.get('data');
-          res.push(entityData ? entityData.toJS() : null);
-          ++offset;
-        }
-        return res;
+export const getPaginationDataJS = simpleScalarMemoize((componentId, endpoint) =>
+  createSelector(
+    [getPagination(componentId), getEndpointResources(endpoint)],
+    (pagination, resources) => {
+      const totalCount = pagination && pagination.get('totalCount');
+      if (!pagination || !resources || !totalCount) {
+        return EMPTY_ARRAY;
       }
-    )
+
+      // Get the right range of offsets
+      let offset = pagination.get('offset');
+      const offsetEnd = Math.min(offset + pagination.get('limit'), totalCount);
+
+      // Collect entities by their IDs
+      const res = [];
+      while (offset < offsetEnd) {
+        const id = pagination.getIn(['data', offset], null);
+        const entity = id && resources.get(id);
+        const entityData = isReady(entity) && entity.get('data');
+        res.push(entityData ? entityData.toJS() : null);
+        ++offset;
+      }
+      return res;
+    }
+  )
 );

@@ -6,11 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
-import {
-  SelectField,
-  ExpandingTextField,
-  ExpandingInputFilesField,
-} from '../Fields';
+import { SelectField, ExpandingTextField, ExpandingInputFilesField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 
 import './EditExerciseSimpleConfigForm.css';
@@ -27,15 +23,7 @@ const validateCustomJudge = value =>
 
 class EditExerciseSimpleConfigDataTest extends Component {
   render() {
-    const {
-      supplementaryFiles,
-      testName,
-      test,
-      testErrors,
-      smartFill,
-      change,
-      intl,
-    } = this.props;
+    const { supplementaryFiles, testName, test, testErrors, smartFill, change, intl } = this.props;
     const supplementaryFilesOptions = supplementaryFiles
       .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
       .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
@@ -53,10 +41,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
         <Row>
           <Col sm={12} lg={4}>
             <h4>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.inputTitle"
-                defaultMessage="Input"
-              />
+              <FormattedMessage id="app.editExerciseSimpleConfigTests.inputTitle" defaultMessage="Input" />
             </h4>
             <FieldArray
               name={`${test}.input-files`}
@@ -70,10 +55,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
                 />
               }
               rightLabel={
-                <FormattedMessage
-                  id="app.editExerciseSimpleConfigTests.inputFilesRename"
-                  defaultMessage="Rename as:"
-                />
+                <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesRename" defaultMessage="Rename as:" />
               }
             />
             {Boolean(smartFill) && (
@@ -87,11 +69,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
                       defaultMessage="Do you really wish to overwrite input configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }>
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillInput"
@@ -104,10 +82,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
           </Col>
           <Col sm={12} lg={4}>
             <h4>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.cmdlineTitle"
-                defaultMessage="Command Line"
-              />
+              <FormattedMessage id="app.editExerciseSimpleConfigTests.cmdlineTitle" defaultMessage="Command Line" />
             </h4>
             <FieldArray
               name={`${test}.run-args`}
@@ -131,11 +106,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
                       defaultMessage="Do you really wish to overwrite command line configuration of all subsequent tests using the first test as a template?"
                     />
                   }>
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillArgs"
@@ -148,10 +119,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
           </Col>
           <Col sm={12} lg={4}>
             <h4>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigTests.judgeTitle"
-                defaultMessage="Judge"
-              />
+              <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeTitle" defaultMessage="Judge" />
             </h4>
             <Field
               name={`${test}.custom-judge`}
@@ -177,11 +145,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
                       defaultMessage="Do you really wish to overwrite judge configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }>
-                  <Button
-                    bsStyle={'primary'}
-                    className="btn-flat"
-                    bsSize="xs"
-                    disabled={Boolean(testErrors)}>
+                  <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillJudge"
@@ -204,15 +168,9 @@ class EditExerciseSimpleConfigDataTest extends Component {
                   defaultMessage="Do you really wish to overwrite configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                 />
               }>
-              <Button
-                bsStyle={'primary'}
-                className="btn-flat"
-                disabled={Boolean(testErrors)}>
+              <Button bsStyle={'primary'} className="btn-flat" disabled={Boolean(testErrors)}>
                 <Icon icon="arrows-alt" gapRight />
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.smartFillAll"
-                  defaultMessage="Smart Fill All"
-                />
+                <FormattedMessage id="app.editExerciseConfigForm.smartFillAll" defaultMessage="Smart Fill All" />
               </Button>
             </Confirm>
           </div>

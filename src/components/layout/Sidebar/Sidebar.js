@@ -9,17 +9,9 @@ import BadgeContainer from '../../../containers/BadgeContainer';
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
-import {
-  isReady,
-  getJsData,
-  getId,
-} from '../../../redux/helpers/resourceManager';
+import { isReady, getJsData, getId } from '../../../redux/helpers/resourceManager';
 import { getLocalizedResourceName } from '../../../helpers/localizedData';
-import {
-  isSupervisorRole,
-  isEmpoweredSupervisorRole,
-  isSuperadminRole,
-} from '../../helpers/usersRoles';
+import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles';
 import withLinks from '../../../helpers/withLinks';
 import { EMPTY_OBJ } from '../../../helpers/common';
 
@@ -53,23 +45,13 @@ const Sidebar = ({
         <ul className="sidebar-menu">
           <MenuTitle title="ReCodEx" />
           <MenuItem
-            title={
-              <FormattedMessage
-                id="app.sidebar.menu.signIn"
-                defaultMessage="Sign in"
-              />
-            }
+            title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
             icon="sign-in-alt"
             currentPath={currentUrl}
             link={LOGIN_URI}
           />
           <MenuItem
-            title={
-              <FormattedMessage
-                id="app.sidebar.menu.createAccount"
-                defaultMessage="Create account"
-              />
-            }
+            title={<FormattedMessage id="app.sidebar.menu.createAccount" defaultMessage="Create account" />}
             isActive={false}
             icon="user-plus"
             currentPath={currentUrl}
@@ -82,21 +64,9 @@ const Sidebar = ({
         <React.Fragment>
           <BadgeContainer small={small} />
           <ul className="sidebar-menu">
-            <MenuTitle
-              title={
-                <FormattedMessage
-                  id="app.sidebar.menu.title"
-                  defaultMessage="Menu"
-                />
-              }
-            />
+            <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
             <MenuItem
-              title={
-                <FormattedMessage
-                  id="app.sidebar.menu.dashboard"
-                  defaultMessage="Dashboard"
-                />
-              }
+              title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
               icon="tachometer-alt"
               currentPath={currentUrl}
               link={DASHBOARD_URI}
@@ -120,19 +90,11 @@ const Sidebar = ({
 
             {studentOf && studentOf.size > 0 && (
               <MenuGroup
-                title={
-                  <FormattedMessage
-                    id="app.sidebar.menu.memberOfGroups"
-                    defaultMessage="Member of Groups"
-                  />
-                }
+                title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
                 items={studentOf
                   .toList()
                   .sort((a, b) =>
-                    getLocalizedResourceName(a, locale).localeCompare(
-                      getLocalizedResourceName(b, locale),
-                      locale
-                    )
+                    getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
                   )}
                 notifications={EMPTY_OBJ}
                 icon={'user-circle'}
@@ -145,19 +107,13 @@ const Sidebar = ({
             {isSupervisorRole(role) && (
               <MenuGroup
                 title={
-                  <FormattedMessage
-                    id="app.sidebar.menu.supervisorOfGroups"
-                    defaultMessage="Supervisor of Groups"
-                  />
+                  <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
                 }
                 notifications={EMPTY_OBJ}
                 items={supervisorOf
                   .toList()
                   .sort((a, b) =>
-                    getLocalizedResourceName(a, locale).localeCompare(
-                      getLocalizedResourceName(b, locale),
-                      locale
-                    )
+                    getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
                   )}
                 icon="graduation-cap"
                 currentPath={currentUrl}
@@ -168,12 +124,7 @@ const Sidebar = ({
 
             {isSupervisorRole(role) && (
               <MenuItem
-                title={
-                  <FormattedMessage
-                    id="app.sidebar.menu.exercises"
-                    defaultMessage="Exercises"
-                  />
-                }
+                title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
                 icon="puzzle-piece"
                 currentPath={currentUrl}
                 link={EXERCISES_URI}
@@ -182,12 +133,7 @@ const Sidebar = ({
 
             {isEmpoweredSupervisorRole(role) && (
               <MenuItem
-                title={
-                  <FormattedMessage
-                    id="app.sidebar.menu.pipelines"
-                    defaultMessage="Pipelines"
-                  />
-                }
+                title={<FormattedMessage id="app.sidebar.menu.pipelines" defaultMessage="Pipelines" />}
                 icon="random"
                 currentPath={currentUrl}
                 link={PIPELINES_URI}
@@ -195,12 +141,7 @@ const Sidebar = ({
             )}
 
             <MenuItem
-              title={
-                <FormattedMessage
-                  id="app.sidebar.menu.archive"
-                  defaultMessage="Archive"
-                />
-              }
+              title={<FormattedMessage id="app.sidebar.menu.archive" defaultMessage="Archive" />}
               icon="archive"
               currentPath={currentUrl}
               link={ARCHIVE_URI}
@@ -208,23 +149,13 @@ const Sidebar = ({
 
             <MenuItem
               icon="id-badge"
-              title={
-                <FormattedMessage
-                  id="app.sidebar.menu.admin.sis"
-                  defaultMessage="SIS Integration"
-                />
-              }
+              title={<FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration" />}
               currentPath={currentUrl}
               link={SIS_INTEGRATION_URI}
             />
 
             <MenuItem
-              title={
-                <FormattedMessage
-                  id="app.sidebar.menu.faq"
-                  defaultMessage="FAQ"
-                />
-              }
+              title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
               icon="blind"
               link={FAQ_URL}
               currentPath={currentUrl}

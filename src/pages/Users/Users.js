@@ -15,24 +15,14 @@ import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer'
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
-import PaginationContainer, {
-  createSortingIcon,
-  showRangeInfo,
-} from '../../containers/PaginationContainer';
+import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
-import {
-  loggedInUserSelector,
-  isLoggedAsSuperAdmin,
-} from '../../redux/selectors/users';
+import { loggedInUserSelector, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { takeOver } from '../../redux/modules/auth';
 import { selectedInstanceId } from '../../redux/selectors/auth';
 
 import withLinks from '../../helpers/withLinks';
-import {
-  knownRoles,
-  isSupervisorRole,
-  isStudentRole,
-} from '../../components/helpers/usersRoles.js';
+import { knownRoles, isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles.js';
 
 const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
@@ -41,18 +31,16 @@ const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
   return initials;
 });
 
-const transformAndSetFilterData = defaultMemoize(
-  setFilters => ({ search, roles }) => {
-    const data = {
-      search: search.trim(),
-      roles: Object.keys(roles).filter(role => roles[role]),
-    };
-    if (!data.search) {
-      delete data.search;
-    }
-    return setFilters(data);
+const transformAndSetFilterData = defaultMemoize(setFilters => ({ search, roles }) => {
+  const data = {
+    search: search.trim(),
+    roles: Object.keys(roles).filter(role => roles[role]),
+  };
+  if (!data.search) {
+    delete data.search;
   }
-);
+  return setFilters(data);
+});
 
 class Users extends Component {
   filtersCreator = (filters, setFilters) => (
@@ -62,45 +50,20 @@ class Users extends Component {
     />
   );
 
-  headingCreator = ({
-    offset,
-    limit,
-    totalCount,
-    orderByColumn,
-    orderByDescending,
-    setOrderBy,
-  }) => (
+  headingCreator = ({ offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy }) => (
     <tr>
       <th />
       <th>
         <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />
-        {createSortingIcon(
-          'name',
-          orderByColumn,
-          orderByDescending,
-          setOrderBy
-        )}
+        {createSortingIcon('name', orderByColumn, orderByDescending, setOrderBy)}
       </th>
       <th>
         <FormattedMessage id="generic.email" defaultMessage="Email" />
-        {createSortingIcon(
-          'email',
-          orderByColumn,
-          orderByDescending,
-          setOrderBy
-        )}
+        {createSortingIcon('email', orderByColumn, orderByDescending, setOrderBy)}
       </th>
       <th>
-        <FormattedMessage
-          id="app.users.userCreatedAt"
-          defaultMessage="User created"
-        />
-        {createSortingIcon(
-          'createdAt',
-          orderByColumn,
-          orderByDescending,
-          setOrderBy
-        )}
+        <FormattedMessage id="app.users.userCreatedAt" defaultMessage="User created" />
+        {createSortingIcon('createdAt', orderByColumn, orderByDescending, setOrderBy)}
       </th>
       <td>{showRangeInfo(offset, limit, totalCount)}</td>
     </tr>
@@ -116,36 +79,22 @@ class Users extends Component {
       isSuperAdmin && (
         <div>
           {privateData && privateData.isAllowed && (
-            <Button
-              bsSize="xs"
-              bsStyle="primary"
-              onClick={() => takeOver(id, DASHBOARD_URI)}>
+            <Button bsSize="xs" bsStyle="primary" onClick={() => takeOver(id, DASHBOARD_URI)}>
               <TransferIcon gapRight />
-              <FormattedMessage
-                id="app.users.takeOver"
-                defaultMessage="Login as"
-              />
+              <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
             </Button>
           )}
 
           <LinkContainer to={EDIT_USER_URI_FACTORY(id)}>
             <Button bsSize="xs" bsStyle="warning">
               <SettingsIcon gapRight />
-              <FormattedMessage
-                id="generic.settings"
-                defaultMessage="Settings"
-              />
+              <FormattedMessage id="generic.settings" defaultMessage="Settings" />
             </Button>
           </LinkContainer>
 
           <AllowUserButtonContainer id={id} bsSize="xs" />
 
-          <DeleteUserButtonContainer
-            id={id}
-            bsSize="xs"
-            resourceless={true}
-            onDeleted={reload}
-          />
+          <DeleteUserButtonContainer id={id} bsSize="xs" resourceless={true} onDeleted={reload} />
         </div>
       )
     );
@@ -156,28 +105,18 @@ class Users extends Component {
 
     return (
       <Page
-        title={
-          <FormattedMessage id="app.users.title" defaultMessage="User list" />
-        }
+        title={<FormattedMessage id="app.users.title" defaultMessage="User list" />}
         resource={user}
-        description={
-          <FormattedMessage
-            id="app.users.description"
-            defaultMessage="Browse all ReCodEx users."
-          />
-        }
+        description={<FormattedMessage id="app.users.description" defaultMessage="Browse all ReCodEx users." />}
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage id="app.users.users" defaultMessage="Users" />
-            ),
+            text: <FormattedMessage id="app.users.users" defaultMessage="Users" />,
             iconName: 'users',
           },
         ]}>
         {user => (
           <div>
-            {(!isSupervisorRole(user.privateData.role) ||
-              isStudentRole(user.privateData.role)) && (
+            {(!isSupervisorRole(user.privateData.role) || isStudentRole(user.privateData.role)) && (
               <Row>
                 <Col sm={12}>
                   <p className="callout callout-warning larger">
@@ -191,52 +130,35 @@ class Users extends Component {
               </Row>
             )}
 
-            {isSupervisorRole(user.privateData.role) &&
-              !isStudentRole(user.privateData.role) && (
-                <Box
-                  title={
-                    <FormattedMessage
-                      id="app.users.listTitle"
-                      defaultMessage="Users"
-                    />
-                  }
-                  unlimitedHeight>
-                  <div>
-                    <PaginationContainer
-                      id="users-all"
-                      endpoint="users"
-                      defaultOrderBy="name"
-                      filtersCreator={this.filtersCreator}>
-                      {({
-                        data,
-                        offset,
-                        limit,
-                        totalCount,
-                        orderByColumn,
-                        orderByDescending,
-                        setOrderBy,
-                        reload,
-                      }) => (
-                        <UsersList
-                          users={data}
-                          loggedUserId={user.id}
-                          emailColumn
-                          createdAtColumn
-                          heading={this.headingCreator({
-                            offset,
-                            limit,
-                            totalCount,
-                            orderByColumn,
-                            orderByDescending,
-                            setOrderBy,
-                          })}
-                          createActions={this.createActions(reload)}
-                        />
-                      )}
-                    </PaginationContainer>
-                  </div>
-                </Box>
-              )}
+            {isSupervisorRole(user.privateData.role) && !isStudentRole(user.privateData.role) && (
+              <Box title={<FormattedMessage id="app.users.listTitle" defaultMessage="Users" />} unlimitedHeight>
+                <div>
+                  <PaginationContainer
+                    id="users-all"
+                    endpoint="users"
+                    defaultOrderBy="name"
+                    filtersCreator={this.filtersCreator}>
+                    {({ data, offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy, reload }) => (
+                      <UsersList
+                        users={data}
+                        loggedUserId={user.id}
+                        emailColumn
+                        createdAtColumn
+                        heading={this.headingCreator({
+                          offset,
+                          limit,
+                          totalCount,
+                          orderByColumn,
+                          orderByDescending,
+                          setOrderBy,
+                        })}
+                        createActions={this.createActions(reload)}
+                      />
+                    )}
+                  </PaginationContainer>
+                </div>
+              </Box>
+            )}
           </div>
         )}
       </Page>
@@ -264,8 +186,7 @@ export default withLinks(
     },
     dispatch => ({
       push: url => dispatch(push(url)),
-      takeOver: (userId, redirectUrl) =>
-        dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
+      takeOver: (userId, redirectUrl) => dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
     })
   )(Users)
 );

@@ -7,10 +7,7 @@ const EmailResent = props => {
   return (
     <FlatButton disabled {...props}>
       <LoadingIcon gapRight />
-      <FormattedMessage
-        id="app.resendEmailVerification.resending"
-        defaultMessage="Sending email..."
-      />
+      <FormattedMessage id="app.resendEmailVerification.resending" defaultMessage="Sending email..." />
     </FlatButton>
   );
 };

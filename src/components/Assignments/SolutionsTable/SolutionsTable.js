@@ -25,35 +25,20 @@ const SolutionsTable = ({
         <tr>
           <th />
           <th>
-            <FormattedMessage
-              id="app.solutionsTable.submissionDate"
-              defaultMessage="Date of submission"
-            />
+            <FormattedMessage id="app.solutionsTable.submissionDate" defaultMessage="Date of submission" />
           </th>
           <th className="text-center">
-            <FormattedMessage
-              id="app.solutionsTable.solutionValidity"
-              defaultMessage="Validity"
-            />
+            <FormattedMessage id="app.solutionsTable.solutionValidity" defaultMessage="Validity" />
           </th>
           <th className="text-center">
-            <FormattedMessage
-              id="app.solutionsTable.receivedPoints"
-              defaultMessage="Points"
-            />
+            <FormattedMessage id="app.solutionsTable.receivedPoints" defaultMessage="Points" />
           </th>
           <th className="text-center">
-            <FormattedMessage
-              id="app.solutionsTable.environment"
-              defaultMessage="Target language"
-            />
+            <FormattedMessage id="app.solutionsTable.environment" defaultMessage="Target language" />
           </th>
           {!compact && (
             <th>
-              <FormattedMessage
-                id="app.solutionsTable.note"
-                defaultMessage="Note"
-              />
+              <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />
             </th>
           )}
           <th />
@@ -79,19 +64,13 @@ const SolutionsTable = ({
           const runtimeEnvironment =
             data.runtimeEnvironmentId &&
             runtimeEnvironments &&
-            runtimeEnvironments.find(
-              ({ id }) => id === data.runtimeEnvironmentId
-            );
+            runtimeEnvironments.find(({ id }) => id === data.runtimeEnvironmentId);
 
           return (
             <SolutionsTableRow
               key={id}
               id={id}
-              status={
-                data.lastSubmission
-                  ? data.lastSubmission.evaluationStatus
-                  : null
-              }
+              status={data.lastSubmission ? data.lastSubmission.evaluationStatus : null}
               runtimeEnvironment={runtimeEnvironment}
               assignmentId={assignmentId}
               noteMaxlen={noteMaxlen}

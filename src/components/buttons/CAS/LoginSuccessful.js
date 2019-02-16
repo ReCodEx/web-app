@@ -6,10 +6,7 @@ import { SuccessIcon } from '../../icons';
 const LogginSuccessful = () => (
   <Button disabled bsStyle="success">
     <SuccessIcon gapRight />
-    <FormattedMessage
-      id="app.casLoginButton.success"
-      defaultMessage="Logged in"
-    />
+    <FormattedMessage id="app.casLoginButton.success" defaultMessage="Logged in" />
   </Button>
 );
 

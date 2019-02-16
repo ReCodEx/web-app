@@ -49,22 +49,12 @@ class SolutionDetail extends Component {
     } = this.props;
 
     const { openFileId } = this.state;
-    const activeSubmissionId =
-      this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
+    const activeSubmissionId = this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
     const evaluationsJS = evaluations.toJS();
-    if (
-      activeSubmissionId &&
-      evaluationsJS[activeSubmissionId] &&
-      evaluationsJS[activeSubmissionId].data
-    ) {
-      var {
-        submittedBy,
-        evaluation,
-        isCorrect,
-        evaluationStatus,
-        isDebug,
-        ...restSub
-      } = evaluationsJS[activeSubmissionId].data;
+    if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
+      var { submittedBy, evaluation, isCorrect, evaluationStatus, isDebug, ...restSub } = evaluationsJS[
+        activeSubmissionId
+      ].data;
     } else {
       evaluationStatus = 'missing-submission';
     }
@@ -74,11 +64,7 @@ class SolutionDetail extends Component {
         <Row>
           <Col md={6} sm={12}>
             <SolutionStatus
-              evaluationStatus={safeGet(
-                lastSubmission,
-                ['evaluationStatus'],
-                'missing-submission'
-              )}
+              evaluationStatus={safeGet(lastSubmission, ['evaluationStatus'], 'missing-submission')}
               submittedAt={createdAt}
               userId={userId}
               submittedBy={submittedBy}
@@ -91,9 +77,7 @@ class SolutionDetail extends Component {
               environment={
                 runtimeEnvironments &&
                 runtimeEnvironmentId &&
-                runtimeEnvironments.find(
-                  ({ id }) => id === runtimeEnvironmentId
-                )
+                runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
               }
             />
             <Row>
@@ -142,14 +126,9 @@ class SolutionDetail extends Component {
                           />
                         </td>
                         <td>
-                          <Button
-                            onClick={refreshSolutionEvaluations}
-                            bsStyle="primary">
+                          <Button onClick={refreshSolutionEvaluations} bsStyle="primary">
                             <RefreshIcon gapRight />
-                            <FormattedMessage
-                              id="generic.refresh"
-                              defaultMessage="Refresh"
-                            />
+                            <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
                           </Button>
                         </td>
                       </tr>
@@ -181,11 +160,7 @@ class SolutionDetail extends Component {
                 />
               )}
 
-              {evaluation && (
-                <CompilationLogs
-                  initiationOutputs={evaluation.initiationOutputs}
-                />
-              )}
+              {evaluation && <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />}
 
               {evaluation && (
                 <TestResults
@@ -203,44 +178,29 @@ class SolutionDetail extends Component {
                 </Row>
               )}
 
-              {activeSubmissionId &&
-                permissionHints.viewResubmissions &&
-                evaluations &&
-                evaluations.size > 1 && (
-                  <Row>
-                    <Col lg={12}>
-                      <ResourceRenderer
-                        resource={evaluations.toArray()}
-                        returnAsArray>
-                        {evaluations => (
-                          <SubmissionEvaluations
-                            submissionId={id}
-                            evaluations={evaluations}
-                            activeSubmissionId={activeSubmissionId}
-                            onSelect={id =>
-                              this.setState({ activeSubmissionId: id })
-                            }
-                            onDelete={
-                              permissionHints.deleteEvaluation
-                                ? deleteEvaluation
-                                : null
-                            }
-                            confirmDeleteLastSubmit
-                          />
-                        )}
-                      </ResourceRenderer>
-                    </Col>
-                  </Row>
-                )}
+              {activeSubmissionId && permissionHints.viewResubmissions && evaluations && evaluations.size > 1 && (
+                <Row>
+                  <Col lg={12}>
+                    <ResourceRenderer resource={evaluations.toArray()} returnAsArray>
+                      {evaluations => (
+                        <SubmissionEvaluations
+                          submissionId={id}
+                          evaluations={evaluations}
+                          activeSubmissionId={activeSubmissionId}
+                          onSelect={id => this.setState({ activeSubmissionId: id })}
+                          onDelete={permissionHints.deleteEvaluation ? deleteEvaluation : null}
+                          confirmDeleteLastSubmit
+                        />
+                      )}
+                    </ResourceRenderer>
+                  </Col>
+                </Row>
+              )}
             </Col>
           )}
         </Row>
 
-        <SourceCodeViewerContainer
-          show={openFileId !== null}
-          fileId={openFileId}
-          onHide={() => this.hideFile()}
-        />
+        <SourceCodeViewerContainer show={openFileId !== null} fileId={openFileId} onHide={() => this.hideFile()} />
       </div>
     );
   }

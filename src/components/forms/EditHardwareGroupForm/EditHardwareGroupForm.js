@@ -23,22 +23,13 @@ const EditHardwareGroupForm = ({
   addEmptyOption = true,
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.editHardwareGroupForm.title"
-        defaultMessage="Select Hardware Group"
-      />
-    }
+    title={<FormattedMessage id="app.editHardwareGroupForm.title" defaultMessage="Select Hardware Group" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
         {dirty && !submitting && !submitSucceeded && (
           <span>
-            <Button
-              type="reset"
-              onClick={reset}
-              bsStyle={'danger'}
-              className="btn-flat">
+            <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
               <RefreshIcon gapRight />
               <FormattedMessage id="generic.reset" defaultMessage="Reset" />
             </Button>
@@ -53,18 +44,9 @@ const EditHardwareGroupForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           messages={{
-            submit: (
-              <FormattedMessage id="generic.save" defaultMessage="Save" />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="generic.saving"
-                defaultMessage="Saving..."
-              />
-            ),
-            success: (
-              <FormattedMessage id="generic.saved" defaultMessage="Saved" />
-            ),
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
           }}
         />
       </div>
@@ -90,17 +72,10 @@ const EditHardwareGroupForm = ({
       name="hardwareGroup"
       component={SelectField}
       options={
-        hardwareGroups
-          .map(hwg => ({ key: hwg.id, name: hwg.name }))
-          .sort((a, b) => a.key.localeCompare(b.key)) // intentionally no locale (key is our identifier)
+        hardwareGroups.map(hwg => ({ key: hwg.id, name: hwg.name })).sort((a, b) => a.key.localeCompare(b.key)) // intentionally no locale (key is our identifier)
       }
       addEmptyOption={addEmptyOption}
-      label={
-        <FormattedMessage
-          id="app.editHardwareGroupForm.hwGroupSelect"
-          defaultMessage="Hardware Group:"
-        />
-      }
+      label={<FormattedMessage id="app.editHardwareGroupForm.hwGroupSelect" defaultMessage="Hardware Group:" />}
     />
   </FormBox>
 );

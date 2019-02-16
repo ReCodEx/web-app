@@ -20,16 +20,10 @@ const UploadsTable = ({
       <tr>
         <th />
         <th>
-          <FormattedMessage
-            id="app.filesTable.fileName"
-            defaultMessage="File Name"
-          />
+          <FormattedMessage id="app.filesTable.fileName" defaultMessage="File Name" />
         </th>
         <th>
-          <FormattedMessage
-            id="app.filesTable.fileSize"
-            defaultMessage="File Size"
-          />
+          <FormattedMessage id="app.filesTable.fileSize" defaultMessage="File Size" />
         </th>
         <th />
       </tr>
@@ -43,10 +37,7 @@ const UploadsTable = ({
           <td>{payload.name}</td>
           <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
-            <Button
-              bsSize="xs"
-              bsStyle="default"
-              onClick={() => removeFile(payload)}>
+            <Button bsSize="xs" bsStyle="default" onClick={() => removeFile(payload)}>
               <DeleteIcon />
             </Button>
           </td>
@@ -73,16 +64,10 @@ const UploadsTable = ({
           <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
-              <Button
-                bsSize="xs"
-                bsStyle="default"
-                onClick={() => removeFailedFile(payload)}>
+              <Button bsSize="xs" bsStyle="default" onClick={() => removeFailedFile(payload)}>
                 <DeleteIcon />
               </Button>
-              <Button
-                bsSize="xs"
-                bsStyle="default"
-                onClick={() => retryUploadFile(payload)}>
+              <Button bsSize="xs" bsStyle="default" onClick={() => retryUploadFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>
@@ -99,10 +84,7 @@ const UploadsTable = ({
           <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
-              <Button
-                bsSize="xs"
-                bsStyle="default"
-                onClick={() => returnFile(payload)}>
+              <Button bsSize="xs" bsStyle="default" onClick={() => returnFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>

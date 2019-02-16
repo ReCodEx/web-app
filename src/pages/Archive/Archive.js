@@ -30,13 +30,7 @@ const normalizeString = str =>
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
 
-const getVisibleArchiveGroupsMap = (
-  groups,
-  showAll,
-  search,
-  locale,
-  rootGroup
-) => {
+const getVisibleArchiveGroupsMap = (groups, showAll, search, locale, rootGroup) => {
   var result = {};
   const groupArray = groups.toArray();
 
@@ -44,9 +38,7 @@ const getVisibleArchiveGroupsMap = (
   groupArray.forEach(groupObj => {
     const group = getJsData(groupObj);
     const rootGroupIncludes =
-      rootGroup === null
-        ? true
-        : group.parentGroupsIds.includes(rootGroup) || rootGroup === group.id;
+      rootGroup === null ? true : group.parentGroupsIds.includes(rootGroup) || rootGroup === group.id;
     if (showAll || group.archived) {
       result[group.id] = rootGroupIncludes;
     }
@@ -57,8 +49,7 @@ const getVisibleArchiveGroupsMap = (
     const group = getJsData(groupObj);
     if (result[group.id] && search && search !== '') {
       const name = getLocalizedName(group, locale);
-      result[group.id] =
-        normalizeString(name).indexOf(normalizeString(search)) !== -1;
+      result[group.id] = normalizeString(name).indexOf(normalizeString(search)) !== -1;
     }
   });
 
@@ -79,10 +70,7 @@ class Archive extends Component {
   state = { showAll: false, search: '', rootGroup: null };
 
   static loadAsync = (params, dispatch, { instanceId }) =>
-    Promise.all([
-      dispatch(fetchInstancesIfNeeded(instanceId)),
-      dispatch(fetchAllGroups({ archived: true })),
-    ]);
+    Promise.all([dispatch(fetchInstancesIfNeeded(instanceId)), dispatch(fetchAllGroups({ archived: true }))]);
 
   componentWillMount() {
     this.props.loadAsync(this.props.instanceId);
@@ -120,18 +108,10 @@ class Archive extends Component {
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
           <Button bsStyle="primary" bsSize="xs">
             <GroupIcon gapRight />
-            <FormattedMessage
-              id="app.group.detail"
-              defaultMessage="Group Detail"
-            />
+            <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
           </Button>
         </LinkContainer>
-        <ArchiveGroupButtonContainer
-          id={groupId}
-          bsSize="xs"
-          shortLabels
-          onChange={() => loadAsync(instanceId)}
-        />
+        <ArchiveGroupButtonContainer id={groupId} bsSize="xs" shortLabels onChange={() => loadAsync(instanceId)} />
       </span>
     );
   };
@@ -146,34 +126,17 @@ class Archive extends Component {
     return (
       <Page
         resource={instance}
-        title={
-          <FormattedMessage id="app.archive.title" defaultMessage="Archive" />
-        }
-        description={
-          <FormattedMessage
-            id="app.archive.description"
-            defaultMessage="List of archived groups."
-          />
-        }
+        title={<FormattedMessage id="app.archive.title" defaultMessage="Archive" />}
+        description={<FormattedMessage id="app.archive.description" defaultMessage="List of archived groups." />}
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.archive.title"
-                defaultMessage="Archive"
-              />
-            ),
+            text: <FormattedMessage id="app.archive.title" defaultMessage="Archive" />,
             iconName: 'archive',
           },
         ]}>
         {data => (
           <Box
-            title={
-              <FormattedMessage
-                id="app.archive.archivedGroups"
-                defaultMessage="All Groups Including Archived"
-              />
-            }
+            title={<FormattedMessage id="app.archive.archivedGroups" defaultMessage="All Groups Including Archived" />}
             unlimitedHeight>
             <React.Fragment>
               <FilterArchiveGroupsForm

@@ -2,8 +2,7 @@ import { createSelector } from 'reselect';
 
 export const getShadowAssignments = state => state.shadowAssignments;
 
-const getShadowAssignmentResources = state =>
-  getShadowAssignments(state).get('resources');
+const getShadowAssignmentResources = state => getShadowAssignments(state).get('resources');
 
 export const getShadowAssignment = createSelector(
   getShadowAssignmentResources,

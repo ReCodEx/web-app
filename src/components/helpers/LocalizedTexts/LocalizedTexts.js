@@ -10,30 +10,19 @@ import { knownLocales } from '../../../helpers/localizedData';
 
 import './LocalizedTexts.css';
 
-const LocalizedTexts = (
-  { locales = [], noLocalesMessage = null },
-  { lang = 'en' }
-) => {
+const LocalizedTexts = ({ locales = [], noLocalesMessage = null }, { lang = 'en' }) => {
   const localeTabs = knownLocales
     .map(locale => locales.find(l => l.locale === locale))
-    .filter(
-      tabData =>
-        tabData && (tabData.text || tabData.link || tabData.studentHint)
-    );
+    .filter(tabData => tabData && (tabData.text || tabData.link || tabData.studentHint));
 
   if (localeTabs.length === 0) {
-    return noLocalesMessage ? (
-      <div className="callout callout-info">{noLocalesMessage}</div>
-    ) : null;
+    return noLocalesMessage ? <div className="callout callout-info">{noLocalesMessage}</div> : null;
   }
 
   return (
     <Tabs
       defaultActiveKey={
-        localeTabs.find(({ locale }) => locale === lang) ||
-        localeTabs.length === 0
-          ? lang
-          : localeTabs[0].locale
+        localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0 ? lang : localeTabs[0].locale
       }
       className="nav-tabs-custom"
       id="localized-texts">
@@ -72,10 +61,7 @@ const LocalizedTexts = (
             <div>
               <hr />
               <h4>
-                <FormattedMessage
-                  id="app.localizedTexts.studentHintHeading"
-                  defaultMessage="Hint"
-                />
+                <FormattedMessage id="app.localizedTexts.studentHintHeading" defaultMessage="Hint" />
               </h4>
               <Markdown source={studentHint} />
             </div>

@@ -1,9 +1,5 @@
 import { handleActions } from 'redux-actions';
-import factory, {
-  initialState,
-  createRecord,
-  resourceStatus,
-} from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
 
@@ -21,8 +17,7 @@ export const actionTypes = {
   ADD_FILES_REJECTED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED',
   REMOVE_FILE: 'recodex/supplementaryFiles/REMOVE_FILE',
   REMOVE_FILE_FULFILLED: 'recodex/supplementaryFiles/REMOVE_FILE_FULFILLED',
-  DOWNLOAD_SUPPLEMENTARY_ARCHIVE:
-    'recodex/supplementaryFiles/DOWNLOAD_SUPPLEMENTARY_ARCHIVE',
+  DOWNLOAD_SUPPLEMENTARY_ARCHIVE: 'recodex/supplementaryFiles/DOWNLOAD_SUPPLEMENTARY_ARCHIVE',
 };
 
 export const fetchSupplementaryFilesForExercise = exerciseId =>
@@ -72,16 +67,11 @@ const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [actionTypes.ADD_FILES_FULFILLED]: (state, { payload, meta: { files } }) =>
       payload.reduce(
-        (state, data) =>
-          state.setIn(
-            ['resources', data.id],
-            createRecord({ data, state: resourceStatus.FULFILLED })
-          ),
+        (state, data) => state.setIn(['resources', data.id], createRecord({ data, state: resourceStatus.FULFILLED })),
         state
       ),
 
-    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) =>
-      state.deleteIn(['resources', fileId]),
+    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) => state.deleteIn(['resources', fileId]),
   }),
   initialState
 );

@@ -8,74 +8,28 @@ import DateTime from '../../../widgets/DateTime';
 
 const syncMessages = {
   supplementaryFiles: (
-    <FormattedMessage
-      id="app.assignment.syncSupplementaryFiles"
-      defaultMessage="Supplementary files"
-    />
+    <FormattedMessage id="app.assignment.syncSupplementaryFiles" defaultMessage="Supplementary files" />
   ),
-  attachmentFiles: (
-    <FormattedMessage
-      id="app.assignment.syncAttachmentFiles"
-      defaultMessage="Text attachment files"
-    />
-  ),
-  exerciseTests: (
-    <FormattedMessage
-      id="app.assignment.syncExerciseTests"
-      defaultMessage="Exercise tests"
-    />
-  ),
-  localizedTexts: (
-    <FormattedMessage
-      id="app.assignment.syncLocalizedTexts"
-      defaultMessage="Localized texts"
-    />
-  ),
+  attachmentFiles: <FormattedMessage id="app.assignment.syncAttachmentFiles" defaultMessage="Text attachment files" />,
+  exerciseTests: <FormattedMessage id="app.assignment.syncExerciseTests" defaultMessage="Exercise tests" />,
+  localizedTexts: <FormattedMessage id="app.assignment.syncLocalizedTexts" defaultMessage="Localized texts" />,
   configurationType: (
     <FormattedMessage
       id="app.assignment.syncConfigurationType"
       defaultMessage="Configuration was switched to advanced mode"
     />
   ),
-  scoreConfig: (
-    <FormattedMessage
-      id="app.assignment.syncScoreConfig"
-      defaultMessage="Score configuration"
-    />
-  ),
-  scoreCalculator: (
-    <FormattedMessage
-      id="app.assignment.syncScoreCalculator"
-      defaultMessage="Score calculator"
-    />
-  ),
-  exerciseConfig: (
-    <FormattedMessage
-      id="app.assignment.syncExerciseConfig"
-      defaultMessage="Exercise configuration"
-    />
-  ),
+  scoreConfig: <FormattedMessage id="app.assignment.syncScoreConfig" defaultMessage="Score configuration" />,
+  scoreCalculator: <FormattedMessage id="app.assignment.syncScoreCalculator" defaultMessage="Score calculator" />,
+  exerciseConfig: <FormattedMessage id="app.assignment.syncExerciseConfig" defaultMessage="Exercise configuration" />,
   runtimeEnvironments: (
-    <FormattedMessage
-      id="app.assignment.syncRuntimeEnvironments"
-      defaultMessage="Selection of runtime environments"
-    />
+    <FormattedMessage id="app.assignment.syncRuntimeEnvironments" defaultMessage="Selection of runtime environments" />
   ),
   exerciseEnvironmentConfigs: (
-    <FormattedMessage
-      id="app.assignment.syncExerciseEnvironmentConfigs"
-      defaultMessage="Environment configuration"
-    />
+    <FormattedMessage id="app.assignment.syncExerciseEnvironmentConfigs" defaultMessage="Environment configuration" />
   ),
-  hardwareGroups: (
-    <FormattedMessage
-      id="app.assignment.syncHardwareGroups"
-      defaultMessage="Hardware groups"
-    />
-  ),
-  limits: (
-    <FormattedMessage id="app.assignment.syncLimits" defaultMessage="Limits" />
-  ),
+  hardwareGroups: <FormattedMessage id="app.assignment.syncHardwareGroups" defaultMessage="Hardware groups" />,
+  limits: <FormattedMessage id="app.assignment.syncLimits" defaultMessage="Limits" />,
 };
 
 const getSyncMessages = syncInfo => {
@@ -103,18 +57,8 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
               id="app.assignment.syncRequired"
               defaultMessage="The exercise data are newer than assignment data. Exercise was updated {exerciseUpdated}, but the assignment was last updated {assignmentUpdated}!"
               values={{
-                exerciseUpdated: (
-                  <DateTime
-                    unixts={syncInfo.updatedAt.exercise}
-                    emptyPlaceholder="??"
-                  />
-                ),
-                assignmentUpdated: (
-                  <DateTime
-                    unixts={syncInfo.updatedAt.assignment}
-                    emptyPlaceholder="??"
-                  />
-                ),
+                exerciseUpdated: <DateTime unixts={syncInfo.updatedAt.exercise} emptyPlaceholder="??" />,
+                assignmentUpdated: <DateTime unixts={syncInfo.updatedAt.assignment} emptyPlaceholder="??" />,
               }}
             />
           </h4>
@@ -126,14 +70,8 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
             <ul>{messages}</ul>
           </div>
           <p>
-            <Button
-              bsStyle="primary"
-              onClick={exerciseSync}
-              disabled={!syncInfo.isSynchronizationPossible}>
-              <FormattedMessage
-                id="app.assignment.syncButton"
-                defaultMessage="Update Assignment"
-              />
+            <Button bsStyle="primary" onClick={exerciseSync} disabled={!syncInfo.isSynchronizationPossible}>
+              <FormattedMessage id="app.assignment.syncButton" defaultMessage="Update Assignment" />
             </Button>
 
             {!syncInfo.isSynchronizationPossible && (

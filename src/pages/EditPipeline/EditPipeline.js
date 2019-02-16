@@ -14,19 +14,13 @@ import EditPipelineForm from '../../components/forms/EditPipelineForm';
 import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 
-import {
-  fetchPipelineIfNeeded,
-  editPipeline,
-} from '../../redux/modules/pipelines';
+import { fetchPipelineIfNeeded, editPipeline } from '../../redux/modules/pipelines';
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getBoxTypes } from '../../redux/selectors/boxes';
 
 import withLinks from '../../helpers/withLinks';
-import {
-  transformPipelineDataForApi,
-  extractVariables,
-} from '../../helpers/boxes';
+import { transformPipelineDataForApi, extractVariables } from '../../helpers/boxes';
 
 class EditPipeline extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -37,8 +31,7 @@ class EditPipeline extends Component {
     }
   };
 
-  static loadAsync = ({ pipelineId }, dispatch) =>
-    Promise.all([dispatch(fetchPipelineIfNeeded(pipelineId))]);
+  static loadAsync = ({ pipelineId }, dispatch) => Promise.all([dispatch(fetchPipelineIfNeeded(pipelineId))]);
 
   render() {
     const {
@@ -55,30 +48,15 @@ class EditPipeline extends Component {
       <Page
         resource={pipeline}
         title={pipeline => pipeline.name}
-        description={
-          <FormattedMessage
-            id="app.editPipeline.description"
-            defaultMessage="Change pipeline settings"
-          />
-        }
+        description={<FormattedMessage id="app.editPipeline.description" defaultMessage="Change pipeline settings" />}
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.pipeline.title"
-                defaultMessage="Pipeline"
-              />
-            ),
+            text: <FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline" />,
             iconName: 'random',
             link: PIPELINE_URI_FACTORY(pipelineId),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.editPipeline.title"
-                defaultMessage="Edit pipeline"
-              />
-            ),
+            text: <FormattedMessage id="app.editPipeline.title" defaultMessage="Edit pipeline" />,
             iconName: ['far', 'edit'],
           },
         ]}>
@@ -88,10 +66,7 @@ class EditPipeline extends Component {
               <Col lg={12}>
                 <Alert bsStyle="warning">
                   <h4>
-                    <FormattedMessage
-                      id="app.editPipeline.disclaimer"
-                      defaultMessage="Disclaimer"
-                    />
+                    <FormattedMessage id="app.editPipeline.disclaimer" defaultMessage="Disclaimer" />
                   </h4>
                   <p>
                     <FormattedMessage
@@ -122,11 +97,7 @@ class EditPipeline extends Component {
                       }}
                       onSubmit={({ pipeline, ...formData }) =>
                         editPipeline(data.version, {
-                          pipeline: transformPipelineDataForApi(
-                            boxTypes,
-                            pipeline,
-                            extractedVariables
-                          ),
+                          pipeline: transformPipelineDataForApi(boxTypes, pipeline, extractedVariables),
                           ...formData,
                         })
                       }
@@ -148,12 +119,7 @@ class EditPipeline extends Component {
               <Col lg={12}>
                 <Box
                   type="danger"
-                  title={
-                    <FormattedMessage
-                      id="app.editPipeline.delete"
-                      defaultMessage="Delete the pipeline"
-                    />
-                  }>
+                  title={<FormattedMessage id="app.editPipeline.delete" defaultMessage="Delete the pipeline" />}>
                   <div>
                     <p>
                       <FormattedMessage
@@ -162,10 +128,7 @@ class EditPipeline extends Component {
                       />
                     </p>
                     <p className="text-center">
-                      <DeletePipelineButtonContainer
-                        id={data.id}
-                        onDeleted={() => push(PIPELINES_URI)}
-                      />
+                      <DeletePipelineButtonContainer id={data.id} onDeleted={() => push(PIPELINES_URI)} />
                     </p>
                   </div>
                 </Box>
@@ -199,17 +162,14 @@ export default withLinks(
         pipeline: getPipeline(pipelineId)(state),
         boxTypes: getBoxTypes(state),
         userId: loggedInUserIdSelector(state),
-        variables: extractVariables(
-          formValueSelector('editPipeline')(state, 'pipeline.boxes')
-        ),
+        variables: extractVariables(formValueSelector('editPipeline')(state, 'pipeline.boxes')),
       };
     },
     (dispatch, { params: { pipelineId } }) => ({
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editPipeline')),
       loadAsync: () => EditPipeline.loadAsync({ pipelineId }, dispatch),
-      editPipeline: (version, data) =>
-        dispatch(editPipeline(pipelineId, { ...data, version })),
+      editPipeline: (version, data) => dispatch(editPipeline(pipelineId, { ...data, version })),
     })
   )(EditPipeline)
 );

@@ -33,15 +33,7 @@ class HeaderNotification extends Component {
   };
 
   render() {
-    const {
-      id,
-      successful = true,
-      msg,
-      hide = null,
-      time,
-      count,
-      isNew = false,
-    } = this.props;
+    const { id, successful = true, msg, hide = null, time, count, isNew = false } = this.props;
 
     const { hovering, clickedCopy } = this.state;
     const deleteOnClick = hide && hovering;
@@ -76,11 +68,7 @@ class HeaderNotification extends Component {
                     e.preventDefault();
                     hide && hide(id);
                   }}>
-                  <DeleteIcon
-                    className="fa text-red"
-                    smallGapRight
-                    fixedWidth
-                  />
+                  <DeleteIcon className="fa text-red" smallGapRight fixedWidth />
                 </span>
               ) : successful ? (
                 <SuccessIcon smallGapRight fixedWidth />
@@ -94,11 +82,7 @@ class HeaderNotification extends Component {
                   <CopyIcon gapRight fixedWidth />
                 </CopyToClipboard>
               </span>
-              <Overlay
-                show={clickedCopy}
-                container={this}
-                target={() => this.copy}
-                placement="bottom">
+              <Overlay show={clickedCopy} container={this} target={() => this.copy} placement="bottom">
                 <Tooltip id={`clicked-copy-${id}`}>
                   <FormattedMessage
                     id="app.headerNotification.copiedToClippboard"

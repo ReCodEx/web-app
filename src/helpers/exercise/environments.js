@@ -20,9 +20,7 @@ const SIMPLE_FORM_ENVIRONMENTS = [
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
 
 export const onlySimpleEnvironments = defaultMemoize(environments =>
-  environments.filter(
-    env => SIMPLE_FORM_ENVIRONMENTS_INDEX[env.id] !== undefined
-  )
+  environments.filter(env => SIMPLE_FORM_ENVIRONMENTS_INDEX[env.id] !== undefined)
 );
 
 /**
@@ -64,11 +62,7 @@ export const getEnvironmentInitValues = environmentConfigs => {
  * @param {*} environmentConfigs
  * @param {*} runtimeEnvironments
  */
-export const transformSimpleEnvironmentsValues = (
-  formData,
-  environmentConfigs,
-  runtimeEnvironments
-) => {
+export const transformSimpleEnvironmentsValues = (formData, environmentConfigs, runtimeEnvironments) => {
   let res = [];
   SIMPLE_FORM_ENVIRONMENTS.forEach(env => {
     if (formData[env] !== true && formData[env] !== 'true') {
@@ -77,9 +71,7 @@ export const transformSimpleEnvironmentsValues = (
     const envObj = {
       runtimeEnvironmentId: env,
     };
-    const environmentConfig = environmentConfigs.find(
-      e => e.runtimeEnvironmentId === env
-    );
+    const environmentConfig = environmentConfigs.find(e => e.runtimeEnvironmentId === env);
     const runtimeEnvironment = runtimeEnvironments.find(e => e.id === env);
     envObj.variablesTable = environmentConfig
       ? environmentConfig.variablesTable // keep already set variables if they exist
@@ -131,29 +123,19 @@ export const compareVariablesForEquality = (vars1, vars2) => {
  * @param {array} selectedPipelinesIds Selected pipelines IDs.
  * @returns {object} Variable names and how many times they are present in the pipeline sequence.
  */
-export const getPossibleVariablesNames = defaultMemoize(
-  (pipelines, selectedPipelinesIds) => {
-    if (
-      !pipelines ||
-      !selectedPipelinesIds ||
-      selectedPipelinesIds.length === 0
-    ) {
-      return null;
-    }
-
-    const res = {};
-    selectedPipelinesIds &&
-      selectedPipelinesIds.forEach(pid => {
-        const pipelineVariables = safeGet(pipelines, [
-          ({ id }) => id === pid,
-          'pipeline',
-          'variables',
-        ]);
-        pipelineVariables &&
-          pipelineVariables
-            .filter(({ type }) => type === 'file' || type === 'file[]')
-            .forEach(({ name }) => (res[name] = res[name] ? res[name] + 1 : 1));
-      });
-    return res;
+export const getPossibleVariablesNames = defaultMemoize((pipelines, selectedPipelinesIds) => {
+  if (!pipelines || !selectedPipelinesIds || selectedPipelinesIds.length === 0) {
+    return null;
   }
-);
+
+  const res = {};
+  selectedPipelinesIds &&
+    selectedPipelinesIds.forEach(pid => {
+      const pipelineVariables = safeGet(pipelines, [({ id }) => id === pid, 'pipeline', 'variables']);
+      pipelineVariables &&
+        pipelineVariables
+          .filter(({ type }) => type === 'file' || type === 'file[]')
+          .forEach(({ name }) => (res[name] = res[name] ? res[name] + 1 : 1));
+    });
+  return res;
+});

@@ -15,24 +15,14 @@ import Icon from '../../icons';
 
 import styles from './EditLimitsField.less';
 
-const prettyPrintBytesWrap = value =>
-  Number.isNaN(Number(value)) ? '-' : prettyPrintBytes(Number(value) * 1024);
+const prettyPrintBytesWrap = value => (Number.isNaN(Number(value)) ? '-' : prettyPrintBytes(Number(value) * 1024));
 
-const prettyPrintMsWrap = value =>
-  Number.isNaN(Number(value)) ? '-' : prettyMs(Number(value) * 1000);
+const prettyPrintMsWrap = value => (Number.isNaN(Number(value)) ? '-' : prettyMs(Number(value) * 1000));
 
 const validateValue = constraintKey => (value, allValues, { constraints }) => {
-  const num = validateLimitsField(
-    value,
-    constraints && constraints[constraintKey]
-  );
+  const num = validateLimitsField(value, constraints && constraints[constraintKey]);
   if (Number.isNaN(num)) {
-    return (
-      <FormattedMessage
-        id="app.EditLimitsForm.validation.NaN"
-        defaultMessage="Given value is not a number."
-      />
-    );
+    return <FormattedMessage id="app.EditLimitsForm.validation.NaN" defaultMessage="Given value is not a number." />;
   } else if (num === false) {
     return (
       <FormattedMessage
@@ -69,12 +59,7 @@ const EditLimitsField = ({
                 name={`${prefix}.memory`}
                 component={LimitsValueField}
                 prettyPrint={prettyPrintBytesWrap}
-                label={
-                  <FormattedMessage
-                    id="app.fields.limits.memory"
-                    defaultMessage="Memory [KiB]:"
-                  />
-                }
+                label={<FormattedMessage id="app.fields.limits.memory" defaultMessage="Memory [KiB]:" />}
                 validate={validateMemory}
                 disabled={disabled}
                 maxLength={12}
@@ -94,9 +79,7 @@ const EditLimitsField = ({
                             />
                           </Tooltip>
                         }>
-                        <FlatButton
-                          onClick={cloneVertically('memory')}
-                          bsSize="xs">
+                        <FlatButton onClick={cloneVertically('memory')} bsSize="xs">
                           <Icon icon="arrows-alt-v" />
                         </FlatButton>
                       </OverlayTrigger>
@@ -167,12 +150,7 @@ const EditLimitsField = ({
                 component={LimitsValueField}
                 prettyPrint={prettyPrintMsWrap}
                 validate={validateTime}
-                label={
-                  <FormattedMessage
-                    id="app.fields.limits.time"
-                    defaultMessage="Time [s]:"
-                  />
-                }
+                label={<FormattedMessage id="app.fields.limits.time" defaultMessage="Time [s]:" />}
                 maxLength={6}
                 disabled={disabled}
                 {...props}
@@ -191,9 +169,7 @@ const EditLimitsField = ({
                             />
                           </Tooltip>
                         }>
-                        <FlatButton
-                          onClick={cloneVertically('time')}
-                          bsSize="xs">
+                        <FlatButton onClick={cloneVertically('time')} bsSize="xs">
                           <Icon icon="arrows-alt-v" />
                         </FlatButton>
                       </OverlayTrigger>

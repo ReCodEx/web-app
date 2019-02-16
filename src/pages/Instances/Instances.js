@@ -8,8 +8,7 @@ import { instancesSelector } from '../../redux/selectors/instances';
 import InstancesManagement from '../../components/Instances/InstancesManagement';
 
 class Instances extends Component {
-  static loadAsync = (params, dispatch) =>
-    Promise.all([dispatch(fetchInstances())]);
+  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchInstances())]);
 
   componentWillMount = () => this.props.loadAsync();
 

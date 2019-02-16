@@ -8,9 +8,7 @@ import EditTestsTestRow from './EditTestsTestRow';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
 
 const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
-  const weightSum = isUniform
-    ? fields.length
-    : testValues.reduce((acc, val) => acc + Number(val.weight), 0);
+  const weightSum = isUniform ? fields.length : testValues.reduce((acc, val) => acc + Number(val.weight), 0);
 
   return (
     <div>
@@ -19,24 +17,15 @@ const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
           <thead>
             <tr>
               <th>
-                <FormattedMessage
-                  id="app.editTestsTest.name"
-                  defaultMessage="Test name:"
-                />
+                <FormattedMessage id="app.editTestsTest.name" defaultMessage="Test name:" />
               </th>
               {!isUniform && (
                 <th>
-                  <FormattedMessage
-                    id="app.editTestsTest.weight"
-                    defaultMessage="Test weight:"
-                  />
+                  <FormattedMessage id="app.editTestsTest.weight" defaultMessage="Test weight:" />
                 </th>
               )}
               <th>
-                <FormattedMessage
-                  id="app.editTestsTest.pointsPercentage"
-                  defaultMessage="Points Percentage:"
-                />
+                <FormattedMessage id="app.editTestsTest.pointsPercentage" defaultMessage="Points Percentage:" />
               </th>
               {!readOnly && <th />}
             </tr>
@@ -50,10 +39,7 @@ const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
                 readOnly={readOnly}
                 percent={
                   testValues[index] && testValues[index].weight
-                    ? prettyPrintPercent(
-                        (isUniform ? 1 : Number(testValues[index].weight)) /
-                          weightSum
-                      )
+                    ? prettyPrintPercent((isUniform ? 1 : Number(testValues[index].weight)) / weightSum)
                     : '?'
                 }
                 onRemove={() => fields.remove(index)}

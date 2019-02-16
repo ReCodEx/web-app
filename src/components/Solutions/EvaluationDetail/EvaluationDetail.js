@@ -20,12 +20,7 @@ const EvaluationDetail = ({
   viewResumbissions = false,
 }) => (
   <Box
-    title={
-      <FormattedMessage
-        id="app.evaluationDetail.title.details"
-        defaultMessage="Evaluation Details"
-      />
-    }
+    title={<FormattedMessage id="app.evaluationDetail.title.details" defaultMessage="Evaluation Details" />}
     noPadding={true}
     collapsable={true}
     isOpen={true}>
@@ -36,17 +31,10 @@ const EvaluationDetail = ({
             <Icon icon={['far', 'clock']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.evaluationDetail.evaluatedAt"
-              defaultMessage="Evaluated at:"
-            />
+            <FormattedMessage id="app.evaluationDetail.evaluatedAt" defaultMessage="Evaluated at:" />
           </th>
           <td>
-            <DateTime
-              unixts={evaluation.evaluatedAt}
-              showRelative
-              showSeconds
-            />
+            <DateTime unixts={evaluation.evaluatedAt} showRelative showSeconds />
           </td>
         </tr>
 
@@ -55,10 +43,7 @@ const EvaluationDetail = ({
             <Icon icon="cogs" />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.evaluationDetail.buildSucceeded"
-              defaultMessage="Build succeeded:"
-            />
+            <FormattedMessage id="app.evaluationDetail.buildSucceeded" defaultMessage="Build succeeded:" />
           </th>
           <td>
             <SuccessOrFailureIcon success={!evaluation.initFailed} />
@@ -70,11 +55,7 @@ const EvaluationDetail = ({
             <Icon icon="percent" />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.evaluationDetail.isCorrect"
-              defaultMessage="Correctness"
-            />
-            :
+            <FormattedMessage id="app.evaluationDetail.isCorrect" defaultMessage="Correctness" />:
           </th>
           <td
             className={classnames({
@@ -92,11 +73,7 @@ const EvaluationDetail = ({
             <Icon icon={['far', 'star']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.evaluationDetail.scoredPoints"
-              defaultMessage="Scored points"
-            />
-            :
+            <FormattedMessage id="app.evaluationDetail.scoredPoints" defaultMessage="Scored points" />:
           </th>
           <td
             className={classnames({
@@ -112,19 +89,11 @@ const EvaluationDetail = ({
         <tr>
           <td className="text-center">
             <b>
-              <AssignmentStatusIcon
-                id={String(submittedAt)}
-                status={evaluationStatus}
-                accepted={accepted}
-              />
+              <AssignmentStatusIcon id={String(submittedAt)} status={evaluationStatus} accepted={accepted} />
             </b>
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.submission.evaluationStatus"
-              defaultMessage="Evaluation status"
-            />
-            :
+            <FormattedMessage id="app.submission.evaluationStatus" defaultMessage="Evaluation status" />:
           </th>
           <td>
             <em>
@@ -168,11 +137,7 @@ const EvaluationDetail = ({
               <BugIcon />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage
-                id="app.evaluationDetail.isDebug"
-                defaultMessage="Debug Mode"
-              />
-              :
+              <FormattedMessage id="app.evaluationDetail.isDebug" defaultMessage="Debug Mode" />:
             </th>
             <td>
               <SuccessOrFailureIcon success={isDebug} />

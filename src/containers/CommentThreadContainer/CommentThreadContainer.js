@@ -41,21 +41,10 @@ class CommentThreadContainer extends Component {
   };
 
   render() {
-    const {
-      thread,
-      user,
-      addComment,
-      repostComment,
-      togglePrivacy,
-      refresh,
-      deleteComment,
-    } = this.props;
+    const { thread, user, addComment, repostComment, togglePrivacy, refresh, deleteComment } = this.props;
 
     return (
-      <ResourceRenderer
-        resource={[thread, user]}
-        loading={<LoadingCommentThread />}
-        failed={<FailedCommentThread />}>
+      <ResourceRenderer resource={[thread, user]} loading={<LoadingCommentThread />} failed={<FailedCommentThread />}>
         {(thread, user) => (
           <CommentThread
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
@@ -89,8 +78,7 @@ export default connect(
     thread: commentsThreadSelector(state, threadId),
   }),
   (dispatch, { threadId }) => ({
-    addComment: (user, text, isPrivate) =>
-      dispatch(postComment(user, threadId, text, isPrivate)),
+    addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),
     repostComment: tmpId => dispatch(repostComment(threadId, tmpId)),
     togglePrivacy: id => dispatch(togglePrivacy(threadId, id)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId)),

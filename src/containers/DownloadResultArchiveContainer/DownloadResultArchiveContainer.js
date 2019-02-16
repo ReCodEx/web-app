@@ -12,9 +12,7 @@ const DownloadResultArchiveContainer = ({
   downloadRefResultArchive,
   isReference = false,
 }) => (
-  <a
-    href="#"
-    onClick={isReference ? downloadRefResultArchive : downloadResultArchive}>
+  <a href="#" onClick={isReference ? downloadRefResultArchive : downloadResultArchive}>
     <ResultArchiveInfoBox id={submissionId} />
   </a>
 );

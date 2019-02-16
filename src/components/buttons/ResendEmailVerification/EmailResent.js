@@ -8,10 +8,7 @@ const EmailResent = ({ resend, ...props }) => {
   return (
     <FlatButton onClick={resend} bsStyle="success" {...props}>
       <SuccessIcon gapRight />
-      <FormattedMessage
-        id="app.resendEmailVerification.resent"
-        defaultMessage="Email has been resent"
-      />
+      <FormattedMessage id="app.resendEmailVerification.resent" defaultMessage="Email has been resent" />
     </FlatButton>
   );
 };

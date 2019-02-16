@@ -16,10 +16,7 @@ import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButton
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import { NeedFixingIcon } from '../../components/icons';
 
-import {
-  fetchExerciseIfNeeded,
-  editExercise,
-} from '../../redux/modules/exercises';
+import { fetchExerciseIfNeeded, editExercise } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -38,19 +35,14 @@ const localizedTextDefaults = {
   description: '',
 };
 
-const prepareInitialValues = defaultMemoize(
-  (id, version, localizedTexts, difficulty, isPublic, isLocked) => ({
-    id,
-    version,
-    localizedTexts: getLocalizedTextsInitialValues(
-      localizedTexts,
-      localizedTextDefaults
-    ),
-    difficulty,
-    isPublic,
-    isLocked,
-  })
-);
+const prepareInitialValues = defaultMemoize((id, version, localizedTexts, difficulty, isPublic, isLocked) => ({
+  id,
+  version,
+  localizedTexts: getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
+  difficulty,
+  isPublic,
+  isLocked,
+}));
 
 class EditExercise extends Component {
   componentWillMount = () => this.props.loadAsync();
@@ -61,8 +53,7 @@ class EditExercise extends Component {
     }
   };
 
-  static loadAsync = ({ exerciseId }, dispatch) =>
-    Promise.all([dispatch(fetchExerciseIfNeeded(exerciseId))]);
+  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([dispatch(fetchExerciseIfNeeded(exerciseId))]);
 
   editExerciseSubmitHandler = formData => {
     const { exercise, editExercise } = this.props;
@@ -86,12 +77,7 @@ class EditExercise extends Component {
       <Page
         resource={exercise}
         title={exercise => getLocalizedName(exercise, locale)}
-        description={
-          <FormattedMessage
-            id="app.editExercise.description"
-            defaultMessage="Change exercise settings"
-          />
-        }
+        description={<FormattedMessage id="app.editExercise.description" defaultMessage="Change exercise settings" />}
         breadcrumbs={[
           {
             resource: exercise,
@@ -110,12 +96,7 @@ class EditExercise extends Component {
             }),
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.editExercise.title"
-                defaultMessage="Edit exercise"
-              />
-            ),
+            text: <FormattedMessage id="app.editExercise.title" defaultMessage="Edit exercise" />,
             iconName: ['far', 'edit'],
           },
         ]}>
@@ -168,10 +149,7 @@ class EditExercise extends Component {
                     <Box
                       type="danger"
                       title={
-                        <FormattedMessage
-                          id="app.editExercise.deleteExercise"
-                          defaultMessage="Delete the exercise"
-                        />
+                        <FormattedMessage id="app.editExercise.deleteExercise" defaultMessage="Delete the exercise" />
                       }>
                       <div>
                         <p>
@@ -181,10 +159,7 @@ class EditExercise extends Component {
                           />
                         </p>
                         <p className="text-center">
-                          <DeleteExerciseButtonContainer
-                            id={exercise.id}
-                            onDeleted={() => push(EXERCISES_URI)}
-                          />
+                          <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => push(EXERCISES_URI)} />
                         </p>
                       </div>
                     </Box>
@@ -225,8 +200,7 @@ export default withLinks(
       push: url => dispatch(push(url)),
       reset: () => dispatch(reset('editExercise')),
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
-      editExercise: (version, data) =>
-        dispatch(editExercise(exerciseId, { ...data, version })),
+      editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
     })
   )(injectIntl(EditExercise))
 );

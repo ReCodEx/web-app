@@ -5,33 +5,17 @@ import { connect } from 'react-redux';
 
 import OrganizationalGroupButton from '../../components/buttons/OrganizationalGroupButton';
 import { setOrganizational } from '../../redux/modules/groups';
-import {
-  groupSelector,
-  groupOrganizationalPendingChange,
-} from '../../redux/selectors/groups';
+import { groupSelector, groupOrganizationalPendingChange } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-const OrganizationalGroupButtonContainer = ({
-  group,
-  pending,
-  setOrganizational,
-  ...props
-}) => (
+const OrganizationalGroupButtonContainer = ({ group, pending, setOrganizational, ...props }) => (
   <ResourceRenderer resource={group}>
-    {({
-      organizational,
-      privateData: { students, assignments },
-      permissionHints,
-    }) => (
+    {({ organizational, privateData: { students, assignments }, permissionHints }) => (
       <OrganizationalGroupButton
         organizational={organizational}
         pending={pending}
         setOrganizational={setOrganizational}
-        disabled={
-          !permissionHints.update ||
-          students.length > 0 ||
-          assignments.length > 0
-        }
+        disabled={!permissionHints.update || students.length > 0 || assignments.length > 0}
         {...props}
       />
     )}
@@ -51,8 +35,7 @@ const mapStateToProps = (state, { id }) => ({
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  setOrganizational: organizational => () =>
-    dispatch(setOrganizational(id, organizational)),
+  setOrganizational: organizational => () => dispatch(setOrganizational(id, organizational)),
 });
 
 export default connect(

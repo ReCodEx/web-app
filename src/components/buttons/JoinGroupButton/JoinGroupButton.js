@@ -7,10 +7,7 @@ import Icon from '../../icons';
 const JoinGroupButton = ({ onClick, ...props }) => (
   <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
     <Icon icon="user-plus" gapRight />
-    <FormattedMessage
-      id="app.groups.joinGroupButton"
-      defaultMessage="Join group"
-    />
+    <FormattedMessage id="app.groups.joinGroupButton" defaultMessage="Join group" />
   </Button>
 );
 

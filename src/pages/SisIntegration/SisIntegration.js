@@ -18,26 +18,14 @@ import EditTerm from '../../components/SisIntegration/EditTerm';
 import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import {
-  fetchAllTerms,
-  create,
-  deleteTerm,
-  editTerm,
-} from '../../redux/modules/sisTerms';
+import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getRole } from '../../redux/selectors/users';
-import {
-  fetchManyStatus,
-  readySisTermsSelector,
-} from '../../redux/selectors/sisTerms';
+import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInSupervisorOfSelector } from '../../redux/selectors/usersGroups';
 
-import {
-  isStudentRole,
-  isSupervisorRole,
-  isSuperadminRole,
-} from '../../components/helpers/usersRoles';
+import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles';
 
 const ADD_SIS_TERM_INITIAL_VALUES = {
   year: new Date(new Date().getTime() - 86400000 * 180).getFullYear(), // actual year (shifted by 180 days back)
@@ -47,8 +35,7 @@ const ADD_SIS_TERM_INITIAL_VALUES = {
 class SisIntegration extends Component {
   state = { openEdit: null };
 
-  static loadAsync = (params, dispatch) =>
-    Promise.all([dispatch(fetchAllTerms)]);
+  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllTerms)]);
 
   componentWillMount() {
     const { loadAsync, role } = this.props;
@@ -75,12 +62,7 @@ class SisIntegration extends Component {
 
     return (
       <PageContent
-        title={
-          <FormattedMessage
-            id="app.sisIntegration.title"
-            defaultMessage="UK SIS Integration"
-          />
-        }
+        title={<FormattedMessage id="app.sisIntegration.title" defaultMessage="UK SIS Integration" />}
         description={
           <FormattedMessage
             id="app.sisIntegration.description"
@@ -89,12 +71,7 @@ class SisIntegration extends Component {
         }
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.sisIntegration.title"
-                defaultMessage="UK SIS Integration"
-              />
-            ),
+            text: <FormattedMessage id="app.sisIntegration.title" defaultMessage="UK SIS Integration" />,
             iconName: 'id-badge',
           },
         ]}>
@@ -111,11 +88,7 @@ class SisIntegration extends Component {
             <Row>
               <Col lg={12}>
                 <ResourceRenderer
-                  resource={
-                    isSuperadminRole(role)
-                      ? allGroups.toArray()
-                      : supervisorOfGroups.toArray()
-                  }
+                  resource={isSuperadminRole(role) ? allGroups.toArray() : supervisorOfGroups.toArray()}
                   returnAsArray={true}>
                   {groups => <SisSupervisorGroupsContainer groups={groups} />}
                 </ResourceRenderer>
@@ -129,12 +102,7 @@ class SisIntegration extends Component {
                 <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                   {() => (
                     <Box
-                      title={
-                        <FormattedMessage
-                          id="app.sisIntegration.list"
-                          defaultMessage="SIS Terms"
-                        />
-                      }
+                      title={<FormattedMessage id="app.sisIntegration.list" defaultMessage="SIS Terms" />}
                       noPadding
                       unlimitedHeight>
                       <TermsList
@@ -147,10 +115,7 @@ class SisIntegration extends Component {
                               bsStyle="warning"
                               onClick={() => this.setState({ openEdit: id })}>
                               <EditIcon gapRight />
-                              <FormattedMessage
-                                id="generic.edit"
-                                defaultMessage="Edit"
-                              />
+                              <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                             </Button>
                             <Confirm
                               id={id}
@@ -161,15 +126,9 @@ class SisIntegration extends Component {
                                   defaultMessage="Are you sure you want to delete the SIS term?"
                                 />
                               }>
-                              <Button
-                                bsSize="xs"
-                                className="btn-flat"
-                                bsStyle="danger">
+                              <Button bsSize="xs" className="btn-flat" bsStyle="danger">
                                 <DeleteIcon gapRight />
-                                <FormattedMessage
-                                  id="generic.delete"
-                                  defaultMessage="Delete"
-                                />
+                                <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                               </Button>
                             </Confirm>
                             <EditTerm
@@ -177,9 +136,7 @@ class SisIntegration extends Component {
                               isOpen={this.state.openEdit === id}
                               onClose={() => this.setState({ openEdit: null })}
                               onSubmit={data =>
-                                editTerm(this.state.openEdit, data).then(() =>
-                                  this.setState({ openEdit: null })
-                                )
+                                editTerm(this.state.openEdit, data).then(() => this.setState({ openEdit: null }))
                               }
                               initialValues={{
                                 beginning: data.beginning * 1000,
@@ -195,10 +152,7 @@ class SisIntegration extends Component {
                 </FetchManyResourceRenderer>
               </Col>
               <Col lg={4}>
-                <AddSisTermForm
-                  onSubmit={createNewTerm}
-                  initialValues={ADD_SIS_TERM_INITIAL_VALUES}
-                />
+                <AddSisTermForm onSubmit={createNewTerm} initialValues={ADD_SIS_TERM_INITIAL_VALUES} />
               </Col>
             </Row>
           )}

@@ -9,17 +9,10 @@ const BonusPoints = ({ bonus }) =>
       placement="bottom"
       overlay={
         <Tooltip id={Date.now()}>
-          <FormattedMessage
-            id="app.submission.evaluation.bonusPoints"
-            defaultMessage="Bonus points:"
-          />
+          <FormattedMessage id="app.submission.evaluation.bonusPoints" defaultMessage="Bonus points:" />
         </Tooltip>
       }>
-      {bonus > 0 ? (
-        <b className="text-success">+{bonus}</b>
-      ) : (
-        <b className="text-danger">{bonus}</b>
-      )}
+      {bonus > 0 ? <b className="text-success">+{bonus}</b> : <b className="text-danger">{bonus}</b>}
     </OverlayTrigger>
   );
 

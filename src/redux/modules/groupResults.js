@@ -45,26 +45,15 @@ export const fetchBestSubmissions = assignmentId =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [additionalActionTypes.BEST_SUBMISSION_PENDING]: (
-      state,
-      { payload, meta: { userId, assignmentId } }
-    ) =>
-      userId !== undefined
-        ? state.setIn(['resources', assignmentId, userId], createRecord())
-        : state,
+    [additionalActionTypes.BEST_SUBMISSION_PENDING]: (state, { payload, meta: { userId, assignmentId } }) =>
+      userId !== undefined ? state.setIn(['resources', assignmentId, userId], createRecord()) : state,
 
-    [additionalActionTypes.BEST_SUBMISSION_FULFILLED]: (
-      state,
-      { payload = {}, meta: { assignmentId, userId } }
-    ) => {
+    [additionalActionTypes.BEST_SUBMISSION_FULFILLED]: (state, { payload = {}, meta: { assignmentId, userId } }) => {
       if (userId !== undefined) {
         // update single-user record
         return state
           .setIn(['resources', assignmentId, userId, 'data'], fromJS(payload))
-          .setIn(
-            ['resources', assignmentId, userId, 'state'],
-            resourceStatus.FULFILLED
-          );
+          .setIn(['resources', assignmentId, userId, 'state'], resourceStatus.FULFILLED);
       } else {
         // Update for each user in the payload
         for (const uId in payload) {

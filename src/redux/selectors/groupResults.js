@@ -21,11 +21,7 @@ export const getBestSubmissionsAssoc = (assignments, users) =>
       for (let user of users) {
         submissions[user.id] = {};
         for (let assignment of assignments) {
-          const usersSubmission = groupResults.getIn([
-            'resources',
-            assignment.id,
-            user.id,
-          ]);
+          const usersSubmission = groupResults.getIn(['resources', assignment.id, user.id]);
           submissions[user.id][assignment.id] = usersSubmission;
         }
       }
@@ -38,11 +34,7 @@ export const getBestSubmissionsForLoggedInUser = createSelector(
   [getGroupResults, loggedInUserIdSelector],
   (groupResults, userId) => {
     const submissions = {};
-    groupResults
-      .get('resources')
-      .forEach(
-        (value, assignmentId) => (submissions[assignmentId] = value.get(userId))
-      );
+    groupResults.get('resources').forEach((value, assignmentId) => (submissions[assignmentId] = value.get(userId)));
     return submissions;
   }
 );

@@ -12,14 +12,8 @@ import Button from '../../components/widgets/FlatButton';
 import { EditIcon } from '../../components/icons';
 // import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
 
-import {
-  fetchPipelineIfNeeded,
-  forkPipeline,
-} from '../../redux/modules/pipelines';
-import {
-  getPipeline,
-  pipelineEnvironmentsSelector,
-} from '../../redux/selectors/pipelines';
+import { fetchPipelineIfNeeded, forkPipeline } from '../../redux/modules/pipelines';
+import { getPipeline, pipelineEnvironmentsSelector } from '../../redux/selectors/pipelines';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { canEditPipeline } from '../../redux/selectors/users';
 
@@ -78,30 +72,15 @@ class Pipeline extends Component {
       <Page
         resource={pipeline}
         title={pipeline => pipeline.name}
-        description={
-          <FormattedMessage
-            id="app.pipeline.description"
-            defaultMessage="Pipeline overview"
-          />
-        }
+        description={<FormattedMessage id="app.pipeline.description" defaultMessage="Pipeline overview" />}
         breadcrumbs={[
           {
-            text: (
-              <FormattedMessage
-                id="app.pipelines.title"
-                defaultMessage="Pipelines"
-              />
-            ),
+            text: <FormattedMessage id="app.pipelines.title" defaultMessage="Pipelines" />,
             iconName: 'random',
             link: PIPELINES_URI,
           },
           {
-            text: (
-              <FormattedMessage
-                id="app.pipeline.title"
-                defaultMessage="Pipeline"
-              />
-            ),
+            text: <FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline" />,
             iconName: 'random',
           },
         ]}>
@@ -114,10 +93,7 @@ class Pipeline extends Component {
                     <Button bsStyle="warning" bsSize="sm">
                       <EditIcon />
                       &nbsp;
-                      <FormattedMessage
-                        id="app.pipeline.editSettings"
-                        defaultMessage="Edit pipeline"
-                      />
+                      <FormattedMessage id="app.pipeline.editSettings" defaultMessage="Edit pipeline" />
                     </Button>
                   </LinkContainer>
                 )}
@@ -135,28 +111,16 @@ class Pipeline extends Component {
               <ResourceRenderer resource={[...runtimeEnvironments]}>
                 {(...runtimes) => (
                   <Col lg={12}>
-                    <PipelineDetail
-                      {...pipeline}
-                      runtimeEnvironments={runtimes}
-                    />
+                    <PipelineDetail {...pipeline} runtimeEnvironments={runtimes} />
                   </Col>
                 )}
               </ResourceRenderer>
               <Col lg={12}>
                 <Box
-                  title={
-                    <FormattedMessage
-                      id="app.pipeline.visualization"
-                      defaultMessage="Visualization"
-                    />
-                  }
+                  title={<FormattedMessage id="app.pipeline.visualization" defaultMessage="Visualization" />}
                   noPadding
                   unlimitedHeight>
-                  <Well className="pipeline">
-                    {graph.nodes.length > 0 && (
-                      <PipelineVisualisation graph={graph} />
-                    )}
-                  </Well>
+                  <Well className="pipeline">{graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}</Well>
                 </Box>
               </Col>
             </Row>
@@ -187,16 +151,13 @@ export default withLinks(
       return {
         pipeline: getPipeline(pipelineId)(state),
         userId: loggedInUserIdSelector(state),
-        isAuthorOfPipeline: pipelineId =>
-          canEditPipeline(userId, pipelineId)(state),
+        isAuthorOfPipeline: pipelineId => canEditPipeline(userId, pipelineId)(state),
         runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state),
       };
     },
     (dispatch, { params: { pipelineId } }) => ({
-      loadAsync: setState =>
-        Pipeline.loadAsync({ pipelineId }, dispatch, { setState }),
-      forkPipeline: (forkId, data) =>
-        dispatch(forkPipeline(pipelineId, forkId, data)),
+      loadAsync: setState => Pipeline.loadAsync({ pipelineId }, dispatch, { setState }),
+      forkPipeline: (forkId, data) => dispatch(forkPipeline(pipelineId, forkId, data)),
     })
   )(Pipeline)
 );

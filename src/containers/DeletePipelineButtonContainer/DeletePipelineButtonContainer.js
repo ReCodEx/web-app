@@ -7,21 +7,11 @@ import ConfirmDeleteButton from '../../components/buttons/DeleteButton/ConfirmDe
 import { deletePipeline } from '../../redux/modules/pipelines';
 import { getPipeline } from '../../redux/selectors/pipelines';
 
-const DeletePipelineButtonContainer = ({
-  resourceless = false,
-  pipeline,
-  deletePipeline,
-  onDeleted,
-  ...props
-}) =>
+const DeletePipelineButtonContainer = ({ resourceless = false, pipeline, deletePipeline, onDeleted, ...props }) =>
   resourceless ? (
     <ConfirmDeleteButton {...props} onClick={deletePipeline} />
   ) : (
-    <DeleteButton
-      {...props}
-      resource={pipeline}
-      deleteResource={deletePipeline}
-    />
+    <DeleteButton {...props} resource={pipeline} deleteResource={deletePipeline} />
   );
 
 DeletePipelineButtonContainer.propTypes = {

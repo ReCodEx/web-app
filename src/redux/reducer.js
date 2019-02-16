@@ -112,13 +112,7 @@ const librariesReducers = {
 };
 
 const createReducer = (token, instanceId) => {
-  const appReducer = combineReducers(
-    Object.assign(
-      {},
-      librariesReducers,
-      createRecodexReducers(token, instanceId)
-    )
-  );
+  const appReducer = combineReducers(Object.assign({}, librariesReducers, createRecodexReducers(token, instanceId)));
 
   return (state, action) => {
     if (action.type === authActionTypes.LOGOUT) {

@@ -5,16 +5,9 @@ import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 
 const SubmitSolutionButton = ({ disabled = false, onClick }) => (
-  <Button
-    bsStyle="success"
-    className="btn-flat"
-    disabled={disabled}
-    onClick={onClick}>
+  <Button bsStyle="success" className="btn-flat" disabled={disabled} onClick={onClick}>
     <Icon icon="bug" gapRight />
-    <FormattedMessage
-      id="app.solutionsTable.submitNewSolution"
-      defaultMessage="Submit New Solution"
-    />
+    <FormattedMessage id="app.solutionsTable.submitNewSolution" defaultMessage="Submit New Solution" />
   </Button>
 );
 

@@ -58,22 +58,13 @@ const SubmissionEvaluations = ({
             {id === activeSubmissionId ? (
               <Button bsStyle="success" bsSize="xs" disabled>
                 <Icon icon={['far', 'eye']} gapRight />
-                <FormattedMessage
-                  id="app.submissionEvaluation.visible"
-                  defaultMessage="Visible"
-                />
+                <FormattedMessage id="app.submissionEvaluation.visible" defaultMessage="Visible" />
               </Button>
             ) : (
               <React.Fragment>
-                <Button
-                  bsStyle="primary"
-                  bsSize="xs"
-                  onClick={() => onSelect(id)}>
+                <Button bsStyle="primary" bsSize="xs" onClick={() => onSelect(id)}>
                   <Icon icon={['far', 'eye']} gapRight />
-                  <FormattedMessage
-                    id="app.submissionEvaluation.show"
-                    defaultMessage="Show"
-                  />
+                  <FormattedMessage id="app.submissionEvaluation.show" defaultMessage="Show" />
                 </Button>
                 {onDelete &&
                   deleteButton(

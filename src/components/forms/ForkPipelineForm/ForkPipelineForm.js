@@ -46,16 +46,9 @@ class ForkPipelineForm extends Component {
     switch (forkStatus) {
       case forkStatuses.FULFILLED:
         return (
-          <Button
-            bsStyle="success"
-            bsSize="sm"
-            className="btn-flat"
-            onClick={() => this.viewForkedPipeline()}>
+          <Button bsStyle="success" bsSize="sm" className="btn-flat" onClick={() => this.viewForkedPipeline()}>
             <SuccessIcon gapRight />
-            <FormattedMessage
-              id="app.forkPipelineButton.success"
-              defaultMessage="Show the forked pipeline"
-            />
+            <FormattedMessage id="app.forkPipelineButton.success" defaultMessage="Show the forked pipeline" />
           </Button>
         );
       default:
@@ -63,10 +56,7 @@ class ForkPipelineForm extends Component {
           <div>
             {submitFailed && (
               <Alert bsStyle="danger">
-                <FormattedMessage
-                  id="generic.savingFailed"
-                  defaultMessage="Saving failed. Please try again later."
-                />
+                <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
               </Alert>
             )}
             <Form inline className="formSpace">
@@ -78,9 +68,7 @@ class ForkPipelineForm extends Component {
                     label={''}
                     options={[{ key: '', name: '_Public_' }].concat(
                       exercises
-                        .sort((a, b) =>
-                          a.name.localeCompare(b.name, intl.locale)
-                        )
+                        .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
                         .filter((item, pos, arr) => arr.indexOf(item) === pos)
                         .map(exercise => ({
                           key: exercise.id,
@@ -101,24 +89,9 @@ class ForkPipelineForm extends Component {
                 handleSubmit={handleSubmit}
                 noIcons
                 messages={{
-                  submit: (
-                    <FormattedMessage
-                      id="app.forkPipelineForm.submit"
-                      defaultMessage="Fork pipeline"
-                    />
-                  ),
-                  submitting: (
-                    <FormattedMessage
-                      id="app.forkPipelineForm.submitting"
-                      defaultMessage="Forking..."
-                    />
-                  ),
-                  success: (
-                    <FormattedMessage
-                      id="app.forkPipelineForm.success"
-                      defaultMessage="Pipeline forked"
-                    />
-                  ),
+                  submit: <FormattedMessage id="app.forkPipelineForm.submit" defaultMessage="Fork pipeline" />,
+                  submitting: <FormattedMessage id="app.forkPipelineForm.submitting" defaultMessage="Forking..." />,
+                  success: <FormattedMessage id="app.forkPipelineForm.success" defaultMessage="Pipeline forked" />,
                 }}
               />
             </Form>
@@ -149,8 +122,7 @@ const mapStateToProps = (state, { pipelineId, forkId }) => {
   const fork = getFork(pipelineId, forkId)(state);
   return {
     forkStatus: fork ? fork.status : null,
-    forkedPipelineId:
-      fork && fork.status === forkStatuses.FULFILLED ? fork.pipelineId : null,
+    forkedPipelineId: fork && fork.status === forkStatuses.FULFILLED ? fork.pipelineId : null,
   };
 };
 

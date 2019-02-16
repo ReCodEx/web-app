@@ -7,14 +7,7 @@ import isEmail from 'validator/lib/isEmail';
 
 import { eventAggregator } from '../../../helpers/eventAggregator';
 import FormBox from '../../widgets/FormBox';
-import {
-  EmailField,
-  TextField,
-  PasswordField,
-  PasswordStrength,
-  SelectField,
-  CheckboxField,
-} from '../Fields';
+import { EmailField, TextField, PasswordField, PasswordStrength, SelectField, CheckboxField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import SubmitButton from '../SubmitButton';
 
@@ -31,12 +24,7 @@ const RegistrationForm = ({
   error,
 }) => (
   <FormBox
-    title={
-      <FormattedMessage
-        id="app.registrationForm.title"
-        defaultMessage="Create ReCodEx Account"
-      />
-    }
+    title={<FormattedMessage id="app.registrationForm.title" defaultMessage="Create ReCodEx Account" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
@@ -50,23 +38,10 @@ const RegistrationForm = ({
           asyncValidating={asyncValidating}
           invalid={invalid || instances.length === 0}
           messages={{
-            submit: (
-              <FormattedMessage
-                id="app.registrationForm.createAccount"
-                defaultMessage="Create account"
-              />
-            ),
-            submitting: (
-              <FormattedMessage
-                id="app.registrationForm.processing"
-                defaultMessage="Creating account..."
-              />
-            ),
+            submit: <FormattedMessage id="app.registrationForm.createAccount" defaultMessage="Create account" />,
+            submitting: <FormattedMessage id="app.registrationForm.processing" defaultMessage="Creating account..." />,
             success: (
-              <FormattedMessage
-                id="app.registrationForm.success"
-                defaultMessage="Your account has been created."
-              />
+              <FormattedMessage id="app.registrationForm.success" defaultMessage="Your account has been created." />
             ),
           }}
         />
@@ -86,36 +61,21 @@ const RegistrationForm = ({
       component={TextField}
       maxLength={100}
       ignoreDirty
-      label={
-        <FormattedMessage
-          id="app.registrationForm.firstName"
-          defaultMessage="First name:"
-        />
-      }
+      label={<FormattedMessage id="app.registrationForm.firstName" defaultMessage="First name:" />}
     />
     <Field
       name="lastName"
       component={TextField}
       maxLength={100}
       ignoreDirty
-      label={
-        <FormattedMessage
-          id="app.registrationForm.lastName"
-          defaultMessage="Last name:"
-        />
-      }
+      label={<FormattedMessage id="app.registrationForm.lastName" defaultMessage="Last name:" />}
     />
     <Field
       name="email"
       component={EmailField}
       maxLength={100}
       ignoreDirty
-      label={
-        <FormattedMessage
-          id="app.registrationForm.email"
-          defaultMessage="E-mail address:"
-        />
-      }
+      label={<FormattedMessage id="app.registrationForm.email" defaultMessage="E-mail address:" />}
     />
 
     <Field
@@ -123,26 +83,14 @@ const RegistrationForm = ({
       component={PasswordField}
       maxLength={100}
       ignoreDirty
-      onKeyDown={() =>
-        eventAggregator('RegistrationFormAsyncValidate', asyncValidate, 500)
-      }
-      label={
-        <FormattedMessage
-          id="app.registrationForm.password"
-          defaultMessage="Password:"
-        />
-      }
+      onKeyDown={() => eventAggregator('RegistrationFormAsyncValidate', asyncValidate, 500)}
+      label={<FormattedMessage id="app.registrationForm.password" defaultMessage="Password:" />}
     />
 
     <Field
       name="passwordStrength"
       component={PasswordStrength}
-      label={
-        <FormattedMessage
-          id="app.registrationForm.passwordStrength"
-          defaultMessage="Password strength:"
-        />
-      }
+      label={<FormattedMessage id="app.registrationForm.passwordStrength" defaultMessage="Password strength:" />}
     />
 
     <Field
@@ -150,12 +98,7 @@ const RegistrationForm = ({
       component={PasswordField}
       maxLength={100}
       ignoreDirty
-      label={
-        <FormattedMessage
-          id="app.registrationForm.passwordConfirm"
-          defaultMessage="Confirm password:"
-        />
-      }
+      label={<FormattedMessage id="app.registrationForm.passwordConfirm" defaultMessage="Confirm password:" />}
     />
 
     <Field
@@ -163,12 +106,7 @@ const RegistrationForm = ({
       required
       component={SelectField}
       ignoreDirty
-      label={
-        <FormattedMessage
-          id="app.externalRegistrationForm.instance"
-          defaultMessage="Instance:"
-        />
-      }
+      label={<FormattedMessage id="app.externalRegistrationForm.instance" defaultMessage="Instance:" />}
       options={instances.map(({ id: key, name }) => ({ key, name }))}
     />
 
@@ -197,21 +135,12 @@ RegistrationForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   anyTouched: PropTypes.bool,
-  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string])
-    .isRequired,
+  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
   invalid: PropTypes.bool,
   error: PropTypes.object,
 };
 
-const validate = ({
-  firstName,
-  lastName,
-  email,
-  password,
-  passwordConfirm,
-  instanceId,
-  gdpr,
-}) => {
+const validate = ({ firstName, lastName, email, password, passwordConfirm, instanceId, gdpr }) => {
   const errors = {};
 
   if (!firstName) {
@@ -268,19 +197,13 @@ const validate = ({
 
   if (!password) {
     errors.password = (
-      <FormattedMessage
-        id="app.registrationForm.validation.emptyPassword"
-        defaultMessage="Password cannot be empty."
-      />
+      <FormattedMessage id="app.registrationForm.validation.emptyPassword" defaultMessage="Password cannot be empty." />
     );
   }
 
   if (!passwordConfirm) {
     errors.passwordConfirm = (
-      <FormattedMessage
-        id="app.registrationForm.validation.emptyPassword"
-        defaultMessage="Password cannot be empty."
-      />
+      <FormattedMessage id="app.registrationForm.validation.emptyPassword" defaultMessage="Password cannot be empty." />
     );
   }
 

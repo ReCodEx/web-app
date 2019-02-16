@@ -27,9 +27,7 @@ const SolutionStatus = ({
   links: { SOLUTION_DETAIL_URI_FACTORY },
 }) => (
   <Box
-    title={
-      <FormattedMessage id="app.solution.title" defaultMessage="The Solution" />
-    }
+    title={<FormattedMessage id="app.solution.title" defaultMessage="The Solution" />}
     noPadding={true}
     collapsable={true}
     isOpen={true}>
@@ -52,11 +50,7 @@ const SolutionStatus = ({
             <Icon icon={['far', 'clock']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.solution.submittedAt"
-              defaultMessage="Submitted at"
-            />
-            :
+            <FormattedMessage id="app.solution.submittedAt" defaultMessage="Submitted at" />:
           </th>
           <td>
             <DateTime unixts={submittedAt} showRelative />
@@ -68,11 +62,7 @@ const SolutionStatus = ({
             <Icon icon="hourglass-start" />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.solution.beforeFirstDeadline"
-              defaultMessage="Before the deadline"
-            />
-            :
+            <FormattedMessage id="app.solution.beforeFirstDeadline" defaultMessage="Before the deadline" />:
           </th>
           <td>
             <SuccessOrFailureIcon success={submittedAt < firstDeadline} />
@@ -85,11 +75,7 @@ const SolutionStatus = ({
               <Icon icon="hourglass-end" />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage
-                id="app.solution.beforeSecondDeadline"
-                defaultMessage="Before the second deadline"
-              />
-              :
+              <FormattedMessage id="app.solution.beforeSecondDeadline" defaultMessage="Before the second deadline" />:
             </th>
             <td>
               <SuccessOrFailureIcon success={submittedAt < secondDeadline} />
@@ -115,11 +101,7 @@ const SolutionStatus = ({
               <Icon icon="user" />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage
-                id="app.solution.reevaluatedBy"
-                defaultMessage="Re-evaluated by"
-              />
-              :
+              <FormattedMessage id="app.solution.reevaluatedBy" defaultMessage="Re-evaluated by" />:
             </th>
             <td>
               <UsersNameContainer userId={submittedBy} showEmail="icon" />
@@ -133,16 +115,10 @@ const SolutionStatus = ({
               <CodeIcon />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage
-                id="app.solution.environment"
-                defaultMessage="Target language:"
-              />
+              <FormattedMessage id="app.solution.environment" defaultMessage="Target language:" />
             </th>
             <td>
-              <EnvironmentsListItem
-                runtimeEnvironment={environment}
-                longNames={true}
-              />
+              <EnvironmentsListItem runtimeEnvironment={environment} longNames={true} />
             </td>
           </tr>
         )}
@@ -150,19 +126,11 @@ const SolutionStatus = ({
         <tr>
           <td className="text-center">
             <b>
-              <AssignmentStatusIcon
-                id={String(submittedAt)}
-                status={evaluationStatus}
-                accepted={accepted}
-              />
+              <AssignmentStatusIcon id={String(submittedAt)} status={evaluationStatus} accepted={accepted} />
             </b>
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.solution.lastEvaluationStatus"
-              defaultMessage="Last evaluation status"
-            />
-            :
+            <FormattedMessage id="app.solution.lastEvaluationStatus" defaultMessage="Last evaluation status" />:
           </th>
           <td>
             <em>
@@ -205,11 +173,7 @@ const SolutionStatus = ({
             <Icon icon={['far', 'star']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage
-              id="app.solution.scoredPoints"
-              defaultMessage="Final score"
-            />
-            :
+            <FormattedMessage id="app.solution.scoredPoints" defaultMessage="Final score" />:
           </th>
           <td
             className={classnames({
@@ -218,10 +182,7 @@ const SolutionStatus = ({
             })}>
             <b>
               {actualPoints || 0}
-              {bonusPoints !== 0
-                ? (bonusPoints >= 0 ? '+' : '') + bonusPoints
-                : ''}{' '}
-              / {maxPoints}
+              {bonusPoints !== 0 ? (bonusPoints >= 0 ? '+' : '') + bonusPoints : ''} / {maxPoints}
             </b>
           </td>
         </tr>

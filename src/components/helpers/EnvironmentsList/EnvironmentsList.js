@@ -4,11 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../../icons';
 import EnvironmentsListItem from './EnvironmentsListItem';
 
-const EnvironmentsList = ({
-  runtimeEnvironments = null,
-  longNames = false,
-  intl: { locale },
-}) => {
+const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false, intl: { locale } }) => {
   const environments =
     runtimeEnvironments &&
     runtimeEnvironments
@@ -22,20 +18,11 @@ const EnvironmentsList = ({
     <span>
       {environments !== null ? (
         environments.length > 0 ? (
-          environments.map(env => (
-            <EnvironmentsListItem
-              key={env.id}
-              runtimeEnvironment={env}
-              longNames={longNames}
-            />
-          ))
+          environments.map(env => <EnvironmentsListItem key={env.id} runtimeEnvironment={env} longNames={longNames} />)
         ) : (
           <i className="small text-muted">
             <WarningIcon gapRight />
-            <FormattedMessage
-              id="app.environmentsList.noEnvironments"
-              defaultMessage="no runtime environments"
-            />
+            <FormattedMessage id="app.environmentsList.noEnvironments" defaultMessage="no runtime environments" />
           </i>
         )
       ) : (

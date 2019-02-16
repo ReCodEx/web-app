@@ -29,12 +29,7 @@ class Login extends Component {
   /**
    * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
    */
-  checkIfIsLoggedIn = ({
-    isLoggedIn,
-    push,
-    reset,
-    links: { DASHBOARD_URI },
-  }) => {
+  checkIfIsLoggedIn = ({ isLoggedIn, push, reset, links: { DASHBOARD_URI } }) => {
     if (isLoggedIn) {
       this.timeout = setTimeout(() => {
         this.timeout = null;
@@ -58,15 +53,8 @@ class Login extends Component {
 
     return (
       <PageContent
-        title={
-          <FormattedMessage id="app.login.title" defaultMessage="Sign in" />
-        }
-        description={
-          <FormattedMessage
-            id="app.login.description"
-            defaultMessage="Please fill your credentials"
-          />
-        }
+        title={<FormattedMessage id="app.login.title" defaultMessage="Sign in" />}
+        description={<FormattedMessage id="app.login.description" defaultMessage="Please fill your credentials" />}
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.homepage.title" />,
@@ -93,10 +81,7 @@ class Login extends Component {
                 defaultMessage="You cannot remember what your password was?"
               />{' '}
               <Link to={RESET_PASSWORD_URI}>
-                <FormattedMessage
-                  id="app.login.resetPassword"
-                  defaultMessage="Reset your password."
-                />
+                <FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." />
               </Link>
             </p>
           </Col>

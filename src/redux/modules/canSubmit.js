@@ -9,8 +9,7 @@ import { actionTypes as assignmentActionTypes } from './assignments';
 const resourceName = 'canSubmit';
 const { actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: assignmentId =>
-    `/exercise-assignments/${assignmentId}/can-submit`,
+  apiEndpointFactory: assignmentId => `/exercise-assignments/${assignmentId}/can-submit`,
 });
 
 export const canSubmit = actions.fetchResource;

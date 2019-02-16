@@ -8,19 +8,9 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 
-const ShadowAssignmentPointsDetail = ({
-  points = null,
-  awardedAt = null,
-  authorId = null,
-  note = '',
-}) => (
+const ShadowAssignmentPointsDetail = ({ points = null, awardedAt = null, authorId = null, note = '' }) => (
   <Box
-    title={
-      <FormattedMessage
-        id="app.shadowAssignmentPointsDetail.title"
-        defaultMessage="Awarded Points"
-      />
-    }
+    title={<FormattedMessage id="app.shadowAssignmentPointsDetail.title" defaultMessage="Awarded Points" />}
     noPadding>
     <Table responsive condensed>
       <tbody>
@@ -29,11 +19,7 @@ const ShadowAssignmentPointsDetail = ({
             <Icon icon={['far', 'star']} />
           </td>
           <th>
-            <FormattedMessage
-              id="app.shadowAssignmentPointsDetail.points"
-              defaultMessage="Points"
-            />
-            :
+            <FormattedMessage id="app.shadowAssignmentPointsDetail.points" defaultMessage="Points" />:
           </th>
           <td>
             {points !== null ? (
@@ -55,19 +41,9 @@ const ShadowAssignmentPointsDetail = ({
               <Icon icon={['far', 'clock']} />
             </td>
             <th>
-              <FormattedMessage
-                id="app.shadowAssignmentPointsDetail.awardedAt"
-                defaultMessage="Awarded at"
-              />
-              :
+              <FormattedMessage id="app.shadowAssignmentPointsDetail.awardedAt" defaultMessage="Awarded at" />:
             </th>
-            <td>
-              {awardedAt !== null ? (
-                <DateTime unixts={awardedAt} showRelative />
-              ) : (
-                <span>&mdash;</span>
-              )}
-            </td>
+            <td>{awardedAt !== null ? <DateTime unixts={awardedAt} showRelative /> : <span>&mdash;</span>}</td>
           </tr>
         )}
 
@@ -77,11 +53,7 @@ const ShadowAssignmentPointsDetail = ({
               <SupervisorIcon />
             </td>
             <th>
-              <FormattedMessage
-                id="app.shadowAssignmentPointsDetail.awardedBy"
-                defaultMessage="Awarded by"
-              />
-              :
+              <FormattedMessage id="app.shadowAssignmentPointsDetail.awardedBy" defaultMessage="Awarded by" />:
             </th>
             <td>
               <UsersNameContainer userId={authorId} showEmail="icon" />
@@ -95,11 +67,7 @@ const ShadowAssignmentPointsDetail = ({
               <Icon icon={['far', 'sticky-note']} />
             </td>
             <th>
-              <FormattedMessage
-                id="app.shadowAssignmentPointsDetail.note"
-                defaultMessage="Note"
-              />
-              :
+              <FormattedMessage id="app.shadowAssignmentPointsDetail.note" defaultMessage="Note" />:
             </th>
             <td>{note}</td>
           </tr>

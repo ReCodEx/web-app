@@ -10,12 +10,7 @@ import { SuccessOrFailureIcon } from '../../icons';
 
 const EvaluationDetail = ({ evaluation, isCorrect }) => (
   <Box
-    title={
-      <FormattedMessage
-        id="app.evaluationDetail.title.details"
-        defaultMessage="Evaluation Details"
-      />
-    }
+    title={<FormattedMessage id="app.evaluationDetail.title.details" defaultMessage="Evaluation Details" />}
     noPadding={true}
     collapsable={true}
     isOpen={true}>
@@ -23,10 +18,7 @@ const EvaluationDetail = ({ evaluation, isCorrect }) => (
       <tbody>
         <tr>
           <th>
-            <FormattedMessage
-              id="app.evaluationDetail.evaluatedAt"
-              defaultMessage="Evaluated at:"
-            />
+            <FormattedMessage id="app.evaluationDetail.evaluatedAt" defaultMessage="Evaluated at:" />
           </th>
           <td className="text-center">
             <DateTime unixts={evaluation.evaluatedAt} showRelative />
@@ -35,10 +27,7 @@ const EvaluationDetail = ({ evaluation, isCorrect }) => (
 
         <tr>
           <th>
-            <FormattedMessage
-              id="app.evaluationDetail.buildSucceeded"
-              defaultMessage="Build succeeded:"
-            />
+            <FormattedMessage id="app.evaluationDetail.buildSucceeded" defaultMessage="Build succeeded:" />
           </th>
           <td className="text-center">
             <SuccessOrFailureIcon success={!evaluation.initFailed} />
@@ -47,11 +36,7 @@ const EvaluationDetail = ({ evaluation, isCorrect }) => (
 
         <tr>
           <th>
-            <FormattedMessage
-              id="app.evaluationDetail.isCorrect"
-              defaultMessage="Correctness"
-            />
-            :
+            <FormattedMessage id="app.evaluationDetail.isCorrect" defaultMessage="Correctness" />:
           </th>
           <td
             className={classnames({
