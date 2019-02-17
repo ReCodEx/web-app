@@ -32,7 +32,7 @@ const LeaveJoinGroupButtonContainer = ({
     userId === currentUserId ? (
       <LeaveGroupButton
         {...props}
-        onClick={() => leaveGroup(groupId, userId).then(push(DASHBOARD_URI))}
+        onClick={() => leaveGroup(groupId, userId).then(() => push(DASHBOARD_URI))}
         bsSize={bsSize}
       />
     ) : (
