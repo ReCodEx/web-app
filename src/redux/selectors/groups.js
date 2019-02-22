@@ -150,6 +150,14 @@ export const allParentIdsForGroup = id =>
     groups => getGroupParentIds(id, groups)
   );
 
+export const canViewParentDetailSelector = createSelector(
+  [groupsSelector, getParam],
+  (groups, id) => {
+    const parentId = groups.getIn([id, 'data', 'parentGroupId']);
+    return Boolean(parentId && groups.getIn([parentId, 'data', 'permissionHints', 'viewDetail']));
+  }
+);
+
 export const groupOrganizationalPendingChange = id =>
   createSelector(
     groupsSelector,
