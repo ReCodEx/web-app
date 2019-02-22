@@ -17,8 +17,8 @@ import Box from '../../components/widgets/Box';
 import { BanIcon, InfoIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
-import { groupSelector } from '../../redux/selectors/groups';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { groupSelector, canViewParentDetailSelector } from '../../redux/selectors/groups';
+import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
 import { isSupervisorOf, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import {
   getLocalizedName,
@@ -57,9 +57,11 @@ class EditGroup extends Component {
       params: { groupId },
       group,
       isSuperAdmin,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY },
       editGroup,
       hasThreshold,
+      canViewParentDetail,
+      instanceId,
       push,
       reload,
       intl: { locale },
@@ -171,7 +173,13 @@ class EditGroup extends Component {
                       disabled={
                         group.parentGroupId === null || (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
                       }
-                      onDeleted={() => push(GROUP_INFO_URI_FACTORY(group.parentGroupId))}
+                      onDeleted={() =>
+                        push(
+                          canViewParentDetail
+                            ? GROUP_INFO_URI_FACTORY(group.parentGroupId)
+                            : INSTANCE_URI_FACTORY(instanceId)
+                        )
+                      }
                     />
 
                     {group.parentGroupId === null && (
@@ -211,6 +219,8 @@ EditGroup.propTypes = {
     groupId: PropTypes.string.isRequired,
   }).isRequired,
   group: ImmutablePropTypes.map,
+  canViewParentDetail: PropTypes.bool.isRequired,
+  instanceId: PropTypes.string,
   editGroup: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
@@ -230,6 +240,8 @@ export default withLinks(
         isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
         hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
+        canViewParentDetail: canViewParentDetailSelector(state, groupId),
+        instanceId: selectedInstanceId(state),
       };
     },
     (dispatch, { params: { groupId } }) => ({
