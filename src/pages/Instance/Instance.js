@@ -6,6 +6,7 @@ import { formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
 import Markdown from '../../components/widgets/Markdown';
@@ -28,6 +29,10 @@ import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { transformLocalizedTextsFormData } from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
+
+const anyGroupVisible = defaultMemoize(groups =>
+  Boolean(groups.size > 0 && groups.find(group => group.getIn(['data', 'permissionHints', 'viewDetail'])))
+);
 
 class Instance extends Component {
   static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
@@ -106,7 +111,7 @@ class Instance extends Component {
                     {data.rootGroupId !== null && (
                       <FetchManyResourceRenderer fetchManyStatus={fetchGroupsStatus}>
                         {() =>
-                          groups.size > 0 ? (
+                          anyGroupVisible(groups) ? (
                             <GroupTree id={data.rootGroupId} isAdmin={isSuperAdmin || isAdmin} groups={groups} />
                           ) : (
                             <FormattedMessage
