@@ -146,6 +146,7 @@
   "app.confirm.yes",
   "app.createGroup.externalId",
   "app.createGroup.hasThreshold",
+  "app.createGroup.isOrganizational",
   "app.createGroup.isPublic",
   "app.createGroup.publicStats",
   "app.createGroup.threshold",

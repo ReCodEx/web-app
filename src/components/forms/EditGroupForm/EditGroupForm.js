@@ -113,11 +113,10 @@ const EditGroupForm = ({
                   defaultMessage="Public (everyone can see and join this group)"
                 />
               }
-              required
             />
           </Col>
         )}
-        <Col lg={isSuperAdmin || isPublic ? 6 : 12}>
+        <Col lg={6}>
           <Field
             name="publicStats"
             tabIndex={4}
@@ -129,16 +128,31 @@ const EditGroupForm = ({
                 defaultMessage="Students can see statistics of each other"
               />
             }
-            required
           />
         </Col>
+        {createNew && (
+          <Col lg={6}>
+            <Field
+              name="isOrganizational"
+              tabIndex={5}
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.createGroup.isOrganizational"
+                  defaultMessage="Organizational (for structural purposes only)"
+                />
+              }
+            />
+          </Col>
+        )}
       </Row>
 
       <Row>
         <Col lg={6}>
           <Field
             name="hasThreshold"
-            tabIndex={5}
+            tabIndex={6}
             component={CheckboxField}
             onOff
             label={
@@ -147,14 +161,13 @@ const EditGroupForm = ({
                 defaultMessage="Students require cetrain number of points to complete the course"
               />
             }
-            required
           />
         </Col>
         <Col lg={6}>
           {hasThreshold && (
             <NumericTextField
               name="threshold"
-              tabIndex={6}
+              tabIndex={7}
               validateMin={0}
               validateMax={100}
               maxLength={3}
