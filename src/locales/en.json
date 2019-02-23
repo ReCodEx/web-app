@@ -146,6 +146,7 @@
   "app.confirm.yes": "Yes",
   "app.createGroup.externalId": "External ID of the group (e.g., ID of schedule event in the school IS):",
   "app.createGroup.hasThreshold": "Students require cetrain number of points to complete the course",
+  "app.createGroup.isOrganizational": "Organizational (for structural purposes only)",
   "app.createGroup.isPublic": "Public (everyone can see and join this group)",
   "app.createGroup.publicStats": "Students can see statistics of each other",
   "app.createGroup.threshold": "Minimum percent of the total points count needed to complete the course:",

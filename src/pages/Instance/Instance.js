@@ -187,10 +187,12 @@ export default withLinks(
       };
     },
     (dispatch, { params: { instanceId } }) => ({
-      createGroup: userId => ({ localizedTexts, ...data }) =>
+      createGroup: userId => ({ localizedTexts, hasThreshold, threshold, ...data }) =>
         dispatch(
           createGroup({
             ...data,
+            hasThreshold,
+            threshold: hasThreshold ? threshold : undefined,
             localizedTexts: transformLocalizedTextsFormData(localizedTexts),
             instanceId,
           })
