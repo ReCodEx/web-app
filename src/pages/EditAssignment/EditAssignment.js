@@ -177,7 +177,9 @@ class EditAssignment extends Component {
                       allowSecondDeadline={allowSecondDeadline}
                       runtimeEnvironments={envs}
                       visibility={visibility}
-                      assignmentIsPublic={assignment.isPublic}
+                      assignmentIsPublic={
+                        assignment.isPublic && (!assignment.visibleFrom || assignment.visibleFrom * 1000 <= Date.now())
+                      }
                     />
                   )}
                 </ResourceRenderer>
