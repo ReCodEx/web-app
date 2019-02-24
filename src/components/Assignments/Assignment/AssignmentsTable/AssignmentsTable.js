@@ -7,7 +7,7 @@ import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
 import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
-import { compareAssignments } from '../../../helpers/assignments';
+import { compareAssignmentsReverted } from '../../../helpers/assignments';
 
 const fetchAssignmentStatus = (statuses, assignmentId) => {
   const assignStatus =
@@ -87,7 +87,7 @@ const AssignmentsTable = ({
       {assignments
         .filter(isReady)
         .map(getJsData)
-        .sort(compareAssignments)
+        .sort(compareAssignmentsReverted)
         .map(assignment => (
           <AssignmentTableRow
             key={assignment.id}
