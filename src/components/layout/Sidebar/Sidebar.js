@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { defaultMemoize } from 'reselect';
 
 import Admin from './Admin';
 import BadgeContainer from '../../../containers/BadgeContainer';
@@ -13,15 +14,17 @@ import { isReady, getJsData, getId } from '../../../redux/helpers/resourceManage
 import { getLocalizedResourceName } from '../../../helpers/localizedData';
 import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles';
 import withLinks from '../../../helpers/withLinks';
-import { EMPTY_OBJ } from '../../../helpers/common';
+import { getExternalIdForCAS } from '../../../helpers/cas';
+import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
 import styles from './sidebar.less';
 
+const getUserData = defaultMemoize(user => getJsData(user));
+
 const Sidebar = ({
-  isLoggedIn = false,
+  loggedInUser,
   studentOf,
   supervisorOf,
-  role,
   currentUrl,
   instances,
   small = false,
@@ -38,142 +41,148 @@ const Sidebar = ({
     SIS_INTEGRATION_URI,
   },
   intl: { locale },
-}) => (
-  <aside className={classnames(['main-sidebar', styles.mainSidebar])}>
-    <section className="sidebar">
-      {!isLoggedIn && (
-        <ul className="sidebar-menu">
-          <MenuTitle title="ReCodEx" />
-          <MenuItem
-            title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
-            icon="sign-in-alt"
-            currentPath={currentUrl}
-            link={LOGIN_URI}
-          />
-          <MenuItem
-            title={<FormattedMessage id="app.sidebar.menu.createAccount" defaultMessage="Create account" />}
-            isActive={false}
-            icon="user-plus"
-            currentPath={currentUrl}
-            link={REGISTRATION_URI}
-          />
-        </ul>
-      )}
+}) => {
+  const user = getUserData(loggedInUser);
+  const role = safeGet(user, ['privateData', 'role']);
 
-      {isLoggedIn && (
-        <React.Fragment>
-          <BadgeContainer small={small} />
+  return (
+    <aside className={classnames(['main-sidebar', styles.mainSidebar])}>
+      <section className="sidebar">
+        {!user && (
           <ul className="sidebar-menu">
-            <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
+            <MenuTitle title="ReCodEx" />
             <MenuItem
-              title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
-              icon="tachometer-alt"
+              title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
+              icon="sign-in-alt"
               currentPath={currentUrl}
-              link={DASHBOARD_URI}
+              link={LOGIN_URI}
             />
-
-            {instances &&
-              instances.size > 0 &&
-              instances
-                .toArray()
-                .filter(isReady)
-                .map(getJsData)
-                .map(({ id, name }) => (
-                  <MenuItem
-                    key={id}
-                    title={name}
-                    icon="university"
-                    currentPath={currentUrl}
-                    link={INSTANCE_URI_FACTORY(id)}
-                  />
-                ))}
-
-            {studentOf && studentOf.size > 0 && (
-              <MenuGroup
-                title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
-                items={studentOf
-                  .toList()
-                  .sort((a, b) =>
-                    getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
-                  )}
-                notifications={EMPTY_OBJ}
-                icon={'user-circle'}
-                currentPath={currentUrl}
-                createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
-                forceOpen={false}
-              />
-            )}
-
-            {isSupervisorRole(role) && (
-              <MenuGroup
-                title={
-                  <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
-                }
-                notifications={EMPTY_OBJ}
-                items={supervisorOf
-                  .toList()
-                  .sort((a, b) =>
-                    getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
-                  )}
-                icon="graduation-cap"
-                currentPath={currentUrl}
-                createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
-                forceOpen={false}
-              />
-            )}
-
-            {isSupervisorRole(role) && (
-              <MenuItem
-                title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
-                icon="puzzle-piece"
-                currentPath={currentUrl}
-                link={EXERCISES_URI}
-              />
-            )}
-
-            {isEmpoweredSupervisorRole(role) && (
-              <MenuItem
-                title={<FormattedMessage id="app.sidebar.menu.pipelines" defaultMessage="Pipelines" />}
-                icon="random"
-                currentPath={currentUrl}
-                link={PIPELINES_URI}
-              />
-            )}
-
             <MenuItem
-              title={<FormattedMessage id="app.sidebar.menu.archive" defaultMessage="Archive" />}
-              icon="archive"
+              title={<FormattedMessage id="app.sidebar.menu.createAccount" defaultMessage="Create account" />}
+              isActive={false}
+              icon="user-plus"
               currentPath={currentUrl}
-              link={ARCHIVE_URI}
-            />
-
-            <MenuItem
-              icon="id-badge"
-              title={<FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration" />}
-              currentPath={currentUrl}
-              link={SIS_INTEGRATION_URI}
-            />
-
-            <MenuItem
-              title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
-              icon="blind"
-              link={FAQ_URL}
-              currentPath={currentUrl}
+              link={REGISTRATION_URI}
             />
           </ul>
-        </React.Fragment>
-      )}
+        )}
 
-      {isSuperadminRole(role) && <Admin currentUrl={currentUrl} />}
-    </section>
-  </aside>
-);
+        {Boolean(user) && (
+          <React.Fragment>
+            <BadgeContainer small={small} />
+            <ul className="sidebar-menu">
+              <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
+              <MenuItem
+                title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
+                icon="tachometer-alt"
+                currentPath={currentUrl}
+                link={DASHBOARD_URI}
+              />
+
+              {instances &&
+                instances.size > 0 &&
+                instances
+                  .toArray()
+                  .filter(isReady)
+                  .map(getJsData)
+                  .map(({ id, name }) => (
+                    <MenuItem
+                      key={id}
+                      title={name}
+                      icon="university"
+                      currentPath={currentUrl}
+                      link={INSTANCE_URI_FACTORY(id)}
+                    />
+                  ))}
+
+              {studentOf && studentOf.size > 0 && (
+                <MenuGroup
+                  title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
+                  items={studentOf
+                    .toList()
+                    .sort((a, b) =>
+                      getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
+                    )}
+                  notifications={EMPTY_OBJ}
+                  icon={'user-circle'}
+                  currentPath={currentUrl}
+                  createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
+                  forceOpen={false}
+                />
+              )}
+
+              {isSupervisorRole(role) && (
+                <MenuGroup
+                  title={
+                    <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
+                  }
+                  notifications={EMPTY_OBJ}
+                  items={supervisorOf
+                    .toList()
+                    .sort((a, b) =>
+                      getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
+                    )}
+                  icon="graduation-cap"
+                  currentPath={currentUrl}
+                  createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
+                  forceOpen={false}
+                />
+              )}
+
+              {isSupervisorRole(role) && (
+                <MenuItem
+                  title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
+                  icon="puzzle-piece"
+                  currentPath={currentUrl}
+                  link={EXERCISES_URI}
+                />
+              )}
+
+              {isEmpoweredSupervisorRole(role) && (
+                <MenuItem
+                  title={<FormattedMessage id="app.sidebar.menu.pipelines" defaultMessage="Pipelines" />}
+                  icon="random"
+                  currentPath={currentUrl}
+                  link={PIPELINES_URI}
+                />
+              )}
+
+              <MenuItem
+                title={<FormattedMessage id="app.sidebar.menu.archive" defaultMessage="Archive" />}
+                icon="archive"
+                currentPath={currentUrl}
+                link={ARCHIVE_URI}
+              />
+
+              {Boolean(getExternalIdForCAS(user)) && (
+                <MenuItem
+                  icon="id-badge"
+                  title={<FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration" />}
+                  currentPath={currentUrl}
+                  link={SIS_INTEGRATION_URI}
+                />
+              )}
+
+              <MenuItem
+                title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
+                icon="blind"
+                link={FAQ_URL}
+                currentPath={currentUrl}
+              />
+            </ul>
+          </React.Fragment>
+        )}
+
+        {isSuperadminRole(role) && <Admin currentUrl={currentUrl} />}
+      </section>
+    </aside>
+  );
+};
 
 Sidebar.propTypes = {
-  isLoggedIn: PropTypes.bool,
+  loggedInUser: ImmutablePropTypes.map,
   studentOf: ImmutablePropTypes.map,
   supervisorOf: ImmutablePropTypes.map,
-  role: PropTypes.string,
   currentUrl: PropTypes.string,
   instances: ImmutablePropTypes.list,
   small: PropTypes.bool,

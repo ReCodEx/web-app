@@ -118,7 +118,8 @@ class ResultsTable extends Component {
         headerSuffixClassName: styles.maxPointsRow,
         className: 'text-left',
         comparator: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
-        cellRenderer: user => user && <UsersName {...user} currentUserId={loggedUser.id} showEmail="icon" />,
+        cellRenderer: user =>
+          user && <UsersName {...user} currentUserId={loggedUser.id} showEmail="icon" showExternalIdentifiers />,
       }),
     ];
 

@@ -103,7 +103,7 @@ export const getUserSettings = userId =>
 
 export const loggedInUserSelector = createSelector(
   [usersSelector, loggedInUserIdSelector],
-  (users, id) => users.get(id)
+  (users, id) => (id && users ? users.get(id) : null)
 );
 
 export const isLoggedAsSuperAdmin = createSelector(
