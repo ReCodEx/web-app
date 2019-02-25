@@ -1,3 +1,5 @@
+import { safeGet } from './common';
+
 export const createCASLoginUrl = serviceUrl =>
   `https://idp.cuni.cz/cas/login?service=${encodeURIComponent(serviceUrl)}&renew=true`;
 
@@ -34,3 +36,5 @@ export const validateServiceTicket = (serviceTicket, serviceUrl, backendUrl, onT
       }
     })
     .catch(onFailed);
+
+export const getExternalIdForCAS = user => safeGet(user, ['privateData', 'externalIds', 'cas-uk']);

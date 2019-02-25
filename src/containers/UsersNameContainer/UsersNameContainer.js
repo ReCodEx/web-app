@@ -27,7 +27,15 @@ class UsersNameContainer extends Component {
   };
 
   render() {
-    const { user, large, noLink, currentUser, isSimple = false, showEmail = null } = this.props;
+    const {
+      user,
+      large,
+      noLink,
+      currentUser,
+      isSimple = false,
+      showEmail = null,
+      showExternalIdentifiers = false,
+    } = this.props;
     const size = large ? 45 : 20;
     return (
       <ResourceRenderer
@@ -47,6 +55,7 @@ class UsersNameContainer extends Component {
               noLink={noLink}
               currentUserId={currentUser.id}
               showEmail={showEmail}
+              showExternalIdentifiers={showExternalIdentifiers}
             />
           )
         }
@@ -64,6 +73,7 @@ UsersNameContainer.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   isSimple: PropTypes.bool,
   showEmail: PropTypes.string,
+  showExternalIdentifiers: PropTypes.bool,
 };
 
 export default connect(
