@@ -18,7 +18,8 @@ export const apiCall = (
     doNotProcess = false,
     uploadFiles = false,
   },
-  dispatch = undefined
+  dispatch = undefined,
+  getState = undefined
 ) => ({
   type,
   payload: {
@@ -33,21 +34,22 @@ export const apiCall = (
         doNotProcess,
         uploadFiles,
       },
-      dispatch
+      dispatch,
+      getState
     ),
     data: body,
   },
   meta: { endpoint, ...meta },
 });
 
-const middleware = ({ dispatch }) => next => action => {
+const middleware = ({ dispatch, getState }) => next => action => {
   switch (action && action.type) {
     case CALL_API:
       if (!action.request) {
         throw new Error('API middleware requires request data in the action');
       }
 
-      action = apiCall(action.request, dispatch);
+      action = apiCall(action.request, dispatch, getState);
       break;
 
     case authActionTypes.LOGOUT:
