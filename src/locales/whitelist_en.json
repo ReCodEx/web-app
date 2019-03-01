@@ -808,6 +808,7 @@
   "app.localizedTexts.validation.noLocalizedText",
   "app.login.cannotRememberPassword",
   "app.login.description",
+  "app.login.loginIsRequired",
   "app.login.resetPassword",
   "app.login.title",
   "app.loginForm.email",

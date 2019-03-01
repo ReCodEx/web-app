@@ -40,12 +40,12 @@ const getUserId = token => token.get('sub');
  */
 
 export const logout = redirectUrl => dispatch => {
-  if (redirectUrl) {
-    dispatch(push(redirectUrl));
-  }
   dispatch({
     type: actionTypes.LOGOUT,
   });
+  if (redirectUrl) {
+    dispatch(push(redirectUrl));
+  }
 };
 
 export const LOCAL_LOGIN = 'recodex-local-login';

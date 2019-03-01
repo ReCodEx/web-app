@@ -29,11 +29,15 @@ class Login extends Component {
   /**
    * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
    */
-  checkIfIsLoggedIn = ({ isLoggedIn, push, reset, links: { DASHBOARD_URI } }) => {
+  checkIfIsLoggedIn = ({ isLoggedIn, push, reset, params: { redirect }, links: { DASHBOARD_URI } }) => {
     if (isLoggedIn) {
       this.timeout = setTimeout(() => {
         this.timeout = null;
-        push(DASHBOARD_URI);
+        if (redirect) {
+          push(atob(redirect));
+        } else {
+          push(DASHBOARD_URI);
+        }
         reset();
       }, 600);
     }
@@ -48,6 +52,7 @@ class Login extends Component {
   render() {
     const {
       login,
+      params: { redirect = null },
       links: { HOME_URI, RESET_PASSWORD_URI },
     } = this.props;
 
@@ -66,31 +71,46 @@ class Login extends Component {
             iconName: 'sign-in-alt',
           },
         ]}>
-        <Row>
-          <Col
-            lg={4}
-            lgOffset={ALLOW_CAS_REGISTRATION ? 1 : 4}
-            md={6}
-            mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
-            sm={8}
-            smOffset={2}>
-            <LoginForm onSubmit={login} />
-            <p className="text-center">
-              <FormattedMessage
-                id="app.login.cannotRememberPassword"
-                defaultMessage="You cannot remember what your password was?"
-              />{' '}
-              <Link to={RESET_PASSWORD_URI}>
-                <FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." />
-              </Link>
-            </p>
-          </Col>
-          {ALLOW_CAS_REGISTRATION && (
-            <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
-              <CASLoginBox />
-            </Col>
+        <React.Fragment>
+          {redirect && (
+            <Row>
+              <Col sm={12}>
+                <div className="callout callout-warning">
+                  <FormattedMessage
+                    id="app.login.loginIsRequired"
+                    defaultMessage="Target page is available for authorized users only. Please sign in first."
+                  />
+                </div>
+              </Col>
+            </Row>
           )}
-        </Row>
+
+          <Row>
+            <Col
+              lg={4}
+              lgOffset={ALLOW_CAS_REGISTRATION ? 1 : 4}
+              md={6}
+              mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
+              sm={8}
+              smOffset={2}>
+              <LoginForm onSubmit={login} />
+              <p className="text-center">
+                <FormattedMessage
+                  id="app.login.cannotRememberPassword"
+                  defaultMessage="You cannot remember what your password was?"
+                />{' '}
+                <Link to={RESET_PASSWORD_URI}>
+                  <FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." />
+                </Link>
+              </p>
+            </Col>
+            {ALLOW_CAS_REGISTRATION && (
+              <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
+                <CASLoginBox />
+              </Col>
+            )}
+          </Row>
+        </React.Fragment>
       </PageContent>
     );
   }
@@ -98,6 +118,7 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  params: PropTypes.object,
   isLoggedIn: PropTypes.bool.isRequired,
   push: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,

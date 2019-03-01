@@ -808,6 +808,7 @@
   "app.localizedTexts.validation.noLocalizedText": "Please enable at least one tab of localized texts.",
   "app.login.cannotRememberPassword": "You cannot remember what your password was?",
   "app.login.description": "Please fill your credentials",
+  "app.login.loginIsRequired": "Target page is available for authorized users only. Please sign in first.",
   "app.login.resetPassword": "Reset your password.",
   "app.login.title": "Sign in",
   "app.loginForm.email": "E-mail address:",

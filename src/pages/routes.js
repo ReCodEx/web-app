@@ -56,7 +56,7 @@ const createRoutes = getState => {
 
   const requireAuth = (nextState, replace) => {
     if (!isLoggedIn(getState())) {
-      replace(getLinks(nextState).LOGIN_URI);
+      replace(getLinks(nextState).LOGIN_URI_WITH_REDIRECT(nextState.location.pathname));
     }
   };
 
@@ -87,7 +87,7 @@ const createRoutes = getState => {
       <Route exact path={`${URL_PATH_PREFIX}/login-extern/:service`} component={LoginExternFinalization} />
       <Route path={`${URL_PATH_PREFIX}/:lang`} component={LayoutContainer} onEnter={checkLanguage}>
         <IndexRoute component={Home} />
-        <Route path="login" component={Login} onEnter={onlyUnauth} />
+        <Route path="login(/:redirect)" component={Login} onEnter={onlyUnauth} />
         <Route path="registration" component={Registration} onEnter={onlyUnauth} />
         <Route path="faq" component={FAQ} />
         <Route path="email-verification" component={EmailVerification} />

@@ -808,6 +808,7 @@
   "app.localizedTexts.validation.noLocalizedText": "Prosíme povolte alespoň jednu záložku s lokalizovanými texty.",
   "app.login.cannotRememberPassword": "Zapomněli jste heslo?",
   "app.login.description": "Prosíme zadejte své přihlašovací údaje",
+  "app.login.loginIsRequired": "Cílová stránka je dostupná pouze pro přihlášené uživatele. Nejprve je potřeba se přihlásit.",
   "app.login.resetPassword": "Obnovte si své heslo.",
   "app.login.title": "Přihlásit se",
   "app.loginForm.email": "E-mailová adresa:",

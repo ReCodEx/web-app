@@ -7,6 +7,7 @@ import { newPendingFetchOperation, completedFetchOperation } from '../../modules
 import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
 import { safeGet } from '../../../helpers/common';
+import { extractLanguageFromUrl, linksFactory } from '../../../links';
 
 export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');
@@ -145,7 +146,13 @@ export const createApiCallPromise = (
     .then(res => {
       canUseDOM && dispatch(completedFetchOperation());
       if (res.status === 401 && !isTokenValid(decode(accessToken)) && dispatch) {
-        dispatch(logout('/'));
+        const currentPathname = safeGet(window, ['location', 'pathname']);
+        if (currentPathname) {
+          const currentLang = extractLanguageFromUrl(currentPathname);
+          dispatch(logout(linksFactory(currentLang).LOGIN_URI_WITH_REDIRECT(currentPathname)));
+        } else {
+          dispatch(logout('/'));
+        }
         dispatch(
           addNotification('Your session expired and you were automatically logged out of the ReCodEx system.', false)
         );

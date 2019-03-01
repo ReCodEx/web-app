@@ -7,6 +7,7 @@ export const linksFactory = lang => {
   const HOME_URI = prefix;
   const DASHBOARD_URI = `${prefix}/app`;
   const LOGIN_URI = `${prefix}/login`;
+  const LOGIN_URI_WITH_REDIRECT = redir => `${LOGIN_URI}/${encodeURIComponent(btoa(redir))}`;
   const REGISTRATION_URI = `${prefix}/registration`;
   const LOGOUT_URI = `${URL_PATH_PREFIX}/logout`;
   const RESET_PASSWORD_URI = `${prefix}/forgotten-password`;
@@ -89,6 +90,7 @@ export const linksFactory = lang => {
     HOME_URI,
     DASHBOARD_URI,
     LOGIN_URI,
+    LOGIN_URI_WITH_REDIRECT,
     REGISTRATION_URI,
     LOGOUT_URI,
     RESET_PASSWORD_URI,
