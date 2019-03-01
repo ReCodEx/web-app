@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import { fetchUserIfNeeded, updateProfile, updateSettings, makeLocalLogin, setRole } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
@@ -20,6 +21,11 @@ import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
 import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { safeGet } from '../../helpers/common';
+
+const prepareUserSettingsInitialValues = defaultMemoize(({ defaultPage, ...settings }) => ({
+  defaultPage: defaultPage || '',
+  ...settings,
+}));
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) => dispatch(fetchUserIfNeeded(userId));
@@ -129,7 +135,10 @@ class EditUser extends Component {
                 />
               </Col>
               <Col lg={6}>
-                <EditUserSettingsForm onSubmit={updateSettings} initialValues={data.privateData.settings} />
+                <EditUserSettingsForm
+                  onSubmit={updateSettings}
+                  initialValues={prepareUserSettingsInitialValues(data.privateData.settings)}
+                />
               </Col>
             </Row>
 

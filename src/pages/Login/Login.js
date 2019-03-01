@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -12,7 +13,8 @@ import LoginForm from '../../components/forms/LoginForm';
 import CASLoginBox from '../../containers/CAS';
 
 import { login } from '../../redux/modules/auth';
-import { isLoggedIn } from '../../redux/selectors/auth';
+import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
+import { loggedInUserSelector } from '../../redux/selectors/users';
 import { getConfigVar } from '../../redux/helpers/api/tools';
 
 import withLinks from '../../helpers/withLinks';
@@ -27,17 +29,38 @@ class Login extends Component {
   componentWillReceiveProps = props => this.checkIfIsLoggedIn(props);
 
   /**
+   * Find appropriate URI for redirect after login.
+   * 1) Use redirect URL parameter if available.
+   * 2) Use user's personal settings.
+   * 3) Use system default.
+   */
+  getRedirectURI = ({
+    loggedInUser = null,
+    instanceId = null,
+    params: { redirect },
+    links: { HOME_URI, DASHBOARD_URI, INSTANCE_URI_FACTORY },
+  }) => {
+    if (redirect) {
+      return atob(redirect);
+    }
+
+    const defaultPages = {
+      home: HOME_URI,
+      dashboard: DASHBOARD_URI,
+      instance: instanceId && INSTANCE_URI_FACTORY(instanceId),
+    };
+    const defaultPage = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'settings', 'defaultPage']);
+    return defaultPage && defaultPages[defaultPage] ? defaultPages[defaultPage] : DASHBOARD_URI; // system default
+  };
+
+  /**
    * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
    */
-  checkIfIsLoggedIn = ({ isLoggedIn, push, reset, params: { redirect }, links: { DASHBOARD_URI } }) => {
+  checkIfIsLoggedIn = ({ isLoggedIn, push, reset, ...props }) => {
     if (isLoggedIn) {
       this.timeout = setTimeout(() => {
         this.timeout = null;
-        if (redirect) {
-          push(atob(redirect));
-        } else {
-          push(DASHBOARD_URI);
-        }
+        push(this.getRedirectURI(props));
         reset();
       }, 600);
     }
@@ -120,6 +143,8 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
   params: PropTypes.object,
   isLoggedIn: PropTypes.bool.isRequired,
+  instanceId: PropTypes.string,
+  loggedInUser: ImmutablePropTypes.map,
   push: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
@@ -129,6 +154,8 @@ export default withLinks(
   connect(
     state => ({
       isLoggedIn: isLoggedIn(state),
+      instanceId: selectedInstanceId(state),
+      loggedInUser: loggedInUserSelector(state),
     }),
     dispatch => ({
       login: ({ email, password }) => dispatch(login(email, password)),
