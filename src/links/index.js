@@ -7,7 +7,13 @@ export const linksFactory = lang => {
   const HOME_URI = prefix;
   const DASHBOARD_URI = `${prefix}/app`;
   const LOGIN_URI = `${prefix}/login`;
-  const LOGIN_URI_WITH_REDIRECT = redir => `${LOGIN_URI}/${encodeURIComponent(btoa(redir))}`;
+  const LOGIN_URI_WITH_REDIRECT = redirLocation => {
+    let redir = redirLocation.pathname;
+    if (redirLocation.search) {
+      redir += redirLocation.search;
+    }
+    return `${LOGIN_URI}/${encodeURIComponent(btoa(redir))}`;
+  };
   const REGISTRATION_URI = `${prefix}/registration`;
   const LOGOUT_URI = `${URL_PATH_PREFIX}/logout`;
   const RESET_PASSWORD_URI = `${prefix}/forgotten-password`;
