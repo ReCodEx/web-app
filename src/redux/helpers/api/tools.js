@@ -146,10 +146,12 @@ export const createApiCallPromise = (
     .then(res => {
       canUseDOM && dispatch(completedFetchOperation());
       if (res.status === 401 && !isTokenValid(decode(accessToken)) && dispatch) {
-        const currentPathname = safeGet(window, ['location', 'pathname']);
-        if (currentPathname) {
-          const currentLang = extractLanguageFromUrl(currentPathname);
-          dispatch(logout(linksFactory(currentLang).LOGIN_URI_WITH_REDIRECT(currentPathname)));
+        const location = window && window.location;
+        if (location) {
+          const currentLang = extractLanguageFromUrl(location.pathname);
+          if (currentLang) {
+            dispatch(logout(linksFactory(currentLang).LOGIN_URI_WITH_REDIRECT(location)));
+          }
         } else {
           dispatch(logout('/'));
         }

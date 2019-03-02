@@ -9,6 +9,8 @@ import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedC
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
 import { actionTypes as paginationActionTypes } from './pagination';
 import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';
+import { actionTypes as registrationActionTypes } from './registration';
+import authActionTypes from './authActionTypes';
 
 import { arrayToObject } from '../../helpers/common';
 
@@ -276,6 +278,16 @@ const reducer = handleActions(
             })
           )
         : state.setIn(['resources', id, 'data', 'isAllowed-pending'], false),
+
+    [authActionTypes.LOGIN_FULFILLED]: (state, { payload: { user } }) =>
+      user && user.id
+        ? state.setIn(['resources', user.id], createRecord({ state: resourceStatus.FULFILLED, data: user }))
+        : state,
+
+    [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (state, { payload: { user } }) =>
+      user && user.id
+        ? state.setIn(['resources', user.id], createRecord({ state: resourceStatus.FULFILLED, data: user }))
+        : state,
   }),
   initialState
 );

@@ -15,66 +15,66 @@ import CASLoginBox from '../../containers/CAS';
 import { login } from '../../redux/modules/auth';
 import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';
-import { getConfigVar } from '../../redux/helpers/api/tools';
+import { getConfigVar, abortAllPendingRequests } from '../../redux/helpers/api/tools';
 
 import withLinks from '../../helpers/withLinks';
 
 const ALLOW_CAS_REGISTRATION = getConfigVar('ALLOW_CAS_REGISTRATION');
 
 class Login extends Component {
-  componentWillMount = () => {
-    this.checkIfIsLoggedIn(this.props);
-  };
-
-  componentWillReceiveProps = props => this.checkIfIsLoggedIn(props);
-
   /**
-   * Find appropriate URI for redirect after login.
+   * Find appropriate URI for redirection after login and perform the redirect.
    * 1) Use redirect URL parameter if available.
    * 2) Use user's personal settings.
    * 3) Use system default.
    */
-  getRedirectURI = ({
-    loggedInUser = null,
-    instanceId = null,
-    params: { redirect },
-    links: { HOME_URI, DASHBOARD_URI, INSTANCE_URI_FACTORY },
-  }) => {
+  redirectAfterLogin = () => {
+    const {
+      loggedInUser = null,
+      instanceId = null,
+      push,
+      reset,
+      params: { redirect },
+      links: { HOME_URI, DASHBOARD_URI, INSTANCE_URI_FACTORY },
+    } = this.props;
+
+    let url = null;
     if (redirect) {
-      return atob(redirect);
+      url = atob(redirect);
+    } else {
+      const defaultPages = {
+        home: HOME_URI,
+        dashboard: DASHBOARD_URI,
+        instance: instanceId && INSTANCE_URI_FACTORY(instanceId),
+      };
+      const defaultPage = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'settings', 'defaultPage']);
+      url = defaultPage && defaultPages[defaultPage] ? defaultPages[defaultPage] : DASHBOARD_URI; // DASHBOARD_URI is system default
     }
 
-    const defaultPages = {
-      home: HOME_URI,
-      dashboard: DASHBOARD_URI,
-      instance: instanceId && INSTANCE_URI_FACTORY(instanceId),
-    };
-    const defaultPage = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'settings', 'defaultPage']);
-    return defaultPage && defaultPages[defaultPage] ? defaultPages[defaultPage] : DASHBOARD_URI; // system default
+    /*
+     * Login is slightly more complicated as the change in logged in user triggers some reloads immediately.
+     * Since we are about to perform a redirect, we need to stop pending requests (wait for all FAILED actions)
+     * and then perform the redirect itself. We use timer to achieve that.
+     */
+    abortAllPendingRequests();
+    window.setTimeout(() => {
+      push(url);
+      reset();
+    }, 100);
   };
 
   /**
-   * Redirect all logged in users to the dashboard as soon as they are visually informed about success.
+   * Log the user in (by given credentials) and then perform the redirect.
    */
-  checkIfIsLoggedIn = ({ isLoggedIn, push, reset, ...props }) => {
-    if (isLoggedIn) {
-      this.timeout = setTimeout(() => {
-        this.timeout = null;
-        push(this.getRedirectURI(props));
-        reset();
-      }, 600);
-    }
+  loginAndRedirect = credentials => {
+    const { login } = this.props;
+    login(credentials).then(() => {
+      this.redirectAfterLogin();
+    });
   };
-
-  componentWillUnmount() {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
-    }
-  }
 
   render() {
     const {
-      login,
       params: { redirect = null },
       links: { HOME_URI, RESET_PASSWORD_URI },
     } = this.props;
@@ -116,7 +116,7 @@ class Login extends Component {
               mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
               sm={8}
               smOffset={2}>
-              <LoginForm onSubmit={login} />
+              <LoginForm onSubmit={this.loginAndRedirect} />
               <p className="text-center">
                 <FormattedMessage
                   id="app.login.cannotRememberPassword"
@@ -129,7 +129,7 @@ class Login extends Component {
             </Col>
             {ALLOW_CAS_REGISTRATION && (
               <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
-                <CASLoginBox />
+                <CASLoginBox afterLogin={this.redirectAfterLogin} />
               </Col>
             )}
           </Row>

@@ -7,24 +7,8 @@ import { actionTypes as registrationActionTypes } from './registration';
 import { actionTypes as usersActionTypes } from './users';
 import { safeGet } from '../../helpers/common';
 
-export const actionTypes = {
-  LOGIN: 'recodex/auth/LOGIN',
-  LOGIN_REQUEST: 'recodex/auth/LOGIN_PENDING',
-  LOGIN_SUCCESS: 'recodex/auth/LOGIN_FULFILLED',
-  LOGIN_FAILIURE: 'recodex/auth/LOGIN_REJECTED',
-  RESET_PASSWORD: 'recodex/auth/RESET_PASSWORD',
-  RESET_PASSWORD_PENDING: 'recodex/auth/RESET_PASSWORD_PENDING',
-  RESET_PASSWORD_FULFILLED: 'recodex/auth/RESET_PASSWORD_FULFILLED',
-  RESET_PASSWORD_REJECTED: 'recodex/auth/RESET_PASSWORD_REJECTED',
-  CHANGE_PASSWORD: 'recodex/auth/CHANGE_PASSWORD',
-  CHANGE_PASSWORD_PENDING: 'recodex/auth/CHANGE_PASSWORD_PENDING',
-  CHANGE_PASSWORD_FULFILLED: 'recodex/auth/CHANGE_PASSWORD_FULFILLED',
-  CHANGE_PASSWORD_REJECTED: 'recodex/auth/CHANGE_PASSWORD_REJECTED',
-  LOGOUT: 'recodex/auth/LOGOUT',
-  GENERATE_TOKEN: 'recodex/auth/GENERATE_TOKEN',
-  GENERATE_TOKEN_FULFILLED: 'recodex/auth/GENERATE_TOKEN_FULFILLED',
-  SELECT_INSTANCE: 'recodex/auth/SELECT_INSTANCE',
-};
+import actionTypes from './authActionTypes';
+export { actionTypes };
 
 export const statusTypes = {
   LOGGED_OUT: 'LOGGED_OUT',
@@ -102,7 +86,7 @@ export const externalLogin = service => (credentials, popupWindow = null) =>
   });
 
 export const externalLoginFailed = service => ({
-  type: actionTypes.LOGIN_FAILIURE,
+  type: actionTypes.LOGIN_REJECTED,
   meta: { service },
 });
 
@@ -187,10 +171,10 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
 
   return handleActions(
     {
-      [actionTypes.LOGIN_REQUEST]: (state, { meta: { service } }) =>
+      [actionTypes.LOGIN_PENDING]: (state, { meta: { service } }) =>
         state.setIn(['status', service], statusTypes.LOGGING_IN),
 
-      [actionTypes.LOGIN_SUCCESS]: (state, { payload: { accessToken, user }, meta: { service, popupWindow } }) => {
+      [actionTypes.LOGIN_FULFILLED]: (state, { payload: { accessToken, user }, meta: { service, popupWindow } }) => {
         closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGGED_IN)
@@ -200,7 +184,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
           .set('instanceId', safeGet(user, ['privateData', 'instancesIds', 0], null));
       },
 
-      [actionTypes.LOGIN_FAILIURE]: (state, { meta: { service, popupWindow } }) => {
+      [actionTypes.LOGIN_REJECTED]: (state, { meta: { service, popupWindow } }) => {
         closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGIN_FAILED)
@@ -221,7 +205,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
           .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
           .set('instanceId', instanceId),
 
-      [actionTypes.LOGOUT]: (state, action) =>
+      [actionTypes.LOGOUT]: state =>
         state
           .update('status', services => services.map(() => statusTypes.LOGGED_OUT))
           .set('jwt', null)
@@ -229,17 +213,17 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
           .set('userId', null)
           .set('instanceId', null),
 
-      [actionTypes.CHANGE_PASSWORD_PENDING]: (state, action) => state.set('changePasswordStatus', 'PENDING'),
+      [actionTypes.CHANGE_PASSWORD_PENDING]: state => state.set('changePasswordStatus', 'PENDING'),
 
-      [actionTypes.CHANGE_PASSWORD_FAILED]: (state, action) => state.set('changePasswordStatus', 'FAILED'),
+      [actionTypes.CHANGE_PASSWORD_FAILED]: state => state.set('changePasswordStatus', 'FAILED'),
 
-      [actionTypes.CHANGE_PASSWORD_FULFILLED]: (state, action) => state.set('changePasswordStatus', 'FULFILLED'),
+      [actionTypes.CHANGE_PASSWORD_FULFILLED]: state => state.set('changePasswordStatus', 'FULFILLED'),
 
-      [actionTypes.RESET_PASSWORD_PENDING]: (state, action) => state.set('resetPasswordStatus', 'PENDING'),
+      [actionTypes.RESET_PASSWORD_PENDING]: state => state.set('resetPasswordStatus', 'PENDING'),
 
-      [actionTypes.RESET_PASSWORD_FAILED]: (state, action) => state.set('resetPasswordStatus', 'FAILED'),
+      [actionTypes.RESET_PASSWORD_FAILED]: state => state.set('resetPasswordStatus', 'FAILED'),
 
-      [actionTypes.RESET_PASSWORD_FULFILLED]: (state, action) => state.set('resetPasswordStatus', 'FULFILLED'),
+      [actionTypes.RESET_PASSWORD_FULFILLED]: state => state.set('resetPasswordStatus', 'FULFILLED'),
 
       [usersActionTypes.UPDATE_FULFILLED]: (state, { payload: { accessToken = null } }) =>
         accessToken

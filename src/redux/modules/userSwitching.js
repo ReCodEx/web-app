@@ -1,5 +1,5 @@
 import { handleActions, createAction } from 'redux-actions';
-import { actionTypes as authActionTypes } from './auth';
+import authActionTypes from './authActionTypes';
 import { decode, isTokenValid } from '../helpers/token';
 import { addNotification } from './notifications';
 
@@ -25,7 +25,7 @@ export const switchUser = userId => (dispatch, getState) => {
     dispatch(removeUser(userId));
   } else {
     dispatch({
-      type: authActionTypes.LOGIN_SUCCESS,
+      type: authActionTypes.LOGIN_FULFILLED,
       payload: { user, accessToken },
       meta: { service: 'takeover' },
     });
@@ -40,7 +40,7 @@ const initialState = {};
 
 const reducer = handleActions(
   {
-    [authActionTypes.LOGIN_SUCCESS]: (state, { payload }) =>
+    [authActionTypes.LOGIN_FULFILLED]: (state, { payload }) =>
       state[payload.user.id]
         ? state
         : {

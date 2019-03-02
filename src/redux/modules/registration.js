@@ -44,11 +44,11 @@ const initialState = fromJS({
 
 const reducer = handleActions(
   {
-    [actionTypes.CREATING_ACCOUNT_PENDING]: (state, action) => state.set('status', statusTypes.CREATING_ACCOUNT),
+    [actionTypes.CREATING_ACCOUNT_PENDING]: state => state.set('status', statusTypes.CREATING_ACCOUNT),
 
-    [actionTypes.CREATE_ACCOUNT_FULFILLED]: (state, action) => state.set('status', statusTypes.ACCOUNT_CREATED),
+    [actionTypes.CREATE_ACCOUNT_FULFILLED]: state => state.set('status', statusTypes.ACCOUNT_CREATED),
 
-    [actionTypes.CREATE_ACCOUNT_REJECTED]: (state, action) => state.set('status', statusTypes.ACCOUNT_CREATING_FAILED),
+    [actionTypes.CREATE_ACCOUNT_REJECTED]: state => state.set('status', statusTypes.ACCOUNT_CREATING_FAILED),
   },
   initialState
 );

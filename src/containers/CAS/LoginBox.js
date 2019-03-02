@@ -40,11 +40,12 @@ export default connect(
   state => ({
     status: statusSelector(loginServices.external.CAS_UK_TICKET)(state),
   }),
-  dispatch => ({
+  (dispatch, { afterLogin = null }) => ({
     fail: () => dispatch(externalLoginFailed(loginServices.external.CAS_UK_TICKET)),
     login: (ticket, clientUrl, popupWindow = null) => {
       const login = externalLogin(loginServices.external.CAS_UK_TICKET);
-      return dispatch(login({ ticket, clientUrl }, popupWindow));
+      const promise = dispatch(login({ ticket, clientUrl }, popupWindow));
+      return afterLogin ? promise.then(afterLogin) : promise;
     },
   })
 )(LoginBox);
