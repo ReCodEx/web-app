@@ -48,12 +48,14 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
       name="email"
       required
       component={EmailField}
+      ignoreDirty
       label={<FormattedMessage id="app.loginForm.email" defaultMessage="E-mail address:" />}
     />
     <Field
       name="password"
       required
       component={PasswordField}
+      ignoreDirty
       label={<FormattedMessage id="app.loginForm.password" defaultMessage="Password:" />}
     />
   </FormBox>

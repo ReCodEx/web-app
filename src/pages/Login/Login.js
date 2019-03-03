@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { push } from 'react-router-redux';
+import { replace } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import { Row, Col } from 'react-bootstrap';
@@ -26,16 +26,17 @@ class Login extends Component {
    * Find appropriate URI for redirection after login and perform the redirect.
    * 1) Use redirect URL parameter if available.
    * 2) Use user's personal settings.
-   * 3) Use system default.
+   * 3) If the user does not have verified email, go to settings.
+   * 4) Use system default.
    */
   redirectAfterLogin = () => {
     const {
       loggedInUser = null,
       instanceId = null,
-      push,
+      replace,
       reset,
       params: { redirect },
-      links: { HOME_URI, DASHBOARD_URI, INSTANCE_URI_FACTORY },
+      links: { HOME_URI, DASHBOARD_URI, INSTANCE_URI_FACTORY, EDIT_USER_URI_FACTORY },
     } = this.props;
 
     let url = null;
@@ -48,7 +49,12 @@ class Login extends Component {
         instance: instanceId && INSTANCE_URI_FACTORY(instanceId),
       };
       const defaultPage = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'settings', 'defaultPage']);
-      url = defaultPage && defaultPages[defaultPage] ? defaultPages[defaultPage] : DASHBOARD_URI; // DASHBOARD_URI is system default
+      url =
+        defaultPage && defaultPages[defaultPage]
+          ? defaultPages[defaultPage]
+          : loggedInUser && loggedInUser.getIn(['data', 'isVerified']) === false
+          ? EDIT_USER_URI_FACTORY(loggedInUser.getIn(['data', 'id']))
+          : DASHBOARD_URI; // system default
     }
 
     /*
@@ -58,9 +64,9 @@ class Login extends Component {
      */
     abortAllPendingRequests();
     window.setTimeout(() => {
-      push(url);
       reset();
-    }, 100);
+      replace(url);
+    }, 10);
   };
 
   /**
@@ -75,6 +81,7 @@ class Login extends Component {
 
   render() {
     const {
+      isLoggedIn,
       params: { redirect = null },
       links: { HOME_URI, RESET_PASSWORD_URI },
     } = this.props;
@@ -108,31 +115,43 @@ class Login extends Component {
             </Row>
           )}
 
-          <Row>
-            <Col
-              lg={4}
-              lgOffset={ALLOW_CAS_REGISTRATION ? 1 : 4}
-              md={6}
-              mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
-              sm={8}
-              smOffset={2}>
-              <LoginForm onSubmit={this.loginAndRedirect} />
-              <p className="text-center">
-                <FormattedMessage
-                  id="app.login.cannotRememberPassword"
-                  defaultMessage="You cannot remember what your password was?"
-                />{' '}
-                <Link to={RESET_PASSWORD_URI}>
-                  <FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." />
-                </Link>
-              </p>
-            </Col>
-            {ALLOW_CAS_REGISTRATION && (
-              <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
-                <CASLoginBox afterLogin={this.redirectAfterLogin} />
+          {isLoggedIn && (
+            <Row>
+              <Col sm={12}>
+                <div className="callout callout-success">
+                  <FormattedMessage id="app.login.alreadyLoggedIn" defaultMessage="You are already logged in." />
+                </div>
               </Col>
-            )}
-          </Row>
+            </Row>
+          )}
+
+          {!isLoggedIn && (
+            <Row>
+              <Col
+                lg={4}
+                lgOffset={ALLOW_CAS_REGISTRATION ? 1 : 4}
+                md={6}
+                mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
+                sm={8}
+                smOffset={2}>
+                <LoginForm onSubmit={this.loginAndRedirect} />
+                <p className="text-center">
+                  <FormattedMessage
+                    id="app.login.cannotRememberPassword"
+                    defaultMessage="You cannot remember what your password was?"
+                  />{' '}
+                  <Link to={RESET_PASSWORD_URI}>
+                    <FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." />
+                  </Link>
+                </p>
+              </Col>
+              {ALLOW_CAS_REGISTRATION && (
+                <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
+                  <CASLoginBox afterLogin={this.redirectAfterLogin} />
+                </Col>
+              )}
+            </Row>
+          )}
         </React.Fragment>
       </PageContent>
     );
@@ -145,7 +164,7 @@ Login.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
   loggedInUser: ImmutablePropTypes.map,
-  push: PropTypes.func.isRequired,
+  replace: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
 };
@@ -159,7 +178,7 @@ export default withLinks(
     }),
     dispatch => ({
       login: ({ email, password }) => dispatch(login(email, password)),
-      push: url => dispatch(push(url)),
+      replace: url => dispatch(replace(url)),
       reset: () => {
         dispatch(reset('login'));
       },
