@@ -15,7 +15,6 @@ const Layout = ({
   toggleSize,
   toggleVisibility,
   sidebar,
-  isLoggedIn,
   pendingFetchOperations,
   children,
   lang,
@@ -43,7 +42,6 @@ const Layout = ({
       pendingFetchOperations={pendingFetchOperations}
     />
     <SidebarContainer
-      isLoggedIn={isLoggedIn}
       isCollapsed={sidebar.isCollapsed}
       small={!sidebar.isOpen && sidebar.isCollapsed} // does not always work, but is good enough
       currentUrl={currentUrl}
@@ -62,7 +60,6 @@ Layout.propTypes = {
     isCollapsed: PropTypes.bool,
     isOpen: PropTypes.bool,
   }),
-  isLoggedIn: PropTypes.bool,
   pendingFetchOperations: PropTypes.bool,
   onCloseSidebar: PropTypes.func,
   children: PropTypes.element,

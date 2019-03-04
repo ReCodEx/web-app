@@ -27,6 +27,8 @@ export const compareAssignments = (a, b) => {
   }
 };
 
+export const compareAssignmentsReverted = (a, b) => -compareAssignments(a, b);
+
 export const compareShadowAssignments = (a, b) => {
   return a.createdAt - b.createdAt;
 };

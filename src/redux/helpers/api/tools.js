@@ -139,8 +139,17 @@ export const createApiCallPromise = (
     doNotProcess = false,
     uploadFiles = false,
   },
-  dispatch = undefined
+  dispatch = undefined,
+  getState = undefined
 ) => {
+  if (getState) {
+    const urlPathname = safeGet(getState(), ['routing', 'locationBeforeTransitions', 'pathname']);
+    const lang = urlPathname && extractLanguageFromUrl(urlPathname);
+    if (lang) {
+      headers['X-ReCodEx-lang'] = lang;
+    }
+  }
+
   let call = createRequest(endpoint, query, method, headers, body, uploadFiles)
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {

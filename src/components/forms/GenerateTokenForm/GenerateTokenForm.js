@@ -108,13 +108,14 @@ const GenerateTokenForm = ({
         />
       </div>
     }>
-    {submitFailed && (
-      <Alert bsStyle="danger">
-        <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-      </Alert>
-    )}
+    <Well>
+      <FormattedMessage
+        id="app.generateTokenForm.info"
+        defaultMessage="This form should help advanced users to access API directly. It may be used to generate security tokens which are used for authentication and authorization of API operations. The scopes may restrict the set of operations authorized by the token beyond the limitations of the user role."
+      />
+    </Well>
 
-    <h4>
+    <h4 className="em-margin-bottom">
       <FormattedMessage id="app.generateTokenForm.scopes" defaultMessage="Scopes:" />
     </h4>
     <Grid fluid>
@@ -138,6 +139,15 @@ const GenerateTokenForm = ({
     {warning && <Alert bsStyle="warning">{warning}</Alert>}
 
     {error && <Alert bsStyle="danger">{error}</Alert>}
+
+    {submitFailed && (
+      <Alert bsStyle="danger">
+        <FormattedMessage
+          id="app.generateTokenForm.failed"
+          defaultMessage="The process of token creation has failed. Please try again later."
+        />
+      </Alert>
+    )}
 
     <hr />
 

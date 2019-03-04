@@ -36,7 +36,12 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
         )}
       </td>
       <td>
-        <UsersName {...user} currentUserId={loggedUserId} showEmail={emailColumn ? null : 'full'} />
+        <UsersName
+          {...user}
+          currentUserId={loggedUserId}
+          showEmail={emailColumn ? null : 'full'}
+          showExternalIdentifiers
+        />
       </td>
 
       {emailColumn && <td>{createEmailLink(user)}</td>}

@@ -5,7 +5,6 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import moment from 'moment';
 import Layout from '../../components/layout/Layout';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { anyPendingFetchOperations } from '../../redux/selectors/app';
 import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
@@ -115,7 +114,6 @@ class LayoutContainer extends Component {
       sidebar,
       toggleSize,
       toggleVisibility,
-      isLoggedIn,
       pendingFetchOperations,
     } = this.props;
 
@@ -127,7 +125,6 @@ class LayoutContainer extends Component {
       <IntlProvider locale={lang} messages={this.getMessages(lang)} formats={ADDITIONAL_INTL_FORMATS}>
         <Layout
           sidebar={sidebar}
-          isLoggedIn={isLoggedIn}
           toggleSize={toggleSize}
           toggleVisibility={toggleVisibility}
           onCloseSidebar={this.maybeHideSidebar}
@@ -161,7 +158,6 @@ LayoutContainer.propTypes = {
   toggleVisibility: PropTypes.func.isRequired,
   collapse: PropTypes.func.isRequired,
   unroll: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool,
   pendingFetchOperations: PropTypes.bool,
   sidebar: PropTypes.object,
   location: PropTypes.shape({
@@ -175,7 +171,6 @@ const mapStateToProps = (state, props) => ({
     isOpen: isVisible(state),
     isCollapsed: isCollapsed(state),
   },
-  isLoggedIn: !!loggedInUserIdSelector(state),
   pendingFetchOperations: anyPendingFetchOperations(state),
 });
 

@@ -275,10 +275,12 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 };
 
 const mapDispatchToProps = (dispatch, { params }) => ({
-  addSubgroup: (instanceId, userId) => ({ localizedTexts, ...data }) =>
+  addSubgroup: (instanceId, userId) => ({ localizedTexts, hasThreshold, threshold, ...data }) =>
     dispatch(
       createGroup({
         ...data,
+        hasThreshold,
+        threshold: hasThreshold ? threshold : undefined,
         localizedTexts: transformLocalizedTextsFormData(localizedTexts),
         instanceId,
         parentGroupId: params.groupId,

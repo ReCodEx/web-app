@@ -469,22 +469,8 @@ class EditAssignmentForm extends Component {
           <Row>
             <Col md={4}>
               <Field name="visibility" component={RadioField} options={VISIBILITY_STATES} />
-
-              {false && (
-                <table>
-                  <tbody>
-                    {Object.keys(VISIBILITY_STATES).map(state => (
-                      <tr key={state}>
-                        <td className="em-padding valign-middle">
-                          <Field name="visibility" component="input" type="radio" value={state} />
-                        </td>
-                        <td className="valign-middle">{VISIBILITY_STATES[state]}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
             </Col>
+
             {visibility === 'visibleFrom' && (
               <Col md={8}>
                 <Field
@@ -633,10 +619,7 @@ const validate = (
   return errors;
 };
 
-const warn = (
-  { groups, canViewJudgeOutputs, submissionsCountLimit },
-  { groupsAccessor, alreadyAssignedGroups = [] }
-) => {
+const warn = ({ groups, canViewJudgeOutputs }, { groupsAccessor, alreadyAssignedGroups = [] }) => {
   const warnings = {};
 
   if (canViewJudgeOutputs) {
