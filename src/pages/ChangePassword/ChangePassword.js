@@ -46,7 +46,7 @@ class ChangePassword extends Component {
           push,
           links: { RESET_PASSWORD_URI },
         } = this.props;
-        push(RESET_PASSWORD_URI); // no hash -> redirect to the reset form
+        push(RESET_PASSWORD_URI); // no token in URL query -> redirect to the reset form
       } else {
         let token = search.substr(1);
         let decodedToken = decode(token);
