@@ -126,7 +126,7 @@ const middleware = store => next => action => {
         break;
       }
     /* eslint no-fallthrough: "off" */
-    case actionTypes.LOGIN_SUCCESS:
+    case actionTypes.LOGIN_FULFILLED:
     case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
       storeToken(action.payload.accessToken);
       storeInstanceId(safeGet(action, ['meta', 'instanceId'], action.payload.user.privateData.instancesIds[0]));
@@ -137,7 +137,7 @@ const middleware = store => next => action => {
       }
       break;
 
-    case actionTypes.LOGIN_FAILIURE:
+    case actionTypes.LOGIN_REJECTED:
     case actionTypes.LOGOUT:
       removeToken();
       removeInstanceId();

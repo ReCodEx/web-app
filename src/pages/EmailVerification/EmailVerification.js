@@ -22,7 +22,7 @@ import withLinks from '../../helpers/withLinks';
  * Component for changing old password for a new one for a user with a specific
  * token provided in the URL - user goes to this page using a link from an email.
  *
- * @class ChangePassword
+ * @class EmailVerification
  * @extends {Component}
  */
 class EmailVerification extends Component {
@@ -36,10 +36,10 @@ class EmailVerification extends Component {
    */
   componentWillMount = () => {
     if (canUseDOM) {
-      const hash = window.location.hash;
-      if (hash.length > 0) {
-        let token = window.location.hash.substr(1);
-        let decodedToken = decode(token);
+      const search = window.location.search;
+      if (search.length > 0) {
+        const token = search.substr(1);
+        const decodedToken = decode(token);
 
         if (isTokenValid(decodedToken) && isInScope(decodedToken, 'email-verification')) {
           this.setState({ token, decodedToken });

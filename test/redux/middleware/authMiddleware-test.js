@@ -6,7 +6,7 @@ import middleware, {
   TOKEN_LOCAL_STORAGE_KEY,
   storeToken,
   removeToken,
-  getToken
+  getToken,
 } from '../../../src/redux/middleware/authMiddleware';
 
 import chai from 'chai';
@@ -38,9 +38,7 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
 
     it('must remove the token from localStorage', () => {
       localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, 'abcdefgh');
-      expect(localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)).to.equal(
-        'abcdefgh'
-      );
+      expect(localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)).to.equal('abcdefgh');
       removeToken();
       expect(localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)).to.equal(null);
     });
@@ -55,25 +53,23 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
       expect(localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)).to.equal(null);
 
       const action = {
-        type: authActionTypes.LOGIN_SUCCESS,
+        type: authActionTypes.LOGIN_FULFILLED,
         payload: {
           accessToken: 'abcdefgh',
           user: {
             privateData: {
               instancesIds: ['instance-id'],
               settings: {
-                defaultLanguage: 'xy'
-              }
-            }
-          }
-        }
+                defaultLanguage: 'xy',
+              },
+            },
+          },
+        },
       };
 
       const store = createFakeStore();
       middleware(store)(a => a)(action);
-      expect(localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)).to.equal(
-        'abcdefgh'
-      );
+      expect(localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)).to.equal('abcdefgh');
       expect(store.dispatch).to.have.been.called.once();
     });
 
@@ -81,7 +77,7 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
       // clean the storage first
       localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, 'hchkrdtn');
       const action = {
-        type: authActionTypes.LOGOUT
+        type: authActionTypes.LOGOUT,
       };
 
       const store = createFakeStore();
@@ -96,9 +92,9 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
         middleware({
           getState: () => ({
             auth: fromJS({
-              jwt: accessToken
-            })
-          })
+              jwt: accessToken,
+            }),
+          }),
         })(a => a)(action).request
       ).to.eql({ accessToken });
     });

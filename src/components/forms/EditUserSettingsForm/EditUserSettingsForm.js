@@ -1,12 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
+import { defaultMemoize } from 'reselect';
+
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
+import { CheckboxField, LanguageSelectField, SelectField } from '../Fields';
 
-import { CheckboxField, LanguageSelectField } from '../Fields';
+const defaultPagesCaptions = defineMessages({
+  dashboard: {
+    id: 'app.editUserSettings.defaultPage.dashboard',
+    defaultMessage: 'Dashboard',
+  },
+  home: {
+    id: 'app.editUserSettings.defaultPage.home',
+    defaultMessage: 'Home page (about)',
+  },
+  instance: {
+    id: 'app.editUserSettings.defaultPage.instance',
+    defaultMessage: 'Instance overview',
+  },
+});
+
+const getDefaultPages = defaultMemoize(formatMessage =>
+  Object.keys(defaultPagesCaptions).map(key => ({
+    key,
+    name: formatMessage(defaultPagesCaptions[key]),
+  }))
+);
 
 const EditUserSettingsForm = ({
   submitting,
@@ -15,6 +38,7 @@ const EditUserSettingsForm = ({
   submitSucceeded = false,
   anyTouched,
   invalid,
+  intl: { formatMessage },
 }) => (
   <FormBox
     title={<FormattedMessage id="app.editUserSettings.title" defaultMessage="Edit settings" />}
@@ -87,9 +111,16 @@ const EditUserSettingsForm = ({
 
     <Field
       name="defaultLanguage"
-      tabIndex={1}
       component={LanguageSelectField}
       label={<FormattedMessage id="app.editUserSettings.defaultLanguage" defaultMessage="Default language:" />}
+    />
+
+    <Field
+      name="defaultPage"
+      component={SelectField}
+      options={getDefaultPages(formatMessage)}
+      addEmptyOption={true}
+      label={<FormattedMessage id="app.editUserSettings.defaultPage" defaultMessage="Default page (after login):" />}
     />
 
     <h3>
@@ -163,10 +194,13 @@ EditUserSettingsForm.propTypes = {
   submitting: PropTypes.bool,
   anyTouched: PropTypes.bool,
   invalid: PropTypes.bool,
+  intl: intlShape.isRequired,
 };
 
-export default reduxForm({
-  form: 'edit-user-settings',
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: false,
-})(EditUserSettingsForm);
+export default injectIntl(
+  reduxForm({
+    form: 'edit-user-settings',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+  })(EditUserSettingsForm)
+);

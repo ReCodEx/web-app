@@ -27,6 +27,7 @@ import { notArchivedGroupsSelector, fetchManyGroupsStatus } from '../../redux/se
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { transformLocalizedTextsFormData } from '../../helpers/localizedData';
+import { resourceStatus } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -35,15 +36,21 @@ const anyGroupVisible = defaultMemoize(groups =>
 );
 
 class Instance extends Component {
-  static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
+  static loadAsync = ({ instanceId, fetchGroupsStatus = null }, dispatch) => {
+    const promises = [dispatch(fetchInstanceIfNeeded(instanceId))];
+    if (fetchGroupsStatus === resourceStatus.FAILED) {
+      promises.push(dispatch(fetchAllGroups()));
+    }
+    return Promise.all(promises);
+  };
 
   componentWillMount() {
-    this.props.loadAsync();
+    this.props.loadAsync(this.props.fetchGroupsStatus);
   }
 
   componentWillReceiveProps(newProps) {
     if (this.props.params.instanceId !== newProps.params.instanceId) {
-      newProps.loadAsync();
+      newProps.loadAsync(newProps.fetchGroupsStatus);
     }
   }
 
@@ -197,7 +204,7 @@ export default withLinks(
             instanceId,
           })
         ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
-      loadAsync: () => Instance.loadAsync({ instanceId }, dispatch),
+      loadAsync: fetchGroupsStatus => Instance.loadAsync({ instanceId, fetchGroupsStatus }, dispatch),
     })
   )(Instance)
 );

@@ -1,5 +1,6 @@
 import { createApiCallPromise, getHeaders, isTwoHundredCode, abortAllPendingRequests } from '../helpers/api/tools';
 import { actionTypes as authActionTypes } from '../modules/auth';
+import { safeGet } from '../../helpers/common';
 
 export const CALL_API = 'recodex-api/CALL';
 export const createApiAction = request => ({ type: CALL_API, request });
@@ -42,6 +43,12 @@ export const apiCall = (
   meta: { endpoint, ...meta },
 });
 
+const lastLocation = {
+  pathname: null,
+  search: null,
+};
+
+
 const middleware = ({ dispatch, getState }) => next => action => {
   switch (action && action.type) {
     case CALL_API:
@@ -53,9 +60,16 @@ const middleware = ({ dispatch, getState }) => next => action => {
       break;
 
     case authActionTypes.LOGOUT:
-    case '@@router/LOCATION_CHANGE':
-      abortAllPendingRequests();
+    case '@@router/LOCATION_CHANGE': {
+      const pathname = safeGet(action, ['payload', 'pathname'], null);
+      const search = safeGet(action, ['payload', 'search'], null);
+      if (pathname !== lastLocation.pathname || search !== lastLocation.search) {
+        lastLocation.pathname = pathname;
+        lastLocation.search = search;
+        abortAllPendingRequests();
+      }
       break;
+    }
   }
 
   return next(action);

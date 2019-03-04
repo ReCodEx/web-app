@@ -40,15 +40,15 @@ class ChangePassword extends Component {
     this.checkIfIsDone(this.props);
 
     if (canUseDOM) {
-      const hash = window.location.hash;
-      if (hash.length === 0) {
+      const search = window.location.search;
+      if (search.length === 0) {
         const {
           push,
           links: { RESET_PASSWORD_URI },
         } = this.props;
-        push(RESET_PASSWORD_URI); // no hash -> redirect to the reset form
+        push(RESET_PASSWORD_URI); // no token in URL query -> redirect to the reset form
       } else {
-        let token = window.location.hash.substr(1);
+        let token = search.substr(1);
         let decodedToken = decode(token);
 
         if (!isTokenValid(decodedToken) || !isInScope(decodedToken, 'change-password')) {
