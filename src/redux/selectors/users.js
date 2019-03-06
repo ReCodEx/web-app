@@ -29,6 +29,11 @@ export const fetchManyStatus = createSelector(
   state => state.getIn(['fetchManyStatus', fetchManyEndpoint])
 );
 
+export const fetchUserStatus = createSelector(
+  [usersSelector, getParam],
+  (users, id) => users.getIn([id, 'state'])
+);
+
 export const getUser = userId =>
   createSelector(
     usersSelector,
