@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 
 import { loggedInUserIdSelector, selectedInstanceId, accessTokenSelector } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { getUser, getUserSettings } from '../../redux/selectors/users';
+import { getUser, fetchUserStatus, getUserSettings } from '../../redux/selectors/users';
 import { isTokenValid, isTokenInNeedOfRefreshment } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
+import { fetchManyUserInstancesStatus } from '../../redux/selectors/instances';
 import { fetchAllGroups } from '../../redux/modules/groups';
+import { fetchManyGroupsStatus } from '../../redux/selectors/groups';
 import { logout, refresh, selectInstance } from '../../redux/modules/auth';
-import { getJsData } from '../../redux/helpers/resourceManager';
+import { getJsData, resourceStatus } from '../../redux/helpers/resourceManager';
 
 // import fontawesome from '@fortawesome/fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -24,6 +26,9 @@ import './recodex.css';
 library.add(regularIcons, solidIcons, brandIcons);
 
 const customLoadGroups = routes => routes.filter(route => route.customLoadGroups).length > 0;
+
+const someStatusesFailed = (...statuses) =>
+  statuses.includes(resourceStatus.FAILED) && !statuses.includes(resourceStatus.PENDING);
 
 class App extends Component {
   static loadAsync = (params, dispatch, { userId, routes }) =>
@@ -50,7 +55,12 @@ class App extends Component {
   componentWillReceiveProps(newProps) {
     if (
       this.props.userId !== newProps.userId ||
-      (customLoadGroups(this.props.routes) && !customLoadGroups(newProps.routes))
+      (customLoadGroups(this.props.routes) && !customLoadGroups(newProps.routes)) ||
+      someStatusesFailed(
+        newProps.fetchUserStatus,
+        newProps.fetchManyGroupsStatus,
+        newProps.fetchManyUserInstancesStatus
+      )
     ) {
       newProps.loadAsync(newProps.userId, newProps.routes);
     }
@@ -109,6 +119,9 @@ App.propTypes = {
   routes: PropTypes.array,
   loadAsync: PropTypes.func,
   userSettings: PropTypes.object,
+  fetchUserStatus: PropTypes.string,
+  fetchManyGroupsStatus: PropTypes.string,
+  fetchManyUserInstancesStatus: PropTypes.string,
 };
 
 App.childContextTypes = {
@@ -124,6 +137,9 @@ export default connect(
       instanceId: selectedInstanceId(state),
       isLoggedIn: Boolean(userId),
       userSettings: getUserSettings(userId)(state),
+      fetchUserStatus: fetchUserStatus(state, userId),
+      fetchManyGroupsStatus: fetchManyGroupsStatus(state),
+      fetchManyUserInstancesStatus: fetchManyUserInstancesStatus(state, userId),
     };
   },
   dispatch => ({

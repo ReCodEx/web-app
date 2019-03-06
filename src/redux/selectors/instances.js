@@ -3,6 +3,9 @@ import { EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 import { loggedInUserSelector } from './users';
 import { selectedInstanceId } from './auth';
+import { fetchUsersInstancesEndpont } from '../modules/instances';
+
+const getParam = (state, id) => id;
 
 const getInstances = state => state.instances;
 const getResources = instances => instances.get('resources');
@@ -46,3 +49,8 @@ export const isAdminOfInstance = (userId, instanceId) =>
     instanceByIdSelector(instanceId),
     instance => !!instance && isReady(instance) && instance.getIn(['data', 'admin']) === userId
   );
+
+export const fetchManyUserInstancesStatus = createSelector(
+  [getInstances, getParam],
+  (state, userId) => state.getIn(['fetchManyStatus', fetchUsersInstancesEndpont(userId)])
+);

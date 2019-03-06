@@ -18,9 +18,11 @@ export const fetchInstances = () =>
     endpoint: '/instances',
   });
 
+export const fetchUsersInstancesEndpont = userId => `/users/${userId}/instances`;
+
 export const fetchUsersInstancesIfNeeded = userId =>
   actions.fetchMany({
-    endpoint: `/users/${userId}/instances`,
+    endpoint: fetchUsersInstancesEndpont(userId),
   });
 
 export const editInstance = actions.updateResource;
