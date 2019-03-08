@@ -19,7 +19,8 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   isPublic: false,
   publicStats: false,
   hasThreshold: false,
-  threshold: '',
+  isOrganizational: false,
+  threshold: 0,
   localizedTexts: getLocalizedTextsInitialValues([], EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
 };
 
