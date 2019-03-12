@@ -78,20 +78,34 @@ Sample content of this file is following:
 ```
 {
   "PORT": 8080,
-  "API_BASE": "https://recodex-devel.ms.mff.cuni.cz:4000/v1",
+  "API_BASE": "https://recodex.base.domain/api/v1",
   "TITLE": "ReCodEx",
   "SKIN": "skin-green",
   "ALLOW_NORMAL_REGISTRATION": true,
   "ALLOW_LDAP_REGISTRATION": false,
-  "ALLOW_CAS_REGISTRATION": true
+  "ALLOW_CAS_REGISTRATION": true,
+  "URL_PATH_PREFIX": "",
+  "PERSISTENT_TOKENS_KEY_PREFIX": "recodex",
+  "CAS_HELPDESK_URL": "mailto:recodex@example.domain"
 }
 ```
+
+Meaning of individual values:
+
+* `PORT` - On which port the node.js express server listens.
+* `API_BASE` - URL of API to which the frontend is connected.
+* `TITLE` - Prefix for the web page title.
+* `SKIN` - Which [skin color](https://adminlte.io/themes/AdminLTE/documentation/index.html) of the AdminLTE should be used.
+* `ALLOW_*` - Allows or disables different forms for registration. Note that this configuration should match which registration types are supported by the API.
+* `URL_PATH_PREFIX` - If the ReCodEx is not placed in the root path of the current domain, the path prefix should be placed here. This also allows running multiple ReCodEx frontends on one domain.
+* `PERSISTENT_TOKENS_KEY_PREFIX` - Prefix used for security token identifiers (in cookies or in local storage). If you run multiple ReCodEx instances on the same domain, it might be necessary to give each instance different prefix.
+* `CAS_HELPDESK_URL` - URL for a link that is displayed in case CAS registration fails. The URL may be either `mailto:` URL (with email to tech support) or `http(s):` URL leading to a web page where help can be found.
 
 ## Usage
 
 The application can be run in two modes, development and production. Development
 mode uses only client rendering and tracks code changes with rebuilds of the
-application in real time. In production mode the compilation (transpile to _ES5_
+application in real time. In production mode the compilation (transpilation to _ES5_
 standard using *Babel* and bundle into single file using *webpack*) has to be
 done separately prior to running. The scripts for compilation are provided as
 additional `npm` commands.

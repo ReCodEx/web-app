@@ -653,6 +653,8 @@
   "app.externalLinkPreview.showAsMarkdown",
   "app.externalLinkPreview.title",
   "app.externalRegistrationForm.failed",
+  "app.externalRegistrationForm.failedHelpdeskMail",
+  "app.externalRegistrationForm.failedHelpdeskPage",
   "app.externalRegistrationForm.gdprConfirm",
   "app.externalRegistrationForm.instance",
   "app.externalRegistrationForm.password",

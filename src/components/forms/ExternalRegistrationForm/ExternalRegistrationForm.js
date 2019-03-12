@@ -47,7 +47,7 @@ const ExternalRegistrationForm = ({
       <Alert bsStyle="danger">
         <FormattedMessage
           id="app.externalRegistrationForm.failed"
-          defaultMessage="Registration failed. Please check your information."
+          defaultMessage="Registration failed. Please check the notification message for more details."
         />
       </Alert>
     )}
