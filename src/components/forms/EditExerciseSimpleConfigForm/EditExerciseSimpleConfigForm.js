@@ -5,6 +5,7 @@ import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Alert } from 'react-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
@@ -26,6 +27,16 @@ import {
   exerciseConfigFormSmartFillCompilation,
 } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
+
+const supplementaryFilesOptions = defaultMemoize((files, locale) =>
+  files
+    .sort((a, b) => a.name.localeCompare(b.name, locale))
+    .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
+    .map(data => ({
+      key: data.name,
+      name: data.name,
+    }))
+);
 
 class EditExerciseSimpleConfigForm extends Component {
   render() {
@@ -105,8 +116,7 @@ class EditExerciseSimpleConfigForm extends Component {
                     return dataOnly ? (
                       <EditExerciseSimpleConfigDataTest
                         key={idx}
-                        environmentsWithEntryPoints={environmentsWithEntryPoints}
-                        supplementaryFiles={files}
+                        supplementaryFiles={supplementaryFilesOptions(files, locale)}
                         testName={test.name}
                         test={'config.' + encodeNumId(test.id)}
                         testErrors={formErrors && formErrors[encodeNumId(test.id)]}
@@ -115,21 +125,21 @@ class EditExerciseSimpleConfigForm extends Component {
                       />
                     ) : (
                       <EditExerciseSimpleConfigTest
-                        key={idx}
+                        change={change}
+                        environmentsWithEntryPoints={environmentsWithEntryPoints}
                         exercise={exercise}
                         extraFiles={testData && testData['extra-files']}
                         jarFiles={testData && testData['jar-files']}
-                        useOutFile={testData && testData.useOutFile}
-                        useCustomJudge={testData && testData.useCustomJudge}
-                        environmentsWithEntryPoints={environmentsWithEntryPoints}
-                        supplementaryFiles={files}
-                        testName={test.name}
-                        test={'config.' + encodeNumId(test.id)}
-                        testErrors={formErrors && formErrors[encodeNumId(test.id)]}
+                        key={idx}
                         smartFill={
                           idx === 0 && exerciseTests.length > 1 ? smartFill(test.id, exerciseTests, files) : undefined
                         }
-                        change={change}
+                        supplementaryFiles={supplementaryFilesOptions(files, locale)}
+                        test={'config.' + encodeNumId(test.id)}
+                        testErrors={formErrors && formErrors[encodeNumId(test.id)]}
+                        testName={test.name}
+                        useCustomJudge={testData && testData.useCustomJudge}
+                        useOutFile={testData && testData.useOutFile}
                       />
                     );
                   })}
