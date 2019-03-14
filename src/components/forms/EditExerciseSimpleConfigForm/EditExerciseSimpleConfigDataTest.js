@@ -23,14 +23,7 @@ const validateCustomJudge = value =>
 
 class EditExerciseSimpleConfigDataTest extends Component {
   render() {
-    const { supplementaryFiles, testName, test, testErrors, smartFill, change, intl } = this.props;
-    const supplementaryFilesOptions = supplementaryFiles
-      .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-      .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
-      .map(data => ({
-        key: data.name,
-        name: data.name,
-      }));
+    const { supplementaryFiles, testName, test, testErrors, smartFill, change } = this.props;
     return (
       <div className="configRow">
         <Row>
@@ -46,7 +39,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
             <FieldArray
               name={`${test}.input-files`}
               component={ExpandingInputFilesField}
-              options={supplementaryFilesOptions}
+              options={supplementaryFiles}
               change={change}
               leftLabel={
                 <FormattedMessage
@@ -124,7 +117,7 @@ class EditExerciseSimpleConfigDataTest extends Component {
             <Field
               name={`${test}.custom-judge`}
               component={SelectField}
-              options={supplementaryFilesOptions}
+              options={supplementaryFiles}
               addEmptyOption={true}
               validate={validateCustomJudge}
               label={
