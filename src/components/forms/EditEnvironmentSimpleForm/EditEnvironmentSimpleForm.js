@@ -8,6 +8,7 @@ import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
+import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
 
 class EditEnvironmentSimpleForm extends Component {
   render() {
@@ -97,24 +98,32 @@ EditEnvironmentSimpleForm.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const validate = formData => {
+const validate = (formData, { runtimeEnvironments }) => {
   const errors = {};
   const allowedEnvrionmentsCount = Object.values(formData).filter(value => value === true || value === 'true').length;
 
   if (allowedEnvrionmentsCount === 0) {
-    errors['_error'] = (
+    errors._error = (
       <FormattedMessage
         id="app.editEnvironmentSimpleForm.validation.environments"
         defaultMessage="Please add at least one runtime environment."
       />
     );
-  } else if (formData['data-linux'] && allowedEnvrionmentsCount > 1) {
-    errors['_error'] = (
-      <FormattedMessage
-        id="app.editEnvironmentSimpleForm.validation.dataOnlyCollision"
-        defaultMessage="Data-Only environment cannot be combined with any other environment."
-      />
-    );
+  } else if (allowedEnvrionmentsCount > 1) {
+    const standaloneEnvs = STANDALONE_ENVIRONMENTS.filter(envId => formData[envId]).map(envId => {
+      const env = runtimeEnvironments.find(({ id }) => id === envId);
+      return env && env.name;
+    });
+
+    if (standaloneEnvs.length > 0) {
+      errors._error = (
+        <FormattedMessage
+          id="app.editEnvironmentSimpleForm.validation.standaloneEnvironmentsCollisions"
+          defaultMessage="Some of the selected environments ({envs}) cannot be combined with any other environment. You need to deselect these environment(s) or make sure only one environment is selected."
+          values={{ envs: standaloneEnvs.join(', ') }}
+        />
+      );
+    }
   }
   return errors;
 };

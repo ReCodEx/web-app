@@ -15,7 +15,14 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   'node-linux',
   'php-linux',
   'python3',
+  'prolog',
 ];
+
+/**
+ * List of environments that must stand alone
+ * (exercise must be configured solely for this environment).
+ */
+export const STANDALONE_ENVIRONMENTS = ['data-linux', 'prolog'];
 
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
 
