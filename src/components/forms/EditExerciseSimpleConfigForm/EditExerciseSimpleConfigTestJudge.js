@@ -63,6 +63,8 @@ const EditExerciseSimpleConfigTestJudge = ({
   test,
   testErrors,
   useCustomJudge,
+  showBuiltins = true,
+  showJudgeArgs = true,
   intl,
 }) => (
   <React.Fragment>
@@ -70,19 +72,21 @@ const EditExerciseSimpleConfigTestJudge = ({
       <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeTitle" defaultMessage="Judge" />
     </h4>
 
-    <Field
-      name={`${test}.useCustomJudge`}
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.editExerciseSimpleConfigTests.useCustomJudge"
-          defaultMessage="Use custom judge binary"
-        />
-      }
-    />
+    {showBuiltins && (
+      <Field
+        name={`${test}.useCustomJudge`}
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.editExerciseSimpleConfigTests.useCustomJudge"
+            defaultMessage="Use custom judge binary"
+          />
+        }
+      />
+    )}
 
-    {useCustomJudge ? (
+    {useCustomJudge || !showBuiltins ? (
       <Field
         name={`${test}.custom-judge`}
         component={SelectField}
@@ -142,7 +146,7 @@ const EditExerciseSimpleConfigTestJudge = ({
       />
     )}
 
-    {useCustomJudge && (
+    {(useCustomJudge || !showBuiltins) && showJudgeArgs && (
       <FieldArray
         name={`${test}.judge-args`}
         component={ExpandingTextField}
@@ -178,6 +182,9 @@ EditExerciseSimpleConfigTestJudge.propTypes = {
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   useCustomJudge: PropTypes.bool,
+  showBuiltins: PropTypes.bool,
+  showJudgeArgs: PropTypes.bool,
+  onlyCustomJudge: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 

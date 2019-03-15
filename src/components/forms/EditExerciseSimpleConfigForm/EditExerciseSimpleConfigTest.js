@@ -6,14 +6,25 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 import Confirm from '../../forms/Confirm';
+import { ENV_DATA_ONLY_ID } from '../../../helpers/exercise/environments';
 
 import EditExerciseSimpleConfigTestCompilation from './EditExerciseSimpleConfigTestCompilation';
 import EditExerciseSimpleConfigTestInputs from './EditExerciseSimpleConfigTestInputs';
-import EditExerciseSimpleConfigTestCmdLine from './EditExerciseSimpleConfigTestCmdLine';
+import EditExerciseSimpleConfigTestExecArgs from './EditExerciseSimpleConfigTestExecArgs';
 import EditExerciseSimpleConfigTestOutput from './EditExerciseSimpleConfigTestOutput';
 import EditExerciseSimpleConfigTestJudge from './EditExerciseSimpleConfigTestJudge';
 
 import './EditExerciseSimpleConfigForm.css';
+
+const overrides = {
+  [ENV_DATA_ONLY_ID]: {
+    showCompilation: false,
+    showInputsStdIn: false,
+    showOutput: false,
+    showJudgeBuiltins: false,
+    showJudgeArgs: false,
+  },
+};
 
 class EditExerciseSimpleConfigTest extends Component {
   render() {
@@ -31,6 +42,28 @@ class EditExerciseSimpleConfigTest extends Component {
       useCustomJudge,
       useOutFile,
     } = this.props;
+
+    // Find out whether environment with override is selected (only standalone envs should have overrides)
+    const environmentWithOverride = exercise.runtimeEnvironments
+      .map(({ id }) => id)
+      .find(env => Boolean(overrides[env]));
+    const override = environmentWithOverride ? overrides[environmentWithOverride] : {};
+
+    // Prepare showFlags combining defaults with overrided for given environment
+    const {
+      showCompilation = true,
+      showInputs = true,
+      showInputsStdIn = true,
+      showArgs = true,
+      showOutput = true,
+      showJudge = true,
+      showJudgeBuiltins = true,
+      showJudgeArgs = true,
+    } = override;
+
+    const colsShown = showInputs + showArgs + showOutput + showJudge;
+    const lgColSpan = colsShown <= 4 ? 12 / colsShown : 3;
+
     return (
       <div className="configRow">
         <Row>
@@ -39,53 +72,69 @@ class EditExerciseSimpleConfigTest extends Component {
           </Col>
         </Row>
 
-        <EditExerciseSimpleConfigTestCompilation
-          change={change}
-          environmentsWithEntryPoints={environmentsWithEntryPoints}
-          exercise={exercise}
-          extraFiles={extraFiles}
-          jarFiles={jarFiles}
-          smartFillCompilation={smartFill ? smartFill.compilation : null}
-          supplementaryFiles={supplementaryFiles}
-          test={test}
-          testErrors={testErrors}
-        />
+        {showCompilation && (
+          <EditExerciseSimpleConfigTestCompilation
+            change={change}
+            environmentsWithEntryPoints={environmentsWithEntryPoints}
+            exercise={exercise}
+            extraFiles={extraFiles}
+            jarFiles={jarFiles}
+            smartFillCompilation={smartFill ? smartFill.compilation : null}
+            supplementaryFiles={supplementaryFiles}
+            test={test}
+            testErrors={testErrors}
+          />
+        )}
 
         <Row>
-          <Col md={6} lg={3}>
-            <EditExerciseSimpleConfigTestInputs
-              change={change}
-              smartFillInputs={smartFill ? smartFill.input : null}
-              supplementaryFiles={supplementaryFiles}
-              test={test}
-              testErrors={testErrors}
-            />
-          </Col>
-          <Col md={6} lg={3}>
-            <EditExerciseSimpleConfigTestCmdLine
-              smartFillArgs={smartFill ? smartFill.args : null}
-              test={test}
-              testErrors={testErrors}
-            />
-          </Col>
-          <Col md={6} lg={3}>
-            <EditExerciseSimpleConfigTestOutput
-              smartFillOutput={smartFill ? smartFill.output : null}
-              supplementaryFiles={supplementaryFiles}
-              test={test}
-              testErrors={testErrors}
-              useOutFile={useOutFile}
-            />
-          </Col>
-          <Col md={6} lg={3}>
-            <EditExerciseSimpleConfigTestJudge
-              smartFillJudge={smartFill ? smartFill.judge : null}
-              supplementaryFiles={supplementaryFiles}
-              test={test}
-              testErrors={testErrors}
-              useCustomJudge={useCustomJudge}
-            />
-          </Col>
+          {showInputs && (
+            <Col md={6} lg={lgColSpan}>
+              <EditExerciseSimpleConfigTestInputs
+                change={change}
+                smartFillInputs={smartFill ? smartFill.input : null}
+                supplementaryFiles={supplementaryFiles}
+                test={test}
+                testErrors={testErrors}
+                showStdinFile={showInputsStdIn}
+              />
+            </Col>
+          )}
+
+          {showArgs && (
+            <Col md={6} lg={lgColSpan}>
+              <EditExerciseSimpleConfigTestExecArgs
+                smartFillArgs={smartFill ? smartFill.args : null}
+                test={test}
+                testErrors={testErrors}
+              />
+            </Col>
+          )}
+
+          {showOutput && (
+            <Col md={6} lg={lgColSpan}>
+              <EditExerciseSimpleConfigTestOutput
+                smartFillOutput={smartFill ? smartFill.output : null}
+                supplementaryFiles={supplementaryFiles}
+                test={test}
+                testErrors={testErrors}
+                useOutFile={useOutFile}
+              />
+            </Col>
+          )}
+
+          {showJudge && (
+            <Col md={6} lg={lgColSpan}>
+              <EditExerciseSimpleConfigTestJudge
+                smartFillJudge={smartFill ? smartFill.judge : null}
+                supplementaryFiles={supplementaryFiles}
+                test={test}
+                testErrors={testErrors}
+                useCustomJudge={useCustomJudge}
+                showBuiltins={showJudgeBuiltins}
+                showJudgeArgs={showJudgeArgs}
+              />
+            </Col>
+          )}
         </Row>
 
         {Boolean(smartFill) && (

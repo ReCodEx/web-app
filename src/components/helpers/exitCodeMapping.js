@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { ENV_FREEPASCAL_ID, ENV_MONO_ID, ENV_JAVA_ID, ENV_PYTHON3_ID } from '../../helpers/exercise/environments';
 
 /**
  * Free Pascal Runtime Error Codes
@@ -88,17 +89,17 @@ const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {
   }
 
   switch (runtimeEnvironmentId) {
-    case 'java':
+    case ENV_JAVA_ID:
       return javaMapping(exitCode);
-    case 'mono':
+    case ENV_MONO_ID:
       return monoMapping(exitCode);
-    case 'freepascal-linux':
+    case ENV_FREEPASCAL_ID:
       if (pascalCodes[exitCode]) {
         return pascalCodes[exitCode];
       } else {
         return exitCode;
       }
-    case 'python3':
+    case ENV_PYTHON3_ID:
       if (python3Codes[exitCode]) {
         return python3Codes[exitCode];
       } else {

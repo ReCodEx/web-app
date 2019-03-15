@@ -1,28 +1,39 @@
 import { defaultMemoize } from 'reselect';
 import { safeGet, arrayToObject, createIndex } from '../../helpers/common';
 
+export const ENV_C_GCC_ID = 'c-gcc-linux';
+export const ENV_CPP_GCC_ID = 'cxx-gcc-linux';
+export const ENV_DATA_ONLY_ID = 'data-linux';
+export const ENV_FREEPASCAL_ID = 'freepascal-linux';
+export const ENV_JAVA_ID = 'java';
+export const ENV_MONO_ID = 'mono';
+export const ENV_NODEJS_ID = 'node-linux';
+export const ENV_PHP_ID = 'php-linux';
+export const ENV_PYTHON3_ID = 'python3';
+export const ENV_PROLOG_ID = 'prolog';
+
 /**
  * List of environment IDs allowed in simple form.
  * @todo If we find a better way how to do this ...
  */
 const SIMPLE_FORM_ENVIRONMENTS = [
-  'c-gcc-linux',
-  'cxx-gcc-linux',
-  'data-linux',
-  'freepascal-linux',
-  'java',
-  'mono',
-  'node-linux',
-  'php-linux',
-  'python3',
-  'prolog',
+  ENV_C_GCC_ID,
+  ENV_CPP_GCC_ID,
+  ENV_DATA_ONLY_ID,
+  ENV_FREEPASCAL_ID,
+  ENV_JAVA_ID,
+  ENV_MONO_ID,
+  ENV_NODEJS_ID,
+  ENV_PHP_ID,
+  ENV_PYTHON3_ID,
+  ENV_PROLOG_ID,
 ];
 
 /**
  * List of environments that must stand alone
  * (exercise must be configured solely for this environment).
  */
-export const STANDALONE_ENVIRONMENTS = ['data-linux', 'prolog'];
+export const STANDALONE_ENVIRONMENTS = [ENV_DATA_ONLY_ID, ENV_PROLOG_ID];
 
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
 

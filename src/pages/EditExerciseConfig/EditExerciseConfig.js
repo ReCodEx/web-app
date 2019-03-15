@@ -68,11 +68,7 @@ import {
   getPossibleVariablesNames,
 } from '../../helpers/exercise/environments';
 import { isSimple, SIMPLE_CONFIG_TYPE, ADVANCED_CONFIG_TYPE } from '../../helpers/exercise/config';
-import {
-  getSimpleConfigInitValues,
-  transformSimpleConfigValues,
-  DATA_ONLY_ID,
-} from '../../helpers/exercise/configSimple';
+import { getSimpleConfigInitValues, transformSimpleConfigValues } from '../../helpers/exercise/configSimple';
 import {
   getPipelines,
   getPipelinesInitialValues,
@@ -552,9 +548,6 @@ class EditExerciseConfig extends Component {
                                     exercise={exercise}
                                     exerciseTests={tests}
                                     environmentsWithEntryPoints={environmentsWithEntryPoints}
-                                    dataOnly={Boolean(
-                                      exercise.runtimeEnvironments.find(env => env.id === DATA_ONLY_ID)
-                                    )}
                                     onSubmit={this.transformAndSendConfigValuesCreator(
                                       transformSimpleConfigValues,
                                       pipelines,

@@ -1,7 +1,6 @@
 import { defaultMemoize } from 'reselect';
-import { safeGet, encodeNumId, identity, EMPTY_ARRAY } from '../../helpers/common';
-
-export const DATA_ONLY_ID = 'data-linux';
+import { safeGet, encodeNumId, identity, EMPTY_ARRAY } from '../common';
+import { ENV_DATA_ONLY_ID, ENV_JAVA_ID } from './environments';
 
 /**
  * Base class for all pipeline variables being edited in the config form.
@@ -241,7 +240,7 @@ const PIPELINE_VARS_DESCRIPTORS = [
   ),
   new FileListVariable('input-files', 'actual-inputs'),
   new FileListVariable('extra-files', 'extra-file-names', false, true),
-  new Variable('jar-files', 'remote-file[]', false, [], true).setRuntimeFilter('java'),
+  new Variable('jar-files', 'remote-file[]', false, [], true).setRuntimeFilter(ENV_JAVA_ID),
   new Variable('entry-point', 'file', false)
     .setPipelineFilter('hasEntryPoint')
     .setTransformPostprocess(value => value || '$entry-point'),
@@ -275,7 +274,7 @@ export const getSimpleConfigInitValues = defaultMemoize((config, tests, exercise
       }
     });
 
-    if (!environmentsIds.includes(DATA_ONLY_ID)) {
+    if (!environmentsIds.includes(ENV_DATA_ONLY_ID)) {
       // Special derived properties, which are present only in non-data-only exercises.
       testObj.useOutFile = Boolean(testObj['actual-output']);
       testObj.useCustomJudge = Boolean(testObj['custom-judge']);
@@ -306,7 +305,7 @@ const mergeVariables = (newVars, origVars) => {
 const getRelevantPipelines = (pipelines, envId, useOutFile) => {
   pipelines = pipelines.filter(pipeline => pipeline.runtimeEnvironmentIds.includes(envId));
 
-  if (envId === DATA_ONLY_ID) {
+  if (envId === ENV_DATA_ONLY_ID) {
     pipelines = pipelines.filter(pipeline => pipeline.parameters.judgeOnlyPipeline);
   } else {
     // We need to select execution pipeline type based on a checkbox (for non-data-only exercises)

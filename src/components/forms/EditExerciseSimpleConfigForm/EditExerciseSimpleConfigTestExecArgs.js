@@ -8,7 +8,7 @@ import Icon from '../../icons';
 import { ExpandingTextField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 
-const EditExerciseSimpleConfigTestCmdLine = ({ smartFillArgs, test, testErrors }) => (
+const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors }) => (
   <React.Fragment>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.cmdlineTitle" defaultMessage="Command Line" />
@@ -47,10 +47,10 @@ const EditExerciseSimpleConfigTestCmdLine = ({ smartFillArgs, test, testErrors }
   </React.Fragment>
 );
 
-EditExerciseSimpleConfigTestCmdLine.propTypes = {
+EditExerciseSimpleConfigTestExecArgs.propTypes = {
   smartFillArgs: PropTypes.func,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
 };
 
-export default EditExerciseSimpleConfigTestCmdLine;
+export default EditExerciseSimpleConfigTestExecArgs;
