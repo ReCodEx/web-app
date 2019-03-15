@@ -14,10 +14,10 @@ import SubmitButton from '../SubmitButton';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
-import EditExerciseSimpleConfigDataTest from './EditExerciseSimpleConfigDataTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { encodeNumId, createIndex, safeSet } from '../../../helpers/common';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
+import { ENV_JAVA_ID, ENV_DATA_ONLY_ID } from '../../../helpers/exercise/environments';
 import {
   exerciseConfigFormSmartFillAll,
   exerciseConfigFormSmartFillInput,
@@ -41,7 +41,6 @@ const supplementaryFilesOptions = defaultMemoize((files, locale) =>
 class EditExerciseSimpleConfigForm extends Component {
   render() {
     const {
-      dataOnly,
       reset,
       change,
       handleSubmit,
@@ -59,6 +58,8 @@ class EditExerciseSimpleConfigForm extends Component {
       smartFill,
       intl: { locale },
     } = this.props;
+
+    const dataOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_DATA_ONLY_ID));
 
     return (
       <div>
@@ -113,17 +114,7 @@ class EditExerciseSimpleConfigForm extends Component {
                   .sort((a, b) => a.name.localeCompare(b.name, locale))
                   .map((test, idx) => {
                     const testData = formValues && formValues.config && formValues.config[encodeNumId(test.id)];
-                    return dataOnly ? (
-                      <EditExerciseSimpleConfigDataTest
-                        key={idx}
-                        supplementaryFiles={supplementaryFilesOptions(files, locale)}
-                        testName={test.name}
-                        test={'config.' + encodeNumId(test.id)}
-                        testErrors={formErrors && formErrors[encodeNumId(test.id)]}
-                        smartFill={idx === 0 ? smartFill(test.id, exerciseTests, files) : undefined}
-                        change={change}
-                      />
-                    ) : (
+                    return (
                       <EditExerciseSimpleConfigTest
                         change={change}
                         environmentsWithEntryPoints={environmentsWithEntryPoints}
@@ -156,7 +147,6 @@ EditExerciseSimpleConfigForm.propTypes = {
   initialValues: PropTypes.object,
   reset: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
-  dataOnly: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool,
   hasFailed: PropTypes.bool,
@@ -175,7 +165,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const validate = (formData, { dataOnly }) => {
+const validate = formData => {
   const errors = {};
 
   for (const testKey in formData.config) {
@@ -228,14 +218,14 @@ const validate = (formData, { dataOnly }) => {
     }
 
     // Special test for Java JAR files only !!!
-    const jarFiles = test['jar-files']['java'];
+    const jarFiles = test['jar-files'][ENV_JAVA_ID];
     if (jarFiles) {
       jarFiles.forEach(
         (file, idx) =>
           file.trim() === '' &&
           safeSet(
             errors,
-            ['config', testKey, 'jar-files', 'java', idx],
+            ['config', testKey, 'jar-files', ENV_JAVA_ID, idx],
             <FormattedMessage
               id="app.editExerciseConfigForm.validation.noFileSelected"
               defaultMessage="Please select a file."
@@ -254,7 +244,7 @@ const validate = (formData, { dataOnly }) => {
           indices.forEach(idx => {
             safeSet(
               errors,
-              ['config', testKey, 'jar-files', 'java', idx],
+              ['config', testKey, 'jar-files', ENV_JAVA_ID, idx],
               <FormattedMessage
                 id="app.editExerciseConfigForm.validation.duplicateFile"
                 defaultMessage="Duplicate file detected."

@@ -8,7 +8,14 @@ import Icon from '../../icons';
 import { SelectField, ExpandingInputFilesField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 
-const EditExerciseSimpleConfigTestInputs = ({ change, smartFillInputs, supplementaryFiles, test, testErrors }) => (
+const EditExerciseSimpleConfigTestInputs = ({
+  change,
+  smartFillInputs,
+  supplementaryFiles,
+  test,
+  testErrors,
+  showStdinFile = false,
+}) => (
   <React.Fragment>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.inputTitle" defaultMessage="Input" />
@@ -27,13 +34,15 @@ const EditExerciseSimpleConfigTestInputs = ({ change, smartFillInputs, supplemen
       }
     />
 
-    <Field
-      name={`${test}.stdin-file`}
-      component={SelectField}
-      options={supplementaryFiles}
-      addEmptyOption={true}
-      label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Stdin:" />}
-    />
+    {showStdinFile && (
+      <Field
+        name={`${test}.stdin-file`}
+        component={SelectField}
+        options={supplementaryFiles}
+        addEmptyOption={true}
+        label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Stdin:" />}
+      />
+    )}
 
     {Boolean(smartFillInputs) && (
       <div className="smart-fill-tinybar">
@@ -62,6 +71,7 @@ EditExerciseSimpleConfigTestInputs.propTypes = {
   supplementaryFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
+  showStdinFile: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTestInputs;

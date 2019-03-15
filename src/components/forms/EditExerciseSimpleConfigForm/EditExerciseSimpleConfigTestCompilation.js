@@ -10,6 +10,7 @@ import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 import { SelectField, ExpandingInputFilesField, ExpandingSelectField } from '../Fields';
 import Confirm from '../../forms/Confirm';
+import { ENV_JAVA_ID } from '../../../helpers/exercise/environments';
 
 class EditExerciseSimpleConfigTestCompilation extends Component {
   constructor(props) {
@@ -99,7 +100,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
 
                             <Grid fluid>
                               <Row>
-                                {env.id === 'java' && (
+                                {env.id === ENV_JAVA_ID && (
                                   /*
                                    * A special case for Java only !!!
                                    */
@@ -129,7 +130,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                  */
                                 }
 
-                                <Col lg={exercise.runtimeEnvironments.length === 1 && env.id === 'java' ? 6 : 12}>
+                                <Col lg={exercise.runtimeEnvironments.length === 1 && env.id === ENV_JAVA_ID ? 6 : 12}>
                                   <FieldArray
                                     name={`${test}.extra-files.${env.id}`}
                                     component={ExpandingInputFilesField}
