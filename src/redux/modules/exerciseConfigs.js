@@ -367,6 +367,9 @@ export const exerciseConfigFormSmartFillJudge = (formName, firstTestId, tests, f
 export const exerciseConfigFormSmartFillCompilation = (formName, firstTestId, tests, files) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['extra-files', 'entry-point', 'jar-files']);
 
+export const exerciseConfigFormSmartFillExtraFiles = (formName, firstTestId, tests, files) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['extra-files']);
+
 /*
  * Advanced config form.
  */

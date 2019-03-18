@@ -1,6 +1,6 @@
 import { defaultMemoize } from 'reselect';
 import { safeGet, encodeNumId, identity, EMPTY_ARRAY } from '../common';
-import { ENV_DATA_ONLY_ID, ENV_JAVA_ID, ENV_PROLOG_ID } from './environments';
+import { ENV_DATA_ONLY_ID, ENV_JAVA_ID } from './environments';
 
 /**
  * Base class for all pipeline variables being edited in the config form.
