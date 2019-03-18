@@ -16,7 +16,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
-import { ENV_JAVA_ID, ENV_DATA_ONLY_ID } from '../../../helpers/exercise/environments';
+import { ENV_JAVA_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID } from '../../../helpers/exercise/environments';
 import {
   exerciseConfigFormSmartFillAll,
   exerciseConfigFormSmartFillInput,
@@ -24,6 +24,7 @@ import {
   exerciseConfigFormSmartFillOutput,
   exerciseConfigFormSmartFillJudge,
   exerciseConfigFormSmartFillCompilation,
+  exerciseConfigFormSmartFillExtraFiles,
 } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 import { encodeNumId, createIndex, safeSet, safeGet } from '../../../helpers/common';
@@ -60,6 +61,7 @@ class EditExerciseSimpleConfigForm extends Component {
     } = this.props;
 
     const dataOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_DATA_ONLY_ID));
+    const prologOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_PROLOG_ID));
 
     return (
       <div>
@@ -73,6 +75,18 @@ class EditExerciseSimpleConfigForm extends Component {
             </p>
           </div>
         )}
+
+        {prologOnly && (
+          <div className="callout callout-info">
+            <p>
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.isPrologOnly"
+                defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file comprise Prolog queries in text format, each on a single line. The output holds the serialized answers, each answer on a corresponding line to the input query. The answer comprise of all possible satisfactions of the query, sorted in ascending lexicographical order to avoid ambiguity."
+              />
+            </p>
+          </div>
+        )}
+
         <FormBox
           title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Edit Exercise Configuration" />}
           unlimitedHeight
@@ -309,6 +323,7 @@ export default connect(
       output: () => dispatch(exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)),
       judge: () => dispatch(exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)),
       compilation: () => dispatch(exerciseConfigFormSmartFillCompilation(FORM_NAME, testId, tests, files)),
+      extraFiles: () => dispatch(exerciseConfigFormSmartFillExtraFiles(FORM_NAME, testId, tests, files)),
     }),
   })
 )(
