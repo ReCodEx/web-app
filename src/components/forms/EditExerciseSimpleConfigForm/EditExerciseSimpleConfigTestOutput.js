@@ -28,25 +28,34 @@ const validateExpectedOutput = value =>
     undefined
   );
 
-const EditExerciseSimpleConfigTestOutput = ({ smartFillOutput, supplementaryFiles, test, testErrors, useOutFile }) => (
+const EditExerciseSimpleConfigTestOutput = ({
+  smartFillOutput,
+  supplementaryFiles,
+  test,
+  testErrors,
+  useOutFile,
+  showOutFile = true,
+}) => (
   <React.Fragment>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.outputTitle" defaultMessage="Output" />
     </h4>
 
-    <Field
-      name={`${test}.useOutFile`}
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.editExerciseSimpleConfigTests.useOutfile"
-          defaultMessage="Use output file instead of stdout"
-        />
-      }
-    />
+    {showOutFile && (
+      <Field
+        name={`${test}.useOutFile`}
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.editExerciseSimpleConfigTests.useOutfile"
+            defaultMessage="Use output file instead of stdout"
+          />
+        }
+      />
+    )}
 
-    {useOutFile && (
+    {showOutFile && useOutFile && (
       <Field
         name={`${test}.actual-output`}
         component={TextField}
@@ -94,6 +103,7 @@ EditExerciseSimpleConfigTestOutput.propTypes = {
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   useOutFile: PropTypes.bool,
+  showOutFile: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTestOutput;

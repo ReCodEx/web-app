@@ -14,6 +14,7 @@ const EditExerciseSimpleConfigTestInputs = ({
   supplementaryFiles,
   test,
   testErrors,
+  showInputFiles = false,
   showStdinFile = false,
 }) => (
   <React.Fragment>
@@ -21,18 +22,20 @@ const EditExerciseSimpleConfigTestInputs = ({
       <FormattedMessage id="app.editExerciseSimpleConfigTests.inputTitle" defaultMessage="Input" />
     </h4>
 
-    <FieldArray
-      name={`${test}.input-files`}
-      component={ExpandingInputFilesField}
-      options={supplementaryFiles}
-      change={change}
-      leftLabel={
-        <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesActual" defaultMessage="Input file:" />
-      }
-      rightLabel={
-        <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesRename" defaultMessage="Rename as:" />
-      }
-    />
+    {showInputFiles && (
+      <FieldArray
+        name={`${test}.input-files`}
+        component={ExpandingInputFilesField}
+        options={supplementaryFiles}
+        change={change}
+        leftLabel={
+          <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesActual" defaultMessage="Input file:" />
+        }
+        rightLabel={
+          <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesRename" defaultMessage="Rename as:" />
+        }
+      />
+    )}
 
     {showStdinFile && (
       <Field
@@ -40,7 +43,7 @@ const EditExerciseSimpleConfigTestInputs = ({
         component={SelectField}
         options={supplementaryFiles}
         addEmptyOption={true}
-        label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Stdin:" />}
+        label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Std. input:" />}
       />
     )}
 
@@ -71,6 +74,7 @@ EditExerciseSimpleConfigTestInputs.propTypes = {
   supplementaryFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
+  showInputFiles: PropTypes.bool,
   showStdinFile: PropTypes.bool,
 };
 

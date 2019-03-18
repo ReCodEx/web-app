@@ -303,7 +303,7 @@
   "app.editExerciseSimpleConfigTests.extraFilesRename": "Rename as:",
   "app.editExerciseSimpleConfigTests.inputFilesActual": "Input file:",
   "app.editExerciseSimpleConfigTests.inputFilesRename": "Rename as:",
-  "app.editExerciseSimpleConfigTests.inputStdin": "Stdin:",
+  "app.editExerciseSimpleConfigTests.inputStdin": "Std. input:",
   "app.editExerciseSimpleConfigTests.inputTitle": "Input",
   "app.editExerciseSimpleConfigTests.jarFiles": "Additional JAR file:",
   "app.editExerciseSimpleConfigTests.judgeArgs": "Judge arguments:",

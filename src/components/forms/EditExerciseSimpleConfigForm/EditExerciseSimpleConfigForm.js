@@ -15,7 +15,6 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
-import { encodeNumId, createIndex, safeSet } from '../../../helpers/common';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
 import { ENV_JAVA_ID, ENV_DATA_ONLY_ID } from '../../../helpers/exercise/environments';
 import {
@@ -27,6 +26,7 @@ import {
   exerciseConfigFormSmartFillCompilation,
 } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
+import { encodeNumId, createIndex, safeSet, safeGet } from '../../../helpers/common';
 
 const supplementaryFilesOptions = defaultMemoize((files, locale) =>
   files
@@ -218,7 +218,7 @@ const validate = formData => {
     }
 
     // Special test for Java JAR files only !!!
-    const jarFiles = test['jar-files'][ENV_JAVA_ID];
+    const jarFiles = safeGet(test, ['jar-files', ENV_JAVA_ID]);
     if (jarFiles) {
       jarFiles.forEach(
         (file, idx) =>
