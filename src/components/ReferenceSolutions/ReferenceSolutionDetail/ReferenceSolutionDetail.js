@@ -45,6 +45,7 @@ class ReferenceSolutionDetail extends Component {
       evaluations,
       deleteEvaluation = null,
       refreshSolutionEvaluations = null,
+      runtimeEnvironments,
     } = this.props;
     const { openFileId } = this.state;
     const evaluationsJS = evaluations && evaluations.toJS();
@@ -60,8 +61,15 @@ class ReferenceSolutionDetail extends Component {
           <Col md={6} sm={12}>
             <ReferenceSolutionStatus
               description={description}
-              solution={{ createdAt, userId }}
+              submittedAt={createdAt}
+              userId={userId}
+              submittedBy={submittedBy}
               exerciseId={exercise.id}
+              environment={
+                runtimeEnvironments &&
+                runtimeEnvironmentId &&
+                runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
+              }
             />
             <Row>
               {files.map(file => (
@@ -177,6 +185,7 @@ ReferenceSolutionDetail.propTypes = {
   evaluations: PropTypes.object.isRequired,
   deleteEvaluation: PropTypes.func,
   refreshSolutionEvaluations: PropTypes.func,
+  runtimeEnvironments: PropTypes.array,
 };
 
 export default ReferenceSolutionDetail;

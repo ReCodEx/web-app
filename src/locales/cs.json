@@ -969,6 +969,7 @@
   "app.randomMessages.m9": "Nakreslit hrocha",
   "app.referenceSolution.exerciseBroken": "Úloha je rozbitá, a proto není v tuto chvíli možné nechat toto vzorové řešení znovu vyhodnotit.",
   "app.referenceSolution.exerciseNoLongerHasEnvironment": "Úloha již nepodporuje běhové prostředí, pod kterým bylo toto řešení odevzdáno. Řešení není možné znovu vyhodnotit.",
+  "app.referenceSolution.reevaluatedBy": "Nechal znovu vyhodnotit",
   "app.referenceSolutionDetail.exercise": "Úloha",
   "app.referenceSolutionDetail.title.details": "Detail referenčního řešení",
   "app.referenceSolutionTable.noDescription": "popis nebyl uveden",

@@ -969,6 +969,7 @@
   "app.randomMessages.m9",
   "app.referenceSolution.exerciseBroken",
   "app.referenceSolution.exerciseNoLongerHasEnvironment",
+  "app.referenceSolution.reevaluatedBy",
   "app.referenceSolutionDetail.exercise",
   "app.referenceSolutionDetail.title.details",
   "app.referenceSolutionTable.noDescription",
