@@ -30,7 +30,7 @@ import { hasPermissions } from '../../helpers/common';
 const messages = defineMessages({
   title: {
     id: 'app.exercise.referenceSolutionTitle',
-    defaultMessage: 'Reference solution overview',
+    defaultMessage: 'Reference Solution Overview',
   },
 });
 
@@ -87,7 +87,7 @@ class ReferenceSolution extends Component {
           },
           {
             text: (
-              <FormattedMessage id="app.exercise.referenceSolutionDetail" defaultMessage="Reference solution detail" />
+              <FormattedMessage id="app.exercise.referenceSolutionDetail" defaultMessage="Reference Solution Detail" />
             ),
             iconName: ['far', 'gem'],
           },
@@ -129,6 +129,7 @@ class ReferenceSolution extends Component {
                       exercise={exercise}
                       deleteEvaluation={deleteEvaluation}
                       refreshSolutionEvaluations={refreshSolutionEvaluations}
+                      runtimeEnvironments={exercise.runtimeEnvironments}
                     />
                   )}
                 </FetchManyResourceRenderer>

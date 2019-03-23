@@ -48,7 +48,6 @@ const lastLocation = {
   search: null,
 };
 
-
 const middleware = ({ dispatch, getState }) => next => action => {
   switch (action && action.type) {
     case CALL_API:
