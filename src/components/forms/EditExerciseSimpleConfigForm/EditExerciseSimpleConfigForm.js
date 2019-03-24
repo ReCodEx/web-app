@@ -81,7 +81,7 @@ class EditExerciseSimpleConfigForm extends Component {
             <p>
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.isPrologOnly"
-                defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file comprise Prolog queries in text format, each on a single line. The output holds the serialized answers, each answer on a corresponding line to the input query. The answer comprise of all possible satisfactions of the query, sorted in ascending lexicographical order to avoid ambiguity."
+                defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file holds a Prolog query in text format. The output holds enumeration of all possible answers, each answer on a separate line. The answers are sorted in ascending lexicographical order to avoid ambiguity."
               />
             </p>
           </div>
@@ -179,7 +179,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const validate = formData => {
+const validate = (formData, { exercise }) => {
   const errors = {};
 
   for (const testKey in formData.config) {
@@ -266,6 +266,20 @@ const validate = formData => {
             );
           });
         }
+      }
+    }
+
+    // Special case -- Prolog only
+    if (exercise.runtimeEnvironments.find(env => env.id === ENV_PROLOG_ID)) {
+      if (!test['stdin-file']) {
+        safeSet(
+          errors,
+          ['config', testKey, 'stdin-file'],
+          <FormattedMessage
+            id="app.editExerciseConfigForm.validation.stdinFileEmpty"
+            defaultMessage="Please, fill in the std. input file."
+          />
+        );
       }
     }
   }
