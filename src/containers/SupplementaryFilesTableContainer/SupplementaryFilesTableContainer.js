@@ -38,7 +38,7 @@ const SupplementaryFilesTableContainer = ({
     description={
       <FormattedMessage
         id="app.supplementaryFilesTable.description"
-        defaultMessage="Supplementary files are files which can be used in job configuration."
+        defaultMessage="Supplementary files are files which can be used in exercise configuration (as input files, expected output files, extra compilation files, custom judges, ...)."
       />
     }
     HeaderComponent={SupplementaryFilesTableHeaderRow}
