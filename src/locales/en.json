@@ -1018,7 +1018,7 @@
   "app.resultsArchiveInfoBox.description": "Detailed logs and dumps",
   "app.resultsArchiveInfoBox.title": "Results archive",
   "app.resultsTable.total": "Total",
-  "app.roles.description.empoweredSupervisor": "A more priviledges version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines.",
+  "app.roles.description.empoweredSupervisor": "A more priviledged version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines.",
   "app.roles.description.student": "Student is the least priviledged user who can see only groups he/she is member of and solve assignments inside these groups.",
   "app.roles.description.superadmin": "Omnipotent and omniscient user who can do anything in the instances to which he/she belongs to. Similar to root in linux or Q in Startrek.",
   "app.roles.description.supervisor": "Supervisor of a group is basically a teacher who manages own groups and assigns exercises to students in these groups. Supervisor is also capable of creating new exercises.",

@@ -57,7 +57,7 @@ export const roleDescriptions = {
   [EMPOWERED_SUPERVISOR_ROLE]: (
     <FormattedMessage
       id="app.roles.description.empoweredSupervisor"
-      defaultMessage="A more priviledges version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines."
+      defaultMessage="A more priviledged version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines."
     />
   ),
   [SUPERADMIN_ROLE]: (
