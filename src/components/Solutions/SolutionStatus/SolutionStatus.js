@@ -101,7 +101,7 @@ const SolutionStatus = ({
               <Icon icon="user" />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage id="app.solution.reevaluatedBy" defaultMessage="Re-evaluated by" />:
+              <FormattedMessage id="generic.reevaluatedBy" defaultMessage="Re-evaluated by" />:
             </th>
             <td>
               <UsersNameContainer userId={submittedBy} showEmail="icon" />

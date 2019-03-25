@@ -70,7 +70,7 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
               <Icon icon="user" />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage id="app.referenceSolution.reevaluatedBy" defaultMessage="Re-evaluated by" />:
+              <FormattedMessage id="generic.reevaluatedBy" defaultMessage="Re-evaluated by" />:
             </th>
             <td>
               <UsersNameContainer userId={submittedBy} showEmail="icon" />
