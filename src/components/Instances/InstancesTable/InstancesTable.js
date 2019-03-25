@@ -26,13 +26,13 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
     <tbody>
       {instances
         .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-        .map(({ id, name, admin, hasValidLicence }) => (
+        .map(({ id, name, adminId, hasValidLicence }) => (
           <tr key={id}>
             <td>
               <Link to={INSTANCE_URI_FACTORY(id)}>{name}</Link>
             </td>
             <td>
-              <UsersNameContainer userId={admin} />
+              <UsersNameContainer userId={adminId} />
             </td>
             <td>
               <SuccessOrFailureIcon success={hasValidLicence} />

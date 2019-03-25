@@ -6,6 +6,7 @@ import { Table } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import Markdown from '../../widgets/Markdown';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const getDescription = (localizedTexts, locale) => {
   const description = getLocalizedDescription({ localizedTexts }, locale);
@@ -27,6 +28,7 @@ const InstanceInfoTable = ({
     hasValidLicence,
     isOpen,
     isAllowed,
+    adminId,
     rootGroup: { localizedTexts },
   },
   locale,
@@ -40,7 +42,16 @@ const InstanceInfoTable = ({
       noPadding
       unlimitedHeight>
       <Table>
-        <tbody />
+        <tbody>
+          <tr>
+            <th>
+              <FormattedMessage id="app.instanceDetail.admin" defaultMessage="Instance Admin" />:
+            </th>
+            <td>
+              <UsersNameContainer userId={adminId} />
+            </td>
+          </tr>
+        </tbody>
       </Table>
     </Box>
   </div>
@@ -52,8 +63,9 @@ InstanceInfoTable.propTypes = {
     hasValidLicence: PropTypes.bool.isRequired,
     isOpen: PropTypes.bool.isRequired,
     isAllowed: PropTypes.bool.isRequired,
+    adminId: PropTypes.string.isRequired,
     rootGroup: PropTypes.shape({
-      localizedTexts: PropTypes.object.isRequired,
+      localizedTexts: PropTypes.array.isRequired,
     }),
   }),
   locale: PropTypes.string.isRequired,
