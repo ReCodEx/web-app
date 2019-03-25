@@ -9,7 +9,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
-import Markdown from '../../components/widgets/Markdown';
 import GroupTree from '../../components/Groups/GroupTree';
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
@@ -83,8 +82,8 @@ class Instance extends Component {
         ]}>
         {data => (
           <div>
-            {/* TODO: not editable right now due differences in api and web-app
-            {isSuperAdmin && (
+            {/* TODO: not editable right now due differences in api and web-app */}
+            {false && isSuperAdmin && (
               <Row>
                 <Col sm={12} md={6}>
                   <p>
@@ -97,7 +96,7 @@ class Instance extends Component {
                   </p>
                 </Col>
               </Row>
-            )} */}
+            )}
 
             <Row>
               <Col sm={12} md={6}>
