@@ -266,7 +266,7 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
     .setInitialPostprocess(({ 'custom-judge': customJudge }) => {
       const res = { 'custom-judge': customJudge, useCustomJudge: Boolean(customJudge) };
       if (customJudge) {
-        res['judge-type'] = ''; // custom-judge descriptor must be defined after judgee-type, so this override will work !!!
+        res['judge-type'] = ''; // custom-judge descriptor must be defined after judge-type, so this override will work !!!
       }
       return res;
     })
@@ -290,9 +290,7 @@ const _ENV_SPECIFIC_VARS_DESCRIPTORS = {
   [ENV_DATA_ONLY_ID]: [
     new FileListVariable('input-files', 'actual-inputs'),
     new Variable('run-args', 'string[]'),
-    new Variable('custom-judge', 'remote-file').setTransformPostprocess((value, formDataTest) =>
-      formDataTest.useCustomJudge ? value : ''
-    ),
+    new Variable('custom-judge', 'remote-file'),
   ],
 };
 
