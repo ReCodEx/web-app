@@ -264,7 +264,10 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
   ),
   new Variable('custom-judge', 'remote-file')
     .setInitialPostprocess(({ 'custom-judge': customJudge }) => {
-      const res = { 'custom-judge': customJudge, useCustomJudge: Boolean(customJudge) };
+      const res = {
+        'custom-judge': customJudge,
+        useCustomJudge: Boolean(customJudge),
+      };
       if (customJudge) {
         res['judge-type'] = ''; // custom-judge descriptor must be defined after judgee-type, so this override will work !!!
       }

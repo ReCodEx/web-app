@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
@@ -26,10 +26,11 @@ import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
 import { notArchivedGroupsSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import { transformLocalizedTextsFormData } from '../../helpers/localizedData';
+import { transformLocalizedTextsFormData, getLocalizedName } from '../../helpers/localizedData';
 import { resourceStatus } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../helpers/withLinks';
+import InstanceInfoTable from '../../components/Instances/InstanceDetail/InstanceInfoTable';
 
 const anyGroupVisible = defaultMemoize(groups =>
   Boolean(groups.size > 0 && groups.find(group => group.getIn(['data', 'permissionHints', 'viewDetail'])))
@@ -66,12 +67,13 @@ class Instance extends Component {
       isSuperAdmin,
       hasThreshold,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY },
+      intl: { locale },
     } = this.props;
 
     return (
       <Page
         resource={instance}
-        title={instance => instance.name}
+        title={instance => getLocalizedName(instance.rootGroup, locale)}
         description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}
         breadcrumbs={[
           {
@@ -81,6 +83,7 @@ class Instance extends Component {
         ]}>
         {data => (
           <div>
+            {/* TODO: not editable right now due differences in api and web-app
             {isSuperAdmin && (
               <Row>
                 <Col sm={12} md={6}>
@@ -94,13 +97,11 @@ class Instance extends Component {
                   </p>
                 </Col>
               </Row>
-            )}
+            )} */}
 
             <Row>
               <Col sm={12} md={6}>
-                <Box title={<FormattedMessage id="app.instance.detailTitle" defaultMessage="Instance Description" />}>
-                  <Markdown source={data.description} />
-                </Box>
+                <InstanceInfoTable instance={data} locale={locale} />
 
                 {(isSuperAdmin || isAdmin) && (
                   <React.Fragment>
@@ -175,6 +176,7 @@ Instance.propTypes = {
   isSuperAdmin: PropTypes.bool.isRequired,
   links: PropTypes.object.isRequired,
   hasThreshold: PropTypes.bool,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const addGroupFormSelector = formValueSelector('addGroup');
@@ -206,5 +208,5 @@ export default withLinks(
         ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
       loadAsync: fetchGroupsStatus => Instance.loadAsync({ instanceId, fetchGroupsStatus }, dispatch),
     })
-  )(Instance)
+  )(injectIntl(Instance))
 );
