@@ -82,8 +82,7 @@ class Instance extends Component {
         ]}>
         {data => (
           <div>
-            {/* TODO: not editable right now due differences in api and web-app */}
-            {false && isSuperAdmin && (
+            {isSuperAdmin && (
               <Row>
                 <Col sm={12} md={6}>
                   <p>
