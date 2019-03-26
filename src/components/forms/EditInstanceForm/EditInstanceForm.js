@@ -6,7 +6,7 @@ import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
-import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
+import { CheckboxField } from '../Fields';
 
 const EditInstanceForm = ({
   submitting,
@@ -46,23 +46,9 @@ const EditInstanceForm = ({
     )}
 
     <Field
-      name="name"
-      component={TextField}
-      maxLength={255}
-      label={
-        <span>
-          <FormattedMessage id="generic.name" defaultMessage="Name" />:
-        </span>
-      }
-    />
-    <Field
-      name="description"
-      component={MarkdownTextAreaField}
-      label={<FormattedMessage id="app.editInstanceForm.description" defaultMessage="Description:" />}
-    />
-    <Field
       name="isOpen"
       component={CheckboxField}
+      onOff
       label={<FormattedMessage id="app.editInstanceForm.isOpen" defaultMessage="Is open" />}
     />
   </FormBox>
@@ -78,18 +64,8 @@ EditInstanceForm.propTypes = {
   invalid: PropTypes.bool,
 };
 
-const validate = ({ name }) => {
+const validate = () => {
   const errors = {};
-
-  if (!name) {
-    errors['name'] = (
-      <FormattedMessage
-        id="app.editInstanceForm.validation.emptyName"
-        defaultMessage="Please fill the name of the instance."
-      />
-    );
-  }
-
   return errors;
 };
 
