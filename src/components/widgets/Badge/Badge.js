@@ -28,7 +28,7 @@ class Badge extends Component {
         </div>
         <div className="info">
           <p>
-            <Link to={USER_URI_FACTORY(id)}>{fullName}</Link>
+            <Link to={USER_URI_FACTORY(id)}>🐰&nbsp;{fullName}</Link>
           </p>
           <Link to={EDIT_USER_URI_FACTORY(id)}>
             <Icon icon="edit" gapRight />

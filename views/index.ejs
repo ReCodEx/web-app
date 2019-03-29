@@ -99,6 +99,26 @@
     <script>
       document.getElementById('loading-screen').remove();
       document.body.className = "<%- skin ? skin : 'skin-green' %> fixed";
+
+      function work_element(texts) {
+        var i;
+        for (i = 0; i < texts.length; i++) {
+          var myel = texts[i];
+          if (myel.childNodes.length === 1 && myel.childNodes[0].nodeName === "#text") {
+            myel.innerText =  myel.innerText.replace(/o/g, "🥚");
+          }
+        }
+      }
+
+      function work() {
+        work_element(document.getElementsByTagName("span"));
+        work_element(document.getElementsByTagName("p"));
+      }
+
+      document.addEventListener("DOMContentLoaded", function(event) {
+        work();
+        setInterval(work, 2000);
+      })
     </script>
   </body>
 </html>
