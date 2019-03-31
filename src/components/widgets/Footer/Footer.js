@@ -7,9 +7,8 @@ const Footer = ({ version }) => (
     <div className="pull-right hidden-xs">
       <FormattedHTMLMessage
         id="app.footer.version"
-        defaultMessage="<strong>Version</strong> {version} (<a href='{changelogUrl}' target='_blank'>changelog</a>)"
+        defaultMessage="<strong>Version</strong> 1.4.19 (<a href='{changelogUrl}' target='_blank'>changelog</a>)"
         values={{
-          version,
           changelogUrl: 'https://github.com/ReCodEx/wiki/wiki/Changelog',
         }}
       />
