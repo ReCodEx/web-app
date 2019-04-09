@@ -16,11 +16,12 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
 import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
-import { ENV_JAVA_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID } from '../../../helpers/exercise/environments';
+import { ENV_JAVA_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments';
 import {
   exerciseConfigFormSmartFillAll,
   exerciseConfigFormSmartFillInput,
   exerciseConfigFormSmartFillArgs,
+  exerciseConfigFormSmartFillEntryPoint,
   exerciseConfigFormSmartFillOutput,
   exerciseConfigFormSmartFillJudge,
   exerciseConfigFormSmartFillCompilation,
@@ -62,6 +63,7 @@ class EditExerciseSimpleConfigForm extends Component {
 
     const dataOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_DATA_ONLY_ID));
     const prologOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_PROLOG_ID));
+    const haskellOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_HASKELL_ID));
 
     return (
       <div>
@@ -82,6 +84,17 @@ class EditExerciseSimpleConfigForm extends Component {
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.isPrologOnly"
                 defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file holds a Prolog query in text format. The output holds enumeration of all possible answers, each answer on a separate line. The answers are sorted in ascending lexicographical order to avoid ambiguity."
+              />
+            </p>
+          </div>
+        )}
+
+        {haskellOnly && (
+          <div className="callout callout-info">
+            <p>
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigForm.isHaskellOnly"
+                defaultMessage="The exercise is configured for Haskell. Haskell tests require a name of the entry-point function which is invoked as the main function (without arguments). The result of the function call is serialized to stdout and default ReCodEx judge compares it with the expected output. For testing purposes, you may provide your own testing functions in extra files. Remember, that extra files have to employ modules for code separation (whilst the submitted solution should be in the Main module)."
               />
             </p>
           </div>
@@ -334,6 +347,7 @@ export default connect(
       all: () => dispatch(exerciseConfigFormSmartFillAll(FORM_NAME, testId, tests, files)),
       input: () => dispatch(exerciseConfigFormSmartFillInput(FORM_NAME, testId, tests, files)),
       args: () => dispatch(exerciseConfigFormSmartFillArgs(FORM_NAME, testId, tests, files)),
+      entryPoint: () => dispatch(exerciseConfigFormSmartFillEntryPoint(FORM_NAME, testId, tests, files)),
       output: () => dispatch(exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)),
       judge: () => dispatch(exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)),
       compilation: () => dispatch(exerciseConfigFormSmartFillCompilation(FORM_NAME, testId, tests, files)),

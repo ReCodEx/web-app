@@ -6,11 +6,12 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 import Confirm from '../../forms/Confirm';
-import { ENV_DATA_ONLY_ID, ENV_PROLOG_ID } from '../../../helpers/exercise/environments';
+import { ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments';
 
 import EditExerciseSimpleConfigTestCompilation from './EditExerciseSimpleConfigTestCompilation';
 import EditExerciseSimpleConfigTestInputs from './EditExerciseSimpleConfigTestInputs';
 import EditExerciseSimpleConfigTestExecArgs from './EditExerciseSimpleConfigTestExecArgs';
+import EditExerciseSimpleConfigTestExecEntryPoint from './EditExerciseSimpleConfigTestEntryPoint';
 import EditExerciseSimpleConfigTestOutput from './EditExerciseSimpleConfigTestOutput';
 import EditExerciseSimpleConfigTestJudge from './EditExerciseSimpleConfigTestJudge';
 import EditExerciseSimpleConfigTestExtraFiles from './EditExerciseSimpleConfigTestExtraFiles';
@@ -29,6 +30,14 @@ const overrides = {
     showCompilation: false,
     showInputsFiles: false,
     showArgs: false,
+    showOutputFile: false,
+    showExtraFiles: true,
+    showJudge: false,
+  },
+  [ENV_HASKELL_ID]: {
+    showCompilation: false,
+    showArgs: false,
+    showStringEntryPoint: true,
     showOutputFile: false,
     showExtraFiles: true,
     showJudge: false,
@@ -60,20 +69,21 @@ class EditExerciseSimpleConfigTest extends Component {
 
     // Prepare showFlags combining defaults with overrided for given environment
     const {
-      showCompilation = true,
-      showInputs = true,
+      showCompilation = true, // compilation block (per-env extra files and entry points)
+      showInputs = true, // input data module (input files + stdin)
       showInputsFiles = true,
       showInputsStdIn = true,
-      showArgs = true,
-      showOutput = true,
+      showArgs = true, // execution args module
+      showStringEntryPoint = false, // specialized input for specifying entry point as a string (e.g., Haskell function to be called)
+      showOutput = true, // data output module (expected file + output file if stdout is not used)
       showOutputFile = true,
-      showExtraFiles = false,
-      showJudge = true,
-      showJudgeBuiltins = true,
-      showJudgeArgs = true,
+      showExtraFiles = false, // specialized extra files (for single environment)
+      showJudge = true, // judge selection module
+      showJudgeBuiltins = true, // select box with predefined judges
+      showJudgeArgs = true, // additional args for the judge
     } = override;
 
-    const colsShown = showInputs + showArgs + showOutput + showJudge + showExtraFiles;
+    const colsShown = showInputs + showArgs + showStringEntryPoint + showOutput + showJudge + showExtraFiles;
     const lgColSpan = colsShown <= 4 ? 12 / colsShown : 3;
 
     return (
@@ -113,10 +123,33 @@ class EditExerciseSimpleConfigTest extends Component {
             </Col>
           )}
 
+          {showExtraFiles && (
+            <Col md={6} lg={lgColSpan}>
+              <EditExerciseSimpleConfigTestExtraFiles
+                change={change}
+                smartFillExtraFiles={smartFill ? smartFill.extraFiles : null}
+                supplementaryFiles={supplementaryFiles}
+                test={test}
+                testErrors={testErrors}
+                environmentId={environmentWithOverride}
+              />
+            </Col>
+          )}
+
           {showArgs && (
             <Col md={6} lg={lgColSpan}>
               <EditExerciseSimpleConfigTestExecArgs
                 smartFillArgs={smartFill ? smartFill.args : null}
+                test={test}
+                testErrors={testErrors}
+              />
+            </Col>
+          )}
+
+          {showStringEntryPoint && (
+            <Col md={6} lg={lgColSpan}>
+              <EditExerciseSimpleConfigTestExecEntryPoint
+                smartFillEntryPoint={smartFill ? smartFill.entryPoint : null}
                 test={test}
                 testErrors={testErrors}
               />
@@ -132,19 +165,6 @@ class EditExerciseSimpleConfigTest extends Component {
                 testErrors={testErrors}
                 useOutFile={useOutFile}
                 showOutFile={showOutputFile}
-              />
-            </Col>
-          )}
-
-          {showExtraFiles && (
-            <Col md={6} lg={lgColSpan}>
-              <EditExerciseSimpleConfigTestExtraFiles
-                change={change}
-                smartFillExtraFiles={smartFill ? smartFill.extraFiles : null}
-                supplementaryFiles={supplementaryFiles}
-                test={test}
-                testErrors={testErrors}
-                environmentId={environmentWithOverride}
               />
             </Col>
           )}
