@@ -1,6 +1,6 @@
 import { defaultMemoize } from 'reselect';
 import { safeGet, encodeNumId, identity, EMPTY_ARRAY } from '../common';
-import { ENV_DATA_ONLY_ID, ENV_JAVA_ID } from './environments';
+import { ENV_DATA_ONLY_ID, ENV_JAVA_ID, ENV_HASKELL_ID } from './environments';
 
 /**
  * Base class for all pipeline variables being edited in the config form.
@@ -294,6 +294,16 @@ const _ENV_SPECIFIC_VARS_DESCRIPTORS = {
     new FileListVariable('input-files', 'actual-inputs'),
     new Variable('run-args', 'string[]'),
     new Variable('custom-judge', 'remote-file'),
+  ],
+  [ENV_HASKELL_ID]: [
+    new Variable('expected-output', 'remote-file'),
+    new Variable('stdin-file', 'remote-file'),
+    new Variable('judge-type', 'string', 'recodex-judge-normal'),
+    new Variable('custom-judge', 'remote-file'),
+    new Variable('judge-args', 'string[]'),
+    new FileListVariable('input-files', 'actual-inputs'),
+    new FileListVariable('extra-files', 'extra-file-names').individualEnvs().forCompilation(),
+    new Variable('entry-point', 'string').overrideFormProp('entry-point-string'),
   ],
 };
 

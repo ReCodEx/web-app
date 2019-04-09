@@ -258,7 +258,7 @@ const prepareTransformations = (template, firstTestId, tests, files) => {
         file,
         matches: bestMatchFileNames(file, firstTestId, tests, files),
       }));
-      if (template['entry-point'][envId] !== undefined) {
+      if (template['entry-point'] && template['entry-point'][envId] !== undefined) {
         entryPoint[envId] = template['entry-point'][envId];
       }
     }
@@ -343,7 +343,8 @@ export const exerciseConfigFormSmartFillAll = (formName, firstTestId, tests, fil
     'custom-judge',
     'judge-args',
     'extra-files',
-    'entry-point',
+    'entry-point', // per env, part of compilation block
+    'entry-point-string', // standalone, used for Haskell
     'jar-files',
   ]);
 
@@ -352,6 +353,9 @@ export const exerciseConfigFormSmartFillInput = (formName, firstTestId, tests, f
 
 export const exerciseConfigFormSmartFillArgs = (formName, firstTestId, tests, files) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['run-args']);
+
+export const exerciseConfigFormSmartFillEntryPoint = (formName, firstTestId, tests, files) =>
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['entry-point-string']);
 
 export const exerciseConfigFormSmartFillOutput = (formName, firstTestId, tests, files) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['expected-output', 'useOutFile', 'actual-output']);

@@ -11,6 +11,7 @@ export const ENV_NODEJS_ID = 'node-linux';
 export const ENV_PHP_ID = 'php-linux';
 export const ENV_PYTHON3_ID = 'python3';
 export const ENV_PROLOG_ID = 'prolog';
+export const ENV_HASKELL_ID = 'haskell';
 
 /**
  * List of environment IDs allowed in simple form.
@@ -27,13 +28,14 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_PHP_ID,
   ENV_PYTHON3_ID,
   ENV_PROLOG_ID,
+  ENV_HASKELL_ID,
 ];
 
 /**
  * List of environments that must stand alone
  * (exercise must be configured solely for this environment).
  */
-export const STANDALONE_ENVIRONMENTS = [ENV_DATA_ONLY_ID, ENV_PROLOG_ID];
+export const STANDALONE_ENVIRONMENTS = [ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID];
 
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
 
