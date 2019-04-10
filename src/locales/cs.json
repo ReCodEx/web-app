@@ -220,6 +220,7 @@
   "app.editEnvironmentConfig.warnings.ambiguousVariable": "Tato proměnná je definovaná ve více pipelines. Nastavená hodnota bude použita ve všech.",
   "app.editEnvironmentConfig.warnings.noPipelinesVariables": "Zatím nejsou vybrané žádné pipelines. Jména proměnných proto není možné verifikovat.",
   "app.editEnvironmentConfig.warnings.unknownVariable": "Tato proměnná není definována v žádné pipeline.",
+  "app.editEnvironmentSimpleForm.standaloneEnvironment": "Separované běhové prostředí",
   "app.editEnvironmentSimpleForm.submit": "Uložit prostředí",
   "app.editEnvironmentSimpleForm.submitting": "Ukládám...",
   "app.editEnvironmentSimpleForm.success": "Konfigurace byla změněna.",
