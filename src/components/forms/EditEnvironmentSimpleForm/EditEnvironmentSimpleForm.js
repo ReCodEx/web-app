@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
-import { Alert, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
-import { RefreshIcon } from '../../icons';
+import Icon, { RefreshIcon, InfoIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
 
 class EditEnvironmentSimpleForm extends Component {
@@ -33,7 +33,41 @@ class EditEnvironmentSimpleForm extends Component {
               .sort((a, b) => a.longName.localeCompare(b.longName, locale))
               .map((environment, i) => (
                 <Col key={i} xs={12} sm={6}>
-                  <Field name={`${environment.id}`} component={CheckboxField} onOff label={environment.longName} />
+                  <Field
+                    name={`${environment.id}`}
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <span>
+                        {environment.longName}
+
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id={`environment-${environment.id}`}>
+                              {environment.description} {environment.extensions}
+                            </Tooltip>
+                          }>
+                          <InfoIcon gapLeft className="text-primary" timid />
+                        </OverlayTrigger>
+
+                        {STANDALONE_ENVIRONMENTS.includes(environment.id) && (
+                          <OverlayTrigger
+                            placement="bottom"
+                            overlay={
+                              <Tooltip id={`environment-standalone-${environment.id}`}>
+                                <FormattedMessage
+                                  id="app.editEnvironmentSimpleForm.standaloneEnvironment"
+                                  defaultMessage="Separated runtime environment"
+                                />
+                              </Tooltip>
+                            }>
+                            <Icon icon={['far', 'star']} smallGapLeft className="text-warning half-opaque" />
+                          </OverlayTrigger>
+                        )}
+                      </span>
+                    }
+                  />
                 </Col>
               ))}
           </Row>

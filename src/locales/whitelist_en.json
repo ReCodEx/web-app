@@ -220,6 +220,7 @@
   "app.editEnvironmentConfig.warnings.ambiguousVariable",
   "app.editEnvironmentConfig.warnings.noPipelinesVariables",
   "app.editEnvironmentConfig.warnings.unknownVariable",
+  "app.editEnvironmentSimpleForm.standaloneEnvironment",
   "app.editEnvironmentSimpleForm.submit",
   "app.editEnvironmentSimpleForm.submitting",
   "app.editEnvironmentSimpleForm.success",
