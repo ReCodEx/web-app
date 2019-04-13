@@ -202,9 +202,11 @@ const detectUnreachableServer = (err, dispatch) => {
 const processResponse = (call, dispatch) =>
   call
     .then(res => res.json())
-    .then(({ success = true, code, msg = '', payload = {} }) => {
+    .then(({ success = true, code, error = null, payload = {} }) => {
       if (!success) {
-        dispatch && dispatch(addNotification(`Server response: ${msg}`, false));
+        if (error && error.message) {
+          dispatch && dispatch(addNotification(`Server response: ${error.message}`, false));
+        }
         return Promise.reject(new Error('The API call was not successful.'));
       } else {
         return Promise.resolve(payload);
