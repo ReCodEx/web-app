@@ -49,14 +49,20 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
     if (!extraFiles && !jarFiles) {
       return false;
     }
-    for (const files of Object.values(extraFiles)) {
-      if (files && files.length > 0) {
-        return true;
+
+    if (extraFiles) {
+      for (const files of Object.values(extraFiles)) {
+        if (files && files.length > 0) {
+          return true;
+        }
       }
     }
-    for (const files of Object.values(jarFiles)) {
-      if (files && files.length > 0) {
-        return true;
+
+    if (jarFiles) {
+      for (const files of Object.values(jarFiles)) {
+        if (files && files.length > 0) {
+          return true;
+        }
       }
     }
     return false;
