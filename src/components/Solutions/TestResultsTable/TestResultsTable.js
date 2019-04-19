@@ -33,7 +33,7 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) => (
   </span>
 );
 
-const showTimeResults = (key, wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded) => {
+const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded) => {
   const showWall = Boolean(wallTimeRatio) || (wallTimeExceeded && !cpuTimeExceeded);
   const showCpu = Boolean(cpuTimeRatio) || cpuTimeExceeded || !showWall;
   return (
@@ -164,7 +164,7 @@ class TestResultsTable extends Component {
           {tickOrCrossAndRatioOrValue(memoryExceeded === false, memoryRatio, memory, prettyPrintBytes, 1024)}
         </td>
         <td className="text-center">
-          {showTimeResults(testName, wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded)}
+          {showTimeResults(wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded)}
         </td>
 
         <td className="text-center">{exitCodeMapping(runtimeEnvironmentId, exitCode)}</td>

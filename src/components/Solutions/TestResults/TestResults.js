@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
+import { defaultMemoize } from 'reselect';
 
-const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog }) => (
+const getSortedTestResults = defaultMemoize(({ testResults }, locale) =>
+  testResults.sort((a, b) => a.testName.localeCompare(b.testName, locale))
+);
+
+const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog, intl: { locale } }) => (
   <Box
     title={<FormattedMessage id="app.submission.evaluation.title.testResults" defaultMessage="Test Results" />}
-    noPadding={true}
-    collapsable={true}
-    isOpen={true}
+    noPadding
+    collapsable
+    isOpen
     unlimitedHeight>
     <TestResultsTable
-      results={evaluation.testResults}
+      results={getSortedTestResults(evaluation, locale)}
       runtimeEnvironmentId={runtimeEnvironmentId}
       showJudgeLog={showJudgeLog}
     />
@@ -23,6 +28,7 @@ TestResults.propTypes = {
   evaluation: PropTypes.object.isRequired,
   runtimeEnvironmentId: PropTypes.string,
   showJudgeLog: PropTypes.bool,
+  intl: intlShape.isRequired,
 };
 
-export default TestResults;
+export default injectIntl(TestResults);
