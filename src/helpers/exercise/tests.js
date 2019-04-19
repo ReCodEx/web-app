@@ -42,17 +42,18 @@ export const transformTestsValues = formData => {
   let tests = [];
 
   for (const test of formData.tests) {
+    const testName = test.name.trim();
     const testWeight = uniformScore ? 100 : Number(test.weight);
-    scoreConfigData.testWeights[test.name] = testWeight;
+    scoreConfigData.testWeights[testName] = testWeight;
 
     tests.push(
       test.id
         ? {
             id: test.id,
-            name: test.name,
+            name: testName,
           }
         : {
-            name: test.name,
+            name: testName,
           }
     );
   }
