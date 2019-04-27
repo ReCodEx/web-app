@@ -20,13 +20,21 @@ export const statusTypes = {
  * Actions
  */
 
-export const createAccount = (firstName, lastName, email, password, passwordConfirm, instanceId) =>
+export const createAccount = (
+  firstName,
+  lastName,
+  email,
+  password,
+  passwordConfirm,
+  instanceId,
+  createdBySuperadmin = false
+) =>
   createApiAction({
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',
     endpoint: '/users',
     body: { firstName, lastName, email, password, passwordConfirm, instanceId },
-    meta: { instanceId },
+    meta: { instanceId, createdBySuperadmin },
   });
 
 export const createExternalAccount = (instanceId, serviceId, credentials, authType = 'default') =>

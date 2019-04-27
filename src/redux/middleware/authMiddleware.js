@@ -128,6 +128,9 @@ const middleware = store => next => action => {
     /* eslint no-fallthrough: "off" */
     case actionTypes.LOGIN_FULFILLED:
     case registrationActionTypes.CREATE_ACCOUNT_FULFILLED:
+      if (safeGet(action, ['meta', 'createdBySuperadmin'], false)) {
+        break;
+      }
       storeToken(action.payload.accessToken);
       storeInstanceId(safeGet(action, ['meta', 'instanceId'], action.payload.user.privateData.instancesIds[0]));
       if (typeof window !== 'undefined') {
