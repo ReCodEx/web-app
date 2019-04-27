@@ -196,14 +196,16 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
 
       [registrationActionTypes.CREATE_ACCOUNT_FULFILLED]: (
         state,
-        { payload: { accessToken }, meta: { instanceId = null, service = LOCAL_LOGIN } }
+        { payload: { accessToken }, meta: { instanceId = null, service = LOCAL_LOGIN, createdBySuperadmin = false } }
       ) =>
-        state
-          .setIn(['status', service], statusTypes.LOGGED_IN)
-          .set('jwt', accessToken)
-          .set('accessToken', decodeAndValidateAccessToken(accessToken))
-          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
-          .set('instanceId', instanceId),
+        createdBySuperadmin
+          ? state
+          : state
+              .setIn(['status', service], statusTypes.LOGGED_IN)
+              .set('jwt', accessToken)
+              .set('accessToken', decodeAndValidateAccessToken(accessToken))
+              .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
+              .set('instanceId', instanceId),
 
       [actionTypes.LOGOUT]: state =>
         state

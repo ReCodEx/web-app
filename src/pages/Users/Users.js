@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { push } from 'react-router-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Modal } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
-import { SettingsIcon, TransferIcon, BanIcon } from '../../components/icons';
+import { SettingsIcon, TransferIcon, BanIcon, UserIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
@@ -17,12 +17,15 @@ import Box from '../../components/widgets/Box';
 import UsersList from '../../components/Users/UsersList';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
+import CreateUserForm from '../../components/forms/CreateUserForm';
 import { loggedInUserSelector, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { takeOver } from '../../redux/modules/auth';
 import { selectedInstanceId } from '../../redux/selectors/auth';
+import { createAccount } from '../../redux/modules/registration';
+import { fetchPaginated } from '../../redux/modules/pagination';
 
 import withLinks from '../../helpers/withLinks';
-import { knownRoles, isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles.js';
+import { knownRoles, isSupervisorRole, isStudentRole, isSuperadminRole } from '../../components/helpers/usersRoles.js';
 
 const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
@@ -42,7 +45,22 @@ const transformAndSetFilterData = defaultMemoize(setFilters => ({ search, roles 
   return setFilters(data);
 });
 
+const createUserInitialValues = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  passwordConfirm: '',
+};
+
+const PAGINATION_CONTAINER_ID = 'users-all';
+const PAGINATION_CONTAINER_ENDPOINT = 'users';
+
 class Users extends Component {
+  state = { dialogOpen: false };
+  openDialog = () => this.setState({ dialogOpen: true });
+  closeDialog = () => this.setState({ dialogOpen: false });
+
   filtersCreator = (filters, setFilters) => (
     <FilterUsersListForm
       onSubmit={setFilters ? transformAndSetFilterData(setFilters) : null}
@@ -100,6 +118,20 @@ class Users extends Component {
     );
   });
 
+  createNewUserAccount = data => {
+    const {
+      instanceId,
+      createUser,
+      reloadPagination,
+      intl: { locale },
+    } = this.props;
+
+    return createUser(data, instanceId).then(() => {
+      this.closeDialog();
+      return reloadPagination(locale);
+    });
+  };
+
   render() {
     const { user } = this.props;
 
@@ -131,11 +163,39 @@ class Users extends Component {
             )}
 
             {isSupervisorRole(user.privateData.role) && !isStudentRole(user.privateData.role) && (
-              <Box title={<FormattedMessage id="app.users.listTitle" defaultMessage="Users" />} unlimitedHeight>
+              <Box
+                title={<FormattedMessage id="app.users.listTitle" defaultMessage="Users" />}
+                unlimitedHeight
+                footer={
+                  isSuperadminRole(user.privateData.role) ? (
+                    <div className="text-center">
+                      <Button bsStyle="success" onClick={this.openDialog}>
+                        <UserIcon gapRight />
+                        <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />
+                      </Button>
+
+                      <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+                        <Modal.Header closeButton>
+                          <Modal.Title>
+                            <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />
+                          </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <CreateUserForm
+                            onSubmit={this.createNewUserAccount}
+                            initialValues={createUserInitialValues}
+                          />
+                        </Modal.Body>
+                      </Modal>
+                    </div>
+                  ) : (
+                    undefined
+                  )
+                }>
                 <div>
                   <PaginationContainer
-                    id="users-all"
-                    endpoint="users"
+                    id={PAGINATION_CONTAINER_ID}
+                    endpoint={PAGINATION_CONTAINER_ENDPOINT}
                     defaultOrderBy="name"
                     filtersCreator={this.filtersCreator}>
                     {({ data, offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy, reload }) => (
@@ -168,11 +228,14 @@ class Users extends Component {
 
 Users.propTypes = {
   instanceId: PropTypes.string,
-  push: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
-  takeOver: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
   user: ImmutablePropTypes.map.isRequired,
+  push: PropTypes.func.isRequired,
+  takeOver: PropTypes.func.isRequired,
+  createUser: PropTypes.func.isRequired,
+  reloadPagination: PropTypes.func.isRequired,
+  links: PropTypes.object.isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default withLinks(
@@ -187,6 +250,10 @@ export default withLinks(
     dispatch => ({
       push: url => dispatch(push(url)),
       takeOver: (userId, redirectUrl) => dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
+      createUser: ({ firstName, lastName, email, password, passwordConfirm }, instanceId) =>
+        dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId, true)), // true = skip auth changes
+      reloadPagination: locale =>
+        dispatch(fetchPaginated(PAGINATION_CONTAINER_ID, PAGINATION_CONTAINER_ENDPOINT)(locale, null, null, true)), // true = force invalidate
     })
-  )(Users)
+  )(injectIntl(Users))
 );
