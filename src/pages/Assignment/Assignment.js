@@ -145,7 +145,7 @@ class Assignment extends Component {
                     <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
-                        <FormattedMessage id="app.assignment.editSettings" defaultMessage="Edit Assignment Settings" />
+                        <FormattedMessage id="app.assignment.editSettings" defaultMessage="Edit Assignment" />
                       </Button>
                     </LinkContainer>
                     <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
@@ -270,7 +270,7 @@ export default withLinks(
         isSupervisorOf: groupId => isSupervisorOf(loggedInUserId, groupId)(state),
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutions(userId || loggedInUserId, assignmentId)(state),
+        solutions: getUserSolutions(state, userId || loggedInUserId, assignmentId),
         fetchManyStatus: fetchManyUserSolutionsStatus(userId || loggedInUserId, assignmentId)(state),
       };
     },

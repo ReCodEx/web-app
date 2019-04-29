@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { EMPTY_LIST } from '../../helpers/common';
+import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
 import { getSolutions } from './solutions';
 import { runtimeEnvironmentSelector } from './runtimeEnvironments';
 import { isReady } from '../helpers/resourceManager';
@@ -7,6 +7,8 @@ import { isReady } from '../helpers/resourceManager';
 export const getAssignments = state => state.assignments;
 
 const getAssignmentResources = state => getAssignments(state).get('resources');
+const getParam = (state, id) => id;
+const getParams = (state, ...params) => params;
 
 export const getAssignment = createSelector(
   getAssignmentResources,
@@ -34,18 +36,25 @@ export const assignmentEnvironmentsSelector = createSelector(
   }
 );
 
-export const getUserSolutions = (userId, assignmentId) =>
-  createSelector(
-    [getSolutions, getAssignments],
-    (solutions, assignments) => {
-      const assignmentSolutions = assignments.getIn(['solutions', assignmentId, userId]);
-      if (!assignmentSolutions) {
-        return EMPTY_LIST;
-      }
+export const getAssigmentSolutions = createSelector(
+  [getSolutions, getAssignments, getParam],
+  (solutions, assignments, assignmentId) =>
+    assignments
+      .getIn(['solutions', assignmentId], EMPTY_MAP)
+      .toList()
+      .flatten()
+      .map(id => solutions.get(id))
+      .filter(a => a)
+);
 
-      return assignmentSolutions.map(id => solutions.get(id)).filter(a => a);
-    }
-  );
+export const getUserSolutions = createSelector(
+  [getSolutions, getAssignments, getParams],
+  (solutions, assignments, [userId, assignmentId]) =>
+    assignments
+      .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
+      .map(id => solutions.get(id))
+      .filter(a => a)
+);
 
 export const isResubmitAllPending = assignmentId =>
   createSelector(

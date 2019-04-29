@@ -4,6 +4,13 @@ import { FormattedMessage } from 'react-intl';
 import StatusIcon from '../../../widgets/StatusIcon';
 import Icon, { CodeIcon } from '../../../icons';
 
+export const getStatusDesc = (status, lastSubmission) => {
+  if (status === null) {
+    status = 'work-in-progress';
+  }
+  return status === 'work-in-progress' && !lastSubmission ? 'missing-submission' : status;
+};
+
 const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
   switch (status) {
     case 'done':

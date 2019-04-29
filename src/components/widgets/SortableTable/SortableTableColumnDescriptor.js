@@ -14,7 +14,7 @@ class SortableTableColumnDescriptor {
       headerSuffix = null,
       headerSuffixStyle = null,
       headerSuffixClassName = null,
-    }
+    } = {}
   ) {
     this.id = id;
     this.header = header;
