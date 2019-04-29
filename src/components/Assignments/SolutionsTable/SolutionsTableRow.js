@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
+import AssignmentStatusIcon, { getStatusDesc } from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
@@ -17,13 +17,6 @@ import withLinks from '../../../helpers/withLinks';
 import styles from './SolutionsTable.less';
 
 const showScoreAndPoints = status => status === 'done' || status === 'failed';
-
-const getStatusDesc = (status, lastSubmission) => {
-  if (status === null) {
-    status = 'work-in-progress';
-  }
-  return status === 'work-in-progress' && !lastSubmission ? 'missing-submission' : status;
-};
 
 const SolutionsTableRow = ({
   id,
