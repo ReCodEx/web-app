@@ -5,6 +5,7 @@ import { Row, Col, Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router';
 import { defaultMemoize } from 'reselect';
 
 import Button from '../../components/widgets/FlatButton';
@@ -30,7 +31,7 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import Box from '../../components/widgets/Box';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import { EditIcon, DownloadIcon } from '../../components/icons';
+import { EditIcon, DownloadIcon, SendIcon } from '../../components/icons';
 import AssignmentStatusIcon, { getStatusDesc } from '../../components/Assignments/Assignment/AssignmentStatusIcon';
 import CommentsIcon from '../../components/Assignments/SolutionsTable/CommentsIcon';
 import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
@@ -38,8 +39,9 @@ import UsersName from '../../components/Users/UsersName';
 import DateTime from '../../components/widgets/DateTime';
 import Points from '../../components/Assignments/SolutionsTable/Points';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
+import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 
-import { safeGet } from '../../helpers/common';
+import { safeGet, identity } from '../../helpers/common';
 import { createUserNameComparator } from '../../components/helpers/users';
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
@@ -50,12 +52,10 @@ import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/L
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
 
-const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, locale) => {
+const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, locale, links) => {
+  const { SOLUTION_DETAIL_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
-  /*
-   * User Name (First Column)
-   */
   const columns = [
     new SortableTableColumnDescriptor('icon', '', {
       className: 'text-nowrap',
@@ -144,11 +144,28 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, locale) => {
     ),
 
     new SortableTableColumnDescriptor('note', <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />, {
-      className: 'small',
+      className: 'small full-width',
       headerClassName: 'text-left',
     }),
 
-    new SortableTableColumnDescriptor('actionButtons', ''),
+    new SortableTableColumnDescriptor('actionButtons', '', {
+      className: 'text-right valign-middle text-nowrap',
+      cellRenderer: solution => (
+        <React.Fragment>
+          {solution.permissionHints && solution.permissionHints.viewDetail && (
+            <Link
+              to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}
+              className="btn btn-flat btn-default btn-xs">
+              <SendIcon gapRight />
+              <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+            </Link>
+          )}
+          {solution.permissionHints && solution.permissionHints.delete && (
+            <DeleteSolutionButtonContainer id={solution.id} bsSize="xs" />
+          )}
+        </React.Fragment>
+      ),
+    }),
   ];
 
   return columns;
@@ -158,6 +175,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
   return assigmentSolutions
     .toArray()
     .map(getJsData)
+    .filter(identity)
     .map(
       ({
         id,
@@ -170,6 +188,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
         actualPoints,
         accepted,
         commentsStats,
+        permissionHints,
       }) => {
         const statusEvaluated =
           lastSubmission &&
@@ -183,6 +202,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
           points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
           runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),
           note,
+          actionButtons: { id, permissionHints },
         };
       }
     );
@@ -250,7 +270,7 @@ class AssignmentStats extends Component {
       downloadBestSolutionsArchive,
       fetchManyStatus,
       intl: { locale },
-      links: { ASSIGNMENT_EDIT_URI_FACTORY },
+      links,
     } = this.props;
 
     return (
@@ -295,7 +315,7 @@ class AssignmentStats extends Component {
             <Row>
               <Col md={12} lg={7}>
                 <p>
-                  <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                  <LinkContainer to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                     <Button bsStyle="warning">
                       <EditIcon gapRight />
                       <FormattedMessage id="app.assignment.editSettings" defaultMessage="Edit Assignment" />
@@ -387,7 +407,7 @@ class AssignmentStats extends Component {
                         noPadding>
                         <SortableTable
                           hover
-                          columns={prepareTableColumnDescriptors(loggedUserId, locale)}
+                          columns={prepareTableColumnDescriptors(loggedUserId, assignmentId, locale, links)}
                           defaultOrder="date"
                           data={prepareTableData(assigmentSolutions, getStudents(group.id), runtimes)}
                           empty={
