@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl, intlShape } from 'react-intl';
 import { Link } from 'react-router';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -9,6 +9,8 @@ import AssignmentStatusIcon, { getStatusDesc } from '../Assignment/AssignmentSta
 import Points from './Points';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
+import AcceptSolutionContainer from '../../../containers/AcceptSolutionContainer';
+
 import CommentsIcon from './CommentsIcon';
 import { SendIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
@@ -36,6 +38,7 @@ const SolutionsTableRow = ({
   noteMaxlen = null,
   compact = false,
   links: { SOLUTION_DETAIL_URI_FACTORY },
+  intl: { locale },
 }) => {
   const trimmedNote = note && note.trim();
   const hasNote = Boolean(trimmedNote);
@@ -118,6 +121,9 @@ const SolutionsTableRow = ({
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
             </Link>
           )}
+          {permissionHints && permissionHints.setAccepted && (
+            <AcceptSolutionContainer id={id} locale={locale} shortLabel bsSize="xs" />
+          )}
           {permissionHints && permissionHints.delete && <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
         </td>
       </tr>
@@ -162,6 +168,7 @@ SolutionsTableRow.propTypes = {
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool.isRequired,
   links: PropTypes.object,
+  intl: intlShape,
 };
 
-export default withLinks(SolutionsTableRow);
+export default withLinks(injectIntl(SolutionsTableRow));

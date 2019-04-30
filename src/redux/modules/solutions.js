@@ -164,18 +164,30 @@ const reducer = handleActions(
     [additionalActionTypes.ACCEPT_REJECTED]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], false),
 
-    [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) =>
-      state.update('resources', resources =>
-        resources.map((item, itemId) =>
-          item.get('data') !== null
-            ? item.update('data', data =>
-                itemId === id
-                  ? data.set('accepted', true).set('accepted-pending', false)
-                  : data.set('accepted', false).set('accepted-pending', false)
-              )
-            : item
-        )
-      ),
+    [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) => {
+      const assignmentId = state.getIn(['resources', id, 'data', 'exerciseAssignmentId']);
+      const userId = state.getIn(['resources', id, 'data', 'solution', 'userId']);
+      return !assignmentId || !userId
+        ? state
+        : state
+            // Accepted solution needs to be updated
+            .updateIn(['resources', id, 'data'], data =>
+              data
+                .set('accepted', true)
+                .set('isBestSolution', true) // accepted also becomes best solution
+                .set('accepted-pending', false)
+            )
+            // All other solutions from the same assignment by the same author needs to be updated
+            .update('resources', resources =>
+              resources.map((item, itemId) => {
+                const aId = item.getIn(['data', 'exerciseAssignmentId']);
+                const uId = item.getIn(['data', 'solution', 'userId']);
+                return itemId === id || aId !== assignmentId || uId !== userId
+                  ? item // no modification (either it is accepted solution, or it is solution from another assignment/by another user)
+                  : item.update('data', data => data.set('accepted', false).set('isBestSolution', false)); // no other solution can be accepted nor best
+              })
+            );
+    },
 
     [additionalActionTypes.UNACCEPT_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], true),
@@ -183,18 +195,20 @@ const reducer = handleActions(
     [additionalActionTypes.UNACCEPT_REJECTED]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'accepted-pending'], false),
 
-    [additionalActionTypes.UNACCEPT_FULFILLED]: (state, { meta: { id } }) =>
-      state.update('resources', resources =>
-        resources.map((item, itemId) =>
-          item.get('data') !== null
-            ? item.update('data', data =>
-                itemId === id
-                  ? data.set('accepted', false).set('accepted-pending', false)
-                  : data.set('accepted', true).set('accepted-pending', false)
-              )
-            : item
-        )
-      ),
+    [additionalActionTypes.UNACCEPT_FULFILLED]: (state, { payload: { assignments }, meta: { id } }) => {
+      const assignmentId = state.getIn(['resources', id, 'data', 'exerciseAssignmentId']);
+      const assignmentStats = assignments.find(a => a.id === assignmentId);
+      const newBestSolutionId = assignmentStats && assignmentStats.bestSolutionId;
+      state = state.updateIn(['resources', id, 'data'], data =>
+        data
+          .set('accepted', false)
+          .set('isBestSolution', false)
+          .set('accepted-pending', false)
+      );
+      return newBestSolutionId && state.hasIn(['resources', newBestSolutionId, 'data', 'isBestSolution'])
+        ? state.setIn(['resources', newBestSolutionId, 'data', 'isBestSolution'], true)
+        : state;
+    },
 
     [submissionEvaluationActionTypes.REMOVE_FULFILLED]: (state, { meta: { solutionId, id: evaluationId } }) => {
       if (!solutionId || !evaluationId) {
