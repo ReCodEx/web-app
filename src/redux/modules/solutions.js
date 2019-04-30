@@ -167,16 +167,17 @@ const reducer = handleActions(
     [additionalActionTypes.ACCEPT_FULFILLED]: (state, { meta: { id } }) => {
       const assignmentId = state.getIn(['resources', id, 'data', 'exerciseAssignmentId']);
       const userId = state.getIn(['resources', id, 'data', 'solution', 'userId']);
+      // Accepted solution needs to be updated
+      state = state.updateIn(['resources', id, 'data'], data =>
+        data
+          .set('accepted', true)
+          .set('isBestSolution', true) // accepted also becomes best solution
+          .set('accepted-pending', false)
+      );
+
       return !assignmentId || !userId
         ? state
         : state
-            // Accepted solution needs to be updated
-            .updateIn(['resources', id, 'data'], data =>
-              data
-                .set('accepted', true)
-                .set('isBestSolution', true) // accepted also becomes best solution
-                .set('accepted-pending', false)
-            )
             // All other solutions from the same assignment by the same author needs to be updated
             .update('resources', resources =>
               resources.map((item, itemId) => {
