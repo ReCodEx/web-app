@@ -29,6 +29,7 @@ const SolutionsTableRow = ({
   actualPoints,
   solution: { createdAt },
   accepted = false,
+  isBestSolution = false,
   runtimeEnvironment = null,
   commentsStats = null,
   permissionHints = null,
@@ -57,7 +58,12 @@ const SolutionsTableRow = ({
             'valign-middle': true,
             'text-nowrap': !compact,
           })}>
-          <AssignmentStatusIcon id={id} status={getStatusDesc(status, lastSubmission)} accepted={accepted} />
+          <AssignmentStatusIcon
+            id={id}
+            status={getStatusDesc(status, lastSubmission)}
+            accepted={accepted}
+            isBestSolution={isBestSolution}
+          />
           <CommentsIcon id={id} commentsStats={commentsStats} gapLeft={!splitOnTwoLines} />
         </td>
 
@@ -149,6 +155,7 @@ SolutionsTableRow.propTypes = {
     createdAt: PropTypes.number.isRequired,
   }),
   accepted: PropTypes.bool,
+  isBestSolution: PropTypes.bool,
   commentsStats: PropTypes.object,
   runtimeEnvironment: PropTypes.object,
   permissionHints: PropTypes.object,

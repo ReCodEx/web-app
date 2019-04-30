@@ -40,6 +40,7 @@
   "app.assignemntStatusIcon.evaluationFailed",
   "app.assignemntStatusIcon.failed",
   "app.assignemntStatusIcon.inProgress",
+  "app.assignemntStatusIcon.isBestSolution",
   "app.assignemntStatusIcon.none",
   "app.assignemntStatusIcon.ok",
   "app.assignemntStatusIcon.solutionMissingSubmission",

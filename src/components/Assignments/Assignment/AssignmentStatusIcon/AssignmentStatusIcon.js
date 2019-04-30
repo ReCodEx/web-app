@@ -11,16 +11,27 @@ export const getStatusDesc = (status, lastSubmission) => {
   return status === 'work-in-progress' && !lastSubmission ? 'missing-submission' : status;
 };
 
-const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
+const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = false }) => {
   switch (status) {
     case 'done':
       return (
         <StatusIcon
           id={id}
           accepted={accepted}
-          icon={<Icon icon={['far', 'thumbs-up']} className="text-green" />}
+          icon={<Icon icon={isBestSolution ? 'thumbs-up' : ['far', 'thumbs-up']} className="text-green" />}
           message={
-            <FormattedMessage id="app.assignemntStatusIcon.ok" defaultMessage="Assignment is successfully completed." />
+            <React.Fragment>
+              <FormattedMessage
+                id="app.assignemntStatusIcon.ok"
+                defaultMessage="Assignment is successfully completed."
+              />
+              {isBestSolution && !accepted && (
+                <FormattedMessage
+                  id="app.assignemntStatusIcon.isBestSolution"
+                  defaultMessage="This is the best solution of the author submitted so far."
+                />
+              )}
+            </React.Fragment>
           }
         />
       );
@@ -44,12 +55,20 @@ const AssignmentStatusIcon = ({ id, status, accepted = false }) => {
         <StatusIcon
           id={id}
           accepted={accepted}
-          icon={<Icon icon={['far', 'thumbs-down']} className="text-red" />}
+          icon={<Icon icon={isBestSolution ? 'thumbs-down' : ['far', 'thumbs-down']} className="text-red" />}
           message={
-            <FormattedMessage
-              id="app.assignemntStatusIcon.failed"
-              defaultMessage="No correct solution was submitted yet."
-            />
+            <React.Fragment>
+              <FormattedMessage
+                id="app.assignemntStatusIcon.failed"
+                defaultMessage="No correct solution was submitted yet."
+              />
+              {isBestSolution && !accepted && (
+                <FormattedMessage
+                  id="app.assignemntStatusIcon.isBestSolution"
+                  defaultMessage="This is the best solution of the author submitted so far."
+                />
+              )}
+            </React.Fragment>
           }
         />
       );

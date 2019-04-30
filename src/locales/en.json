@@ -40,6 +40,7 @@
   "app.assignemntStatusIcon.evaluationFailed": "No solution was evaluated correctly by ReCodEx.",
   "app.assignemntStatusIcon.failed": "No correct solution was submitted yet.",
   "app.assignemntStatusIcon.inProgress": "Assignment solution is being evaluated.",
+  "app.assignemntStatusIcon.isBestSolution": "This is the best solution of the author submitted so far.",
   "app.assignemntStatusIcon.none": "No solutions were submmitted so far.",
   "app.assignemntStatusIcon.ok": "Assignment is successfully completed.",
   "app.assignemntStatusIcon.solutionMissingSubmission": "The solution was not submitted for evaluation probably due to an error. You may need to resubmit it.",

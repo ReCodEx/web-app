@@ -68,6 +68,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
               info.lastSubmission
             )}
             accepted={info.accepted}
+            isBestSolution={info.isBestSolution}
           />
           <CommentsIcon id={info.id} commentsStats={info.commentsStats} gapLeft />
         </React.Fragment>
@@ -187,6 +188,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
         bonusPoints,
         actualPoints,
         accepted,
+        isBestSolution,
         commentsStats,
         permissionHints,
       }) => {
@@ -195,7 +197,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
           (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
         const userId = solution && solution.userId;
         return {
-          icon: { id, commentsStats, lastSubmission, accepted },
+          icon: { id, commentsStats, lastSubmission, accepted, isBestSolution },
           user: users.find(({ id }) => id === userId),
           date: solution && solution.createdAt,
           validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
