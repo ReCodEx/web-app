@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Row, Col, Grid } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -172,11 +172,11 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
   return columns;
 });
 
-const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvironments) => {
+const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvironments, onlyBestSolutionsCheckbox) => {
   return assigmentSolutions
     .toArray()
     .map(getJsData)
-    .filter(identity)
+    .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
     .map(
       ({
         id,
@@ -335,36 +335,27 @@ class AssignmentStats extends Component {
                   <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
                 </p>
               </Col>
-              <Col md={12} lg={5}>
-                <Grid fluid>
-                  <Row>
-                    <Col xs={12} sm={12} className="text-right">
-                      <OnOffCheckbox
-                        checked={this.state.groupByUsersCheckbox}
-                        disabled={this.state.onlyBestSolutionsCheckbox}
-                        name="groupByUsersCheckbox"
-                        onChange={this.checkboxClickHandler}>
-                        <FormattedMessage
-                          id="app.assignmentStats.groupByUsersCheckbox"
-                          defaultMessage="Group by users"
-                        />
-                      </OnOffCheckbox>
-                    </Col>
-                    {false /* TODO -- when implemented changes in API */ && (
-                      <Col xs={12} sm={6}>
-                        <OnOffCheckbox
-                          checked={this.state.onlyBestSolutionsCheckbox}
-                          name="onlyBestSolutionsCheckbox"
-                          onChange={this.checkboxClickHandler}>
-                          <FormattedMessage
-                            id="app.assignmentStats.onlyBestSolutionsCheckbox"
-                            defaultMessage="Best solutions only"
-                          />
-                        </OnOffCheckbox>
-                      </Col>
-                    )}
-                  </Row>
-                </Grid>
+              <Col md={12} lg={5} className="text-right text-nowrap">
+                <OnOffCheckbox
+                  checked={this.state.groupByUsersCheckbox}
+                  disabled={this.state.onlyBestSolutionsCheckbox}
+                  name="groupByUsersCheckbox"
+                  onChange={this.checkboxClickHandler}>
+                  <span className="em-padding-right">
+                    <FormattedMessage id="app.assignmentStats.groupByUsersCheckbox" defaultMessage="Group by users" />
+                  </span>
+                </OnOffCheckbox>
+                <OnOffCheckbox
+                  checked={this.state.onlyBestSolutionsCheckbox}
+                  name="onlyBestSolutionsCheckbox"
+                  onChange={this.checkboxClickHandler}>
+                  <span className="em-padding-right">
+                    <FormattedMessage
+                      id="app.assignmentStats.onlyBestSolutionsCheckbox"
+                      defaultMessage="Best solutions only"
+                    />
+                  </span>
+                </OnOffCheckbox>
               </Col>
             </Row>
 
@@ -375,7 +366,7 @@ class AssignmentStats extends Component {
                   loading={<LoadingSolutionsTable />}
                   failed={<FailedLoadingSolutionsTable />}>
                   {() =>
-                    this.state.groupByUsersCheckbox ? (
+                    this.state.groupByUsersCheckbox && !this.state.onlyBestSolutionsCheckbox ? (
                       <div>
                         {getStudents(group.id)
                           .sort(
@@ -411,7 +402,12 @@ class AssignmentStats extends Component {
                           hover
                           columns={prepareTableColumnDescriptors(loggedUserId, assignmentId, locale, links)}
                           defaultOrder="date"
-                          data={prepareTableData(assigmentSolutions, getStudents(group.id), runtimes)}
+                          data={prepareTableData(
+                            assigmentSolutions,
+                            getStudents(group.id),
+                            runtimes,
+                            this.state.onlyBestSolutionsCheckbox
+                          )}
                           empty={
                             <div className="text-center text-muted">
                               <FormattedMessage
