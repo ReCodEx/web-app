@@ -40,6 +40,7 @@
   "app.assignemntStatusIcon.evaluationFailed": "Žádné řesení nebylo správně vyhodnoceno.",
   "app.assignemntStatusIcon.failed": "Žádné správné řešení nebylo zatím odevzdáno.",
   "app.assignemntStatusIcon.inProgress": "Řešení úlohy je právě vyhodnocováno.",
+  "app.assignemntStatusIcon.isBestSolution": "Toto je nejlepší řešení, které autor dosud odevzdal.",
   "app.assignemntStatusIcon.none": "Zatím nebyla odevzdána žádná řešení.",
   "app.assignemntStatusIcon.ok": "Úloha byla úspěšně splněna.",
   "app.assignemntStatusIcon.solutionMissingSubmission": "Řešení nebylo odevzdáno k vyhodnocení pravděpodobně díky chybě. Budete ho muset odevzdat znovu.",
