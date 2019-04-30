@@ -4,16 +4,24 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 
-const AcceptSolution = ({ accepted, acceptPending, accept, unaccept }) =>
+const AcceptSolution = ({ accepted, acceptPending, accept, unaccept, shortLabel = false, bsSize = undefined }) =>
   accepted === true ? (
-    <Button bsStyle="info" onClick={unaccept} disabled={acceptPending}>
+    <Button bsStyle="info" bsSize={bsSize} onClick={unaccept} disabled={acceptPending}>
       <Icon icon="check-circle" gapRight />
-      <FormattedMessage id="app.acceptSolution.accepted" defaultMessage="Revoke as Final" />
+      {shortLabel ? (
+        <FormattedMessage id="app.acceptSolution.acceptedShort" defaultMessage="Revoke" />
+      ) : (
+        <FormattedMessage id="app.acceptSolution.accepted" defaultMessage="Revoke as Final" />
+      )}
     </Button>
   ) : (
-    <Button bsStyle="primary" onClick={accept} disabled={acceptPending}>
+    <Button bsStyle="primary" bsSize={bsSize} onClick={accept} disabled={acceptPending}>
       <Icon icon={['far', 'check-circle']} gapRight />
-      <FormattedMessage id="app.acceptSolution.notAccepted" defaultMessage="Accept as Final" />
+      {shortLabel ? (
+        <FormattedMessage id="app.acceptSolution.notAcceptedShort" defaultMessage="Accept" />
+      ) : (
+        <FormattedMessage id="app.acceptSolution.notAccepted" defaultMessage="Accept as Final" />
+      )}
     </Button>
   );
 
@@ -22,6 +30,8 @@ AcceptSolution.propTypes = {
   acceptPending: PropTypes.bool.isRequired,
   accept: PropTypes.func.isRequired,
   unaccept: PropTypes.func.isRequired,
+  shortLabel: PropTypes.bool,
+  bsSize: PropTypes.string,
 };
 
 export default AcceptSolution;

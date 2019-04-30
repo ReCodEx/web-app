@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
+import { injectIntl, FormattedMessage, FormattedNumber, intlShape } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router';
 import { defaultMemoize } from 'reselect';
@@ -40,6 +40,7 @@ import DateTime from '../../components/widgets/DateTime';
 import Points from '../../components/Assignments/SolutionsTable/Points';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
+import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 
 import { safeGet, identity } from '../../helpers/common';
 import { createUserNameComparator } from '../../components/helpers/users';
@@ -160,6 +161,9 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
               <SendIcon gapRight />
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
             </Link>
+          )}
+          {solution.permissionHints && solution.permissionHints.setAccepted && (
+            <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel bsSize="xs" />
           )}
           {solution.permissionHints && solution.permissionHints.delete && (
             <DeleteSolutionButtonContainer id={solution.id} bsSize="xs" />
@@ -442,7 +446,7 @@ AssignmentStats.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   downloadBestSolutionsArchive: PropTypes.func.isRequired,
   fetchManyStatus: PropTypes.string,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
+  intl: intlShape,
   links: PropTypes.object.isRequired,
 };
 
