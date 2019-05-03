@@ -8,6 +8,7 @@ import LocalizedAssignmentFormField from './LocalizedAssignmentFormField';
 import LocalizedShadowAssignmentFormField from './LocalizedShadowAssignmentFormField';
 import LocalizedExerciseFormField from './LocalizedExerciseFormField';
 import LocalizedGroupFormField from './LocalizedGroupFormField';
+import LocalizedSystemMessageFormField from './LocalizedSystemMessageFormField';
 import { WarningIcon } from '../../icons';
 import { knownLocalesNames } from '../../../helpers/localizedData';
 
@@ -16,6 +17,7 @@ const fieldTypes = {
   shadowAssignment: LocalizedShadowAssignmentFormField,
   exercise: LocalizedExerciseFormField,
   group: LocalizedGroupFormField,
+  systemMessage: LocalizedSystemMessageFormField,
 };
 
 const renderTitle = ({ locale, _enabled }) => (

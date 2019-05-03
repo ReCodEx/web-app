@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { SuperadminIcon, EmpoweredSupervisorIcon, SupervisorIcon, SupervisorStudentIcon, UserIcon } from '../icons';
 
@@ -22,6 +22,14 @@ export const roleLabels = {
   ),
   [SUPERADMIN_ROLE]: <FormattedMessage id="app.roles.superadmin" defaultMessage="Main Administrator" />,
 };
+
+export const roleLabelsSimpleMessages = defineMessages({
+  [STUDENT_ROLE]: { id: 'app.roles.student', defaultMessage: 'Student' },
+  [SUPERVISOR_STUDENT_ROLE]: { id: 'app.roles.supervisorStudent', defaultMessage: 'Supervisor-student' },
+  [SUPERVISOR_ROLE]: { id: 'app.roles.supervisor', defaultMessage: 'Supervisor' },
+  [EMPOWERED_SUPERVISOR_ROLE]: { id: 'app.roles.empoweredSupervisor', defaultMessage: 'Empowered Supervisor' },
+  [SUPERADMIN_ROLE]: { id: 'app.roles.superadmin', defaultMessage: 'Main Administrator' },
+});
 
 export const roleLabelsPlural = {
   [STUDENT_ROLE]: <FormattedMessage id="app.roles.students" defaultMessage="Students" />,
