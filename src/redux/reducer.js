@@ -52,6 +52,7 @@ import upload from './modules/upload';
 import users from './modules/users';
 import userSwitching from './modules/userSwitching';
 import broker from './modules/broker';
+import systemMessages from './modules/systemMessages';
 
 const createRecodexReducers = (token, instanceId) => ({
   app,
@@ -104,6 +105,7 @@ const createRecodexReducers = (token, instanceId) => ({
   userSwitching,
   upload,
   broker,
+  systemMessages,
 });
 
 const librariesReducers = {

@@ -1,0 +1,2 @@
+import DeleteSystemMessageButtonContainer from './DeleteSystemMessageButtonContainer';
+export default DeleteSystemMessageButtonContainer;

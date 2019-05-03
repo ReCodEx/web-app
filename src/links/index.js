@@ -79,6 +79,9 @@ export const linksFactory = lang => {
   // failures details
   const FAILURES_URI = `${prefix}/app/submission-failures`;
 
+  // system messages (notifications)
+  const MESSAGES_URI = `${prefix}/app/system-messages`;
+
   // sis integration
   const SIS_INTEGRATION_URI = `${prefix}/app/sis-integration`;
 
@@ -135,6 +138,7 @@ export const linksFactory = lang => {
     DOWNLOAD,
     LOGIN_EXTERN_FINALIZATION,
     FAILURES_URI,
+    MESSAGES_URI,
     SIS_INTEGRATION_URI,
     ARCHIVE_URI,
     BROKER_URI,

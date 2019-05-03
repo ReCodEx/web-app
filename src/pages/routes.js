@@ -43,6 +43,7 @@ import FAQ from './FAQ';
 import SubmissionFailures from './SubmissionFailures';
 import SisIntegration from './SisIntegration';
 import Archive from './Archive';
+import SystemMessages from './SystemMessages/SystemMessages';
 
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
@@ -134,6 +135,7 @@ const createRoutes = getState => {
             <Route path="edit" component={EditUser} />
           </Route>
           <Route path="submission-failures" component={SubmissionFailures} />
+          <Route path="system-messages" component={SystemMessages} />
           <Route path="sis-integration" component={SisIntegration} />
           <Route path="archive" component={Archive} customLoadGroups={true} />
           <Route path="broker" component={Broker} />

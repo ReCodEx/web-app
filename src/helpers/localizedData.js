@@ -32,6 +32,7 @@ const getLocalizedResourceX = field => (resource, locale) => {
 
 export const getLocalizedName = getLocalizedX('name');
 export const getLocalizedDescription = getLocalizedX('description');
+export const getLocalizedText = getLocalizedX('text');
 
 export const getLocalizedResourceName = getLocalizedResourceX('name');
 
