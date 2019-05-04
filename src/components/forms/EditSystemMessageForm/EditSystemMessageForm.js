@@ -46,6 +46,7 @@ const EditSystemMessageForm = ({
         name="type"
         component={SelectField}
         options={[
+          { key: 'success', name: 'Success' },
           { key: 'info', name: 'Info' },
           { key: 'warning', name: 'Warning' },
           { key: 'danger', name: 'Danger' },
