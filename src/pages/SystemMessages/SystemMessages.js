@@ -127,6 +127,7 @@ class SystemMessages extends Component {
                       <Button
                         bsSize="xs"
                         bsStyle="warning"
+                        className="btn-flat"
                         onClick={() => {
                           this.setState({ isOpen: true, message: messageToForm(message) });
                         }}>

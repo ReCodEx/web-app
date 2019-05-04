@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
@@ -9,6 +10,8 @@ import DateTime from '../../widgets/DateTime';
 import { roleLabels } from '../../helpers/usersRoles';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
+import styles from './MessagesList.less';
+
 class MessagesList extends Component {
   prepareColumnDescriptors = defaultMemoize((systemMessages, locale) => {
     const columns = [
@@ -16,7 +19,7 @@ class MessagesList extends Component {
         'text',
         <FormattedMessage id="app.systemMessagesList.text" defaultMessage="Text" />,
         {
-          className: 'text-left',
+          className: styles.textPreview,
           comparator: ({ text: t1 }, { text: t2 }) =>
             getLocalizedText(t1, locale).localeCompare(getLocalizedText(t2, locale), locale),
           cellRenderer: text => text && <i>{getLocalizedText(text, locale)}</i>,
@@ -59,7 +62,7 @@ class MessagesList extends Component {
         <FormattedMessage id="app.systemMessagesList.type" defaultMessage="Type" />,
         {
           comparator: ({ type: t1 }, { type: t2 }) => t1.localeCompare(t2, locale),
-          cellRenderer: type => type && <span>{type}</span>,
+          cellRenderer: type => type && <Alert bsStyle={type} className={styles.alertType} />,
         }
       ),
 
