@@ -16,6 +16,11 @@ export const fetchAllMessages = actions.fetchMany({
   endpoint: fetchManyEndpoint,
 });
 
+export const fetchManyUserEndpoint = '/notifications';
+export const fetchAllUserMessages = actions.fetchMany({
+  endpoint: fetchManyUserEndpoint,
+});
+
 /**
  * Reducer takes mainly care about all the state of individual attachments
  */
