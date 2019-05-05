@@ -5,6 +5,7 @@ import { IndexLink } from 'react-router';
 import MediaQuery from 'react-responsive';
 
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
+import HeaderSystemMessagesContainer from '../../../containers/HeaderSystemMessagesContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import ClientOnly from '../../helpers/ClientOnly';
 import { LoadingIcon } from '../../icons';
@@ -76,6 +77,7 @@ class Header extends Component {
           </ClientOnly>
           <div className="navbar-custom-menu">
             <ul className="nav navbar-nav">
+              <HeaderSystemMessagesContainer />
               <HeaderNotificationsContainer />
               {availableLangs.map(lang => (
                 <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />

@@ -29,7 +29,7 @@ const Admin = ({ currentUrl, links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_U
       link={FAILURES_URI}
     />
     <MenuItem
-      icon="flag"
+      icon="envelope"
       title={<FormattedMessage id="app.sidebar.menu.admin.messages" defaultMessage="System Messages" />}
       currentPath={currentUrl}
       link={MESSAGES_URI}

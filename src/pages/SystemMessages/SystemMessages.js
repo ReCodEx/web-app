@@ -104,7 +104,7 @@ class SystemMessages extends Component {
             breadcrumbs={[
               {
                 text: <FormattedMessage id="app.systemMessages.title" defaultMessage="System Messages" />,
-                iconName: 'flag',
+                iconName: 'envelope',
               },
             ]}>
             <React.Fragment>

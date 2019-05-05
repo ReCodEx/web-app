@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { fetchManyEndpoint } from '../modules/systemMessages';
+import { fetchManyEndpoint, fetchManyUserEndpoint } from '../modules/systemMessages';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getSystemMessages = state => state.systemMessages;
@@ -13,6 +13,11 @@ export const systemMessagesSelector = createSelector(
 export const fetchManyStatus = createSelector(
   getSystemMessages,
   state => state.getIn(['fetchManyStatus', fetchManyEndpoint])
+);
+
+export const fetchManyUserStatus = createSelector(
+  getSystemMessages,
+  state => state.getIn(['fetchManyStatus', fetchManyUserEndpoint])
 );
 
 export const getMessage = messageId =>
@@ -29,4 +34,12 @@ export const readySystemMessagesSelector = createSelector(
       .filter(isReady)
       .map(getJsData)
       .toArray()
+);
+
+export const readyActiveSystemMessagesSelector = createSelector(
+  readySystemMessagesSelector,
+  messages =>
+    messages
+      .filter(m => m.visibleFrom * 1000 <= Date.now() && m.visibleTo * 1000 >= Date.now())
+      .sort((a, b) => a.visibleTo - b.visibleTo) // show messages with shortest expiration first
 );
