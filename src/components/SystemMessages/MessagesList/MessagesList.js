@@ -9,11 +9,23 @@ import { getLocalizedText } from '../../../helpers/localizedData';
 import DateTime from '../../widgets/DateTime';
 import { roleLabels } from '../../helpers/usersRoles';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import FilterSystemMessagesForm from '../../forms/FilterSystemMessagesForm/FilterSystemMessagesForm';
 
 import styles from './MessagesList.less';
 
+const getVisibleMessages = (systemMessages, showAll) =>
+  showAll ? systemMessages : systemMessages.filter(msg => msg.visibleTo * 1000 >= Date.now());
+
 class MessagesList extends Component {
-  prepareColumnDescriptors = defaultMemoize((systemMessages, locale) => {
+  state = { showAll: false, visibleMessages: [] };
+
+  componentDidMount() {
+    this.setState({
+      visibleMessages: getVisibleMessages(this.props.systemMessages, this.state.showAll),
+    });
+  }
+
+  prepareColumnDescriptors = defaultMemoize(locale => {
     const columns = [
       new SortableTableColumnDescriptor(
         'text',
@@ -44,7 +56,7 @@ class MessagesList extends Component {
         }
       ),
 
-      new SortableTableColumnDescriptor('authorId', <FormattedMessage id="generic.name" defaultMessage="Name" />, {
+      new SortableTableColumnDescriptor('authorId', <FormattedMessage id="generic.author" defaultMessage="Author" />, {
         cellRenderer: authorId => authorId && <UsersNameContainer userId={authorId} />,
       }),
 
@@ -98,20 +110,32 @@ class MessagesList extends Component {
     } = this.props;
 
     return (
-      <SortableTable
-        hover
-        columns={this.prepareColumnDescriptors(systemMessages, locale)}
-        defaultOrder="visibleTo"
-        data={this.prepareData(systemMessages)}
-        empty={
-          <div className="text-center text-muted">
-            <FormattedMessage
-              id="app.systemMessagesList.noMessages"
-              defaultMessage="There are currently no system messages."
-            />
-          </div>
-        }
-      />
+      <React.Fragment>
+        <FilterSystemMessagesForm
+          onSubmit={({ showAll }) => {
+            this.setState({
+              showAll: showAll,
+              visibleMessages: getVisibleMessages(systemMessages, showAll),
+            });
+            return Promise.resolve();
+          }}
+          initialValues={{ showAll: this.state.showAll }}
+        />
+        <SortableTable
+          hover
+          columns={this.prepareColumnDescriptors(locale)}
+          defaultOrder="visibleTo"
+          data={this.prepareData(this.state.visibleMessages)}
+          empty={
+            <div className="text-center text-muted">
+              <FormattedMessage
+                id="app.systemMessagesList.noMessages"
+                defaultMessage="There are currently no system messages."
+              />
+            </div>
+          }
+        />
+      </React.Fragment>
     );
   }
 }

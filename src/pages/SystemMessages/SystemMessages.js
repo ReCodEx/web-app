@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Button } from 'react-bootstrap';
 
+import Button from '../../components/widgets/FlatButton';
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages';
@@ -11,7 +11,7 @@ import { fetchManyStatus, readySystemMessagesSelector } from '../../redux/select
 import Box from '../../components/widgets/Box/Box';
 import { AddIcon, EditIcon } from '../../components/icons';
 import EditSystemMessageForm from '../../components/forms/EditSystemMessageForm/EditSystemMessageForm';
-import { getLocalizedTextsInitialValues } from '../../helpers/localizedData';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import moment from 'moment';
 import MessagesList from '../../components/SystemMessages/MessagesList/MessagesList';
 import DeleteSystemMessageButtonContainer from '../../containers/DeleteSystemMessageButtonContainer';
@@ -24,17 +24,17 @@ const messageInitialValues = () => ({
   localizedTexts: getLocalizedTextsInitialValues([], localizedTextDefaults),
   groupsIds: [],
   id: undefined,
+  visibleFrom: moment(),
+  visibleTo: moment()
+    .add(1, 'week')
+    .endOf('day'),
 });
 
 const messageToForm = message => {
   const processedData = Object.assign({}, message, {
-    visibleFrom: new Date(message.visibleFrom * 1000),
-    visibleTo: new Date(message.visibleTo * 1000),
-  });
-  processedData.localizedTexts.forEach((value, index) => {
-    if (value.text) {
-      processedData.localizedTexts[index]['_enabled'] = true;
-    }
+    visibleFrom: moment.unix(message.visibleFrom),
+    visibleTo: moment.unix(message.visibleTo),
+    localizedTexts: getLocalizedTextsInitialValues(message.localizedTexts, localizedTextDefaults),
   });
   return processedData;
 };
@@ -43,6 +43,7 @@ const messageToSubmit = data =>
   Object.assign({}, data, {
     visibleFrom: moment(data.visibleFrom).unix(),
     visibleTo: moment(data.visibleTo).unix(),
+    localizedTexts: transformLocalizedTextsFormData(data.localizedTexts),
   });
 
 class SystemMessages extends Component {
@@ -111,7 +112,6 @@ class SystemMessages extends Component {
               <Box
                 title={<FormattedMessage id="app.systemMessages.listTitle" defaultMessage="System Messages" />}
                 unlimitedHeight
-                noPadding
                 footer={
                   <p className="em-margin-top text-center">
                     <Button onClick={() => this.setState({ isOpen: true })} bsStyle="success">
@@ -127,7 +127,6 @@ class SystemMessages extends Component {
                       <Button
                         bsSize="xs"
                         bsStyle="warning"
-                        className="btn-flat"
                         onClick={() => {
                           this.setState({ isOpen: true, message: messageToForm(message) });
                         }}>

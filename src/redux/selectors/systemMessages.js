@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 import { fetchManyEndpoint, fetchManyUserEndpoint } from '../modules/systemMessages';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
+const getParam = (state, id) => id;
+
 const getSystemMessages = state => state.systemMessages;
 const getResources = messages => messages.get('resources');
 
@@ -20,11 +22,10 @@ export const fetchManyUserStatus = createSelector(
   state => state.getIn(['fetchManyStatus', fetchManyUserEndpoint])
 );
 
-export const getMessage = messageId =>
-  createSelector(
-    systemMessagesSelector,
-    messages => messages.get(messageId)
-  );
+export const getMessage = createSelector(
+  [systemMessagesSelector, getParam],
+  (messages, messageId) => messages.get(messageId)
+);
 
 export const readySystemMessagesSelector = createSelector(
   systemMessagesSelector,
