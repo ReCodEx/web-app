@@ -19,7 +19,7 @@ DeleteSystemMessageButtonContainer.propTypes = {
 
 export default connect(
   (state, { id }) => ({
-    message: getMessage(id)(state),
+    message: getMessage(state, id),
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteMessage: () => dispatch(deleteMessage(id)).then(() => onDeleted && onDeleted()),

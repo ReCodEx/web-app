@@ -2,16 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Alert, Modal, Button } from 'react-bootstrap';
+import { Alert, Modal } from 'react-bootstrap';
+import moment from 'moment';
 
 import { SelectField, DatetimeField } from '../Fields';
-
 import SubmitButton from '../SubmitButton';
+import Button from '../../widgets/FlatButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 import withLinks from '../../../helpers/withLinks';
 import { CloseIcon } from '../../icons';
 import { roleLabelsSimpleMessages } from '../../helpers/usersRoles';
+
+const typeOptions = [
+  { key: 'success', name: 'Success' },
+  { key: 'info', name: 'Info' },
+  { key: 'warning', name: 'Warning' },
+  { key: 'danger', name: 'Danger' },
+];
 
 const EditSystemMessageForm = ({
   initialValues,
@@ -45,12 +53,7 @@ const EditSystemMessageForm = ({
       <Field
         name="type"
         component={SelectField}
-        options={[
-          { key: 'success', name: 'Success' },
-          { key: 'info', name: 'Info' },
-          { key: 'warning', name: 'Warning' },
-          { key: 'danger', name: 'Danger' },
-        ]}
+        options={typeOptions}
         addEmptyOption
         label={<FormattedMessage id="app.editSystemMessageForm.type" defaultMessage="Type of the notification." />}
       />
@@ -114,7 +117,7 @@ const EditSystemMessageForm = ({
           }}
         />
 
-        <Button bsStyle="default" className="btn-flat" onClick={onClose}>
+        <Button bsStyle="default" onClick={onClose}>
           <CloseIcon gapRight />
           <FormattedMessage id="generic.close" defaultMessage="Close" />
         </Button>
@@ -140,7 +143,7 @@ EditSystemMessageForm.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const validate = ({ localizedTexts }) => {
+const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
   const errors = {};
   validateLocalizedTextsFormData(errors, localizedTexts, ({ text }) => {
     const textErrors = {};
@@ -155,6 +158,60 @@ const validate = ({ localizedTexts }) => {
 
     return textErrors;
   });
+
+  if (!visibleFrom) {
+    errors['visibleFrom'] = (
+      <FormattedMessage
+        id="app.editSystemMessageForm.validation.visibleFromEmpty"
+        defaultMessage="The visible from date must be set."
+      />
+    );
+  }
+
+  if (!visibleTo) {
+    errors['visibleTo'] = (
+      <FormattedMessage
+        id="app.editSystemMessageForm.validation.visibleToEmpty"
+        defaultMessage="The visible to date must be set."
+      />
+    );
+  }
+
+  if (visibleTo.isBefore(moment.unix(Date.now() / 1000))) {
+    errors['visibleTo'] = (
+      <FormattedMessage
+        id="app.editSystemMessageForm.validation.visibleToInHistory"
+        defaultMessage="The visible to date cannot be in the past."
+      />
+    );
+  }
+
+  if (visibleTo.isBefore(visibleFrom)) {
+    errors['visibleFrom'] = (
+      <FormattedMessage
+        id="app.editSystemMessageForm.validation.visibleFromBeforeTo"
+        defaultMessage="The visible from date cannot be after visible to date."
+      />
+    );
+  }
+
+  if (!type) {
+    errors['type'] = (
+      <FormattedMessage
+        id="app.editSystemMessageForm.validation.typeEmpty"
+        defaultMessage="Type of the notification must be set."
+      />
+    );
+  }
+
+  if (!role) {
+    errors['role'] = (
+      <FormattedMessage
+        id="app.editSystemMessageForm.validation.roleEmpty"
+        defaultMessage="Base user role of the notification muset be set."
+      />
+    );
+  }
 
   return errors;
 };
