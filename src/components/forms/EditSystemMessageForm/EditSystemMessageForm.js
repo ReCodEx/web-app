@@ -90,7 +90,7 @@ const EditSystemMessageForm = ({
         component={DatetimeField}
         label={
           <FormattedMessage
-            id="app.editSystemMessageForm.isLocked"
+            id="app.editSystemMessageForm.visibleTo"
             defaultMessage="Date to which is notification visible."
           />
         }
