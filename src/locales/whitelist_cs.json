@@ -114,6 +114,8 @@
   "app.sidebar.menu.faq",
   "app.submissions.testResultsTable.statusOK",
   "app.failureList.headLink",
+  "app.systemMessagesList.text",
+  "app.systemMessagesList.role",
   "app.randomMessages.m1",
   "app.randomMessages.m2",
   "app.randomMessages.m3",
