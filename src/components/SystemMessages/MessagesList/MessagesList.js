@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
@@ -10,6 +9,7 @@ import DateTime from '../../widgets/DateTime';
 import { roleLabels, rolePriorities } from '../../helpers/usersRoles';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import FilterSystemMessagesForm from '../../forms/FilterSystemMessagesForm/FilterSystemMessagesForm';
+import { TypedMessageIcon } from '../../icons';
 
 import styles from './MessagesList.less';
 
@@ -78,8 +78,7 @@ class MessagesList extends Component {
         'type',
         <FormattedMessage id="app.systemMessagesList.type" defaultMessage="Type" />,
         {
-          comparator: ({ type: t1 }, { type: t2 }) => t1.localeCompare(t2, locale),
-          cellRenderer: type => type && <Alert bsStyle={type} className={styles.alertType} />,
+          cellRenderer: type => type && <TypedMessageIcon type={type} className={`text-${type}`} />,
           className: 'text-center valign-middle',
         }
       ),
