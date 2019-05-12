@@ -10,50 +10,26 @@ import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/
 class HeaderNotificationsContainer extends Component {
   state = { isOpen: false, showAll: false };
 
-  //
   // Monitor clicking and hide the notifications panel when the user clicks sideways
-
   componentWillMount = () => {
-    this.lastClick = 0;
     if (canUseDOM) {
-      window.addEventListener('click', () => this.clickAnywhere());
+      window.addEventListener('mousedown', this.close);
     }
   };
 
   componentWillUnMount = () => {
     if (canUseDOM) {
-      window.removeEventListener(() => this.clickAnywhere());
+      window.removeEventListener('mousedown', this.close);
     }
   };
-
-  clickAnywhere = () => {
-    if (this.state.isOpen === true && this.isClickingSomewhereElse()) {
-      this.close();
-    }
-  };
-
-  markClick = () => {
-    this.lastClick = Date.now();
-  };
-
-  /**
-   * Determines, whether this click is on the container or not - a 10ms tolerance
-   * between now and the time of last click on the container is defined.
-   */
-  isClickingSomewhereElse = () => Date.now() - this.lastClick > 50;
-
-  //
-  //
 
   toggleOpen = e => {
     e.preventDefault();
     this.state.isOpen ? this.close() : this.open();
-    this.markClick();
   };
 
   toggleShowAll = e => {
     e.preventDefault();
-    this.markClick();
     this.setState({ showAll: !this.state.showAll });
   };
 
@@ -79,7 +55,6 @@ class HeaderNotificationsContainer extends Component {
       <HeaderNotificationsDropdown
         isOpen={isOpen}
         toggleOpen={this.toggleOpen}
-        markClick={this.markClick}
         showAll={showAll}
         toggleShowAll={this.toggleShowAll}
         hideNotification={hideNotification}

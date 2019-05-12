@@ -1228,7 +1228,7 @@
   "app.systemMessages.title": "Systémové zprávy",
   "app.systemMessagesList.noMessages": "Nyní zde nejsou žádné systémové zprávy.",
   "app.systemMessagesList.role": "Role",
-  "app.systemMessagesList.showAll": "Ukaž všechny zprávy (včetně exporovaných)",
+  "app.systemMessagesList.showAll": "Zobrazit všechny zprávy (včetně expirovaných)",
   "app.systemMessagesList.text": "Text",
   "app.systemMessagesList.type": "Typ",
   "app.systemMessagesList.visibleFrom": "Viditelné od",

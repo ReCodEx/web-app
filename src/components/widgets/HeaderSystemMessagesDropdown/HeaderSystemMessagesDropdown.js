@@ -10,18 +10,21 @@ import { getLocalizedText } from '../../../helpers/localizedData';
 
 import styles from './HeaderSystemMessagesDropdown.less';
 
-const HeaderSystemMessagesDropdown = ({ isOpen, toggleOpen, markClick, systemMessages, intl: { locale } }) => (
+const preventClickPropagation = ev => ev.stopPropagation();
+
+const HeaderSystemMessagesDropdown = ({ isOpen, toggleOpen, systemMessages, intl: { locale } }) => (
   <li
     className={classnames({
       'notifications-menu': true,
       dropdown: true,
       open: isOpen,
-    })}>
+    })}
+    onMouseDown={isOpen ? preventClickPropagation : undefined}>
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
       <Icon icon={['far', 'envelope']} />
       {systemMessages.length > 0 && <Label bsStyle="warning">{systemMessages.length}</Label>}
     </a>
-    <ul className={classnames(['dropdown-menu', styles.dropdownMenu])} onClick={markClick}>
+    <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>
       <li className="header">
         <FormattedMessage
           id="app.systemMessages.title"
@@ -46,7 +49,6 @@ HeaderSystemMessagesDropdown.propTypes = {
   isOpen: PropTypes.bool,
   showAll: PropTypes.bool,
   toggleOpen: PropTypes.func.isRequired,
-  markClick: PropTypes.func.isRequired,
   systemMessages: PropTypes.array.isRequired,
   intl: intlShape.isRequired,
 };

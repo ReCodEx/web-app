@@ -78,6 +78,15 @@ export const roleDescriptions = {
 
 export const knownRoles = Object.keys(roleLabels);
 
+// Ordering from lowest to highest power (when roles ordering is required)
+export const rolePriorities = {
+  [STUDENT_ROLE]: 1,
+  [SUPERVISOR_STUDENT_ROLE]: 2,
+  [SUPERVISOR_ROLE]: 3,
+  [EMPOWERED_SUPERVISOR_ROLE]: 4,
+  [SUPERADMIN_ROLE]: Number.MAX_SAFE_INTEGER,
+};
+
 /*
  * Helper Functions
  */
