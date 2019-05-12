@@ -12,43 +12,24 @@ class HeaderSystemMessagesContainer extends Component {
 
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllUserMessages)]);
 
-  //
   // Monitor clicking and hide the notifications panel when the user clicks sideways
 
   componentWillMount = () => {
     this.props.loadAsync();
-    this.lastClick = 0;
     if (canUseDOM) {
-      window.addEventListener('click', () => this.clickAnywhere());
+      window.addEventListener('mousedown', this.close);
     }
   };
 
   componentWillUnMount = () => {
     if (canUseDOM) {
-      window.removeEventListener(() => this.clickAnywhere());
+      window.removeEventListener('mousedown', this.close);
     }
   };
-
-  clickAnywhere = () => {
-    if (this.state.isOpen === true && this.isClickingSomewhereElse()) {
-      this.close();
-    }
-  };
-
-  markClick = () => {
-    this.lastClick = Date.now();
-  };
-
-  /**
-   * Determines, whether this click is on the container or not - a 50ms tolerance
-   * between now and the time of last click on the container is defined.
-   */
-  isClickingSomewhereElse = () => Date.now() - this.lastClick > 50;
 
   toggleOpen = e => {
     e.preventDefault();
     this.state.isOpen ? this.close() : this.open();
-    this.markClick();
   };
 
   close = () => {
@@ -64,12 +45,7 @@ class HeaderSystemMessagesContainer extends Component {
     return (
       <FetchManyResourceRenderer fetchManyStatus={fetchStatus} loading={<span />}>
         {() => (
-          <HeaderSystemMessagesDropdown
-            isOpen={isOpen}
-            toggleOpen={this.toggleOpen}
-            markClick={this.markClick}
-            systemMessages={systemMessages}
-          />
+          <HeaderSystemMessagesDropdown isOpen={isOpen} toggleOpen={this.toggleOpen} systemMessages={systemMessages} />
         )}
       </FetchManyResourceRenderer>
     );

@@ -20,17 +20,19 @@ const localizedTextDefaults = {
   text: '',
 };
 
-const messageInitialValues = () => ({
+const newMessageInitialValues = {
   localizedTexts: getLocalizedTextsInitialValues([], localizedTextDefaults),
   groupsIds: [],
   id: undefined,
+  type: 'success',
+  role: 'student',
   visibleFrom: moment(),
   visibleTo: moment()
     .add(1, 'week')
     .endOf('day'),
-});
+};
 
-const messageToForm = message => {
+const getMessageInitialValues = message => {
   const processedData = Object.assign({}, message, {
     visibleFrom: moment.unix(message.visibleFrom),
     visibleTo: moment.unix(message.visibleTo),
@@ -39,7 +41,7 @@ const messageToForm = message => {
   return processedData;
 };
 
-const messageToSubmit = data =>
+const transformMessageFormData = data =>
   Object.assign({}, data, {
     visibleFrom: moment(data.visibleFrom).unix(),
     visibleTo: moment(data.visibleTo).unix(),
@@ -49,10 +51,11 @@ const messageToSubmit = data =>
 class SystemMessages extends Component {
   state = {
     isOpen: false,
-    message: messageInitialValues(),
+    createNew: false,
+    message: newMessageInitialValues,
   };
 
-  formReset = () => this.setState({ isOpen: false, message: messageInitialValues() });
+  formReset = () => this.setState({ isOpen: false, message: newMessageInitialValues });
 
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllMessages)]);
 
@@ -114,7 +117,7 @@ class SystemMessages extends Component {
                 unlimitedHeight
                 footer={
                   <p className="em-margin-top text-center">
-                    <Button onClick={() => this.setState({ isOpen: true })} bsStyle="success">
+                    <Button onClick={() => this.setState({ isOpen: true, createNew: true })} bsStyle="success">
                       <AddIcon gapRight />
                       <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
                     </Button>
@@ -128,7 +131,7 @@ class SystemMessages extends Component {
                         bsSize="xs"
                         bsStyle="warning"
                         onClick={() => {
-                          this.setState({ isOpen: true, message: messageToForm(message) });
+                          this.setState({ isOpen: true, createNew: false, message: getMessageInitialValues(message) });
                         }}>
                         <EditIcon gapRight />
                         <FormattedMessage id="generic.edit" defaultMessage="Edit" />
@@ -139,6 +142,7 @@ class SystemMessages extends Component {
                 />
               </Box>
               <EditSystemMessageForm
+                createNew={this.state.createNew}
                 initialValues={this.state.message}
                 isOpen={this.state.isOpen}
                 onClose={() => this.formReset()}
@@ -171,7 +175,7 @@ export default connect(
   }),
   dispatch => ({
     loadAsync: () => SystemMessages.loadAsync({}, dispatch),
-    createMessage: data => dispatch(createMessage(messageToSubmit(data))),
-    editMessage: (id, data) => dispatch(editMessage(id, messageToSubmit(data))),
+    createMessage: data => dispatch(createMessage(transformMessageFormData(data))),
+    editMessage: (id, data) => dispatch(editMessage(id, transformMessageFormData(data))),
   })
 )(SystemMessages);

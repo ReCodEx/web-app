@@ -7,23 +7,24 @@ import { defaultMemoize } from 'reselect';
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
 import { getLocalizedText } from '../../../helpers/localizedData';
 import DateTime from '../../widgets/DateTime';
-import { roleLabels } from '../../helpers/usersRoles';
+import { roleLabels, rolePriorities } from '../../helpers/usersRoles';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import FilterSystemMessagesForm from '../../forms/FilterSystemMessagesForm/FilterSystemMessagesForm';
 
 import styles from './MessagesList.less';
 
-const getVisibleMessages = (systemMessages, showAll) =>
-  showAll ? systemMessages : systemMessages.filter(msg => msg.visibleTo * 1000 >= Date.now());
+const prepareData = defaultMemoize((systemMessages, showAll, renderActions) => {
+  const filteredMessages = showAll ? systemMessages : systemMessages.filter(msg => msg.visibleTo * 1000 >= Date.now());
+
+  return filteredMessages.map(message => ({
+    ...message,
+    text: { localizedTexts: message.localizedTexts },
+    buttons: renderActions && renderActions(message),
+  }));
+});
 
 class MessagesList extends Component {
   state = { showAll: false, visibleMessages: [] };
-
-  componentDidMount() {
-    this.setState({
-      visibleMessages: getVisibleMessages(this.props.systemMessages, this.state.showAll),
-    });
-  }
 
   prepareColumnDescriptors = defaultMemoize(locale => {
     const columns = [
@@ -44,6 +45,7 @@ class MessagesList extends Component {
         {
           comparator: ({ visibleFrom: f1 }, { visibleFrom: f2 }) => f2 - f1,
           cellRenderer: visibleFrom => visibleFrom && <DateTime unixts={visibleFrom} />,
+          className: 'valign-middle',
         }
       ),
 
@@ -53,19 +55,22 @@ class MessagesList extends Component {
         {
           comparator: ({ visibleTo: t1 }, { visibleTo: t2 }) => t2 - t1,
           cellRenderer: visibleTo => visibleTo && <DateTime unixts={visibleTo} />,
+          className: 'valign-middle',
         }
       ),
 
       new SortableTableColumnDescriptor('authorId', <FormattedMessage id="generic.author" defaultMessage="Author" />, {
-        cellRenderer: authorId => authorId && <UsersNameContainer userId={authorId} />,
+        cellRenderer: authorId => authorId && <UsersNameContainer userId={authorId} size={8} />,
+        className: 'valign-middle',
       }),
 
       new SortableTableColumnDescriptor(
         'role',
         <FormattedMessage id="app.systemMessagesList.role" defaultMessage="Role" />,
         {
-          comparator: ({ role: r1 }, { role: r2 }) => r1.localeCompare(r2, locale),
+          comparator: ({ role: r1 }, { role: r2 }) => Number(rolePriorities[r2]) - Number(rolePriorities[r1]),
           cellRenderer: role => role && roleLabels[role],
+          className: 'valign-middle',
         }
       ),
 
@@ -75,37 +80,22 @@ class MessagesList extends Component {
         {
           comparator: ({ type: t1 }, { type: t2 }) => t1.localeCompare(t2, locale),
           cellRenderer: type => type && <Alert bsStyle={type} className={styles.alertType} />,
+          className: 'text-center valign-middle',
         }
       ),
 
       new SortableTableColumnDescriptor('buttons', '', {
-        className: 'text-right',
+        className: 'text-right valign-middle',
       }),
     ];
 
     return columns;
   });
 
-  prepareData = defaultMemoize(systemMessages => {
-    const { renderActions } = this.props;
-
-    return systemMessages.map(message => {
-      const data = {
-        text: { localizedTexts: message.localizedTexts },
-        visibleFrom: message.visibleFrom,
-        visibleTo: message.visibleTo,
-        authorId: message.authorId,
-        role: message.role,
-        type: message.type,
-        buttons: renderActions && renderActions(message),
-      };
-      return data;
-    });
-  });
-
   render() {
     const {
       systemMessages,
+      renderActions,
       intl: { locale },
     } = this.props;
 
@@ -115,17 +105,17 @@ class MessagesList extends Component {
           onSubmit={({ showAll }) => {
             this.setState({
               showAll: showAll,
-              visibleMessages: getVisibleMessages(systemMessages, showAll),
             });
             return Promise.resolve();
           }}
           initialValues={{ showAll: this.state.showAll }}
         />
+        <hr className="no-margin" />
         <SortableTable
           hover
           columns={this.prepareColumnDescriptors(locale)}
           defaultOrder="visibleTo"
-          data={this.prepareData(this.state.visibleMessages)}
+          data={prepareData(systemMessages, this.state.showAll, renderActions)}
           empty={
             <div className="text-center text-muted">
               <FormattedMessage

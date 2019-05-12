@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Alert, Modal } from 'react-bootstrap';
-import moment from 'moment';
+import { defaultMemoize } from 'reselect';
 
 import { SelectField, DatetimeField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -21,8 +21,14 @@ const typeOptions = [
   { key: 'danger', name: 'Danger' },
 ];
 
+const getRoleOptions = defaultMemoize(formatMessage =>
+  Object.keys(roleLabelsSimpleMessages).map(role => ({
+    key: role,
+    name: formatMessage(roleLabelsSimpleMessages[role]),
+  }))
+);
+
 const EditSystemMessageForm = ({
-  initialValues,
   error,
   dirty,
   submitting,
@@ -30,15 +36,19 @@ const EditSystemMessageForm = ({
   submitFailed,
   submitSucceeded,
   invalid,
-  asyncValidating,
   isOpen,
   onClose,
-  intl: { formatMessage },
+  createNew = false,
+  intl: { locale, formatMessage },
 }) => (
   <Modal show={isOpen} backdrop="static" size="lg" onHide={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
-        <FormattedMessage id="app.editSystemMessageForm.title" defaultMessage="Edit System Message" />
+        {createNew ? (
+          <FormattedMessage id="app.editSystemMessageForm.title" defaultMessage="Edit System Message" />
+        ) : (
+          <FormattedMessage id="app.editSystemMessageForm.title" defaultMessage="Edit System Message" />
+        )}
       </Modal.Title>
     </Modal.Header>
     <Modal.Body>
@@ -54,18 +64,13 @@ const EditSystemMessageForm = ({
         name="type"
         component={SelectField}
         options={typeOptions}
-        addEmptyOption
         label={<FormattedMessage id="app.editSystemMessageForm.type" defaultMessage="Type of the notification." />}
       />
 
       <Field
         name="role"
         component={SelectField}
-        options={Object.keys(roleLabelsSimpleMessages).map(role => ({
-          key: role,
-          name: formatMessage(roleLabelsSimpleMessages[role]),
-        }))}
-        addEmptyOption
+        options={getRoleOptions(formatMessage)}
         label={
           <FormattedMessage
             id="app.editSystemMessageForm.role"
@@ -108,7 +113,6 @@ const EditSystemMessageForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           handleSubmit={handleSubmit}
-          asyncValidating={asyncValidating}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
@@ -128,18 +132,16 @@ const EditSystemMessageForm = ({
 
 EditSystemMessageForm.propTypes = {
   error: PropTypes.any,
-  initialValues: PropTypes.object.isRequired,
-  values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   links: PropTypes.object,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  createNew: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 
@@ -160,7 +162,7 @@ const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
   });
 
   if (!visibleFrom) {
-    errors['visibleFrom'] = (
+    errors.visibleFrom = (
       <FormattedMessage
         id="app.editSystemMessageForm.validation.visibleFromEmpty"
         defaultMessage="The visible from date must be set."
@@ -169,7 +171,7 @@ const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
   }
 
   if (!visibleTo) {
-    errors['visibleTo'] = (
+    errors.visibleTo = (
       <FormattedMessage
         id="app.editSystemMessageForm.validation.visibleToEmpty"
         defaultMessage="The visible to date must be set."
@@ -177,17 +179,8 @@ const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
     );
   }
 
-  if (visibleTo.isBefore(moment.unix(Date.now() / 1000))) {
-    errors['visibleTo'] = (
-      <FormattedMessage
-        id="app.editSystemMessageForm.validation.visibleToInHistory"
-        defaultMessage="The visible to date cannot be in the past."
-      />
-    );
-  }
-
   if (visibleTo.isBefore(visibleFrom)) {
-    errors['visibleFrom'] = (
+    errors.visibleFrom = (
       <FormattedMessage
         id="app.editSystemMessageForm.validation.visibleFromBeforeTo"
         defaultMessage="The visible from date cannot be after visible to date."
@@ -196,7 +189,7 @@ const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
   }
 
   if (!type) {
-    errors['type'] = (
+    errors.type = (
       <FormattedMessage
         id="app.editSystemMessageForm.validation.typeEmpty"
         defaultMessage="Type of the notification must be set."
@@ -205,7 +198,7 @@ const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
   }
 
   if (!role) {
-    errors['role'] = (
+    errors.role = (
       <FormattedMessage
         id="app.editSystemMessageForm.validation.roleEmpty"
         defaultMessage="Base user role of the notification muset be set."

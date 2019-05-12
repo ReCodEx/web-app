@@ -10,12 +10,13 @@ import HeaderNotification from '../HeaderNotification';
 
 import styles from './headerNotificationDropdown.less';
 
+const preventClickPropagation = ev => ev.stopPropagation();
+
 const HeaderNotificationsDropdown = ({
   isOpen,
   showAll,
   toggleOpen,
   toggleShowAll,
-  markClick,
   hideNotification,
   newNotifications,
   oldNotifications,
@@ -25,7 +26,8 @@ const HeaderNotificationsDropdown = ({
       'notifications-menu': true,
       dropdown: true,
       open: isOpen,
-    })}>
+    })}
+    onMouseDown={isOpen ? preventClickPropagation : undefined}>
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
       {newNotifications.size === 0 ? (
         <Icon icon={['far', 'bell']} />
@@ -36,7 +38,7 @@ const HeaderNotificationsDropdown = ({
         <Label bsStyle="danger">{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Label>
       )}
     </a>
-    <ul className={classnames(['dropdown-menu', styles.dropdownMenu])} onClick={markClick}>
+    <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>
       <li className="header">
         <FormattedMessage
           id="app.notifications.title"
@@ -79,7 +81,6 @@ HeaderNotificationsDropdown.propTypes = {
   showAll: PropTypes.bool,
   toggleOpen: PropTypes.func.isRequired,
   toggleShowAll: PropTypes.func.isRequired,
-  markClick: PropTypes.func.isRequired,
   hideNotification: PropTypes.func.isRequired,
   newNotifications: ImmutablePropTypes.list,
   oldNotifications: ImmutablePropTypes.list,

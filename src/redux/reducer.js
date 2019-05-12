@@ -60,6 +60,7 @@ const createRecodexReducers = (token, instanceId) => ({
   attachmentFiles,
   auth: auth(token, instanceId),
   boxes,
+  broker,
   canSubmit: canSubmitModule,
   comments,
   emailVerification,
@@ -101,11 +102,10 @@ const createRecodexReducers = (token, instanceId) => ({
   submissionEvaluations,
   submissionFailures,
   supplementaryFiles,
+  systemMessages,
+  upload,
   users,
   userSwitching,
-  upload,
-  broker,
-  systemMessages,
 });
 
 const librariesReducers = {
