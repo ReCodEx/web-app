@@ -13,11 +13,10 @@ import { fetchManyGroupsStatus } from '../../redux/selectors/groups';
 import { logout, refresh, selectInstance } from '../../redux/modules/auth';
 import { getJsData, resourceStatus } from '../../redux/helpers/resourceManager';
 
-// import fontawesome from '@fortawesome/fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import regularIcons from '@fortawesome/fontawesome-free-regular';
-import solidIcons from '@fortawesome/fontawesome-free-solid';
-import brandIcons from '@fortawesome/fontawesome-free-brands';
+import { far as regularIcons } from '@fortawesome/free-regular-svg-icons';
+import { fas as solidIcons } from '@fortawesome/free-solid-svg-icons';
+import { fab as brandIcons } from '@fortawesome/free-brands-svg-icons';
 
 import { LoadingIcon } from '../../components/icons';
 

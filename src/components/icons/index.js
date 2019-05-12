@@ -6,6 +6,8 @@ import Icon from './Icon';
  * Icons with meta-names
  */
 
+const defaultMessageIcon = ['far', 'envelope'];
+
 export const AddIcon = props => <Icon {...props} icon="plus" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
 export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
@@ -33,7 +35,7 @@ export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LoadingIcon = props => <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export const LockIcon = props => <Icon {...props} icon="lock" />;
-export const MailIcon = props => <Icon {...props} icon={['far', 'envelope']} />;
+export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
@@ -62,6 +64,17 @@ export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
 export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props => <Icon {...props} icon="chalkboard-teacher" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
+
+const messageIconTypes = {
+  success: ['far', 'check-circle'],
+  info: 'info-circle',
+  danger: 'radiation',
+  warning: 'exclamation-triangle',
+};
+export const TypedMessageIcon = ({ type, ...props }) => (
+  <Icon {...props} icon={messageIconTypes[type] || defaultMessageIcon} />
+);
+
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;

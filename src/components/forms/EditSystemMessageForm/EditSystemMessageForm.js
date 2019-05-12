@@ -45,7 +45,7 @@ const EditSystemMessageForm = ({
     <Modal.Header closeButton>
       <Modal.Title>
         {createNew ? (
-          <FormattedMessage id="app.editSystemMessageForm.title" defaultMessage="Edit System Message" />
+          <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
         ) : (
           <FormattedMessage id="app.editSystemMessageForm.title" defaultMessage="Edit System Message" />
         )}
