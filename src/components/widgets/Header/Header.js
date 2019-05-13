@@ -24,6 +24,7 @@ class Header extends Component {
 
   render() {
     const {
+      isLoggedIn,
       availableLangs = [],
       currentLang,
       currentUrl = '',
@@ -39,7 +40,7 @@ class Header extends Component {
               <LoadingIcon gapRight />
             ) : (
               <React.Fragment>
-                Re<b>C</b>
+                Re<b>X</b>
               </React.Fragment>
             )}
           </span>
@@ -77,7 +78,7 @@ class Header extends Component {
           </ClientOnly>
           <div className="navbar-custom-menu">
             <ul className="nav navbar-nav">
-              <HeaderSystemMessagesContainer />
+              {isLoggedIn && <HeaderSystemMessagesContainer />}
               <HeaderNotificationsContainer />
               {availableLangs.map(lang => (
                 <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />
@@ -91,6 +92,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
+  isLoggedIn: PropTypes.bool,
   toggleSidebarSize: PropTypes.func.isRequired,
   toggleSidebarVisibility: PropTypes.func.isRequired,
   currentLang: PropTypes.string.isRequired,

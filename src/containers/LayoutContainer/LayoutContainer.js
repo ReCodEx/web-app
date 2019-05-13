@@ -8,6 +8,7 @@ import Layout from '../../components/layout/Layout';
 import { anyPendingFetchOperations } from '../../redux/selectors/app';
 import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
+import { isLoggedIn } from '../../redux/selectors/auth';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
 
@@ -89,8 +90,8 @@ class LayoutContainer extends Component {
   });
 
   maybeHideSidebar = e => {
-    const { sidebar, toggleVisibility } = this.props;
-    if (sidebar.isOpen) {
+    const { sidebarIsOpen, toggleVisibility } = this.props;
+    if (sidebarIsOpen) {
       toggleVisibility();
     }
   };
@@ -111,7 +112,9 @@ class LayoutContainer extends Component {
     const {
       children,
       location: { pathname },
-      sidebar,
+      isLoggedIn,
+      sidebarIsCollapsed,
+      sidebarIsOpen,
       toggleSize,
       toggleVisibility,
       pendingFetchOperations,
@@ -124,7 +127,9 @@ class LayoutContainer extends Component {
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)} formats={ADDITIONAL_INTL_FORMATS}>
         <Layout
-          sidebar={sidebar}
+          isLoggedIn={isLoggedIn}
+          sidebarIsCollapsed={sidebarIsCollapsed}
+          sidebarIsOpen={sidebarIsOpen}
           toggleSize={toggleSize}
           toggleVisibility={toggleVisibility}
           onCloseSidebar={this.maybeHideSidebar}
@@ -159,7 +164,9 @@ LayoutContainer.propTypes = {
   collapse: PropTypes.func.isRequired,
   unroll: PropTypes.func.isRequired,
   pendingFetchOperations: PropTypes.bool,
-  sidebar: PropTypes.object,
+  isLoggedIn: PropTypes.bool,
+  sidebarIsCollapsed: PropTypes.bool,
+  sidebarIsOpen: PropTypes.bool,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }).isRequired,
@@ -167,10 +174,9 @@ LayoutContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => ({
-  sidebar: {
-    isOpen: isVisible(state),
-    isCollapsed: isCollapsed(state),
-  },
+  isLoggedIn: isLoggedIn(state),
+  sidebarIsCollapsed: isCollapsed(state),
+  sidebarIsOpen: isVisible(state),
   pendingFetchOperations: anyPendingFetchOperations(state),
 });
 

@@ -10,6 +10,7 @@ import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { fetchManyUserInstancesStatus } from '../../redux/selectors/instances';
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchManyGroupsStatus } from '../../redux/selectors/groups';
+import { fetchAllUserMessages } from '../../redux/modules/systemMessages';
 import { logout, refresh, selectInstance } from '../../redux/modules/auth';
 import { getJsData, resourceStatus } from '../../redux/helpers/resourceManager';
 
@@ -44,6 +45,7 @@ class App extends Component {
             })
           ),
           dispatch(fetchUsersInstancesIfNeeded(userId)),
+          dispatch(fetchAllUserMessages),
         ])
       : Promise.resolve();
 

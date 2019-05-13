@@ -5,17 +5,13 @@ import { connect } from 'react-redux';
 import HeaderSystemMessagesDropdown from '../../components/widgets/HeaderSystemMessagesDropdown';
 import { readyActiveSystemMessagesSelector, fetchManyUserStatus } from '../../redux/selectors/systemMessages';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import { fetchAllUserMessages } from '../../redux/modules/systemMessages';
 
 class HeaderSystemMessagesContainer extends Component {
   state = { isOpen: false };
 
-  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllUserMessages)]);
-
   // Monitor clicking and hide the notifications panel when the user clicks sideways
 
   componentWillMount = () => {
-    this.props.loadAsync();
     if (canUseDOM) {
       window.addEventListener('mousedown', this.close);
     }
@@ -55,15 +51,9 @@ class HeaderSystemMessagesContainer extends Component {
 HeaderSystemMessagesContainer.propTypes = {
   systemMessages: PropTypes.array.isRequired,
   fetchStatus: PropTypes.string,
-  loadAsync: PropTypes.func.isRequired,
 };
 
-export default connect(
-  state => ({
-    fetchStatus: fetchManyUserStatus(state),
-    systemMessages: readyActiveSystemMessagesSelector(state),
-  }),
-  dispatch => ({
-    loadAsync: () => HeaderSystemMessagesContainer.loadAsync({}, dispatch),
-  })
-)(HeaderSystemMessagesContainer);
+export default connect(state => ({
+  fetchStatus: fetchManyUserStatus(state),
+  systemMessages: readyActiveSystemMessagesSelector(state),
+}))(HeaderSystemMessagesContainer);
