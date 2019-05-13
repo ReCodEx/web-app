@@ -14,7 +14,9 @@ const title = getConfigVar('TITLE');
 const Layout = ({
   toggleSize,
   toggleVisibility,
-  sidebar,
+  isLoggedIn,
+  sidebarIsCollapsed,
+  sidebarIsOpen,
   pendingFetchOperations,
   children,
   lang,
@@ -26,14 +28,15 @@ const Layout = ({
     className={classnames({
       wrapper: true,
       'sidebar-mini': true,
-      'sidebar-collapse': sidebar.isCollapsed,
-      'sidebar-open': sidebar.isOpen,
+      'sidebar-collapse': sidebarIsCollapsed,
+      'sidebar-open': sidebarIsOpen,
     })}
     style={{
       overflow: 'visible',
     }}>
     <Helmet defaultTitle={`${title}`} titleTemplate={`%s | ${title}`} />
     <Header
+      isLoggedIn={isLoggedIn}
       toggleSidebarSize={toggleSize}
       toggleSidebarVisibility={toggleVisibility}
       availableLangs={availableLangs}
@@ -42,8 +45,8 @@ const Layout = ({
       pendingFetchOperations={pendingFetchOperations}
     />
     <SidebarContainer
-      isCollapsed={sidebar.isCollapsed}
-      small={!sidebar.isOpen && sidebar.isCollapsed} // does not always work, but is good enough
+      isCollapsed={sidebarIsCollapsed}
+      small={!sidebarIsOpen && sidebarIsCollapsed} // does not always work, but is good enough
       currentUrl={currentUrl}
     />
     <div onClick={onCloseSidebar}>
@@ -56,10 +59,9 @@ const Layout = ({
 Layout.propTypes = {
   toggleSize: PropTypes.func,
   toggleVisibility: PropTypes.func,
-  sidebar: PropTypes.shape({
-    isCollapsed: PropTypes.bool,
-    isOpen: PropTypes.bool,
-  }),
+  isLoggedIn: PropTypes.bool,
+  sidebarIsCollapsed: PropTypes.bool,
+  sidebarIsOpen: PropTypes.bool,
   pendingFetchOperations: PropTypes.bool,
   onCloseSidebar: PropTypes.func,
   children: PropTypes.element,
