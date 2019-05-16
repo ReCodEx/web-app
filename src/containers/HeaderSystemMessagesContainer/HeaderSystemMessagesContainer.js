@@ -35,13 +35,18 @@ class HeaderSystemMessagesContainer extends Component {
   open = () => this.setState({ isOpen: true });
 
   render() {
-    const { systemMessages, fetchStatus } = this.props;
+    const { systemMessages, fetchStatus, locale } = this.props;
     const { isOpen } = this.state;
 
     return (
       <FetchManyResourceRenderer fetchManyStatus={fetchStatus} loading={<span />}>
         {() => (
-          <HeaderSystemMessagesDropdown isOpen={isOpen} toggleOpen={this.toggleOpen} systemMessages={systemMessages} />
+          <HeaderSystemMessagesDropdown
+            isOpen={isOpen}
+            toggleOpen={this.toggleOpen}
+            systemMessages={systemMessages}
+            locale={locale}
+          />
         )}
       </FetchManyResourceRenderer>
     );
@@ -51,6 +56,7 @@ class HeaderSystemMessagesContainer extends Component {
 HeaderSystemMessagesContainer.propTypes = {
   systemMessages: PropTypes.array.isRequired,
   fetchStatus: PropTypes.string,
+  locale: PropTypes.string.isRequired,
 };
 
 export default connect(state => ({
