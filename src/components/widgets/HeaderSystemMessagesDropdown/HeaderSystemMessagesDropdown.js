@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 import { Label, Table } from 'react-bootstrap';
 
@@ -14,7 +14,7 @@ import DateTime from '../DateTime';
 
 const preventClickPropagation = ev => ev.stopPropagation();
 
-const HeaderSystemMessagesDropdown = ({ isOpen, toggleOpen, systemMessages, intl: { locale } }) => (
+const HeaderSystemMessagesDropdown = ({ isOpen, toggleOpen, systemMessages, locale }) => (
   <li
     className={classnames({
       'notifications-menu': true,
@@ -76,7 +76,7 @@ HeaderSystemMessagesDropdown.propTypes = {
   showAll: PropTypes.bool,
   toggleOpen: PropTypes.func.isRequired,
   systemMessages: PropTypes.array.isRequired,
-  intl: intlShape.isRequired,
+  locale: PropTypes.string.isRequired,
 };
 
-export default injectIntl(HeaderSystemMessagesDropdown);
+export default HeaderSystemMessagesDropdown;

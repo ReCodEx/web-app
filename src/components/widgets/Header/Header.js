@@ -78,7 +78,7 @@ class Header extends Component {
           </ClientOnly>
           <div className="navbar-custom-menu">
             <ul className="nav navbar-nav">
-              {isLoggedIn && <HeaderSystemMessagesContainer />}
+              {isLoggedIn && <HeaderSystemMessagesContainer locale={currentLang} />}
               <HeaderNotificationsContainer />
               {availableLangs.map(lang => (
                 <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />
