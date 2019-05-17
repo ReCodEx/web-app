@@ -5,6 +5,7 @@ import { Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-boots
 
 import Button from '../../FlatButton';
 import Icon from '../../../icons';
+import { safeGet } from '../../../../helpers/common';
 
 const messages = defineMessages({
   placeholder: {
@@ -13,18 +14,54 @@ const messages = defineMessages({
   },
 });
 
+const textareaStyle = { resize: 'none', overflow: 'hidden', height: 'auto' };
+
+const updateTextareaHeight = textarea => {
+  const saveScrollPos = window.scrollY; // we need to save viewport scroll position first
+
+  // First we make it small (reset the size)
+  textarea.style.height = '1px';
+  const newHeight = 2 + textarea.scrollHeight; // and see, how large the scroll area really is
+  const maxHeight = 500;
+
+  if (newHeight > maxHeight) {
+    // Set the height to maximum and allow scrollbars inside textarea
+    textarea.style.height = `${maxHeight}px`;
+    textarea.style.overflow = 'auto';
+  } else {
+    // Set the height to match actual text size and disable scrollbars
+    textarea.style.height = `${newHeight}px`;
+    textarea.style.overflow = 'hidden';
+    textarea.scrollTop = 0;
+  }
+
+  window.scrollTo(window.scrollX, saveScrollPos); // restore viewport scroll position (prevent document jumping)
+};
+
 class AddComment extends Component {
   state = { text: '', isPrivate: false };
 
-  changeText = text => this.setState({ text });
+  handleTextareaChange = ev => {
+    const textarea = ev.target;
+    this.setState({ text: textarea.value });
+    updateTextareaHeight(textarea);
+  };
+
   togglePrivate = () => this.setState({ isPrivate: !this.state.isPrivate });
 
-  addComment = e => {
-    e.preventDefault();
+  addComment = ev => {
     const { text, isPrivate } = this.state;
     const { addComment } = this.props;
     addComment(text, isPrivate);
     this.setState({ text: '' });
+
+    ev.preventDefault();
+    const formElement = safeGet(ev, ['currentTarget', 'form']);
+    const textarea = formElement && formElement.querySelector('textarea');
+    if (textarea) {
+      textarea.value = '';
+      updateTextareaHeight(textarea);
+    }
   };
 
   render() {
@@ -41,10 +78,11 @@ class AddComment extends Component {
           <InputGroup>
             <FormControl
               componentClass="textarea"
-              rows={text.split('\n').length}
-              style={{ resize: 'none', overflow: 'hidden' }}
+              rows={1}
+              style={textareaStyle}
               disabled={!addComment}
-              onChange={e => this.changeText(e.target.value)}
+              onChange={this.handleTextareaChange}
+              onInput={this.handleTextareInput}
               placeholder={formatMessage(messages.placeholder)}
               value={text}
             />
@@ -62,13 +100,13 @@ class AddComment extends Component {
             </InputGroup.Button>
           </InputGroup>
           <HelpBlock>
-            <Button onClick={this.togglePrivate} bsSize="xs" disabled={!addComment}>
+            <Button onClick={this.togglePrivate} bsSize="xs" disabled={!addComment} className="halfem-margin-right">
               {isPrivate ? (
                 <Icon icon="lock" className="text-success" />
               ) : (
                 <Icon icon="unlock-alt" className="text-warning" />
               )}
-            </Button>{' '}
+            </Button>
             {isPrivate && (
               <FormattedHTMLMessage
                 id="app.comments.warnings.isPrivate"
