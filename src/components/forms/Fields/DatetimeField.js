@@ -46,6 +46,7 @@ class DatetimeField extends Component {
           {...input}
           {...props}
           locale={lang}
+          timeFormat="H:mm"
           onFocus={() => this.onFocus()}
           inputProps={{ disabled }}
           bsClass={classnames({
