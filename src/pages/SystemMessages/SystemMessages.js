@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import Button from '../../components/widgets/FlatButton';
 import PageContent from '../../components/layout/PageContent';
@@ -64,7 +64,13 @@ class SystemMessages extends Component {
   }
 
   render() {
-    const { fetchStatus, createMessage, editMessage, systemMessages } = this.props;
+    const {
+      fetchStatus,
+      createMessage,
+      editMessage,
+      systemMessages,
+      intl: { locale },
+    } = this.props;
 
     return (
       <FetchManyResourceRenderer
@@ -114,33 +120,43 @@ class SystemMessages extends Component {
             <React.Fragment>
               <Box
                 title={<FormattedMessage id="app.systemMessages.listTitle" defaultMessage="System Messages" />}
-                unlimitedHeight
-                footer={
+                unlimitedHeight>
+                <React.Fragment>
+                  <MessagesList
+                    systemMessages={systemMessages}
+                    renderActions={message => (
+                      <React.Fragment>
+                        <Button
+                          bsSize="xs"
+                          bsStyle="warning"
+                          onClick={() => {
+                            this.setState({
+                              isOpen: true,
+                              createNew: false,
+                              message: getMessageInitialValues(message),
+                            });
+                          }}>
+                          <EditIcon gapRight />
+                          <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                        </Button>
+                        <DeleteSystemMessageButtonContainer
+                          id={message.id}
+                          bsSize="xs"
+                          locale={locale /* Hack to force re-rendering when locale changes */}
+                        />
+                      </React.Fragment>
+                    )}
+                  />
+                  <hr className="no-margin" />
                   <p className="em-margin-top text-center">
                     <Button onClick={() => this.setState({ isOpen: true, createNew: true })} bsStyle="success">
                       <AddIcon gapRight />
                       <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
                     </Button>
                   </p>
-                }>
-                <MessagesList
-                  systemMessages={systemMessages}
-                  renderActions={message => (
-                    <React.Fragment>
-                      <Button
-                        bsSize="xs"
-                        bsStyle="warning"
-                        onClick={() => {
-                          this.setState({ isOpen: true, createNew: false, message: getMessageInitialValues(message) });
-                        }}>
-                        <EditIcon gapRight />
-                        <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                      </Button>
-                      <DeleteSystemMessageButtonContainer id={message.id} bsSize="xs" />
-                    </React.Fragment>
-                  )}
-                />
+                </React.Fragment>
               </Box>
+
               <EditSystemMessageForm
                 createNew={this.state.createNew}
                 initialValues={this.state.message}
@@ -166,6 +182,7 @@ SystemMessages.propTypes = {
   createMessage: PropTypes.func,
   editMessage: PropTypes.func,
   systemMessages: PropTypes.array.isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default connect(
@@ -178,4 +195,4 @@ export default connect(
     createMessage: data => dispatch(createMessage(transformMessageFormData(data))),
     editMessage: (id, data) => dispatch(editMessage(id, transformMessageFormData(data))),
   })
-)(SystemMessages);
+)(injectIntl(SystemMessages));
