@@ -11,32 +11,35 @@ import { loadAceEditor, getAceModeFromExtension } from '../../helpers/AceEditorL
 let AceEditor = loadAceEditor();
 
 const SourceCodeField = (
-  { input, mode, meta: { error, warning }, label = null, children, tabIndex, onBlur, ...props },
+  { input, mode, meta: { error, warning }, label = null, children, tabIndex, onBlur, readOnly = false, ...props },
   { userSettings: { vimMode = false, darkTheme = false } }
 ) => (
   <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
     {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
     <ClientOnly>
-      <AceEditor
-        {...props}
-        {...input}
-        mode={getAceModeFromExtension(mode)}
-        theme={darkTheme ? 'monokai' : 'github'}
-        name={input.name}
-        tabIndex={tabIndex}
-        keyboardHandler={vimMode ? 'vim' : undefined}
-        width="100%"
-        height="100%"
-        minLines={5}
-        maxLines={20}
-        onBlur={
-          () => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
-        }
-        editorProps={{
-          $blockScrolling: Infinity,
-          $autoScrollEditorIntoView: true,
-        }}
-      />
+      <div className={readOnly ? 'noselection' : ''}>
+        <AceEditor
+          {...props}
+          {...input}
+          mode={getAceModeFromExtension(mode)}
+          theme={darkTheme ? 'monokai' : 'github'}
+          name={input.name}
+          tabIndex={tabIndex}
+          keyboardHandler={vimMode ? 'vim' : undefined}
+          width="100%"
+          height="100%"
+          minLines={5}
+          maxLines={20}
+          readOnly={readOnly}
+          onBlur={
+            () => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
+          }
+          editorProps={{
+            $blockScrolling: Infinity,
+            $autoScrollEditorIntoView: true,
+          }}
+        />
+      </div>
     </ClientOnly>
     {error && <HelpBlock> {error} </HelpBlock>}
     {!error && warning && <HelpBlock> {warning} </HelpBlock>}
@@ -61,6 +64,7 @@ SourceCodeField.propTypes = {
     PropTypes.element,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
+  readOnly: PropTypes.bool,
   onBlur: PropTypes.func,
 };
 
