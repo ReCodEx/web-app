@@ -184,3 +184,15 @@ th.shrink-col {
 .wider-tooltip>.tooltip-inner {
   max-width: 300px;
 }
+
+
+/*
+ * ACE Editor Overrides
+ */
+.noselection .ace_marker-layer .ace_selection {
+  background: transparent !important;
+}
+
+.noselection .ace_cursor {
+  color: transparent !important;
+}
