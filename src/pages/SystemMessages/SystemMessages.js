@@ -20,7 +20,7 @@ const localizedTextDefaults = {
   text: '',
 };
 
-const newMessageInitialValues = {
+const createMewMessageInitialValues = () => ({
   localizedTexts: getLocalizedTextsInitialValues([], localizedTextDefaults),
   groupsIds: [],
   id: undefined,
@@ -30,7 +30,7 @@ const newMessageInitialValues = {
   visibleTo: moment()
     .add(1, 'week')
     .endOf('day'),
-};
+});
 
 const getMessageInitialValues = message => {
   const processedData = Object.assign({}, message, {
@@ -52,10 +52,10 @@ class SystemMessages extends Component {
   state = {
     isOpen: false,
     createNew: false,
-    message: newMessageInitialValues,
+    message: createMewMessageInitialValues(),
   };
 
-  formReset = () => this.setState({ isOpen: false, message: newMessageInitialValues });
+  formReset = () => this.setState({ isOpen: false, message: createMewMessageInitialValues() });
 
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllMessages)]);
 
