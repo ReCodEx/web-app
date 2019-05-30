@@ -14,11 +14,13 @@ export const deleteMessage = actions.removeResource;
 export const fetchManyEndpoint = '/notifications/all';
 export const fetchAllMessages = actions.fetchMany({
   endpoint: fetchManyEndpoint,
+  meta: { allowReload: true },
 });
 
 export const fetchManyUserEndpoint = '/notifications';
 export const fetchAllUserMessages = actions.fetchMany({
   endpoint: fetchManyUserEndpoint,
+  meta: { allowReload: true },
 });
 
 /**

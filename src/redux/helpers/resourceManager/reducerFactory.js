@@ -23,8 +23,13 @@ const reducerFactory = (actionTypes, id = 'id') => ({
       .removeIn(['resources', tmpId])
       .setIn(['resources', data[id]], createRecord({ state: resourceStatus.FULFILLED, data })),
 
-  [actionTypes.FETCH_MANY_PENDING]: (state, { meta: { endpoint } }) =>
-    state.setIn(['fetchManyStatus', endpoint], resourceStatus.PENDING),
+  [actionTypes.FETCH_MANY_PENDING]: (state, { meta: { endpoint, allowReload = false } }) =>
+    state.setIn(
+      ['fetchManyStatus', endpoint],
+      allowReload && state.getIn(['fetchManyStatus', endpoint]) === resourceStatus.FULFILLED
+        ? resourceStatus.RELOADING
+        : resourceStatus.PENDING
+    ),
 
   [actionTypes.FETCH_MANY_REJECTED]: (state, { meta: { endpoint } }) =>
     state.setIn(['fetchManyStatus', endpoint], resourceStatus.FAILED),
