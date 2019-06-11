@@ -178,12 +178,25 @@ class EditUser extends Component {
                   disabledNameChange={data.privateData.isExternal && !isSuperAdmin}
                 />
               </Col>
-              <Col lg={6}>
-                <EditUserSettingsForm
-                  onSubmit={updateSettings}
-                  initialValues={prepareUserSettingsInitialValues(data.privateData.settings)}
-                />
-              </Col>
+
+              {data.privateData.settings && (
+                <Col lg={6}>
+                  <EditUserSettingsForm
+                    onSubmit={updateSettings}
+                    initialValues={prepareUserSettingsInitialValues(data.privateData.settings)}
+                  />
+                </Col>
+              )}
+
+              {isSuperAdmin && data.id !== loggedUserId && data.privateData && (
+                <Col lg={6}>
+                  <EditUserRoleForm
+                    currentRole={data.privateData.role}
+                    initialValues={{ role: data.privateData.role }}
+                    onSubmit={this.setRole}
+                  />
+                </Col>
+              )}
             </Row>
 
             {data && data.id && data.id === loggedUserId && (
@@ -200,18 +213,6 @@ class EditUser extends Component {
                       },
                     }}
                     lastToken={lastToken}
-                  />
-                </Col>
-              </Row>
-            )}
-
-            {isSuperAdmin && data.id !== loggedUserId && data.privateData && (
-              <Row>
-                <Col lg={12}>
-                  <EditUserRoleForm
-                    currentRole={data.privateData.role}
-                    initialValues={{ role: data.privateData.role }}
-                    onSubmit={this.setRole}
                   />
                 </Col>
               </Row>
