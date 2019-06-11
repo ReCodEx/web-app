@@ -42,5 +42,5 @@ export const readyActiveSystemMessagesSelector = createSelector(
   messages =>
     messages
       .filter(m => m.visibleFrom * 1000 <= Date.now() && m.visibleTo * 1000 >= Date.now())
-      .sort((a, b) => a.visibleTo - b.visibleTo) // show messages with shortest expiration first
+      .sort((a, b) => a.visibleFrom - b.visibleFrom)
 );

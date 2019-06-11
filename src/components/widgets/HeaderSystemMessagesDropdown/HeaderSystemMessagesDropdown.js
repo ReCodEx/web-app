@@ -14,7 +14,15 @@ import DateTime from '../DateTime';
 
 const preventClickPropagation = ev => ev.stopPropagation();
 
-const HeaderSystemMessagesDropdown = ({ isOpen, toggleOpen, systemMessages, locale }) => (
+const HeaderSystemMessagesDropdown = ({
+  isOpen,
+  toggleOpen,
+  systemMessages,
+  totalMessagesCount,
+  locale,
+  acceptActiveMessages,
+  unacceptActiveMessages,
+}) => (
   <li
     className={classnames({
       'notifications-menu': true,
@@ -30,12 +38,16 @@ const HeaderSystemMessagesDropdown = ({ isOpen, toggleOpen, systemMessages, loca
       <li className="header">
         <small>
           <FormattedMessage
-            id="app.systemMessages.title"
-            defaultMessage="You have {count, number} active {count, plural, one {message} two {messages} other {messages}}"
-            values={{ count: systemMessages.length }}
+            id="app.systemMessages.titleLong"
+            defaultMessage="You have {totalMessagesCount, number} active {totalMessagesCount, plural, one {message} two {messages} other {messages}} ({unreadCount, number} unread {unreadCount, plural, one {message} two {messages} other {messages}})"
+            values={{
+              totalMessagesCount,
+              unreadCount: systemMessages.length,
+            }}
           />
         </small>
       </li>
+
       <li>
         <ul className={classnames(['menu', styles.messageList])}>
           <li>
@@ -65,6 +77,24 @@ const HeaderSystemMessagesDropdown = ({ isOpen, toggleOpen, systemMessages, loca
               </tbody>
             </Table>
           </li>
+
+          {systemMessages.length > 0 && (
+            <li className="footer text-center clickable" onClick={acceptActiveMessages}>
+              <FormattedMessage
+                id="app.systemMessages.acceptActiveMessages"
+                defaultMessage="Hide messages (mark them as read)"
+              />
+            </li>
+          )}
+
+          {systemMessages.length === 0 && totalMessagesCount > 0 && (
+            <li className="footer text-center clickable" onClick={unacceptActiveMessages}>
+              <FormattedMessage
+                id="app.systemMessages.unacceptActiveMessages"
+                defaultMessage="Show all messages (mark them as unread)"
+              />
+            </li>
+          )}
         </ul>
       </li>
     </ul>
@@ -76,7 +106,10 @@ HeaderSystemMessagesDropdown.propTypes = {
   showAll: PropTypes.bool,
   toggleOpen: PropTypes.func.isRequired,
   systemMessages: PropTypes.array.isRequired,
+  totalMessagesCount: PropTypes.number.isRequired,
   locale: PropTypes.string.isRequired,
+  acceptActiveMessages: PropTypes.func,
+  unacceptActiveMessages: PropTypes.func,
 };
 
 export default HeaderSystemMessagesDropdown;
