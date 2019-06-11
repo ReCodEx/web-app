@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { canUseDOM } from 'exenv';
 import { connect } from 'react-redux';
+import { defaultMemoize } from 'reselect';
+
 import HeaderSystemMessagesDropdown from '../../components/widgets/HeaderSystemMessagesDropdown';
 import { readyActiveSystemMessagesSelector, fetchManyUserStatus } from '../../redux/selectors/systemMessages';
+import { loggedInUserSelector } from '../../redux/selectors/users';
+import { updateUiData } from '../../redux/modules/users';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { isReady, getJsData } from '../../redux/helpers/resourceManager';
+import { safeGet } from '../../helpers/common';
+
+const getVisibleSystemMessages = defaultMemoize((systemMessages, user) => {
+  const systemMessagesAccepted = safeGet(user, ['privateData', 'uiData', 'systemMessagesAccepted']);
+  return systemMessagesAccepted ? systemMessages.filter(m => m.visibleFrom > systemMessagesAccepted) : systemMessages;
+});
 
 class HeaderSystemMessagesContainer extends Component {
   state = { isOpen: false };
@@ -34,21 +47,40 @@ class HeaderSystemMessagesContainer extends Component {
 
   open = () => this.setState({ isOpen: true });
 
+  updateUiDataSystemMessagesAccepted = systemMessagesAccepted => {
+    const { loggedInUser, updateUiData } = this.props;
+    if (isReady(loggedInUser)) {
+      const user = getJsData(loggedInUser);
+      const uiData = safeGet(user, ['privateData', 'uiData'], {});
+      updateUiData(user.id, { ...uiData, systemMessagesAccepted });
+    }
+  };
+
+  acceptActiveMessages = () => this.updateUiDataSystemMessagesAccepted(Math.round(Date.now() / 1000));
+  unacceptActiveMessages = () => this.updateUiDataSystemMessagesAccepted(null);
+
   render() {
-    const { systemMessages, fetchStatus, locale } = this.props;
+    const { systemMessages, fetchStatus, loggedInUser, locale } = this.props;
     const { isOpen } = this.state;
 
     return (
-      <FetchManyResourceRenderer fetchManyStatus={fetchStatus} loading={<span />}>
-        {() => (
-          <HeaderSystemMessagesDropdown
-            isOpen={isOpen}
-            toggleOpen={this.toggleOpen}
-            systemMessages={systemMessages}
-            locale={locale}
-          />
+      <ResourceRenderer resource={loggedInUser} hiddenUntilReady>
+        {user => (
+          <FetchManyResourceRenderer fetchManyStatus={fetchStatus} loading={<span />}>
+            {() => (
+              <HeaderSystemMessagesDropdown
+                isOpen={isOpen}
+                toggleOpen={this.toggleOpen}
+                systemMessages={getVisibleSystemMessages(systemMessages, user)}
+                totalMessagesCount={systemMessages.length}
+                locale={locale}
+                acceptActiveMessages={this.acceptActiveMessages}
+                unacceptActiveMessages={this.unacceptActiveMessages}
+              />
+            )}
+          </FetchManyResourceRenderer>
         )}
-      </FetchManyResourceRenderer>
+      </ResourceRenderer>
     );
   }
 }
@@ -56,10 +88,18 @@ class HeaderSystemMessagesContainer extends Component {
 HeaderSystemMessagesContainer.propTypes = {
   systemMessages: PropTypes.array.isRequired,
   fetchStatus: PropTypes.string,
+  loggedInUser: ImmutablePropTypes.map,
+  updateUiData: PropTypes.func.isRequired,
   locale: PropTypes.string.isRequired,
 };
 
-export default connect(state => ({
-  fetchStatus: fetchManyUserStatus(state),
-  systemMessages: readyActiveSystemMessagesSelector(state),
-}))(HeaderSystemMessagesContainer);
+export default connect(
+  state => ({
+    fetchStatus: fetchManyUserStatus(state),
+    systemMessages: readyActiveSystemMessagesSelector(state),
+    loggedInUser: loggedInUserSelector(state),
+  }),
+  dispatch => ({
+    updateUiData: (userId, uiData) => dispatch(updateUiData(userId, uiData)),
+  })
+)(HeaderSystemMessagesContainer);

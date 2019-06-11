@@ -57,6 +57,7 @@ export const validateRegistrationData = (email, password) =>
 
 export const updateProfile = actions.updateResource;
 export const updateSettings = (id, body) => actions.updateResource(id, body, `/users/${id}/settings`);
+export const updateUiData = (id, uiData) => actions.updateResource(id, { uiData }, `/users/${id}/ui-data`);
 export const deleteUser = actions.removeResource;
 
 export const fetchSupervisors = groupId =>

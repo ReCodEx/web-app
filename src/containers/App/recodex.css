@@ -167,6 +167,13 @@ th.shrink-col {
 }
 
 /*
+ * Misc
+ */
+.clickable {
+  cursor: pointer;
+}
+
+/*
  * AdminLTE Boxes
  */
 
