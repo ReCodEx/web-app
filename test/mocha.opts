@@ -1,5 +1,5 @@
---compilers js:@babel/register
 --recursive
 --timeout 2000
+--require @babel/register
 --require ./test/setup.js
 --require mock-local-storage
