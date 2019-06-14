@@ -56,7 +56,12 @@ class HeaderSystemMessagesContainer extends Component {
     }
   };
 
-  acceptActiveMessages = () => this.updateUiDataSystemMessagesAccepted(Math.round(Date.now() / 1000));
+  acceptActiveMessages = () => {
+    const { systemMessages } = this.props;
+    const lastMessageFrom = systemMessages.reduce((lastFrom, { visibleFrom }) => Math.max(lastFrom, visibleFrom), 0);
+    this.updateUiDataSystemMessagesAccepted(lastMessageFrom || Math.floor(Date.now() / 1000));
+  };
+
   unacceptActiveMessages = () => this.updateUiDataSystemMessagesAccepted(null);
 
   render() {
