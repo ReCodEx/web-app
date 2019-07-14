@@ -239,26 +239,28 @@ EditAssignment.propTypes = {
 
 const editAssignmentFormSelector = formValueSelector('editAssignment');
 
-export default connect(
-  (state, { params: { assignmentId } }) => {
-    const assignment = getAssignment(state)(assignmentId);
-    return {
-      assignment,
-      userId: loggedInUserIdSelector(state),
-      exercise: getExerciseOfAssignmentJS(state)(assignmentId),
-      runtimeEnvironments: runtimeEnvironmentsSelector(state),
-      firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
-      allowSecondDeadline: editAssignmentFormSelector(state, 'allowSecondDeadline'),
-      visibility: editAssignmentFormSelector(state, 'visibility'),
-      allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
-    };
-  },
-  (dispatch, { params: { assignmentId } }) => ({
-    push: url => dispatch(push(url)),
-    reset: () => dispatch(reset('editAssignment')),
-    loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
-    editAssignment: data => dispatch(editAssignment(assignmentId, data)),
-    exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
-    validateAssignment: version => dispatch(validateAssignment(assignmentId, version)),
-  })
-)(withLinks(EditAssignment));
+export default withLinks(
+  connect(
+    (state, { params: { assignmentId } }) => {
+      const assignment = getAssignment(state)(assignmentId);
+      return {
+        assignment,
+        userId: loggedInUserIdSelector(state),
+        exercise: getExerciseOfAssignmentJS(state)(assignmentId),
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
+        firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
+        allowSecondDeadline: editAssignmentFormSelector(state, 'allowSecondDeadline'),
+        visibility: editAssignmentFormSelector(state, 'visibility'),
+        allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
+      };
+    },
+    (dispatch, { params: { assignmentId } }) => ({
+      push: url => dispatch(push(url)),
+      reset: () => dispatch(reset('editAssignment')),
+      loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
+      editAssignment: data => dispatch(editAssignment(assignmentId, data)),
+      exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+      validateAssignment: version => dispatch(validateAssignment(assignmentId, version)),
+    })
+  )(EditAssignment)
+);

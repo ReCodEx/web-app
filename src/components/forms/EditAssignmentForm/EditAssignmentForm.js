@@ -602,7 +602,7 @@ const validate = (
 
   validateTwoDeadlines(errors, formatMessage, firstDeadline, secondDeadline, allowSecondDeadline);
 
-  const formEnabledRuntimes = runtimeEnvironmentIds.filter(key => enabledRuntime[key]);
+  const formEnabledRuntimes = (runtimeEnvironmentIds || []).filter(key => enabledRuntime[key]);
   if (formEnabledRuntimes.length === 0) {
     errors._error = (
       <FormattedMessage

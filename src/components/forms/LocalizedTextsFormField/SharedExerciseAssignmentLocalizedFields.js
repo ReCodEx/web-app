@@ -6,7 +6,7 @@ import { TextField, MarkdownTextAreaField } from '../Fields';
 
 const isURL = url => {
   const pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
-  return url.trim() !== '' && !pattern.test(url.trim()) ? (
+  return url && url.trim() !== '' && !pattern.test(url.trim()) ? (
     <FormattedMessage
       id="app.editAssignmentForm.localized.urlValidation"
       defaultMessage="Given string is not a valid URL."

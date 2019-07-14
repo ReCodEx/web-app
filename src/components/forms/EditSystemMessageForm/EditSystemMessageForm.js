@@ -179,7 +179,7 @@ const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
     );
   }
 
-  if (visibleTo.isBefore(visibleFrom)) {
+  if (visibleTo && visibleTo.isBefore(visibleFrom)) {
     errors.visibleFrom = (
       <FormattedMessage
         id="app.editSystemMessageForm.validation.visibleFromBeforeTo"

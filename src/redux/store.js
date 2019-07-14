@@ -22,7 +22,7 @@ const engine = filter(createEngine(`${PERSISTENT_TOKENS_KEY_PREFIX}/store`), ['u
 const getMiddleware = history => [
   authMiddleware,
   apiMiddleware,
-  promiseMiddleware(),
+  promiseMiddleware,
   thunkMiddleware,
   routerMiddleware(history),
   storage.createMiddleware(
