@@ -103,6 +103,10 @@ export const transformLocalizedTextsFormData = formData => {
  * @param internalValidation {function} injected internal validator called on every enabled localized text
  */
 export const validateLocalizedTextsFormData = (errors, formData, internalValidation = null) => {
+  if (!formData) {
+    return errors;
+  }
+
   // Ensure that at least one localized text version is enabled.
   const enabledCount = formData.reduce((acc, data) => acc + (data && data._enabled ? 1 : 0), 0);
   if (enabledCount < 1) {

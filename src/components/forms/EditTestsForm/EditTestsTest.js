@@ -6,9 +6,10 @@ import { FormattedMessage } from 'react-intl';
 
 import EditTestsTestRow from './EditTestsTestRow';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
+import { safeGet } from '../../../helpers/common';
 
 const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
-  const weightSum = isUniform ? fields.length : testValues.reduce((acc, val) => acc + Number(val.weight), 0);
+  const weightSum = isUniform ? fields.length : (testValues || []).reduce((acc, val) => acc + Number(val.weight), 0);
 
   return (
     <div>
@@ -38,7 +39,7 @@ const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
                 isUniform={isUniform}
                 readOnly={readOnly}
                 percent={
-                  testValues[index] && testValues[index].weight
+                  safeGet(testValues, [index, 'weight'])
                     ? prettyPrintPercent((isUniform ? 1 : Number(testValues[index].weight)) / weightSum)
                     : '?'
                 }
@@ -63,7 +64,7 @@ EditTestsTest.propTypes = {
   readOnly: PropTypes.bool,
   fields: PropTypes.object.isRequired,
   isUniform: PropTypes.bool.isRequired,
-  testValues: PropTypes.array.isRequired,
+  testValues: PropTypes.array,
 };
 
 export default formValues({

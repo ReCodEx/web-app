@@ -118,8 +118,11 @@ EditTestsForm.propTypes = {
   formValues: PropTypes.object,
 };
 
-const validate = ({ isUniform, tests }) => {
+const validate = ({ tests }) => {
   const errors = {};
+  if (!tests) {
+    return errors;
+  }
 
   const testsErrors = {};
   const knownTests = new Set();

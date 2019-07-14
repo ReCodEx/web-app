@@ -188,6 +188,10 @@ EditLimitsForm.propTypes = {
 
 const validate = ({ limits }, { constraints, environments }) => {
   const errors = {};
+  if (!limits) {
+    return errors;
+  }
+
   const brokenEnvironments = validateLimitsTimeTotals(limits, constraints.totalTime);
 
   if (brokenEnvironments && brokenEnvironments.length > 0) {

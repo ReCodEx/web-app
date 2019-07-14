@@ -192,6 +192,10 @@ GenerateTokenForm.propTypes = {
 
 const validate = ({ scopes, expiration }) => {
   const errors = {};
+  if (!scopes || !expiration) {
+    return errors;
+  }
+
   if (!scopes['read-all'] && !scopes.master) {
     errors._error = (
       <FormattedHTMLMessage
@@ -212,7 +216,7 @@ const validate = ({ scopes, expiration }) => {
 
 const warn = ({ scopes }) => {
   const warnings = {};
-  if (scopes['read-all'] && scopes.master) {
+  if (scopes && scopes['read-all'] && scopes.master) {
     warnings._warning = (
       <FormattedHTMLMessage
         id="app.generateTokenForm.warnBothMasterAndReadAll"
