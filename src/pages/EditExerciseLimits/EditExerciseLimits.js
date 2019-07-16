@@ -50,13 +50,13 @@ import {
 } from '../../helpers/exercise/limits';
 
 class EditExerciseLimits extends Component {
-  componentWillMount = () => this.props.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps = nextProps => {
-    if (this.props.params.exerciseId !== nextProps.params.exerciseId) {
-      nextProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+      this.props.loadAsync();
     }
-  };
+  }
 
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([

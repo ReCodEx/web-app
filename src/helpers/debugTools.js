@@ -19,7 +19,7 @@ export const modificationWatchdog = (name, value, verbose = false) => {
   return value;
 };
 
-// This should be called from componentWillReceiveProps(nextProps), for instance.
+// This should be called from componentDidUpdate(nextProps), for instance.
 export const logPropsChanges = (className, props, nextProps) => {
   let changed = false;
   for (const p in props) {

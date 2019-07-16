@@ -5,16 +5,14 @@ import { Button, FormGroup, ControlLabel, FormControl, InputGroup } from 'react-
 import { LoadingIcon, SearchIcon, WarningIcon } from '../../icons';
 
 class SimpleTextSearch extends Component {
-  state = { query: this.props.query };
+  state = { query: this.props.query, lastPropsQuery: this.props.query };
 
   queryChangeHandler = ev => {
     this.setState({ query: ev.target.value });
   };
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.query !== newProps.query) {
-      this.setState({ query: newProps.query });
-    }
+  static getDerivedStateFromProps(props, state) {
+    return props.query !== state.lastPropsQuery ? { query: props.query, lastPropsQuery: props.query } : null;
   }
 
   render() {

@@ -17,11 +17,12 @@ import { createGetPipelineFiles } from '../../../redux/selectors/pipelineFiles';
 
 class EditPipelineForm extends Component {
   componentDidMount = () => this.props.loadAsync();
-  componentWillReceiveProps = props => {
-    if (this.props.pipeline.id !== props.pipeline.id) {
-      props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.pipeline.id !== prevProps.pipeline.id) {
+      this.props.loadAsync();
     }
-  };
+  }
 
   static loadAsync = ({ pipeline }, dispatch) => {
     Promise.all([dispatch(fetchSupplementaryFilesForPipeline(pipeline.id))]);

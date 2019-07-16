@@ -84,7 +84,7 @@ class PaginationContainer extends Component {
   }
 
   // Mounting handles also redux state initialization using default values and fetching the first batch.
-  componentWillMount() {
+  componentDidMount() {
     const { hideAllItems } = this.props;
     if (!hideAllItems) {
       this.reload();
@@ -92,19 +92,19 @@ class PaginationContainer extends Component {
   }
 
   // When lang or hideAllItems changes, reload is required ...
-  componentWillReceiveProps(newProps) {
-    if (newProps.id !== this.props.id) {
-      PaginationContainer.init(newProps);
+  componentDidUpdate(prevProps) {
+    if (prevProps.id !== this.props.id) {
+      PaginationContainer.init(this.props);
     }
 
     if (
-      (this.props.intl.locale !== newProps.intl.locale ||
-        newProps.id !== this.props.id ||
-        newProps.endpoint !== this.props.endpoint) &&
-      !newProps.hideAllItems &&
-      !newProps.isPending
+      (this.props.intl.locale !== prevProps.intl.locale ||
+        prevProps.id !== this.props.id ||
+        prevProps.endpoint !== this.props.endpoint) &&
+      !this.props.hideAllItems &&
+      !this.props.isPending
     ) {
-      newProps.reload(newProps.id, newProps.endpoint, newProps.intl.locale);
+      this.props.reload(this.props.id, this.props.endpoint, this.props.intl.locale);
     }
   }
 

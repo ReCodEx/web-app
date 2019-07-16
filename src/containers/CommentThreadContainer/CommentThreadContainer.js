@@ -26,14 +26,8 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
  * not interleave.
  */
 class CommentThreadContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     CommentThreadContainer.loadData(this.props);
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (this.props.threadId !== newProps.threadId) {
-      CommentThreadContainer.loadData(newProps);
-    }
   }
 
   static loadData = ({ loadThreadIfNeeded }) => {

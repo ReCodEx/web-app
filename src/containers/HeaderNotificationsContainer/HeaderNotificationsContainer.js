@@ -8,10 +8,18 @@ import { hideNotification } from '../../redux/modules/notifications';
 import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications';
 
 class HeaderNotificationsContainer extends Component {
-  state = { isOpen: false, showAll: false };
+  state = { isOpen: false, showAll: false, visibleNotifications: null };
+
+  static getDerivedStateFromProps(props, state) {
+    const visibleNotifications = props.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
+    if (state.visibleNotifications !== visibleNotifications && visibleNotifications > 0) {
+      return { isOpen: true, visibleNotifications }; // force open the notifications dropdown - there are some new notifications
+    }
+    return null;
+  }
 
   // Monitor clicking and hide the notifications panel when the user clicks sideways
-  componentWillMount = () => {
+  componentDidMount = () => {
     if (canUseDOM) {
       window.addEventListener('mousedown', this.close);
     }
@@ -38,14 +46,6 @@ class HeaderNotificationsContainer extends Component {
   };
 
   open = () => this.setState({ isOpen: true });
-
-  componentWillReceiveProps = newProps => {
-    const oldVisible = this.props.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
-    const newVisible = newProps.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
-    if (oldVisible !== newVisible) {
-      this.setState({ isOpen: true }); // force open the notifications dropdown - there are some new notifications
-    }
-  };
 
   render() {
     const { newNotifications, oldNotifications, hideNotification } = this.props;

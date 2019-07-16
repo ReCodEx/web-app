@@ -232,13 +232,11 @@ class AssignmentStats extends Component {
     this.setState({ [ev.target.name]: !this.state[ev.target.name] });
   };
 
-  componentWillMount() {
-    this.props.loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.assignmentId !== newProps.assignmentId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.assignmentId !== prevProps.assignmentId) {
+      this.props.loadAsync();
     }
   }
 

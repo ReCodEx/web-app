@@ -17,9 +17,7 @@ class SubmissionFailures extends Component {
 
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllFailures)]);
 
-  componentWillMount() {
-    this.props.loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
   render() {
     const { submissionFailures, fetchStatus, resolveFailure } = this.props;

@@ -14,11 +14,8 @@ if (canUseDOM) {
 }
 
 class MarkdownTextAreaField extends Component {
-  componentWillMount = () => {
-    const { showPreview = false } = this.props;
-    this.setState({
-      showPreview,
-    });
+  state = {
+    showPreview: this.props.showPreview || false,
   };
 
   shouldComponentUpdate() {

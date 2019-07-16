@@ -55,17 +55,17 @@ class Assignment extends Component {
       dispatch(fetchUsersSolutions(userId, assignmentId)),
     ]);
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadAsync(this.props.userId || this.props.loggedInUserId);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentDidUpdate(prevProps) {
     if (
-      this.props.params.assignmentId !== newProps.params.assignmentId ||
-      this.props.userId !== newProps.userId ||
-      (!this.props.userId && this.props.loggedInUserId !== newProps.loggedInUserId)
+      this.props.params.assignmentId !== prevProps.params.assignmentId ||
+      this.props.userId !== prevProps.userId ||
+      (!prevProps.userId && this.props.loggedInUserId !== prevProps.loggedInUserId)
     ) {
-      newProps.loadAsync(newProps.userId || newProps.loggedInUserId);
+      this.props.loadAsync(this.props.userId || this.props.loggedInUserId);
     }
   }
 

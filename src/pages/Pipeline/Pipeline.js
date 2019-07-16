@@ -30,20 +30,19 @@ class Pipeline extends Component {
     forkId: null,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadAsync(val => this.setState(val));
     this.reset();
   }
-  componentWillReceiveProps = props => {
-    if (this.props.params.pipelineId !== props.params.pipelineId) {
-      props.loadAsync(val => this.setState(val));
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.pipelineId !== prevProps.params.pipelineId) {
+      this.props.loadAsync(val => this.setState(val));
       this.reset();
     }
-  };
-
-  reset() {
-    this.setState({ forkId: Math.random().toString() });
   }
+
+  reset = () => this.setState({ forkId: Math.random().toString() });
 
   static loadAsync = ({ pipelineId }, dispatch, { setState = null }) =>
     Promise.all([

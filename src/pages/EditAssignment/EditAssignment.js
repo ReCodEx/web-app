@@ -34,17 +34,18 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 import withLinks from '../../helpers/withLinks';
 
 class EditAssignment extends Component {
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = nextProps => {
-    if (this.props.params.assignmentId !== nextProps.params.assignmentId) {
-      nextProps.reset();
-      nextProps.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.assignmentId !== prevProps.params.assignmentId) {
+      this.props.reset();
+      this.props.loadAsync();
     }
 
-    if (isReady(nextProps.assignment)) {
-      this.groupId = getJsData(nextProps.assignment).groupId;
+    if (isReady(this.props.assignment)) {
+      this.groupId = getJsData(this.props.assignment).groupId;
     }
-  };
+  }
 
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([

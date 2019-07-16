@@ -27,19 +27,29 @@ const ADDITIONAL_INTL_FORMATS = {
   },
 };
 
+const getLang = props => {
+  let lang = props.params.lang;
+  if (!lang) {
+    lang = defaultLanguage;
+  }
+
+  return lang;
+};
+
 /**
  * Handles the dependency injection of the localized links based on the current language stated in the URL.
  * Also controls the state of the sidebar - collapsing and showing the sidebar.
  */
 class LayoutContainer extends Component {
-  state = { links: null };
+  state = { lang: getLang(this.props), links: linksFactory(getLang(this.props)) };
 
-  componentWillMount() {
+  componentDidMount() {
     this.changeLang(this.props);
     this.resizeSidebarToDefault(this.props, this.context);
   }
 
-  componentWillReceiveProps(newProps, newContext) {
+  UNSAFE_componentWillReceiveProps(newProps, newContext) {
+    // TODO this needs to be rewritten along with the new context handling...
     if (
       (typeof this.context.userSettings.openedSidebar === 'undefined' &&
         typeof newContext.userSettings.openedSidebar !== 'undefined') ||
@@ -64,17 +74,8 @@ class LayoutContainer extends Component {
   getDefaultOpenedSidebar = ({ userSettings }) =>
     userSettings && typeof userSettings.openedSidebar !== 'undefined' ? userSettings.openedSidebar : true;
 
-  getLang = props => {
-    let lang = props.params.lang;
-    if (!lang) {
-      lang = defaultLanguage;
-    }
-
-    return lang;
-  };
-
   changeLang = props => {
-    const lang = this.getLang(props);
+    const lang = getLang(props);
     this.setState({ lang, links: linksFactory(lang) });
     this.forceUpdate();
   };

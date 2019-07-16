@@ -60,8 +60,14 @@ export const encodeNumId = id => {
 };
 
 /*
- * Array Helpers
+ * Array/Object Helpers
  */
+
+/**
+ * Check whether given object is an empty object {}.
+ * @param {*} obj
+ */
+export const isEmptyObject = obj => Object.keys(obj).length === 0;
 
 /**
  * Create numeric index range [start, end). If start > end, the range goes in descending order from start to end-1.

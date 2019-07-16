@@ -72,31 +72,24 @@ class GroupDetail extends Component {
       ),
     ]);
 
-  componentWillMount() {
-    const { loadAsync } = this.props;
-    loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps(newProps) {
-    const {
-      params: { groupId },
-    } = this.props;
-
-    if (groupId !== newProps.params.groupId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.groupId !== prevProps.params.groupId) {
+      this.props.loadAsync();
       return;
     }
 
     if (
       isReady(this.props.group) &&
-      isReady(newProps.group) &&
+      isReady(prevProps.group) &&
       this.props.group.hasIn(['data', 'privateData', 'students']) &&
-      newProps.group.hasIn(['data', 'privateData', 'students'])
+      prevProps.group.hasIn(['data', 'privateData', 'students'])
     ) {
-      const thisData = this.props.group.toJS().data.privateData;
-      const newData = newProps.group.toJS().data.privateData;
-      if (thisData.students.length !== newData.students.length) {
-        newProps.loadAsync(newProps.userId, newProps.isSuperAdmin);
+      const prevData = prevProps.group.toJS().data.privateData;
+      const newData = this.props.group.toJS().data.privateData;
+      if (prevData.students.length !== newData.students.length) {
+        this.props.loadAsync();
       }
     }
   }

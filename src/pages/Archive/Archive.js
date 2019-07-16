@@ -72,7 +72,7 @@ class Archive extends Component {
   static loadAsync = (params, dispatch, { instanceId }) =>
     Promise.all([dispatch(fetchInstancesIfNeeded(instanceId)), dispatch(fetchAllGroups({ archived: true }))]);
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadAsync(this.props.instanceId);
   }
 

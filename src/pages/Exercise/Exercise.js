@@ -60,7 +60,7 @@ export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
 };
 
 class Exercise extends Component {
-  state = { forkId: null };
+  state = { forkId: Math.random().toString() };
 
   static loadAsync = ({ exerciseId }, dispatch, { userId }) =>
     Promise.all([
@@ -73,14 +73,14 @@ class Exercise extends Component {
       //      dispatch(fetchExercisePipelines(exerciseId)), // TODO - awaiting modification (many-to-many relation with exercises)
     ]);
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadAsync(this.props.userId);
     this.reset();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.exerciseId !== newProps.params.exerciseId) {
-      newProps.loadAsync(this.props.userId);
+  componentDidUpdate(prevProps) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+      this.props.loadAsync(this.props.userId);
       this.reset();
     }
   }

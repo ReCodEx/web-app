@@ -13,12 +13,13 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchStudents } from '../../redux/modules/users';
 
 class StudentsListContainer extends Component {
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = newProps => {
-    if (newProps.groupId !== this.props.groupId) {
-      newProps.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.groupId !== this.props.groupId) {
+      this.props.loadAsync();
     }
-  };
+  }
 
   render() {
     const { group, students, stats, ...props } = this.props;

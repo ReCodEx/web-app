@@ -21,15 +21,12 @@ class PipelineVisualEditor extends Component {
     nodeToEdit: null,
   };
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     // initialize the graph, if the source is valid
     const { source } = this.props;
     const graph = createGraphFromNodes(source);
-
     this.setState({ graph });
-  };
 
-  componentDidMount = () => {
     const { editorWrapper } = this;
     editorWrapper.addEventListener('click', e => this.onClick(e.target));
   };

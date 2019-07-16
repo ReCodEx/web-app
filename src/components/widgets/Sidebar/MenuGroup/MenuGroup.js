@@ -11,18 +11,18 @@ import { getLocalizedName } from '../../../../helpers/localizedData';
 import Icon from '../../../icons';
 
 class MenuGroup extends Component {
-  componentWillMount = () =>
-    this.setState({
-      open: this.isActive(this.props),
-    });
-
-  componentWillReceiveProps = newProps => {
-    if (this.isActive(this.props) !== this.isActive(newProps)) {
-      this.setState({
-        open: this.isActive(newProps),
-      });
-    }
+  state = {
+    open: null,
+    defaultOpen: null,
   };
+
+  static getDerivedStateFromProps = ({ isActive = false }, state) =>
+    state.defaultOpen !== isActive // props have changed -> reinitialize
+      ? {
+          open: isActive, // this is actual state value indicating expanded/collapsed menu
+          defaultOpen: isActive, // this is only derived from props, so we can detect props change and reinitialize state
+        }
+      : null;
 
   toggle = e => {
     e.preventDefault();
@@ -116,11 +116,8 @@ MenuGroup.propTypes = {
   forceOpen: PropTypes.bool,
   createLink: PropTypes.func.isRequired,
   notifications: PropTypes.object,
+  isActive: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
-};
-
-MenuGroup.contextTypes = {
-  isActive: PropTypes.func,
 };
 
 export default injectIntl(MenuGroup);

@@ -55,14 +55,14 @@ class ExerciseAssignments extends Component {
       dispatch(fetchExerciseAssignments(exerciseId)),
     ]);
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadAsync();
     this.reset();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.exerciseId !== newProps.params.exerciseId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+      this.props.loadAsync();
       this.reset();
     }
   }

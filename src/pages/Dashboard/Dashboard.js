@@ -47,15 +47,15 @@ const supervisorOfCount = user => safeGet(user, ['privateData', 'groups', 'super
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
 
-  componentWillReceiveProps = newProps => {
+  componentDidUpdate(prevProps) {
     if (
-      this.props.userId !== newProps.userId ||
-      this.props.supervisorOf.size > newProps.supervisorOf.size ||
-      this.props.studentOf.size > newProps.studentOf.size
+      this.props.userId !== prevProps.userId ||
+      this.props.supervisorOf.size < prevProps.supervisorOf.size ||
+      this.props.studentOf.size < prevProps.studentOf.size
     ) {
-      newProps.loadAsync(newProps.userId);
+      this.props.loadAsync(this.props.userId);
     }
-  };
+  }
 
   /**
    * A fairly complicated load method - uses redux thunk

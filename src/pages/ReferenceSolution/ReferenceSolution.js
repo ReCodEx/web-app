@@ -46,13 +46,11 @@ class ReferenceSolution extends Component {
       dispatch(fetchReferenceSolutionEvaluationsForSolution(referenceSolutionId)),
     ]);
 
-  componentWillMount() {
-    this.props.loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.referenceSolutionId !== newProps.params.referenceSolutionId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.referenceSolutionId !== prevProps.params.referenceSolutionId) {
+      this.props.loadAsync();
     }
   }
 

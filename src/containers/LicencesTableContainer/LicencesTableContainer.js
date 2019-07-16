@@ -12,12 +12,13 @@ import { getLicencesOfInstance } from '../../redux/selectors/licences';
 class LicencesTableContainer extends Component {
   static loadAsync = ({ instanceId }, dispatch) => dispatch(fetchInstanceLincences(instanceId));
 
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = newProps => {
-    if (this.props.instance.id !== newProps.instance.id) {
-      newProps.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.instance.id !== prevProps.instance.id) {
+      this.props.loadAsync();
     }
-  };
+  }
 
   render() {
     const { licences, instance } = this.props;

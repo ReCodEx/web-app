@@ -5,9 +5,7 @@ import Button from '../../widgets/FlatButton';
 import { SendIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
 
 class SubmitButton extends Component {
-  componentWillMount() {
-    this.setState({ saved: false });
-  }
+  state = { saved: false };
 
   componentWillUnmount() {
     this.unmounted = true;

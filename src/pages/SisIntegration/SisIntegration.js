@@ -38,17 +38,17 @@ class SisIntegration extends Component {
 
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllTerms)]);
 
-  componentWillMount() {
+  componentDidMount() {
     const { loadAsync, loggedInUser } = this.props;
     const role = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'role']);
     isSuperadminRole(role) && loadAsync();
   }
 
-  componentWillReceiveProps(newProps) {
-    const newRole = newProps.loggedInUser && newProps.loggedInUser.getIn(['data', 'privateData', 'role']);
-    const oldRole = this.props.loggedInUser && this.props.loggedInUser.getIn(['data', 'privateData', 'role']);
+  componentDidUpdate(prevProps) {
+    const oldRole = prevProps.loggedInUser && prevProps.loggedInUser.getIn(['data', 'privateData', 'role']);
+    const newRole = this.props.loggedInUser && this.props.loggedInUser.getIn(['data', 'privateData', 'role']);
     if (newRole !== oldRole && isSuperadminRole(newRole)) {
-      newProps.loadAsync();
+      this.props.loadAsync();
     }
   }
 

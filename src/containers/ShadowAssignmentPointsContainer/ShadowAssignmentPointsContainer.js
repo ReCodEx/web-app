@@ -15,12 +15,13 @@ import { studentsOfGroupSelector } from '../../redux/selectors/users';
 class ShadowAssignmentPointsContainer extends Component {
   static loadAsync = ({ groupId }, dispatch) => dispatch(fetchStudents(groupId));
 
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = newProps => {
-    if (this.props.id !== newProps.id) {
-      newProps.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.id !== prevProps.id) {
+      this.props.loadAsync();
     }
-  };
+  }
 
   render() {
     const { students, points, maxPoints, permissionHints, createPoints, updatePoints, removePoints } = this.props;

@@ -9,13 +9,13 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 
 class HierarchyLineContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     HierarchyLineContainer.loadAsync(this.props);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.groupId !== newProps.groupId) {
-      HierarchyLineContainer.loadAsync(newProps);
+  componentDidUpdate(prevProps) {
+    if (this.props.groupId !== prevProps.groupId) {
+      HierarchyLineContainer.loadAsync(this.props);
     }
   }
 

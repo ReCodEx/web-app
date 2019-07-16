@@ -71,17 +71,8 @@ const shallowResourcesEqual = (oldResources, newResources) => {
  * for the loaded state.
  */
 class ResourceRenderer extends Component {
-  componentWillMount = () => {
-    // Reset caching variables ...
-    this.oldResources = null;
-    this.oldData = null;
-  };
-
-  componentWillUpdate = () => {
-    // Reset caching variables ...
-    this.oldResources = null;
-    this.oldData = null;
-  };
+  oldResources = null;
+  oldData = null;
 
   // Perform rendering of the childs whilst keeping resource data cached ...
   renderReady = resources => {

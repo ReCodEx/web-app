@@ -14,10 +14,9 @@ import styles from './Box.less';
  * and can be displayed in different colors and types.
  */
 class Box extends Component {
-  componentWillMount() {
-    const { isOpen = true } = this.props;
-    this.setState({ isOpen });
-  }
+  state = {
+    isOpen: this.props.isOpen !== undefined ? this.props.isOpen : true,
+  };
 
   toggleDetails = () => {
     if (!this.props.collapsable) {

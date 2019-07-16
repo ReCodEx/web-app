@@ -9,13 +9,13 @@ import { reset } from '../../redux/modules/upload';
 import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
 
 class FilesTableContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     FilesTableContainer.loadData(this.props);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.uploadId !== newProps.uploadId) {
-      FilesTableContainer.loadData(newProps);
+  componentDidUpdate(prevProps) {
+    if (this.props.uploadId !== prevProps.uploadId) {
+      FilesTableContainer.loadData(this.props);
     }
   }
 

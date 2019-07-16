@@ -42,12 +42,12 @@ const getInitialValues = defaultMemoize(instances => {
 });
 
 class Registration extends Component {
-  componentWillMount = () => {
+  componentDidMount = () => {
     this.checkIfIsDone(this.props);
     this.props.loadAsync();
   };
 
-  componentWillReceiveProps = props => this.checkIfIsDone(props);
+  componentDidUpdate = () => this.checkIfIsDone(this.props);
 
   checkIfIsDone = ({ hasSucceeded, push, reset, links: { DASHBOARD_URI } }) => {
     if (hasSucceeded) {
