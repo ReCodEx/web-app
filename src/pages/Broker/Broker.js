@@ -16,7 +16,7 @@ import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 class Broker extends Component {
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchBrokerStats())]);
 
-  componentWillMount = () => this.props.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
 
   render() {
     const {

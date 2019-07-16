@@ -13,9 +13,7 @@ import {
 import { init, uploadFile, removeFile, returnFile, removeFailedFile } from '../../redux/modules/upload';
 
 class UploadContainer extends Component {
-  componentWillMount() {
-    this.props.init();
-  }
+  componentDidMount = () => this.props.init();
 
   retryUploadFile = payload => {
     this.props.removeFailedFile(payload);
@@ -83,11 +81,11 @@ export default connect(
     removeFailedFile: payload => dispatch(removeFailedFile(id, payload)),
     removeFile: payload => {
       dispatch(removeFile(id, payload));
-      onChange({ removeFile: payload });
+      onChange && onChange({ removeFile: payload });
     },
     returnFile: payload => {
       dispatch(returnFile(id, payload));
-      onChange({ returnFile: payload });
+      onChange && onChange({ returnFile: payload });
     },
   })
 )(UploadContainer);

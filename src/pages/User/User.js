@@ -42,13 +42,16 @@ import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
 class User extends Component {
-  componentWillMount = () => this.props.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps = newProps => {
-    if (this.props.params.userId !== newProps.params.userId || this.props.loggedInUserId !== newProps.loggedInUserId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.params.userId !== prevProps.params.userId ||
+      this.props.loggedInUserId !== prevProps.loggedInUserId
+    ) {
+      this.props.loadAsync();
     }
-  };
+  }
 
   /**
    * A fairly complicated load method - uses redux thunk

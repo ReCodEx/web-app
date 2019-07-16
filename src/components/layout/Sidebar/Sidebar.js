@@ -21,29 +21,45 @@ import styles from './sidebar.less';
 
 const getUserData = defaultMemoize(user => getJsData(user));
 
-const Sidebar = ({
-  loggedInUser,
-  studentOf,
-  supervisorOf,
-  currentUrl,
-  instances,
-  small = false,
-  links: {
-    FAQ_URL,
-    LOGIN_URI,
-    REGISTRATION_URI,
-    DASHBOARD_URI,
-    INSTANCE_URI_FACTORY,
-    GROUP_DETAIL_URI_FACTORY,
-    EXERCISES_URI,
-    PIPELINES_URI,
-    ARCHIVE_URI,
-    SIS_INTEGRATION_URI,
+const Sidebar = (
+  {
+    loggedInUser,
+    studentOf,
+    supervisorOf,
+    currentUrl,
+    instances,
+    small = false,
+    links: {
+      FAQ_URL,
+      LOGIN_URI,
+      REGISTRATION_URI,
+      DASHBOARD_URI,
+      INSTANCE_URI_FACTORY,
+      GROUP_DETAIL_URI_FACTORY,
+      EXERCISES_URI,
+      PIPELINES_URI,
+      ARCHIVE_URI,
+      SIS_INTEGRATION_URI,
+    },
+    intl: { locale },
   },
-  intl: { locale },
-}) => {
+  { isActive }
+) => {
   const user = getUserData(loggedInUser);
   const role = safeGet(user, ['privateData', 'role']);
+  const createLink = item => GROUP_DETAIL_URI_FACTORY(getId(item));
+  const studentOfItems =
+    studentOf &&
+    studentOf.size > 0 &&
+    studentOf
+      .toList()
+      .sort((a, b) => getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale));
+  const supervisorOfItems =
+    supervisorOf &&
+    supervisorOf.size > 0 &&
+    supervisorOf
+      .toList()
+      .sort((a, b) => getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale));
 
   return (
     <aside className={classnames(['main-sidebar', styles.mainSidebar])}>
@@ -95,37 +111,31 @@ const Sidebar = ({
                     />
                   ))}
 
-              {studentOf && studentOf.size > 0 && (
+              {studentOfItems && (
                 <MenuGroup
                   title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
-                  items={studentOf
-                    .toList()
-                    .sort((a, b) =>
-                      getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
-                    )}
+                  items={studentOfItems}
                   notifications={EMPTY_OBJ}
                   icon={'user-circle'}
                   currentPath={currentUrl}
-                  createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
+                  createLink={createLink}
                   forceOpen={false}
+                  isActive={studentOfItems.find(item => isActive(createLink(item))) !== undefined}
                 />
               )}
 
-              {isSupervisorRole(role) && (
+              {isSupervisorRole(role) && supervisorOfItems && (
                 <MenuGroup
                   title={
                     <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
                   }
                   notifications={EMPTY_OBJ}
-                  items={supervisorOf
-                    .toList()
-                    .sort((a, b) =>
-                      getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale)
-                    )}
+                  items={supervisorOfItems}
                   icon="graduation-cap"
                   currentPath={currentUrl}
-                  createLink={item => GROUP_DETAIL_URI_FACTORY(getId(item))}
+                  createLink={createLink}
                   forceOpen={false}
+                  isActive={supervisorOfItems.find(item => isActive(createLink(item))) !== undefined}
                 />
               )}
 
@@ -188,6 +198,10 @@ Sidebar.propTypes = {
   small: PropTypes.bool,
   links: PropTypes.object,
   intl: intlShape,
+};
+
+Sidebar.contextTypes = {
+  isActive: PropTypes.func,
 };
 
 export default withLinks(injectIntl(Sidebar));

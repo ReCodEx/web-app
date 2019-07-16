@@ -45,13 +45,14 @@ const prepareInitialValues = defaultMemoize((id, version, localizedTexts, diffic
 }));
 
 class EditExercise extends Component {
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = nextProps => {
-    if (this.props.params.exerciseId !== nextProps.params.exerciseId) {
-      nextProps.reset();
-      nextProps.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+      this.props.reset();
+      this.props.loadAsync();
     }
-  };
+  }
 
   static loadAsync = ({ exerciseId }, dispatch) => Promise.all([dispatch(fetchExerciseIfNeeded(exerciseId))]);
 

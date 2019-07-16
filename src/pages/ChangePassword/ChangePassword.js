@@ -36,7 +36,7 @@ class ChangePassword extends Component {
    * so it must be validated properly and user redirected or warned
    * when there is something wrong.
    */
-  componentWillMount = () => {
+  componentDidMount() {
     this.checkIfIsDone(this.props);
 
     if (canUseDOM) {
@@ -59,11 +59,9 @@ class ChangePassword extends Component {
         this.setState({ token, decodedToken });
       }
     }
-  };
+  }
 
-  componentWillReceiveProps = props => {
-    this.checkIfIsDone(props);
-  };
+  componentDidUpdate = () => this.checkIfIsDone(this.props);
 
   /**
    * Check if the operation was not carried out successfuly and redirect the user to the next step if so.

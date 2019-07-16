@@ -34,7 +34,7 @@ class EmailVerification extends Component {
    * so it must be validated properly and user redirected or warned
    * when there is something wrong.
    */
-  componentWillMount = () => {
+  componentDidMount = () => {
     if (canUseDOM) {
       const search = window.location.search;
       if (search.length > 0) {

@@ -10,13 +10,13 @@ import { hasPermissions } from '../../helpers/common';
 import GroupsName, { LoadingGroupsName } from '../../components/Groups/GroupsName';
 
 class GroupsNameContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadAsync();
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.groupId !== newProps.groupId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.groupId !== prevProps.groupId) {
+      this.props.loadAsync();
     }
   }
 

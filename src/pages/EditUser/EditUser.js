@@ -38,13 +38,11 @@ const prepareUserSettingsInitialValues = defaultMemoize(({ defaultPage, ...setti
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) => dispatch(fetchUserIfNeeded(userId));
 
-  componentWillMount() {
-    this.props.loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.userId !== newProps.params.userId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.userId !== prevProps.params.userId) {
+      this.props.loadAsync();
     }
   }
 

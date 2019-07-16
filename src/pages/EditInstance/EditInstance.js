@@ -17,13 +17,14 @@ import withLinks from '../../helpers/withLinks';
 class EditInstance extends Component {
   static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
 
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = props => {
-    if (this.props.params.instanceId !== props.params.instanceId) {
-      props.reset();
-      props.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.instanceId !== prevProps.params.instanceId) {
+      this.props.reset();
+      this.props.loadAsync();
     }
-  };
+  }
 
   getInitialValues = ({ threshold, ...instance }) => ({
     ...instance,

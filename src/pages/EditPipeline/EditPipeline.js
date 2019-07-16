@@ -23,13 +23,14 @@ import withLinks from '../../helpers/withLinks';
 import { transformPipelineDataForApi, extractVariables } from '../../helpers/boxes';
 
 class EditPipeline extends Component {
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = props => {
-    if (this.props.params.pipelineId !== props.params.pipelineId) {
-      props.reset();
-      props.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.pipelineId !== prevProps.params.pipelineId) {
+      this.props.reset();
+      this.props.loadAsync();
     }
-  };
+  }
 
   static loadAsync = ({ pipelineId }, dispatch) => Promise.all([dispatch(fetchPipelineIfNeeded(pipelineId))]);
 

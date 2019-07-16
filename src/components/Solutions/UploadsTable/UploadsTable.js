@@ -80,8 +80,10 @@ const UploadsTable = ({
           <td className="text-center">
             <DeleteIcon className="text-warning" />
           </td>
-          <td>{payload.name}</td>
-          <td>{prettyPrintBytes(payload.file.size)}</td>
+          <td className="text-muted">
+            <strike>{payload.name}</strike>
+          </td>
+          <td className="text-muted">{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
               <Button bsSize="xs" bsStyle="default" onClick={() => returnFile(payload)}>

@@ -49,21 +49,21 @@ class App extends Component {
         ])
       : Promise.resolve();
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadAsync(this.props.userId, this.props.routes);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentDidUpdate(prevProps) {
     if (
-      this.props.userId !== newProps.userId ||
-      (customLoadGroups(this.props.routes) && !customLoadGroups(newProps.routes)) ||
+      this.props.userId !== prevProps.userId ||
+      (customLoadGroups(prevProps.routes) && !customLoadGroups(this.props.routes)) ||
       someStatusesFailed(
-        newProps.fetchUserStatus,
-        newProps.fetchManyGroupsStatus,
-        newProps.fetchManyUserInstancesStatus
+        this.props.fetchUserStatus,
+        this.props.fetchManyGroupsStatus,
+        this.props.fetchManyUserInstancesStatus
       )
     ) {
-      newProps.loadAsync(newProps.userId, newProps.routes);
+      this.props.loadAsync(this.props.userId, this.props.routes);
     }
   }
 

@@ -10,13 +10,13 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ExercisesName, { LoadingExercisesName } from '../../components/Exercises/ExercisesName';
 
 class ExercisesNameContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     ExercisesNameContainer.loadData(this.props);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.exerciseId !== newProps.exerciseId) {
-      ExercisesNameContainer.loadData(newProps);
+  componentDidUpdate(prevProps) {
+    if (this.props.exerciseId !== prevProps.exerciseId) {
+      ExercisesNameContainer.loadData(this.props);
     }
   }
 

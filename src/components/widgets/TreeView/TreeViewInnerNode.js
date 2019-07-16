@@ -4,9 +4,20 @@ import Collapse from 'react-collapse';
 import TreeViewLeaf from './TreeViewLeaf';
 
 class TreeViewInnerNode extends Component {
-  componentWillMount() {
-    const { isOpen = false } = this.props;
-    this.setState({ isOpen });
+  state = {
+    isOpen: false,
+    isOpenInitial: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (state.isOpenInitial !== props.isOpen) {
+      return {
+        isOpen: props.isOpen || false,
+        isOpenInitial: props.isOpen,
+      };
+    } else {
+      return null;
+    }
   }
 
   toggleOpen = e => {

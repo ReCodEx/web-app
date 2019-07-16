@@ -24,7 +24,7 @@ class HeaderSystemMessagesContainer extends Component {
 
   // Monitor clicking and hide the notifications panel when the user clicks sideways
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     if (canUseDOM) {
       window.addEventListener('mousedown', this.close);
     }

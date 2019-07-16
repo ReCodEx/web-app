@@ -32,17 +32,18 @@ const localizedTextDefaults = {
 };
 
 class EditShadowAssignment extends Component {
-  componentWillMount = () => this.props.loadAsync();
-  componentWillReceiveProps = nextProps => {
-    if (this.props.params.assignmentId !== nextProps.params.assignmentId) {
-      nextProps.reset();
-      nextProps.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.assignmentId !== prevProps.params.assignmentId) {
+      this.props.reset();
+      this.props.loadAsync();
     }
 
-    if (isReady(nextProps.shadowAssignment)) {
-      this.groupId = getJsData(nextProps.shadowAssignment).groupId;
+    if (isReady(this.props.shadowAssignment)) {
+      this.groupId = getJsData(this.props.shadowAssignment).groupId;
     }
-  };
+  }
 
   static loadAsync = ({ assignmentId }, dispatch) => dispatch(fetchShadowAssignment(assignmentId));
 

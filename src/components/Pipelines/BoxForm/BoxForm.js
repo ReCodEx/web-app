@@ -18,7 +18,8 @@ import { getBoxTypes } from '../../../redux/selectors/boxes';
 import { getVariablesTypes } from '../../../helpers/boxes';
 
 class BoxForm extends Component {
-  componentWillMount = () => this.loadBoxTypes();
+  componentDidMount = () => this.loadBoxTypes();
+
   loadBoxTypes() {
     const { fetchBoxTypes } = this.props;
     fetchBoxTypes();

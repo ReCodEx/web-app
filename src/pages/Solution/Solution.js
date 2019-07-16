@@ -44,13 +44,11 @@ class Solution extends Component {
         .then(assignment => dispatch(fetchGroupsStats(assignment.groupId))),
     ]);
 
-  componentWillMount() {
-    this.props.loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.solutionId !== newProps.params.solutionId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.solutionId !== prevProps.params.solutionId) {
+      this.props.loadAsync();
     }
   }
 

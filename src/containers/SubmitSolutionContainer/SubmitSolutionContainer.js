@@ -27,20 +27,20 @@ import { reset as resetUpload } from '../../redux/modules/upload';
 
 import withLinks from '../../helpers/withLinks';
 import { canSubmit } from '../../redux/modules/canSubmit';
+import { isEmptyObject } from '../../helpers/common';
 
 class SubmitSolutionContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedEnvironment: null,
-      entryPoint: null,
-    };
-  }
+  state = {
+    selectedEnvironment: null,
+    entryPoint: null,
+  };
 
-  componentWillReceiveProps({ presubmitEnvironments, attachedFiles }) {
+  static getDerivedStateFromProps({ presubmitEnvironments, attachedFiles }, state) {
+    const res = {}; // changes of state
+
     // Only check the selection, if presubmit environments are set ...
     if (presubmitEnvironments && presubmitEnvironments.length > 0) {
-      let newEnv = this.state.selectedEnvironment;
+      let newEnv = state.selectedEnvironment;
       if (newEnv && !presubmitEnvironments.find(e => e.id === newEnv)) {
         newEnv = null; // selected env is not availabe anymore
       }
@@ -48,15 +48,17 @@ class SubmitSolutionContainer extends Component {
         newEnv = presubmitEnvironments[0].id;
       }
 
-      if (newEnv !== this.state.selectedEnvironment) {
-        this.setState({ selectedEnvironment: newEnv });
+      if (newEnv !== state.selectedEnvironment) {
+        res.selectedEnvironment = newEnv;
       }
     }
 
     // If entry point is no longer valid ...
-    if (this.state.entryPoint && attachedFiles && !attachedFiles.find(f => f.name === this.state.entryPoint)) {
-      this.setState({ entryPoint: null });
+    if (state.entryPoint && attachedFiles && !attachedFiles.find(f => f.name === state.entryPoint)) {
+      res.entryPoint = null;
     }
+
+    return !isEmptyObject(res) ? res : null;
   }
 
   getEntryPoint = () => {

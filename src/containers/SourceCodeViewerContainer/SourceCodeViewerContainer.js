@@ -16,16 +16,16 @@ import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 import styles from './sourceCode.less';
 
 class SourceCodeViewerContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { fileId, loadAsync } = this.props;
     if (fileId !== null) {
       loadAsync();
     }
   }
 
-  componentWillReceiveProps({ fileId, loadAsync }) {
-    if (this.props.fileId !== fileId && fileId !== null) {
-      loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.fileId !== prevProps.fileId && this.props.fileId !== null) {
+      this.props.loadAsync();
     }
   }
 

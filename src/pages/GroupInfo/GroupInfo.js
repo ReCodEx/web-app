@@ -46,26 +46,19 @@ class GroupInfo extends Component {
         ])
       );
 
-  componentWillMount() {
-    const { loadAsync } = this.props;
-    loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps(newProps) {
-    const {
-      params: { groupId },
-    } = this.props;
-
-    if (groupId !== newProps.params.groupId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.groupId !== prevProps.params.groupId) {
+      this.props.loadAsync();
       return;
     }
 
-    if (isReady(this.props.group) && isReady(newProps.group)) {
-      const thisData = this.props.group.toJS().data.privateData;
-      const newData = newProps.group.toJS().data.privateData;
-      if (thisData.supervisors.length !== newData.supervisors.length) {
-        newProps.refetchSupervisors();
+    if (isReady(this.props.group) && isReady(prevProps.group)) {
+      const newData = this.props.group.toJS().data.privateData;
+      const prevData = prevProps.group.toJS().data.privateData;
+      if (prevData.supervisors.length !== newData.supervisors.length) {
+        this.props.refetchSupervisors();
       }
     }
   }

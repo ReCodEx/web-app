@@ -49,14 +49,14 @@ class ExercisesListContainer extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     ExercisesListContainer.loadData(this.props);
   }
 
-  componentWillReceiveProps({ rootGroup, fetchExercisesAuthorsIfNeeded }) {
-    if (this.props.rootGroup !== rootGroup) {
-      this.defaultFilters.groupsIds = [rootGroup];
-      fetchExercisesAuthorsIfNeeded(rootGroup);
+  componentDidUpdate(prevProps) {
+    if (this.props.rootGroup !== prevProps.rootGroup) {
+      this.defaultFilters.groupsIds = [this.props.rootGroup];
+      this.props.fetchExercisesAuthorsIfNeeded(this.props.rootGroup);
     }
   }
 

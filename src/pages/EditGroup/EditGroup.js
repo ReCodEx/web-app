@@ -31,13 +31,12 @@ import { hasPermissions } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class EditGroup extends Component {
-  componentWillMount() {
-    this.props.loadAsync();
-  }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.params.groupId !== nextProps.params.groupId) {
-      nextProps.reset();
-      nextProps.loadAsync();
+  componentDidMount = () => this.props.loadAsync();
+
+  componentDidUpdate(prevProps) {
+    if (this.props.params.groupId !== prevProps.params.groupId) {
+      this.props.reset();
+      this.props.loadAsync();
     }
   }
 

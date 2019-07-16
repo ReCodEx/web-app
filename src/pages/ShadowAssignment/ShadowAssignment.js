@@ -24,27 +24,25 @@ import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions, EMPTY_OBJ } from '../../helpers/common';
 
+const findPoints = defaultMemoize((points, loggedUserId) => {
+  return points.find(p => p.awardeeId === loggedUserId) || EMPTY_OBJ;
+});
+
 class ShadowAssignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch) => dispatch(fetchShadowAssignmentIfNeeded(assignmentId));
 
-  componentWillMount() {
-    this.props.loadAsync();
-  }
+  componentDidMount = () => this.props.loadAsync();
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.assignmentId !== newProps.params.assignmentId) {
-      newProps.loadAsync();
+  componentDidUpdate(prevProps) {
+    if (this.props.params.assignmentId !== prevProps.params.assignmentId) {
+      this.props.loadAsync();
     }
   }
-
-  findPoints = defaultMemoize(points => {
-    const { loggedUserId } = this.props;
-    return points.find(p => p.awardeeId === loggedUserId) || EMPTY_OBJ;
-  });
 
   render() {
     const {
       shadowAssignment,
+      loggedUserId,
       links: { SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
       intl: { locale },
     } = this.props;
@@ -100,7 +98,7 @@ class ShadowAssignment extends Component {
               <Col lg={6}>
                 <ShadowAssignmentDetail {...shadowAssignment} />
                 {!hasPermissions(shadowAssignment, 'viewAllPoints') && (
-                  <ShadowAssignmentPointsDetail {...this.findPoints(shadowAssignment.points)} />
+                  <ShadowAssignmentPointsDetail {...findPoints(shadowAssignment.points, loggedUserId)} />
                 )}
               </Col>
             </Row>

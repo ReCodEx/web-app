@@ -44,13 +44,11 @@ class Instance extends Component {
     return Promise.all(promises);
   };
 
-  componentWillMount() {
-    this.props.loadAsync(this.props.fetchGroupsStatus);
-  }
+  componentDidMount = () => this.props.loadAsync(this.props.fetchGroupsStatus);
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.params.instanceId !== newProps.params.instanceId) {
-      newProps.loadAsync(newProps.fetchGroupsStatus);
+  componentDidUpdate(prevProps) {
+    if (this.props.params.instanceId !== prevProps.params.instanceId) {
+      this.props.loadAsync(this.props.fetchGroupsStatus);
     }
   }
 

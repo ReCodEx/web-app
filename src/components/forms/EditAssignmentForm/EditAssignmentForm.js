@@ -18,7 +18,7 @@ import {
   validateLocalizedTextsFormData,
   transformLocalizedTextsFormData,
 } from '../../../helpers/localizedData';
-import { safeSet } from '../../../helpers/common';
+import { safeGet, safeSet, EMPTY_ARRAY } from '../../../helpers/common';
 
 const localizedTextDefaults = {
   name: '',
@@ -176,13 +176,32 @@ const SUBMIT_BUTTON_MESSAGES_DEFAULT = {
   success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
 };
 
+const getAllGroups = defaultMemoize((groups, groupsAccessor, locale) =>
+  groups && groupsAccessor
+    ? groups
+        .filter(g => !g.organizational && !g.archived)
+        .sort((a, b) =>
+          getGroupCanonicalLocalizedName(a, groupsAccessor, locale).localeCompare(
+            getGroupCanonicalLocalizedName(b, groupsAccessor, locale),
+            locale
+          )
+        )
+    : EMPTY_ARRAY
+);
+
+const getUserGroups = defaultMemoize((groups, userId, groupsAccessor, locale) =>
+  getAllGroups(groups, groupsAccessor, locale).filter(
+    g =>
+      safeGet(g, ['primaryAdminsIds', id => id === userId]) ||
+      safeGet(g, ['privateData', 'supervisors', id => id === userId])
+  )
+);
+
 class EditAssignmentForm extends Component {
   state = {
     open: false,
     assignedToGroups: null,
   };
-  allGroups = [];
-  myGroups = [];
 
   toggleOpenState = () => {
     this.setState({ open: !this.state.open });
@@ -192,33 +211,6 @@ class EditAssignmentForm extends Component {
     this.setState({ assignedToGroups: null });
     this.props.reset();
   };
-
-  componentWillReceiveProps(newProps) {
-    if (
-      this.props.groups !== newProps.groups ||
-      this.props.userId !== newProps.userId ||
-      this.props.groupsAccessor !== newProps.groupsAccessor
-    ) {
-      const {
-        groupsAccessor,
-        intl: { locale },
-      } = newProps;
-      this.allGroups = newProps.groups
-        .filter(g => !g.organizational && !g.archived)
-        .sort((a, b) =>
-          getGroupCanonicalLocalizedName(a, groupsAccessor, locale).localeCompare(
-            getGroupCanonicalLocalizedName(b, groupsAccessor, locale),
-            locale
-          )
-        );
-
-      this.myGroups = this.allGroups.filter(
-        g =>
-          g.primaryAdminsIds.find(id => id === newProps.userId) ||
-          g.privateData.supervisors.find(id => id === newProps.userId)
-      );
-    }
-  }
 
   /**
    * Wraps the onSubmit callback passed from the parent component.
@@ -238,6 +230,7 @@ class EditAssignmentForm extends Component {
 
   render() {
     const {
+      userId,
       groups,
       editTexts = false,
       groupsAccessor = null,
@@ -257,6 +250,7 @@ class EditAssignmentForm extends Component {
       visibility,
       assignmentIsPublic,
       submitButtonMessages = SUBMIT_BUTTON_MESSAGES_DEFAULT,
+      intl: { locale },
     } = this.props;
 
     return groups && groupsAccessor && this.state.assignedToGroups !== null ? (
@@ -278,10 +272,19 @@ class EditAssignmentForm extends Component {
 
         {groupsAccessor && (
           <AssignmentFormGroupsList
-            groups={this.state.open ? this.allGroups : this.myGroups}
+            groups={
+              this.state.open
+                ? getAllGroups(groups, groupsAccessor, locale)
+                : getUserGroups(groups, userId, groupsAccessor, locale)
+            }
             groupsAccessor={groupsAccessor}
             isOpen={this.state.open}
-            toggleOpenState={this.allGroups.length !== this.myGroups.length ? this.toggleOpenState : null}
+            toggleOpenState={
+              getAllGroups(groups, groupsAccessor, locale).length !==
+              getUserGroups(groups, userId, groupsAccessor, locale).length
+                ? this.toggleOpenState
+                : null
+            }
           />
         )}
 
@@ -631,7 +634,7 @@ const warn = ({ groups, canViewJudgeOutputs }, { groupsAccessor, alreadyAssigned
     );
   }
 
-  if (groupsAccessor) {
+  if (groups && groupsAccessor) {
     let alreadyAssigned = false;
     alreadyAssignedGroups.forEach(id => {
       const key = `id${id}`;

@@ -33,18 +33,19 @@ class EvaluationProgressContainer extends Component {
   state = { realTimeProcessing: true, monitor: null };
   socket = null;
 
-  componentWillMount = () => this.init(this.props);
+  componentDidMount = () => this.init(this.props);
 
-  componentWillReceiveProps = newProps => {
-    if (newProps.monitor && newProps.monitor.id) {
-      if (this.props.monitor && this.props.monitor.id) {
-        if (newProps.monitor.id === this.props.monitor.id) {
+  componentDidUpdate = prevProps => {
+    if (this.props.monitor && this.props.monitor.id) {
+      if (prevProps.monitor && prevProps.monitor.id) {
+        if (this.props.monitor.id === prevProps.monitor.id) {
           return;
         }
       }
-      this.init(newProps);
+      this.init(this.props);
     }
   };
+
   componentWillUnmount = () => {
     this.closeSocket();
   };
