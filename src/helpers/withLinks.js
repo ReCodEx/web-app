@@ -1,13 +1,12 @@
 // @flow
 import React from 'react';
-import PropTypes from 'prop-types';
+import { LinksContext } from '../helpers/contexts';
 
 const withLinks = (Inner: *) => {
-  const ComponentWithLinks = (props: any, { links }: { links: any }) => <Inner {...props} links={links} />;
+  const ComponentWithLinks = (props: any) => (
+    <LinksContext.Consumer>{links => <Inner {...props} links={links} />}</LinksContext.Consumer>
+  );
   ComponentWithLinks.displayName = `withLinks(${Inner.displayName || Inner.name || 'Component'})`;
-  ComponentWithLinks.contextTypes = {
-    links: PropTypes.object,
-  };
   ComponentWithLinks.WrappedComponent = Inner; // use the same name as react-redux
   return ComponentWithLinks;
 };

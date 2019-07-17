@@ -284,10 +284,6 @@ class Exercise extends Component {
   }
 }
 
-Exercise.contextTypes = {
-  links: PropTypes.object,
-};
-
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,

@@ -16,6 +16,7 @@ import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '.
 import withLinks from '../../../helpers/withLinks';
 import { getExternalIdForCAS } from '../../../helpers/cas';
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
+import { UrlContext } from '../../../helpers/contexts';
 
 import styles from './sidebar.less';
 
@@ -112,31 +113,44 @@ const Sidebar = (
                   ))}
 
               {studentOfItems && (
-                <MenuGroup
-                  title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
-                  items={studentOfItems}
-                  notifications={EMPTY_OBJ}
-                  icon={'user-circle'}
-                  currentPath={currentUrl}
-                  createLink={createLink}
-                  forceOpen={false}
-                  isActive={studentOfItems.find(item => isActive(createLink(item))) !== undefined}
-                />
+                <UrlContext.Consumer>
+                  {({ isActive }) => (
+                    <MenuGroup
+                      title={
+                        <FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />
+                      }
+                      items={studentOfItems}
+                      notifications={EMPTY_OBJ}
+                      icon={'user-circle'}
+                      currentPath={currentUrl}
+                      createLink={createLink}
+                      forceOpen={false}
+                      isActive={studentOfItems.find(item => isActive(createLink(item))) !== undefined}
+                    />
+                  )}
+                </UrlContext.Consumer>
               )}
 
               {isSupervisorRole(role) && supervisorOfItems && (
-                <MenuGroup
-                  title={
-                    <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
-                  }
-                  notifications={EMPTY_OBJ}
-                  items={supervisorOfItems}
-                  icon="graduation-cap"
-                  currentPath={currentUrl}
-                  createLink={createLink}
-                  forceOpen={false}
-                  isActive={supervisorOfItems.find(item => isActive(createLink(item))) !== undefined}
-                />
+                <UrlContext.Consumer>
+                  {({ isActive }) => (
+                    <MenuGroup
+                      title={
+                        <FormattedMessage
+                          id="app.sidebar.menu.supervisorOfGroups"
+                          defaultMessage="Supervisor of Groups"
+                        />
+                      }
+                      notifications={EMPTY_OBJ}
+                      items={supervisorOfItems}
+                      icon="graduation-cap"
+                      currentPath={currentUrl}
+                      createLink={createLink}
+                      forceOpen={false}
+                      isActive={supervisorOfItems.find(item => isActive(createLink(item))) !== undefined}
+                    />
+                  )}
+                </UrlContext.Consumer>
               )}
 
               {isSupervisorRole(role) && (
@@ -198,10 +212,6 @@ Sidebar.propTypes = {
   small: PropTypes.bool,
   links: PropTypes.object,
   intl: intlShape,
-};
-
-Sidebar.contextTypes = {
-  isActive: PropTypes.func,
 };
 
 export default withLinks(injectIntl(Sidebar));
