@@ -9,8 +9,10 @@ import { anyPendingFetchOperations } from '../../redux/selectors/app';
 import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { isLoggedIn } from '../../redux/selectors/auth';
+import { getLoggedInUserSettings } from '../../redux/selectors/users';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
+import { UserSettingsContext } from '../../helpers/contexts';
 
 import 'admin-lte/dist/css/AdminLTE.min.css';
 import 'admin-lte/dist/css/skins/_all-skins.min.css';
@@ -45,33 +47,31 @@ class LayoutContainer extends Component {
 
   componentDidMount() {
     this.changeLang(this.props);
-    this.resizeSidebarToDefault(this.props, this.context);
+    this.resizeSidebarToDefault(this.props);
   }
 
-  UNSAFE_componentWillReceiveProps(newProps, newContext) {
+  componentDidUpdate(prevProps) {
     // TODO this needs to be rewritten along with the new context handling...
     if (
-      (typeof this.context.userSettings.openedSidebar === 'undefined' &&
-        typeof newContext.userSettings.openedSidebar !== 'undefined') ||
-      (typeof this.context.userSettings.openedSidebar !== 'undefined' &&
-        this.context.userSettings.openedSidebar !== newContext.userSettings.openedSidebar)
+      (prevProps.userSettings.openedSidebar === undefined && this.props.userSettings.openedSidebar !== undefined) ||
+      (prevProps.userSettings.openedSidebar !== undefined &&
+        prevProps.userSettings.openedSidebar !== this.props.userSettings.openedSidebar)
     ) {
-      this.resizeSidebarToDefault(newProps, newContext);
+      this.resizeSidebarToDefault(this.props);
     }
 
-    if (this.props.params.lang !== newProps.params.lang) {
-      this.changeLang(newProps);
+    if (this.props.params.lang !== prevProps.params.lang) {
+      this.changeLang(this.props);
     }
   }
 
-  resizeSidebarToDefault(props, context) {
+  resizeSidebarToDefault({ collapse, unroll, userSettings }) {
     // open or hide the sidebar based on user's settings
-    const { collapse, unroll } = props;
-    const shouldBeOpen = this.getDefaultOpenedSidebar(context);
+    const shouldBeOpen = this.getDefaultOpenedSidebar(userSettings);
     shouldBeOpen ? unroll() : collapse();
   }
 
-  getDefaultOpenedSidebar = ({ userSettings }) =>
+  getDefaultOpenedSidebar = userSettings =>
     userSettings && typeof userSettings.openedSidebar !== 'undefined' ? userSettings.openedSidebar : true;
 
   changeLang = props => {
@@ -102,7 +102,7 @@ class LayoutContainer extends Component {
    */
 
   getDefaultLang = () => {
-    const { userSettings } = this.context;
+    const { userSettings } = this.props;
     return userSettings && userSettings.defaultLanguage ? userSettings.defaultLanguage : 'en';
   };
 
@@ -119,6 +119,7 @@ class LayoutContainer extends Component {
       toggleSize,
       toggleVisibility,
       pendingFetchOperations,
+      userSettings,
     } = this.props;
 
     const { lang } = this.state;
@@ -127,19 +128,21 @@ class LayoutContainer extends Component {
 
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)} formats={ADDITIONAL_INTL_FORMATS}>
-        <Layout
-          isLoggedIn={isLoggedIn}
-          sidebarIsCollapsed={sidebarIsCollapsed}
-          sidebarIsOpen={sidebarIsOpen}
-          toggleSize={toggleSize}
-          toggleVisibility={toggleVisibility}
-          onCloseSidebar={this.maybeHideSidebar}
-          lang={lang}
-          availableLangs={Object.keys(messages)}
-          currentUrl={pathname}
-          pendingFetchOperations={pendingFetchOperations}>
-          {children}
-        </Layout>
+        <UserSettingsContext.Provider value={userSettings}>
+          <Layout
+            isLoggedIn={isLoggedIn}
+            sidebarIsCollapsed={sidebarIsCollapsed}
+            sidebarIsOpen={sidebarIsOpen}
+            toggleSize={toggleSize}
+            toggleVisibility={toggleVisibility}
+            onCloseSidebar={this.maybeHideSidebar}
+            lang={lang}
+            availableLangs={Object.keys(messages)}
+            currentUrl={pathname}
+            pendingFetchOperations={pendingFetchOperations}>
+            {children}
+          </Layout>
+        </UserSettingsContext.Provider>
       </IntlProvider>
     );
   }
@@ -153,7 +156,6 @@ LayoutContainer.childContextTypes = {
 
 LayoutContainer.contextTypes = {
   router: PropTypes.object,
-  userSettings: PropTypes.object,
 };
 
 LayoutContainer.propTypes = {
@@ -172,6 +174,7 @@ LayoutContainer.propTypes = {
     pathname: PropTypes.string.isRequired,
   }).isRequired,
   children: PropTypes.element,
+  userSettings: PropTypes.object,
 };
 
 const mapStateToProps = (state, props) => ({
@@ -179,6 +182,7 @@ const mapStateToProps = (state, props) => ({
   sidebarIsCollapsed: isCollapsed(state),
   sidebarIsOpen: isVisible(state),
   pendingFetchOperations: anyPendingFetchOperations(state),
+  userSettings: getLoggedInUserSettings(state),
 });
 
 const mapDispatchToProps = { toggleVisibility, toggleSize, collapse, unroll };

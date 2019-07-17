@@ -100,15 +100,23 @@ export const isSupervisor = userId =>
     role => isSupervisorRole(role)
   );
 
+const userSettingsSelector = user =>
+  isReady(user) ? user.getIn(['data', 'privateData', 'settings']).toJS() : EMPTY_OBJ;
+
 export const getUserSettings = userId =>
   createSelector(
     getUser(userId),
-    user => (isReady(user) ? user.getIn(['data', 'privateData', 'settings']).toJS() : EMPTY_OBJ)
+    userSettingsSelector
   );
 
 export const loggedInUserSelector = createSelector(
   [usersSelector, loggedInUserIdSelector],
   (users, id) => (id && users ? users.get(id) : null)
+);
+
+export const getLoggedInUserSettings = createSelector(
+  loggedInUserSelector,
+  userSettingsSelector
 );
 
 export const isLoggedAsSuperAdmin = createSelector(
