@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { loggedInUserIdSelector, selectedInstanceId, accessTokenSelector } from '../../redux/selectors/auth';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { getUser, fetchUserStatus, getUserSettings } from '../../redux/selectors/users';
+import { getUser, fetchUserStatus } from '../../redux/selectors/users';
 import { isTokenValid, isTokenInNeedOfRefreshment } from '../../redux/helpers/token';
 import { fetchUsersInstancesIfNeeded } from '../../redux/modules/instances';
 import { fetchManyUserInstancesStatus } from '../../redux/selectors/instances';
@@ -67,10 +67,6 @@ class App extends Component {
     }
   }
 
-  getChildContext = () => ({
-    userSettings: this.props.userSettings,
-  });
-
   /**
    * The validation in react-router does not cover all cases - validity of the token
    * must be checked more often.
@@ -119,14 +115,9 @@ App.propTypes = {
   children: PropTypes.element,
   routes: PropTypes.array,
   loadAsync: PropTypes.func,
-  userSettings: PropTypes.object,
   fetchUserStatus: PropTypes.string,
   fetchManyGroupsStatus: PropTypes.string,
   fetchManyUserInstancesStatus: PropTypes.string,
-};
-
-App.childContextTypes = {
-  userSettings: PropTypes.object,
 };
 
 export default connect(
@@ -137,7 +128,6 @@ export default connect(
       userId,
       instanceId: selectedInstanceId(state),
       isLoggedIn: Boolean(userId),
-      userSettings: getUserSettings(userId)(state),
       fetchUserStatus: fetchUserStatus(state, userId),
       fetchManyGroupsStatus: fetchManyGroupsStatus(state),
       fetchManyUserInstancesStatus: fetchManyUserInstancesStatus(state, userId),

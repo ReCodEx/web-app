@@ -9,7 +9,7 @@ import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentL
 import { MarkdownTextAreaField } from '../Fields';
 import { WarningIcon } from '../../icons';
 
-const LocalizedAssigmentFormField = ({ prefix, data: enabled }) => (
+const LocalizedAssignmentFormField = ({ prefix, data: enabled }) => (
   <Well>
     <Alert bsStyle="info">
       <WarningIcon gapRight />
@@ -36,9 +36,9 @@ const LocalizedAssigmentFormField = ({ prefix, data: enabled }) => (
   </Well>
 );
 
-LocalizedAssigmentFormField.propTypes = {
+LocalizedAssignmentFormField.propTypes = {
   prefix: PropTypes.string.isRequired,
   data: PropTypes.bool.isRequired,
 };
 
-export default LocalizedAssigmentFormField;
+export default LocalizedAssignmentFormField;

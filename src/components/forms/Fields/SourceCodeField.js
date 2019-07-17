@@ -1,44 +1,55 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 import ClientOnly from '../../helpers/ClientOnly';
-
-import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { UserSettingsContext } from '../../../helpers/contexts';
 
 // load the ACE editor only when rendering in the browser
 import { loadAceEditor, getAceModeFromExtension } from '../../helpers/AceEditorLoader';
 let AceEditor = loadAceEditor();
 
-const SourceCodeField = (
-  { input, mode, meta: { error, warning }, label = null, children, tabIndex, onBlur, readOnly = false, ...props },
-  { userSettings: { vimMode = false, darkTheme = false } }
-) => (
+const SourceCodeField = ({
+  input,
+  mode,
+  meta: { error, warning },
+  label = null,
+  children,
+  tabIndex,
+  onBlur,
+  readOnly = false,
+  ...props
+}) => (
   <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
     {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
     <ClientOnly>
       <div className={readOnly ? 'noselection' : ''}>
-        <AceEditor
-          {...props}
-          {...input}
-          mode={getAceModeFromExtension(mode)}
-          theme={darkTheme ? 'monokai' : 'github'}
-          name={input.name}
-          tabIndex={tabIndex}
-          keyboardHandler={vimMode ? 'vim' : undefined}
-          width="100%"
-          height="100%"
-          minLines={5}
-          maxLines={20}
-          readOnly={readOnly}
-          onBlur={
-            () => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
-          }
-          editorProps={{
-            $blockScrolling: Infinity,
-            $autoScrollEditorIntoView: true,
-          }}
-        />
+        <UserSettingsContext.Consumer>
+          {({ vimMode = false, darkTheme = false }) => (
+            <AceEditor
+              {...props}
+              {...input}
+              mode={getAceModeFromExtension(mode)}
+              theme={darkTheme ? 'monokai' : 'github'}
+              name={input.name}
+              tabIndex={tabIndex}
+              keyboardHandler={vimMode ? 'vim' : undefined}
+              width="100%"
+              height="100%"
+              minLines={5}
+              maxLines={20}
+              readOnly={readOnly}
+              onBlur={
+                () => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
+              }
+              editorProps={{
+                $blockScrolling: Infinity,
+                $autoScrollEditorIntoView: true,
+              }}
+            />
+          )}
+        </UserSettingsContext.Consumer>
       </div>
     </ClientOnly>
     {error && <HelpBlock> {error} </HelpBlock>}
@@ -66,10 +77,6 @@ SourceCodeField.propTypes = {
   ]),
   readOnly: PropTypes.bool,
   onBlur: PropTypes.func,
-};
-
-SourceCodeField.contextTypes = {
-  userSettings: PropTypes.object,
 };
 
 export default SourceCodeField;
