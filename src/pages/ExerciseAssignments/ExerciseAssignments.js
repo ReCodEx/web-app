@@ -247,10 +247,6 @@ class ExerciseAssignments extends Component {
   }
 }
 
-ExerciseAssignments.contextTypes = {
-  links: PropTypes.object,
-};
-
 ExerciseAssignments.propTypes = {
   userId: PropTypes.string.isRequired,
   params: PropTypes.shape({

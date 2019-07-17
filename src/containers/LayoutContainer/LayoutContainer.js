@@ -12,7 +12,7 @@ import { isLoggedIn } from '../../redux/selectors/auth';
 import { getLoggedInUserSettings } from '../../redux/selectors/users';
 import { messages, localeData, defaultLanguage } from '../../locales';
 import { linksFactory, isAbsolute } from '../../links';
-import { UserSettingsContext } from '../../helpers/contexts';
+import { UserSettingsContext, LinksContext, UrlContext } from '../../helpers/contexts';
 
 import 'admin-lte/dist/css/AdminLTE.min.css';
 import 'admin-lte/dist/css/skins/_all-skins.min.css';
@@ -80,16 +80,6 @@ class LayoutContainer extends Component {
     this.forceUpdate();
   };
 
-  /**
-   * Child components should be able to access current language settings
-   * and up-to-date links (with respect to the given language).
-   */
-  getChildContext = () => ({
-    links: this.state.links,
-    lang: this.state.lang,
-    isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true),
-  });
-
   maybeHideSidebar = e => {
     const { sidebarIsOpen, toggleVisibility } = this.props;
     if (sidebarIsOpen) {
@@ -122,37 +112,47 @@ class LayoutContainer extends Component {
       userSettings,
     } = this.props;
 
-    const { lang } = this.state;
+    const { lang, links } = this.state;
     addLocaleData([...this.getLocaleData(lang)]);
     moment.locale(lang);
 
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)} formats={ADDITIONAL_INTL_FORMATS}>
         <UserSettingsContext.Provider value={userSettings}>
-          <Layout
-            isLoggedIn={isLoggedIn}
-            sidebarIsCollapsed={sidebarIsCollapsed}
-            sidebarIsOpen={sidebarIsOpen}
-            toggleSize={toggleSize}
-            toggleVisibility={toggleVisibility}
-            onCloseSidebar={this.maybeHideSidebar}
-            lang={lang}
-            availableLangs={Object.keys(messages)}
-            currentUrl={pathname}
-            pendingFetchOperations={pendingFetchOperations}>
-            {children}
-          </Layout>
+          <LinksContext.Provider value={links}>
+            <UrlContext.Provider
+              value={{
+                lang,
+                isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true),
+              }}>
+              <Layout
+                isLoggedIn={isLoggedIn}
+                sidebarIsCollapsed={sidebarIsCollapsed}
+                sidebarIsOpen={sidebarIsOpen}
+                toggleSize={toggleSize}
+                toggleVisibility={toggleVisibility}
+                onCloseSidebar={this.maybeHideSidebar}
+                lang={lang}
+                availableLangs={Object.keys(messages)}
+                currentUrl={pathname}
+                pendingFetchOperations={pendingFetchOperations}>
+                {children}
+              </Layout>
+            </UrlContext.Provider>
+          </LinksContext.Provider>
         </UserSettingsContext.Provider>
       </IntlProvider>
     );
   }
 }
 
+/*
 LayoutContainer.childContextTypes = {
   lang: PropTypes.string,
   links: PropTypes.object,
   isActive: PropTypes.func,
 };
+*/
 
 LayoutContainer.contextTypes = {
   router: PropTypes.object,
