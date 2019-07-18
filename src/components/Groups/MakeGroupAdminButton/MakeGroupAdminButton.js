@@ -7,7 +7,7 @@ import Icon from '../../icons';
 const MakeGroupAdminButton = ({ onClick, ...props }) => (
   <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
     <Icon icon="user-secret" gapRight />
-    <FormattedMessage id="app.groups.makeGroupAdminButton" defaultMessage="Make group admin" />
+    <FormattedMessage id="app.groups.makeGroupAdminButton" defaultMessage="Promote to group admin" />
   </Button>
 );
 

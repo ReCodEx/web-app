@@ -32,7 +32,7 @@ import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../compo
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 import { BanIcon } from '../../components/icons';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupInfo extends Component {
@@ -57,7 +57,7 @@ class GroupInfo extends Component {
     if (isReady(this.props.group) && isReady(prevProps.group)) {
       const newData = this.props.group.toJS().data.privateData;
       const prevData = prevProps.group.toJS().data.privateData;
-      if (prevData.supervisors.length !== newData.supervisors.length) {
+      if (safeGet(prevData, ['supervisors', 'length'], -1) !== safeGet(newData, ['supervisors', 'length'], -1)) {
         this.props.refetchSupervisors();
       }
     }
@@ -73,7 +73,10 @@ class GroupInfo extends Component {
         resource: group,
         iconName: 'university',
         breadcrumb: data => ({
-          link: ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.privateData.instanceId),
+          link:
+            data && data.privateData
+              ? ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.privateData.instanceId)
+              : undefined,
           text: 'Instance',
         }),
       },
