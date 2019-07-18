@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { injectIntl, intlShape } from 'react-intl';
+
 import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { isSupervisorOf } from '../../redux/selectors/users';
@@ -9,9 +11,9 @@ import MakeSupervisorButton from '../../components/Groups/MakeSupervisorButton';
 import RemoveSupervisorButton from '../../components/Groups/RemoveSupervisorButton';
 
 const MakeRemoveSupervisorButtonContainer = ({
-  isSupervisor,
   userId,
   groupId,
+  isSupervisor,
   makeSupervisor,
   removeSupervisor,
   fetchUserIfNeeded,
@@ -36,6 +38,7 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   makeSupervisor: PropTypes.func.isRequired,
   removeSupervisor: PropTypes.func.isRequired,
   fetchUserIfNeeded: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
 const mapStateToProps = (state, { groupId, userId }) => ({
@@ -48,7 +51,9 @@ const mapDispatchToProps = {
   fetchUserIfNeeded,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MakeRemoveSupervisorButtonContainer);
+export default injectIntl(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(MakeRemoveSupervisorButtonContainer)
+);
