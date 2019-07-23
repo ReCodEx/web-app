@@ -41,6 +41,7 @@ var server = new WebpackDevServer(webpack(config), {
   quiet: false,
   noInfo: false,
   publicPath: '/',
+  port: WEBPACK_DEV_SERVER_PORT,
   stats: { colors: true },
 });
 
