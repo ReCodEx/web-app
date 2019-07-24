@@ -121,6 +121,7 @@ AssignmentStatusIcon.propTypes = {
   id: PropTypes.string.isRequired,
   status: PropTypes.string,
   accepted: PropTypes.bool,
+  isBestSolution: PropTypes.bool,
 };
 
 export default AssignmentStatusIcon;

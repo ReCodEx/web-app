@@ -53,11 +53,11 @@ const getCSVValues = (assignments, shadowAssignments, data, locale) => {
   const QUOTE = '"';
   const SEPARATOR = ';';
   const NEWLINE = '\n';
-  let result = [];
+  const result = [];
 
   const enquote = string => `${QUOTE}${string}${QUOTE}`;
 
-  let header = [enquote('userName'), enquote('userEmail'), enquote('totalPoints')];
+  const header = [enquote('userName'), enquote('userEmail'), enquote('totalPoints')];
   assignments.forEach(assignment => {
     header.push(enquote(escapeString(getLocalizedName(assignment, locale))));
   });
@@ -67,7 +67,7 @@ const getCSVValues = (assignments, shadowAssignments, data, locale) => {
   result.push(header);
 
   data.forEach(item => {
-    let row = [
+    const row = [
       enquote(`${escapeString(item.user.fullName)}`),
       item.user.privateData ? enquote(`${escapeString(item.user.privateData.email)}`) : '',
       item.total.gained,

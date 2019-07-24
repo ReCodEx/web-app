@@ -39,6 +39,7 @@ const TextField = ({
 TextField.propTypes = {
   type: PropTypes.string,
   input: PropTypes.shape({
+    name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.array, PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired,
   meta: PropTypes.shape({

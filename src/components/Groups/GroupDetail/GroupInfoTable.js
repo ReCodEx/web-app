@@ -35,7 +35,7 @@ const GroupInfoTable = ({
     localizedTexts,
     primaryAdminsIds,
     public: isPublic = false,
-    privateData: { threshold, publicStats, parentGroupId, bindings, ...privateGroup },
+    privateData: { threshold, publicStats, bindings },
   },
   groups,
   supervisors,
@@ -148,14 +148,17 @@ const GroupInfoTable = ({
 GroupInfoTable.propTypes = {
   group: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    externalId: PropTypes.string,
     parentGroupId: PropTypes.string,
     threshold: PropTypes.number,
     primaryAdminsIds: PropTypes.array.isRequired,
     public: PropTypes.bool.isRequired,
     organizational: PropTypes.bool.isRequired,
+    localizedTexts: PropTypes.array,
     privateData: PropTypes.shape({
+      threshold: PropTypes.number,
       publicStats: PropTypes.bool.isRequired,
-      supervisors: PropTypes.array.isRequired,
+      bindings: PropTypes.object,
     }),
   }),
   groups: PropTypes.object.isRequired,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { UserSettingsContext } from '../../../helpers/contexts';
 import { loadAceEditor, getAceModeFromExtension } from '../../helpers/AceEditorLoader';
-let AceEditor = loadAceEditor();
+const AceEditor = loadAceEditor();
 
 const SourceCodeViewer = ({ name, content = '', lineNumbers = true }) => (
   <UserSettingsContext.Consumer>

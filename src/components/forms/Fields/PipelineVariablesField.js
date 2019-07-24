@@ -89,6 +89,7 @@ const PipelineVariablesField = ({ input, label, variables, supplementaryFiles, i
 PipelineVariablesField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    value: PropTypes.object,
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,

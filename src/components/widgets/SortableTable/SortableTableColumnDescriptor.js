@@ -30,9 +30,11 @@ class SortableTableColumnDescriptor {
   }
 
   getHeaderStyle = () => this.headerStyle || this.style;
+
   getHeaderClassName = () => this.headerClassName || this.className;
 
   getHeaderSuffixStyle = () => this.headerSuffixStyle || this.headerStyle || this.style;
+
   getHeaderSuffixClassName = () => this.headerSuffixClassName || this.headerClassName || this.className;
 }
 

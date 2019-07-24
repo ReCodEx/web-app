@@ -9,6 +9,7 @@ import { identity } from '../../../helpers/common';
 
 class TabbedArrayField extends Component {
   state = { activeTab: 0 };
+
   changeTab = n => this.setState({ activeTab: n });
 
   prepareFieldsIndices = () => {

@@ -37,7 +37,7 @@ class PipelineVisualEditor extends Component {
   };
 
   onClick = target => {
-    let boxId = this.findTopmostCluster(target);
+    const boxId = this.findTopmostCluster(target);
     const nodeToEdit = boxId ? this.state.graph.nodes.find(node => node.name === boxId) : null;
 
     this.setState({ nodeToEdit });

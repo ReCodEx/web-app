@@ -29,7 +29,9 @@ const getLastSubmissionId = evaluations => {
 
 class ReferenceSolutionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
+
   openFile = id => this.setState({ openFileId: id });
+
   hideFile = () => this.setState({ openFileId: null });
 
   render() {
@@ -171,6 +173,8 @@ class ReferenceSolutionDetail extends Component {
 ReferenceSolutionDetail.propTypes = {
   solution: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    runtimeEnvironmentId: PropTypes.string,
     note: PropTypes.string,
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
     solution: PropTypes.shape({

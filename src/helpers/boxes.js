@@ -2,9 +2,9 @@ export const isArrayType = type => type.indexOf('[]') > 0;
 
 export const getVariablesTypes = (boxTypes, boxes) => {
   const variablesTypes = {};
-  for (let box of boxes) {
-    let boxType = boxTypes.find(boxType => boxType.type === box.type);
-    for (let port of Object.keys(box.portsIn || {})) {
+  for (const box of boxes) {
+    const boxType = boxTypes.find(boxType => boxType.type === box.type);
+    for (const port of Object.keys(box.portsIn || {})) {
       const { value } = box.portsIn[port];
       const { type } = boxType.portsIn[port];
       variablesTypes[value] = {
@@ -12,7 +12,7 @@ export const getVariablesTypes = (boxTypes, boxes) => {
         examplePort: box.name,
       };
     }
-    for (let port of Object.keys(box.portsOut)) {
+    for (const port of Object.keys(box.portsOut)) {
       const { value } = box.portsOut[port];
       const { type } = boxType.portsOut[port];
       variablesTypes[value] = {

@@ -72,6 +72,7 @@ const shallowResourcesEqual = (oldResources, newResources) => {
  */
 class ResourceRenderer extends Component {
   oldResources = null;
+
   oldData = null;
 
   // Perform rendering of the childs whilst keeping resource data cached ...

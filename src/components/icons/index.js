@@ -104,6 +104,14 @@ SuccessOrFailureIcon.propTypes = {
   success: PropTypes.bool,
 };
 
+TypedMessageIcon.propTypes = {
+  type: PropTypes.string.isRequired,
+};
+
+VisibleIcon.propTypes = {
+  visible: PropTypes.bool,
+};
+
 export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
 export { default as MaybeBonusAssignmentIcon } from './MaybeBonusAssignmentIcon';
 export { default as MaybeVisibleAssignmentIcon } from './MaybeVisibleAssignmentIcon';

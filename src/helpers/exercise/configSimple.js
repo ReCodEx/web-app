@@ -223,8 +223,8 @@ class FileListVariable extends Variable {
     value = value === undefined ? this.defaultValue : value;
 
     // Split it into files and their actual names ...
-    let inputFiles = [];
-    let actualInputs = [];
+    const inputFiles = [];
+    const actualInputs = [];
     for (const item of value) {
       inputFiles.push(item.file);
       actualInputs.push(item.name.trim());
@@ -327,7 +327,7 @@ const SPECIAL_ENV_PIPELINE_FILTERS = {
 export const getSimpleConfigInitValues = defaultMemoize((config, tests, exerciseEnvironmentsConfig) => {
   const environmentsIds = exerciseEnvironmentsConfig.map(env => env.runtimeEnvironmentId);
 
-  let res = {};
+  const res = {};
   tests.forEach(({ id }) => {
     let testObj = { name: id };
 

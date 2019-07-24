@@ -83,6 +83,7 @@ MarkdownTextAreaField.propTypes = {
     name: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
   }).isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default MarkdownTextAreaField;

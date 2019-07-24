@@ -60,7 +60,7 @@ const urlPrefix = parsedConfig.URL_PATH_PREFIX || '';
 const bundle = process.env.BUNDLE || getFileName('public/bundle-*.js', `${urlPrefix}/`) || `${urlPrefix}/bundle.js`;
 const style = getFileName('public/style-*.css', `${urlPrefix}/`) || `${urlPrefix}/style.css`;
 
-let app = new Express();
+const app = new Express();
 const ejs = require('ejs').__express;
 app.set('view engine', 'ejs');
 app.engine('.ejs', ejs);
@@ -89,8 +89,8 @@ const renderWithoutSSR = (res, renderProps) => {
 };
 
 const renderPage = (res, store, renderProps) => {
-  let reduxState = serialize(store.getState(), { isJSON: true });
-  let html = renderToString(
+  const reduxState = serialize(store.getState(), { isJSON: true });
+  const html = renderToString(
     <Provider store={store}>
       <RouterContext {...renderProps} />
     </Provider>

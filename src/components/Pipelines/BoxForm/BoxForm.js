@@ -163,13 +163,11 @@ const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, exist
   const errors = {};
 
   if (!name || name.length === 0) {
-    errors['name'] = (
-      <FormattedMessage id="app.pipelineEditor.BoxForm.emptyName" defaultMessage="Name cannot be empty." />
-    );
+    errors.name = <FormattedMessage id="app.pipelineEditor.BoxForm.emptyName" defaultMessage="Name cannot be empty." />;
   }
 
   if (!type) {
-    errors['type'] = (
+    errors.type = (
       <FormattedMessage id="app.pipelineEditor.BoxForm.missingType" defaultMessage="You must select some type." />
     );
   } else {
@@ -184,7 +182,7 @@ const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, exist
         existingBoxes.filter(box => box.name !== name && box.type !== type)
       );
 
-      for (let portName of portsInNames) {
+      for (const portName of portsInNames) {
         if (portsIn[portName] && portsIn[portName].length > 0) {
           const intendedVariableName = portsIn[portName].value;
           const portType = boxType.portsIn[portName].type;
@@ -210,14 +208,14 @@ const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, exist
 
       // check that the variable in a certain port has the correct port
       if (Object.keys(portsInErrors).length > 0) {
-        errors['portsIn'] = portsInErrors;
+        errors.portsIn = portsInErrors;
       }
 
       const portsOutErrors = {};
 
       // check that one box does not have the same var as input and output
-      for (let portIn of portsInNames) {
-        for (let portOut of portsOutNames) {
+      for (const portIn of portsInNames) {
+        for (const portOut of portsOutNames) {
           if (portsIn[portIn] && portsOut[portOut] && portsIn[portIn].value === portsOut[portOut].value) {
             portsOutErrors[portOut] = {
               value: (
@@ -232,7 +230,7 @@ const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, exist
       }
 
       if (Object.keys(portsOutErrors).length > 0) {
-        errors['portsOut'] = portsOutErrors;
+        errors.portsOut = portsOutErrors;
       }
     }
   }

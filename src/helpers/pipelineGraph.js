@@ -10,16 +10,16 @@ export const addDependencies = (graph, node) => {
   const nodePortsIn = node.portsIn ? Object.keys(node.portsIn) : {};
   const nodePortsOut = node.portsOut ? Object.keys(node.portsOut) : {};
 
-  for (let old of graph.nodes) {
+  for (const old of graph.nodes) {
     const oldPortsIn = old.portsIn ? Object.keys(old.portsIn) : {};
     const oldPortsOut = old.portsOut ? Object.keys(old.portsOut) : {};
-    for (let portInName of oldPortsIn) {
+    for (const portInName of oldPortsIn) {
       const portIn = old.portsIn[portInName];
       if (portIn.value.length === 0) {
         continue;
       }
 
-      for (let portOutName of nodePortsOut) {
+      for (const portOutName of nodePortsOut) {
         const portOut = node.portsOut[portOutName];
         if (portOut.value.length > 0 && portIn.value === portOut.value) {
           candidates.push({
@@ -31,13 +31,13 @@ export const addDependencies = (graph, node) => {
       }
     }
 
-    for (let portInName of nodePortsIn) {
+    for (const portInName of nodePortsIn) {
       const portIn = node.portsIn[portInName];
       if (portIn.value.length === 0) {
         continue;
       }
 
-      for (let portOutName of oldPortsOut) {
+      for (const portOutName of oldPortsOut) {
         const portOut = old.portsOut[portOutName];
         if (portOut.value.length > 0 && portIn.value === portOut.value) {
           candidates.push({
@@ -50,9 +50,9 @@ export const addDependencies = (graph, node) => {
     }
   }
 
-  for (let candidate of candidates) {
+  for (const candidate of candidates) {
     let unique = true;
-    for (let dependency of dependencies) {
+    for (const dependency of dependencies) {
       if (candidate.name === dependency.name && candidate.from === dependency.from && candidate.to === dependency.to) {
         unique = false;
         break;
@@ -80,7 +80,7 @@ export const replaceNode = (graph, oldNode, newNode) => addNode(removeNode(graph
 export const createGraphFromNodes = nodes => {
   let graph = { nodes, dependencies: [] };
 
-  for (let node of graph.nodes) {
+  for (const node of graph.nodes) {
     graph = addDependencies(graph, node);
   }
 

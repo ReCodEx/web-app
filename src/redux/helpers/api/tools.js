@@ -74,7 +74,7 @@ export const flattenBody = body => {
 const createFormData = body => {
   const data = new FormData();
   const flattened = flattenBody(body);
-  for (let key in flattened) {
+  for (const key in flattened) {
     data.append(key, flattened[key]);
   }
   return data;
@@ -150,7 +150,7 @@ export const createApiCallPromise = (
     }
   }
 
-  let call = createRequest(endpoint, query, method, headers, body, uploadFiles)
+  const call = createRequest(endpoint, query, method, headers, body, uploadFiles)
     .catch(err => detectUnreachableServer(err, dispatch))
     .then(res => {
       canUseDOM && dispatch(completedFetchOperation());

@@ -15,6 +15,7 @@ class ExerciseGroups extends Component {
   state = { dialogOpen: false };
 
   openDialog = () => this.setState({ dialogOpen: true });
+
   closeDialog = () => this.setState({ dialogOpen: false });
 
   attachButton = groupId => {
