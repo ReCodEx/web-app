@@ -43,6 +43,7 @@ const PortField = ({
 
 PortField.propTypes = {
   input: PropTypes.shape({
+    name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired,
   meta: PropTypes.shape({

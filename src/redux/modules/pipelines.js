@@ -46,7 +46,7 @@ export const forkStatuses = {
 };
 
 export const forkPipeline = (id, forkId, formData = null) => {
-  let actionData = {
+  const actionData = {
     type: additionalActionTypes.FORK_PIPELINE,
     endpoint: `/pipelines/${id}/fork`,
     method: 'POST',

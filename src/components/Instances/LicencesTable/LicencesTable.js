@@ -64,6 +64,7 @@ const LicencesTable = ({ instance, licences }) => (
 LicencesTable.propTypes = {
   instance: PropTypes.shape({
     hasValidLicence: PropTypes.bool.isRequired,
+    name: PropTypes.string,
   }).isRequired,
   licences: PropTypes.array.isRequired,
 };

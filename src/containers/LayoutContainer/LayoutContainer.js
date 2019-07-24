@@ -51,7 +51,6 @@ class LayoutContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // TODO this needs to be rewritten along with the new context handling...
     if (
       (prevProps.userSettings.openedSidebar === undefined && this.props.userSettings.openedSidebar !== undefined) ||
       (prevProps.userSettings.openedSidebar !== undefined &&
@@ -97,6 +96,7 @@ class LayoutContainer extends Component {
   };
 
   getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
+
   getLocaleData = lang => localeData[lang] || localeData[this.getDefaultLang()];
 
   render() {
@@ -145,14 +145,6 @@ class LayoutContainer extends Component {
     );
   }
 }
-
-/*
-LayoutContainer.childContextTypes = {
-  lang: PropTypes.string,
-  links: PropTypes.object,
-  isActive: PropTypes.func,
-};
-*/
 
 LayoutContainer.contextTypes = {
   router: PropTypes.object,

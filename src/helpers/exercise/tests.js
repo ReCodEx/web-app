@@ -9,7 +9,7 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   const testWeights = jsonScoreConfig.testWeights || EMPTY_OBJ;
   const sortedTests = exerciseTests.sort((a, b) => a.name.localeCompare(b.name, locale));
 
-  let res = [];
+  const res = [];
   let allWeightsSame = true;
   let lastWeight = null;
   for (const test of sortedTests) {
@@ -36,10 +36,10 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
  */
 export const transformTestsValues = formData => {
   const uniformScore = formData.isUniform === true || formData.isUniform === 'true';
-  let scoreConfigData = {
+  const scoreConfigData = {
     testWeights: {},
   };
-  let tests = [];
+  const tests = [];
 
   for (const test of formData.tests) {
     const testName = test.name.trim();

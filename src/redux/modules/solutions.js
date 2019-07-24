@@ -217,7 +217,7 @@ const reducer = handleActions(
       }
 
       // Remove the submit from internal list
-      let newState = state.updateIn(['resources', solutionId, 'data', 'submissions'], submissions =>
+      const newState = state.updateIn(['resources', solutionId, 'data', 'submissions'], submissions =>
         submissions.filter(submission => submission !== evaluationId)
       );
 

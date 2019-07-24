@@ -48,7 +48,7 @@ export const onlySimpleEnvironments = defaultMemoize(environments =>
  * @param {*} environmentConfigs
  */
 export const getSimpleEnvironmentsInitValues = environmentConfigs => {
-  let res = {};
+  const res = {};
   // all environments
   SIMPLE_FORM_ENVIRONMENTS.forEach(envId => {
     res[envId] = false; // make sure we have all the environments set
@@ -83,7 +83,7 @@ export const getEnvironmentInitValues = environmentConfigs => {
  * @param {*} runtimeEnvironments
  */
 export const transformSimpleEnvironmentsValues = (formData, environmentConfigs, runtimeEnvironments) => {
-  let res = [];
+  const res = [];
   SIMPLE_FORM_ENVIRONMENTS.forEach(env => {
     if (formData[env] !== true && formData[env] !== 'true') {
       return;
@@ -107,7 +107,7 @@ export const transformSimpleEnvironmentsValues = (formData, environmentConfigs, 
  * @param {*} runtimeEnvironments
  */
 export const transformEnvironmentValues = formData => {
-  let res = [];
+  const res = [];
   if (formData.environmentId) {
     res.push({
       runtimeEnvironmentId: formData.environmentId,

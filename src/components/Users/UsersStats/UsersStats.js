@@ -32,6 +32,8 @@ UsersStats.propTypes = {
       total: PropTypes.number.isRequired,
       gained: PropTypes.number.isRequired,
     }),
+    hasLimit: PropTypes.bool,
+    passesLimit: PropTypes.bool,
   }).isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };

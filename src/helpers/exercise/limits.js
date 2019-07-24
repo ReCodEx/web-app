@@ -6,7 +6,7 @@ import { encodeId, encodeNumId, safeGet } from '../common';
  * Memory and Time limits
  */
 export const getLimitsInitValues = defaultMemoize((limits, tests, environments, hwGroup) => {
-  let res = {};
+  const res = {};
   let wallTimeCount = 0;
   let cpuTimeCount = 0;
   limits = limits && limits[hwGroup];
@@ -16,7 +16,7 @@ export const getLimitsInitValues = defaultMemoize((limits, tests, environments, 
     res[testEnc] = {};
     environments.forEach(environment => {
       const envId = encodeId(environment.id);
-      let lim = safeGet(limits, [environment.id, String(test.id)]);
+      const lim = safeGet(limits, [environment.id, String(test.id)]);
 
       // Prepare time object and aggregate data for heuristics ...
       const time = {};
@@ -58,7 +58,7 @@ export const getLimitsInitValues = defaultMemoize((limits, tests, environments, 
 });
 
 const transformLimitsObject = ({ memory, time }, timeField = 'wall-time') => {
-  let res = {
+  const res = {
     memory,
   };
   res[timeField] = time;
@@ -157,7 +157,7 @@ export const validateLimitsField = (value, range) => {
 
 export const validateLimitsTimeTotals = (limits, range) => {
   // Compute sum of times for each environment.
-  let sums = {};
+  const sums = {};
   Object.keys(limits).forEach(test =>
     Object.keys(limits[test]).forEach(env => {
       if (limits[test][env].time) {
@@ -183,7 +183,7 @@ export const validateLimitsConstraints = ({ limits }, constraints) => {
   }
 
   // Compute sum of times for each environment.
-  let envTimeSums = {};
+  const envTimeSums = {};
   const fieldChecks = Object.keys(limits).every(test => {
     return Object.keys(limits[test]).every(envEnc => {
       const memory = validateLimitsField(safeGet(limits, [test, envEnc, 'memory']), constraints.memory);

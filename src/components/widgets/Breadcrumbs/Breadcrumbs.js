@@ -9,7 +9,9 @@ const Breadcrumbs = ({ items = [] }) => (
     {items
       .filter(({ hidden = false }) => hidden !== true)
       .map((item, i) => {
-        const Component = item.hasOwnProperty('resource') ? ResourceDependentBreadcrumbItem : BreadcrumbItem;
+        const Component = Object.prototype.hasOwnProperty.call(item, 'resource')
+          ? ResourceDependentBreadcrumbItem
+          : BreadcrumbItem;
         return <Component {...item} key={i} isActive={i === items.length - 1} />;
       })}
   </Breadcrumb>

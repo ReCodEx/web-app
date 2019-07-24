@@ -18,9 +18,9 @@ export const getBestSubmissionsAssoc = (assignments, users) =>
     getGroupResults,
     groupResults => {
       const submissions = {};
-      for (let user of users) {
+      for (const user of users) {
         submissions[user.id] = {};
-        for (let assignment of assignments) {
+        for (const assignment of assignments) {
           const usersSubmission = groupResults.getIn(['resources', assignment.id, user.id]);
           submissions[user.id][assignment.id] = usersSubmission;
         }

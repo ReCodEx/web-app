@@ -23,7 +23,9 @@ import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
 class SolutionDetail extends Component {
   state = { openFileId: null, activeSubmissionId: null };
+
   openFile = id => this.setState({ openFileId: id });
+
   hideFile = () => this.setState({ openFileId: null });
 
   render() {
@@ -220,6 +222,7 @@ SolutionDetail.propTypes = {
     bonusPoints: PropTypes.number.isRequired,
     overriddenPoints: PropTypes.number,
     actualPoints: PropTypes.number,
+    accepted: PropTypes.bool,
     runtimeEnvironmentId: PropTypes.string,
     permissionHints: PropTypes.object,
   }).isRequired,

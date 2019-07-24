@@ -31,6 +31,7 @@ class Box extends Component {
   };
 
   showDetails = () => this.setState({ isOpen: true });
+
   hideDetails = () => this.setState({ isOpen: false });
 
   renderBody() {

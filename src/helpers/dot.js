@@ -14,7 +14,7 @@ const createDotForPorts = (name, ports) =>
     .map(port => `${subnode(name, port)} [label="${port}"]`);
 
 const createDotForNodeFactory = dependencies => (name, portsIn = {}, portsOut = {}, i) => {
-  let hasFullSupport = true;
+  const hasFullSupport = true;
   const inputs = createDotForPorts(name, portsIn);
   const outputs = createDotForPorts(name, portsOut);
 

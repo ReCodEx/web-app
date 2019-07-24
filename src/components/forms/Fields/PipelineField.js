@@ -25,6 +25,8 @@ const PipelineField = ({ input, meta: { touched, error }, label, ...props }) => 
 PipelineField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
+    onChange: PropTypes.func.isRequired,
   }).isRequired,
   label: PropTypes.oneOfType([
     PropTypes.string,

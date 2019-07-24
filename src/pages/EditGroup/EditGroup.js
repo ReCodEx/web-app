@@ -249,7 +249,7 @@ export default withLinks(
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
       reload: () => dispatch(fetchGroup(groupId)),
       editGroup: ({ localizedTexts, externalId, isPublic, publicStats, threshold, hasThreshold }) => {
-        let transformedData = {
+        const transformedData = {
           localizedTexts: transformLocalizedTextsFormData(localizedTexts),
           externalId,
           isPublic,

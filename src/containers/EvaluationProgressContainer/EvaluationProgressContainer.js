@@ -31,6 +31,7 @@ import randomMessages, { extraMessages } from './randomMessages';
 
 class EvaluationProgressContainer extends Component {
   state = { realTimeProcessing: true, monitor: null };
+
   socket = null;
 
   componentDidMount = () => this.init(this.props);

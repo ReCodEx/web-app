@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { injectIntl, FormattedMessage, defineMessages, intlShape } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -153,7 +153,7 @@ ForkExerciseForm.propTypes = {
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
+  intl: intlShape,
 };
 
 const mapStateToProps = (state, { exerciseId, forkId }) => {

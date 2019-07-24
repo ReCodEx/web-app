@@ -27,6 +27,7 @@ RadioField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    onChange: PropTypes.func,
   }).isRequired,
   meta: PropTypes.shape({
     dirty: PropTypes.bool,

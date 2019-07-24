@@ -40,6 +40,8 @@ StudentsListItem.propTypes = {
       total: PropTypes.number.isRequired,
       gained: PropTypes.number.isRequired,
     }),
+    hasLimit: PropTypes.bool,
+    passesLimit: PropTypes.bool,
   }),
   renderActions: PropTypes.func,
 };

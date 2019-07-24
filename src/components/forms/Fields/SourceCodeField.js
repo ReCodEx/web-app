@@ -8,7 +8,7 @@ import { UserSettingsContext } from '../../../helpers/contexts';
 
 // load the ACE editor only when rendering in the browser
 import { loadAceEditor, getAceModeFromExtension } from '../../helpers/AceEditorLoader';
-let AceEditor = loadAceEditor();
+const AceEditor = loadAceEditor();
 
 const SourceCodeField = ({
   input,
@@ -61,6 +61,7 @@ const SourceCodeField = ({
 SourceCodeField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    onBlur: PropTypes.func.isRequired,
   }).isRequired,
   mode: PropTypes.string.isRequired,
   children: PropTypes.any,

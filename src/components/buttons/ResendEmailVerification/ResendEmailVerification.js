@@ -49,6 +49,7 @@ const ResendEmailVerification = ({ resend, state, intl: { formatMessage }, ...pr
 
 ResendEmailVerification.propTypes = {
   resend: PropTypes.func.isRequired,
+  state: PropTypes.string,
   intl: intlShape,
 };
 

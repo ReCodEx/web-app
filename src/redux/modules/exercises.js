@@ -57,7 +57,7 @@ export const forkStatuses = {
 };
 
 export const forkExercise = (id, forkId, formData = null) => {
-  let actionData = {
+  const actionData = {
     type: additionalActionTypes.FORK_EXERCISE,
     endpoint: `/exercises/${id}/fork`,
     method: 'POST',
@@ -100,7 +100,7 @@ export const getVariablesForPipelines = (exerciseId, runtimeEnvironmentId, pipel
 };
 
 export const setExerciseHardwareGroups = (id, hwGroups) => {
-  let actionData = {
+  const actionData = {
     type: additionalActionTypes.SET_HARDWARE_GROUPS,
     endpoint: `/exercises/${id}/hardware-groups`,
     method: 'POST',
