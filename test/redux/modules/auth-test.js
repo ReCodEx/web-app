@@ -8,15 +8,9 @@ import reducerFactory, {
   logout,
   login,
   externalLogin,
-  loginServices
+  loginServices,
 } from '../../../src/redux/modules/auth';
-import {
-  isLoggedIn,
-  hasSucceeded,
-  hasFailed,
-  statusSelector
-} from '../../../src/redux/selectors/auth';
-import { push } from 'react-router-redux';
+import { isLoggedIn, hasSucceeded, hasFailed, statusSelector } from '../../../src/redux/selectors/auth';
 
 import decodeJwt from 'jwt-decode';
 
@@ -26,18 +20,8 @@ const expect = chai.expect;
 describe('Authentication', () => {
   describe('(Action creators)', () => {
     it('must create a valid logout action', () => {
-      const action = logout('https://anywhere');
-      expect(action).to.be.a('function');
-      expect(action.length).to.equal(1);
-
-      const dispatchSpy = chai.spy();
-      action(dispatchSpy);
-
-      expect(dispatchSpy).to.have.been.called.twice();
-      expect(dispatchSpy).to.have.been.called.with(push('https://anywhere'));
-      expect(dispatchSpy).to.have.been.called.with({
-        type: actionTypes.LOGOUT
-      });
+      const action = logout();
+      expect(action).to.eql({ type: actionTypes.LOGOUT });
     });
 
     it('must create correct login request action', () => {
@@ -47,7 +31,7 @@ describe('Authentication', () => {
         method: 'POST',
         endpoint: '/login',
         body: { username: 'usr', password: 'pwd' },
-        meta: { service: loginServices.local }
+        meta: { service: loginServices.local },
       });
     });
 
@@ -55,7 +39,7 @@ describe('Authentication', () => {
       const serviceId = 'some-ext-service';
       const action = externalLogin(serviceId)({
         serviceToken: 'xyz',
-        otherData: 'uvw'
+        otherData: 'uvw',
       });
       expect(action.request).to.eql({
         type: actionTypes.LOGIN,
@@ -63,9 +47,9 @@ describe('Authentication', () => {
         endpoint: `/login/${serviceId}`,
         body: {
           serviceToken: 'xyz',
-          otherData: 'uvw'
+          otherData: 'uvw',
         },
-        meta: { service: serviceId, popupWindow: null }
+        meta: { service: serviceId, popupWindow: null },
       });
     });
   });
@@ -80,7 +64,7 @@ describe('Authentication', () => {
           jwt: null,
           accessToken: null,
           userId: null,
-          instanceId: null
+          instanceId: null,
         });
         expect(state).to.eql(expectedState);
       });
@@ -93,7 +77,7 @@ describe('Authentication', () => {
           jwt: null,
           accessToken: null,
           userId: null,
-          instanceId: null
+          instanceId: null,
         });
         expect(state).to.eql(expectedState);
       });
@@ -111,7 +95,7 @@ describe('Authentication', () => {
           jwt: null,
           accessToken: null,
           userId: null,
-          instanceId: null
+          instanceId: null,
         });
         expect(state).to.eql(expectedState);
       });
@@ -127,7 +111,7 @@ describe('Authentication', () => {
           jwt: validToken,
           accessToken: decodeJwt(validToken),
           userId: 123,
-          instanceId: 'instance-id'
+          instanceId: 'instance-id',
         });
         expect(state).to.eql(expectedState);
       });
@@ -138,8 +122,8 @@ describe('Authentication', () => {
     it('must detect that the user is not logged in', () => {
       const state = {
         auth: fromJS({
-          userId: null
-        })
+          userId: null,
+        }),
       };
 
       expect(isLoggedIn(state)).to.equal(false);
@@ -150,9 +134,9 @@ describe('Authentication', () => {
         auth: fromJS({
           userId: 123,
           accessToken: {
-            exp: Date.now() / 1000 + 100
-          }
-        })
+            exp: Date.now() / 1000 + 100,
+          },
+        }),
       };
 
       expect(isLoggedIn(state)).to.equal(true);
@@ -161,8 +145,8 @@ describe('Authentication', () => {
     it('must select correct OK status', () => {
       const state = {
         auth: fromJS({
-          status: { abc: statusTypes.LOGGED_IN }
-        })
+          status: { abc: statusTypes.LOGGED_IN },
+        }),
       };
 
       expect(statusSelector('abc')(state)).to.equal(statusTypes.LOGGED_IN);
@@ -173,8 +157,8 @@ describe('Authentication', () => {
     it('must select correct FAIL status', () => {
       const state = {
         auth: fromJS({
-          status: { abc: statusTypes.LOGIN_FAILED }
-        })
+          status: { abc: statusTypes.LOGIN_FAILED },
+        }),
       };
 
       expect(statusSelector('abc')(state)).to.equal(statusTypes.LOGIN_FAILED);

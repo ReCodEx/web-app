@@ -1,30 +1,30 @@
-import chai from 'chai';
-import chaiImmutable from 'chai-immutable';
-chai.use(chaiImmutable);
-
-const expect = chai.expect;
-
 import reducer, {
   actionTypes,
   initialState,
-
   init,
   addFile,
   removeFile,
   removeFailedFile,
   returnFile,
   uploadSuccessful,
-  uploadFailed
+  uploadFailed,
 } from '../../../src/redux/modules/upload';
 
 import { fromJS, Map, List } from 'immutable';
+
+import chai from 'chai';
+import chaiImmutable from 'chai-immutable';
+
+chai.use(chaiImmutable);
+
+const expect = chai.expect;
 
 describe('Uploading', () => {
   describe('(Action creators)', () => {
     it('must initialize the submission', () => {
       expect(init('blablabla')).to.eql({
         type: actionTypes.INIT,
-        payload: 'blablabla'
+        payload: 'blablabla',
       });
     });
 
@@ -34,7 +34,7 @@ describe('Uploading', () => {
       expect(removeFile(id, file)).to.eql({
         type: actionTypes.REMOVE_FILE,
         payload: file,
-        meta: { id }
+        meta: { id },
       });
     });
   });
@@ -51,15 +51,17 @@ describe('Uploading', () => {
     describe('file uploading', () => {
       it('must initialise a specific upload process', () => {
         const id = 'alsdjlaskjdalskjd';
-        let state = reducer(undefined, {});
-        expect(reducer(state, init(id))).to.eql(fromJS({
-          [id]: {
-            uploaded: [],
-            uploading: [],
-            failed: [],
-            removed: []
-          }
-        }));
+        const state = reducer(undefined, {});
+        expect(reducer(state, init(id))).to.eql(
+          fromJS({
+            [id]: {
+              uploaded: [],
+              uploading: [],
+              failed: [],
+              removed: [],
+            },
+          })
+        );
       });
 
       it('must add file among other files for upload', () => {
@@ -68,9 +70,9 @@ describe('Uploading', () => {
         const action = {
           type: actionTypes.UPLOAD_PENDING,
           payload: {
-            [file.name]: file
+            [file.name]: file,
           },
-          meta: { id, fileName: file.name }
+          meta: { id, fileName: file.name },
         };
 
         let state = reducer(reducer(undefined, {}), init(id));
@@ -80,7 +82,7 @@ describe('Uploading', () => {
         expect(filesToUpload.size).to.equal(1);
         expect(filesToUpload.first()).to.eql({
           name: file.name,
-          file
+          file,
         });
       });
 
@@ -102,7 +104,7 @@ describe('Uploading', () => {
         expect(uploadedFiles.size).to.equal(1);
         expect(uploadedFiles.first()).to.eql({
           name: file.name,
-          file
+          file,
         });
       });
 
@@ -124,7 +126,7 @@ describe('Uploading', () => {
         expect(failedFiles.size).to.equal(1);
         expect(failedFiles.first()).to.eql({
           name: file.name,
-          file
+          file,
         });
       });
 
@@ -138,8 +140,8 @@ describe('Uploading', () => {
 
         // now that the file is in the list, remove it!
         state = reducer(state, removeFile(id, file));
-        const uploadedFiles = state.getIn([ id, 'uploaded' ]);
-        const removedFiles = state.getIn([ id, 'removed' ]);
+        const uploadedFiles = state.getIn([id, 'uploaded']);
+        const removedFiles = state.getIn([id, 'removed']);
         expect(uploadedFiles.size).to.equal(0);
         expect(removedFiles.size).to.equal(1);
         expect(removedFiles.first()).to.eql(file);
@@ -156,8 +158,8 @@ describe('Uploading', () => {
 
         // now that the file is removed, return it back
         state = reducer(state, returnFile(id, file));
-        const removedFiles = state.getIn([ id, 'removed' ]);
-        const uploadedFiles = state.getIn([ id, 'uploaded' ]);
+        const removedFiles = state.getIn([id, 'removed']);
+        const uploadedFiles = state.getIn([id, 'uploaded']);
         expect(removedFiles.size).to.equal(0);
         expect(uploadedFiles.size).to.equal(1);
         expect(uploadedFiles.first()).to.eql(file);
@@ -173,7 +175,7 @@ describe('Uploading', () => {
 
         // now that the file is in the list, remove it!
         state = reducer(state, removeFailedFile(id, file));
-        const failedFiles = state.getIn([ id, 'failed' ]);
+        const failedFiles = state.getIn([id, 'failed']);
         expect(failedFiles.size).to.equal(0);
       });
     });
