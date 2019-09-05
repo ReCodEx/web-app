@@ -10,7 +10,7 @@ import { actionTypes as emailVerificationActionTypes } from './emailVerification
 import { actionTypes as paginationActionTypes } from './pagination';
 import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';
 import { actionTypes as registrationActionTypes } from './registration';
-import authActionTypes from './authActionTypes';
+import { actionTypes as authActionTypes } from './authTypes';
 
 import { arrayToObject } from '../../helpers/common';
 

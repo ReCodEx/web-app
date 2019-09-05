@@ -4,8 +4,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage, defineMessages, intlShape } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reduxForm, Field } from 'redux-form';
+import { withRouter } from 'react-router';
+
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../../components/widgets/FlatButton';
@@ -31,12 +32,10 @@ class ForkExerciseForm extends Component {
   viewForkedExercise() {
     const {
       forkedExerciseId: id,
-      push,
+      history: { push },
       links: { EXERCISE_URI_FACTORY },
     } = this.props;
-
-    const url = EXERCISE_URI_FACTORY(id);
-    push(url);
+    push(EXERCISE_URI_FACTORY(id));
   }
 
   render() {
@@ -140,6 +139,10 @@ class ForkExerciseForm extends Component {
 }
 
 ForkExerciseForm.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   exerciseId: PropTypes.string.isRequired,
   forkId: PropTypes.string.isRequired,
   forkStatus: PropTypes.string,
@@ -149,24 +152,11 @@ ForkExerciseForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   intl: intlShape,
 };
-
-const mapStateToProps = (state, { exerciseId, forkId }) => {
-  const fork = getFork(exerciseId, forkId)(state);
-  return {
-    forkStatus: fork ? fork.status : null,
-    forkedExerciseId: fork && fork.status === forkStatuses.FULFILLED ? fork.exerciseId : null,
-  };
-};
-
-const mapDispatchToProps = (dispatch, { exerciseId, forkId }) => ({
-  push: url => dispatch(push(url)),
-});
 
 const validate = ({ groupId }) => {
   const errors = {};
@@ -182,13 +172,16 @@ const validate = ({ groupId }) => {
 };
 
 export default withLinks(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(
+  connect((state, { exerciseId, forkId }) => {
+    const fork = getFork(exerciseId, forkId)(state);
+    return {
+      forkStatus: fork ? fork.status : null,
+      forkedExerciseId: fork && fork.status === forkStatuses.FULFILLED ? fork.exerciseId : null,
+    };
+  })(
     reduxForm({
       form: 'forkExercise',
       validate,
-    })(injectIntl(ForkExerciseForm))
+    })(injectIntl(withRouter(ForkExerciseForm)))
   )
 );

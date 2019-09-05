@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import withLinks from '../../../helpers/withLinks';
 

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../components/widgets/FlatButton';
-import { push } from 'react-router-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
+import App from '../../containers/App';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
@@ -52,10 +52,13 @@ class Pipelines extends Component {
   newPipeline = () => {
     const {
       createPipeline,
-      push,
+      history: { push },
       links: { PIPELINE_EDIT_URI_FACTORY },
     } = this.props;
-    createPipeline().then(({ value: pipeline }) => push(PIPELINE_EDIT_URI_FACTORY(pipeline.id)));
+    createPipeline().then(({ value: pipeline }) => {
+      App.ignoreNextLocationChange();
+      push(PIPELINE_EDIT_URI_FACTORY(pipeline.id));
+    });
   };
 
   render() {
@@ -143,9 +146,12 @@ class Pipelines extends Component {
 }
 
 Pipelines.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   createPipeline: PropTypes.func.isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
 };
 
@@ -153,13 +159,11 @@ export default withLinks(
   connect(
     state => {
       const userId = loggedInUserIdSelector(state);
-
       return {
         isAuthorOfPipeline: pipelineId => canEditPipeline(userId, pipelineId)(state),
       };
     },
     dispatch => ({
-      push: url => dispatch(push(url)),
       createPipeline: () => dispatch(createPipeline()),
     })
   )(Pipelines)

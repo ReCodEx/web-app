@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { IndexLink } from 'react-router';
+import { Link } from 'react-router-dom';
 import MediaQuery from 'react-responsive';
 
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
@@ -27,14 +27,14 @@ class Header extends Component {
       isLoggedIn,
       availableLangs = [],
       currentLang,
-      currentUrl = '',
+      setLang,
       pendingFetchOperations,
       links: { HOME_URI },
     } = this.props;
 
     return (
       <header className="main-header fixed">
-        <IndexLink to={HOME_URI} className="logo">
+        <Link to={HOME_URI} className="logo">
           <span className="logo-mini">
             {pendingFetchOperations ? (
               <LoadingIcon gapRight />
@@ -52,7 +52,7 @@ class Header extends Component {
             )}
             Re<b>CodEx</b>
           </span>
-        </IndexLink>
+        </Link>
 
         <div className="navbar navbar-static-top" role="navigation">
           <ClientOnly>
@@ -81,7 +81,7 @@ class Header extends Component {
               {isLoggedIn && <HeaderSystemMessagesContainer locale={currentLang} />}
               <HeaderNotificationsContainer />
               {availableLangs.map(lang => (
-                <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} currentUrl={currentUrl} />
+                <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} setLang={setLang} />
               ))}
             </ul>
           </div>
@@ -96,6 +96,7 @@ Header.propTypes = {
   toggleSidebarSize: PropTypes.func.isRequired,
   toggleSidebarVisibility: PropTypes.func.isRequired,
   currentLang: PropTypes.string.isRequired,
+  setLang: PropTypes.func.isRequired,
   availableLangs: PropTypes.array,
   currentUrl: PropTypes.string,
   pendingFetchOperations: PropTypes.bool,

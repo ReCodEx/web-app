@@ -1,2 +1,3 @@
 export const getApp = state => state.app;
-export const anyPendingFetchOperations = state => getApp(state).get('pendingFetchOperations') > 0;
+export const getLang = state => (state.app && state.app.get('lang')) || 'en';
+export const anyPendingFetchOperations = state => state.app && state.app.get('pendingFetchOperations') > 0;

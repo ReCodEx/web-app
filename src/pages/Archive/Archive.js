@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { push } from 'react-router-redux';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -68,6 +67,8 @@ const getVisibleArchiveGroupsMap = (groups, showAll, search, locale, rootGroup) 
 
 class Archive extends Component {
   state = { showAll: false, search: '', rootGroup: null };
+
+  static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
 
   static loadAsync = (params, dispatch, { instanceId }) =>
     Promise.all([dispatch(fetchInstancesIfNeeded(instanceId)), dispatch(fetchAllGroups({ archived: true }))]);
@@ -181,7 +182,6 @@ class Archive extends Component {
 
 Archive.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   instanceId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
@@ -200,7 +200,6 @@ export default withLinks(
     },
     dispatch => ({
       loadAsync: instanceId => Archive.loadAsync({}, dispatch, { instanceId }),
-      push: url => dispatch(push(url)),
     })
   )(injectIntl(Archive))
 );

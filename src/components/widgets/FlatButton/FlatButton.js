@@ -4,7 +4,14 @@ import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import Confirm from '../../forms/Confirm';
 
-const FlatButton = ({ className = '', onClick = null, confirm = null, confirmId = null, ...props }) =>
+const FlatButton = ({
+  className = '',
+  onClick = null,
+  confirm = null,
+  confirmId = null,
+  staticContext /* avoid capturing static context in the rest of ...props */,
+  ...props
+}) =>
   confirm ? (
     <Confirm id={confirmId} onConfirmed={onClick} question={confirm}>
       <Button
@@ -30,6 +37,7 @@ FlatButton.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
   confirm: PropTypes.any,
+  staticContext: PropTypes.any,
   confirmId: PropTypes.string,
 };
 

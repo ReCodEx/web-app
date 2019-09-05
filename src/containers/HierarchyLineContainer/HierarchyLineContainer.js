@@ -10,18 +10,14 @@ import HierarchyLine from '../../components/Groups/HierarchyLine';
 
 class HierarchyLineContainer extends Component {
   componentDidMount() {
-    HierarchyLineContainer.loadAsync(this.props);
+    this.props.loadGroupIfNeeded(this.props.groupId);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.groupId !== prevProps.groupId) {
-      HierarchyLineContainer.loadAsync(this.props);
+      this.props.loadGroupIfNeeded(this.props.groupId);
     }
   }
-
-  static loadAsync = ({ loadGroupIfNeeded }) => {
-    loadGroupIfNeeded();
-  };
 
   render() {
     const { group } = this.props;
@@ -36,13 +32,14 @@ class HierarchyLineContainer extends Component {
 HierarchyLineContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
+  loadGroupIfNeeded: PropTypes.func.isRequired,
 };
 
 export default connect(
   (state, { groupId }) => ({
     group: groupSelector(state, groupId),
   }),
-  (dispatch, { groupId }) => ({
-    loadGroupIfNeeded: () => dispatch(fetchGroupIfNeeded(groupId)),
+  dispatch => ({
+    loadGroupIfNeeded: groupId => dispatch(fetchGroupIfNeeded(groupId)),
   })
 )(HierarchyLineContainer);

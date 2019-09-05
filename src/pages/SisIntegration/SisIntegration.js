@@ -36,7 +36,7 @@ const ADD_SIS_TERM_INITIAL_VALUES = {
 class SisIntegration extends Component {
   state = { openEdit: null };
 
-  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllTerms)]);
+  static loadAsync = (params, dispatch) => dispatch(fetchAllTerms());
 
   componentDidMount() {
     const { loadAsync, loggedInUser } = this.props;
@@ -212,7 +212,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { params }) => ({
+const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   loadAsync: () => SisIntegration.loadAsync(params, dispatch),
   createNewTerm: data => dispatch(create(data)),
   deleteTerm: id => dispatch(deleteTerm(id)),

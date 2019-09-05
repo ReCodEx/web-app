@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 import withLinks from '../../../helpers/withLinks';

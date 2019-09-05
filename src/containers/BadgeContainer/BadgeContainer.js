@@ -10,16 +10,14 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { accessTokenExpiration } from '../../redux/selectors/auth';
 
-import withLinks from '../../helpers/withLinks';
-
-const BadgeContainer = ({ user, expiration, logout, small = false, links: { HOME_URI } }) => (
+const BadgeContainer = ({ user, expiration, logout, small = false }) => (
   <ResourceRenderer
     loading={<LoadingBadge small={small} />}
     failed={<FailedBadge color="black" small={small} />}
     resource={user}>
     {user => (
       <span>
-        <Badge {...user} logout={() => logout(HOME_URI)} expiration={expiration} small={small} />
+        <Badge {...user} logout={logout} expiration={expiration} small={small} />
         <UserSwitchingContainer open={true} />
       </span>
     )}
@@ -34,12 +32,10 @@ BadgeContainer.propTypes = {
   links: PropTypes.object,
 };
 
-export default withLinks(
-  connect(
-    state => ({
-      user: loggedInUserSelector(state),
-      expiration: accessTokenExpiration(state),
-    }),
-    { logout }
-  )(BadgeContainer)
-);
+export default connect(
+  state => ({
+    user: loggedInUserSelector(state),
+    expiration: accessTokenExpiration(state),
+  }),
+  { logout }
+)(BadgeContainer);

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { formValueSelector } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { List } from 'immutable';
@@ -49,7 +48,7 @@ class GroupInfo extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.groupId !== prevProps.params.groupId) {
+    if (this.props.match.params.groupId !== prevProps.match.params.groupId) {
       this.props.loadAsync();
       return;
     }
@@ -233,7 +232,7 @@ class GroupInfo extends Component {
 }
 
 GroupInfo.propTypes = {
-  params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
+  match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
@@ -245,7 +244,6 @@ GroupInfo.propTypes = {
   isStudent: PropTypes.bool,
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
-  push: PropTypes.func.isRequired,
   refetchSupervisors: PropTypes.func.isRequired,
   links: PropTypes.object,
   hasThreshold: PropTypes.bool,
@@ -254,7 +252,14 @@ GroupInfo.propTypes = {
 
 const addSubgroupFormSelector = formValueSelector('addSubgroup');
 
-const mapStateToProps = (state, { params: { groupId } }) => {
+const mapStateToProps = (
+  state,
+  {
+    match: {
+      params: { groupId },
+    },
+  }
+) => {
   const userId = loggedInUserIdSelector(state);
 
   return {
@@ -270,7 +275,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { params }) => ({
+const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   addSubgroup: (instanceId, userId) => ({ localizedTexts, hasThreshold, threshold, ...data }) =>
     dispatch(
       createGroup({
@@ -283,7 +288,6 @@ const mapDispatchToProps = (dispatch, { params }) => ({
       })
     ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
-  push: url => dispatch(push(url)),
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId)),
 });
 

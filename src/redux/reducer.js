@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 
 import app from './modules/app';
@@ -54,8 +53,8 @@ import userSwitching from './modules/userSwitching';
 import broker from './modules/broker';
 import systemMessages from './modules/systemMessages';
 
-const createRecodexReducers = (token, instanceId) => ({
-  app,
+const createRecodexReducers = (token, instanceId, lang) => ({
+  app: app(lang),
   assignments,
   attachmentFiles,
   auth: auth(token, instanceId),
@@ -109,12 +108,13 @@ const createRecodexReducers = (token, instanceId) => ({
 });
 
 const librariesReducers = {
-  routing: routerReducer,
   form: formReducer,
 };
 
-const createReducer = (token, instanceId) => {
-  const appReducer = combineReducers(Object.assign({}, librariesReducers, createRecodexReducers(token, instanceId)));
+const createReducer = (token, instanceId, lang) => {
+  const appReducer = combineReducers(
+    Object.assign({}, librariesReducers, createRecodexReducers(token, instanceId, lang))
+  );
 
   return (state, action) => {
     if (action.type === authActionTypes.LOGOUT) {

@@ -7,7 +7,7 @@ import PageContent from '../../components/layout/PageContent';
 import Icon from '../../components/icons';
 
 import withLinks from '../../helpers/withLinks';
-import { URL_PATH_PREFIX } from '../../redux/helpers/api/tools';
+import { URL_PATH_PREFIX } from '../../helpers/config';
 
 const Home = ({ links: { GITHUB_BUGS_URL } }) => (
   <PageContent

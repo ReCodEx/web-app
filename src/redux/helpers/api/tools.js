@@ -1,31 +1,17 @@
 import statusCode from 'statuscode';
-import { addNotification } from '../../modules/notifications';
 import { flatten } from 'flat';
 import { canUseDOM } from 'exenv';
 
+import { addNotification } from '../../modules/notifications';
 import { newPendingFetchOperation, completedFetchOperation } from '../../modules/app';
-import { logout } from '../../modules/auth';
 import { isTokenValid, decode } from '../../helpers/token';
-import { safeGet } from '../../../helpers/common';
-import { extractLanguageFromUrl, linksFactory } from '../../../links';
+import { getLang } from '../../selectors/app';
+import { API_BASE, URL_PATH_PREFIX } from '../../../helpers/config';
+import { actionTypes as authActionTypes } from '../../modules/authTypes';
 
 export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');
 export const isUnauthorized = status => status === 403;
-
-export const getConfigVar = name => {
-  var MY_VAR = '';
-  if (canUseDOM) {
-    MY_VAR = safeGet(window, ['__RECODEX_CONFIG__', name], '');
-  } else {
-    const fs = require('fs');
-    MY_VAR = JSON.parse(fs.readFileSync('etc/env.json', 'utf8'))[name] || '';
-  }
-  return MY_VAR;
-};
-
-export const API_BASE = getConfigVar('API_BASE');
-export const URL_PATH_PREFIX = getConfigVar('URL_PATH_PREFIX') || '';
 
 const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
@@ -123,6 +109,22 @@ export const getHeaders = (headers, accessToken, skipContentType) => {
 };
 
 /**
+ * Logout dispatcher is defined here, since it is needed by internal API middleware.
+ * @param {*} redirectUrl
+ */
+export const logout = () => ({
+  type: authActionTypes.LOGOUT,
+});
+
+export const SESSION_EXPIRED_MESSAGE =
+  'Your session expired and you were automatically logged out of the ReCodEx system.';
+export const LOGIN_URI_PREFIX = 'login';
+
+export const createLoginLinkWithRedirect = redirLocation => {
+  return `${URL_PATH_PREFIX}/${LOGIN_URI_PREFIX}/${encodeURIComponent(btoa(redirLocation))}`;
+};
+
+/**
  * Create a request and setup the processing of the response.
  * @param {Object} request The request settings and data
  * @param {Function} dispatch The dispatch method
@@ -143,8 +145,7 @@ export const createApiCallPromise = (
   getState = undefined
 ) => {
   if (getState) {
-    const urlPathname = safeGet(getState(), ['routing', 'locationBeforeTransitions', 'pathname']);
-    const lang = urlPathname && extractLanguageFromUrl(urlPathname);
+    const lang = getLang(getState());
     if (lang) {
       headers['X-ReCodEx-lang'] = lang;
     }
@@ -155,18 +156,9 @@ export const createApiCallPromise = (
     .then(res => {
       canUseDOM && dispatch(completedFetchOperation());
       if (res.status === 401 && !isTokenValid(decode(accessToken)) && dispatch) {
-        const location = window && window.location;
-        if (location) {
-          const currentLang = extractLanguageFromUrl(location.pathname);
-          if (currentLang) {
-            dispatch(logout(linksFactory(currentLang).LOGIN_URI_WITH_REDIRECT(location)));
-          }
-        } else {
-          dispatch(logout('/'));
-        }
-        dispatch(
-          addNotification('Your session expired and you were automatically logged out of the ReCodEx system.', false)
-        );
+        abortAllPendingRequests();
+        dispatch(logout());
+        dispatch(addNotification(SESSION_EXPIRED_MESSAGE, false));
         return Promise.reject(res);
       }
 

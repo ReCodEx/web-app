@@ -1,36 +1,20 @@
 import { handleActions, createAction } from 'redux-actions';
-import { push } from 'react-router-redux';
 import { fromJS } from 'immutable';
 import { decode, isTokenValid } from '../helpers/token';
 import { createApiAction } from '../middleware/apiMiddleware';
+import { logout } from '../helpers/api/tools';
 import { actionTypes as registrationActionTypes } from './registration';
 import { actionTypes as usersActionTypes } from './users';
 import { safeGet } from '../../helpers/common';
 
-import actionTypes from './authActionTypes';
-export { actionTypes };
-
-export const statusTypes = {
-  LOGGED_OUT: 'LOGGED_OUT',
-  LOGGED_IN: 'LOGGED_IN',
-  LOGGING_IN: 'LOGGING_IN',
-  LOGIN_FAILED: 'LOGIN_FAILED',
-};
+import { actionTypes, statusTypes } from './authTypes';
+export { actionTypes, statusTypes };
 
 const getUserId = token => token.get('sub');
 
 /**
  * Actions
  */
-
-export const logout = redirectUrl => dispatch => {
-  dispatch({
-    type: actionTypes.LOGOUT,
-  });
-  if (redirectUrl) {
-    dispatch(push(redirectUrl));
-  }
-};
 
 export const LOCAL_LOGIN = 'recodex-local-login';
 
@@ -50,6 +34,8 @@ export const login = (username, password) =>
     body: { username, password },
     meta: { service: LOCAL_LOGIN },
   });
+
+export { logout }; // this logically belongs here, but since logout is required internally, we needed to declare it inside api tools
 
 export const resetPassword = username =>
   createApiAction({
@@ -176,12 +162,14 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
 
       [actionTypes.LOGIN_FULFILLED]: (state, { payload: { accessToken, user }, meta: { service, popupWindow } }) => {
         closeAuthPopupWindow(popupWindow);
-        return state
-          .setIn(['status', service], statusTypes.LOGGED_IN)
-          .set('jwt', accessToken)
-          .set('accessToken', decodeAndValidateAccessToken(accessToken))
-          .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
-          .set('instanceId', safeGet(user, ['privateData', 'instancesIds', 0], null));
+        return state.getIn(['status', service]) === statusTypes.LOGGING_IN // this should prevent re-login, when explicit logout ocurred whilst refreshing token
+          ? state
+              .setIn(['status', service], statusTypes.LOGGED_IN)
+              .set('jwt', accessToken)
+              .set('accessToken', decodeAndValidateAccessToken(accessToken))
+              .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
+              .set('instanceId', safeGet(user, ['privateData', 'instancesIds', 0], null))
+          : state;
       },
 
       [actionTypes.LOGIN_REJECTED]: (state, { meta: { service, popupWindow } }) => {

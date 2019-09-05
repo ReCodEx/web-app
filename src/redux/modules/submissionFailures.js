@@ -16,9 +16,10 @@ export const additionalActionTypes = {
  */
 export const fetchManyEndpoint = '/submission-failures';
 
-export const fetchAllFailures = actions.fetchMany({
-  endpoint: fetchManyEndpoint,
-});
+export const fetchAllFailures = () =>
+  actions.fetchMany({
+    endpoint: fetchManyEndpoint,
+  });
 
 export const resolveFailure = (id, data) =>
   createApiAction({

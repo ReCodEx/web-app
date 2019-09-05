@@ -883,7 +883,7 @@
   "app.multiAssignForm.successDescription": "The exercise was successfuly assigned to the following groups.",
   "app.multiAssignForm.successHeading": "Exercise Assigned",
   "app.notFound.description": "Oops, this is probably not what you were looking for.",
-  "app.notFound.text": "The URL is not a word of the language this website accepts.",
+  "app.notFound.text": "Either you got a wrong (possibly old) URL in your address bar, or we have a bug in links generator.",
   "app.notFound.title": "Page not found",
   "app.notifications.hideAll": "Only new notifications",
   "app.notifications.showAll": "Show {count, plural, one {old notification} two {two old notifications} other {all # notifications}}",

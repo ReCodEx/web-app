@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Link } from 'react-router';
+import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Icon from '../../../icons';
-import { UrlContext } from '../../../../helpers/contexts';
 
 const MenuItem = ({
   title,
@@ -15,32 +15,33 @@ const MenuItem = ({
   inNewTab = false,
   small = false,
   onIsActive = isActive => isActive,
+  location: { pathname, search },
 }) => (
-  <UrlContext.Consumer>
-    {({ isActive }) => (
-      <li
-        className={classnames({
-          active: isActive(link),
-          small,
-        })}>
-        <Link to={link} target={inNewTab ? '_blank' : undefined}>
-          <Icon icon={icon} fixedWidth gapRight />
-          <span
-            style={{
-              whiteSpace: 'normal',
-              display: 'inline-block',
-              verticalAlign: 'top',
-            }}>
-            {title}
-          </span>
-          {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
-        </Link>
-      </li>
-    )}
-  </UrlContext.Consumer>
+  <li
+    className={classnames({
+      active: link === pathname + search,
+      small,
+    })}>
+    <Link to={link} target={inNewTab ? '_blank' : undefined}>
+      <Icon icon={icon} fixedWidth gapRight />
+      <span
+        style={{
+          whiteSpace: 'normal',
+          display: 'inline-block',
+          verticalAlign: 'top',
+        }}>
+        {title}
+      </span>
+      {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
+    </Link>
+  </li>
 );
 
 MenuItem.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+  }).isRequired,
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   currentPath: PropTypes.string,
@@ -51,4 +52,4 @@ MenuItem.propTypes = {
   onIsActive: PropTypes.func,
 };
 
-export default MenuItem;
+export default withRouter(MenuItem);

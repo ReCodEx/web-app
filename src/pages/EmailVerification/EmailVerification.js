@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 
 import { Row, Col, Alert } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
@@ -148,7 +147,6 @@ EmailVerification.propTypes = {
   getVerificationStatus: PropTypes.func.isRequired,
   userId: PropTypes.string,
   verifyEmail: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   links: PropTypes.object,
 };
 
@@ -160,7 +158,6 @@ export default withLinks(
     }),
     dispatch => ({
       verifyEmail: (userId, token) => dispatch(verifyEmail(userId, token)),
-      push: url => dispatch(push(url)),
     })
   )(EmailVerification)
 );

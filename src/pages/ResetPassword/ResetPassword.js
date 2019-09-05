@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
@@ -70,7 +69,6 @@ export default withLinks(
     }),
     dispatch => ({
       resetPassword: ({ username }) => dispatch(resetPassword(username)),
-      push: url => dispatch(push(url)),
     })
   )(ResetPassword)
 );

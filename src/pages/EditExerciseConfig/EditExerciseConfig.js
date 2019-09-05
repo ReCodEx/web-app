@@ -83,7 +83,7 @@ class EditExerciseConfig extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
       this.props.loadAsync();
     }
   }
@@ -205,7 +205,9 @@ class EditExerciseConfig extends Component {
 
   render() {
     const {
-      params: { exerciseId },
+      match: {
+        params: { exerciseId },
+      },
       exercise,
       loggedUser,
       runtimeEnvironments,
@@ -629,8 +631,10 @@ EditExerciseConfig.propTypes = {
   exercise: ImmutablePropTypes.map,
   loggedUser: ImmutablePropTypes.map,
   runtimeEnvironments: PropTypes.object.isRequired,
-  params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      exerciseId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
@@ -656,7 +660,14 @@ EditExerciseConfig.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { exerciseId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => {
       return {
         exercise: getExercise(exerciseId)(state),
         loggedUser: loggedInUserSelector(state),
@@ -671,7 +682,14 @@ export default withLinks(
         pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state),
       };
     },
-    (dispatch, { params: { exerciseId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => ({
       loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
       fetchPipelinesVariables: (runtimeId, pipelinesIds) =>
         dispatch(fetchExercisePipelinesVariables(exerciseId, runtimeId, pipelinesIds)),

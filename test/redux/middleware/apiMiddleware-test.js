@@ -2,11 +2,8 @@ import chai from 'chai';
 import spies from 'chai-spies';
 
 import fetchMock from 'fetch-mock';
-import middleware, {
-  CALL_API,
-  createApiAction
-} from '../../../src/redux/middleware/apiMiddleware';
-import { API_BASE } from '../../../src/redux/helpers/api/tools';
+import middleware, { CALL_API, createApiAction } from '../../../src/redux/middleware/apiMiddleware';
+import { API_BASE } from '../../../src/helpers/config';
 
 chai.use(spies);
 const expect = chai.expect;
@@ -18,8 +15,8 @@ describe('API middleware and helper functions', () => {
       type: CALL_API,
       request: {
         type: 'TYPE',
-        payload: 'payload'
-      }
+        payload: 'payload',
+      },
     });
   });
 

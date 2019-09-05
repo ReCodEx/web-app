@@ -13,9 +13,10 @@ const { actions, reduceActions } = factory({
 
 export const fetchManyEndpoint = '/extensions/sis/terms';
 
-export const fetchAllTerms = actions.fetchMany({
-  endpoint: fetchManyEndpoint,
-});
+export const fetchAllTerms = () =>
+  actions.fetchMany({
+    endpoint: fetchManyEndpoint,
+  });
 export const fetchTermsIfNeeded = actions.fetchIfNeeded;
 export const fetchTermIfNeeded = actions.fetchOneIfNeeded;
 export const create = actions.addResource;

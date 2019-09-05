@@ -23,7 +23,8 @@ import { create as assignExercise, editAssignment, fetchExerciseAssignments } fr
 import { exerciseSelector } from '../../redux/selectors/exercises';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupDataAccessorSelector, groupsUserCanAssignToSelector } from '../../redux/selectors/groups';
+import { groupDataAccessorSelector } from '../../redux/selectors/groups';
+import { groupsUserCanAssignToSelector } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector, getExerciseAssignments } from '../../redux/selectors/assignments';
 
 import { getLocalizedName } from '../../helpers/localizedData';
@@ -61,7 +62,7 @@ class ExerciseAssignments extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
       this.props.loadAsync();
       this.reset();
     }
@@ -114,7 +115,9 @@ class ExerciseAssignments extends Component {
       visibility,
       links: { EXERCISE_URI_FACTORY },
       intl: { formatMessage, locale },
-      params: { exerciseId },
+      match: {
+        params: { exerciseId },
+      },
     } = this.props;
 
     return (
@@ -249,8 +252,10 @@ class ExerciseAssignments extends Component {
 
 ExerciseAssignments.propTypes = {
   userId: PropTypes.string.isRequired,
-  params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      exerciseId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   exercise: ImmutablePropTypes.map,
   assignments: ImmutablePropTypes.map,
@@ -271,7 +276,14 @@ const multiAssignFormSelector = formValueSelector('multiAssign');
 
 export default withLinks(
   connect(
-    (state, { params: { exerciseId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => {
       const userId = loggedInUserIdSelector(state);
       return {
         userId,
@@ -285,7 +297,14 @@ export default withLinks(
         visibility: multiAssignFormSelector(state, 'visibility'),
       };
     },
-    (dispatch, { params: { exerciseId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => ({
       loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
       assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
       editAssignment: (id, body) => dispatch(editAssignment(id, body)),

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import { Row, Col, Alert } from 'react-bootstrap';
@@ -43,10 +42,10 @@ class ChangePassword extends Component {
       const search = window.location.search;
       if (search.length === 0) {
         const {
-          push,
+          history: { replace },
           links: { RESET_PASSWORD_URI },
         } = this.props;
-        push(RESET_PASSWORD_URI); // no token in URL query -> redirect to the reset form
+        replace(RESET_PASSWORD_URI); // no token in URL query -> redirect to the reset form
       } else {
         let token = search.substr(1);
         let decodedToken = decode(token);
@@ -71,13 +70,13 @@ class ChangePassword extends Component {
     if (hasSucceeded) {
       this.timeout = setTimeout(() => {
         const {
-          push,
           reset,
+          history: { replace },
           links: { DASHBOARD_URI },
         } = this.props;
         this.timeout = null;
         reset();
-        push(DASHBOARD_URI);
+        replace(DASHBOARD_URI);
       }, 1500);
     }
   };
@@ -156,9 +155,12 @@ class ChangePassword extends Component {
 }
 
 ChangePassword.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   isChanging: PropTypes.bool,
   changePassword: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool.isRequired,
   hasSucceeded: PropTypes.bool.isRequired,
@@ -174,7 +176,6 @@ export default withLinks(
     }),
     dispatch => ({
       changePassword: (password, accessToken) => dispatch(changePassword(password, accessToken)),
-      push: url => dispatch(push(url)),
       reset: () => dispatch(reset('changePassword')),
     })
   )(ChangePassword)

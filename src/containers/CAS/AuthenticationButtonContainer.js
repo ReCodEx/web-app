@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { Authenticate, LoginFailed } from '../../components/buttons/CAS';
 import { openCASWindow } from '../../helpers/cas';
 import withLinks from '../../helpers/withLinks';
-import { absolute } from '../../links';
+
+const makeAbsolute = url =>
+  typeof window === 'undefined' ? url : `${window.location.origin}/${url.indexOf('/') === 0 ? url.substr(1) : url}`;
+
+const ensureAbsoluteUrl = url => (url.match('^(https?:)?//.+') !== null ? url : makeAbsolute(url));
 
 class AuthenticationButtonContainer extends Component {
   constructor(props, context) {
@@ -19,7 +23,7 @@ class AuthenticationButtonContainer extends Component {
 
     if (ticket !== null && e.source === this.casWindow && this.casWindow !== null) {
       // cancel the window and the interval
-      const clientUrl = absolute(links.LOGIN_EXTERN_FINALIZATION('cas-uk'));
+      const clientUrl = ensureAbsoluteUrl(links.LOGIN_EXTERN_FINALIZATION_URI_FACTORY('cas-uk'));
       this.casWindow.postMessage('received', e.origin);
       onTicketObtained(ticket, clientUrl, this.casWindow);
       this.dispose(); // delayed window close (1s)
@@ -30,7 +34,7 @@ class AuthenticationButtonContainer extends Component {
     if (this.casWindow === null || this.casWindow.closed) {
       const { links, onFailed } = this.props;
 
-      const returnUrl = absolute(links.LOGIN_EXTERN_FINALIZATION('cas-uk'));
+      const returnUrl = ensureAbsoluteUrl(links.LOGIN_EXTERN_FINALIZATION_URI_FACTORY('cas-uk'));
       this.casWindow = openCASWindow(returnUrl);
       if (!this.casWindow) {
         onFailed(); // not in browser or for some reason the window could not have been opened

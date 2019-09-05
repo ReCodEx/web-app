@@ -15,7 +15,7 @@ import { Button } from 'react-bootstrap';
 class SubmissionFailures extends Component {
   state = { isOpen: false, activeId: null };
 
-  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllFailures)]);
+  static loadAsync = (params, dispatch) => dispatch(fetchAllFailures());
 
   componentDidMount = () => this.props.loadAsync();
 

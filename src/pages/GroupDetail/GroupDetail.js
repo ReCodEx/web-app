@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import Button from '../../components/widgets/FlatButton';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
+import App from '../../containers/App';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
@@ -75,7 +75,7 @@ class GroupDetail extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.groupId !== prevProps.params.groupId) {
+    if (this.props.match.params.groupId !== prevProps.match.params.groupId) {
       this.props.loadAsync();
       return;
     }
@@ -126,21 +126,25 @@ class GroupDetail extends Component {
   createShadowAssignment = () => {
     const {
       createShadowAssignment,
-      push,
+      history: { push },
       links: { SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
-    createShadowAssignment().then(({ value: shadowAssignment }) =>
-      push(SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id))
-    );
+    createShadowAssignment().then(({ value: shadowAssignment }) => {
+      App.ignoreNextLocationChange();
+      push(SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id));
+    });
   };
 
   createGroupExercise = () => {
     const {
       createGroupExercise,
-      push,
+      history: { push },
       links: { EXERCISE_EDIT_URI_FACTORY },
     } = this.props;
-    createGroupExercise().then(({ value: exercise }) => push(EXERCISE_EDIT_URI_FACTORY(exercise.id)));
+    createGroupExercise().then(({ value: exercise }) => {
+      App.ignoreNextLocationChange();
+      push(EXERCISE_EDIT_URI_FACTORY(exercise.id));
+    });
   };
 
   render() {
@@ -373,7 +377,11 @@ class GroupDetail extends Component {
 }
 
 GroupDetail.propTypes = {
-  params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
+  match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   loggedUser: ImmutablePropTypes.map,
   group: ImmutablePropTypes.map,
@@ -391,12 +399,18 @@ GroupDetail.propTypes = {
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   createShadowAssignment: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   links: PropTypes.object,
   intl: intlShape,
 };
 
-const mapStateToProps = (state, { params: { groupId } }) => {
+const mapStateToProps = (
+  state,
+  {
+    match: {
+      params: { groupId },
+    },
+  }
+) => {
   const userId = loggedInUserIdSelector(state);
 
   return {
@@ -416,11 +430,10 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { params }) => ({
+const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   loadAsync: () => GroupDetail.loadAsync(params, dispatch),
   createShadowAssignment: () => dispatch(createShadowAssignment({ groupId: params.groupId })),
   createGroupExercise: () => dispatch(createExercise({ groupId: params.groupId })),
-  push: url => dispatch(push(url)),
 });
 
 export default withLinks(

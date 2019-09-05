@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
@@ -26,7 +25,7 @@ class EditPipeline extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.pipelineId !== prevProps.params.pipelineId) {
+    if (this.props.match.params.pipelineId !== prevProps.match.params.pipelineId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -37,11 +36,13 @@ class EditPipeline extends Component {
   render() {
     const {
       links: { PIPELINES_URI, PIPELINE_URI_FACTORY },
-      params: { pipelineId },
+      match: {
+        params: { pipelineId },
+      },
+      history: { replace },
       pipeline,
       boxTypes,
       editPipeline,
-      push,
       variables: extractedVariables,
     } = this.props;
 
@@ -129,7 +130,7 @@ class EditPipeline extends Component {
                       />
                     </p>
                     <p className="text-center">
-                      <DeletePipelineButtonContainer id={data.id} onDeleted={() => push(PIPELINES_URI)} />
+                      <DeletePipelineButtonContainer id={data.id} onDeleted={() => replace(PIPELINES_URI)} />
                     </p>
                   </div>
                 </Box>
@@ -143,22 +144,34 @@ class EditPipeline extends Component {
 }
 
 EditPipeline.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   pipeline: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   editPipeline: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    pipelineId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      pipelineId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   links: PropTypes.object.isRequired,
   boxTypes: PropTypes.array.isRequired,
-  push: PropTypes.func.isRequired,
   variables: PropTypes.array,
 };
 
 export default withLinks(
   connect(
-    (state, { params: { pipelineId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { pipelineId },
+        },
+      }
+    ) => {
       return {
         pipeline: getPipeline(pipelineId)(state),
         boxTypes: getBoxTypes(state),
@@ -166,8 +179,14 @@ export default withLinks(
         variables: extractVariables(formValueSelector('editPipeline')(state, 'pipeline.boxes')),
       };
     },
-    (dispatch, { params: { pipelineId } }) => ({
-      push: url => dispatch(push(url)),
+    (
+      dispatch,
+      {
+        match: {
+          params: { pipelineId },
+        },
+      }
+    ) => ({
       reset: () => dispatch(reset('editPipeline')),
       loadAsync: () => EditPipeline.loadAsync({ pipelineId }, dispatch),
       editPipeline: (version, data) => dispatch(editPipeline(pipelineId, { ...data, version })),

@@ -36,7 +36,7 @@ class Pipeline extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.pipelineId !== prevProps.params.pipelineId) {
+    if (this.props.match.params.pipelineId !== prevProps.match.params.pipelineId) {
       this.props.loadAsync(val => this.setState(val));
       this.reset();
     }
@@ -133,8 +133,10 @@ class Pipeline extends Component {
 Pipeline.propTypes = {
   pipeline: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    pipelineId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      pipelineId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
@@ -144,7 +146,14 @@ Pipeline.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { pipelineId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { pipelineId },
+        },
+      }
+    ) => {
       const userId = loggedInUserIdSelector(state);
 
       return {
@@ -154,7 +163,14 @@ export default withLinks(
         runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state),
       };
     },
-    (dispatch, { params: { pipelineId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { pipelineId },
+        },
+      }
+    ) => ({
       loadAsync: setState => Pipeline.loadAsync({ pipelineId }, dispatch, { setState }),
       forkPipeline: (forkId, data) => dispatch(forkPipeline(pipelineId, forkId, data)),
     })

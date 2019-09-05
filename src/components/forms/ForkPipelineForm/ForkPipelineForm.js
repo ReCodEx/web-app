@@ -4,8 +4,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reduxForm, Field } from 'redux-form';
+import { withRouter } from 'react-router';
+
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../../components/widgets/FlatButton';
@@ -22,12 +23,10 @@ class ForkPipelineForm extends Component {
   viewForkedPipeline() {
     const {
       forkedPipelineId: id,
-      push,
+      history: { push },
       links: { PIPELINE_URI_FACTORY },
     } = this.props;
-
-    const url = PIPELINE_URI_FACTORY(id);
-    push(url);
+    push(PIPELINE_URI_FACTORY(id));
   }
 
   render() {
@@ -102,6 +101,10 @@ class ForkPipelineForm extends Component {
 }
 
 ForkPipelineForm.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   pipelineId: PropTypes.string.isRequired,
   forkId: PropTypes.string.isRequired,
   forkStatus: PropTypes.string,
@@ -112,34 +115,24 @@ ForkPipelineForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   links: PropTypes.object,
   exercises: ImmutablePropTypes.map,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-const mapStateToProps = (state, { pipelineId, forkId }) => {
-  const fork = getFork(pipelineId, forkId)(state);
-  return {
-    forkStatus: fork ? fork.status : null,
-    forkedPipelineId: fork && fork.status === forkStatuses.FULFILLED ? fork.pipelineId : null,
-  };
-};
-
-const mapDispatchToProps = (dispatch, { pipelineId, forkId }) => ({
-  push: url => dispatch(push(url)),
-});
-
 const validate = () => {};
 
 export default withLinks(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(
+  connect((state, { pipelineId, forkId }) => {
+    const fork = getFork(pipelineId, forkId)(state);
+    return {
+      forkStatus: fork ? fork.status : null,
+      forkedPipelineId: fork && fork.status === forkStatuses.FULFILLED ? fork.pipelineId : null,
+    };
+  })(
     reduxForm({
       form: 'forkPipeline',
       validate,
-    })(injectIntl(ForkPipelineForm))
+    })(injectIntl(withRouter(ForkPipelineForm)))
   )
 );

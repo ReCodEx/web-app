@@ -2,19 +2,18 @@ import { createSelector } from 'reselect';
 
 import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common';
 import { isReady, getJsData } from '../helpers/resourceManager';
-import { extractLanguageFromUrl } from '../../links';
 import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles';
 
 import { fetchManyEndpoint } from '../modules/users';
 import { loggedInUserIdSelector } from './auth';
 import { groupSelectorCreator, studentsOfGroup, supervisorsOfGroup, groupsSelector } from './groups';
 import { pipelineSelector } from './pipelines';
+import { getLang } from './app';
 
 const getParam = (state, id) => id;
 
 const getUsers = state => state.users;
 const getResources = users => users.get('resources');
-const getLang = state => extractLanguageFromUrl(state.routing.locationBeforeTransitions.pathname);
 
 /**
  * Select users part of the state

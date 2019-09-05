@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import {
@@ -239,7 +238,6 @@ EvaluationProgressContainer.propTypes = {
   goToEvaluationDetails: PropTypes.func,
   messages: ImmutablePropTypes.list,
   intl: PropTypes.object.isRequired,
-  push: PropTypes.func.isRequired,
   dropObserver: PropTypes.func.isRequired,
   onUserClose: PropTypes.func,
   onFinish: PropTypes.func,
@@ -263,7 +261,6 @@ export default connect(
     skippedTask,
     failedTask,
     addMessage,
-    push,
     dropObserver,
   }
 )(injectIntl(EvaluationProgressContainer));

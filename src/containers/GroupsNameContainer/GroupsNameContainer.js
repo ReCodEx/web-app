@@ -11,18 +11,14 @@ import GroupsName, { LoadingGroupsName } from '../../components/Groups/GroupsNam
 
 class GroupsNameContainer extends Component {
   componentDidMount() {
-    this.props.loadAsync();
+    this.props.loadAsync(this.props.groupId);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.groupId !== prevProps.groupId) {
-      this.props.loadAsync();
+      this.props.loadAsync(this.props.groupId);
     }
   }
-
-  static loadAsync = ({ groupId }, dispatch) => {
-    dispatch(fetchGroupIfNeeded(groupId));
-  };
 
   render() {
     const { group, noLink } = this.props;
@@ -45,7 +41,7 @@ export default connect(
   (state, { groupId }) => ({
     group: groupSelector(state, groupId),
   }),
-  (dispatch, { groupId }) => ({
-    loadAsync: () => GroupsNameContainer.loadAsync({ groupId }, dispatch),
+  dispatch => ({
+    loadAsync: groupId => dispatch(fetchGroupIfNeeded(groupId)),
   })
 )(GroupsNameContainer);
