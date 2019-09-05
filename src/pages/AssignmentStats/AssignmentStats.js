@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber, intlShape } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import Button from '../../components/widgets/FlatButton';
@@ -450,7 +450,14 @@ AssignmentStats.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { assignmentId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { assignmentId },
+        },
+      }
+    ) => {
       const assignment = getAssignment(state)(assignmentId);
       const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
       const readyUsers = usersSelector(state)
@@ -470,7 +477,14 @@ export default withLinks(
         fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),
       };
     },
-    (dispatch, { params: { assignmentId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { assignmentId },
+        },
+      }
+    ) => ({
       loadAsync: () => AssignmentStats.loadAsync({ assignmentId }, dispatch),
       downloadBestSolutionsArchive: name => ev => {
         ev.preventDefault();

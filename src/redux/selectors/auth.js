@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { statusTypes } from '../modules/auth';
+import { statusTypes } from '../modules/authTypes';
 import { isTokenValid } from '../helpers/token';
 
 const getAuth = state => state.auth;

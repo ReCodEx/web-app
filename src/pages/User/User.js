@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Set } from 'immutable';
 
@@ -31,8 +31,8 @@ import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import {
   groupSelector,
   groupsAssignmentsSelector,
-  studentOfSelector2,
-  supervisorOfSelector2,
+  studentOfSelector,
+  supervisorOfSelector,
   adminOfSelector,
 } from '../../redux/selectors/groups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
@@ -46,12 +46,14 @@ class User extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.params.userId !== prevProps.params.userId ||
+      this.props.match.params.userId !== prevProps.match.params.userId ||
       this.props.loggedInUserId !== prevProps.loggedInUserId
     ) {
       this.props.loadAsync();
     }
   }
+
+  static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
 
   /**
    * A fairly complicated load method - uses redux thunk
@@ -249,7 +251,7 @@ User.propTypes = {
   commonGroups: PropTypes.array,
   isAdmin: PropTypes.bool,
   studentOfGroupsIds: PropTypes.array,
-  params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
+  match: PropTypes.shape({ params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   student: PropTypes.bool,
   loggedInUserId: PropTypes.string,
@@ -263,21 +265,28 @@ User.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { userId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { userId },
+        },
+      }
+    ) => {
       const loggedInUserId = loggedInUserIdSelector(state);
       const isSuperadmin = isLoggedAsSuperAdmin(state);
 
-      const studentOfArray = studentOfSelector2(userId)(state)
+      const studentOfArray = studentOfSelector(userId)(state)
         .toList()
         .toArray();
       const studentOf = new Set(
-        studentOfSelector2(userId)(state)
+        studentOfSelector(userId)(state)
           .toList()
           .toJS()
           .map(group => group.id)
       );
       const supervisorOf = new Set(
-        supervisorOfSelector2(loggedInUserId)(state)
+        supervisorOfSelector(loggedInUserId)(state)
           .toList()
           .toJS()
           .map(group => group.id)
@@ -310,7 +319,7 @@ export default withLinks(
         commonGroups,
       };
     },
-    (dispatch, { params }) => ({
+    (dispatch, { match: { params } }) => ({
       loadAsync: () => User.loadAsync(params, dispatch),
       takeOver: userId => dispatch(takeOver(userId)),
     })

@@ -53,7 +53,7 @@ class EditExerciseLimits extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
       this.props.loadAsync();
     }
   }
@@ -112,7 +112,9 @@ class EditExerciseLimits extends Component {
   render() {
     const {
       links: { EXERCISE_URI_FACTORY },
-      params: { exerciseId },
+      match: {
+        params: { exerciseId },
+      },
       exercise,
       exerciseTests,
       limits,
@@ -310,8 +312,10 @@ class EditExerciseLimits extends Component {
 EditExerciseLimits.propTypes = {
   exercise: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      exerciseId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   setExerciseLimits: PropTypes.func.isRequired,
   setExerciseHardwareGroups: PropTypes.func.isRequired,
@@ -348,7 +352,14 @@ const editHardwareGroupFormSelector = formValueSelector('editHardwareGroup');
 
 export default withLinks(
   connect(
-    (state, { params: { exerciseId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => {
       return {
         exercise: getExercise(exerciseId)(state),
         userId: loggedInUserIdSelector(state),
@@ -360,7 +371,14 @@ export default withLinks(
         isSuperAdmin: isLoggedAsSuperAdmin(state),
       };
     },
-    (dispatch, { params: { exerciseId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => ({
       loadAsync: () => EditExerciseLimits.loadAsync({ exerciseId }, dispatch),
       setExerciseHardwareGroups: hwGroups => dispatch(setExerciseHardwareGroups(exerciseId, hwGroups)),
       setExerciseLimits: limits => dispatch(setExerciseLimits(exerciseId, { limits })),

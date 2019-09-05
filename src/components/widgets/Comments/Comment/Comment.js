@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import withLinks from '../../../../helpers/withLinks';
 import Icon, { DeleteIcon } from '../../../icons';

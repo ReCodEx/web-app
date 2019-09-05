@@ -883,7 +883,7 @@
   "app.multiAssignForm.successDescription": "Úloha byla zadána v následujících skupinách.",
   "app.multiAssignForm.successHeading": "Úloha zadána",
   "app.notFound.description": "Oops, tohle jste pravděpodobně nehledali.",
-  "app.notFound.text": "Jazyková mutace podle tohoto URL není dostupná.",
+  "app.notFound.text": "Buď jste do adresního řádku dostali špatné (případně staré) URL, nebo máme chybu v generátoru odkazů.",
   "app.notFound.title": "Stránka nenalezena",
   "app.notifications.hideAll": "Pouze nové notifikace",
   "app.notifications.showAll": "Zobrazit {count, plural, one {jednu starou notifikaci} two {dvě staré notifikace} other {# starých notifikací}}",

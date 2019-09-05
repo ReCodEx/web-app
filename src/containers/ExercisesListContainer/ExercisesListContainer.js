@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
-import { push } from 'react-router-redux';
 import { defaultMemoize } from 'reselect';
+import { withRouter } from 'react-router';
 
+import App from '../App';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../PaginationContainer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FilterExercisesListForm from '../../components/forms/FilterExercisesListForm';
@@ -112,10 +113,13 @@ class ExercisesListContainer extends Component {
   assignExercise = exerciseId => {
     const {
       assignExercise,
-      push,
+      history: { push },
       links: { ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
-    assignExercise(exerciseId).then(({ value: assigment }) => push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id)));
+    assignExercise(exerciseId).then(({ value: assigment }) => {
+      App.ignoreNextLocationChange();
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id));
+    });
   };
 
   render() {
@@ -150,6 +154,10 @@ class ExercisesListContainer extends Component {
 }
 
 ExercisesListContainer.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   id: PropTypes.string.isRequired,
   rootGroup: PropTypes.string,
   showGroups: PropTypes.bool,
@@ -159,7 +167,6 @@ ExercisesListContainer.propTypes = {
   authorsLoading: PropTypes.bool.isRequired,
   fetchExercisesAuthorsIfNeeded: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired,
 };
@@ -176,7 +183,6 @@ export default withLinks(
     (dispatch, { rootGroup = null }) => ({
       fetchExercisesAuthorsIfNeeded: groupId => dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
       assignExercise: exerciseId => dispatch(assignExercise(rootGroup, exerciseId)),
-      push: url => dispatch(push(url)),
     })
-  )(injectIntl(ExercisesListContainer))
+  )(injectIntl(withRouter(ExercisesListContainer)))
 );

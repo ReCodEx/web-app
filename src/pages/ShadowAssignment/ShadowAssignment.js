@@ -34,7 +34,7 @@ class ShadowAssignment extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.assignmentId !== prevProps.params.assignmentId) {
+    if (this.props.match.params.assignmentId !== prevProps.match.params.assignmentId) {
       this.props.loadAsync();
     }
   }
@@ -118,9 +118,11 @@ class ShadowAssignment extends Component {
 }
 
 ShadowAssignment.propTypes = {
-  params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired,
-  }),
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      assignmentId: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   shadowAssignment: PropTypes.object,
   loggedUserId: PropTypes.string,
   group: PropTypes.func,
@@ -131,13 +133,27 @@ ShadowAssignment.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { assignmentId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { assignmentId },
+        },
+      }
+    ) => {
       return {
         shadowAssignment: getShadowAssignment(state)(assignmentId),
         loggedUserId: loggedInUserIdSelector(state),
       };
     },
-    (dispatch, { params: { assignmentId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { assignmentId },
+        },
+      }
+    ) => ({
       loadAsync: () => ShadowAssignment.loadAsync({ assignmentId }, dispatch),
     })
   )(injectIntl(ShadowAssignment))

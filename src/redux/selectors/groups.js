@@ -2,11 +2,9 @@ import { createSelector } from 'reselect';
 import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY } from '../../helpers/common';
 
 import { fetchAllGroupsEndpoint } from '../modules/groups';
-import { studentOfGroupsIdsSelector, supervisorOfGroupsIdsSelector, isLoggedAsSuperAdmin } from './users';
 import { getAssignments } from './assignments';
 import { getShadowAssignments } from './shadowAssignments';
-import { isReady, getId, getJsData } from '../helpers/resourceManager';
-import { loggedInUserIdSelector } from './auth';
+import { isReady, getJsData } from '../helpers/resourceManager';
 
 /**
  * Select groups part of the state
@@ -21,8 +19,6 @@ export const notArchivedGroupsSelector = state =>
     .get('resources')
     .filter(isReady)
     .filter(group => group.getIn(['data', 'archived']) === false);
-
-export const filterGroups = (ids, groups) => groups.filter(isReady).filter(group => ids.contains(getId(group)));
 
 export const filterNonOrganizationalActiveGroups = groups =>
   groups.filter(group => !group.getIn(['data', 'organizational'], false) && !group.getIn(['data', 'archived'], false));
@@ -46,18 +42,6 @@ export const groupDataAccessorSelector = createSelector(
 
 export const studentOfSelector = userId =>
   createSelector(
-    [studentOfGroupsIdsSelector(userId), groupsSelector],
-    filterGroups
-  );
-
-export const supervisorOfSelector = userId =>
-  createSelector(
-    [supervisorOfGroupsIdsSelector(userId), groupsSelector],
-    filterGroups
-  );
-
-export const studentOfSelector2 = userId =>
-  createSelector(
     groupsSelector,
     groups =>
       groups
@@ -66,7 +50,7 @@ export const studentOfSelector2 = userId =>
         .filter(group => group.privateData && group.privateData.students.indexOf(userId) >= 0)
   );
 
-export const supervisorOfSelector2 = userId =>
+export const supervisorOfSelector = userId =>
   createSelector(
     groupsSelector,
     groups =>
@@ -85,26 +69,6 @@ export const adminOfSelector = userId =>
         .map(getJsData)
         .filter(group => group.privateData && group.privateData.admins.indexOf(userId) >= 0)
   );
-
-export const groupsUserCanEditSelector = createSelector(
-  [loggedInUserIdSelector, groupsSelector, state => isLoggedAsSuperAdmin(state)],
-  (userId, groups, isSuperAdmin) =>
-    groups.filter(isReady).filter(group => {
-      if (isSuperAdmin) {
-        return true;
-      }
-      const groupData = getJsData(group);
-      return (
-        groupData.privateData &&
-        (groupData.privateData.supervisors.indexOf(userId) >= 0 || groupData.privateData.admins.indexOf(userId) >= 0)
-      );
-    })
-);
-
-export const groupsUserCanAssignToSelector = createSelector(
-  groupsUserCanEditSelector,
-  filterNonOrganizationalActiveGroups
-);
 
 const usersOfGroup = (type, groupId) =>
   createSelector(

@@ -7,7 +7,7 @@ import Header from '../../widgets/Header';
 import Footer from '../../widgets/Footer';
 
 import SidebarContainer from '../../../containers/SidebarContainer';
-import { getConfigVar } from '../../../redux/helpers/api/tools';
+import { getConfigVar } from '../../../helpers/config';
 
 const title = getConfigVar('TITLE');
 
@@ -20,6 +20,7 @@ const Layout = ({
   pendingFetchOperations,
   children,
   lang,
+  setLang,
   currentUrl,
   availableLangs,
   onCloseSidebar,
@@ -41,6 +42,7 @@ const Layout = ({
       toggleSidebarVisibility={toggleVisibility}
       availableLangs={availableLangs}
       currentLang={lang}
+      setLang={setLang}
       currentUrl={currentUrl}
       pendingFetchOperations={pendingFetchOperations}
     />
@@ -66,6 +68,7 @@ Layout.propTypes = {
   onCloseSidebar: PropTypes.func,
   children: PropTypes.element,
   lang: PropTypes.string,
+  setLang: PropTypes.func.isRequired,
   currentUrl: PropTypes.string,
   availableLangs: PropTypes.array,
 };

@@ -1,5 +1,5 @@
 // action types declaration was moved outside the auth module to break cyclic import dependencies
-const actionTypes = {
+export const actionTypes = {
   LOGIN: 'recodex/auth/LOGIN',
   LOGIN_PENDING: 'recodex/auth/LOGIN_PENDING',
   LOGIN_FULFILLED: 'recodex/auth/LOGIN_FULFILLED',
@@ -18,4 +18,9 @@ const actionTypes = {
   SELECT_INSTANCE: 'recodex/auth/SELECT_INSTANCE',
 };
 
-export default actionTypes;
+export const statusTypes = {
+  LOGGED_OUT: 'LOGGED_OUT',
+  LOGGED_IN: 'LOGGED_IN',
+  LOGGING_IN: 'LOGGING_IN',
+  LOGIN_FAILED: 'LOGIN_FAILED',
+};

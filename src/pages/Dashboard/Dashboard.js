@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import Button from '../../components/widgets/FlatButton';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/layout/Page';
@@ -56,6 +56,8 @@ class Dashboard extends Component {
       this.props.loadAsync(this.props.userId);
     }
   }
+
+  static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
 
   /**
    * A fairly complicated load method - uses redux thunk
@@ -327,7 +329,7 @@ export default withLinks(
         statistics: statisticsSelector(state),
       };
     },
-    (dispatch, { params }) => ({
+    (dispatch, { match: { params } }) => ({
       loadAsync: userId => Dashboard.loadAsync(params, dispatch, { userId }),
     })
   )(injectIntl(Dashboard))

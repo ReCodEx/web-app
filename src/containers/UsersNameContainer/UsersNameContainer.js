@@ -12,17 +12,13 @@ import { LoadingIcon, FailureIcon } from '../../components/icons';
 import './UsersNameContainer.css';
 
 class UsersNameContainer extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount = () => this.props.loadUserIfNeeded(this.props.userId);
 
   componentDidUpdate(prevProps) {
     if (this.props.userId !== prevProps.userId) {
-      this.props.loadAsync();
+      this.props.loadUserIfNeeded(this.props.userId);
     }
   }
-
-  static loadAsync = ({ userId }, dispatch) => {
-    dispatch(fetchUserIfNeeded(userId));
-  };
 
   render() {
     const {
@@ -68,10 +64,10 @@ UsersNameContainer.propTypes = {
   large: PropTypes.bool,
   user: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
-  loadAsync: PropTypes.func.isRequired,
   isSimple: PropTypes.bool,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
+  loadUserIfNeeded: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -79,8 +75,7 @@ export default connect(
     user: getUser(userId)(state),
     currentUser: loggedInUserSelector(state),
   }),
-  (dispatch, { userId }) => ({
-    loadProfileIfNeeded: () => dispatch(fetchUserIfNeeded(userId)),
-    loadAsync: () => UsersNameContainer.loadAsync({ userId }, dispatch),
+  dispatch => ({
+    loadUserIfNeeded: userId => dispatch(fetchUserIfNeeded(userId)),
   })
 )(UsersNameContainer);

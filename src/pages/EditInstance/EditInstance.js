@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 
 import Page from '../../components/layout/Page';
@@ -20,7 +19,7 @@ class EditInstance extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.instanceId !== prevProps.params.instanceId) {
+    if (this.props.match.params.instanceId !== prevProps.match.params.instanceId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -33,7 +32,9 @@ class EditInstance extends Component {
 
   render() {
     const {
-      params: { instanceId },
+      match: {
+        params: { instanceId },
+      },
       links: { INSTANCE_URI_FACTORY },
       instance,
       editInstance,
@@ -65,8 +66,10 @@ EditInstance.propTypes = {
   links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    instanceId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      instanceId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   instance: ImmutablePropTypes.map,
   editInstance: PropTypes.func.isRequired,
@@ -74,11 +77,24 @@ EditInstance.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { instanceId } }) => ({
+    (
+      state,
+      {
+        match: {
+          params: { instanceId },
+        },
+      }
+    ) => ({
       instance: instanceSelector(state, instanceId),
     }),
-    (dispatch, { params: { instanceId } }) => ({
-      push: url => dispatch(push(url)),
+    (
+      dispatch,
+      {
+        match: {
+          params: { instanceId },
+        },
+      }
+    ) => ({
       reset: () => dispatch(reset('editInstance')),
       loadAsync: () => EditInstance.loadAsync({ instanceId }, dispatch),
       editInstance: data => dispatch(editInstance(instanceId, data)),

@@ -30,7 +30,7 @@ class HeaderSystemMessagesContainer extends Component {
     }
   };
 
-  componentWillUnMount = () => {
+  componentWillUnmount = () => {
     if (canUseDOM) {
       window.removeEventListener('mousedown', this.close);
     }

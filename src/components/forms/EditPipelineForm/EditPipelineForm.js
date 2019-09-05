@@ -24,10 +24,6 @@ class EditPipelineForm extends Component {
     }
   }
 
-  static loadAsync = ({ pipeline }, dispatch) => {
-    Promise.all([dispatch(fetchSupplementaryFilesForPipeline(pipeline.id))]);
-  };
-
   render() {
     const {
       initialValues: pipeline,
@@ -203,7 +199,7 @@ export default connect(
     supplementaryFiles: createGetPipelineFiles(pipeline.supplementaryFilesIds)(state),
   }),
   (dispatch, { pipeline }) => ({
-    loadAsync: () => EditPipelineForm.loadAsync({ pipeline }, dispatch),
+    loadAsync: () => dispatch(fetchSupplementaryFilesForPipeline(pipeline.id)),
   })
 )(
   reduxForm({

@@ -3,17 +3,13 @@ import 'isomorphic-fetch';
 import React from 'react';
 import { render } from 'react-dom';
 import { fromJS } from 'immutable';
-
 import { Provider } from 'react-redux';
-import { Router, useRouterHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
-import useScroll from 'scroll-behavior/lib/useStandardScroll';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { BrowserRouter } from 'react-router-dom';
 
 import { configureStore } from './redux/store';
-import createRoutes from './pages/routes';
-
-import { getToken } from './redux/middleware/authMiddleware';
+import { getToken, getInstanceId } from './redux/middleware/authMiddleware';
+import { getLang } from './redux/middleware/langMiddleware';
+import App from './containers/App';
 
 // load the initial state form the server - if any
 let state;
@@ -22,18 +18,17 @@ const blacklist = ['userSwitching'];
 if (ini) {
   state = {};
   Object.keys(ini).map(key => {
-    state[key] = blacklist.indexOf(key) >= 0 ? ini[key] : fromJS(ini[key]);
+    state[key] = blacklist.includes(key) ? ini[key] : fromJS(ini[key]);
   });
 }
 
-const createScrollHistory = useScroll(createBrowserHistory);
-const appHistory = useRouterHistory(createScrollHistory)();
-const store = configureStore(appHistory, state, getToken());
-const history = syncHistoryWithStore(appHistory, store);
+const store = configureStore(state, getToken(), getInstanceId(), getLang());
 
 render(
   <Provider store={store}>
-    <Router history={history} routes={createRoutes(store.getState)} />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );

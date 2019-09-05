@@ -13,8 +13,6 @@ import {
 import { studentsOfGroupSelector } from '../../redux/selectors/users';
 
 class ShadowAssignmentPointsContainer extends Component {
-  static loadAsync = ({ groupId }, dispatch) => dispatch(fetchStudents(groupId));
-
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
@@ -57,7 +55,7 @@ export default connect(
     students: studentsOfGroupSelector(state, groupId),
   }),
   (dispatch, { groupId, id }) => ({
-    loadAsync: () => ShadowAssignmentPointsContainer.loadAsync({ groupId }, dispatch),
+    loadAsync: () => dispatch(fetchStudents(groupId)),
     createPoints: ({ awardeeId, points, note, awardedAt }) =>
       dispatch(createShadowAssignmentPoints(id, awardeeId, points, note, awardedAt)),
     updatePoints: ({ pointsId, points, note, awardedAt }) =>

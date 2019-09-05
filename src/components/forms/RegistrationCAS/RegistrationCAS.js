@@ -6,7 +6,7 @@ import { Alert, FormControl, ControlLabel, Well } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import AuthenticationButtonContainer from '../../../containers/CAS/AuthenticationButtonContainer';
 import { safeGet } from '../../../helpers/common';
-import { getConfigVar } from '../../../redux/helpers/api/tools';
+import { getConfigVar } from '../../../helpers/config';
 
 const casHelpdeskUrl = getConfigVar('CAS_HELPDESK_URL');
 

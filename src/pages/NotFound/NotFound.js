@@ -13,7 +13,7 @@ const NotFound = () => (
     }>
     <FormattedMessage
       id="app.notFound.text"
-      defaultMessage="The URL is not a word of the language this website accepts."
+      defaultMessage="Either you got a wrong (possibly old) URL in your address bar, or we have a bug in links generator."
     />
   </PageContent>
 );

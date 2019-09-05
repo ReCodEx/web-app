@@ -47,14 +47,16 @@ class Instance extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.fetchGroupsStatus);
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.instanceId !== prevProps.params.instanceId) {
+    if (this.props.match.params.instanceId !== prevProps.match.params.instanceId) {
       this.props.loadAsync(this.props.fetchGroupsStatus);
     }
   }
 
   render() {
     const {
-      params: { instanceId },
+      match: {
+        params: { instanceId },
+      },
       userId,
       instance,
       groups,
@@ -160,8 +162,10 @@ class Instance extends Component {
 
 Instance.propTypes = {
   loadAsync: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    instanceId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      instanceId: PropTypes.string.isRequired,
+    }),
   }).isRequired,
   userId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
@@ -179,7 +183,14 @@ const addGroupFormSelector = formValueSelector('addGroup');
 
 export default withLinks(
   connect(
-    (state, { params: { instanceId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { instanceId },
+        },
+      }
+    ) => {
       const userId = loggedInUserIdSelector(state);
       return {
         userId,
@@ -191,7 +202,14 @@ export default withLinks(
         hasThreshold: addGroupFormSelector(state, 'hasThreshold'),
       };
     },
-    (dispatch, { params: { instanceId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { instanceId },
+        },
+      }
+    ) => ({
       createGroup: userId => ({ localizedTexts, hasThreshold, threshold, ...data }) =>
         dispatch(
           createGroup({

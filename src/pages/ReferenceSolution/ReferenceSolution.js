@@ -49,7 +49,7 @@ class ReferenceSolution extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.referenceSolutionId !== prevProps.params.referenceSolutionId) {
+    if (this.props.match.params.referenceSolutionId !== prevProps.match.params.referenceSolutionId) {
       this.props.loadAsync();
     }
   }
@@ -58,7 +58,9 @@ class ReferenceSolution extends Component {
     const {
       referenceSolution,
       exercise,
-      params: { exerciseId },
+      match: {
+        params: { exerciseId },
+      },
       fetchStatus,
       evaluations,
       refreshSolutionEvaluations,
@@ -141,9 +143,11 @@ class ReferenceSolution extends Component {
 }
 
 ReferenceSolution.propTypes = {
-  params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired,
-    referenceSolutionId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      exerciseId: PropTypes.string.isRequired,
+      referenceSolutionId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   referenceSolution: ImmutablePropTypes.map,
@@ -159,13 +163,20 @@ ReferenceSolution.propTypes = {
 export default withLinks(
   injectIntl(
     connect(
-      (state, { params: { exerciseId, referenceSolutionId } }) => ({
+      (
+        state,
+        {
+          match: {
+            params: { exerciseId, referenceSolutionId },
+          },
+        }
+      ) => ({
         referenceSolution: getReferenceSolution(referenceSolutionId)(state),
         exercise: getExercise(exerciseId)(state),
         evaluations: evaluationsForReferenceSolutionSelector(referenceSolutionId)(state),
         fetchStatus: fetchManyStatus(referenceSolutionId)(state),
       }),
-      (dispatch, { params }) => ({
+      (dispatch, { match: { params } }) => ({
         loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
         refreshSolutionEvaluations: () => {
           dispatch(fetchReferenceSolution(params.referenceSolutionId));

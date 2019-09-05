@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
@@ -35,7 +34,7 @@ class EditShadowAssignment extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.assignmentId !== prevProps.params.assignmentId) {
+    if (this.props.match.params.assignmentId !== prevProps.match.params.assignmentId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -89,8 +88,10 @@ class EditShadowAssignment extends Component {
     const {
       shadowAssignment,
       isPublic,
-      params: { assignmentId },
-      push,
+      match: {
+        params: { assignmentId },
+      },
+      history: { replace },
       links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
@@ -149,7 +150,7 @@ class EditShadowAssignment extends Component {
                     <p className="text-center">
                       <DeleteShadowAssignmentButtonContainer
                         id={assignmentId}
-                        onDeleted={() => push(GROUP_DETAIL_URI_FACTORY(this.groupId))}
+                        onDeleted={() => replace(GROUP_DETAIL_URI_FACTORY(this.groupId))}
                       />
                     </p>
                   </div>
@@ -164,11 +165,16 @@ class EditShadowAssignment extends Component {
 }
 
 EditShadowAssignment.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      assignmentId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   shadowAssignment: ImmutablePropTypes.map,
   editShadowAssignment: PropTypes.func.isRequired,
@@ -180,15 +186,28 @@ EditShadowAssignment.propTypes = {
 const editAssignmentFormSelector = formValueSelector('editShadowAssignment');
 
 export default connect(
-  (state, { params: { assignmentId } }) => {
+  (
+    state,
+    {
+      match: {
+        params: { assignmentId },
+      },
+    }
+  ) => {
     const shadowAssignment = getShadowAssignment(state)(assignmentId);
     return {
       shadowAssignment,
       isPublic: editAssignmentFormSelector(state, 'isPublic'),
     };
   },
-  (dispatch, { params: { assignmentId } }) => ({
-    push: url => dispatch(push(url)),
+  (
+    dispatch,
+    {
+      match: {
+        params: { assignmentId },
+      },
+    }
+  ) => ({
     reset: () => dispatch(reset('editShadowAssignment')),
     loadAsync: () => EditShadowAssignment.loadAsync({ assignmentId }, dispatch),
     editShadowAssignment: data => {

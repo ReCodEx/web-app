@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { push } from 'react-router-redux';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
+import App from '../../containers/App';
 import { SettingsIcon, TransferIcon, BanIcon, UserIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
@@ -93,13 +93,22 @@ class Users extends Component {
     const {
       takeOver,
       isSuperAdmin,
+      history: { push },
       links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI },
     } = this.props;
     return (
       isSuperAdmin && (
         <div>
           {privateData && privateData.isAllowed && (
-            <Button bsSize="xs" bsStyle="primary" onClick={() => takeOver(id, DASHBOARD_URI)}>
+            <Button
+              bsSize="xs"
+              bsStyle="primary"
+              onClick={() =>
+                takeOver(id).then(() => {
+                  App.ignoreNextLocationChange();
+                  push(DASHBOARD_URI);
+                })
+              }>
               <TransferIcon gapRight />
               <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
             </Button>
@@ -229,10 +238,13 @@ class Users extends Component {
 }
 
 Users.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   instanceId: PropTypes.string,
   isSuperAdmin: PropTypes.bool,
-  user: ImmutablePropTypes.map.isRequired,
-  push: PropTypes.func.isRequired,
+  user: ImmutablePropTypes.map,
   takeOver: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
   reloadPagination: PropTypes.func.isRequired,
@@ -250,8 +262,7 @@ export default withLinks(
       };
     },
     dispatch => ({
-      push: url => dispatch(push(url)),
-      takeOver: (userId, redirectUrl) => dispatch(takeOver(userId)).then(() => dispatch(push(redirectUrl))),
+      takeOver: userId => dispatch(takeOver(userId)),
       createUser: ({ firstName, lastName, email, password, passwordConfirm }, instanceId) =>
         dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId, true)), // true = skip auth changes
       reloadPagination: locale =>

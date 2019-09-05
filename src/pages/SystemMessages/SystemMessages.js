@@ -57,7 +57,7 @@ class SystemMessages extends Component {
 
   formReset = () => this.setState({ isOpen: false, message: createMewMessageInitialValues() });
 
-  static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchAllMessages)]);
+  static loadAsync = (params, dispatch) => dispatch(fetchAllMessages());
 
   componentDidMount = () => this.props.loadAsync();
 

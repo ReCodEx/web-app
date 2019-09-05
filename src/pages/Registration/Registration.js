@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reset, startAsyncValidation } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
@@ -19,7 +18,7 @@ import { fetchInstances } from '../../redux/modules/instances';
 import { publicInstancesSelector } from '../../redux/selectors/instances';
 import { hasSucceeded } from '../../redux/selectors/registration';
 
-import { getConfigVar } from '../../redux/helpers/api/tools';
+import { getConfigVar } from '../../helpers/config';
 import withLinks from '../../helpers/withLinks';
 
 // Configuration properties
@@ -49,10 +48,10 @@ class Registration extends Component {
 
   componentDidUpdate = () => this.checkIfIsDone(this.props);
 
-  checkIfIsDone = ({ hasSucceeded, push, reset, links: { DASHBOARD_URI } }) => {
+  checkIfIsDone = ({ hasSucceeded, reset, history: { replace }, links: { DASHBOARD_URI } }) => {
     if (hasSucceeded) {
       setTimeout(() => {
-        push(DASHBOARD_URI);
+        replace(DASHBOARD_URI);
         reset();
       }, 600);
     }
@@ -137,7 +136,6 @@ Registration.propTypes = {
   createAccount: PropTypes.func.isRequired,
   createExternalAccount: PropTypes.func.isRequired,
   hasSucceeded: PropTypes.bool,
-  push: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   triggerAsyncValidation: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
@@ -155,7 +153,6 @@ export default withLinks(
         dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId)),
       createExternalAccount: (authType = 'default') => ({ instanceId, serviceId, ...credentials }) =>
         dispatch(createExternalAccount(instanceId, serviceId, credentials, authType)),
-      push: url => dispatch(push(url)),
       triggerAsyncValidation: () => dispatch(startAsyncValidation('registration')),
       reset: () => {
         dispatch(reset('registration'));

@@ -1,5 +1,5 @@
 import { handleActions, createAction } from 'redux-actions';
-import authActionTypes from './authActionTypes';
+import { actionTypes as authActionTypes } from './authTypes';
 import { decode, isTokenValid } from '../helpers/token';
 import { addNotification } from './notifications';
 
@@ -16,9 +16,7 @@ export const switchUser = userId => (dispatch, getState) => {
   if (!accessToken || !isTokenValid(decodedToken)) {
     dispatch(
       addNotification(
-        `The token has already expired, you cannot switch to user ${
-          user.fullName
-        }. This account will be removed from the user switching panel.`,
+        `The token has already expired, you cannot switch to user ${user.fullName}. This account will be removed from the user switching panel.`,
         false
       )
     );

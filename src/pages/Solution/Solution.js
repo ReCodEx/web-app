@@ -47,7 +47,7 @@ class Solution extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.solutionId !== prevProps.params.solutionId) {
+    if (this.props.match.params.solutionId !== prevProps.match.params.solutionId) {
       this.props.loadAsync();
     }
   }
@@ -56,7 +56,9 @@ class Solution extends Component {
     const {
       assignment,
       solution,
-      params: { assignmentId },
+      match: {
+        params: { assignmentId },
+      },
       evaluations,
       runtimeEnvironments,
       fetchStatus,
@@ -166,9 +168,11 @@ class Solution extends Component {
 }
 
 Solution.propTypes = {
-  params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired,
-    solutionId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      assignmentId: PropTypes.string.isRequired,
+      solutionId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   assignment: PropTypes.object,
   children: PropTypes.element,
@@ -183,14 +187,21 @@ Solution.propTypes = {
 };
 
 export default connect(
-  (state, { params: { solutionId, assignmentId } }) => ({
+  (
+    state,
+    {
+      match: {
+        params: { solutionId, assignmentId },
+      },
+    }
+  ) => ({
     solution: getSolution(solutionId)(state),
     assignment: getAssignment(state)(assignmentId),
     evaluations: evaluationsForSubmissionSelector(solutionId)(state),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
     fetchStatus: fetchManyStatus(solutionId)(state),
   }),
-  (dispatch, { params }) => ({
+  (dispatch, { match: { params } }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),
     refreshSolutionEvaluations: () =>
       Promise.all([

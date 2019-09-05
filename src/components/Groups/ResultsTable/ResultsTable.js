@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -256,6 +256,7 @@ class ResultsTable extends Component {
       groupName,
       intl: { locale },
     } = this.props;
+
     return (
       <React.Fragment>
         <SortableTable

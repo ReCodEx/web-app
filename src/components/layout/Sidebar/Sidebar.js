@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { defaultMemoize } from 'reselect';
+import { withRouter } from 'react-router';
 
 import Admin from './Admin';
 import BadgeContainer from '../../../containers/BadgeContainer';
@@ -16,36 +17,33 @@ import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '.
 import withLinks from '../../../helpers/withLinks';
 import { getExternalIdForCAS } from '../../../helpers/cas';
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
-import { UrlContext } from '../../../helpers/contexts';
 
 import styles from './sidebar.less';
 
 const getUserData = defaultMemoize(user => getJsData(user));
 
-const Sidebar = (
-  {
-    loggedInUser,
-    studentOf,
-    supervisorOf,
-    currentUrl,
-    instances,
-    small = false,
-    links: {
-      FAQ_URL,
-      LOGIN_URI,
-      REGISTRATION_URI,
-      DASHBOARD_URI,
-      INSTANCE_URI_FACTORY,
-      GROUP_DETAIL_URI_FACTORY,
-      EXERCISES_URI,
-      PIPELINES_URI,
-      ARCHIVE_URI,
-      SIS_INTEGRATION_URI,
-    },
-    intl: { locale },
+const Sidebar = ({
+  loggedInUser,
+  studentOf,
+  supervisorOf,
+  currentUrl,
+  instances,
+  small = false,
+  links: {
+    FAQ_URL,
+    LOGIN_URI,
+    REGISTRATION_URI,
+    DASHBOARD_URI,
+    INSTANCE_URI_FACTORY,
+    GROUP_DETAIL_URI_FACTORY,
+    EXERCISES_URI,
+    PIPELINES_URI,
+    ARCHIVE_URI,
+    SIS_INTEGRATION_URI,
   },
-  { isActive }
-) => {
+  location: { pathname, search },
+  intl: { locale },
+}) => {
   const user = getUserData(loggedInUser);
   const role = safeGet(user, ['privateData', 'role']);
   const createLink = item => GROUP_DETAIL_URI_FACTORY(getId(item));
@@ -61,6 +59,7 @@ const Sidebar = (
     supervisorOf
       .toList()
       .sort((a, b) => getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale));
+  const currentLink = pathname + search;
 
   return (
     <aside className={classnames(['main-sidebar', styles.mainSidebar])}>
@@ -113,44 +112,31 @@ const Sidebar = (
                   ))}
 
               {studentOfItems && (
-                <UrlContext.Consumer>
-                  {({ isActive }) => (
-                    <MenuGroup
-                      title={
-                        <FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />
-                      }
-                      items={studentOfItems}
-                      notifications={EMPTY_OBJ}
-                      icon={'user-circle'}
-                      currentPath={currentUrl}
-                      createLink={createLink}
-                      forceOpen={false}
-                      isActive={studentOfItems.find(item => isActive(createLink(item))) !== undefined}
-                    />
-                  )}
-                </UrlContext.Consumer>
+                <MenuGroup
+                  title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
+                  items={studentOfItems}
+                  notifications={EMPTY_OBJ}
+                  icon={'user-circle'}
+                  currentPath={currentUrl}
+                  createLink={createLink}
+                  forceOpen={false}
+                  isActive={studentOfItems.find(item => createLink(item) === currentLink) !== undefined}
+                />
               )}
 
               {isSupervisorRole(role) && supervisorOfItems && (
-                <UrlContext.Consumer>
-                  {({ isActive }) => (
-                    <MenuGroup
-                      title={
-                        <FormattedMessage
-                          id="app.sidebar.menu.supervisorOfGroups"
-                          defaultMessage="Supervisor of Groups"
-                        />
-                      }
-                      notifications={EMPTY_OBJ}
-                      items={supervisorOfItems}
-                      icon="graduation-cap"
-                      currentPath={currentUrl}
-                      createLink={createLink}
-                      forceOpen={false}
-                      isActive={supervisorOfItems.find(item => isActive(createLink(item))) !== undefined}
-                    />
-                  )}
-                </UrlContext.Consumer>
+                <MenuGroup
+                  title={
+                    <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
+                  }
+                  notifications={EMPTY_OBJ}
+                  items={supervisorOfItems}
+                  icon="graduation-cap"
+                  currentPath={currentUrl}
+                  createLink={createLink}
+                  forceOpen={false}
+                  isActive={supervisorOfItems.find(item => createLink(item) === currentLink) !== undefined}
+                />
               )}
 
               {isSupervisorRole(role) && (
@@ -204,6 +190,10 @@ const Sidebar = (
 };
 
 Sidebar.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+  }).isRequired,
   loggedInUser: ImmutablePropTypes.map,
   studentOf: ImmutablePropTypes.map,
   supervisorOf: ImmutablePropTypes.map,
@@ -214,4 +204,4 @@ Sidebar.propTypes = {
   intl: intlShape,
 };
 
-export default withLinks(injectIntl(Sidebar));
+export default withLinks(withRouter(injectIntl(Sidebar)));

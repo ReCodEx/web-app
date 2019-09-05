@@ -12,16 +12,18 @@ export const editMessage = actions.updateResource;
 export const deleteMessage = actions.removeResource;
 
 export const fetchManyEndpoint = '/notifications/all';
-export const fetchAllMessages = actions.fetchMany({
-  endpoint: fetchManyEndpoint,
-  meta: { allowReload: true },
-});
+export const fetchAllMessages = () =>
+  actions.fetchMany({
+    endpoint: fetchManyEndpoint,
+    meta: { allowReload: true },
+  });
 
 export const fetchManyUserEndpoint = '/notifications';
-export const fetchAllUserMessages = actions.fetchMany({
-  endpoint: fetchManyUserEndpoint,
-  meta: { allowReload: true },
-});
+export const fetchAllUserMessages = () =>
+  actions.fetchMany({
+    endpoint: fetchManyUserEndpoint,
+    meta: { allowReload: true },
+  });
 
 /**
  * Reducer takes mainly care about all the state of individual attachments

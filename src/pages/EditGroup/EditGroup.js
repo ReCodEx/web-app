@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { HelpBlock, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
@@ -34,7 +33,7 @@ class EditGroup extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.groupId !== prevProps.params.groupId) {
+    if (this.props.match.params.groupId !== prevProps.match.params.groupId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -53,7 +52,10 @@ class EditGroup extends Component {
 
   render() {
     const {
-      params: { groupId },
+      match: {
+        params: { groupId },
+      },
+      history: { replace },
       group,
       isSuperAdmin,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY },
@@ -61,7 +63,6 @@ class EditGroup extends Component {
       hasThreshold,
       canViewParentDetail,
       instanceId,
-      push,
       reload,
       intl: { locale },
     } = this.props;
@@ -173,7 +174,7 @@ class EditGroup extends Component {
                         group.parentGroupId === null || (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
                       }
                       onDeleted={() =>
-                        push(
+                        replace(
                           canViewParentDetail
                             ? GROUP_INFO_URI_FACTORY(group.parentGroupId)
                             : INSTANCE_URI_FACTORY(instanceId)
@@ -210,18 +211,23 @@ class EditGroup extends Component {
 }
 
 EditGroup.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   reload: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    groupId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      groupId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   group: ImmutablePropTypes.map,
   canViewParentDetail: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
   editGroup: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
   intl: intlShape,
@@ -231,7 +237,14 @@ const editGroupFormSelector = formValueSelector('editGroup');
 
 export default withLinks(
   connect(
-    (state, { params: { groupId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { groupId },
+        },
+      }
+    ) => {
       const userId = loggedInUserIdSelector(state);
       return {
         group: groupSelector(state, groupId),
@@ -243,8 +256,14 @@ export default withLinks(
         instanceId: selectedInstanceId(state),
       };
     },
-    (dispatch, { params: { groupId } }) => ({
-      push: url => dispatch(push(url)),
+    (
+      dispatch,
+      {
+        match: {
+          params: { groupId },
+        },
+      }
+    ) => ({
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
       reload: () => dispatch(fetchGroup(groupId)),

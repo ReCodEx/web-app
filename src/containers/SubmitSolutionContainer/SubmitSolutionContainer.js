@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 
+import App from '../App';
 import SubmitSolution from '../../components/Solutions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
@@ -120,12 +121,13 @@ class SubmitSolutionContainer extends Component {
       submissionId,
       isReferenceSolution = false,
       afterEvaluationFinishes,
-      push,
+      history: { push },
       links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY, SOLUTION_DETAIL_URI_FACTORY },
     } = this.props;
+    App.ignoreNextLocationChange();
     return isReferenceSolution
       ? push(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
-      : afterEvaluationFinishes(SOLUTION_DETAIL_URI_FACTORY(id, submissionId));
+      : afterEvaluationFinishes().then(() => push(SOLUTION_DETAIL_URI_FACTORY(id, submissionId)));
   };
 
   render = () => {
@@ -189,6 +191,10 @@ class SubmitSolutionContainer extends Component {
 }
 
 SubmitSolutionContainer.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   id: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
   onReset: PropTypes.func,
@@ -216,7 +222,6 @@ SubmitSolutionContainer.propTypes = {
   showProgress: PropTypes.bool,
   isReferenceSolution: PropTypes.bool,
   afterEvaluationFinishes: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
 };
 
 export default withLinks(
@@ -245,11 +250,7 @@ export default withLinks(
         dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint, progressObserverId)),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
-      afterEvaluationFinishes: link =>
-        Promise.all([dispatch(fetchUsersSolutions(userId, id)), dispatch(canSubmit(id))]).then(() =>
-          dispatch(push(link))
-        ),
-      push: url => dispatch(push(url)),
+      afterEvaluationFinishes: () => Promise.all([dispatch(fetchUsersSolutions(userId, id)), dispatch(canSubmit(id))]),
     })
-  )(SubmitSolutionContainer)
+  )(withRouter(SubmitSolutionContainer))
 );

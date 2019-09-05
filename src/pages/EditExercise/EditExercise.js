@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { reset } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
@@ -48,7 +47,7 @@ class EditExercise extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -68,9 +67,11 @@ class EditExercise extends Component {
   render() {
     const {
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY },
-      params: { exerciseId },
+      match: {
+        params: { exerciseId },
+      },
+      history: { replace },
       exercise,
-      push,
       intl: { locale },
     } = this.props;
 
@@ -160,7 +161,7 @@ class EditExercise extends Component {
                           />
                         </p>
                         <p className="text-center">
-                          <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => push(EXERCISES_URI)} />
+                          <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => replace(EXERCISES_URI)} />
                         </p>
                       </div>
                     </Box>
@@ -176,29 +177,47 @@ class EditExercise extends Component {
 }
 
 EditExercise.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   exercise: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
-  params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      exerciseId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   links: PropTypes.object.isRequired,
-  push: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default withLinks(
   connect(
-    (state, { params: { exerciseId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => {
       return {
         exercise: getExercise(exerciseId)(state),
         submitting: isSubmitting(state),
         userId: loggedInUserIdSelector(state),
       };
     },
-    (dispatch, { params: { exerciseId } }) => ({
-      push: url => dispatch(push(url)),
+    (
+      dispatch,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => ({
       reset: () => dispatch(reset('editExercise')),
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),

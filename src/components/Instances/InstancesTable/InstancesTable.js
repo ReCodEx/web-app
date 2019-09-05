@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { SuccessOrFailureIcon } from '../../icons';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 

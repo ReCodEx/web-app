@@ -3,6 +3,7 @@ import 'isomorphic-fetch';
 
 // server setup
 import React from 'react';
+import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import Express from 'express';
@@ -11,19 +12,18 @@ import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 import fs from 'fs';
 
-import { match, RouterContext } from 'react-router';
+import { StaticRouter } from 'react-router';
 
 import { addLocaleData } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
 
-import { Provider } from 'react-redux';
-import { syncHistoryWithStore } from 'react-router-redux';
-import createHistory from 'react-router/lib/createMemoryHistory';
 import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from './redux/selectors/users';
-import createRoutes from './pages/routes';
+import { match } from './pages/routes';
 import { TOKEN_COOKIES_KEY, INSTANCEID_COOKIES_KEY } from './redux/middleware/authMiddleware';
+import { LANG_COOKIES_KEY } from './redux/middleware/langMiddleware';
+import App from './containers/App';
 
 addLocaleData([...cs]);
 
@@ -74,29 +74,9 @@ app.use(
 );
 app.use(cookieParser());
 
-const renderWithoutSSR = (res, renderProps) => {
+const renderPage = (res, { store = null, html = '' }) => {
+  const reduxState = store ? serialize(store.getState(), { isJSON: true }) : 'undefined';
   const head = Helmet.rewind();
-  res.render('index', {
-    html: '',
-    head,
-    reduxState: 'undefined',
-    skin: parsedConfig['SKIN'],
-    bundle,
-    style,
-    config,
-    urlPrefix,
-  });
-};
-
-const renderPage = (res, store, renderProps) => {
-  const reduxState = serialize(store.getState(), { isJSON: true });
-  const html = renderToString(
-    <Provider store={store}>
-      <RouterContext {...renderProps} />
-    </Provider>
-  );
-  const head = Helmet.rewind();
-
   res.render('index', {
     html,
     head,
@@ -110,49 +90,46 @@ const renderPage = (res, store, renderProps) => {
 };
 
 app.get('*', (req, res) => {
-  const memoryHistory = createHistory(req.originalUrl);
   // Extract the accessToken from the cookies for authenticated API requests from the server.
   const token = req.cookies[TOKEN_COOKIES_KEY]; // undefined === the user is not logged in
   const instanceId = req.cookies[INSTANCEID_COOKIES_KEY] || null; // Selected instance
-  const store = configureStore(memoryHistory, undefined, token, instanceId);
-  const history = syncHistoryWithStore(memoryHistory, store);
+  const lang = req.cookies[LANG_COOKIES_KEY] || null; // Selected instance
+  const store = configureStore(undefined, token, instanceId, lang);
   const location = req.originalUrl;
+  const context = {};
 
-  match({ history, routes: createRoutes(store.getState), location }, (error, redirectLocation, renderProps) => {
-    if (redirectLocation) {
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-    } else if (error) {
-      // @todo use the 500.ejs view
-      res.status(500).send(error.message);
-    } else if (renderProps == null) {
-      // this should never happen but just for sure - if router failed
-      res.status(404).send('Not found');
+  try {
+    const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
+    const isSuperadmin = isLoggedAsSuperAdmin(store.getState());
+    const { redirect, params, loadAsync } = match(location, Boolean(userId));
+
+    if (redirect) {
+      res.redirect(302, redirect);
     } else {
-      const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
-      const isSuperadmin = isLoggedAsSuperAdmin(store.getState());
-      const loadAsync = renderProps.components
-        .filter(component => component)
-        .map(component => {
-          // there might be several layers of wrapping - connect, withLinks, ...
-          while (component.WrappedComponent) {
-            component = component.WrappedComponent;
-          }
-          return component;
-        })
-        .filter(component => component.loadAsync)
-        .map(component =>
-          component.loadAsync(renderProps.params, store.dispatch, {
+      Promise.all(
+        loadAsync.map(la =>
+          la(params, store.dispatch, {
             userId,
             isSuperadmin,
             instanceId,
           })
-        );
-
-      Promise.all(loadAsync)
-        .then(() => renderPage(res, store, renderProps))
-        .catch(() => renderWithoutSSR(res, renderProps));
+        )
+      )
+        .then(() => {
+          const html = renderToString(
+            <Provider store={store}>
+              <StaticRouter location={location} context={context}>
+                <App />
+              </StaticRouter>
+            </Provider>
+          );
+          renderPage(res, { store, html });
+        })
+        .catch(() => renderPage(res)); // without SSR
     }
-  });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 
 const port = parsedConfig['PORT'];

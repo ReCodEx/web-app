@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import Button from '../../components/widgets/FlatButton';
 import Page from '../../components/layout/Page';
@@ -79,7 +79,7 @@ class Exercise extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
+    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
       this.props.loadAsync(this.props.userId);
       this.reset();
     }
@@ -101,7 +101,6 @@ class Exercise extends Component {
       intl: { formatMessage, locale },
       initCreateReferenceSolution,
       deleteReferenceSolution,
-      push,
       groups,
       groupsAccessor,
       forkExercise,
@@ -225,14 +224,13 @@ class Exercise extends Component {
                                 runtimeEnvironments={runtimes}
                                 renderButtons={(solutionId, permissionHints) => (
                                   <div>
-                                    <Button
-                                      bsSize="xs"
-                                      onClick={() =>
-                                        push(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId))
-                                      }>
-                                      <SendIcon gapRight />
-                                      <FormattedMessage id="generic.detail" defaultMessage="Detail" />
-                                    </Button>
+                                    <LinkContainer
+                                      to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
+                                      <Button bsSize="xs">
+                                        <SendIcon gapRight />
+                                        <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+                                      </Button>
+                                    </LinkContainer>
                                     {permissionHints && permissionHints.delete !== false && (
                                       <Confirm
                                         id={solutionId}
@@ -287,11 +285,12 @@ class Exercise extends Component {
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
-  params: PropTypes.shape({
-    exerciseId: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      exerciseId: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
-  push: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
@@ -312,7 +311,14 @@ Exercise.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { exerciseId } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => {
       const userId = loggedInUserIdSelector(state);
       const instanceId = selectedInstanceId(state);
       return {
@@ -329,9 +335,15 @@ export default withLinks(
         detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state),
       };
     },
-    (dispatch, { params: { exerciseId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { exerciseId },
+        },
+      }
+    ) => ({
       loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
-      push: url => dispatch(push(url)),
       initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
       deleteReferenceSolution: solutionId => dispatch(deleteReferenceSolution(solutionId)),
       forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),

@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-import { replace } from 'react-router-redux';
+import { Link } from 'react-router-dom';
 import { reset } from 'redux-form';
-
 import { Row, Col } from 'react-bootstrap';
+
 import PageContent from '../../components/layout/PageContent';
 import LoginForm from '../../components/forms/LoginForm';
 import CASLoginBox from '../../containers/CAS';
@@ -15,7 +14,7 @@ import CASLoginBox from '../../containers/CAS';
 import { login } from '../../redux/modules/auth';
 import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';
-import { getConfigVar, abortAllPendingRequests } from '../../redux/helpers/api/tools';
+import { getConfigVar } from '../../helpers/config';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -33,15 +32,20 @@ class Login extends Component {
     const {
       loggedInUser = null,
       instanceId = null,
-      replace,
       reset,
-      params: { redirect },
+      match: {
+        params: { redirect },
+      },
+      history: { replace },
       links: { HOME_URI, DASHBOARD_URI, INSTANCE_URI_FACTORY, EDIT_USER_URI_FACTORY },
     } = this.props;
 
+    // Reset the login form (so it is fresh for next time)
+    reset();
+
     let url = null;
     if (redirect) {
-      url = atob(redirect);
+      url = atob(decodeURIComponent(redirect));
     } else {
       const defaultPages = {
         home: HOME_URI,
@@ -57,16 +61,8 @@ class Login extends Component {
           : DASHBOARD_URI; // system default
     }
 
-    /*
-     * Login is slightly more complicated as the change in logged in user triggers some reloads immediately.
-     * Since we are about to perform a redirect, we need to stop pending requests (wait for all FAILED actions)
-     * and then perform the redirect itself. We use timer to achieve that.
-     */
-    abortAllPendingRequests();
-    window.setTimeout(() => {
-      reset();
-      replace(url);
-    }, 10);
+    // Redirect
+    replace(url);
   };
 
   /**
@@ -74,15 +70,15 @@ class Login extends Component {
    */
   loginAndRedirect = credentials => {
     const { login } = this.props;
-    login(credentials).then(() => {
-      this.redirectAfterLogin();
-    });
+    login(credentials).then(this.redirectAfterLogin);
   };
 
   render() {
     const {
       isLoggedIn,
-      params: { redirect = null },
+      match: {
+        params: { redirect = null },
+      },
       links: { HOME_URI, RESET_PASSWORD_URI },
     } = this.props;
 
@@ -160,11 +156,18 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  params: PropTypes.object,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      redirect: PropTypes.string,
+    }),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   isLoggedIn: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
   loggedInUser: ImmutablePropTypes.map,
-  replace: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
 };
@@ -178,7 +181,6 @@ export default withLinks(
     }),
     dispatch => ({
       login: ({ email, password }) => dispatch(login(email, password)),
-      replace: url => dispatch(replace(url)),
       reset: () => {
         dispatch(reset('login'));
       },

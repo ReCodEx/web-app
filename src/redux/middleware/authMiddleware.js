@@ -1,15 +1,14 @@
-import { push } from 'react-router-redux';
 import cookies from 'browser-cookies';
 import { canUseDOM } from 'exenv';
 
-import { actionTypes } from '../modules/auth';
+import { actionTypes } from '../modules/authTypes';
 import { jwtSelector } from '../selectors/auth';
 import { actionTypes as registrationActionTypes } from '../modules/registration';
 import { actionTypes as usersActionTypes } from '../modules/users';
+import { setLang } from '../modules/app';
 import { CALL_API } from './apiMiddleware';
-import { changeLanguage } from '../../links';
 import { safeGet } from '../../helpers/common';
-import { getConfigVar } from '../helpers/api/tools';
+import { getConfigVar } from '../../helpers/config';
 
 const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 
@@ -34,7 +33,7 @@ export const storeToken = accessToken => {
 };
 
 /**
- * Remove security token to both local storage and cookies.
+ * Remove security token from both local storage and cookies.
  */
 export const removeToken = () => {
   if (typeof localStorage !== 'undefined') {
@@ -70,7 +69,7 @@ export const getToken = () => {
 };
 
 /**
- * Store security token to both local storage and cookies.
+ * Store instance ID to both local storage and cookies.
  */
 export const storeInstanceId = instanceId => {
   if (canUseDOM && instanceId) {
@@ -83,7 +82,7 @@ export const storeInstanceId = instanceId => {
 };
 
 /**
- * Remove security token to both local storage and cookies.
+ * Remove instance ID from both local storage and cookies.
  */
 export const removeInstanceId = () => {
   if (typeof localStorage !== 'undefined') {
@@ -134,9 +133,7 @@ const middleware = store => next => action => {
       storeToken(action.payload.accessToken);
       storeInstanceId(safeGet(action, ['meta', 'instanceId'], action.payload.user.privateData.instancesIds[0]));
       if (typeof window !== 'undefined') {
-        store.dispatch(
-          push(changeLanguage(window.location.pathname, action.payload.user.privateData.settings.defaultLanguage))
-        );
+        store.dispatch(setLang(action.payload.user.privateData.settings.defaultLanguage));
       }
       break;
 

@@ -41,7 +41,7 @@ class EditUser extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.userId !== prevProps.params.userId) {
+    if (this.props.match.params.userId !== prevProps.match.params.userId) {
       this.props.loadAsync();
     }
   }
@@ -223,7 +223,7 @@ class EditUser extends Component {
 }
 
 EditUser.propTypes = {
-  params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
+  match: PropTypes.shape({ params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired }).isRequired,
   user: ImmutablePropTypes.map,
   loggedUserId: PropTypes.string.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
@@ -240,13 +240,27 @@ EditUser.propTypes = {
 };
 
 export default connect(
-  (state, { params: { userId } }) => ({
+  (
+    state,
+    {
+      match: {
+        params: { userId },
+      },
+    }
+  ) => ({
     user: getUser(userId)(state),
     loggedUserId: loggedInUserIdSelector(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     lastToken: lastGeneratedToken(state),
   }),
-  (dispatch, { params: { userId } }) => ({
+  (
+    dispatch,
+    {
+      match: {
+        params: { userId },
+      },
+    }
+  ) => ({
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     refreshUser: () => dispatch(fetchUser(userId)),
     updateSettings: data => dispatch(updateSettings(userId, data)),

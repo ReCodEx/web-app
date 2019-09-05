@@ -5,14 +5,16 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import moment from 'moment';
 import Layout from '../../components/layout/Layout';
 
-import { anyPendingFetchOperations } from '../../redux/selectors/app';
+import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app';
+import { setLang } from '../../redux/modules/app';
 import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { isLoggedIn } from '../../redux/selectors/auth';
 import { getLoggedInUserSettings } from '../../redux/selectors/users';
-import { messages, localeData, defaultLanguage } from '../../locales';
-import { linksFactory, isAbsolute } from '../../links';
+import { messages, localeData } from '../../locales';
 import { UserSettingsContext, LinksContext, UrlContext } from '../../helpers/contexts';
+
+import { buildRoutes, getLinks } from '../../pages/routes';
 
 import 'admin-lte/dist/css/AdminLTE.min.css';
 import 'admin-lte/dist/css/skins/_all-skins.min.css';
@@ -29,24 +31,12 @@ const ADDITIONAL_INTL_FORMATS = {
   },
 };
 
-const getLang = props => {
-  let lang = props.params.lang;
-  if (!lang) {
-    lang = defaultLanguage;
-  }
-
-  return lang;
-};
-
 /**
- * Handles the dependency injection of the localized links based on the current language stated in the URL.
+ * Handles the dependency injection of the links.
  * Also controls the state of the sidebar - collapsing and showing the sidebar.
  */
 class LayoutContainer extends Component {
-  state = { lang: getLang(this.props), links: linksFactory(getLang(this.props)) };
-
   componentDidMount() {
-    this.changeLang(this.props);
     this.resizeSidebarToDefault(this.props);
   }
 
@@ -58,10 +48,6 @@ class LayoutContainer extends Component {
     ) {
       this.resizeSidebarToDefault(this.props);
     }
-
-    if (this.props.params.lang !== prevProps.params.lang) {
-      this.changeLang(this.props);
-    }
   }
 
   resizeSidebarToDefault({ collapse, unroll, userSettings }) {
@@ -72,12 +58,6 @@ class LayoutContainer extends Component {
 
   getDefaultOpenedSidebar = userSettings =>
     userSettings && typeof userSettings.openedSidebar !== 'undefined' ? userSettings.openedSidebar : true;
-
-  changeLang = props => {
-    const lang = getLang(props);
-    this.setState({ lang, links: linksFactory(lang) });
-    this.forceUpdate();
-  };
 
   maybeHideSidebar = e => {
     const { sidebarIsOpen, toggleVisibility } = this.props;
@@ -101,8 +81,8 @@ class LayoutContainer extends Component {
 
   render() {
     const {
-      children,
-      location: { pathname },
+      lang,
+      location: { pathname, search },
       isLoggedIn,
       sidebarIsCollapsed,
       sidebarIsOpen,
@@ -110,22 +90,19 @@ class LayoutContainer extends Component {
       toggleVisibility,
       pendingFetchOperations,
       userSettings,
+      setLang,
     } = this.props;
 
-    const { lang, links } = this.state;
     addLocaleData([...this.getLocaleData(lang)]);
     moment.locale(lang);
 
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)} formats={ADDITIONAL_INTL_FORMATS}>
         <UserSettingsContext.Provider value={userSettings}>
-          <LinksContext.Provider value={links}>
-            <UrlContext.Provider
-              value={{
-                lang,
-                isActive: link => !isAbsolute(link) && this.context.router.isActive(link, true),
-              }}>
+          <LinksContext.Provider value={getLinks()}>
+            <UrlContext.Provider value={{ lang }}>
               <Layout
+                key={lang}
                 isLoggedIn={isLoggedIn}
                 sidebarIsCollapsed={sidebarIsCollapsed}
                 sidebarIsOpen={sidebarIsOpen}
@@ -133,10 +110,11 @@ class LayoutContainer extends Component {
                 toggleVisibility={toggleVisibility}
                 onCloseSidebar={this.maybeHideSidebar}
                 lang={lang}
+                setLang={setLang}
                 availableLangs={Object.keys(messages)}
                 currentUrl={pathname}
                 pendingFetchOperations={pendingFetchOperations}>
-                {children}
+                {buildRoutes(pathname + search, isLoggedIn)}
               </Layout>
             </UrlContext.Provider>
           </LinksContext.Provider>
@@ -151,35 +129,37 @@ LayoutContainer.contextTypes = {
 };
 
 LayoutContainer.propTypes = {
-  params: PropTypes.shape({
-    lang: PropTypes.string,
-  }),
+  lang: PropTypes.string,
   toggleSize: PropTypes.func.isRequired,
   toggleVisibility: PropTypes.func.isRequired,
   collapse: PropTypes.func.isRequired,
   unroll: PropTypes.func.isRequired,
+  setLang: PropTypes.func.isRequired,
   pendingFetchOperations: PropTypes.bool,
   isLoggedIn: PropTypes.bool,
   sidebarIsCollapsed: PropTypes.bool,
   sidebarIsOpen: PropTypes.bool,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
   }).isRequired,
-  children: PropTypes.element,
   userSettings: PropTypes.object,
 };
 
-const mapStateToProps = (state, props) => ({
-  isLoggedIn: isLoggedIn(state),
-  sidebarIsCollapsed: isCollapsed(state),
-  sidebarIsOpen: isVisible(state),
-  pendingFetchOperations: anyPendingFetchOperations(state),
-  userSettings: getLoggedInUserSettings(state),
-});
-
-const mapDispatchToProps = { toggleVisibility, toggleSize, collapse, unroll };
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  state => ({
+    lang: getLang(state),
+    isLoggedIn: isLoggedIn(state),
+    sidebarIsCollapsed: isCollapsed(state),
+    sidebarIsOpen: isVisible(state),
+    pendingFetchOperations: anyPendingFetchOperations(state),
+    userSettings: getLoggedInUserSettings(state),
+  }),
+  dispatch => ({
+    toggleVisibility: () => dispatch(toggleVisibility()),
+    toggleSize: () => dispatch(toggleSize()),
+    collapse: () => dispatch(collapse()),
+    unroll: () => dispatch(unroll()),
+    setLang: lang => dispatch(setLang(lang)),
+  })
 )(LayoutContainer);

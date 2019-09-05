@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
+
 import { joinGroup, leaveGroup, fetchGroup } from '../../redux/modules/groups';
 import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
@@ -24,7 +25,7 @@ const LeaveJoinGroupButtonContainer = ({
   fetchGroup,
   fetchGroupsStatsIfNeeded,
   bsSize = 'xs',
-  push,
+  history: { replace },
   links: { DASHBOARD_URI },
   ...props
 }) =>
@@ -32,7 +33,7 @@ const LeaveJoinGroupButtonContainer = ({
     userId === currentUserId ? (
       <LeaveGroupButton
         {...props}
-        onClick={() => leaveGroup(groupId, userId).then(() => push(DASHBOARD_URI))}
+        onClick={() => leaveGroup(groupId, userId).then(() => replace(DASHBOARD_URI))}
         bsSize={bsSize}
       />
     ) : (
@@ -51,6 +52,10 @@ const LeaveJoinGroupButtonContainer = ({
   );
 
 LeaveJoinGroupButtonContainer.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
   groupId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
@@ -61,7 +66,6 @@ LeaveJoinGroupButtonContainer.propTypes = {
   fetchGroup: PropTypes.func.isRequired,
   fetchGroupsStatsIfNeeded: PropTypes.func.isRequired,
   bsSize: PropTypes.string,
-  push: PropTypes.func.isRequired,
   links: PropTypes.object,
 };
 
@@ -76,12 +80,11 @@ const mapDispatchToProps = dispatch => ({
   fetchAssignmentsForGroup: gId => dispatch(fetchAssignmentsForGroup(gId)),
   fetchGroup: gId => dispatch(fetchGroup(gId)),
   fetchGroupsStatsIfNeeded: gId => dispatch(fetchGroupsStatsIfNeeded(gId)),
-  push: url => dispatch(push(url)),
 });
 
 export default withLinks(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(LeaveJoinGroupButtonContainer)
+  )(withRouter(LeaveJoinGroupButtonContainer))
 );

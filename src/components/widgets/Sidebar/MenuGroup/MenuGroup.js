@@ -31,12 +31,6 @@ class MenuGroup extends Component {
     });
   };
 
-  isActive = props => {
-    const { isActive } = this.context;
-    const { items, createLink } = props;
-    return items.find(item => isActive(createLink(item)));
-  };
-
   render() {
     const { open } = this.state;
     const {

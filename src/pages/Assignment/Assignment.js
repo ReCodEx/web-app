@@ -61,7 +61,7 @@ class Assignment extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.params.assignmentId !== prevProps.params.assignmentId ||
+      this.props.match.params.assignmentId !== prevProps.match.params.assignmentId ||
       this.props.userId !== prevProps.userId ||
       (!prevProps.userId && this.props.loggedInUserId !== prevProps.loggedInUserId)
     ) {
@@ -237,9 +237,12 @@ class Assignment extends Component {
 Assignment.propTypes = {
   userId: PropTypes.string,
   loggedInUserId: PropTypes.string,
-  params: PropTypes.shape({
-    assignmentId: PropTypes.string.isRequired,
-  }),
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      assignmentId: PropTypes.string.isRequired,
+      userId: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
   isStudentOf: PropTypes.func.isRequired,
   isSupervisorOf: PropTypes.func.isRequired,
   isAdminOf: PropTypes.func.isRequired,
@@ -258,7 +261,14 @@ Assignment.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { assignmentId, userId = null } }) => {
+    (
+      state,
+      {
+        match: {
+          params: { assignmentId, userId = null },
+        },
+      }
+    ) => {
       const loggedInUserId = loggedInUserIdSelector(state);
       return {
         assignment: getAssignment(state)(assignmentId),
@@ -274,7 +284,14 @@ export default withLinks(
         fetchManyStatus: fetchManyUserSolutionsStatus(userId || loggedInUserId, assignmentId)(state),
       };
     },
-    (dispatch, { params: { assignmentId } }) => ({
+    (
+      dispatch,
+      {
+        match: {
+          params: { assignmentId },
+        },
+      }
+    ) => ({
       init: userId => () => dispatch(init(userId, assignmentId)),
       loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
       exerciseSync: () => dispatch(syncWithExercise(assignmentId)),

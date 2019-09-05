@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Link } from 'react-router';
-import { changeLanguage } from '../../../links';
 
-const HeaderLanguageSwitching = ({ currentUrl, lang, active = false }) => (
-  <li className={classnames({ active })}>
-    <Link to={changeLanguage(currentUrl, lang)}>{lang}</Link>
+const HeaderLanguageSwitching = ({ lang, setLang, active = false }) => (
+  <li
+    className={classnames({ active })}
+    onClick={ev => {
+      setLang(lang);
+      ev.preventDefault();
+    }}>
+    <a href="#">{lang}</a>
   </li>
 );
 
 HeaderLanguageSwitching.propTypes = {
-  currentUrl: PropTypes.string.isRequired,
+  setLang: PropTypes.func.isRequired,
   lang: PropTypes.string.isRequired,
   active: PropTypes.bool,
 };

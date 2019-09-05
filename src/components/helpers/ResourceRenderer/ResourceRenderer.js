@@ -42,6 +42,12 @@ const defaultFailedBulky = noIcons => (
 );
 
 const shallowResourcesEqual = (oldResources, newResources) => {
+  if (List.isList(oldResources) || List.isList(newResources)) {
+    return oldResources === newResources;
+  }
+
+  // Examine resources as arrays ...
+
   if (oldResources.length !== newResources.length) {
     return false;
   }
@@ -83,12 +89,9 @@ class ResourceRenderer extends Component {
         .filter(res => !isDeleting(res))
         .filter(res => !isDeleted(res))
         .filter(res => !isPosting(res))
-        .map((res, idx) =>
-          // If a particular resource did not change, re-use its old data
-          this.oldResources && this.oldResources[idx] === res && this.oldResources[idx].get('data') === res.get('data')
-            ? this.oldData[idx]
-            : getJsData(res)
-        );
+        .map(getJsData);
+
+      this.oldData = List.isList(this.oldData) ? this.oldData.toArray() : this.oldData;
       this.oldResources = resources;
     }
     return returnAsArray ? ready(this.oldData) : ready(...this.oldData);
@@ -105,7 +108,7 @@ class ResourceRenderer extends Component {
       forceLoading = false,
     } = this.props;
 
-    const resources = Array.isArray(resource) ? resource : List.isList(resource) ? resource.toArray() : [resource];
+    const resources = Array.isArray(resource) || List.isList(resource) ? resource : [resource];
     const stillLoading = !resource || resources.find(res => !res) || resources.some(isLoading) || forceLoading;
 
     return stillLoading
