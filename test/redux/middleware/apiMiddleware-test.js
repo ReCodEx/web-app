@@ -1,6 +1,5 @@
 import chai from 'chai';
 import spies from 'chai-spies';
-
 import fetchMock from 'fetch-mock';
 import middleware, { CALL_API, createApiAction } from '../../../src/redux/middleware/apiMiddleware';
 import { API_BASE } from '../../../src/helpers/config';
@@ -28,7 +27,7 @@ describe('API middleware and helper functions', () => {
 
     it('must intersect API call actions and create request', done => {
       const requestInfo = { type: 'A', endpoint: '/abc' };
-      let action = createApiAction(requestInfo);
+      const action = createApiAction(requestInfo);
       const spy = chai.spy();
       const next = action => {
         spy();

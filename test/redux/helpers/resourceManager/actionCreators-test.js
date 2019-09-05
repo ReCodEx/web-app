@@ -2,11 +2,11 @@ import chai from 'chai';
 import spies from 'chai-spies';
 import { fromJS } from 'immutable';
 
-chai.use(spies);
-const expect = chai.expect;
-
 import actionTypesFactory from '../../../../src/redux/helpers/resourceManager/actionTypesFactory';
 import actionCreatorsFactory from '../../../../src/redux/helpers/resourceManager/actionCreatorsFactory';
+
+chai.use(spies);
+const expect = chai.expect;
 
 // prepared spies
 var globalNeedsRefetching = false; // this is really disgusting, I know...
@@ -21,7 +21,7 @@ const actionCreators = actionCreatorsFactory({
   apiEndpointFactory: (id = '') => `url/${id}`,
   needsRefetching,
   createAction,
-  createApiAction
+  createApiAction,
 });
 
 describe('Resource manager', () => {
@@ -47,11 +47,11 @@ describe('Resource manager', () => {
           type: actionTypes.FETCH,
           method: 'GET',
           endpoint: 'url/abc',
-          meta: { id: 'abc' }
+          meta: { id: 'abc' },
         });
       });
 
-      it('must create fetch action which checks if the resource is not already cached', (done) => {
+      it('must create fetch action which checks if the resource is not already cached', done => {
         const { fetchOneIfNeeded } = actionCreators;
 
         // fetchResource must be a function with one parameter
@@ -63,11 +63,12 @@ describe('Resource manager', () => {
         expect(thunk).to.be.a('function');
         expect(thunk.length).to.equal(2);
 
-        const getState = () => fromJS({
-          resources: {
-            abc: { status: 'FULFILLED', data: { a: 'b' } }
-          }
-        });
+        const getState = () =>
+          fromJS({
+            resources: {
+              abc: { status: 'FULFILLED', data: { a: 'b' } },
+            },
+          });
 
         globalNeedsRefetching = false;
         const dispatch = chai.spy();
@@ -82,11 +83,12 @@ describe('Resource manager', () => {
         const { fetchOneIfNeeded, fetchResource } = actionCreators;
         const thunk = fetchOneIfNeeded('abc');
 
-        const getState = () => fromJS({
-          resources: {
-            abc: { status: '', data: { a: 'b' } }
-          }
-        });
+        const getState = () =>
+          fromJS({
+            resources: {
+              abc: { status: '', data: { a: 'b' } },
+            },
+          });
 
         globalNeedsRefetching = true;
         const dispatch = chai.spy();
@@ -111,7 +113,7 @@ describe('Resource manager', () => {
         expect(createApiAction).to.have.been.called.with({
           type: actionTypes.FETCH_MANY,
           method: 'GET',
-          endpoint: 'url/'
+          endpoint: 'url/',
         });
       });
     });
@@ -123,7 +125,7 @@ describe('Resource manager', () => {
         expect(addResource).to.be.a('function');
         expect(addResource.length).to.equal(1);
 
-        const body = { 'foo': 'bar', 'abc': 'xyz' };
+        const body = { foo: 'bar', abc: 'xyz' };
         const tmpId = 'random-tmp-id';
         addResource(body, tmpId);
         expect(createApiAction).to.have.been.called.once();
@@ -132,7 +134,7 @@ describe('Resource manager', () => {
           method: 'POST',
           endpoint: 'url/',
           body,
-          meta: { tmpId, body }
+          meta: { tmpId, body },
         });
       });
 
@@ -152,7 +154,7 @@ describe('Resource manager', () => {
         expect(updateResource).to.be.a('function');
         expect(updateResource.length).to.equal(2);
 
-        const body = { 'foo': 'bar', 'abc': 'xyz' };
+        const body = { foo: 'bar', abc: 'xyz' };
         const id = 'some-id';
         updateResource(id, body);
         expect(createApiAction).to.have.been.called.once();
@@ -161,7 +163,7 @@ describe('Resource manager', () => {
           method: 'POST',
           endpoint: `url/${id}`,
           body,
-          meta: { id, body }
+          meta: { id, body },
         });
       });
     });
@@ -180,7 +182,7 @@ describe('Resource manager', () => {
           type: actionTypes.REMOVE,
           method: 'DELETE',
           endpoint: `url/${id}`,
-          meta: { id }
+          meta: { id },
         });
       });
     });

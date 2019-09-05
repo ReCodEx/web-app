@@ -7,7 +7,7 @@ import reducer, {
   initialState,
   init,
   changeNote,
-  finishProcessing
+  finishProcessing,
 } from '../../../src/redux/modules/submission';
 
 import { Map } from 'immutable';
@@ -22,7 +22,7 @@ describe("Submission of user's solution", () => {
       const id = 'yzsdalkj';
       expect(init(userId, id)).to.eql({
         type: actionTypes.INIT,
-        payload: { userId, id }
+        payload: { userId, id },
       });
     });
 
@@ -30,7 +30,7 @@ describe("Submission of user's solution", () => {
       const note = 'bla bla bla';
       expect(changeNote(note)).to.eql({
         type: actionTypes.CHANGE_NOTE,
-        payload: note
+        payload: note,
       });
     });
   });
@@ -51,7 +51,7 @@ describe("Submission of user's solution", () => {
           monitor: null,
           status: submissionStatus.NONE,
           warningMsg: null,
-          presubmit: null
+          presubmit: null,
         })
       );
     });
@@ -70,7 +70,7 @@ describe("Submission of user's solution", () => {
           monitor: null,
           status: submissionStatus.CREATING,
           warningMsg: null,
-          presubmit: null
+          presubmit: null,
         })
       );
     });
@@ -87,7 +87,7 @@ describe("Submission of user's solution", () => {
         monitor: null,
         status: submissionStatus.PROCESSING,
         warningMsg: 'This is not gonna end well!',
-        presubmit: []
+        presubmit: [],
       });
 
       const state = reducer(oldState, init(userId, id));
@@ -101,7 +101,7 @@ describe("Submission of user's solution", () => {
           monitor: null,
           status: submissionStatus.CREATING,
           warningMsg: null,
-          presubmit: null
+          presubmit: null,
         })
       );
     });
@@ -112,9 +112,7 @@ describe("Submission of user's solution", () => {
       const state = reducer(initialState, action);
       expect(state.get('note')).to.equal(note);
       expect(state.get('status')).to.equal(submissionStatus.CREATING);
-      expect(
-        state.set('note', '').set('status', submissionStatus.NONE)
-      ).to.equal(initialState);
+      expect(state.set('note', '').set('status', submissionStatus.NONE)).to.equal(initialState);
     });
 
     describe('solution submission', () => {
@@ -135,9 +133,9 @@ describe("Submission of user's solution", () => {
           type: actionTypes.SUBMIT_FULFILLED,
           payload: {
             solution: { id: '123' },
-            webSocketChannel: { monitorUrl: 'ws://xyz.cz' }
+            webSocketChannel: { monitorUrl: 'ws://xyz.cz' },
           },
-          meta: { submissionType: 'assignmentSolution' }
+          meta: { submissionType: 'assignmentSolution' },
         });
         expect(state.get('status')).to.equal(submissionStatus.PROCESSING);
         expect(state.get('solutionId')).to.equal('123');
