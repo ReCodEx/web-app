@@ -94,6 +94,10 @@ EditExercisePipelinesForm.propTypes = {
 
 const validate = ({ pipelines }) => {
   const errors = {};
+  if (!pipelines) {
+    return errors;
+  }
+
   if (pipelines.length === 0) {
     errors._error = (
       <FormattedMessage
@@ -107,6 +111,9 @@ const validate = ({ pipelines }) => {
 
 const warn = ({ pipelines }) => {
   const warnings = {};
+  if (!pipelines) {
+    return warnings;
+  }
   const index = createIndex(pipelines);
 
   if (pipelines.length !== Object.keys(index).length) {

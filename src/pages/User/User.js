@@ -133,7 +133,7 @@ class User extends Component {
                 </LinkContainer>
               )}
 
-              {isAdmin && userId !== loggedInUserId && (
+              {isAdmin && userId !== loggedInUserId && user.privateData.isAllowed && (
                 <Button bsSize="sm" bsStyle="primary" onClick={() => takeOver(userId)}>
                   <TransferIcon gapRight />
                   <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />

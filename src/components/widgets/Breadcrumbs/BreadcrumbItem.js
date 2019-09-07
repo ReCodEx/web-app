@@ -10,7 +10,7 @@ import withLinks from '../../../helpers/withLinks';
 const BreadcrumbItem = ({ text, link = null, iconName = null, isActive = false, links }) => {
   const content = (
     <Breadcrumb.Item active={isActive}>
-      {!!iconName && <Icon icon={iconName} />} {text}
+      {Boolean(iconName) && <Icon icon={iconName} smallGapRight />} {text}
     </Breadcrumb.Item>
   );
 

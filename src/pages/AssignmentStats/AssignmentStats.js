@@ -291,14 +291,19 @@ class AssignmentStats extends Component {
               link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
             }),
           },
-          {
-            resource: assignment,
-            iconName: 'puzzle-piece',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-              link: ({ EXERCISE_URI_FACTORY }) => EXERCISE_URI_FACTORY(assignment.exerciseId),
-            }),
-          },
+          assignment && assignment.getIn(['data', 'exerciseId'])
+            ? {
+                resource: assignment,
+                iconName: 'puzzle-piece',
+                breadcrumb: assignment => ({
+                  text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
+                  link: ({ EXERCISE_URI_FACTORY }) => EXERCISE_URI_FACTORY(assignment.exerciseId),
+                }),
+              }
+            : {
+                text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
+                iconName: 'ghost',
+              },
           {
             resource: assignment,
             iconName: 'hourglass-start',

@@ -53,6 +53,8 @@
   "app.assignment.editSettings": "Upravit zadanou úlohu",
   "app.assignment.error": "Zadání úlohy se nepodařilo načíst.",
   "app.assignment.errorExplanation": "Zadání pro tuto úlohu se nepodařilo načíst. Zkontrolujte své připojení k internetu a zkuste dotaz později.",
+  "app.assignment.exerciseDeleted": "Úloha, ze které bylo vytvořeno toto zadání, byla smazána.",
+  "app.assignment.exerciseDeletedInfo": "Zadání úlohy již nebude možné synchronizovat s původní úlohou a žádná další zadání této úlohy nebude možné vytvořit.",
   "app.assignment.isBonus": "Bonusová úloha",
   "app.assignment.loading": "Načítá se zadání úlohy...",
   "app.assignment.maxPointsCurrent": "Max. bodů (v tomto okamžiku)",

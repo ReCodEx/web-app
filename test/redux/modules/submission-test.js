@@ -15,7 +15,7 @@ import { Map } from 'immutable';
 chai.use(chaiImmutable);
 const expect = chai.expect;
 
-describe("Submission of user's solution", () => {
+describe('Submission of user solution', () => {
   describe('(Action creators)', () => {
     it('must initialize the submission', () => {
       const userId = 'abcdefg';

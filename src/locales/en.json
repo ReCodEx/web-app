@@ -53,6 +53,8 @@
   "app.assignment.editSettings": "Edit Assignment",
   "app.assignment.error": "Exercise assignment could not be loaded.",
   "app.assignment.errorExplanation": "The assignment of this exercise could not be loaded. Make sure you are connected to the Internet and try again later.",
+  "app.assignment.exerciseDeleted": "Corresponding exercise has been deleted.",
+  "app.assignment.exerciseDeletedInfo": "The assignment may no longer be synchronized with the exercise and no more assignments of this exercise may be created.",
   "app.assignment.isBonus": "Bonus assignment",
   "app.assignment.loading": "Loading exercise assignment...",
   "app.assignment.maxPointsCurrent": "Max. points (at present time)",

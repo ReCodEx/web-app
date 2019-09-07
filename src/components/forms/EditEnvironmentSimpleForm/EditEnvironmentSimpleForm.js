@@ -134,8 +134,11 @@ EditEnvironmentSimpleForm.propTypes = {
 
 const validate = (formData, { runtimeEnvironments }) => {
   const errors = {};
-  const allowedEnvrionmentsCount = Object.values(formData).filter(value => value === true || value === 'true').length;
+  if (Object.values(formData).length === 0 || runtimeEnvironments.length === 0) {
+    return errors; // This is actually a hack (reduxForm fails to re-validate after re-initialization)
+  }
 
+  const allowedEnvrionmentsCount = Object.values(formData).filter(value => value === true || value === 'true').length;
   if (allowedEnvrionmentsCount === 0) {
     errors._error = (
       <FormattedMessage
@@ -159,6 +162,7 @@ const validate = (formData, { runtimeEnvironments }) => {
       );
     }
   }
+
   return errors;
 };
 
