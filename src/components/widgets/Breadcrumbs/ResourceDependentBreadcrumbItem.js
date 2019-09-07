@@ -12,7 +12,7 @@ const ResourceDependentBreadcrumbItem = ({ resource, iconName, isActive, breadcr
       <BreadcrumbItem
         text={
           <span>
-            {iconName ? <Icon icon={iconName} gapRight /> : <LoadingIcon gapRight />}
+            {iconName ? <Icon icon={iconName} smallGapRight /> : <LoadingIcon smallGapRight />}
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </span>
         }

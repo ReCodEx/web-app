@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Alert } from 'react-bootstrap';
 
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -32,7 +32,7 @@ import UsersNameContainer from '../../containers/UsersNameContainer';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import AssignmentDetails from '../../components/Assignments/Assignment/AssignmentDetails';
-import { EditIcon, ResultsIcon } from '../../components/icons';
+import Icon, { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
@@ -114,17 +114,22 @@ class Assignment extends Component {
               link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
             }),
           },
-          {
-            resource: assignment,
-            iconName: 'puzzle-piece',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-              link: ({ EXERCISE_URI_FACTORY }) =>
-                isAdminOf(assignment.groupId) || isSupervisorOf(assignment.groupId)
-                  ? EXERCISE_URI_FACTORY(assignment.exerciseId)
-                  : '#',
-            }),
-          },
+          assignment && assignment.getIn(['data', 'exerciseId'])
+            ? {
+                resource: assignment,
+                iconName: 'puzzle-piece',
+                breadcrumb: assignment => ({
+                  text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
+                  link: ({ EXERCISE_URI_FACTORY }) =>
+                    isAdminOf(assignment.groupId) || isSupervisorOf(assignment.groupId)
+                      ? EXERCISE_URI_FACTORY(assignment.exerciseId)
+                      : '#',
+                }),
+              }
+            : {
+                text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
+                iconName: 'ghost',
+              },
           {
             text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
             iconName: 'hourglass-start',
@@ -159,8 +164,27 @@ class Assignment extends Component {
                 )}
               </Col>
             </Row>
-            {(isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)) && ( // includes superadmin
+
+            {assignment.exerciseId && assignment.permissionHints.update && (
               <AssignmentSync syncInfo={assignment.exerciseSynchronizationInfo} exerciseSync={exerciseSync} />
+            )}
+
+            {!assignment.exerciseId && assignment.permissionHints.update && (
+              <Alert bsStyle="warning">
+                <h3 className="no-margin ">
+                  <Icon icon="ghost" gapRight />
+                  <FormattedMessage
+                    id="app.assignment.exerciseDeleted"
+                    defaultMessage="Corresponding exercise has been deleted."
+                  />
+                </h3>
+                <p className="halfem-margin-top">
+                  <FormattedMessage
+                    id="app.assignment.exerciseDeletedInfo"
+                    defaultMessage="The assignment may no longer be synchronized with the exercise and no more assignments of this exercise may be created."
+                  />
+                </p>
+              </Alert>
             )}
 
             <Row>

@@ -178,6 +178,9 @@ EditEnvironmentConfigForm.propTypes = {
 
 const validate = ({ environmentId, variables }) => {
   const errors = {};
+  if (!variables) {
+    return errors;
+  }
 
   if (!environmentId) {
     errors.environmentId = (
@@ -229,6 +232,10 @@ const validate = ({ environmentId, variables }) => {
 
 const warn = ({ variables }, { possibleVariables = null }) => {
   const warnings = {};
+  if (!variables) {
+    return warnings;
+  }
+
   if (possibleVariables) {
     variables
       .filter(({ name }) => name && name.match(/^[-a-zA-Z0-9_]+$/))

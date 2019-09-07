@@ -366,7 +366,10 @@ class EditExerciseConfig extends Component {
                           unlimitedHeight>
                           <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
                             {(config, environmentConfigs) => (
-                              <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
+                              <ResourceRenderer
+                                resource={runtimeEnvironments.toArray()}
+                                returnAsArray
+                                forceLoading={runtimeEnvironments.size === 0}>
                                 {environments => (
                                   <EditEnvironmentSimpleForm
                                     initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}

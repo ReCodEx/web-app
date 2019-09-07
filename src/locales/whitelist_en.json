@@ -53,6 +53,8 @@
   "app.assignment.editSettings",
   "app.assignment.error",
   "app.assignment.errorExplanation",
+  "app.assignment.exerciseDeleted",
+  "app.assignment.exerciseDeletedInfo",
   "app.assignment.isBonus",
   "app.assignment.loading",
   "app.assignment.maxPointsCurrent",

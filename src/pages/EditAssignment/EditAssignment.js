@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -15,7 +15,7 @@ import EditAssignmentForm, {
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import { ResultsIcon } from '../../components/icons';
+import Icon, { ResultsIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
@@ -23,9 +23,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchAssignment, editAssignment, syncWithExercise, validateAssignment } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { getExerciseOfAssignmentJS } from '../../redux/selectors/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
@@ -47,12 +45,7 @@ class EditAssignment extends Component {
   }
 
   static loadAsync = ({ assignmentId }, dispatch) =>
-    Promise.all([
-      dispatch(fetchAssignment(assignmentId)).then(({ value: assignment }) =>
-        dispatch(fetchExerciseIfNeeded(assignment.exerciseId))
-      ),
-      dispatch(fetchRuntimeEnvironments()),
-    ]);
+    Promise.all([dispatch(fetchAssignment(assignmentId)), dispatch(fetchRuntimeEnvironments())]);
 
   editAssignmentSubmitHandler = formData => {
     const { assignment, editAssignment, validateAssignment } = this.props;
@@ -90,7 +83,6 @@ class EditAssignment extends Component {
       history: { replace },
       assignment,
       userId,
-      exercise,
       firstDeadline,
       allowSecondDeadline,
       exerciseSync,
@@ -109,14 +101,19 @@ class EditAssignment extends Component {
           />
         }
         breadcrumbs={[
-          {
-            resource: assignment,
-            iconName: 'puzzle-piece',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-              link: EXERCISE_URI_FACTORY(assignment && assignment.exerciseId),
-            }),
-          },
+          assignment && assignment.getIn(['data', 'exerciseId'])
+            ? {
+                resource: assignment,
+                iconName: 'puzzle-piece',
+                breadcrumb: assignment => ({
+                  text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
+                  link: EXERCISE_URI_FACTORY(assignment && assignment.exerciseId),
+                }),
+              }
+            : {
+                text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
+                iconName: 'ghost',
+              },
           {
             text: <FormattedMessage id="app.assignment.title" />,
             iconName: 'hourglass-start',
@@ -148,12 +145,27 @@ class EditAssignment extends Component {
                   )}
                 </Col>
               </Row>
-              {assignment.permissionHints.update && (
-                <AssignmentSync
-                  syncInfo={assignment.exerciseSynchronizationInfo}
-                  exerciseSync={exerciseSync}
-                  isBroken={Boolean(exercise) && exercise.isBroken}
-                />
+
+              {assignment.exerciseId && assignment.permissionHints.update && (
+                <AssignmentSync syncInfo={assignment.exerciseSynchronizationInfo} exerciseSync={exerciseSync} />
+              )}
+
+              {!assignment.exerciseId && assignment.permissionHints.update && (
+                <Alert bsStyle="warning">
+                  <h3 className="no-margin ">
+                    <Icon icon="ghost" gapRight />
+                    <FormattedMessage
+                      id="app.assignment.exerciseDeleted"
+                      defaultMessage="Corresponding exercise has been deleted."
+                    />
+                  </h3>
+                  <p className="halfem-margin-top">
+                    <FormattedMessage
+                      id="app.assignment.exerciseDeletedInfo"
+                      defaultMessage="The assignment may no longer be synchronized with the exercise and no more assignments of this exercise may be created."
+                    />
+                  </p>
+                </Alert>
               )}
 
               <Box
@@ -232,7 +244,6 @@ EditAssignment.propTypes = {
   }).isRequired,
   assignment: ImmutablePropTypes.map,
   userId: PropTypes.string.isRequired,
-  exercise: PropTypes.object,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
   firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
@@ -260,7 +271,6 @@ export default withLinks(
       return {
         assignment,
         userId: loggedInUserIdSelector(state),
-        exercise: getExerciseOfAssignmentJS(state)(assignmentId),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
         allowSecondDeadline: editAssignmentFormSelector(state, 'allowSecondDeadline'),
