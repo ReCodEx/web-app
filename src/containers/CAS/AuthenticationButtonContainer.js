@@ -7,7 +7,7 @@ import withLinks from '../../helpers/withLinks';
 const makeAbsolute = url =>
   typeof window === 'undefined' ? url : `${window.location.origin}/${url.indexOf('/') === 0 ? url.substr(1) : url}`;
 
-const ensureAbsoluteUrl = url => (url.match('^(https?:)?//.+') !== null ? url : makeAbsolute(url));
+const ensureAbsoluteUrl = url => (url.match('^https?://.+') !== null ? url : makeAbsolute(url));
 
 class AuthenticationButtonContainer extends Component {
   constructor(props, context) {
