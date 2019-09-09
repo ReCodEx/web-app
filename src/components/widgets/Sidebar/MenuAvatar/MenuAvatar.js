@@ -2,18 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import styles from './MenuAvatar.less';
+import styles from '../Sidebar.less';
 import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
 
-const MenuAvatar = ({
-  title,
-  avatarUrl,
-  firstName,
-  notificationsCount = 0,
-  isActive = false,
-  useGravatar = false,
-  onClick,
-}) => (
+const MenuAvatar = ({ title, avatarUrl, firstName, notificationsCount = 0, isActive = false, onClick }) => (
   <li
     className={classnames({
       active: isActive,
@@ -23,7 +15,7 @@ const MenuAvatar = ({
         e.preventDefault();
         onClick();
       }}
-      style={{ cursor: 'pointer' }}>
+      className={styles.cursorPointer}>
       <AvatarContainer
         avatarUrl={avatarUrl}
         fullName={title}
@@ -31,14 +23,7 @@ const MenuAvatar = ({
         size={20}
         altClassName={styles.avatar}
       />
-      <span
-        style={{
-          whiteSpace: 'normal',
-          display: 'inline-block',
-          verticalAlign: 'top',
-        }}>
-        {title}
-      </span>
+      <span className={styles.menuItem}>{title}</span>
       {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
     </a>
   </li>
@@ -51,7 +36,6 @@ MenuAvatar.propTypes = {
   onClick: PropTypes.func,
   notificationsCount: PropTypes.number,
   isActive: PropTypes.bool,
-  useGravatar: PropTypes.bool,
 };
 
 export default MenuAvatar;

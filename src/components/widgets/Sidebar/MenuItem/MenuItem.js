@@ -5,6 +5,7 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import Icon from '../../../icons';
+import styles from '../Sidebar.less';
 
 const MenuItem = ({
   title,
@@ -24,14 +25,7 @@ const MenuItem = ({
     })}>
     <Link to={link} target={inNewTab ? '_blank' : undefined}>
       <Icon icon={icon} fixedWidth gapRight />
-      <span
-        style={{
-          whiteSpace: 'normal',
-          display: 'inline-block',
-          verticalAlign: 'top',
-        }}>
-        {title}
-      </span>
+      <span className={styles.menuItem}>{title}</span>
       {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
     </Link>
   </li>

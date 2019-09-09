@@ -10,6 +10,8 @@ import { isLoading } from '../../../../redux/helpers/resourceManager';
 import { getLocalizedName } from '../../../../helpers/localizedData';
 import Icon from '../../../icons';
 
+import styles from '../Sidebar.less';
+
 class MenuGroup extends Component {
   state = {
     open: null,
@@ -44,11 +46,6 @@ class MenuGroup extends Component {
       intl: { locale },
     } = this.props;
 
-    const dropdownStyles = {
-      overflowY: 'auto',
-      overflowX: 'hidden',
-    };
-
     const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
     const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
 
@@ -60,20 +57,13 @@ class MenuGroup extends Component {
         })}>
         <a href="#" onClick={this.toggle}>
           <Icon icon={icon} gapRight fixedWidth />
-          <span
-            style={{
-              whiteSpace: 'normal',
-              display: 'inline-block',
-              verticalAlign: 'top',
-            }}>
-            {title}
-          </span>
+          <span className={styles.menuItem}>{title}</span>
           <span className="pull-right-container">
             {notificationsCount > 0 && <small className="label pull-right bg-blue">{notificationsCount}</small>}
-            <Icon icon="angle-left" className="pull-right" style={{ height: '15px' }} />
+            <Icon icon="angle-left" className={classnames({ [styles.arrowIcon]: true, 'pull-right': true })} />
           </span>
         </a>
-        <ul className="treeview-menu" style={dropdownStyles}>
+        <ul className={classnames({ 'treeview-menu': true, [styles.dropdown]: true })}>
           {items.map((item, key) =>
             isLoading(item) ? (
               <LoadingMenuItem key={key} />

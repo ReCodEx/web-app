@@ -198,7 +198,7 @@ const createLink = path => {
       const res = [...tokens]; // make a copy of URL path tokens (so we can fill in parameters)
       index.forEach(idx => (res[idx] = params.shift())); // fill in parameters using indexed positions
       while (res.length > 0 && !res[res.length - 1]) {
-        // remove empty parameters at the end
+        // remove empty parameters at the end (params.shift() will fill in undefined for every missing parameter)
         res.pop();
       }
       res.unshift(URL_PATH_PREFIX);
