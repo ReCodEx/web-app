@@ -18,7 +18,7 @@ import UsersList from '../../components/Users/UsersList';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
 import CreateUserForm from '../../components/forms/CreateUserForm';
-import { loggedInUserSelector, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { loggedInUserSelector, isLoggedAsSuperAdmin, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import { takeOver } from '../../redux/modules/auth';
 import { selectedInstanceId } from '../../redux/selectors/auth';
 import { createAccount } from '../../redux/modules/registration';
@@ -144,7 +144,7 @@ class Users extends Component {
   };
 
   render() {
-    const { user } = this.props;
+    const { user, effectiveRole } = this.props;
 
     return (
       <Page
@@ -159,7 +159,7 @@ class Users extends Component {
         ]}>
         {user => (
           <div>
-            {(!isSupervisorRole(user.privateData.role) || isStudentRole(user.privateData.role)) && (
+            {(!isSupervisorRole(effectiveRole) || isStudentRole(effectiveRole)) && (
               <Row>
                 <Col sm={12}>
                   <p className="callout callout-warning larger">
@@ -173,12 +173,12 @@ class Users extends Component {
               </Row>
             )}
 
-            {isSupervisorRole(user.privateData.role) && !isStudentRole(user.privateData.role) && (
+            {isSupervisorRole(effectiveRole) && !isStudentRole(effectiveRole) && (
               <Box
                 title={<FormattedMessage id="app.users.listTitle" defaultMessage="Users" />}
                 unlimitedHeight
                 footer={
-                  isSuperadminRole(user.privateData.role) ? (
+                  isSuperadminRole(effectiveRole) ? (
                     <div className="text-center">
                       <Button bsStyle="success" onClick={this.openDialog}>
                         <UserIcon gapRight />
@@ -245,6 +245,7 @@ Users.propTypes = {
   instanceId: PropTypes.string,
   isSuperAdmin: PropTypes.bool,
   user: ImmutablePropTypes.map,
+  effectiveRole: PropTypes.string,
   takeOver: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
   reloadPagination: PropTypes.func.isRequired,
@@ -259,6 +260,7 @@ export default withLinks(
         instanceId: selectedInstanceId(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         user: loggedInUserSelector(state),
+        effectiveRole: getLoggedInUserEffectiveRole(state),
       };
     },
     dispatch => ({

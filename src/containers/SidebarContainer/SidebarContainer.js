@@ -5,10 +5,11 @@ import {
   loggedInStudentOfSelector,
   loggedInSupervisorOfNonOrganizationalSelector,
 } from '../../redux/selectors/usersGroups';
-import { loggedInUserSelector, notificationsSelector } from '../../redux/selectors/users';
+import { loggedInUserSelector, notificationsSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 
 export default connect(state => ({
   loggedInUser: loggedInUserSelector(state),
+  effectiveRole: getLoggedInUserEffectiveRole(state),
   instances: loggedInUserMemberOfInstances(state),
   studentOf: loggedInStudentOfSelector(state),
   supervisorOf: loggedInSupervisorOfNonOrganizationalSelector(state),

@@ -19,14 +19,13 @@ import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInSupervisorOfSelector } from '../../redux/selectors/usersGroups';
 
 import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles';
 import { getExternalIdForCAS } from '../../helpers/cas';
-import { safeGet } from '../../helpers/common';
 
 const ADD_SIS_TERM_INITIAL_VALUES = {
   year: new Date(new Date().getTime() - 86400000 * 180).getFullYear(), // actual year (shifted by 180 days back)
@@ -39,15 +38,12 @@ class SisIntegration extends Component {
   static loadAsync = (params, dispatch) => dispatch(fetchAllTerms());
 
   componentDidMount() {
-    const { loadAsync, loggedInUser } = this.props;
-    const role = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'role']);
-    isSuperadminRole(role) && loadAsync();
+    const { loadAsync, effectiveRole } = this.props;
+    isSuperadminRole(effectiveRole) && loadAsync();
   }
 
   componentDidUpdate(prevProps) {
-    const oldRole = prevProps.loggedInUser && prevProps.loggedInUser.getIn(['data', 'privateData', 'role']);
-    const newRole = this.props.loggedInUser && this.props.loggedInUser.getIn(['data', 'privateData', 'role']);
-    if (newRole !== oldRole && isSuperadminRole(newRole)) {
+    if (this.props.effectiveRole !== prevProps.effectiveRole && isSuperadminRole(this.props.effectiveRole)) {
       this.props.loadAsync();
     }
   }
@@ -55,6 +51,7 @@ class SisIntegration extends Component {
   render() {
     const {
       loggedInUser,
+      effectiveRole,
       fetchStatus,
       supervisorOfGroups,
       allGroups,
@@ -81,7 +78,6 @@ class SisIntegration extends Component {
           },
         ]}>
         {user => {
-          const role = safeGet(user, ['privateData', 'role']);
           const externalId = getExternalIdForCAS(user);
 
           return externalId ? (
@@ -95,7 +91,7 @@ class SisIntegration extends Component {
                 />
               </div>
 
-              {isStudentRole(role) && (
+              {isStudentRole(effectiveRole) && (
                 <Row>
                   <Col lg={12}>
                     <SisIntegrationContainer />
@@ -103,11 +99,11 @@ class SisIntegration extends Component {
                 </Row>
               )}
 
-              {isSupervisorRole(role) && (
+              {isSupervisorRole(effectiveRole) && (
                 <Row>
                   <Col lg={12}>
                     <ResourceRenderer
-                      resource={isSuperadminRole(role) ? allGroups.toArray() : supervisorOfGroups.toArray()}
+                      resource={isSuperadminRole(effectiveRole) ? allGroups.toArray() : supervisorOfGroups.toArray()}
                       returnAsArray={true}>
                       {groups => <SisSupervisorGroupsContainer groups={groups} />}
                     </ResourceRenderer>
@@ -115,7 +111,7 @@ class SisIntegration extends Component {
                 </Row>
               )}
 
-              {isSuperadminRole(role) && (
+              {isSuperadminRole(effectiveRole) && (
                 <Row>
                   <Col lg={8}>
                     <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
@@ -192,6 +188,7 @@ class SisIntegration extends Component {
 
 SisIntegration.propTypes = {
   loggedInUser: ImmutablePropTypes.map,
+  effectiveRole: PropTypes.string,
   fetchStatus: PropTypes.string,
   sisTerms: PropTypes.array.isRequired,
   supervisorOfGroups: ImmutablePropTypes.map,
@@ -205,6 +202,7 @@ SisIntegration.propTypes = {
 const mapStateToProps = state => {
   return {
     loggedInUser: loggedInUserSelector(state),
+    effectiveRole: getLoggedInUserEffectiveRole(state),
     fetchStatus: fetchManyStatus(state),
     sisTerms: readySisTermsSelector(state),
     supervisorOfGroups: loggedInSupervisorOfSelector(state),

@@ -23,16 +23,19 @@ const UsersName = ({
   fullName,
   avatarUrl,
   name: { firstName },
-  size = 20,
+  size = null,
   large = false,
   isVerified,
-  noLink,
+  noLink = false,
   privateData = null,
   showEmail = null,
   showExternalIdentifiers = false,
   links: { USER_URI_FACTORY },
   currentUserId,
 }) => {
+  if (size === null) {
+    size = large ? 45 : 20;
+  }
   const email = privateData && privateData.email && showEmail && encodeURIComponent(privateData.email);
   const externalIds = privateData && privateData.externalIds;
   return (

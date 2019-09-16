@@ -5,7 +5,7 @@ import { isReady, getJsData } from '../helpers/resourceManager';
 import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles';
 
 import { fetchManyEndpoint } from '../modules/users';
-import { loggedInUserIdSelector } from './auth';
+import { loggedInUserIdSelector, accessTokenSelector } from './auth';
 import { groupSelectorCreator, studentsOfGroup, supervisorsOfGroup, groupsSelector } from './groups';
 import { pipelineSelector } from './pipelines';
 import { getLang } from './app';
@@ -118,20 +118,17 @@ export const getLoggedInUserSettings = createSelector(
   userSettingsSelector
 );
 
-export const isLoggedAsSuperAdmin = createSelector(
-  [loggedInUserSelector],
-  loggedInUser =>
-    loggedInUser && isReady(loggedInUser)
-      ? isSuperadminRole(loggedInUser.getIn(['data', 'privateData', 'role']))
-      : false
+export const getLoggedInUserEffectiveRole = createSelector(
+  [loggedInUserSelector, accessTokenSelector],
+  (loggedInUser, token) =>
+    (token && token.get('effrole')) ||
+    (loggedInUser && isReady(loggedInUser) && loggedInUser.getIn(['data', 'privateData', 'role'])) ||
+    null
 );
 
-export const isLoggedAsSupervisor = createSelector(
-  [loggedInUserSelector],
-  loggedInUser =>
-    loggedInUser && isReady(loggedInUser)
-      ? isSupervisorRole(loggedInUser.getIn(['data', 'privateData', 'role']))
-      : false
+export const isLoggedAsSuperAdmin = createSelector(
+  getLoggedInUserEffectiveRole,
+  effectiveRole => isSuperadminRole(effectiveRole)
 );
 
 export const memberOfInstancesIdsSelector = userId =>

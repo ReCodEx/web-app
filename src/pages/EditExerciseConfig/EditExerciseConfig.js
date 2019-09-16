@@ -29,7 +29,7 @@ import {
 } from '../../redux/modules/exerciseConfigs';
 import { getExercise } from '../../redux/selectors/exercises';
 import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables';
@@ -209,7 +209,7 @@ class EditExerciseConfig extends Component {
         params: { exerciseId },
       },
       exercise,
-      loggedUser,
+      effectiveRole,
       runtimeEnvironments,
       exerciseConfig,
       exerciseEnvironmentConfig,
@@ -228,7 +228,7 @@ class EditExerciseConfig extends Component {
 
     return (
       <Page
-        resource={[exercise, exerciseTests, loggedUser]}
+        resource={[exercise, exerciseTests]}
         title={exercise => getLocalizedName(exercise, locale)}
         description={
           <FormattedMessage
@@ -258,7 +258,7 @@ class EditExerciseConfig extends Component {
             iconName: ['far', 'edit'],
           },
         ]}>
-        {(exercise, tests, loggedUser) => (
+        {(exercise, tests) => (
           <div>
             <ResourceRenderer resource={pipelines.toArray()} returnAsArray={true}>
               {(
@@ -288,7 +288,7 @@ class EditExerciseConfig extends Component {
                     </Col>
                   </Row>
 
-                  {hasPermissions(exercise, 'update') && isEmpoweredSupervisorRole(loggedUser.privateData.role) && (
+                  {hasPermissions(exercise, 'update') && isEmpoweredSupervisorRole(effectiveRole) && (
                     <table className="em-margin-vertical">
                       <tbody>
                         <tr>
@@ -632,7 +632,7 @@ class EditExerciseConfig extends Component {
 
 EditExerciseConfig.propTypes = {
   exercise: ImmutablePropTypes.map,
-  loggedUser: ImmutablePropTypes.map,
+  effectiveRole: PropTypes.string,
   runtimeEnvironments: PropTypes.object.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -673,7 +673,7 @@ export default withLinks(
     ) => {
       return {
         exercise: getExercise(exerciseId)(state),
-        loggedUser: loggedInUserSelector(state),
+        effectiveRole: getLoggedInUserEffectiveRole(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         exerciseConfig: exerciseConfigSelector(exerciseId)(state),
         exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(exerciseId)(state),

@@ -39,7 +39,7 @@ const EditSystemMessageForm = ({
   isOpen,
   onClose,
   createNew = false,
-  intl: { locale, formatMessage },
+  intl: { formatMessage },
 }) => (
   <Modal show={isOpen} backdrop="static" size="lg" onHide={onClose}>
     <Modal.Header closeButton>

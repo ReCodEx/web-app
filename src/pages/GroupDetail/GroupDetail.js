@@ -34,6 +34,7 @@ import {
   studentsOfGroupSelector,
   isStudentOf,
   loggedInUserSelector,
+  getLoggedInUserEffectiveRole,
 } from '../../redux/selectors/users';
 import {
   groupSelector,
@@ -152,6 +153,7 @@ class GroupDetail extends Component {
       group,
       students,
       loggedUser,
+      effectiveRole,
       assignments = EMPTY_LIST,
       shadowAssignments = EMPTY_LIST,
       assignmentEnvironmentsSelector,
@@ -321,8 +323,8 @@ class GroupDetail extends Component {
                   (isGroupSupervisor || isGroupAdmin) &&
                     !data.organizational &&
                     !data.archived &&
-                    isSupervisorRole(loggedUser.privateData.role) &&
-                    !isStudentRole(loggedUser.privateData.role) && (
+                    isSupervisorRole(effectiveRole) &&
+                    !isStudentRole(effectiveRole) && (
                       <Row>
                         <Col sm={6}>
                           <Box
@@ -384,6 +386,7 @@ GroupDetail.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   loggedUser: ImmutablePropTypes.map,
+  effectiveRole: PropTypes.string,
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
@@ -417,6 +420,7 @@ const mapStateToProps = (
     group: groupSelector(state, groupId),
     userId,
     loggedUser: loggedInUserSelector(state),
+    effectiveRole: getLoggedInUserEffectiveRole(state),
     groups: groupsSelector(state),
     assignments: groupsAssignmentsSelector(state, groupId),
     shadowAssignments: groupsShadowAssignmentsSelector(state, groupId),

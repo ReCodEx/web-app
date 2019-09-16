@@ -16,7 +16,7 @@ import { getLocalizedResourceName } from '../../../helpers/localizedData';
 import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles';
 import withLinks from '../../../helpers/withLinks';
 import { getExternalIdForCAS } from '../../../helpers/cas';
-import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
+import { EMPTY_OBJ } from '../../../helpers/common';
 
 import styles from './sidebar.less';
 
@@ -24,6 +24,7 @@ const getUserData = defaultMemoize(user => getJsData(user));
 
 const Sidebar = ({
   loggedInUser,
+  effectiveRole = null,
   studentOf,
   supervisorOf,
   currentUrl,
@@ -45,7 +46,6 @@ const Sidebar = ({
   intl: { locale },
 }) => {
   const user = getUserData(loggedInUser);
-  const role = safeGet(user, ['privateData', 'role']);
   const createLink = item => GROUP_DETAIL_URI_FACTORY(getId(item));
   const studentOfItems =
     studentOf &&
@@ -124,7 +124,7 @@ const Sidebar = ({
                 />
               )}
 
-              {isSupervisorRole(role) && supervisorOfItems && (
+              {isSupervisorRole(effectiveRole) && supervisorOfItems && (
                 <MenuGroup
                   title={
                     <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
@@ -139,7 +139,7 @@ const Sidebar = ({
                 />
               )}
 
-              {isSupervisorRole(role) && (
+              {isSupervisorRole(effectiveRole) && (
                 <MenuItem
                   title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
                   icon="puzzle-piece"
@@ -148,7 +148,7 @@ const Sidebar = ({
                 />
               )}
 
-              {isEmpoweredSupervisorRole(role) && (
+              {isEmpoweredSupervisorRole(effectiveRole) && (
                 <MenuItem
                   title={<FormattedMessage id="app.sidebar.menu.pipelines" defaultMessage="Pipelines" />}
                   icon="random"
@@ -183,7 +183,7 @@ const Sidebar = ({
           </React.Fragment>
         )}
 
-        {isSuperadminRole(role) && <Admin currentUrl={currentUrl} />}
+        {isSuperadminRole(effectiveRole) && <Admin currentUrl={currentUrl} />}
       </section>
     </aside>
   );
@@ -195,6 +195,7 @@ Sidebar.propTypes = {
     search: PropTypes.string.isRequired,
   }).isRequired,
   loggedInUser: ImmutablePropTypes.map,
+  effectiveRole: PropTypes.string,
   studentOf: ImmutablePropTypes.map,
   supervisorOf: ImmutablePropTypes.map,
   currentUrl: PropTypes.string,
