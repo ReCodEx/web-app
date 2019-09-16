@@ -115,6 +115,20 @@ export const generateToken = (expiration, scopes) =>
     body: { expiration: Number(expiration), scopes },
   });
 
+export const restrictEffectiveRole = effectiveRole => (dispatch, getState) => {
+  const token = getState().auth.get('accessToken');
+  const scopes = token.get('scopes').toArray();
+  const expiration = token.get('exp') - token.get('iat');
+  return dispatch(
+    createApiAction({
+      type: actionTypes.LOGIN,
+      method: 'POST',
+      endpoint: '/login/issue-restricted-token',
+      body: { scopes, expiration, effectiveRole },
+    })
+  );
+};
+
 const closeAuthPopupWindow = popupWindow => {
   if (popupWindow && !popupWindow.closed && popupWindow.close && popupWindow.postMessage) {
     // Double kill (in case we cannot close the window, it may listen to a message and drop dead on its own)

@@ -64,15 +64,11 @@ class MessagesList extends Component {
         className: 'valign-middle',
       }),
 
-      new SortableTableColumnDescriptor(
-        'role',
-        <FormattedMessage id="app.systemMessagesList.role" defaultMessage="Role" />,
-        {
-          comparator: ({ role: r1 }, { role: r2 }) => Number(rolePriorities[r2]) - Number(rolePriorities[r1]),
-          cellRenderer: role => role && roleLabels[role],
-          className: 'valign-middle',
-        }
-      ),
+      new SortableTableColumnDescriptor('role', <FormattedMessage id="generic.role" defaultMessage="Role" />, {
+        comparator: ({ role: r1 }, { role: r2 }) => Number(rolePriorities[r2]) - Number(rolePriorities[r1]),
+        cellRenderer: role => role && roleLabels[role],
+        className: 'valign-middle',
+      }),
 
       new SortableTableColumnDescriptor(
         'type',

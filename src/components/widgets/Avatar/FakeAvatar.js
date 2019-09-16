@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const getSize = (size, small) => (small ? size * (2 / 3) : size);
+const getSize = (size, borderWidth, small) => (small ? size * (2 / 3) : size) - 2 * borderWidth;
 
 const FakeAvatar = ({ size = 45, borderWidth = 2, light = false, children, small = false, altClassName = '' }) => (
   <span
@@ -10,14 +10,14 @@ const FakeAvatar = ({ size = 45, borderWidth = 2, light = false, children, small
       background: !light ? '#286090' : 'white',
       color: !light ? 'white' : 'gray',
       textAlign: 'center',
-      width: getSize(size, small),
-      height: getSize(size, small),
-      lineHeight: `${getSize(size, small) - 2 * borderWidth}px`,
+      width: getSize(size, borderWidth, small),
+      height: getSize(size, borderWidth, small),
+      lineHeight: `${getSize(size, borderWidth, small) - 2 * borderWidth}px`,
       borderStyle: 'solid',
       borderWidth,
       borderColor: !light ? 'transparent' : 'gray',
-      borderRadius: Math.ceil(getSize(size, small) / 2),
-      fontSize: Math.floor(Math.max(14, getSize(size, small) / 2)),
+      borderRadius: Math.floor(getSize(size, borderWidth, small) / 2),
+      fontSize: Math.floor(Math.max(10, getSize(size, borderWidth, small) / 2)),
       fontWeight: 'bolder',
     }}
     className={altClassName}>

@@ -56,14 +56,14 @@ class Header extends Component {
 
         <div className="navbar navbar-static-top" role="navigation">
           <ClientOnly>
-            <MediaQuery maxWidth={767} values={{ deviceWidth: 1368 }}>
+            <MediaQuery maxDeviceWidth={767} values={{ deviceWidth: 1368 }}>
               <a href="#" className="sidebar-toggle" role="button" onClick={this.toggleSidebarVisibility}>
                 <span className="sr-only">
                   <FormattedMessage id="app.header.toggleSidebar" defaultMessage="Show/hide sidebar" />
                 </span>
               </a>
             </MediaQuery>
-            <MediaQuery minWidth={768} values={{ deviceWidth: 1368 }}>
+            <MediaQuery minDeviceWidth={768} values={{ deviceWidth: 1368 }}>
               <a
                 href="#"
                 className="sidebar-toggle"
