@@ -467,6 +467,7 @@
   "app.editUserProfile.validation.emptyFirstName": "First name cannot be empty.",
   "app.editUserProfile.validation.emptyLastName": "Last name cannot be empty.",
   "app.editUserProfile.validation.emptyNewPassword": "New password cannot be empty if you want to change your password.",
+  "app.editUserProfile.validation.emptyOldPassword": "Current password has to be verified before it can be changed.",
   "app.editUserProfile.validation.passwordsDontMatch": "Passwords do not match.",
   "app.editUserProfile.validation.samePasswords": "Changing your password to the same password does not make any sense.",
   "app.editUserProfile.validation.shortFirstName": "First name must contain at least 2 characters.",

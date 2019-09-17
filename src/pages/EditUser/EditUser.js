@@ -173,6 +173,7 @@ class EditUser extends Component {
                   }}
                   allowChangePassword={data.privateData.isLocal}
                   emptyLocalPassword={data.privateData.emptyLocalPassword}
+                  canForceChangePassword={isSuperAdmin && data.id !== loggedUserId}
                   disabledNameChange={data.privateData.isExternal && !isSuperAdmin}
                 />
               </Col>

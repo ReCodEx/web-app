@@ -21,6 +21,7 @@ const EditUserProfileForm = ({
   invalid,
   allowChangePassword,
   emptyLocalPassword,
+  canForceChangePassword,
   disabledNameChange,
   reset,
 }) => (
@@ -135,12 +136,14 @@ const EditUserProfileForm = ({
             </p>
           </div>
         ) : (
-          <Field
-            name="oldPassword"
-            component={PasswordField}
-            autoComplete="off"
-            label={<FormattedMessage id="app.changePasswordForm.oldPassword" defaultMessage="Old Password:" />}
-          />
+          !canForceChangePassword && (
+            <Field
+              name="oldPassword"
+              component={PasswordField}
+              autoComplete="off"
+              label={<FormattedMessage id="app.changePasswordForm.oldPassword" defaultMessage="Old Password:" />}
+            />
+          )
         )}
 
         <Field
@@ -181,14 +184,18 @@ EditUserProfileForm.propTypes = {
   reset: PropTypes.func,
   allowChangePassword: PropTypes.bool.isRequired,
   emptyLocalPassword: PropTypes.bool.isRequired,
+  canForceChangePassword: PropTypes.bool.isRequired,
   disabledNameChange: PropTypes.bool,
 };
 
-const validate = ({ firstName, lastName, email, oldPassword, password, passwordConfirm }, { allowChangePassword }) => {
+const validate = (
+  { firstName, lastName, email, oldPassword, password, passwordConfirm },
+  { disabledNameChange, allowChangePassword, emptyLocalPassword, canForceChangePassword }
+) => {
   const errors = {};
 
-  if (!firstName) {
-    errors['firstName'] = (
+  if (!firstName && !disabledNameChange) {
+    errors.firstName = (
       <FormattedMessage
         id="app.editUserProfile.validation.emptyFirstName"
         defaultMessage="First name cannot be empty."
@@ -197,7 +204,7 @@ const validate = ({ firstName, lastName, email, oldPassword, password, passwordC
   }
 
   if (firstName && firstName.length < 2) {
-    errors['firstName'] = (
+    errors.firstName = (
       <FormattedMessage
         id="app.editUserProfile.validation.shortFirstName"
         defaultMessage="First name must contain at least 2 characters."
@@ -205,14 +212,14 @@ const validate = ({ firstName, lastName, email, oldPassword, password, passwordC
     );
   }
 
-  if (!lastName) {
-    errors['lastName'] = (
+  if (!lastName && !disabledNameChange) {
+    errors.lastName = (
       <FormattedMessage id="app.editUserProfile.validation.emptyLastName" defaultMessage="Last name cannot be empty." />
     );
   }
 
   if (lastName && lastName.length < 2) {
-    errors['lastName'] = (
+    errors.lastName = (
       <FormattedMessage
         id="app.editUserProfile.validation.shortLastName"
         defaultMessage="Last name must contain at least 2 characters."
@@ -221,14 +228,14 @@ const validate = ({ firstName, lastName, email, oldPassword, password, passwordC
   }
 
   if (email && isEmail(email) === false) {
-    errors['email'] = (
+    errors.email = (
       <FormattedMessage
         id="app.editUserProfile.validation.emailNotValid"
         defaultMessage="E-mail address is not valid."
       />
     );
   } else if (!email) {
-    errors['email'] = (
+    errors.email = (
       <FormattedMessage
         id="app.editUserProfile.validation.emptyEmail"
         defaultMessage="E-mail address cannot be empty."
@@ -238,8 +245,17 @@ const validate = ({ firstName, lastName, email, oldPassword, password, passwordC
 
   if (allowChangePassword) {
     if (oldPassword || password || passwordConfirm) {
+      if (!oldPassword && !emptyLocalPassword && !canForceChangePassword) {
+        errors.oldPassword = (
+          <FormattedMessage
+            id="app.editUserProfile.validation.emptyOldPassword"
+            defaultMessage="Current password has to be verified before it can be changed."
+          />
+        );
+      }
+
       if (!password || password.length === 0) {
-        errors['password'] = (
+        errors.password = (
           <FormattedMessage
             id="app.editUserProfile.validation.emptyNewPassword"
             defaultMessage="New password cannot be empty if you want to change your password."
@@ -248,7 +264,7 @@ const validate = ({ firstName, lastName, email, oldPassword, password, passwordC
       }
 
       if (password !== passwordConfirm) {
-        errors['passwordConfirm'] = (
+        errors.passwordConfirm = (
           <FormattedMessage
             id="app.editUserProfile.validation.passwordsDontMatch"
             defaultMessage="Passwords do not match."
@@ -257,7 +273,7 @@ const validate = ({ firstName, lastName, email, oldPassword, password, passwordC
       }
 
       if (password && password.length > 0 && oldPassword && oldPassword.length > 0 && password === oldPassword) {
-        errors['password'] = (
+        errors.password = (
           <FormattedMessage
             id="app.editUserProfile.validation.samePasswords"
             defaultMessage="Changing your password to the same password does not make any sense."
