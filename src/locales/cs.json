@@ -466,6 +466,7 @@
   "app.editUserProfile.validation.emptyFirstName": "Jméno nemůže být prázdné.",
   "app.editUserProfile.validation.emptyLastName": "Příjmení nemůže být prázdné.",
   "app.editUserProfile.validation.emptyNewPassword": "Nové heslo nemůže být prázdné pokud si měníte heslo.",
+  "app.editUserProfile.validation.emptyOldPassword": "Je potřeba ověřit aktuální heslo, aby mohlo být změněno.",
   "app.editUserProfile.validation.passwordsDontMatch": "Hesla se neshodují.",
   "app.editUserProfile.validation.samePasswords": "Změnit Vaše heslo na stejné nedává žádný smysl.",
   "app.editUserProfile.validation.shortFirstName": "Jméno musí obsahovat alespoň 2 znaky.",

@@ -466,6 +466,7 @@
   "app.editUserProfile.validation.emptyFirstName",
   "app.editUserProfile.validation.emptyLastName",
   "app.editUserProfile.validation.emptyNewPassword",
+  "app.editUserProfile.validation.emptyOldPassword",
   "app.editUserProfile.validation.passwordsDontMatch",
   "app.editUserProfile.validation.samePasswords",
   "app.editUserProfile.validation.shortFirstName",
