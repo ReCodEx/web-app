@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape, defineMessages } from 'react-intl';
+import { injectIntl, intlShape, defineMessages, FormattedHTMLMessage } from 'react-intl';
 import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock, Well, Row, Col } from 'react-bootstrap';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
@@ -11,6 +11,9 @@ import Confirm from '../../forms/Confirm';
 
 import { createGetUploadedFiles } from '../../../redux/selectors/upload';
 import { hasEntryPoint } from '../../../redux/selectors/submission';
+import { getConfigVar } from '../../../helpers/config';
+
+const environmentsHelpUrl = getConfigVar('ENVIRONMENTS_INFO_URL');
 
 const commonMessages = defineMessages({
   runtimeEnvironment: {
@@ -186,16 +189,27 @@ class SubmitSolution extends Component {
                 ) : !presubmitEnvironments ? (
                   <p className="text-left callout callout-info">{formatMessage(commonMessages.uploadFilesFirst)}</p>
                 ) : presubmitEnvironments.length > 0 ? (
-                  <FormControl
-                    onChange={e => changeRuntimeEnvironment(e.target.value)}
-                    componentClass="select"
-                    defaultValue={selectedEnvironment}>
-                    {presubmitEnvironments.map(rte => (
-                      <option key={rte.id} value={rte.id}>
-                        {rte.name}
-                      </option>
-                    ))}
-                  </FormControl>
+                  <React.Fragment>
+                    <FormControl
+                      onChange={e => changeRuntimeEnvironment(e.target.value)}
+                      componentClass="select"
+                      defaultValue={selectedEnvironment}>
+                      {presubmitEnvironments.map(rte => (
+                        <option key={rte.id} value={rte.id}>
+                          {rte.name}
+                        </option>
+                      ))}
+                    </FormControl>
+                    {environmentsHelpUrl && (
+                      <p className="small text-muted em-margin-top">
+                        <FormattedHTMLMessage
+                          id="app.submitSolution.linkToWiki"
+                          defaultMessage="Select the right environment, under which you wish to submit your solution. You may find more information about the environments at our <a href='{url}' target='_blank'>wiki page</a>."
+                          values={{ url: environmentsHelpUrl }}
+                        />
+                      </p>
+                    )}
+                  </React.Fragment>
                 ) : (
                   <p className="text-left callout callout-danger">{formatMessage(commonMessages.noEnvironments)}</p>
                 )}
