@@ -31,6 +31,11 @@ class Variable {
     return this;
   }
 
+  forCompilationAndExecution() {
+    delete this.pipelineFilter.isCompilationPipeline;
+    return this;
+  }
+
   /**
    * Change the name of the redux-form property corresponding to this variable.
    * By default, all variables are stored in redux-form under the same name they have in configs.
@@ -286,7 +291,8 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
   new Variable('entry-point', 'file')
     .individualEnvs()
     .setPipelineFilter('hasEntryPoint')
-    .setTransformPostprocess(value => value || '$entry-point'),
+    .setTransformPostprocess(value => value || '$entry-point')
+    .forCompilationAndExecution(),
 ];
 
 const _ENV_SPECIFIC_VARS_DESCRIPTORS = {
