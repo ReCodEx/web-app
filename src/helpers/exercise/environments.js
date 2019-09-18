@@ -12,6 +12,8 @@ export const ENV_PHP_ID = 'php-linux';
 export const ENV_PYTHON3_ID = 'python3';
 export const ENV_PROLOG_ID = 'prolog';
 export const ENV_HASKELL_ID = 'haskell';
+export const ENV_RUST_ID = 'rust';
+export const ENV_GO_ID = 'go';
 
 /**
  * List of environment IDs allowed in simple form.
@@ -29,6 +31,8 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_PYTHON3_ID,
   ENV_PROLOG_ID,
   ENV_HASKELL_ID,
+  ENV_RUST_ID,
+  ENV_GO_ID,
 ];
 
 /**
