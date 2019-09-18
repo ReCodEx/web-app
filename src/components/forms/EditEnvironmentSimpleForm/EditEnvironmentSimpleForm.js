@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
-import { Alert, Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
+import { Alert, Grid, Row, Col, OverlayTrigger, Tooltip, Well } from 'react-bootstrap';
 
 import { CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
 import Icon, { RefreshIcon, InfoIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
+import { getConfigVar } from '../../../helpers/config';
+
+const environmentsHelpUrl = getConfigVar('ENVIRONMENTS_INFO_URL');
 
 class EditEnvironmentSimpleForm extends Component {
   render() {
@@ -27,6 +30,18 @@ class EditEnvironmentSimpleForm extends Component {
 
     return (
       <div>
+        {environmentsHelpUrl && (
+          <Well bsSize="sm">
+            <div className="small text-muted">
+              <FormattedHTMLMessage
+                id="app.editEnvironmentSimpleForm.linkToWiki"
+                defaultMessage="Select all runtime environments the exercise should support. You may find more information about the environments at our <a href='{url}' target='_blank'>wiki page</a>."
+                values={{ url: environmentsHelpUrl }}
+              />
+            </div>
+          </Well>
+        )}
+
         <Grid fluid>
           <Row>
             {runtimeEnvironments
@@ -72,6 +87,8 @@ class EditEnvironmentSimpleForm extends Component {
               ))}
           </Row>
         </Grid>
+
+        <hr />
 
         {submitFailed && (
           <Alert bsStyle="danger">
