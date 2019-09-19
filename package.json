@@ -80,8 +80,8 @@
     "react-redux": "^7.1.0",
     "react-responsive": "^7.0.0",
     "react-router": "^5.0.1",
-    "react-router-dom": "^5.0.1",
     "react-router-bootstrap": "^0.25.0",
+    "react-router-dom": "^5.0.1",
     "react-toggle": "4.0.2",
     "redux": "^4.0.4",
     "redux-actions": "^2.6.5",
@@ -159,7 +159,7 @@
     "webpack-isomorphic-tools": "^3.0.6"
   },
   "resolutions": {
-  	"lodash": "4.17.15",
-  	"lodash.merge": "4.6.2"
+    "lodash": "4.17.15",
+    "lodash.merge": "4.6.2"
   }
 }
