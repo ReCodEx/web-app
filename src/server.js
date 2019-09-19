@@ -81,7 +81,7 @@ const renderPage = (res, { store = null, html = '' }) => {
     html,
     head,
     reduxState,
-    skin: parsedConfig['SKIN'],
+    skin: parsedConfig.SKIN,
     bundle,
     style,
     config,
@@ -132,7 +132,7 @@ app.get('*', (req, res) => {
   }
 });
 
-const port = parsedConfig['PORT'];
+const port = parsedConfig.PORT;
 app.listen(port, () => {
   console.log('Server is running on port ' + port); // eslint-disable-line no-console
 });

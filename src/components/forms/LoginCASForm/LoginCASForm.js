@@ -69,13 +69,13 @@ LoginCASForm.propTypes = {
 const validate = ({ ukco, password }) => {
   const errors = {};
   if (!ukco) {
-    errors['ukco'] = (
+    errors.ukco = (
       <FormattedMessage id="app.loginCASForm.validation.emptyUKCO" defaultMessage="UKCO address cannot be empty." />
     );
   }
 
   if (!password) {
-    errors['password'] = (
+    errors.password = (
       <FormattedMessage id="app.loginCASForm.validation.emptyPassword" defaultMessage="Password cannot be empty." />
     );
   }

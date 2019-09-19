@@ -74,11 +74,11 @@ ResetPasswordForm.propTypes = {
 const validate = ({ username }) => {
   const errors = {};
   if (!username) {
-    errors['username'] = (
+    errors.username = (
       <FormattedMessage id="app.resetPassword.validation.emptyEmail" defaultMessage="E-mail address cannot be empty." />
     );
   } else if (!isEmail(username)) {
-    errors['username'] = (
+    errors.username = (
       <FormattedMessage
         id="app.resetPassword.validation.emailIsNotAnEmail"
         defaultMessage="E-mail address is not valid."

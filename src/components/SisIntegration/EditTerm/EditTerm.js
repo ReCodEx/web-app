@@ -88,19 +88,19 @@ const validate = ({ beginning, end, advertiseUntil }) => {
   const errors = {};
 
   if (!beginning) {
-    errors['beginning'] = (
+    errors.beginning = (
       <FormattedMessage id="app.editSisTerm.validation.noBeginning" defaultMessage="Start of the term is required." />
     );
   }
 
   if (!end) {
-    errors['end'] = (
+    errors.end = (
       <FormattedMessage id="app.editSisTerm.validation.noEnd" defaultMessage="End of the term is required." />
     );
   }
 
   if (!advertiseUntil) {
-    errors['advertiseUntil'] = (
+    errors.advertiseUntil = (
       <FormattedMessage
         id="app.editSisTerm.validation.noAdvertiseUntil"
         defaultMessage="End date of advertising the term is required."
@@ -113,7 +113,7 @@ const validate = ({ beginning, end, advertiseUntil }) => {
   const aDate = new Date(advertiseUntil * 1000);
 
   if (aDate < bDate || aDate > eDate) {
-    errors['advertiseUntil'] = (
+    errors.advertiseUntil = (
       <FormattedMessage
         id="app.editSisTerm.validation.advertiseInLimits"
         defaultMessage="The term can be advertised only in its period."

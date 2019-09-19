@@ -73,17 +73,17 @@ LoginForm.propTypes = {
 const validate = ({ email, password }) => {
   const errors = {};
   if (email && isEmail(email) === false) {
-    errors['email'] = (
+    errors.email = (
       <FormattedMessage id="app.loginForm.validation.emailIsNotAnEmail" defaultMessage="E-mail address is not valid." />
     );
   } else if (!email) {
-    errors['email'] = (
+    errors.email = (
       <FormattedMessage id="app.loginForm.validation.emptyEmail" defaultMessage="E-mail address cannot be empty." />
     );
   }
 
   if (!password) {
-    errors['password'] = (
+    errors.password = (
       <FormattedMessage id="app.loginForm.validation.emptyPassword" defaultMessage="Password cannot be empty." />
     );
   }

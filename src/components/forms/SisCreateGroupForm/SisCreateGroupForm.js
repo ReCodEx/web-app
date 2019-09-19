@@ -92,7 +92,7 @@ const validate = ({ parentGroupId }) => {
   const errors = {};
 
   if (!parentGroupId) {
-    errors['parentGroupId'] = (
+    errors.parentGroupId = (
       <FormattedMessage id="app.sisCreateGroupForm.emptyParentGroup" defaultMessage="Please fill the parent group." />
     );
   }

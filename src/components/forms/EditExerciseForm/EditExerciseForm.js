@@ -181,7 +181,7 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       .then(({ versionIsUpToDate }) => {
         var errors = {};
         if (versionIsUpToDate === false) {
-          errors['name'] = (
+          errors.name = (
             <FormattedMessage
               id="app.editExerciseForm.validation.versionDiffers"
               defaultMessage="Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more."

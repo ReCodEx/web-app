@@ -97,7 +97,7 @@ EditHardwareGroupForm.propTypes = {
 const validate = ({ hardwareGroup }) => {
   const errors = {};
   if (!hardwareGroup) {
-    errors['hardwareGroup'] = (
+    errors.hardwareGroup = (
       <FormattedMessage
         id="app.editHardwareGroupForm.validationFailed"
         defaultMessage="Hardware group must be selected."

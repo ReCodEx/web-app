@@ -77,18 +77,18 @@ const validate = ({ note, validUntil }) => {
   const errors = {};
 
   if (!note || note.length === 0) {
-    errors['note'] = <FormattedMessage id="app.addLicence.validation.note" defaultMessage="Note cannot be empty." />;
+    errors.note = <FormattedMessage id="app.addLicence.validation.note" defaultMessage="Note cannot be empty." />;
   }
 
   if (!validUntil) {
-    errors['validUntil'] = (
+    errors.validUntil = (
       <FormattedMessage
         id="app.addLicence.validation.validUntilEmpty"
         defaultMessage="The expiration date of the valid period of the licence must be set."
       />
     );
   } else if (validUntil.isBefore(Date.now())) {
-    errors['validUntil'] = (
+    errors.validUntil = (
       <FormattedMessage
         id="app.addLicence.validation.validUntilInThePast"
         defaultMessage="The expiration date of the valid period of the licence must be in the future."
