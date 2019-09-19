@@ -1297,6 +1297,7 @@
   "generic.details",
   "generic.disable",
   "generic.edit",
+  "generic.effectiveRole",
   "generic.email",
   "generic.enable",
   "generic.filtersSet",
