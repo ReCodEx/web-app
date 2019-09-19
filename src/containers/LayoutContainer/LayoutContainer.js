@@ -102,7 +102,6 @@ class LayoutContainer extends Component {
           <LinksContext.Provider value={getLinks()}>
             <UrlContext.Provider value={{ lang }}>
               <Layout
-                key={lang}
                 isLoggedIn={isLoggedIn}
                 sidebarIsCollapsed={sidebarIsCollapsed}
                 sidebarIsOpen={sidebarIsOpen}
@@ -160,6 +159,9 @@ export default connect(
     toggleSize: () => dispatch(toggleSize()),
     collapse: () => dispatch(collapse()),
     unroll: () => dispatch(unroll()),
-    setLang: lang => dispatch(setLang(lang)),
+    setLang: lang => {
+      dispatch(setLang(lang));
+      window.location.reload();
+    },
   })
 )(LayoutContainer);
