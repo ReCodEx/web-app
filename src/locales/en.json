@@ -228,7 +228,7 @@
   "app.editEnvironmentConfig.variableName": "Source Files Variable",
   "app.editEnvironmentConfig.variableType": "Type",
   "app.editEnvironmentConfig.variableValue": "Wildcard Pattern",
-  "app.editEnvironmentConfig.variablesInfo": "These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.\\{c,h\\}</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here.",
+  "app.editEnvironmentConfig.variablesInfo": "These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.&#123;c,h&#125;</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here.",
   "app.editEnvironmentConfig.warnings.ambiguousVariable": "This variable is defined in multiple pipelines. The value will be used in all of them.",
   "app.editEnvironmentConfig.warnings.noPipelinesVariables": "There are no pipelines set. Name of the variables may not be verified.",
   "app.editEnvironmentConfig.warnings.unknownVariable": "This variable is not defined in any pipeline.",

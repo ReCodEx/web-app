@@ -116,7 +116,7 @@ class EditEnvironmentConfigForm extends Component {
               <InfoIcon gapRight />
               <FormattedHTMLMessage
                 id="app.editEnvironmentConfig.variablesInfo"
-                defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.\{c,h\}</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here."
+                defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.[c,h]</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here."
               />
             </p>
             <FieldArray name="variables" component={EditEnvironmentConfigVariables} />
