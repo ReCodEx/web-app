@@ -92,7 +92,7 @@ const validate = ({ username, password, instanceId }) => {
   const errors = {};
 
   if (!username) {
-    errors['username'] = (
+    errors.username = (
       <FormattedMessage
         id="app.externalRegistrationForm.validation.emptyUsername"
         defaultMessage="Username cannot be empty."
@@ -101,7 +101,7 @@ const validate = ({ username, password, instanceId }) => {
   }
 
   if (!password) {
-    errors['password'] = (
+    errors.password = (
       <FormattedMessage
         id="app.externalRegistrationForm.validation.emptyPassword"
         defaultMessage="Password cannot be empty."
@@ -110,7 +110,7 @@ const validate = ({ username, password, instanceId }) => {
   }
 
   if (!instanceId) {
-    errors['instanceId'] = (
+    errors.instanceId = (
       <FormattedMessage
         id="app.externalRegistrationForm.validation.instanceId"
         defaultMessage="Please select one of the instances."

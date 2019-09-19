@@ -149,7 +149,7 @@ const validate = ({ name, description }) => {
   const errors = {};
 
   if (!name) {
-    errors['name'] = (
+    errors.name = (
       <FormattedMessage
         id="app.editPipelineForm.validation.emptyName"
         defaultMessage="Please fill the name of the pipeline."
@@ -158,7 +158,7 @@ const validate = ({ name, description }) => {
   }
 
   if (!description) {
-    errors['description'] = (
+    errors.description = (
       <FormattedMessage
         id="app.editPipelineForm.validation.description"
         defaultMessage="Please fill the description of the pipeline."
@@ -176,7 +176,7 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       .then(({ versionIsUpToDate }) => {
         var errors = {};
         if (versionIsUpToDate === false) {
-          errors['name'] = (
+          errors.name = (
             <FormattedMessage
               id="app.editPipelineForm.validation.versionDiffers"
               defaultMessage="Somebody has changed the pipeline while you have been editing it. Please reload the page and apply your changes once more."

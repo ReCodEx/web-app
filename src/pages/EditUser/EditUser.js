@@ -49,8 +49,8 @@ class EditUser extends Component {
   updateProfile(data, changeNames) {
     const { updateProfile } = this.props;
     if (!changeNames) {
-      delete data['firstName'];
-      delete data['lastName'];
+      delete data.firstName;
+      delete data.lastName;
     }
     return updateProfile(data);
   }

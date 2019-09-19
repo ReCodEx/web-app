@@ -85,9 +85,7 @@ const validate = ({ groupId }) => {
   const errors = {};
 
   if (!groupId) {
-    errors['groupId'] = (
-      <FormattedMessage id="app.sisBindGroupForm.emptyGroup" defaultMessage="Please fill the group." />
-    );
+    errors.groupId = <FormattedMessage id="app.sisBindGroupForm.emptyGroup" defaultMessage="Please fill the group." />;
   }
 
   return errors;

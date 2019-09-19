@@ -298,7 +298,7 @@ const asyncValidate = ({ email, password = '' }, dispatch) => {
       .then(({ usernameIsFree, passwordScore }) => {
         var errors = {};
         if (!usernameIsFree) {
-          errors['email'] = (
+          errors.email = (
             <FormattedMessage
               id="app.editUserProfile.validation.emailTaken"
               defaultMessage="This email address is already taken by someone else or it is equal to your old email address."

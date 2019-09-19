@@ -84,7 +84,7 @@ ChangePasswordForm.propTypes = {
 const validate = ({ password, passwordCheck }) => {
   const errors = {};
   if (!password) {
-    errors['password'] = (
+    errors.password = (
       <FormattedMessage
         id="app.changePasswordForm.validation.emptyPassword"
         defaultMessage="Password cannot be empty."
@@ -93,7 +93,7 @@ const validate = ({ password, passwordCheck }) => {
   }
 
   if (!passwordCheck || passwordCheck !== password) {
-    errors['passwordCheck'] = (
+    errors.passwordCheck = (
       <FormattedMessage
         id="app.changePasswordForm.validation.passwordsDontMatch"
         defaultMessage="Passwords do not match."
@@ -111,7 +111,7 @@ const asyncValidate = ({ password = '' }, dispatch) =>
       .then(({ passwordScore }) => {
         var errors = {};
         if (passwordScore <= 0) {
-          errors['password'] = (
+          errors.password = (
             <FormattedMessage
               id="app.changePasswordForm.validation.passwordTooWeak"
               defaultMessage="The password you chose is too weak, please choose a different one."
