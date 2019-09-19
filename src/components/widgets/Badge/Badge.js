@@ -9,7 +9,7 @@ import EffectiveRoleSwitching from '../../Users/EffectiveRoleSwitching';
 import withLinks from '../../../helpers/withLinks';
 import Icon from '../../icons';
 import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
-import { isSuperadminRole } from '../../helpers/usersRoles';
+import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../helpers/usersRoles';
 
 class Badge extends Component {
   state = { effectiveRoleDialogOpened: false, effectiveRoleUpdating: null };
@@ -87,15 +87,24 @@ class Badge extends Component {
             {small && <br />}
 
             {isSuperadminRole(user.privateData.role) && (
-              <a
-                href="#"
-                onClick={e => {
-                  e.preventDefault();
-                  this.openEffectiveRoleDialog();
-                }}>
-                <Icon icon="user" className="text-primary" largeGapLeft={!small} gapRight={!small} />
-                {!small && <FormattedMessage id="generic.role" defaultMessage="Role" />}
-              </a>
+              <OverlayTrigger
+                placement="right"
+                overlay={
+                  <Tooltip id="effectiveRole">
+                    <FormattedMessage id="generic.effectiveRole" defaultMessage="Effective Role" />:{' '}
+                    {roleLabels[effectiveRole]}
+                  </Tooltip>
+                }>
+                <a
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    this.openEffectiveRoleDialog();
+                  }}>
+                  <UserRoleIcon role={effectiveRole} className="text-primary" largeGapLeft={!small} gapRight={!small} />
+                  {!small && <FormattedMessage id="generic.role" defaultMessage="Role" />}
+                </a>
+              </OverlayTrigger>
             )}
           </div>
         </div>
