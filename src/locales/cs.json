@@ -228,7 +228,7 @@
   "app.editEnvironmentConfig.variableName": "Proměnná vstupních souborů",
   "app.editEnvironmentConfig.variableType": "Typ",
   "app.editEnvironmentConfig.variableValue": "Předpis (wildcard)",
-  "app.editEnvironmentConfig.variablesInfo": "Tyto proměnné určují předpis souborů, které je možné odevzdat jako řešení, a jak jsou tyto soubory použity ve vstupech pipelines. Každá hodnota může obsahovat buď název souboru nebo wildcard (např. <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.\\{c,h\\}</code>). Povolené jsou pouze proměnné typu <code>file[]</code>.",
+  "app.editEnvironmentConfig.variablesInfo": "Tyto proměnné určují předpis souborů, které je možné odevzdat jako řešení, a jak jsou tyto soubory použity ve vstupech pipelines. Každá hodnota může obsahovat buď název souboru nebo wildcard (např. <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.&#123;c,h&#125;</code>). Povolené jsou pouze proměnné typu <code>file[]</code>.",
   "app.editEnvironmentConfig.warnings.ambiguousVariable": "Tato proměnná je definovaná ve více pipelines. Nastavená hodnota bude použita ve všech.",
   "app.editEnvironmentConfig.warnings.noPipelinesVariables": "Zatím nejsou vybrané žádné pipelines. Jména proměnných proto není možné verifikovat.",
   "app.editEnvironmentConfig.warnings.unknownVariable": "Tato proměnná není definována v žádné pipeline.",
