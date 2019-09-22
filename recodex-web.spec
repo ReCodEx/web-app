@@ -2,7 +2,7 @@
 %define short_name web-app
 %define version 1.18.0
 %define unmangled_version 500a3e84abf13265219ccb0131ffa8254bcdb6a5
-%define release 1
+%define release 8
 
 Summary: ReCodEx web-app component
 Name: %{name}
@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/web-app
-BuildRequires: systemd nodejs-packaging npm
+BuildRequires: systemd, nodejs >= 8.11.0
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
