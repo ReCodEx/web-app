@@ -87,7 +87,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
       }
     ),
 
-    new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.name" defaultMessage="Name" />, {
+    new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />, {
       className: 'text-left',
       comparator: ({ user: u1, date: d1 }, { user: u2, date: d2 }) => nameComparator(u1, u2) || d2 - d1, // dates are implicitly in reversed order
       cellRenderer: user =>
