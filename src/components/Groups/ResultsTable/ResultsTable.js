@@ -113,7 +113,7 @@ class ResultsTable extends Component {
      * User Name (First Column)
      */
     const columns = [
-      new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.name" defaultMessage="Name" />, {
+      new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />, {
         headerSuffix: <FormattedMessage id="app.groupResultsTable.maxPointsRow" defaultMessage="Max points:" />,
         headerSuffixClassName: styles.maxPointsRow,
         className: 'text-left',

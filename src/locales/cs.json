@@ -824,7 +824,7 @@
   "app.homepage.description": "ReCodEx — úvodní stránka",
   "app.homepage.githubWebappRepository": "Repozitář ReCodEx Webapp",
   "app.homepage.help": "Nápověda",
-  "app.homepage.helpContent": "Pokud máte s používáním ReCodExu nějaké problémy, prosíme přečtěte si nejprve <a href=\"https://github.com/ReCodEx/wiki/wiki/User-documentation\">uživatelskou dokumentaci</a> (nyní pouze v angličtině).",
+  "app.homepage.helpContent": "Pokud máte s používáním ReCodExu nějaké problémy, prosíme přečtěte si nejprve <a href=\"https://github.com/ReCodEx/wiki/wiki/User-documentation\">uživatelskou dokumentaci</a>.",
   "app.homepage.howToGiveFeedback": "Pokud máte jakoukoliv zpětnou vazbu, ať už pozitivní nebo negativní, neváhejte založit issue na GitHubu. Pokud zakládáte zpětnou vazbu, dejte jí prosím tag 'feedback', ať můžeme rozlišit zpětnou vazbu od chyb. Budeme se snažit odpovědět a případně vyhovět potencionálním požadavkům. Dopředu děkujeme za jakoukoliv formu zpětné vazby!",
   "app.homepage.title": "ReCodEx — ReCodEx Code Examiner",
   "app.homepage.whatIsRecodex": "Co je ReCodEx?",
