@@ -66,7 +66,11 @@ class App extends Component {
           ),
           dispatch(fetchUsersInstancesIfNeeded(userId)),
           dispatch(fetchAllUserMessages()),
-        ])
+        ]).catch(response => {
+          if (response && response.status === 403) {
+            dispatch(logout()); // if requests demanding basic info about user are unauthorized, the user is either blocked or something fishy is going on...
+          }
+        })
       : Promise.resolve();
 
   constructor() {

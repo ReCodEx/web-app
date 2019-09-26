@@ -193,7 +193,12 @@ const detectUnreachableServer = (err, dispatch) => {
  */
 const processResponse = (call, dispatch) =>
   call
-    .then(res => res.json())
+    .then(res => {
+      if (res.status !== 200) {
+        return Promise.reject(res);
+      }
+      return res.json();
+    })
     .then(({ success = true, code, error = null, payload = {} }) => {
       if (!success) {
         if (error && error.message) {
