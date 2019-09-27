@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import Avatar, { LoadingAvatar, FailedAvatar, FakeAvatar } from '../../components/widgets/Avatar';
+import { safeGet } from '../../helpers/common';
 
 const AvatarContainer = ({ currentUser, avatarUrl, fullName, firstName, size = 45, ...props }) => (
   <ResourceRenderer
@@ -12,7 +13,7 @@ const AvatarContainer = ({ currentUser, avatarUrl, fullName, firstName, size = 4
     failed={<FailedAvatar size={size} />}
     resource={currentUser}>
     {currentUser =>
-      currentUser.privateData.settings.useGravatar && avatarUrl !== null ? (
+      safeGet(currentUser, ['privateData', 'settings', 'useGravatar'], false) && avatarUrl !== null ? (
         <Avatar size={size} src={avatarUrl} title={fullName} {...props} />
       ) : (
         <FakeAvatar size={size} {...props}>

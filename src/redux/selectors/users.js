@@ -99,8 +99,10 @@ export const isSupervisor = userId =>
     role => isSupervisorRole(role)
   );
 
-const userSettingsSelector = user =>
-  isReady(user) ? user.getIn(['data', 'privateData', 'settings']).toJS() : EMPTY_OBJ;
+const userSettingsSelector = user => {
+  const settings = isReady(user) && user.getIn(['data', 'privateData', 'settings']);
+  return settings ? settings.toJS() : EMPTY_OBJ;
+};
 
 export const getUserSettings = userId =>
   createSelector(

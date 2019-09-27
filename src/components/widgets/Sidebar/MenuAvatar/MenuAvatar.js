@@ -4,15 +4,24 @@ import classnames from 'classnames';
 
 import styles from '../Sidebar.less';
 import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
+import Icon from '../../../icons';
 
-const MenuAvatar = ({ title, avatarUrl, firstName, notificationsCount = 0, isActive = false, onClick }) => (
+const MenuAvatar = ({
+  title,
+  avatarUrl,
+  firstName,
+  notificationsCount = 0,
+  isActive = false,
+  onClick,
+  onRemove = null,
+}) => (
   <li
     className={classnames({
       active: isActive,
     })}>
     <a
-      onClick={e => {
-        e.preventDefault();
+      onClick={ev => {
+        ev.preventDefault();
         onClick();
       }}
       className={styles.cursorPointer}>
@@ -25,6 +34,21 @@ const MenuAvatar = ({ title, avatarUrl, firstName, notificationsCount = 0, isAct
       />
       <span className={styles.menuItem}>{title}</span>
       {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
+
+      {onRemove && (
+        <span className="pull-right">
+          <Icon
+            icon="user-slash"
+            className="text-danger"
+            timid
+            gapRight
+            onClick={ev => {
+              ev.preventDefault();
+              onRemove();
+            }}
+          />
+        </span>
+      )}
     </a>
   </li>
 );
@@ -34,6 +58,7 @@ MenuAvatar.propTypes = {
   avatarUrl: PropTypes.string,
   firstName: PropTypes.string.isRequired,
   onClick: PropTypes.func,
+  onRemove: PropTypes.func,
   notificationsCount: PropTypes.number,
   isActive: PropTypes.bool,
 };
