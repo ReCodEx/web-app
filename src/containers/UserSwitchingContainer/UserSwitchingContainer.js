@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import UserSwitching from '../../components/Users/UserSwitching';
 
-import { switchUser } from '../../redux/modules/userSwitching';
+import { switchUser, removeUser } from '../../redux/modules/userSwitching';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { usersSelector } from '../../redux/selectors/userSwitching';
 
@@ -20,5 +20,6 @@ export default connect(
   }),
   dispatch => ({
     loginAs: id => dispatch(switchUser(id)),
+    removeUser: id => dispatch(removeUser(id)),
   })
 )(UserSwitching);
