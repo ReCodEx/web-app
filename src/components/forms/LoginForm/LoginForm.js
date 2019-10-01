@@ -11,7 +11,7 @@ import { EmailField, PasswordField } from '../Fields';
 import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 
-const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded }) => (
+const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded, error }) => (
   <FormBox
     title={<FormattedMessage id="app.loginForm.title" defaultMessage="Sign into ReCodEx" />}
     type={hasSucceeded ? 'success' : undefined}
@@ -21,7 +21,7 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
           {!submitting ? (
             hasSucceeded ? (
               <span>
-                <SuccessIcon />{' '}
+                <SuccessIcon gapRight />
                 <FormattedMessage id="app.loginForm.success" defaultMessage="You are successfully signed in" />
               </span>
             ) : (
@@ -32,17 +32,14 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
             )
           ) : (
             <span>
-              <LoadingIcon /> <FormattedMessage id="app.loginForm.processing" defaultMessage="Signing in..." />
+              <LoadingIcon gapRight />
+              <FormattedMessage id="app.loginForm.processing" defaultMessage="Signing in..." />
             </span>
           )}
         </Button>
       </div>
     }>
-    {hasFailed && (
-      <Alert bsStyle="danger">
-        <FormattedMessage id="app.loginForm.failed" defaultMessage="Login failed. Please check your credentials." />
-      </Alert>
-    )}
+    {hasFailed && error && <Alert bsStyle="danger">{error}</Alert>}
 
     <Field
       name="email"
@@ -68,6 +65,7 @@ LoginForm.propTypes = {
   submitting: PropTypes.bool,
   hasSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
+  error: PropTypes.any,
 };
 
 const validate = ({ email, password }) => {
