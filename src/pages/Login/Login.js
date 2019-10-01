@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { reset } from 'redux-form';
+import { reset, SubmissionError } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/layout/PageContent';
@@ -15,6 +15,7 @@ import { login } from '../../redux/modules/auth';
 import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { getConfigVar } from '../../helpers/config';
+import { getErrorMessage } from '../../locales/apiErrorMessages';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -70,7 +71,14 @@ class Login extends Component {
    */
   loginAndRedirect = credentials => {
     const { login } = this.props;
-    login(credentials).then(this.redirectAfterLogin);
+    return login(credentials)
+      .then(this.redirectAfterLogin)
+      .catch(e =>
+        // Translate fetch response error into form error message...
+        e.json().then(body => {
+          throw new SubmissionError({ _error: getErrorMessage(body && body.error) });
+        })
+      );
   };
 
   render() {

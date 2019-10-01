@@ -186,7 +186,7 @@ const detectUnreachableServer = (err, dispatch) => {
 };
 
 /**
- * Process the standardized formatof the response.
+ * Process the standardized format of the response.
  * @param {Promise} call
  * @param {Function} dispatch
  * @returns {Promise}
