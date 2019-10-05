@@ -72,8 +72,8 @@ class EditEnvironmentSimpleForm extends Component {
                             overlay={
                               <Tooltip id={`environment-standalone-${environment.id}`}>
                                 <FormattedMessage
-                                  id="app.editEnvironmentSimpleForm.standaloneEnvironment"
-                                  defaultMessage="Separated runtime environment"
+                                  id="app.editEnvironmentSimpleForm.exclusiveEnvironment"
+                                  defaultMessage="Exclusive runtime environment"
                                 />
                               </Tooltip>
                             }>
