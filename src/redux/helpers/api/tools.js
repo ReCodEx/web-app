@@ -12,6 +12,12 @@ import { actionTypes as authActionTypes } from '../../modules/authTypes';
 export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');
 export const isUnauthorized = status => status === 403;
+const isStatusOKWithBody = status =>
+  status === 200 || // OK
+  status === 201 || // Created
+  status === 202 || // Accepted
+  status === 203 || // Non-auth info
+  status === 206; // Partial content
 
 const maybeShash = endpoint => (endpoint.indexOf('/') === 0 ? '' : '/');
 const getUrl = endpoint => API_BASE + maybeShash(endpoint) + endpoint;
@@ -194,12 +200,12 @@ const detectUnreachableServer = (err, dispatch) => {
 const processResponse = (call, dispatch) =>
   call
     .then(res => {
-      if (res.status !== 200) {
-        return Promise.reject(res);
+      if (isStatusOKWithBody(res.status)) {
+        return res.json();
       }
-      return res.json();
+      return Promise.reject(res);
     })
-    .then(({ success = true, code, error = null, payload = {} }) => {
+    .then(({ success = true, error = null, payload = {} }) => {
       if (!success) {
         if (error && error.message) {
           dispatch && dispatch(addNotification(`Server response: ${error.message}`, false));
