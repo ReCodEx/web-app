@@ -60,6 +60,10 @@ export const additionalActionTypes = {
   SET_ARCHIVED_PENDING: 'recodex/groups/SET_ARCHIVED_PENDING',
   SET_ARCHIVED_FULFILLED: 'recodex/groups/SET_ARCHIVED_FULFILLED',
   SET_ARCHIVED_REJECTED: 'recodex/groups/SET_ARCHIVED_REJECTED',
+  RELOCATE: 'recodex/groups/RELOCATE',
+  RELOCATE_PENDING: 'recodex/groups/RELOCATE_PENDING',
+  RELOCATE_FULFILLED: 'recodex/groups/RELOCATE_FULFILLED',
+  RELOCATE_REJECTED: 'recodex/groups/RELOCATE_REJECTED',
 };
 
 export const loadGroup = actions.pushResource;
@@ -193,6 +197,13 @@ export const setArchived = (groupId, archived) =>
     meta: { groupId },
   });
 
+export const relocateGroup = (groupId, newParentId) =>
+  createApiAction({
+    type: additionalActionTypes.RELOCATE,
+    method: 'POST',
+    endpoint: `/groups/${groupId}/relocate/${newParentId}`,
+  });
+
 /**
  * Reducer
  */
@@ -292,6 +303,12 @@ const reducer = handleActions(
 
     [additionalActionTypes.SET_ARCHIVED_REJECTED]: (state, { payload, meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-archived']),
+
+    [additionalActionTypes.RELOCATE_FULFILLED]: (state, { payload }) =>
+      payload.reduce(
+        (state, data) => state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
+        state
+      ),
 
     [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
       const groups = [...payload.supervisor, ...payload.student];

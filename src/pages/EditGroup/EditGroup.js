@@ -8,15 +8,22 @@ import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import EditGroupForm, { EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT } from '../../components/forms/EditGroupForm';
+import RelocateGroupForm, { getPossibleParentsOfGroup } from '../../components/forms/RelocateGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import { BanIcon, InfoIcon } from '../../components/icons';
 
-import { fetchGroup, fetchGroupIfNeeded, editGroup } from '../../redux/modules/groups';
-import { groupSelector, canViewParentDetailSelector } from '../../redux/selectors/groups';
+import { fetchGroup, fetchGroupIfNeeded, editGroup, relocateGroup } from '../../redux/modules/groups';
+import {
+  groupSelector,
+  canViewParentDetailSelector,
+  notArchivedGroupsSelector,
+  groupDataAccessorSelector,
+} from '../../redux/selectors/groups';
 import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
 import { isSupervisorOf, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import {
@@ -28,6 +35,10 @@ import {
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+
+const canRelocate = group => hasPermissions(group, 'relocate') && !group.archived;
+
+const getRelocateFormInitialValues = defaultMemoize(group => ({ groupId: group.parentGroupId }));
 
 class EditGroup extends Component {
   componentDidMount = () => this.props.loadAsync();
@@ -57,9 +68,12 @@ class EditGroup extends Component {
       },
       history: { replace },
       group,
+      groups,
+      groupsAccessor,
       isSuperAdmin,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY },
       editGroup,
+      relocateGroup,
       hasThreshold,
       canViewParentDetail,
       instanceId,
@@ -156,10 +170,29 @@ class EditGroup extends Component {
               />
             )}
 
+            {canRelocate(group) && (
+              <ResourceRenderer resource={groups.toArray()} returnAsArray>
+                {groups =>
+                  getPossibleParentsOfGroup(groups, group).length > 1 && (
+                    <Box
+                      type="warning"
+                      title={<FormattedMessage id="app.editGroup.relocateGroup" defaultMessage="Relocate Group" />}>
+                      <RelocateGroupForm
+                        initialValues={getRelocateFormInitialValues(group)}
+                        groups={getPossibleParentsOfGroup(groups, group)}
+                        groupsAccessor={groupsAccessor}
+                        onSubmit={relocateGroup}
+                      />
+                    </Box>
+                  )
+                }
+              </ResourceRenderer>
+            )}
+
             {hasPermissions(group, 'remove') && (
               <Box
                 type="danger"
-                title={<FormattedMessage id="app.editGroup.deleteGroup" defaultMessage="Delete the group" />}>
+                title={<FormattedMessage id="app.editGroup.deleteGroup" defaultMessage="Delete Group" />}>
                 <div>
                   <p>
                     <FormattedMessage
@@ -225,9 +258,12 @@ EditGroup.propTypes = {
     }).isRequired,
   }).isRequired,
   group: ImmutablePropTypes.map,
+  groups: ImmutablePropTypes.map,
+  groupsAccessor: PropTypes.func.isRequired,
   canViewParentDetail: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
   editGroup: PropTypes.func.isRequired,
+  relocateGroup: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
   intl: intlShape,
@@ -248,6 +284,8 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         group: groupSelector(state, groupId),
+        groups: notArchivedGroupsSelector(state),
+        groupsAccessor: groupDataAccessorSelector(state),
         userId,
         isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
         hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
@@ -280,6 +318,7 @@ export default withLinks(
         }
         return dispatch(editGroup(groupId, transformedData));
       },
+      relocateGroup: ({ groupId: newParentId }) => dispatch(relocateGroup(groupId, newParentId)),
     })
   )(injectIntl(EditGroup))
 );
