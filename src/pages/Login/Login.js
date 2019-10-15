@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { reset, SubmissionError } from 'redux-form';
@@ -70,13 +70,16 @@ class Login extends Component {
    * Log the user in (by given credentials) and then perform the redirect.
    */
   loginAndRedirect = credentials => {
-    const { login } = this.props;
+    const {
+      login,
+      intl: { formatMessage },
+    } = this.props;
     return login(credentials)
       .then(this.redirectAfterLogin)
       .catch(e =>
         // Translate fetch response error into form error message...
         e.json().then(body => {
-          throw new SubmissionError({ _error: getErrorMessage(body && body.error) });
+          throw new SubmissionError({ _error: getErrorMessage(formatMessage)(body && body.error) });
         })
       );
   };
@@ -178,6 +181,7 @@ Login.propTypes = {
   loggedInUser: ImmutablePropTypes.map,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
+  intl: intlShape,
 };
 
 export default withLinks(
@@ -193,5 +197,5 @@ export default withLinks(
         dispatch(reset('login'));
       },
     })
-  )(Login)
+  )(injectIntl(Login))
 );

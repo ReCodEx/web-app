@@ -1,16 +1,37 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 
-const apiErrorCodes = {
-  '400-101': <FormattedMessage id="app.apiErrorCodes.400-101" defaultMessage="The credentials are not valid." />,
-  '403-001': <FormattedMessage id="app.apiErrorCodes.403-001" defaultMessage="The user account does not exist." />,
-  '403-002': <FormattedMessage id="app.apiErrorCodes.403-002" defaultMessage="The user account has been disabled." />,
-};
+const apiErrorCodes = defineMessages({
+  '400-001': {
+    id: 'app.apiErrorCodes.400-001',
+    defaultMessage:
+      'The user has multiple e-mail addresses and multiple matching accounts already exist. Accounts cannot be associated due to ambiguity.',
+  },
+  '400-101': { id: 'app.apiErrorCodes.400-101', defaultMessage: 'The credentials are not valid.' },
+  '400-106': { id: 'app.apiErrorCodes.400-106', defaultMessage: 'The user is already registered.' },
+  '403-001': { id: 'app.apiErrorCodes.403-001', defaultMessage: 'The user account does not exist.' },
+  '403-002': { id: 'app.apiErrorCodes.403-002', defaultMessage: 'The user account has been disabled.' },
+  '409_100': {
+    id: 'app.apiErrorCodes.409_100',
+    defaultMessage:
+      'The user data received from the CAS contain no affiliation attributes that would match current registration policies.',
+  },
+  '409_101': {
+    id: 'app.apiErrorCodes.409_101',
+    defaultMessage: 'The user attributes received from the CAS do not contain an email address, which is required.',
+  },
+  '409_102': {
+    id: 'app.apiErrorCodes.409_102',
+    defaultMessage: 'The user attributes received from the CAS are incomplete.',
+  },
+  '500-000': { id: 'app.apiErrorCodes.500-000', defaultMessage: 'Unexpected internal error.' },
+});
 
-export const getErrorMessage = error => {
+export const getErrorMessage = formatMessage => error => {
   const code = error && error.code;
+  const parameters = (error && error.parameters) || {};
   if (code && apiErrorCodes[code]) {
-    return apiErrorCodes[code];
+    return formatMessage(apiErrorCodes[code], parameters);
   } else {
     return (
       (error && error.message) || (

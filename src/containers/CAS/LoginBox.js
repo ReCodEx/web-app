@@ -45,7 +45,9 @@ export default connect(
     login: (ticket, clientUrl, popupWindow = null) => {
       const login = externalLogin(loginServices.external.CAS_UK_TICKET);
       const promise = dispatch(login({ ticket, clientUrl }, popupWindow));
-      return afterLogin ? promise.then(afterLogin) : promise;
+      return (afterLogin ? promise.then(afterLogin) : promise).catch(_ => {
+        /* intentionally ignoring the error */
+      });
     },
   })
 )(LoginBox);
