@@ -2,7 +2,8 @@ import { handleActions } from 'redux-actions';
 import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { fromJS } from 'immutable';
-
+import { actionTypes } from './sisSupervisedCoursesTypes';
+import { actionTypes as groupsActionTypes } from './groups';
 /**
  * Create actions & reducer
  */
@@ -11,17 +12,6 @@ const resourceName = 'sisSupervisedCourses';
 const { reduceActions } = factory({
   resourceName,
 });
-
-export const actionTypes = {
-  FETCH: 'recodex/sisSupervisedCourses/FETCH',
-  FETCH_PENDING: 'recodex/sisSupervisedCourses/FETCH_PENDING',
-  FETCH_REJECTED: 'recodex/sisSupervisedCourses/FETCH_REJECTED',
-  FETCH_FULFILLED: 'recodex/sisSupervisedCourses/FETCH_FULFILLED',
-  CREATE: 'recodex/sisSupervisedCourses/CREATE',
-  CREATE_FULFILLED: 'recodex/sisSupervisedCourses/CREATE_FULFILLED',
-  BIND: 'recodex/sisSupervisedCourses/BIND',
-  BIND_FULFILLED: 'recodex/sisSupervisedCourses/BIND_FULFILLED',
-};
 
 export const fetchSisSupervisedCourses = (userId, year, term) =>
   createApiAction({
@@ -49,6 +39,14 @@ export const sisBindGroup = (courseId, data, userId, year, term) =>
     body: { ...data },
   });
 
+export const sisUnbindGroup = (courseId, groupId, userId, year, term) =>
+  createApiAction({
+    type: actionTypes.UNBIND,
+    method: 'DELETE',
+    endpoint: `/extensions/sis/remote-courses/${courseId}/bindings/${groupId}`,
+    meta: { courseId, groupId, userId, year, term },
+  });
+
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [actionTypes.CREATE_FULFILLED]: (state, { meta: { userId, courseId, year, term }, payload }) =>
@@ -56,9 +54,16 @@ const reducer = handleActions(
         groups.push(fromJS(payload))
       ),
 
-    [actionTypes.BIND_FULFILLED]: (state, { meta: { userId, courseId, year, term }, payload }) =>
+    [actionTypes.BIND_FULFILLED]: (state, { meta: { courseId, userId, year, term }, payload }) =>
       state.updateIn(['resources', userId, `${year}-${term}`, 'data', courseId, 'groups'], groups =>
         groups.push(fromJS(payload))
+      ),
+
+    [actionTypes.UNBIND_FULFILLED]: (state, { meta: { courseId, groupId, userId } }) =>
+      state.updateIn(['resources', userId], terms =>
+        terms.map(term =>
+          term.updateIn(['data', courseId, 'groups'], groups => groups.filter(group => group.get('id') !== groupId))
+        )
       ),
 
     [actionTypes.FETCH_PENDING]: (state, { meta: { userId, year, term } }) =>
@@ -79,6 +84,19 @@ const reducer = handleActions(
             }, {})
           ),
         })
+      ),
+
+    [groupsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: groupId } }) =>
+      state.update('resources', users =>
+        users.map(userTerms =>
+          userTerms.map(term =>
+            term.update('data', courses =>
+              courses.map(course =>
+                course.update('groups', groups => groups.filter(group => group.get('id') !== groupId))
+              )
+            )
+          )
+        )
       ),
   }),
   initialState

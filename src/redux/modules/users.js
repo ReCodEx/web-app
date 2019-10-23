@@ -5,7 +5,7 @@ import factory, { initialState, createRecord, resourceStatus } from '../helpers/
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { additionalActionTypes as groupsActionTypes } from './groups';
-import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
+import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes';
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
 import { actionTypes as paginationActionTypes } from './pagination';
 import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';

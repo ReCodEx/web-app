@@ -9,7 +9,7 @@ import createRecord from '../helpers/resourceManager/recordFactory';
 import { resourceStatus } from '../helpers/resourceManager/status';
 import { actionTypes as assignmentsActionTypes } from './assignments';
 import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments';
-import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCourses';
+import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes';
 import { selectedInstanceId } from '../selectors/auth';
 
 import { objectMap } from '../../helpers/common';
@@ -378,6 +378,14 @@ const reducer = handleActions(
 
     [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (state, { payload: data }) =>
       state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
+
+    [sisSupervisedCoursesActionTypes.BIND_FULFILLED]: (state, { payload: data }) =>
+      state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
+
+    [actionTypes.UNBIND_FULFILLED]: (state, { meta: { courseId, groupId } }) =>
+      state.updateIn(['resources', groupId, 'data', 'privateData', 'bindings', 'sis'], bindings =>
+        bindings.filter(binding => binding !== courseId)
+      ),
   }),
   initialState
 );
