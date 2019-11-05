@@ -169,7 +169,7 @@ class Dashboard extends Component {
                 {groups => (
                   <div>
                     <h2 className="page-heading">
-                      <FormattedMessage id="app.dashboard.memberOf" defaultMessage="Groups you are member of" />
+                      <FormattedMessage id="app.dashboard.memberOf" defaultMessage="Groups you are a member of" />
                     </h2>
 
                     {groups

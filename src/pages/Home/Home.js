@@ -37,7 +37,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
           <p>
             <FormattedMessage
               id="app.homepage.whatIsRecodexContent"
-              defaultMessage="ReCodEx is a system for dynamic analysis and evaluation of programming exercises. It is a set of components, which allows assigning practical programming problems to students by theit supervisors throught web interface. After solving the problem students upload their solution to the system and ReCodEx automaticaly evaluates them (typically checking corectness of program output) and assigns corresponding amount of points. Students have quick feedback about their solution and supervisors does not have to manually check each solution for basic coretness (like that the program compiles and gives correct results in reasonable time)."
+              defaultMessage="ReCodEx is a system for dynamic analysis and evaluation of programming exercises. It is a set of components that allow supervisors to assign practical programming problems to students through a web interface. After solving each problem, students upload their solution to the system and ReCodEx automaticaly evaluates it (typically checking the correctness of program output) and assigns an appropriate number of points. Students have quick feedback about their solution and supervisors do not have to manually check each solution for basic correctness (like that the program compiles and gives correct results in a reasonable amount of time)."
             />
           </p>
         </Col>
@@ -50,19 +50,19 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
           <p>
             <FormattedHTMLMessage
               id="app.homepage.aboutContentP1"
-              defaultMessage='ReCodEx was born in 2016 as final work for <i>Software project</i> class. It is replacement for old system CodEx used at MFF UK since 2006. The project is opensource under <a href="https://opensource.org/licenses/MIT">MIT</a> licence hosted on <a href="https://github.com/ReCodEx">GitHub</a>. More detailed info is on <a href="https://github.com/ReCodEx/wiki/wiki">Wiki</a> page of the project.'
+              defaultMessage='ReCodEx was born in 2016 as a project for the <i>Software Project</i> class. It is a replacement for the previous system CodEx used at MFF UK since 2006. The project is open source under the <a href="https://opensource.org/licenses/MIT">MIT</a> licence hosted on <a href="https://github.com/ReCodEx">GitHub</a>. More detailed info is on the <a href="https://github.com/ReCodEx/wiki/wiki">Wiki</a> page of the project.'
             />
           </p>
           <p>
             <FormattedHTMLMessage
               id="app.homepage.aboutContentP2"
-              defaultMessage='During development was found number of <a href="https://github.com/ReCodEx/wiki/wiki/Conclusion#further-improvements">topics</a> for following student works of differend kinds. In case of interest in make this project more awesome, please contact one of the <a href="https://github.com/orgs/ReCodEx/people">authors</a> or teachers.'
+              defaultMessage='During development we found a number of <a href="https://github.com/ReCodEx/wiki/wiki/Conclusion#further-improvements">topics</a> for subsequent student projects of various kinds. If you are interested in making this project more awesome, please contact one of the <a href="https://github.com/orgs/ReCodEx/people">authors</a> or teachers.'
             />
           </p>
           <p>
             <FormattedMessage
               id="app.homepage.howToGiveFeedback"
-              defaultMessage="For any kind of feedback, either positive or negative, feel free to create an issue on GitHub. Just please give your feedback the tag 'feedback' so we can distinguish those from bugs. We will try to respond to your feedback and we will see if there is something that can be done about it. We thank you for all your feedback in advance!"
+              defaultMessage="For any kind of feedback, either positive or negative, feel free to create an issue on GitHub. Just please give your feedback the tag 'feedback' so we can distinguish it from bugs. We will try to respond to your feedback and we will see if there is something that can be done about it. We thank you for all your feedback in advance!"
             />
           </p>
         </Col>
@@ -108,7 +108,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
           <p>
             <FormattedMessage
               id="app.homepage.whereToReportBugsText"
-              defaultMessage="Every software contains bugs and we are well avare of this fact. From time to time you might find a bug that nobody else has reported and which has not been fixed yet. Please report all bugs to our issue tracker on GitHub - just file a new issue and give it a label 'bug'. We will try to investigate and release a bugfix as soon as possible."
+              defaultMessage="Every software system contains bugs and we are well aware of this fact. From time to time you might find a bug that nobody else has reported and which has not been fixed yet. Please report all bugs to our issue tracker on GitHub - just file a new issue and give it the label 'bug'. We will try to investigate and release a bug fix as soon as possible."
             />
           </p>
           <p className="text-center">
