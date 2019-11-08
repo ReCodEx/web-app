@@ -67,7 +67,7 @@ class User extends Component {
         dispatch(fetchUserIfNeeded(userId)).then(({ value: user }) => {
           const studentOf = safeGet(user, ['privateData', 'groups', 'studentOf'], []);
           const supervisorOf = safeGet(user, ['privateData', 'groups', 'supervisorOf'], []);
-          dispatch((dispatch, getState) =>
+          return dispatch((dispatch, getState) =>
             Promise.all(
               [...studentOf, ...supervisorOf]
                 .filter(groupId => {
