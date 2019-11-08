@@ -436,7 +436,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   loadAsync: () => GroupDetail.loadAsync(params, dispatch),
-  createShadowAssignment: () => dispatch(createShadowAssignment({ groupId: params.groupId })),
+  createShadowAssignment: () => dispatch(createShadowAssignment(params.groupId)),
   createGroupExercise: () => dispatch(createExercise({ groupId: params.groupId })),
 });
 
