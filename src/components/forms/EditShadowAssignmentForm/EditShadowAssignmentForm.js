@@ -10,6 +10,7 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
+import { safeGet } from '../../../helpers/common';
 
 const EditShadowAssignmentForm = ({
   initialValues: shadowAssignment,
@@ -28,13 +29,17 @@ const EditShadowAssignmentForm = ({
   <div>
     <FormBox
       title={
-        <FormattedMessage
-          id="app.editShadowAssignment.titleName"
-          defaultMessage="Edit Shadow Assignment — {name}"
-          values={{
-            name: <LocalizedExerciseName entity={shadowAssignment} />,
-          }}
-        />
+        safeGet(shadowAssignment, ['localizedTexts'], []).filter(lt => lt._enabled && lt.name).length > 0 ? (
+          <FormattedMessage
+            id="app.editShadowAssignment.titleName"
+            defaultMessage="Edit Shadow Assignment — {name}"
+            values={{
+              name: <LocalizedExerciseName entity={shadowAssignment} />,
+            }}
+          />
+        ) : (
+          <FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Edit Shadow Assignment" />
+        )
       }
       successful={submitSucceeded}
       dirty={dirty}
