@@ -99,3 +99,8 @@ export const getExerciseDetachingGroupId = defaultMemoize(id =>
     exercise => exercise && exercise.getIn(['data', 'detachingGroupId'], null)
   )
 );
+
+export const getExerciseTags = state => getExercises(state).get('tags', []);
+export const getExerciseTagsLoading = state => getExercises(state).get('tags') === null;
+
+export const getExerciseTagsUpdatePending = state => getExercises(state).get('tagsPending', null);

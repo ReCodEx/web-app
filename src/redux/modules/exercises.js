@@ -7,7 +7,7 @@ import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFil
 import { actionTypes as attachmentFilesActionTypes } from './attachmentFiles';
 import { actionTypes as paginationActionTypes } from './pagination';
 
-import { arrayToObject } from '../../helpers/common';
+import { arrayToObject, unique } from '../../helpers/common';
 
 const resourceName = 'exercises';
 const { actions, reduceActions, actionTypes } = factory({
@@ -37,6 +37,18 @@ export const additionalActionTypes = {
   DETACH_EXERCISE_GROUP_PENDING: 'recodex/exercises/DETACH_EXERCISE_GROUP_PENDING',
   DETACH_EXERCISE_GROUP_REJECTED: 'recodex/exercises/DETACH_EXERCISE_GROUP_REJECTED',
   DETACH_EXERCISE_GROUP_FULFILLED: 'recodex/exercises/DETACH_EXERCISE_GROUP_FULFILLED',
+  FETCH_TAGS: 'recodex/exercises/FETCH_TAGS',
+  FETCH_TAGS_PENDING: 'recodex/exercises/FETCH_TAGS_PENDING',
+  FETCH_TAGS_REJECTED: 'recodex/exercises/FETCH_TAGS_REJECTED',
+  FETCH_TAGS_FULFILLED: 'recodex/exercises/FETCH_TAGS_FULFILLED',
+  ADD_TAG: 'recodex/exercises/ADD_TAG',
+  ADD_TAG_PENDING: 'recodex/exercises/ADD_TAG_PENDING',
+  ADD_TAG_REJECTED: 'recodex/exercises/ADD_TAG_REJECTED',
+  ADD_TAG_FULFILLED: 'recodex/exercises/ADD_TAG_FULFILLED',
+  REMOVE_TAG: 'recodex/exercises/REMOVE_TAG',
+  REMOVE_TAG_PENDING: 'recodex/exercises/REMOVE_TAG_PENDING',
+  REMOVE_TAG_REJECTED: 'recodex/exercises/REMOVE_TAG_REJECTED',
+  REMOVE_TAG_FULFILLED: 'recodex/exercises/REMOVE_TAG_FULFILLED',
 };
 
 export const loadExercise = actions.pushResource;
@@ -126,7 +138,34 @@ export const detachExerciseFromGroup = (exerciseId, groupId) =>
     meta: { exerciseId, groupId },
   });
 
-/**
+/*
+ * Tags
+ */
+
+export const fetchTags = () =>
+  createApiAction({
+    type: additionalActionTypes.FETCH_TAGS,
+    method: 'GET',
+    endpoint: '/exercises/tags',
+  });
+
+export const addTag = (exerciseId, tagName) =>
+  createApiAction({
+    type: additionalActionTypes.ADD_TAG,
+    method: 'POST',
+    endpoint: `/exercises/${exerciseId}/tags/${tagName}`,
+    meta: { exerciseId, tagName },
+  });
+
+export const removeTag = (exerciseId, tagName) =>
+  createApiAction({
+    type: additionalActionTypes.REMOVE_TAG,
+    method: 'DELETE',
+    endpoint: `/exercises/${exerciseId}/tags/${tagName}`,
+    meta: { exerciseId, tagName },
+  });
+
+/*
  * Reducer
  */
 
@@ -235,6 +274,40 @@ const reducer = handleActions(
             )
           )
         : state,
+
+    [additionalActionTypes.FETCH_TAGS_PENDING]: state => state.set('tags', null),
+    [additionalActionTypes.FETCH_TAGS_REJECTED]: state => state.delete('tags'),
+    [additionalActionTypes.FETCH_TAGS_FULFILLED]: (state, { payload }) => state.set('tags', payload.sort()),
+
+    [additionalActionTypes.ADD_TAG_PENDING]: (state, { meta: { exerciseId } }) => state.set('tagsPending', exerciseId),
+    [additionalActionTypes.ADD_TAG_REJECTED]: state => state.delete('tagsPending'),
+    [additionalActionTypes.ADD_TAG_FULFILLED]: (state, { payload: data, meta: { exerciseId, tagName } }) =>
+      state
+        .delete('tagsPending')
+        .setIn(
+          ['resources', exerciseId],
+          createRecord({
+            data,
+            state: resourceStatus.FULFILLED,
+            didInvalidate: false,
+            lastUpdate: Date.now(),
+          })
+        )
+        .update('tags', [], tags => unique([...tags, tagName]).sort()),
+
+    [additionalActionTypes.REMOVE_TAG_PENDING]: (state, { meta: { exerciseId } }) =>
+      state.set('tagsPending', exerciseId),
+    [additionalActionTypes.REMOVE_TAG_REJECTED]: state => state.delete('tagsPending'),
+    [additionalActionTypes.REMOVE_TAG_FULFILLED]: (state, { payload: data, meta: { exerciseId, tagName } }) =>
+      state.delete('tagsPending').setIn(
+        ['resources', exerciseId],
+        createRecord({
+          data,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now(),
+        })
+      ),
   }),
   initialState
 );
