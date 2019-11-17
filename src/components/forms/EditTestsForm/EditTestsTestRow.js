@@ -38,7 +38,7 @@ const EditTestsTestRow = ({ test, onRemove, isUniform, percent, readOnly = false
       <td style={{ verticalAlign: 'middle' }}>
         <Button onClick={onRemove} bsStyle={'danger'} bsSize="xs" className="btn-flat pull-right">
           <RemoveIcon gapRight />
-          <FormattedMessage id="app.editTestsTest.remove" defaultMessage="Remove" />
+          <FormattedMessage id="generic.remove" defaultMessage="Remove" />
         </Button>
       </td>
     )}

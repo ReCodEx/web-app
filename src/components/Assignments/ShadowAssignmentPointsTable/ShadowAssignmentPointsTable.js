@@ -157,10 +157,7 @@ class ShadowAssignmentPointsTable extends Component {
                             }>
                             <Button bsStyle="danger" bsSize="xs">
                               <DeleteIcon gapRight />
-                              <FormattedMessage
-                                id="app.shadowAssignmentPointsTable.removePointsButton"
-                                defaultMessage="Remove"
-                              />
+                              <FormattedMessage id="generic.remove" defaultMessage="Remove" />
                             </Button>
                           </Confirm>
                         )}

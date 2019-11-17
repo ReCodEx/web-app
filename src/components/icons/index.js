@@ -8,7 +8,7 @@ import Icon from './Icon';
 
 const defaultMessageIcon = ['far', 'envelope'];
 
-export const AddIcon = props => <Icon {...props} icon="plus" />;
+export const AddIcon = props => <Icon {...props} icon="plus-circle" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
 export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
   <Icon {...props} icon={archived ? 'dolly' : 'archive'} />
@@ -39,7 +39,7 @@ export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
-export const RemoveIcon = props => <Icon {...props} icon="minus" />;
+export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
 export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const SendIcon = props => <Icon {...props} icon={['far', 'paper-plane']} />;
