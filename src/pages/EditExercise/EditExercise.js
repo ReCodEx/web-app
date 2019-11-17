@@ -11,11 +11,12 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
+import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import { NeedFixingIcon } from '../../components/icons';
 
-import { fetchExerciseIfNeeded, editExercise } from '../../redux/modules/exercises';
+import { fetchExerciseIfNeeded, editExercise, fetchTags } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -53,7 +54,8 @@ class EditExercise extends Component {
     }
   }
 
-  static loadAsync = ({ exerciseId }, dispatch) => Promise.all([dispatch(fetchExerciseIfNeeded(exerciseId))]);
+  static loadAsync = ({ exerciseId }, dispatch) =>
+    Promise.all([dispatch(fetchExerciseIfNeeded(exerciseId)), dispatch(fetchTags())]);
 
   editExerciseSubmitHandler = formData => {
     const { exercise, editExercise } = this.props;
@@ -142,6 +144,9 @@ class EditExercise extends Component {
                 </Col>
                 <Col lg={6}>
                   <AttachmentFilesTableContainer exercise={exercise} />
+                  <Box title={<FormattedMessage id="app.editExercise.editTags" defaultMessage="Edit Tags" />}>
+                    <ExercisesTagsEditContainer exerciseId={exercise.id} />
+                  </Box>
                 </Col>
               </Row>
               <br />
