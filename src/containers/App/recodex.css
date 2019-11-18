@@ -86,6 +86,11 @@
   margin: 0 !important;
 }
 
+.tag-margin {
+  margin: 2px;
+  display: inline-block;
+}
+
 /*
  * Padding Configurations
  */

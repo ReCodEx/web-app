@@ -32,6 +32,7 @@ export const GroupIcon = ({ organizational = false, archived = false, ...props }
   <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'} />
 );
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
+export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
 export const LoadingIcon = props => <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export const LockIcon = props => <Icon {...props} icon="lock" />;
@@ -63,6 +64,8 @@ export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
 export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
 export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props => <Icon {...props} icon="chalkboard-teacher" />;
+export const TagIcon = props => <Icon {...props} icon="tag" />;
+export const TestsIcon = props => <Icon {...props} icon="tasks" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 
 const messageIconTypes = {

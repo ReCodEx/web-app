@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
+import { Label, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import DifficultyIcon from '../DifficultyIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -11,10 +12,11 @@ import DeleteExerciseButtonContainer from '../../../containers/DeleteExerciseBut
 
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
-import { ExercisePrefixIcons, EditIcon } from '../../icons';
+import { ExercisePrefixIcons, EditIcon, LimitsIcon, TestsIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
 import DateTime from '../../widgets/DateTime';
 import AssignExerciseButton from '../../buttons/AssignExerciseButton';
+import { getTagStyle } from '../../../helpers/exercise/tags';
 
 import withLinks from '../../../helpers/withLinks';
 
@@ -24,6 +26,7 @@ const ExercisesListItem = ({
   difficulty,
   authorId,
   runtimeEnvironments,
+  tags,
   groupsIds = [],
   localizedTexts,
   createdAt,
@@ -46,6 +49,7 @@ const ExercisesListItem = ({
     <td className="shrink-col">
       <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
     </td>
+
     <td>
       <strong>
         {permissionHints.viewDetail ? (
@@ -57,10 +61,21 @@ const ExercisesListItem = ({
         )}
       </strong>
     </td>
+
     <td>
       <UsersNameContainer userId={authorId} />
     </td>
+
     <td className="small">{runtimeEnvironments && <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}</td>
+
+    <td className="small">
+      {tags.sort().map(tag => (
+        <Label key={tag} className="tag-margin" style={getTagStyle(tag)}>
+          {tag}
+        </Label>
+      ))}
+    </td>
+
     {showGroups && (
       <td className="small">
         {groupsIds.length > 0 ? (
@@ -76,13 +91,16 @@ const ExercisesListItem = ({
         )}
       </td>
     )}
+
     <td className="text-nowrap">
       <DifficultyIcon difficulty={difficulty} />
     </td>
+
     <td className="text-nowrap">
       <DateTime
         unixts={createdAt}
         showOverlay
+        showTime={false}
         overlayTooltipId={`created-tooltip-${id}`}
         customTooltip={
           <span>
@@ -102,30 +120,51 @@ const ExercisesListItem = ({
       )}
       {permissionHints.update && (
         <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
-          <Button bsSize="xs" bsStyle="warning">
-            <EditIcon gapRight />
-            <FormattedMessage id="app.exercises.listEdit" defaultMessage="Settings" />
-          </Button>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`${id}-settings`}>
+                <FormattedMessage id="app.exercises.listEdit" defaultMessage="Settings" />
+              </Tooltip>
+            }>
+            <Button bsSize="xs" bsStyle="warning">
+              <EditIcon smallGapLeft smallGapRight />
+            </Button>
+          </OverlayTrigger>
         </LinkContainer>
       )}
       {permissionHints.viewPipelines && permissionHints.viewScoreConfig && (
         <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
-          <Button bsSize="xs" bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}>
-            <EditIcon gapRight />
-            <FormattedMessage id="app.exercises.listEditConfig" defaultMessage="Tests" />
-          </Button>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`${id}-tests`}>
+                <FormattedMessage id="app.exercises.listEditConfig" defaultMessage="Tests" />
+              </Tooltip>
+            }>
+            <Button bsSize="xs" bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}>
+              <TestsIcon smallGapLeft smallGapRight />
+            </Button>
+          </OverlayTrigger>
         </LinkContainer>
       )}
       {permissionHints.viewLimits && (
         <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}>
-          <Button bsSize="xs" bsStyle={permissionHints.setLimits ? 'warning' : 'default'}>
-            <EditIcon gapRight />
-            <FormattedMessage id="app.exercises.listEditLimits" defaultMessage="Limits" />
-          </Button>
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`${id}-limits`}>
+                <FormattedMessage id="app.exercises.listEditLimits" defaultMessage="Limits" />
+              </Tooltip>
+            }>
+            <Button bsSize="xs" bsStyle={permissionHints.setLimits ? 'warning' : 'default'}>
+              <LimitsIcon smallGapLeft smallGapRight />
+            </Button>
+          </OverlayTrigger>
         </LinkContainer>
       )}
       {permissionHints.remove && (
-        <DeleteExerciseButtonContainer id={id} bsSize="xs" resourceless={true} onDeleted={reload} />
+        <DeleteExerciseButtonContainer id={id} bsSize="xs" resourceless captionAsLabel onDeleted={reload} />
       )}
     </td>
   </tr>
@@ -135,6 +174,7 @@ ExercisesListItem.propTypes = {
   id: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
+  tags: PropTypes.array.isRequired,
   groupsIds: PropTypes.array,
   name: PropTypes.string.isRequired,
   difficulty: PropTypes.string.isRequired,

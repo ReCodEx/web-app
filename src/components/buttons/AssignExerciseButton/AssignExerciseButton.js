@@ -18,7 +18,7 @@ const AssignExerciseButton = ({ isLocked, isBroken, assignExercise, ...props }) 
     );
   } else {
     return (
-      <Button onClick={assignExercise} bsSize="xs" className="btn-flat">
+      <Button onClick={assignExercise} bsSize="xs" className="btn-flat" bsStyle="success">
         <SendIcon gapRight />
         <FormattedMessage id="app.exercise.assignButton" defaultMessage="Assign" />
       </Button>

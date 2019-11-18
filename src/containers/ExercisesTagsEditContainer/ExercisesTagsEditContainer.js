@@ -15,7 +15,7 @@ import {
 } from '../../redux/selectors/exercises';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { getTagCSSColor } from '../../helpers/exercise/tags';
-import Icon, { LoadingIcon, RemoveIcon } from '../../components/icons';
+import { LoadingIcon, RemoveIcon, TagIcon } from '../../components/icons';
 import Button from '../../components/widgets/FlatButton';
 
 const ADD_TAG_INITIAL_VALUES = { tag: '' };
@@ -30,7 +30,7 @@ const ExercisesTagsEditContainer = ({ exercise, tags, tagsLoading, updatePending
               {exercise.tags.sort().map(tag => (
                 <tr key={`${exercise.id}:${tag}`}>
                   <td>
-                    <Icon icon="tag" style={{ color: getTagCSSColor(tag) }}></Icon>
+                    <TagIcon style={{ color: getTagCSSColor(tag) }} />
                   </td>
                   <td className="full-width">{tag}</td>
                   <td>
