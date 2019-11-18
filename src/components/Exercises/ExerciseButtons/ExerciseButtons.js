@@ -5,7 +5,7 @@ import { ButtonGroup } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Button from '../../widgets/FlatButton';
-import Icon, { EditIcon } from '../../icons';
+import { EditIcon, GroupIcon, LimitsIcon, TestsIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 const ExerciseButtons = ({
@@ -22,8 +22,8 @@ const ExerciseButtons = ({
     <ButtonGroup>
       <LinkContainer to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exerciseId)}>
         <Button bsStyle="primary" bsSize="sm">
-          <Icon icon="tasks" gapRight />
-          <FormattedMessage id="app.exercise.assignments" defaultMessage="Assignments" />
+          <GroupIcon gapRight />
+          <FormattedMessage id="app.exercise.assignments" defaultMessage="Assignments in Groups" />
         </Button>
       </LinkContainer>
 
@@ -39,7 +39,7 @@ const ExerciseButtons = ({
       {permissionHints && permissionHints.viewPipelines && permissionHints.viewScoreConfig && (
         <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exerciseId)}>
           <Button bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'} bsSize="sm">
-            <EditIcon gapRight />
+            <TestsIcon gapRight />
             <FormattedMessage id="app.exercise.editConfig" defaultMessage="Tests Configuration" />
           </Button>
         </LinkContainer>
@@ -48,7 +48,7 @@ const ExerciseButtons = ({
       {permissionHints && permissionHints.viewLimits && (
         <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(exerciseId)}>
           <Button bsStyle={permissionHints.setLimits ? 'warning' : 'default'} bsSize="sm">
-            <EditIcon gapRight />
+            <LimitsIcon gapRight />
             <FormattedMessage id="app.exercise.editLimits" defaultMessage="Tests Limits" />
           </Button>
         </LinkContainer>

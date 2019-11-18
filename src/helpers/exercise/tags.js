@@ -8,6 +8,8 @@ export const getTagCSSColor = tag => {
     res = res + (char.charCodeAt(0) * goldenRatio) / 256;
     return Math.abs(res - Math.trunc(res));
   }, 0);
-  const hue = Math.round(hash * 360);
+  const hue = Math.round(hash * 36) * 10;
   return `hsl(${hue}, 66%, 42%)`;
 };
+
+export const getTagStyle = tag => ({ backgroundColor: getTagCSSColor(tag), color: 'white' });

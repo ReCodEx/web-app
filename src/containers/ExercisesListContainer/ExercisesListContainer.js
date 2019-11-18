@@ -78,6 +78,9 @@ class ExercisesListContainer extends Component {
         <th>
           <FormattedMessage id="generic.runtimesShort" defaultMessage="Runtimes/Languages" />
         </th>
+        <th>
+          <FormattedMessage id="generic.tags" defaultMessage="Tags" />
+        </th>
         {showGroups && (
           <th>
             <FormattedMessage id="app.exercisesList.groups" defaultMessage="Groups" />

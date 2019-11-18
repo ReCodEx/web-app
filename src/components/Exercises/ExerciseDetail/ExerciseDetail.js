@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { Table } from 'react-bootstrap';
+import { Table, Label } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import Box from '../../widgets/Box';
@@ -11,11 +11,12 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon, CodeIcon } from '../../icons';
+import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon, CodeIcon, TagIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import Version from '../../widgets/Version/Version';
+import { getTagStyle } from '../../../helpers/exercise/tags';
 
 const ExerciseDetail = ({
   authorId,
@@ -27,6 +28,7 @@ const ExerciseDetail = ({
   forkedFrom = null,
   localizedTexts,
   runtimeEnvironments,
+  tags,
   isPublic,
   isLocked,
   locale,
@@ -88,6 +90,22 @@ const ExerciseDetail = ({
           </th>
           <td>
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <TagIcon />
+          </td>
+          <th className="text-nowrap">
+            <FormattedMessage id="generic.tags" defaultMessage="Tags" />:
+          </th>
+          <td>
+            {tags.sort().map(tag => (
+              <Label key={tag} className="tag-margin" style={getTagStyle(tag)}>
+                {tag}
+              </Label>
+            ))}
           </td>
         </tr>
 
@@ -180,6 +198,7 @@ ExerciseDetail.propTypes = {
   forkedFrom: PropTypes.object,
   localizedTexts: PropTypes.array.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
+  tags: PropTypes.array.isRequired,
   isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   locale: PropTypes.string.isRequired,
