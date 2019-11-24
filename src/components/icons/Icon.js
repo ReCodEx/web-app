@@ -29,8 +29,8 @@ const Icon = ({
         [style.gapRight]: gapRight,
         [style.largeGapLeft]: largeGapLeft,
         [style.largeGapRight]: largeGapRight,
-        [style.timid]: timid,
-        [style.clickable]: Boolean(onClick || onDoubleClick),
+        timid: timid,
+        clickable: Boolean(onClick || onDoubleClick),
       })}
       onClick={onClick}
       onDoubleClick={onDoubleClick}

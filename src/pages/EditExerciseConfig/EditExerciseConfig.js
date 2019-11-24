@@ -399,7 +399,7 @@ class EditExerciseConfig extends Component {
                       {(config, environmentConfigs) => (
                         <Row>
                           <Col lg={6}>
-                            <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
+                            <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray>
                               {environments => (
                                 <EditEnvironmentConfigForm
                                   initialValues={getEnvironmentInitValues(environmentConfigs)}
@@ -633,7 +633,7 @@ class EditExerciseConfig extends Component {
 EditExerciseConfig.propTypes = {
   exercise: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
-  runtimeEnvironments: PropTypes.object.isRequired,
+  runtimeEnvironments: ImmutablePropTypes.map.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       exerciseId: PropTypes.string.isRequired,

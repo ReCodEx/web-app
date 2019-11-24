@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
-import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
-import { Alert, Grid, Row, Col, OverlayTrigger, Tooltip, Well } from 'react-bootstrap';
+import { reduxForm } from 'redux-form';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { Alert, Well } from 'react-bootstrap';
 
-import { CheckboxField } from '../Fields';
+import EditEnvironmentList from './EditEnvironmentList';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
-import Icon, { RefreshIcon, InfoIcon } from '../../icons';
+import { RefreshIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
 import { getConfigVar } from '../../../helpers/config';
 
@@ -25,7 +25,6 @@ class EditEnvironmentSimpleForm extends Component {
       invalid,
       error,
       runtimeEnvironments,
-      intl: { locale },
     } = this.props;
 
     return (
@@ -42,51 +41,7 @@ class EditEnvironmentSimpleForm extends Component {
           </Well>
         )}
 
-        <Grid fluid>
-          <Row>
-            {runtimeEnvironments
-              .sort((a, b) => a.longName.localeCompare(b.longName, locale))
-              .map((environment, i) => (
-                <Col key={i} xs={12} sm={6}>
-                  <Field
-                    name={`${environment.id}`}
-                    component={CheckboxField}
-                    onOff
-                    label={
-                      <span>
-                        {environment.longName}
-
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id={`environment-${environment.id}`}>
-                              {environment.description} {environment.extensions}
-                            </Tooltip>
-                          }>
-                          <InfoIcon gapLeft className="text-primary" timid />
-                        </OverlayTrigger>
-
-                        {STANDALONE_ENVIRONMENTS.includes(environment.id) && (
-                          <OverlayTrigger
-                            placement="bottom"
-                            overlay={
-                              <Tooltip id={`environment-standalone-${environment.id}`}>
-                                <FormattedMessage
-                                  id="app.editEnvironmentSimpleForm.exclusiveEnvironment"
-                                  defaultMessage="Exclusive runtime environment"
-                                />
-                              </Tooltip>
-                            }>
-                            <Icon icon={['far', 'star']} smallGapLeft className="text-warning half-opaque" />
-                          </OverlayTrigger>
-                        )}
-                      </span>
-                    }
-                  />
-                </Col>
-              ))}
-          </Row>
-        </Grid>
+        <EditEnvironmentList runtimeEnvironments={runtimeEnvironments} showExclusive />
 
         <hr />
 
@@ -146,7 +101,6 @@ EditEnvironmentSimpleForm.propTypes = {
   invalid: PropTypes.bool,
   error: PropTypes.any,
   runtimeEnvironments: PropTypes.array,
-  intl: intlShape.isRequired,
 };
 
 const validate = (formData, { runtimeEnvironments }) => {
@@ -188,4 +142,4 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate,
-})(injectIntl(EditEnvironmentSimpleForm));
+})(EditEnvironmentSimpleForm);

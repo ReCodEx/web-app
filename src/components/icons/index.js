@@ -23,6 +23,8 @@ export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props => <Icon {...props} icon="cloud-download-alt" />;
 export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
 export const EmpoweredSupervisorIcon = props => <Icon {...props} icon="user-ninja" />;
+export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
+  isOpen ? <Icon icon={['far', 'minus-square']} gapRight /> : <Icon icon={['far', 'plus-square']} gapRight />;
 export const FailureIcon = props => (
   <strong className="text-danger">
     <Icon {...props} icon="times" />
@@ -88,6 +90,10 @@ export const VisibleIcon = ({ visible = true, ...props }) =>
     <Icon {...props} icon={['far', 'eye-slash']} className="text-muted" />
   );
 export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
+
+ExpandCollapseIcon.propTypes = {
+  isOpen: PropTypes.bool,
+};
 
 GroupIcon.propTypes = {
   organizational: PropTypes.bool,
