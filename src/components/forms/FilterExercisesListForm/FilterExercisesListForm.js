@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field } from 'redux-form';
-import { Alert, Well, Grid, Row, Col, Form, Button } from 'react-bootstrap';
+import { reduxForm, Field, FieldArray } from 'redux-form';
+import { Alert, Well, Grid, Row, Col, Form, Button, ControlLabel } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
+import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SubmitButton from '../SubmitButton';
-import { TextField, SelectField } from '../Fields';
-import { identity } from '../../../helpers/common';
+import { TextField, SelectField, TagsSelectorField } from '../Fields';
+import { identity, safeGet } from '../../../helpers/common';
+import { ExpandCollapseIcon } from '../../icons';
 
 const authorsToOptions = defaultMemoize((authors, locale) =>
   authors
@@ -25,91 +27,219 @@ const authorsToOptions = defaultMemoize((authors, locale) =>
     }))
 );
 
-const FilterExercisesListForm = ({
-  onSubmit = identity,
-  handleSubmit,
-  authors,
-  authorsLoading,
-  loggedUserId,
-  submitFailed = false,
-  submitSucceeded = false,
-  invalid,
-  change,
-  intl: { locale },
-}) => (
-  <Form method="POST" onSubmit={onSubmit}>
-    <Well bsSize="sm">
-      {submitFailed && (
-        <Alert bsStyle="danger">
-          <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
-        </Alert>
-      )}
+class FilterExercisesListForm extends Component {
+  state = { open: null };
 
-      <ResourceRenderer resource={authors} returnAsArray forceLoading={authorsLoading} bulkyLoading>
-        {authors => (
-          <Grid fluid>
-            <Row>
-              <Col sm={12} md={4}>
-                <Field
-                  name="search"
-                  component={TextField}
-                  maxLength={255}
-                  label={
-                    <span>
-                      <FormattedMessage id="app.filterExercisesListForm.searchName" defaultMessage="Search by name" />:
-                    </span>
-                  }
-                />
-              </Col>
-              <Col sm={12} md={6}>
-                <Field
-                  name="author"
-                  component={SelectField}
-                  addEmptyOption
-                  emptyOptionCaption=""
-                  options={authorsToOptions(authors, locale)}
-                  label={
-                    <span>
-                      <FormattedMessage id="app.filterExercisesListForm.author" defaultMessage="Author" />:
-                    </span>
-                  }
-                  associatedButton={
-                    <div className="text-nowrap">
-                      <Button className="btn-flat" onClick={() => change('author', null)}>
-                        <FormattedMessage id="app.filterExercisesListForm.allButton" defaultMessage="All" />
-                      </Button>
-                      {authors.find(author => author.id === loggedUserId) && (
-                        <Button className="btn-flat" onClick={() => change('author', loggedUserId)}>
-                          <FormattedMessage id="app.filterExercisesListForm.mineButton" defaultMessage="Mine" />
-                        </Button>
+  isOpen = () => {
+    return (
+      this.state.open === true ||
+      (this.state.open === null && // null = no one touched the initial state
+        (safeGet(this.props, ['initialValues', 'tags', 'length'], 0) > 0 || // some tags are selected...
+          Object.values(safeGet(this.props, ['initialValues', 'runtimeEnvironments'], {})).includes(true))) // ...or some envs are selected
+    );
+  };
+
+  toggleOpen = ev => {
+    ev.preventDefault();
+    this.setState({
+      open: !this.isOpen(),
+    });
+  };
+
+  render() {
+    const {
+      onSubmit = identity,
+      handleSubmit,
+      authors,
+      authorsLoading,
+      tags = [],
+      tagsLoading = false,
+      runtimeEnvironments,
+      loggedUserId,
+      submitFailed = false,
+      submitSucceeded = false,
+      invalid,
+      change,
+      intl: { locale },
+    } = this.props;
+    return (
+      <Form method="POST" onSubmit={onSubmit}>
+        <Well bsSize="sm">
+          {submitFailed && (
+            <Alert bsStyle="danger">
+              <FormattedMessage
+                id="generic.operationFailed"
+                defaultMessage="Operation failed. Please try again later."
+              />
+            </Alert>
+          )}
+
+          <ResourceRenderer resource={authors} returnAsArray forceLoading={authorsLoading || tagsLoading} bulkyLoading>
+            {authors => (
+              <Grid fluid>
+                <Row>
+                  <Col sm={12} md={this.isOpen() ? 6 : 4}>
+                    <Field
+                      name="search"
+                      component={TextField}
+                      maxLength={255}
+                      label={
+                        <span>
+                          <FormattedMessage
+                            id="app.filterExercisesListForm.searchName"
+                            defaultMessage="Search by name"
+                          />
+                          :
+                        </span>
+                      }
+                    />
+                  </Col>
+
+                  <Col sm={12} md={6}>
+                    <Field
+                      name="author"
+                      component={SelectField}
+                      addEmptyOption
+                      emptyOptionCaption=""
+                      options={authorsToOptions(authors, locale)}
+                      label={
+                        <span>
+                          <FormattedMessage id="app.filterExercisesListForm.author" defaultMessage="Author" />:
+                        </span>
+                      }
+                      associatedButton={
+                        <div className="text-nowrap">
+                          <Button className="btn-flat" onClick={() => change('author', null)}>
+                            <FormattedMessage id="app.filterExercisesListForm.allButton" defaultMessage="All" />
+                          </Button>
+                          {authors.find(author => author.id === loggedUserId) && (
+                            <Button className="btn-flat" onClick={() => change('author', loggedUserId)}>
+                              <FormattedMessage id="app.filterExercisesListForm.mineButton" defaultMessage="Mine" />
+                            </Button>
+                          )}
+                        </div>
+                      }
+                    />
+                  </Col>
+
+                  {!this.isOpen() && (
+                    <Col sm={12} md={2}>
+                      <div className="text-right" style={{ marginTop: '25px' }}>
+                        <SubmitButton
+                          id="setFilters"
+                          handleSubmit={handleSubmit}
+                          hasSucceeded={submitSucceeded}
+                          hasFailed={submitFailed}
+                          invalid={invalid}
+                          disabled={onSubmit === null}
+                          messages={{
+                            submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                            success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
+                          }}
+                        />
+                      </div>
+                    </Col>
+                  )}
+                </Row>
+
+                {this.isOpen() && (
+                  <React.Fragment>
+                    {tags && tags.length > 0 && (
+                      <React.Fragment>
+                        <Row>
+                          <Col lg={12}>
+                            <hr />
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={12}>
+                            <FieldArray
+                              name="tags"
+                              tags={tags}
+                              component={TagsSelectorField}
+                              label={
+                                <FormattedMessage
+                                  id="app.filterExercisesListForm.selectedTags"
+                                  defaultMessage="Selected Tags:"
+                                />
+                              }
+                            />
+                          </Col>
+                        </Row>
+                      </React.Fragment>
+                    )}
+
+                    <Row>
+                      <Col lg={12}>
+                        <hr />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg={12}>
+                        <ControlLabel>
+                          <FormattedMessage
+                            id="app.filterExercisesListForm.selectedEnvironments"
+                            defaultMessage="Selected Runtime Environments:"
+                          />
+                        </ControlLabel>
+                        <EditEnvironmentList
+                          runtimeEnvironments={runtimeEnvironments}
+                          namePrefix="runtimeEnvironments."
+                          fullWidth
+                        />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )}
+
+                <Row>
+                  <Col lg={12}>
+                    <hr />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col lg={12}>
+                    <p className="text-center">
+                      {this.isOpen() && (
+                        <SubmitButton
+                          id="setFilters"
+                          handleSubmit={handleSubmit}
+                          hasSucceeded={submitSucceeded}
+                          hasFailed={submitFailed}
+                          invalid={invalid}
+                          disabled={onSubmit === null}
+                          messages={{
+                            submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                            success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
+                          }}
+                        />
                       )}
-                    </div>
-                  }
-                />
-              </Col>
-              <Col sm={12} md={2}>
-                <div className="text-right" style={{ marginTop: '25px' }}>
-                  <SubmitButton
-                    id="setFilters"
-                    handleSubmit={handleSubmit}
-                    hasSucceeded={submitSucceeded}
-                    hasFailed={submitFailed}
-                    invalid={invalid}
-                    disabled={onSubmit === null}
-                    messages={{
-                      submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
-                      success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
-                    }}
-                  />
-                </div>
-              </Col>
-            </Row>
-          </Grid>
-        )}
-      </ResourceRenderer>
-    </Well>
-  </Form>
-);
+
+                      <span className="small clickable em-padding-horizontal" onClick={this.toggleOpen}>
+                        <ExpandCollapseIcon isOpen={this.isOpen()} gapRight />
+                        {this.isOpen() ? (
+                          <FormattedMessage
+                            id="app.filterExercisesListForm.hideAdvancedFilters"
+                            defaultMessage="Hide advanced filters..."
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.filterExercisesListForm.showAllFilters"
+                            defaultMessage="Show all filters..."
+                          />
+                        )}
+                      </span>
+                    </p>
+                  </Col>
+                </Row>
+              </Grid>
+            )}
+          </ResourceRenderer>
+        </Well>
+      </Form>
+    );
+  }
+}
 
 FilterExercisesListForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -118,8 +248,12 @@ FilterExercisesListForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   change: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
   authors: ImmutablePropTypes.list,
   authorsLoading: PropTypes.bool.isRequired,
+  tags: PropTypes.array,
+  tagsLoading: PropTypes.bool,
+  runtimeEnvironments: PropTypes.array.isRequired,
   loggedUserId: PropTypes.string.isRequired,
   intl: intlShape.isRequired,
 };

@@ -7,7 +7,7 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
 import Button from '../../widgets/FlatButton';
-import Icon from '../../icons';
+import Icon, { ExpandCollapseIcon } from '../../icons';
 import { SelectField, ExpandingInputFilesField, ExpandingSelectField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import { ENV_JAVA_ID } from '../../../helpers/exercise/environments';
@@ -76,7 +76,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
         (this.state.compilationOpen === null && this.hasCompilationExtraFiles()) ? (
           <Well>
             <h4 className="compilation-close" onClick={this.compilationClose}>
-              <Icon icon={['far', 'minus-square']} gapRight />
+              <ExpandCollapseIcon isOpen={true} gapRight />
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.compilationTitle"
                 defaultMessage="Compilation/Execution"
@@ -211,7 +211,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
           </Well>
         ) : (
           <div className="text-muted compilation-open" onClick={this.compilationOpen}>
-            <Icon icon={['far', 'plus-square']} gapRight />
+            <ExpandCollapseIcon isOpen={false} gapRight />
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.compilationTitle"
               defaultMessage="Compilation/Execution"

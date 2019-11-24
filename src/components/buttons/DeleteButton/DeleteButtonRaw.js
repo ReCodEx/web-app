@@ -5,8 +5,8 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
 import { DeleteIcon } from '../../icons';
 
-const DeleteButtonRaw = ({ id, disabled, small = true, captionAsLabel = false, ...props }) =>
-  captionAsLabel ? (
+const DeleteButtonRaw = ({ id, disabled, small = true, captionAsTooltip = false, ...props }) =>
+  captionAsTooltip ? (
     <OverlayTrigger
       placement="bottom"
       overlay={
@@ -28,7 +28,7 @@ const DeleteButtonRaw = ({ id, disabled, small = true, captionAsLabel = false, .
 DeleteButtonRaw.propTypes = {
   id: PropTypes.string,
   small: PropTypes.bool,
-  captionAsLabel: PropTypes.bool,
+  captionAsTooltip: PropTypes.bool,
   disabled: PropTypes.bool,
 };
 

@@ -8,9 +8,13 @@ import { withRouter } from 'react-router';
 
 import App from '../App';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../PaginationContainer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FilterExercisesListForm from '../../components/forms/FilterExercisesListForm';
 import { fetchExercisesAuthorsIfNeeded } from '../../redux/modules/exercisesAuthors';
+import { create as assignExercise } from '../../redux/modules/assignments';
+import { fetchTags } from '../../redux/modules/exercises';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import {
   getAllExericsesAuthors,
   getAllExericsesAuthorsIsLoading,
@@ -18,28 +22,45 @@ import {
   getExercisesAuthorsOfGroupIsLoading,
 } from '../../redux/selectors/exercisesAuthors';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { create as assignExercise } from '../../redux/modules/assignments';
+import { getExerciseTags, getExerciseTagsLoading } from '../../redux/selectors/exercises';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import { arrayToObject } from '../../helpers/common';
 
 import withLinks from '../../helpers/withLinks';
 
-const filterInitialValues = defaultMemoize(({ search = '', authorsIds = [] }) => ({
-  search,
-  author: authorsIds.length > 0 ? authorsIds[0] : null,
-}));
+const filterInitialValues = defaultMemoize(
+  ({ search = '', authorsIds = [], tags = [], runtimeEnvironments = [] }, allEnvironments) => ({
+    search,
+    author: authorsIds.length > 0 ? authorsIds[0] : null,
+    tags,
+    runtimeEnvironments: arrayToObject(allEnvironments, rte => rte.id, rte => runtimeEnvironments.includes(rte.id)),
+  })
+);
 
-const transformAndSetFilterData = defaultMemoize((setFilters, rootGroup) => ({ search, author }) => {
-  const data = {};
-  if (search.trim()) {
-    data.search = search.trim();
+const transformAndSetFilterData = defaultMemoize(
+  (setFilters, rootGroup) => ({ search, author, tags, runtimeEnvironments }) => {
+    const data = {};
+    if (search.trim()) {
+      data.search = search.trim();
+    }
+    if (author) {
+      data.authorsIds = [author];
+    }
+    if (rootGroup) {
+      data.groupsIds = [rootGroup];
+    }
+    if (tags.length > 0) {
+      data.tags = tags;
+    }
+
+    data.runtimeEnvironments = Object.keys(runtimeEnvironments).filter(rte => runtimeEnvironments[rte]);
+    if (runtimeEnvironments.length === 0) {
+      delete data.runtimeEnvironments;
+    }
+
+    return setFilters(data);
   }
-  if (author) {
-    data.authorsIds = [author];
-  }
-  if (rootGroup) {
-    data.groupsIds = [rootGroup];
-  }
-  return setFilters(data);
-});
+);
 
 class ExercisesListContainer extends Component {
   constructor(props) {
@@ -58,10 +79,12 @@ class ExercisesListContainer extends Component {
     if (this.props.rootGroup !== prevProps.rootGroup) {
       this.defaultFilters.groupsIds = [this.props.rootGroup];
       this.props.fetchExercisesAuthorsIfNeeded(this.props.rootGroup);
+      this.props.fetchTags();
     }
   }
 
-  static loadData = ({ rootGroup, fetchExercisesAuthorsIfNeeded }) => fetchExercisesAuthorsIfNeeded(rootGroup);
+  static loadData = ({ rootGroup, fetchExercisesAuthorsIfNeeded, fetchTags, fetchRuntimeEnvironments }) =>
+    Promise.all([fetchExercisesAuthorsIfNeeded(rootGroup), fetchTags(), fetchRuntimeEnvironments()]);
 
   headingCreator = ({ offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy }) => {
     const { showGroups } = this.props;
@@ -89,7 +112,7 @@ class ExercisesListContainer extends Component {
         <th>
           <FormattedMessage id="app.exercisesList.difficulty" defaultMessage="Difficulty" />
         </th>
-        <th>
+        <th className="text-nowrap">
           <FormattedMessage id="app.exercisesList.created" defaultMessage="Created" />
           {createSortingIcon('createdAt', orderByColumn, orderByDescending, setOrderBy)}
         </th>
@@ -99,17 +122,33 @@ class ExercisesListContainer extends Component {
   };
 
   filtersCreator = (filters, setFilters) => {
-    const { id, authors, authorsLoading, loggedUserId, rootGroup } = this.props;
+    const {
+      id,
+      authors,
+      authorsLoading,
+      allTags = [],
+      allTagsLoading,
+      runtimeEnvironments,
+      loggedUserId,
+      rootGroup,
+    } = this.props;
 
     return (
-      <FilterExercisesListForm
-        form={`${id}-filterForm`}
-        authors={authors}
-        authorsLoading={authorsLoading}
-        loggedUserId={loggedUserId}
-        onSubmit={setFilters ? transformAndSetFilterData(setFilters, rootGroup) : null}
-        initialValues={filterInitialValues(filters)}
-      />
+      <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray bulkyLoading>
+        {envs => (
+          <FilterExercisesListForm
+            form={`${id}-filterForm`}
+            authors={authors}
+            authorsLoading={authorsLoading}
+            tags={allTags}
+            tagsLoading={allTagsLoading}
+            runtimeEnvironments={envs}
+            loggedUserId={loggedUserId}
+            onSubmit={setFilters ? transformAndSetFilterData(setFilters, rootGroup) : null}
+            initialValues={filterInitialValues(filters, envs)}
+          />
+        )}
+      </ResourceRenderer>
     );
   };
 
@@ -168,7 +207,11 @@ ExercisesListContainer.propTypes = {
   loggedUserId: PropTypes.string.isRequired,
   authors: ImmutablePropTypes.list,
   authorsLoading: PropTypes.bool.isRequired,
+  allTags: PropTypes.array,
+  allTagsLoading: PropTypes.bool.isRequired,
   fetchExercisesAuthorsIfNeeded: PropTypes.func.isRequired,
+  fetchTags: PropTypes.func.isRequired,
+  runtimeEnvironments: ImmutablePropTypes.map.isRequired,
   assignExercise: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired,
@@ -182,9 +225,14 @@ export default withLinks(
       authorsLoading: rootGroup
         ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
         : getAllExericsesAuthorsIsLoading(state),
+      allTags: getExerciseTags(state),
+      allTagsLoading: getExerciseTagsLoading(state),
+      runtimeEnvironments: runtimeEnvironmentsSelector(state),
     }),
     (dispatch, { rootGroup = null }) => ({
       fetchExercisesAuthorsIfNeeded: groupId => dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
+      fetchTags: () => dispatch(fetchTags()),
+      fetchRuntimeEnvironments: () => dispatch(fetchRuntimeEnvironments()),
       assignExercise: exerciseId => dispatch(assignExercise(rootGroup, exerciseId)),
     })
   )(injectIntl(withRouter(ExercisesListContainer)))

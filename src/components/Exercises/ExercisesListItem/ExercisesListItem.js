@@ -164,7 +164,7 @@ const ExercisesListItem = ({
         </LinkContainer>
       )}
       {permissionHints.remove && (
-        <DeleteExerciseButtonContainer id={id} bsSize="xs" resourceless captionAsLabel onDeleted={reload} />
+        <DeleteExerciseButtonContainer id={id} bsSize="xs" resourceless captionAsTooltip onDeleted={reload} />
       )}
     </td>
   </tr>

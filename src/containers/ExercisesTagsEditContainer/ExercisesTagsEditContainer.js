@@ -50,17 +50,15 @@ const ExercisesTagsEditContainer = ({ exercise, tags, tagsLoading, updatePending
         )}
         <hr />
         {tagsLoading ? (
-          <div>?</div>
+          <LoadingIcon />
         ) : (
-          <React.Fragment>
-            <AddExerciseTagForm
-              exercise={exercise}
-              tags={tags}
-              onSubmit={data => addTag(data.tag)}
-              initialValues={ADD_TAG_INITIAL_VALUES}
-              updatePending={updatePending}
-            />
-          </React.Fragment>
+          <AddExerciseTagForm
+            exercise={exercise}
+            tags={tags}
+            onSubmit={data => addTag(data.tag)}
+            initialValues={ADD_TAG_INITIAL_VALUES}
+            updatePending={updatePending}
+          />
         )}
       </div>
     )}
