@@ -8,6 +8,7 @@ import { defaultMemoize } from 'reselect';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, LanguageSelectField, SelectField } from '../Fields';
+import { isStudentRole, isSupervisorRole } from '../../helpers/usersRoles';
 
 const defaultPagesCaptions = defineMessages({
   dashboard: {
@@ -32,6 +33,7 @@ const getDefaultPages = defaultMemoize(formatMessage =>
 );
 
 const EditUserSettingsForm = ({
+  user,
   submitting,
   handleSubmit,
   submitFailed = false,
@@ -123,70 +125,88 @@ const EditUserSettingsForm = ({
       label={<FormattedMessage id="app.editUserSettings.defaultPage" defaultMessage="Default page (after login):" />}
     />
 
-    <h3>
-      <FormattedMessage id="app.editUserSettings.emailsTitle" defaultMessage="Emails:" />
-    </h3>
+    <hr />
 
-    <Field
-      name="newAssignmentEmails"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage id="app.editUserSettings.newAssignmentEmails" defaultMessage="Notify about new assignments" />
-      }
-    />
+    <h4>
+      <FormattedMessage id="app.editUserSettings.emailsTitle" defaultMessage="Email Notifications" />:
+    </h4>
 
-    <Field
-      name="assignmentDeadlineEmails"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.editUserSettings.assignmentDeadlineEmails"
-          defaultMessage="Notify about approaching assignments deadline"
+    {isStudentRole(user.privateData.role) && (
+      <React.Fragment>
+        <Field
+          name="newAssignmentEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage id="app.editUserSettings.newAssignmentEmails" defaultMessage="New exercise assigned" />
+          }
         />
-      }
-    />
 
-    <Field
-      name="submissionEvaluatedEmails"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.editUserSettings.submissionEvaluatedEmails"
-          defaultMessage="Notify about submission evaluation"
+        <Field
+          name="assignmentDeadlineEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editUserSettings.assignmentDeadlineEmails"
+              defaultMessage="Assignment deadline is approaching"
+            />
+          }
         />
-      }
-    />
+
+        <Field
+          name="submissionEvaluatedEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editUserSettings.submissionEvaluatedEmails"
+              defaultMessage="Submission evaluation (when taking a long time)"
+            />
+          }
+        />
+
+        <Field
+          name="pointsChangedEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editUserSettings.pointsChangedEmails"
+              defaultMessage="Awarded points modified by teacher"
+            />
+          }
+        />
+      </React.Fragment>
+    )}
 
     <Field
       name="solutionCommentsEmails"
       component={CheckboxField}
       onOff
       label={
-        <FormattedMessage
-          id="app.editUserSettings.solutionCommentsEmails"
-          defaultMessage="Notify about new submission comments"
-        />
+        <FormattedMessage id="app.editUserSettings.solutionCommentsEmails" defaultMessage="New solution comment" />
       }
     />
 
-    <Field
-      name="pointsChangedEmails"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.editUserSettings.pointsChangedEmails"
-          defaultMessage="Notify about modifications of awarded points"
-        />
-      }
-    />
+    {isSupervisorRole(user.privateData.role) && (
+      <Field
+        name="assignmentSubmitAfterAcceptedEmails"
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.editUserSettings.assignmentSubmitAfterAcceptedEmails"
+            defaultMessage="New solution evaluated for as assignment where another solution has already been accepted"
+          />
+        }
+      />
+    )}
   </FormBox>
 );
 
 EditUserSettingsForm.propTypes = {
+  user: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
