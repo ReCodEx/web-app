@@ -182,6 +182,7 @@ class EditUser extends Component {
                 <Col lg={6}>
                   <EditUserSettingsForm
                     onSubmit={updateSettings}
+                    user={data}
                     initialValues={prepareUserSettingsInitialValues(data.privateData.settings)}
                   />
                 </Col>
