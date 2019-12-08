@@ -71,8 +71,9 @@ class User extends Component {
             Promise.all(
               [...studentOf, ...supervisorOf]
                 .filter(groupId => {
+                  // TODO this should be done better using security endpoint (unfortunatelly, permission hints are insuficient)
                   const group = groupSelector(getState(), groupId);
-                  return group && group.getIn(['data', 'permissionHints', 'viewStats']);
+                  return group && group.getIn(['data', 'permissionHints', 'viewAssignments']);
                 })
                 .map(groupId =>
                   Promise.all([
@@ -119,7 +120,7 @@ class User extends Component {
         {user => (
           <div>
             <p>
-              <UsersNameContainer userId={user.id} large noLink showEmail="full" />
+              <UsersNameContainer userId={user.id} large noLink showEmail="full" showExternalIdentifiers />
             </p>
 
             <p>

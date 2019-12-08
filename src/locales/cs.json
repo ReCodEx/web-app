@@ -1300,7 +1300,7 @@
   "app.user.welcomeTitle": "Vítejte v ReCodExu",
   "app.userList.noSupervisors": "V tomto seznamu nejsou žádní vedoucí skupiny.",
   "app.userList.noUsers": "Žádní uživatelé nevyhovují zvoleným filtrům.",
-  "app.userList.userDeactivated": "Uživatelský účet byl deaktivován. Uživatel se nemůže přihlásit.",
+  "app.userName.userDeactivated": "Uživatelský účet byl deaktivován. Uživatel se nemůže přihlásit.",
   "app.userName.externalIds": "Externí identifikátory",
   "app.userSwitching.loginAs": "Přihlásit jako",
   "app.users.createUser": "Vytvořit uživatele",

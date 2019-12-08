@@ -1300,7 +1300,7 @@
   "app.user.welcomeTitle",
   "app.userList.noSupervisors",
   "app.userList.noUsers",
-  "app.userList.userDeactivated",
+  "app.userName.userDeactivated",
   "app.userName.externalIds",
   "app.userSwitching.loginAs",
   "app.users.createUser",
