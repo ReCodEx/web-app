@@ -1300,7 +1300,7 @@
   "app.user.welcomeTitle": "Welcome to ReCodEx",
   "app.userList.noSupervisors": "There are no supervisors on the list.",
   "app.userList.noUsers": "No users match selected filters.",
-  "app.userList.userDeactivated": "The user account was deactivated. The user may not sign in.",
+  "app.userName.userDeactivated": "The user account was deactivated. The user may not sign in.",
   "app.userName.externalIds": "External identifiers",
   "app.userSwitching.loginAs": "Login as",
   "app.users.createUser": "Create User",

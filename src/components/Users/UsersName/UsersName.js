@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
 import NotVerified from './NotVerified';
-import Icon, { MailIcon } from '../../icons';
+import Icon, { MailIcon, BanIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 import styles from './usersName.less';
@@ -15,7 +15,6 @@ import styles from './usersName.less';
 const userNameStyle = defaultMemoize((size, large) => ({
   lineHeight: `${size}px`,
   fontSize: large ? size / 2 : 'inherit',
-  marginLeft: large ? 10 : 5,
 }));
 
 const UsersName = ({
@@ -40,11 +39,29 @@ const UsersName = ({
   const externalIds = privateData && privateData.externalIds;
   return (
     <span className={styles.wrapper}>
-      <span className={styles.avatar}>
-        <AvatarContainer avatarUrl={avatarUrl} fullName={fullName} firstName={firstName} size={size} />
-      </span>
+      {(!privateData || privateData.isAllowed) && (
+        <span className={styles.avatar}>
+          <AvatarContainer avatarUrl={avatarUrl} fullName={fullName} firstName={firstName} size={size} />
+        </span>
+      )}
       <span style={userNameStyle(size, large)}>
+        {privateData && !privateData.isAllowed && (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`ban-${id}`}>
+                <FormattedMessage
+                  id="app.userName.userDeactivated"
+                  defaultMessage="The user account was deactivated. The user may not sign in."
+                />
+              </Tooltip>
+            }>
+            <BanIcon gapRight />
+          </OverlayTrigger>
+        )}
+
         {noLink ? <span>{fullName}</span> : <Link to={USER_URI_FACTORY(id)}>{fullName}</Link>}
+
         {showExternalIdentifiers && externalIds && Object.keys(externalIds).length > 0 && (
           <OverlayTrigger
             placement="right"
