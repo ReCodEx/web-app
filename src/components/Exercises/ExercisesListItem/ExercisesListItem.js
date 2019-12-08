@@ -33,6 +33,7 @@ const ExercisesListItem = ({
   updatedAt,
   isLocked,
   isBroken,
+  hasReferenceSolutions,
   permissionHints,
   showGroups = false,
   showAssignButton = false,
@@ -47,7 +48,12 @@ const ExercisesListItem = ({
 }) => (
   <tr>
     <td className="shrink-col">
-      <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
+      <ExercisePrefixIcons
+        id={id}
+        isLocked={isLocked}
+        isBroken={isBroken}
+        hasReferenceSolutions={hasReferenceSolutions}
+      />
     </td>
 
     <td>
@@ -116,7 +122,13 @@ const ExercisesListItem = ({
 
     <td className="text-right text-nowrap">
       {showAssignButton && assignExercise && (
-        <AssignExerciseButton isLocked={isLocked} isBroken={isBroken} assignExercise={() => assignExercise(id)} />
+        <AssignExerciseButton
+          id={id}
+          isLocked={isLocked}
+          isBroken={isBroken}
+          hasReferenceSolutions={hasReferenceSolutions}
+          assignExercise={() => assignExercise(id)}
+        />
       )}
       {permissionHints.update && (
         <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
@@ -182,6 +194,7 @@ ExercisesListItem.propTypes = {
   updatedAt: PropTypes.number.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
+  hasReferenceSolutions: PropTypes.bool.isRequired,
   localizedTexts: PropTypes.array.isRequired,
   permissionHints: PropTypes.object.isRequired,
   showGroups: PropTypes.bool,

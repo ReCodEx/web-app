@@ -115,7 +115,7 @@ class EditExercise extends Component {
                         <NeedFixingIcon gapRight />
                         <FormattedMessage
                           id="app.exercise.isBroken"
-                          defaultMessage="Exercise configuration is incorrect and needs fixing"
+                          defaultMessage="Exercise configuration is incorrect and needs fixing."
                         />
                       </h4>
                       {exercise.validationError}
