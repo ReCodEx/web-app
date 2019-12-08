@@ -10,7 +10,7 @@ import { defaultMemoize } from 'reselect';
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Box from '../../components/widgets/Box';
-import { NeedFixingIcon } from '../../components/icons';
+import { NeedFixingIcon, LockIcon, CheckRequiredIcon } from '../../components/icons';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import EditAssignmentForm, {
@@ -159,7 +159,7 @@ class ExerciseAssignments extends Component {
                       <NeedFixingIcon gapRight />
                       <FormattedMessage
                         id="app.exercise.isBroken"
-                        defaultMessage="Exercise configuration is incorrect and needs fixing"
+                        defaultMessage="Exercise configuration is incorrect and needs fixing."
                       />
                     </h4>
                     {exercise.validationError}
@@ -199,47 +199,69 @@ class ExerciseAssignments extends Component {
               </Row>
             )}
 
-            {!exercise.isBroken && !exercise.isLocked && hasPermissions(exercise, 'viewDetail') && (
+            {!exercise.isBroken && hasPermissions(exercise, 'viewDetail') && (
               <Row>
                 <Col sm={12}>
-                  <Box
-                    title={formatMessage(messages.groupsBoxTitle)}
-                    description={
-                      <Alert bsStyle="info">
-                        <FormattedMessage
-                          id="app.exercise.assignToGroup"
-                          defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
-                        />
-                      </Alert>
-                    }
-                    unlimitedHeight>
-                    <ResourceRenderer resource={assignableGroups.toArray()} returnAsArray>
-                      {assignableGroups => (
-                        <ResourceRenderer resource={assignments.toList()} returnAsArray>
-                          {assignments => (
-                            <EditAssignmentForm
-                              form="multiAssign"
-                              userId={userId}
-                              initialValues={this.multiAssignFormInitialValues(
-                                assignableGroups,
-                                exercise.runtimeEnvironments
-                              )}
-                              onSubmit={this.assignExercise}
-                              groups={assignableGroups}
-                              groupsAccessor={groupsAccessor}
-                              alreadyAssignedGroups={getAssignmentsGroups(assignments)}
-                              runtimeEnvironments={exercise.runtimeEnvironments}
-                              firstDeadline={firstDeadline}
-                              allowSecondDeadline={allowSecondDeadline}
-                              visibility={visibility}
-                              assignmentIsPublic={false}
-                              submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
-                            />
-                          )}
-                        </ResourceRenderer>
-                      )}
-                    </ResourceRenderer>
-                  </Box>
+                  {exercise.isLocked && (
+                    <div className="callout callout-warning">
+                      <LockIcon largeGapRight />
+                      <FormattedMessage
+                        id="app.ExercisePrefixIcons.isLocked"
+                        defaultMessage="Exercise is locked by the author and cannot be assigned."
+                      />
+                    </div>
+                  )}
+
+                  {!exercise.hasReferenceSolutions && (
+                    <div className="callout callout-warning">
+                      <CheckRequiredIcon largeGapRight />
+                      <FormattedMessage
+                        id="app.exercise.noRefSolutions"
+                        defaultMessage="Exercise has no proof of concept. Exercise must get at least one reference solution before it can be assigned."
+                      />
+                    </div>
+                  )}
+
+                  {!exercise.isLocked && exercise.hasReferenceSolutions && (
+                    <Box
+                      title={formatMessage(messages.groupsBoxTitle)}
+                      description={
+                        <Alert bsStyle="info">
+                          <FormattedMessage
+                            id="app.exercise.assignToGroup"
+                            defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
+                          />
+                        </Alert>
+                      }
+                      unlimitedHeight>
+                      <ResourceRenderer resource={assignableGroups.toArray()} returnAsArray>
+                        {assignableGroups => (
+                          <ResourceRenderer resource={assignments.toList()} returnAsArray>
+                            {assignments => (
+                              <EditAssignmentForm
+                                form="multiAssign"
+                                userId={userId}
+                                initialValues={this.multiAssignFormInitialValues(
+                                  assignableGroups,
+                                  exercise.runtimeEnvironments
+                                )}
+                                onSubmit={this.assignExercise}
+                                groups={assignableGroups}
+                                groupsAccessor={groupsAccessor}
+                                alreadyAssignedGroups={getAssignmentsGroups(assignments)}
+                                runtimeEnvironments={exercise.runtimeEnvironments}
+                                firstDeadline={firstDeadline}
+                                allowSecondDeadline={allowSecondDeadline}
+                                visibility={visibility}
+                                assignmentIsPublic={false}
+                                submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
+                              />
+                            )}
+                          </ResourceRenderer>
+                        )}
+                      </ResourceRenderer>
+                    </Box>
+                  )}
                 </Col>
               </Row>
             )}

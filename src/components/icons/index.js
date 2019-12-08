@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from './Icon';
+import { NeedFixingIcon, ExercisePrefixIcons, LockIcon, CheckRequiredIcon } from './ExercisePrefixIcons';
 
 /*
  * Icons with meta-names
@@ -16,6 +17,7 @@ export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
 export const BanIcon = props => <Icon {...props} icon="ban" />;
 export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
 export const BugIcon = props => <Icon {...props} icon="bug" />;
+export { CheckRequiredIcon };
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CodeIcon = props => <Icon {...props} icon="code" />;
 export const CopyIcon = props => <Icon {...props} icon={['far', 'clipboard']} />;
@@ -37,9 +39,9 @@ export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
 export const LoadingIcon = props => <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
-export const LockIcon = props => <Icon {...props} icon="lock" />;
+export { LockIcon };
 export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
-export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
+export { NeedFixingIcon };
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
@@ -121,7 +123,7 @@ VisibleIcon.propTypes = {
   visible: PropTypes.bool,
 };
 
-export { default as ExercisePrefixIcons } from './ExercisePrefixIcons';
+export { ExercisePrefixIcons };
 export { default as MaybeBonusAssignmentIcon } from './MaybeBonusAssignmentIcon';
 export { default as MaybeVisibleAssignmentIcon } from './MaybeVisibleAssignmentIcon';
 
