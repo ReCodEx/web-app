@@ -41,6 +41,7 @@ class ForkExerciseForm extends Component {
   render() {
     const {
       forkStatus,
+      resetId,
       submitting,
       handleSubmit,
       submitFailed,
@@ -68,12 +69,17 @@ class ForkExerciseForm extends Component {
                     </p>
                   </td>
                   <td className="text-right">
-                    <Button bsStyle="primary" onClick={() => this.viewForkedExercise()}>
+                    <Button bsStyle="primary" onClick={this.viewForkedExercise}>
                       <FormattedMessage
                         id="app.forkExerciseForm.showForkedExerciseButton"
                         defaultMessage="Show the Forked Exercise"
                       />
                     </Button>
+                    {resetId && (
+                      <Button onClick={resetId}>
+                        <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
+                      </Button>
+                    )}
                   </td>
                 </tr>
               </tbody>
@@ -118,8 +124,14 @@ class ForkExerciseForm extends Component {
                       hasFailed={submitFailed}
                       handleSubmit={handleSubmit}
                       defaultIcon={<Icon icon="code-branch" gapRight />}
+                      confirmQuestion={
+                        <FormattedMessage
+                          id="app.forkExerciseForm.confirmSubmit"
+                          defaultMessage="Fork process will create another copy of the exercise. This only make sense if you need to create a different exercise and you do not want to start from scratch. Please, do not fork exercises just to attach them to a different groups of residence. Are you sure you would like to proceed with forking?"
+                        />
+                      }
                       messages={{
-                        submit: <FormattedMessage id="app.forkExerciseForm.submit" defaultMessage="Fork exercise" />,
+                        submit: <FormattedMessage id="app.forkExerciseForm.submit" defaultMessage="Fork Exercise" />,
                         submitting: (
                           <FormattedMessage id="app.forkExerciseForm.submitting" defaultMessage="Forking..." />
                         ),
@@ -152,6 +164,7 @@ ForkExerciseForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
+  resetId: PropTypes.func,
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
