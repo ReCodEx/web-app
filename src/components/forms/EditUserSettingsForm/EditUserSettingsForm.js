@@ -197,7 +197,7 @@ const EditUserSettingsForm = ({
         label={
           <FormattedMessage
             id="app.editUserSettings.assignmentSubmitAfterAcceptedEmails"
-            defaultMessage="New solution evaluated for as assignment where another solution has already been accepted"
+            defaultMessage="New solution evaluated for an assignment where another solution has already been accepted"
           />
         }
       />

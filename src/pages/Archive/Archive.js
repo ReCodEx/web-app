@@ -20,7 +20,7 @@ import { getJsData } from '../../redux/helpers/resourceManager';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
 import { getLocalizedName } from '../../helpers/localizedData';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
-import { GroupIcon, SuccessOrFailureIcon } from '../../components/icons';
+import { GroupIcon, SuccessOrFailureIcon, AssignmentsIcon } from '../../components/icons';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
@@ -108,8 +108,8 @@ class Archive extends Component {
         </LinkContainer>
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
           <Button bsStyle="primary" bsSize="xs">
-            <GroupIcon gapRight />
-            <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
+            <AssignmentsIcon gapRight />
+            <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
         </LinkContainer>
         <ArchiveGroupButtonContainer id={groupId} bsSize="xs" shortLabels onChange={() => loadAsync(instanceId)} />

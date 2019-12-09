@@ -34,7 +34,7 @@ import {
 } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon, GroupIcon, LoadingIcon } from '../../components/icons';
+import { InfoIcon, GroupIcon, LoadingIcon, AssignmentsIcon } from '../../components/icons';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
@@ -203,14 +203,17 @@ class Dashboard extends Component {
                                         <p className="text-center">
                                           <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
                                             <Button bsSize="sm">
-                                              <InfoIcon gapRight />
+                                              <GroupIcon gapRight />
                                               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                             </Button>
                                           </LinkContainer>
                                           <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                             <Button bsSize="sm">
-                                              <GroupIcon gapRight />
-                                              <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
+                                              <AssignmentsIcon gapRight />
+                                              <FormattedMessage
+                                                id="app.group.assignments"
+                                                defaultMessage="Group Detail"
+                                              />
                                             </Button>
                                           </LinkContainer>
                                         </p>
@@ -270,7 +273,10 @@ class Dashboard extends Component {
                                           <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                             <Button bsSize="sm">
                                               <GroupIcon gapRight />
-                                              <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
+                                              <FormattedMessage
+                                                id="app.group.assignments"
+                                                defaultMessage="Group Detail"
+                                              />
                                             </Button>
                                           </LinkContainer>
                                         </p>

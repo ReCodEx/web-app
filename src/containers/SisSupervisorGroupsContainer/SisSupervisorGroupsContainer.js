@@ -32,7 +32,7 @@ import Confirm from '../../components/forms/Confirm';
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 
-import Icon, { GroupIcon } from '../../components/icons';
+import Icon, { EditIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
 import { unique, arrayToObject, hasPermissions } from '../../helpers/common';
 
@@ -103,7 +103,7 @@ class SisSupervisorGroupsContainer extends Component {
       unbindGroup,
       sisPossibleParents,
       groupsAccessor,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       intl: { locale },
     } = this.props;
 
@@ -262,20 +262,39 @@ class SisSupervisorGroupsContainer extends Component {
                                                     ))}
                                                   </td>
                                                   <td className="text-right">
-                                                    <LinkContainer
-                                                      to={
-                                                        group.organizational
-                                                          ? GROUP_INFO_URI_FACTORY(group.id)
-                                                          : GROUP_DETAIL_URI_FACTORY(group.id)
-                                                      }>
+                                                    {hasPermissions(group, 'update') && (
+                                                      <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
+                                                        <Button bsStyle="warning" bsSize="xs">
+                                                          <EditIcon gapRight />
+                                                          <FormattedMessage
+                                                            id="app.editGroup.title"
+                                                            defaultMessage="Edit Group"
+                                                          />
+                                                        </Button>
+                                                      </LinkContainer>
+                                                    )}
+
+                                                    <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
                                                       <Button bsStyle="primary" bsSize="xs">
                                                         <GroupIcon gapRight />
                                                         <FormattedMessage
-                                                          id="app.group.detail"
-                                                          defaultMessage="Group Detail"
+                                                          id="app.group.info"
+                                                          defaultMessage="Group Info"
                                                         />
                                                       </Button>
                                                     </LinkContainer>
+
+                                                    {hasPermissions(group, 'viewDetail') && (
+                                                      <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                                        <Button bsStyle="primary" bsSize="xs">
+                                                          <AssignmentsIcon gapRight />
+                                                          <FormattedMessage
+                                                            id="app.group.assignments"
+                                                            defaultMessage="Assignments"
+                                                          />
+                                                        </Button>
+                                                      </LinkContainer>
+                                                    )}
 
                                                     <Confirm
                                                       id={`${course.course.code}:${group.id}`}
