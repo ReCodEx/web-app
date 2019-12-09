@@ -85,9 +85,9 @@ class Exercise extends Component {
     }
   }
 
-  reset() {
+  reset = () => {
     this.setState({ forkId: Math.random().toString() });
-  }
+  };
 
   render() {
     const {
@@ -160,6 +160,7 @@ class Exercise extends Component {
                     groups={groups}
                     forkId={forkId}
                     onSubmit={formData => forkExercise(forkId, formData)}
+                    resetId={this.reset}
                     groupsAccessor={groupsAccessor}
                     initialValues={FORK_EXERCISE_FORM_INITIAL_VALUES}
                   />

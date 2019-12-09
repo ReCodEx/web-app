@@ -7,22 +7,23 @@ import { SuccessIcon, CloseIcon } from '../../icons';
 class Confirm extends Component {
   state = { showPopup: false };
 
-  askForConfirmation = e => {
+  askForConfirmation = ev => {
     const { disabled = false, onConfirmed } = this.props;
+    ev.preventDefault();
     if (disabled === false) {
-      this.setState({ showPopup: true, target: e.target });
+      this.setState({ showPopup: true, target: ev.target });
     } else {
       onConfirmed();
     }
   };
 
-  dismiss = e => {
-    e.preventDefault();
+  dismiss = ev => {
+    ev.preventDefault();
     this.setState({ showPopup: false });
   };
 
-  confirm = e => {
-    this.dismiss(e);
+  confirm = ev => {
+    this.dismiss(event);
     this.props.onConfirmed();
   };
 
@@ -51,8 +52,8 @@ class Confirm extends Component {
         <Popover id={id} title={question}>
           <div className="text-center">
             <ButtonGroup bsSize="sm">
-              <Button onClick={e => this.confirm(e)}>{yes}</Button>
-              <Button onClick={e => this.dismiss(e)}>{no}</Button>
+              <Button onClick={this.confirm}>{yes}</Button>
+              <Button onClick={this.dismiss}>{no}</Button>
             </ButtonGroup>
           </div>
         </Popover>
@@ -65,7 +66,7 @@ class Confirm extends Component {
     return (
       <span style={{ display: 'inline-block', position: 'relative' }} className={className}>
         {React.cloneElement(children, {
-          onClick: e => this.askForConfirmation(e),
+          onClick: this.askForConfirmation,
         })}
         {this.renderQuestion()}
       </span>

@@ -764,7 +764,7 @@
   "app.footer.version": "<strong>Version</strong> {version} (<a href='{changelogUrl}' target='_blank'>changelog</a>)",
   "app.forkExerciseForm.selectGroupFirst": "... select group of residence first ...",
   "app.forkExerciseForm.showForkedExerciseButton": "Show the Forked Exercise",
-  "app.forkExerciseForm.submit": "Fork exercise",
+  "app.forkExerciseForm.submit": "Fork Exercise",
   "app.forkExerciseForm.submitting": "Forking...",
   "app.forkExerciseForm.success": "Exercise forked",
   "app.forkExerciseForm.successMessage": "A copy of the exercise was successfully created in the designated group.",
