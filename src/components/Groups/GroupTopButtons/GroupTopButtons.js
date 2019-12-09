@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Button from '../../widgets/FlatButton';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
-import { GroupIcon, EditIcon, InfoIcon, MailIcon } from '../../icons';
+import { GroupIcon, EditIcon, AssignmentsIcon, MailIcon } from '../../icons';
 import { identity, hasPermissions } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
 
@@ -41,7 +41,7 @@ const GroupTopButtons = ({
 
       <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
         <Button bsStyle="primary">
-          <InfoIcon gapRight />
+          <GroupIcon gapRight />
           <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
         </Button>
       </LinkContainer>
@@ -49,8 +49,8 @@ const GroupTopButtons = ({
       {canSeeDetail && (
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
           <Button bsStyle="primary">
-            <GroupIcon gapRight />
-            <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
+            <AssignmentsIcon gapRight />
+            <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
         </LinkContainer>
       )}

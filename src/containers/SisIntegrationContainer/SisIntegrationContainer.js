@@ -150,7 +150,7 @@ class SisIntegrationContainer extends Component {
                                                 <Button bsStyle="primary" bsSize="xs" className="btn-flat">
                                                   <GroupIcon gapRight />
                                                   <FormattedMessage
-                                                    id="app.group.detail"
+                                                    id="app.group.assignments"
                                                     defaultMessage="Group Detail"
                                                   />
                                                 </Button>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button from '../../widgets/FlatButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
@@ -9,7 +10,7 @@ import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import GroupsName from '../GroupsName';
 import { computeVisibleGroupsMap, computeEditableGroupsMap } from '../../helpers/group.js';
 import { getLocalizedResourceName } from '../../../helpers/localizedData';
-import { GroupIcon } from '../../icons';
+import { GroupIcon, AssignmentsIcon, EditIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 const conditionalEmphasize = (content, condition) => (condition ? <strong>{content}</strong> : content);
@@ -25,25 +26,60 @@ class GroupTree extends Component {
     </TreeView>
   );
 
-  renderButtons = (groupId, showInfoLink, isRoot) => {
+  renderButtons = (groupId, permissionHints, isRoot) => {
     const {
       buttonsCreator = null,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
     } = this.props;
     return buttonsCreator ? (
-      buttonsCreator(groupId, isRoot)
+      buttonsCreator(groupId, isRoot, permissionHints)
     ) : (
       <span>
-        <LinkContainer to={showInfoLink ? GROUP_INFO_URI_FACTORY(groupId) : GROUP_DETAIL_URI_FACTORY(groupId)}>
-          <Button bsStyle="primary" bsSize="xs" className="btn-flat">
-            <GroupIcon gapRight />
-            {showInfoLink ? (
+        {permissionHints && permissionHints.update && (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`info-${groupId}`}>
+                <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
+              </Tooltip>
+            }>
+            <LinkContainer to={GROUP_EDIT_URI_FACTORY(groupId)}>
+              <Button bsStyle="warning" bsSize="xs" className="btn-flat">
+                <EditIcon smallGapLeft smallGapRight />
+              </Button>
+            </LinkContainer>
+          </OverlayTrigger>
+        )}
+
+        <OverlayTrigger
+          placement="bottom"
+          overlay={
+            <Tooltip id={`info-${groupId}`}>
               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-            ) : (
-              <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
-            )}
-          </Button>
-        </LinkContainer>
+            </Tooltip>
+          }>
+          <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
+            <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+              <GroupIcon />
+            </Button>
+          </LinkContainer>
+        </OverlayTrigger>
+
+        {permissionHints && permissionHints.viewDetail && (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`info-${groupId}`}>
+                <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+              </Tooltip>
+            }>
+            <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+              <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+                <AssignmentsIcon smallGapLeft smallGapRight />
+              </Button>
+            </LinkContainer>
+          </OverlayTrigger>
+        )}
       </span>
     );
   };
@@ -130,7 +166,7 @@ class GroupTree extends Component {
             actions={
               (currentGroupId !== groupId || forceRootButtons) && permissionHints.viewDetail
                 ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
-                  this.renderButtons(groupId, organizational || isPublic, currentGroupId === groupId)
+                  this.renderButtons(groupId, permissionHints, currentGroupId === groupId)
                 : undefined
             }>
             {onAncestralPath

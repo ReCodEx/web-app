@@ -94,7 +94,7 @@ class EditGroup extends Component {
           },
           {
             text: <FormattedMessage id="app.group.title" />,
-            iconName: 'users',
+            iconName: 'tasks',
             link: GROUP_DETAIL_URI_FACTORY(groupId),
           },
           {

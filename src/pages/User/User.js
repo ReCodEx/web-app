@@ -37,7 +37,7 @@ import {
 } from '../../redux/selectors/groups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon, EditIcon, TransferIcon } from '../../components/icons';
+import { InfoIcon, EditIcon, TransferIcon, AssignmentsIcon, GroupIcon } from '../../components/icons';
 import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
@@ -101,7 +101,7 @@ class User extends Component {
       groupStatistics,
       usersStatistics,
       takeOver,
-      links: { GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY, EDIT_USER_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY, EDIT_USER_URI_FACTORY },
     } = this.props;
 
     return (
@@ -171,9 +171,17 @@ class User extends Component {
                               unlimitedHeight
                               footer={
                                 <p className="text-center">
+                                  <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
+                                    <Button bsSize="sm">
+                                      <GroupIcon gapRight />
+                                      <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                                    </Button>
+                                  </LinkContainer>
+
                                   <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                     <Button bsSize="sm">
-                                      <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
+                                      <AssignmentsIcon gapRight />
+                                      <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                                     </Button>
                                   </LinkContainer>
                                 </p>

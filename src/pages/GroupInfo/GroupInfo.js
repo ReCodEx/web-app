@@ -109,7 +109,9 @@ class GroupInfo extends Component {
       <Page
         resource={group}
         title={group => getLocalizedName(group, locale)}
-        description={<FormattedMessage id="app.group.description" defaultMessage="Group overview and assignments" />}
+        description={
+          <FormattedMessage id="app.groupInfo.pageDescription" defaultMessage="Group details and metadata" />
+        }
         breadcrumbs={this.getBreadcrumbs()}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>

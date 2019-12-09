@@ -4,7 +4,7 @@ import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import Icon, { GroupIcon } from '../../icons';
+import Icon, { GroupIcon, AssignmentsIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { identity } from '../../../helpers/common';
@@ -16,7 +16,7 @@ const AssignmentFormMultiassignSuccess = ({
   groupsAccessor,
   acknowledgeSuccess,
   intl: { locale },
-  links: { GROUP_DETAIL_URI_FACTORY },
+  links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
 }) => (
   <React.Fragment>
     <div className="callout callout-success">
@@ -42,10 +42,16 @@ const AssignmentFormMultiassignSuccess = ({
               </td>
               <td>{getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}</td>
               <td className="text-right">
-                <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
                   <Button bsSize="xs" bsStyle="primary" className="btn-flat">
                     <GroupIcon gapRight />
-                    <FormattedMessage id="app.group.detail" defaultMessage="Group Detail" />
+                    <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                  </Button>
+                </LinkContainer>
+                <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                  <Button bsSize="xs" bsStyle="primary" className="btn-flat">
+                    <AssignmentsIcon gapRight />
+                    <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                   </Button>
                 </LinkContainer>
               </td>

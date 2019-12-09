@@ -170,7 +170,12 @@ class GroupDetail extends Component {
       <Page
         resource={group}
         title={group => getLocalizedName(group, locale)}
-        description={<FormattedMessage id="app.group.description" defaultMessage="Group overview and assignments" />}
+        description={
+          <FormattedMessage
+            id="app.groupDetail.pageDescription"
+            defaultMessage="Group assignments and student results"
+          />
+        }
         breadcrumbs={this.getBreadcrumbs()}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
