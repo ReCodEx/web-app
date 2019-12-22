@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import { joinGroup, leaveGroup, fetchGroup } from '../../redux/modules/groups';
-import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
+import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isStudentOf } from '../../redux/selectors/users';
@@ -23,7 +23,7 @@ const LeaveJoinGroupButtonContainer = ({
   leaveGroup,
   fetchAssignmentsForGroup,
   fetchGroup,
-  fetchGroupsStatsIfNeeded,
+  fetchGroupStatsIfNeeded,
   bsSize = 'xs',
   history: { replace },
   links: { DASHBOARD_URI },
@@ -44,7 +44,7 @@ const LeaveJoinGroupButtonContainer = ({
       {...props}
       onClick={() =>
         joinGroup(groupId, userId).then(() =>
-          Promise.all([fetchGroup(groupId), fetchAssignmentsForGroup(groupId), fetchGroupsStatsIfNeeded(groupId)])
+          Promise.all([fetchGroup(groupId), fetchAssignmentsForGroup(groupId), fetchGroupStatsIfNeeded(groupId)])
         )
       }
       bsSize={bsSize}
@@ -64,7 +64,7 @@ LeaveJoinGroupButtonContainer.propTypes = {
   leaveGroup: PropTypes.func.isRequired,
   fetchAssignmentsForGroup: PropTypes.func.isRequired,
   fetchGroup: PropTypes.func.isRequired,
-  fetchGroupsStatsIfNeeded: PropTypes.func.isRequired,
+  fetchGroupStatsIfNeeded: PropTypes.func.isRequired,
   bsSize: PropTypes.string,
   links: PropTypes.object,
 };
@@ -79,7 +79,7 @@ const mapDispatchToProps = dispatch => ({
   leaveGroup: (gId, uId) => dispatch(leaveGroup(gId, uId)),
   fetchAssignmentsForGroup: gId => dispatch(fetchAssignmentsForGroup(gId)),
   fetchGroup: gId => dispatch(fetchGroup(gId)),
-  fetchGroupsStatsIfNeeded: gId => dispatch(fetchGroupsStatsIfNeeded(gId)),
+  fetchGroupStatsIfNeeded: gId => dispatch(fetchGroupStatsIfNeeded(gId)),
 });
 
 export default withLinks(

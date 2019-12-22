@@ -260,7 +260,7 @@ class TestResultsTable extends Component {
                 }>
                 <span>
                   <Icon icon="thermometer-half" gapRight />
-                  <Icon icon="braille" />
+                  <Icon icon="memory" />
                 </span>
               </OverlayTrigger>
             </th>
@@ -277,7 +277,7 @@ class TestResultsTable extends Component {
                 }>
                 <span>
                   <Icon icon="thermometer-half" gapRight />
-                  <Icon icon="bolt" />
+                  <Icon icon="running" />
                 </span>
               </OverlayTrigger>
             </th>

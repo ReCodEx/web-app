@@ -13,7 +13,7 @@ import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchGroupsStats } from '../../redux/modules/stats';
+import { fetchGroupStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSolution, fetchSolutionIfNeeded } from '../../redux/modules/solutions';
 import {
@@ -41,7 +41,7 @@ class Solution extends Component {
       dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
-        .then(assignment => dispatch(fetchGroupsStats(assignment.groupId))),
+        .then(assignment => dispatch(fetchGroupStats(assignment.groupId))),
     ]);
 
   componentDidMount = () => this.props.loadAsync();

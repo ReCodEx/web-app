@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-import Box from '../../widgets/Box';
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
 import SolutionsTableRow from './SolutionsTableRow';
 import { LoadingIcon } from '../../icons';
@@ -12,85 +11,88 @@ import { LoadingIcon } from '../../icons';
 import styles from './SolutionsTable.less';
 
 const SolutionsTable = ({
-  title,
   assignmentId,
+  groupId,
   solutions,
   runtimeEnvironments,
   noteMaxlen = null,
   compact = false,
 }) => (
-  <Box title={title} collapsable isOpen noPadding unlimitedHeight>
-    <Table responsive className={styles.solutionsTable}>
-      <thead>
-        <tr>
-          <th />
+  <Table responsive className={styles.solutionsTable}>
+    <thead>
+      <tr>
+        <th />
+        <th>
+          <FormattedMessage id="app.solutionsTable.submissionDate" defaultMessage="Date of submission" />
+        </th>
+        <th className="text-center">
+          <FormattedMessage id="app.solutionsTable.solutionValidity" defaultMessage="Validity" />
+        </th>
+        <th className="text-center">
+          <FormattedMessage id="app.solutionsTable.receivedPoints" defaultMessage="Points" />
+        </th>
+        <th className="text-center">
+          <FormattedMessage id="app.solutionsTable.environment" defaultMessage="Target language" />
+        </th>
+        {!compact && (
           <th>
-            <FormattedMessage id="app.solutionsTable.submissionDate" defaultMessage="Date of submission" />
+            <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />
           </th>
-          <th className="text-center">
-            <FormattedMessage id="app.solutionsTable.solutionValidity" defaultMessage="Validity" />
-          </th>
-          <th className="text-center">
-            <FormattedMessage id="app.solutionsTable.receivedPoints" defaultMessage="Points" />
-          </th>
-          <th className="text-center">
-            <FormattedMessage id="app.solutionsTable.environment" defaultMessage="Target language" />
-          </th>
-          {!compact && (
-            <th>
-              <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />
-            </th>
-          )}
-          <th />
-        </tr>
-      </thead>
-      {solutions.size === 0 ? (
-        <NoSolutionYetTableRow />
-      ) : (
-        solutions.map((data, idx) => {
-          if (!data) {
-            return (
-              <tbody key={idx}>
-                <tr>
-                  <td colSpan={compact ? 6 : 7} className="text-center">
-                    <LoadingIcon size="xs" />
-                  </td>
-                </tr>
-              </tbody>
-            );
-          }
-
-          const id = data.id;
-          const runtimeEnvironment =
-            data.runtimeEnvironmentId &&
-            runtimeEnvironments &&
-            runtimeEnvironments.find(({ id }) => id === data.runtimeEnvironmentId);
-
-          return (
-            <SolutionsTableRow
-              key={id}
-              id={id}
-              status={data.lastSubmission ? data.lastSubmission.evaluationStatus : null}
-              runtimeEnvironment={runtimeEnvironment}
-              assignmentId={assignmentId}
-              noteMaxlen={noteMaxlen}
-              compact={compact}
-              {...data}
+        )}
+        <td className="text-right text-muted small">
+          {solutions.size > 5 && (
+            <FormattedMessage
+              id="app.solutionsTable.rowsCount"
+              defaultMessage="Total records: {count}"
+              values={{ count: solutions.size }}
             />
+          )}
+        </td>
+      </tr>
+    </thead>
+    {solutions.size === 0 ? (
+      <NoSolutionYetTableRow />
+    ) : (
+      solutions.map((data, idx) => {
+        if (!data) {
+          return (
+            <tbody key={idx}>
+              <tr>
+                <td colSpan={compact ? 6 : 7} className="text-center">
+                  <LoadingIcon size="xs" />
+                </td>
+              </tr>
+            </tbody>
           );
-        })
-      )}
-    </Table>
-  </Box>
+        }
+
+        const id = data.id;
+        const runtimeEnvironment =
+          data.runtimeEnvironmentId &&
+          runtimeEnvironments &&
+          runtimeEnvironments.find(({ id }) => id === data.runtimeEnvironmentId);
+
+        return (
+          <SolutionsTableRow
+            key={id}
+            id={id}
+            status={data.lastSubmission ? data.lastSubmission.evaluationStatus : null}
+            runtimeEnvironment={runtimeEnvironment}
+            assignmentId={assignmentId}
+            groupId={groupId}
+            noteMaxlen={noteMaxlen}
+            compact={compact}
+            {...data}
+          />
+        );
+      })
+    )}
+  </Table>
 );
 
 SolutionsTable.propTypes = {
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element,
-  ]).isRequired,
   assignmentId: PropTypes.string.isRequired,
+  groupId: PropTypes.string.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,

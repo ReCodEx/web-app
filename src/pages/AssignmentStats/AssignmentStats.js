@@ -14,7 +14,7 @@ import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
 import {
   getAssignment,
   assignmentEnvironmentsSelector,
-  getUserSolutions,
+  getUserSolutionsSortedData,
   getAssigmentSolutions,
 } from '../../redux/selectors/assignments';
 
@@ -53,7 +53,7 @@ import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/L
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
 
-const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, locale, links) => {
+const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, locale, links) => {
   const { SOLUTION_DETAIL_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
@@ -166,7 +166,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
             <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel bsSize="xs" />
           )}
           {solution.permissionHints && solution.permissionHints.delete && (
-            <DeleteSolutionButtonContainer id={solution.id} bsSize="xs" />
+            <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} bsSize="xs" />
           )}
         </React.Fragment>
       ),
@@ -251,14 +251,6 @@ class AssignmentStats extends Component {
     const safeName = name && name.normalize('NFD').replace(/[^-_a-zA-Z0-9.()[\] ]/g, '');
     return `${safeName || assignmentId}.zip`;
   };
-
-  sortSolutions(solutions) {
-    return solutions.sort((a, b) => {
-      var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
-      var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
-      return bTimestamp - aTimestamp;
-    });
-  }
 
   // Re-format the data, so they can be rendered by the SortableTable ...
   render() {
@@ -384,13 +376,15 @@ class AssignmentStats extends Component {
                           .map(user => (
                             <Row key={user.id}>
                               <Col sm={12}>
-                                <SolutionsTable
-                                  title={user.fullName}
-                                  solutions={this.sortSolutions(getUserSolutions(user.id)).map(getJsData)}
-                                  assignmentId={assignmentId}
-                                  runtimeEnvironments={runtimes}
-                                  noteMaxlen={160}
-                                />
+                                <Box title={user.fullName} collapsable isOpen noPadding unlimitedHeight>
+                                  <SolutionsTable
+                                    solutions={getUserSolutions(user.id)}
+                                    assignmentId={assignmentId}
+                                    groupId={assignment.groupId}
+                                    runtimeEnvironments={runtimes}
+                                    noteMaxlen={160}
+                                  />
+                                </Box>
                               </Col>
                             </Row>
                           ))}
@@ -407,7 +401,7 @@ class AssignmentStats extends Component {
                         noPadding>
                         <SortableTable
                           hover
-                          columns={prepareTableColumnDescriptors(loggedUserId, assignmentId, locale, links)}
+                          columns={prepareTableColumnDescriptors(loggedUserId, assignmentId, group.id, locale, links)}
                           defaultOrder="date"
                           data={prepareTableData(
                             assigmentSolutions,
@@ -475,7 +469,7 @@ export default withLinks(
         assignment,
         getStudentsIds,
         getStudents: groupId => readyUsers.filter(user => getStudentsIds(groupId).includes(getId(user))).map(getJsData),
-        getUserSolutions: userId => getUserSolutions(state, userId, assignmentId),
+        getUserSolutions: userId => getUserSolutionsSortedData(state)(userId, assignmentId),
         assigmentSolutions: getAssigmentSolutions(state, assignmentId),
         getGroup: id => groupSelector(state, id),
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),

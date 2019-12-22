@@ -14,16 +14,17 @@ const resourceName = 'solutions';
 const needsRefetching = item =>
   defaultNeedsRefetching(item) || item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
 
+const apiEndpointFactory = id => `/assignment-solutions/${id}`;
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: id => `/assignment-solutions/${id}`,
+  apiEndpointFactory,
   needsRefetching,
 });
 
 /**
  * Actions
  */
-
+export { actionTypes };
 export const additionalActionTypes = {
   LOAD_USERS_SOLUTIONS: 'recodex/solutions/LOAD_USERS_SOLUTIONS',
   LOAD_USERS_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_USERS_SOLUTIONS_PENDING',
@@ -54,7 +55,7 @@ export const additionalActionTypes = {
 
 export const fetchSolution = actions.fetchResource;
 export const fetchSolutionIfNeeded = actions.fetchOneIfNeeded;
-export const deleteSolution = actions.removeResource;
+export const deleteSolution = (id, groupId) => actions.removeResource(id, apiEndpointFactory(id), { groupId });
 
 export const setPoints = (solutionId, overriddenPoints, bonusPoints) =>
   createApiAction({

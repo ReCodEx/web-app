@@ -27,8 +27,8 @@ export const fetchManyAssignmentSolutionsStatus = assignmentId =>
     state => state.getIn(['fetchManyStatus', fetchManyAssignmentSolutionsEndpoint(assignmentId)])
   );
 
-export const fetchManyUserSolutionsStatus = (userId, assignmentId) =>
-  createSelector(
-    getSolutionsRaw,
-    state => state.getIn(['fetchManyStatus', fetchManyUserSolutionsEndpoint(userId, assignmentId)])
-  );
+export const fetchManyUserSolutionsStatus = createSelector(
+  getSolutionsRaw,
+  solutions => (userId, assignmentId) =>
+    solutions.getIn(['fetchManyStatus', fetchManyUserSolutionsEndpoint(userId, assignmentId)])
+);

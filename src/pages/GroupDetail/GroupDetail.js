@@ -20,12 +20,18 @@ import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButton
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchGroupsStats } from '../../redux/modules/stats';
+import { fetchGroupStats, fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchStudents } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
-import { fetchShadowAssignmentsForGroup, createShadowAssignment } from '../../redux/modules/shadowAssignments';
+import {
+  fetchShadowAssignmentsForGroup,
+  createShadowAssignment,
+  setShadowAssignmentPoints,
+  removeShadowAssignmentPoints,
+} from '../../redux/modules/shadowAssignments';
 import { create as createExercise } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { fetchUsersSolutions } from '../../redux/modules/solutions';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
@@ -43,7 +49,9 @@ import {
   groupsShadowAssignmentsSelector,
 } from '../../redux/selectors/groups';
 import { getStatusesForLoggedUser, createGroupsStatsSelector } from '../../redux/selectors/stats';
-import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
+import { assignmentEnvironmentsSelector, getUserSolutionsSortedData } from '../../redux/selectors/assignments';
+import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
@@ -68,7 +76,7 @@ class GroupDetail extends Component {
               ])
             : Promise.resolve(),
           hasPermissions(group, 'viewStudents') ? dispatch(fetchStudents(groupId)) : Promise.resolve(),
-          dispatch(fetchGroupsStats(groupId)),
+          dispatch(fetchGroupStats(groupId)),
         ])
       ),
     ]);
@@ -163,6 +171,13 @@ class GroupDetail extends Component {
       isGroupSupervisor,
       isGroupStudent,
       userId,
+      userSolutionsSelector,
+      userSolutionsStatusSelector,
+      runtimeEnvironments,
+      fetchGroupStatsIfNeeded,
+      fetchUsersSolutions,
+      setShadowPoints,
+      removeShadowPoints,
       intl: { locale },
     } = this.props;
 
@@ -297,22 +312,37 @@ class GroupDetail extends Component {
                                 {assignments => (
                                   <ResourceRenderer resource={shadowAssignments} returnAsArray bulkyLoading>
                                     {shadowAssignments => (
-                                      <ResultsTable
-                                        users={students}
-                                        loggedUser={loggedUser}
-                                        assignments={assignments}
-                                        shadowAssignments={shadowAssignments}
-                                        stats={groupStats}
-                                        publicStats={data && data.privateData && data.privateData.publicStats}
-                                        isAdmin={isGroupAdmin}
-                                        isSupervisor={isGroupSupervisor}
-                                        groupName={getLocalizedName(data, locale)}
-                                        renderActions={id => {
-                                          return data.archived ? null : (
-                                            <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
-                                          );
-                                        }}
-                                      />
+                                      <ResourceRenderer
+                                        resource={runtimeEnvironments.toArray()}
+                                        returnAsArray
+                                        bulkyLoading>
+                                        {runtimes => (
+                                          <ResultsTable
+                                            users={students}
+                                            loggedUser={loggedUser}
+                                            assignments={assignments}
+                                            shadowAssignments={shadowAssignments}
+                                            stats={groupStats}
+                                            publicStats={data && data.privateData && data.privateData.publicStats}
+                                            isAdmin={isGroupAdmin}
+                                            isSupervisor={isGroupSupervisor}
+                                            groupName={getLocalizedName(data, locale)}
+                                            groupId={data.id}
+                                            runtimeEnvironments={runtimes}
+                                            userSolutionsSelector={userSolutionsSelector}
+                                            userSolutionsStatusSelector={userSolutionsStatusSelector}
+                                            fetchGroupStatsIfNeeded={fetchGroupStatsIfNeeded}
+                                            fetchUsersSolutions={fetchUsersSolutions}
+                                            setShadowPoints={setShadowPoints}
+                                            removeShadowPoints={removeShadowPoints}
+                                            renderActions={id => {
+                                              return data.archived ? null : (
+                                                <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
+                                              );
+                                            }}
+                                          />
+                                        )}
+                                      </ResourceRenderer>
                                     )}
                                   </ResourceRenderer>
                                 )}
@@ -402,11 +432,18 @@ GroupDetail.propTypes = {
   isGroupAdmin: PropTypes.bool,
   isGroupSupervisor: PropTypes.bool,
   isGroupStudent: PropTypes.bool,
+  userSolutionsSelector: PropTypes.func.isRequired,
+  userSolutionsStatusSelector: PropTypes.func.isRequired,
+  runtimeEnvironments: ImmutablePropTypes.map,
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   createShadowAssignment: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
+  fetchGroupStatsIfNeeded: PropTypes.func.isRequired,
+  fetchUsersSolutions: PropTypes.func.isRequired,
+  setShadowPoints: PropTypes.func.isRequired,
+  removeShadowPoints: PropTypes.func.isRequired,
   links: PropTypes.object,
   intl: intlShape,
 };
@@ -436,6 +473,9 @@ const mapStateToProps = (
     isGroupSupervisor: isSupervisorOf(userId, groupId)(state),
     isGroupAdmin: isAdminOf(userId, groupId)(state),
     isGroupStudent: isStudentOf(userId, groupId)(state),
+    userSolutionsSelector: getUserSolutionsSortedData(state),
+    userSolutionsStatusSelector: fetchManyUserSolutionsStatus(state),
+    runtimeEnvironments: runtimeEnvironmentsSelector(state),
   };
 };
 
@@ -443,6 +483,12 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   loadAsync: () => GroupDetail.loadAsync(params, dispatch),
   createShadowAssignment: () => dispatch(createShadowAssignment(params.groupId)),
   createGroupExercise: () => dispatch(createExercise({ groupId: params.groupId })),
+  fetchGroupStatsIfNeeded: () => dispatch(fetchGroupStatsIfNeeded(params.groupId, { allowReload: true })),
+  fetchUsersSolutions: (userId, assignmentId) => dispatch(fetchUsersSolutions(userId, assignmentId)),
+  setShadowPoints: (shadowId, { awardeeId, pointsId, points, note, awardedAt }) =>
+    dispatch(setShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId, points, note, awardedAt)),
+  removeShadowPoints: (shadowId, awardeeId, pointsId) =>
+    dispatch(removeShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId)),
 });
 
 export default withLinks(

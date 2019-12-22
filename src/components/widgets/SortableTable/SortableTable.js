@@ -14,8 +14,8 @@ class SortableTable extends Component {
   // Default row rendering fucntion (if the user does not provide custom function)
   defaultRowRenderer = (row, idx, columns) => (
     <tr key={row.id || idx}>
-      {columns.map(({ id: colId, cellRenderer, style, className }) => (
-        <td key={colId} style={style} className={className}>
+      {columns.map(({ id: colId, cellRenderer, style, className, onClick = null }) => (
+        <td key={colId} style={style} className={className} onClick={onClick && (() => onClick(row.id, colId))}>
           {cellRenderer(row[colId], idx, colId, row)}
         </td>
       ))}

@@ -6,24 +6,25 @@ import DeleteButton from '../../components/buttons/DeleteButton';
 import { getSolution } from '../../redux/selectors/solutions';
 import { deleteSolution } from '../../redux/modules/solutions';
 
-const DeleteSolutionButtonContainer = ({ submission, deleteSolution, onDeleted, ...props }) => (
-  <DeleteButton {...props} resource={submission} deleteResource={deleteSolution} />
+const DeleteSolutionButtonContainer = ({ solution, deleteSolution, onDeleted, groupId, ...props }) => (
+  <DeleteButton {...props} resource={solution} deleteResource={deleteSolution} />
 );
 
 DeleteSolutionButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
-  submission: ImmutablePropTypes.map,
+  groupId: PropTypes.string.isRequired,
+  solution: ImmutablePropTypes.map,
   deleteSolution: PropTypes.func.isRequired,
   onDeleted: PropTypes.func,
 };
 
 export default connect(
   (state, { id }) => ({
-    submission: getSolution(id)(state),
+    solution: getSolution(id)(state),
   }),
-  (dispatch, { id, onDeleted }) => ({
+  (dispatch, { id, groupId, onDeleted }) => ({
     deleteSolution: () => {
-      const promise = dispatch(deleteSolution(id));
+      const promise = dispatch(deleteSolution(id, groupId));
       if (onDeleted) {
         promise.then(onDeleted);
       }

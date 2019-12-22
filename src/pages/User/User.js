@@ -21,7 +21,7 @@ import GroupsName from '../../components/Groups/GroupsName';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
+import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { takeOver } from '../../redux/modules/auth';
 
@@ -76,10 +76,7 @@ class User extends Component {
                   return group && group.getIn(['data', 'permissionHints', 'viewAssignments']);
                 })
                 .map(groupId =>
-                  Promise.all([
-                    dispatch(fetchAssignmentsForGroup(groupId)),
-                    dispatch(fetchGroupsStatsIfNeeded(groupId)),
-                  ])
+                  Promise.all([dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupStatsIfNeeded(groupId))])
                 )
             )
           );

@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../../icons';
 import {
   isLoading,
+  isReadyOrReloading,
   hasFailed,
   isPosting,
   isDeleting,
@@ -78,12 +79,15 @@ const shallowResourcesEqual = (oldResources, newResources) => {
  */
 class ResourceRenderer extends Component {
   oldResources = null;
-
   oldData = null;
+
+  renderFromCache = () => {
+    const { children: ready, returnAsArray = false } = this.props;
+    return returnAsArray ? ready(this.oldData) : ready(...this.oldData);
+  };
 
   // Perform rendering of the childs whilst keeping resource data cached ...
   renderReady = resources => {
-    const { children: ready, returnAsArray = false } = this.props;
     if (this.oldResources === null || !shallowResourcesEqual(this.oldResources, resources)) {
       this.oldData = resources
         .filter(res => !isDeleting(res))
@@ -94,7 +98,7 @@ class ResourceRenderer extends Component {
       this.oldData = List.isList(this.oldData) ? this.oldData.toArray() : this.oldData;
       this.oldResources = resources;
     }
-    return returnAsArray ? ready(this.oldData) : ready(...this.oldData);
+    return this.renderFromCache();
   };
 
   render() {
@@ -110,6 +114,12 @@ class ResourceRenderer extends Component {
 
     const resources = Array.isArray(resource) || List.isList(resource) ? resource : [resource];
     const stillLoading = !resource || resources.find(res => !res) || resources.some(isLoading) || forceLoading;
+    const isReloading =
+      stillLoading && !forceLoading && resources.length > 0 && resources.every(res => res && isReadyOrReloading(res));
+
+    if (isReloading && this.oldData !== null) {
+      return this.renderFromCache();
+    }
 
     return stillLoading
       ? hiddenUntilReady
