@@ -54,9 +54,9 @@ class DatetimeField extends Component {
             [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
             [styles.active]: active,
           })}
-        />{' '}
-        {error && <HelpBlock> {error} </HelpBlock>}
-        {!error && warning && <HelpBlock> {warning} </HelpBlock>}
+        />
+        {error && <HelpBlock>{error}</HelpBlock>}
+        {!error && warning && <HelpBlock>{warning}</HelpBlock>}
       </FormGroup>
     );
   }
