@@ -47,7 +47,7 @@ class EditLimitsForm extends Component {
             <div className="text-center">
               {dirty && (
                 <span>
-                  <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
+                  <Button type="reset" onClick={reset} bsStyle={'danger'}>
                     <RefreshIcon gapRight />
                     <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>

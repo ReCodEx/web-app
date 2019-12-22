@@ -2,12 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Form, Alert, Grid, Row, Col } from 'react-bootstrap';
+import { Form, FormGroup, Alert, Grid, Row, Col } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import moment from 'moment';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
+import Button from '../../widgets/FlatButton';
+import Icon, { RefreshIcon, DeleteIcon } from '../../icons';
 
 export const getPointsFormInitialValues = defaultMemoize((userPoints, awardeeId) => {
   return userPoints
@@ -34,6 +36,9 @@ export const transformPointsFormSubmitData = ({ pointsId = null, awardedAt, ...f
 });
 
 const EditShadowAssignmentPointsForm = ({
+  onRemovePoints = null,
+  change,
+  reset,
   submitting,
   handleSubmit,
   dirty,
@@ -54,7 +59,7 @@ const EditShadowAssignmentPointsForm = ({
 
     <Grid fluid>
       <Row>
-        <Col md={12} lg={6}>
+        <Col md={12} lg={5}>
           <NumericTextField
             name="points"
             maxLength={6}
@@ -63,12 +68,33 @@ const EditShadowAssignmentPointsForm = ({
             label={<FormattedMessage id="app.editShadowAssignmentPointsForm.points" defaultMessage="Points:" />}
           />
         </Col>
-        <Col md={12} lg={6}>
-          <Field
-            name="awardedAt"
-            component={DatetimeField}
-            label={<FormattedMessage id="app.editShadowAssignmentPointsForm.awardedAt" defaultMessage="Awarded at:" />}
-          />
+        <Col md={12} lg={7}>
+          <table className="full-width">
+            <tbody>
+              <tr>
+                <td>
+                  <Field
+                    name="awardedAt"
+                    component={DatetimeField}
+                    label={
+                      <FormattedMessage
+                        id="app.editShadowAssignmentPointsForm.awardedAt"
+                        defaultMessage="Awarded at:"
+                      />
+                    }
+                  />
+                </td>
+                <td className="valign-bottom shrink-col">
+                  <FormGroup>
+                    <Button onClick={() => change('awardedAt', moment().startOf('minute'))}>
+                      <Icon icon="history" gapRight />
+                      <FormattedMessage id="app.editShadowAssignmentPointsForm.setNow" defaultMessage="Now" />
+                    </Button>
+                  </FormGroup>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </Col>
       </Row>
       <Row>
@@ -88,6 +114,12 @@ const EditShadowAssignmentPointsForm = ({
     {warning && <Alert bsStyle="warning">{warning}</Alert>}
 
     <div className="text-center">
+      {dirty && (
+        <Button type="reset" onClick={reset} bsStyle={'danger'}>
+          <RefreshIcon gapRight />
+          <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+        </Button>
+      )}
       <SubmitButton
         id="shadow-assignment-points"
         handleSubmit={handleSubmit}
@@ -102,12 +134,25 @@ const EditShadowAssignmentPointsForm = ({
           success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
         }}
       />
+
+      {onRemovePoints && (
+        <Button onClick={onRemovePoints} bsStyle="danger" className="em-margin-left">
+          <DeleteIcon gapRight />
+          <FormattedMessage
+            id="app.editShadowAssignmentPointsForm.removePoints"
+            defaultMessage="Remove Points Record"
+          />
+        </Button>
+      )}
     </div>
   </Form>
 );
 
 EditShadowAssignmentPointsForm.propTypes = {
   maxPoints: PropTypes.number.isRequired,
+  onRemovePoints: PropTypes.func,
+  change: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   dirty: PropTypes.bool,

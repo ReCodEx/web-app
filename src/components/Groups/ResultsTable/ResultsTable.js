@@ -192,6 +192,18 @@ class ResultsTable extends Component {
       : this.closeDialog();
   };
 
+  removeShadowPoints = () => {
+    if (this.state.dialogClosing) return;
+
+    const points = this.getDialogPoints();
+    if (points && this.state.dialogUserId) {
+      this.setState({ dialogClosing: true });
+      return this.props.removeShadowPoints(this.state.dialogShadowId, this.state.dialogUserId, points.id).then(() => {
+        this.setState({ dialogOpen: false, dialogClosing: false });
+      });
+    }
+  };
+
   prepareColumnDescriptors = defaultMemoize((assignments, shadowAssignments, loggedUser, locale) => {
     const {
       isAdmin,
@@ -443,6 +455,7 @@ class ResultsTable extends Component {
                       initialValues={getPointsFormInitialValues(this.getDialogPoints(), this.state.dialogUserId)}
                       onSubmit={this.submitPointsForm}
                       maxPoints={this.getDialogShadowAssignment().maxPoints}
+                      onRemovePoints={this.removeShadowPoints}
                     />
                   )}
                 </React.Fragment>
