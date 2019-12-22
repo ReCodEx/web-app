@@ -35,21 +35,21 @@ const actionCreatorsFactory = ({
 
   const fetchIfNeeded = (...ids) => (dispatch, getState) => Promise.all(ids.map(id => dispatch(fetchOneIfNeeded(id))));
 
-  const fetchOneIfNeeded = id => (dispatch, getState) => {
+  const fetchOneIfNeeded = (id, meta = {}) => (dispatch, getState) => {
     if (needsRefetching(getItem(id, getState))) {
-      archivedPromises[id] = dispatch(fetchResource(id));
+      archivedPromises[id] = dispatch(fetchResource(id, meta));
     }
 
     const item = getItem(id, getState);
     return isLoading(item) ? archivedPromises[id] : Promise.resolve(fakeResult(item));
   };
 
-  const fetchResource = id =>
+  const fetchResource = (id, meta = {}) =>
     createApiAction({
       type: actionTypes.FETCH,
       method: 'GET',
       endpoint: apiEndpointFactory(id),
-      meta: { id },
+      meta: { ...meta, id },
     });
 
   const pushResource = createAction(
@@ -58,30 +58,30 @@ const actionCreatorsFactory = ({
     resource => ({ id: resource.get('id') })
   );
 
-  const addResource = (body, tmpId = Math.random().toString(), endpoint = apiEndpointFactory('')) =>
+  const addResource = (body, tmpId = Math.random().toString(), endpoint = apiEndpointFactory(''), meta = {}) =>
     createApiAction({
       type: actionTypes.ADD,
       method: 'POST',
       endpoint,
       body,
-      meta: { tmpId, body },
+      meta: { ...meta, tmpId, body },
     });
 
-  const updateResource = (id, body, endpoint = apiEndpointFactory(id)) =>
+  const updateResource = (id, body, endpoint = apiEndpointFactory(id), meta = {}) =>
     createApiAction({
       type: actionTypes.UPDATE,
       method: 'POST',
       endpoint,
       body,
-      meta: { id, body },
+      meta: { ...meta, id, body },
     });
 
-  const removeResource = (id, endpoint = apiEndpointFactory(id)) =>
+  const removeResource = (id, endpoint = apiEndpointFactory(id), meta = {}) =>
     createApiAction({
       type: actionTypes.REMOVE,
       method: 'DELETE',
       endpoint,
-      meta: { id },
+      meta: { ...meta, id },
     });
 
   const invalidate = createAction(actionTypes.INVALIDATE);

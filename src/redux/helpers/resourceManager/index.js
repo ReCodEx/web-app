@@ -9,6 +9,7 @@ import createRecord, { getData, getJsData, getId } from './recordFactory';
 import {
   resourceStatus,
   isLoading,
+  isReadyOrReloading,
   hasFailed,
   isDeleting,
   isDeleted,
@@ -28,6 +29,7 @@ export {
   initialState,
   resourceStatus,
   isLoading,
+  isReadyOrReloading,
   hasFailed,
   isDeleting,
   isDeleted,

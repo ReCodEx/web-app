@@ -182,6 +182,10 @@ th.shrink-col {
   cursor: pointer;
 }
 
+table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
+  background-color: #eeeeee;
+}
+
 .timid {
   opacity: 0.2;
   transition: opacity 0.5s ease;

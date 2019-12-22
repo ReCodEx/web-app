@@ -6,6 +6,7 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Col, Row, Alert } from 'react-bootstrap';
 
 import Button from '../../components/widgets/FlatButton';
+import Box from '../../components/widgets/Box';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments';
@@ -18,7 +19,11 @@ import {
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
-import { getAssignment, assignmentEnvironmentsSelector, getUserSolutions } from '../../redux/selectors/assignments';
+import {
+  getAssignment,
+  assignmentEnvironmentsSelector,
+  getUserSolutionsSortedData,
+} from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -43,7 +48,6 @@ import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
 import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
-import { getJsData } from '../../redux/helpers/resourceManager';
 import { hasPermissions } from '../../helpers/common';
 
 class Assignment extends Component {
@@ -72,14 +76,6 @@ class Assignment extends Component {
   isAfter = unixTime => {
     return unixTime * 1000 < Date.now();
   };
-
-  sortSolutions(solutions) {
-    return solutions.sort((a, b) => {
-      var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
-      var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
-      return bTimestamp - aTimestamp;
-    });
-  }
 
   render() {
     const {
@@ -229,23 +225,28 @@ class Assignment extends Component {
 
                     {(isStudentOf(assignment.groupId) ||
                       (userId && hasPermissions(assignment, 'viewAssignmentSolutions'))) && ( // includes superadmin
-                      <FetchManyResourceRenderer
-                        fetchManyStatus={fetchManyStatus}
-                        loading={<LoadingSolutionsTable />}
-                        failed={<FailedLoadingSolutionsTable />}>
-                        {() => (
-                          <SolutionsTable
-                            title={
-                              <FormattedMessage id="app.solutionsTable.title" defaultMessage="Submitted Solutions" />
-                            }
-                            solutions={this.sortSolutions(solutions).map(getJsData)}
-                            assignmentId={assignment.id}
-                            runtimeEnvironments={runtimes}
-                            noteMaxlen={64}
-                            compact
-                          />
-                        )}
-                      </FetchManyResourceRenderer>
+                      <Box
+                        title={<FormattedMessage id="app.solutionsTable.title" defaultMessage="Submitted Solutions" />}
+                        collapsable
+                        isOpen
+                        noPadding
+                        unlimitedHeight>
+                        <FetchManyResourceRenderer
+                          fetchManyStatus={fetchManyStatus}
+                          loading={<LoadingSolutionsTable />}
+                          failed={<FailedLoadingSolutionsTable />}>
+                          {() => (
+                            <SolutionsTable
+                              solutions={solutions}
+                              assignmentId={assignment.id}
+                              groupId={assignment.groupId}
+                              runtimeEnvironments={runtimes}
+                              noteMaxlen={64}
+                              compact
+                            />
+                          )}
+                        </FetchManyResourceRenderer>
+                      </Box>
                     )}
                   </Col>
                 )}
@@ -304,8 +305,8 @@ export default withLinks(
         isSupervisorOf: groupId => isSupervisorOf(loggedInUserId, groupId)(state),
         isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutions(state, userId || loggedInUserId, assignmentId),
-        fetchManyStatus: fetchManyUserSolutionsStatus(userId || loggedInUserId, assignmentId)(state),
+        solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
+        fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
       };
     },
     (

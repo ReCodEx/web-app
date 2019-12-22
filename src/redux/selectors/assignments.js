@@ -1,14 +1,13 @@
-import { createSelector } from 'reselect';
+import { createSelector, defaultMemoize } from 'reselect';
 import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
 import { getSolutions } from './solutions';
 import { runtimeEnvironmentSelector } from './runtimeEnvironments';
-import { isReady } from '../helpers/resourceManager';
+import { isReady, getJsData } from '../helpers/resourceManager';
 
 export const getAssignments = state => state.assignments;
 
 const getAssignmentResources = state => getAssignments(state).get('resources');
 const getParam = (state, id) => id;
-const getParams = (state, ...params) => params;
 
 export const getAssignment = createSelector(
   getAssignmentResources,
@@ -48,12 +47,31 @@ export const getAssigmentSolutions = createSelector(
 );
 
 export const getUserSolutions = createSelector(
-  [getSolutions, getAssignments, getParams],
-  (solutions, assignments, [userId, assignmentId]) =>
-    assignments
-      .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
-      .map(id => solutions.get(id))
-      .filter(a => a)
+  [getSolutions, getAssignments],
+  (solutions, assignments) =>
+    defaultMemoize((userId, assignmentId) =>
+      assignments
+        .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
+        .map(id => solutions.get(id))
+        .filter(a => a)
+    )
+);
+
+export const getUserSolutionsSortedData = createSelector(
+  [getSolutions, getAssignments],
+  (solutions, assignments) =>
+    defaultMemoize((userId, assignmentId) =>
+      assignments
+        .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
+        .map(id => solutions.get(id))
+        .filter(a => a)
+        .sort((a, b) => {
+          var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
+          var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
+          return bTimestamp - aTimestamp;
+        })
+        .map(getJsData)
+    )
 );
 
 export const isResubmitAllPending = assignmentId =>

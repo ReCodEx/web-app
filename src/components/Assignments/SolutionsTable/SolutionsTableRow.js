@@ -23,6 +23,7 @@ const showScoreAndPoints = status => status === 'done' || status === 'failed';
 const SolutionsTableRow = ({
   id,
   assignmentId,
+  groupId,
   status = null,
   note,
   lastSubmission,
@@ -124,7 +125,9 @@ const SolutionsTableRow = ({
           {permissionHints && permissionHints.setAccepted && (
             <AcceptSolutionContainer id={id} locale={locale} shortLabel bsSize="xs" />
           )}
-          {permissionHints && permissionHints.delete && <DeleteSolutionButtonContainer id={id} bsSize="xs" />}
+          {permissionHints && permissionHints.delete && (
+            <DeleteSolutionButtonContainer id={id} groupId={groupId} bsSize="xs" />
+          )}
         </td>
       </tr>
 
@@ -146,6 +149,7 @@ const SolutionsTableRow = ({
 SolutionsTableRow.propTypes = {
   id: PropTypes.string.isRequired,
   assignmentId: PropTypes.string.isRequired,
+  groupId: PropTypes.string.isRequired,
   status: PropTypes.string,
   note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,

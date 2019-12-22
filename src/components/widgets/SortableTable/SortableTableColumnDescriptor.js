@@ -14,6 +14,7 @@ class SortableTableColumnDescriptor {
       headerSuffix = null,
       headerSuffixStyle = null,
       headerSuffixClassName = null,
+      onClick = null,
     } = {}
   ) {
     this.id = id;
@@ -27,6 +28,7 @@ class SortableTableColumnDescriptor {
     this.headerSuffix = headerSuffix;
     this.headerSuffixStyle = headerSuffixStyle;
     this.headerSuffixClassName = headerSuffixClassName;
+    this.onClick = onClick;
   }
 
   getHeaderStyle = () => this.headerStyle || this.style;

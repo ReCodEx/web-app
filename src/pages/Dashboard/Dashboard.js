@@ -21,7 +21,7 @@ import GroupsName from '../../components/Groups/GroupsName';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchGroupsStatsIfNeeded } from '../../redux/modules/stats';
+import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
@@ -75,7 +75,7 @@ class Dashboard extends Component {
             const groups = user.privateData.groups.studentOf.concat(user.privateData.groups.supervisorOf);
             return Promise.all(
               groups.map(groupId =>
-                Promise.all([dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupsStatsIfNeeded(groupId))])
+                Promise.all([dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupStatsIfNeeded(groupId))])
               )
             );
           })

@@ -3,19 +3,28 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { defaultMemoize } from 'reselect';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 
-import { safeGet, EMPTY_ARRAY, EMPTY_OBJ } from '../../../helpers/common';
+import UsersNameContainer from '../../../containers/UsersNameContainer';
+import SolutionsTable from '../../Assignments/SolutionsTable';
+import LoadingSolutionsTable from '../../Assignments/SolutionsTable/LoadingSolutionsTable';
+import FailedLoadingSolutionsTable from '../../Assignments/SolutionsTable/FailedLoadingSolutionsTable';
+import EditShadowAssignmentPointsForm, {
+  getPointsFormInitialValues,
+  transformPointsFormSubmitData,
+} from '../../forms/EditShadowAssignmentPointsForm';
 import UsersName from '../../Users/UsersName';
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
-import withLinks from '../../../helpers/withLinks';
+import FetchManyResourceRenderer from '../../helpers/FetchManyResourceRenderer';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { getLocalizedName } from '../../../helpers/localizedData';
 import { createUserNameComparator } from '../../helpers/users';
 import { compareAssignments, compareShadowAssignments } from '../../helpers/assignments';
 import { downloadString } from '../../../redux/helpers/api/download';
 import Button from '../../widgets/FlatButton';
-import { DownloadIcon } from '../../icons';
+import { DownloadIcon, LoadingIcon } from '../../icons';
+import { safeGet, EMPTY_ARRAY, EMPTY_OBJ } from '../../../helpers/common';
+import withLinks from '../../../helpers/withLinks';
 
 import styles from './ResultsTable.less';
 import escapeString from '../../helpers/escapeString';
@@ -27,7 +36,7 @@ const assignmentCellRendererCreator = defaultMemoize((rawAssignments, locale) =>
     <OverlayTrigger
       placement="bottom"
       overlay={
-        <Tooltip id={`results-table-cell-${row.user.id}-${idx}`}>
+        <Tooltip id={`results-table-cell-${row.user.id}-${key}`}>
           {row.user.name.firstName} {row.user.name.lastName}
           {', '}
           {assignments[key] && getLocalizedName(assignments[key], locale)}
@@ -44,6 +53,24 @@ const assignmentCellRendererCreator = defaultMemoize((rawAssignments, locale) =>
           '-'
         )}
       </span>
+    </OverlayTrigger>
+  );
+});
+
+const shadowAssignmentCellRendererCreator = defaultMemoize((shadowAssignments, locale) => {
+  const assignments = {};
+  shadowAssignments.forEach(a => (assignments[a.id] = a));
+  return (points, idx, key, row) => (
+    <OverlayTrigger
+      placement="bottom"
+      overlay={
+        <Tooltip id={`results-table-cell-${row.user.id}-${key}`}>
+          {row.user.name.firstName} {row.user.name.lastName}
+          {', '}
+          {assignments[key] && getLocalizedName(assignments[key], locale)}
+        </Tooltip>
+      }>
+      <span>{points && Number.isInteger(points.gained) ? points.gained : '-'}</span>
     </OverlayTrigger>
   );
 });
@@ -100,6 +127,71 @@ const getCSVValues = (assignments, shadowAssignments, data, locale) => {
 };
 
 class ResultsTable extends Component {
+  state = {
+    dialogOpen: false,
+    dialogClosing: false,
+    dialogUserId: null,
+    dialogAssignmentId: null,
+    dialogShadowId: null,
+  };
+
+  openDialogAssignment = (dialogUserId, dialogAssignmentId) => {
+    this.props.fetchUsersSolutions(dialogUserId, dialogAssignmentId);
+    this.setState({
+      dialogOpen: true,
+      dialogClosing: false,
+      dialogUserId,
+      dialogAssignmentId,
+      dialogShadowId: null,
+    });
+  };
+
+  openDialogShadowAssignment = (dialogUserId, dialogShadowId) => {
+    this.setState({
+      dialogOpen: true,
+      dialogClosing: false,
+      dialogUserId,
+      dialogAssignmentId: null,
+      dialogShadowId,
+    });
+  };
+
+  closeDialog = () => {
+    if (this.state.dialogClosing) return;
+    this.setState({ dialogClosing: true });
+
+    return this.props.fetchGroupStatsIfNeeded().then(() => {
+      this.setState({ dialogOpen: false, dialogClosing: false });
+      return Promise.resolve();
+    });
+  };
+
+  getDialogAssignment = () =>
+    this.state.dialogAssignmentId &&
+    this.props.assignments &&
+    this.props.assignments.find(({ id }) => id === this.state.dialogAssignmentId);
+
+  getDialogShadowAssignment = () =>
+    this.state.dialogShadowId &&
+    this.props.shadowAssignments &&
+    this.props.shadowAssignments.find(({ id }) => id === this.state.dialogShadowId);
+
+  getDialogPoints = () => {
+    const shadowAssignment = this.getDialogShadowAssignment();
+    return (
+      shadowAssignment &&
+      shadowAssignment.points &&
+      shadowAssignment.points.find(({ awardeeId }) => awardeeId === this.state.dialogUserId)
+    );
+  };
+
+  submitPointsForm = formData => {
+    const { setShadowPoints } = this.props;
+    return this.state.dialogShadowId
+      ? setShadowPoints(this.state.dialogShadowId, transformPointsFormSubmitData(formData)).then(this.closeDialog)
+      : this.closeDialog();
+  };
+
   prepareColumnDescriptors = defaultMemoize((assignments, shadowAssignments, loggedUser, locale) => {
     const {
       isAdmin,
@@ -145,12 +237,14 @@ class ResultsTable extends Component {
             </div>
           ),
           {
-            className: 'text-center',
+            headerClassName: 'text-center',
+            className: 'text-center clickable',
             headerSuffix:
               assignment.maxPointsBeforeFirstDeadline +
               (assignment.maxPointsBeforeSecondDeadline ? ` / ${assignment.maxPointsBeforeSecondDeadline}` : ''),
             headerSuffixClassName: styles.maxPointsRow,
             cellRenderer: assignmentCellRendererCreator(assignments, locale),
+            onClick: (userId, assignmentId) => this.openDialogAssignment(userId, assignmentId),
           }
         )
       )
@@ -173,10 +267,11 @@ class ResultsTable extends Component {
             </div>
           ),
           {
-            className: 'text-center',
+            className: 'text-center clickable',
             headerSuffix: shadowAssignment.maxPoints,
             headerSuffixClassName: styles.maxPointsRow,
-            cellRenderer: points => (points && Number.isInteger(points.gained) ? <span>{points.gained}</span> : '-'),
+            cellRenderer: shadowAssignmentCellRendererCreator(shadowAssignments, locale),
+            onClick: (userId, shadowId) => this.openDialogShadowAssignment(userId, shadowId),
           }
         )
       )
@@ -254,6 +349,10 @@ class ResultsTable extends Component {
       isAdmin,
       isSupervisor,
       groupName,
+      groupId,
+      userSolutionsSelector,
+      userSolutionsStatusSelector,
+      runtimeEnvironments,
       intl: { locale },
     } = this.props;
 
@@ -296,6 +395,61 @@ class ResultsTable extends Component {
             </Button>
           </div>
         )}
+
+        {(isAdmin || isSupervisor) && (
+          <Modal
+            show={Boolean(this.state.dialogOpen && this.state.dialogUserId)}
+            backdrop="static"
+            onHide={this.closeDialog}
+            bsSize="large">
+            <Modal.Header closeButton>
+              <Modal.Title>
+                <LocalizedExerciseName entity={this.getDialogAssignment() || this.getDialogShadowAssignment()} />
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {this.state.dialogClosing ? (
+                <div className="text-center">
+                  <LoadingIcon />
+                </div>
+              ) : (
+                <React.Fragment>
+                  <UsersNameContainer userId={this.state.dialogUserId} showEmail="icon" large />
+                  <hr />
+
+                  {this.state.dialogAssignmentId && (
+                    <FetchManyResourceRenderer
+                      fetchManyStatus={userSolutionsStatusSelector(
+                        this.state.dialogUserId,
+                        this.state.dialogAssignmentId
+                      )}
+                      loading={<LoadingSolutionsTable />}
+                      failed={<FailedLoadingSolutionsTable />}>
+                      {() => (
+                        <SolutionsTable
+                          solutions={userSolutionsSelector(this.state.dialogUserId, this.state.dialogAssignmentId)}
+                          assignmentId={this.state.dialogAssignmentId}
+                          groupId={groupId}
+                          runtimeEnvironments={runtimeEnvironments}
+                          noteMaxlen={64}
+                          compact
+                        />
+                      )}
+                    </FetchManyResourceRenderer>
+                  )}
+
+                  {this.state.dialogShadowId && (
+                    <EditShadowAssignmentPointsForm
+                      initialValues={getPointsFormInitialValues(this.getDialogPoints(), this.state.dialogUserId)}
+                      onSubmit={this.submitPointsForm}
+                      maxPoints={this.getDialogShadowAssignment().maxPoints}
+                    />
+                  )}
+                </React.Fragment>
+              )}
+            </Modal.Body>
+          </Modal>
+        )}
       </React.Fragment>
     );
   }
@@ -312,6 +466,14 @@ ResultsTable.propTypes = {
   isSupervisor: PropTypes.bool,
   renderActions: PropTypes.func,
   groupName: PropTypes.string.isRequired,
+  groupId: PropTypes.string.isRequired,
+  runtimeEnvironments: PropTypes.array.isRequired,
+  userSolutionsSelector: PropTypes.func.isRequired,
+  userSolutionsStatusSelector: PropTypes.func.isRequired,
+  fetchGroupStatsIfNeeded: PropTypes.func.isRequired,
+  fetchUsersSolutions: PropTypes.func.isRequired,
+  setShadowPoints: PropTypes.func.isRequired,
+  removeShadowPoints: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   links: PropTypes.object,
 };

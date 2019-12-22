@@ -3,9 +3,35 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Form, Alert, Grid, Row, Col } from 'react-bootstrap';
-import SubmitButton from '../SubmitButton';
+import { defaultMemoize } from 'reselect';
+import moment from 'moment';
 
+import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
+
+export const getPointsFormInitialValues = defaultMemoize((userPoints, awardeeId) => {
+  return userPoints
+    ? {
+        pointsId: userPoints.id,
+        awardeeId,
+        points: userPoints.points,
+        awardedAt: moment.unix(userPoints.awardedAt),
+        note: userPoints.note,
+      }
+    : {
+        pointsId: null,
+        awardeeId,
+        points: 0,
+        awardedAt: moment().startOf('minute'),
+        note: '',
+      };
+});
+
+export const transformPointsFormSubmitData = ({ pointsId = null, awardedAt, ...formData }) => ({
+  pointsId,
+  awardedAt: moment(awardedAt).unix(),
+  ...formData,
+});
 
 const EditShadowAssignmentPointsForm = ({
   submitting,

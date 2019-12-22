@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import { Table, Modal } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
-import moment from 'moment';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import EditShadowAssignmentPointsForm from '../../forms/EditShadowAssignmentPointsForm';
+import EditShadowAssignmentPointsForm, {
+  getPointsFormInitialValues,
+  transformPointsFormSubmitData,
+} from '../../forms/EditShadowAssignmentPointsForm';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import Button from '../../widgets/FlatButton';
@@ -16,10 +17,8 @@ import Icon, { EditIcon, DeleteIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users';
 import { arrayToObject, safeGet } from '../../../helpers/common';
 
-//
-
 class ShadowAssignmentPointsTable extends Component {
-  state = { dialogOpen: false, dialogStudentId: null, dialogPointsId: null };
+  state = { dialogStudentId: null, dialogAssignmentId: null };
 
   openDialog = (studentId, pointsId = null) =>
     this.setState({
@@ -28,45 +27,19 @@ class ShadowAssignmentPointsTable extends Component {
       dialogPointsId: pointsId,
     });
 
-  closeDialog = () => this.setState({ dialogOpen: false });
-
-  getPointsFormInitialValues = defaultMemoize((awardeeId, pointsId) => {
-    const studentPoints = pointsId && this.props.points.find(({ id }) => id === pointsId);
-    return studentPoints === null
-      ? {
-          pointsId: null,
-          awardeeId,
-          points: 0,
-          awardedAt: moment().startOf('minute'),
-          note: '',
-        }
-      : {
-          pointsId,
-          points: studentPoints.points,
-          awardedAt: moment.unix(studentPoints.awardedAt),
-          note: studentPoints.note,
-        };
-  });
-
-  submitPointsForm = ({ pointsId, awardedAt, ...formData }) => {
-    const { createPoints, updatePoints } = this.props;
-    const promise =
-      pointsId === null
-        ? createPoints({
-            awardedAt: moment(awardedAt).unix(),
-            ...formData,
-          })
-        : updatePoints({
-            pointsId,
-            awardedAt: moment(awardedAt).unix(),
-            ...formData,
-          });
-    return promise.then(this.closeDialog);
+  closeDialog = () => {
+    this.setState({ dialogOpen: false });
+    return Promise.resolve();
   };
 
-  removePoints = pointsId => {
+  submitPointsForm = formData => {
+    const { setPoints } = this.props;
+    return setPoints(transformPointsFormSubmitData(formData)).then(this.closeDialog);
+  };
+
+  removePoints = (pointsId, awardeeId) => {
     const { removePoints } = this.props;
-    return removePoints(pointsId);
+    return removePoints(pointsId, awardeeId);
   };
 
   render() {
@@ -148,7 +121,7 @@ class ShadowAssignmentPointsTable extends Component {
                         {permissionHints.removePoints && (
                           <Confirm
                             id={`remove-${pointsId}`}
-                            onConfirmed={() => this.removePoints(pointsId)}
+                            onConfirmed={() => this.removePoints(pointsId, student.id)}
                             question={
                               <FormattedMessage
                                 id="app.shadowAssignmentPointsTable.removePointsButtonConfirmation"
@@ -181,7 +154,10 @@ class ShadowAssignmentPointsTable extends Component {
               <UsersNameContainer userId={this.state.dialogStudentId} showEmail="icon" large />
               <hr />
               <EditShadowAssignmentPointsForm
-                initialValues={this.getPointsFormInitialValues(this.state.dialogStudentId, this.state.dialogPointsId)}
+                initialValues={getPointsFormInitialValues(
+                  this.state.dialogPointsId && this.props.points.find(({ id }) => id === this.state.dialogPointsId),
+                  this.state.dialogStudentId
+                )}
                 onSubmit={this.submitPointsForm}
                 maxPoints={maxPoints}
               />
@@ -198,8 +174,7 @@ ShadowAssignmentPointsTable.propTypes = {
   points: PropTypes.array.isRequired,
   permissionHints: PropTypes.object.isRequired,
   maxPoints: PropTypes.number.isRequired,
-  createPoints: PropTypes.func.isRequired,
-  updatePoints: PropTypes.func.isRequired,
+  setPoints: PropTypes.func.isRequired,
   removePoints: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };

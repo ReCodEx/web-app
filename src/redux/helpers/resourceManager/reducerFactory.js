@@ -5,7 +5,10 @@ import { resourceStatus } from './status';
 export const initialState = fromJS({ resources: {}, fetchManyStatus: {} });
 
 const reducerFactory = (actionTypes, id = 'id') => ({
-  [actionTypes.FETCH_PENDING]: (state, { meta }) => state.setIn(['resources', meta[id]], createRecord()),
+  [actionTypes.FETCH_PENDING]: (state, { meta }) =>
+    meta.allowReload && state.getIn(['resources', meta[id], 'state']) === resourceStatus.FULFILLED
+      ? state.setIn(['resources', meta[id], 'state'], resourceStatus.RELOADING)
+      : state.setIn(['resources', meta[id]], createRecord()),
 
   [actionTypes.FETCH_REJECTED]: (state, { meta }) =>
     state.setIn(['resources', meta[id]], createRecord({ state: resourceStatus.FAILED })),

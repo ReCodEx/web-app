@@ -53,42 +53,42 @@ export const validateShadowAssignment = (id, version) =>
     body: { version },
   });
 
-export const createShadowAssignmentPoints = (
+export const setShadowAssignmentPoints = (
+  groupId,
   shadowAssignmentId,
-  awardeeId,
+  userId, // awardee ID
+  pointsId = null,
   points,
   note = '',
   awardedAt = Math.floor(Date.now() / 1000)
 ) =>
-  createApiAction({
-    type: additionalActionTypes.CREATE_POINTS,
-    method: 'POST',
-    endpoint: `/shadow-assignments/${shadowAssignmentId}/create-points`,
-    meta: { shadowAssignmentId },
-    body: { userId: awardeeId, points, note, awardedAt },
-  });
+  pointsId === null
+    ? createApiAction({
+        type: additionalActionTypes.CREATE_POINTS,
+        method: 'POST',
+        endpoint: `/shadow-assignments/${shadowAssignmentId}/create-points`,
+        meta: { groupId, shadowAssignmentId, points, userId },
+        body: { userId, points, note, awardedAt },
+      })
+    : createApiAction({
+        type: additionalActionTypes.UPDATE_POINTS,
+        method: 'POST',
+        endpoint: `/shadow-assignments/points/${pointsId}`,
+        meta: { groupId, shadowAssignmentId, pointsId, points, userId },
+        body: { points, note, awardedAt },
+      });
 
-export const updateShadowAssignmentPoints = (
+export const removeShadowAssignmentPoints = (
+  groupId,
   shadowAssignmentId,
-  pointsId,
-  points,
-  note = '',
-  awardedAt = Math.floor(Date.now() / 1000)
+  userId, // awardee ID
+  pointsId
 ) =>
-  createApiAction({
-    type: additionalActionTypes.UPDATE_POINTS,
-    method: 'POST',
-    endpoint: `/shadow-assignments/points/${pointsId}`,
-    meta: { shadowAssignmentId, pointsId },
-    body: { points, note, awardedAt },
-  });
-
-export const removeShadowAssignmentPoints = (shadowAssignmentId, pointsId) =>
   createApiAction({
     type: additionalActionTypes.REMOVE_POINTS,
     method: 'DELETE',
     endpoint: `/shadow-assignments/points/${pointsId}`,
-    meta: { shadowAssignmentId, pointsId },
+    meta: { groupId, shadowAssignmentId, pointsId, userId, points: null },
   });
 
 /**
