@@ -4,6 +4,7 @@
   "app.EditLimitsForm.validation.NaN": "Given value is not a number.",
   "app.EditLimitsForm.validation.outOfRange": "Given value is out of range. See limits constraints for details.",
   "app.ExercisePrefixIcons.isLocked": "Exercise is locked by the author and cannot be assigned.",
+  "app.ExercisePrefixIcons.isPrivate": "Exercise is private (visible only to author).",
   "app.acceptSolution.accepted": "Revoke as Final",
   "app.acceptSolution.acceptedShort": "Revoke",
   "app.acceptSolution.notAccepted": "Accept as Final",

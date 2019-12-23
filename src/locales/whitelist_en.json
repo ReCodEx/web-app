@@ -4,6 +4,7 @@
   "app.EditLimitsForm.validation.NaN",
   "app.EditLimitsForm.validation.outOfRange",
   "app.ExercisePrefixIcons.isLocked",
+  "app.ExercisePrefixIcons.isPrivate",
   "app.acceptSolution.accepted",
   "app.acceptSolution.acceptedShort",
   "app.acceptSolution.notAccepted",

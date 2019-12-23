@@ -4,6 +4,7 @@
   "app.EditLimitsForm.validation.NaN": "Zadaná hodnota není číslo.",
   "app.EditLimitsForm.validation.outOfRange": "Zadaná hodnota je mimo rozsah. Pro více informací nahlédněte do omezení limit.",
   "app.ExercisePrefixIcons.isLocked": "Úloha je zamčena autorem a nemůže být zadávána",
+  "app.ExercisePrefixIcons.isPrivate": "Úloha je soukromá (viditelná pouze autorovi).",
   "app.acceptSolution.accepted": "Zrušit jako finální",
   "app.acceptSolution.acceptedShort": "Neakceptovat",
   "app.acceptSolution.notAccepted": "Akceptovat jako finální",

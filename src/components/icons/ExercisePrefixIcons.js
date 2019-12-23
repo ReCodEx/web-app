@@ -4,12 +4,30 @@ import { FormattedMessage } from 'react-intl';
 import Icon from './Icon';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
+export const PrivateIcon = props => <Icon {...props} icon={['far', 'eye-slash']} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
 export const LockIcon = props => <Icon {...props} icon="lock" />;
 export const CheckRequiredIcon = props => <Icon {...props} icon="spell-check" />;
 
-export const ExercisePrefixIcons = ({ id, isLocked, isBroken, hasReferenceSolutions, ...props }) => (
+export const ExercisePrefixIcons = ({ id, isPublic, isLocked, isBroken, hasReferenceSolutions, ...props }) => (
   <span>
+    {!isPublic && (
+      <span>
+        <OverlayTrigger
+          placement="right"
+          overlay={
+            <Tooltip id={id}>
+              <FormattedMessage
+                id="app.ExercisePrefixIcons.isPrivate"
+                defaultMessage="Exercise is private (visible only to author)."
+              />
+            </Tooltip>
+          }>
+          <PrivateIcon {...props} className="text-muted" gapRight />
+        </OverlayTrigger>
+      </span>
+    )}
+
     {isLocked && (
       <span>
         <OverlayTrigger
@@ -65,6 +83,7 @@ export const ExercisePrefixIcons = ({ id, isLocked, isBroken, hasReferenceSoluti
 
 ExercisePrefixIcons.propTypes = {
   id: PropTypes.any.isRequired,
+  isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
   hasReferenceSolutions: PropTypes.bool.isRequired,

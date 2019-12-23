@@ -31,6 +31,7 @@ const ExercisesListItem = ({
   localizedTexts,
   createdAt,
   updatedAt,
+  isPublic,
   isLocked,
   isBroken,
   hasReferenceSolutions,
@@ -50,6 +51,7 @@ const ExercisesListItem = ({
     <td className="shrink-col">
       <ExercisePrefixIcons
         id={id}
+        isPublic={isPublic}
         isLocked={isLocked}
         isBroken={isBroken}
         hasReferenceSolutions={hasReferenceSolutions}
@@ -192,6 +194,7 @@ ExercisesListItem.propTypes = {
   difficulty: PropTypes.string.isRequired,
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
+  isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
   hasReferenceSolutions: PropTypes.bool.isRequired,
