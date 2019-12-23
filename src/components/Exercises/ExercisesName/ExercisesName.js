@@ -7,9 +7,25 @@ import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 
 import { ExercisePrefixIcons } from '../../icons';
 
-const ExercisesName = ({ id, name, localizedTexts, isLocked, isBroken, noLink, links: { EXERCISE_URI_FACTORY } }) => (
+const ExercisesName = ({
+  id,
+  name,
+  localizedTexts,
+  isPublic,
+  isLocked,
+  isBroken,
+  hasReferenceSolutions,
+  noLink,
+  links: { EXERCISE_URI_FACTORY },
+}) => (
   <span>
-    <ExercisePrefixIcons id={id} isLocked={isLocked} isBroken={isBroken} />
+    <ExercisePrefixIcons
+      id={id}
+      isPublic={isPublic}
+      isLocked={isLocked}
+      isBroken={isBroken}
+      hasReferenceSolutions={hasReferenceSolutions}
+    />
     {noLink ? (
       <span>
         <LocalizedExerciseName entity={{ name, localizedTexts }} />
@@ -26,8 +42,10 @@ ExercisesName.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   localizedTexts: PropTypes.array.isRequired,
+  isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
+  hasReferenceSolutions: PropTypes.bool.isRequired,
   noLink: PropTypes.bool,
   links: PropTypes.object,
 };
