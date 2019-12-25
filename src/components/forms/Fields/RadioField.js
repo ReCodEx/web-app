@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 
 import { FormGroup, HelpBlock, Radio } from 'react-bootstrap';
 
+import styles from './RadioField.less';
+
 const RadioField = ({ input, meta: { error, warning }, options }) => {
   return (
     <FormGroup validationState={error ? 'error' : warning ? 'warning' : undefined} controlId={input.name}>
       {options.map(({ key, name }, idx) => (
         <Radio
+          className={styles.radioContainer}
           key={`radio${idx}-${key}`}
           name={input.name}
           value={key}
           checked={input.value === key}
           onChange={input.onChange}>
           {name}
+          <span className={styles.radiomark}></span>
         </Radio>
       ))}
 
