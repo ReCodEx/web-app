@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { reduxForm, Field, FieldArray } from 'redux-form';
+import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
 import { Alert, Well, Grid, Row, Col, Form, Button, ControlLabel } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
+
+import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises';
+import {
+  getAllExericsesAuthors,
+  getAllExericsesAuthorsIsLoading,
+  getExercisesAuthorsOfGroup,
+  getExercisesAuthorsOfGroupIsLoading,
+} from '../../../redux/selectors/exercisesAuthors';
+import { loggedInUserIdSelector } from '../../../redux/selectors/auth';
 
 import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -12,6 +22,8 @@ import SubmitButton from '../SubmitButton';
 import { TextField, SelectField, TagsSelectorField } from '../Fields';
 import { identity, safeGet } from '../../../helpers/common';
 import { ExpandCollapseIcon } from '../../icons';
+
+const RTE_PREFIX = 'runtimeEnvironments.';
 
 const authorsToOptions = defaultMemoize((authors, locale) =>
   authors
@@ -46,6 +58,28 @@ class FilterExercisesListForm extends Component {
     });
   };
 
+  selectAllRuntimes = () => {
+    const { runtimeEnvironments, change } = this.props;
+    runtimeEnvironments.forEach(env => {
+      change(`${RTE_PREFIX}${env.id}`, true);
+    });
+  };
+
+  clearAllRuntimes = () => {
+    const { runtimeEnvironments, change } = this.props;
+    runtimeEnvironments.forEach(env => {
+      change(`${RTE_PREFIX}${env.id}`, false);
+    });
+  };
+
+  invertRuntimeSelection = () => {
+    const { runtimeEnvironments, envValueSelector, change } = this.props;
+    runtimeEnvironments.forEach(env => {
+      const name = `${RTE_PREFIX}${env.id}`;
+      change(name, !envValueSelector(name));
+    });
+  };
+
   render() {
     const {
       onSubmit = identity,
@@ -62,6 +96,7 @@ class FilterExercisesListForm extends Component {
       change,
       intl: { locale },
     } = this.props;
+
     return (
       <Form method="POST" onSubmit={onSubmit}>
         <Well bsSize="sm">
@@ -174,17 +209,23 @@ class FilterExercisesListForm extends Component {
                         <hr />
                       </Col>
                     </Row>
+
                     <Row>
                       <Col lg={12}>
-                        <ControlLabel>
-                          <FormattedMessage
-                            id="app.filterExercisesListForm.selectedEnvironments"
-                            defaultMessage="Selected Runtime Environments:"
-                          />
-                        </ControlLabel>
+                        <div className="em-margin-bottom">
+                          <ControlLabel>
+                            <FormattedMessage
+                              id="app.filterExercisesListForm.selectedEnvironments"
+                              defaultMessage="Selected Runtime Environments:"
+                            />
+                          </ControlLabel>
+                        </div>
                         <EditEnvironmentList
                           runtimeEnvironments={runtimeEnvironments}
-                          namePrefix="runtimeEnvironments."
+                          namePrefix={RTE_PREFIX}
+                          selectAllRuntimesHandler={this.selectAllRuntimes}
+                          clearAllRuntimesHandler={this.clearAllRuntimes}
+                          invertRuntimeSelectionHandler={this.invertRuntimeSelection}
                           fullWidth
                         />
                       </Col>
@@ -197,6 +238,7 @@ class FilterExercisesListForm extends Component {
                     <hr />
                   </Col>
                 </Row>
+
                 <Row>
                   <Col lg={12}>
                     <p className="text-center">
@@ -253,14 +295,26 @@ FilterExercisesListForm.propTypes = {
   authorsLoading: PropTypes.bool.isRequired,
   tags: PropTypes.array,
   tagsLoading: PropTypes.bool,
+  envValueSelector: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
   loggedUserId: PropTypes.string.isRequired,
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(
-  reduxForm({
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-  })(FilterExercisesListForm)
+export default connect((state, { rootGroup = null, form }) => ({
+  loggedUserId: loggedInUserIdSelector(state),
+  authors: rootGroup ? getExercisesAuthorsOfGroup(rootGroup)(state) : getAllExericsesAuthors(state),
+  authorsLoading: rootGroup
+    ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
+    : getAllExericsesAuthorsIsLoading(state),
+  tags: getExerciseTags(state),
+  tagsLoading: getExerciseTagsLoading(state),
+  envValueSelector: name => formValueSelector(form)(state, name),
+}))(
+  injectIntl(
+    reduxForm({
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+    })(FilterExercisesListForm)
+  )
 );

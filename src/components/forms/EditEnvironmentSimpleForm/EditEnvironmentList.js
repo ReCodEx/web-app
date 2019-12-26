@@ -4,6 +4,7 @@ import { Field } from 'redux-form';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
+import Button from '../../widgets/FlatButton';
 import { CheckboxField } from '../Fields';
 import Icon, { InfoIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
@@ -11,6 +12,9 @@ import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments'
 const EditEnvironmentList = ({
   runtimeEnvironments,
   namePrefix = '',
+  selectAllRuntimesHandler,
+  clearAllRuntimesHandler,
+  invertRuntimeSelectionHandler,
   showExclusive = false,
   fullWidth = false,
   intl: { locale },
@@ -59,12 +63,43 @@ const EditEnvironmentList = ({
           </Col>
         ))}
     </Row>
+    {(Boolean(selectAllRuntimesHandler) ||
+      Boolean(clearAllRuntimesHandler) ||
+      Boolean(invertRuntimeSelectionHandler)) && (
+      <Row>
+        <Col>
+          <div className="text-center">
+            {Boolean(selectAllRuntimesHandler) && (
+              <Button onClick={selectAllRuntimesHandler} bsStyle="primary" bsSize="sm">
+                <Icon icon={['far', 'check-square']} gapRight />
+                <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
+              </Button>
+            )}
+            {Boolean(clearAllRuntimesHandler) && (
+              <Button onClick={clearAllRuntimesHandler} bsStyle="primary" bsSize="sm">
+                <Icon icon={['far', 'square']} gapRight />
+                <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
+              </Button>
+            )}
+            {Boolean(invertRuntimeSelectionHandler) && (
+              <Button onClick={invertRuntimeSelectionHandler} bsStyle="primary" bsSize="sm">
+                <Icon icon="yin-yang" gapRight />
+                <FormattedMessage id="generic.invertSelection" defaultMessage="Invert Selection" />
+              </Button>
+            )}
+          </div>
+        </Col>
+      </Row>
+    )}
   </Grid>
 );
 
 EditEnvironmentList.propTypes = {
   runtimeEnvironments: PropTypes.array,
   namePrefix: PropTypes.string,
+  selectAllRuntimesHandler: PropTypes.func,
+  clearAllRuntimesHandler: PropTypes.func,
+  invertRuntimeSelectionHandler: PropTypes.func,
   showExclusive: PropTypes.bool,
   fullWidth: PropTypes.bool,
   intl: intlShape.isRequired,
