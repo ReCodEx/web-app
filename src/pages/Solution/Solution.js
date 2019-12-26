@@ -8,6 +8,7 @@ import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SolutionDetail, { FailedSubmissionDetail } from '../../components/Solutions/SolutionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
+import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
@@ -106,11 +107,14 @@ class Solution extends Component {
           {(solution, assignment) => (
             <div>
               <HierarchyLineContainer groupId={assignment.groupId} />
-              {((solution.permissionHints && solution.permissionHints.setAccepted) ||
+              {((solution.permissionHints && solution.permissionHints.setFlag) ||
                 (assignment.permissionHints && assignment.permissionHints.resubmitSubmissions)) && (
                 <p>
-                  {solution.permissionHints && solution.permissionHints.setAccepted && (
-                    <AcceptSolutionContainer id={solution.id} locale={locale} />
+                  {solution.permissionHints && solution.permissionHints.setFlag && (
+                    <React.Fragment>
+                      <AcceptSolutionContainer id={solution.id} locale={locale} />
+                      <ReviewSolutionContainer id={solution.id} locale={locale} />
+                    </React.Fragment>
                   )}
 
                   {assignment.permissionHints &&

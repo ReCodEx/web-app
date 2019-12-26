@@ -10,9 +10,10 @@ import Points from './Points';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 import AcceptSolutionContainer from '../../../containers/AcceptSolutionContainer';
+import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer';
 
 import CommentsIcon from './CommentsIcon';
-import { SendIcon } from '../../icons';
+import Icon, { SendIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 
 import withLinks from '../../../helpers/withLinks';
@@ -32,6 +33,7 @@ const SolutionsTableRow = ({
   actualPoints,
   solution: { createdAt },
   accepted = false,
+  reviewed = false,
   isBestSolution = false,
   runtimeEnvironment = null,
   commentsStats = null,
@@ -68,6 +70,22 @@ const SolutionsTableRow = ({
             accepted={accepted}
             isBestSolution={isBestSolution}
           />
+
+          {reviewed && (
+            <OverlayTrigger
+              placement="right"
+              overlay={
+                <Tooltip id={`reviewed-${id}`}>
+                  <FormattedMessage
+                    id="app.solutionsTable.reviewedTooltip"
+                    defaultMessage="The solution has been reviewed by the supervisor."
+                  />
+                </Tooltip>
+              }>
+              <Icon icon="stamp" className="text-muted" gapLeft={!splitOnTwoLines} />
+            </OverlayTrigger>
+          )}
+
           <CommentsIcon id={id} commentsStats={commentsStats} gapLeft={!splitOnTwoLines} />
         </td>
 
@@ -122,8 +140,11 @@ const SolutionsTableRow = ({
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
             </Link>
           )}
-          {permissionHints && permissionHints.setAccepted && (
-            <AcceptSolutionContainer id={id} locale={locale} shortLabel bsSize="xs" />
+          {permissionHints && permissionHints.setFlag && (
+            <React.Fragment>
+              <AcceptSolutionContainer id={id} locale={locale} shortLabel bsSize="xs" />
+              <ReviewSolutionContainer id={id} locale={locale} bsSize="xs" />
+            </React.Fragment>
           )}
           {permissionHints && permissionHints.delete && (
             <DeleteSolutionButtonContainer id={id} groupId={groupId} bsSize="xs" />
@@ -165,6 +186,7 @@ SolutionsTableRow.propTypes = {
     createdAt: PropTypes.number.isRequired,
   }),
   accepted: PropTypes.bool,
+  reviewed: PropTypes.bool,
   isBestSolution: PropTypes.bool,
   commentsStats: PropTypes.object,
   runtimeEnvironment: PropTypes.object,

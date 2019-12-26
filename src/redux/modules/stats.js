@@ -57,15 +57,7 @@ const reducer = handleActions(
     [solutionActionTypes.REMOVE_FULFILLED]: (state, { meta: { groupId } }) =>
       state.hasIn(['resources', groupId]) ? state.setIn(['resources', groupId, 'didInvalidate'], true) : state,
 
-    [additionalSolutionsActionTypes.ACCEPT_FULFILLED]: (state, { payload }) =>
-      state.updateIn(['resources', payload.groupId, 'data'], stats => {
-        if (!stats) {
-          stats = List();
-        }
-        return stats.filter(userStats => userStats.get('userId') !== payload.userId).push(fromJS(payload));
-      }),
-
-    [additionalSolutionsActionTypes.UNACCEPT_FULFILLED]: (state, { payload }) =>
+    [additionalSolutionsActionTypes.SET_FLAG_FULFILLED]: (state, { payload }) =>
       state.updateIn(['resources', payload.groupId, 'data'], stats => {
         if (!stats) {
           stats = List();

@@ -6,7 +6,7 @@ import Icon from '../../icons';
 
 const AcceptSolution = ({ accepted, acceptPending, accept, unaccept, shortLabel = false, bsSize = undefined }) =>
   accepted === true ? (
-    <Button bsStyle="info" bsSize={bsSize} onClick={unaccept} disabled={acceptPending}>
+    <Button bsStyle="warning" bsSize={bsSize} onClick={unaccept} disabled={acceptPending}>
       <Icon icon="check-circle" gapRight />
       {shortLabel ? (
         <FormattedMessage id="app.acceptSolution.acceptedShort" defaultMessage="Revoke" />
@@ -15,7 +15,7 @@ const AcceptSolution = ({ accepted, acceptPending, accept, unaccept, shortLabel 
       )}
     </Button>
   ) : (
-    <Button bsStyle="primary" bsSize={bsSize} onClick={accept} disabled={acceptPending}>
+    <Button bsStyle="success" bsSize={bsSize} onClick={accept} disabled={acceptPending}>
       <Icon icon={['far', 'check-circle']} gapRight />
       {shortLabel ? (
         <FormattedMessage id="app.acceptSolution.notAcceptedShort" defaultMessage="Accept" />

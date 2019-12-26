@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import AcceptSolution from '../../components/buttons/AcceptSolution';
-import { acceptSolution, unacceptSolution } from '../../redux/modules/solutions';
-import { isAccepted, isAcceptPending } from '../../redux/selectors/solutions';
+import { setSolutionFlag } from '../../redux/modules/solutions';
+import { isAccepted, isSetFlagPending } from '../../redux/selectors/solutions';
 
 const AcceptSolutionContainer = ({ accepted, acceptPending, accept, unaccept, ...props }) => {
   return (
@@ -22,12 +22,12 @@ AcceptSolutionContainer.propTypes = {
 
 const mapStateToProps = (state, { id }) => ({
   accepted: isAccepted(id)(state),
-  acceptPending: isAcceptPending(id)(state),
+  acceptPending: isSetFlagPending(id, 'accepted')(state),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  accept: () => dispatch(acceptSolution(id)),
-  unaccept: () => dispatch(unacceptSolution(id)),
+  accept: () => dispatch(setSolutionFlag(id, 'accepted', true)),
+  unaccept: () => dispatch(setSolutionFlag(id, 'accepted', false)),
 });
 
 export default connect(

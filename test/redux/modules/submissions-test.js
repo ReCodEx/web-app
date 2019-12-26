@@ -1,20 +1,21 @@
 import { expect } from 'chai';
 import { fromJS } from 'immutable';
 
-import reducer, { additionalActionTypes, acceptSolution } from '../../../src/redux/modules/solutions';
+import reducer, { additionalActionTypes, setSolutionFlag } from '../../../src/redux/modules/solutions';
 
-describe('Submissions', () => {
+describe('Solutions', () => {
   describe('Mark as accepted', () => {
     it('must create propper API action', () => {
       const id = 'abc';
 
-      const action = acceptSolution(id);
+      const action = setSolutionFlag(id, 'accepted', true);
 
       expect(action.request).to.eql({
-        type: additionalActionTypes.ACCEPT,
+        type: additionalActionTypes.SET_FLAG,
         method: 'POST',
-        endpoint: `/assignment-solutions/${id}/set-accepted`,
-        meta: { id },
+        endpoint: `/assignment-solutions/${id}/set-flag/accepted`,
+        body: { value: true },
+        meta: { id, flag: 'accepted', value: true },
       });
     });
 
@@ -25,26 +26,27 @@ describe('Submissions', () => {
       });
 
       const pendingAction = {
-        type: additionalActionTypes.ACCEPT_PENDING,
-        meta: { id },
+        type: additionalActionTypes.SET_FLAG_PENDING,
+        meta: { id, flag: 'accepted', value: true },
       };
 
       const pendingState = reducer(initialState, pendingAction);
       expect(pendingState.getIn(['resources', id, 'data', 'accepted'])).to.equal(false);
-      expect(pendingState.getIn(['resources', id, 'data', 'accepted-pending'])).to.equal(true);
+      expect(pendingState.getIn(['resources', id, 'pending-set-flag-accepted'])).to.equal(true);
 
       const failedAction = {
-        type: additionalActionTypes.ACCEPT_REJECTED,
-        meta: { id },
+        type: additionalActionTypes.SET_FLAG_REJECTED,
+        meta: { id, flag: 'accepted', value: true },
       };
 
       const failedState = reducer(pendingState, failedAction);
       expect(failedState.getIn(['resources', id, 'data', 'accepted'])).to.equal(false);
-      expect(failedState.getIn(['resources', id, 'data', 'accepted-pending'])).to.equal(false);
+      expect(failedState.getIn(['resources', id, 'pending-set-flag-accepted'])).to.equal(undefined);
 
       const successAction = {
-        type: additionalActionTypes.ACCEPT_FULFILLED,
-        meta: { id },
+        type: additionalActionTypes.SET_FLAG_FULFILLED,
+        payload: { assignments: [] },
+        meta: { id, flag: 'accepted', value: true },
       };
 
       const successState = reducer(pendingState, successAction);
@@ -75,8 +77,9 @@ describe('Submissions', () => {
       });
 
       const successAction = {
-        type: additionalActionTypes.ACCEPT_FULFILLED,
-        meta: { id },
+        type: additionalActionTypes.SET_FLAG_FULFILLED,
+        payload: { assignments: [] },
+        meta: { id, flag: 'accepted', value: true },
       };
 
       const successState = reducer(pendingState, successAction);

@@ -20,6 +20,7 @@ const SolutionStatus = ({
   submittedBy,
   note,
   accepted,
+  reviewed,
   environment,
   maxPoints,
   bonusPoints,
@@ -125,52 +126,7 @@ const SolutionStatus = ({
 
         <tr>
           <td className="text-center">
-            <b>
-              <AssignmentStatusIcon id={String(submittedAt)} status={evaluationStatus} accepted={accepted} />
-            </b>
-          </td>
-          <th className="text-nowrap">
-            <FormattedMessage id="app.solution.lastEvaluationStatus" defaultMessage="Last evaluation status" />:
-          </th>
-          <td>
-            <em>
-              {evaluationStatus === 'done' && (
-                <FormattedMessage
-                  id="app.submission.evaluation.status.isCorrect"
-                  defaultMessage="The solution is correct and meets all criteria."
-                />
-              )}
-              {evaluationStatus === 'work-in-progress' && (
-                <FormattedMessage
-                  id="app.submission.evaluation.status.workInProgress"
-                  defaultMessage="The solution has not been evaluated yet."
-                />
-              )}
-              {evaluationStatus === 'failed' && (
-                <FormattedMessage
-                  id="app.submission.evaluation.status.failed"
-                  defaultMessage="The solution does not meet the defined criteria."
-                />
-              )}
-              {evaluationStatus === 'evaluation-failed' && (
-                <FormattedMessage
-                  id="app.submission.evaluation.status.systemFailiure"
-                  defaultMessage="Evaluation process failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project."
-                />
-              )}
-              {evaluationStatus === 'missing-submission' && (
-                <FormattedMessage
-                  id="app.submission.evaluation.status.solutionMissingSubmission"
-                  defaultMessage="The solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
-                />
-              )}
-            </em>
-          </td>
-        </tr>
-
-        <tr>
-          <td className="text-center">
-            <Icon icon={['far', 'star']} />
+            <AssignmentStatusIcon id={String(submittedAt)} status={evaluationStatus} accepted={accepted} />
           </td>
           <th className="text-nowrap">
             <FormattedMessage id="app.solution.scoredPoints" defaultMessage="Final score" />:
@@ -184,6 +140,30 @@ const SolutionStatus = ({
               {actualPoints || 0}
               {bonusPoints !== 0 ? (bonusPoints >= 0 ? '+' : '') + bonusPoints : ''} / {maxPoints}
             </b>
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center">
+            <Icon icon="check-circle" />
+          </td>
+          <th className="text-nowrap">
+            <FormattedMessage id="app.solution.acceptedAsFinal" defaultMessage="Accepted as final" />:
+          </th>
+          <td>
+            <SuccessOrFailureIcon success={accepted} />
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center">
+            <Icon icon="stamp" />
+          </td>
+          <th className="text-nowrap">
+            <FormattedMessage id="app.solution.reviewed" defaultMessage="Reviewed" />:
+          </th>
+          <td>
+            <SuccessOrFailureIcon success={reviewed} />
           </td>
         </tr>
       </tbody>
@@ -202,7 +182,8 @@ SolutionStatus.propTypes = {
   userId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string,
   note: PropTypes.string,
-  accepted: PropTypes.bool,
+  accepted: PropTypes.bool.isRequired,
+  reviewed: PropTypes.bool.isRequired,
   environment: PropTypes.object,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,

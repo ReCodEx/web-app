@@ -41,6 +41,7 @@ import Points from '../../components/Assignments/SolutionsTable/Points';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
+import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 
 import { safeGet, identity } from '../../helpers/common';
 import { createUserNameComparator } from '../../components/helpers/users';
@@ -162,8 +163,11 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
             </Link>
           )}
-          {solution.permissionHints && solution.permissionHints.setAccepted && (
-            <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel bsSize="xs" />
+          {solution.permissionHints && solution.permissionHints.setFlag && (
+            <React.Fragment>
+              <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel bsSize="xs" />
+              <ReviewSolutionContainer id={solution.id} locale={locale} bsSize="xs" />
+            </React.Fragment>
           )}
           {solution.permissionHints && solution.permissionHints.delete && (
             <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} bsSize="xs" />
