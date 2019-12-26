@@ -15,14 +15,6 @@ import { fetchExercisesAuthorsIfNeeded } from '../../redux/modules/exercisesAuth
 import { create as assignExercise } from '../../redux/modules/assignments';
 import { fetchTags } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import {
-  getAllExericsesAuthors,
-  getAllExericsesAuthorsIsLoading,
-  getExercisesAuthorsOfGroup,
-  getExercisesAuthorsOfGroupIsLoading,
-} from '../../redux/selectors/exercisesAuthors';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { getExerciseTags, getExerciseTagsLoading } from '../../redux/selectors/exercises';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { arrayToObject } from '../../helpers/common';
 
@@ -122,28 +114,15 @@ class ExercisesListContainer extends Component {
   };
 
   filtersCreator = (filters, setFilters) => {
-    const {
-      id,
-      authors,
-      authorsLoading,
-      allTags = [],
-      allTagsLoading,
-      runtimeEnvironments,
-      loggedUserId,
-      rootGroup,
-    } = this.props;
+    const { id, runtimeEnvironments, rootGroup } = this.props;
 
     return (
       <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray bulkyLoading>
         {envs => (
           <FilterExercisesListForm
             form={`${id}-filterForm`}
-            authors={authors}
-            authorsLoading={authorsLoading}
-            tags={allTags}
-            tagsLoading={allTagsLoading}
+            rootGroup={rootGroup}
             runtimeEnvironments={envs}
-            loggedUserId={loggedUserId}
             onSubmit={setFilters ? transformAndSetFilterData(setFilters, rootGroup) : null}
             initialValues={filterInitialValues(filters, envs)}
           />
@@ -204,11 +183,6 @@ ExercisesListContainer.propTypes = {
   rootGroup: PropTypes.string,
   showGroups: PropTypes.bool,
   showAssignButton: PropTypes.bool,
-  loggedUserId: PropTypes.string.isRequired,
-  authors: ImmutablePropTypes.list,
-  authorsLoading: PropTypes.bool.isRequired,
-  allTags: PropTypes.array,
-  allTagsLoading: PropTypes.bool.isRequired,
   fetchExercisesAuthorsIfNeeded: PropTypes.func.isRequired,
   fetchTags: PropTypes.func.isRequired,
   runtimeEnvironments: ImmutablePropTypes.map.isRequired,
@@ -220,13 +194,6 @@ ExercisesListContainer.propTypes = {
 export default withLinks(
   connect(
     (state, { rootGroup = null }) => ({
-      loggedUserId: loggedInUserIdSelector(state),
-      authors: rootGroup ? getExercisesAuthorsOfGroup(rootGroup)(state) : getAllExericsesAuthors(state),
-      authorsLoading: rootGroup
-        ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
-        : getAllExericsesAuthorsIsLoading(state),
-      allTags: getExerciseTags(state),
-      allTagsLoading: getExerciseTagsLoading(state),
       runtimeEnvironments: runtimeEnvironmentsSelector(state),
     }),
     (dispatch, { rootGroup = null }) => ({
