@@ -15,10 +15,16 @@ export const isAccepted = id =>
     solution => solution.getIn(['data', 'accepted'], false)
   );
 
-export const isAcceptPending = id =>
+export const isReviewed = id =>
   createSelector(
     getSolution(id),
-    solution => solution.getIn(['data', 'accepted-pending'], false)
+    solution => solution.getIn(['data', 'reviewed'], false)
+  );
+
+export const isSetFlagPending = (id, flag) =>
+  createSelector(
+    getSolution(id),
+    solution => solution.get(`pending-set-flag-${flag}`, false)
   );
 
 export const fetchManyAssignmentSolutionsStatus = assignmentId =>
