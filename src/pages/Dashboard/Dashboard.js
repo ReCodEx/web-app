@@ -212,7 +212,7 @@ class Dashboard extends Component {
                                               <AssignmentsIcon gapRight />
                                               <FormattedMessage
                                                 id="app.group.assignments"
-                                                defaultMessage="Group Detail"
+                                                defaultMessage="Assignments"
                                               />
                                             </Button>
                                           </LinkContainer>
@@ -275,7 +275,7 @@ class Dashboard extends Component {
                                               <GroupIcon gapRight />
                                               <FormattedMessage
                                                 id="app.group.assignments"
-                                                defaultMessage="Group Detail"
+                                                defaultMessage="Assignments"
                                               />
                                             </Button>
                                           </LinkContainer>

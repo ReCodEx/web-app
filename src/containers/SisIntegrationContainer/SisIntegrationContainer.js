@@ -19,7 +19,7 @@ import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import { GroupIcon } from '../../components/icons';
+import { AssignmentsIcon } from '../../components/icons';
 import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
@@ -148,10 +148,10 @@ class SisIntegrationContainer extends Component {
                                                     : GROUP_DETAIL_URI_FACTORY(group.id)
                                                 }>
                                                 <Button bsStyle="primary" bsSize="xs" className="btn-flat">
-                                                  <GroupIcon gapRight />
+                                                  <AssignmentsIcon gapRight />
                                                   <FormattedMessage
                                                     id="app.group.assignments"
-                                                    defaultMessage="Group Detail"
+                                                    defaultMessage="Assignments"
                                                   />
                                                 </Button>
                                               </LinkContainer>

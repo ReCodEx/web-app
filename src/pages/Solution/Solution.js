@@ -76,9 +76,9 @@ class Solution extends Component {
         breadcrumbs={[
           {
             resource: assignment,
-            iconName: 'users',
+            iconName: 'tasks',
             breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.group.title" defaultMessage="Group detail" />,
+              text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
               link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
             }),
           },

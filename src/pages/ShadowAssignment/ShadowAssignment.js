@@ -55,9 +55,9 @@ class ShadowAssignment extends Component {
         breadcrumbs={[
           {
             resource: shadowAssignment,
-            iconName: 'users',
+            iconName: 'tasks',
             breadcrumb: shadowAssignment => ({
-              text: <FormattedMessage id="app.group.title" defaultMessage="Group detail" />,
+              text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
               link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(shadowAssignment.groupId),
             }),
           },

@@ -93,7 +93,7 @@ class EditGroup extends Component {
             link: GROUP_INFO_URI_FACTORY(groupId),
           },
           {
-            text: <FormattedMessage id="app.group.title" />,
+            text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
             iconName: 'tasks',
             link: GROUP_DETAIL_URI_FACTORY(groupId),
           },
