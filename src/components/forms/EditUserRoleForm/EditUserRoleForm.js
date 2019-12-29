@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { Alert, Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { knownRoles, roleLabels, roleDescriptions, UserRoleIcon } from '../../helpers/usersRoles';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
+import StandaloneRadioField from '../Fields/StandaloneRadioField';
 
 const EditUserRoleForm = ({
   currentRole = null,
@@ -55,7 +56,7 @@ const EditUserRoleForm = ({
             })}
             onClick={() => change('role', role)}>
             <td className="shrink-col text-nowrap text-center">
-              <Field name="role" component="input" type="radio" value={role} />
+              <StandaloneRadioField name="role" value={role} />
             </td>
             <td className="shrink-col text-nowrap text-center">
               <UserRoleIcon role={role} />

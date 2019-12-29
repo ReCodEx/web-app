@@ -4,6 +4,7 @@ import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { knownRoles, roleLabels, UserRoleIcon } from '../../helpers/usersRoles';
+import StandaloneRadioInput from '../../forms/StandaloneRadioInput/StandaloneRadioInput';
 
 const EffectiveRoleSwitching = ({ effectiveRole, setEffectiveRole, updating = null }) => (
   <Table hover className="no-margin">
@@ -19,8 +20,7 @@ const EffectiveRoleSwitching = ({ effectiveRole, setEffectiveRole, updating = nu
             setEffectiveRole(role);
           }}>
           <td className="shrink-col">
-            <input
-              type="radio"
+            <StandaloneRadioInput
               name="effectiveRole"
               value={role}
               checked={role === (updating || effectiveRole)}
