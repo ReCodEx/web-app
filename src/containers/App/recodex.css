@@ -226,3 +226,82 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
 .noselection .ace_cursor {
   color: transparent !important;
 }
+
+/******************************************************************************/
+/* Radio Input Styling                                                        */
+/* Taken from W3Schools and adapted for our use case...                       */
+/* https://www.w3schools.com/howto/howto_css_custom_checkbox.asp              */
+/******************************************************************************/
+
+ /* Customize the container of the radio input */
+ .radio-container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+}
+
+/* Remove default label margin and paddings */
+.radio-container label {
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Hide the browser's default radio button */
+.radio-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.radiomark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio-container label:hover input ~ .radiomark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a green background */
+.radio-container label input:checked ~ .radiomark {
+  background-color: #00a65a;
+}
+
+/* On mouse-over, when the radio button is checked, add a darker green background */
+.radio-container label:hover input:checked ~ .radiomark {
+  background-color: #008d4c;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radiomark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio-container input:checked ~ .radiomark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio-container .radiomark:after {
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #eee;
+}
+
+/******************************************************************************/
