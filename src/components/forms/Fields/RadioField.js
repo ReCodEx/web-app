@@ -8,14 +8,14 @@ const RadioField = ({ input, meta: { error, warning }, options }) => {
     <FormGroup validationState={error ? 'error' : warning ? 'warning' : undefined} controlId={input.name}>
       {options.map(({ key, name }, idx) => (
         <Radio
-          className={'radio-container'}
+          className="radio-container"
           key={`radio${idx}-${key}`}
           name={input.name}
           value={key}
           checked={input.value === key}
           onChange={input.onChange}>
           {name}
-          <span className={'radiomark'}></span>
+          <span className="radiomark"></span>
         </Radio>
       ))}
 

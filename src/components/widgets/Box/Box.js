@@ -56,7 +56,7 @@ class Box extends Component {
           })}>
           {children}
         </div>
-        {footer && <div className={'box-footer'}>{footer}</div>}
+        {footer && <div className="box-footer">{footer}</div>}
       </div>
     );
   }
