@@ -4,7 +4,7 @@ import Icon from '../../icons';
 
 const SimpleInfoBox = ({ title, description = '', icon = 'info', color = 'yellow' }) => (
   <div className="info-box">
-    <span className={'info-box-icon bg-' + color}>
+    <span className={`info-box-icon bg-${color}`}>
       <Icon icon={icon} />
     </span>
     <div className="info-box-content">

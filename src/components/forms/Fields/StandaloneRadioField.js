@@ -4,10 +4,10 @@ import { Field } from 'redux-form';
 
 const StandaloneRadioField = ({ name, value }) => {
   return (
-    <div className={'radio-container'}>
+    <div className="radio-container">
       <label>
         <Field name={name} component="input" type="radio" value={value} />
-        <span className={'radiomark'}></span>
+        <span className="radiomark"></span>
       </label>
     </div>
   );

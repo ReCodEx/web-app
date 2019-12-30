@@ -3,17 +3,10 @@ import PropTypes from 'prop-types';
 
 const StandaloneRadioInput = ({ name, value, checked, disabled, readOnly }) => {
   return (
-    <div className={'radio-container'}>
+    <div className="radio-container">
       <label>
-        <input
-          type="radio"
-          name={name}
-          value={value}
-          checked={checked}
-          disabled={disabled}
-          readOnly={readOnly}
-        />
-        <span className={'radiomark'}></span>
+        <input type="radio" name={name} value={value} checked={checked} disabled={disabled} readOnly={readOnly} />
+        <span className="radiomark"></span>
       </label>
     </div>
   );
