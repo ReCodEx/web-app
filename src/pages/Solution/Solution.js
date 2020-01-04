@@ -16,7 +16,7 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchGroupStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { fetchSolution, fetchSolutionIfNeeded } from '../../redux/modules/solutions';
+import { fetchSolution, fetchSolutionIfNeeded, setNote } from '../../redux/modules/solutions';
 import {
   fetchSubmissionEvaluationsForSolution,
   deleteSubmissionEvaluation,
@@ -63,6 +63,7 @@ class Solution extends Component {
       evaluations,
       runtimeEnvironments,
       fetchStatus,
+      editNote,
       deleteEvaluation,
       refreshSolutionEvaluations,
       intl: { locale },
@@ -158,6 +159,7 @@ class Solution extends Component {
                         runtimeEnvironments={runtimes}
                         deleteEvaluation={deleteEvaluation}
                         refreshSolutionEvaluations={refreshSolutionEvaluations}
+                        editNote={solution.permissionHints && solution.permissionHints.update ? editNote : null}
                       />
                     )}
                   </FetchManyResourceRenderer>
@@ -185,8 +187,9 @@ Solution.propTypes = {
   evaluations: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
   fetchStatus: PropTypes.string,
-  deleteEvaluation: PropTypes.func,
-  refreshSolutionEvaluations: PropTypes.func,
+  editNote: PropTypes.func.isRequired,
+  deleteEvaluation: PropTypes.func.isRequired,
+  refreshSolutionEvaluations: PropTypes.func.isRequired,
   intl: intlShape,
 };
 
@@ -207,6 +210,7 @@ export default connect(
   }),
   (dispatch, { match: { params } }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),
+    editNote: note => dispatch(setNote(params.solutionId, note)),
     refreshSolutionEvaluations: () =>
       Promise.all([
         dispatch(fetchSolution(params.solutionId)),

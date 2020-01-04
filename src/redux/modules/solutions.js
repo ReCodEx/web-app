@@ -34,6 +34,10 @@ export const additionalActionTypes = {
   LOAD_ASSIGNMENT_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_PENDING',
   LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED',
   LOAD_ASSIGNMENT_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_REJECTED',
+  SET_NOTE: 'recodex/solutions/SET_NOTE',
+  SET_NOTE_PENDING: 'recodex/solutions/SET_NOTE_PENDING',
+  SET_NOTE_FULFILLED: 'recodex/solutions/SET_NOTE_FULFILLED',
+  SET_NOTE_REJECTED: 'recodex/solutions/SET_NOTE_REJECTED',
   SET_BONUS_POINTS: 'recodex/solutions/SET_BONUS_POINTS',
   SET_BONUS_POINTS_PENDING: 'recodex/solutions/SET_BONUS_POINTS_PENDING',
   SET_BONUS_POINTS_FULFILLED: 'recodex/solutions/SET_BONUS_POINTS_FULFILLED',
@@ -52,6 +56,15 @@ export const additionalActionTypes = {
 export const fetchSolution = actions.fetchResource;
 export const fetchSolutionIfNeeded = actions.fetchOneIfNeeded;
 export const deleteSolution = (id, groupId) => actions.removeResource(id, apiEndpointFactory(id), { groupId });
+
+export const setNote = (solutionId, note) =>
+  createApiAction({
+    type: additionalActionTypes.SET_NOTE,
+    endpoint: `/assignment-solutions/${solutionId}`,
+    method: 'POST',
+    body: { note },
+    meta: { solutionId },
+  });
 
 export const setPoints = (solutionId, overriddenPoints, bonusPoints) =>
   createApiAction({
@@ -136,6 +149,15 @@ const reducer = handleActions(
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_PENDING]: reduceActions[actionTypes.FETCH_MANY_PENDING],
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: reduceActions[actionTypes.FETCH_MANY_FULFILLED],
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_REJECTED]: reduceActions[actionTypes.FETCH_MANY_REJECTED],
+
+    [additionalActionTypes.SET_NOTE_FULFILLED]: (state, { payload }) =>
+      state.setIn(
+        ['resources', payload.id],
+        createRecord({
+          state: resourceStatus.FULFILLED,
+          data: payload,
+        })
+      ),
 
     [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
       state,

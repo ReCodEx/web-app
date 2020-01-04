@@ -47,6 +47,7 @@ class SolutionDetail extends Component {
       assignment,
       evaluations,
       runtimeEnvironments,
+      editNote = null,
       deleteEvaluation = null,
       refreshSolutionEvaluations = null,
     } = this.props;
@@ -72,6 +73,7 @@ class SolutionDetail extends Component {
               userId={userId}
               submittedBy={submittedBy}
               note={note}
+              editNote={editNote}
               accepted={accepted}
               reviewed={reviewed}
               assignment={assignment}
@@ -232,6 +234,7 @@ SolutionDetail.propTypes = {
   assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
+  editNote: PropTypes.func,
   deleteEvaluation: PropTypes.func,
   refreshSolutionEvaluations: PropTypes.func,
 };
