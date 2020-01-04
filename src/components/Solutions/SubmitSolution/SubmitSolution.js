@@ -245,7 +245,7 @@ class SubmitSolution extends Component {
 
               <FormGroup>
                 <ControlLabel>{formatMessage(messages.noteLabel)}</ControlLabel>
-                <FormControl onChange={e => saveNote(e.target.value)} value={note} type="text" />
+                <FormControl onChange={e => saveNote(e.target.value)} value={note} type="text" maxLength={1024} />
               </FormGroup>
               {isReferenceSolution && note.trim().length === 0 && (
                 <p className="callout callout-danger">{formatMessage(commonMessages.emptyNoteWarning)}</p>
