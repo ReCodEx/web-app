@@ -202,6 +202,20 @@ const EditUserSettingsForm = ({
         }
       />
     )}
+
+    {isSupervisorRole(user.privateData.role) && (
+      <Field
+        name="assignmentSubmitAfterReviewedEmails"
+        component={CheckboxField}
+        onOff
+        label={
+          <FormattedMessage
+            id="app.editUserSettings.assignmentSubmitAfterReviewedEmails"
+            defaultMessage="New solution evaluated for an assignment where another solution has already been reviewed"
+          />
+        }
+      />
+    )}
   </FormBox>
 );
 
