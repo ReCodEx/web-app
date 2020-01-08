@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Table, Modal } from 'react-bootstrap';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Table, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { defaultMemoize } from 'reselect';
 
@@ -20,9 +22,23 @@ import Icon, {
   ReviewedIcon,
   SuccessOrFailureIcon,
   CodeIcon,
+  LinkIcon,
+  WarningIcon,
 } from '../../icons';
 
 const getEditNoteFormInitialValues = defaultMemoize(note => ({ note }));
+
+const getImportantSolutions = defaultMemoize((solutions, selectedSolutionId) => {
+  solutions = solutions.toArray();
+  const selectedIdx = solutions.findIndex(s => s.id === selectedSolutionId);
+  const accepted = solutions.find(s => s.accepted && s.id !== selectedSolutionId) || null;
+  const best = solutions.find(s => s.isBestSolution && s.id !== selectedSolutionId) || null;
+  let lastReviewed = solutions.filter(s => s.reviewed).shift();
+  lastReviewed = lastReviewed && lastReviewed.id !== selectedSolutionId ? lastReviewed : null;
+  let last = solutions.shift();
+  last = last && last.id !== selectedSolutionId ? last : null;
+  return { selectedIdx, accepted, best, lastReviewed, last };
+});
 
 class SolutionStatus extends Component {
   state = { dialogOpen: false };
@@ -40,7 +56,9 @@ class SolutionStatus extends Component {
 
   render() {
     const {
-      assignment: { firstDeadline, allowSecondDeadline, secondDeadline },
+      id,
+      otherSolutions,
+      assignment: { id: assignmentId, firstDeadline, allowSecondDeadline, secondDeadline },
       evaluationStatus,
       submittedAt,
       userId,
@@ -55,6 +73,8 @@ class SolutionStatus extends Component {
       editNote = null,
       links: { SOLUTION_DETAIL_URI_FACTORY },
     } = this.props;
+
+    const important = getImportantSolutions(otherSolutions, id);
 
     return (
       <React.Fragment>
@@ -74,18 +94,18 @@ class SolutionStatus extends Component {
                     <FormattedMessage id="app.solution.note" defaultMessage="Note:" />
                   </th>
                   <td>
-                    {Boolean(editNote) && (
-                      <span className="pull-right text-warning">
-                        <EditIcon gapLeft gapRight onClick={this.openDialog} />
-                      </span>
-                    )}
-
                     {note.length > 0 ? (
                       note
                     ) : (
                       <em className="text-muted">
                         <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
                       </em>
+                    )}
+
+                    {Boolean(editNote) && (
+                      <span className="pull-right text-warning">
+                        <EditIcon gapLeft gapRight onClick={this.openDialog} />
+                      </span>
                     )}
                   </td>
                 </tr>
@@ -189,18 +209,53 @@ class SolutionStatus extends Component {
                     {actualPoints || 0}
                     {bonusPoints !== 0 ? (bonusPoints >= 0 ? '+' : '') + bonusPoints : ''} / {maxPoints}
                   </b>
-                </td>
-              </tr>
 
-              <tr>
-                <td className="text-center">
-                  <Icon icon="check-circle" />
-                </td>
-                <th className="text-nowrap">
-                  <FormattedMessage id="app.solution.acceptedAsFinal" defaultMessage="Accepted as final" />:
-                </th>
-                <td>
-                  <SuccessOrFailureIcon success={accepted} />
+                  {important.accepted && (
+                    <React.Fragment>
+                      <OverlayTrigger
+                        placement="bottom"
+                        overlay={
+                          <Tooltip id="accepted">
+                            <FormattedMessage
+                              id="app.solution.anotherAcceptedWarning"
+                              defaultMessage="Another solution has been marked as accepted. Points of this solution are not taken into account."
+                            />
+                          </Tooltip>
+                        }>
+                        <WarningIcon largeGapLeft largeGapRight className="text-warning" />
+                      </OverlayTrigger>
+
+                      <span className="small pull-right">
+                        <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.accepted.id)}>
+                          <FormattedMessage id="app.solution.accepted" defaultMessage="accepted" />
+                          <LinkIcon gapLeft />
+                        </Link>
+                      </span>
+                    </React.Fragment>
+                  )}
+                  {!important.accepted && important.best && (
+                    <React.Fragment>
+                      <OverlayTrigger
+                        placement="bottom"
+                        overlay={
+                          <Tooltip id="best">
+                            <FormattedMessage
+                              id="app.solution.anotherBestWarning"
+                              defaultMessage="Another solution is considered as the best (i.e., it has gained more points or it has the same points but it was submitted later)."
+                            />
+                          </Tooltip>
+                        }>
+                        <WarningIcon largeGapLeft largeGapRight className="text-warning" />
+                      </OverlayTrigger>
+
+                      <span className="small pull-right">
+                        <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.best.id)}>
+                          <FormattedMessage id="app.solution.best" defaultMessage="best" />
+                          <LinkIcon gapLeft />
+                        </Link>
+                      </span>
+                    </React.Fragment>
+                  )}
                 </td>
               </tr>
 
@@ -213,6 +268,43 @@ class SolutionStatus extends Component {
                 </th>
                 <td>
                   <SuccessOrFailureIcon success={reviewed} />
+
+                  {important.lastReviewed && (
+                    <span className="small pull-right">
+                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.lastReviewed.id)}>
+                        <FormattedMessage id="app.solution.lastReviewed" defaultMessage="last reviewed" />
+                        <LinkIcon gapLeft />
+                      </Link>
+                    </span>
+                  )}
+                </td>
+              </tr>
+
+              <tr>
+                <td className="text-center">
+                  <Icon icon="list-ol" />
+                </td>
+                <th className="text-nowrap">
+                  <FormattedMessage id="app.solution.solutionAttempt" defaultMessage="Solution Attempt" />:
+                </th>
+                <td>
+                  <FormattedMessage
+                    id="app.solution.solutionAttemptValue"
+                    defaultMessage="{index} of {count}"
+                    values={{
+                      index: otherSolutions.size - important.selectedIdx,
+                      count: otherSolutions.size,
+                    }}
+                  />
+
+                  {important.last && (
+                    <span className="small pull-right">
+                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.last.id)}>
+                        <FormattedMessage id="app.solution.lastSolution" defaultMessage="last" />
+                        <LinkIcon gapLeft />
+                      </Link>
+                    </span>
+                  )}
                 </td>
               </tr>
             </tbody>
@@ -240,7 +332,10 @@ class SolutionStatus extends Component {
 }
 
 SolutionStatus.propTypes = {
+  id: PropTypes.string.isRequired,
+  otherSolutions: ImmutablePropTypes.list.isRequired,
   assignment: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     firstDeadline: PropTypes.number.isRequired,
     allowSecondDeadline: PropTypes.bool.isRequired,
     secondDeadline: PropTypes.number,

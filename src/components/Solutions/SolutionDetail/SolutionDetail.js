@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
@@ -44,6 +45,7 @@ class SolutionDetail extends Component {
         lastSubmission,
         permissionHints = EMPTY_OBJ,
       },
+      otherSolutions,
       assignment,
       evaluations,
       runtimeEnvironments,
@@ -68,6 +70,7 @@ class SolutionDetail extends Component {
         <Row>
           <Col md={6} sm={12}>
             <SolutionStatus
+              id={id}
               evaluationStatus={safeGet(lastSubmission, ['evaluationStatus'], 'missing-submission')}
               submittedAt={createdAt}
               userId={userId}
@@ -85,6 +88,7 @@ class SolutionDetail extends Component {
                 runtimeEnvironmentId &&
                 runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
               }
+              otherSolutions={otherSolutions}
             />
             <Row>
               {files.map(file => (
@@ -231,6 +235,7 @@ SolutionDetail.propTypes = {
     runtimeEnvironmentId: PropTypes.string,
     permissionHints: PropTypes.object,
   }).isRequired,
+  otherSolutions: ImmutablePropTypes.list.isRequired,
   assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
