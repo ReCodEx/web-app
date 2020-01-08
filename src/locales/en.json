@@ -503,6 +503,7 @@
   "app.editUserRoleForm.title": "Set User's Role",
   "app.editUserSettings.assignmentDeadlineEmails": "Assignment deadline is approaching",
   "app.editUserSettings.assignmentSubmitAfterAcceptedEmails": "New solution evaluated for an assignment where another solution has already been accepted",
+  "app.editUserSettings.assignmentSubmitAfterReviewedEmails": "New solution evaluated for an assignment where another solution has already been reviewed",
   "app.editUserSettings.darkTheme": "Use a dark theme for the source code viewers and editors.",
   "app.editUserSettings.defaultLanguage": "Default language:",
   "app.editUserSettings.defaultPage": "Default page (after login):",

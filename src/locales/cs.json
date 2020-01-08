@@ -503,6 +503,7 @@
   "app.editUserRoleForm.title": "Nastavení uživatelské role",
   "app.editUserSettings.assignmentDeadlineEmails": "Blíží se termín zadané úlohy",
   "app.editUserSettings.assignmentSubmitAfterAcceptedEmails": "Bylo vyhodnoceno nové řešení úlohy, ke které již bylo akceptováno jiné řešení",
+  "app.editUserSettings.assignmentSubmitAfterReviewedEmails": "Bylo vyhodnoceno nové řešení úlohy, ke které již bylo posouzeno jiné řešení",
   "app.editUserSettings.darkTheme": "Použít tmavý motiv pro editor zdrojového kódu.",
   "app.editUserSettings.defaultLanguage": "Výchozí jazyk:",
   "app.editUserSettings.defaultPage": "Výchozí stránka (po přihlášení):",
