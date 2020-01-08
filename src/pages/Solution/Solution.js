@@ -14,15 +14,18 @@ import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchGroupStats } from '../../redux/modules/stats';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { fetchSolution, fetchSolutionIfNeeded, setNote } from '../../redux/modules/solutions';
+import { fetchSolution, fetchSolutionIfNeeded, fetchUsersSolutions, setNote } from '../../redux/modules/solutions';
 import {
   fetchSubmissionEvaluationsForSolution,
   deleteSubmissionEvaluation,
 } from '../../redux/modules/submissionEvaluations';
 import { getSolution } from '../../redux/selectors/solutions';
-import { getAssignment, assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
+import {
+  getAssignment,
+  assignmentEnvironmentsSelector,
+  getUserSolutionsSortedData,
+} from '../../redux/selectors/assignments';
 
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { getLocalizedName } from '../../helpers/localizedData';
@@ -38,11 +41,11 @@ class Solution extends Component {
   static loadAsync = ({ solutionId, assignmentId }, dispatch) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchSolutionIfNeeded(solutionId)),
-      dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
-      dispatch(fetchAssignmentIfNeeded(assignmentId))
+      dispatch(fetchSolutionIfNeeded(solutionId))
         .then(res => res.value)
-        .then(assignment => dispatch(fetchGroupStats(assignment.groupId))),
+        .then(solution => dispatch(fetchUsersSolutions(solution.solution.userId, assignmentId))),
+      dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
+      dispatch(fetchAssignmentIfNeeded(assignmentId)),
     ]);
 
   componentDidMount = () => this.props.loadAsync();
@@ -57,6 +60,7 @@ class Solution extends Component {
     const {
       assignment,
       solution,
+      userSolutionsSelector,
       match: {
         params: { assignmentId },
       },
@@ -154,6 +158,7 @@ class Solution extends Component {
                     {() => (
                       <SolutionDetail
                         solution={solution}
+                        otherSolutions={userSolutionsSelector(solution.solution.userId, assignment.id)}
                         assignment={assignment}
                         evaluations={evaluations}
                         runtimeEnvironments={runtimes}
@@ -183,6 +188,7 @@ Solution.propTypes = {
   assignment: PropTypes.object,
   children: PropTypes.element,
   solution: PropTypes.object,
+  userSolutionsSelector: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   evaluations: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
@@ -203,6 +209,7 @@ export default connect(
     }
   ) => ({
     solution: getSolution(solutionId)(state),
+    userSolutionsSelector: getUserSolutionsSortedData(state),
     assignment: getAssignment(state)(assignmentId),
     evaluations: evaluationsForSubmissionSelector(solutionId)(state),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),

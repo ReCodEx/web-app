@@ -38,6 +38,7 @@ export const GroupIcon = ({ organizational = false, archived = false, ...props }
 );
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
+export const LinkIcon = props => <Icon {...props} icon="share-square" />;
 export const LoadingIcon = props => <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export { LockIcon };
