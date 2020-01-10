@@ -89,11 +89,11 @@ const SolutionsTableRow = ({
           <CommentsIcon id={id} commentsStats={commentsStats} gapLeft={!splitOnTwoLines} />
         </td>
 
-        <td className="text-nowrap">
+        <td className="text-nowrap valign-middle">
           <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
 
-        <td className="text-center text-nowrap">
+        <td className="text-center text-nowrap valign-middle">
           {showScoreAndPoints(status) ? (
             <strong className="text-success">
               <FormattedNumber style="percent" value={lastSubmission.evaluation.score} />
@@ -103,7 +103,7 @@ const SolutionsTableRow = ({
           )}
         </td>
 
-        <td className="text-center text-nowrap">
+        <td className="text-center text-nowrap valign-middle">
           {showScoreAndPoints(status) ? (
             <strong className="text-success">
               <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} />
@@ -113,7 +113,7 @@ const SolutionsTableRow = ({
           )}
         </td>
 
-        <td className="text-center text-nowrap">
+        <td className="text-center text-nowrap valign-middle">
           {runtimeEnvironment ? (
             <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames={!compact} />
           ) : (
