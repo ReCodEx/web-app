@@ -25,7 +25,7 @@ const PageContent = ({ intl: { formatMessage }, title, description = '', breadcr
     <section className="content-header">
       <h1>
         {title}
-        <small>{description}</small>
+        <small className="halfem-margin-left">{description}</small>
       </h1>
       {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
     </section>
