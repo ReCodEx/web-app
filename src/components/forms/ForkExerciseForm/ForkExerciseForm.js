@@ -29,14 +29,14 @@ const messages = defineMessages({
 });
 
 class ForkExerciseForm extends Component {
-  viewForkedExercise() {
+  viewForkedExercise = () => {
     const {
       forkedExerciseId: id,
       history: { push },
       links: { EXERCISE_URI_FACTORY },
     } = this.props;
     push(EXERCISE_URI_FACTORY(id));
-  }
+  };
 
   render() {
     const {

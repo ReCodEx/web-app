@@ -101,7 +101,7 @@ const EditShadowAssignmentPointsForm = ({
           <Field
             name="note"
             component={TextField}
-            maxLength={255}
+            maxLength={1024}
             label={<FormattedMessage id="app.editShadowAssignmentPointsForm.note" defaultMessage="Note:" />}
           />
         </Col>
