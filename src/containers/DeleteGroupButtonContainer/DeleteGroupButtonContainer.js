@@ -7,7 +7,7 @@ import { deleteGroup } from '../../redux/modules/groups';
 import { groupSelector } from '../../redux/selectors/groups';
 
 const DeleteGroupButtonContainer = ({ group, deleteGroup, onDeleted, ...props }) => (
-  <DeleteButton {...props} resource={group} deleteResource={deleteGroup} />
+  <DeleteButton {...props} resource={group} deleteAction={deleteGroup} />
 );
 
 DeleteGroupButtonContainer.propTypes = {

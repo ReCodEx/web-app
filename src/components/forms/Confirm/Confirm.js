@@ -74,7 +74,11 @@ class Confirm extends Component {
   }
 }
 
-const stringOrFormattedMessage = PropTypes.oneOfType([PropTypes.string, PropTypes.element, FormattedMessage]);
+const stringOrFormattedMessage = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.element,
+  PropTypes.oneOf([FormattedMessage]),
+]);
 
 Confirm.propTypes = {
   id: PropTypes.string.isRequired,

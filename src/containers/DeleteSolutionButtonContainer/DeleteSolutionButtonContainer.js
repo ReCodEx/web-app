@@ -7,7 +7,7 @@ import { getSolution } from '../../redux/selectors/solutions';
 import { deleteSolution } from '../../redux/modules/solutions';
 
 const DeleteSolutionButtonContainer = ({ solution, deleteSolution, onDeleted, groupId, ...props }) => (
-  <DeleteButton {...props} resource={solution} deleteResource={deleteSolution} />
+  <DeleteButton {...props} resource={solution} deleteAction={deleteSolution} />
 );
 
 DeleteSolutionButtonContainer.propTypes = {
