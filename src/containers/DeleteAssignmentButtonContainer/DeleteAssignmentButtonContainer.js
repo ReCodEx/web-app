@@ -7,7 +7,7 @@ import { deleteAssignment } from '../../redux/modules/assignments';
 import { getAssignment } from '../../redux/selectors/assignments';
 
 const DeleteAssignmentButtonContainer = ({ assignment, deleteAssignment, onDeleted, ...props }) => (
-  <DeleteButton {...props} resource={assignment} deleteResource={deleteAssignment} />
+  <DeleteButton {...props} resource={assignment} deleteAction={deleteAssignment} />
 );
 
 DeleteAssignmentButtonContainer.propTypes = {

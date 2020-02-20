@@ -8,7 +8,7 @@ import { reduxForm, Field, formValueSelector } from 'redux-form';
 import { TextField, SelectField, PortsField } from '../../forms/Fields';
 import { Modal, Alert } from 'react-bootstrap';
 import Button from '../../widgets/FlatButton';
-import ConfirmDeleteButton from '../../buttons/DeleteButton/ConfirmDeleteButton';
+import DeleteButton from '../../buttons/DeleteButton';
 
 import SubmitButton from '../../forms/SubmitButton';
 import { CloseIcon } from '../../../components/icons';
@@ -127,7 +127,7 @@ class BoxForm extends Component {
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
             <span style={{ display: 'inline-block', width: '5px' }} />
-            <ConfirmDeleteButton id="delete-box" onClick={onDelete} small={false} />
+            <DeleteButton id="delete-box" resourceless onClick={onDelete} small={false} />
           </p>
         </Modal.Footer>
       </Modal>

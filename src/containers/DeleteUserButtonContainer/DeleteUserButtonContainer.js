@@ -3,16 +3,12 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import ConfirmDeleteButton from '../../components/buttons/DeleteButton/ConfirmDeleteButton';
 import { deleteUser } from '../../redux/modules/users';
 import { getUser } from '../../redux/selectors/users';
 
-const DeleteUserButtonContainer = ({ resourceless = false, user, deleteUser, onDeleted, ...props }) =>
-  resourceless ? (
-    <ConfirmDeleteButton {...props} onClick={deleteUser} />
-  ) : (
-    <DeleteButton {...props} resource={user} deleteResource={deleteUser} />
-  );
+const DeleteUserButtonContainer = ({ resourceless = false, user = null, deleteUser, onDeleted, ...props }) => (
+  <DeleteButton {...props} resourceless={resourceless} resource={user} deleteAction={deleteUser} />
+);
 
 DeleteUserButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,

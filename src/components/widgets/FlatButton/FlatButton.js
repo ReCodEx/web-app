@@ -4,6 +4,17 @@ import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import Confirm from '../../forms/Confirm';
 
+const FlatButtonInternal = ({ className, onClick = null, ...props }) => (
+  <Button
+    className={classnames({
+      'btn-flat': true,
+      [className]: className.length > 0,
+    })}
+    onClick={onClick}
+    {...props}
+  />
+);
+
 const FlatButton = ({
   className = '',
   onClick = null,
@@ -14,24 +25,16 @@ const FlatButton = ({
 }) =>
   confirm ? (
     <Confirm id={confirmId} onConfirmed={onClick} question={confirm}>
-      <Button
-        className={classnames({
-          'btn-flat': true,
-          [className]: className.length > 0,
-        })}
-        {...props}
-      />
+      <FlatButtonInternal className={className} {...props} />
     </Confirm>
   ) : (
-    <Button
-      className={classnames({
-        'btn-flat': true,
-        [className]: className.length > 0,
-      })}
-      onClick={onClick}
-      {...props}
-    />
+    <FlatButtonInternal className={className} onClick={onClick} {...props} />
   );
+
+FlatButtonInternal.propTypes = {
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+};
 
 FlatButton.propTypes = {
   className: PropTypes.string,

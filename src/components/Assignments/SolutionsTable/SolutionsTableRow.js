@@ -13,8 +13,9 @@ import AcceptSolutionContainer from '../../../containers/AcceptSolutionContainer
 import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer';
 
 import CommentsIcon from './CommentsIcon';
-import Icon, { SendIcon } from '../../icons';
+import Icon, { SearchIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
+import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 
 import withLinks from '../../../helpers/withLinks';
 import styles from './SolutionsTable.less';
@@ -62,7 +63,7 @@ const SolutionsTableRow = ({
           rowSpan={splitOnTwoLines ? 2 : 1}
           className={classnames({
             'valign-middle': true,
-            'text-nowrap': !compact,
+            'text-nowrap': true,
           })}>
           <AssignmentStatusIcon
             id={id}
@@ -82,11 +83,11 @@ const SolutionsTableRow = ({
                   />
                 </Tooltip>
               }>
-              <Icon icon="stamp" className="text-muted" gapLeft={!splitOnTwoLines} />
+              <Icon icon="stamp" className="text-muted" gapLeft />
             </OverlayTrigger>
           )}
 
-          <CommentsIcon id={id} commentsStats={commentsStats} gapLeft={!splitOnTwoLines} />
+          <CommentsIcon id={id} commentsStats={commentsStats} gapLeft />
         </td>
 
         <td className="text-nowrap valign-middle">
@@ -135,19 +136,32 @@ const SolutionsTableRow = ({
           })}
           rowSpan={splitOnTwoLines ? 2 : 1}>
           {permissionHints && permissionHints.viewDetail && (
-            <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)} className="btn btn-flat btn-default btn-xs">
-              <SendIcon gapRight />
-              <FormattedMessage id="generic.detail" defaultMessage="Detail" />
-            </Link>
+            <OptionalTooltipWrapper
+              tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+              hide={!compact}
+              tooltipId={`detail-${id}`}>
+              <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)} className="btn btn-flat btn-default btn-xs">
+                <SearchIcon gapRight={!compact} />
+                {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+              </Link>
+            </OptionalTooltipWrapper>
           )}
+
           {permissionHints && permissionHints.setFlag && (
             <React.Fragment>
-              <AcceptSolutionContainer id={id} locale={locale} shortLabel bsSize="xs" />
-              <ReviewSolutionContainer id={id} locale={locale} bsSize="xs" />
+              <AcceptSolutionContainer
+                id={id}
+                locale={locale}
+                captionAsTooltip={compact}
+                shortLabel={!compact}
+                bsSize="xs"
+              />
+              <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} bsSize="xs" />
             </React.Fragment>
           )}
+
           {permissionHints && permissionHints.delete && (
-            <DeleteSolutionButtonContainer id={id} groupId={groupId} bsSize="xs" />
+            <DeleteSolutionButtonContainer id={id} groupId={groupId} bsSize="xs" captionAsTooltip={compact} />
           )}
         </td>
       </tr>

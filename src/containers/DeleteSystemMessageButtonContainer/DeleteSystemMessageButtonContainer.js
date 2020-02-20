@@ -7,7 +7,7 @@ import { deleteMessage } from '../../redux/modules/systemMessages';
 import { getMessage } from '../../redux/selectors/systemMessages';
 
 const DeleteSystemMessageButtonContainer = ({ message, deleteMessage, onDeleted, ...props }) => (
-  <DeleteButton {...props} resource={message} deleteResource={deleteMessage} />
+  <DeleteButton {...props} resource={message} deleteAction={deleteMessage} />
 );
 
 DeleteSystemMessageButtonContainer.propTypes = {

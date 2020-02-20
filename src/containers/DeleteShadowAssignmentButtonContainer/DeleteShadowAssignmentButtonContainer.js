@@ -7,7 +7,7 @@ import { deleteShadowAssignment } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 
 const DeleteShadowAssignmentButtonContainer = ({ shadowAssignment, deleteShadowAssignment, onDeleted, ...props }) => (
-  <DeleteButton {...props} resource={shadowAssignment} deleteResource={deleteShadowAssignment} />
+  <DeleteButton {...props} resource={shadowAssignment} deleteAction={deleteShadowAssignment} />
 );
 
 DeleteShadowAssignmentButtonContainer.propTypes = {
