@@ -5,19 +5,18 @@ import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import AssignmentStatusIcon, { getStatusDesc } from '../Assignment/AssignmentStatusIcon';
 import Points from './Points';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 import AcceptSolutionContainer from '../../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer';
 
-import CommentsIcon from './CommentsIcon';
-import Icon, { SearchIcon } from '../../icons';
+import { SearchIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 
 import withLinks from '../../../helpers/withLinks';
+import SolutionTableRowIcons from './SolutionTableRowIcons';
 import styles from './SolutionsTable.less';
 
 const showScoreAndPoints = status => status === 'done' || status === 'failed';
@@ -65,29 +64,15 @@ const SolutionsTableRow = ({
             'valign-middle': true,
             'text-nowrap': true,
           })}>
-          <AssignmentStatusIcon
+          <SolutionTableRowIcons
             id={id}
-            status={getStatusDesc(status, lastSubmission)}
             accepted={accepted}
+            reviewed={reviewed}
             isBestSolution={isBestSolution}
+            status={status}
+            lastSubmission={lastSubmission}
+            commentsStats={commentsStats}
           />
-
-          {reviewed && (
-            <OverlayTrigger
-              placement="right"
-              overlay={
-                <Tooltip id={`reviewed-${id}`}>
-                  <FormattedMessage
-                    id="app.solutionsTable.reviewedTooltip"
-                    defaultMessage="The solution has been reviewed by the supervisor."
-                  />
-                </Tooltip>
-              }>
-              <Icon icon="stamp" className="text-muted" gapLeft />
-            </OverlayTrigger>
-          )}
-
-          <CommentsIcon id={id} commentsStats={commentsStats} gapLeft />
         </td>
 
         <td className="text-nowrap valign-middle">
