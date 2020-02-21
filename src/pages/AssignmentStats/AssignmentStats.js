@@ -31,9 +31,8 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import Box from '../../components/widgets/Box';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import { EditIcon, DownloadIcon, SendIcon } from '../../components/icons';
-import AssignmentStatusIcon, { getStatusDesc } from '../../components/Assignments/Assignment/AssignmentStatusIcon';
-import CommentsIcon from '../../components/Assignments/SolutionsTable/CommentsIcon';
+import { EditIcon, DownloadIcon, SearchIcon } from '../../components/icons';
+import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
 import UsersName from '../../components/Users/UsersName';
 import DateTime from '../../components/widgets/DateTime';
@@ -62,18 +61,15 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
     new SortableTableColumnDescriptor('icon', '', {
       className: 'text-nowrap',
       cellRenderer: info => (
-        <React.Fragment>
-          <AssignmentStatusIcon
-            id={info.id}
-            status={getStatusDesc(
-              info.lastSubmission ? info.lastSubmission.evaluationStatus : null,
-              info.lastSubmission
-            )}
-            accepted={info.accepted}
-            isBestSolution={info.isBestSolution}
-          />
-          <CommentsIcon id={info.id} commentsStats={info.commentsStats} gapLeft />
-        </React.Fragment>
+        <SolutionTableRowIcons
+          id={info.id}
+          accepted={info.accepted}
+          reviewed={info.reviewed}
+          isBestSolution={info.isBestSolution}
+          status={info.lastSubmission ? info.lastSubmission.evaluationStatus : null}
+          lastSubmission={info.lastSubmission}
+          commentsStats={info.commentsStats}
+        />
       ),
     }),
 
@@ -159,7 +155,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
             <Link
               to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}
               className="btn btn-flat btn-default btn-xs">
-              <SendIcon gapRight />
+              <SearchIcon gapRight />
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
             </Link>
           )}
@@ -196,6 +192,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
         bonusPoints,
         actualPoints,
         accepted,
+        reviewed,
         isBestSolution,
         commentsStats,
         permissionHints,
@@ -205,7 +202,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
           (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
         const userId = solution && solution.userId;
         return {
-          icon: { id, commentsStats, lastSubmission, accepted, isBestSolution },
+          icon: { id, commentsStats, lastSubmission, accepted, reviewed, isBestSolution },
           user: users.find(({ id }) => id === userId),
           date: solution && solution.createdAt,
           validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
