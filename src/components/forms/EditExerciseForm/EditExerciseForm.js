@@ -5,7 +5,7 @@ import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-i
 import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
-import { SelectField, CheckboxField } from '../Fields';
+import { SelectField, CheckboxField, NumericTextField } from '../Fields';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
@@ -92,6 +92,34 @@ const EditExerciseForm = ({
       options={difficultyOptions(formatMessage)}
       addEmptyOption={true}
       label={<FormattedMessage id="app.editExerciseForm.difficulty" defaultMessage="Difficulty" />}
+    />
+
+    <NumericTextField
+      name="solutionFilesLimit"
+      validateMin={1}
+      validateMax={100}
+      maxLength={3}
+      nullable
+      label={
+        <FormattedMessage
+          id="app.editExerciseForm.solutionFilesLimit"
+          defaultMessage="Soluition files limit (default for assignments):"
+        />
+      }
+    />
+
+    <NumericTextField
+      name="solutionSizeLimit"
+      validateMin={1}
+      validateMax={128 * 1024}
+      maxLength={6}
+      nullable
+      label={
+        <FormattedMessage
+          id="app.editExerciseForm.solutionSizeLimit"
+          defaultMessage="Soluition total size [KiB] limit (default for assignments):"
+        />
+      }
     />
 
     <Field

@@ -24,6 +24,8 @@ const AssignmentDetails = ({
   pointsPercentualThreshold,
   isPublic,
   visibleFrom,
+  solutionFilesLimit,
+  solutionSizeLimit,
   permissionHints,
   isStudent,
 }) => (
@@ -138,42 +140,6 @@ const AssignmentDetails = ({
           </td>
         </tr>
 
-        <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="ban" />
-          </td>
-          <th>
-            <FormattedMessage id="app.assignment.submissionsCountLimit" defaultMessage="Submission count limit" />:
-          </th>
-          <td>{submissionsCountLimit === null ? '-' : submissionsCountLimit}</td>
-        </tr>
-
-        {isStudent && (
-          <tr>
-            <td className="text-center shrink-col em-padding-left em-padding-right">
-              <Icon icon="coffee" />
-            </td>
-            <th>
-              <FormattedMessage id="app.assignment.alreadySubmitted" defaultMessage="Already submitted" />:
-            </th>
-            <td>{canSubmit.submittedCount}</td>
-          </tr>
-        )}
-
-        {isStudent && (
-          <tr>
-            <td className="text-center shrink-col em-padding-left em-padding-right">
-              <Icon icon="unlock-alt" />
-            </td>
-            <th>
-              <FormattedMessage id="app.assignment.canSubmit" defaultMessage="Can submit more solutions" />:
-            </th>
-            <td>
-              <SuccessOrFailureIcon success={canSubmit.canSubmit} />
-            </td>
-          </tr>
-        )}
-
         {isBonus && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -217,6 +183,61 @@ const AssignmentDetails = ({
             <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />
           </td>
         </tr>
+
+        {!isStudent && (
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <Icon icon="ban" />
+            </td>
+            <th>
+              <FormattedMessage id="app.assignment.submissionsCountLimit" defaultMessage="Submission count limit" />:
+            </th>
+            <td>{submissionsCountLimit === null ? '-' : submissionsCountLimit}</td>
+          </tr>
+        )}
+
+        {isStudent && (
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              {canSubmit.canSubmit ? <Icon icon="coffee" /> : <Icon icon="ban" />}
+            </td>
+            <th>
+              <FormattedMessage id="app.assignment.alreadySubmitted" defaultMessage="Already submitted solutions" />:
+            </th>
+            <td>
+              {canSubmit.submittedCount}
+              {submissionsCountLimit !== null && ` / ${submissionsCountLimit}`}
+            </td>
+          </tr>
+        )}
+
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'folder-open']} />
+          </td>
+          <th>
+            <FormattedMessage
+              id="app.assignment.solutionFilesLimit"
+              defaultMessage="Maximal number of files in a solution"
+            />
+            :
+          </th>
+          <td>{solutionFilesLimit === null ? '-' : solutionFilesLimit}</td>
+        </tr>
+
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="weight" />
+          </td>
+          <th>
+            <FormattedMessage
+              id="app.assignment.solutionSizeLimit"
+              defaultMessage="Maximal total size of submitted solution"
+            />
+            :
+          </th>
+          <td>{solutionSizeLimit === null ? '-' : `${Math.ceil(solutionSizeLimit / 1024)} KiB`}</td>
+        </tr>
       </tbody>
     </Table>
   </Box>
@@ -237,6 +258,8 @@ AssignmentDetails.propTypes = {
   canSubmit: PropTypes.object,
   pointsPercentualThreshold: PropTypes.number,
   visibleFrom: PropTypes.number,
+  solutionFilesLimit: PropTypes.number,
+  solutionSizeLimit: PropTypes.number,
   isPublic: PropTypes.bool.isRequired,
   permissionHints: PropTypes.object.isRequired,
   isStudent: PropTypes.bool.isRequired,

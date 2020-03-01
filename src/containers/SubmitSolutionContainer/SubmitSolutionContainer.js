@@ -17,6 +17,8 @@ import {
   getMonitorParams,
   getPresubmitEnvironments,
   getPresubmitVariables,
+  getPresubmitCountLimitOK,
+  getPresubmitSizeLimitOK,
   hasEntryPoint,
 } from '../../redux/selectors/submission';
 
@@ -139,6 +141,8 @@ class SubmitSolutionContainer extends Component {
       id,
       presubmitEnvironments,
       presubmitVariables,
+      presubmitCountLimitOK,
+      presubmitSizeLimitOK,
       changeNote,
       canSubmit,
       hasFailed,
@@ -148,6 +152,8 @@ class SubmitSolutionContainer extends Component {
       monitor,
       reset,
       showProgress = true,
+      solutionFilesLimit = null,
+      solutionSizeLimit = null,
       isReferenceSolution = false,
     } = this.props;
 
@@ -169,6 +175,10 @@ class SubmitSolutionContainer extends Component {
           onClose={cancel}
           presubmitEnvironments={presubmitEnvironments}
           presubmitVariables={presubmitVariables}
+          presubmitCountLimitOK={presubmitCountLimitOK}
+          presubmitSizeLimitOK={presubmitSizeLimitOK}
+          solutionFilesLimit={solutionFilesLimit}
+          solutionSizeLimit={solutionSizeLimit}
           selectedEnvironment={selectedEnvironment}
           changeRuntimeEnvironment={this.changeRuntimeEnvironment}
           selectedEntryPoint={entryPoint}
@@ -199,6 +209,8 @@ SubmitSolutionContainer.propTypes = {
   onSubmit: PropTypes.func,
   onReset: PropTypes.func,
   presubmitValidation: PropTypes.func,
+  solutionFilesLimit: PropTypes.number,
+  solutionSizeLimit: PropTypes.number,
   userId: PropTypes.string.isRequired,
   isOpen: PropTypes.bool,
   cancel: PropTypes.func.isRequired,
@@ -213,6 +225,8 @@ SubmitSolutionContainer.propTypes = {
   monitor: PropTypes.object,
   presubmitEnvironments: PropTypes.array,
   presubmitVariables: PropTypes.array,
+  presubmitCountLimitOK: PropTypes.bool,
+  presubmitSizeLimitOK: PropTypes.bool,
   progressObserverId: PropTypes.string,
   submitSolution: PropTypes.func.isRequired,
   presubmitSolution: PropTypes.func.isRequired,
@@ -240,6 +254,8 @@ export default withLinks(
         monitor: getMonitorParams(state),
         presubmitEnvironments: getPresubmitEnvironments(state),
         presubmitVariables: getPresubmitVariables(state),
+        presubmitCountLimitOK: getPresubmitCountLimitOK(state),
+        presubmitSizeLimitOK: getPresubmitSizeLimitOK(state),
         progressObserverId: getProgressObserverId(state),
       };
     },

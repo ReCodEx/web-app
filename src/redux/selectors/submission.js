@@ -70,6 +70,16 @@ export const getPresubmitVariables = createSelector(
   presubmit => ((presubmit && presubmit.get('submitVariables')) || EMPTY_LIST).toJS()
 );
 
+export const getPresubmitCountLimitOK = createSelector(
+  [getPresubmit],
+  presubmit => (presubmit ? presubmit.get('countLimitOK', true) : true)
+);
+
+export const getPresubmitSizeLimitOK = createSelector(
+  [getPresubmit],
+  presubmit => (presubmit ? presubmit.get('sizeLimitOK', true) : true)
+);
+
 // Selector helper function for presubmit variables
 export const hasEntryPoint = (vars, env) =>
   Boolean(env && safeGet(vars, [v => v.runtimeEnvironmentId === env, 'variables', v => v.name === 'entry-point']));

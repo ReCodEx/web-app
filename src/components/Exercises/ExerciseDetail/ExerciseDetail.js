@@ -31,6 +31,8 @@ const ExerciseDetail = ({
   tags,
   isPublic,
   isLocked,
+  solutionFilesLimit,
+  solutionSizeLimit,
   locale,
   links: { EXERCISE_URI_FACTORY },
 }) => (
@@ -157,6 +159,34 @@ const ExerciseDetail = ({
           </td>
         </tr>
 
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon={['far', 'folder-open']} />
+          </td>
+          <th>
+            <FormattedMessage
+              id="app.assignment.solutionFilesLimit"
+              defaultMessage="Maximal number of files in a solution"
+            />
+            :
+          </th>
+          <td>{solutionFilesLimit === null ? '-' : solutionFilesLimit}</td>
+        </tr>
+
+        <tr>
+          <td className="text-center shrink-col em-padding-left em-padding-right">
+            <Icon icon="weight" />
+          </td>
+          <th>
+            <FormattedMessage
+              id="app.assignment.solutionSizeLimit"
+              defaultMessage="Maximal total size of submitted solution"
+            />
+            :
+          </th>
+          <td>{solutionSizeLimit === null ? '-' : `${Math.ceil(solutionSizeLimit / 1024)} KiB`}</td>
+        </tr>
+
         {forkedFrom && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
@@ -201,6 +231,8 @@ ExerciseDetail.propTypes = {
   tags: PropTypes.array.isRequired,
   isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
+  solutionFilesLimit: PropTypes.number,
+  solutionSizeLimit: PropTypes.number,
   locale: PropTypes.string.isRequired,
   links: PropTypes.object,
 };

@@ -268,6 +268,8 @@ class Exercise extends Component {
                           presubmitValidation={presubmitReferenceSolution}
                           onReset={init}
                           isOpen={submitting}
+                          solutionFilesLimit={exercise.solutionFilesLimit}
+                          solutionSizeLimit={exercise.solutionSizeLimit}
                           isReferenceSolution={true}
                         />
                       </div>

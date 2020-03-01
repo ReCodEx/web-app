@@ -6,6 +6,7 @@ import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
+import { WarningIcon } from '../../icons';
 import { DatetimeField, CheckboxField, RadioField, NumericTextField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
@@ -43,6 +44,8 @@ export const prepareInitialValues = defaultMemoize(
     maxPointsBeforeSecondDeadline = '5',
     submissionsCountLimit = '50',
     pointsPercentualThreshold = '0',
+    solutionFilesLimit = null,
+    solutionSizeLimit = null,
     canViewLimitRatios = true,
     canViewJudgeOutputs = false,
     isBonus = false,
@@ -71,6 +74,8 @@ export const prepareInitialValues = defaultMemoize(
     maxPointsBeforeSecondDeadline,
     submissionsCountLimit,
     pointsPercentualThreshold,
+    solutionFilesLimit,
+    solutionSizeLimit: solutionSizeLimit || Math.ceil(solutionSizeLimit / 1024), // B -> KiB
     canViewLimitRatios,
     canViewJudgeOutputs,
     isBonus,
@@ -101,6 +106,8 @@ const transformSubmittedData = ({
   maxPointsBeforeSecondDeadline,
   submissionsCountLimit,
   pointsPercentualThreshold,
+  solutionFilesLimit,
+  solutionSizeLimit,
   canViewLimitRatios,
   canViewJudgeOutputs,
   isBonus,
@@ -119,6 +126,8 @@ const transformSubmittedData = ({
     allowSecondDeadline,
     submissionsCountLimit: Number(submissionsCountLimit),
     pointsPercentualThreshold,
+    solutionFilesLimit,
+    solutionSizeLimit: solutionSizeLimit || solutionSizeLimit * 1024, // if not null, convert KiB -> B
     canViewLimitRatios,
     canViewJudgeOutputs,
     isBonus,
@@ -268,8 +277,6 @@ class EditAssignmentForm extends Component {
           </Alert>
         )}
 
-        {editTexts && <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="assignment" />}
-
         {groupsAccessor && (
           <AssignmentFormGroupsList
             groups={
@@ -288,28 +295,33 @@ class EditAssignmentForm extends Component {
           />
         )}
 
-        <Field
-          name="firstDeadline"
-          component={DatetimeField}
-          label={<FormattedMessage id="app.editAssignmentForm.firstDeadline" defaultMessage="First deadline:" />}
-        />
-
-        <NumericTextField
-          name="maxPointsBeforeFirstDeadline"
-          validateMin={0}
-          validateMax={10000}
-          maxLength={5}
-          label={
-            <FormattedMessage
-              id="app.editAssignmentForm.maxPointsBeforeFirstDeadline"
-              defaultMessage="Maximum amount of points received when submitted before the deadline:"
-            />
-          }
-        />
-
         <Grid fluid>
           <Row>
-            <Col sm={6}>
+            <Col lg={6}>
+              <Field
+                name="firstDeadline"
+                component={DatetimeField}
+                label={<FormattedMessage id="app.editAssignmentForm.firstDeadline" defaultMessage="First deadline:" />}
+              />
+            </Col>
+            <Col lg={6}>
+              <NumericTextField
+                name="maxPointsBeforeFirstDeadline"
+                validateMin={0}
+                validateMax={10000}
+                maxLength={5}
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.maxPointsBeforeFirstDeadline"
+                    defaultMessage="Maximum amount of points (before the deadline):"
+                  />
+                }
+              />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col lg={12}>
               <Field
                 name="allowSecondDeadline"
                 component={CheckboxField}
@@ -323,70 +335,114 @@ class EditAssignmentForm extends Component {
               />
             </Col>
           </Row>
+
+          {allowSecondDeadline && (
+            <Row>
+              <Col lg={6}>
+                <Field
+                  name="secondDeadline"
+                  disabled={!firstDeadline || allowSecondDeadline !== true}
+                  isValidDate={date => date.isSameOrAfter(firstDeadline)}
+                  component={DatetimeField}
+                  label={
+                    <FormattedMessage id="app.editAssignmentForm.secondDeadline" defaultMessage="Second deadline:" />
+                  }
+                />
+                {!firstDeadline && (
+                  <HelpBlock>
+                    <FormattedMessage
+                      id="app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline"
+                      defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
+                    />
+                  </HelpBlock>
+                )}
+              </Col>
+              <Col lg={6}>
+                <NumericTextField
+                  name="maxPointsBeforeSecondDeadline"
+                  disabled={allowSecondDeadline !== true}
+                  validateMin={0}
+                  validateMax={10000}
+                  maxLength={5}
+                  label={
+                    <FormattedMessage
+                      id="app.editAssignmentForm.maxPointsBeforeSecondDeadline"
+                      defaultMessage="Maximum amount of points (before the second deadline):"
+                    />
+                  }
+                />
+              </Col>
+            </Row>
+          )}
         </Grid>
 
-        {allowSecondDeadline && (
-          <Field
-            name="secondDeadline"
-            disabled={!firstDeadline || allowSecondDeadline !== true}
-            isValidDate={date => date.isSameOrAfter(firstDeadline)}
-            component={DatetimeField}
-            label={<FormattedMessage id="app.editAssignmentForm.secondDeadline" defaultMessage="Second deadline:" />}
-          />
-        )}
-
-        {allowSecondDeadline && !firstDeadline && (
-          <HelpBlock>
-            <FormattedMessage
-              id="app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline"
-              defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
-            />
-          </HelpBlock>
-        )}
-
-        {allowSecondDeadline && (
-          <NumericTextField
-            name="maxPointsBeforeSecondDeadline"
-            disabled={allowSecondDeadline !== true}
-            validateMin={0}
-            validateMax={10000}
-            maxLength={5}
-            label={
-              <FormattedMessage
-                id="app.editAssignmentForm.maxPointsBeforeSecondDeadline"
-                defaultMessage="Maximum amount of points received when submitted before the second deadline:"
-              />
-            }
-          />
-        )}
-
         <hr />
+        <Grid fluid>
+          <Row>
+            <Col lg={6}>
+              {' '}
+              <NumericTextField
+                name="submissionsCountLimit"
+                validateMin={1}
+                validateMax={100}
+                maxLength={3}
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.submissionsCountLimit"
+                    defaultMessage="Submissions count limit:"
+                  />
+                }
+              />
+            </Col>
+            <Col lg={6}>
+              <NumericTextField
+                name="pointsPercentualThreshold"
+                validateMin={0}
+                validateMax={100}
+                maxLength={3}
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.pointsPercentualThreshold"
+                    defaultMessage="Minimum percentage of points which submissions have to gain:"
+                  />
+                }
+              />
+            </Col>
+          </Row>
 
-        <NumericTextField
-          name="submissionsCountLimit"
-          validateMin={1}
-          validateMax={100}
-          maxLength={3}
-          label={
-            <FormattedMessage
-              id="app.editAssignmentForm.submissionsCountLimit"
-              defaultMessage="Submissions count limit:"
-            />
-          }
-        />
-
-        <NumericTextField
-          name="pointsPercentualThreshold"
-          validateMin={0}
-          validateMax={100}
-          maxLength={3}
-          label={
-            <FormattedMessage
-              id="app.editAssignmentForm.pointsPercentualThreshold"
-              defaultMessage="Minimum percentage of points which submissions have to gain:"
-            />
-          }
-        />
+          <Row>
+            <Col lg={6}>
+              <NumericTextField
+                name="solutionFilesLimit"
+                validateMin={1}
+                validateMax={100}
+                maxLength={3}
+                nullable
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.solutionFilesLimit"
+                    defaultMessage="Soluition files limit (if empty, no limit is applied):"
+                  />
+                }
+              />
+            </Col>
+            <Col lg={6}>
+              <NumericTextField
+                name="solutionSizeLimit"
+                validateMin={1}
+                validateMax={128 * 1024}
+                maxLength={6}
+                nullable
+                label={
+                  <FormattedMessage
+                    id="app.editAssignmentForm.solutionSizeLimit"
+                    defaultMessage="Soluition total size [KiB] limit (if empty, no limit is applied):"
+                  />
+                }
+              />
+            </Col>
+          </Row>
+        </Grid>
 
         <br />
 
@@ -500,6 +556,22 @@ class EditAssignmentForm extends Component {
             )}
           </Row>
         </Grid>
+
+        {editTexts && (
+          <React.Fragment>
+            <hr />
+
+            <div className="callout callout-info">
+              <WarningIcon gapRight />
+              <FormattedMessage
+                id="app.editAssignmentForm.localized.assignmentSyncInfo"
+                defaultMessage="Please note that the localized texts are overwritten by actual data from the exercise when exercise update is invoked."
+              />
+            </div>
+
+            <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="assignment" />
+          </React.Fragment>
+        )}
 
         {error && <Alert bsStyle="danger">{error}</Alert>}
 

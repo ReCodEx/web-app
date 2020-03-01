@@ -57,6 +57,8 @@ class ReferenceSolutionDetail extends Component {
       var { submittedBy, evaluation, isCorrect, evaluationStatus, ...restSub } = evaluationsJS[activeSubmissionId].data;
     } else evaluationStatus = 'missing-submission';
 
+    const filesSize = files.reduce((acc, { size }) => acc + size, 0);
+
     return (
       <div>
         <Row>
@@ -73,6 +75,29 @@ class ReferenceSolutionDetail extends Component {
                 runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
               }
             />
+
+            {exercise.solutionFilesLimit !== null && files.length > exercise.solutionFilesLimit && (
+              <div className="callout callout-warning">
+                <WarningIcon gapRight />
+                <FormattedMessage
+                  id="app.referenceSolutionDetail.solutionFilesLimitExceeded"
+                  defaultMessage="The total number of submitted files exceeds the default solution files limit ({limit})."
+                  values={{ limit: exercise.solutionFilesLimit }}
+                />
+              </div>
+            )}
+
+            {exercise.solutionSizeLimit !== null && filesSize > exercise.solutionSizeLimit && (
+              <div className="callout callout-warning">
+                <WarningIcon gapRight />
+                <FormattedMessage
+                  id="app.referenceSolutionDetail.solutionSizeLimitExceeded"
+                  defaultMessage="The total size of all submitted files exceeds the default solution size limit ({limit} KiB)."
+                  values={{ limit: Math.ceil(exercise.solutionSizeLimit / 1024) }}
+                />
+              </div>
+            )}
+
             <Row>
               {files.map(file => (
                 <Col lg={6} md={12} key={file.id}>
