@@ -219,6 +219,8 @@ class Assignment extends Component {
                           presubmitValidation={presubmitSolution}
                           onReset={init}
                           isOpen={submitting}
+                          solutionFilesLimit={assignment.solutionFilesLimit}
+                          solutionSizeLimit={assignment.solutionSizeLimit}
                         />
                       </div>
                     )}

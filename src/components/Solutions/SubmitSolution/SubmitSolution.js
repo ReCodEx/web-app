@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, defineMessages, FormattedHTMLMessage } from 'react-intl';
 import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock, Well, Row, Col } from 'react-bootstrap';
+import classnames from 'classnames';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
 import UploadContainer from '../../../containers/UploadContainer';
@@ -72,6 +73,18 @@ const commonMessages = defineMessages({
     id: 'generic.submitting',
     defaultMessage: 'Submitting...',
   },
+  limitsExceeded: {
+    id: 'app.submitSolution.limitsExceeded',
+    defaultMessage: 'Solution file limits have been exceeded',
+  },
+  limitsExceededCount: {
+    id: 'app.submitSolution.limitsExceededCount',
+    defaultMessage: 'You may submit no more than {limit} {limit, plural, one {file} other {files}}.',
+  },
+  limitsExceededSize: {
+    id: 'app.submitSolution.limitsExceededSize',
+    defaultMessage: 'Total size of the solution must not exceed {limit} KiB.',
+  },
 });
 
 const submissionMessages = defineMessages({
@@ -100,13 +113,17 @@ class SubmitSolution extends Component {
   _createSubmitButton = (btnProps = {}) => {
     const {
       canSubmit,
+      presubmitCountLimitOK,
+      presubmitSizeLimitOK,
+      isReferenceSolution,
       hasFailed,
       intl: { formatMessage },
     } = this.props;
+    const limitsOK = isReferenceSolution || (presubmitCountLimitOK && presubmitSizeLimitOK); // ref. solution ignores limits
     return (
       <Button
         type="submit"
-        disabled={!canSubmit}
+        disabled={!canSubmit || !limitsOK}
         bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
         className="btn-flat"
         {...btnProps}>
@@ -146,7 +163,6 @@ class SubmitSolution extends Component {
       onFilesChange,
       reset,
       uploadId,
-      canSubmit,
       isSending,
       isValidating,
       hasFailed,
@@ -154,6 +170,10 @@ class SubmitSolution extends Component {
       attachedFiles,
       presubmitEnvironments,
       presubmitVariables,
+      presubmitCountLimitOK,
+      presubmitSizeLimitOK,
+      solutionFilesLimit = null,
+      solutionSizeLimit = null,
       selectedEnvironment,
       changeRuntimeEnvironment,
       selectedEntryPoint,
@@ -177,6 +197,28 @@ class SubmitSolution extends Component {
           <Row>
             <Col md={12} lg={6}>
               <UploadContainer id={uploadId} onChange={onFilesChange} />
+
+              {(!presubmitCountLimitOK || !presubmitSizeLimitOK) && (
+                <div
+                  className={classnames({
+                    callout: true,
+                    'callout-danger': !isReferenceSolution,
+                    'callout-warning': isReferenceSolution,
+                  })}>
+                  <h4>
+                    <WarningIcon gapRight />
+                    {formatMessage(commonMessages.limitsExceeded)}
+                  </h4>
+                  {!presubmitCountLimitOK && (
+                    <p>{formatMessage(commonMessages.limitsExceededCount, { limit: solutionFilesLimit })}</p>
+                  )}
+                  {!presubmitSizeLimitOK && (
+                    <p>
+                      {formatMessage(commonMessages.limitsExceededSize, { limit: Math.ceil(solutionSizeLimit / 1024) })}
+                    </p>
+                  )}
+                </div>
+              )}
             </Col>
             <Col md={12} lg={6}>
               <FormGroup>
@@ -278,11 +320,9 @@ class SubmitSolution extends Component {
             </Button>
           </div>
 
-          {!canSubmit && (
-            <Well className="em-margin-top">
-              <HelpBlock className="text-left">{formatMessage(commonMessages.instructions)}</HelpBlock>
-            </Well>
-          )}
+          <Well className="em-margin-top">
+            <HelpBlock className="text-left">{formatMessage(commonMessages.instructions)}</HelpBlock>
+          </Well>
         </Modal.Footer>
       </Modal>
     );
@@ -295,6 +335,8 @@ SubmitSolution.propTypes = {
   reset: PropTypes.func.isRequired,
   uploadId: PropTypes.string.isRequired,
   canSubmit: PropTypes.bool.isRequired,
+  solutionFilesLimit: PropTypes.number,
+  solutionSizeLimit: PropTypes.number,
   submitSolution: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   note: PropTypes.string,
@@ -305,6 +347,8 @@ SubmitSolution.propTypes = {
   isSending: PropTypes.bool,
   presubmitEnvironments: PropTypes.array,
   presubmitVariables: PropTypes.array,
+  presubmitCountLimitOK: PropTypes.bool,
+  presubmitSizeLimitOK: PropTypes.bool,
   selectedEnvironment: PropTypes.string,
   changeRuntimeEnvironment: PropTypes.func.isRequired,
   selectedEntryPoint: PropTypes.string,

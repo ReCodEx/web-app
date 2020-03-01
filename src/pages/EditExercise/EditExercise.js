@@ -35,14 +35,18 @@ const localizedTextDefaults = {
   description: '',
 };
 
-const prepareInitialValues = defaultMemoize((id, version, localizedTexts, difficulty, isPublic, isLocked) => ({
-  id,
-  version,
-  localizedTexts: getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
-  difficulty,
-  isPublic,
-  isLocked,
-}));
+const prepareInitialValues = defaultMemoize(
+  ({ id, version, localizedTexts, difficulty, isPublic, isLocked, solutionFilesLimit, solutionSizeLimit }) => ({
+    id,
+    version,
+    localizedTexts: getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
+    difficulty,
+    isPublic,
+    isLocked,
+    solutionFilesLimit,
+    solutionSizeLimit: solutionSizeLimit || Math.ceil(solutionSizeLimit / 1024), // if not null, convert B -> KiB
+  })
+);
 
 class EditExercise extends Component {
   componentDidMount = () => this.props.loadAsync();
@@ -59,9 +63,10 @@ class EditExercise extends Component {
 
   editExerciseSubmitHandler = formData => {
     const { exercise, editExercise } = this.props;
-    const { localizedTexts, ...data } = formData;
+    const { localizedTexts, solutionSizeLimit, ...data } = formData;
     return editExercise(exercise.getIn(['data', 'version']), {
       localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+      solutionSizeLimit: solutionSizeLimit || solutionSizeLimit * 1024, // if not null, convert KiB -> B
       ...data,
     });
   };
@@ -131,14 +136,7 @@ class EditExercise extends Component {
               <Row>
                 <Col lg={6}>
                   <EditExerciseForm
-                    initialValues={prepareInitialValues(
-                      exercise.id,
-                      exercise.version,
-                      exercise.localizedTexts,
-                      exercise.difficulty,
-                      exercise.isPublic,
-                      exercise.isLocked
-                    )}
+                    initialValues={prepareInitialValues(exercise)}
                     onSubmit={this.editExerciseSubmitHandler}
                   />
                 </Col>
