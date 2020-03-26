@@ -14,6 +14,10 @@ export const ENV_PROLOG_ID = 'prolog';
 export const ENV_HASKELL_ID = 'haskell';
 export const ENV_RUST_ID = 'rust';
 export const ENV_GO_ID = 'go';
+export const ENV_KOTLIN_ID = 'kotlin';
+export const ENV_GROOVY_ID = 'groovy';
+export const ENV_SCALA_ID = 'scala';
+export const ENV_BASH_ID = 'bash';
 
 /**
  * List of environment IDs allowed in simple form.
@@ -33,6 +37,10 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_HASKELL_ID,
   ENV_RUST_ID,
   ENV_GO_ID,
+  ENV_KOTLIN_ID,
+  ENV_GROOVY_ID,
+  ENV_SCALA_ID,
+  ENV_BASH_ID,
 ];
 
 /**
