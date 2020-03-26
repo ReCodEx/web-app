@@ -1,6 +1,13 @@
 import { defaultMemoize } from 'reselect';
 import { safeGet, encodeNumId, identity, EMPTY_ARRAY } from '../common';
-import { ENV_DATA_ONLY_ID, ENV_JAVA_ID, ENV_HASKELL_ID } from './environments';
+import {
+  ENV_DATA_ONLY_ID,
+  ENV_JAVA_ID,
+  ENV_KOTLIN_ID,
+  ENV_GROOVY_ID,
+  ENV_SCALA_ID,
+  ENV_HASKELL_ID,
+} from './environments';
 
 /**
  * Base class for all pipeline variables being edited in the config form.
@@ -287,7 +294,7 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
   new Variable('jar-files', 'remote-file[]', [])
     .individualEnvs()
     .forCompilation()
-    .setRuntimeFilter(ENV_JAVA_ID),
+    .setRuntimeFilter([ENV_JAVA_ID, ENV_KOTLIN_ID, ENV_GROOVY_ID, ENV_SCALA_ID]),
   new Variable('entry-point', 'file')
     .individualEnvs()
     .setPipelineFilter('hasEntryPoint')
