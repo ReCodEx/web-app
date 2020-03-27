@@ -44,7 +44,7 @@ const prepareInitialValues = defaultMemoize(
     isPublic,
     isLocked,
     solutionFilesLimit,
-    solutionSizeLimit: solutionSizeLimit || Math.ceil(solutionSizeLimit / 1024), // if not null, convert B -> KiB
+    solutionSizeLimit: solutionSizeLimit && Math.ceil(solutionSizeLimit / 1024), // if not null, convert B -> KiB
   })
 );
 
@@ -66,7 +66,7 @@ class EditExercise extends Component {
     const { localizedTexts, solutionSizeLimit, ...data } = formData;
     return editExercise(exercise.getIn(['data', 'version']), {
       localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-      solutionSizeLimit: solutionSizeLimit || solutionSizeLimit * 1024, // if not null, convert KiB -> B
+      solutionSizeLimit: solutionSizeLimit ? solutionSizeLimit * 1024 : null, // if not null, convert KiB -> B
       ...data,
     });
   };

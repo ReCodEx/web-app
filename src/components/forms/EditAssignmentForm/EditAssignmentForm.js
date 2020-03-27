@@ -75,7 +75,7 @@ export const prepareInitialValues = defaultMemoize(
     submissionsCountLimit,
     pointsPercentualThreshold,
     solutionFilesLimit,
-    solutionSizeLimit: solutionSizeLimit || Math.ceil(solutionSizeLimit / 1024), // B -> KiB
+    solutionSizeLimit: solutionSizeLimit && Math.ceil(solutionSizeLimit / 1024), // B -> KiB
     canViewLimitRatios,
     canViewJudgeOutputs,
     isBonus,
@@ -127,7 +127,7 @@ const transformSubmittedData = ({
     submissionsCountLimit: Number(submissionsCountLimit),
     pointsPercentualThreshold,
     solutionFilesLimit,
-    solutionSizeLimit: solutionSizeLimit || solutionSizeLimit * 1024, // if not null, convert KiB -> B
+    solutionSizeLimit: solutionSizeLimit ? solutionSizeLimit * 1024 : null, // if not null, convert KiB -> B
     canViewLimitRatios,
     canViewJudgeOutputs,
     isBonus,

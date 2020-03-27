@@ -72,23 +72,27 @@ class ExerciseAssignments extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  multiAssignFormInitialValues = defaultMemoize((visibleGroups, runtimeEnvironments) => {
-    const groups = visibleGroups.reduce((acc, { id }) => {
-      acc[`id${id}`] = false;
-      return acc;
-    }, {});
+  multiAssignFormInitialValues = defaultMemoize(
+    (visibleGroups, runtimeEnvironments, solutionFilesLimit, solutionSizeLimit) => {
+      const groups = visibleGroups.reduce((acc, { id }) => {
+        acc[`id${id}`] = false;
+        return acc;
+      }, {});
 
-    const enabledRuntime = runtimeEnvironments.reduce((acc, { id }) => {
-      acc[id] = true;
-      return acc;
-    }, {});
+      const enabledRuntime = runtimeEnvironments.reduce((acc, { id }) => {
+        acc[id] = true;
+        return acc;
+      }, {});
 
-    return prepareEditFormInitialValues({
-      groups,
-      runtimeEnvironmentIds: Object.keys(enabledRuntime),
-      enabledRuntime,
-    });
-  });
+      return prepareEditFormInitialValues({
+        solutionFilesLimit,
+        solutionSizeLimit,
+        groups,
+        runtimeEnvironmentIds: Object.keys(enabledRuntime),
+        enabledRuntime,
+      });
+    }
+  );
 
   assignExercise = formData => {
     const { assignExercise, editAssignment } = this.props;
@@ -243,7 +247,9 @@ class ExerciseAssignments extends Component {
                                 userId={userId}
                                 initialValues={this.multiAssignFormInitialValues(
                                   assignableGroups,
-                                  exercise.runtimeEnvironments
+                                  exercise.runtimeEnvironments,
+                                  exercise.solutionFilesLimit,
+                                  exercise.solutionSizeLimit
                                 )}
                                 onSubmit={this.assignExercise}
                                 groups={assignableGroups}
