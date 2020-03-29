@@ -11,6 +11,8 @@ import Icon, { DeleteIcon } from '../../../icons';
 import { Posted, Posting, Failed } from './Status';
 import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
 
+import styles from '../comments.less';
+
 const Comment = ({
   isFromCurrentUser = false,
   id,
@@ -56,7 +58,15 @@ const Comment = ({
         altClassName="direct-chat-img"
       />
       <div className="direct-chat-text">
-        {isFromCurrentUser && <DeleteIcon gapLeft className="pull-right" onClick={() => deleteComment(id)} />}
+        {isFromCurrentUser && (
+          <DeleteIcon
+            gapLeft
+            className={classnames({ 'pull-right': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
+            onClick={() => deleteComment(id)}
+            timid
+            bsStyle="danger"
+          />
+        )}
         {isFromCurrentUser && togglePrivacy && (
           <OverlayTrigger
             placement="left"
@@ -78,11 +88,12 @@ const Comment = ({
             <Icon
               icon={isToggling ? 'circle-notch' : isPrivate ? 'lock' : 'unlock-alt'}
               onClick={() => togglePrivacy(id)}
-              className="pull-right"
+              className={classnames({ 'pull-right': true, [styles.iconButton]: true, [styles.iconButtonLock]: true })}
               spin={isToggling}
+              timid
             />
           </OverlayTrigger>
-        )}{' '}
+        )}
         {text.split('\n').map((line, idx) => (
           <div key={idx} style={{ minHeight: '1em' }}>
             {line}

@@ -21,6 +21,7 @@ export const BugIcon = props => <Icon {...props} icon="bug" />;
 export { CheckRequiredIcon };
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CodeIcon = props => <Icon {...props} icon="code" />;
+export const ChatIcon = props => <Icon {...props} icon={['far', 'comments']} />;
 export const CopyIcon = props => <Icon {...props} icon={['far', 'clipboard']} />;
 export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props => <Icon {...props} icon="cloud-download-alt" />;

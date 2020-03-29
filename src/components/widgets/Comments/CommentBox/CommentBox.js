@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Modal } from 'react-bootstrap';
+import classnames from 'classnames';
+
 import Box from '../../Box';
+import styles from '../comments.less';
 
 class CommentBox extends Component {
   state = { prevCount: 0 };
@@ -25,31 +29,48 @@ class CommentBox extends Component {
     }
   };
 
-  render() {
-    const { children, footer } = this.props;
-
+  renderMessages() {
     return (
-      <Box
-        title={<FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />}
-        noPadding={false}
-        collapsable
-        footer={footer}
-        className="direct-chat">
-        <div
-          className="direct-chat-messages"
-          ref={c => {
-            this.commentsContainer = c;
-          }}>
-          {children}
-        </div>
+      <div
+        className={classnames({ 'direct-chat-messages': true, [styles.fullHeight]: this.props.inModal })}
+        ref={c => {
+          this.commentsContainer = c;
+        }}>
+        {this.props.children}
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      title = <FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />,
+      footer,
+      inModal = false,
+    } = this.props;
+
+    return inModal ? (
+      <React.Fragment>
+        <Modal.Header closeButton>
+          <Modal.Title>{title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{this.renderMessages()}</Modal.Body>
+        <Modal.Footer>
+          <div className="text-left">{footer}</div>
+        </Modal.Footer>
+      </React.Fragment>
+    ) : (
+      <Box title={title} noPadding={false} collapsable footer={footer} className="direct-chat">
+        {this.renderMessages()}
       </Box>
     );
   }
 }
 
 CommentBox.propTypes = {
+  title: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
   commentsCount: PropTypes.number.isRequired,
   footer: PropTypes.element,
+  inModal: PropTypes.bool,
   children: PropTypes.element,
 };
 

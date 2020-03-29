@@ -43,6 +43,7 @@ import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionBut
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
+import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
@@ -146,7 +147,7 @@ class Assignment extends Component {
                     <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                       <Button bsStyle="warning">
                         <EditIcon gapRight />
-                        <FormattedMessage id="app.assignment.editSettings" defaultMessage="Edit Assignment" />
+                        <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                       </Button>
                     </LinkContainer>
                     <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
@@ -250,6 +251,8 @@ class Assignment extends Component {
                         </FetchManyResourceRenderer>
                       </Box>
                     )}
+
+                    <CommentThreadContainer threadId={assignment.id} />
                   </Col>
                 )}
               </ResourceRenderer>

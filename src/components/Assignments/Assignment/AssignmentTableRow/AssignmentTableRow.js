@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
-import { EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisibleAssignmentIcon } from '../../../icons';
+import { ChatIcon, EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisibleAssignmentIcon } from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
 import Button from '../../../widgets/FlatButton';
 import DateTime from '../../../widgets/DateTime';
@@ -38,6 +39,7 @@ const AssignmentTableRow = ({
   showNames = true,
   showGroups = false,
   groupsAccessor = null,
+  discussionOpen,
   intl: { locale },
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
@@ -100,23 +102,62 @@ const AssignmentTableRow = ({
       <DateTime unixts={allowSecondDeadline ? secondDeadline : null} isDeadline />
     </td>
     <td className="text-center text-nowrap shrink-col">{allowSecondDeadline ? maxPointsBeforeSecondDeadline : ''}</td>
-    {isAdmin && (
-      <td className="text-right">
-        <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
-          <Button bsSize="xs" bsStyle="primary">
-            <ResultsIcon gapRight />
-            <FormattedMessage id="generic.results" defaultMessage="Results" />
+
+    <td className="text-right text-nowrap valign-middle">
+      {discussionOpen &&
+        (isAdmin ? (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`discussion-${id}`}>
+                <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
+              </Tooltip>
+            }>
+            <Button bsSize="xs" bsStyle="info" onClick={discussionOpen}>
+              <ChatIcon smallGapLeft smallGapRight />
+            </Button>
+          </OverlayTrigger>
+        ) : (
+          <Button bsSize="xs" bsStyle="info" onClick={discussionOpen}>
+            <ChatIcon gapRight />
+            <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
           </Button>
-        </LinkContainer>
-        <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
-          <Button bsSize="xs" bsStyle="warning">
-            <EditIcon gapRight />
-            <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-          </Button>
-        </LinkContainer>
-        <DeleteAssignmentButtonContainer id={id} bsSize="xs" />
-      </td>
-    )}
+        ))}
+
+      {isAdmin && (
+        <React.Fragment>
+          <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`results-${id}`}>
+                  <FormattedMessage id="generic.results" defaultMessage="Results" />
+                </Tooltip>
+              }>
+              <Button bsSize="xs" bsStyle="primary">
+                <ResultsIcon smallGapLeft smallGapRight />
+              </Button>
+            </OverlayTrigger>
+          </LinkContainer>
+
+          <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`edit-${id}`}>
+                  <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                </Tooltip>
+              }>
+              <Button bsSize="xs" bsStyle="warning">
+                <EditIcon smallGapLeft smallGapRight />
+              </Button>
+            </OverlayTrigger>
+          </LinkContainer>
+
+          <DeleteAssignmentButtonContainer id={id} bsSize="xs" captionAsTooltip />
+        </React.Fragment>
+      )}
+    </td>
   </tr>
 );
 
@@ -143,6 +184,7 @@ AssignmentTableRow.propTypes = {
   showNames: PropTypes.bool,
   showGroups: PropTypes.bool,
   groupsAccessor: PropTypes.func,
+  discussionOpen: PropTypes.func,
   links: PropTypes.object,
   intl: intlShape.isRequired,
 };

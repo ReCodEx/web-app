@@ -19,7 +19,7 @@ const ResubmitAllSolutions = ({
   <Confirm id={id} onConfirmed={resubmit} question={question}>
     <Button bsStyle="danger" disabled={isResubmitting}>
       {isResubmitting ? <LoadingIcon gapRight /> : <Icon icon="redo" gapRight />}
-      <FormattedMessage id="app.resubmitSolution.resubmitAll" defaultMessage="Resubmit All Solutions" />
+      <FormattedMessage id="app.resubmitSolution.resubmitAll" defaultMessage="Resubmit All" />
     </Button>
   </Confirm>
 );

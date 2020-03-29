@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber, intlShape } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -31,7 +31,7 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import Box from '../../components/widgets/Box';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import { EditIcon, DownloadIcon, SearchIcon } from '../../components/icons';
+import { ChatIcon, EditIcon, DownloadIcon, SearchIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
 import UsersName from '../../components/Users/UsersName';
@@ -41,11 +41,13 @@ import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/Envi
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
+import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import { safeGet, identity } from '../../helpers/common';
 import { createUserNameComparator } from '../../components/helpers/users';
 import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
 import { fetchManyAssignmentSolutionsStatus } from '../../redux/selectors/solutions';
@@ -227,11 +229,14 @@ class AssignmentStats extends Component {
       dispatch(fetchAssignmentSolutions(assignmentId)),
     ]);
 
-  state = { groupByUsersCheckbox: true, onlyBestSolutionsCheckbox: false };
+  state = { groupByUsersCheckbox: true, onlyBestSolutionsCheckbox: false, assignmentDialogOpen: false };
 
   checkboxClickHandler = ev => {
     this.setState({ [ev.target.name]: !this.state[ev.target.name] });
   };
+
+  openDialog = () => this.setState({ assignmentDialogOpen: true });
+  closeDialog = () => this.setState({ assignmentDialogOpen: false });
 
   componentDidMount = () => this.props.loadAsync();
 
@@ -274,7 +279,9 @@ class AssignmentStats extends Component {
       <Page
         resource={assignment}
         title={assignment => getLocalizedName(assignment, locale)}
-        description={<FormattedMessage id="app.assignmentStats.title" defaultMessage="Assignment statistics" />}
+        description={
+          <FormattedMessage id="app.assignmentStats.title" defaultMessage="All submissions of the assignment" />
+        }
         breadcrumbs={[
           {
             resource: assignment,
@@ -306,7 +313,9 @@ class AssignmentStats extends Component {
             }),
           },
           {
-            text: <FormattedMessage id="app.assignmentStats.title" defaultMessage="Assignment statistics" />,
+            text: (
+              <FormattedMessage id="app.assignmentStats.title" defaultMessage="All submissions of the assignment" />
+            ),
             iconName: 'chart-line',
           },
         ]}>
@@ -320,7 +329,7 @@ class AssignmentStats extends Component {
                   <LinkContainer to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                     <Button bsStyle="warning">
                       <EditIcon gapRight />
-                      <FormattedMessage id="app.assignment.editSettings" defaultMessage="Edit Assignment" />
+                      <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                     </Button>
                   </LinkContainer>
                   <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
@@ -328,13 +337,38 @@ class AssignmentStats extends Component {
                       <DownloadIcon gapRight />
                       <FormattedMessage
                         id="app.assignment.downloadBestSolutionsArchive"
-                        defaultMessage="Download Best Solutions"
+                        defaultMessage="Download Bests"
                       />
                     </Button>
                   </a>
                   <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
+                  <Button bsStyle="info" onClick={this.openDialog}>
+                    <ChatIcon gapRight />
+                    <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
+                  </Button>
                 </p>
+
+                <Modal
+                  show={this.state.assignmentDialogOpen}
+                  backdrop="static"
+                  onHide={this.closeDialog}
+                  bsSize="large">
+                  <CommentThreadContainer
+                    threadId={assignment.id}
+                    title={
+                      <React.Fragment>
+                        <FormattedMessage
+                          id="app.assignments.discussionModalTitle"
+                          defaultMessage="Public Discussion"
+                        />
+                        : <LocalizedExerciseName entity={{ name: '??', localizedTexts: assignment.localizedTexts }} />
+                      </React.Fragment>
+                    }
+                    inModal
+                  />
+                </Modal>
               </Col>
+
               <Col md={12} lg={5} className="text-right text-nowrap">
                 <OnOffCheckbox
                   checked={this.state.groupByUsersCheckbox}
@@ -460,9 +494,7 @@ export default withLinks(
     ) => {
       const assignment = getAssignment(state)(assignmentId);
       const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
-      const readyUsers = usersSelector(state)
-        .toArray()
-        .filter(isReady);
+      const readyUsers = usersSelector(state).toArray().filter(isReady);
 
       return {
         loggedUserId: loggedInUserIdSelector(state),
