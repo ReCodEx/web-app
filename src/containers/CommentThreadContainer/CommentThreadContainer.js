@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 
 import {
   postComment,
@@ -35,12 +36,23 @@ class CommentThreadContainer extends Component {
   };
 
   render() {
-    const { thread, user, addComment, repostComment, togglePrivacy, refresh, deleteComment } = this.props;
+    const {
+      title = <FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />,
+      thread,
+      user,
+      addComment,
+      repostComment,
+      togglePrivacy,
+      refresh,
+      deleteComment,
+      inModal = false,
+    } = this.props;
 
     return (
       <ResourceRenderer resource={[thread, user]} loading={<LoadingCommentThread />} failed={<FailedCommentThread />}>
         {(thread, user) => (
           <CommentThread
+            title={title}
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
             addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
@@ -48,6 +60,7 @@ class CommentThreadContainer extends Component {
             repostComment={repostComment}
             refresh={refresh}
             deleteComment={deleteComment}
+            inModal={inModal}
           />
         )}
       </ResourceRenderer>
@@ -57,6 +70,8 @@ class CommentThreadContainer extends Component {
 
 CommentThreadContainer.propTypes = {
   threadId: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
+  inModal: PropTypes.bool,
   thread: PropTypes.object,
   user: PropTypes.object,
   addComment: PropTypes.func.isRequired,

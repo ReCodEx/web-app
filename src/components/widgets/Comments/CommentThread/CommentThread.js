@@ -7,6 +7,7 @@ import AddComment from '../AddComment';
 import { UsersComment, SomebodyElsesComment } from '../Comment';
 
 const CommentThread = ({
+  title = <FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />,
   comments = [],
   currentUserId,
   addComment,
@@ -14,10 +15,13 @@ const CommentThread = ({
   togglePrivacy,
   refresh,
   deleteComment,
+  inModal = false,
 }) => (
   <CommentBox
+    title={title}
     commentsCount={comments.length}
-    footer={addComment && <AddComment addComment={addComment} refresh={refresh} />}>
+    footer={addComment && <AddComment addComment={addComment} refresh={refresh} />}
+    inModal={inModal}>
     <div>
       {comments.map((comment, i) =>
         comment.user.id === currentUserId ? (
@@ -46,6 +50,7 @@ const CommentThread = ({
 );
 
 CommentThread.propTypes = {
+  title: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
   comments: PropTypes.array,
   currentUserId: PropTypes.string.isRequired,
   addComment: PropTypes.func,
@@ -53,6 +58,7 @@ CommentThread.propTypes = {
   togglePrivacy: PropTypes.func,
   refresh: PropTypes.func,
   deleteComment: PropTypes.func,
+  inModal: PropTypes.bool,
 };
 
 export default CommentThread;
