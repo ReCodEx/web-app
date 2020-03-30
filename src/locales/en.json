@@ -508,6 +508,7 @@
   "app.editUserProfile.validation.shortLastName": "Last name must contain at least 2 characters.",
   "app.editUserProfileForm.title": "Edit Profile",
   "app.editUserRoleForm.title": "Set User's Role",
+  "app.editUserSettings.assignmentCommentsEmails": "New comment in public discussion of an assignment",
   "app.editUserSettings.assignmentDeadlineEmails": "Assignment deadline is approaching",
   "app.editUserSettings.assignmentSubmitAfterAcceptedEmails": "New solution evaluated for an assignment where another solution has already been accepted",
   "app.editUserSettings.assignmentSubmitAfterReviewedEmails": "New solution evaluated for an assignment where another solution has already been reviewed",

@@ -508,6 +508,7 @@
   "app.editUserProfile.validation.shortLastName": "Příjmení musí obsahovat alespoň 2 znaky.",
   "app.editUserProfileForm.title": "Upravit profil",
   "app.editUserRoleForm.title": "Nastavení uživatelské role",
+  "app.editUserSettings.assignmentCommentsEmails": "Nový komentář v diskusi k zadané úloze",
   "app.editUserSettings.assignmentDeadlineEmails": "Blíží se termín zadané úlohy",
   "app.editUserSettings.assignmentSubmitAfterAcceptedEmails": "Bylo vyhodnoceno nové řešení úlohy, ke které již bylo akceptováno jiné řešení",
   "app.editUserSettings.assignmentSubmitAfterReviewedEmails": "Bylo vyhodnoceno nové řešení úlohy, ke které již bylo posouzeno jiné řešení",

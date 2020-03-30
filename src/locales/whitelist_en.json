@@ -508,6 +508,7 @@
   "app.editUserProfile.validation.shortLastName",
   "app.editUserProfileForm.title",
   "app.editUserRoleForm.title",
+  "app.editUserSettings.assignmentCommentsEmails",
   "app.editUserSettings.assignmentDeadlineEmails",
   "app.editUserSettings.assignmentSubmitAfterAcceptedEmails",
   "app.editUserSettings.assignmentSubmitAfterReviewedEmails",

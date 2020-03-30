@@ -189,6 +189,18 @@ const EditUserSettingsForm = ({
       }
     />
 
+    <Field
+      name="assignmentCommentsEmails"
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserSettings.assignmentCommentsEmails"
+          defaultMessage="New comment in public discussion of an assignment"
+        />
+      }
+    />
+
     {isSupervisorRole(user.privateData.role) && (
       <Field
         name="assignmentSubmitAfterAcceptedEmails"
