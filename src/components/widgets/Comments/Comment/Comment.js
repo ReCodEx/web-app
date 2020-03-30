@@ -64,7 +64,6 @@ const Comment = ({
             className={classnames({ 'pull-right': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
             onClick={() => deleteComment(id)}
             timid
-            bsStyle="danger"
           />
         )}
         {isFromCurrentUser && togglePrivacy && (
