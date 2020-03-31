@@ -6,7 +6,7 @@ import Icon from '../../icons';
 
 const SubmitSolutionButton = ({ disabled = false, onClick }) => (
   <Button bsStyle="success" className="btn-flat" disabled={disabled} onClick={onClick}>
-    <Icon icon="bug" gapRight />
+    <Icon icon="disease" gapRight />
     <FormattedMessage id="app.solutionsTable.submitNewSolution" defaultMessage="Submit New Solution" />
   </Button>
 );

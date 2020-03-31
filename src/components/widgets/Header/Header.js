@@ -50,7 +50,7 @@ class Header extends Component {
                 <LoadingIcon gapRight />
               </span>
             )}
-            Re<b>CodEx</b>
+            Re<b>CodVid</b>
           </span>
         </Link>
 

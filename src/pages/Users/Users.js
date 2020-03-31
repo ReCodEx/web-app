@@ -154,7 +154,7 @@ class Users extends Component {
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.users.users" defaultMessage="Users" />,
-            iconName: 'users',
+            iconName: 'viruses',
           },
         ]}>
         {user => (
@@ -199,9 +199,7 @@ class Users extends Component {
                         </Modal.Body>
                       </Modal>
                     </div>
-                  ) : (
-                    undefined
-                  )
+                  ) : undefined
                 }>
                 <div>
                   <PaginationContainer

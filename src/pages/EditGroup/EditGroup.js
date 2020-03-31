@@ -89,7 +89,7 @@ class EditGroup extends Component {
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.group.info" defaultMessage="Group Info" />,
-            iconName: 'users',
+            iconName: 'viruses',
             link: GROUP_INFO_URI_FACTORY(groupId),
           },
           {

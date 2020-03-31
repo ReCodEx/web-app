@@ -144,7 +144,7 @@ class ExerciseAssignments extends Component {
                   }}
                 />
               ),
-              iconName: 'puzzle-piece',
+              iconName: 'stethoscope',
               link: EXERCISE_URI_FACTORY(exerciseId),
             }),
           },

@@ -81,7 +81,7 @@ class GroupInfo extends Component {
       },
       {
         resource: group,
-        iconName: 'users',
+        iconName: 'viruses',
         breadcrumb: data => ({
           text: getLocalizedName(data, locale),
         }),
@@ -293,7 +293,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectIntl(GroupInfo));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo));

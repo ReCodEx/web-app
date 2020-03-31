@@ -18,7 +18,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
         <StatusIcon
           id={id}
           accepted={accepted}
-          icon={<Icon icon={isBestSolution ? 'thumbs-up' : ['far', 'thumbs-up']} className="text-green" />}
+          icon={<Icon icon={isBestSolution ? 'mitten' : 'allergies'} className="text-green" />}
           message={
             <React.Fragment>
               <FormattedMessage
@@ -55,7 +55,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
         <StatusIcon
           id={id}
           accepted={accepted}
-          icon={<Icon icon={isBestSolution ? 'thumbs-down' : ['far', 'thumbs-down']} className="text-red" />}
+          icon={<Icon icon={isBestSolution ? 'fist-raised' : ['far', 'hand-lizard']} className="text-red" />}
           message={
             <React.Fragment>
               <FormattedMessage

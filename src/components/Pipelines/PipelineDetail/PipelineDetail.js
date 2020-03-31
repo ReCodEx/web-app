@@ -55,7 +55,7 @@ const PipelineDetail = ({
 
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="puzzle-piece" />
+            <Icon icon="stethoscope" />
           </td>
           <th>
             <FormattedMessage id="app.pipeline.exercises" defaultMessage="Exercises:" />

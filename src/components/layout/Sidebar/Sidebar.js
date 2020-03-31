@@ -90,7 +90,7 @@ const Sidebar = ({
               <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
               <MenuItem
                 title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
-                icon="tachometer-alt"
+                icon="heartbeat"
                 currentPath={currentUrl}
                 link={DASHBOARD_URI}
               />
@@ -105,7 +105,7 @@ const Sidebar = ({
                     <MenuItem
                       key={id}
                       title={name}
-                      icon="university"
+                      icon="dna"
                       currentPath={currentUrl}
                       link={INSTANCE_URI_FACTORY(id)}
                     />
@@ -116,7 +116,7 @@ const Sidebar = ({
                   title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
                   items={studentOfItems}
                   notifications={EMPTY_OBJ}
-                  icon={'user-circle'}
+                  icon="diagnoses"
                   currentPath={currentUrl}
                   createLink={createLink}
                   forceOpen={false}
@@ -142,7 +142,7 @@ const Sidebar = ({
               {isSupervisorRole(effectiveRole) && (
                 <MenuItem
                   title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
-                  icon="puzzle-piece"
+                  icon="stethoscope"
                   currentPath={currentUrl}
                   link={EXERCISES_URI}
                 />

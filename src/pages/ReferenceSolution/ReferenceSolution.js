@@ -77,7 +77,7 @@ class ReferenceSolution extends Component {
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />,
-            iconName: 'puzzle-piece',
+            iconName: 'stethoscope',
             link: EXERCISES_URI,
           },
           {

@@ -14,19 +14,19 @@ export const AdressIcon = props => <Icon {...props} icon="at" />;
 export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
   <Icon {...props} icon={archived ? 'dolly' : 'archive'} />
 );
-export const AssignmentsIcon = props => <Icon {...props} icon="tasks" />;
-export const BanIcon = props => <Icon {...props} icon="ban" />;
-export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
-export const BugIcon = props => <Icon {...props} icon="bug" />;
+export const AssignmentsIcon = props => <Icon {...props} icon="microscope" />;
+export const BanIcon = props => <Icon {...props} icon="smoking-ban" />;
+export const BonusIcon = props => <Icon {...props} icon="hand-holding-medical" />;
+export const BugIcon = props => <Icon {...props} icon="disease" />;
 export { CheckRequiredIcon };
 export const CloseIcon = props => <Icon {...props} icon="times" />;
-export const CodeIcon = props => <Icon {...props} icon="code" />;
+export const CodeIcon = props => <Icon {...props} icon="dna" />;
 export const ChatIcon = props => <Icon {...props} icon={['far', 'comments']} />;
 export const CopyIcon = props => <Icon {...props} icon={['far', 'clipboard']} />;
 export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props => <Icon {...props} icon="cloud-download-alt" />;
-export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
-export const EmpoweredSupervisorIcon = props => <Icon {...props} icon="user-ninja" />;
+export const EditIcon = props => <Icon {...props} icon="syringe" />;
+export const EmpoweredSupervisorIcon = props => <Icon {...props} icon="user-md" />;
 export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
   isOpen ? <Icon icon={['far', 'minus-square']} gapRight /> : <Icon icon={['far', 'plus-square']} gapRight />;
 export const FailureIcon = props => (
@@ -35,7 +35,7 @@ export const FailureIcon = props => (
   </strong>
 );
 export const GroupIcon = ({ organizational = false, archived = false, ...props }) => (
-  <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'} />
+  <Icon {...props} icon={organizational ? 'viruses' : archived ? 'archive' : 'viruses'} />
 );
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
@@ -49,10 +49,10 @@ export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} 
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
-export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
+export const ResultsIcon = props => <Icon {...props} icon="procedures" />;
 export const ReviewedIcon = props => <Icon {...props} icon="stamp" />;
-export const SearchIcon = props => <Icon {...props} icon="search" />;
-export const SendIcon = props => <Icon {...props} icon={['far', 'paper-plane']} />;
+export const SearchIcon = props => <Icon {...props} icon="microscope" />;
+export const SendIcon = props => <Icon {...props} icon="biohazard" />;
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
 export const ShadowAssignmentIcon = props => <Icon {...props} icon="user-secret" />;
 export const SortedIcon = ({ active = true, descending = false, ...props }) => (
@@ -71,8 +71,8 @@ export const SuccessIcon = props => (
 export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
   success ? <SuccessIcon {...props} /> : <FailureIcon {...props} />;
 export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
-export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
-export const SupervisorStudentIcon = props => <Icon {...props} icon="chalkboard-teacher" />;
+export const SupervisorIcon = props => <Icon {...props} icon="user-md" />;
+export const SupervisorStudentIcon = props => <Icon {...props} icon="user-nurse" />;
 export const TagIcon = props => <Icon {...props} icon="tag" />;
 export const TestsIcon = props => <Icon {...props} icon="tasks" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
@@ -80,8 +80,8 @@ export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 const messageIconTypes = {
   success: ['far', 'check-circle'],
   info: 'info-circle',
-  danger: 'radiation',
-  warning: 'exclamation-triangle',
+  danger: 'biohazard',
+  warning: 'biohazard',
 };
 export const TypedMessageIcon = ({ type, ...props }) => (
   <Icon {...props} icon={messageIconTypes[type] || defaultMessageIcon} />
@@ -89,14 +89,10 @@ export const TypedMessageIcon = ({ type, ...props }) => (
 
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
-export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
+export const UserIcon = props => <Icon {...props} icon="head-side-mask" />;
 export const VisibleIcon = ({ visible = true, ...props }) =>
-  visible ? (
-    <Icon {...props} icon={['far', 'eye']} />
-  ) : (
-    <Icon {...props} icon={['far', 'eye-slash']} className="text-muted" />
-  );
-export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
+  visible ? <Icon {...props} icon="virus" /> : <Icon {...props} icon="virus-slash" className="text-muted" />;
+export const WarningIcon = props => <Icon {...props} icon="biohazard" />;
 
 ExpandCollapseIcon.propTypes = {
   isOpen: PropTypes.bool,

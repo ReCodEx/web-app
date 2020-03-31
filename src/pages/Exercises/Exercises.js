@@ -18,7 +18,7 @@ class Exercises extends Component {
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercise List" />,
-            iconName: 'puzzle-piece',
+            iconName: 'stethoscope',
           },
         ]}>
         <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>

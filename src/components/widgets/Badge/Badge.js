@@ -59,7 +59,7 @@ class Badge extends Component {
 
           <div className="small text-center halfem-margin-top">
             <Link to={EDIT_USER_URI_FACTORY(user.id)}>
-              <Icon icon="edit" className="text-warning" gapRight={!small} />
+              <Icon icon="syringe" className="text-warning" gapRight={!small} />
               {!small && <FormattedMessage id="generic.settings" defaultMessage="Settings" />}
             </Link>
 
@@ -79,7 +79,7 @@ class Badge extends Component {
                   e.preventDefault();
                   logout();
                 }}>
-                <Icon icon="sign-out-alt" className="text-danger" largeGapLeft={!small} gapRight={!small} />
+                <Icon icon="skull-crossbones" className="text-danger" largeGapLeft={!small} gapRight={!small} />
                 {!small && <FormattedMessage id="app.logout" defaultMessage="Logout" />}
               </a>
             </OverlayTrigger>

@@ -187,7 +187,7 @@ const AssignmentDetails = ({
         {!isStudent && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
-              <Icon icon="ban" />
+              <Icon icon="smoking-ban" />
             </td>
             <th>
               <FormattedMessage id="app.assignment.submissionsCountLimit" defaultMessage="Submission count limit" />:
@@ -199,7 +199,7 @@ const AssignmentDetails = ({
         {isStudent && (
           <tr>
             <td className="text-center shrink-col em-padding-left em-padding-right">
-              {canSubmit.canSubmit ? <Icon icon="coffee" /> : <Icon icon="ban" />}
+              {canSubmit.canSubmit ? <Icon icon="coffee" /> : <Icon icon="smoking-ban" />}
             </td>
             <th>
               <FormattedMessage id="app.assignment.alreadySubmitted" defaultMessage="Already submitted solutions" />:

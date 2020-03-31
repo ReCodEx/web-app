@@ -114,7 +114,7 @@ class Assignment extends Component {
           assignment && assignment.getIn(['data', 'exerciseId'])
             ? {
                 resource: assignment,
-                iconName: 'puzzle-piece',
+                iconName: 'stethoscope',
                 breadcrumb: assignment => ({
                   text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
                   link: ({ EXERCISE_URI_FACTORY }) =>

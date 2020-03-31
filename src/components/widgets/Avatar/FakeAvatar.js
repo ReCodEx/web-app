@@ -1,27 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Image } from 'react-bootstrap';
+import { URL_PATH_PREFIX } from '../../../helpers/config';
 
 const getSize = (size, borderWidth, small) => (small ? size * (2 / 3) : size) - 2 * borderWidth;
 
-const FakeAvatar = ({ size = 45, borderWidth = 2, light = false, children, small = false, altClassName = '' }) => (
+const FakeAvatar = ({ size = 45, borderWidth = 0, light = false, children, small = false, altClassName = '' }) => (
   <span
     style={{
       display: 'inline-block',
-      background: !light ? '#286090' : 'white',
-      color: !light ? 'white' : 'gray',
       textAlign: 'center',
       width: getSize(size, borderWidth, small),
       height: getSize(size, borderWidth, small),
       lineHeight: `${getSize(size, borderWidth, small) - 2 * borderWidth}px`,
-      borderStyle: 'solid',
-      borderWidth,
-      borderColor: !light ? 'transparent' : 'gray',
-      borderRadius: Math.floor(getSize(size, borderWidth, small) / 2),
       fontSize: Math.floor(Math.max(10, getSize(size, borderWidth, small) / 2)),
       fontWeight: 'bolder',
     }}
     className={altClassName}>
-    {children}
+    <Image
+      src={`${URL_PATH_PREFIX}/public/avatar.png`}
+      width={getSize(size, borderWidth, small)}
+      height={getSize(size, borderWidth, small)}
+    />
   </span>
 );
 

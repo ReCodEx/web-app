@@ -121,7 +121,7 @@ class GroupDetail extends Component {
       },
       {
         resource: group,
-        iconName: 'users',
+        iconName: 'viruses',
         breadcrumb: data =>
           data &&
           data.privateData && {
@@ -391,9 +391,7 @@ class GroupDetail extends Component {
                             <FormattedMessage id="app.group.createExercise" defaultMessage="Create Exercise in Group" />
                           </Button>
                         </p>
-                      ) : (
-                        undefined
-                      )
+                      ) : undefined
                     }
                     isOpen
                     unlimitedHeight>
@@ -491,9 +489,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     dispatch(removeShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId)),
 });
 
-export default withLinks(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(injectIntl(GroupDetail))
-);
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupDetail)));

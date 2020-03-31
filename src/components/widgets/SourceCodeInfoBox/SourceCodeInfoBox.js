@@ -4,7 +4,7 @@ import { SimpleInfoBox } from '../InfoBox';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 
 const SourceCodeInfoBox = ({ id, name, size, uploadedAt }) => (
-  <SimpleInfoBox title={name} description={prettyPrintBytes(size)} icon={['far', 'file-code']} />
+  <SimpleInfoBox title={name} description={prettyPrintBytes(size)} icon="biohazard" />
 );
 
 SourceCodeInfoBox.propTypes = {
