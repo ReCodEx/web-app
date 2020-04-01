@@ -94,7 +94,7 @@ class EditExerciseSimpleConfigForm extends Component {
             <p>
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.isHaskellOnly"
-                defaultMessage="The exercise is configured for Haskell. Haskell tests require a name of the entry-point function which is invoked as the main function (without arguments). The result of the function call is serialized to stdout and default ReCodEx judge compares it with the expected output. For testing purposes, you may provide your own testing functions in extra files. Remember, that extra files have to employ modules for code separation (whilst the submitted solution should be in the Main module)."
+                defaultMessage="The exercise is configured for Haskell. Haskell tests require a name of the entry-point function which is invoked as the main function (without arguments). The result of the function call is serialized to stdout and default ReCoVid judge compares it with the expected output. For testing purposes, you may provide your own testing functions in extra files. Remember, that extra files have to employ modules for code separation (whilst the submitted solution should be in the Main module)."
               />
             </p>
           </div>

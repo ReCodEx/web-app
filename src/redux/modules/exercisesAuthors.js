@@ -5,10 +5,10 @@ import { createRecord, resourceStatus, defaultNeedsRefetching, isLoading, getJsD
 import { selectedInstanceId } from '../selectors/auth';
 
 export const actionTypes = {
-  FETCH: 'recodex/exercisesAuthors/FETCH',
-  FETCH_PENDING: 'recodex/exercisesAuthors/FETCH_PENDING',
-  FETCH_FULFILLED: 'recodex/exercisesAuthors/FETCH_FULFILLED',
-  FETCH_REJECTED: 'recodex/exercisesAuthors/FETCH_REJECTED',
+  FETCH: 'recovid/exercisesAuthors/FETCH',
+  FETCH_PENDING: 'recovid/exercisesAuthors/FETCH_PENDING',
+  FETCH_FULFILLED: 'recovid/exercisesAuthors/FETCH_FULFILLED',
+  FETCH_REJECTED: 'recovid/exercisesAuthors/FETCH_REJECTED',
 };
 
 const createInitialState = (instanceId = null) =>

@@ -223,7 +223,7 @@ class User extends Component {
                   <div className="callout callout-success">
                     <h4>
                       <InfoIcon gapRight />
-                      <FormattedMessage id="app.user.welcomeTitle" defaultMessage="Welcome to ReCodEx" />
+                      <FormattedMessage id="app.user.welcomeTitle" defaultMessage="Welcome to ReCoVid" />
                     </h4>
                     <p>
                       <FormattedMessage

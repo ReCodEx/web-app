@@ -24,7 +24,7 @@ const RegistrationForm = ({
   error,
 }) => (
   <FormBox
-    title={<FormattedMessage id="app.registrationForm.title" defaultMessage="Create ReCodEx Account" />}
+    title={<FormattedMessage id="app.registrationForm.title" defaultMessage="Create ReCoVid Account" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
@@ -117,7 +117,7 @@ const RegistrationForm = ({
       label={
         <FormattedMessage
           id="app.externalRegistrationForm.gdprConfirm"
-          defaultMessage="I agree that my personal data will be processed by ReCodEx in accordance with GDPR policy."
+          defaultMessage="I agree that my personal data will be processed by ReCoVid in accordance with GDPR policy."
         />
       }
     />

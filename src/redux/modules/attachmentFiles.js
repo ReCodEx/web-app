@@ -11,13 +11,13 @@ const { actions, reduceActions } = factory({ resourceName });
  */
 
 export const actionTypes = {
-  ADD_FILES: 'recodex/attachmentFiles/ADD_FILES',
-  ADD_FILES_PENDING: 'recodex/attachmentFiles/ADD_FILES_PENDING',
-  ADD_FILES_FULFILLED: 'recodex/attachmentFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_REJECTED: 'recodex/attachmentFiles/ADD_FILES_REJECTED',
-  REMOVE_FILE: 'recodex/attachmentFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/attachmentFiles/REMOVE_FILE_FULFILLED',
-  DOWNLOAD_ATTACHMENT_ARCHIVE: 'recodex/attachmentFiles/DOWNLOAD_ATTACHMENT_ARCHIVE',
+  ADD_FILES: 'recovid/attachmentFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recovid/attachmentFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recovid/attachmentFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_REJECTED: 'recovid/attachmentFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recovid/attachmentFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recovid/attachmentFiles/REMOVE_FILE_FULFILLED',
+  DOWNLOAD_ATTACHMENT_ARCHIVE: 'recovid/attachmentFiles/DOWNLOAD_ATTACHMENT_ARCHIVE',
 };
 
 export const fetchAttachmentFiles = exerciseId =>

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import reducer from '../../../src/redux/modules/groupExercises';
 
-const actionType = 'recodex/resource/exercises/FETCH_MANY_FULFILLED';
+const actionType = 'recovid/resource/exercises/FETCH_MANY_FULFILLED';
 
 describe('Group exercises', () => {
   it('will return the same state if the ', () => {

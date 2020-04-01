@@ -7,8 +7,8 @@ const resourceName = 'submissionFailures';
 var { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
-  RESOLVE: 'recodex/submissionFailures/RESOLVE',
-  RESOLVE_FULFILLED: 'recodex/submissionFailures/RESOLVE_FULFILLED',
+  RESOLVE: 'recovid/submissionFailures/RESOLVE',
+  RESOLVE_FULFILLED: 'recovid/submissionFailures/RESOLVE_FULFILLED',
 };
 
 /**

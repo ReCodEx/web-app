@@ -17,8 +17,8 @@ const { actionTypes, actions, reduceActions } = factory({
 
 export { actionTypes };
 export const additionalActionTypes = {
-  DOWNLOAD_EVALUATION_ARCHIVE: 'recodex/files/DOWNLOAD_EVALUATION_ARCHIVE',
-  DOWNLOAD_SOLUTION_ARCHIVE: 'recodex/files/DOWNLOAD_SOLUTION_ARCHIVE',
+  DOWNLOAD_EVALUATION_ARCHIVE: 'recovid/files/DOWNLOAD_EVALUATION_ARCHIVE',
+  DOWNLOAD_SOLUTION_ARCHIVE: 'recovid/files/DOWNLOAD_SOLUTION_ARCHIVE',
 };
 
 export const fetchReferenceSolutionEvaluation = actions.fetchResource;

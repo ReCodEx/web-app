@@ -6,11 +6,11 @@ import { createApiAction } from '../middleware/apiMiddleware';
 import { safeGet } from '../../helpers/common';
 
 export const actionTypes = {
-  REMOVE_USER: 'recodex/userSwitching/REMOVE_USER',
-  REFRESH_TOKEN: 'recodex/userSwitching/REFRESH_TOKEN',
-  REFRESH_TOKEN_PENDING: 'recodex/userSwitching/REFRESH_TOKEN_PENDING',
-  REFRESH_TOKEN_FULFILLED: 'recodex/userSwitching/REFRESH_TOKEN_FULFILLED',
-  REFRESH_TOKEN_REJECTED: 'recodex/userSwitching/REFRESH_TOKEN_REJECTED',
+  REMOVE_USER: 'recovid/userSwitching/REMOVE_USER',
+  REFRESH_TOKEN: 'recovid/userSwitching/REFRESH_TOKEN',
+  REFRESH_TOKEN_PENDING: 'recovid/userSwitching/REFRESH_TOKEN_PENDING',
+  REFRESH_TOKEN_FULFILLED: 'recovid/userSwitching/REFRESH_TOKEN_FULFILLED',
+  REFRESH_TOKEN_REJECTED: 'recovid/userSwitching/REFRESH_TOKEN_REJECTED',
 };
 
 export const removeUser = createAction(actionTypes.REMOVE_USER);

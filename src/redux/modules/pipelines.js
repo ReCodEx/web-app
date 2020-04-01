@@ -12,11 +12,11 @@ const resourceName = 'pipelines';
 const { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
-  VALIDATE_PIPELINE: 'recodex/pipelines/VALIDATE_PIPELINE',
-  FORK_PIPELINE: 'recodex/pipelines/FORK_PIPELINE',
-  FORK_PIPELINE_PENDING: 'recodex/pipelines/FORK_PIPELINE_PENDING',
-  FORK_PIPELINE_REJECTED: 'recodex/pipelines/FORK_PIPELINE_REJECTED',
-  FORK_PIPELINE_FULFILLED: 'recodex/pipelines/FORK_PIPELINE_FULFILLED',
+  VALIDATE_PIPELINE: 'recovid/pipelines/VALIDATE_PIPELINE',
+  FORK_PIPELINE: 'recovid/pipelines/FORK_PIPELINE',
+  FORK_PIPELINE_PENDING: 'recovid/pipelines/FORK_PIPELINE_PENDING',
+  FORK_PIPELINE_REJECTED: 'recovid/pipelines/FORK_PIPELINE_REJECTED',
+  FORK_PIPELINE_FULFILLED: 'recovid/pipelines/FORK_PIPELINE_FULFILLED',
 };
 
 export const fetchPipeline = actions.fetchResource;

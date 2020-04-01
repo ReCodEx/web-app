@@ -320,7 +320,7 @@ class EditExerciseConfig extends Component {
                             {isSimple(exercise) ? (
                               <FormattedMessage
                                 id="app.editExerciseConfig.changeConfigAdvancedExplain"
-                                defaultMessage="Changing to advanced configuration will allow you to use custom pipelines and manually configure their parameters. The exercise may also have a custom environment configuration alowing arbitrary constraints on which files are submitted by the students. A deeper understanding of the ReCodEx evaluation process is required to set the configuration correctly. Please note that advanced configurations may have only one runtime environment (so it is not possible to convert simple configurations with multiple environments set)."
+                                defaultMessage="Changing to advanced configuration will allow you to use custom pipelines and manually configure their parameters. The exercise may also have a custom environment configuration alowing arbitrary constraints on which files are submitted by the students. A deeper understanding of the ReCoVid evaluation process is required to set the configuration correctly. Please note that advanced configurations may have only one runtime environment (so it is not possible to convert simple configurations with multiple environments set)."
                               />
                             ) : (
                               <FormattedMessage

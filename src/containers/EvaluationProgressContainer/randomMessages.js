@@ -59,7 +59,7 @@ export default defineMessages({
   },
   m21: {
     id: 'app.randomMessages.m21',
-    defaultMessage: 'Nalezena chyba v ReCodExu, hlavně to opravit hodně rychle',
+    defaultMessage: 'Nalezena chyba v ReCoVidu, hlavně to opravit hodně rychle',
   },
   m22: {
     id: 'app.randomMessages.m22',

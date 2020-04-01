@@ -22,7 +22,7 @@ app.get('*', (req, res) => {
     html: '',
     head: {
       htmlAttributes: 'lang="cs"',
-      title: '<title>ReCodEx</title>',
+      title: '<title>ReCoVid</title>',
       meta: '',
       link: '',
     },

@@ -86,7 +86,7 @@ class SisIntegration extends Component {
                 <UserIcon gapRight />
                 <FormattedMessage
                   id="app.sisIntegration.identityInfo"
-                  defaultMessage="Your ReCodEx account is associated with SIS identity identifier '{externalId}'."
+                  defaultMessage="Your ReCoVid account is associated with SIS identity identifier '{externalId}'."
                   values={{ externalId }}
                 />
               </div>
@@ -176,7 +176,7 @@ class SisIntegration extends Component {
             <div className="callout callout-warning">
               <FormattedMessage
                 id="app.sisIntegration.noCasIdentifier"
-                defaultMessage="Your ReCodEx account is not associated with any SIS identity identifier."
+                defaultMessage="Your ReCoVid account is not associated with any SIS identity identifier."
               />
             </div>
           );

@@ -21,27 +21,27 @@ describe('Resource manager', () => {
     it('must create all defined actions according to the given resource name', () => {
       const resourceName = 'blabla';
       expect(actionTypesFactory(resourceName)).to.eql({
-        FETCH: `recodex/resource/${resourceName}/FETCH`,
-        FETCH_PENDING: `recodex/resource/${resourceName}/FETCH_PENDING`,
-        FETCH_FULFILLED: `recodex/resource/${resourceName}/FETCH_FULFILLED`,
-        FETCH_REJECTED: `recodex/resource/${resourceName}/FETCH_REJECTED`,
-        ADD: `recodex/resource/${resourceName}/ADD`,
-        ADD_PENDING: `recodex/resource/${resourceName}/ADD_PENDING`,
-        ADD_FULFILLED: `recodex/resource/${resourceName}/ADD_FULFILLED`,
-        ADD_REJECTED: `recodex/resource/${resourceName}/ADD_REJECTED`,
-        UPDATE: `recodex/resource/${resourceName}/UPDATE`,
-        UPDATE_PENDING: `recodex/resource/${resourceName}/UPDATE_PENDING`,
-        UPDATE_FULFILLED: `recodex/resource/${resourceName}/UPDATE_FULFILLED`,
-        UPDATE_REJECTED: `recodex/resource/${resourceName}/UPDATE_REJECTED`,
-        REMOVE: `recodex/resource/${resourceName}/REMOVE`,
-        REMOVE_PENDING: `recodex/resource/${resourceName}/REMOVE_PENDING`,
-        REMOVE_FULFILLED: `recodex/resource/${resourceName}/REMOVE_FULFILLED`,
-        REMOVE_REJECTED: `recodex/resource/${resourceName}/REMOVE_REJECTED`,
-        FETCH_MANY: `recodex/resource/${resourceName}/FETCH_MANY`,
-        FETCH_MANY_PENDING: `recodex/resource/${resourceName}/FETCH_MANY_PENDING`,
-        FETCH_MANY_FULFILLED: `recodex/resource/${resourceName}/FETCH_MANY_FULFILLED`,
-        FETCH_MANY_REJECTED: `recodex/resource/${resourceName}/FETCH_MANY_REJECTED`,
-        INVALIDATE: `recodex/resource/${resourceName}/INVALIDATE`
+        FETCH: `recovid/resource/${resourceName}/FETCH`,
+        FETCH_PENDING: `recovid/resource/${resourceName}/FETCH_PENDING`,
+        FETCH_FULFILLED: `recovid/resource/${resourceName}/FETCH_FULFILLED`,
+        FETCH_REJECTED: `recovid/resource/${resourceName}/FETCH_REJECTED`,
+        ADD: `recovid/resource/${resourceName}/ADD`,
+        ADD_PENDING: `recovid/resource/${resourceName}/ADD_PENDING`,
+        ADD_FULFILLED: `recovid/resource/${resourceName}/ADD_FULFILLED`,
+        ADD_REJECTED: `recovid/resource/${resourceName}/ADD_REJECTED`,
+        UPDATE: `recovid/resource/${resourceName}/UPDATE`,
+        UPDATE_PENDING: `recovid/resource/${resourceName}/UPDATE_PENDING`,
+        UPDATE_FULFILLED: `recovid/resource/${resourceName}/UPDATE_FULFILLED`,
+        UPDATE_REJECTED: `recovid/resource/${resourceName}/UPDATE_REJECTED`,
+        REMOVE: `recovid/resource/${resourceName}/REMOVE`,
+        REMOVE_PENDING: `recovid/resource/${resourceName}/REMOVE_PENDING`,
+        REMOVE_FULFILLED: `recovid/resource/${resourceName}/REMOVE_FULFILLED`,
+        REMOVE_REJECTED: `recovid/resource/${resourceName}/REMOVE_REJECTED`,
+        FETCH_MANY: `recovid/resource/${resourceName}/FETCH_MANY`,
+        FETCH_MANY_PENDING: `recovid/resource/${resourceName}/FETCH_MANY_PENDING`,
+        FETCH_MANY_FULFILLED: `recovid/resource/${resourceName}/FETCH_MANY_FULFILLED`,
+        FETCH_MANY_REJECTED: `recovid/resource/${resourceName}/FETCH_MANY_REJECTED`,
+        INVALIDATE: `recovid/resource/${resourceName}/INVALIDATE`
       });
     });
   });

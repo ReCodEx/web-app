@@ -11,13 +11,13 @@ const { actions, reduceActions } = factory({ resourceName });
  */
 
 export const actionTypes = {
-  ADD_FILES: 'recodex/supplementaryFiles/ADD_FILES',
-  ADD_FILES_PENDING: 'recodex/supplementaryFiles/ADD_FILES_PENDING',
-  ADD_FILES_FULFILLED: 'recodex/supplementaryFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_REJECTED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED',
-  REMOVE_FILE: 'recodex/supplementaryFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/supplementaryFiles/REMOVE_FILE_FULFILLED',
-  DOWNLOAD_SUPPLEMENTARY_ARCHIVE: 'recodex/supplementaryFiles/DOWNLOAD_SUPPLEMENTARY_ARCHIVE',
+  ADD_FILES: 'recovid/supplementaryFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recovid/supplementaryFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recovid/supplementaryFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_REJECTED: 'recovid/supplementaryFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recovid/supplementaryFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recovid/supplementaryFiles/REMOVE_FILE_FULFILLED',
+  DOWNLOAD_SUPPLEMENTARY_ARCHIVE: 'recovid/supplementaryFiles/DOWNLOAD_SUPPLEMENTARY_ARCHIVE',
 };
 
 export const fetchSupplementaryFilesForExercise = exerciseId =>

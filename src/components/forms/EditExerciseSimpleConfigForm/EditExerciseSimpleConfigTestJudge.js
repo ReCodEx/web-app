@@ -10,35 +10,35 @@ import Confirm from '../../forms/Confirm';
 
 const messages = defineMessages({
   normal: {
-    id: 'recodex-judge-normal',
+    id: 'recovid-judge-normal',
     defaultMessage: 'Token judge',
   },
   float: {
-    id: 'recodex-judge-float',
+    id: 'recovid-judge-float',
     defaultMessage: 'Float-numbers judge',
   },
   normalNewline: {
-    id: 'recodex-judge-normal-newline',
+    id: 'recovid-judge-normal-newline',
     defaultMessage: 'Token judge (ignoring ends of lines)',
   },
   floatNewline: {
-    id: 'recodex-judge-float-newline',
+    id: 'recovid-judge-float-newline',
     defaultMessage: 'Float-numbers judge (ignoring ends of lines)',
   },
   shuffle: {
-    id: 'recodex-judge-shuffle',
+    id: 'recovid-judge-shuffle',
     defaultMessage: 'Unordered-tokens judge',
   },
   shuffleRows: {
-    id: 'recodex-judge-shuffle-rows',
+    id: 'recovid-judge-shuffle-rows',
     defaultMessage: 'Unordered-rows judge',
   },
   shuffleAll: {
-    id: 'recodex-judge-shuffle-all',
+    id: 'recovid-judge-shuffle-all',
     defaultMessage: 'Unordered-tokens-and-rows judge',
   },
   shuffleNewline: {
-    id: 'recodex-judge-shuffle-newline',
+    id: 'recovid-judge-shuffle-newline',
     defaultMessage: 'Unordered-tokens judge (ignoring ends of lines)',
   },
   diff: {
@@ -106,35 +106,35 @@ const EditExerciseSimpleConfigTestJudge = ({
         component={SelectField}
         options={[
           {
-            key: 'recodex-judge-normal',
+            key: 'recovid-judge-normal',
             name: intl.formatMessage(messages.normal),
           },
           {
-            key: 'recodex-judge-float',
+            key: 'recovid-judge-float',
             name: intl.formatMessage(messages.float),
           },
           {
-            key: 'recodex-judge-normal-newline',
+            key: 'recovid-judge-normal-newline',
             name: intl.formatMessage(messages.normalNewline),
           },
           {
-            key: 'recodex-judge-float-newline',
+            key: 'recovid-judge-float-newline',
             name: intl.formatMessage(messages.floatNewline),
           },
           {
-            key: 'recodex-judge-shuffle',
+            key: 'recovid-judge-shuffle',
             name: intl.formatMessage(messages.shuffle),
           },
           {
-            key: 'recodex-judge-shuffle-rows',
+            key: 'recovid-judge-shuffle-rows',
             name: intl.formatMessage(messages.shuffleRows),
           },
           {
-            key: 'recodex-judge-shuffle-all',
+            key: 'recovid-judge-shuffle-all',
             name: intl.formatMessage(messages.shuffleAll),
           },
           {
-            key: 'recodex-judge-shuffle-newline',
+            key: 'recovid-judge-shuffle-newline',
             name: intl.formatMessage(messages.shuffleNewline),
           },
           {

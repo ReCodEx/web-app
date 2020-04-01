@@ -120,7 +120,7 @@ class SisSupervisorGroupsContainer extends Component {
           <p className="text-muted">
             <FormattedMessage
               id="app.sisSupervisor.sisGroupsCreateExplain"
-              defaultMessage="SIS courses you teach in particular semesters and which have mapping to ReCodEx. You may create new groups with binding or bind existing groups to these courses."
+              defaultMessage="SIS courses you teach in particular semesters and which have mapping to ReCoVid. You may create new groups with binding or bind existing groups to these courses."
             />
           </p>
           <p className="callout callout-warning">
@@ -338,7 +338,7 @@ class SisSupervisorGroupsContainer extends Component {
                                               <b>
                                                 <FormattedMessage
                                                   id="app.sisSupervisor.noSisGroups"
-                                                  defaultMessage="Currently there are no ReCodEx groups matching this SIS course."
+                                                  defaultMessage="Currently there are no ReCoVid groups matching this SIS course."
                                                 />
                                               </b>
                                             </p>
@@ -385,7 +385,7 @@ class SisSupervisorGroupsContainer extends Component {
                                     <b>
                                       <FormattedMessage
                                         id="app.sisIntegration.noSisGroups"
-                                        defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
+                                        defaultMessage="Currently there are no ReCoVid groups matching your SIS subjects for this time period."
                                       />
                                     </b>
                                   </p>

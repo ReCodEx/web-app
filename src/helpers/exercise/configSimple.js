@@ -271,7 +271,7 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
       useOutFile: Boolean(actualOutput), // add checkbox property for the form
     })),
   new Variable('stdin-file', 'remote-file'),
-  new Variable('judge-type', 'string', 'recodex-judge-normal').setTransformPostprocess((value, formDataTest) =>
+  new Variable('judge-type', 'string', 'recovid-judge-normal').setTransformPostprocess((value, formDataTest) =>
     formDataTest.useCustomJudge ? '' : value
   ),
   new Variable('custom-judge', 'remote-file')
@@ -311,7 +311,7 @@ const _ENV_SPECIFIC_VARS_DESCRIPTORS = {
   [ENV_HASKELL_ID]: [
     new Variable('expected-output', 'remote-file'),
     new Variable('stdin-file', 'remote-file'),
-    new Variable('judge-type', 'string', 'recodex-judge-normal'),
+    new Variable('judge-type', 'string', 'recovid-judge-normal'),
     new Variable('custom-judge', 'remote-file'),
     new Variable('judge-args', 'string[]'),
     new FileListVariable('input-files', 'actual-inputs'),

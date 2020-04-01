@@ -14,14 +14,14 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
     title={
       <FormattedMessage
         id="app.homepage.title"
-        defaultMessage="ReCodEx — Code Examinator Reloaded"
+        defaultMessage="ReCoVid — Code Examinator Reloaded"
         description="Homepage title"
       />
     }
     description={
       <FormattedMessage
         id="app.homepage.description"
-        defaultMessage="ReCodEx - homepage"
+        defaultMessage="ReCoVid - homepage"
         description="Homepage description"
       />
     }>
@@ -32,12 +32,12 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
         </Col>
         <Col sm={6}>
           <h2>
-            <FormattedMessage id="app.homepage.whatIsRecodex" defaultMessage="What is ReCodEx?" />
+            <FormattedMessage id="app.homepage.whatIsRecodex" defaultMessage="What is ReCoVid?" />
           </h2>
           <p>
             <FormattedMessage
               id="app.homepage.whatIsRecodexContent"
-              defaultMessage="ReCodEx is a system for dynamic analysis and evaluation of programming exercises. It is a set of components that allow supervisors to assign practical programming problems to students through a web interface. After solving each problem, students upload their solution to the system and ReCodEx automaticaly evaluates it (typically checking the correctness of program output) and assigns an appropriate number of points. Students have quick feedback about their solution and supervisors do not have to manually check each solution for basic correctness (like that the program compiles and gives correct results in a reasonable amount of time)."
+              defaultMessage="ReCoVid is a system for dynamic analysis and evaluation of programming exercises. It is a set of components that allow supervisors to assign practical programming problems to students through a web interface. After solving each problem, students upload their solution to the system and ReCoVid automaticaly evaluates it (typically checking the correctness of program output) and assigns an appropriate number of points. Students have quick feedback about their solution and supervisors do not have to manually check each solution for basic correctness (like that the program compiles and gives correct results in a reasonable amount of time)."
             />
           </p>
         </Col>
@@ -50,7 +50,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
           <p>
             <FormattedHTMLMessage
               id="app.homepage.aboutContentP1"
-              defaultMessage='ReCodEx was born in 2016 as a project for the <i>Software Project</i> class. It is a replacement for the previous system CodEx used at MFF UK since 2006. The project is open source under the <a href="https://opensource.org/licenses/MIT">MIT</a> licence hosted on <a href="https://github.com/ReCodEx">GitHub</a>. More detailed info is on the <a href="https://github.com/ReCodEx/wiki/wiki">Wiki</a> page of the project.'
+              defaultMessage='ReCoVid was born in 2016 as a project for the <i>Software Project</i> class. It is a replacement for the previous system CodEx used at MFF UK since 2006. The project is open source under the <a href="https://opensource.org/licenses/MIT">MIT</a> licence hosted on <a href="https://github.com/ReCodEx">GitHub</a>. More detailed info is on the <a href="https://github.com/ReCodEx/wiki/wiki">Wiki</a> page of the project.'
             />
           </p>
           <p>
@@ -97,7 +97,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
           <p>
             <FormattedHTMLMessage
               id="app.homepage.helpContent"
-              defaultMessage='If you have any issues with ReCodEx, please consult the <a href="https://github.com/ReCodEx/wiki/wiki/User-documentation">user documentation</a> first.'
+              defaultMessage='If you have any issues with ReCoVid, please consult the <a href="https://github.com/ReCodEx/wiki/wiki/User-documentation">user documentation</a> first.'
             />
           </p>
         </Col>
@@ -114,7 +114,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
           <p className="text-center">
             <a href={GITHUB_BUGS_URL} target="_blank" rel="noopener noreferrer" className="btn btn-flat btn-default">
               <Icon icon={['fab', 'github']} gapRight />
-              <FormattedMessage defaultMessage="ReCodEx Webapp Repository" id="app.homepage.githubWebappRepository" />
+              <FormattedMessage defaultMessage="ReCoVid Webapp Repository" id="app.homepage.githubWebappRepository" />
             </a>
           </p>
         </Col>

@@ -1,10 +1,10 @@
-%define name recodex-web
+%define name recovid-web
 %define short_name web-app
 %define version 1.21.0
 %define unmangled_version e148ce468a06b87ad85a65681c45aa4f8edc6b86
 %define release 2
 
-Summary: ReCodEx web-app component
+Summary: ReCoVid web-app component
 Name: %{name}
 Version: %{version}
 Release: %{release}
@@ -26,7 +26,7 @@ Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.t
 %define debug_package %{nil}
 
 %description
-Web-app of ReCodEx programmer testing solution.
+Web-app of ReCoVid programmer testing solution.
 
 %prep
 %setup -n %{short_name}-%{unmangled_version}
@@ -48,27 +48,27 @@ __EOF
 install -d  %{buildroot}/opt/%{name}
 cp -r ./prod/* %{buildroot}/opt/%{name}
 install -d %{buildroot}/lib/systemd/system
-cp -r install/recodex-web.service %{buildroot}/lib/systemd/system/recodex-web.service
+cp -r install/recovid-web.service %{buildroot}/lib/systemd/system/recovid-web.service
 
 %clean
 
 
 %post
-%systemd_post 'recodex-web.service'
+%systemd_post 'recovid-web.service'
 
 %postun
-%systemd_postun_with_restart 'recodex-web.service'
+%systemd_postun_with_restart 'recovid-web.service'
 
 %pre
-getent group recodex >/dev/null || groupadd -r recodex
-getent passwd recodex >/dev/null || useradd -r -g recodex -d %{_sysconfdir}/recodex -s /sbin/nologin -c "ReCodEx Code Examiner" recodex
+getent group recovid >/dev/null || groupadd -r recovid
+getent passwd recovid >/dev/null || useradd -r -g recovid -d %{_sysconfdir}/recovid -s /sbin/nologin -c "ReCoVid Code Examiner" recovid
 exit 0
 
 %preun
-%systemd_preun 'recodex-web.service'
+%systemd_preun 'recovid-web.service'
 
 %files
-%defattr(-,recodex,recodex)
+%defattr(-,recovid,recovid)
 %dir /opt/%{name}
 
 /opt/%{name}/bin/*
@@ -76,8 +76,8 @@ exit 0
 /opt/%{name}/views/*
 %config(noreplace) /opt/%{name}/etc/env.json
 
-#%{_unitdir}/recodex-web.service
-%attr(-,root,root) /lib/systemd/system/recodex-web.service
+#%{_unitdir}/recovid-web.service
+%attr(-,root,root) /lib/systemd/system/recovid-web.service
 
 %changelog
 

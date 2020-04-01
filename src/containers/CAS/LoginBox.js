@@ -17,7 +17,7 @@ const LoginBox = ({ login, fail, status }) => (
           <p className="callout callout-danger em-margin-top">
             <FormattedMessage
               id="app.cas.login.failed"
-              defaultMessage="Signing to ReCodEx using UK-CAS authentication process failed. This usually means that you either do not have an account in ReCodEx yet, the account is disabled, or binding between your account and CAS identity has not been created."
+              defaultMessage="Signing to ReCoVid using UK-CAS authentication process failed. This usually means that you either do not have an account in ReCoVid yet, the account is disabled, or binding between your account and CAS identity has not been created."
             />
           </p>
         )}
@@ -25,7 +25,7 @@ const LoginBox = ({ login, fail, status }) => (
     }>
     <FormattedMessage
       id="app.cas.login.description"
-      defaultMessage="After you click on the button below, you will be redirected to CAS UK. After you are authenticated, the popup window will be closed and you will be logged into ReCodEx."
+      defaultMessage="After you click on the button below, you will be redirected to CAS UK. After you are authenticated, the popup window will be closed and you will be logged into ReCoVid."
     />
   </Box>
 );

@@ -11,16 +11,16 @@ import {
 import { selectedInstanceId } from '../selectors/auth';
 
 export const actionTypes = {
-  REGISTER: 'recodex/pagination/REGISTER',
-  SET_OFFSET: 'recodex/pagination/SET_OFFSET',
-  SET_LIMIT: 'recodex/pagination/SET_LIMIT',
-  SET_OFFSET_LIMIT: 'recodex/pagination/SET_OFFSET_LIMIT',
-  SET_FILTERS: 'recodex/pagination/SET_FILTERS',
-  SET_ORDERBY: 'recodex/pagination/SET_ORDERBY',
-  FETCH_PAGINATED: 'recodex/pagination/FETCH_PAGINATED',
-  FETCH_PAGINATED_PENDING: 'recodex/pagination/FETCH_PAGINATED_PENDING',
-  FETCH_PAGINATED_FULFILLED: 'recodex/pagination/FETCH_PAGINATED_FULFILLED',
-  FETCH_PAGINATED_REJECTED: 'recodex/pagination/FETCH_PAGINATED_REJECTED',
+  REGISTER: 'recovid/pagination/REGISTER',
+  SET_OFFSET: 'recovid/pagination/SET_OFFSET',
+  SET_LIMIT: 'recovid/pagination/SET_LIMIT',
+  SET_OFFSET_LIMIT: 'recovid/pagination/SET_OFFSET_LIMIT',
+  SET_FILTERS: 'recovid/pagination/SET_FILTERS',
+  SET_ORDERBY: 'recovid/pagination/SET_ORDERBY',
+  FETCH_PAGINATED: 'recovid/pagination/FETCH_PAGINATED',
+  FETCH_PAGINATED_PENDING: 'recovid/pagination/FETCH_PAGINATED_PENDING',
+  FETCH_PAGINATED_FULFILLED: 'recovid/pagination/FETCH_PAGINATED_FULFILLED',
+  FETCH_PAGINATED_REJECTED: 'recovid/pagination/FETCH_PAGINATED_REJECTED',
 };
 
 const paginationStructure = {

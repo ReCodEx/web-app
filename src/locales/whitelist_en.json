@@ -1406,12 +1406,12 @@
   "generic.uploadedAt",
   "generic.validating",
   "generic.version",
-  "recodex-judge-float",
-  "recodex-judge-float-newline",
-  "recodex-judge-normal",
-  "recodex-judge-normal-newline",
-  "recodex-judge-shuffle",
-  "recodex-judge-shuffle-all",
-  "recodex-judge-shuffle-newline",
-  "recodex-judge-shuffle-rows"
+  "recovid-judge-float",
+  "recovid-judge-float-newline",
+  "recovid-judge-normal",
+  "recovid-judge-normal-newline",
+  "recovid-judge-shuffle",
+  "recovid-judge-shuffle-all",
+  "recovid-judge-shuffle-newline",
+  "recovid-judge-shuffle-rows"
 ]

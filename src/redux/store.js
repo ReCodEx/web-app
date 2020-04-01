@@ -15,7 +15,7 @@ import { actionTypes as authActionTypes } from './modules/authTypes';
 import { actionTypes as switchingActionTypes } from './modules/userSwitching';
 import { getConfigVar } from '../helpers/config';
 
-const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
+const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recovid';
 
 const engine = filter(createEngine(`${PERSISTENT_TOKENS_KEY_PREFIX}/store`), ['userSwitching']);
 

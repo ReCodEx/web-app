@@ -210,7 +210,7 @@ class EditAssignment extends Component {
                     <p>
                       <FormattedMessage
                         id="app.editAssignment.deleteAssignmentWarning"
-                        defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
+                        defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCoVid if you wanted to restore the assignment in the future."
                       />
                     </p>
                     <p className="text-center">

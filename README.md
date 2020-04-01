@@ -1,9 +1,9 @@
-# ReCodEx
+# ReCoVid
 
 [![Build Status](https://travis-ci.org/ReCodEx/web-app.svg?branch=master)](https://travis-ci.org/ReCodEx/web-app)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![GitHub release](https://img.shields.io/github/release/recodex/web-app.svg)](https://github.com/ReCodEx/wiki/wiki/Changelog)
-[![COPR](https://copr.fedorainfracloud.org/coprs/semai/ReCodEx/package/recodex-web/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/semai/ReCodEx/)
+[![COPR](https://copr.fedorainfracloud.org/coprs/semai/ReCodEx/package/recovid-web/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/semai/ReCodEx/)
 
 ## Installation
 
@@ -44,7 +44,7 @@ automatically start on boot on one of our computers for no reason).
 ### RPM package
 
 For Linux systems with RPM packages (CentOS, Fedora) we provide prebuilt
-packages. They install production bundle to `/opt/recodex-web` directory.
+packages. They install production bundle to `/opt/recovid-web` directory.
 Provided unit file can be used to run the app with SystemD. The app itself do
 not care about certificates, so it is recommended to use the app behind reverse
 proxy of your choice.
@@ -79,14 +79,14 @@ Sample content of this file is following:
 {
   "PORT": 8080,
   "API_BASE": "https://recodex.base.domain/api/v1",
-  "TITLE": "ReCodEx",
+  "TITLE": "ReCoVid",
   "SKIN": "skin-green",
   "ALLOW_NORMAL_REGISTRATION": true,
   "ALLOW_LDAP_REGISTRATION": false,
   "ALLOW_CAS_REGISTRATION": true,
   "URL_PATH_PREFIX": "",
-  "PERSISTENT_TOKENS_KEY_PREFIX": "recodex",
-  "CAS_HELPDESK_URL": "mailto:recodex@example.domain"
+  "PERSISTENT_TOKENS_KEY_PREFIX": "recovid",
+  "CAS_HELPDESK_URL": "mailto:recovid@example.domain"
 }
 ```
 
@@ -97,8 +97,8 @@ Meaning of individual values:
 * `TITLE` - Prefix for the web page title.
 * `SKIN` - Which [skin color](https://adminlte.io/themes/AdminLTE/documentation/index.html) of the AdminLTE should be used.
 * `ALLOW_*` - Allows or disables different forms for registration. Note that this configuration should match which registration types are supported by the API.
-* `URL_PATH_PREFIX` - If the ReCodEx is not placed in the root path of the current domain, the path prefix should be placed here. This also allows running multiple ReCodEx frontends on one domain.
-* `PERSISTENT_TOKENS_KEY_PREFIX` - Prefix used for security token identifiers (in cookies or in local storage). If you run multiple ReCodEx instances on the same domain, it might be necessary to give each instance different prefix.
+* `URL_PATH_PREFIX` - If the ReCoVid is not placed in the root path of the current domain, the path prefix should be placed here. This also allows running multiple ReCoVid frontends on one domain.
+* `PERSISTENT_TOKENS_KEY_PREFIX` - Prefix used for security token identifiers (in cookies or in local storage). If you run multiple ReCoVid instances on the same domain, it might be necessary to give each instance different prefix.
 * `CAS_HELPDESK_URL` - URL for a link that is displayed in case CAS registration fails. The URL may be either `mailto:` URL (with email to tech support) or `http(s):` URL leading to a web page where help can be found.
 
 ## Usage
@@ -135,4 +135,4 @@ There is `.env-sample` file which can be just copied and altered.
 
 ## Documentation
 
-The descriptin and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki) of the ReCodEx project.
+The descriptin and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki) of the ReCoVid project.

@@ -14,19 +14,19 @@ export const submissionStatus = {
 };
 
 export const actionTypes = {
-  INIT: 'recodex/submission/INIT',
-  CANCEL: 'recodex/submission/CANCEL',
-  CHANGE_NOTE: 'recodex/submission/CHANGE_NOTE',
-  SUBMIT: 'recodex/submission/SUBMIT',
-  SUBMIT_PENDING: 'recodex/submission/SUBMIT_PENDING',
-  SUBMIT_FULFILLED: 'recodex/submission/SUBMIT_FULFILLED',
-  SUBMIT_REJECTED: 'recodex/submission/SUBMIT_REJECTED',
-  PRESUBMIT: 'recodex/submission/PRESUBMIT',
-  PRESUBMIT_RESET: 'recodex/submission/PRESUBMIT_RESET',
-  PRESUBMIT_PENDING: 'recodex/submission/PRESUBMIT_PENDING',
-  PRESUBMIT_FULFILLED: 'recodex/submission/PRESUBMIT_FULFILLED',
-  PRESUBMIT_REJECTED: 'recodex/submission/PRESUBMIT_REJECTED',
-  PROCESSING_FINISHED: 'recodex/submission/PROCESSING_FINISHED',
+  INIT: 'recovid/submission/INIT',
+  CANCEL: 'recovid/submission/CANCEL',
+  CHANGE_NOTE: 'recovid/submission/CHANGE_NOTE',
+  SUBMIT: 'recovid/submission/SUBMIT',
+  SUBMIT_PENDING: 'recovid/submission/SUBMIT_PENDING',
+  SUBMIT_FULFILLED: 'recovid/submission/SUBMIT_FULFILLED',
+  SUBMIT_REJECTED: 'recovid/submission/SUBMIT_REJECTED',
+  PRESUBMIT: 'recovid/submission/PRESUBMIT',
+  PRESUBMIT_RESET: 'recovid/submission/PRESUBMIT_RESET',
+  PRESUBMIT_PENDING: 'recovid/submission/PRESUBMIT_PENDING',
+  PRESUBMIT_FULFILLED: 'recovid/submission/PRESUBMIT_FULFILLED',
+  PRESUBMIT_REJECTED: 'recovid/submission/PRESUBMIT_REJECTED',
+  PROCESSING_FINISHED: 'recovid/submission/PROCESSING_FINISHED',
 };
 
 export const initialState = fromJS({

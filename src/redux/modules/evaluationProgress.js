@@ -22,13 +22,13 @@ export const initialState = fromJS({
  */
 
 export const actionTypes = {
-  INIT: 'recodex/evaluationProgress/INIT',
-  FINISH: 'recodex/evaluationProgress/FINISH',
-  COMPLETED_TASK: 'recodex/evaluationProgress/COMPLETED_TASK',
-  SKIPPED_TASK: 'recodex/evaluationProgress/SKIPPED_TASK',
-  FAILED_TASK: 'recodex/evaluationProgress/FAILED_TASK',
-  ADD_MESSAGE: 'recodex/evaluationProgress/ADD_MESSAGE',
-  DROP_OBSERVER: 'recodex/evaluationProgress/DROP_OBSERVER',
+  INIT: 'recovid/evaluationProgress/INIT',
+  FINISH: 'recovid/evaluationProgress/FINISH',
+  COMPLETED_TASK: 'recovid/evaluationProgress/COMPLETED_TASK',
+  SKIPPED_TASK: 'recovid/evaluationProgress/SKIPPED_TASK',
+  FAILED_TASK: 'recovid/evaluationProgress/FAILED_TASK',
+  ADD_MESSAGE: 'recovid/evaluationProgress/ADD_MESSAGE',
+  DROP_OBSERVER: 'recovid/evaluationProgress/DROP_OBSERVER',
 };
 
 export const init = createAction(actionTypes.INIT, (webSocketChannelId, expectedTasksCount) => ({

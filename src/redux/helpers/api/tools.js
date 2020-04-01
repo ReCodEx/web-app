@@ -123,7 +123,7 @@ export const logout = () => ({
 });
 
 export const SESSION_EXPIRED_MESSAGE =
-  'Your session expired and you were automatically logged out of the ReCodEx system.';
+  'Your session expired and you were automatically logged out of the ReCoVid system.';
 export const LOGIN_URI_PREFIX = 'login';
 
 export const createLoginLinkWithRedirect = redirLocation => {
@@ -153,7 +153,7 @@ export const createApiCallPromise = (
   if (getState) {
     const lang = getLang(getState());
     if (lang) {
-      headers['X-ReCodEx-lang'] = lang;
+      headers['X-ReCoVid-lang'] = lang;
     }
   }
 

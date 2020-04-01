@@ -13,19 +13,19 @@ const { actions, actionTypes, reduceActions } = factory({
 export { actionTypes };
 
 export const additionalActionTypes = {
-  VALIDATE: 'recodex/shadow-assignments/VALIDATE',
-  CREATE_POINTS: 'recodex/shadow-assignments/CREATE_POINTS',
-  CREATE_POINTS_PENDING: 'recodex/shadow-assignments/CREATE_POINTS_PENDING',
-  CREATE_POINTS_FULFILLED: 'recodex/shadow-assignments/CREATE_POINTS_FULFILLED',
-  CREATE_POINTS_REJECTED: 'recodex/shadow-assignments/CREATE_POINTS_REJECTED',
-  UPDATE_POINTS: 'recodex/shadow-assignments/UPDATE_POINTS',
-  UPDATE_POINTS_PENDING: 'recodex/shadow-assignments/UPDATE_POINTS_PENDING',
-  UPDATE_POINTS_FULFILLED: 'recodex/shadow-assignments/UPDATE_POINTS_FULFILLED',
-  UPDATE_POINTS_REJECTED: 'recodex/shadow-assignments/UPDATE_POINTS_REJECTED',
-  REMOVE_POINTS: 'recodex/shadow-assignments/REMOVE_POINTS',
-  REMOVE_POINTS_PENDING: 'recodex/shadow-assignments/REMOVE_POINTS_PENDING',
-  REMOVE_POINTS_FULFILLED: 'recodex/shadow-assignments/REMOVE_POINTS_FULFILLED',
-  REMOVE_POINTS_REJECTED: 'recodex/shadow-assignments/REMOVE_POINTS_REJECTED',
+  VALIDATE: 'recovid/shadow-assignments/VALIDATE',
+  CREATE_POINTS: 'recovid/shadow-assignments/CREATE_POINTS',
+  CREATE_POINTS_PENDING: 'recovid/shadow-assignments/CREATE_POINTS_PENDING',
+  CREATE_POINTS_FULFILLED: 'recovid/shadow-assignments/CREATE_POINTS_FULFILLED',
+  CREATE_POINTS_REJECTED: 'recovid/shadow-assignments/CREATE_POINTS_REJECTED',
+  UPDATE_POINTS: 'recovid/shadow-assignments/UPDATE_POINTS',
+  UPDATE_POINTS_PENDING: 'recovid/shadow-assignments/UPDATE_POINTS_PENDING',
+  UPDATE_POINTS_FULFILLED: 'recovid/shadow-assignments/UPDATE_POINTS_FULFILLED',
+  UPDATE_POINTS_REJECTED: 'recovid/shadow-assignments/UPDATE_POINTS_REJECTED',
+  REMOVE_POINTS: 'recovid/shadow-assignments/REMOVE_POINTS',
+  REMOVE_POINTS_PENDING: 'recovid/shadow-assignments/REMOVE_POINTS_PENDING',
+  REMOVE_POINTS_FULFILLED: 'recovid/shadow-assignments/REMOVE_POINTS_FULFILLED',
+  REMOVE_POINTS_REJECTED: 'recovid/shadow-assignments/REMOVE_POINTS_REJECTED',
 };
 
 /**

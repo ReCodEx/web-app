@@ -10,12 +10,12 @@ const { actions, reduceActions } = factory({ resourceName });
  */
 
 export const actionTypes = {
-  ADD_FILES: 'recodex/pipelineFiles/ADD_FILES',
-  ADD_FILES_PENDING: 'recodex/pipelineFiles/ADD_FILES_PENDING',
-  ADD_FILES_FULFILLED: 'recodex/pipelineFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_REJECTED: 'recodex/pipelineFiles/ADD_FILES_REJECTED',
-  REMOVE_FILE: 'recodex/pipelineFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/pipelineFiles/REMOVE_FILE_FULFILLED',
+  ADD_FILES: 'recovid/pipelineFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recovid/pipelineFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recovid/pipelineFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_REJECTED: 'recovid/pipelineFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recovid/pipelineFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recovid/pipelineFiles/REMOVE_FILE_FULFILLED',
 };
 
 export const fetchSupplementaryFilesForPipeline = pipelineId =>

@@ -12,7 +12,7 @@ import Button from '../../widgets/FlatButton';
 
 const LoginCASForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded }) => (
   <FormBox
-    title={<FormattedMessage id="app.loginCASForm.title" defaultMessage="Sign into ReCodEx using CAS UK" />}
+    title={<FormattedMessage id="app.loginCASForm.title" defaultMessage="Sign into ReCoVid using CAS UK" />}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">

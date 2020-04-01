@@ -1,9 +1,9 @@
 {
-  "name": "recodex-web-app",
-  "description": "Single page application for the ReCodEx project.",
+  "name": "recovid-web-app",
+  "description": "Single page application for the ReCoVid project.",
   "version": "0.0.0",
   "license": "MIT",
-  "author": "ReCodEx team <recodex@ksi.mff.cuni.cz>",
+  "author": "ReCoVid team <recovid@ksi.mff.cuni.cz>",
   "repository": {
     "type": "git",
     "url": "https://github.com/recodex/web-app.git"

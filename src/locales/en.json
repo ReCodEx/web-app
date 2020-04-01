@@ -1406,12 +1406,12 @@
   "generic.uploadedAt": "Uploaded at",
   "generic.validating": "Validating...",
   "generic.version": "Version",
-  "recodex-judge-float": "Float-numbers judge",
-  "recodex-judge-float-newline": "Float-numbers judge (ignoring ends of lines)",
-  "recodex-judge-normal": "Token judge",
-  "recodex-judge-normal-newline": "Token judge (ignoring ends of lines)",
-  "recodex-judge-shuffle": "Unordered-tokens judge",
-  "recodex-judge-shuffle-all": "Unordered-tokens-and-rows judge",
-  "recodex-judge-shuffle-newline": "Unordered-tokens judge (ignoring ends of lines)",
-  "recodex-judge-shuffle-rows": "Unordered-rows judge"
+  "recovid-judge-float": "Float-numbers judge",
+  "recovid-judge-float-newline": "Float-numbers judge (ignoring ends of lines)",
+  "recovid-judge-normal": "Token judge",
+  "recovid-judge-normal-newline": "Token judge (ignoring ends of lines)",
+  "recovid-judge-shuffle": "Unordered-tokens judge",
+  "recovid-judge-shuffle-all": "Unordered-tokens-and-rows judge",
+  "recovid-judge-shuffle-newline": "Unordered-tokens judge (ignoring ends of lines)",
+  "recovid-judge-shuffle-rows": "Unordered-rows judge"
 }

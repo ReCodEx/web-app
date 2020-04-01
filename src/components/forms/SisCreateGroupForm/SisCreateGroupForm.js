@@ -25,7 +25,7 @@ class SisCreateGroupForm extends Component {
 
     return (
       <FormBox
-        title={<FormattedMessage id="app.sisCreateGroupForm.title" defaultMessage="Create ReCodEx group from SIS" />}
+        title={<FormattedMessage id="app.sisCreateGroupForm.title" defaultMessage="Create ReCoVid group from SIS" />}
         succeeded={submitSucceeded}
         dirty={anyTouched}
         footer={

@@ -13,7 +13,7 @@ describe('App notifications', () => {
       const time = Date.now();
       const action = addNotification('Hello world!!', true, 'abc', time);
       expect(action).to.eql({
-        type: 'recodex/notifications/ADD_NOTIFICATION',
+        type: 'recovid/notifications/ADD_NOTIFICATION',
         payload: {
           id: 'abc',
           msg: 'Hello world!!',
@@ -31,7 +31,7 @@ describe('App notifications', () => {
     it('must create correct "hide notification" action', () => {
       const action = hideNotification('abc');
       expect(action).to.eql({
-        type: 'recodex/notifications/HIDE_NOTIFICATION',
+        type: 'recovid/notifications/HIDE_NOTIFICATION',
         payload: {
           id: 'abc'
         }
@@ -41,7 +41,7 @@ describe('App notifications', () => {
     it('must create correct "hide all" action', () => {
       const action = hideAll();
       expect(action).to.eql({
-        type: 'recodex/notifications/HIDE_ALL'
+        type: 'recovid/notifications/HIDE_ALL'
       });
     });
   });

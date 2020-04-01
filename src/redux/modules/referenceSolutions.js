@@ -17,9 +17,9 @@ const { actions, reduceActions } = factory({
  */
 
 export const additionalActionTypes = {
-  RESUBMIT: 'recodex/referenceSolutions/RESUBMIT',
-  FETCHALL: 'recodex/referenceSolutions/FETCHALL',
-  FETCHALL_FULFILLED: 'recodex/referenceSolutions/FETCHALL_FULFILLED',
+  RESUBMIT: 'recovid/referenceSolutions/RESUBMIT',
+  FETCHALL: 'recovid/referenceSolutions/FETCHALL',
+  FETCHALL_FULFILLED: 'recovid/referenceSolutions/FETCHALL_FULFILLED',
 };
 
 export const fetchReferenceSolution = actions.fetchResource;

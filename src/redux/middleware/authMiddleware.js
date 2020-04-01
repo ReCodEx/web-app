@@ -10,7 +10,7 @@ import { CALL_API } from './apiMiddleware';
 import { safeGet } from '../../helpers/common';
 import { getConfigVar } from '../../helpers/config';
 
-const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
+const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recovid';
 
 export const TOKEN_LOCAL_STORAGE_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '/accessToken';
 export const TOKEN_COOKIES_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '_accessToken';

@@ -1,6 +1,6 @@
 import { createApiCallPromise, getHeaders, isTwoHundredCode } from '../helpers/api/tools';
 
-export const CALL_API = 'recodex-api/CALL';
+export const CALL_API = 'recovid-api/CALL';
 export const createApiAction = request => ({ type: CALL_API, request });
 
 export const apiCall = (

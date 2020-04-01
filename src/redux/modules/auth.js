@@ -16,7 +16,7 @@ const getUserId = token => token.get('sub');
  * Actions
  */
 
-export const LOCAL_LOGIN = 'recodex-local-login';
+export const LOCAL_LOGIN = 'recovid-local-login';
 
 export const takeOver = userId =>
   createApiAction({

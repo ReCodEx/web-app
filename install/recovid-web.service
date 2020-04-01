@@ -1,4 +1,4 @@
-# ReCodEx web-app systemd configuration file
+# ReCoVid web-app systemd configuration file
 #
 # This file should be placed in /lib/systemd/system/ directory
 
@@ -12,10 +12,10 @@ Type=simple
 StandardInput=null
 StandardOutput=null
 StandardError=journal
-User=recodex
-Group=recodex
-WorkingDirectory=/opt/recodex-web
-ExecStart=/usr/bin/node /opt/recodex-web/bin/server.js
+User=recovid
+Group=recovid
+WorkingDirectory=/opt/recovid-web
+ExecStart=/usr/bin/node /opt/recovid-web/bin/server.js
 
 [Install]
 WantedBy=multi-user.target

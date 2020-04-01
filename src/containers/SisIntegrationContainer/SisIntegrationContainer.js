@@ -66,7 +66,7 @@ class SisIntegrationContainer extends Component {
           <p className="text-muted">
             <FormattedMessage
               id="app.dashboard.sisGroupsStudentExplain"
-              defaultMessage="SIS courses you are enrolled to in particular semesters and which have correspondig groups in ReCodEx."
+              defaultMessage="SIS courses you are enrolled to in particular semesters and which have correspondig groups in ReCoVid."
             />
           </p>
           <ResourceRenderer resource={sisStatus}>
@@ -173,7 +173,7 @@ class SisIntegrationContainer extends Component {
                                     <b>
                                       <FormattedMessage
                                         id="app.sisIntegration.noSisGroups"
-                                        defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
+                                        defaultMessage="Currently there are no ReCoVid groups matching your SIS subjects for this time period."
                                       />
                                     </b>
                                   </p>

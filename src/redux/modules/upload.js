@@ -3,14 +3,14 @@ import { handleActions, createAction } from 'redux-actions';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 export const actionTypes = {
-  INIT: 'recodex/upload/INIT',
-  UPLOAD: 'recodex/upload/UPLOAD',
-  UPLOAD_PENDING: 'recodex/upload/UPLOAD_PENDING',
-  UPLOAD_FULFILLED: 'recodex/upload/UPLOAD_FULFILLED',
-  UPLOAD_REJECTED: 'recodex/upload/UPLOAD_REJECTED',
-  REMOVE_FILE: 'recodex/upload/REMOVE_FILE',
-  RETURN_FILE: 'recodex/upload/RETURN_FILE',
-  REMOVE_FAILED_FILE: 'recodex/upload/REMOVE_FAILED_FILE',
+  INIT: 'recovid/upload/INIT',
+  UPLOAD: 'recovid/upload/UPLOAD',
+  UPLOAD_PENDING: 'recovid/upload/UPLOAD_PENDING',
+  UPLOAD_FULFILLED: 'recovid/upload/UPLOAD_FULFILLED',
+  UPLOAD_REJECTED: 'recovid/upload/UPLOAD_REJECTED',
+  REMOVE_FILE: 'recovid/upload/REMOVE_FILE',
+  RETURN_FILE: 'recovid/upload/RETURN_FILE',
+  REMOVE_FAILED_FILE: 'recovid/upload/REMOVE_FAILED_FILE',
 };
 
 export const initialState = fromJS({});

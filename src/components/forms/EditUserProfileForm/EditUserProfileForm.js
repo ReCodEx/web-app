@@ -131,7 +131,7 @@ const EditUserProfileForm = ({
             <p>
               <FormattedMessage
                 id="app.editUserProfile.emptyLocalPasswordExplain"
-                defaultMessage="You may not sign in to ReCodEx using local account until you set the password."
+                defaultMessage="You may not sign in to ReCoVid using local account until you set the password."
               />
             </p>
           </div>

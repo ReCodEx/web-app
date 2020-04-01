@@ -150,7 +150,7 @@ class Users extends Component {
       <Page
         title={<FormattedMessage id="app.users.title" defaultMessage="User list" />}
         resource={user}
-        description={<FormattedMessage id="app.users.description" defaultMessage="Browse all ReCodEx users." />}
+        description={<FormattedMessage id="app.users.description" defaultMessage="Browse all ReCoVid users." />}
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.users.users" defaultMessage="Users" />,

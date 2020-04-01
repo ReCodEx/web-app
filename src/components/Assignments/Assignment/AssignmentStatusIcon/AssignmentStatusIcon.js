@@ -81,7 +81,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
           message={
             <FormattedMessage
               id="app.assignemntStatusIcon.evaluationFailed"
-              defaultMessage="No solution was evaluated correctly by ReCodEx."
+              defaultMessage="No solution was evaluated correctly by ReCoVid."
             />
           }
         />

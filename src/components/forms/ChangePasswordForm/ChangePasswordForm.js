@@ -12,7 +12,7 @@ import { validatePasswordStrength } from '../../../redux/modules/auth';
 
 const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSucceeded = false, invalid }) => (
   <FormBox
-    title={<FormattedMessage id="app.changePasswordForm.title" defaultMessage="Change your ReCodEx password" />}
+    title={<FormattedMessage id="app.changePasswordForm.title" defaultMessage="Change your ReCoVid password" />}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">

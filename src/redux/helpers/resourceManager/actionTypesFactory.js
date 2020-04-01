@@ -2,7 +2,7 @@
  * @module actionTypesFactory
  */
 
-const defaultPrefix = resourceName => `recodex/resource/${resourceName}`;
+const defaultPrefix = resourceName => `recovid/resource/${resourceName}`;
 const twoPhaseActions = ['ADD', 'UPDATE', 'REMOVE', 'FETCH', 'FETCH_MANY'];
 const onePhaseActions = ['INVALIDATE'];
 

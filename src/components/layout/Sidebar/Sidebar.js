@@ -66,7 +66,7 @@ const Sidebar = ({
       <section className="sidebar">
         {!user && (
           <ul className="sidebar-menu">
-            <MenuTitle title="ReCodEx" />
+            <MenuTitle title="ReCoVid" />
             <MenuItem
               title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
               icon="sign-in-alt"

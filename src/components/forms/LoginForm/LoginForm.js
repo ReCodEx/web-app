@@ -13,7 +13,7 @@ import Button from '../../widgets/FlatButton';
 
 const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded, error }) => (
   <FormBox
-    title={<FormattedMessage id="app.loginForm.title" defaultMessage="Sign into ReCodEx" />}
+    title={<FormattedMessage id="app.loginForm.title" defaultMessage="Sign into ReCoVid" />}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">

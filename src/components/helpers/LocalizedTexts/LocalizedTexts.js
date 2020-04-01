@@ -37,7 +37,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                     <h4>
                       <FormattedMessage
                         id="app.localizedTexts.externalLink"
-                        defaultMessage="The description is located beyond the realms of ReCodEx"
+                        defaultMessage="The description is located beyond the realms of ReCoVid"
                       />
                     </h4>
                     <Icon icon="link" gapRight />

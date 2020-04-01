@@ -3,14 +3,14 @@ import { createApiAction } from '../middleware/apiMiddleware';
 import { fromJS } from 'immutable';
 
 export const actionTypes = {
-  RESEND_EMAIL: 'recodex/email-verification/RESEND_EMAIL',
-  RESEND_EMAIL_PENDING: 'recodex/email-verification/RESEND_EMAIL_PENDING',
-  RESEND_EMAIL_FULFILLED: 'recodex/email-verification/RESEND_EMAIL_FULFILLED',
-  RESEND_EMAIL_REJECTED: 'recodex/email-verification/RESEND_EMAIL_REJECTED',
-  EMAIL_VERIFICATION: 'recodex/email-verification/EMAIL_VERIFICATION',
-  EMAIL_VERIFICATION_PENDING: 'recodex/email-verification/EMAIL_VERIFICATION_PENDING',
-  EMAIL_VERIFICATION_FULFILLED: 'recodex/email-verification/EMAIL_VERIFICATION_FULFILLED',
-  EMAIL_VERIFICATION_REJECTED: 'recodex/email-verification/EMAIL_VERIFICATION_REJECTED',
+  RESEND_EMAIL: 'recovid/email-verification/RESEND_EMAIL',
+  RESEND_EMAIL_PENDING: 'recovid/email-verification/RESEND_EMAIL_PENDING',
+  RESEND_EMAIL_FULFILLED: 'recovid/email-verification/RESEND_EMAIL_FULFILLED',
+  RESEND_EMAIL_REJECTED: 'recovid/email-verification/RESEND_EMAIL_REJECTED',
+  EMAIL_VERIFICATION: 'recovid/email-verification/EMAIL_VERIFICATION',
+  EMAIL_VERIFICATION_PENDING: 'recovid/email-verification/EMAIL_VERIFICATION_PENDING',
+  EMAIL_VERIFICATION_FULFILLED: 'recovid/email-verification/EMAIL_VERIFICATION_FULFILLED',
+  EMAIL_VERIFICATION_REJECTED: 'recovid/email-verification/EMAIL_VERIFICATION_REJECTED',
 };
 
 export const resendVerificationEmail = userId =>

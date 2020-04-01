@@ -4,7 +4,7 @@ import { canUseDOM } from 'exenv';
 import { actionTypes } from '../modules/app';
 import { getConfigVar } from '../../helpers/config';
 
-const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
+const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recovid';
 
 export const LANG_LOCAL_STORAGE_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '/lang';
 export const LANG_COOKIES_KEY = PERSISTENT_TOKENS_KEY_PREFIX + '_lang';

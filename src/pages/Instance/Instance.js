@@ -122,7 +122,7 @@ class Instance extends Component {
                           ) : (
                             <FormattedMessage
                               id="app.instance.groups.noGroups"
-                              defaultMessage="There are no groups in this ReCodEx instance currently visible to you."
+                              defaultMessage="There are no groups in this ReCoVid instance currently visible to you."
                             />
                           )
                         }
@@ -132,7 +132,7 @@ class Instance extends Component {
                     {data.rootGroupId === null && (
                       <FormattedMessage
                         id="app.instance.groups.noGroups"
-                        defaultMessage="There are no groups in this ReCodEx instance currently visible to you."
+                        defaultMessage="There are no groups in this ReCoVid instance currently visible to you."
                       />
                     )}
                   </div>

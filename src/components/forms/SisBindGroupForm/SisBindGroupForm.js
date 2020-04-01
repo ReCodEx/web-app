@@ -22,7 +22,7 @@ const SisBindGroupForm = ({
   intl: { locale },
 }) => (
   <FormBox
-    title={<FormattedMessage id="app.sisBindGroupForm.title" defaultMessage="Bind existing ReCodEx group to SIS" />}
+    title={<FormattedMessage id="app.sisBindGroupForm.title" defaultMessage="Bind existing ReCoVid group to SIS" />}
     succeeded={submitSucceeded}
     dirty={anyTouched}
     footer={

@@ -15,12 +15,12 @@ const { reduceActions } = factory({
  * Actions
  */
 export const additionalActionTypes = {
-  BEST_SUBMISSION: 'recodex/groupResults/BEST_SUBMISSION',
-  BEST_SUBMISSION_PENDING: 'recodex/groupResults/BEST_SUBMISSION_PENDING',
-  BEST_SUBMISSION_FULFILLED: 'recodex/groupResults/BEST_SUBMISSION_FULFILLED',
-  BEST_SUBMISSIONS: 'recodex/groupResults/BEST_SUBMISSIONS',
-  BEST_SUBMISSIONS_PENDING: 'recodex/groupResults/BEST_SUBMISSIONS_PENDING',
-  BEST_SUBMISSIONS_FULFILLED: 'recodex/groupResults/BEST_SUBMISSIONS_FULFILLED',
+  BEST_SUBMISSION: 'recovid/groupResults/BEST_SUBMISSION',
+  BEST_SUBMISSION_PENDING: 'recovid/groupResults/BEST_SUBMISSION_PENDING',
+  BEST_SUBMISSION_FULFILLED: 'recovid/groupResults/BEST_SUBMISSION_FULFILLED',
+  BEST_SUBMISSIONS: 'recovid/groupResults/BEST_SUBMISSIONS',
+  BEST_SUBMISSIONS_PENDING: 'recovid/groupResults/BEST_SUBMISSIONS_PENDING',
+  BEST_SUBMISSIONS_FULFILLED: 'recovid/groupResults/BEST_SUBMISSIONS_FULFILLED',
 };
 
 export const fetchBestSubmission = (userId, assignmentId) =>

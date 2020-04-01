@@ -16,7 +16,7 @@ const Footer = ({ version }) => (
     </div>
     <FormattedHTMLMessage
       id="app.footer.copyright"
-      defaultMessage="Copyright © 2016-{year} <a href='{website}' target='_blank'>ReCodEx</a>. All rights reserved."
+      defaultMessage="Copyright © 2016-{year} <a href='{website}' target='_blank'>ReCoVid</a>. All rights reserved."
       values={{
         website: 'http://github.com/recodex',
         year: Math.max(new Date().getFullYear(), 2018),

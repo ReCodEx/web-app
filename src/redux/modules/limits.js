@@ -15,9 +15,9 @@ const { actions, reduceActions } = factory({
 });
 
 export const additionalActionTypes = {
-  CLONE_VERTICAL: 'recodex/limits/CLONE_VERTICAL',
-  CLONE_HORIZONTAL: 'recodex/limits/CLONE_HORIZONTAL',
-  CLONE_ALL: 'recodex/limits/CLONE_ALL',
+  CLONE_VERTICAL: 'recovid/limits/CLONE_VERTICAL',
+  CLONE_HORIZONTAL: 'recovid/limits/CLONE_HORIZONTAL',
+  CLONE_ALL: 'recovid/limits/CLONE_ALL',
 };
 
 export const fetchExerciseLimits = actions.fetchResource;

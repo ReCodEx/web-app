@@ -20,7 +20,7 @@ const ExternalRegistrationForm = ({
 }) => (
   <FormBox
     title={
-      <FormattedMessage id="app.externalRegistrationForm.title" defaultMessage="Create ReCodEx account using CAS" />
+      <FormattedMessage id="app.externalRegistrationForm.title" defaultMessage="Create ReCoVid account using CAS" />
     }
     type={submitSucceeded ? 'success' : undefined}
     footer={

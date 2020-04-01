@@ -14,7 +14,7 @@ const { actions, reduceActions } = factory({
  */
 
 const actionTypes = {
-  DOWNLOAD: 'recodex/files/DOWNLOAD',
+  DOWNLOAD: 'recovid/files/DOWNLOAD',
 };
 
 export const loadFile = actions.pushResource;

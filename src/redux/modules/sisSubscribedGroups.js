@@ -13,10 +13,10 @@ const { reduceActions } = factory({
 });
 
 export const actionTypes = {
-  FETCH: 'recodex/sisSubscribedGroups/FETCH',
-  FETCH_PENDING: 'recodex/sisSubscribedGroups/FETCH_PENDING',
-  FETCH_REJECTED: 'recodex/sisSubscribedGroups/FETCH_REJECTED',
-  FETCH_FULFILLED: 'recodex/sisSubscribedGroups/FETCH_FULFILLED',
+  FETCH: 'recovid/sisSubscribedGroups/FETCH',
+  FETCH_PENDING: 'recovid/sisSubscribedGroups/FETCH_PENDING',
+  FETCH_REJECTED: 'recovid/sisSubscribedGroups/FETCH_REJECTED',
+  FETCH_FULFILLED: 'recovid/sisSubscribedGroups/FETCH_FULFILLED',
 };
 
 export const fetchSisSubscribedGroups = (userId, year, term) =>

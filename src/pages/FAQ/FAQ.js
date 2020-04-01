@@ -27,7 +27,7 @@ class FAQ extends Component {
     return (
       <PageContent
         title={<FormattedMessage id="app.faq.title" defaultMessage="FAQ" />}
-        description={<FormattedMessage id="app.faq.description" defaultMessage="ReCodEx FAQ" />}
+        description={<FormattedMessage id="app.faq.description" defaultMessage="ReCoVid FAQ" />}
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.faq.title" defaultMessage="FAQ" />,

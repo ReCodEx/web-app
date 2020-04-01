@@ -29,7 +29,7 @@ import { knownLocales } from '../../helpers/localizedData';
 import { LoadingIcon } from '../../components/icons';
 import { abortAllPendingRequests, SESSION_EXPIRED_MESSAGE } from '../../redux/helpers/api/tools';
 
-import './recodex.css';
+import './recovid.css';
 
 library.add(regularIcons, solidIcons, brandIcons);
 

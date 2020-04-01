@@ -69,8 +69,8 @@ class Registration extends Component {
       (ALLOW_NORMAL_REGISTRATION ? 1 : 0) + (ALLOW_LDAP_REGISTRATION ? 1 : 0) + (ALLOW_CAS_REGISTRATION ? 1 : 0);
     return (
       <PageContent
-        title={<FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCodEx account" />}
-        description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCodEx today" />}
+        title={<FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCoVid account" />}
+        description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCoVid today" />}
         breadcrumbs={[
           {
             text: <FormattedMessage id="app.homepage.title" />,

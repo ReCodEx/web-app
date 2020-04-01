@@ -2,9 +2,9 @@ import { createAction, handleActions } from 'redux-actions';
 import { fromJS, List } from 'immutable';
 
 export const actionTypes = {
-  ADD_NOTIFICATION: 'recodex/notifications/ADD_NOTIFICATION',
-  HIDE_NOTIFICATION: 'recodex/notifications/HIDE_NOTIFICATION',
-  HIDE_ALL: 'recodex/notifications/HIDE_ALL',
+  ADD_NOTIFICATION: 'recovid/notifications/ADD_NOTIFICATION',
+  HIDE_NOTIFICATION: 'recovid/notifications/HIDE_NOTIFICATION',
+  HIDE_ALL: 'recovid/notifications/HIDE_ALL',
 };
 
 export const initialState = fromJS({

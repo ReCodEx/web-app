@@ -3,10 +3,10 @@ import { fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 export const actionTypes = {
-  CREATE_ACCOUNT: 'recodex/registration/CREATE_ACCOUNT',
-  CREATE_ACCOUNT_PENDING: 'recodex/registration/CREATE_ACCOUNT_PENDING',
-  CREATE_ACCOUNT_FULFILLED: 'recodex/registration/CREATE_ACCOUNT_FULFILLED',
-  CREATE_ACCOUNT_REJECTED: 'recodex/registration/CREATE_ACCOUNT_REJECTED',
+  CREATE_ACCOUNT: 'recovid/registration/CREATE_ACCOUNT',
+  CREATE_ACCOUNT_PENDING: 'recovid/registration/CREATE_ACCOUNT_PENDING',
+  CREATE_ACCOUNT_FULFILLED: 'recovid/registration/CREATE_ACCOUNT_FULFILLED',
+  CREATE_ACCOUNT_REJECTED: 'recovid/registration/CREATE_ACCOUNT_REJECTED',
 };
 
 export const statusTypes = {
