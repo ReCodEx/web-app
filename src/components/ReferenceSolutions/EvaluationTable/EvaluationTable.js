@@ -69,7 +69,14 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
                 </b>
               </td>
             )}
-            {!e.evaluation && (
+
+            {!e.evaluation && e.failure && (
+              <td colSpan="2">
+                <i>{e.failure.description}</i>
+              </td>
+            )}
+
+            {!e.evaluation && !e.failure && (
               <td colSpan="2">
                 <i>
                   <FormattedMessage id="app.evaluationTable.notAvailable" defaultMessage="Evaluation not available" />

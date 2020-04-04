@@ -17,8 +17,9 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
-import { WarningIcon, RefreshIcon } from '../../icons';
+import Icon, { WarningIcon, RefreshIcon, EvaluationFailedIcon } from '../../icons';
 import Button from '../../widgets/FlatButton';
+import DateTime from '../../widgets/DateTime';
 
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
@@ -58,7 +59,7 @@ class SolutionDetail extends Component {
     const activeSubmissionId = this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
     const evaluationsJS = evaluations.toJS();
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
-      var { submittedBy, evaluation, isCorrect, evaluationStatus, isDebug, ...restSub } = evaluationsJS[
+      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } = evaluationsJS[
         activeSubmissionId
       ].data;
     } else {
@@ -124,7 +125,7 @@ class SolutionDetail extends Component {
 
           {evaluations && (
             <Col md={6} sm={12}>
-              {!evaluation && refreshSolutionEvaluations && (
+              {!evaluation && !failure && refreshSolutionEvaluations && (
                 <div className="callout callout-warning">
                   <table>
                     <tbody>
@@ -145,6 +146,50 @@ class SolutionDetail extends Component {
                     </tbody>
                   </table>
                 </div>
+              )}
+
+              {failure && (
+                <React.Fragment>
+                  <div className="callout callout-danger">
+                    <h4>
+                      <EvaluationFailedIcon gapRight />
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailedHeading"
+                        defaultMessage="The evaluation has failed!"
+                      />
+                    </h4>
+
+                    <p>
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailedMessage"
+                        defaultMessage="Backend message"
+                      />
+                      : <em>{failure.description}</em>
+                    </p>
+                  </div>
+
+                  {Boolean(failure.resolvedAt && failure.resolutionNote) && (
+                    <div className="callout callout-success">
+                      <span className="small pull-right">
+                        (<DateTime unixts={failure.resolvedAt} />)
+                      </span>
+                      <h4>
+                        <Icon icon="fire-extinguisher" gapRight />
+                        <FormattedMessage
+                          id="app.submissionEvaluation.evaluationFailureResolved"
+                          defaultMessage="The failure has been resolved by admin!"
+                        />
+                      </h4>
+                      <p>
+                        <FormattedMessage
+                          id="app.submissionEvaluation.evaluationFailureResolvedNote"
+                          defaultMessage="Resolution note"
+                        />
+                        : <em>{failure.resolutionNote}</em>
+                      </p>
+                    </div>
+                  )}
+                </React.Fragment>
               )}
 
               {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (

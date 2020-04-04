@@ -12,7 +12,8 @@ import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerConta
 import SubmissionEvaluations from '../../Solutions/SubmissionEvaluations';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Button from '../../widgets/FlatButton';
-import { RefreshIcon, WarningIcon } from '../../icons';
+import DateTime from '../../widgets/DateTime';
+import Icon, { RefreshIcon, WarningIcon, EvaluationFailedIcon } from '../../icons';
 
 import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
@@ -54,7 +55,9 @@ class ReferenceSolutionDetail extends Component {
     const activeSubmissionId = evaluationsJS && (this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS));
 
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
-      var { submittedBy, evaluation, isCorrect, evaluationStatus, ...restSub } = evaluationsJS[activeSubmissionId].data;
+      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, ...restSub } = evaluationsJS[
+        activeSubmissionId
+      ].data;
     } else evaluationStatus = 'missing-submission';
 
     const filesSize = files.reduce((acc, { size }) => acc + size, 0);
@@ -133,7 +136,7 @@ class ReferenceSolutionDetail extends Component {
                 </div>
               )}
 
-              {!evaluation && evaluations && evaluations.size > 0 && refreshSolutionEvaluations && (
+              {!evaluation && !failure && evaluations && evaluations.size > 0 && refreshSolutionEvaluations && (
                 <div className="callout callout-warning">
                   <table>
                     <tbody>
@@ -154,6 +157,50 @@ class ReferenceSolutionDetail extends Component {
                     </tbody>
                   </table>
                 </div>
+              )}
+
+              {failure && (
+                <React.Fragment>
+                  <div className="callout callout-danger">
+                    <h4>
+                      <EvaluationFailedIcon gapRight />
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailedHeading"
+                        defaultMessage="The evaluation has failed!"
+                      />
+                    </h4>
+
+                    <p>
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailedMessage"
+                        defaultMessage="Backend message"
+                      />
+                      : <em>{failure.description}</em>
+                    </p>
+                  </div>
+
+                  {Boolean(failure.resolvedAt && failure.resolutionNote) && (
+                    <div className="callout callout-success">
+                      <span className="small pull-right">
+                        (<DateTime unixts={failure.resolvedAt} />)
+                      </span>
+                      <h4>
+                        <Icon icon="fire-extinguisher" gapRight />
+                        <FormattedMessage
+                          id="app.submissionEvaluation.evaluationFailureResolved"
+                          defaultMessage="The failure has been resolved by admin!"
+                        />
+                      </h4>
+                      <p>
+                        <FormattedMessage
+                          id="app.submissionEvaluation.evaluationFailureResolvedNote"
+                          defaultMessage="Resolution note"
+                        />
+                        : <em>{failure.resolutionNote}</em>
+                      </p>
+                    </div>
+                  )}
+                </React.Fragment>
               )}
 
               {evaluation && (

@@ -27,6 +27,7 @@ export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props => <Icon {...props} icon="cloud-download-alt" />;
 export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
 export const EmpoweredSupervisorIcon = props => <Icon {...props} icon="user-ninja" />;
+export const EvaluationFailedIcon = props => <Icon {...props} icon="bomb" />;
 export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
   isOpen ? <Icon icon={['far', 'minus-square']} gapRight /> : <Icon icon={['far', 'plus-square']} gapRight />;
 export const FailureIcon = props => (
