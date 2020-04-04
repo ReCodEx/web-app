@@ -18,7 +18,7 @@ const FailuresList = ({ failures, createActions }) => (
           <FormattedMessage id="app.failureList.headLink" defaultMessage="Link" />
         </th>
         <th>
-          <FormattedMessage id="app.failureList.headCreatedAt" defaultMessage="Created at" />
+          <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />
         </th>
         <th>
           <FormattedMessage id="app.failureList.headResolvedAt" defaultMessage="Resolved at" />
