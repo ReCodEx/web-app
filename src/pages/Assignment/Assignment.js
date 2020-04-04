@@ -252,7 +252,15 @@ class Assignment extends Component {
                       </Box>
                     )}
 
-                    <CommentThreadContainer threadId={assignment.id} />
+                    <CommentThreadContainer
+                      threadId={assignment.id}
+                      title={
+                        <FormattedMessage
+                          id="app.assignments.discussionModalTitle"
+                          defaultMessage="Public Discussion"
+                        />
+                      }
+                    />
                   </Col>
                 )}
               </ResourceRenderer>

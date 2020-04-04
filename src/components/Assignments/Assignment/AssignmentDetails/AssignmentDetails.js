@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
+
 import Icon, { SuccessIcon, SuccessOrFailureIcon, CodeIcon, VisibleIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
@@ -11,6 +12,7 @@ import DateTime from '../../../widgets/DateTime';
 const AssignmentDetails = ({
   isOpen = true,
   submissionsCountLimit,
+  createdAt,
   firstDeadline,
   secondDeadline,
   allowSecondDeadline,
@@ -42,6 +44,20 @@ const AssignmentDetails = ({
             </th>
             <td>
               <SuccessOrFailureIcon success={isPublic && (!visibleFrom || visibleFrom * 1000 <= Date.now())} />
+            </td>
+          </tr>
+        )}
+
+        {permissionHints.update && (
+          <tr>
+            <td className="text-center shrink-col em-padding-left em-padding-right">
+              <Icon icon="glass-cheers" />
+            </td>
+            <th>
+              <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:
+            </th>
+            <td>
+              <DateTime unixts={createdAt} showRelative />
             </td>
           </tr>
         )}
@@ -246,6 +262,7 @@ const AssignmentDetails = ({
 AssignmentDetails.propTypes = {
   isOpen: PropTypes.bool,
   submissionsCountLimit: PropTypes.any.isRequired,
+  createdAt: PropTypes.number.isRequired,
   firstDeadline: PropTypes.number.isRequired,
   secondDeadline: PropTypes.number,
   allowSecondDeadline: PropTypes.bool.isRequired,

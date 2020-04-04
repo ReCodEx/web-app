@@ -104,7 +104,7 @@ const PipelineDetail = ({
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
-            <FormattedMessage id="app.pipeline.createdAt" defaultMessage="Created at" />:
+            <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:
           </th>
           <td>
             <DateTime unixts={createdAt} showRelative />
