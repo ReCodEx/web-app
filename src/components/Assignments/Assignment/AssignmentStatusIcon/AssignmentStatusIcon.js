@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import StatusIcon from '../../../widgets/StatusIcon';
-import Icon, { CodeIcon } from '../../../icons';
+import Icon, { CodeIcon, EvaluationFailedIcon } from '../../../icons';
 
 export const getStatusDesc = (status, lastSubmission) => {
   if (status === null) {
@@ -77,12 +77,9 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
       return (
         <StatusIcon
           id={id}
-          icon={<Icon icon="exclamation-triangle" className="text-yellow" />}
+          icon={<EvaluationFailedIcon className="text-danger" />}
           message={
-            <FormattedMessage
-              id="app.assignemntStatusIcon.evaluationFailed"
-              defaultMessage="No solution was evaluated correctly by ReCodEx."
-            />
+            <FormattedMessage id="app.assignemntStatusIcon.evaluationFailed" defaultMessage="Evaluation failed." />
           }
         />
       );
