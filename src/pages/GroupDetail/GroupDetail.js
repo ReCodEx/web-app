@@ -201,7 +201,9 @@ class GroupDetail extends Component {
             <GroupTopButtons
               group={data}
               userId={userId}
-              canLeaveJoin={!isGroupAdmin && !isGroupSupervisor && (data.public || isGroupStudent)}
+              canLeaveJoin={
+                !isGroupAdmin && !isGroupSupervisor && (data.public || (isGroupStudent && !data.privateData.detaining))
+              }
               students={students}
             />
             {!hasOneOfPermissions(data, 'viewAssignments', 'viewExercises') && (
@@ -391,9 +393,7 @@ class GroupDetail extends Component {
                             <FormattedMessage id="app.group.createExercise" defaultMessage="Create Exercise in Group" />
                           </Button>
                         </p>
-                      ) : (
-                        undefined
-                      )
+                      ) : undefined
                     }
                     isOpen
                     unlimitedHeight>
@@ -491,9 +491,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     dispatch(removeShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId)),
 });
 
-export default withLinks(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(injectIntl(GroupDetail))
-);
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupDetail)));

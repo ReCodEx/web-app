@@ -44,6 +44,10 @@ class SisIntegrationContainer extends Component {
             .map(({ year, term }) => dispatch(fetchSisSubscribedGroups(loggedInUserId, year, term)))
       );
 
+  reloadData = () => {
+    this.props.loadData(this.props.currentUserId);
+  };
+
   render() {
     const {
       sisStatus,
@@ -124,7 +128,7 @@ class SisIntegrationContainer extends Component {
                                                     (a, b) => a.localeCompare(b) // locales intentionally ommited
                                                   )
                                                   .map((c, idx) => (
-                                                    <span key="{c}">
+                                                    <span key={c}>
                                                       {idx > 0 ? ', ' : ''}
                                                       <code>{c}</code>
                                                     </span>
@@ -155,12 +159,17 @@ class SisIntegrationContainer extends Component {
                                                   />
                                                 </Button>
                                               </LinkContainer>
-                                              {!group.organizational && (
-                                                <LeaveJoinGroupButtonContainer
-                                                  userId={currentUserId}
-                                                  groupId={group.id}
-                                                />
-                                              )}
+                                              {!group.organizational &&
+                                                (!group.privateData ||
+                                                  !group.privateData.detaining ||
+                                                  !group.privateData.students.includes(currentUserId)) && (
+                                                  <LeaveJoinGroupButtonContainer
+                                                    userId={currentUserId}
+                                                    groupId={group.id}
+                                                    onJoin={this.reloadData}
+                                                    onLeave={this.reloadData}
+                                                  />
+                                                )}
                                             </span>
                                           </td>
                                         </tr>

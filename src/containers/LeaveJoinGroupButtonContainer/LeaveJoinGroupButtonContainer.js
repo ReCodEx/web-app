@@ -27,13 +27,21 @@ const LeaveJoinGroupButtonContainer = ({
   bsSize = 'xs',
   history: { replace },
   links: { DASHBOARD_URI },
+  redirectAfterLeave = false,
+  onJoin = null,
+  onLeave = null,
   ...props
 }) =>
   isStudent ? (
     userId === currentUserId ? (
       <LeaveGroupButton
         {...props}
-        onClick={() => leaveGroup(groupId, userId).then(() => replace(DASHBOARD_URI))}
+        onClick={() =>
+          leaveGroup(groupId, userId).then(() => {
+            onLeave && onLeave();
+            redirectAfterLeave && replace(DASHBOARD_URI);
+          })
+        }
         bsSize={bsSize}
       />
     ) : (
@@ -43,9 +51,14 @@ const LeaveJoinGroupButtonContainer = ({
     <JoinGroupButton
       {...props}
       onClick={() =>
-        joinGroup(groupId, userId).then(() =>
-          Promise.all([fetchGroup(groupId), fetchAssignmentsForGroup(groupId), fetchGroupStatsIfNeeded(groupId)])
-        )
+        joinGroup(groupId, userId).then(() => {
+          onJoin && onJoin();
+          return Promise.all([
+            fetchGroup(groupId),
+            fetchAssignmentsForGroup(groupId),
+            fetchGroupStatsIfNeeded(groupId),
+          ]);
+        })
       }
       bsSize={bsSize}
     />
@@ -66,6 +79,9 @@ LeaveJoinGroupButtonContainer.propTypes = {
   fetchGroup: PropTypes.func.isRequired,
   fetchGroupStatsIfNeeded: PropTypes.func.isRequired,
   bsSize: PropTypes.string,
+  redirectAfterLeave: PropTypes.bool,
+  onJoin: PropTypes.func,
+  onLeave: PropTypes.func,
   links: PropTypes.object,
 };
 
@@ -82,9 +98,4 @@ const mapDispatchToProps = dispatch => ({
   fetchGroupStatsIfNeeded: gId => dispatch(fetchGroupStatsIfNeeded(gId)),
 });
 
-export default withLinks(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(withRouter(LeaveJoinGroupButtonContainer))
-);
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(withRouter(LeaveJoinGroupButtonContainer)));

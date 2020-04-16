@@ -177,6 +177,7 @@
   "app.comments.warnings.isPublic": "<strong>Everyone on this page will see this comment.</strong>",
   "app.confirm.no": "No",
   "app.confirm.yes": "Yes",
+  "app.createGroup.detaining": "Detaining students (only supervisor can remove them)",
   "app.createGroup.externalId": "External ID of the group (e.g., ID of schedule event in the school IS):",
   "app.createGroup.hasThreshold": "Students require cetrain number of points to complete the course",
   "app.createGroup.isOrganizational": "Organizational (for structural purposes only)",

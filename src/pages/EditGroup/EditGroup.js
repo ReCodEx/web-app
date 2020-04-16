@@ -51,11 +51,12 @@ class EditGroup extends Component {
   }
 
   getInitialValues = defaultMemoize(
-    ({ localizedTexts, externalId, public: isPublic, privateData: { publicStats, threshold } }) => ({
+    ({ localizedTexts, externalId, public: isPublic, privateData: { publicStats, threshold, detaining } }) => ({
       localizedTexts: getLocalizedTextsInitialValues(localizedTexts, EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
       externalId,
       isPublic,
       publicStats,
+      detaining,
       hasThreshold: threshold !== null && threshold !== undefined,
       threshold: threshold !== null && threshold !== undefined ? String(Number(threshold) * 100) : '0',
     })
@@ -305,12 +306,13 @@ export default withLinks(
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
       reload: () => dispatch(fetchGroup(groupId)),
-      editGroup: ({ localizedTexts, externalId, isPublic, publicStats, threshold, hasThreshold }) => {
+      editGroup: ({ localizedTexts, externalId, isPublic, publicStats, detaining, threshold, hasThreshold }) => {
         const transformedData = {
           localizedTexts: transformLocalizedTextsFormData(localizedTexts),
           externalId,
           isPublic,
           publicStats,
+          detaining,
           hasThreshold,
         };
         if (hasThreshold) {

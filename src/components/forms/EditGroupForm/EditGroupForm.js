@@ -20,6 +20,7 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   publicStats: false,
   hasThreshold: false,
   isOrganizational: false,
+  detaining: false,
   threshold: 0,
   localizedTexts: getLocalizedTextsInitialValues([], EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
 };
@@ -40,6 +41,7 @@ const EditGroupForm = ({
   isOpen = true,
   reset,
   isSuperAdmin,
+  isOrganizational = false,
 }) => (
   <FormBox
     title={
@@ -147,13 +149,29 @@ const EditGroupForm = ({
             />
           </Col>
         )}
+        {!isOrganizational && (
+          <Col lg={6}>
+            <Field
+              name="detaining"
+              tabIndex={6}
+              component={CheckboxField}
+              onOff
+              label={
+                <FormattedMessage
+                  id="app.createGroup.detaining"
+                  defaultMessage="Detaining students (only supervisor can remove them)"
+                />
+              }
+            />
+          </Col>
+        )}
       </Row>
 
       <Row>
         <Col lg={6}>
           <Field
             name="hasThreshold"
-            tabIndex={6}
+            tabIndex={7}
             component={CheckboxField}
             onOff
             label={
@@ -168,7 +186,7 @@ const EditGroupForm = ({
           {hasThreshold && (
             <NumericTextField
               name="threshold"
-              tabIndex={7}
+              tabIndex={8}
               validateMin={0}
               validateMax={100}
               maxLength={3}
@@ -204,6 +222,7 @@ EditGroupForm.propTypes = {
   isOpen: PropTypes.bool,
   reset: PropTypes.func,
   isSuperAdmin: PropTypes.bool,
+  isOrganizational: PropTypes.bool,
 };
 
 const validate = ({ localizedTexts }) => {
