@@ -177,6 +177,7 @@
   "app.comments.warnings.isPublic",
   "app.confirm.no",
   "app.confirm.yes",
+  "app.createGroup.detaining",
   "app.createGroup.externalId",
   "app.createGroup.hasThreshold",
   "app.createGroup.isOrganizational",
