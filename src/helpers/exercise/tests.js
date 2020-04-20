@@ -5,7 +5,7 @@ import { EMPTY_OBJ } from '../../helpers/common';
  * Prepare initial values for EditTestsForm of the exercise.
  */
 export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
-  const jsonScoreConfig = yaml.safeLoad(scoreConfig);
+  const jsonScoreConfig = scoreConfig && scoreConfig.config && yaml.safeLoad(scoreConfig.config);
   const testWeights = jsonScoreConfig.testWeights || EMPTY_OBJ;
   const sortedTests = exerciseTests.sort((a, b) => a.name.localeCompare(b.name, locale));
 
@@ -60,6 +60,7 @@ export const transformTestsValues = formData => {
 
   return {
     tests,
+    scoreCalculator: 'weighted', // will be fixed once other calculators are implemented
     scoreConfig: yaml.safeDump(scoreConfigData),
   };
 };

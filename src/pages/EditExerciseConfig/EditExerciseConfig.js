@@ -142,8 +142,8 @@ class EditExerciseConfig extends Component {
 
   transformAndSendTestsValues = data => {
     const { editTests, editScoreConfig, reloadConfig } = this.props;
-    const { tests, scoreConfig } = transformTestsValues(data);
-    return Promise.all([editTests({ tests }), editScoreConfig({ scoreConfig })]).then(reloadConfig);
+    const { tests, scoreCalculator, scoreConfig } = transformTestsValues(data);
+    return Promise.all([editTests({ tests }), editScoreConfig({ scoreCalculator, scoreConfig })]).then(reloadConfig);
   };
 
   transformAndSendConfigValuesCreator = defaultMemoize((transform, ...transformArgs) => {
@@ -641,7 +641,7 @@ EditExerciseConfig.propTypes = {
   }).isRequired,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
-  exerciseScoreConfig: PropTypes.object,
+  exerciseScoreConfig: ImmutablePropTypes.map,
   exerciseTests: PropTypes.object,
   pipelines: ImmutablePropTypes.map,
   exercisePipelines: ImmutablePropTypes.map,
@@ -677,7 +677,7 @@ export default withLinks(
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         exerciseConfig: exerciseConfigSelector(exerciseId)(state),
         exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(exerciseId)(state),
-        exerciseScoreConfig: exerciseScoreConfigSelector(exerciseId)(state),
+        exerciseScoreConfig: exerciseScoreConfigSelector(state, exerciseId),
         exerciseTests: exerciseTestsSelector(exerciseId)(state),
         pipelines: pipelinesSelector(state),
         //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),

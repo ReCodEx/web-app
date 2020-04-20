@@ -20,7 +20,6 @@ const syncMessages = {
     />
   ),
   scoreConfig: <FormattedMessage id="app.assignment.syncScoreConfig" defaultMessage="Score configuration" />,
-  scoreCalculator: <FormattedMessage id="app.assignment.syncScoreCalculator" defaultMessage="Score calculator" />,
   exerciseConfig: <FormattedMessage id="app.assignment.syncExerciseConfig" defaultMessage="Exercise configuration" />,
   runtimeEnvironments: (
     <FormattedMessage id="app.assignment.syncRuntimeEnvironments" defaultMessage="Selection of runtime environments" />
