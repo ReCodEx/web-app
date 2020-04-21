@@ -1,12 +1,15 @@
 import yaml from 'js-yaml';
 import { EMPTY_OBJ } from '../../helpers/common';
 
+const UNIFORM_ID = 'uniform';
+const WEIGHTED_ID = 'weighted';
 /**
  * Prepare initial values for EditTestsForm of the exercise.
  */
 export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   const jsonScoreConfig = scoreConfig && scoreConfig.config && yaml.safeLoad(scoreConfig.config);
-  const testWeights = jsonScoreConfig.testWeights || EMPTY_OBJ;
+  const uniformCalculator = scoreConfig && scoreConfig.calculator === UNIFORM_ID;
+  const testWeights = (jsonScoreConfig && jsonScoreConfig.testWeights) || EMPTY_OBJ;
   const sortedTests = exerciseTests.sort((a, b) => a.name.localeCompare(b.name, locale));
 
   const res = [];
@@ -26,7 +29,7 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   }
 
   return {
-    isUniform: allWeightsSame,
+    isUniform: uniformCalculator || allWeightsSame,
     tests: res,
   };
 };
@@ -43,8 +46,9 @@ export const transformTestsValues = formData => {
 
   for (const test of formData.tests) {
     const testName = test.name.trim();
-    const testWeight = uniformScore ? 100 : Number(test.weight);
-    scoreConfigData.testWeights[testName] = testWeight;
+    if (!uniformScore) {
+      scoreConfigData.testWeights[testName] = Number(test.weight);
+    }
 
     tests.push(
       test.id
@@ -60,7 +64,7 @@ export const transformTestsValues = formData => {
 
   return {
     tests,
-    scoreCalculator: 'weighted', // will be fixed once other calculators are implemented
-    scoreConfig: yaml.safeDump(scoreConfigData),
+    scoreCalculator: uniformScore ? UNIFORM_ID : WEIGHTED_ID,
+    scoreConfig: uniformScore ? null : yaml.safeDump(scoreConfigData),
   };
 };
