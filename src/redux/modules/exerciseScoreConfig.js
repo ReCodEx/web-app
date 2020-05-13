@@ -34,7 +34,7 @@ export const additionalActionTypes = {
 const fetchSubmissionScoreConfig = (submissionId, type) =>
   createApiAction({
     type: additionalActionTypes.FETCH_SUBMISSION_SCORE_CONFIG,
-    endpoint: `/${type}-solutions/evaluation/${submissionId}/score-config`,
+    endpoint: `/${type}-solutions/submission/${submissionId}/score-config`,
     method: 'GET',
     meta: { submissionId, type },
   });
