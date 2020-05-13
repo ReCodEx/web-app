@@ -112,6 +112,7 @@
   "app.instancesTable.admin",
   "app.sidebar.menu.title",
   "app.sidebar.menu.faq",
+  "app.scoreConfigInfoWeighted.test",
   "app.submissions.testResultsTable.statusOK",
   "app.failureList.headLink",
   "app.systemMessagesList.text",

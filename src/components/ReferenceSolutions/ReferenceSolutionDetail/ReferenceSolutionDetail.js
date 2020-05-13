@@ -3,20 +3,22 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
+import EvaluationDetail from '../../Solutions/EvaluationDetail';
 import TestResults from '../../Solutions/TestResults';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
 import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 import SubmissionEvaluations from '../../Solutions/SubmissionEvaluations';
-import ResourceRenderer from '../../helpers/ResourceRenderer';
-import Button from '../../widgets/FlatButton';
-import DateTime from '../../widgets/DateTime';
-import Icon, { RefreshIcon, WarningIcon, EvaluationFailedIcon } from '../../icons';
-
+import { ScoreConfigInfoDialog } from '../../scoreConfig/ScoreConfigInfo';
 import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
+
+import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
+import Button from '../../widgets/FlatButton';
+import DateTime from '../../widgets/DateTime';
+import ResourceRenderer from '../../helpers/ResourceRenderer';
+import Icon, { RefreshIcon, WarningIcon, EvaluationFailedIcon } from '../../icons';
 
 import { EMPTY_OBJ, getFirstItemInOrder } from '../../../helpers/common';
 
@@ -29,11 +31,27 @@ const getLastSubmissionId = evaluations => {
 };
 
 class ReferenceSolutionDetail extends Component {
-  state = { openFileId: null, activeSubmissionId: null };
+  state = { openFileId: null, activeSubmissionId: null, scoreDialogOpened: false };
+
+  setActiveSubmission = id => {
+    this.props.fetchScoreConfigIfNeeded && this.props.fetchScoreConfigIfNeeded(id);
+    this.setState({ activeSubmissionId: id });
+  };
 
   openFile = id => this.setState({ openFileId: id });
 
   hideFile = () => this.setState({ openFileId: null });
+
+  openScoreDialog = () => {
+    const evaluationsJS = this.props.evaluations && this.props.evaluations.toJS();
+    const activeSubmissionId = evaluationsJS && (this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS));
+    if (activeSubmissionId) {
+      this.props.fetchScoreConfigIfNeeded && this.props.fetchScoreConfigIfNeeded(activeSubmissionId);
+      this.setState({ scoreDialogOpened: true });
+    }
+  };
+
+  closeScoreDialog = () => this.setState({ scoreDialogOpened: false });
 
   render() {
     const {
@@ -49,13 +67,15 @@ class ReferenceSolutionDetail extends Component {
       deleteEvaluation = null,
       refreshSolutionEvaluations = null,
       runtimeEnvironments,
+      scoreConfigSelector = null,
+      canResubmit = false,
     } = this.props;
-    const { openFileId } = this.state;
+    const { openFileId, scoreDialogOpened } = this.state;
     const evaluationsJS = evaluations && evaluations.toJS();
     const activeSubmissionId = evaluationsJS && (this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS));
 
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
-      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, ...restSub } = evaluationsJS[
+      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } = evaluationsJS[
         activeSubmissionId
       ].data;
     } else evaluationStatus = 'missing-submission';
@@ -120,7 +140,7 @@ class ReferenceSolutionDetail extends Component {
                 </Col>
               )}
             </Row>
-            {evaluation && <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />}
+
             <CommentThreadContainer threadId={id} />
           </Col>
 
@@ -204,6 +224,20 @@ class ReferenceSolutionDetail extends Component {
               )}
 
               {evaluation && (
+                <EvaluationDetail
+                  evaluation={evaluation}
+                  submittedAt={createdAt}
+                  isCorrect={isCorrect}
+                  isDebug={isDebug}
+                  viewResumbissions
+                  showScoreDetail={this.openScoreDialog}
+                  referenceSolution
+                />
+              )}
+
+              {evaluation && <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />}
+
+              {evaluation && (
                 <TestResults evaluation={evaluation} runtimeEnvironmentId={runtimeEnvironmentId} showJudgeLog={true} />
               )}
 
@@ -224,7 +258,7 @@ class ReferenceSolutionDetail extends Component {
                           evaluations={evaluations}
                           activeSubmissionId={activeSubmissionId}
                           showInfo={false}
-                          onSelect={id => this.setState({ activeSubmissionId: id })}
+                          onSelect={this.setActiveSubmission}
                           onDelete={permissionHints.deleteEvaluation ? deleteEvaluation : null}
                         />
                       )}
@@ -237,6 +271,15 @@ class ReferenceSolutionDetail extends Component {
         </Row>
 
         <SourceCodeViewerContainer show={openFileId !== null} fileId={openFileId} onHide={() => this.hideFile()} />
+
+        {activeSubmissionId && scoreConfigSelector && (
+          <ScoreConfigInfoDialog
+            show={scoreDialogOpened}
+            onHide={this.closeScoreDialog}
+            scoreConfig={scoreConfigSelector(activeSubmissionId)}
+            canResubmit={canResubmit}
+          />
+        )}
       </div>
     );
   }
@@ -262,6 +305,9 @@ ReferenceSolutionDetail.propTypes = {
   deleteEvaluation: PropTypes.func,
   refreshSolutionEvaluations: PropTypes.func,
   runtimeEnvironments: PropTypes.array,
+  scoreConfigSelector: PropTypes.func,
+  fetchScoreConfigIfNeeded: PropTypes.func,
+  canResubmit: PropTypes.bool,
 };
 
 export default ReferenceSolutionDetail;

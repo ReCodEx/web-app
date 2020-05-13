@@ -74,7 +74,7 @@ class SolutionDetail extends Component {
       canResubmit = false,
     } = this.props;
 
-    const { openFileId } = this.state;
+    const { openFileId, scoreDialogOpened } = this.state;
     const activeSubmissionId = this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
     const evaluationsJS = evaluations.toJS();
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
@@ -279,7 +279,7 @@ class SolutionDetail extends Component {
 
         {activeSubmissionId && scoreConfigSelector && (
           <ScoreConfigInfoDialog
-            show={this.state.scoreDialogOpened}
+            show={scoreDialogOpened}
             onHide={this.closeScoreDialog}
             scoreConfig={scoreConfigSelector(activeSubmissionId)}
             canResubmit={canResubmit}
