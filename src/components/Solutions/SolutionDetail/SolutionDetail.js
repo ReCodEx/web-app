@@ -13,6 +13,7 @@ import DownloadSolutionArchiveContainer from '../../../containers/DownloadSoluti
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 import SubmissionEvaluations from '../SubmissionEvaluations';
+import { ScoreConfigInfoDialog } from '../../scoreConfig/ScoreConfigInfo';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
@@ -24,11 +25,27 @@ import DateTime from '../../widgets/DateTime';
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
 class SolutionDetail extends Component {
-  state = { openFileId: null, activeSubmissionId: null };
+  state = { openFileId: null, activeSubmissionId: null, scoreDialogOpened: false };
+
+  setActiveSubmission = id => {
+    this.props.fetchScoreConfigIfNeeded && this.props.fetchScoreConfigIfNeeded(id);
+    this.setState({ activeSubmissionId: id });
+  };
 
   openFile = id => this.setState({ openFileId: id });
 
   hideFile = () => this.setState({ openFileId: null });
+
+  openScoreDialog = () => {
+    const activeSubmissionId =
+      this.state.activeSubmissionId || safeGet(this.props.solution.lastSubmission, ['id'], null);
+    if (activeSubmissionId) {
+      this.props.fetchScoreConfigIfNeeded && this.props.fetchScoreConfigIfNeeded(activeSubmissionId);
+      this.setState({ scoreDialogOpened: true });
+    }
+  };
+
+  closeScoreDialog = () => this.setState({ scoreDialogOpened: false });
 
   render() {
     const {
@@ -53,6 +70,8 @@ class SolutionDetail extends Component {
       editNote = null,
       deleteEvaluation = null,
       refreshSolutionEvaluations = null,
+      scoreConfigSelector = null,
+      canResubmit = false,
     } = this.props;
 
     const { openFileId } = this.state;
@@ -212,6 +231,7 @@ class SolutionDetail extends Component {
                   evaluationStatus={evaluationStatus}
                   isDebug={isDebug}
                   viewResumbissions={permissionHints.viewResubmissions}
+                  showScoreDetail={this.openScoreDialog}
                 />
               )}
 
@@ -242,7 +262,7 @@ class SolutionDetail extends Component {
                           submissionId={id}
                           evaluations={evaluations}
                           activeSubmissionId={activeSubmissionId}
-                          onSelect={id => this.setState({ activeSubmissionId: id })}
+                          onSelect={this.setActiveSubmission}
                           onDelete={permissionHints.deleteEvaluation ? deleteEvaluation : null}
                           confirmDeleteLastSubmit
                         />
@@ -256,6 +276,15 @@ class SolutionDetail extends Component {
         </Row>
 
         <SourceCodeViewerContainer show={openFileId !== null} fileId={openFileId} onHide={() => this.hideFile()} />
+
+        {activeSubmissionId && scoreConfigSelector && (
+          <ScoreConfigInfoDialog
+            show={this.state.scoreDialogOpened}
+            onHide={this.closeScoreDialog}
+            scoreConfig={scoreConfigSelector(activeSubmissionId)}
+            canResubmit={canResubmit}
+          />
+        )}
       </div>
     );
   }
@@ -287,6 +316,9 @@ SolutionDetail.propTypes = {
   editNote: PropTypes.func,
   deleteEvaluation: PropTypes.func,
   refreshSolutionEvaluations: PropTypes.func,
+  scoreConfigSelector: PropTypes.func,
+  fetchScoreConfigIfNeeded: PropTypes.func,
+  canResubmit: PropTypes.bool,
 };
 
 export default SolutionDetail;
