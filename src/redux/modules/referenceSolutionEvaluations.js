@@ -8,7 +8,7 @@ import { arrayToObject } from '../../helpers/common';
 const resourceName = 'referenceSolutionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: evaluationId => `/reference-solutions/evaluation/${evaluationId}`,
+  apiEndpointFactory: evaluationId => `/reference-solutions/submission/${evaluationId}`,
 });
 
 /**
@@ -29,7 +29,7 @@ export const deleteReferenceSolutionEvaluation = (solutionId, evaluationId) => {
   return action;
 };
 
-export const fetchManyEndpoint = id => `/reference-solutions/${id}/evaluations`;
+export const fetchManyEndpoint = id => `/reference-solutions/${id}/submissions`;
 
 export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
@@ -39,7 +39,7 @@ export const fetchReferenceSolutionEvaluationsForSolution = solutionId =>
 export const downloadEvaluationArchive = downloadHelper({
   actionType: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
   fetch: null,
-  endpoint: id => `/reference-solutions/evaluation/${id}/download-result`,
+  endpoint: id => `/reference-solutions/submission/${id}/download-result`,
   fileNameSelector: (id, state) => `${id}.zip`,
   contentType: 'application/zip',
 });

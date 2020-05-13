@@ -7,7 +7,7 @@ import { actionTypes as additionalSubmissionActionTypes } from './submission';
 const resourceName = 'submissionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({
   resourceName,
-  apiEndpointFactory: evaluationId => `/assignment-solutions/evaluation/${evaluationId}`,
+  apiEndpointFactory: evaluationId => `/assignment-solutions/submission/${evaluationId}`,
 });
 
 /**
@@ -28,7 +28,7 @@ export const deleteSubmissionEvaluation = (solutionId, evaluationId) => {
   return action;
 };
 
-export const fetchManyEndpoint = id => `/assignment-solutions/${id}/evaluations`;
+export const fetchManyEndpoint = id => `/assignment-solutions/${id}/submissions`;
 
 export const fetchSubmissionEvaluationsForSolution = solutionId =>
   actions.fetchMany({
@@ -38,7 +38,7 @@ export const fetchSubmissionEvaluationsForSolution = solutionId =>
 export const downloadEvaluationArchive = downloadHelper({
   actionType: additionalActionTypes.DOWNLOAD_EVALUATION_ARCHIVE,
   fetch: null,
-  endpoint: id => `/assignment-solutions/evaluation/${id}/download-result`,
+  endpoint: id => `/assignment-solutions/submission/${id}/download-result`,
   fileNameSelector: (id, state) => `${id}.zip`,
   contentType: 'application/zip',
 });
