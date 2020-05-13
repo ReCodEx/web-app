@@ -12,10 +12,10 @@ export const exerciseScoreConfigSelector = createSelector(
   (configs, exerciseId) => configs.get(exerciseId)
 );
 
-export const subId = ({ submissionId, type }) => `${type}-${submissionId}`;
+export const subId = (submissionId, type) => `${type}-${submissionId}`;
 
 const submissionScoreConfigSelector = type =>
-  createSelector([exerciseScoreConfigsSelector, getParam], (configs, id) => configs.get(subId(id, type)));
+  createSelector(exerciseScoreConfigsSelector, configs => id => configs.get(subId(id, type)));
 
 export const assignmentSubmissionScoreConfigSelector = submissionScoreConfigSelector('assignment');
 export const referenceSubmissionScoreConfigSelector = submissionScoreConfigSelector('reference');

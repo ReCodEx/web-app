@@ -20,14 +20,16 @@ import {
   fetchSubmissionEvaluationsForSolution,
   deleteSubmissionEvaluation,
 } from '../../redux/modules/submissionEvaluations';
+import { fetchAssignmentSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
 import { getSolution } from '../../redux/selectors/solutions';
 import {
   getAssignment,
   assignmentEnvironmentsSelector,
   getUserSolutionsSortedData,
 } from '../../redux/selectors/assignments';
-
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
+import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
+
 import { getLocalizedName } from '../../helpers/localizedData';
 import { WarningIcon } from '../../components/icons';
 
@@ -70,6 +72,8 @@ class Solution extends Component {
       editNote,
       deleteEvaluation,
       refreshSolutionEvaluations,
+      scoreConfigSelector,
+      fetchScoreConfigIfNeeded,
       intl: { locale },
     } = this.props;
 
@@ -165,6 +169,9 @@ class Solution extends Component {
                         deleteEvaluation={deleteEvaluation}
                         refreshSolutionEvaluations={refreshSolutionEvaluations}
                         editNote={solution.permissionHints && solution.permissionHints.update ? editNote : null}
+                        scoreConfigSelector={scoreConfigSelector}
+                        fetchScoreConfigIfNeeded={fetchScoreConfigIfNeeded}
+                        canResubmit={assignment.permissionHints && assignment.permissionHints.resubmitSubmissions}
                       />
                     )}
                   </FetchManyResourceRenderer>
@@ -190,9 +197,11 @@ Solution.propTypes = {
   solution: PropTypes.object,
   userSolutionsSelector: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
+  fetchScoreConfigIfNeeded: PropTypes.func.isRequired,
   evaluations: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
   fetchStatus: PropTypes.string,
+  scoreConfigSelector: PropTypes.func,
   editNote: PropTypes.func.isRequired,
   deleteEvaluation: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
@@ -214,9 +223,11 @@ export default connect(
     evaluations: evaluationsForSubmissionSelector(solutionId)(state),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
     fetchStatus: fetchManyStatus(solutionId)(state),
+    scoreConfigSelector: assignmentSubmissionScoreConfigSelector(state),
   }),
   (dispatch, { match: { params } }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),
+    fetchScoreConfigIfNeeded: submissionId => dispatch(fetchAssignmentSubmissionScoreConfigIfNeeded(submissionId)),
     editNote: note => dispatch(setNote(params.solutionId, note)),
     refreshSolutionEvaluations: () =>
       Promise.all([

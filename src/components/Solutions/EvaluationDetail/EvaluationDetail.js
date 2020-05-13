@@ -18,6 +18,7 @@ const EvaluationDetail = ({
   evaluationStatus,
   isDebug,
   viewResumbissions = false,
+  showScoreDetail = null,
 }) => (
   <Box
     title={<FormattedMessage id="app.evaluationDetail.title.details" defaultMessage="Evaluation Details" />}
@@ -65,6 +66,12 @@ const EvaluationDetail = ({
             <b>
               <FormattedNumber style="percent" value={evaluation.score} />
             </b>
+            {showScoreDetail && (
+              <span className="pull-right clickable text-primary" onClick={showScoreDetail}>
+                explain
+                <Icon icon="calculator" gapLeft gapRight />
+              </span>
+            )}
           </td>
         </tr>
 
@@ -158,6 +165,7 @@ EvaluationDetail.propTypes = {
   evaluationStatus: PropTypes.string.isRequired,
   isDebug: PropTypes.bool.isRequired,
   viewResumbissions: PropTypes.bool,
+  showScoreDetail: PropTypes.func,
 };
 
 export default EvaluationDetail;
