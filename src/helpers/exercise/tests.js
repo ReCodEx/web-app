@@ -1,4 +1,3 @@
-import yaml from 'js-yaml';
 import { EMPTY_OBJ } from '../../helpers/common';
 
 const UNIFORM_ID = 'uniform';
@@ -7,9 +6,8 @@ const WEIGHTED_ID = 'weighted';
  * Prepare initial values for EditTestsForm of the exercise.
  */
 export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
-  const jsonScoreConfig = scoreConfig && scoreConfig.config && yaml.safeLoad(scoreConfig.config);
   const uniformCalculator = scoreConfig && scoreConfig.calculator === UNIFORM_ID;
-  const testWeights = (jsonScoreConfig && jsonScoreConfig.testWeights) || EMPTY_OBJ;
+  const testWeights = (scoreConfig && scoreConfig.config && scoreConfig.config.testWeights) || EMPTY_OBJ;
   const sortedTests = exerciseTests.sort((a, b) => a.name.localeCompare(b.name, locale));
 
   const res = [];
@@ -65,6 +63,6 @@ export const transformTestsValues = formData => {
   return {
     tests,
     scoreCalculator: uniformScore ? UNIFORM_ID : WEIGHTED_ID,
-    scoreConfig: uniformScore ? null : yaml.safeDump(scoreConfigData),
+    scoreConfig: uniformScore ? null : scoreConfigData,
   };
 };
