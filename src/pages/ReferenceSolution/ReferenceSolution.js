@@ -5,27 +5,30 @@ import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-i
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defaultMemoize } from 'reselect';
 
-import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import withLinks from '../../helpers/withLinks';
+import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
 import Page from '../../components/layout/Page';
+import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-
-import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
-import { getExercise } from '../../redux/selectors/exercises';
-import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
+import { fetchReferenceSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
 import {
   fetchReferenceSolutionEvaluationsForSolution,
   deleteReferenceSolutionEvaluation,
 } from '../../redux/modules/referenceSolutionEvaluations';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+
+import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
+import { getExercise } from '../../redux/selectors/exercises';
+import { referenceSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 import {
   evaluationsForReferenceSolutionSelector,
   fetchManyStatus,
 } from '../../redux/selectors/referenceSolutionEvaluations';
-import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
+
 import { hasPermissions } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
 
 const messages = defineMessages({
   title: {
@@ -65,6 +68,8 @@ class ReferenceSolution extends Component {
       evaluations,
       refreshSolutionEvaluations,
       deleteEvaluation,
+      scoreConfigSelector,
+      fetchScoreConfigIfNeeded,
       intl: { formatMessage, locale },
       links: { EXERCISES_URI, EXERCISE_URI_FACTORY },
     } = this.props;
@@ -130,6 +135,9 @@ class ReferenceSolution extends Component {
                       deleteEvaluation={deleteEvaluation}
                       refreshSolutionEvaluations={refreshSolutionEvaluations}
                       runtimeEnvironments={exercise.runtimeEnvironments}
+                      scoreConfigSelector={scoreConfigSelector}
+                      fetchScoreConfigIfNeeded={fetchScoreConfigIfNeeded}
+                      canResubmit={hasPermissions(referenceSolution, 'evaluate')}
                     />
                   )}
                 </FetchManyResourceRenderer>
@@ -150,11 +158,13 @@ ReferenceSolution.propTypes = {
     }).isRequired,
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
+  fetchScoreConfigIfNeeded: PropTypes.func.isRequired,
   referenceSolution: ImmutablePropTypes.map,
   exercise: ImmutablePropTypes.map,
   refreshSolutionEvaluations: PropTypes.func,
   deleteEvaluation: PropTypes.func.isRequired,
   fetchStatus: PropTypes.string,
+  scoreConfigSelector: PropTypes.func,
   evaluations: ImmutablePropTypes.map,
   intl: intlShape.isRequired,
   links: PropTypes.object.isRequired,
@@ -175,9 +185,11 @@ export default withLinks(
         exercise: getExercise(exerciseId)(state),
         evaluations: evaluationsForReferenceSolutionSelector(referenceSolutionId)(state),
         fetchStatus: fetchManyStatus(referenceSolutionId)(state),
+        scoreConfigSelector: referenceSubmissionScoreConfigSelector(state),
       }),
       (dispatch, { match: { params } }) => ({
         loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
+        fetchScoreConfigIfNeeded: submissionId => dispatch(fetchReferenceSubmissionScoreConfigIfNeeded(submissionId)),
         refreshSolutionEvaluations: () => {
           dispatch(fetchReferenceSolution(params.referenceSolutionId));
           dispatch(fetchReferenceSolutionEvaluationsForSolution(params.referenceSolutionId));

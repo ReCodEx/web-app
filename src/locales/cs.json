@@ -539,6 +539,7 @@
   "app.environmentsList.noEnvironments": "žádná běhová prostředí",
   "app.evaluationDetail.buildSucceeded": "Kompilace:",
   "app.evaluationDetail.evaluatedAt": "Vyhodnoceno:",
+  "app.evaluationDetail.explainCorrectness": "vysvětlit",
   "app.evaluationDetail.isCorrect": "Správnost",
   "app.evaluationDetail.isDebug": "Ladící mód",
   "app.evaluationDetail.notActualEvaluation": "Zobrazené vyhodnocení není poslední. Pouze poslední vyhodnocení je použito pro bodování úlohy. Změnu výběru zobrazeného vyhodnocení můžete provést v tabulce v dolní části stránky.",

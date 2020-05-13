@@ -539,6 +539,7 @@
   "app.environmentsList.noEnvironments",
   "app.evaluationDetail.buildSucceeded",
   "app.evaluationDetail.evaluatedAt",
+  "app.evaluationDetail.explainCorrectness",
   "app.evaluationDetail.isCorrect",
   "app.evaluationDetail.isDebug",
   "app.evaluationDetail.notActualEvaluation",

@@ -539,6 +539,7 @@
   "app.environmentsList.noEnvironments": "no runtime environments",
   "app.evaluationDetail.buildSucceeded": "Build succeeded:",
   "app.evaluationDetail.evaluatedAt": "Evaluated at:",
+  "app.evaluationDetail.explainCorrectness": "explain",
   "app.evaluationDetail.isCorrect": "Correctness",
   "app.evaluationDetail.isDebug": "Debug Mode",
   "app.evaluationDetail.notActualEvaluation": "This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom.",
