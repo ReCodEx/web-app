@@ -45,7 +45,7 @@ const SourceCodeField = ({
               }
               editorProps={{
                 $blockScrolling: Infinity,
-                $autoScrollEditorIntoView: true,
+                $autoScrollEditorIntoView: false,
               }}
             />
           )}
