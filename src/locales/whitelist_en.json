@@ -711,6 +711,7 @@
   "app.exitCodes.python3.112",
   "app.exitCodes.python3.113",
   "app.exitCodes.python3.114",
+  "app.exitCodes.python3.115",
   "app.exitCodes.unknown",
   "app.expandingInputFilesField.noFiles",
   "app.expandingInputFilesField.tooltip.add",

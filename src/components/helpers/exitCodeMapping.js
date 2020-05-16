@@ -81,6 +81,7 @@ const python3Codes = {
   112: <FormattedMessage id="app.exitCodes.python3.112" defaultMessage="Import error" />,
   113: <FormattedMessage id="app.exitCodes.python3.113" defaultMessage="Memory error" />,
   114: <FormattedMessage id="app.exitCodes.python3.114" defaultMessage="Syntax error" />,
+  115: <FormattedMessage id="app.exitCodes.python3.115" defaultMessage="Recursion error" />,
 };
 
 const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {
