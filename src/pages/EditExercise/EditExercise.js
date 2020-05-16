@@ -49,7 +49,10 @@ const prepareInitialValues = defaultMemoize(
 );
 
 class EditExercise extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount = () => {
+    this.props.loadAsync();
+    window.scrollTo(0, 0);
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
