@@ -25,7 +25,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors 
             id="app.editExerciseSimpleConfigTests.executionArguments"
             defaultMessage="Execution arguments:"
           />
-          <Explanation>
+          <Explanation id={`${test}.run-args-explanation`}>
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.argumentsExplanation"
               defaultMessage="Please, place individual arguments into individual input boxes. Any whitespace inside the input box will be treated as a regular part of the argument value (not as a separator of arguments)."

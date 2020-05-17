@@ -306,16 +306,43 @@ const warnEntryPointStateFunction = (current, next) =>
   current === undefined ? next : next === current ? current : 'ambiguous';
 
 const warn = formData => {
+  const warnings = {};
   const envEntryPointDefaults = {};
+
   for (const testKey in formData.config) {
     const test = formData.config[testKey];
+
+    const argsFields = ['run-args']; // list of all active args fields to be checked
+    if (test.useCustomJudge) {
+      argsFields.push('judge-args');
+    }
+
+    // check all args fields for whitespace
+    argsFields.forEach(
+      args =>
+        test[args] &&
+        test[args].forEach((val, idx) => {
+          if (val && val.match(/\s+/)) {
+            safeSet(
+              warnings,
+              ['config', testKey, args, idx],
+              <FormattedMessage
+                id="app.editExerciseConfigForm.validation.whitespaceInArg"
+                defaultMessage="Whitespace is not an argument separator."
+              />
+            );
+          }
+        })
+    );
+
+    // check ambiguity of entry points and mark them in envEntryPointDefaults
     for (const envId in test['entry-point']) {
       const entryPoint = test['entry-point'][envId];
       envEntryPointDefaults[envId] = warnEntryPointStateFunction(envEntryPointDefaults[envId], entryPoint === '');
     }
   }
 
-  const warnings = {};
+  // add warnings for ambiguous entry points based on envEntryPointDefaults
   for (const envId in envEntryPointDefaults) {
     if (envEntryPointDefaults[envId] === 'ambiguous') {
       for (const testKey in formData.config) {
