@@ -56,7 +56,7 @@ const AssignmentDetails = ({
             </td>
             <th>
               <FormattedMessage id="generic.assignedAt" defaultMessage="Assigned at" />:
-              <Explanation>
+              <Explanation id="assigned-at">
                 <FormattedMessage
                   id="app.assignment.assignedAtExplanation"
                   defaultMessage="The time of assignment creation. Note that the assignment may have been made visible to students at different time."

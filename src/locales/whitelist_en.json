@@ -312,6 +312,7 @@
   "app.editExerciseConfigForm.validation.duplicateFileName",
   "app.editExerciseConfigForm.validation.noFileSelected",
   "app.editExerciseConfigForm.validation.stdinFileEmpty",
+  "app.editExerciseConfigForm.validation.whitespaceInArg",
   "app.editExerciseForm.difficulty",
   "app.editExerciseForm.easy",
   "app.editExerciseForm.hard",

@@ -312,6 +312,7 @@
   "app.editExerciseConfigForm.validation.duplicateFileName": "Duplicate name detected.",
   "app.editExerciseConfigForm.validation.noFileSelected": "Please select a file.",
   "app.editExerciseConfigForm.validation.stdinFileEmpty": "Please, fill in the std. input file.",
+  "app.editExerciseConfigForm.validation.whitespaceInArg": "Whitespace is not an argument separator.",
   "app.editExerciseForm.difficulty": "Difficulty",
   "app.editExerciseForm.easy": "Easy",
   "app.editExerciseForm.hard": "Hard",

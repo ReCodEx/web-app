@@ -5,10 +5,9 @@ import Icon from '../../icons';
 
 const Explanation = ({ id = null, title = null, children, placement = 'right' }) => (
   <OverlayTrigger
-    id={id || Date.now()}
     placement={placement}
     overlay={
-      <Popover title={title}>
+      <Popover id={id || Date.now()} title={title}>
         <small>{children}</small>
       </Popover>
     }>

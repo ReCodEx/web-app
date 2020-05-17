@@ -153,7 +153,7 @@ const EditExerciseSimpleConfigTestJudge = ({
         label={
           <React.Fragment>
             <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeArgs" defaultMessage="Judge arguments:" />
-            <Explanation>
+            <Explanation id={`${test}.judge-args-explanation`}>
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.argumentsExplanation"
                 defaultMessage="Please, place individual arguments into individual input boxes. Any whitespace inside the input box will be treated as a regular part of the argument value (not as a separator of arguments)."

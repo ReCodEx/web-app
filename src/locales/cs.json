@@ -312,6 +312,7 @@
   "app.editExerciseConfigForm.validation.duplicateFileName": "Nalezeno duplicitní jméno. Aliasy vstupní souborů musí být unikátní.",
   "app.editExerciseConfigForm.validation.noFileSelected": "Prosíme, vyberte soubor.",
   "app.editExerciseConfigForm.validation.stdinFileEmpty": "Prosíme, vyberte soubor pro std. vstup.",
+  "app.editExerciseConfigForm.validation.whitespaceInArg": "Bílé znaky neoddělují argumenty.",
   "app.editExerciseForm.difficulty": "Obtížnost",
   "app.editExerciseForm.easy": "Snadné",
   "app.editExerciseForm.hard": "Těžké",
