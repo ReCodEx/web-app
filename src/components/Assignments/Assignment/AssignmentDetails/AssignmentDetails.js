@@ -8,6 +8,7 @@ import Icon, { SuccessIcon, SuccessOrFailureIcon, CodeIcon, VisibleIcon } from '
 import Box from '../../../widgets/Box';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import DateTime from '../../../widgets/DateTime';
+import Explanation from '../../../widgets/Explanation';
 
 const AssignmentDetails = ({
   isOpen = true,
@@ -54,7 +55,13 @@ const AssignmentDetails = ({
               <Icon icon="glass-cheers" />
             </td>
             <th>
-              <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:
+              <FormattedMessage id="generic.assignedAt" defaultMessage="Assigned at" />:
+              <Explanation>
+                <FormattedMessage
+                  id="app.assignment.assignedAtExplanation"
+                  defaultMessage="The time of assignment creation. Note that the assignment may have been made visible to students at different time."
+                />
+              </Explanation>
             </th>
             <td>
               <DateTime unixts={createdAt} showRelative />

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { FormattedMessage, injectIntl, defineMessages, intlShape } from 'react-intl';
 
-import Button from '../../widgets/FlatButton';
-import Icon from '../../icons';
 import { SelectField, ExpandingTextField, CheckboxField } from '../Fields';
 import Confirm from '../../forms/Confirm';
+import Icon from '../../icons';
+import Explanation from '../../widgets/Explanation';
+import Button from '../../widgets/FlatButton';
 
 const messages = defineMessages({
   normal: {
@@ -53,9 +54,7 @@ const validateCustomJudge = value =>
       id="app.editExerciseSimpleConfigForm.validation.customJudge"
       defaultMessage="Please, select the custom judge binary for this test or use one of the standard judges instead."
     />
-  ) : (
-    undefined
-  );
+  ) : undefined;
 
 const EditExerciseSimpleConfigTestJudge = ({
   smartFillJudge,
@@ -151,7 +150,17 @@ const EditExerciseSimpleConfigTestJudge = ({
         name={`${test}.judge-args`}
         component={ExpandingTextField}
         maxLength={64}
-        label={<FormattedMessage id="app.editExerciseSimpleConfigTests.judgeArgs" defaultMessage="Judge arguments:" />}
+        label={
+          <React.Fragment>
+            <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeArgs" defaultMessage="Judge arguments:" />
+            <Explanation>
+              <FormattedMessage
+                id="app.editExerciseSimpleConfigTests.argumentsExplanation"
+                defaultMessage="Please, place individual arguments into individual input boxes. Any whitespace inside the input box will be treated as a regular part of the argument value (not as a separator of arguments)."
+              />
+            </Explanation>
+          </React.Fragment>
+        }
       />
     )}
 
