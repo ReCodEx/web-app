@@ -23,7 +23,7 @@ import './ForkExerciseForm.css';
 
 const messages = defineMessages({
   emptyOption: {
-    id: 'app.forkExerciseForm.selectGroupFirst',
+    id: 'app.createExerciseForm.selectGroupFirst',
     defaultMessage: '... select group of residence first ...',
   },
 });
@@ -172,11 +172,12 @@ ForkExerciseForm.propTypes = {
 };
 
 const validate = ({ groupId }) => {
+  // the error is actually not displayed, but it prevents form submission
   const errors = {};
   if (!groupId) {
     errors._error = (
       <FormattedMessage
-        id="app.forkExerciseForm.validation.noGroupSelected"
+        id="app.createExerciseForm.validation.noGroupSelected"
         defaultMessage="No group of residence has been selected."
       />
     );
