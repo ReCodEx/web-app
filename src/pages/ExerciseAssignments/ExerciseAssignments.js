@@ -10,7 +10,8 @@ import { defaultMemoize } from 'reselect';
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Box from '../../components/widgets/Box';
-import { NeedFixingIcon, LockIcon, CheckRequiredIcon } from '../../components/icons';
+import { LockIcon, CheckRequiredIcon } from '../../components/icons';
+import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import EditAssignmentForm, {
@@ -155,22 +156,14 @@ class ExerciseAssignments extends Component {
         ]}>
         {exercise => (
           <div>
-            {exercise.isBroken && (
+            {exerciseCalloutsAreVisible(exercise) && (
               <Row>
                 <Col sm={12}>
-                  <div className="callout callout-warning">
-                    <h4>
-                      <NeedFixingIcon gapRight />
-                      <FormattedMessage
-                        id="app.exercise.isBroken"
-                        defaultMessage="Exercise configuration is incorrect and needs fixing."
-                      />
-                    </h4>
-                    {exercise.validationError}
-                  </div>
+                  <ExerciseCallouts {...exercise} />
                 </Col>
               </Row>
             )}
+
             <Row>
               <Col sm={12}>
                 <ExerciseButtons {...exercise} />

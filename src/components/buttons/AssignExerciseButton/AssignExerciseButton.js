@@ -15,7 +15,7 @@ const AssignExerciseButton = ({ id, isLocked, isBroken, hasReferenceSolutions, a
             {isBroken ? (
               <FormattedMessage
                 id="app.exercise.isBroken"
-                defaultMessage="Exercise configuration is incorrect and needs fixing."
+                defaultMessage="Exercise configuration is incomplete and needs fixing."
               />
             ) : isLocked ? (
               <FormattedMessage

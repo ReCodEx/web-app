@@ -15,8 +15,9 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ReferenceSolutionsTable from '../../components/Exercises/ReferenceSolutionsTable';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
-import { SendIcon, DeleteIcon, NeedFixingIcon } from '../../components/icons';
+import { SendIcon, DeleteIcon } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
+import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 
@@ -131,22 +132,14 @@ class Exercise extends Component {
         ]}>
         {exercise => (
           <div>
-            {exercise.isBroken && (
+            {exerciseCalloutsAreVisible(exercise) && (
               <Row>
                 <Col sm={12}>
-                  <div className="callout callout-warning">
-                    <h4>
-                      <NeedFixingIcon gapRight />
-                      <FormattedMessage
-                        id="app.exercise.isBroken"
-                        defaultMessage="Exercise configuration is incorrect and needs fixing."
-                      />
-                    </h4>
-                    {exercise.validationError}
-                  </div>
+                  <ExerciseCallouts {...exercise} />
                 </Col>
               </Row>
             )}
+
             <Row>
               <Col sm={12}>
                 <ExerciseButtons {...exercise} />
@@ -204,7 +197,7 @@ class Exercise extends Component {
                               {exercise.isBroken ? (
                                 <FormattedMessage
                                   id="app.exercise.isBrokenShort"
-                                  defaultMessage="Exercise is broken..."
+                                  defaultMessage="Incomplete configuration..."
                                 />
                               ) : (
                                 <FormattedMessage
