@@ -5,7 +5,7 @@ import Icon from './Icon';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 export const PrivateIcon = props => <Icon {...props} icon={['far', 'eye-slash']} />;
-export const NeedFixingIcon = props => <Icon {...props} icon="medkit" />;
+export const NeedFixingIcon = props => <Icon {...props} icon="hammer" />;
 export const LockIcon = props => <Icon {...props} icon="lock" />;
 export const CheckRequiredIcon = props => <Icon {...props} icon="spell-check" />;
 
@@ -53,7 +53,7 @@ export const ExercisePrefixIcons = ({ id, isPublic, isLocked, isBroken, hasRefer
             <Tooltip id={id}>
               <FormattedMessage
                 id="app.exercise.isBroken"
-                defaultMessage="Exercise configuration is incorrect and needs fixing."
+                defaultMessage="Exercise configuration is incomplete and needs fixing."
               />
             </Tooltip>
           }>

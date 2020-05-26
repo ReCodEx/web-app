@@ -18,8 +18,9 @@ import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentCon
 import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
 // import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
+import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
-import { InfoIcon, NeedFixingIcon, WarningIcon } from '../../components/icons';
+import { InfoIcon, WarningIcon } from '../../components/icons';
 
 import { fetchExercise, fetchExerciseIfNeeded, editExercise } from '../../redux/modules/exercises';
 import {
@@ -265,19 +266,10 @@ class EditExerciseConfig extends Component {
                 pipelines // pipelines are returned as a whole array (so they can be cached properly)
               ) => (
                 <div>
-                  {exercise.isBroken && (
+                  {exerciseCalloutsAreVisible(exercise) && (
                     <Row>
                       <Col sm={12}>
-                        <div className="callout callout-warning">
-                          <h4>
-                            <NeedFixingIcon gapRight />
-                            <FormattedMessage
-                              id="app.exercise.isBroken"
-                              defaultMessage="Exercise configuration is incorrect and needs fixing."
-                            />
-                          </h4>
-                          {exercise.validationError}
-                        </div>
+                        <ExerciseCallouts {...exercise} />
                       </Col>
                     </Row>
                   )}

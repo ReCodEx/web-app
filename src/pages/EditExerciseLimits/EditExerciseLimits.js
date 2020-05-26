@@ -11,9 +11,10 @@ import Page from '../../components/layout/Page';
 import HardwareGroupMetadata from '../../components/Exercises/HardwareGroupMetadata';
 import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm';
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
+import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Icon, { NeedFixingIcon } from '../../components/icons';
+import Icon from '../../components/icons';
 
 import {
   fetchExercise,
@@ -162,22 +163,14 @@ class EditExerciseLimits extends Component {
         ]}>
         {(exercise, tests, limits) => (
           <div>
-            {exercise.isBroken && (
+            {exerciseCalloutsAreVisible(exercise) && (
               <Row>
                 <Col sm={12}>
-                  <div className="callout callout-warning">
-                    <h4>
-                      <NeedFixingIcon gapRight />
-                      <FormattedMessage
-                        id="app.exercise.isBroken"
-                        defaultMessage="Exercise configuration is incorrect and needs fixing."
-                      />
-                    </h4>
-                    {exercise.validationError}
-                  </div>
+                  <ExerciseCallouts {...exercise} />
                 </Col>
               </Row>
             )}
+
             <Row>
               <Col sm={12}>
                 <ExerciseButtons {...exercise} />
