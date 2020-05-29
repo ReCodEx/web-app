@@ -23,6 +23,7 @@ const EditHardwareGroupForm = ({
   addEmptyOption = true,
 }) => (
   <FormBox
+    id="hwgroup-form"
     title={<FormattedMessage id="app.editHardwareGroupForm.title" defaultMessage="Select Hardware Group" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={

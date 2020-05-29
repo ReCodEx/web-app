@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import classnames from 'classnames';
 import Collapse from 'react-collapse';
+import { withRouter } from 'react-router';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import classnames from 'classnames';
 
 import Icon from '../../icons';
 
@@ -17,6 +19,12 @@ class Box extends Component {
   state = {
     isOpen: this.props.isOpen !== undefined ? this.props.isOpen : true,
   };
+
+  componentDidMount() {
+    if (this.props.id && this.props.location.hash === `#${this.props.id}`) {
+      window.location.hash = this.props.location.hash;
+    }
+  }
 
   toggleDetails = () => {
     if (!this.props.collapsable) {
@@ -33,6 +41,13 @@ class Box extends Component {
   showDetails = () => this.setState({ isOpen: true });
 
   hideDetails = () => this.setState({ isOpen: false });
+
+  removeUrlHash = () => {
+    const scrollPosition = window.scrollY;
+    window.location.hash = '';
+    this.props.history.replace(this.props.location.pathname + this.props.location.search);
+    window.setTimeout(() => window.scrollTo(0, scrollPosition), 0);
+  };
 
   renderBody() {
     const {
@@ -62,11 +77,12 @@ class Box extends Component {
   }
 
   render() {
-    const { title, type = 'default', solid = false, collapsable = false, className = '' } = this.props;
+    const { id = null, title, type = 'default', solid = false, collapsable = false, className = '' } = this.props;
     const { isOpen = true } = this.state;
 
     return (
       <div
+        id={id}
         className={classnames({
           box: true,
           [`box-${type}`]: typeof type !== 'undefined',
@@ -75,7 +91,25 @@ class Box extends Component {
           [className]: className.length > 0,
         })}>
         <div className="box-header with-border" onClick={this.toggleDetails}>
-          <h3 className="box-title">{title}</h3>
+          <h3 className="box-title">
+            {title}
+
+            <span className="whenTargetted text-warning">
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`highlighter-${id}`}>
+                    <FormattedMessage
+                      id="app.box.highlighterExplanation"
+                      defaultMessage="This box is highlighted. Click to restore."
+                    />
+                  </Tooltip>
+                }>
+                <Icon icon="highlighter" gapLeft timid onClick={this.removeUrlHash} />
+              </OverlayTrigger>
+            </span>
+          </h3>
+
           {collapsable && (
             <div className="box-tools pull-right">
               <button type="button" className="btn btn-box-tool" onClick={this.toggleDetails}>
@@ -95,6 +129,7 @@ class Box extends Component {
 }
 
 Box.propTypes = {
+  id: PropTypes.string,
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
@@ -115,6 +150,15 @@ Box.propTypes = {
   footer: PropTypes.element,
   children: PropTypes.element,
   className: PropTypes.string,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+    hash: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
-export default Box;
+export default withRouter(Box);

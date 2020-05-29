@@ -65,9 +65,7 @@ const errorLinkCaptions = {
   'no-runtimes': (
     <FormattedMessage id="app.exercise.validationLinks.runtimes" defaultMessage="update runtime environments form" />
   ),
-  runtimes: (
-    <FormattedMessage id="app.exercise.validationLinks.runtimes" defaultMessage="update runtime environments form" />
-  ),
+  runtimes: <FormattedMessage id="app.exercise.validationLinks.noConfigs" defaultMessage="update configuration form" />,
   'no-configs': (
     <FormattedMessage id="app.exercise.validationLinks.noConfigs" defaultMessage="update configuration form" />
   ),
@@ -88,12 +86,23 @@ const errorLinks = {
   limits: 'EXERCISE_EDIT_LIMITS_URI_FACTORY',
 };
 
+const errorLinksHashes = {
+  'no-texts': '#texts-form',
+  'no-tests': '#tests-score-form',
+  score: '#tests-score-form',
+  'no-runtimes': '#runtimes-form',
+  runtimes: '#exercise-config-form',
+  'no-configs': '#exercise-config-form',
+  'no-hwgroups': '#hwgroup-form',
+  limits: '#limits-form',
+};
+
 const createErrorLink = (tag, exerciseId, links) => {
   if (!errorLinks[tag] || !errorLinkCaptions[tag]) {
     return null;
   }
 
-  const link = links[errorLinks[tag]](exerciseId);
+  const link = links[errorLinks[tag]](exerciseId) + (errorLinksHashes[tag] || '');
   return (
     <React.Fragment>
       (<Link to={link}>{errorLinkCaptions[tag]}</Link>)
@@ -193,7 +202,7 @@ const ExerciseCallouts = ({
               id="app.exercise.addReferenceSolutionDetailed"
               defaultMessage="A reference solution can be added on the exercise detail page."
             />
-            <Link to={links.EXERCISE_URI_FACTORY(id)}>
+            <Link to={`${links.EXERCISE_URI_FACTORY(id)}#reference-solutions`}>
               <LinkIcon gapLeft />
             </Link>
           </p>

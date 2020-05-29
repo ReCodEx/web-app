@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 import { formValueSelector } from 'redux-form';
@@ -87,7 +88,19 @@ class EditExerciseLimits extends Component {
   );
 
   transformAndSendHardwareGroups = defaultMemoize((hwGroupId, limits) => {
-    const { setExerciseHardwareGroups, setExerciseLimits, reloadExercise, invalidateExercise } = this.props;
+    const {
+      setExerciseHardwareGroups,
+      setExerciseLimits,
+      reloadExercise,
+      invalidateExercise,
+      history: { replace },
+      location: { pathname, search, hash },
+    } = this.props;
+
+    if (hash) {
+      replace(pathname + search);
+    }
+
     const limitsData = limits && limits[hwGroupId];
     return formData =>
       setExerciseHardwareGroups(formData.hardwareGroup ? [formData.hardwareGroup] : [])
@@ -103,7 +116,15 @@ class EditExerciseLimits extends Component {
   });
 
   transformAndSendLimitsValues = defaultMemoize((hwGroupId, tests, exerciseRuntimeEnvironments) => {
-    const { setExerciseLimits, reloadExercise } = this.props;
+    const {
+      setExerciseLimits,
+      reloadExercise,
+      history: { replace },
+      location: { pathname, search, hash },
+    } = this.props;
+    if (hash) {
+      replace(pathname + search);
+    }
     return formData =>
       setExerciseLimits(transformLimitsValues(formData, hwGroupId, exerciseRuntimeEnvironments, tests)).then(
         reloadExercise
@@ -238,11 +259,13 @@ class EditExerciseLimits extends Component {
                         (exercise.hardwareGroups.length !== 1 || targetHardwareGroup !== exercise.hardwareGroups[0].id)
                     ) && (
                       <div>
-                        <div className="text-center text-muted em-margin-bottom">
-                          &nbsp;
-                          <Icon icon="arrow-down" />
-                          &nbsp;
-                        </div>
+                        {exercise.hardwareGroups.length > 0 && (
+                          <div className="text-center text-muted em-margin-bottom">
+                            &nbsp;
+                            <Icon icon="arrow-down" />
+                            &nbsp;
+                          </div>
+                        )}
                         <HardwareGroupMetadata
                           key={targetHardwareGroup}
                           hardwareGroup={hwgs.find(h => h.id === targetHardwareGroup)}
@@ -326,6 +349,15 @@ EditExerciseLimits.propTypes = {
   invalidateExercise: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+    hash: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 const cloneVerticallyWrapper = defaultMemoize(dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
@@ -382,5 +414,5 @@ export default withLinks(
       reloadExercise: () => dispatch(fetchExercise(exerciseId)),
       invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
     })
-  )(injectIntl(EditExerciseLimits))
+  )(injectIntl(withRouter(EditExerciseLimits)))
 );

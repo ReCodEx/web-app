@@ -38,6 +38,7 @@ const ADDITIONAL_INTL_FORMATS = {
 class LayoutContainer extends Component {
   componentDidMount() {
     this.resizeSidebarToDefault(this.props);
+    window.location.hash = this.props.location.hash;
   }
 
   componentDidUpdate(prevProps) {
@@ -48,6 +49,8 @@ class LayoutContainer extends Component {
     ) {
       this.resizeSidebarToDefault(this.props);
     }
+
+    window.location.hash = this.props.location.hash;
   }
 
   resizeSidebarToDefault({ collapse, unroll, userSettings }) {
@@ -141,6 +144,7 @@ LayoutContainer.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
     search: PropTypes.string.isRequired,
+    hash: PropTypes.string.isRequired,
   }).isRequired,
   userSettings: PropTypes.object,
 };

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 
@@ -141,7 +142,18 @@ class EditExerciseConfig extends Component {
     }
   );
 
+  removeUrlHash = () => {
+    const {
+      history: { replace },
+      location: { pathname, search, hash },
+    } = this.props;
+    if (hash) {
+      replace(pathname + search);
+    }
+  };
+
   transformAndSendTestsValues = data => {
+    this.removeUrlHash();
     const { editTests, editScoreConfig, reloadConfig } = this.props;
     const { tests, scoreCalculator, scoreConfig } = transformTestsValues(data);
     return Promise.all([editTests({ tests }), editScoreConfig({ scoreCalculator, scoreConfig })]).then(reloadConfig);
@@ -149,7 +161,10 @@ class EditExerciseConfig extends Component {
 
   transformAndSendConfigValuesCreator = defaultMemoize((transform, ...transformArgs) => {
     const { setConfig, reloadExercise } = this.props;
-    return data => setConfig(transform(data, ...transformArgs)).then(reloadExercise);
+    return data => {
+      this.removeUrlHash();
+      return setConfig(transform(data, ...transformArgs)).then(reloadExercise);
+    };
   });
 
   transformAndSendSimpleRuntimesValuesCreator = defaultMemoize(
@@ -157,6 +172,7 @@ class EditExerciseConfig extends Component {
       const { editEnvironmentConfigs, reloadConfig, setConfig } = this.props;
 
       return data => {
+        this.removeUrlHash();
         const newEnvironments = transformSimpleEnvironmentsValues(data, environmentConfigs, environments);
         const configData = transformSimpleConfigValues(
           getSimpleConfigInitValues(config, tests, environmentConfigs),
@@ -178,6 +194,7 @@ class EditExerciseConfig extends Component {
     const { editEnvironmentConfigs, fetchPipelinesVariables, setConfig, reloadConfig } = this.props;
     const selectedPipelines = getPipelines(config);
     return data => {
+      this.removeUrlHash();
       const environmentConfigs = transformEnvironmentValues(data);
       const runtimeId = safeGet(environmentConfigs, [0, 'runtimeEnvironmentId'], null);
 
@@ -194,6 +211,7 @@ class EditExerciseConfig extends Component {
   });
 
   transformAndSendPipelinesCreator = defaultMemoize((tests, config, environmentConfigs) => ({ pipelines }) => {
+    this.removeUrlHash();
     const { setConfig, fetchPipelinesVariables, reloadConfig } = this.props;
     const runtimeId = safeGet(environmentConfigs, [0, 'runtimeEnvironmentId'], null);
 
@@ -329,6 +347,7 @@ class EditExerciseConfig extends Component {
                   <Row>
                     <Col lg={6}>
                       <Box
+                        id="tests-score-form"
                         title={
                           <FormattedMessage
                             id="app.editExerciseConfig.testsAndScoring"
@@ -349,6 +368,7 @@ class EditExerciseConfig extends Component {
 
                       {isSimple(exercise) && hasPermissions(exercise, 'update') && (
                         <Box
+                          id="runtimes-form"
                           title={
                             <FormattedMessage
                               id="app.editExerciseConfig.runtimeEnvironments"
@@ -651,6 +671,15 @@ EditExerciseConfig.propTypes = {
   setConfig: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+    hash: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default withLinks(
@@ -701,5 +730,5 @@ export default withLinks(
           Promise.all([dispatch(fetchExerciseConfig(exerciseId)), dispatch(fetchExerciseEnvironmentConfig(exerciseId))])
         ),
     })
-  )(injectIntl(EditExerciseConfig))
+  )(injectIntl(withRouter(EditExerciseConfig)))
 );
