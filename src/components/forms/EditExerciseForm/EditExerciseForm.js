@@ -49,6 +49,7 @@ const EditExerciseForm = ({
   intl: { formatMessage },
 }) => (
   <FormBox
+    id="texts-form"
     title={
       <FormattedMessage
         id="app.editExerciseForm.title"

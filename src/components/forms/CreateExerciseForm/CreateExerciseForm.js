@@ -36,34 +36,36 @@ class CreateExerciseForm extends Component {
         type={submitSucceeded ? 'success' : undefined}>
         <React.Fragment>
           <table>
-            <tr>
-              <td className="valign-top full-width">
-                <Field
-                  name="groupId"
-                  component={SelectField}
-                  label=""
-                  ignoreDirty
-                  addEmptyOption
-                  emptyOptionCaption={formatMessage(messages.emptyOption)}
-                  options={groups}
-                />
-              </td>
-              <td className="valign-top">
-                <SubmitButton
-                  id="createExercise"
-                  disabled={invalid}
-                  submitting={submitting}
-                  hasSucceeded={submitSucceeded}
-                  hasFailed={submitFailed}
-                  handleSubmit={handleSubmit}
-                  messages={{
-                    submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
-                    submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
-                    success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
-                  }}
-                />
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td className="valign-top full-width">
+                  <Field
+                    name="groupId"
+                    component={SelectField}
+                    label=""
+                    ignoreDirty
+                    addEmptyOption
+                    emptyOptionCaption={formatMessage(messages.emptyOption)}
+                    options={groups}
+                  />
+                </td>
+                <td className="valign-top">
+                  <SubmitButton
+                    id="createExercise"
+                    disabled={invalid}
+                    submitting={submitting}
+                    hasSucceeded={submitSucceeded}
+                    hasFailed={submitFailed}
+                    handleSubmit={handleSubmit}
+                    messages={{
+                      submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
+                      submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
+                      success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
+                    }}
+                  />
+                </td>
+              </tr>
+            </tbody>
           </table>
 
           {submitFailed && (

@@ -43,6 +43,7 @@ class EditEnvironmentConfigForm extends Component {
 
     return (
       <FormBox
+        id="runtimes-form"
         title={
           <FormattedMessage id="app.editEnvironmentConfig.title" defaultMessage="Runtime Environment Configuration" />
         }

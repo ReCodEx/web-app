@@ -185,6 +185,7 @@ class Exercise extends Component {
                 <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
                   {runtimes => (
                     <Box
+                      id="reference-solutions"
                       title={formatMessage(messages.referenceSolutionsBox)}
                       noPadding
                       footer={

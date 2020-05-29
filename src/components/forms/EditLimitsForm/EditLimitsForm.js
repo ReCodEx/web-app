@@ -37,6 +37,7 @@ class EditLimitsForm extends Component {
 
     return (
       <FormBox
+        id="limits-form"
         title={<FormattedMessage id="app.editLimitsBox.title" defaultMessage="Execution Limits" />}
         unlimitedHeight
         noPadding

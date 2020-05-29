@@ -129,6 +129,7 @@
   "app.badge.failedLoading",
   "app.badge.failedLoadingInfo",
   "app.badge.sessionExpiration",
+  "app.box.highlighterExplanation",
   "app.broker.confirmFreeze",
   "app.broker.confirmUnfreeze",
   "app.broker.description",

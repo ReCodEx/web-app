@@ -65,19 +65,21 @@ class Exercises extends Component {
             iconName: 'puzzle-piece',
           },
         ]}>
-        <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
-          <ExercisesListContainer id="exercises-all" showGroups />
-        </Box>
+        <React.Fragment>
+          <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
+            <ExercisesListContainer id="exercises-all" showGroups />
+          </Box>
 
-        <ResourceRenderer resource={groups.toArray()} returnAsArray>
-          {groups => (
-            <CreateExerciseForm
-              groups={prepareGroupOptions(groups, groupsAccessor, locale)}
-              onSubmit={this.createExercise}
-              initialValues={CREATE_EXERCISE_FORM_INITIAL_VALUES}
-            />
-          )}
-        </ResourceRenderer>
+          <ResourceRenderer resource={groups.toArray()} returnAsArray>
+            {groups => (
+              <CreateExerciseForm
+                groups={prepareGroupOptions(groups, groupsAccessor, locale)}
+                onSubmit={this.createExercise}
+                initialValues={CREATE_EXERCISE_FORM_INITIAL_VALUES}
+              />
+            )}
+          </ResourceRenderer>
+        </React.Fragment>
       </PageContent>
     );
   }

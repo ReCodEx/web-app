@@ -129,6 +129,7 @@
   "app.badge.failedLoading": "Failed to load the data",
   "app.badge.failedLoadingInfo": "Please check your Internet connection.",
   "app.badge.sessionExpiration": "Session expiration:",
+  "app.box.highlighterExplanation": "This box is highlighted. Click to restore.",
   "app.broker.confirmFreeze": "Are you sure you want to freeze broker? Broker will not longer accept evaluation requests!",
   "app.broker.confirmUnfreeze": "Are you sure you want to unfreeze broker?",
   "app.broker.description": "Management of broker backend service",

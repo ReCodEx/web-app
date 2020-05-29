@@ -101,6 +101,7 @@ class EditExerciseSimpleConfigForm extends Component {
         )}
 
         <FormBox
+          id="exercise-config-form"
           title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Edit Exercise Configuration" />}
           unlimitedHeight
           noPadding
