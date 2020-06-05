@@ -260,17 +260,11 @@ class FileListVariable extends Variable {
 /*
  * List of known variables and their meta-configuration
  */
-
-const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
+const _COMMON_VAR_DESCRIPTORS = [
   new Variable('expected-output', 'remote-file'),
-  new Variable('run-args', 'string[]'),
-  new Variable('actual-output', 'file')
-    .setPipelineFilter('producesFiles')
-    .setInitialPostprocess(({ 'actual-output': actualOutput }) => ({
-      'actual-output': actualOutput,
-      useOutFile: Boolean(actualOutput), // add checkbox property for the form
-    })),
   new Variable('stdin-file', 'remote-file'),
+  new FileListVariable('input-files', 'actual-inputs'),
+  new FileListVariable('extra-files', 'extra-file-names').individualEnvs().forCompilation(),
   new Variable('judge-type', 'string', 'recodex-judge-normal').setTransformPostprocess((value, formDataTest) =>
     formDataTest.useCustomJudge ? '' : value
   ),
@@ -289,8 +283,17 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
   new Variable('judge-args', 'string[]').setTransformPostprocess((value, formDataTest) =>
     formDataTest.useCustomJudge ? value : []
   ),
-  new FileListVariable('input-files', 'actual-inputs'),
-  new FileListVariable('extra-files', 'extra-file-names').individualEnvs().forCompilation(),
+];
+
+const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
+  ..._COMMON_VAR_DESCRIPTORS,
+  new Variable('run-args', 'string[]'),
+  new Variable('actual-output', 'file')
+    .setPipelineFilter('producesFiles')
+    .setInitialPostprocess(({ 'actual-output': actualOutput }) => ({
+      'actual-output': actualOutput,
+      useOutFile: Boolean(actualOutput), // add checkbox property for the form
+    })),
   new Variable('jar-files', 'remote-file[]', [])
     .individualEnvs()
     .forCompilation()
@@ -309,13 +312,7 @@ const _ENV_SPECIFIC_VARS_DESCRIPTORS = {
     new Variable('custom-judge', 'remote-file'),
   ],
   [ENV_HASKELL_ID]: [
-    new Variable('expected-output', 'remote-file'),
-    new Variable('stdin-file', 'remote-file'),
-    new Variable('judge-type', 'string', 'recodex-judge-normal'),
-    new Variable('custom-judge', 'remote-file'),
-    new Variable('judge-args', 'string[]'),
-    new FileListVariable('input-files', 'actual-inputs'),
-    new FileListVariable('extra-files', 'extra-file-names').individualEnvs().forCompilation(),
+    ..._COMMON_VAR_DESCRIPTORS,
     new Variable('entry-point', 'string').overrideFormProp('entry-point-string'),
   ],
 };

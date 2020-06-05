@@ -40,7 +40,6 @@ const overrides = {
     showStringEntryPoint: true,
     showOutputFile: false,
     showExtraFiles: true,
-    showJudge: false,
   },
 };
 
@@ -83,7 +82,7 @@ class EditExerciseSimpleConfigTest extends Component {
       showJudgeArgs = true, // additional args for the judge
     } = override;
 
-    const colsShown = showInputs + showArgs + showStringEntryPoint + showOutput + showJudge + showExtraFiles;
+    const colsShown = showInputs + showArgs + showOutput + showJudge + showExtraFiles;
     const lgColSpan = colsShown <= 4 ? 12 / colsShown : 3;
 
     return (
@@ -106,6 +105,18 @@ class EditExerciseSimpleConfigTest extends Component {
             test={test}
             testErrors={testErrors}
           />
+        )}
+
+        {showStringEntryPoint && (
+          <Row>
+            <Col lg={12}>
+              <EditExerciseSimpleConfigTestExecEntryPoint
+                smartFillEntryPoint={smartFill ? smartFill.entryPoint : null}
+                test={test}
+                testErrors={testErrors}
+              />
+            </Col>
+          </Row>
         )}
 
         <Row>
@@ -140,16 +151,6 @@ class EditExerciseSimpleConfigTest extends Component {
             <Col md={6} lg={lgColSpan}>
               <EditExerciseSimpleConfigTestExecArgs
                 smartFillArgs={smartFill ? smartFill.args : null}
-                test={test}
-                testErrors={testErrors}
-              />
-            </Col>
-          )}
-
-          {showStringEntryPoint && (
-            <Col md={6} lg={lgColSpan}>
-              <EditExerciseSimpleConfigTestExecEntryPoint
-                smartFillEntryPoint={smartFill ? smartFill.entryPoint : null}
                 test={test}
                 testErrors={testErrors}
               />
