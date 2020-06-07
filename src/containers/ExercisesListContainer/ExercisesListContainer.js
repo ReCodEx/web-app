@@ -16,7 +16,7 @@ import { create as assignExercise } from '../../redux/modules/assignments';
 import { fetchTags } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { arrayToObject } from '../../helpers/common';
+import { arrayToObject, EMPTY_OBJ } from '../../helpers/common';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -25,7 +25,11 @@ const filterInitialValues = defaultMemoize(
     search,
     author: authorsIds.length > 0 ? authorsIds[0] : null,
     tags,
-    runtimeEnvironments: arrayToObject(allEnvironments, rte => rte.id, rte => runtimeEnvironments.includes(rte.id)),
+    runtimeEnvironments: arrayToObject(
+      allEnvironments,
+      rte => rte.id,
+      rte => runtimeEnvironments.includes(rte.id)
+    ),
   })
 );
 
@@ -54,22 +58,15 @@ const transformAndSetFilterData = defaultMemoize(
   }
 );
 
-class ExercisesListContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.defaultFilters = {};
-    if (props.rootGroup) {
-      this.defaultFilters.groupsIds = [props.rootGroup];
-    }
-  }
+const getDefaultFilters = defaultMemoize(rootGroup => (rootGroup ? { groupsIds: [rootGroup] } : EMPTY_OBJ));
 
+class ExercisesListContainer extends Component {
   componentDidMount() {
     ExercisesListContainer.loadData(this.props);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.rootGroup !== prevProps.rootGroup) {
-      this.defaultFilters.groupsIds = [this.props.rootGroup];
       this.props.fetchExercisesAuthorsIfNeeded(this.props.rootGroup);
       this.props.fetchTags();
     }
@@ -150,7 +147,7 @@ class ExercisesListContainer extends Component {
         id={id}
         endpoint="exercises"
         defaultOrderBy="name"
-        defaultFilters={this.defaultFilters}
+        defaultFilters={getDefaultFilters(rootGroup)}
         filtersCreator={this.filtersCreator}>
         {({ data, offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy, reload }) => (
           <ExercisesList

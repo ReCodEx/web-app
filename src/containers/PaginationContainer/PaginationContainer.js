@@ -104,7 +104,7 @@ class PaginationContainer extends Component {
       !this.props.hideAllItems &&
       !this.props.isPending
     ) {
-      this.props.reload(this.props.id, this.props.endpoint, this.props.intl.locale);
+      this.reload();
     }
   }
 

@@ -57,7 +57,7 @@
     "glob": "^7.1.2",
     "global": "^4.3.1",
     "highlight.js": "^9.16.2",
-    "immutable": "^3.8.1",
+    "immutable": "^3.8.2",
     "isomorphic-fetch": "^2.2.1",
     "jwt-decode": "^2.2.0",
     "markdown-it": "^8.4.1",
