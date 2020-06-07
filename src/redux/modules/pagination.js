@@ -39,6 +39,7 @@ const createPaginationStructure = init =>
     ...paginationStructure,
     ...init,
   });
+
 const initialState = Map();
 
 /*
@@ -51,7 +52,11 @@ export const setPaginationOffset = componentId => createAction(actionTypes.SET_O
 export const setPaginationLimit = componentId => createAction(actionTypes.SET_LIMIT, null, () => ({ componentId }));
 
 export const setPaginationOffsetLimit = componentId =>
-  createAction(actionTypes.SET_OFFSET_LIMIT, (offset, limit) => ({ offset, limit }), () => ({ componentId }));
+  createAction(
+    actionTypes.SET_OFFSET_LIMIT,
+    (offset, limit) => ({ offset, limit }),
+    () => ({ componentId })
+  );
 
 export const setPaginationOrderBy = componentId => createAction(actionTypes.SET_ORDERBY, null, () => ({ componentId }));
 
