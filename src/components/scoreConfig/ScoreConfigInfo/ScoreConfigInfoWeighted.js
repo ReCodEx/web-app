@@ -14,12 +14,12 @@ const ScoreConfigInfoWeighted = ({ scoreConfig }) => {
   return (
     <div>
       <h4>
-        <FormattedMessage id="app.scoreConfigInfoWeighted.title" defaultMessage="Weighted arithmetic mean" />
+        <FormattedMessage id="app.scoreCalculators.weighted.caption" defaultMessage="Weighted arithmetic mean" />
       </h4>
       <p>
         <FormattedMessage
-          id="app.scoreConfigInfoWeighted.description"
-          defaultMessage="The overall correctness is computed as weighted average of the individual test results. The weights for individual tests are displayed below."
+          id="app.scoreCalculators.weighted.description"
+          defaultMessage="The overall correctness is computed as weighted average of the individual test results."
         />
       </p>
 
