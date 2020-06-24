@@ -7,24 +7,25 @@ import { FormattedMessage } from 'react-intl';
 import { TextField, NumericTextField } from '../Fields';
 import { RemoveIcon } from '../../icons';
 import './EditTests.css';
+import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/score';
 
-const EditTestsTestRow = ({ test, onRemove, isUniform, percent, readOnly = false }) => (
+const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = false }) => (
   <tr>
     <td>
       <Field
         name={`${test}.name`}
         component={TextField}
-        label={''}
+        label=""
         maxLength={64}
         groupClassName="testRow"
         disabled={readOnly}
       />
     </td>
-    {!isUniform && (
+    {calculator === WEIGHTED_ID && (
       <td>
         <NumericTextField
           name={`${test}.weight`}
-          label={''}
+          label=""
           validateMin={0}
           validateMax={10000}
           maxLength={5}
@@ -33,10 +34,10 @@ const EditTestsTestRow = ({ test, onRemove, isUniform, percent, readOnly = false
         />
       </td>
     )}
-    <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>{percent}</td>
+    {calculator !== UNIVERSAL_ID && <td className="text-center valign-middle">{percent}</td>}
     {!readOnly && (
-      <td style={{ verticalAlign: 'middle' }}>
-        <Button onClick={onRemove} bsStyle={'danger'} bsSize="xs" className="btn-flat pull-right">
+      <td className="valign-middle">
+        <Button onClick={onRemove} bsStyle="danger" bsSize="xs" className="btn-flat pull-right">
           <RemoveIcon gapRight />
           <FormattedMessage id="generic.remove" defaultMessage="Remove" />
         </Button>
@@ -48,7 +49,7 @@ const EditTestsTestRow = ({ test, onRemove, isUniform, percent, readOnly = false
 EditTestsTestRow.propTypes = {
   test: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired,
-  isUniform: PropTypes.bool.isRequired,
+  calculator: PropTypes.string,
   percent: PropTypes.string.isRequired,
   readOnly: PropTypes.bool,
 };

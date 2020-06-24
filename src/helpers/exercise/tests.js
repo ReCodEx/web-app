@@ -1,68 +1,19 @@
-import { EMPTY_OBJ } from '../../helpers/common';
+import { augmentTestInitValuesWithScoreConfig } from './score';
 
-const UNIFORM_ID = 'uniform';
-const WEIGHTED_ID = 'weighted';
 /**
  * Prepare initial values for EditTestsForm of the exercise.
  */
 export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
-  const uniformCalculator = scoreConfig && scoreConfig.calculator === UNIFORM_ID;
-  const testWeights = (scoreConfig && scoreConfig.config && scoreConfig.config.testWeights) || EMPTY_OBJ;
   const sortedTests = exerciseTests.sort((a, b) => a.name.localeCompare(b.name, locale));
-
-  const res = [];
-  let allWeightsSame = true;
-  let lastWeight = null;
-  for (const test of sortedTests) {
-    const testWeight = testWeights[test.name] !== undefined ? Number(testWeights[test.name]) : 100;
-    if (lastWeight !== null && testWeight !== lastWeight) {
-      allWeightsSame = false;
-    }
-    lastWeight = testWeight;
-    res.push({
-      id: test.id,
-      name: test.name,
-      weight: testWeight,
-    });
-  }
-
-  return {
-    isUniform: uniformCalculator || allWeightsSame,
-    tests: res,
-  };
+  const tests = sortedTests.map(test => ({
+    id: test.id,
+    name: test.name,
+  }));
+  return augmentTestInitValuesWithScoreConfig({ tests }, scoreConfig);
 };
 
 /**
  * Gather data of EditTestsForm and prepare them to be sent to Tests endpoint and ScoreConfig endpoint.
  */
-export const transformTestsValues = formData => {
-  const uniformScore = formData.isUniform === true || formData.isUniform === 'true';
-  const scoreConfigData = {
-    testWeights: {},
-  };
-  const tests = [];
-
-  for (const test of formData.tests) {
-    const testName = test.name.trim();
-    if (!uniformScore) {
-      scoreConfigData.testWeights[testName] = Number(test.weight);
-    }
-
-    tests.push(
-      test.id
-        ? {
-            id: test.id,
-            name: testName,
-          }
-        : {
-            name: testName,
-          }
-    );
-  }
-
-  return {
-    tests,
-    scoreCalculator: uniformScore ? UNIFORM_ID : WEIGHTED_ID,
-    scoreConfig: uniformScore ? null : scoreConfigData,
-  };
-};
+export const transformTestsValues = ({ tests }) =>
+  tests.map(({ id, name }) => (id ? { id, name: name.trim() } : { name: name.trim() }));

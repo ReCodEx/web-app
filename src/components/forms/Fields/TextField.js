@@ -8,7 +8,7 @@ import styles from './commonStyles.less';
 
 const TextField = ({
   input: { value, ...input },
-  meta: { active, dirty, error, warning },
+  meta: { active, dirty, error = null, warning = null },
   type = 'text',
   label = null,
   groupClassName = '',

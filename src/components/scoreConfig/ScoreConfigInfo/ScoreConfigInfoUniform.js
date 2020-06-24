@@ -5,11 +5,11 @@ import { FormattedMessage } from 'react-intl';
 const ScoreConfigInfoUniform = ({ scoreConfig }) => (
   <div>
     <h4>
-      <FormattedMessage id="app.scoreConfigInfoUniform.title" defaultMessage="Arithmetic average" />
+      <FormattedMessage id="app.scoreCalculators.uniform.caption" defaultMessage="Arithmetic average" />
     </h4>
     <p>
       <FormattedMessage
-        id="app.scoreConfigInfoUniform.description"
+        id="app.scoreCalculators.uniform.description"
         defaultMessage="The overall correctness is computed as a simple arithmetic average of the individual test results."
       />
     </p>

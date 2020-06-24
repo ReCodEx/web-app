@@ -45,7 +45,8 @@ class SubmitButton extends Component {
   }
 
   submit = data => {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, onSubmit = null } = this.props;
+    onSubmit && onSubmit();
     return handleSubmit(data).then(() => {
       if (!this.unmounted) {
         this.setState({ saved: true });
@@ -117,6 +118,7 @@ SubmitButton.propTypes = {
   invalid: PropTypes.bool,
   disabled: PropTypes.bool,
   reset: PropTypes.func,
+  onSubmit: PropTypes.func,
   messages: PropTypes.shape({
     submit: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     success: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),

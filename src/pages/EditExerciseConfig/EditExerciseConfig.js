@@ -60,6 +60,7 @@ import { fetchPipelines } from '../../redux/modules/pipelines';
 import { pipelinesSelector, getPipelinesEnvironmentsWhichHasEntryPoint } from '../../redux/selectors/pipelines';
 
 import { getTestsInitValues, transformTestsValues } from '../../helpers/exercise/tests';
+import { transformScoreConfig, UNIVERSAL_ID as UNIVERSAL_SCORE_CALCULATOR } from '../../helpers/exercise/score';
 import {
   onlySimpleEnvironments,
   getSimpleEnvironmentsInitValues,
@@ -152,12 +153,22 @@ class EditExerciseConfig extends Component {
     }
   };
 
-  transformAndSendTestsValues = data => {
+  changeScoreCalculator = ({ calculator }) => {};
+
+  transformAndSendTestsValues = defaultMemoize(originalCalculator => data => {
     this.removeUrlHash();
+
     const { editTests, editScoreConfig, reloadConfig } = this.props;
-    const { tests, scoreCalculator, scoreConfig } = transformTestsValues(data);
-    return Promise.all([editTests({ tests }), editScoreConfig({ scoreCalculator, scoreConfig })]).then(reloadConfig);
-  };
+    const tests = transformTestsValues(data);
+    const scoreCalculator = data.calculator;
+    const scoreConfig = transformScoreConfig(tests, originalCalculator, data);
+
+    const scorePromise = editScoreConfig({ scoreCalculator, scoreConfig });
+    // Calculator may be changed only when the rest of the for is not dirty (tests do not have to be editted)
+    const resPromise =
+      originalCalculator !== scoreCalculator ? scorePromise : Promise.all([editTests({ tests }), scorePromise]);
+    return resPromise.then(reloadConfig);
+  });
 
   transformAndSendConfigValuesCreator = defaultMemoize((transform, ...transformArgs) => {
     const { setConfig, reloadExercise } = this.props;
@@ -221,6 +232,18 @@ class EditExerciseConfig extends Component {
       )
       .then(reloadConfig);
   });
+
+  renderTestsAndScoreBox(exercise, tests, scoreConfig) {
+    return (
+      <EditTestsForm
+        calculator={scoreConfig && scoreConfig.calculator}
+        readOnly={!hasPermissions(exercise, 'setScoreConfig')}
+        initialValues={getTestsInitValues(tests, scoreConfig, this.props.intl.locale)}
+        changeCalculator={null}
+        onSubmit={this.transformAndSendTestsValues(scoreConfig.calculator)}
+      />
+    );
+  }
 
   render() {
     const {
@@ -344,67 +367,63 @@ class EditExerciseConfig extends Component {
                     </table>
                   )}
 
-                  <Row>
-                    <Col lg={6}>
-                      <Box
-                        id="tests-score-form"
-                        title={
-                          <FormattedMessage
-                            id="app.editExerciseConfig.testsAndScoring"
-                            defaultMessage="Tests and Scoring"
-                          />
-                        }
-                        unlimitedHeight>
-                        <ResourceRenderer resource={exerciseScoreConfig}>
-                          {scoreConfig => (
-                            <EditTestsForm
-                              readOnly={!hasPermissions(exercise, 'setScoreConfig')}
-                              initialValues={getTestsInitValues(tests, scoreConfig, locale)}
-                              onSubmit={this.transformAndSendTestsValues}
-                            />
-                          )}
-                        </ResourceRenderer>
-                      </Box>
+                  <ResourceRenderer resource={exerciseScoreConfig}>
+                    {scoreConfig => (
+                      <React.Fragment>
+                        {scoreConfig && scoreConfig.calculator === UNIVERSAL_SCORE_CALCULATOR && (
+                          <Row>
+                            <Col lg={12}>{this.renderTestsAndScoreBox(exercise, tests, scoreConfig)}</Col>
+                          </Row>
+                        )}
 
-                      {isSimple(exercise) && hasPermissions(exercise, 'update') && (
-                        <Box
-                          id="runtimes-form"
-                          title={
-                            <FormattedMessage
-                              id="app.editExerciseConfig.runtimeEnvironments"
-                              defaultMessage="Runtime Environments"
-                            />
-                          }
-                          unlimitedHeight>
-                          <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
-                            {(config, environmentConfigs) => (
-                              <ResourceRenderer
-                                resource={runtimeEnvironments.toArray()}
-                                returnAsArray
-                                forceLoading={runtimeEnvironments.size === 0}>
-                                {environments => (
-                                  <EditEnvironmentSimpleForm
-                                    initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}
-                                    runtimeEnvironments={onlySimpleEnvironments(environments)}
-                                    onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
-                                      pipelines,
-                                      environments,
-                                      tests,
-                                      config,
-                                      environmentConfigs
-                                    )}
+                        <Row>
+                          <Col lg={6}>
+                            {scoreConfig &&
+                              scoreConfig.calculator !== UNIVERSAL_SCORE_CALCULATOR &&
+                              this.renderTestsAndScoreBox(exercise, tests, scoreConfig)}
+
+                            {isSimple(exercise) && hasPermissions(exercise, 'update') && (
+                              <Box
+                                id="runtimes-form"
+                                title={
+                                  <FormattedMessage
+                                    id="app.editExerciseConfig.runtimeEnvironments"
+                                    defaultMessage="Runtime Environments"
                                   />
-                                )}
-                              </ResourceRenderer>
+                                }
+                                unlimitedHeight>
+                                <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
+                                  {(config, environmentConfigs) => (
+                                    <ResourceRenderer
+                                      resource={runtimeEnvironments.toArray()}
+                                      returnAsArray
+                                      forceLoading={runtimeEnvironments.size === 0}>
+                                      {environments => (
+                                        <EditEnvironmentSimpleForm
+                                          initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}
+                                          runtimeEnvironments={onlySimpleEnvironments(environments)}
+                                          onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
+                                            pipelines,
+                                            environments,
+                                            tests,
+                                            config,
+                                            environmentConfigs
+                                          )}
+                                        />
+                                      )}
+                                    </ResourceRenderer>
+                                  )}
+                                </ResourceRenderer>
+                              </Box>
                             )}
-                          </ResourceRenderer>
-                        </Box>
-                      )}
-                    </Col>
-                    <Col lg={6}>
-                      <SupplementaryFilesTableContainer exercise={exercise} />
-                    </Col>
-                  </Row>
+                          </Col>
+                          <Col lg={6}>
+                            <SupplementaryFilesTableContainer exercise={exercise} />
+                          </Col>
+                        </Row>
+                      </React.Fragment>
+                    )}
+                  </ResourceRenderer>
 
                   {!isSimple(exercise) && (
                     <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>

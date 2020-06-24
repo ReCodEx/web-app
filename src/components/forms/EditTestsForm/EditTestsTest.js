@@ -7,9 +7,15 @@ import { FormattedMessage } from 'react-intl';
 import EditTestsTestRow from './EditTestsTestRow';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
 import { safeGet } from '../../../helpers/common';
+import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/score';
 
-const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
-  const weightSum = isUniform ? fields.length : (testValues || []).reduce((acc, val) => acc + Number(val.weight), 0);
+const EditTestsTest = ({ fields, calculator, testValues, readOnly = false }) => {
+  const weightSum = Math.max(
+    1, // make sure the sum is not zero (it is used in division)
+    calculator === WEIGHTED_ID
+      ? (testValues || []).reduce((acc, val) => acc + Number(val.weight), 0)
+      : fields.length * 100
+  );
 
   return (
     <div>
@@ -20,14 +26,16 @@ const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
               <th>
                 <FormattedMessage id="app.editTestsTest.name" defaultMessage="Test name:" />
               </th>
-              {!isUniform && (
+              {calculator === WEIGHTED_ID && (
                 <th>
                   <FormattedMessage id="app.editTestsTest.weight" defaultMessage="Test weight:" />
                 </th>
               )}
-              <th>
-                <FormattedMessage id="app.editTestsTest.pointsPercentage" defaultMessage="Points Percentage:" />
-              </th>
+              {calculator !== UNIVERSAL_ID && (
+                <th>
+                  <FormattedMessage id="app.editTestsTest.pointsPercentage" defaultMessage="Points Percentage:" />
+                </th>
+              )}
               {!readOnly && <th />}
             </tr>
           </thead>
@@ -36,13 +44,9 @@ const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
               <EditTestsTestRow
                 key={index}
                 test={test}
-                isUniform={isUniform}
+                calculator={calculator}
                 readOnly={readOnly}
-                percent={
-                  safeGet(testValues, [index, 'weight'])
-                    ? prettyPrintPercent((isUniform ? 1 : Number(testValues[index].weight)) / weightSum)
-                    : '?'
-                }
+                percent={prettyPrintPercent(Number(safeGet(testValues, [index, 'weight'], 100)) / weightSum)}
                 onRemove={() => fields.remove(index)}
               />
             ))}
@@ -63,7 +67,7 @@ const EditTestsTest = ({ fields, isUniform, testValues, readOnly = false }) => {
 EditTestsTest.propTypes = {
   readOnly: PropTypes.bool,
   fields: PropTypes.object.isRequired,
-  isUniform: PropTypes.bool.isRequired,
+  calculator: PropTypes.string,
   testValues: PropTypes.array,
 };
 
