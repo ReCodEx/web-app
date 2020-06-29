@@ -1,0 +1,126 @@
+/*
+  The code was inspired by this CSS stylesheet: https://www.cssscript.com/minimalist-tree-view-pure-css/
+*/
+
+@radius: 4px;
+@lineColor: #ccc;
+@hoverColor: #dc3;
+@functionNodeColor: #d0d0ff;
+@literalNodeColor: #e0e0e0;
+@testNodeColor: #ffffd0;
+@invalidNodeColor: #f96;
+
+.tree {
+  margin-left: 20px
+}
+
+.tree, .tree li, .tree ul {
+  margin: 0;
+  padding: 0;
+}
+
+.tree ul {
+  margin-left: 20px;
+}
+
+.tree li {
+  list-style-type: none;
+  margin: 7px 15px;
+  position: relative;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.tree li::before {
+  content: "";
+  position: absolute;
+  top:-6px;
+  height: 16px;
+  left: -20px;
+  width: 20px;
+  border-left: 1px solid @lineColor;
+  border-bottom: 1px solid @lineColor;
+  border-radius:0;
+}
+
+.tree li::after {
+  position:absolute;
+  content:"";
+  top: 9px;
+  height: 100%;
+  left: -20px;
+  width: 20px;
+  border-left: 1px solid @lineColor;
+  border-top: 1px solid @lineColor;
+  border-radius: 0;
+}
+
+.tree li:last-child::after,
+ul.tree > li:first-child::before {
+    display: none;
+}
+
+.tree li:last-child::before{
+  border-radius: 0 0 0 @radius;
+}
+
+ul.tree > li:first-child::after {
+  border-radius: @radius 0 0 0;
+}
+
+.tree li > span {
+  border: 1px solid @lineColor;
+  border-radius: @radius;
+  padding: 3px 5px 2px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/*
+ * Node types/states decorations
+ */
+
+.tree li > span.function {
+  background: linear-gradient(white, @functionNodeColor);
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+}
+
+.tree li > span.literal {
+  background: linear-gradient(white, @literalNodeColor);
+}
+
+.tree li > span.test {
+  background: linear-gradient(white, @testNodeColor);
+  font-style: italic;
+}
+
+.tree li > span.placeholder {
+  border: 1px dotted #eee;
+}
+
+.tree li > span.placeholder {
+  border: 1px dotted #eee;
+}
+
+.tree li > span.invalid {
+  border-color: @invalidNodeColor;
+  box-shadow: 0 0 3px 3px #fa7;
+}
+
+/*
+ * Hover animations
+ */
+
+.tree li > span:hover,
+.tree li > span:hover + ul li > span {
+  border-color: @hoverColor;
+}
+
+.tree li > span:hover + ul li::after,
+.tree li > span:hover + ul li::before, 
+.tree li > span:hover + ul::before,
+.tree li > span:hover + ul ul::before {
+  border-color: @hoverColor;
+}
+

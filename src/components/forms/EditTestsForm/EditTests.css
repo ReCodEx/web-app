@@ -1,4 +1,18 @@
-.testRow {
+.editTestFormTestRow {
   margin-bottom: 0;
   margin-top: 0;
 }
+
+.editTestFormRelativeContainer {
+  position: relative;
+}
+
+.editTestFormRightPanel {
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 51%;
+  right: 0;
+}
+

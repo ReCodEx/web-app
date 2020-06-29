@@ -17,7 +17,7 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = fals
         component={TextField}
         label=""
         maxLength={64}
-        groupClassName="testRow"
+        groupClassName="editTestFormTestRow"
         disabled={readOnly}
       />
     </td>
@@ -29,7 +29,7 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = fals
           validateMin={0}
           validateMax={10000}
           maxLength={5}
-          groupClassName="testRow"
+          groupClassName="editTestFormTestRow"
           disabled={readOnly}
         />
       </td>

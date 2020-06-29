@@ -1,0 +1,128 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+import { FormControl, Table, Well } from 'react-bootstrap';
+import classnames from 'classnames';
+
+import StandaloneRadioField from '../../forms/StandaloneRadioInput';
+import Button from '../../widgets/FlatButton';
+import { CloseIcon, SendIcon } from '../../icons';
+import { AstNode, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
+
+import formStyles from '../../forms/Fields/commonStyles.less';
+
+class EditTestNodeForm extends Component {
+  state = {
+    node: null,
+    parent: null,
+    selected: null,
+  };
+
+  static getDerivedStateFromProps({ node = null, parent = null }, state) {
+    // If the node or the parent have changed, the previous selection should be forgotten (form is reset)
+    return node !== state.node || parent !== state.parent
+      ? {
+          node,
+          parent,
+          selected: null,
+        }
+      : null;
+  }
+
+  dirty = () => {
+    const { node = null } = this.props;
+    return this.state.selected && this.state.selected !== (node && node.test);
+  };
+
+  save = () => {
+    const { node = null, parent = null, close } = this.props;
+    if (this.dirty()) {
+      const newNode = new AstNodeTestResult();
+      newNode.test = this.state.selected;
+      if (node) {
+        node.replace(newNode);
+      } else if (parent) {
+        parent.appendChild(newNode);
+      }
+    }
+    close();
+  };
+
+  render() {
+    const { node = null, tests, close } = this.props;
+    const selected = this.state.selected || (node && node.test);
+
+    return (
+      <React.Fragment>
+        <Well>
+          <FormattedMessage
+            id="app.scoreConfigExpression.editTestDialog.description"
+            defaultMessage="The value of the test result node is the actual score assigned by the judge to the selected test. Normally, the judge assigns value 1 to passed tests and 0 to failed tests; however, a custom judge may score any real value from [0,1] range. Please select the corresponding test."
+          />
+        </Well>
+
+        {tests.length > 10 ? (
+          <FormControl
+            componentClass="select"
+            bsClass={classnames({
+              'form-control': true,
+              [formStyles.dirty]: this.dirty(),
+              'full-width': true,
+            })}
+            onChange={ev => ev.target && ev.target.value && this.setState({ selected: ev.target.value })}>
+            {tests.map(({ name }) => (
+              <option value={name} key={name}>
+                {name}
+              </option>
+            ))}
+          </FormControl>
+        ) : (
+          <Table hover>
+            <tbody>
+              {tests.map(test => (
+                <tr
+                  key={test.id}
+                  onClick={() => this.setState({ selected: test.name })}
+                  className={classnames({
+                    'bg-info': (node && node.test) === test.name,
+                  })}>
+                  <td className="valign-middle shrink-col">
+                    <StandaloneRadioField
+                      name="test"
+                      value={test.name}
+                      checked={test.name === selected}
+                      onChange={() => this.setState({ selected: test.name })}
+                    />
+                  </td>
+                  <td>{test.name}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+
+        <hr />
+
+        <div className="text-center">
+          <Button onClick={this.save} bsStyle="success" disabled={tests.length === 0 || !this.dirty()}>
+            <SendIcon gapRight />
+            <FormattedMessage id="generic.save" defaultMessage="Save" />
+          </Button>
+          <Button onClick={close} bsStyle="default">
+            <CloseIcon gapRight />
+            <FormattedMessage id="generic.close" defaultMessage="Close" />
+          </Button>
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+
+EditTestNodeForm.propTypes = {
+  node: PropTypes.instanceOf(AstNode),
+  parent: PropTypes.object,
+  tests: PropTypes.array.isRequired,
+  close: PropTypes.func.isRequired,
+};
+
+export default EditTestNodeForm;

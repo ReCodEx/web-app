@@ -54,6 +54,10 @@ export const augmentTestInitValuesWithScoreConfig = (formValues, scoreConfig) =>
   return formValues;
 };
 
+/**
+ * Generate weights compatible with uniform config (each text has weight 100).
+ * @param {Object[]} tests
+ */
 const generateUniformWeights = tests =>
   arrayToObject(
     tests,
@@ -61,11 +65,40 @@ const generateUniformWeights = tests =>
     () => 100
   );
 
+const sumWeights = weights => Object.values(weights).reduce((res, x) => res + x, 0);
+
+const areWeightsTheSame = weights => {
+  const values = Object.values(weights);
+  return values.every(value => value === values[0]);
+};
+
+const weightsToUniversalConfig = weights =>
+  Object.keys(weights).length > 0
+    ? areWeightsTheSame(weights)
+      ? {
+          type: 'avg',
+          children: Object.keys(weights).map(name => ({ type: 'test-result', test: name })),
+        }
+      : {
+          type: 'div',
+          children: [
+            {
+              type: 'sum',
+              children: Object.keys(weights).map(name => ({
+                type: 'mul',
+                children: [weights[name], { type: 'test-result', test: name }],
+              })),
+            },
+            sumWeights(weights),
+          ],
+        }
+    : { type: 'value', value: 1 };
+
 /**
  * Load weights from the form data based on the original calculator
- * @param {array} tests List of tests as yielded by transformTestsValues of tests.js
+ * @param {Object[]} tests List of tests as yielded by transformTestsValues of tests.js
  * @param {string} originalCalculator Name of the calculator used
- * @param {object} formData
+ * @param {Object} formData
  */
 const loadWeights = (tests, originalCalculator, formData) => {
   if (originalCalculator === WEIGHTED_ID) {
@@ -94,10 +127,24 @@ const loadWeights = (tests, originalCalculator, formData) => {
 };
 
 /**
- * Transform the data of the form into score config data to be sent over to the server.
- * @param {array} tests List of tests as yielded by transformTestsValues of tests.js
+ * Load universal configuration (AST tree) based on the original calculator
+ * @param {Object[]} tests List of tests as yielded by transformTestsValues of tests.js
  * @param {string} originalCalculator Name of the calculator used
- * @param {object} formData
+ * @param {Object} formData
+ */
+const loadUniversalConfig = (tests, originalCalculator, formData) => {
+  if (originalCalculator === UNIVERSAL_ID) {
+    return formData.config;
+  }
+
+  return weightsToUniversalConfig(loadWeights(tests, originalCalculator, formData));
+};
+
+/**
+ * Transform the data of the form into score config data to be sent over to the server.
+ * @param {Object[]} tests List of tests as yielded by transformTestsValues of tests.js
+ * @param {string} originalCalculator Name of the calculator used
+ * @param {Object} formData
  */
 export const transformScoreConfig = (tests, originalCalculator, formData) => {
   const scoreCalculator = formData.calculator || UNIFORM_ID;
@@ -112,8 +159,7 @@ export const transformScoreConfig = (tests, originalCalculator, formData) => {
   }
 
   if (scoreCalculator === UNIVERSAL_ID) {
-    // TODO
-    return { type: 'value', value: 1 };
+    return loadUniversalConfig(tests, originalCalculator, formData);
   }
 
   throw new Error(`Unknown score calculator ${scoreCalculator}.`);
