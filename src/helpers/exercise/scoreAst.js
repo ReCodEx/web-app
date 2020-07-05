@@ -1,3 +1,8 @@
+/**
+ * This is a bit tough piece of code, so this prologue should help you understand it.
+ * TODO
+ */
+
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { arrayToObject } from '../common';
@@ -7,24 +12,82 @@ export const FUNCTION_NODE = 'function';
 export const TEST_NODE = 'test';
 export const LITERAL_NODE = 'literal';
 
+/**
+ * Get a key for sorting (a string with serialized location vector).
+ * This function assumes that no node in the tree has more than 9,999 children.
+ * @param {AstNode} node
+ */
+const _getSortingKey = node =>
+  node
+    .getLocationVector()
+    .map(idx => String(idx).padStart(4, '0'))
+    .join('-');
+
+/**
+ * Internal function that sorts nodes by their position in the tree (DFS ordering).
+ */
+const sortNodes = nodes => {
+  if (nodes.length < 2) {
+    return nodes; // small optimization
+  }
+
+  const wrapped = nodes.map(node => ({ node, key: _getSortingKey(node) }));
+  wrapped.sort();
+  return wrapped.map(({ node }) => node);
+};
+
+class MutableNodeList {
+  constructor() {
+    this.nodes = [];
+  }
+
+  addNode(node) {
+    this.nodes.push(node);
+    node.setParent(this);
+  }
+
+  /**
+   * Actually reimplements the interface of AstNode, but in a mutable way (just modify internal list of nodes).
+   * @param {AstNode} oldChild
+   * @param {AstNode} newChild
+   */
+  _childChanged(oldChild, newChild) {
+    const index = this.nodes.indexOf(oldChild);
+    if (index >= 0) {
+      this.nodes[index] = newChild;
+    }
+  }
+}
+
 /*
  * Abstract AST classes
  */
-let idCounter = 0;
+let idCounter = 0; // internal counter for generating unique IDs
 
+/*
+TODO - parent bude mutable, pri zmene children se musi naklonovat node
+- pri zmene roota (napr. pri undo) se opravi vsechny parenty (rekurzivne podle children).
+- zvazit, jestli neudelat parenta pres indirekci (objekt) a nezafreezovat this (otazka kdy)
+*/
 export class AstNode {
-  constructor(config = null) {
-    this.id = `${this.getType()}-${++idCounter}`;
-    this.parent = null;
+  /**
+   * Initialize an empty node. The node remains mutable until initialized by deserialization,
+   * or until connected to a real tree by modification functions.
+   * @param {string} [id=null] Unique identifier of the node. If missing, it is generated automatically.
+   */
+  constructor(id = null) {
+    this.id = id || `${this.getType()}-${++idCounter}`;
+    this.parent = { parent: null }; // this way we keep the parent mutable after freeze
     this.children = [];
-    if (config) {
-      this._initFromConfig(config);
-    }
 
     this._fixChildrenPlaceholders();
     this._fixChildrenParentage();
   }
 
+  /**
+   * Remove unnecessary placeholders (if this node is comutative or if the number of children is exceeded).
+   * This must be called before the node is frozen.
+   */
   _fixChildrenPlaceholders() {
     if (this.isComutative() || this.children.length > this.getMaxChildren()) {
       this.children = this.children.filter(child => child && !(child instanceof AstNodePlaceholder));
@@ -36,51 +99,104 @@ export class AstNode {
     }
   }
 
-  _fixChildrenParentage() {
+  /**
+   * Fix the parent references of all children. The references are mutable.
+   * @param {boolean} recursive If true, the operation will be performed in the entire subtree.
+   */
+  _fixChildrenParentage(recursive = false) {
     this.children.forEach(child => {
-      child.parent = this;
+      child.setParent(this);
+      if (recursive) {
+        child._fixChildrenParentage(true);
+      }
     });
   }
 
   // TODO remove
   _check() {
-    const errors = this.children.filter(child => child.parent !== this);
+    const errors = this.children.filter(child => child.getParent() !== this);
     if (errors.length > 0) {
-      console.log(this.id);
+      console.log(this);
       console.log(errors);
     }
 
     this.children.forEach(child => child._check());
   }
 
+  /**
+   * Internal deserialization routine.
+   * @param {Array} config A JSON configuration node as retrieved from the API.
+   */
   _initFromConfig(config) {
     if (config.children && config.children.length > 0) {
       this.children = config.children.map(childConf => _deserialize(childConf) || new AstNodePlaceholder());
+      this._fixChildrenPlaceholders();
+      this._fixChildrenParentage();
     }
   }
 
-  _clone() {
-    const clone = this.constructor();
-    clone.parent = this.parent;
+  /**
+   * Internal cloning function that creates a copy of self.
+   * @param {boolean} [forceNewId=false] If true, the clone will have new unique ID. Otherwise even the ID is copied.
+   */
+  _clone(forceNewId = false) {
+    const clone = this.constructor(forceNewId ? null : this.id);
+    clone.setParent(this.getParent());
     clone.children = this.children;
     return clone;
   }
 
   /**
-   *
+   * Create a clone of this node with updated children and initiate its replacement within a tree.
+   * @param {Function} updater creates new children array from the old one
+   * @param {boolean} [keepPlaceholders=false] If true, placeholders will not be modified (not even if the capacity of the node is exceeded).
+   */
+  _updateChildren(updater, keepPlaceholders = false) {
+    // Create clone with updated children
+    const clone = this._clone();
+    clone.children = updater(clone.children);
+
+    // Make sure children are OK and have the right parent ref.
+    if (!keepPlaceholders) {
+      clone._fixChildrenPlaceholders();
+    }
+    clone._fixChildrenParentage();
+
+    // Finalize and report the change upwards
+    Object.freeze(clone);
+    if (this.getParent() && this.getParent()._childChanged) {
+      this.getParent()._childChanged(this, clone);
+    }
+    return clone;
+  }
+
+  /**
+   * Replace given child with one ore more new nodes.
+   * @param {AstNode|null} child Child node to be replaced; if null, new nodes are appended
+   * @param {AstNode|AstNode[]} newNodes Node or array of nodes to be placed where the original node was.
+   * @param {boolean} [keepPlaceholders=false] If true, placeholders will not be modified (not even if the capacity of the node is exceeded).
+   */
+  _replaceChild(child, newNodes = [], keepPlaceholders = false) {
+    if (!Array.isArray(newNodes)) {
+      newNodes = newNodes ? [newNodes] : [];
+    }
+
+    return this._updateChildren(children => {
+      let position = children.indexOf(child);
+      position = position < 0 ? children.length : position;
+      return [...children.slice(0, position), ...newNodes, ...children.slice(position + 1)];
+    }, keepPlaceholders);
+  }
+
+  /**
+   * Internal function used to update the tree. If node is changed (i.e., its update-clone is created),
+   * it calls this function on its parent to introduce the updated clone into the tree.
    * @param {AstNode} [oldChild=null] child node to be replaced (if null, new child is appended)
    * @param {AstNode} [newChild=null] child node to be inserted (if null, only old child is removed/replaced with placeholder)
    */
   _childChanged(oldChild, newChild) {
     if (!oldChild && !newChild) {
       throw new Error('At least one argument (oldChild, newChild) must not be null in child changed notificator.');
-    }
-
-    if (oldChild) {
-      if (oldChild.parent !== this || !this.children.includes(oldChild)) {
-        throw new Error('AST structure is corrupted. Child replacement trigger did not found the old child object.');
-      }
-      oldChild.parent = null;
     }
 
     if (newChild === null) {
@@ -96,24 +212,38 @@ export class AstNode {
       }
     }
 
-    const clone = this._clone();
-    clone.children =
-      oldChild === null
-        ? // Appending
-          [...this.children, newChild]
-        : // Replacing/removing
-          this.children.map(child => (child === oldChild ? newChild : child)).filter(child => child);
-    clone._fixChildrenParentage();
+    return this._replaceChild(oldChild, newChild || [], true);
+  }
 
-    if (this.parent) {
-      this.parent._childChanged(this, clone);
+  /**
+   * Initiates a transaction on the whole tree.
+   */
+  _beginTransaction() {
+    if (this.getParent() && this.getParent()._beginTransaction) {
+      this.getParent()._beginTransaction();
     }
+  }
 
-    return clone;
+  /**
+   * Perfoms a commit on the whole tree.
+   */
+  _commit() {
+    if (this.getParent() && this.getParent()._commit) {
+      this.getParent()._commit();
+    }
+  }
+
+  /**
+   * Undo all changes in the tree made after transaction started.
+   */
+  _rollback() {
+    if (this.getParent() && this.getParent()._rollback) {
+      this.getParent()._rollback();
+    }
   }
 
   /*
-   * Objet type and behavioral properties
+   * Basic object getters
    */
 
   getType() {
@@ -125,7 +255,8 @@ export class AstNode {
   }
 
   getCaption() {
-    return this.getType() + '()';
+    return this.id; // TODO return
+    // return this.getType() + '()'; // this is default for function-nodes (leaves will have to override)
   }
 
   getDescription() {
@@ -146,6 +277,7 @@ export class AstNode {
 
   /**
    * Validates this node whether it has the right amount of children (no placeholders) and all parameters.
+   * @returns {boolean}
    */
   isValid() {
     if (this.children.length < this.getMinChildren() || this.children.length > this.getMaxChildren()) {
@@ -156,7 +288,64 @@ export class AstNode {
   }
 
   /**
+   * Return parent node.
+   * @returns {AstNode}
+   */
+  getParent() {
+    return this.parent.parent;
+  }
+
+  /**
+   * Change the parent reference. This is the only mutable item of a node.
+   * @param {AstNode|Ast|null} parent
+   */
+  setParent(parent) {
+    this.parent.parent = parent;
+  }
+
+  /**
+   * Return all ancestor nodes in an array (from the nearest to the root).
+   * @returns {AstNode[]}
+   */
+  getAllAncestors() {
+    const res = [];
+    let parent = this.getParent();
+    while (parent && parent instanceof AstNode) {
+      res.push(parent);
+      parent = parent.getParent();
+    }
+    return res;
+  }
+
+  /**
+   * Return (zero-based) index of this node among its siblings.
+   * @returns {number}
+   */
+  getSiblingIndex() {
+    if (!this.getParent() || !(this.getParent() instanceof AstNode)) {
+      return 0;
+    }
+    return this.getParent().children.indexOf(this);
+  }
+
+  /**
+   * Return a vector that represents a path from root to this node.
+   * Each item is the index of the corresponding ancestor among its siblings.
+   * @returns {number[]}
+   */
+  getLocationVector() {
+    let node = this;
+    const res = [];
+    while (node && node instanceof AstNode) {
+      res.unshift(node.getSiblingIndex());
+      node = node.getParent();
+    }
+    return res;
+  }
+
+  /**
    * Return the first child node or null, if there are no children.
+   * @returns {AstNode|null}
    */
   getFirstChild() {
     return this.children && this.children.length > 0 ? this.children[0] : null;
@@ -164,13 +353,36 @@ export class AstNode {
 
   /**
    * Return the last child node or null, if there are no children.
+   * @returns {AstNode|null}
    */
   getLastChild() {
     return this.children && this.children.length > 0 ? this.children[this.children.length - 1] : null;
   }
 
   /**
+   * Return array of children without placeholder nodes.
+   * @returns {AstNode[]}
+   */
+  getRealChildren() {
+    return this.children.filter(child => child && !(child instanceof AstNodePlaceholder));
+  }
+
+  /**
+   * Search subtree starting with this node as root for node with given ID.
+   * @param {string} id
+   * @returns {AstNode|null} the node or null if no such node exists
+   */
+  findById(id) {
+    if (this.id === id) {
+      return this;
+    }
+
+    return this.children.reduce((res, child) => res || child.findById(id), null);
+  }
+
+  /**
    * Exports a structure ready for JSON serialization (according to API format).
+   * @returns {Object}
    */
   serialize() {
     const res = { type: this.getType() };
@@ -181,8 +393,19 @@ export class AstNode {
   }
 
   /*
-   * Modification routines
+   * Public routines for tree manipulation
    */
+
+  /**
+   * Create a deep copy of given node and its subtree (cloned nodes have new IDs).
+   */
+  clone() {
+    const res = this._clone(true);
+    res.children = res.children.map(child => child.clone());
+    res._fixChildrenParentage();
+    Object.freeze(res);
+    return res;
+  }
 
   /**
    * Append new child node.
@@ -196,40 +419,190 @@ export class AstNode {
   }
 
   /**
-   * Replace this node only with given new node. The new node re-takes all the children of the old node.
-   * @param {AstNode} newNode a replacement node
+   * Replace this node with given new node, but the new node re-takes all the children of the old node.
+   * @param {AstNode} newNode a replacement node (still mutable, will be frozen)
+   * @param {boolean} pushDown original node is pushed one level down as the first child of replacement node
    */
-  replace(newNode) {
-    newNode.children = this.children;
-    this.children = [];
+  supplant(newNode, pushDown) {
+    const parent = this.getParent();
+
+    if (pushDown) {
+      newNode.children = [this];
+    } else {
+      newNode.children = this.children;
+    }
     newNode._fixChildrenPlaceholders();
     newNode._fixChildrenParentage();
-
-    if (this.parent) {
-      this.parent._childChanged(this, newNode);
+    Object.freeze(newNode);
+    if (parent && parent._childChanged) {
+      parent._childChanged(this, newNode);
     }
   }
 
   /**
    * Replace this node and its entire subtree with another node (and its subtree).
-   * @param {AstNode} newNode a replacement node
+   * @param {AstNode} newNode a replacement node (not connected in tree)
    */
-  replaceWithSubtree(newNode) {
-    if (this.parent) {
-      this.parent._childChanged(this, newNode);
+  replace(newNode) {
+    Object.freeze(newNode);
+    if (this.getParent() && this.getParent()._childChanged) {
+      this.getParent()._childChanged(this, newNode);
     }
+  }
+
+  /**
+   * Replace this node with an array of nodes. These nodes must not be connected in the tree
+   * or they must be connected under nodes being removed.
+   * @param {AstNode[]} nodes
+   */
+  replaceWithMultiple(nodes) {
+    const realNodes = nodes.filter(node => node && !(node instanceof AstNodePlaceholder));
+
+    // Let's make sure we can do this (check the vacancies)
+    const parent = this.getParent();
+    const vacantSiblings =
+      parent && parent instanceof AstNode ? parent.getMaxChildren() - parent.getRealChildren().length : 0;
+
+    if (vacantSiblings + 1 < realNodes.length) {
+      // this condition is met also when the parent is the Ast (tree) object
+      throw new Error('Node cannot be removed since its children cannot be moved one level up.');
+    }
+
+    parent._replaceChild(this, nodes);
+  }
+
+  /**
+   * Swap this node (and entire subtree) with given node of the same tree. The nodes must not be in ancestor-child relation.
+   * @param {AstNode} node another node in the tree
+   */
+  swap(node) {
+    if (this === node || this.getAllAncestors().includes(node) || node.getAllAncestors().includes(this)) {
+      throw new Error('Unable to swap nodes (one is an ancestor of another).');
+    }
+
+    this._beginTransaction();
+    const tmp1 = new AstNode();
+    const tmp2 = new AstNode();
+
+    this.replace(tmp1);
+    node.replace(tmp2);
+
+    tmp1.replace(node);
+    tmp2.replace(this);
+
+    this._commit();
+  }
+
+  /**
+   * Remove this node, but keep the children. The children are reconnected under the parent of this node.
+   */
+  remove() {
+    const realChildrenCount = this.getRealChildren().length;
+    if (realChildrenCount === 0) {
+      this.removeWholeSubtree(); // no children -> remove everything
+      return;
+    }
+
+    this.replaceWithMultiple(this.children);
   }
 
   /**
    * Remove this node (and its entire subtree) from the hierarchy.
    */
-  delete() {
-    if (this.parent) {
-      this.parent._childChanged(this, null);
+  removeWholeSubtree() {
+    if (this.getParent() && this.getParent()._childChanged) {
+      this.getParent()._childChanged(this, null);
+    }
+  }
+
+  /**
+   * Move given nodes under this nodes (append them as children). If this node is a placeholder,
+   * the moved nodes will replace it. Moved nodes must not be ancestors of this node.
+   * @param {AstNode[]} nodes
+   */
+  moveNodesHere(nodes) {
+    // Verify the operation can be performed
+    const ancestors = this.getAllAncestors();
+    nodes.forEach(node => {
+      if (!node || node instanceof AstNodePlaceholder) {
+        throw new Error('Placeholders may not be moved.');
+      }
+      if (this === node || ancestors.includes(node)) {
+        throw new Error('Unable to move the nodes (at least one is an ancestor of target node).');
+      }
+    });
+
+    // lets get started
+    const sortedNodes = sortNodes(nodes);
+    this._beginTransaction();
+
+    // determine the right target (placeholders are replaced, otherwise the nodes are appended as children)
+    const target = this instanceof AstNodePlaceholder ? this : new AstNodePlaceholder();
+    if (target !== this) {
+      this._childChanged(null, target); // append new target (will be replaced later)
+    }
+
+    // verify that the nodes will fit
+    const nodesKeepingTheirParent = sortedNodes.filter(node => node.getParent() === target.getParent());
+    if (
+      sortedNodes.length >
+      target.getParent().getMaxChildren() - target.getParent().getRealChildren().length - nodesKeepingTheirParent.length
+    ) {
+      target._rollback();
+      throw new Error('Unable to move the nodes (the arity of the target node would be exceeded).');
+    }
+
+    /*
+     * We need to carefully remove nodes from the tree and place them into temporary collection.
+     * The reason for that is that one node may be an ancestor of another and we might need to
+     * remove nodes from already removed subtrees (temporary collection will handle root replacements).
+     * Note that the nodes are sorted, so the ancestor is always moved before its descendant.
+     */
+    const mutableList = new MutableNodeList();
+    sortedNodes.forEach(node => {
+      node.removeWholeSubtree();
+      mutableList.addNode(node);
+    });
+
+    // Now we move the nodes from mutable list (where they may have been modified due to subtree updates).
+    target.replaceWithMultiple(mutableList.nodes);
+
+    this._commit();
+  }
+
+  /**
+   * Copy given list of nodes here (append them as children). If this node is a placeholder,
+   * the copied nodes will replace it.
+   * @param {AstNode[]} nodes
+   */
+  copyNodesHere(nodes) {
+    // verify the operation can be performed
+    nodes.forEach(node => {
+      if (!node || node instanceof AstNodePlaceholder) {
+        throw new Error('Placeholders may not be copied.');
+      }
+    });
+
+    if (nodes.length > this.getMaxChildren() - this.getRealChildren().length) {
+      throw new Error('Unable to copy the nodes (the arity of the target node would be exceeded).');
+    }
+
+    const sortedNodes = sortNodes(nodes).map(node => node.clone());
+
+    // this is shorter and more readable than polymorphism
+    if (this instanceof AstNodePlaceholder) {
+      // placeholders are replaced directly
+      this.replaceWithMultiple(sortedNodes);
+    } else {
+      // otherwise we append the children (null = append)
+      this._replaceChild(null, sortedNodes);
     }
   }
 }
 
+/**
+ * Base class for unary functions (with single child).
+ */
 export class AstNodeUnary extends AstNode {
   getGenericClass() {
     return FUNCTION_NODE;
@@ -244,6 +617,9 @@ export class AstNodeUnary extends AstNode {
   }
 }
 
+/**
+ * Base class for binary functions (with two children)
+ */
 export class AstNodeBinary extends AstNode {
   getGenericClass() {
     return FUNCTION_NODE;
@@ -258,6 +634,9 @@ export class AstNodeBinary extends AstNode {
   }
 }
 
+/**
+ * Base class for variadic functions (with one or more children).
+ */
 export class AstNodeVariadic extends AstNode {
   getGenericClass() {
     return FUNCTION_NODE;
@@ -276,6 +655,9 @@ export class AstNodeVariadic extends AstNode {
  * Concrete AST classes
  */
 
+/**
+ *
+ */
 export class AstNodePlaceholder extends AstNode {
   static type = 'placeholder';
 
@@ -283,9 +665,9 @@ export class AstNodePlaceholder extends AstNode {
     return null;
   }
 
-  replace(newNode) {
+  supplant(newNode) {
     // Placeholder do not override children of the new node
-    this.replaceWithSubtree(newNode);
+    this.replace(newNode);
   }
 
   serialize() {
@@ -293,6 +675,9 @@ export class AstNodePlaceholder extends AstNode {
   }
 }
 
+/**
+ *
+ */
 export class AstNodeAverage extends AstNodeVariadic {
   static type = 'avg';
   static description = (
@@ -307,6 +692,9 @@ export class AstNodeAverage extends AstNodeVariadic {
   }
 }
 
+/**
+ *
+ */
 export class AstNodeClamp extends AstNodeUnary {
   static type = 'clamp';
   static description = (
@@ -317,6 +705,9 @@ export class AstNodeClamp extends AstNodeUnary {
   );
 }
 
+/**
+ *
+ */
 export class AstNodeDivision extends AstNodeBinary {
   static type = 'div';
   static description = (
@@ -327,6 +718,9 @@ export class AstNodeDivision extends AstNodeBinary {
   );
 }
 
+/**
+ *
+ */
 export class AstNodeMinimum extends AstNodeVariadic {
   static type = 'min';
   static description = (
@@ -341,6 +735,9 @@ export class AstNodeMinimum extends AstNodeVariadic {
   }
 }
 
+/**
+ *
+ */
 export class AstNodeMaximum extends AstNodeVariadic {
   static type = 'max';
   static description = (
@@ -355,6 +752,9 @@ export class AstNodeMaximum extends AstNodeVariadic {
   }
 }
 
+/**
+ *
+ */
 export class AstNodeMultiply extends AstNodeVariadic {
   static type = 'mul';
   static description = (
@@ -369,6 +769,9 @@ export class AstNodeMultiply extends AstNodeVariadic {
   }
 }
 
+/**
+ *
+ */
 export class AstNodeNegation extends AstNodeUnary {
   static type = 'neg';
   static description = (
@@ -379,6 +782,9 @@ export class AstNodeNegation extends AstNodeUnary {
   );
 }
 
+/**
+ *
+ */
 export class AstNodeSubtraction extends AstNodeBinary {
   static type = 'sub';
   static description = (
@@ -389,6 +795,9 @@ export class AstNodeSubtraction extends AstNodeBinary {
   );
 }
 
+/**
+ *
+ */
 export class AstNodeSum extends AstNodeVariadic {
   static type = 'sum';
   static description = (
@@ -403,6 +812,9 @@ export class AstNodeSum extends AstNodeVariadic {
   }
 }
 
+/**
+ *
+ */
 export class AstNodeTestResult extends AstNode {
   static type = 'test-result';
   static description = (
@@ -412,8 +824,8 @@ export class AstNodeTestResult extends AstNode {
     />
   );
 
-  constructor(config = null) {
-    super(config);
+  constructor(id = null) {
+    super(id);
     if (this.test === undefined) {
       this.test = null;
     }
@@ -423,8 +835,8 @@ export class AstNodeTestResult extends AstNode {
     this.test = config.test;
   }
 
-  _clone() {
-    const clone = super._clone();
+  _clone(forceNewId = false) {
+    const clone = super._clone(forceNewId);
     clone.test = this.test;
     return clone;
   }
@@ -434,7 +846,8 @@ export class AstNodeTestResult extends AstNode {
   }
 
   getCaption() {
-    return this.test;
+    return `${this.id}: ${this.test}`; // TODO remove
+    // return this.test;
   }
 
   isValid() {
@@ -448,14 +861,17 @@ export class AstNodeTestResult extends AstNode {
   }
 }
 
+/**
+ * Node representing a literal numeric value.
+ */
 export class AstNodeValue extends AstNode {
   static type = 'value';
   static description = (
     <FormattedMessage id="app.scoreConfigExpression.value.description" defaultMessage="Numeric literal" />
   );
 
-  constructor(config = null) {
-    super(config);
+  constructor(id = null) {
+    super(id);
     if (this.value === undefined) {
       this.value = null;
     }
@@ -465,8 +881,8 @@ export class AstNodeValue extends AstNode {
     this.value = config.value;
   }
 
-  _clone() {
-    const clone = super._clone();
+  _clone(forceNewId = false) {
+    const clone = super._clone(forceNewId);
     clone.value = this.value;
     return clone;
   }
@@ -476,7 +892,8 @@ export class AstNodeValue extends AstNode {
   }
 
   getCaption() {
-    return this.value;
+    return `${this.id}: ${this.value}`; // TODO remove
+    // return this.value;
   }
 
   isValid() {
@@ -484,7 +901,7 @@ export class AstNodeValue extends AstNode {
   }
 
   serialize() {
-    if (!this.parent || !(this.parent instanceof AstNode)) {
+    if (!this.getParent() || !(this.getParent() instanceof AstNode)) {
       // There is no parent or the parent is a placeholder.
       return super.serialize();
     } else {
@@ -495,7 +912,7 @@ export class AstNodeValue extends AstNode {
 }
 
 /**
- * Registration of all classes by their types. Used for deserialization.
+ * List of all classes of the function generic type.
  */
 export const AST_FUNCTION_CLASSES = [
   AstNodeAverage,
@@ -509,6 +926,9 @@ export const AST_FUNCTION_CLASSES = [
   AstNodeSum,
 ];
 
+/**
+ * Index of all classes by their types. Used for deserialization.
+ */
 export const KNOWN_AST_CLASSES = arrayToObject([...AST_FUNCTION_CLASSES, AstNodeTestResult, AstNodeValue], c => c.type);
 
 /**
@@ -518,38 +938,100 @@ export const KNOWN_AST_CLASSES = arrayToObject([...AST_FUNCTION_CLASSES, AstNode
  */
 const _deserialize = scoreConfig => {
   if (typeof scoreConfig === 'number') {
-    return new AstNodeValue({ value: scoreConfig });
+    const node = new AstNodeValue();
+    node.value = scoreConfig;
+    Object.freeze(node);
+    return node;
   }
 
   if (!scoreConfig.type || !KNOWN_AST_CLASSES[scoreConfig.type]) {
     return null;
   }
 
-  return new KNOWN_AST_CLASSES[scoreConfig.type](scoreConfig);
+  const node = new KNOWN_AST_CLASSES[scoreConfig.type]();
+  node._initFromConfig(scoreConfig);
+  Object.freeze(node);
+  return node;
 };
 
 /**
- * Public deserialization interface. Get score config and returns the root node of the AST.
- * @param {Object} scoreConfig Score configuration to be deserialized into AST.
- * @param {function} [rootChangedCallback=null]
+ * Ast object represents the whole tree. It is also acts as special parent for root node.
+ * We take advantage of dynamic nature of JS and implement some of the methods that are
+ * called on parents from nodes (to ensure correct interaction between this object and the root node).
  */
-export const deserialize = (scoreConfig, rootChangedCallback = null) => {
-  // If root changed callback is provided, we wrap it into root object, which fakes the _childChanged interface.
-  const root = rootChangedCallback
-    ? {
-        _childChanged: (oldChild, newChild) => {
-          if (!newChild) {
-            newChild = new AstNodePlaceholder();
-          }
-          oldChild.parent = null;
-          newChild.parent = root;
-          rootChangedCallback(oldChild, newChild);
-        },
-      }
-    : null;
+export class Ast {
+  constructor(rootChangedCallback = null) {
+    this.root = new AstNodePlaceholder();
+    this.rootChangedCallback = rootChangedCallback;
+    this.inTransaction = false;
+    this.uncommitedRoot = null;
+  }
 
-  const res = _deserialize(scoreConfig);
-  res.parent = root;
-  res._check();
-  return res;
-};
+  /**
+   * Interface retaken from AstNode (basically reports that root node needs to be replaced).
+   */
+  _childChanged(oldChild, newChild) {
+    if (this.inTransaction) {
+      // When in transaction, the change of a root needs to be commited
+      this.uncommitedRoot = newChild;
+      return;
+    }
+
+    if (!newChild) {
+      newChild = new AstNodePlaceholder();
+    }
+    this.root = newChild;
+    newChild.setParent(this);
+
+    if (this.rootChangedCallback) {
+      this.rootChangedCallback(oldChild, newChild);
+    }
+  }
+
+  _beginTransaction() {
+    if (this.inTransaction) {
+      throw new Error('Recursive transactions are not allowed.');
+    }
+    this.inTransaction = true;
+  }
+
+  _commit() {
+    if (!this.inTransaction) {
+      throw new Error('Unable to perform commit when no transaction was started.');
+    }
+
+    this.inTransaction = false;
+    if (this.uncommitedRoot) {
+      this._childChanged(this.root, this.uncommitedRoot);
+      this.uncommitedRoot = null;
+    }
+  }
+
+  _rollback() {
+    if (!this.inTransaction) {
+      throw new Error('Unable to perform commit when no transaction was started.');
+    }
+
+    this.inTransaction = false;
+    this.uncommitedRoot = null;
+    if (this.root) {
+      // It might be necessary to fix parent refs, since they might have been updated in transaction.
+      this.root._fixChildrenParentage(true);
+    }
+  }
+
+  getRoot() {
+    return this.root;
+  }
+
+  /**
+   * Public deserialization interface. Get score config and returns the root node of the AST.
+   * @param {Object} scoreConfig Score configuration to be deserialized into AST.
+   */
+  deserialize(scoreConfig) {
+    this.root = _deserialize(scoreConfig);
+    this.root.setParent(this);
+    this.root._check();
+    return this.root;
+  }
+}

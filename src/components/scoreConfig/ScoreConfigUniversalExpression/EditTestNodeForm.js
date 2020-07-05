@@ -40,7 +40,7 @@ class EditTestNodeForm extends Component {
       const newNode = new AstNodeTestResult();
       newNode.test = this.state.selected;
       if (node) {
-        node.replace(newNode);
+        node.supplant(newNode);
       } else if (parent) {
         parent.appendChild(newNode);
       }

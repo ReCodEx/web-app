@@ -28,16 +28,16 @@ class EditFunctionNodeForm extends Component {
   }
 
   dirty = () => {
-    const { node = null } = this.props;
-    return this.state.selected && this.state.selected !== (node && node.getType());
+    const { node = null, pushDown = false } = this.props;
+    return this.state.selected && (pushDown || this.state.selected !== (node && node.getType()));
   };
 
   save = () => {
-    const { node = null, parent = null, close } = this.props;
+    const { node = null, parent = null, pushDown = false, close } = this.props;
     if (this.dirty()) {
       const newNode = new KNOWN_AST_CLASSES[this.state.selected]();
       if (node) {
-        node.replace(newNode);
+        node.supplant(newNode, pushDown);
       } else if (parent) {
         parent.appendChild(newNode);
       }
@@ -46,12 +46,12 @@ class EditFunctionNodeForm extends Component {
   };
 
   render() {
-    const { node = null, close } = this.props;
-    const selected = this.state.selected || (node && node.getType());
+    const { node = null, pushDown = false, close } = this.props;
+    const selected = this.state.selected || (node && !pushDown ? node.getType() : null);
 
     return (
       <React.Fragment>
-        {node ? (
+        {node && !pushDown ? (
           <div className="callout callout-warning">
             <FormattedMessage
               id="app.scoreConfigExpression.editFunctionDialog.editDescription"
@@ -74,7 +74,7 @@ class EditFunctionNodeForm extends Component {
                 key={astClass.type}
                 onClick={() => this.setState({ selected: astClass.type })}
                 className={classnames({
-                  'bg-info': (node && node.getType()) === astClass.type,
+                  'bg-info': node && !pushDown && node.getType() === astClass.type,
                 })}>
                 <td className="valign-middle shrink-col">
                   <StandaloneRadioField
@@ -115,6 +115,7 @@ class EditFunctionNodeForm extends Component {
 EditFunctionNodeForm.propTypes = {
   node: PropTypes.instanceOf(AstNode),
   parent: PropTypes.object,
+  pushDown: PropTypes.bool,
   close: PropTypes.func.isRequired,
 };
 

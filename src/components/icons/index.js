@@ -74,6 +74,7 @@ export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
 export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
 export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props => <Icon {...props} icon="chalkboard-teacher" />;
+export const SwapIcon = props => <Icon {...props} icon="sync" />;
 export const TagIcon = props => <Icon {...props} icon="tag" />;
 export const TestsIcon = props => <Icon {...props} icon="tasks" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
