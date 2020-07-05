@@ -57,7 +57,7 @@ class EditLiteralNodeForm extends Component {
       const newNode = new AstNodeValue();
       newNode.value = this.state.numValue;
       if (node) {
-        node.replace(newNode);
+        node.supplant(newNode);
       } else if (parent) {
         parent.appendChild(newNode);
       }

@@ -2,20 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
 
 import ExpressionNode from './ExpressionNode';
 import EditFunctionNodeForm from './EditFunctionNodeForm';
 import EditTestNodeForm from './EditTestNodeForm';
 import EditLiteralNodeForm from './EditLiteralNodeForm';
-import Button from '../../widgets/FlatButton';
-import Icon, { CloseIcon } from '../../icons';
 
-import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, deserialize } from '../../../helpers/exercise/scoreAst';
+import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst';
 
 import style from './tree.less';
-
-const memoizedDeserialize = defaultMemoize((config, updateCallback) => deserialize(config, updateCallback));
 
 const CLOSED_DIALOGS_STATE = {
   [`${FUNCTION_NODE}DialogOpen`]: false,
@@ -51,6 +46,7 @@ class ScoreConfigUniversalExpression extends Component {
   state = {
     initialConfig: null,
     config: null,
+    currentSelection: {},
     ...CLOSED_DIALOGS_STATE,
   };
 
@@ -59,16 +55,50 @@ class ScoreConfigUniversalExpression extends Component {
       ? {
           initialConfig, // we keep this just to detect changes
           config: null, // null -> computed from initial config
+          currentSelection: {},
           ...CLOSED_DIALOGS_STATE,
         }
       : null;
   }
 
   updateConfig = (_, config) => {
+    if (config) {
+      config._check(); // TODO remove
+    }
+
+    // Update selection (nodes may have changed or removed)
+    const currentSelection = {};
+    Object.keys(this.state.currentSelection).forEach(id => {
+      const node = config && config.findById(id);
+      if (node) {
+        currentSelection[id] = node;
+      }
+    });
+    this.setState({ currentSelection });
+
     this.setState({ config });
   };
 
-  openDialog = (node, parent = null, genericClass = null) => {
+  ast = null;
+  lastInitialConfig = null;
+  getAst() {
+    if (this.lastInitialConfig !== this.props.initialConfig || !this.ast) {
+      this.lastInitialConfig = this.props.initialConfig;
+      this.ast = new Ast(this.updateConfig);
+      this.ast.deserialize(this.props.initialConfig);
+    }
+
+    return this.ast;
+  }
+
+  /**
+   * Open dialog that edit parameters/type of a node (based on its generic class)
+   * @param {AstNode|null} node Node being edited (i.e., replaced). If null, new node is created.
+   * @param {AstNode|null} parent If null, node's parent is taken.
+   * @param {string|null} genericClass Generic class (type of dialog to be opened). If null, generic class of given node is taken.
+   * @param {boolean} pushDown Whether current node should be pushed down as a child of newly created node (instead of replacing).
+   */
+  openDialog = (node, parent = null, genericClass = null, pushDown = false) => {
     if (!genericClass) {
       genericClass = node && node.getGenericClass();
       if (!genericClass) {
@@ -82,22 +112,45 @@ class ScoreConfigUniversalExpression extends Component {
       // One must love dynamic languages...
       [`${genericClass}DialogOpen`]: Boolean(node || parent),
       [`${genericClass}DialogNode`]: node,
-      [`${genericClass}DialogParent`]: parent || (node && node.parent),
+      [`${genericClass}DialogParent`]: parent || (node && node.getParent()),
     });
+
+    if (genericClass === FUNCTION_NODE) {
+      this.setState({ [`${FUNCTION_NODE}DialogPushDown`]: pushDown });
+    }
   };
 
   closeDialog = () => {
     this.setState(CLOSED_DIALOGS_STATE);
   };
 
+  selectNode = (node, multi = false) => {
+    if (node === null) {
+      this.setState({ currentSelection: {} });
+    }
+
+    const currentSelection = multi ? { ...this.state.currentSelection } : {};
+    if (this.state.currentSelection[node.id]) {
+      delete currentSelection[node.id];
+    } else {
+      currentSelection[node.id] = node;
+    }
+    this.setState({ currentSelection });
+  };
+
   render() {
-    const { initialConfig, tests, editable = false } = this.props;
-    const config = this.state.config || memoizedDeserialize(initialConfig, this.updateConfig);
+    const { tests, editable = false } = this.props;
+    const config = this.state.config || this.getAst().getRoot();
 
     return config ? (
       <React.Fragment>
         <ul className={style.tree}>
-          <ExpressionNode node={config} editNode={editable ? this.openDialog : null} />
+          <ExpressionNode
+            node={config}
+            selectedNodes={this.state.currentSelection}
+            editNode={editable ? this.openDialog : null}
+            selectNode={editable ? this.selectNode : null}
+          />
         </ul>
 
         {[FUNCTION_NODE, TEST_NODE, LITERAL_NODE].map(genericClass => {
@@ -116,6 +169,7 @@ class ScoreConfigUniversalExpression extends Component {
                 <FormComponent
                   node={this.state[`${genericClass}DialogNode`]}
                   parent={this.state[`${genericClass}DialogParent`]}
+                  pushDown={genericClass === FUNCTION_NODE ? this.state[`${FUNCTION_NODE}DialogPushDown`] : undefined}
                   tests={tests}
                   close={this.closeDialog}
                 />

@@ -4,6 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Popover, Overlay, ButtonGroup, Button } from 'react-bootstrap';
 import { SuccessIcon, CloseIcon } from '../../icons';
 
+const wrapperSpanStyle = { display: 'inline-block', position: 'relative' };
+
 class Confirm extends Component {
   state = { showPopup: false };
 
@@ -64,7 +66,7 @@ class Confirm extends Component {
   render() {
     const { children, className = '' } = this.props;
     return (
-      <span style={{ display: 'inline-block', position: 'relative' }} className={className}>
+      <span style={wrapperSpanStyle} className={className}>
         {React.cloneElement(children, {
           onClick: this.askForConfirmation,
         })}

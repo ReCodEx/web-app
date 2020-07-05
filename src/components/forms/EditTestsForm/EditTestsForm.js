@@ -213,7 +213,7 @@ class EditTestsForm extends Component {
                   </div>
                 )}
               </Col>
-              {calculator === UNIVERSAL_ID && formValues && (
+              {calculator === UNIVERSAL_ID && formValues && formValues.config && (
                 <div className="editTestFormRightPanel">
                   <ScoreConfigUniversalExpression initialConfig={formValues.config} tests={formValues.tests} editable />
                 </div>

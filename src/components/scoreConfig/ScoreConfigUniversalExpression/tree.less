@@ -9,9 +9,11 @@
 @literalNodeColor: #e0e0e0;
 @testNodeColor: #ffffd0;
 @invalidNodeColor: #f96;
+@selectedNodeColor: #6b0;
 
 .tree {
-  margin-left: 20px
+  margin-left: 20px;
+  user-select: none;
 }
 
 .tree, .tree li, .tree ul {
@@ -27,7 +29,7 @@
   list-style-type: none;
   margin: 7px 15px;
   position: relative;
-  font-size: 13px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -82,7 +84,6 @@ ul.tree > li:first-child::after {
 
 .tree li > span.function {
   background: linear-gradient(white, @functionNodeColor);
-  font-family: 'Courier New', Courier, monospace;
   font-weight: bold;
 }
 
@@ -105,7 +106,20 @@ ul.tree > li:first-child::after {
 
 .tree li > span.invalid {
   border-color: @invalidNodeColor;
-  box-shadow: 0 0 3px 3px #fa7;
+  background: linear-gradient(white, @invalidNodeColor);
+  box-shadow: 0 0 3px 1px #eb8;
+}
+
+.tree li > span.selected {
+  border-color: @selectedNodeColor;
+  box-shadow: 0 0 8px 4px #be4;
+}
+
+.tree li > span.selected + ul li::after,
+.tree li > span.selected + ul li::before, 
+.tree li > span.selected + ul::before,
+.tree li > span.selected + ul ul::before {
+  border-color: @selectedNodeColor;
 }
 
 /*
