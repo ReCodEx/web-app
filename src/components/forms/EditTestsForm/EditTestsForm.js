@@ -61,7 +61,7 @@ class EditTestsForm extends Component {
 
           <Grid fluid className="no-padding">
             <Row className="no-margin editTestFormRelativeContainer">
-              <Col lg={calculator === UNIVERSAL_ID ? 6 : 12} className="no-padding">
+              <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="no-padding">
                 <FieldArray name="tests" component={EditTestsTest} readOnly={readOnly} calculator={calculator} />
 
                 {!readOnly && (
