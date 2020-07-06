@@ -1,6 +1,20 @@
 /**
  * This is a bit tough piece of code, so this prologue should help you understand it.
- * TODO
+ * We have considered using libraries like immutable.js, but they are not quite ready for recursive trees.
+ *
+ * The thing is we need an immutable data structure (when change is done in a node, a clone is created instead).
+ * However, due to performance reasons we need both donwlink (children) and uplink (parent) references in the nodes.
+ * If such a tree is completely immutable, any modification will result in complete re-creation of the tree
+ * which is highly suboptimal. Therefore, each node is immutable except for the reference to its parent.
+ * The parent reference is kept in a nested object, so it is not affected by Object.freeze and can be changed.
+ *
+ * When AST node is cloned, _childChanged method needs to be called on its parent to replace the clone with the
+ * original. This leads to recursive update all the way up to the root. Parent of a root node is Ast class that
+ * represents the whole tree. This class also implements _childChanged, but it is mutable (so it updates its root ref).
+ *
+ * Each node is assigned unique ID. This ID is copied to a clone when the node is simply updated. Hence, it can be used
+ * externally to keep more permanent idenfication of a node (e.g., node selection). However, when the node is really
+ * copied (user-issued copy operation), a new ID is assigned to the copy.
  */
 
 import React from 'react';
@@ -36,11 +50,20 @@ const sortNodes = nodes => {
   return wrapped.map(({ node }) => node);
 };
 
+/**
+ * Special collection that can temporarily hold detached nodes.
+ * The benefit is that changes may be performed in detached node subtrees
+ * and the mutable list correctly replace the nodes with their updated clones.
+ */
 class MutableNodeList {
   constructor() {
     this.nodes = [];
   }
 
+  /**
+   * Append another node to be handled inside this list.
+   * @param {AstNode} node already detached node
+   */
   addNode(node) {
     this.nodes.push(node);
     node.setParent(this);
@@ -64,11 +87,9 @@ class MutableNodeList {
  */
 let idCounter = 0; // internal counter for generating unique IDs
 
-/*
-TODO - parent bude mutable, pri zmene children se musi naklonovat node
-- pri zmene roota (napr. pri undo) se opravi vsechny parenty (rekurzivne podle children).
-- zvazit, jestli neudelat parenta pres indirekci (objekt) a nezafreezovat this (otazka kdy)
-*/
+/**
+ * Base class for all AST nodes. Most functionality is implemented here.
+ */
 export class AstNode {
   /**
    * Initialize an empty node. The node remains mutable until initialized by deserialization,
@@ -656,7 +677,8 @@ export class AstNodeVariadic extends AstNode {
  */
 
 /**
- *
+ * Special placeholder node. It is used in situations, where node needs to be present (e.g., to hold specific position)
+ * in the UI. This node may not be serialized and its behavior is slightly different in some situations.
  */
 export class AstNodePlaceholder extends AstNode {
   static type = 'placeholder';
@@ -675,9 +697,6 @@ export class AstNodePlaceholder extends AstNode {
   }
 }
 
-/**
- *
- */
 export class AstNodeAverage extends AstNodeVariadic {
   static type = 'avg';
   static description = (
@@ -692,9 +711,6 @@ export class AstNodeAverage extends AstNodeVariadic {
   }
 }
 
-/**
- *
- */
 export class AstNodeClamp extends AstNodeUnary {
   static type = 'clamp';
   static description = (
@@ -705,9 +721,6 @@ export class AstNodeClamp extends AstNodeUnary {
   );
 }
 
-/**
- *
- */
 export class AstNodeDivision extends AstNodeBinary {
   static type = 'div';
   static description = (
@@ -718,9 +731,6 @@ export class AstNodeDivision extends AstNodeBinary {
   );
 }
 
-/**
- *
- */
 export class AstNodeMinimum extends AstNodeVariadic {
   static type = 'min';
   static description = (
@@ -735,9 +745,6 @@ export class AstNodeMinimum extends AstNodeVariadic {
   }
 }
 
-/**
- *
- */
 export class AstNodeMaximum extends AstNodeVariadic {
   static type = 'max';
   static description = (
@@ -752,9 +759,6 @@ export class AstNodeMaximum extends AstNodeVariadic {
   }
 }
 
-/**
- *
- */
 export class AstNodeMultiply extends AstNodeVariadic {
   static type = 'mul';
   static description = (
@@ -769,9 +773,6 @@ export class AstNodeMultiply extends AstNodeVariadic {
   }
 }
 
-/**
- *
- */
 export class AstNodeNegation extends AstNodeUnary {
   static type = 'neg';
   static description = (
@@ -782,9 +783,6 @@ export class AstNodeNegation extends AstNodeUnary {
   );
 }
 
-/**
- *
- */
 export class AstNodeSubtraction extends AstNodeBinary {
   static type = 'sub';
   static description = (
@@ -795,9 +793,6 @@ export class AstNodeSubtraction extends AstNodeBinary {
   );
 }
 
-/**
- *
- */
 export class AstNodeSum extends AstNodeVariadic {
   static type = 'sum';
   static description = (
@@ -813,7 +808,7 @@ export class AstNodeSum extends AstNodeVariadic {
 }
 
 /**
- *
+ * Leaf node representing a test. The name of the test is stored in property `test`.
  */
 export class AstNodeTestResult extends AstNode {
   static type = 'test-result';
@@ -912,7 +907,7 @@ export class AstNodeValue extends AstNode {
 }
 
 /**
- * List of all classes of the function generic type.
+ * List of all classes of the generic type 'function'.
  */
 export const AST_FUNCTION_CLASSES = [
   AstNodeAverage,
@@ -965,6 +960,8 @@ export class Ast {
     this.rootChangedCallback = rootChangedCallback;
     this.inTransaction = false;
     this.uncommitedRoot = null;
+    this.undos = []; // list of UNDo roots
+    this.redos = []; // list of REDO roots
   }
 
   /**
@@ -972,7 +969,7 @@ export class Ast {
    */
   _childChanged(oldChild, newChild) {
     if (this.inTransaction) {
-      // When in transaction, the change of a root needs to be commited
+      // when in transaction, the change of a root needs to be commited
       this.uncommitedRoot = newChild;
       return;
     }
@@ -980,6 +977,12 @@ export class Ast {
     if (!newChild) {
       newChild = new AstNodePlaceholder();
     }
+
+    // clear redos and save last root for undo
+    this.redos = [];
+    this.undos.push(this.root);
+
+    // update the root
     this.root = newChild;
     newChild.setParent(this);
 
@@ -988,6 +991,10 @@ export class Ast {
     }
   }
 
+  /**
+   * Initiate transaction on the tree. No root modifications will be actually made until
+   * commit is called.
+   */
   _beginTransaction() {
     if (this.inTransaction) {
       throw new Error('Recursive transactions are not allowed.');
@@ -995,6 +1002,9 @@ export class Ast {
     this.inTransaction = true;
   }
 
+  /**
+   * Commit a transaction (make the last root passed via _childChanged the real root).
+   */
   _commit() {
     if (!this.inTransaction) {
       throw new Error('Unable to perform commit when no transaction was started.');
@@ -1007,6 +1017,9 @@ export class Ast {
     }
   }
 
+  /**
+   * Rollback a transaction (remove any temporary data, do not change the root).
+   */
   _rollback() {
     if (!this.inTransaction) {
       throw new Error('Unable to perform commit when no transaction was started.');
@@ -1020,13 +1033,62 @@ export class Ast {
     }
   }
 
+  /**
+   * Get the (immutable) root node of the tree.
+   */
   getRoot() {
     return this.root;
   }
 
   /**
+   * Whether it is possible to perform an UNDO operation.
+   */
+  canUndo() {
+    return this.undos.length > 0;
+  }
+
+  /**
+   * Revert the tree to the previous state in the history.
+   */
+  undo() {
+    if (this.canUndo()) {
+      const oldRoot = this.root;
+      this.redos.push(oldRoot);
+      this.root = this.undos.pop();
+      this.root._fixChildrenParentage(true);
+
+      if (this.rootChangedCallback) {
+        this.rootChangedCallback(oldRoot, this.root);
+      }
+    }
+  }
+
+  /**
+   * Whether it is possible to perform REDO operation.
+   */
+  canRedo() {
+    return this.redos.length > 0;
+  }
+
+  /**
+   * Change the tree into a next state, that was previosly reverted by UNDO.
+   */
+  redo() {
+    if (this.canRedo()) {
+      const oldRoot = this.root;
+      this.undos.push(oldRoot);
+      this.root = this.redos.pop();
+      this.root._fixChildrenParentage(true);
+
+      if (this.rootChangedCallback) {
+        this.rootChangedCallback(oldRoot, this.root);
+      }
+    }
+  }
+
+  /**
    * Public deserialization interface. Get score config and returns the root node of the AST.
-   * @param {Object} scoreConfig Score configuration to be deserialized into AST.
+   * @param {Object} scoreConfig score configuration from API to be deserialized
    */
   deserialize(scoreConfig) {
     this.root = _deserialize(scoreConfig);

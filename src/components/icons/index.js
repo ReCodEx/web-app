@@ -48,6 +48,7 @@ export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
 export { NeedFixingIcon };
 export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
+export const RedoIcon = props => <Icon {...props} icon="redo-alt" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
@@ -89,6 +90,7 @@ export const TypedMessageIcon = ({ type, ...props }) => (
   <Icon {...props} icon={messageIconTypes[type] || defaultMessageIcon} />
 );
 
+export const UndoIcon = props => <Icon {...props} icon="undo-alt" />;
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
