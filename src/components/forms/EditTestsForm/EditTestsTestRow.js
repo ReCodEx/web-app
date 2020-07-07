@@ -6,8 +6,9 @@ import { FormattedMessage } from 'react-intl';
 
 import { TextField, NumericTextField } from '../Fields';
 import { RemoveIcon } from '../../icons';
-import './EditTests.css';
 import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/score';
+
+import style from './EditTests.less';
 
 const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = false }) => (
   <tr>
@@ -17,7 +18,7 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = fals
         component={TextField}
         label=""
         maxLength={64}
-        groupClassName="editTestFormTestRow"
+        groupClassName={style.testRow}
         disabled={readOnly}
       />
     </td>
@@ -29,7 +30,7 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = fals
           validateMin={0}
           validateMax={10000}
           maxLength={5}
-          groupClassName="editTestFormTestRow"
+          groupClassName={style.testRow}
           disabled={readOnly}
         />
       </td>

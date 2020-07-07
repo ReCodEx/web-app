@@ -77,7 +77,15 @@ class Box extends Component {
   }
 
   render() {
-    const { id = null, title, type = 'default', solid = false, collapsable = false, className = '' } = this.props;
+    const {
+      id = null,
+      title,
+      type = 'default',
+      solid = false,
+      collapsable = false,
+      customIcons = null,
+      className = '',
+    } = this.props;
     const { isOpen = true } = this.state;
 
     return (
@@ -110,8 +118,10 @@ class Box extends Component {
             </span>
           </h3>
 
-          {collapsable && (
-            <div className="box-tools pull-right">
+          {customIcons && <span className={styles.customIcons}>{customIcons}</span>}
+
+          {collapsable && !customIcons && (
+            <div className="box-tools">
               <button type="button" className="btn btn-box-tool" onClick={this.toggleDetails}>
                 <Icon icon={isOpen ? 'minus' : 'plus'} />
               </button>
@@ -150,6 +160,7 @@ Box.propTypes = {
   footer: PropTypes.element,
   children: PropTypes.element,
   className: PropTypes.string,
+  customIcons: PropTypes.any,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
