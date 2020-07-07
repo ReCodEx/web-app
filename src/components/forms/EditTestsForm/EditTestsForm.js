@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Modal, Table, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Modal, Table, Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import EditTestsTest from './EditTestsTest';
@@ -22,14 +22,20 @@ import {
   SCORE_CALCULATOR_DESCRIPTIONS,
 } from '../../../helpers/exercise/score';
 
+import style from './EditTests.less';
+
 class EditTestsForm extends Component {
-  state = { dialogOpen: false };
+  state = { dialogOpen: false, expanded: false };
 
   openDialog = () => this.setState({ dialogOpen: true });
 
   closeDialog = () => {
     this.setState({ dialogOpen: false });
     this.props.reset();
+  };
+
+  toggleExpanded = () => {
+    this.setState({ expanded: !this.state.expanded });
   };
 
   render() {
@@ -51,7 +57,28 @@ class EditTestsForm extends Component {
       <Box
         id="tests-score-form"
         title={<FormattedMessage id="app.editExerciseConfig.testsAndScoring" defaultMessage="Tests and Scoring" />}
-        unlimitedHeight>
+        unlimitedHeight
+        customIcons={
+          calculator === UNIVERSAL_ID ? (
+            <OverlayTrigger
+              placement="left"
+              overlay={
+                <Tooltip id="expandToggleButton">
+                  <FormattedMessage
+                    id="app.editTestsForm.expandToggleTooltip"
+                    defaultMessage="Toggle compressed/expanded view"
+                  />
+                </Tooltip>
+              }>
+              <Icon
+                icon={this.state.expanded ? 'compress' : 'expand'}
+                size="lg"
+                className="valign-middle"
+                onClick={this.toggleExpanded}
+              />
+            </OverlayTrigger>
+          ) : null
+        }>
         <React.Fragment>
           {submitFailed && (
             <Alert bsStyle="danger">
@@ -60,7 +87,7 @@ class EditTestsForm extends Component {
           )}
 
           <Grid fluid className="no-padding">
-            <Row className="no-margin editTestFormRelativeContainer">
+            <Row className={style.relativeContainer}>
               <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="no-padding">
                 <FieldArray name="tests" component={EditTestsTest} readOnly={readOnly} calculator={calculator} />
 
@@ -214,7 +241,12 @@ class EditTestsForm extends Component {
                 )}
               </Col>
               {calculator === UNIVERSAL_ID && formValues && formValues.config && (
-                <div className="editTestFormRightPanel">
+                <div
+                  className={classnames({
+                    'col-xs-6': this.state.expanded,
+                    [style.rightPanel]: !this.state.expanded,
+                    'em-padding-left': true,
+                  })}>
                   <ScoreConfigUniversalExpression initialConfig={formValues.config} tests={formValues.tests} editable />
                 </div>
               )}
