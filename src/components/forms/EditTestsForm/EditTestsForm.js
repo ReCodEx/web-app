@@ -21,21 +21,75 @@ import {
   SCORE_CALCULATOR_CAPTIONS,
   SCORE_CALCULATOR_DESCRIPTIONS,
 } from '../../../helpers/exercise/score';
+import { Ast, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
+
+import { arrayToObject } from '../../../helpers/common';
 
 import style from './EditTests.less';
 
 class EditTestsForm extends Component {
-  state = { dialogOpen: false, expanded: false };
+  idCounter = 0; // counter used to generate unique IDs
+
+  getUniqueId() {
+    return -++this.idCounter;
+  }
+
+  ast = null;
+  lastConfig = null;
+  usedTests = null;
+
+  getAst() {
+    const { calculator, initialValues } = this.props;
+    if (calculator !== UNIVERSAL_ID) {
+      return null;
+    }
+
+    if (!this.ast || this.lastConfig !== initialValues.config) {
+      this.lastConfig = initialValues.config;
+      this.ast = new Ast(this.updateAstRoot);
+      this.ast.deserialize(initialValues.config, initialValues.tests);
+      this.usedTests = null;
+      this.props.registerExtraData && this.props.registerExtraData(this.ast.getRoot());
+    }
+    return this.ast;
+  }
+
+  getUsedTests() {
+    if (!this.usedTests && this.getAst()) {
+      this.usedTests = arrayToObject(
+        this.getAst().getNodes(node => node instanceof AstNodeTestResult),
+        node => node.test
+      );
+    }
+    return this.usedTests;
+  }
+
+  state = { dialogOpen: false, expanded: false, astRoot: null };
+
+  reset = () => {
+    this.ast = null;
+    this.usedTests = null;
+    this.props.reset();
+    if (this.props.calculator === UNIVERSAL_ID) {
+      this.setState({ astRoot: this.getAst().getRoot() });
+    }
+  };
 
   openDialog = () => this.setState({ dialogOpen: true });
 
   closeDialog = () => {
-    this.setState({ dialogOpen: false });
-    this.props.reset();
+    this.setState({ dialogOpen: false, astRoot: null });
+    this.reset();
   };
 
   toggleExpanded = () => {
     this.setState({ expanded: !this.state.expanded });
+  };
+
+  updateAstRoot = (_, newRoot) => {
+    this.usedTests = null;
+    this.setState({ astRoot: newRoot });
+    this.props.registerExtraData && this.props.registerExtraData(this.getAst().getRoot());
   };
 
   render() {
@@ -45,7 +99,6 @@ class EditTestsForm extends Component {
       dirty,
       submitting,
       handleSubmit,
-      reset,
       change,
       submitFailed,
       submitSucceeded,
@@ -89,7 +142,13 @@ class EditTestsForm extends Component {
           <Grid fluid className="no-padding">
             <Row className={style.relativeContainer}>
               <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="no-padding">
-                <FieldArray name="tests" component={EditTestsTest} readOnly={readOnly} calculator={calculator} />
+                <FieldArray
+                  name="tests"
+                  component={EditTestsTest}
+                  readOnly={readOnly}
+                  usedTests={this.getUsedTests()}
+                  calculator={calculator}
+                />
 
                 {!readOnly && (
                   <div className="text-center">
@@ -100,6 +159,7 @@ class EditTestsForm extends Component {
                           change('tests', [
                             ...formValues.tests,
                             {
+                              id: this.getUniqueId(),
                               name: 'Test ' + (formValues.tests.length + 1).toString().padStart(2, '0'),
                               weight: '100',
                             },
@@ -111,9 +171,9 @@ class EditTestsForm extends Component {
                       </Button>
                     )}
 
-                    {dirty && !submitting && (
+                    {(dirty || (this.getAst() && this.getAst().canUndo())) && !submitting && (
                       <span>
-                        <Button type="reset" onClick={reset} bsStyle="danger" className="btn-flat">
+                        <Button type="reset" onClick={this.reset} bsStyle="danger">
                           <RefreshIcon gapRight />
                           <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                         </Button>
@@ -247,7 +307,12 @@ class EditTestsForm extends Component {
                     [style.rightPanel]: !this.state.expanded,
                     'em-padding-left': true,
                   })}>
-                  <ScoreConfigUniversalExpression initialConfig={formValues.config} tests={formValues.tests} editable />
+                  <ScoreConfigUniversalExpression
+                    ast={this.getAst()}
+                    root={this.state.astRoot || this.getAst().getRoot()}
+                    tests={formValues.tests}
+                    editable={!readOnly}
+                  />
                 </div>
               )}
             </Row>
@@ -265,12 +330,14 @@ EditTestsForm.propTypes = {
   reset: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  changeCalculator: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
+  registerExtraData: PropTypes.func,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
+  initialValues: PropTypes.object,
   formValues: PropTypes.object,
 };
 

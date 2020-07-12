@@ -85,8 +85,7 @@ const ExpressionNodePlaceholder = ({
   // When copying, there must be enough vacant space for all selected nodes.
   // When moving, there must be enough vacant space for all selected nodes except siblings (since they are moved under the same parent)
   const selectedNodesCount = Object.values(selectedNodes).length;
-  const selectedSiblingsCount = Object.values(selectedNodes).filter(node => node.getParent() === parent).length;
-  const vacantCount = getVacantChildrenPositions(parent);
+  const selecteNodeObjects = Object.values(selectedNodes);
 
   return (
     <li>
@@ -109,44 +108,40 @@ const ExpressionNodePlaceholder = ({
           </OverlayTrigger>
         ))}
 
-        {selectedNodesCount > 0 && vacantCount >= selectedNodesCount - selectedSiblingsCount && (
-          <React.Fragment>
-            {vacantCount >= selectedNodesCount && (
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={`${(node || parent).id}-copy`}>
-                    <FormattedMessage id="app.scoreConfigExpression.copy" defaultMessage="Copy selected node(s) here" />
-                  </Tooltip>
-                }>
-                <Icon
-                  icon={['far', 'copy']}
-                  gapLeft
-                  gapRight
-                  timid
-                  onClick={() => (node || parent).copyNodesHere(Object.values(selectedNodes))}
-                />
-              </OverlayTrigger>
-            )}
+        {selectedNodesCount > 0 && (node || parent).canCopyNodesHere(selecteNodeObjects) && (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`${(node || parent).id}-copy`}>
+                <FormattedMessage id="app.scoreConfigExpression.copy" defaultMessage="Copy selected node(s) here" />
+              </Tooltip>
+            }>
+            <Icon
+              icon={['far', 'copy']}
+              gapLeft
+              gapRight
+              timid
+              onClick={() => (node || parent).copyNodesHere(selecteNodeObjects)}
+            />
+          </OverlayTrigger>
+        )}
 
-            {!hasSelectedParent && (
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={`${(node || parent).id}-move`}>
-                    <FormattedMessage id="app.scoreConfigExpression.move" defaultMessage="Move selected node(s) here" />
-                  </Tooltip>
-                }>
-                <Icon
-                  icon="external-link-alt"
-                  gapLeft
-                  gapRight
-                  timid
-                  onClick={() => (node || parent).moveNodesHere(Object.values(selectedNodes))}
-                />
-              </OverlayTrigger>
-            )}
-          </React.Fragment>
+        {selectedNodesCount > 0 && !hasSelectedParent && (node || parent).canMoveNodesHere(selecteNodeObjects) && (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`${(node || parent).id}-move`}>
+                <FormattedMessage id="app.scoreConfigExpression.move" defaultMessage="Move selected node(s) here" />
+              </Tooltip>
+            }>
+            <Icon
+              icon="external-link-alt"
+              gapLeft
+              gapRight
+              timid
+              onClick={() => (node || parent).moveNodesHere(selecteNodeObjects)}
+            />
+          </OverlayTrigger>
         )}
       </span>
     </li>
@@ -155,6 +150,7 @@ const ExpressionNodePlaceholder = ({
 
 const ExpressionNode = ({
   node,
+  testsIndex = EMPTY_OBJ,
   selectedNodes = EMPTY_OBJ,
   parent = null,
   editNode = null,
@@ -185,7 +181,7 @@ const ExpressionNode = ({
             onClick={ev => selectNode && selectNode(node, ev.ctrlKey)}
             onDoubleClick={() => editNode && editNode(node)}>
             {genericClass && <Icon icon={ICONS[genericClass]} className={ICONS_CSS_CLASSES[genericClass]} gapRight />}
-            {node.getCaption()}
+            {node.getCaption(testsIndex)}
           </span>
         </OptionalTooltipWrapper>
 
@@ -274,6 +270,7 @@ const ExpressionNode = ({
               key={idx}
               node={child}
               parent={node}
+              testsIndex={testsIndex}
               selectedNodes={selectedNodes}
               editNode={editNode}
               selectNode={selectNode}
@@ -316,6 +313,7 @@ ExpressionNodePlaceholder.propTypes = {
 
 ExpressionNode.propTypes = {
   node: PropTypes.instanceOf(AstNode),
+  testsIndex: PropTypes.object,
   selectedNodes: PropTypes.object,
   parent: PropTypes.instanceOf(AstNode),
   editNode: PropTypes.func,

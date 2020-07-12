@@ -44,10 +44,10 @@ class SubmitButton extends Component {
     }
   }
 
-  submit = data => {
+  submit = () => {
     const { handleSubmit, onSubmit = null } = this.props;
     onSubmit && onSubmit();
-    return handleSubmit(data).then(() => {
+    return handleSubmit().then(() => {
       if (!this.unmounted) {
         this.setState({ saved: true });
         this.resetAfterSomeTime = setTimeout(this.reset, 2000);
@@ -92,11 +92,10 @@ class SubmitButton extends Component {
     const formattedMessages = getMessages(messages);
 
     return (
-      <Confirm id="allow-fork" onConfirmed={this.submit} question={confirmQuestion} disabled={!confirmQuestion}>
+      <Confirm id="confirm-submit" onConfirmed={this.submit} question={confirmQuestion} disabled={!confirmQuestion}>
         <Button
           type="submit"
           bsStyle={hasSucceeded ? 'success' : hasFailed ? 'danger' : invalid ? 'warning' : 'success'}
-          className="btn-flat"
           disabled={invalid || asyncValidating !== false || submitting || disabled}>
           {!noIcons && icons[buttonState]}
           {formattedMessages[buttonState]}

@@ -16,4 +16,4 @@ export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
  * Gather data of EditTestsForm and prepare them to be sent to Tests endpoint and ScoreConfig endpoint.
  */
 export const transformTestsValues = ({ tests }) =>
-  tests.map(({ id, name }) => (id ? { id, name: name.trim() } : { name: name.trim() }));
+  tests.map(({ id, name }) => (id && id >= 0 ? { id, name: name.trim() } : { name: name.trim() }));

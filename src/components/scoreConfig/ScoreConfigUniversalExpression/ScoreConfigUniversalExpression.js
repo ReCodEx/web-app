@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
+import { defaultMemoize } from 'reselect';
 
 import ExpressionNode from './ExpressionNode';
 import EditFunctionNodeForm from './EditFunctionNodeForm';
 import EditTestNodeForm from './EditTestNodeForm';
 import EditLiteralNodeForm from './EditLiteralNodeForm';
 
-import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst';
+import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast, AstNode } from '../../../helpers/exercise/scoreAst';
 import Button from '../../widgets/FlatButton';
 import { UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
+import { arrayToObject } from '../../../helpers/common';
 
 import style from './tree.less';
 
@@ -46,53 +48,44 @@ const EDIT_FORMS_TITLES = {
   ),
 };
 
+const createTestNameIndex = defaultMemoize(tests =>
+  arrayToObject(
+    tests,
+    ({ id }) => id,
+    ({ name }) => name
+  )
+);
 class ScoreConfigUniversalExpression extends Component {
   state = {
-    initialConfig: null,
-    config: null,
+    ast: null,
+    root: null,
     currentSelection: {},
     ...CLOSED_DIALOGS_STATE,
   };
 
-  static getDerivedStateFromProps({ initialConfig }, state) {
-    return initialConfig !== state.initialConfig
-      ? {
-          initialConfig, // we keep this just to detect changes
-          config: null, // null -> computed from initial config
-          currentSelection: {},
-          ...CLOSED_DIALOGS_STATE,
+  static getDerivedStateFromProps({ ast, root }, state) {
+    if (ast !== state.ast) {
+      // editor has been reinitialized
+      return {
+        ast, // we keep this just to detect changes
+        root, // we keep this just to detect changes
+        currentSelection: {},
+        ...CLOSED_DIALOGS_STATE,
+      };
+    }
+
+    if (root !== state.root) {
+      // Update selection (nodes may have changed or removed)
+      const currentSelection = {};
+      Object.keys(state.currentSelection).forEach(id => {
+        const node = root && root.findById(id);
+        if (node) {
+          currentSelection[id] = node;
         }
-      : null;
-  }
-
-  updateConfig = (_, config) => {
-    if (config) {
-      config._check(); // TODO remove
+      });
+      return { root, currentSelection };
     }
-
-    // Update selection (nodes may have changed or removed)
-    const currentSelection = {};
-    Object.keys(this.state.currentSelection).forEach(id => {
-      const node = config && config.findById(id);
-      if (node) {
-        currentSelection[id] = node;
-      }
-    });
-    this.setState({ currentSelection });
-
-    this.setState({ config });
-  };
-
-  ast = null;
-  lastInitialConfig = null;
-  getAst() {
-    if (this.lastInitialConfig !== this.props.initialConfig || !this.ast) {
-      this.lastInitialConfig = this.props.initialConfig;
-      this.ast = new Ast(this.updateConfig);
-      this.ast.deserialize(this.props.initialConfig);
-    }
-
-    return this.ast;
+    return null;
   }
 
   /**
@@ -147,10 +140,10 @@ class ScoreConfigUniversalExpression extends Component {
   };
 
   render() {
-    const { tests, editable = false } = this.props;
-    const config = this.state.config || this.getAst().getRoot();
+    const { ast, root, tests, editable = false } = this.props;
+    const testsIndex = createTestNameIndex(tests);
 
-    return config ? (
+    return root ? (
       <React.Fragment>
         {editable && (
           <span className={style.iconBar}>
@@ -167,9 +160,9 @@ class ScoreConfigUniversalExpression extends Component {
                   'halfem-margin-vertical': true,
                   'em-margin-horizontal': true,
                   'text-primary': true,
-                  'almost-transparent': !this.getAst().canUndo(),
+                  'almost-transparent': !ast.canUndo(),
                 })}
-                onClick={() => this.getAst().undo()}
+                onClick={() => ast.undo()}
               />
             </OverlayTrigger>
 
@@ -188,9 +181,9 @@ class ScoreConfigUniversalExpression extends Component {
                   'halfem-margin-vertical': true,
                   'em-margin-horizontal': true,
                   'text-primary': true,
-                  'almost-transparent': !this.getAst().canRedo(),
+                  'almost-transparent': !ast.canRedo(),
                 })}
-                onClick={() => this.getAst().redo()}
+                onClick={() => ast.redo()}
               />
             </OverlayTrigger>
 
@@ -217,7 +210,8 @@ class ScoreConfigUniversalExpression extends Component {
 
         <ul className={style.tree}>
           <ExpressionNode
-            node={config}
+            node={root}
+            testsIndex={testsIndex}
             selectedNodes={this.state.currentSelection}
             editNode={editable ? this.openDialog : null}
             selectNode={editable ? this.selectNode : null}
@@ -328,7 +322,8 @@ class ScoreConfigUniversalExpression extends Component {
 }
 
 ScoreConfigUniversalExpression.propTypes = {
-  initialConfig: PropTypes.object.isRequired,
+  ast: PropTypes.instanceOf(Ast).isRequired,
+  root: PropTypes.instanceOf(AstNode).isRequired,
   tests: PropTypes.array.isRequired,
   editable: PropTypes.bool,
 };

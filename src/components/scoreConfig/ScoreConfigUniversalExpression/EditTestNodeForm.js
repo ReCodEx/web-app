@@ -70,8 +70,8 @@ class EditTestNodeForm extends Component {
               'full-width': true,
             })}
             onChange={ev => ev.target && ev.target.value && this.setState({ selected: ev.target.value })}>
-            {tests.map(({ name }) => (
-              <option value={name} key={name}>
+            {tests.map(({ id, name }) => (
+              <option value={id} key={id}>
                 {name}
               </option>
             ))}
@@ -82,16 +82,16 @@ class EditTestNodeForm extends Component {
               {tests.map(test => (
                 <tr
                   key={test.id}
-                  onClick={() => this.setState({ selected: test.name })}
+                  onClick={() => this.setState({ selected: test.id })}
                   className={classnames({
-                    'bg-info': (node && node.test) === test.name,
+                    'bg-info': (node && node.test) === test.id,
                   })}>
                   <td className="valign-middle shrink-col">
                     <StandaloneRadioField
                       name="test"
-                      value={test.name}
-                      checked={test.name === selected}
-                      onChange={() => this.setState({ selected: test.name })}
+                      value={test.id}
+                      checked={test.id === selected}
+                      onChange={() => this.setState({ selected: test.id })}
                     />
                   </td>
                   <td>{test.name}</td>
