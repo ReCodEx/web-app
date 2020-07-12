@@ -27,15 +27,22 @@ export const TEST_NODE = 'test';
 export const LITERAL_NODE = 'literal';
 
 /**
- * Get a key for sorting (a string with serialized location vector).
- * This function assumes that no node in the tree has more than 9,999 children.
- * @param {AstNode} node
+ * Numeric-vector comparator for sorting.
+ * @param {number[]} v1
+ * @param {number[]} v2
  */
-const _getSortingKey = node =>
-  node
-    .getLocationVector()
-    .map(idx => String(idx).padStart(4, '0'))
-    .join('-');
+const compareLocationVectors = (v1, v2) => {
+  const len = Math.max(v1.length, v2.length);
+  for (let i = 0; i < len; ++i) {
+    const x1 = i < v1.length ? v1[i] : -1;
+    const x2 = i < v2.length ? v2[i] : -1;
+    const res = x1 - x2;
+    if (res) {
+      return res;
+    }
+  }
+  return 0;
+};
 
 /**
  * Internal function that sorts nodes by their position in the tree (DFS ordering).
@@ -45,8 +52,8 @@ const sortNodes = nodes => {
     return nodes; // small optimization
   }
 
-  const wrapped = nodes.map(node => ({ node, key: _getSortingKey(node) }));
-  wrapped.sort();
+  const wrapped = nodes.map(node => ({ node, key: node.getLocationVector() }));
+  wrapped.sort((a, b) => compareLocationVectors(a.key, b.key));
   return wrapped.map(({ node }) => node);
 };
 
@@ -146,11 +153,12 @@ export class AstNode {
 
   /**
    * Internal deserialization routine.
-   * @param {Array} config A JSON configuration node as retrieved from the API.
+   * @param {Object} config A JSON configuration node as retrieved from the API.
+   * @param {Object[]} tests list of existing tests (each object contains 'id' and 'name')
    */
-  _initFromConfig(config) {
+  _initFromConfig(config, tests = []) {
     if (config.children && config.children.length > 0) {
-      this.children = config.children.map(childConf => _deserialize(childConf) || new AstNodePlaceholder());
+      this.children = config.children.map(childConf => _deserialize(childConf, tests) || new AstNodePlaceholder());
       this._fixChildrenPlaceholders();
       this._fixChildrenParentage();
     }
@@ -276,8 +284,7 @@ export class AstNode {
   }
 
   getCaption() {
-    return this.id; // TODO return
-    // return this.getType() + '()'; // this is default for function-nodes (leaves will have to override)
+    return this.getType() + '()'; // this is default for function-nodes (leaves will have to override)
   }
 
   getDescription() {
@@ -402,13 +409,22 @@ export class AstNode {
   }
 
   /**
+   * Return a list of all nodes in this sub-tree. The nodes are optionally filtered by a predicate.
+   * @param {Function} [filter=null]
+   */
+  getNodes(filter = null) {
+    const children = this.children.map(node => node.getNodes(filter)).flat();
+    return !filter || filter(this) ? [this, ...children] : children;
+  }
+
+  /**
    * Exports a structure ready for JSON serialization (according to API format).
    * @returns {Object}
    */
-  serialize() {
+  serialize(tests) {
     const res = { type: this.getType() };
     if (this.children.length > 0) {
-      res.children = this.children.map(child => child.serialize());
+      res.children = this.children.map(child => child.serialize(tests));
     }
     return res;
   }
@@ -537,21 +553,37 @@ export class AstNode {
   }
 
   /**
+   * Soft test whether moveNodesHere would succeed. Used to indicate whether a control icon should be displayed or not.
+   * @param {AstNode[]} nodes
+   */
+  canMoveNodesHere(nodes) {
+    // Verify the operation can be performed
+    const ancestors = this.getAllAncestors();
+    if (nodes.some(node => this === node || ancestors.includes(node))) {
+      return false;
+    }
+
+    const parent = this instanceof AstNodePlaceholder ? this.getParent() : this;
+    const nodesKeepingTheirParent = nodes.filter(node => node.getParent() === parent);
+    return nodes.length <= parent.getMaxChildren() - parent.getRealChildren().length - nodesKeepingTheirParent.length;
+  }
+
+  /**
    * Move given nodes under this nodes (append them as children). If this node is a placeholder,
    * the moved nodes will replace it. Moved nodes must not be ancestors of this node.
    * @param {AstNode[]} nodes
    */
   moveNodesHere(nodes) {
     // Verify the operation can be performed
-    const ancestors = this.getAllAncestors();
     nodes.forEach(node => {
       if (!node || node instanceof AstNodePlaceholder) {
         throw new Error('Placeholders may not be moved.');
       }
-      if (this === node || ancestors.includes(node)) {
-        throw new Error('Unable to move the nodes (at least one is an ancestor of target node).');
-      }
     });
+
+    if (!this.canMoveNodesHere(nodes)) {
+      throw new Error('Unable to move the nodes.');
+    }
 
     // lets get started
     const sortedNodes = sortNodes(nodes);
@@ -561,16 +593,6 @@ export class AstNode {
     const target = this instanceof AstNodePlaceholder ? this : new AstNodePlaceholder();
     if (target !== this) {
       this._childChanged(null, target); // append new target (will be replaced later)
-    }
-
-    // verify that the nodes will fit
-    const nodesKeepingTheirParent = sortedNodes.filter(node => node.getParent() === target.getParent());
-    if (
-      sortedNodes.length >
-      target.getParent().getMaxChildren() - target.getParent().getRealChildren().length - nodesKeepingTheirParent.length
-    ) {
-      target._rollback();
-      throw new Error('Unable to move the nodes (the arity of the target node would be exceeded).');
     }
 
     /*
@@ -592,6 +614,15 @@ export class AstNode {
   }
 
   /**
+   * Soft test whether copyNodesHere would succeed. Used to indicate whether a control icon should be displayed or not.
+   * @param {AstNode[]} nodes
+   */
+  canCopyNodesHere(nodes) {
+    const parent = this instanceof AstNodePlaceholder ? this.getParent() : this;
+    return nodes.length <= parent.getMaxChildren() - parent.getRealChildren().length;
+  }
+
+  /**
    * Copy given list of nodes here (append them as children). If this node is a placeholder,
    * the copied nodes will replace it.
    * @param {AstNode[]} nodes
@@ -604,7 +635,7 @@ export class AstNode {
       }
     });
 
-    if (nodes.length > this.getMaxChildren() - this.getRealChildren().length) {
+    if (!this.canCopyNodesHere(nodes)) {
       throw new Error('Unable to copy the nodes (the arity of the target node would be exceeded).');
     }
 
@@ -808,7 +839,9 @@ export class AstNodeSum extends AstNodeVariadic {
 }
 
 /**
- * Leaf node representing a test. The name of the test is stored in property `test`.
+ * Leaf node representing a test. It holds `test` property with the ID (not the name!) of the test.
+ * Keeping ID instead of name requires translation during (de)serialization, but the structure
+ * is immune to test renaming.
  */
 export class AstNodeTestResult extends AstNode {
   static type = 'test-result';
@@ -826,8 +859,9 @@ export class AstNodeTestResult extends AstNode {
     }
   }
 
-  _initFromConfig(config) {
-    this.test = config.test;
+  _initFromConfig(config, tests = []) {
+    const test = tests.find(({ name }) => name === config.test);
+    this.test = (test && test.id) || null;
   }
 
   _clone(forceNewId = false) {
@@ -840,18 +874,22 @@ export class AstNodeTestResult extends AstNode {
     return TEST_NODE;
   }
 
-  getCaption() {
-    return `${this.id}: ${this.test}`; // TODO remove
-    // return this.test;
+  getCaption(testsIndex = {}) {
+    return testsIndex[this.test] || this.test;
   }
 
   isValid() {
     return this.children.length === 0 && this.test !== null;
   }
 
-  serialize() {
-    const res = super.serialize();
-    res.test = this.test;
+  serialize(tests) {
+    const test = tests.find(({ id }) => id === this.test);
+    if (!test || !test.name) {
+      throw new Error('Unable to serialize test result node with invalid test reference.');
+    }
+
+    const res = super.serialize(tests);
+    res.test = test.name;
     return res;
   }
 }
@@ -887,18 +925,17 @@ export class AstNodeValue extends AstNode {
   }
 
   getCaption() {
-    return `${this.id}: ${this.value}`; // TODO remove
-    // return this.value;
+    return this.value;
   }
 
   isValid() {
     return this.children.length === 0 && this.value !== null;
   }
 
-  serialize() {
+  serialize(tests) {
     if (!this.getParent() || !(this.getParent() instanceof AstNode)) {
       // There is no parent or the parent is a placeholder.
-      return super.serialize();
+      return super.serialize(tests);
     } else {
       // We may simplify the node to mere number literal.
       return this.value;
@@ -928,10 +965,11 @@ export const KNOWN_AST_CLASSES = arrayToObject([...AST_FUNCTION_CLASSES, AstNode
 
 /**
  * Internal deserialization routine.
- * @param {Object} parent Parent object of newly deserialized object.
  * @param {Object} scoreConfig Configuration node to be deserialized.
+ * @param {Object[]} tests list of existing tests (each object contains 'id' and 'name')
+ * @returns {AstNode|null} null is returned if the deserialization fails
  */
-const _deserialize = scoreConfig => {
+const _deserialize = (scoreConfig, tests = []) => {
   if (typeof scoreConfig === 'number') {
     const node = new AstNodeValue();
     node.value = scoreConfig;
@@ -944,7 +982,7 @@ const _deserialize = scoreConfig => {
   }
 
   const node = new KNOWN_AST_CLASSES[scoreConfig.type]();
-  node._initFromConfig(scoreConfig);
+  node._initFromConfig(scoreConfig, tests);
   Object.freeze(node);
   return node;
 };
@@ -1089,11 +1127,26 @@ export class Ast {
   /**
    * Public deserialization interface. Get score config and returns the root node of the AST.
    * @param {Object} scoreConfig score configuration from API to be deserialized
+   * @param {Object[]} tests list of existing tests (each object contains 'id' and 'name')
    */
-  deserialize(scoreConfig) {
-    this.root = _deserialize(scoreConfig);
-    this.root.setParent(this);
-    this.root._check();
-    return this.root;
+  deserialize(scoreConfig, tests = []) {
+    const root = _deserialize(scoreConfig, tests);
+    if (root) {
+      this.root = root;
+      root.setParent(this);
+    }
+    return root;
+  }
+
+  serialize(tests) {
+    return this.getRoot() && this.getRoot().serialize(tests);
+  }
+
+  /**
+   * Return a list of all nodes in the tree. The nodes are optionally filtered by a predicate.
+   * @param {Function} [filter=null]
+   */
+  getNodes(filter = null) {
+    return this.getRoot() ? this.getRoot().getNodes(filter) : [];
   }
 }

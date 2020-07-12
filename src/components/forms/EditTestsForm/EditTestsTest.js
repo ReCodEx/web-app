@@ -9,7 +9,7 @@ import { prettyPrintPercent } from '../../helpers/stringFormatters';
 import { safeGet } from '../../../helpers/common';
 import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/score';
 
-const EditTestsTest = ({ fields, calculator, testValues, readOnly = false }) => {
+const EditTestsTest = ({ fields, calculator, testValues, usedTests, readOnly = false }) => {
   const weightSum = Math.max(
     1, // make sure the sum is not zero (it is used in division)
     calculator === WEIGHTED_ID
@@ -48,6 +48,7 @@ const EditTestsTest = ({ fields, calculator, testValues, readOnly = false }) => 
                 readOnly={readOnly}
                 percent={prettyPrintPercent(Number(safeGet(testValues, [index, 'weight'], 100)) / weightSum)}
                 onRemove={() => fields.remove(index)}
+                used={Boolean(testValues && usedTests && usedTests[testValues[index].id])}
               />
             ))}
           </tbody>
@@ -69,6 +70,7 @@ EditTestsTest.propTypes = {
   fields: PropTypes.object.isRequired,
   calculator: PropTypes.string,
   testValues: PropTypes.array,
+  usedTests: PropTypes.object,
 };
 
 export default formValues({

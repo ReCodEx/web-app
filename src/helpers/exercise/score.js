@@ -132,9 +132,9 @@ const loadWeights = (tests, originalCalculator, formData) => {
  * @param {string} originalCalculator Name of the calculator used
  * @param {Object} formData
  */
-const loadUniversalConfig = (tests, originalCalculator, formData) => {
+const loadUniversalConfig = (tests, originalCalculator, formData, astRoot) => {
   if (originalCalculator === UNIVERSAL_ID) {
-    return formData.config;
+    return astRoot ? astRoot.serialize(formData.tests) : formData.config;
   }
 
   return weightsToUniversalConfig(loadWeights(tests, originalCalculator, formData));
@@ -146,7 +146,7 @@ const loadUniversalConfig = (tests, originalCalculator, formData) => {
  * @param {string} originalCalculator Name of the calculator used
  * @param {Object} formData
  */
-export const transformScoreConfig = (tests, originalCalculator, formData) => {
+export const transformScoreConfig = (tests, originalCalculator, formData, extraData) => {
   const scoreCalculator = formData.calculator || UNIFORM_ID;
 
   if (scoreCalculator === UNIFORM_ID) {
@@ -159,7 +159,7 @@ export const transformScoreConfig = (tests, originalCalculator, formData) => {
   }
 
   if (scoreCalculator === UNIVERSAL_ID) {
-    return loadUniversalConfig(tests, originalCalculator, formData);
+    return loadUniversalConfig(tests, originalCalculator, formData, extraData);
   }
 
   throw new Error(`Unknown score calculator ${scoreCalculator}.`);

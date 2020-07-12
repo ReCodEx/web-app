@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { Button } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 import { TextField, NumericTextField } from '../Fields';
-import { RemoveIcon } from '../../icons';
+import Button from '../../widgets/FlatButton';
+import Icon, { RemoveIcon } from '../../icons';
 import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/score';
 
 import style from './EditTests.less';
 
-const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = false }) => (
+const EditTestsTestRow = ({ test, onRemove, calculator, percent, used = false, readOnly = false }) => (
   <tr>
     <td>
       <Field
@@ -37,11 +37,18 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, readOnly = fals
     )}
     {calculator !== UNIVERSAL_ID && <td className="text-center valign-middle">{percent}</td>}
     {!readOnly && (
-      <td className="valign-middle">
-        <Button onClick={onRemove} bsStyle="danger" bsSize="xs" className="btn-flat pull-right">
-          <RemoveIcon gapRight />
-          <FormattedMessage id="generic.remove" defaultMessage="Remove" />
-        </Button>
+      <td className="valign-middle text-right">
+        {used ? (
+          <em>
+            <Icon icon="paperclip" gapRight className="text-success" />
+            <FormattedMessage id="app.editTestsTest.testUsedInExpression" defaultMessage="used in expression" />
+          </em>
+        ) : (
+          <Button onClick={onRemove} bsStyle="danger" bsSize="xs">
+            <RemoveIcon gapRight />
+            <FormattedMessage id="generic.remove" defaultMessage="Remove" />
+          </Button>
+        )}
       </td>
     )}
   </tr>
@@ -52,6 +59,7 @@ EditTestsTestRow.propTypes = {
   onRemove: PropTypes.func.isRequired,
   calculator: PropTypes.string,
   percent: PropTypes.string.isRequired,
+  used: PropTypes.bool,
   readOnly: PropTypes.bool,
 };
 

@@ -23,7 +23,7 @@ import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/E
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
 import { InfoIcon, WarningIcon } from '../../components/icons';
 
-import { fetchExercise, fetchExerciseIfNeeded, editExercise } from '../../redux/modules/exercises';
+import { fetchExercise, fetchExerciseIfNeeded, editExercise, invalidateExercise } from '../../redux/modules/exercises';
 import {
   fetchExerciseConfig,
   fetchExerciseConfigIfNeeded,
@@ -155,18 +155,28 @@ class EditExerciseConfig extends Component {
 
   changeScoreCalculator = ({ calculator }) => {};
 
+  scoreConfigExtraData = null; // data kept oustide redux-form (for technical reasons) but required for submission
+
+  registerScoreConfigExtraData = data => {
+    this.scoreConfigExtraData = data;
+  };
+
   transformAndSendTestsValues = defaultMemoize(originalCalculator => data => {
     this.removeUrlHash();
 
-    const { editTests, editScoreConfig, reloadConfig } = this.props;
+    const { editTests, editScoreConfig, reloadConfig, invalidateExercise } = this.props;
     const tests = transformTestsValues(data);
     const scoreCalculator = data.calculator;
-    const scoreConfig = transformScoreConfig(tests, originalCalculator, data);
+    const scoreConfig = transformScoreConfig(tests, originalCalculator, data, this.scoreConfigExtraData);
 
-    const scorePromise = editScoreConfig({ scoreCalculator, scoreConfig });
-    // Calculator may be changed only when the rest of the for is not dirty (tests do not have to be editted)
+    // calculator may be changed only when the rest of the for is not dirty (tests do not have to be updated)
+    invalidateExercise();
     const resPromise =
-      originalCalculator !== scoreCalculator ? scorePromise : Promise.all([editTests({ tests }), scorePromise]);
+      originalCalculator !== scoreCalculator
+        ? editScoreConfig({ scoreCalculator, scoreConfig })
+        : editTests({ tests }).then(() => editScoreConfig({ scoreCalculator, scoreConfig }));
+
+    this.scoreConfigExtraData = null;
     return resPromise.then(reloadConfig);
   });
 
@@ -239,8 +249,8 @@ class EditExerciseConfig extends Component {
         calculator={scoreConfig && scoreConfig.calculator}
         readOnly={!hasPermissions(exercise, 'setScoreConfig')}
         initialValues={getTestsInitValues(tests, scoreConfig, this.props.intl.locale)}
-        changeCalculator={null}
         onSubmit={this.transformAndSendTestsValues(scoreConfig.calculator)}
+        registerExtraData={this.registerScoreConfigExtraData}
       />
     );
   }
@@ -690,6 +700,7 @@ EditExerciseConfig.propTypes = {
   setConfig: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
+  invalidateExercise: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
@@ -745,9 +756,10 @@ export default withLinks(
       setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
       reloadExercise: () => dispatch(fetchExercise(exerciseId)),
       reloadConfig: () =>
-        dispatch(fetchExercise(exerciseId)).then(({ value: exercise }) =>
+        dispatch(fetchExercise(exerciseId)).then(() =>
           Promise.all([dispatch(fetchExerciseConfig(exerciseId)), dispatch(fetchExerciseEnvironmentConfig(exerciseId))])
         ),
+      invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
     })
   )(injectIntl(withRouter(EditExerciseConfig)))
 );
