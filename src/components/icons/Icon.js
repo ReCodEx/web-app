@@ -11,6 +11,7 @@ const Icon = ({
   gapRight = false,
   largeGapLeft = false,
   largeGapRight = false,
+  disabled = false,
   timid = false,
   className = [],
   onClick,
@@ -29,6 +30,7 @@ const Icon = ({
         [style.gapRight]: gapRight,
         [style.largeGapLeft]: largeGapLeft,
         [style.largeGapRight]: largeGapRight,
+        [style.disabled]: disabled,
         timid: timid,
         clickable: Boolean(onClick || onDoubleClick),
       })}
@@ -46,6 +48,7 @@ Icon.propTypes = {
   gapRight: PropTypes.bool,
   largeGapLeft: PropTypes.bool,
   largeGapRight: PropTypes.bool,
+  disabled: PropTypes.bool,
   timid: PropTypes.bool,
   onClick: PropTypes.func,
   onDoubleClick: PropTypes.func,

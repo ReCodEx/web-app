@@ -20,7 +20,8 @@ import {
   KNOWN_CALCULATORS,
   SCORE_CALCULATOR_CAPTIONS,
   SCORE_CALCULATOR_DESCRIPTIONS,
-} from '../../../helpers/exercise/score';
+  createTestNameIndex,
+} from '../../../helpers/exercise/testsAndScore';
 import { Ast, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
 
 import { arrayToObject } from '../../../helpers/common';
@@ -47,7 +48,7 @@ class EditTestsForm extends Component {
     if (!this.ast || this.lastConfig !== initialValues.config) {
       this.lastConfig = initialValues.config;
       this.ast = new Ast(this.updateAstRoot);
-      this.ast.deserialize(initialValues.config, initialValues.tests);
+      this.ast.deserialize(initialValues.config, createTestNameIndex(initialValues.tests));
       this.usedTests = null;
       this.props.registerExtraData && this.props.registerExtraData(this.ast.getRoot());
     }
@@ -182,7 +183,7 @@ class EditTestsForm extends Component {
 
                     <SubmitButton
                       id="editTests"
-                      invalid={invalid}
+                      invalid={invalid || (this.getAst() && !this.getAst().isValid())}
                       submitting={submitting}
                       hasSucceeded={submitSucceeded}
                       dirty={dirty}

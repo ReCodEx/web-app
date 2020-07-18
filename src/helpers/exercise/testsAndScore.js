@@ -38,21 +38,47 @@ export const SCORE_CALCULATOR_DESCRIPTIONS = {
   ),
 };
 
-export const augmentTestInitValuesWithScoreConfig = (formValues, scoreConfig) => {
+/**
+ * Prepare initial values for EditTestsForm of the exercise.
+ */
+export const getTestsInitValues = (exerciseTests, scoreConfig, locale) => {
   const calculator = (scoreConfig && scoreConfig.calculator) || UNIFORM_ID;
-  formValues.calculator = calculator;
+  const sortedTests = exerciseTests.sort((a, b) => a.name.localeCompare(b.name, locale));
 
+  const tests = sortedTests.map(test => ({
+    id: test.id,
+    name: test.name,
+  }));
   if (calculator === WEIGHTED_ID) {
     const testWeights = (scoreConfig.config && scoreConfig.config.testWeights) || EMPTY_OBJ;
-    formValues.tests.forEach(
-      test => (test.weight = testWeights[test.name] !== undefined ? Number(testWeights[test.name]) : 100)
-    );
-  } else if (scoreConfig.config) {
-    formValues.config = scoreConfig.config;
+    tests.forEach(test => (test.weight = testWeights[test.name] !== undefined ? Number(testWeights[test.name]) : 100));
   }
 
+  const formValues = { tests, calculator };
+  if (calculator === UNIVERSAL_ID && scoreConfig.config) {
+    formValues.config = scoreConfig.config;
+  }
   return formValues;
 };
+
+/**
+ * Gather data of EditTestsForm and prepare them to be sent to Tests endpoint and ScoreConfig endpoint.
+ */
+export const transformTestsValues = ({ tests }) =>
+  tests.map(({ id, name }) => (id && id >= 0 ? { id, name: name.trim() } : { name: name.trim() }));
+
+/**
+ * Convert tests (in form data format -- as an array of { id, name }) into an object indexed by IDs
+ * (i.e., object where ids are keys and names are values).
+ * @param {Object[]} tests
+ * @returns {Object}
+ */
+export const createTestNameIndex = tests =>
+  arrayToObject(
+    tests,
+    ({ id }) => id,
+    ({ name }) => name
+  );
 
 /**
  * Generate weights compatible with uniform config (each text has weight 100).
@@ -72,35 +98,32 @@ const areWeightsTheSame = weights => {
   return values.every(value => value === values[0]);
 };
 
+// tmp function used for config cnostruction
+const _node = (type, valueName = 'children') => value => ({ type, [valueName]: value });
+const _avg = _node('avg');
+const _div = _node('div');
+const _mul = _node('mul');
+const _sum = _node('sum');
+const _test = _node('test-result', 'test');
+const _value = _node('value', 'value');
+
 const weightsToUniversalConfig = weights =>
   Object.keys(weights).length > 0
     ? areWeightsTheSame(weights)
-      ? {
-          type: 'avg',
-          children: Object.keys(weights).map(name => ({ type: 'test-result', test: name })),
-        }
-      : {
-          type: 'div',
-          children: [
-            {
-              type: 'sum',
-              children: Object.keys(weights).map(name => ({
-                type: 'mul',
-                children: [weights[name], { type: 'test-result', test: name }],
-              })),
-            },
-            sumWeights(weights),
-          ],
-        }
-    : { type: 'value', value: 1 };
+      ? // normal average
+        _avg(Object.keys(weights).map(_test))
+      : // weighted average (sum of tests divided by sum of weights)
+        _div([_sum(Object.keys(weights).map(name => _mul([weights[name], _test(name)]))), sumWeights(weights)])
+    : _value(1); // fallback for no weights - at least valid config must be generated
 
 /**
  * Load weights from the form data based on the original calculator
  * @param {Object[]} tests List of tests as yielded by transformTestsValues of tests.js
  * @param {string} originalCalculator Name of the calculator used
  * @param {Object} formData
+ * @param {AstNode} astRoot extra data present if the config is made in AST editor
  */
-const loadWeights = (tests, originalCalculator, formData) => {
+const loadWeights = (tests, originalCalculator, formData, astRoot) => {
   if (originalCalculator === WEIGHTED_ID) {
     const weights = arrayToObject(
       formData.tests,
@@ -118,8 +141,11 @@ const loadWeights = (tests, originalCalculator, formData) => {
     return weights;
   }
 
-  if (originalCalculator === UNIFORM_ID) {
+  if (originalCalculator === UNIVERSAL_ID) {
+    // Attempt to detect pattern of (weighted) average in universal (AST) configuration
+    // const config = loadUniversalConfig(tests, originalCalculator, formData, astRoot);
     // TODO
+    return generateUniformWeights(tests);
   }
 
   // In any other case, the weights cannot be loaded -> fill in the uniform weights
@@ -131,13 +157,14 @@ const loadWeights = (tests, originalCalculator, formData) => {
  * @param {Object[]} tests List of tests as yielded by transformTestsValues of tests.js
  * @param {string} originalCalculator Name of the calculator used
  * @param {Object} formData
+ * @param {AstNode} astRoot extra data present if the config is made in AST editor
  */
 const loadUniversalConfig = (tests, originalCalculator, formData, astRoot) => {
   if (originalCalculator === UNIVERSAL_ID) {
-    return astRoot ? astRoot.serialize(formData.tests) : formData.config;
+    return astRoot ? astRoot.serialize(createTestNameIndex(formData.tests)) : formData.config;
   }
 
-  return weightsToUniversalConfig(loadWeights(tests, originalCalculator, formData));
+  return weightsToUniversalConfig(loadWeights(tests, originalCalculator, formData, astRoot));
 };
 
 /**
@@ -145,6 +172,7 @@ const loadUniversalConfig = (tests, originalCalculator, formData, astRoot) => {
  * @param {Object[]} tests List of tests as yielded by transformTestsValues of tests.js
  * @param {string} originalCalculator Name of the calculator used
  * @param {Object} formData
+ * @param {AstNode} extraData extra data present if the config is made in AST editor
  */
 export const transformScoreConfig = (tests, originalCalculator, formData, extraData) => {
   const scoreCalculator = formData.calculator || UNIFORM_ID;
@@ -154,7 +182,7 @@ export const transformScoreConfig = (tests, originalCalculator, formData, extraD
   }
 
   if (scoreCalculator === WEIGHTED_ID) {
-    const testWeights = loadWeights(tests, originalCalculator, formData);
+    const testWeights = loadWeights(tests, originalCalculator, formData, extraData);
     return { testWeights };
   }
 

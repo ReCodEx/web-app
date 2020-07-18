@@ -19,7 +19,7 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { arrayToObject } from '../common';
+import { arrayToObject, objectFind, deepCompare } from '../common';
 
 // Generic node types
 export const FUNCTION_NODE = 'function';
@@ -107,9 +107,17 @@ export class AstNode {
     this.id = id || `${this.getType()}-${++idCounter}`;
     this.parent = { parent: null }; // this way we keep the parent mutable after freeze
     this.children = [];
+    this.valid = null;
+    this.subtreeValid = null;
 
     this._fixChildrenPlaceholders();
     this._fixChildrenParentage();
+  }
+
+  _freeze() {
+    this.valid = this._isValid();
+    this.subtreeValid = this.valid && this.getRealChildren().every(child => child.subtreeValid);
+    Object.freeze(this);
   }
 
   /**
@@ -140,23 +148,12 @@ export class AstNode {
     });
   }
 
-  // TODO remove
-  _check() {
-    const errors = this.children.filter(child => child.getParent() !== this);
-    if (errors.length > 0) {
-      console.log(this);
-      console.log(errors);
-    }
-
-    this.children.forEach(child => child._check());
-  }
-
   /**
    * Internal deserialization routine.
    * @param {Object} config A JSON configuration node as retrieved from the API.
-   * @param {Object[]} tests list of existing tests (each object contains 'id' and 'name')
+   * @param {Object} tests test names index (object where keys are ids and values are names)
    */
-  _initFromConfig(config, tests = []) {
+  _initFromConfig(config, tests = {}) {
     if (config.children && config.children.length > 0) {
       this.children = config.children.map(childConf => _deserialize(childConf, tests) || new AstNodePlaceholder());
       this._fixChildrenPlaceholders();
@@ -192,7 +189,7 @@ export class AstNode {
     clone._fixChildrenParentage();
 
     // Finalize and report the change upwards
-    Object.freeze(clone);
+    clone._freeze();
     if (this.getParent() && this.getParent()._childChanged) {
       this.getParent()._childChanged(this, clone);
     }
@@ -303,16 +300,18 @@ export class AstNode {
     return false;
   }
 
+  // Internal validation function used for overloading (public interface is `isValid`)
+  _isValid() {
+    const realChildren = this.getRealChildren();
+    return realChildren.length >= this.getMinChildren() && realChildren.length <= this.getMaxChildren();
+  }
+
   /**
    * Validates this node whether it has the right amount of children (no placeholders) and all parameters.
    * @returns {boolean}
    */
   isValid() {
-    if (this.children.length < this.getMinChildren() || this.children.length > this.getMaxChildren()) {
-      return false;
-    }
-
-    return this.children.every(child => child && !(child instanceof AstNodePlaceholder));
+    return this.valid === null ? this._isValid() : this.valid;
   }
 
   /**
@@ -419,14 +418,11 @@ export class AstNode {
 
   /**
    * Exports a structure ready for JSON serialization (according to API format).
+   * @param {Object} tests test names index (object where keys are ids and values are names)
    * @returns {Object}
    */
   serialize(tests) {
-    const res = { type: this.getType() };
-    if (this.children.length > 0) {
-      res.children = this.children.map(child => child.serialize(tests));
-    }
-    return res;
+    return { type: this.getType(), children: this.getRealChildren().map(child => child.serialize(tests)) };
   }
 
   /*
@@ -440,7 +436,7 @@ export class AstNode {
     const res = this._clone(true);
     res.children = res.children.map(child => child.clone());
     res._fixChildrenParentage();
-    Object.freeze(res);
+    res._freeze();
     return res;
   }
 
@@ -452,6 +448,7 @@ export class AstNode {
     if (this.getMaxChildren() <= this.children.length) {
       throw new Error('Unable to append another child. Maximal limit of children has been reached.');
     }
+    child._freeze();
     return this._childChanged(null, child);
   }
 
@@ -470,7 +467,7 @@ export class AstNode {
     }
     newNode._fixChildrenPlaceholders();
     newNode._fixChildrenParentage();
-    Object.freeze(newNode);
+    newNode._freeze();
     if (parent && parent._childChanged) {
       parent._childChanged(this, newNode);
     }
@@ -481,7 +478,7 @@ export class AstNode {
    * @param {AstNode} newNode a replacement node (not connected in tree)
    */
   replace(newNode) {
-    Object.freeze(newNode);
+    newNode._freeze();
     if (this.getParent() && this.getParent()._childChanged) {
       this.getParent()._childChanged(this, newNode);
     }
@@ -859,9 +856,9 @@ export class AstNodeTestResult extends AstNode {
     }
   }
 
-  _initFromConfig(config, tests = []) {
-    const test = tests.find(({ name }) => name === config.test);
-    this.test = (test && test.id) || null;
+  _initFromConfig(config, tests = {}) {
+    const testId = objectFind(tests, config.test);
+    this.test = testId || null;
   }
 
   _clone(forceNewId = false) {
@@ -878,19 +875,17 @@ export class AstNodeTestResult extends AstNode {
     return testsIndex[this.test] || this.test;
   }
 
-  isValid() {
+  _isValid() {
     return this.children.length === 0 && this.test !== null;
   }
 
   serialize(tests) {
-    const test = tests.find(({ id }) => id === this.test);
-    if (!test || !test.name) {
+    const test = tests[this.test];
+    if (!test) {
       throw new Error('Unable to serialize test result node with invalid test reference.');
     }
 
-    const res = super.serialize(tests);
-    res.test = test.name;
-    return res;
+    return { type: this.getType(), test };
   }
 }
 
@@ -928,16 +923,16 @@ export class AstNodeValue extends AstNode {
     return this.value;
   }
 
-  isValid() {
+  _isValid() {
     return this.children.length === 0 && this.value !== null;
   }
 
-  serialize(tests) {
+  serialize() {
     if (!this.getParent() || !(this.getParent() instanceof AstNode)) {
-      // There is no parent or the parent is a placeholder.
-      return super.serialize(tests);
+      // there is no parent or the parent is AST container => this is the root node
+      return { type: this.getType(), value: this.value };
     } else {
-      // We may simplify the node to mere number literal.
+      // we may simplify the node to mere number literal.
       return this.value;
     }
   }
@@ -966,14 +961,14 @@ export const KNOWN_AST_CLASSES = arrayToObject([...AST_FUNCTION_CLASSES, AstNode
 /**
  * Internal deserialization routine.
  * @param {Object} scoreConfig Configuration node to be deserialized.
- * @param {Object[]} tests list of existing tests (each object contains 'id' and 'name')
+ * @param {Object} tests test names index (object where keys are ids and values are names)
  * @returns {AstNode|null} null is returned if the deserialization fails
  */
-const _deserialize = (scoreConfig, tests = []) => {
+const _deserialize = (scoreConfig, tests = {}) => {
   if (typeof scoreConfig === 'number') {
     const node = new AstNodeValue();
     node.value = scoreConfig;
-    Object.freeze(node);
+    node._freeze();
     return node;
   }
 
@@ -983,7 +978,7 @@ const _deserialize = (scoreConfig, tests = []) => {
 
   const node = new KNOWN_AST_CLASSES[scoreConfig.type]();
   node._initFromConfig(scoreConfig, tests);
-  Object.freeze(node);
+  node._freeze();
   return node;
 };
 
@@ -1078,6 +1073,10 @@ export class Ast {
     return this.root;
   }
 
+  isValid() {
+    return this.root && this.root.subtreeValid;
+  }
+
   /**
    * Whether it is possible to perform an UNDO operation.
    */
@@ -1127,9 +1126,9 @@ export class Ast {
   /**
    * Public deserialization interface. Get score config and returns the root node of the AST.
    * @param {Object} scoreConfig score configuration from API to be deserialized
-   * @param {Object[]} tests list of existing tests (each object contains 'id' and 'name')
+   * @param {Object} tests test names index (object where keys are ids and values are names)
    */
-  deserialize(scoreConfig, tests = []) {
+  deserialize(scoreConfig, tests = {}) {
     const root = _deserialize(scoreConfig, tests);
     if (root) {
       this.root = root;
@@ -1138,6 +1137,10 @@ export class Ast {
     return root;
   }
 
+  /**
+   * Serialize the entire tree into a structure which can be passed to API.
+   * @param {Object} tests test names index (object where keys are ids and values are names)
+   */
   serialize(tests) {
     return this.getRoot() && this.getRoot().serialize(tests);
   }
@@ -1148,5 +1151,24 @@ export class Ast {
    */
   getNodes(filter = null) {
     return this.getRoot() ? this.getRoot().getNodes(filter) : [];
+  }
+
+  /**
+   * Apply a tree-wide transformation.
+   * @param {Function} transformation node => node function applied to in serialized form
+   * @param {Object} tests test names index (object where keys are ids and values are names)
+   */
+  applyTransformation(transformation, tests) {
+    const source = this.serialize(tests);
+    const verification = this.serialize(tests);
+    const transformed = transformation(source);
+
+    if (!deepCompare(verification, transformed)) {
+      // when transformation actually modified something
+      const root = _deserialize(transformed, tests);
+      if (root) {
+        this._childChanged(this.root, root);
+      }
+    }
   }
 }

@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import EditTestsTestRow from './EditTestsTestRow';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
 import { safeGet } from '../../../helpers/common';
-import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/score';
+import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
 
 const EditTestsTest = ({ fields, calculator, testValues, usedTests, readOnly = false }) => {
   const weightSum = Math.max(

@@ -10,10 +10,12 @@ import EditFunctionNodeForm from './EditFunctionNodeForm';
 import EditTestNodeForm from './EditTestNodeForm';
 import EditLiteralNodeForm from './EditLiteralNodeForm';
 
+import { createTestNameIndex } from '../../../helpers/exercise/testsAndScore';
 import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast, AstNode } from '../../../helpers/exercise/scoreAst';
+import { removeConstantExpressions, optimize } from '../../../helpers/exercise/scoreAstFunctions';
 import Button from '../../widgets/FlatButton';
-import { UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
-import { arrayToObject } from '../../../helpers/common';
+import Icon, { UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
+import { composeFunctions } from '../../../helpers/common';
 
 import style from './tree.less';
 
@@ -22,6 +24,7 @@ const CLOSED_DIALOGS_STATE = {
   [`${TEST_NODE}DialogOpen`]: false,
   [`${LITERAL_NODE}DialogOpen`]: false,
   helpDialogOpen: false,
+  optimizationDialogOpen: false,
 };
 
 const EDIT_FORMS = {
@@ -48,13 +51,8 @@ const EDIT_FORMS_TITLES = {
   ),
 };
 
-const createTestNameIndex = defaultMemoize(tests =>
-  arrayToObject(
-    tests,
-    ({ id }) => id,
-    ({ name }) => name
-  )
-);
+const createTestNameIndexMemoized = defaultMemoize(tests => createTestNameIndex(tests));
+
 class ScoreConfigUniversalExpression extends Component {
   state = {
     ast: null,
@@ -121,6 +119,18 @@ class ScoreConfigUniversalExpression extends Component {
     this.setState({ helpDialogOpen: true });
   };
 
+  openOptimizationDialog = () => {
+    if (this.props.ast.isValid()) {
+      this.setState({ optimizationDialogOpen: true });
+    }
+  };
+
+  performOptimizations = (...transformations) => {
+    const transformation = composeFunctions(...transformations);
+    this.props.ast.applyTransformation(transformation, createTestNameIndex(this.props.tests));
+    this.closeDialog();
+  };
+
   closeDialog = () => {
     this.setState(CLOSED_DIALOGS_STATE);
   };
@@ -141,7 +151,7 @@ class ScoreConfigUniversalExpression extends Component {
 
   render() {
     const { ast, root, tests, editable = false } = this.props;
-    const testsIndex = createTestNameIndex(tests);
+    const testsIndex = createTestNameIndexMemoized(tests);
 
     return root ? (
       <React.Fragment>
@@ -155,13 +165,14 @@ class ScoreConfigUniversalExpression extends Component {
                 </Tooltip>
               }>
               <UndoIcon
+                fixedWidth
                 size="lg"
                 className={classnames({
                   'halfem-margin-vertical': true,
                   'em-margin-horizontal': true,
                   'text-primary': true,
-                  'almost-transparent': !ast.canUndo(),
                 })}
+                disabled={!ast.canUndo()}
                 onClick={() => ast.undo()}
               />
             </OverlayTrigger>
@@ -176,14 +187,37 @@ class ScoreConfigUniversalExpression extends Component {
                 </Tooltip>
               }>
               <RedoIcon
+                fixedWidth
                 size="lg"
                 className={classnames({
                   'halfem-margin-vertical': true,
                   'em-margin-horizontal': true,
                   'text-primary': true,
-                  'almost-transparent': !ast.canRedo(),
                 })}
+                disabled={!ast.canRedo()}
                 onClick={() => ast.redo()}
+              />
+            </OverlayTrigger>
+
+            <br />
+
+            <OverlayTrigger
+              placement="left"
+              overlay={
+                <Tooltip id="optimizeDialog">
+                  <FormattedMessage
+                    id="app.scoreConfigExpression.openOptimizeDialog"
+                    defaultMessage="Optimize the tree"
+                  />
+                </Tooltip>
+              }>
+              <Icon
+                icon="air-freshener"
+                fixedWidth
+                size="lg"
+                className="halfem-margin-vertical em-margin-horizontal text-warning"
+                disabled={!ast.isValid()}
+                onClick={this.openOptimizationDialog}
               />
             </OverlayTrigger>
 
@@ -200,6 +234,7 @@ class ScoreConfigUniversalExpression extends Component {
                 </Tooltip>
               }>
               <InfoIcon
+                fixedWidth
                 size="lg"
                 className="halfem-margin-vertical em-margin-horizontal text-muted"
                 onClick={this.openHelpDialog}
@@ -305,6 +340,88 @@ class ScoreConfigUniversalExpression extends Component {
                   defaultMessage="Invalid nodes are marked by red color. In case of function nodes, it indicates that the node does not have the right amount of children (e.g., when binary function does not have exactly two arguments). In case of leaf nodes, something may be wrong with the node value. There must be no invalid nodes when the form is submitted."
                 />
               </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <div className="text-center">
+                <Button onClick={this.closeDialog} bsStyle="default">
+                  <CloseIcon gapRight />
+                  <FormattedMessage id="generic.close" defaultMessage="Close" />
+                </Button>
+              </div>
+            </Modal.Footer>
+          </Modal>
+        )}
+
+        {editable && (
+          <Modal show={this.state.optimizationDialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+            <Modal.Header closeButton>
+              <Modal.Title>
+                <FormattedMessage
+                  id="app.scoreConfigExpression.optimize.title"
+                  defaultMessage="Optimize The Expression"
+                />
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="callout callout-info">
+                <FormattedMessage
+                  id="app.scoreConfigExpression.optimize.info"
+                  defaultMessage="The selected optimization is applied on the whole tree as a single operation (i.e., it will register as one undo step). If it cannot improve the tree (since it is already optimal) no modifications will be performed."
+                />
+              </div>
+
+              <table>
+                <tr>
+                  <td className="em-padding valign-middle">
+                    <Button onClick={() => this.performOptimizations(removeConstantExpressions)} bsStyle="success">
+                      <FormattedMessage
+                        id="app.scoreConfigExpression.optimize.removeConstantsButton"
+                        defaultMessage="Replace Constant Sub-expressions"
+                      />
+                    </Button>
+                  </td>
+                  <td className="em-padding valign-middle text-muted small">
+                    <FormattedMessage
+                      id="app.scoreConfigExpression.optimize.removeConstantsInfo"
+                      defaultMessage="All constant sub-expressions (sub-trees) are evaluated and replaced with numeric literal nodes."
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="em-padding valign-middle">
+                    <Button onClick={() => this.performOptimizations(optimize)} bsStyle="success">
+                      <FormattedMessage
+                        id="app.scoreConfigExpression.optimize.optimizeButton"
+                        defaultMessage="Basic Optimizations"
+                      />
+                    </Button>
+                  </td>
+                  <td className="em-padding valign-middle text-muted small">
+                    <FormattedMessage
+                      id="app.scoreConfigExpression.optimize.optimizeInfo"
+                      defaultMessage="Perform basic set of optimizations which simplify the tree but have no effect on the result (removing double negtion, removing 0 from sum() and 1 from mul(), etc.)."
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="em-padding valign-middle">
+                    <Button
+                      onClick={() => this.performOptimizations(removeConstantExpressions, optimize)}
+                      bsStyle="success">
+                      <FormattedMessage
+                        id="app.scoreConfigExpression.optimize.allButton"
+                        defaultMessage="All Optimizations"
+                      />
+                    </Button>
+                  </td>
+                  <td className="em-padding valign-middle text-muted small">
+                    <FormattedMessage
+                      id="app.scoreConfigExpression.optimize.allInfo"
+                      defaultMessage="Perform all optimizations mentioned above in the correct order."
+                    />
+                  </td>
+                </tr>
+              </table>
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
