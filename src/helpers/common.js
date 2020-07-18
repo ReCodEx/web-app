@@ -112,6 +112,15 @@ export const objectMap = (obj, fnc) => {
   return res;
 };
 
+/**
+ * Search object by values and return corresponding key.
+ * @param {Object} obj object to be searched
+ * @param {*} predicate either a value being searched or a function that tests each value and returns true if match is found
+ * @returns {string|number} key of the first matchinng value (beware the order of search is implementation specific)
+ */
+export const objectFind = (obj, predicate) =>
+  Object.keys(obj).find(typeof predicate === 'function' ? key => predicate(obj[key]) : key => obj[key] === predicate);
+
 const idSelector = obj => obj.id;
 
 /**
@@ -160,6 +169,31 @@ export const getFirstItemInOrder = (arr, comarator = _defaultComparator) => {
   return res;
 };
 
+/**
+ * Compare two entities (scalars, arrays, or objects). In case of arrays and objects,
+ * the items/properties are compared recursively.
+ * @param {*} a
+ * @param {*} b
+ * @returns {boolean} true if the values are matching
+ */
+export const deepCompare = (a, b) => {
+  if (typeof a !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
+    return false;
+  }
+  if (typeof a !== 'object') {
+    return a === b; // compare scalars
+  }
+  if (Array.isArray(a)) {
+    // compare arrays
+    return a.length === b.length ? a.every((val, idx) => deepCompare(val, b[idx])) : false;
+  } else {
+    // compare objects
+    const aKeys = Object.keys(a);
+    const bKeys = new Set(Object.keys(b));
+    return aKeys.length === bKeys.size ? aKeys.every(key => bKeys.has(key) && deepCompare(a[key], b[key])) : false;
+  }
+};
+
 /*
  * Function Helpers
  */
@@ -176,6 +210,21 @@ export const simpleScalarMemoize = fnc => {
     }
     return cache[key];
   };
+};
+
+/**
+ * Compose a sequence of unary functions (composeFunctions(f, g) will create x => f(g(x))).
+ * @param {Function} fnc
+ * @param  {Function[]} rest
+ * @returns {Function}
+ */
+export const composeFunctions = (fnc, ...rest) => {
+  if (rest.length === 0) {
+    return fnc;
+  }
+
+  const innerFnc = composeFunctions(...rest);
+  return arg => fnc(innerFnc(arg));
 };
 
 /*

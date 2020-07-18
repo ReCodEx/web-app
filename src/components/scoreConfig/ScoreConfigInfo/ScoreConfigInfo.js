@@ -6,7 +6,7 @@ import ScoreConfigInfoDefault from './ScoreConfigInfoDefault';
 import DateTime from '../../widgets/DateTime';
 import ScoreConfigInfoUniform from './ScoreConfigInfoUniform';
 import ScoreConfigInfoWeighted from './ScoreConfigInfoWeighted';
-import { UNIFORM_ID, WEIGHTED_ID } from '../../../helpers/exercise/score';
+import { UNIFORM_ID, WEIGHTED_ID } from '../../../helpers/exercise/testsAndScore';
 
 const knownCalculators = {
   [UNIFORM_ID]: ScoreConfigInfoUniform,

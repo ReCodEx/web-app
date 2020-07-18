@@ -59,8 +59,12 @@ import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
 import { fetchPipelines } from '../../redux/modules/pipelines';
 import { pipelinesSelector, getPipelinesEnvironmentsWhichHasEntryPoint } from '../../redux/selectors/pipelines';
 
-import { getTestsInitValues, transformTestsValues } from '../../helpers/exercise/tests';
-import { transformScoreConfig, UNIVERSAL_ID as UNIVERSAL_SCORE_CALCULATOR } from '../../helpers/exercise/score';
+import {
+  getTestsInitValues,
+  transformTestsValues,
+  transformScoreConfig,
+  UNIVERSAL_ID as UNIVERSAL_SCORE_CALCULATOR,
+} from '../../helpers/exercise/testsAndScore';
 import {
   onlySimpleEnvironments,
   getSimpleEnvironmentsInitValues,
