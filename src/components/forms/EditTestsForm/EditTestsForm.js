@@ -13,9 +13,10 @@ import StandaloneRadioField from '../Fields/StandaloneRadioField';
 import Box from '../../widgets/Box';
 import Button from '../../widgets/FlatButton';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
-import Icon, { AddIcon, CloseIcon, RefreshIcon } from '../../icons';
+import Icon, { AddIcon, CloseIcon, RefreshIcon, WarningIcon } from '../../icons';
 import {
   UNIFORM_ID,
+  WEIGHTED_ID,
   UNIVERSAL_ID,
   KNOWN_CALCULATORS,
   SCORE_CALCULATOR_CAPTIONS,
@@ -235,7 +236,7 @@ class EditTestsForm extends Component {
                           <div className="callout callout-info">
                             <FormattedMessage
                               id="app.editTestsForm.changeCalculatorModal.info"
-                              defaultMessage="When the scoring algorithm is changed, the score configuration is transformed into corresponding format. Transforming more generic configuration into more specific one may require some reduction or even reinitialization of the score configuration."
+                              defaultMessage="When the scoring algorithm is changed, the score configuration is transformed into corresponding format. Transforming more generic configuration into more specific one may require some reduction or even reinitialization of the score configuration. Please note that the change is performed immediately and any configuration transformations cannot be undone."
                             />
                           </div>
 
@@ -259,6 +260,26 @@ class EditTestsForm extends Component {
                               ))}
                             </tbody>
                           </Table>
+
+                          {formValues && formValues.calculator === UNIFORM_ID && formValues.calculator !== calculator && (
+                            <p className="text-warning text-center">
+                              <WarningIcon gapRight />
+                              <FormattedMessage
+                                id="app.editTestsForm.changeCalculatorModal.warningUniform"
+                                defaultMessage="Current algorithm configuration will be removed."
+                              />
+                            </p>
+                          )}
+
+                          {formValues && formValues.calculator === WEIGHTED_ID && calculator === UNIVERSAL_ID && (
+                            <p className="text-warning text-center">
+                              <WarningIcon gapRight />
+                              <FormattedMessage
+                                id="app.editTestsForm.changeCalculatorModal.warningUniversalToWeighted"
+                                defaultMessage="Transformation of generic expression into weighted average may cause some reductions in the configuration."
+                              />
+                            </p>
+                          )}
                         </Modal.Body>
                         <Modal.Footer>
                           <div className="text-center">
