@@ -481,6 +481,8 @@
   "app.editTestsForm.changeCalculatorDisabledTooltip",
   "app.editTestsForm.changeCalculatorModal.info",
   "app.editTestsForm.changeCalculatorModal.title",
+  "app.editTestsForm.changeCalculatorModal.warningUniform",
+  "app.editTestsForm.changeCalculatorModal.warningUniversalToWeighted",
   "app.editTestsForm.expandToggleTooltip",
   "app.editTestsForm.submit",
   "app.editTestsForm.submitting",

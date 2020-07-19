@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { attemptExtractWeights } from './scoreAstFunctions';
 import { arrayToObject, EMPTY_OBJ } from '../common';
 
 export const UNIFORM_ID = 'uniform';
@@ -116,6 +117,14 @@ const weightsToUniversalConfig = weights =>
         _div([_sum(Object.keys(weights).map(name => _mul([weights[name], _test(name)]))), sumWeights(weights)])
     : _value(1); // fallback for no weights - at least valid config must be generated
 
+const addMissingWeights = (weights, tests, defaultWeight) => {
+  tests.forEach(({ name }) => {
+    if (weights[name] === undefined) {
+      weights[name] = defaultWeight;
+    }
+  });
+};
+
 /**
  * Load weights from the form data based on the original calculator
  * @param {Object[]} tests List of tests as yielded by transformTestsValues of tests.js
@@ -131,21 +140,18 @@ const loadWeights = (tests, originalCalculator, formData, astRoot) => {
       ({ weight = 100 }) => Number(weight)
     );
 
-    // if some test weights are missing, fill them with defaults
-    tests.forEach(({ name }) => {
-      if (weights[name] === undefined) {
-        weights[name] = 100;
-      }
-    });
-
+    addMissingWeights(weights, tests, 100);
     return weights;
   }
 
   if (originalCalculator === UNIVERSAL_ID) {
     // Attempt to detect pattern of (weighted) average in universal (AST) configuration
-    // const config = loadUniversalConfig(tests, originalCalculator, formData, astRoot);
-    // TODO
-    return generateUniformWeights(tests);
+    const config = loadUniversalConfig(tests, originalCalculator, formData, astRoot);
+    const weights = attemptExtractWeights(config);
+    if (weights) {
+      addMissingWeights(weights, tests, 0);
+      return weights;
+    }
   }
 
   // In any other case, the weights cannot be loaded -> fill in the uniform weights

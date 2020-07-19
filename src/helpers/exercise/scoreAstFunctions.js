@@ -53,7 +53,10 @@ export const removeConstantExpressions = node => {
 };
 
 /**
- * Optimization rules applied in given order to every node in DFS
+ * Optimization rules applied in given order to every node recursively (in DFS). Each rule is an object
+ * { type, condition, optimisation }. The `type` is node type or array of types to which nodes this rule applies to.
+ * The condition is a function that gets node as argument and returns bool, whether the rule may be applied.
+ * The optimization is actual transformation function that takes node and yield transformed node.
  */
 const optimizationRules = [
   {
@@ -154,20 +157,43 @@ export const optimize = node => {
   return node;
 };
 
+/**
+ * Internal function that detects a node is of given type (also recognize numbers as 'value' nodes).
+ * @param {Object|number} node
+ * @param {string} type
+ * @returns {boolean}
+ */
 const _isOfType = (node, type) => {
   return (typeof node === 'object' && node.type === type) || (type === 'value' && typeof node === 'number');
 };
 
+/**
+ * Internal function that retrieves a value of 'value' nodes (handles both numeric values and 'value' objects).
+ * @param {Object|number} node
+ * @returns {number|null} null if given node is not value node
+ */
 const _getValue = node => (_isOfType(node, 'value') ? (typeof node === 'number' ? node : node.value) : null);
 
-const _getAllNodes = (root, filter) => {
-  const res = root.children.flatMap(child => _getAllNodes(child, filter));
-  if (!filter || filter(root)) {
-    res.push(root);
+/**
+ * Internal function that returns all nodes that pass filter test from given subtree.
+ * @param {Object|number} node root node of target subtree
+ * @param {Function} filter filtering function (node => boolean)
+ */
+const _getAllNodes = (node, filter) => {
+  const res =
+    typeof node === 'object' && node.children ? node.children.flatMap(child => _getAllNodes(child, filter)) : [];
+  if (!filter || filter(node)) {
+    res.push(node);
   }
   return res;
 };
 
+/**
+ * Internal function that extract children nodes of given type.
+ * @param {Object} node parent
+ * @param  {string[]} types list of types of child nodes
+ * @returns {Array} array holding a corresponding child (or null) to each type of `types`
+ */
 const _extractChildren = (node, ...types) => {
   if (typeof node !== 'object' || !node.children || node.children.length === 0) {
     return types.map(() => null);
@@ -179,6 +205,12 @@ const _extractChildren = (node, ...types) => {
   });
 };
 
+/**
+ * Internal function that finds all test-result nodes and accumulate them into a result object.
+ * @param {Array} nodes list of nodes
+ * @param {Object} accumulator object collecting test results (and their weights)
+ * @param {number} weight the value written into accumulator (key is the test name)
+ */
 const _accumulateTestResultNodes = (nodes, accumulator, weight = 1) => {
   nodes
     .filter(node => _isOfType(node, 'test-result'))
@@ -187,7 +219,17 @@ const _accumulateTestResultNodes = (nodes, accumulator, weight = 1) => {
     });
 };
 
+/**
+ * A very tolerant function that optimizes the configuration tree, tries to find either
+ * weighted average or regular average pattern, and extract the test names and their weights.
+ * @param {Object} root root node of the serialized configuration
+ * @returns {Object|null} object where keys are test names and values are weights (null on failure)
+ */
 export const attemptExtractWeights = root => {
+  if (!root) {
+    return null;
+  }
+
   root = removeConstantExpressions(root);
   root = optimize(root);
 
