@@ -412,7 +412,7 @@ export class AstNode {
    * @param {Function} [filter=null]
    */
   getNodes(filter = null) {
-    const children = this.children.map(node => node.getNodes(filter)).flat();
+    const children = this.children.flatMap(node => node.getNodes(filter));
     return !filter || filter(this) ? [this, ...children] : children;
   }
 

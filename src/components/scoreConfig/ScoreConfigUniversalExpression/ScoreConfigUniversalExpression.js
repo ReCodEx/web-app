@@ -371,56 +371,58 @@ class ScoreConfigUniversalExpression extends Component {
               </div>
 
               <table>
-                <tr>
-                  <td className="em-padding valign-middle">
-                    <Button onClick={() => this.performOptimizations(removeConstantExpressions)} bsStyle="success">
+                <tbody>
+                  <tr>
+                    <td className="em-padding valign-middle">
+                      <Button onClick={() => this.performOptimizations(removeConstantExpressions)} bsStyle="success">
+                        <FormattedMessage
+                          id="app.scoreConfigExpression.optimize.removeConstantsButton"
+                          defaultMessage="Replace Constant Sub-expressions"
+                        />
+                      </Button>
+                    </td>
+                    <td className="em-padding valign-middle text-muted small">
                       <FormattedMessage
-                        id="app.scoreConfigExpression.optimize.removeConstantsButton"
-                        defaultMessage="Replace Constant Sub-expressions"
+                        id="app.scoreConfigExpression.optimize.removeConstantsInfo"
+                        defaultMessage="All constant sub-expressions (sub-trees) are evaluated and replaced with numeric literal nodes."
                       />
-                    </Button>
-                  </td>
-                  <td className="em-padding valign-middle text-muted small">
-                    <FormattedMessage
-                      id="app.scoreConfigExpression.optimize.removeConstantsInfo"
-                      defaultMessage="All constant sub-expressions (sub-trees) are evaluated and replaced with numeric literal nodes."
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="em-padding valign-middle">
-                    <Button onClick={() => this.performOptimizations(optimize)} bsStyle="success">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="em-padding valign-middle">
+                      <Button onClick={() => this.performOptimizations(optimize)} bsStyle="success">
+                        <FormattedMessage
+                          id="app.scoreConfigExpression.optimize.optimizeButton"
+                          defaultMessage="Basic Optimizations"
+                        />
+                      </Button>
+                    </td>
+                    <td className="em-padding valign-middle text-muted small">
                       <FormattedMessage
-                        id="app.scoreConfigExpression.optimize.optimizeButton"
-                        defaultMessage="Basic Optimizations"
+                        id="app.scoreConfigExpression.optimize.optimizeInfo"
+                        defaultMessage="Perform basic set of optimizations which simplify the tree but have no effect on the result (removing double negtion, removing 0 from sum() and 1 from mul(), etc.)."
                       />
-                    </Button>
-                  </td>
-                  <td className="em-padding valign-middle text-muted small">
-                    <FormattedMessage
-                      id="app.scoreConfigExpression.optimize.optimizeInfo"
-                      defaultMessage="Perform basic set of optimizations which simplify the tree but have no effect on the result (removing double negtion, removing 0 from sum() and 1 from mul(), etc.)."
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="em-padding valign-middle">
-                    <Button
-                      onClick={() => this.performOptimizations(removeConstantExpressions, optimize)}
-                      bsStyle="success">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="em-padding valign-middle">
+                      <Button
+                        onClick={() => this.performOptimizations(removeConstantExpressions, optimize)}
+                        bsStyle="success">
+                        <FormattedMessage
+                          id="app.scoreConfigExpression.optimize.allButton"
+                          defaultMessage="All Optimizations"
+                        />
+                      </Button>
+                    </td>
+                    <td className="em-padding valign-middle text-muted small">
                       <FormattedMessage
-                        id="app.scoreConfigExpression.optimize.allButton"
-                        defaultMessage="All Optimizations"
+                        id="app.scoreConfigExpression.optimize.allInfo"
+                        defaultMessage="Perform all optimizations mentioned above in the correct order."
                       />
-                    </Button>
-                  </td>
-                  <td className="em-padding valign-middle text-muted small">
-                    <FormattedMessage
-                      id="app.scoreConfigExpression.optimize.allInfo"
-                      defaultMessage="Perform all optimizations mentioned above in the correct order."
-                    />
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </Modal.Body>
             <Modal.Footer>

@@ -174,12 +174,10 @@ class EditTestsForm extends Component {
                     )}
 
                     {(dirty || (this.getAst() && this.getAst().canUndo())) && !submitting && (
-                      <span>
-                        <Button type="reset" onClick={this.reset} bsStyle="danger">
-                          <RefreshIcon gapRight />
-                          <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                        </Button>
-                      </span>
+                      <Button type="reset" onClick={this.reset} bsStyle="danger">
+                        <RefreshIcon gapRight />
+                        <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                      </Button>
                     )}
 
                     <SubmitButton
@@ -199,129 +197,123 @@ class EditTestsForm extends Component {
                       }}
                     />
 
-                    {!readOnly && (
-                      <OptionalTooltipWrapper
-                        tooltip={
+                    <OptionalTooltipWrapper
+                      tooltip={
+                        <FormattedMessage
+                          id="app.editTestsForm.changeCalculatorDisabledTooltip"
+                          defaultMessage="The scoring algorithm may be changed only when there are no unsaved modifications in this form."
+                        />
+                      }
+                      hide={!dirty}>
+                      <Button
+                        onClick={this.openDialog}
+                        bsStyle={dirty ? 'default' : 'primary'}
+                        className="em-margin-left"
+                        disabled={dirty}>
+                        <Icon icon="calculator" gapRight />
+                        <FormattedMessage id="app.editTestsForm.changeCalculator" defaultMessage="Scoring Algorithm" />
+                      </Button>
+                    </OptionalTooltipWrapper>
+
+                    <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+                      <Modal.Header closeButton>
+                        <Modal.Title>
                           <FormattedMessage
-                            id="app.editTestsForm.changeCalculatorDisabledTooltip"
-                            defaultMessage="The scoring algorithm may be changed only when there are no unsaved modifications in this form."
+                            id="app.editTestsForm.changeCalculatorModal.title"
+                            defaultMessage="Set Scoring Algorithm"
                           />
-                        }
-                        hide={!dirty}>
-                        <Button
-                          onClick={this.openDialog}
-                          bsStyle={dirty ? 'default' : 'primary'}
-                          className="em-margin-left"
-                          disabled={dirty}>
-                          <Icon icon="calculator" gapRight />
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <div className="callout callout-info">
                           <FormattedMessage
-                            id="app.editTestsForm.changeCalculator"
-                            defaultMessage="Scoring Algorithm"
+                            id="app.editTestsForm.changeCalculatorModal.info"
+                            defaultMessage="When the scoring algorithm is changed, the score configuration is transformed into corresponding format. Transforming more generic configuration into more specific one may require some reduction or even reinitialization of the score configuration. Please note that the change is performed immediately and any configuration transformations cannot be undone."
                           />
-                        </Button>
-                      </OptionalTooltipWrapper>
-                    )}
+                        </div>
 
-                    {!readOnly && (
-                      <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
-                        <Modal.Header closeButton>
-                          <Modal.Title>
+                        <Table hover>
+                          <tbody>
+                            {KNOWN_CALCULATORS.map(calc => (
+                              <tr
+                                key={calc}
+                                className={classnames({
+                                  'bg-info': calc === calculator,
+                                })}>
+                                <td className="valign-middle shrink-col">
+                                  <StandaloneRadioField name="calculator" value={calc} />
+                                </td>
+                                <td>
+                                  <strong>{SCORE_CALCULATOR_CAPTIONS[calc]}</strong>
+                                  <br />
+                                  <small className="text-muted">{SCORE_CALCULATOR_DESCRIPTIONS[calc]}</small>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+
+                        {formValues && formValues.calculator === UNIFORM_ID && formValues.calculator !== calculator && (
+                          <p className="text-warning text-center">
+                            <WarningIcon gapRight />
                             <FormattedMessage
-                              id="app.editTestsForm.changeCalculatorModal.title"
-                              defaultMessage="Set Scoring Algorithm"
+                              id="app.editTestsForm.changeCalculatorModal.warningUniform"
+                              defaultMessage="Current algorithm configuration will be removed."
                             />
-                          </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <div className="callout callout-info">
+                          </p>
+                        )}
+
+                        {formValues && formValues.calculator === WEIGHTED_ID && calculator === UNIVERSAL_ID && (
+                          <p className="text-warning text-center">
+                            <WarningIcon gapRight />
                             <FormattedMessage
-                              id="app.editTestsForm.changeCalculatorModal.info"
-                              defaultMessage="When the scoring algorithm is changed, the score configuration is transformed into corresponding format. Transforming more generic configuration into more specific one may require some reduction or even reinitialization of the score configuration. Please note that the change is performed immediately and any configuration transformations cannot be undone."
+                              id="app.editTestsForm.changeCalculatorModal.warningUniversalToWeighted"
+                              defaultMessage="Transformation of generic expression into weighted average may cause some reductions in the configuration."
                             />
-                          </div>
-
-                          <Table hover>
-                            <tbody>
-                              {KNOWN_CALCULATORS.map(calc => (
-                                <tr
-                                  key={calc}
-                                  className={classnames({
-                                    'bg-info': calc === calculator,
-                                  })}>
-                                  <td className="valign-middle shrink-col">
-                                    <StandaloneRadioField name="calculator" value={calc} />
-                                  </td>
-                                  <td>
-                                    <strong>{SCORE_CALCULATOR_CAPTIONS[calc]}</strong>
-                                    <br />
-                                    <small className="text-muted">{SCORE_CALCULATOR_DESCRIPTIONS[calc]}</small>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </Table>
-
-                          {formValues && formValues.calculator === UNIFORM_ID && formValues.calculator !== calculator && (
-                            <p className="text-warning text-center">
-                              <WarningIcon gapRight />
-                              <FormattedMessage
-                                id="app.editTestsForm.changeCalculatorModal.warningUniform"
-                                defaultMessage="Current algorithm configuration will be removed."
-                              />
-                            </p>
-                          )}
-
-                          {formValues && formValues.calculator === WEIGHTED_ID && calculator === UNIVERSAL_ID && (
-                            <p className="text-warning text-center">
-                              <WarningIcon gapRight />
-                              <FormattedMessage
-                                id="app.editTestsForm.changeCalculatorModal.warningUniversalToWeighted"
-                                defaultMessage="Transformation of generic expression into weighted average may cause some reductions in the configuration."
-                              />
-                            </p>
-                          )}
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <div className="text-center">
-                            <SubmitButton
-                              id="editTests"
-                              disabled={formValues && formValues.calculator === calculator}
-                              submitting={submitting}
-                              hasSucceeded={submitSucceeded}
-                              handleSubmit={handleSubmit}
-                              onSubmit={this.closeDialog}
-                              messages={{
-                                submit: (
-                                  <FormattedMessage
-                                    id="app.editTestsForm.changeCalculator.submit"
-                                    defaultMessage="Set Algorithm"
-                                  />
-                                ),
-                                submitting: (
-                                  <FormattedMessage
-                                    id="app.editTestsForm.changeCalculator.submitting"
-                                    defaultMessage="Setting Algorithm..."
-                                  />
-                                ),
-                                success: (
-                                  <FormattedMessage
-                                    id="app.editTestsForm.changeCalculator.success"
-                                    defaultMessage="Algorithm Set."
-                                  />
-                                ),
-                              }}
-                            />
-                            <Button onClick={this.closeDialog} bsStyle="default">
-                              <CloseIcon gapRight />
-                              <FormattedMessage id="generic.close" defaultMessage="Close" />
-                            </Button>
-                          </div>
-                        </Modal.Footer>
-                      </Modal>
-                    )}
+                          </p>
+                        )}
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <div className="text-center">
+                          <SubmitButton
+                            id="editTests"
+                            disabled={formValues && formValues.calculator === calculator}
+                            submitting={submitting}
+                            hasSucceeded={submitSucceeded}
+                            handleSubmit={handleSubmit}
+                            onSubmit={this.closeDialog}
+                            messages={{
+                              submit: (
+                                <FormattedMessage
+                                  id="app.editTestsForm.changeCalculator.submit"
+                                  defaultMessage="Set Algorithm"
+                                />
+                              ),
+                              submitting: (
+                                <FormattedMessage
+                                  id="app.editTestsForm.changeCalculator.submitting"
+                                  defaultMessage="Setting Algorithm..."
+                                />
+                              ),
+                              success: (
+                                <FormattedMessage
+                                  id="app.editTestsForm.changeCalculator.success"
+                                  defaultMessage="Algorithm Set."
+                                />
+                              ),
+                            }}
+                          />
+                          <Button onClick={this.closeDialog} bsStyle="default">
+                            <CloseIcon gapRight />
+                            <FormattedMessage id="generic.close" defaultMessage="Close" />
+                          </Button>
+                        </div>
+                      </Modal.Footer>
+                    </Modal>
                   </div>
                 )}
               </Col>
+
               {calculator === UNIVERSAL_ID && formValues && formValues.config && (
                 <div
                   className={classnames({
@@ -402,15 +394,15 @@ const validate = ({ tests }) => {
   return errors;
 };
 
-export default connect(state => {
-  return {
-    formValues: getFormValues('editTests')(state),
-  };
+export default reduxForm({
+  form: 'editTests',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+  validate,
 })(
-  reduxForm({
-    form: 'editTests',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    validate,
+  connect(state => {
+    return {
+      formValues: getFormValues('editTests')(state),
+    };
   })(EditTestsForm)
 );

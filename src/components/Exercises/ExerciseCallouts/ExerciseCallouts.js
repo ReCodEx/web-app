@@ -10,7 +10,17 @@ import withLinks from '../../../helpers/withLinks';
 
 export const exerciseCalloutsAreVisible = ({ isBroken, hasReferenceSolutions }) => isBroken || !hasReferenceSolutions;
 
-const errorTypes = ['no-texts', 'no-tests', 'score', 'no-runtimes', 'runtimes', 'no-configs', 'no-hwgroups', 'limits'];
+const errorTypes = [
+  'no-texts',
+  'no-tests',
+  'score',
+  'no-runtimes',
+  'runtimes',
+  'no-configs',
+  'no-hwgroups',
+  'config',
+  'limits',
+];
 
 const errorMessages = {
   'no-texts': (
@@ -50,6 +60,12 @@ const errorMessages = {
       defaultMessage="Exercise has no hardware group selected"
     />
   ),
+  config: (
+    <FormattedMessage
+      id="app.exercise.validationErrors.config"
+      defaultMessage="Configuration of some tests is incomplete; this typically happens when you add a test or delete a file"
+    />
+  ),
   limits: (
     <FormattedMessage
       id="app.exercise.validationErrors.limits"
@@ -69,6 +85,7 @@ const errorLinkCaptions = {
   'no-configs': (
     <FormattedMessage id="app.exercise.validationLinks.noConfigs" defaultMessage="update configuration form" />
   ),
+  config: <FormattedMessage id="app.exercise.validationLinks.noConfigs" defaultMessage="update configuration form" />,
   'no-hwgroups': (
     <FormattedMessage id="app.exercise.validationLinks.noHwGroups" defaultMessage="select hardware group" />
   ),
@@ -83,6 +100,7 @@ const errorLinks = {
   runtimes: 'EXERCISE_EDIT_CONFIG_URI_FACTORY',
   'no-configs': 'EXERCISE_EDIT_CONFIG_URI_FACTORY',
   'no-hwgroups': 'EXERCISE_EDIT_LIMITS_URI_FACTORY',
+  config: 'EXERCISE_EDIT_CONFIG_URI_FACTORY',
   limits: 'EXERCISE_EDIT_LIMITS_URI_FACTORY',
 };
 
@@ -94,6 +112,7 @@ const errorLinksHashes = {
   runtimes: '#exercise-config-form',
   'no-configs': '#exercise-config-form',
   'no-hwgroups': '#hwgroup-form',
+  config: '#exercise-config-form',
   limits: '#limits-form',
 };
 
