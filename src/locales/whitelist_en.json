@@ -606,6 +606,7 @@
   "app.exercise.runtimes",
   "app.exercise.submitReferenceSoution",
   "app.exercise.title",
+  "app.exercise.validationErrors.config",
   "app.exercise.validationErrors.limits",
   "app.exercise.validationErrors.noConfigs",
   "app.exercise.validationErrors.noHwGroups",

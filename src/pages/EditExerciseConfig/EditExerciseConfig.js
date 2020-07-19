@@ -157,8 +157,6 @@ class EditExerciseConfig extends Component {
     }
   };
 
-  changeScoreCalculator = ({ calculator }) => {};
-
   scoreConfigExtraData = null; // data kept oustide redux-form (for technical reasons) but required for submission
 
   registerScoreConfigExtraData = data => {
@@ -253,7 +251,7 @@ class EditExerciseConfig extends Component {
         calculator={scoreConfig && scoreConfig.calculator}
         readOnly={!hasPermissions(exercise, 'setScoreConfig')}
         initialValues={getTestsInitValues(tests, scoreConfig, this.props.intl.locale)}
-        onSubmit={this.transformAndSendTestsValues(scoreConfig.calculator)}
+        onSubmit={this.transformAndSendTestsValues(scoreConfig && scoreConfig.calculator)}
         registerExtraData={this.registerScoreConfigExtraData}
       />
     );

@@ -606,6 +606,7 @@
   "app.exercise.runtimes": "Běhová prostředí",
   "app.exercise.submitReferenceSoution": "Odevzdat nové referenční řešení",
   "app.exercise.title": "Úloha",
+  "app.exercise.validationErrors.config": "Konfigurace testů není kompletní, což se typicky stane, pokud přidáte test nebo smažete soubor",
   "app.exercise.validationErrors.limits": "Paměťové nebo časové limity nejsou správně nastaveny",
   "app.exercise.validationErrors.noConfigs": "Konfigurace některých testů není platná nebo chybí",
   "app.exercise.validationErrors.noHwGroups": "Úloha nemá vybranou hardwarovou skupinu",

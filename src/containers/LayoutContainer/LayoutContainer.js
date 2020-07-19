@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import moment from 'moment';
-import Layout from '../../components/layout/Layout';
+import { canUseDOM } from 'exenv';
 
+import Layout from '../../components/layout/Layout';
 import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app';
 import { setLang } from '../../redux/modules/app';
 import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
@@ -38,7 +39,9 @@ const ADDITIONAL_INTL_FORMATS = {
 class LayoutContainer extends Component {
   componentDidMount() {
     this.resizeSidebarToDefault(this.props);
-    window.location.hash = this.props.location.hash;
+    if (canUseDOM && (window.location.hash || this.props.location.hash)) {
+      window.location.hash = this.props.location.hash;
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -50,7 +53,9 @@ class LayoutContainer extends Component {
       this.resizeSidebarToDefault(this.props);
     }
 
-    window.location.hash = this.props.location.hash;
+    if (canUseDOM && (window.location.hash || this.props.location.hash)) {
+      window.location.hash = this.props.location.hash;
+    }
   }
 
   resizeSidebarToDefault({ collapse, unroll, userSettings }) {

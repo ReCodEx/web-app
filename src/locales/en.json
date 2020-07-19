@@ -606,6 +606,7 @@
   "app.exercise.runtimes": "Runtime environments",
   "app.exercise.submitReferenceSoution": "Submit New Reference Solution",
   "app.exercise.title": "Exercise",
+  "app.exercise.validationErrors.config": "Configuration of some tests is incomplete; this typically happens when you add a test or delete a file",
   "app.exercise.validationErrors.limits": "Memory or time limits are not properly set",
   "app.exercise.validationErrors.noConfigs": "Configuration of some tests is incorrect or missing",
   "app.exercise.validationErrors.noHwGroups": "Exercise has no hardware group selected",
