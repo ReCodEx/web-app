@@ -42,6 +42,14 @@ class EditLiteralNodeForm extends Component {
     }
   };
 
+  keyDown = ev => {
+    if (event.key === 'Enter' && this.dirty() && this.valid()) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.save();
+    }
+  };
+
   valid = () => {
     return this.state.value === null || this.state.numValue !== null;
   };
@@ -73,6 +81,7 @@ class EditLiteralNodeForm extends Component {
       <React.Fragment>
         <FormGroup validationState={!this.valid() ? 'error' : undefined}>
           <FormControl
+            autoFocus
             type="text"
             value={value}
             bsClass={classnames({
@@ -80,6 +89,7 @@ class EditLiteralNodeForm extends Component {
               [formStyles.dirty]: this.dirty(),
             })}
             onChange={this.changeValue}
+            onKeyDown={this.keyDown}
           />
 
           {!this.valid() && (

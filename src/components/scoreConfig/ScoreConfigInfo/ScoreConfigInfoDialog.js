@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import ScoreConfigInfo from './ScoreConfigInfo';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
-const ScoreConfigInfoDialog = ({ show, onHide, scoreConfig, canResubmit = false }) => (
+const ScoreConfigInfoDialog = ({ show, onHide, scoreConfig, testResults, canResubmit = false }) => (
   <Modal show={show} backdrop="static" onHide={onHide} bsSize="large">
     <Modal.Header closeButton>
       <Modal.Title>
@@ -16,7 +16,9 @@ const ScoreConfigInfoDialog = ({ show, onHide, scoreConfig, canResubmit = false 
     </Modal.Header>
     <Modal.Body>
       <ResourceRenderer resource={scoreConfig}>
-        {scoreConfigJS => <ScoreConfigInfo scoreConfig={scoreConfigJS} canResubmit={canResubmit} />}
+        {scoreConfigJS => (
+          <ScoreConfigInfo scoreConfig={scoreConfigJS} testResults={testResults} canResubmit={canResubmit} />
+        )}
       </ResourceRenderer>
     </Modal.Body>
   </Modal>
@@ -26,6 +28,7 @@ ScoreConfigInfoDialog.propTypes = {
   show: PropTypes.bool.isRequired,
   onHide: PropTypes.func.isRequired,
   scoreConfig: ImmutablePropTypes.map,
+  testResults: PropTypes.array,
   canResubmit: PropTypes.bool,
 };
 

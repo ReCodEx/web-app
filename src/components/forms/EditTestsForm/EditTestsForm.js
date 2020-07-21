@@ -48,7 +48,7 @@ class EditTestsForm extends Component {
 
     if (!this.ast || this.lastConfig !== initialValues.config) {
       this.lastConfig = initialValues.config;
-      this.ast = new Ast(this.updateAstRoot);
+      this.ast = new Ast(this.updateAstRootHandler);
       this.ast.deserialize(initialValues.config, createTestNameIndex(initialValues.tests));
       this.usedTests = null;
       this.props.registerExtraData && this.props.registerExtraData(this.ast.getRoot());
@@ -66,7 +66,11 @@ class EditTestsForm extends Component {
     return this.usedTests;
   }
 
-  state = { dialogOpen: false, expanded: false, astRoot: null };
+  state = {
+    dialogOpen: false, // modal with set scoring algorithm form
+    expanded: false, // toggle button in the upper right corner
+    astRoot: null, // we keep this just to trigger re-render when AST is changed
+  };
 
   reset = () => {
     this.ast = null;
@@ -88,9 +92,9 @@ class EditTestsForm extends Component {
     this.setState({ expanded: !this.state.expanded });
   };
 
-  updateAstRoot = (_, newRoot) => {
+  updateAstRootHandler = (_, newRoot) => {
     this.usedTests = null;
-    this.setState({ astRoot: newRoot });
+    this.setState({ astRoot: newRoot }); // this will actually trigger re-render
     this.props.registerExtraData && this.props.registerExtraData(this.getAst().getRoot());
   };
 
@@ -321,12 +325,7 @@ class EditTestsForm extends Component {
                     [style.rightPanel]: !this.state.expanded,
                     'em-padding-left': true,
                   })}>
-                  <ScoreConfigUniversalExpression
-                    ast={this.getAst()}
-                    root={this.state.astRoot || this.getAst().getRoot()}
-                    tests={formValues.tests}
-                    editable={!readOnly}
-                  />
+                  <ScoreConfigUniversalExpression ast={this.getAst()} tests={formValues.tests} editable={!readOnly} />
                 </div>
               )}
             </Row>

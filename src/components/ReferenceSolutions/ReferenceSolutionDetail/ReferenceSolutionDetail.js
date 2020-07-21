@@ -277,6 +277,7 @@ class ReferenceSolutionDetail extends Component {
             show={scoreDialogOpened}
             onHide={this.closeScoreDialog}
             scoreConfig={scoreConfigSelector(activeSubmissionId)}
+            testResults={evaluation && evaluation.testResults}
             canResubmit={canResubmit}
           />
         )}

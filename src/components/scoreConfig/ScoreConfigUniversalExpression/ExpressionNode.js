@@ -11,6 +11,7 @@ import {
   TEST_NODE,
   LITERAL_NODE,
   AstNode,
+  AstNodeValue,
   AstNodePlaceholder,
 } from '../../../helpers/exercise/scoreAst';
 import { EMPTY_OBJ } from '../../../helpers/common';
@@ -73,6 +74,8 @@ const getVacantChildrenPositions = parent => {
   const siblings = parent.getRealChildren();
   return parent.getMaxChildren() - siblings.length;
 };
+
+const nodeValuePrettyPrint = value => `${Math.round(value * 1000) / 1000}`;
 
 // Placeholders are rather special nodes, so we have a separate component for them...
 const ExpressionNodePlaceholder = ({
@@ -171,6 +174,7 @@ const ExpressionNode = ({
           [style[genericClass]]: true,
           [style.invalid]: !node.isValid(),
           [style.selected]: isSelected,
+          [style.clickable]: editNode,
         })}>
         <OptionalTooltipWrapper
           tooltip={description}
@@ -262,6 +266,10 @@ const ExpressionNode = ({
           </React.Fragment>
         )}
       </span>
+
+      {node.evaluated !== null && !(node instanceof AstNodeValue) && (
+        <small className="text-muted em-padding-left">= {nodeValuePrettyPrint(node.evaluated)}</small>
+      )}
 
       {node.children && (
         <ul>

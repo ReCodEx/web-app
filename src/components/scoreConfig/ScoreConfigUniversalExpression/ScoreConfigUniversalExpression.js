@@ -11,7 +11,7 @@ import EditTestNodeForm from './EditTestNodeForm';
 import EditLiteralNodeForm from './EditLiteralNodeForm';
 
 import { createTestNameIndex } from '../../../helpers/exercise/testsAndScore';
-import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast, AstNode } from '../../../helpers/exercise/scoreAst';
+import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst';
 import { removeConstantExpressions, optimize } from '../../../helpers/exercise/scoreAstFunctions';
 import Button from '../../widgets/FlatButton';
 import Icon, { UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
@@ -54,6 +54,16 @@ const EDIT_FORMS_TITLES = {
 const createTestNameIndexMemoized = defaultMemoize(tests => createTestNameIndex(tests));
 
 class ScoreConfigUniversalExpression extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    // performance optimization -- let's re-render only when we need to
+    return (
+      nextProps.ast !== this.props.ast ||
+      nextProps.tests !== this.props.tests ||
+      nextProps.editable !== this.props.editable ||
+      Object.keys(nextState).some(key => nextState[key] !== this.state[key])
+    );
+  }
+
   state = {
     ast: null,
     root: null,
@@ -61,7 +71,9 @@ class ScoreConfigUniversalExpression extends Component {
     ...CLOSED_DIALOGS_STATE,
   };
 
-  static getDerivedStateFromProps({ ast, root }, state) {
+  static getDerivedStateFromProps({ ast }, state) {
+    const root = ast && ast.getRoot();
+
     if (ast !== state.ast) {
       // editor has been reinitialized
       return {
@@ -73,15 +85,19 @@ class ScoreConfigUniversalExpression extends Component {
     }
 
     if (root !== state.root) {
-      // Update selection (nodes may have changed or removed)
+      // update selection (nodes may have changed or removed)
       const currentSelection = {};
+      let selectionChanged = false;
       Object.keys(state.currentSelection).forEach(id => {
         const node = root && root.findById(id);
         if (node) {
           currentSelection[id] = node;
+        } else {
+          selectionChanged = true;
         }
       });
-      return { root, currentSelection };
+
+      return selectionChanged ? { root, currentSelection } : { root }; // this will actually trigger re-rendering
     }
     return null;
   }
@@ -150,8 +166,9 @@ class ScoreConfigUniversalExpression extends Component {
   };
 
   render() {
-    const { ast, root, tests, editable = false } = this.props;
-    const testsIndex = createTestNameIndexMemoized(tests);
+    const { ast, tests = null, editable = false } = this.props;
+    const root = ast && ast.getRoot();
+    const testsIndex = tests && createTestNameIndexMemoized(tests);
 
     return root ? (
       <React.Fragment>
@@ -442,8 +459,7 @@ class ScoreConfigUniversalExpression extends Component {
 
 ScoreConfigUniversalExpression.propTypes = {
   ast: PropTypes.instanceOf(Ast).isRequired,
-  root: PropTypes.instanceOf(AstNode).isRequired,
-  tests: PropTypes.array.isRequired,
+  tests: PropTypes.array,
   editable: PropTypes.bool,
 };
 

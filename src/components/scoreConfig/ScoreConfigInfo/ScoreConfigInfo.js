@@ -6,14 +6,16 @@ import ScoreConfigInfoDefault from './ScoreConfigInfoDefault';
 import DateTime from '../../widgets/DateTime';
 import ScoreConfigInfoUniform from './ScoreConfigInfoUniform';
 import ScoreConfigInfoWeighted from './ScoreConfigInfoWeighted';
-import { UNIFORM_ID, WEIGHTED_ID } from '../../../helpers/exercise/testsAndScore';
+import ScoreConfigInfoUniversal from './ScoreConfigInfoUniversal';
+import { UNIFORM_ID, WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
 
 const knownCalculators = {
   [UNIFORM_ID]: ScoreConfigInfoUniform,
   [WEIGHTED_ID]: ScoreConfigInfoWeighted,
+  [UNIVERSAL_ID]: ScoreConfigInfoUniversal,
 };
 
-const ScoreConfigInfo = ({ scoreConfig, canResubmit = false }) => {
+const ScoreConfigInfo = ({ scoreConfig, testResults, canResubmit = false }) => {
   const ScoreConfigCalculatorPresenter =
     (scoreConfig && scoreConfig.calculator && knownCalculators[scoreConfig.calculator]) || ScoreConfigInfoDefault;
 
@@ -21,7 +23,7 @@ const ScoreConfigInfo = ({ scoreConfig, canResubmit = false }) => {
     <React.Fragment>
       {scoreConfig ? (
         <React.Fragment>
-          <ScoreConfigCalculatorPresenter scoreConfig={scoreConfig} />
+          <ScoreConfigCalculatorPresenter scoreConfig={scoreConfig} testResults={testResults} />
           <p className="small text-right text-nowrap text-muted em-padding-right">
             <FormattedMessage id="app.scoreConfigInfo.createdAt" defaultMessage="Configured at" />
             :&nbsp;
@@ -58,6 +60,7 @@ const ScoreConfigInfo = ({ scoreConfig, canResubmit = false }) => {
 
 ScoreConfigInfo.propTypes = {
   scoreConfig: PropTypes.object,
+  testResults: PropTypes.array,
   canResubmit: PropTypes.bool,
 };
 
