@@ -34,7 +34,7 @@ export const SCORE_CALCULATOR_DESCRIPTIONS = {
   [UNIVERSAL_ID]: (
     <FormattedMessage
       id="app.scoreCalculators.universal.description"
-      defaultMessage="The correcntess is computed by a custom expression that takes test results as an input."
+      defaultMessage="The correcntess is computed by a custom expression that takes test results as inputs."
     />
   ),
 };

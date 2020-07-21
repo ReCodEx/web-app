@@ -3,13 +3,24 @@ import PropTypes from 'prop-types';
 import { Table, Well } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
+import { safeGet, EMPTY_OBJ, arrayToObject } from '../../../helpers/common';
 
-const ScoreConfigInfoWeighted = ({ scoreConfig }) => {
+const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
+  const results =
+    testResults &&
+    arrayToObject(
+      testResults,
+      ({ testName }) => testName,
+      ({ score }) => score
+    );
+
   const weightsObj = safeGet(scoreConfig, ['config', 'testWeights'], EMPTY_OBJ);
   const weights = Object.keys(weightsObj)
     .sort()
     .map(test => ({ test, weight: weightsObj[test] }));
+  const weightsSum = weights.reduce((acc, { weight }) => acc + weight, 0);
+  const testsSum = weights.reduce((acc, { test, weight }) => acc + weight * results[test], 0);
+  const totalScore = weightsSum !== 0 ? Math.round((testsSum * 1000) / weightsSum) / 1000 : '?';
 
   return (
     <div>
@@ -31,6 +42,9 @@ const ScoreConfigInfoWeighted = ({ scoreConfig }) => {
                 <FormattedMessage id="app.scoreConfigInfoWeighted.test" defaultMessage="Test" />
               </th>
               <th>
+                <FormattedMessage id="app.scoreConfigInfoWeighted.score" defaultMessage="Test Correctness" />
+              </th>
+              <th>
                 <FormattedMessage id="app.scoreConfigInfoWeighted.weight" defaultMessage="Weight" />
               </th>
             </tr>
@@ -39,10 +53,23 @@ const ScoreConfigInfoWeighted = ({ scoreConfig }) => {
             {weights.map(({ test, weight }) => (
               <tr key={test}>
                 <td className="text-nowrap">{test}</td>
+                <td>{results[test] !== undefined ? results[test] : '?'}</td>
                 <td>{weight}</td>
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <th>
+                <FormattedMessage id="app.scoreConfigInfoWeighted.totals" defaultMessage="Totals" />
+              </th>
+              <th>{testsSum}</th>
+              <th>
+                {weightsSum}
+                <span className="pull-right">= {totalScore}</span>
+              </th>
+            </tr>
+          </tfoot>
         </Table>
       ) : (
         <Well>
@@ -58,6 +85,7 @@ const ScoreConfigInfoWeighted = ({ scoreConfig }) => {
 
 ScoreConfigInfoWeighted.propTypes = {
   scoreConfig: PropTypes.object,
+  testResults: PropTypes.array,
 };
 
 export default ScoreConfigInfoWeighted;

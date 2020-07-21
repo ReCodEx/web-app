@@ -7,7 +7,7 @@
 
 const sum = nums => nums.reduce((acc, x) => acc + x, 0);
 
-const evalNode = {
+export const evaluationFunctions = {
   avg: children => (children.length > 0 ? sum(children) / children.length : 0),
   clamp: ([x]) => Math.max(0, Math.min(1, x)),
   div: ([a, b]) => (b === 0 ? 0 : a / b),
@@ -35,10 +35,10 @@ export const removeConstantExpressions = node => {
 
   if (node.children) {
     node.children = node.children.map(removeConstantExpressions);
-    if (evalNode[node.type]) {
+    if (evaluationFunctions[node.type]) {
       const constants = node.children.filter(child => typeof child === 'number');
       if (constants.length > 1) {
-        const value = evalNode[node.type](constants);
+        const value = evaluationFunctions[node.type](constants);
         if (constants.length === node.children.length) {
           return value;
         } else {

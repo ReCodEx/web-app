@@ -20,6 +20,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { arrayToObject, objectFind, deepCompare } from '../common';
+import { evaluationFunctions } from './scoreAstFunctions';
 
 // Generic node types
 export const FUNCTION_NODE = 'function';
@@ -109,6 +110,7 @@ export class AstNode {
     this.children = [];
     this.valid = null;
     this.subtreeValid = null;
+    this.evaluated = null; // current value of this node (null if the value is not available)
 
     this._fixChildrenPlaceholders();
     this._fixChildrenParentage();
@@ -116,7 +118,11 @@ export class AstNode {
 
   _freeze() {
     this.valid = this._isValid();
-    this.subtreeValid = this.valid && this.getRealChildren().every(child => child.subtreeValid);
+    const realChildren = this.getRealChildren();
+    this.subtreeValid = this.valid && realChildren.every(child => child.subtreeValid);
+    if (evaluationFunctions[this.getType()] && realChildren.every(child => child.evaluated !== null)) {
+      this.evaluated = evaluationFunctions[this.getType()](realChildren.map(child => child.evaluated));
+    }
     Object.freeze(this);
   }
 
@@ -153,7 +159,7 @@ export class AstNode {
    * @param {Object} config A JSON configuration node as retrieved from the API.
    * @param {Object} tests test names index (object where keys are ids and values are names)
    */
-  _initFromConfig(config, tests = {}) {
+  _initFromConfig(config, tests = null) {
     if (config.children && config.children.length > 0) {
       this.children = config.children.map(childConf => _deserialize(childConf, tests) || new AstNodePlaceholder());
       this._fixChildrenPlaceholders();
@@ -856,14 +862,19 @@ export class AstNodeTestResult extends AstNode {
     }
   }
 
-  _initFromConfig(config, tests = {}) {
-    const testId = objectFind(tests, config.test);
-    this.test = testId || null;
+  _initFromConfig(config, tests = null) {
+    if (tests !== null) {
+      const testId = objectFind(tests, config.test);
+      this.test = testId || null;
+    } else {
+      this.test = config.test; // if no tests are given, no translation takes place
+    }
   }
 
   _clone(forceNewId = false) {
     const clone = super._clone(forceNewId);
     clone.test = this.test;
+    clone.evaluated = this.evaluated;
     return clone;
   }
 
@@ -871,8 +882,8 @@ export class AstNodeTestResult extends AstNode {
     return TEST_NODE;
   }
 
-  getCaption(testsIndex = {}) {
-    return testsIndex[this.test] || this.test;
+  getCaption(tests = null) {
+    return (tests && tests[this.test]) || this.test;
   }
 
   _isValid() {
@@ -880,12 +891,26 @@ export class AstNodeTestResult extends AstNode {
   }
 
   serialize(tests) {
-    const test = tests[this.test];
+    const test = (tests && tests[this.test]) || this.test;
     if (!test) {
       throw new Error('Unable to serialize test result node with invalid test reference.');
     }
 
     return { type: this.getType(), test };
+  }
+
+  /**
+   * Assign an evaluated value from test results (creates an updated clone).
+   * @param {number} value
+   */
+  evaluate(value) {
+    const clone = this._clone();
+    clone.evaluated = value;
+    clone._freeze();
+    if (this.getParent() && this.getParent()._childChanged) {
+      this.getParent()._childChanged(this, clone);
+    }
+    return clone;
   }
 }
 
@@ -905,13 +930,20 @@ export class AstNodeValue extends AstNode {
     }
   }
 
+  _freeze() {
+    this.evaluated = this.value;
+    super._freeze();
+  }
+
   _initFromConfig(config) {
     this.value = config.value;
+    this.evaluated = this.value;
   }
 
   _clone(forceNewId = false) {
     const clone = super._clone(forceNewId);
     clone.value = this.value;
+    clone.evaluated = this.evaluated;
     return clone;
   }
 
@@ -964,7 +996,7 @@ export const KNOWN_AST_CLASSES = arrayToObject([...AST_FUNCTION_CLASSES, AstNode
  * @param {Object} tests test names index (object where keys are ids and values are names)
  * @returns {AstNode|null} null is returned if the deserialization fails
  */
-const _deserialize = (scoreConfig, tests = {}) => {
+const _deserialize = (scoreConfig, tests = null) => {
   if (typeof scoreConfig === 'number') {
     const node = new AstNodeValue();
     node.value = scoreConfig;
@@ -1128,7 +1160,7 @@ export class Ast {
    * @param {Object} scoreConfig score configuration from API to be deserialized
    * @param {Object} tests test names index (object where keys are ids and values are names)
    */
-  deserialize(scoreConfig, tests = {}) {
+  deserialize(scoreConfig, tests = null) {
     const root = _deserialize(scoreConfig, tests);
     if (root) {
       this.root = root;
@@ -1169,6 +1201,28 @@ export class Ast {
       if (root) {
         this._childChanged(this.root, root);
       }
+    }
+  }
+
+  /**
+   * Provide scores for individual test results and perform a tree-wide evaluation.
+   * @param {Object} results keys are test names/ids (expected to match, whatever is used in the AST), values are scores
+   */
+  evaluate(results) {
+    const needsTransaction = !this.inTransaction;
+    if (needsTransaction) {
+      this._beginTransaction();
+    }
+
+    const tests = this.getNodes(node => node instanceof AstNodeTestResult);
+    tests.forEach(test => {
+      if (results[test.test] !== undefined) {
+        test.evaluate(results[test.test]);
+      }
+    });
+
+    if (needsTransaction) {
+      this._commit();
     }
   }
 }
