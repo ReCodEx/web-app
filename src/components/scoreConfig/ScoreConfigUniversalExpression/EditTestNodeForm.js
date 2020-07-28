@@ -31,14 +31,14 @@ class EditTestNodeForm extends Component {
 
   dirty = () => {
     const { node = null } = this.props;
-    return this.state.selected && this.state.selected !== (node && node.test);
+    return this.state.selected && this.state.selected !== (node && String(node.test));
   };
 
   save = () => {
     const { node = null, parent = null, close } = this.props;
     if (this.dirty()) {
       const newNode = new AstNodeTestResult();
-      newNode.test = this.state.selected;
+      newNode.test = Number(this.state.selected);
       if (node) {
         node.supplant(newNode);
       } else if (parent) {
@@ -50,7 +50,7 @@ class EditTestNodeForm extends Component {
 
   render() {
     const { node = null, tests, close } = this.props;
-    const selected = this.state.selected || (node && node.test);
+    const selected = this.state.selected || (node && String(node.test));
 
     return (
       <React.Fragment>
@@ -71,7 +71,7 @@ class EditTestNodeForm extends Component {
             })}
             onChange={ev => ev.target && ev.target.value && this.setState({ selected: ev.target.value })}>
             {tests.map(({ id, name }) => (
-              <option value={id} key={id}>
+              <option value={String(id)} key={id}>
                 {name}
               </option>
             ))}
@@ -82,16 +82,16 @@ class EditTestNodeForm extends Component {
               {tests.map(test => (
                 <tr
                   key={test.id}
-                  onClick={() => this.setState({ selected: test.id })}
+                  onClick={() => this.setState({ selected: String(test.id) })}
                   className={classnames({
                     'bg-info': (node && node.test) === test.id,
                   })}>
                   <td className="valign-middle shrink-col">
                     <StandaloneRadioField
                       name="test"
-                      value={test.id}
-                      checked={test.id === selected}
-                      onChange={() => this.setState({ selected: test.id })}
+                      value={String(test.id)}
+                      checked={String(test.id) === selected}
+                      onChange={() => this.setState({ selected: String(test.id) })}
                     />
                   </td>
                   <td>{test.name}</td>
