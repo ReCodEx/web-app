@@ -17,6 +17,11 @@
  * copied (user-issued copy operation), a new ID is assigned to the copy.
  */
 
+/**
+ * EXPERIMENTAL INFO: this feature is still in experimental stage. There are some methods/additional data which
+ * are here to help us with bug tracking and diagnostics. All these properties/methods/functions are prefixed with `debug`.
+ */
+
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { arrayToObject, objectFind, deepCompare } from '../common';
@@ -116,11 +121,56 @@ export class AstNode {
     this._fixChildrenParentage();
   }
 
+  debugCheckStructure() {
+    if (!Object.isFrozen(this)) throw new Error(`Node ${this.id} is not frozen.`);
+    if (this.valid !== this._isValid())
+      throw new Error(
+        `Node ${this.id} validity mismatch (valid === ${this.valid}, _isValid() === ${this._isValid()}).`
+      );
+
+    this.children.forEach((child, idx) => {
+      if (!child) throw new Error(`Child #${idx} of node ${this.id} is ${child}.`);
+      if (!(child instanceof AstNode)) throw new Error(`Child #${idx} of node ${this.id} is not instance of AstNode.`);
+      if (child.getParent() !== this)
+        throw new Error(
+          `Node ${child.id} has parent reference set to ${child.getParent() && child.getParent().id} instead of ${
+            this.id
+          }.`
+        );
+      child.debugCheckStructure();
+    });
+
+    if (this.children > 0) {
+      if (
+        this.subtreeValid !== this.valid &&
+        this.children.reduce((valid, node) => valid && node.valid && node.subtreeValid, true)
+      )
+        throw new Error(`Node ${this.id} subtreeValid (=== ${this.subtreeValid}) flag is not correct.`);
+
+      if (this.evaluated !== null && (typeof this.evaluated !== 'number' || isNaN(this.evaluated)))
+        throw new Error(`Node ${this.id} evaluated (=== ${this.evaluated}) value is not correct.`);
+
+      const allChildrenEvaluated = this.children.every(child => child.evaluated !== null);
+      if (allChildrenEvaluated !== (this.evaluated !== null))
+        throw new Error(`Node ${this.id} evaluated (=== ${this.evaluated}) value is not correct.`);
+    }
+
+    if (this instanceof AstNodeValue && this.value !== this.evaluated)
+      throw new Error(
+        `Value node ${this.id} evaluated (=== ${this.evaluated}) value is not correct (${this.value} expected).`
+      );
+  }
+
+  debugGetIds(acc) {
+    acc[this.id] = 1 + acc[this.id];
+    this.children.forEach(child => child.debugGetIds(acc));
+  }
+
   _freeze() {
     this.valid = this._isValid();
     const realChildren = this.getRealChildren();
     this.subtreeValid = this.valid && realChildren.every(child => child.subtreeValid);
-    if (evaluationFunctions[this.getType()] && realChildren.every(child => child.evaluated !== null)) {
+    if (this.valid && evaluationFunctions[this.getType()] && realChildren.every(child => child.evaluated !== null)) {
       this.evaluated = evaluationFunctions[this.getType()](realChildren.map(child => child.evaluated));
     }
     Object.freeze(this);
@@ -183,7 +233,7 @@ export class AstNode {
    * @param {Function} updater creates new children array from the old one
    * @param {boolean} [keepPlaceholders=false] If true, placeholders will not be modified (not even if the capacity of the node is exceeded).
    */
-  _updateChildren(updater, keepPlaceholders = false) {
+  _updateChildren(updater, keepPlaceholders = false, debugAction = null, debugData = null) {
     // Create clone with updated children
     const clone = this._clone();
     clone.children = updater(clone.children);
@@ -197,7 +247,7 @@ export class AstNode {
     // Finalize and report the change upwards
     clone._freeze();
     if (this.getParent() && this.getParent()._childChanged) {
-      this.getParent()._childChanged(this, clone);
+      this.getParent()._childChanged(this, clone, debugAction, debugData);
     }
     return clone;
   }
@@ -208,16 +258,21 @@ export class AstNode {
    * @param {AstNode|AstNode[]} newNodes Node or array of nodes to be placed where the original node was.
    * @param {boolean} [keepPlaceholders=false] If true, placeholders will not be modified (not even if the capacity of the node is exceeded).
    */
-  _replaceChild(child, newNodes = [], keepPlaceholders = false) {
+  _replaceChild(child, newNodes = [], keepPlaceholders = false, debugAction = null, debugData = null) {
     if (!Array.isArray(newNodes)) {
       newNodes = newNodes ? [newNodes] : [];
     }
 
-    return this._updateChildren(children => {
-      let position = children.indexOf(child);
-      position = position < 0 ? children.length : position;
-      return [...children.slice(0, position), ...newNodes, ...children.slice(position + 1)];
-    }, keepPlaceholders);
+    return this._updateChildren(
+      children => {
+        let position = children.indexOf(child);
+        position = position < 0 ? children.length : position;
+        return [...children.slice(0, position), ...newNodes, ...children.slice(position + 1)];
+      },
+      keepPlaceholders,
+      debugAction,
+      debugData
+    );
   }
 
   /**
@@ -226,7 +281,7 @@ export class AstNode {
    * @param {AstNode} [oldChild=null] child node to be replaced (if null, new child is appended)
    * @param {AstNode} [newChild=null] child node to be inserted (if null, only old child is removed/replaced with placeholder)
    */
-  _childChanged(oldChild, newChild) {
+  _childChanged(oldChild, newChild, debugAction = null, debugData = null) {
     if (!oldChild && !newChild) {
       throw new Error('At least one argument (oldChild, newChild) must not be null in child changed notificator.');
     }
@@ -244,15 +299,25 @@ export class AstNode {
       }
     }
 
-    return this._replaceChild(oldChild, newChild || [], true);
+    return this._replaceChild(oldChild, newChild || [], true, debugAction, debugData);
+  }
+
+  /**
+   * Replace this node and its entire subtree with another node (and its subtree).
+   * @param {AstNode} newNode a replacement node (not connected in tree)
+   */
+  _replace(newNode) {
+    if (this.getParent() && this.getParent()._childChanged) {
+      this.getParent()._childChanged(this, newNode, 'replace', newNode.id);
+    }
   }
 
   /**
    * Initiates a transaction on the whole tree.
    */
-  _beginTransaction() {
+  _beginTransaction(debugAction = null, debugData = null) {
     if (this.getParent() && this.getParent()._beginTransaction) {
-      this.getParent()._beginTransaction();
+      this.getParent()._beginTransaction(debugAction, debugData);
     }
   }
 
@@ -455,7 +520,7 @@ export class AstNode {
       throw new Error('Unable to append another child. Maximal limit of children has been reached.');
     }
     child._freeze();
-    return this._childChanged(null, child);
+    return this._childChanged(null, child, 'appendChild', child.id);
   }
 
   /**
@@ -475,18 +540,7 @@ export class AstNode {
     newNode._fixChildrenParentage();
     newNode._freeze();
     if (parent && parent._childChanged) {
-      parent._childChanged(this, newNode);
-    }
-  }
-
-  /**
-   * Replace this node and its entire subtree with another node (and its subtree).
-   * @param {AstNode} newNode a replacement node (not connected in tree)
-   */
-  replace(newNode) {
-    newNode._freeze();
-    if (this.getParent() && this.getParent()._childChanged) {
-      this.getParent()._childChanged(this, newNode);
+      parent._childChanged(this, newNode, 'supplant', newNode.id);
     }
   }
 
@@ -495,7 +549,7 @@ export class AstNode {
    * or they must be connected under nodes being removed.
    * @param {AstNode[]} nodes
    */
-  replaceWithMultiple(nodes) {
+  replaceWithMultiple(nodes, debugAction = null) {
     const realNodes = nodes.filter(node => node && !(node instanceof AstNodePlaceholder));
 
     // Let's make sure we can do this (check the vacancies)
@@ -508,7 +562,13 @@ export class AstNode {
       throw new Error('Node cannot be removed since its children cannot be moved one level up.');
     }
 
-    parent._replaceChild(this, nodes);
+    parent._replaceChild(
+      this,
+      nodes,
+      false,
+      debugAction ? `replaceWithMultiple(${debugAction})` : 'replaceWithMultiple',
+      nodes.map(node => node.id)
+    );
   }
 
   /**
@@ -520,15 +580,15 @@ export class AstNode {
       throw new Error('Unable to swap nodes (one is an ancestor of another).');
     }
 
-    this._beginTransaction();
+    this._beginTransaction('swap', [this.id, node.id]);
     const tmp1 = new AstNode();
     const tmp2 = new AstNode();
 
-    this.replace(tmp1);
-    node.replace(tmp2);
+    this._replace(tmp1);
+    node._replace(tmp2);
 
-    tmp1.replace(node);
-    tmp2.replace(this);
+    tmp1._replace(node);
+    tmp2._replace(this);
 
     this._commit();
   }
@@ -543,7 +603,7 @@ export class AstNode {
       return;
     }
 
-    this.replaceWithMultiple(this.children);
+    this.replaceWithMultiple(this.children, 'remove');
   }
 
   /**
@@ -551,7 +611,7 @@ export class AstNode {
    */
   removeWholeSubtree() {
     if (this.getParent() && this.getParent()._childChanged) {
-      this.getParent()._childChanged(this, null);
+      this.getParent()._childChanged(this, null, 'removeWholeSubtree', this.id);
     }
   }
 
@@ -590,12 +650,15 @@ export class AstNode {
 
     // lets get started
     const sortedNodes = sortNodes(nodes);
-    this._beginTransaction();
+    this._beginTransaction(
+      'moveNodesHere',
+      nodes.map(node => node.id)
+    );
 
     // determine the right target (placeholders are replaced, otherwise the nodes are appended as children)
     const target = this instanceof AstNodePlaceholder ? this : new AstNodePlaceholder();
     if (target !== this) {
-      this._childChanged(null, target); // append new target (will be replaced later)
+      this._childChanged(null, target, 'moveNodesHere-appendTarget', target.id); // append new target (will be replaced later)
     }
 
     /*
@@ -611,7 +674,7 @@ export class AstNode {
     });
 
     // Now we move the nodes from mutable list (where they may have been modified due to subtree updates).
-    target.replaceWithMultiple(mutableList.nodes);
+    target.replaceWithMultiple(mutableList.nodes, 'moveNodesHere');
 
     this._commit();
   }
@@ -647,10 +710,15 @@ export class AstNode {
     // this is shorter and more readable than polymorphism
     if (this instanceof AstNodePlaceholder) {
       // placeholders are replaced directly
-      this.replaceWithMultiple(sortedNodes);
+      this.replaceWithMultiple(sortedNodes, 'copyNodesHere');
     } else {
       // otherwise we append the children (null = append)
-      this._replaceChild(null, sortedNodes);
+      this._replaceChild(
+        null,
+        sortedNodes,
+        'copyNodesHere',
+        nodes.map(node => node.id)
+      );
     }
   }
 }
@@ -716,6 +784,11 @@ export class AstNodeVariadic extends AstNode {
  */
 export class AstNodePlaceholder extends AstNode {
   static type = 'placeholder';
+  debugCheckStructure() {
+    if (this.children.length > 0) {
+      throw new Error(`Placeholder ${this.id} have some children (${this.children.length})`);
+    }
+  }
 
   getCaption() {
     return null;
@@ -723,7 +796,8 @@ export class AstNodePlaceholder extends AstNode {
 
   supplant(newNode) {
     // Placeholder do not override children of the new node
-    this.replace(newNode);
+    newNode._freeze();
+    this._replace(newNode);
   }
 
   serialize() {
@@ -1014,6 +1088,15 @@ const _deserialize = (scoreConfig, tests = null) => {
   return node;
 };
 
+const debugSoftClone = node => {
+  const res = { ...node };
+  res.parent = node.getParent && node.getParent() && node.getParent().id;
+  if (res.children) {
+    res.children = res.children.map(debugSoftClone);
+  }
+  return res;
+};
+
 /**
  * Ast object represents the whole tree. It is also acts as special parent for root node.
  * We take advantage of dynamic nature of JS and implement some of the methods that are
@@ -1027,15 +1110,42 @@ export class Ast {
     this.uncommitedRoot = null;
     this.undos = []; // list of UNDo roots
     this.redos = []; // list of REDO roots
+    this.debugLog = [];
+    this.debugLastRoot = null;
+  }
+
+  debugAddLog(action, additionalData = null) {
+    const record = { action };
+    if (additionalData) record.data = additionalData;
+    const root = this.inTransaction ? this.uncommitedRoot : this.root;
+    if (root && this.debugLastRoot !== root) record.root = debugSoftClone(root);
+    this.debugLog.push(record);
+  }
+
+  debugConsistencyCheck() {
+    try {
+      this.root.debugCheckStructure();
+
+      const ids = {};
+      this.root.debugGetIds(ids);
+      const duplicates = Object.entries(ids)
+        .filter(([_, value]) => value > 1)
+        .map(([key]) => key);
+      if (duplicates.length > 0) throw new Error(`Duplicate IDs found: ${duplicates.join(', ')}`);
+    } catch (e) {
+      console.error('Consistency check failed.');
+      console.error(e);
+    }
   }
 
   /**
    * Interface retaken from AstNode (basically reports that root node needs to be replaced).
    */
-  _childChanged(oldChild, newChild) {
+  _childChanged(oldChild, newChild, debugAction = null, debugData = null) {
     if (this.inTransaction) {
       // when in transaction, the change of a root needs to be commited
       this.uncommitedRoot = newChild;
+      if (debugAction) this.debugAddLog(debugAction, debugData);
       return;
     }
 
@@ -1054,16 +1164,20 @@ export class Ast {
     if (this.rootChangedCallback) {
       this.rootChangedCallback(oldChild, newChild);
     }
+
+    if (debugAction) this.debugAddLog(debugAction, debugData);
+    this.debugConsistencyCheck();
   }
 
   /**
    * Initiate transaction on the tree. No root modifications will be actually made until
    * commit is called.
    */
-  _beginTransaction() {
+  _beginTransaction(debugAction = null, debugData = null) {
     if (this.inTransaction) {
       throw new Error('Recursive transactions are not allowed.');
     }
+    this.debugAddLog(debugAction ? `beginTransaction(${debugAction})` : 'beginTransaction', debugData);
     this.inTransaction = true;
   }
 
@@ -1080,6 +1194,7 @@ export class Ast {
       this._childChanged(this.root, this.uncommitedRoot);
       this.uncommitedRoot = null;
     }
+    this.debugAddLog('commit');
   }
 
   /**
@@ -1096,6 +1211,7 @@ export class Ast {
       // It might be necessary to fix parent refs, since they might have been updated in transaction.
       this.root._fixChildrenParentage(true);
     }
+    this.debugAddLog('rollback');
   }
 
   /**
@@ -1129,6 +1245,7 @@ export class Ast {
       if (this.rootChangedCallback) {
         this.rootChangedCallback(oldRoot, this.root);
       }
+      this.debugAddLog('undo');
     }
   }
 
@@ -1152,6 +1269,7 @@ export class Ast {
       if (this.rootChangedCallback) {
         this.rootChangedCallback(oldRoot, this.root);
       }
+      this.debugAddLog('redo');
     }
   }
 
@@ -1191,6 +1309,7 @@ export class Ast {
    * @param {Object} tests test names index (object where keys are ids and values are names)
    */
   applyTransformation(transformation, tests) {
+    this.debugAddLog('applyTransformation', transformation.name);
     const source = this.serialize(tests);
     const verification = this.serialize(tests);
     const transformed = transformation(source);
@@ -1209,6 +1328,7 @@ export class Ast {
    * @param {Object} results keys are test names/ids (expected to match, whatever is used in the AST), values are scores
    */
   evaluate(results) {
+    this.debugAddLog('evaluate', results);
     const needsTransaction = !this.inTransaction;
     if (needsTransaction) {
       this._beginTransaction();

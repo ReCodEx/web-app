@@ -14,7 +14,7 @@ import { createTestNameIndex } from '../../../helpers/exercise/testsAndScore';
 import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst';
 import { removeConstantExpressions, optimize } from '../../../helpers/exercise/scoreAstFunctions';
 import Button from '../../widgets/FlatButton';
-import Icon, { UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
+import Icon, { CopyIcon, UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
 import { composeFunctions } from '../../../helpers/common';
 
 import style from './tree.less';
@@ -25,6 +25,7 @@ const CLOSED_DIALOGS_STATE = {
   [`${LITERAL_NODE}DialogOpen`]: false,
   helpDialogOpen: false,
   optimizationDialogOpen: false,
+  debugDialogOpen: false,
 };
 
 const EDIT_FORMS = {
@@ -133,6 +134,10 @@ class ScoreConfigUniversalExpression extends Component {
 
   openHelpDialog = () => {
     this.setState({ helpDialogOpen: true });
+  };
+
+  openDebugDialog = () => {
+    this.setState({ debugDialogOpen: true });
   };
 
   openOptimizationDialog = () => {
@@ -255,6 +260,24 @@ class ScoreConfigUniversalExpression extends Component {
                 size="lg"
                 className="halfem-margin-vertical em-margin-horizontal text-muted"
                 onClick={this.openHelpDialog}
+              />
+            </OverlayTrigger>
+
+            <br />
+
+            <OverlayTrigger
+              placement="left"
+              overlay={
+                <Tooltip id="debugDialog">
+                  <FormattedMessage id="app.scoreConfigExpression.openDebugDialog" defaultMessage="Open debug log" />
+                </Tooltip>
+              }>
+              <Icon
+                icon="flask"
+                fixedWidth
+                size="lg"
+                className="halfem-margin-vertical em-margin-horizontal text-danger"
+                onClick={this.openDebugDialog}
               />
             </OverlayTrigger>
           </span>
@@ -441,6 +464,52 @@ class ScoreConfigUniversalExpression extends Component {
                   </tr>
                 </tbody>
               </table>
+            </Modal.Body>
+            <Modal.Footer>
+              <div className="text-center">
+                <Button onClick={this.closeDialog} bsStyle="default">
+                  <CloseIcon gapRight />
+                  <FormattedMessage id="generic.close" defaultMessage="Close" />
+                </Button>
+              </div>
+            </Modal.Footer>
+          </Modal>
+        )}
+
+        {editable && (
+          <Modal show={this.state.debugDialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+            <Modal.Header closeButton>
+              <Modal.Title>
+                <FormattedMessage id="app.scoreConfigExpression.debug.title" defaultMessage="Debug Log" />
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                <FormattedMessage
+                  id="app.scoreConfigExpression.debug.explain"
+                  defaultMessage="The custom expression algorithm is still in experimental phase. If you experience any trouble, please send the log below (along with the problem desription, URL, and errors from JavaScript console) to ReCodEx developers."
+                />
+              </p>
+              <pre className="small">
+                <CopyIcon
+                  className="pull-right"
+                  size="2x"
+                  onClick={ev => {
+                    let node = ev.target;
+                    while (node && node.nodeName.toLowerCase() !== 'pre') {
+                      node = node.parentNode;
+                    }
+                    if (node) {
+                      const range = document.createRange();
+                      range.selectNodeContents(node);
+                      const sel = window.getSelection();
+                      sel.removeAllRanges();
+                      sel.addRange(range);
+                    }
+                  }}
+                />
+                {this.state.debugDialogOpen && JSON.stringify(ast.debugLog, null, 2)}
+              </pre>
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
