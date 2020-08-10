@@ -1,21 +1,45 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
-import { Alert, Well } from 'react-bootstrap';
+import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
+import { Alert, Well, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import EditEnvironmentList from './EditEnvironmentList';
 import SubmitButton from '../SubmitButton';
+import Box from '../../widgets/Box';
 import Button from '../../widgets/FlatButton';
-import { RefreshIcon } from '../../icons';
+import Icon, { RefreshIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
 import { getConfigVar } from '../../../helpers/config';
+import { arrayToObject } from '../../../helpers/common';
 
 const environmentsHelpUrl = getConfigVar('ENVIRONMENTS_INFO_URL');
 
+const preprocessExtensions = ({ extensions, ...rest }) => ({
+  ...rest,
+  extensions: extensions.replace(/[ [\]]/g, '').split(','),
+});
+const getSelectedEnvs = defaultMemoize((initialValues, runtimeEnvironments, locale) => {
+  const indexed = arrayToObject(runtimeEnvironments);
+  return Object.keys(initialValues)
+    .filter(env => initialValues[env])
+    .map(env => preprocessExtensions(indexed[env]))
+    .sort((a, b) => a.longName.localeCompare(b.longName, locale));
+});
+
 class EditEnvironmentSimpleForm extends Component {
+  state = {
+    expanded: false, // toggle button in the upper right corner
+  };
+
+  toggleExpanded = () => {
+    this.setState({ expanded: !this.state.expanded });
+  };
+
   render() {
     const {
+      initialValues,
       dirty,
       submitting,
       reset,
@@ -25,73 +49,134 @@ class EditEnvironmentSimpleForm extends Component {
       invalid,
       error,
       runtimeEnvironments,
+      intl: { locale },
     } = this.props;
 
+    const selectedEnvs = getSelectedEnvs(initialValues, runtimeEnvironments, locale);
+
     return (
-      <div>
-        {environmentsHelpUrl && (
-          <Well bsSize="sm">
-            <div className="small text-muted">
-              <FormattedHTMLMessage
-                id="app.editEnvironmentSimpleForm.linkToWiki"
-                defaultMessage="Select all runtime environments the exercise should support. You may find more information about the environments at our <a href='{url}' target='_blank'>wiki page</a>."
-                values={{ url: environmentsHelpUrl }}
+      <Box
+        id="runtimes-form"
+        title={
+          <FormattedMessage id="app.editExerciseConfig.runtimeEnvironments" defaultMessage="Runtime Environments" />
+        }
+        unlimitedHeight
+        customIcons={
+          selectedEnvs.length > 0 ? (
+            <OverlayTrigger
+              placement="left"
+              overlay={
+                <Tooltip id="expandToggleButton">
+                  <FormattedMessage
+                    id="app.editTestsForm.expandToggleTooltip"
+                    defaultMessage="Toggle compressed/expanded view"
+                  />
+                </Tooltip>
+              }>
+              <Icon
+                icon={this.state.expanded ? 'compress' : 'expand'}
+                size="lg"
+                className="valign-middle"
+                onClick={this.toggleExpanded}
+              />
+            </OverlayTrigger>
+          ) : null
+        }>
+        {this.state.expanded || selectedEnvs.length === 0 ? (
+          <React.Fragment>
+            {environmentsHelpUrl && (
+              <Well bsSize="sm">
+                <div className="small text-muted">
+                  <FormattedHTMLMessage
+                    id="app.editEnvironmentSimpleForm.linkToWiki"
+                    defaultMessage="Select all runtime environments the exercise should support. You may find more information about the environments at our <a href='{url}' target='_blank'>wiki page</a>."
+                    values={{ url: environmentsHelpUrl }}
+                  />
+                </div>
+              </Well>
+            )}
+
+            <EditEnvironmentList runtimeEnvironments={runtimeEnvironments} showExclusive />
+
+            <hr />
+
+            {submitFailed && (
+              <Alert bsStyle="danger">
+                <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
+              </Alert>
+            )}
+
+            {error && <Alert bsStyle="danger">{error}</Alert>}
+
+            <div className="text-center">
+              {dirty && (
+                <span>
+                  <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
+                    <RefreshIcon gapRight />
+                    <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                  </Button>{' '}
+                </span>
+              )}
+
+              <SubmitButton
+                id="editTests"
+                invalid={invalid}
+                submitting={submitting}
+                hasSucceeded={submitSucceeded}
+                dirty={dirty}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+                messages={{
+                  submit: (
+                    <FormattedMessage id="app.editEnvironmentSimpleForm.submit" defaultMessage="Save Environments" />
+                  ),
+                  submitting: (
+                    <FormattedMessage
+                      id="app.editEnvironmentSimpleForm.submitting"
+                      defaultMessage="Saving Environments..."
+                    />
+                  ),
+                  success: (
+                    <FormattedMessage id="app.editEnvironmentSimpleForm.success" defaultMessage="Environments Saved." />
+                  ),
+                }}
               />
             </div>
-          </Well>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Table responsive hover>
+              <tbody>
+                {selectedEnvs.map(env => (
+                  <tr key={env.id}>
+                    <td className="text-nowrap">
+                      <strong>{env.longName}</strong>
+                    </td>
+                    <td className="text-muted">{env.description}</td>
+                    <td>
+                      {env.extensions &&
+                        env.extensions.map(ext => (
+                          <span key={ext} className="comma-separated">
+                            <code>*.{ext}</code>
+                          </span>
+                        ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <div className="text-center text-primary clickable small halfem-margin-top" onClick={this.toggleExpanded}>
+              <FormattedMessage id="generic.showAll" defaultMessage="Show All" />
+              ...
+            </div>
+          </React.Fragment>
         )}
-
-        <EditEnvironmentList runtimeEnvironments={runtimeEnvironments} showExclusive />
-
-        <hr />
-
-        {submitFailed && (
-          <Alert bsStyle="danger">
-            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Alert>
-        )}
-
-        {error && <Alert bsStyle="danger">{error}</Alert>}
-
-        <div className="text-center">
-          {dirty && (
-            <span>
-              <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
-                <RefreshIcon gapRight />
-                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-              </Button>{' '}
-            </span>
-          )}
-
-          <SubmitButton
-            id="editTests"
-            invalid={invalid}
-            submitting={submitting}
-            hasSucceeded={submitSucceeded}
-            dirty={dirty}
-            hasFailed={submitFailed}
-            handleSubmit={handleSubmit}
-            messages={{
-              submit: <FormattedMessage id="app.editEnvironmentSimpleForm.submit" defaultMessage="Save Environments" />,
-              submitting: (
-                <FormattedMessage
-                  id="app.editEnvironmentSimpleForm.submitting"
-                  defaultMessage="Saving Environments..."
-                />
-              ),
-              success: (
-                <FormattedMessage id="app.editEnvironmentSimpleForm.success" defaultMessage="Environments Saved." />
-              ),
-            }}
-          />
-        </div>
-      </div>
+      </Box>
     );
   }
 }
 
 EditEnvironmentSimpleForm.propTypes = {
-  values: PropTypes.array,
   reset: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   dirty: PropTypes.bool,
@@ -100,7 +185,9 @@ EditEnvironmentSimpleForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   error: PropTypes.any,
+  initialValues: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
+  intl: intlShape.isRequired,
 };
 
 const validate = (formData, { runtimeEnvironments }) => {
@@ -142,4 +229,4 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate,
-})(EditEnvironmentSimpleForm);
+})(injectIntl(EditEnvironmentSimpleForm));
