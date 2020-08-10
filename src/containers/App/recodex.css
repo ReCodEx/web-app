@@ -236,7 +236,7 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
 }
 
 /*
- * Bootstrap tooltip enhancments
+ * Bootstrap Enhancments
  */
 .wider-tooltip {
   width: 300px;
@@ -244,6 +244,14 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
 
 .wider-tooltip>.tooltip-inner {
   max-width: 300px;
+}
+
+.btn.active {
+  font-weight: bold;
+}
+
+.btn-warning.active, .btn-warning:active {
+  filter: brightness(96%);
 }
 
 
