@@ -195,6 +195,10 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
   opacity: 1.0;
 }
 
+.comma-separated + .comma-separated::before {
+  content: ", ";
+}
+
 
 /*
  * AdminLTE Boxes
@@ -252,6 +256,11 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
 
 .btn-warning.active, .btn-warning:active {
   filter: brightness(96%);
+}
+
+table.table tbody:first-child tr:first-child td,
+table.table tbody:first-child tr:first-child th {
+  border-top: 0;
 }
 
 

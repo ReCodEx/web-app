@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
-import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
@@ -395,38 +394,28 @@ class EditExerciseConfig extends Component {
                               this.renderTestsAndScoreBox(exercise, tests, scoreConfig)}
 
                             {isSimple(exercise) && hasPermissions(exercise, 'update') && (
-                              <Box
-                                id="runtimes-form"
-                                title={
-                                  <FormattedMessage
-                                    id="app.editExerciseConfig.runtimeEnvironments"
-                                    defaultMessage="Runtime Environments"
-                                  />
-                                }
-                                unlimitedHeight>
-                                <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
-                                  {(config, environmentConfigs) => (
-                                    <ResourceRenderer
-                                      resource={runtimeEnvironments.toArray()}
-                                      returnAsArray
-                                      forceLoading={runtimeEnvironments.size === 0}>
-                                      {environments => (
-                                        <EditEnvironmentSimpleForm
-                                          initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}
-                                          runtimeEnvironments={onlySimpleEnvironments(environments)}
-                                          onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
-                                            pipelines,
-                                            environments,
-                                            tests,
-                                            config,
-                                            environmentConfigs
-                                          )}
-                                        />
-                                      )}
-                                    </ResourceRenderer>
-                                  )}
-                                </ResourceRenderer>
-                              </Box>
+                              <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
+                                {(config, environmentConfigs) => (
+                                  <ResourceRenderer
+                                    resource={runtimeEnvironments.toArray()}
+                                    returnAsArray
+                                    forceLoading={runtimeEnvironments.size === 0}>
+                                    {environments => (
+                                      <EditEnvironmentSimpleForm
+                                        initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}
+                                        runtimeEnvironments={onlySimpleEnvironments(environments)}
+                                        onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
+                                          pipelines,
+                                          environments,
+                                          tests,
+                                          config,
+                                          environmentConfigs
+                                        )}
+                                      />
+                                    )}
+                                  </ResourceRenderer>
+                                )}
+                              </ResourceRenderer>
                             )}
                           </Col>
                           <Col lg={6}>
