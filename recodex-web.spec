@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/web-app
-BuildRequires: systemd, nodejs >= 10.16.0
+BuildRequires: systemd, nodejs >= 12.18.0
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
@@ -26,7 +26,7 @@ Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.t
 %define debug_package %{nil}
 
 %description
-Web-app of ReCodEx programmer testing solution.
+Single page web application frontend for ReCodEx code examiner, an educational application for evaluating programming assignments.
 
 %prep
 %setup -n %{short_name}-%{unmangled_version}
