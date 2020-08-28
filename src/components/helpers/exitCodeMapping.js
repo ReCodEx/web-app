@@ -1,6 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { ENV_FREEPASCAL_ID, ENV_MONO_ID, ENV_JAVA_ID, ENV_PYTHON3_ID } from '../../helpers/exercise/environments';
+import {
+  ENV_FREEPASCAL_ID,
+  ENV_CS_DOTNET_CORE_ID,
+  ENV_JAVA_ID,
+  ENV_PYTHON3_ID,
+} from '../../helpers/exercise/environments';
 
 /**
  * Free Pascal Runtime Error Codes
@@ -92,8 +97,8 @@ const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {
   switch (runtimeEnvironmentId) {
     case ENV_JAVA_ID:
       return javaMapping(exitCode);
-    case ENV_MONO_ID:
-      return monoMapping(exitCode);
+    case ENV_CS_DOTNET_CORE_ID:
+      return csDotnetMapping(exitCode);
     case ENV_FREEPASCAL_ID:
       if (pascalCodes[exitCode]) {
         return pascalCodes[exitCode];
@@ -153,36 +158,36 @@ const javaMapping = exitCode => {
   }
 };
 
-const monoMapping = exitCode => {
+const csDotnetMapping = exitCode => {
   switch (exitCode) {
     case 0:
-      return <FormattedMessage id="app.exitCodes.mono.0" defaultMessage="OK" />;
+      return <FormattedMessage id="app.exitCodes.csharp.0" defaultMessage="OK" />;
     case 1:
-      return <FormattedMessage id="app.exitCodes.mono.1" defaultMessage="User error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.1" defaultMessage="User error" />;
     case 101:
-      return <FormattedMessage id="app.exitCodes.mono.101" defaultMessage="Unhandled exception" />;
+      return <FormattedMessage id="app.exitCodes.csharp.101" defaultMessage="Unhandled exception" />;
     case 102:
-      return <FormattedMessage id="app.exitCodes.mono.102" defaultMessage="Null reference error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.102" defaultMessage="Null reference error" />;
     case 103:
-      return <FormattedMessage id="app.exitCodes.mono.103" defaultMessage="Memory allocation error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.103" defaultMessage="Memory allocation error" />;
     case 104:
-      return <FormattedMessage id="app.exitCodes.mono.104" defaultMessage="Index out of range error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.104" defaultMessage="Index out of range error" />;
     case 105:
-      return <FormattedMessage id="app.exitCodes.mono.105" defaultMessage="Overflow error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.105" defaultMessage="Overflow error" />;
     case 106:
-      return <FormattedMessage id="app.exitCodes.mono.106" defaultMessage="IO error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.106" defaultMessage="IO error" />;
     case 107:
-      return <FormattedMessage id="app.exitCodes.mono.107" defaultMessage="File not found error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.107" defaultMessage="File not found error" />;
     case 108:
-      return <FormattedMessage id="app.exitCodes.mono.108" defaultMessage="Invalid operation error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.108" defaultMessage="Invalid operation error" />;
     case 109:
-      return <FormattedMessage id="app.exitCodes.mono.109" defaultMessage="Division by zero error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.109" defaultMessage="Division by zero error" />;
     case 200:
-      return <FormattedMessage id="app.exitCodes.mono.200" defaultMessage="Internal error" />;
+      return <FormattedMessage id="app.exitCodes.csharp.200" defaultMessage="Internal error" />;
     case 201:
-      return <FormattedMessage id="app.exitCodes.mono.201" defaultMessage="No main method" />;
+      return <FormattedMessage id="app.exitCodes.csharp.201" defaultMessage="No main method" />;
     case 202:
-      return <FormattedMessage id="app.exitCodes.mono.202" defaultMessage="More main methods" />;
+      return <FormattedMessage id="app.exitCodes.csharp.202" defaultMessage="More main methods" />;
     default:
       return exitCode;
   }
