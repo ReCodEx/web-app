@@ -2,7 +2,7 @@
 %define short_name web-app
 %define version 1.22.0
 %define unmangled_version db9cd5a5e8300ab4dea2d2441b359f3cc357f854
-%define release 1
+%define release 2
 
 Summary: ReCodEx web-app component
 Name: %{name}
@@ -49,6 +49,8 @@ install -d  %{buildroot}/opt/%{name}
 cp -r ./prod/* %{buildroot}/opt/%{name}
 install -d %{buildroot}/lib/systemd/system
 cp -r install/recodex-web.service %{buildroot}/lib/systemd/system/recodex-web.service
+mkdir -p %{buildroot}/%{_sysconfdir}/recodex/web-app
+ln -sf /opt/%{name}/etc/env.json %{buildroot}/%{_sysconfdir}/recodex/web-app/env.json
 
 %clean
 
@@ -75,6 +77,7 @@ exit 0
 /opt/%{name}/public/*
 /opt/%{name}/views/*
 %config(noreplace) /opt/%{name}/etc/env.json
+%{_sysconfdir}/recodex/web-app/env.json
 
 #%{_unitdir}/recodex-web.service
 %attr(-,root,root) /lib/systemd/system/recodex-web.service

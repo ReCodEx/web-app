@@ -3,10 +3,10 @@ import { safeGet, arrayToObject, createIndex } from '../../helpers/common';
 
 export const ENV_C_GCC_ID = 'c-gcc-linux';
 export const ENV_CPP_GCC_ID = 'cxx-gcc-linux';
+export const ENV_CS_DOTNET_CORE_ID = 'cs-dotnet-core';
 export const ENV_DATA_ONLY_ID = 'data-linux';
 export const ENV_FREEPASCAL_ID = 'freepascal-linux';
 export const ENV_JAVA_ID = 'java';
-export const ENV_MONO_ID = 'mono';
 export const ENV_NODEJS_ID = 'node-linux';
 export const ENV_PHP_ID = 'php-linux';
 export const ENV_PYTHON3_ID = 'python3';
@@ -29,7 +29,7 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_DATA_ONLY_ID,
   ENV_FREEPASCAL_ID,
   ENV_JAVA_ID,
-  ENV_MONO_ID,
+  ENV_CS_DOTNET_CORE_ID,
   ENV_NODEJS_ID,
   ENV_PHP_ID,
   ENV_PYTHON3_ID,
