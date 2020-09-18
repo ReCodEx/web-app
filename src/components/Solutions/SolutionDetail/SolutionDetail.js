@@ -85,6 +85,10 @@ class SolutionDetail extends Component {
       evaluationStatus = 'missing-submission';
     }
 
+    if (evaluationStatus === 'evaluation-failed' && !failure) {
+      failure = true;
+    }
+
     return (
       <div>
         <Row>
@@ -178,16 +182,25 @@ class SolutionDetail extends Component {
                       />
                     </h4>
 
-                    <p>
-                      <FormattedMessage
-                        id="app.submissionEvaluation.evaluationFailedMessage"
-                        defaultMessage="Backend message"
-                      />
-                      : <em>{failure.description}</em>
-                    </p>
+                    {typeof failure === 'object' ? (
+                      <p>
+                        <FormattedMessage
+                          id="app.submissionEvaluation.evaluationFailedMessage"
+                          defaultMessage="Backend message"
+                        />
+                        : <em>{failure.description}</em>
+                      </p>
+                    ) : (
+                      <p>
+                        <FormattedMessage
+                          id="app.submissionEvaluation.evaluationFailedInternalError"
+                          defaultMessage="Internal backend error."
+                        />
+                      </p>
+                    )}
                   </div>
 
-                  {Boolean(failure.resolvedAt && failure.resolutionNote) && (
+                  {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
                     <div className="callout callout-success">
                       <span className="small pull-right">
                         (<DateTime unixts={failure.resolvedAt} />)
