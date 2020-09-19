@@ -12,6 +12,7 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import Button from '../../components/widgets/FlatButton';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -30,6 +31,7 @@ import {
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 
+import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
 import { getLocalizedName } from '../../helpers/localizedData';
 import { WarningIcon } from '../../components/icons';
 
@@ -137,13 +139,24 @@ class Solution extends Component {
                         userId={solution.solution.userId}
                         locale={locale}
                       />
-                      <ResubmitSolutionContainer
-                        id={solution.id}
-                        assignmentId={assignment.id}
-                        isDebug={true}
-                        userId={solution.solution.userId}
-                        locale={locale}
-                      />
+
+                      {solution.runtimeEnvironmentId ===
+                      ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
+                        <Button disabled={true}>
+                          <FormattedMessage
+                            id="app.solution.dotnetResubmitTemporaryDisabled"
+                            defaultMessage="Debug Resubmit Temporary Disabled"
+                          />
+                        </Button>
+                      ) : (
+                        <ResubmitSolutionContainer
+                          id={solution.id}
+                          assignmentId={assignment.id}
+                          isDebug={true}
+                          userId={solution.solution.userId}
+                          locale={locale}
+                        />
+                      )}
                     </React.Fragment>
                   ) : (
                     <span>

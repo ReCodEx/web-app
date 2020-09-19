@@ -1302,6 +1302,7 @@
   "app.solution.beforeFirstDeadline",
   "app.solution.beforeSecondDeadline",
   "app.solution.best",
+  "app.solution.dotnetResubmitTemporaryDisabled",
   "app.solution.editNoteModalTitle",
   "app.solution.emptyNote",
   "app.solution.environment",

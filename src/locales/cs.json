@@ -1302,6 +1302,7 @@
   "app.solution.beforeFirstDeadline": "Před prvním termínem",
   "app.solution.beforeSecondDeadline": "Před druhým termínem",
   "app.solution.best": "nejlepší",
+  "app.solution.dotnetResubmitTemporaryDisabled": "Ladicí resubmit je dočasně zablokován",
   "app.solution.editNoteModalTitle": "Upravit poznámku řešení",
   "app.solution.emptyNote": "prázdná",
   "app.solution.environment": "Cílový jazyk:",
