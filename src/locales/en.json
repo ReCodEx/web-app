@@ -1302,6 +1302,7 @@
   "app.solution.beforeFirstDeadline": "Before the deadline",
   "app.solution.beforeSecondDeadline": "Before the second deadline",
   "app.solution.best": "best",
+  "app.solution.dotnetResubmitTemporaryDisabled": "Debug Resubmit Temporary Disabled",
   "app.solution.editNoteModalTitle": "Edit Solution Note",
   "app.solution.emptyNote": "empty",
   "app.solution.environment": "Target language:",
