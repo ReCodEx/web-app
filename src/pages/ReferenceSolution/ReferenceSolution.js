@@ -10,6 +10,7 @@ import Page from '../../components/layout/Page';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import Button from '../../components/widgets/FlatButton';
 
 import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -27,6 +28,7 @@ import {
   fetchManyStatus,
 } from '../../redux/selectors/referenceSolutionEvaluations';
 
+import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
 import { hasPermissions } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
@@ -120,7 +122,22 @@ class ReferenceSolution extends Component {
                     ) : (
                       <p>
                         <ResubmitReferenceSolutionContainer id={referenceSolution.id} isDebug={false} locale={locale} />
-                        <ResubmitReferenceSolutionContainer id={referenceSolution.id} isDebug={true} locale={locale} />
+
+                        {referenceSolution.runtimeEnvironmentId ===
+                        ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
+                          <Button disabled={true}>
+                            <FormattedMessage
+                              id="app.solution.dotnetResubmitTemporaryDisabled"
+                              defaultMessage="Debug Resubmit Temporary Disabled"
+                            />
+                          </Button>
+                        ) : (
+                          <ResubmitReferenceSolutionContainer
+                            id={referenceSolution.id}
+                            isDebug={true}
+                            locale={locale}
+                          />
+                        )}
                       </p>
                     )}
                   </React.Fragment>
