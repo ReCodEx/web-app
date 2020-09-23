@@ -236,44 +236,50 @@ export const saturateLimitsConstraints = (limits, exerciseHwGroups) => {
     wallTimePerExercise,
   } = combineHardwareGroupLimitsConstraints(exerciseHwGroups);
 
-  Object.keys(limits).forEach(envId => {
-    // First round
-    let cpuSum = 0;
-    let wallSum = 0;
-    Object.keys(limits[envId]).forEach(test => {
-      saturateField(limits, envId, test, 'memory', memory, 128);
-      cpuSum += saturateField(limits, envId, test, 'cpu-time', cpuTimePerTest);
-      wallSum += saturateField(limits, envId, test, 'wall-time', wallTimePerTest);
+  if (!limits) {
+    return limits;
+  }
+
+  Object.keys(limits)
+    .filter(envId => limits[envId])
+    .forEach(envId => {
+      // First round
+      let cpuSum = 0;
+      let wallSum = 0;
+      Object.keys(limits[envId]).forEach(test => {
+        saturateField(limits, envId, test, 'memory', memory, 128);
+        cpuSum += saturateField(limits, envId, test, 'cpu-time', cpuTimePerTest);
+        wallSum += saturateField(limits, envId, test, 'wall-time', wallTimePerTest);
+      });
+
+      // Attempt to adjust for total limits if necessary...
+      if (cpuSum > cpuTimePerExercise) {
+        const newTimeSum = Math.min(cpuSum, cpuTimePerExercise);
+        const patchFactor = newTimeSum / cpuSum;
+
+        // Multiply all times by patch factor...
+        cpuSum = 0;
+        Object.keys(limits[envId]).forEach(test => {
+          cpuSum += saturateField(limits, envId, test, 'cpu-time', cpuTimePerTest, 0.1, patchFactor);
+        });
+      }
+
+      if (wallSum > wallTimePerExercise) {
+        const newTimeSum = Math.min(wallSum, wallTimePerExercise);
+        const patchFactor = newTimeSum / wallSum;
+
+        // Multiply all times by patch factor...
+        wallSum = 0;
+        Object.keys(limits[envId]).forEach(test => {
+          wallSum += saturateField(limits, envId, test, 'wall-time', wallTimePerTest, 0.1, patchFactor);
+        });
+      }
+
+      // Check whether we were successful
+      if (cpuSum > cpuTimePerExercise || wallSum > wallTimePerExercise) {
+        limits[envId] = null; // ok, we give up
+      }
     });
-
-    // Attempt to adjust for total limits if necessary...
-    if (cpuSum > cpuTimePerExercise) {
-      const newTimeSum = Math.min(cpuSum, cpuTimePerExercise);
-      const patchFactor = newTimeSum / cpuSum;
-
-      // Multiply all times by patch factor...
-      cpuSum = 0;
-      Object.keys(limits[envId]).forEach(test => {
-        cpuSum += saturateField(limits, envId, test, 'cpu-time', cpuTimePerTest, 0.1, patchFactor);
-      });
-    }
-
-    if (wallSum > wallTimePerExercise) {
-      const newTimeSum = Math.min(wallSum, wallTimePerExercise);
-      const patchFactor = newTimeSum / wallSum;
-
-      // Multiply all times by patch factor...
-      wallSum = 0;
-      Object.keys(limits[envId]).forEach(test => {
-        wallSum += saturateField(limits, envId, test, 'wall-time', wallTimePerTest, 0.1, patchFactor);
-      });
-    }
-
-    // Check whether we were successful
-    if (cpuSum > cpuTimePerExercise || wallSum > wallTimePerExercise) {
-      limits[envId] = null; // ok, we give up
-    }
-  });
 
   return limits;
 };
