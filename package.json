@@ -16,7 +16,7 @@
     "build": "npm run clean && npm run build:server && npm run build:client",
     "build:test": "npm run clean && npm run build:server && npm run build:client",
     "lint": "eslint src",
-    "test": "npm run lint && mocha",
+    "test": "mocha",
     "test:mocha": "mocha",
     "test:watch": "mocha --watch --reporter nyan",
     "dev": "babel-node bin/dev.js --max-old-space-size=4096",
