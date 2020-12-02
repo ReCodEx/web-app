@@ -100,8 +100,8 @@ class TestResultsTable extends Component {
 
   setAllLogsState = open => () => {
     const { results } = this.props;
-    results.forEach(({ testName, judgeLog }) => {
-      if (judgeLog) {
+    results.forEach(({ testName, judgeLogStdout, judgeLogStderr }) => {
+      if (judgeLogStdout || judgeLogStderr) {
         this.setState({ [testName]: open });
       }
     });
@@ -121,9 +121,10 @@ class TestResultsTable extends Component {
     wallTime,
     cpuTime,
     exitCode,
-    judgeLog = '',
+    judgeLogStdout = '',
+    judgeLogStderr = '',
   }) => {
-    const { runtimeEnvironmentId, showJudgeLog = false } = this.props;
+    const { runtimeEnvironmentId, showJudgeLogStdout = false, showJudgeLogStderr = false } = this.props;
     return (
       <tr key={testName}>
         <td>
@@ -169,9 +170,9 @@ class TestResultsTable extends Component {
 
         <td className="text-center">{exitCodeMapping(runtimeEnvironmentId, exitCode)}</td>
 
-        {showJudgeLog && (
+        {(showJudgeLogStdout || showJudgeLogStderr) && (
           <td className="text-right">
-            {judgeLog && (
+            {((judgeLogStdout && showJudgeLogStdout) || (judgeLogStderr && showJudgeLogStderr)) && (
               <Button
                 bsStyle={this.isLogOpen(testName) ? 'warning' : 'primary'}
                 className="btn-flat"
@@ -190,25 +191,55 @@ class TestResultsTable extends Component {
     );
   };
 
-  renderLog = ({ testName, judgeLog = '' }) => (
-    <tr key={`${testName}-log`}>
-      <td colSpan={7}>
-        <table className={styles.logWrapper}>
-          <tbody>
-            <tr>
-              <td>
-                <pre className={styles.log}>{judgeLog}</pre>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </td>
-    </tr>
-  );
+  renderLog = ({ testName, judgeLogStdout = '', judgeLogStderr = '' }) => {
+    const { showJudgeLogStdout = false, showJudgeLogStderr = false } = this.props;
+    return (
+      <tr key={`${testName}-log`}>
+        <td colSpan={7}>
+          <table className={styles.logWrapper}>
+            <tbody>
+              {judgeLogStdout && showJudgeLogStdout && (
+                <tr>
+                  <td>
+                    <small className="text-muted">
+                      <FormattedMessage id="app.submissions.testResultsTable.primaryLog" defaultMessage="Primary Log" />
+                      :
+                    </small>
+                    <pre className={styles.log}>{judgeLogStdout}</pre>
+                  </td>
+                </tr>
+              )}
+
+              {judgeLogStderr && showJudgeLogStderr && (
+                <tr>
+                  <td>
+                    <small className="text-muted">
+                      <FormattedMessage
+                        id="app.submissions.testResultsTable.secondaryLog"
+                        defaultMessage="Secondary Log"
+                      />
+                      :
+                    </small>
+                    <pre className={styles.log}>{judgeLogStderr}</pre>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    );
+  };
 
   render() {
-    const { results, showJudgeLog = false } = this.props;
-    const showLogButton = showJudgeLog && results.reduce((out, { judgeLog = '' }) => out || Boolean(judgeLog), false);
+    const { results, showJudgeLogStdout = false, showJudgeLogStderr = false } = this.props;
+    const showLogButton =
+      (showJudgeLogStdout || showJudgeLogStderr) &&
+      results.reduce(
+        (out, { judgeLogStdout = '', judgeLogStderr = '' }) =>
+          out || (Boolean(judgeLogStdout) && showJudgeLogStdout) || (Boolean(judgeLogStderr) && showJudgeLogStderr),
+        false
+      );
     const allLogsClosed =
       showLogButton && results.reduce((out, { testName }) => out && !this.isLogOpen(testName), true);
 
@@ -295,7 +326,7 @@ class TestResultsTable extends Component {
                 <Icon icon="power-off" />
               </OverlayTrigger>
             </th>
-            {showJudgeLog && (
+            {(showJudgeLogStdout || showJudgeLogStderr) && (
               <th className="text-right">
                 {showLogButton && (
                   <Button
@@ -331,7 +362,8 @@ TestResultsTable.propTypes = {
     })
   ).isRequired,
   runtimeEnvironmentId: PropTypes.string,
-  showJudgeLog: PropTypes.bool,
+  showJudgeLogStdout: PropTypes.bool,
+  showJudgeLogStderr: PropTypes.bool,
 };
 
 export default TestResultsTable;

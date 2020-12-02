@@ -254,7 +254,8 @@ class SolutionDetail extends Component {
                 <TestResults
                   evaluation={evaluation}
                   runtimeEnvironmentId={runtimeEnvironmentId}
-                  showJudgeLog={permissionHints.viewEvaluationJudgeOutput}
+                  showJudgeLogStdout={permissionHints.viewEvaluationJudgeStdout}
+                  showJudgeLogStderr={permissionHints.viewEvaluationJudgeStderr}
                 />
               )}
 

@@ -47,7 +47,7 @@ export const prepareInitialValues = defaultMemoize(
     solutionFilesLimit = null,
     solutionSizeLimit = null,
     canViewLimitRatios = true,
-    canViewJudgeOutputs = false,
+    canViewJudgeStdout = false,
     isBonus = false,
     disabledRuntimeEnvironmentIds = [],
     runtimeEnvironmentIds,
@@ -77,7 +77,7 @@ export const prepareInitialValues = defaultMemoize(
     solutionFilesLimit,
     solutionSizeLimit: solutionSizeLimit && Math.ceil(solutionSizeLimit / 1024), // B -> KiB
     canViewLimitRatios,
-    canViewJudgeOutputs,
+    canViewJudgeStdout,
     isBonus,
     runtimeEnvironmentIds,
     enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
@@ -109,7 +109,7 @@ const transformSubmittedData = ({
   solutionFilesLimit,
   solutionSizeLimit,
   canViewLimitRatios,
-  canViewJudgeOutputs,
+  canViewJudgeStdout,
   isBonus,
   enabledRuntime,
   visibility,
@@ -129,7 +129,7 @@ const transformSubmittedData = ({
     solutionFilesLimit,
     solutionSizeLimit: solutionSizeLimit ? solutionSizeLimit * 1024 : null, // if not null, convert KiB -> B
     canViewLimitRatios,
-    canViewJudgeOutputs,
+    canViewJudgeStdout,
     isBonus,
     disabledRuntimeEnvironmentIds,
     isPublic: visibility !== 'hidden',
@@ -463,12 +463,12 @@ class EditAssignmentForm extends Component {
             </Col>
             <Col md={6}>
               <Field
-                name="canViewJudgeOutputs"
+                name="canViewJudgeStdout"
                 component={CheckboxField}
                 onOff
                 label={
                   <FormattedMessage
-                    id="app.editAssignmentForm.canViewJudgeOutputs"
+                    id="app.editAssignmentForm.canViewJudgeStdout"
                     defaultMessage="Visibility of judge logs"
                   />
                 }
@@ -694,13 +694,13 @@ const validate = (
   return errors;
 };
 
-const warn = ({ groups, canViewJudgeOutputs }, { groupsAccessor, alreadyAssignedGroups = [] }) => {
+const warn = ({ groups, canViewJudgeStdout }, { groupsAccessor, alreadyAssignedGroups = [] }) => {
   const warnings = {};
 
-  if (canViewJudgeOutputs) {
-    warnings.canViewJudgeOutputs = (
+  if (canViewJudgeStdout) {
+    warnings.canViewJudgeStdout = (
       <FormattedMessage
-        id="app.editAssignmentForm.warninigs.canViewJudgeOutputs"
+        id="app.editAssignmentForm.warninigs.canViewJudgeStdout"
         defaultMessage="Allowing the students to see judge logs has its security risks. In case of simple exercises, the students may use this channel to retrieve the test inputs and expected outputs and design a trivial solution which embeds the correct outputs directly into the source code. Use this option wisely."
       />
     );
