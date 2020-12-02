@@ -251,7 +251,12 @@ class ReferenceSolutionDetail extends Component {
               {evaluation && <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />}
 
               {evaluation && (
-                <TestResults evaluation={evaluation} runtimeEnvironmentId={runtimeEnvironmentId} showJudgeLog={true} />
+                <TestResults
+                  evaluation={evaluation}
+                  runtimeEnvironmentId={runtimeEnvironmentId}
+                  showJudgeLogStdout={true}
+                  showJudgeLogStderr={true}
+                />
               )}
 
               {evaluation && (

@@ -9,7 +9,13 @@ const getSortedTestResults = defaultMemoize(({ testResults }, locale) =>
   testResults.sort((a, b) => a.testName.localeCompare(b.testName, locale))
 );
 
-const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog, intl: { locale } }) => (
+const TestResults = ({
+  evaluation,
+  runtimeEnvironmentId,
+  showJudgeLogStdout = false,
+  showJudgeLogStderr = false,
+  intl: { locale },
+}) => (
   <Box
     title={<FormattedMessage id="app.submission.evaluation.title.testResults" defaultMessage="Test Results" />}
     noPadding
@@ -19,7 +25,8 @@ const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog, intl: { l
     <TestResultsTable
       results={getSortedTestResults(evaluation, locale)}
       runtimeEnvironmentId={runtimeEnvironmentId}
-      showJudgeLog={showJudgeLog}
+      showJudgeLogStdout={showJudgeLogStdout}
+      showJudgeLogStderr={showJudgeLogStderr}
     />
   </Box>
 );
@@ -27,7 +34,8 @@ const TestResults = ({ evaluation, runtimeEnvironmentId, showJudgeLog, intl: { l
 TestResults.propTypes = {
   evaluation: PropTypes.object.isRequired,
   runtimeEnvironmentId: PropTypes.string,
-  showJudgeLog: PropTypes.bool,
+  showJudgeLogStdout: PropTypes.bool,
+  showJudgeLogStderr: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 
