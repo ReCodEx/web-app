@@ -5,6 +5,7 @@ import { Row, Col, Alert } from 'react-bootstrap';
 
 import Button from '../../../widgets/FlatButton';
 import DateTime from '../../../widgets/DateTime';
+import Explanation from '../../../widgets/Explanation';
 
 const syncMessages = {
   supplementaryFiles: (
@@ -29,7 +30,17 @@ const syncMessages = {
   ),
   hardwareGroups: <FormattedMessage id="app.assignment.syncHardwareGroups" defaultMessage="Hardware groups" />,
   limits: <FormattedMessage id="app.assignment.syncLimits" defaultMessage="Limits" />,
-  mergeJudgeLogs: <FormattedMessage id="app.assignment.syncMergeJudgeLogs" defaultMessage="Judge logs merge flag" />,
+  mergeJudgeLogs: (
+    <span>
+      <FormattedMessage id="app.assignment.syncMergeJudgeLogs" defaultMessage="Judge logs merge flag" />
+      <Explanation id="syncMergeJudgeLogs">
+        <FormattedMessage
+          id="app.exercise.mergeJudgeLogsExplanation"
+          defaultMessage="The merge flag indicates whether primary (stdout) and secondary (stderr) judge logs are are concatenated in one log (which should be default for built-in judges). If the logs are separated, the visibility of each part may be controlled idividually in assignments. That might be helpful if you need to pass two separate logs from a custom judge (e.g., one is for students and one is for supervisors)."
+        />
+      </Explanation>
+    </span>
+  ),
 };
 
 const getSyncMessages = syncInfo => {

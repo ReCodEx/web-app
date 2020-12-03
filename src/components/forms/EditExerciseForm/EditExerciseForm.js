@@ -13,6 +13,7 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
+import Explanation from '../../widgets/Explanation';
 import withLinks from '../../../helpers/withLinks';
 
 const messages = defineMessages({
@@ -102,10 +103,22 @@ const EditExerciseForm = ({
       maxLength={3}
       nullable
       label={
-        <FormattedMessage
-          id="app.editExerciseForm.solutionFilesLimit"
-          defaultMessage="Soluition files limit (default for assignments):"
-        />
+        <span>
+          <FormattedMessage id="app.editExerciseForm.solutionFilesLimit" defaultMessage="Soluition files limit:" />
+          <Explanation id="solutionFilesLimitExplanation">
+            <FormattedMessage
+              id="app.exercise.solutionFilesLimitExplanation"
+              defaultMessage="Maximal number of files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
+            />
+            <hr />
+            <strong>
+              <FormattedMessage
+                id="app.exercise.defaultValueForAssignment"
+                defaultMessage="This is a default (recommended) value for assignments, but each assignment of this exercise may set it individually. Modifications of this value are not synchronized with already created assignments."
+              />
+            </strong>
+          </Explanation>
+        </span>
       }
     />
 
@@ -116,10 +129,22 @@ const EditExerciseForm = ({
       maxLength={6}
       nullable
       label={
-        <FormattedMessage
-          id="app.editExerciseForm.solutionSizeLimit"
-          defaultMessage="Soluition total size [KiB] limit (default for assignments):"
-        />
+        <span>
+          <FormattedMessage id="app.editExerciseForm.solutionSizeLimit" defaultMessage="Soluition total size [KiB]:" />
+          <Explanation id="solutionSizeLimitExplanation">
+            <FormattedMessage
+              id="app.exercise.solutionSizeLimitExplanation"
+              defaultMessage="Maximal total size of all files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
+            />
+            <hr />
+            <strong>
+              <FormattedMessage
+                id="app.exercise.defaultValueForAssignment"
+                defaultMessage="This is a default (recommended) value for assignments, but each assignment of this exercise may set it individually. Modifications of this value are not synchronized with already created assignments."
+              />
+            </strong>
+          </Explanation>
+        </span>
       }
     />
 
@@ -127,7 +152,17 @@ const EditExerciseForm = ({
       name="mergeJudgeLogs"
       component={CheckboxField}
       onOff
-      label={<FormattedMessage id="app.editExerciseForm.mergeJudgeLogs" defaultMessage="Merge judge logs in one" />}
+      label={
+        <span>
+          <FormattedMessage id="app.editExerciseForm.mergeJudgeLogs" defaultMessage="Merge judge logs in one" />
+          <Explanation id="mergeJudgeLogsExplanation">
+            <FormattedMessage
+              id="app.exercise.mergeJudgeLogsExplanation"
+              defaultMessage="The merge flag indicates whether primary (stdout) and secondary (stderr) judge logs are are concatenated in one log (which should be default for built-in judges). If the logs are separated, the visibility of each part may be controlled idividually in assignments. That might be helpful if you need to pass two separate logs from a custom judge (e.g., one is for students and one is for supervisors)."
+            />
+          </Explanation>
+        </span>
+      }
     />
 
     <hr />
@@ -137,10 +172,15 @@ const EditExerciseForm = ({
       component={CheckboxField}
       onOff
       label={
-        <FormattedMessage
-          id="app.editExerciseForm.isPublic"
-          defaultMessage="Exercise is public and can be assigned to students by their supervisors."
-        />
+        <span>
+          <FormattedMessage id="app.editExerciseForm.isPublic" defaultMessage="Exercise is public" />
+          <Explanation id="isPublicExplanation">
+            <FormattedMessage
+              id="app.exercise.isPublicExplanation"
+              defaultMessage="Public exercise is visible to all supervisors in its home groups and respective nested groups. Private (not public) exercise is visible to the author only."
+            />
+          </Explanation>
+        </span>
       }
     />
 
@@ -149,10 +189,15 @@ const EditExerciseForm = ({
       component={CheckboxField}
       onOff
       label={
-        <FormattedMessage
-          id="app.editExerciseForm.isLocked"
-          defaultMessage="Exercise is locked (visible, but cannot be assigned to any group)."
-        />
+        <span>
+          <FormattedMessage id="app.editExerciseForm.isLocked" defaultMessage="Exercise is locked" />
+          <Explanation id="isLockedExplanation">
+            <FormattedMessage
+              id="app.exercise.isLockedExplanation"
+              defaultMessage="Locked exercises cannot be assigned in groups. It is recommended to keep the assignment locked until it is properly tested by reference solutions, especially if it is also public."
+            />
+          </Explanation>
+        </span>
       }
     />
 
