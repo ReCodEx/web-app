@@ -124,6 +124,15 @@ const EditExerciseForm = ({
     />
 
     <Field
+      name="mergeJudgeLogs"
+      component={CheckboxField}
+      onOff
+      label={<FormattedMessage id="app.editExerciseForm.mergeJudgeLogs" defaultMessage="Merge judge logs in one" />}
+    />
+
+    <hr />
+
+    <Field
       name="isPublic"
       component={CheckboxField}
       onOff

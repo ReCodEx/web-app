@@ -36,11 +36,22 @@ const localizedTextDefaults = {
 };
 
 const prepareInitialValues = defaultMemoize(
-  ({ id, version, localizedTexts, difficulty, isPublic, isLocked, solutionFilesLimit, solutionSizeLimit }) => ({
+  ({
+    id,
+    version,
+    localizedTexts,
+    difficulty,
+    mergeJudgeLogs,
+    isPublic,
+    isLocked,
+    solutionFilesLimit,
+    solutionSizeLimit,
+  }) => ({
     id,
     version,
     localizedTexts: getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
     difficulty,
+    mergeJudgeLogs,
     isPublic,
     isLocked,
     solutionFilesLimit,

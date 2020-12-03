@@ -254,6 +254,7 @@ class ExerciseAssignments extends Component {
                                 visibility={visibility}
                                 assignmentIsPublic={false}
                                 submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
+                                mergeJudgeLogs={exercise.mergeJudgeLogs}
                               />
                             )}
                           </ResourceRenderer>

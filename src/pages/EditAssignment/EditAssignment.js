@@ -194,6 +194,7 @@ class EditAssignment extends Component {
                       assignmentIsPublic={
                         assignment.isPublic && (!assignment.visibleFrom || assignment.visibleFrom * 1000 <= Date.now())
                       }
+                      mergeJudgeLogs={assignment.mergeJudgeLogs}
                     />
                   )}
                 </ResourceRenderer>
