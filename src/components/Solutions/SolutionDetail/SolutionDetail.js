@@ -256,6 +256,9 @@ class SolutionDetail extends Component {
                   runtimeEnvironmentId={runtimeEnvironmentId}
                   showJudgeLogStdout={permissionHints.viewEvaluationJudgeStdout}
                   showJudgeLogStderr={permissionHints.viewEvaluationJudgeStderr}
+                  isJudgeLogStdoutPublic={assignment.canViewJudgeStdout}
+                  isJudgeLogStderrPublic={assignment.canViewJudgeStderr}
+                  isJudgeLogMerged={assignment.mergeJudgeLogs}
                 />
               )}
 

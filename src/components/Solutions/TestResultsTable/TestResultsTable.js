@@ -192,7 +192,13 @@ class TestResultsTable extends Component {
   };
 
   renderLog = ({ testName, judgeLogStdout = '', judgeLogStderr = '' }) => {
-    const { showJudgeLogStdout = false, showJudgeLogStderr = false } = this.props;
+    const {
+      showJudgeLogStdout = false,
+      showJudgeLogStderr = false,
+      isJudgeLogStdoutPublic = null,
+      isJudgeLogStderrPublic = null,
+      isJudgeLogMerged = true,
+    } = this.props;
     return (
       <tr key={`${testName}-log`}>
         <td colSpan={7}>
@@ -201,25 +207,54 @@ class TestResultsTable extends Component {
               {judgeLogStdout && showJudgeLogStdout && (
                 <tr>
                   <td>
-                    <small className="text-muted">
-                      <FormattedMessage id="app.submissions.testResultsTable.primaryLog" defaultMessage="Primary Log" />
-                      :
-                    </small>
+                    {!isJudgeLogMerged && (
+                      <small className="text-muted">
+                        <FormattedMessage
+                          id="app.submissions.testResultsTable.primaryLog"
+                          defaultMessage="Primary Log"
+                        />
+                        {isJudgeLogStdoutPublic === false && (
+                          <strong>
+                            {' '}
+                            (
+                            <FormattedMessage
+                              id="app.submissions.testResultsTable.logIsPrivate"
+                              defaultMessage="not visible to students"
+                            />
+                            )
+                          </strong>
+                        )}
+                        :
+                      </small>
+                    )}
                     <pre className={styles.log}>{judgeLogStdout}</pre>
                   </td>
                 </tr>
               )}
 
-              {judgeLogStderr && showJudgeLogStderr && (
+              {judgeLogStderr && showJudgeLogStderr && !isJudgeLogMerged && (
                 <tr>
                   <td>
-                    <small className="text-muted">
-                      <FormattedMessage
-                        id="app.submissions.testResultsTable.secondaryLog"
-                        defaultMessage="Secondary Log"
-                      />
-                      :
-                    </small>
+                    {!isJudgeLogMerged && (
+                      <small className="text-muted">
+                        <FormattedMessage
+                          id="app.submissions.testResultsTable.secondaryLog"
+                          defaultMessage="Secondary Log"
+                        />
+                        {isJudgeLogStderrPublic === false && (
+                          <strong>
+                            {' '}
+                            (
+                            <FormattedMessage
+                              id="app.submissions.testResultsTable.logIsPrivate"
+                              defaultMessage="not visible to students"
+                            />
+                            )
+                          </strong>
+                        )}
+                        :
+                      </small>
+                    )}
                     <pre className={styles.log}>{judgeLogStderr}</pre>
                   </td>
                 </tr>
@@ -232,12 +267,14 @@ class TestResultsTable extends Component {
   };
 
   render() {
-    const { results, showJudgeLogStdout = false, showJudgeLogStderr = false } = this.props;
+    const { results, showJudgeLogStdout = false, showJudgeLogStderr = false, isJudgeLogMerged = true } = this.props;
     const showLogButton =
       (showJudgeLogStdout || showJudgeLogStderr) &&
       results.reduce(
         (out, { judgeLogStdout = '', judgeLogStderr = '' }) =>
-          out || (Boolean(judgeLogStdout) && showJudgeLogStdout) || (Boolean(judgeLogStderr) && showJudgeLogStderr),
+          out ||
+          (Boolean(judgeLogStdout) && showJudgeLogStdout) ||
+          (Boolean(judgeLogStderr) && showJudgeLogStderr && !isJudgeLogMerged),
         false
       );
     const allLogsClosed =
@@ -326,7 +363,7 @@ class TestResultsTable extends Component {
                 <Icon icon="power-off" />
               </OverlayTrigger>
             </th>
-            {(showJudgeLogStdout || showJudgeLogStderr) && (
+            {(showJudgeLogStdout || (showJudgeLogStderr && !isJudgeLogMerged)) && (
               <th className="text-right">
                 {showLogButton && (
                   <Button
@@ -364,6 +401,9 @@ TestResultsTable.propTypes = {
   runtimeEnvironmentId: PropTypes.string,
   showJudgeLogStdout: PropTypes.bool,
   showJudgeLogStderr: PropTypes.bool,
+  isJudgeLogStdoutPublic: PropTypes.bool,
+  isJudgeLogStderrPublic: PropTypes.bool,
+  isJudgeLogMerged: PropTypes.bool,
 };
 
 export default TestResultsTable;

@@ -48,6 +48,7 @@ export const prepareInitialValues = defaultMemoize(
     solutionSizeLimit = null,
     canViewLimitRatios = true,
     canViewJudgeStdout = false,
+    canViewJudgeStderr = false,
     isBonus = false,
     disabledRuntimeEnvironmentIds = [],
     runtimeEnvironmentIds,
@@ -56,21 +57,14 @@ export const prepareInitialValues = defaultMemoize(
   }) => ({
     groups,
     localizedTexts: localizedTexts && getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
-    firstDeadline:
-      firstDeadline !== undefined
-        ? moment.unix(firstDeadline)
-        : moment()
-            .add(2, 'weeks')
-            .endOf('day'),
+    firstDeadline: firstDeadline !== undefined ? moment.unix(firstDeadline) : moment().add(2, 'weeks').endOf('day'),
     maxPointsBeforeFirstDeadline,
     allowSecondDeadline,
     secondDeadline: secondDeadline
       ? moment.unix(secondDeadline)
       : firstDeadline !== undefined
       ? moment.unix(firstDeadline).add(2, 'weeks')
-      : moment()
-          .add(4, 'weeks')
-          .endOf('day'),
+      : moment().add(4, 'weeks').endOf('day'),
     maxPointsBeforeSecondDeadline,
     submissionsCountLimit,
     pointsPercentualThreshold,
@@ -78,6 +72,7 @@ export const prepareInitialValues = defaultMemoize(
     solutionSizeLimit: solutionSizeLimit && Math.ceil(solutionSizeLimit / 1024), // B -> KiB
     canViewLimitRatios,
     canViewJudgeStdout,
+    canViewJudgeStderr,
     isBonus,
     runtimeEnvironmentIds,
     enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
@@ -110,6 +105,7 @@ const transformSubmittedData = ({
   solutionSizeLimit,
   canViewLimitRatios,
   canViewJudgeStdout,
+  canViewJudgeStderr,
   isBonus,
   enabledRuntime,
   visibility,
@@ -130,6 +126,7 @@ const transformSubmittedData = ({
     solutionSizeLimit: solutionSizeLimit ? solutionSizeLimit * 1024 : null, // if not null, convert KiB -> B
     canViewLimitRatios,
     canViewJudgeStdout,
+    canViewJudgeStderr,
     isBonus,
     disabledRuntimeEnvironmentIds,
     isPublic: visibility !== 'hidden',
@@ -259,6 +256,7 @@ class EditAssignmentForm extends Component {
       visibility,
       assignmentIsPublic,
       submitButtonMessages = SUBMIT_BUTTON_MESSAGES_DEFAULT,
+      mergeJudgeLogs,
       intl: { locale },
     } = this.props;
 
@@ -297,14 +295,14 @@ class EditAssignmentForm extends Component {
 
         <Grid fluid>
           <Row>
-            <Col lg={6}>
+            <Col md={6}>
               <Field
                 name="firstDeadline"
                 component={DatetimeField}
                 label={<FormattedMessage id="app.editAssignmentForm.firstDeadline" defaultMessage="First deadline:" />}
               />
             </Col>
-            <Col lg={6}>
+            <Col md={6}>
               <NumericTextField
                 name="maxPointsBeforeFirstDeadline"
                 validateMin={0}
@@ -338,7 +336,7 @@ class EditAssignmentForm extends Component {
 
           {allowSecondDeadline && (
             <Row>
-              <Col lg={6}>
+              <Col md={6}>
                 <Field
                   name="secondDeadline"
                   disabled={!firstDeadline || allowSecondDeadline !== true}
@@ -357,7 +355,7 @@ class EditAssignmentForm extends Component {
                   </HelpBlock>
                 )}
               </Col>
-              <Col lg={6}>
+              <Col md={6}>
                 <NumericTextField
                   name="maxPointsBeforeSecondDeadline"
                   disabled={allowSecondDeadline !== true}
@@ -379,8 +377,7 @@ class EditAssignmentForm extends Component {
         <hr />
         <Grid fluid>
           <Row>
-            <Col lg={6}>
-              {' '}
+            <Col md={6}>
               <NumericTextField
                 name="submissionsCountLimit"
                 validateMin={1}
@@ -394,7 +391,7 @@ class EditAssignmentForm extends Component {
                 }
               />
             </Col>
-            <Col lg={6}>
+            <Col md={6}>
               <NumericTextField
                 name="pointsPercentualThreshold"
                 validateMin={0}
@@ -411,7 +408,7 @@ class EditAssignmentForm extends Component {
           </Row>
 
           <Row>
-            <Col lg={6}>
+            <Col md={6}>
               <NumericTextField
                 name="solutionFilesLimit"
                 validateMin={1}
@@ -426,7 +423,7 @@ class EditAssignmentForm extends Component {
                 }
               />
             </Col>
-            <Col lg={6}>
+            <Col md={6}>
               <NumericTextField
                 name="solutionSizeLimit"
                 validateMin={1}
@@ -469,11 +466,28 @@ class EditAssignmentForm extends Component {
                 label={
                   <FormattedMessage
                     id="app.editAssignmentForm.canViewJudgeStdout"
-                    defaultMessage="Visibility of judge logs"
+                    defaultMessage="Visibility of primary logs"
                   />
                 }
               />
             </Col>
+
+            {!mergeJudgeLogs && (
+              <Col md={6}>
+                <Field
+                  name="canViewJudgeStderr"
+                  component={CheckboxField}
+                  onOff
+                  label={
+                    <FormattedMessage
+                      id="app.editAssignmentForm.canViewJudgeStderr"
+                      defaultMessage="Visibility of secondary logs"
+                    />
+                  }
+                />
+              </Col>
+            )}
+
             <Col md={12}>
               <Field
                 name="isBonus"
@@ -619,6 +633,7 @@ EditAssignmentForm.propTypes = {
   visibility: PropTypes.string,
   assignmentIsPublic: PropTypes.bool,
   submitButtonMessages: PropTypes.object,
+  mergeJudgeLogs: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
 };
 
@@ -694,13 +709,22 @@ const validate = (
   return errors;
 };
 
-const warn = ({ groups, canViewJudgeStdout }, { groupsAccessor, alreadyAssignedGroups = [] }) => {
+const warn = ({ groups, canViewJudgeStdout, canViewJudgeStderr }, { groupsAccessor, alreadyAssignedGroups = [] }) => {
   const warnings = {};
 
   if (canViewJudgeStdout) {
     warnings.canViewJudgeStdout = (
       <FormattedMessage
-        id="app.editAssignmentForm.warninigs.canViewJudgeStdout"
+        id="app.editAssignmentForm.warninigs.canViewJudgeLogs"
+        defaultMessage="Allowing the students to see judge logs has its security risks. In case of simple exercises, the students may use this channel to retrieve the test inputs and expected outputs and design a trivial solution which embeds the correct outputs directly into the source code. Use this option wisely."
+      />
+    );
+  }
+
+  if (canViewJudgeStderr) {
+    warnings.canViewJudgeStderr = (
+      <FormattedMessage
+        id="app.editAssignmentForm.warninigs.canViewJudgeLogs"
         defaultMessage="Allowing the students to see judge logs has its security risks. In case of simple exercises, the students may use this channel to retrieve the test inputs and expected outputs and design a trivial solution which embeds the correct outputs directly into the source code. Use this option wisely."
       />
     );

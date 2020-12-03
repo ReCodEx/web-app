@@ -14,6 +14,9 @@ const TestResults = ({
   runtimeEnvironmentId,
   showJudgeLogStdout = false,
   showJudgeLogStderr = false,
+  isJudgeLogStdoutPublic = null,
+  isJudgeLogStderrPublic = null,
+  isJudgeLogMerged = true,
   intl: { locale },
 }) => (
   <Box
@@ -27,6 +30,9 @@ const TestResults = ({
       runtimeEnvironmentId={runtimeEnvironmentId}
       showJudgeLogStdout={showJudgeLogStdout}
       showJudgeLogStderr={showJudgeLogStderr}
+      isJudgeLogStdoutPublic={isJudgeLogStdoutPublic}
+      isJudgeLogStderrPublic={isJudgeLogStderrPublic}
+      isJudgeLogMerged={isJudgeLogMerged}
     />
   </Box>
 );
@@ -36,6 +42,9 @@ TestResults.propTypes = {
   runtimeEnvironmentId: PropTypes.string,
   showJudgeLogStdout: PropTypes.bool,
   showJudgeLogStderr: PropTypes.bool,
+  isJudgeLogStdoutPublic: PropTypes.bool,
+  isJudgeLogStderrPublic: PropTypes.bool,
+  isJudgeLogMerged: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 

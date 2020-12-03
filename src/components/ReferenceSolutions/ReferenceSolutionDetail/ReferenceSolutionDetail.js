@@ -254,8 +254,9 @@ class ReferenceSolutionDetail extends Component {
                 <TestResults
                   evaluation={evaluation}
                   runtimeEnvironmentId={runtimeEnvironmentId}
-                  showJudgeLogStdout={true}
-                  showJudgeLogStderr={true}
+                  showJudgeLogStdout
+                  showJudgeLogStderr
+                  isJudgeLogMerged={exercise.mergeJudgeLogs}
                 />
               )}
 

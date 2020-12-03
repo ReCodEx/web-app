@@ -29,6 +29,7 @@ const syncMessages = {
   ),
   hardwareGroups: <FormattedMessage id="app.assignment.syncHardwareGroups" defaultMessage="Hardware groups" />,
   limits: <FormattedMessage id="app.assignment.syncLimits" defaultMessage="Limits" />,
+  mergeJudgeLogs: <FormattedMessage id="app.assignment.syncMergeJudgeLogs" defaultMessage="Judge logs merge flag" />,
 };
 
 const getSyncMessages = syncInfo => {
