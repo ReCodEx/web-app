@@ -12,6 +12,7 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import AssignmentFormGroupsList from './AssignmentFormGroupsList';
 import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess';
+import Explanation from '../../widgets/Explanation';
 import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation';
 import {
   getGroupCanonicalLocalizedName,
@@ -398,10 +399,18 @@ class EditAssignmentForm extends Component {
                 validateMax={100}
                 maxLength={3}
                 label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.pointsPercentualThreshold"
-                    defaultMessage="Minimum percentage of points which submissions have to gain:"
-                  />
+                  <span>
+                    <FormattedMessage
+                      id="app.editAssignmentForm.pointsPercentualThreshold"
+                      defaultMessage="Minimal required correctness [%]:"
+                    />
+                    <Explanation id="pointsPercentualThresholdExplanation">
+                      <FormattedMessage
+                        id="app.editAssignmentForm.pointsPercentualThresholdExplanation"
+                        defaultMessage="Minimal solution correctness (expressed in percents) that is required for regular scoring. Solutions below this threshold always gets zero points."
+                      />
+                    </Explanation>
+                  </span>
                 }
               />
             </Col>
@@ -416,10 +425,18 @@ class EditAssignmentForm extends Component {
                 maxLength={3}
                 nullable
                 label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.solutionFilesLimit"
-                    defaultMessage="Soluition files limit (if empty, no limit is applied):"
-                  />
+                  <span>
+                    <FormattedMessage
+                      id="app.editExerciseForm.solutionFilesLimit"
+                      defaultMessage="Soluition files limit:"
+                    />
+                    <Explanation id="solutionFilesLimitExplanation">
+                      <FormattedMessage
+                        id="app.exercise.solutionFilesLimitExplanation"
+                        defaultMessage="Maximal number of files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
+                      />
+                    </Explanation>
+                  </span>
                 }
               />
             </Col>
@@ -431,10 +448,18 @@ class EditAssignmentForm extends Component {
                 maxLength={6}
                 nullable
                 label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.solutionSizeLimit"
-                    defaultMessage="Soluition total size [KiB] limit (if empty, no limit is applied):"
-                  />
+                  <span>
+                    <FormattedMessage
+                      id="app.editExerciseForm.solutionSizeLimit"
+                      defaultMessage="Soluition total size [KiB]:"
+                    />
+                    <Explanation id="solutionSizeLimitExplanation">
+                      <FormattedMessage
+                        id="app.exercise.solutionSizeLimitExplanation"
+                        defaultMessage="Maximal total size of all files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
+                      />
+                    </Explanation>
+                  </span>
                 }
               />
             </Col>
@@ -445,44 +470,83 @@ class EditAssignmentForm extends Component {
 
         <Grid fluid>
           <Row>
-            <Col md={6}>
+            <Col md={mergeJudgeLogs ? 6 : 12} lg={mergeJudgeLogs ? 6 : 4}>
               <Field
                 name="canViewLimitRatios"
                 component={CheckboxField}
                 onOff
                 label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.canViewLimitRatios"
-                    defaultMessage="Visibility of memory and time ratios"
-                  />
+                  <span>
+                    <FormattedMessage
+                      id="app.editAssignmentForm.canViewLimitRatios"
+                      defaultMessage="Visibility of memory and time"
+                    />
+                    <Explanation id="canViewLimitRatiosExplanation">
+                      <FormattedMessage
+                        id="app.editAssignmentForm.canViewLimitRatiosExplanation"
+                        defaultMessage="Whether the students can see the measured execution time and consumed memory of their solutions. The measurements are displayed relatively to the established limits, so the students do not see the absolute values but only a percentage."
+                      />
+                    </Explanation>
+                  </span>
                 }
               />
             </Col>
-            <Col md={6}>
+            <Col md={6} lg={mergeJudgeLogs ? 6 : 4}>
               <Field
                 name="canViewJudgeStdout"
                 component={CheckboxField}
                 onOff
                 label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.canViewJudgeStdout"
-                    defaultMessage="Visibility of primary logs"
-                  />
+                  mergeJudgeLogs ? (
+                    <span>
+                      <FormattedMessage
+                        id="app.editAssignmentForm.canViewJudgeLogs"
+                        defaultMessage="Visibility of judge logs"
+                      />
+                      <Explanation id="canViewJudgeLogsExplanation">
+                        <FormattedMessage
+                          id="app.editAssignmentForm.canViewJudgeLogsExplanation"
+                          defaultMessage="If set, judge logs are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desriable for some categories of exercises."
+                        />
+                      </Explanation>
+                    </span>
+                  ) : (
+                    <span>
+                      <FormattedMessage
+                        id="app.editAssignmentForm.canViewJudgeStdout"
+                        defaultMessage="Visibility of primary logs"
+                      />
+                      <Explanation id="canViewJudgeStdoutExplanation">
+                        <FormattedMessage
+                          id="app.editAssignmentForm.canViewJudgeStdoutExplanation"
+                          defaultMessage="If set, judge primary logs (stdout) are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desriable for some categories of exercises."
+                        />
+                      </Explanation>
+                    </span>
+                  )
                 }
               />
             </Col>
 
             {!mergeJudgeLogs && (
-              <Col md={6}>
+              <Col md={6} lg={4}>
                 <Field
                   name="canViewJudgeStderr"
                   component={CheckboxField}
                   onOff
                   label={
-                    <FormattedMessage
-                      id="app.editAssignmentForm.canViewJudgeStderr"
-                      defaultMessage="Visibility of secondary logs"
-                    />
+                    <span>
+                      <FormattedMessage
+                        id="app.editAssignmentForm.canViewJudgeStderr"
+                        defaultMessage="Visibility of secondary logs"
+                      />
+                      <Explanation id="canViewJudgeStderrExplanation" placement="top">
+                        <FormattedMessage
+                          id="app.editAssignmentForm.canViewJudgeStderrExplanation"
+                          defaultMessage="If set, judge secondary logs (stderr) are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desriable for some categories of exercises."
+                        />
+                      </Explanation>
+                    </span>
                   }
                 />
               </Col>
