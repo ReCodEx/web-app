@@ -121,6 +121,7 @@ class TestResultsTable extends Component {
     wallTime,
     cpuTime,
     exitCode,
+    exitSignal,
     judgeLogStdout = '',
     judgeLogStderr = '',
   }) => {
@@ -168,7 +169,27 @@ class TestResultsTable extends Component {
           {showTimeResults(wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded)}
         </td>
 
-        <td className="text-center">{exitCodeMapping(runtimeEnvironmentId, exitCode)}</td>
+        <td className="text-center">
+          {Boolean(exitSignal) && (
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="signal">
+                  <FormattedMessage
+                    id="app.submissions.testResultsTable.signalTooltip"
+                    defaultMessage="Process terminated by signal"
+                  />
+                </Tooltip>
+              }>
+              <strong>
+                <Icon icon="satellite-dish" className="text-danger" gapRight />
+                {exitSignal}
+                {exitCode !== -1 && <br />}
+              </strong>
+            </OverlayTrigger>
+          )}
+          {(exitCode !== -1 || !exitSignal) && exitCodeMapping(runtimeEnvironmentId, exitCode)}
+        </td>
 
         {(showJudgeLogStdout || showJudgeLogStderr) && (
           <td className="text-right">

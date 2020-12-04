@@ -1394,6 +1394,7 @@
   "app.submissions.testResultsTable.primaryLog": "Primary Log",
   "app.submissions.testResultsTable.secondaryLog": "Secondary Log",
   "app.submissions.testResultsTable.showLog": "Show Log",
+  "app.submissions.testResultsTable.signalTooltip": "Process terminated by signal",
   "app.submissions.testResultsTable.statusFailed": "FAILED",
   "app.submissions.testResultsTable.statusOK": "OK",
   "app.submissions.testResultsTable.statusSkipped": "SKIPPED",

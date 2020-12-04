@@ -1394,6 +1394,7 @@
   "app.submissions.testResultsTable.primaryLog",
   "app.submissions.testResultsTable.secondaryLog",
   "app.submissions.testResultsTable.showLog",
+  "app.submissions.testResultsTable.signalTooltip",
   "app.submissions.testResultsTable.statusFailed",
   "app.submissions.testResultsTable.statusOK",
   "app.submissions.testResultsTable.statusSkipped",
