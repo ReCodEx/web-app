@@ -276,7 +276,7 @@
   "app.editEnvironmentSimpleForm.validation.environments": "Přidejte prosím alespoň jedno běhové prostředí.",
   "app.editEnvironmentSimpleForm.validation.standaloneEnvironmentsCollisions": "Některá vybraná běhová prostředí ({envs}) nemohou být kombinovaná s jinými. Odeberte tato běhová prostředí, nebo zajistěte, že bude vybrané právě jedno z nich.",
   "app.editExercise.deleteExercise": "Smazat úlohu",
-  "app.editExercise.deleteExerciseWarning": "Smazání úlohy odstraní všechna studentská řešení a všechna zadání této úlohy.",
+  "app.editExercise.deleteExerciseWarning": "Smazání úlohy nebude mít žádný vliv na již zadané instance této úlohy ani jejich řešení, zadané úlohy pouze již nebude možné aktualizovat. Smazání ovšem efektivně odebre tuto úlohu ze všech domovských skupin.",
   "app.editExercise.description": "Změna nastavení úlohy",
   "app.editExercise.editConfig": "Nastavení konfigurace úlohy",
   "app.editExercise.editTags": "Editace nálepek",
