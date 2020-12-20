@@ -276,7 +276,7 @@
   "app.editEnvironmentSimpleForm.validation.environments": "Please add at least one runtime environment.",
   "app.editEnvironmentSimpleForm.validation.standaloneEnvironmentsCollisions": "Some of the selected environments ({envs}) cannot be combined with any other environment. You need to deselect these environment(s) or make sure only one environment is selected.",
   "app.editExercise.deleteExercise": "Delete the exercise",
-  "app.editExercise.deleteExerciseWarning": "Deleting an exercise will remove all the students submissions and all assignments.",
+  "app.editExercise.deleteExerciseWarning": "Deletion of an exercise will not affect any existing assignments nor their solutions, except they could not be synchronized anymore. However, the deletion will effectively remove the exercise from all groups of residence.",
   "app.editExercise.description": "Change exercise settings",
   "app.editExercise.editConfig": "Edit Exercise Configuration",
   "app.editExercise.editTags": "Edit Tags",

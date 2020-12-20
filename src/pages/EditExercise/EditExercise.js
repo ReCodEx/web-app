@@ -166,7 +166,7 @@ class EditExercise extends Component {
                         <p>
                           <FormattedMessage
                             id="app.editExercise.deleteExerciseWarning"
-                            defaultMessage="Deleting an exercise will remove all the students submissions and all assignments."
+                            defaultMessage="Deletion of an exercise will not affect any existing assignments nor their solutions, except they could not be synchronized anymore. However, the deletion will effectively remove the exercise from all groups of residence."
                           />
                         </p>
                         <p className="text-center">
