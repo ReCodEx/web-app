@@ -19,7 +19,7 @@ const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
     .sort()
     .map(test => ({ test, weight: weightsObj[test] }));
   const weightsSum = weights.reduce((acc, { weight }) => acc + weight, 0);
-  const testsSum = weights.reduce((acc, { test, weight }) => acc + weight * results[test], 0);
+  const testsSum = results && weights.reduce((acc, { test, weight }) => acc + weight * results[test], 0);
   const totalScore = weightsSum !== 0 ? Math.round((testsSum * 1000) / weightsSum) / 1000 : '?';
 
   return (
@@ -53,7 +53,7 @@ const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
             {weights.map(({ test, weight }) => (
               <tr key={test}>
                 <td className="text-nowrap">{test}</td>
-                <td>{results[test] !== undefined ? results[test] : '?'}</td>
+                <td>{results && results[test] !== undefined ? results[test] : '?'}</td>
                 <td>{weight}</td>
               </tr>
             ))}
