@@ -6,8 +6,8 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import { LoadingIcon, WarningIcon } from '../../icons';
 
 const Page = ({
-  title,
-  description,
+  title = '',
+  description = '',
   resource,
   loadingTitle = (
     <span>
@@ -74,8 +74,8 @@ Page.propTypes = {
   loadingDescription: stringOrFormattedMessage,
   failedTitle: stringOrFormattedMessage,
   failedDescription: stringOrFormattedMessage,
-  title: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]).isRequired,
-  description: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]).isRequired,
+  title: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]),
+  description: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]),
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 };
 

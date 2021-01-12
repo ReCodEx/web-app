@@ -74,7 +74,7 @@ app.use(
 );
 app.use(cookieParser());
 
-const renderPage = (res, { store = null, html = '' }) => {
+const renderPage = (res, store = null, html = '') => {
   const reduxState = store ? serialize(store.getState(), { isJSON: true }) : 'undefined';
   const head = Helmet.rewind();
   res.render('index', {
@@ -123,7 +123,7 @@ app.get('*', (req, res) => {
               </StaticRouter>
             </Provider>
           );
-          renderPage(res, { store, html });
+          renderPage(res, store, html);
         })
         .catch(() => renderPage(res)); // without SSR
     }
