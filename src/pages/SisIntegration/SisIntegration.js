@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 
 import Page from '../../components/layout/Page';
@@ -17,6 +17,7 @@ import { EditIcon, DeleteIcon, UserIcon } from '../../components/icons';
 import EditTerm from '../../components/SisIntegration/EditTerm';
 import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import Button from '../../components/widgets/FlatButton';
 
 import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
@@ -124,11 +125,7 @@ class SisIntegration extends Component {
                             terms={sisTerms}
                             createActions={(id, data) => (
                               <div>
-                                <Button
-                                  bsSize="xs"
-                                  className="btn-flat"
-                                  bsStyle="warning"
-                                  onClick={() => this.setState({ openEdit: id })}>
+                                <Button bsSize="xs" bsStyle="warning" onClick={() => this.setState({ openEdit: id })}>
                                   <EditIcon gapRight />
                                   <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                                 </Button>
@@ -141,7 +138,7 @@ class SisIntegration extends Component {
                                       defaultMessage="Are you sure you want to delete the SIS term?"
                                     />
                                   }>
-                                  <Button bsSize="xs" className="btn-flat" bsStyle="danger">
+                                  <Button bsSize="xs" bsStyle="danger">
                                     <DeleteIcon gapRight />
                                     <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                                   </Button>
@@ -225,7 +222,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SisIntegration);
+export default connect(mapStateToProps, mapDispatchToProps)(SisIntegration);

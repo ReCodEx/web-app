@@ -16,6 +16,7 @@ export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
 );
 export const AssignmentsIcon = props => <Icon {...props} icon="tasks" />;
 export const BanIcon = props => <Icon {...props} icon="ban" />;
+export const BindIcon = props => <Icon {...props} icon="link" />;
 export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
 export const BugIcon = props => <Icon {...props} icon="bug" />;
 export { CheckRequiredIcon };
