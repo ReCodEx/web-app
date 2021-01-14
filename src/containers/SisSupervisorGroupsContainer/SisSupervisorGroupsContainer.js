@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import Box from '../../components/widgets/Box';
-import { Table, Accordion, Panel, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { Table, Accordion, Panel, Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
 
+import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
 import { LinkContainer } from 'react-router-bootstrap';
 
@@ -30,31 +30,12 @@ import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
 import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 import Confirm from '../../components/forms/Confirm';
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
+import CourseLabel, { getLocalizedData } from '../../components/SisIntegration/CourseLabel';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 
-import Icon, { EditIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
+import Icon, { AddIcon, BindIcon, EditIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
-import { unique, arrayToObject, hasPermissions } from '../../helpers/common';
-
-const days = {
-  cs: ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'],
-  en: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-};
-
-const oddEven = {
-  cs: ['lichý', 'sudý'],
-  en: ['odd', 'even'],
-};
-
-const getLocalizedData = (obj, locale) => {
-  if (obj && obj[locale]) {
-    return obj[locale];
-  } else if (obj && Object.keys(obj).length > 0) {
-    return Object.keys(obj)[0];
-  } else {
-    return null;
-  }
-};
+import { unique, arrayToObject, hasPermissions, safeGet } from '../../helpers/common';
 
 const filterGroupsForBinding = (groups, alreadyBoundGroups) => {
   const bound = arrayToObject(alreadyBoundGroups);
@@ -62,6 +43,64 @@ const filterGroupsForBinding = (groups, alreadyBoundGroups) => {
 };
 
 class SisSupervisorGroupsContainer extends Component {
+  state = { createDialog: null, bindDialog: null };
+
+  openCreateDialog = (possibleParents, course, term) => {
+    this.setState({
+      createDialog: {
+        possibleParents,
+        course: course.course,
+        groupsCount: course.groups.length,
+        term,
+      },
+    });
+  };
+
+  closeCreateDialog = () => {
+    this.setState({ createDialog: null });
+  };
+
+  submitCreateDialog = data => {
+    const { createGroup, currentUserId } = this.props;
+    if (this.state.createDialog === null) {
+      return;
+    }
+
+    const { course, term } = this.state.createDialog;
+    return createGroup(course.code, data, currentUserId, term.year, term.term).then(res => {
+      this.closeCreateDialog();
+      return res;
+    });
+  };
+
+  openBindDialog = (course, term) => {
+    this.setState({
+      bindDialog: {
+        groups: filterGroupsForBinding(this.props.groups, course.groups),
+        course: course.course,
+        groupsCount: course.groups.length,
+        term,
+      },
+    });
+  };
+
+  closeBindDialog = () => {
+    this.setState({ bindDialog: null });
+  };
+
+  submitBindDialog = data => {
+    const { bindGroup, currentUserId } = this.props;
+    if (this.state.bindDialog === null) {
+      return;
+    }
+
+    const { course, term } = this.state.bindDialog;
+    return bindGroup(course.code, data, currentUserId, term.year, term.term).then(res => {
+      this.closeBindDialog();
+      return res;
+    });
+  };
+
   componentDidMount() {
     this.props.loadData(this.props.currentUserId);
   }
@@ -96,10 +135,7 @@ class SisSupervisorGroupsContainer extends Component {
     const {
       sisStatus,
       sisCourses,
-      groups,
       currentUserId,
-      createGroup,
-      bindGroup,
       unbindGroup,
       sisPossibleParents,
       groupsAccessor,
@@ -156,63 +192,23 @@ class SisSupervisorGroupsContainer extends Component {
                               {courses && Object.keys(courses).length > 0 ? (
                                 <Accordion>
                                   {Object.values(courses)
-                                    .sort((a, b) =>
-                                      getLocalizedData(a.course.captions, locale).localeCompare(
-                                        getLocalizedData(b.course.captions, locale),
-                                        locale
-                                      )
+                                    .sort(
+                                      (a, b) =>
+                                        getLocalizedData(a.course.captions, locale).localeCompare(
+                                          getLocalizedData(b.course.captions, locale),
+                                          locale
+                                        ) || a.course.code.localeCompare(b.course.code, locale)
                                     )
                                     .map((course, i) => (
                                       <Panel
                                         key={i}
                                         header={
                                           <div>
-                                            <table className="small full-width">
-                                              <tbody>
-                                                <tr>
-                                                  <td>
-                                                    <OverlayTrigger
-                                                      placement="bottom"
-                                                      overlay={
-                                                        <Tooltip id={`course-tooltip-${i}`}>
-                                                          {course.course.type === 'lecture' ? (
-                                                            <FormattedMessage
-                                                              id="app.sisSupervisor.lecture"
-                                                              defaultMessage="Lecture"
-                                                            />
-                                                          ) : (
-                                                            <FormattedMessage
-                                                              id="app.sisSupervisor.lab"
-                                                              defaultMessage="Lab (seminar)"
-                                                            />
-                                                          )}
-                                                        </Tooltip>
-                                                      }>
-                                                      {course.course.type === 'lecture' ? (
-                                                        <Icon icon="chalkboard-teacher" gapRight fixedWidth />
-                                                      ) : (
-                                                        <Icon icon="laptop" gapRight fixedWidth />
-                                                      )}
-                                                    </OverlayTrigger>
-                                                  </td>
-                                                  <td className="full-width">
-                                                    {getLocalizedData(course.course.captions, locale)} (
-                                                    <code>{course.course.code}</code>)
-                                                    {course.groups.length > 0 && <GroupIcon gapLeft />}
-                                                  </td>
-                                                  <td className="text-nowrap">
-                                                    {getLocalizedData(days, locale)[course.course.dayOfWeek]}{' '}
-                                                    {course.course.time}{' '}
-                                                    {course.course.fortnightly
-                                                      ? getLocalizedData(oddEven, locale)[
-                                                          course.course.oddWeeks ? 0 : 1
-                                                        ]
-                                                      : ''}
-                                                  </td>
-                                                  <td className="text-nowrap em-padding-left">{course.course.room}</td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
+                                            {course && (
+                                              <small>
+                                                <CourseLabel {...course.course} groupsCount={course.groups.length} />
+                                              </small>
+                                            )}
                                           </div>
                                         }
                                         eventKey={i}
@@ -255,10 +251,46 @@ class SisSupervisorGroupsContainer extends Component {
                                                   </td>
                                                   <td>
                                                     {getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
+                                                    {safeGet(group, ['privateData', 'bindings', 'sis'], []).length >
+                                                      1 && (
+                                                      <OverlayTrigger
+                                                        placement="right"
+                                                        overlay={
+                                                          <Popover
+                                                            id={`grp-pop-${group.id}`}
+                                                            title={
+                                                              <FormattedMessage
+                                                                id="app.sisSupervisor.multiGroupPopover.title"
+                                                                defaultMessage="The group has multiple bindings:"
+                                                              />
+                                                            }>
+                                                            <ul className="em-padding-left">
+                                                              {group.privateData.bindings.sis.sort().map(code => (
+                                                                <li key={code}>
+                                                                  <code>{code}</code>
+                                                                  {code === course.course.code && (
+                                                                    <Icon
+                                                                      icon={['far', 'star']}
+                                                                      className="text-muted"
+                                                                      gapLeft
+                                                                    />
+                                                                  )}
+                                                                </li>
+                                                              ))}
+                                                            </ul>
+                                                          </Popover>
+                                                        }>
+                                                        <Icon
+                                                          icon="people-carry"
+                                                          largeGapLeft
+                                                          className="text-warning"
+                                                        />
+                                                      </OverlayTrigger>
+                                                    )}
                                                   </td>
                                                   <td>
                                                     {group.primaryAdminsIds.map(id => (
-                                                      <UsersNameContainer key={id} userId={id} />
+                                                      <UsersNameContainer key={id} userId={id} isSimple />
                                                     ))}
                                                   </td>
                                                   <td className="text-right">
@@ -344,36 +376,39 @@ class SisSupervisorGroupsContainer extends Component {
                                             </p>
                                           </div>
                                         )}
+
                                         <Row>
-                                          <Col xs={6}>
+                                          <Col lg={12}>
+                                            <hr />
+
                                             <ResourceRenderer resource={sisPossibleParents.get(course.course.code)}>
                                               {possibleParents => (
-                                                <SisCreateGroupForm
-                                                  form={'sisCreateGroup' + course.course.code}
-                                                  onSubmit={data =>
-                                                    createGroup(
-                                                      course.course.code,
-                                                      data,
-                                                      currentUserId,
-                                                      term.year,
-                                                      term.term
-                                                    )
-                                                  }
-                                                  groups={possibleParents}
-                                                  groupsAccessor={groupsAccessor}
-                                                />
+                                                <div className="text-center">
+                                                  <Button
+                                                    bsStyle="success"
+                                                    className="em-margin-right"
+                                                    onClick={() =>
+                                                      this.openCreateDialog(possibleParents, course, term)
+                                                    }>
+                                                    <AddIcon gapRight />
+                                                    <FormattedMessage
+                                                      id="app.sisSupervisor.createGroupButton"
+                                                      defaultMessage="Create New Group"
+                                                    />
+                                                  </Button>
+
+                                                  <Button
+                                                    bsStyle="success"
+                                                    onClick={() => this.openBindDialog(course, term)}>
+                                                    <BindIcon gapRight />
+                                                    <FormattedMessage
+                                                      id="app.sisSupervisor.bindGroupButton"
+                                                      defaultMessage="Bind Existing Group"
+                                                    />
+                                                  </Button>
+                                                </div>
                                               )}
                                             </ResourceRenderer>
-                                          </Col>
-                                          <Col xs={6}>
-                                            <SisBindGroupForm
-                                              form={'sisBindGroup' + course.course.code}
-                                              onSubmit={data =>
-                                                bindGroup(course.course.code, data, currentUserId, term.year, term.term)
-                                              }
-                                              groups={filterGroupsForBinding(groups, course.groups)}
-                                              groupsAccessor={groupsAccessor}
-                                            />
                                           </Col>
                                         </Row>
                                       </Panel>
@@ -399,6 +434,26 @@ class SisSupervisorGroupsContainer extends Component {
               </div>
             )}
           </ResourceRenderer>
+
+          <SisCreateGroupForm
+            isOpen={this.state.createDialog !== null}
+            onClose={this.closeCreateDialog}
+            onSubmit={this.submitCreateDialog}
+            groups={this.state.createDialog && this.state.createDialog.possibleParents}
+            groupsAccessor={groupsAccessor}
+            course={this.state.createDialog && this.state.createDialog.course}
+            courseGroupsCount={this.state.createDialog && this.state.createDialog.groupsCount}
+          />
+
+          <SisBindGroupForm
+            isOpen={this.state.bindDialog !== null}
+            onClose={this.closeBindDialog}
+            onSubmit={this.submitBindDialog}
+            groups={this.state.bindDialog && this.state.bindDialog.groups}
+            groupsAccessor={groupsAccessor}
+            course={this.state.bindDialog && this.state.bindDialog.course}
+            courseGroupsCount={this.state.bindDialog && this.state.bindDialog.groupsCount}
+          />
         </div>
       </Box>
     );
@@ -417,7 +472,7 @@ SisSupervisorGroupsContainer.propTypes = {
   links: PropTypes.object,
   sisPossibleParents: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default injectIntl(

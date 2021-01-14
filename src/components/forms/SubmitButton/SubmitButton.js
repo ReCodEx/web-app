@@ -47,7 +47,7 @@ class SubmitButton extends Component {
   submit = () => {
     const { handleSubmit, onSubmit = null } = this.props;
     onSubmit && onSubmit();
-    return handleSubmit().then(() => {
+    return handleSubmit().then(res => {
       if (!this.unmounted) {
         this.setState({ saved: true });
         this.resetAfterSomeTime = setTimeout(this.reset, 2000);
@@ -55,6 +55,7 @@ class SubmitButton extends Component {
         const { reset } = this.props;
         reset && reset(); // the redux form must be still reset
       }
+      return res;
     });
   };
 

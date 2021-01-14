@@ -62,6 +62,7 @@ const AddSisTermForm = ({
       validateMax={2099}
       maxLength={4}
       label={<FormattedMessage id="app.addSisTermForm.year" defaultMessage="Year:" />}
+      ignoreDirty
     />
     <Field
       name="term"
@@ -72,6 +73,7 @@ const AddSisTermForm = ({
         { name: formatMessage(messages.summerTerm), key: 2 },
       ]}
       addEmptyOption
+      ignoreDirty
     />
   </FormBox>
 );

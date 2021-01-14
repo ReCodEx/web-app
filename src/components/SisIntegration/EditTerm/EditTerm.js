@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button } from 'react-bootstrap';
-import { CloseIcon } from '../../icons';
+import { Modal } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
+
 import DatetimeField from '../../forms/Fields/DatetimeField';
 import SubmitButton from '../../forms/SubmitButton';
+import Button from '../../widgets/FlatButton';
+import { CloseIcon } from '../../icons';
 
 const EditTerm = ({
   isOpen,
@@ -63,7 +65,7 @@ const EditTerm = ({
         }}
       />
 
-      <Button bsStyle="default" className="btn-flat" onClick={onClose}>
+      <Button bsStyle="default" onClick={onClose}>
         <CloseIcon gapRight />
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
