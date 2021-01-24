@@ -35,10 +35,10 @@ const reducer = handleActions(
     [actionTypes.FETCH_REJECTED]: (state, { meta: { userId, year, term } }) =>
       state.setIn(['resources', userId, `${year}-${term}`], createRecord({ state: resourceStatus.FAILED })),
 
-    [actionTypes.FETCH_FULFILLED]: (state, { payload, meta: { userId, year, term } }) =>
+    [actionTypes.FETCH_FULFILLED]: (state, { payload: { courses }, meta: { userId, year, term } }) =>
       state.setIn(
         ['resources', userId, `${year}-${term}`],
-        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(payload) })
+        createRecord({ state: resourceStatus.FULFILLED, data: fromJS(courses) })
       ),
   }),
   initialState

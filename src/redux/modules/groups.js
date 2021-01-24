@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -10,9 +10,10 @@ import { resourceStatus } from '../helpers/resourceManager/status';
 import { actionTypes as assignmentsActionTypes } from './assignments';
 import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes';
+import { actionTypes as sisSubscribedCoursesActionTypes } from './sisSubscribedGroups';
 import { selectedInstanceId } from '../selectors/auth';
 
-import { objectMap } from '../../helpers/common';
+import { objectMap, arrayToObject } from '../../helpers/common';
 
 const resourceName = 'groups';
 const { actions, actionTypes, reduceActions } = factory({ resourceName });
@@ -320,10 +321,7 @@ const reducer = handleActions(
 
     [assignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: assignmentId, groupId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'assignments'], assignments =>
-        assignments
-          .push(assignmentId)
-          .toSet()
-          .toList()
+        assignments.push(assignmentId).toSet().toList()
       ),
 
     [assignmentsActionTypes.ADD_FULFILLED]: (
@@ -336,10 +334,7 @@ const reducer = handleActions(
       }
     ) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'assignments'], assignments =>
-        assignments
-          .push(assignmentId)
-          .toSet()
-          .toList()
+        assignments.push(assignmentId).toSet().toList()
       ),
 
     [assignmentsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: assignmentId } }) =>
@@ -353,18 +348,12 @@ const reducer = handleActions(
 
     [shadowAssignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: shadowAssignmentId, groupId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'shadowAssignments'], assignments =>
-        assignments
-          .push(shadowAssignmentId)
-          .toSet()
-          .toList()
+        assignments.push(shadowAssignmentId).toSet().toList()
       ),
 
     [shadowAssignmentsActionTypes.ADD_FULFILLED]: (state, { payload: { id: shadowAssignmentId, groupId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'shadowAssignments'], assignments =>
-        assignments
-          .push(shadowAssignmentId)
-          .toSet()
-          .toList()
+        assignments.push(shadowAssignmentId).toSet().toList()
       ),
 
     [shadowAssignmentsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id: shadowAssignmentId } }) =>
@@ -385,6 +374,19 @@ const reducer = handleActions(
     [actionTypes.UNBIND_FULFILLED]: (state, { meta: { courseId, groupId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'bindings', 'sis'], bindings =>
         bindings.filter(binding => binding !== courseId)
+      ),
+
+    [sisSubscribedCoursesActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
+      state.update('resources', oldGroups =>
+        oldGroups.merge(
+          new Map(
+            arrayToObject(
+              groups,
+              o => o.id,
+              data => createRecord({ state: resourceStatus.FULFILLED, data })
+            )
+          )
+        )
       ),
   }),
   initialState

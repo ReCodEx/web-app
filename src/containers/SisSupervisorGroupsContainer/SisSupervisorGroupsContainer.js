@@ -4,10 +4,18 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Table, Accordion, Panel, Row, Col, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
-import { LinkContainer } from 'react-router-bootstrap';
+import UsersNameContainer from '../UsersNameContainer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
+import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
+import Confirm from '../../components/forms/Confirm';
+import CourseLabel, { getLocalizedData } from '../../components/SisIntegration/CourseLabel';
+import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
+import Icon, { AddIcon, BindIcon, EditIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
 
 import { fetchAllGroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
@@ -24,16 +32,7 @@ import { sisSupervisedCoursesSelector } from '../../redux/selectors/sisSupervise
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { groupDataAccessorSelector } from '../../redux/selectors/groups';
 
-import UsersNameContainer from '../UsersNameContainer';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
-import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
-import Confirm from '../../components/forms/Confirm';
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
-import CourseLabel, { getLocalizedData } from '../../components/SisIntegration/CourseLabel';
-import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
-
-import Icon, { AddIcon, BindIcon, EditIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
 import { unique, arrayToObject, hasPermissions, safeGet } from '../../helpers/common';
 
@@ -420,7 +419,7 @@ class SisSupervisorGroupsContainer extends Component {
                                     <b>
                                       <FormattedMessage
                                         id="app.sisIntegration.noSisGroups"
-                                        defaultMessage="Currently there are no ReCodEx groups matching your SIS subjects for this time period."
+                                        defaultMessage="Currently you have no courses in SIS for this semester."
                                       />
                                     </b>
                                   </p>
