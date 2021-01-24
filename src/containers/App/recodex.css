@@ -143,6 +143,19 @@ th.shrink-col {
   width: 100%;
 }
 
+.half-width {
+  width: 50%;
+}
+
+.third-width {
+  width: 33%;
+}
+
+.two-third-width {
+  width: 66%;
+}
+
+
 /*
  * Alignment
  */
