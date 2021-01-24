@@ -23,57 +23,45 @@ export const notArchivedGroupsSelector = state =>
 export const filterNonOrganizationalActiveGroups = groups =>
   groups.filter(group => !group.getIn(['data', 'organizational'], false) && !group.getIn(['data', 'archived'], false));
 
-export const groupSelector = createSelector(
-  [groupsSelector, getParam],
-  (groups, id) => groups.get(id)
-);
+export const groupSelector = createSelector([groupsSelector, getParam], (groups, id) => groups.get(id));
 
-export const groupSelectorCreator = id =>
-  createSelector(
-    groupsSelector,
-    groups => groups.get(id)
-  );
+export const groupSelectorCreator = id => createSelector(groupsSelector, groups => groups.get(id));
 
 // This is perhaps the best way how to create simple accessor (selector with parameter).
-export const groupDataAccessorSelector = createSelector(
-  groupsSelector,
-  groups => groupId => groups.getIn([groupId, 'data'], EMPTY_MAP)
+export const groupAccessorSelector = createSelector(groupsSelector, groups => groupId => groups.get(groupId));
+
+// This is perhaps the best way how to create simple accessor (selector with parameter).
+export const groupDataAccessorSelector = createSelector(groupsSelector, groups => groupId =>
+  groups.getIn([groupId, 'data'], EMPTY_MAP)
 );
 
 export const studentOfSelector = userId =>
-  createSelector(
-    groupsSelector,
-    groups =>
-      groups
-        .filter(isReady)
-        .map(getJsData)
-        .filter(group => group.privateData && group.privateData.students.indexOf(userId) >= 0)
+  createSelector(groupsSelector, groups =>
+    groups
+      .filter(isReady)
+      .map(getJsData)
+      .filter(group => group.privateData && group.privateData.students.indexOf(userId) >= 0)
   );
 
 export const supervisorOfSelector = userId =>
-  createSelector(
-    groupsSelector,
-    groups =>
-      groups
-        .filter(isReady)
-        .map(getJsData)
-        .filter(group => group.privateData && group.privateData.supervisors.indexOf(userId) >= 0)
+  createSelector(groupsSelector, groups =>
+    groups
+      .filter(isReady)
+      .map(getJsData)
+      .filter(group => group.privateData && group.privateData.supervisors.indexOf(userId) >= 0)
   );
 
 export const adminOfSelector = userId =>
-  createSelector(
-    groupsSelector,
-    groups =>
-      groups
-        .filter(isReady)
-        .map(getJsData)
-        .filter(group => group.privateData && group.privateData.admins.indexOf(userId) >= 0)
+  createSelector(groupsSelector, groups =>
+    groups
+      .filter(isReady)
+      .map(getJsData)
+      .filter(group => group.privateData && group.privateData.admins.indexOf(userId) >= 0)
   );
 
 const usersOfGroup = (type, groupId) =>
-  createSelector(
-    groupSelectorCreator(groupId),
-    group => (group && isReady(group) ? group.getIn(['data', 'privateData', type], EMPTY_LIST) : EMPTY_LIST)
+  createSelector(groupSelectorCreator(groupId), group =>
+    group && isReady(group) ? group.getIn(['data', 'privateData', type], EMPTY_LIST) : EMPTY_LIST
   );
 
 export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
@@ -108,33 +96,19 @@ const getGroupParentIds = (id, groups) => {
   }
 };
 
-export const allParentIdsForGroup = id =>
-  createSelector(
-    groupsSelector,
-    groups => getGroupParentIds(id, groups)
-  );
+export const allParentIdsForGroup = id => createSelector(groupsSelector, groups => getGroupParentIds(id, groups));
 
-export const canViewParentDetailSelector = createSelector(
-  [groupsSelector, getParam],
-  (groups, id) => {
-    const parentId = groups.getIn([id, 'data', 'parentGroupId']);
-    return Boolean(parentId && groups.getIn([parentId, 'data', 'permissionHints', 'viewDetail']));
-  }
-);
+export const canViewParentDetailSelector = createSelector([groupsSelector, getParam], (groups, id) => {
+  const parentId = groups.getIn([id, 'data', 'parentGroupId']);
+  return Boolean(parentId && groups.getIn([parentId, 'data', 'permissionHints', 'viewDetail']));
+});
 
 export const groupOrganizationalPendingChange = id =>
-  createSelector(
-    groupsSelector,
-    groups => groups && groups.getIn([id, 'pending-organizational'], false)
-  );
+  createSelector(groupsSelector, groups => groups && groups.getIn([id, 'pending-organizational'], false));
 
 export const groupArchivedPendingChange = id =>
-  createSelector(
-    groupsSelector,
-    groups => groups && groups.getIn([id, 'pending-archived'], false)
-  );
+  createSelector(groupsSelector, groups => groups && groups.getIn([id, 'pending-archived'], false));
 
-export const fetchManyGroupsStatus = createSelector(
-  getGroups,
-  state => state.getIn(['fetchManyStatus', fetchAllGroupsEndpoint])
+export const fetchManyGroupsStatus = createSelector(getGroups, state =>
+  state.getIn(['fetchManyStatus', fetchAllGroupsEndpoint])
 );
