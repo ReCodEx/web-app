@@ -1,11 +1,13 @@
 import { handleActions } from 'redux-actions';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 
 const resourceName = 'sisPossibleParents';
-const { actions, reduceActions } = factory({
+const { actionTypes, actions, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: courseId => `/extensions/sis/remote-courses/${courseId}/possible-parents`,
 });
+
+export { actionTypes };
 
 /**
  * Actions & reducer
@@ -13,6 +15,15 @@ const { actions, reduceActions } = factory({
 
 export const fetchSisPossibleParentsIfNeeded = actions.fetchOneIfNeeded;
 
-const reducer = handleActions(Object.assign({}, reduceActions, {}), initialState);
+const reducer = handleActions(
+  Object.assign({}, reduceActions, {
+    [actionTypes.FETCH_FULFILLED]: (state, { payload, meta: { id } }) =>
+      state.setIn(
+        ['resources', id],
+        createRecord({ state: resourceStatus.FULFILLED, data: payload.map(group => group.id) })
+      ),
+  }),
+  initialState
+);
 
 export default reducer;

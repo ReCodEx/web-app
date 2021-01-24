@@ -49,21 +49,19 @@ export const sisUnbindGroup = (courseId, groupId, userId, year, term) =>
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [actionTypes.CREATE_FULFILLED]: (state, { meta: { userId, courseId, year, term }, payload }) =>
+    [actionTypes.CREATE_FULFILLED]: (state, { meta: { userId, courseId, year, term }, payload: { id: groupId } }) =>
       state.updateIn(['resources', userId, `${year}-${term}`, 'data', courseId, 'groups'], groups =>
-        groups.push(fromJS(payload))
+        groups.push(groupId)
       ),
 
-    [actionTypes.BIND_FULFILLED]: (state, { meta: { courseId, userId, year, term }, payload }) =>
+    [actionTypes.BIND_FULFILLED]: (state, { meta: { courseId, userId, year, term }, payload: { id: groupId } }) =>
       state.updateIn(['resources', userId, `${year}-${term}`, 'data', courseId, 'groups'], groups =>
-        groups.push(fromJS(payload))
+        groups.push(groupId)
       ),
 
     [actionTypes.UNBIND_FULFILLED]: (state, { meta: { courseId, groupId, userId } }) =>
       state.updateIn(['resources', userId], terms =>
-        terms.map(term =>
-          term.updateIn(['data', courseId, 'groups'], groups => groups.filter(group => group.get('id') !== groupId))
-        )
+        terms.map(term => term.updateIn(['data', courseId, 'groups'], groups => groups.filter(g => g !== groupId)))
       ),
 
     [actionTypes.FETCH_PENDING]: (state, { meta: { userId, year, term } }) =>
@@ -72,13 +70,13 @@ const reducer = handleActions(
     [actionTypes.FETCH_REJECTED]: (state, { meta: { userId, year, term } }) =>
       state.setIn(['resources', userId, `${year}-${term}`], createRecord({ state: resourceStatus.FAILED })),
 
-    [actionTypes.FETCH_FULFILLED]: (state, { payload, meta: { userId, year, term } }) =>
+    [actionTypes.FETCH_FULFILLED]: (state, { payload: { courses }, meta: { userId, year, term } }) =>
       state.setIn(
         ['resources', userId, `${year}-${term}`],
         createRecord({
           state: resourceStatus.FULFILLED,
           data: fromJS(
-            payload.reduce((map, p) => {
+            courses.reduce((map, p) => {
               map[p.course.code] = p;
               return map;
             }, {})
@@ -91,9 +89,7 @@ const reducer = handleActions(
         users.map(userTerms =>
           userTerms.map(term =>
             term.update('data', courses =>
-              courses.map(course =>
-                course.update('groups', groups => groups.filter(group => group.get('id') !== groupId))
-              )
+              courses.map(course => course.update('groups', groups => groups.filter(g => g !== groupId)))
             )
           )
         )

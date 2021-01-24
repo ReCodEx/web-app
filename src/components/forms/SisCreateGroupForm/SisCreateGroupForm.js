@@ -23,7 +23,7 @@ class SisCreateGroupForm extends Component {
       submitting,
       submitSucceeded,
       warning,
-      groups,
+      groupIds,
       groupsAccessor,
       course,
       courseGroupsCount,
@@ -57,10 +57,10 @@ class SisCreateGroupForm extends Component {
             required
             component={SelectField}
             label={<FormattedMessage id="app.sisCreateGroupForm.parentGroup" defaultMessage="Parent group:" />}
-            options={(groups || [])
-              .map(group => ({
-                key: group.id,
-                name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
+            options={(groupIds || [])
+              .map(groupId => ({
+                key: groupId,
+                name: getGroupCanonicalLocalizedName(groupId, groupsAccessor, locale),
               }))
               .sort((a, b) => a.name.localeCompare(b.name, locale))}
             addEmptyOption
@@ -121,7 +121,7 @@ SisCreateGroupForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitFailed: PropTypes.bool,
   warning: PropTypes.object,
-  groups: PropTypes.array,
+  groupIds: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,
   course: PropTypes.object,
   courseGroupsCount: PropTypes.number,

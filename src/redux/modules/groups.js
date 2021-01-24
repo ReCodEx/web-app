@@ -11,6 +11,7 @@ import { actionTypes as assignmentsActionTypes } from './assignments';
 import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes';
 import { actionTypes as sisSubscribedCoursesActionTypes } from './sisSubscribedGroups';
+import { actionTypes as sisPossibleParentsActionTypes } from './sisPossibleParents';
 import { selectedInstanceId } from '../selectors/auth';
 
 import { objectMap, arrayToObject } from '../../helpers/common';
@@ -371,12 +372,38 @@ const reducer = handleActions(
     [sisSupervisedCoursesActionTypes.BIND_FULFILLED]: (state, { payload: data }) =>
       state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
 
-    [actionTypes.UNBIND_FULFILLED]: (state, { meta: { courseId, groupId } }) =>
+    [sisSupervisedCoursesActionTypes.UNBIND_FULFILLED]: (state, { meta: { courseId, groupId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'bindings', 'sis'], bindings =>
         bindings.filter(binding => binding !== courseId)
       ),
 
+    [sisSupervisedCoursesActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
+      state.update('resources', oldGroups =>
+        oldGroups.merge(
+          new Map(
+            arrayToObject(
+              groups,
+              o => o.id,
+              data => createRecord({ state: resourceStatus.FULFILLED, data })
+            )
+          )
+        )
+      ),
+
     [sisSubscribedCoursesActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
+      state.update('resources', oldGroups =>
+        oldGroups.merge(
+          new Map(
+            arrayToObject(
+              groups,
+              o => o.id,
+              data => createRecord({ state: resourceStatus.FULFILLED, data })
+            )
+          )
+        )
+      ),
+
+    [sisPossibleParentsActionTypes.FETCH_FULFILLED]: (state, { payload: groups }) =>
       state.update('resources', oldGroups =>
         oldGroups.merge(
           new Map(

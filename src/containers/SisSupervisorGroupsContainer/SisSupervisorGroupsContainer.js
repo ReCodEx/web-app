@@ -15,7 +15,7 @@ import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 import Confirm from '../../components/forms/Confirm';
 import CourseLabel, { getLocalizedData } from '../../components/SisIntegration/CourseLabel';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
-import Icon, { AddIcon, BindIcon, EditIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
+import Icon, { AddIcon, BindIcon, EditIcon, GroupIcon, AssignmentsIcon, LoadingIcon } from '../../components/icons';
 
 import { fetchAllGroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
@@ -30,7 +30,7 @@ import { sisPossibleParentsSelector } from '../../redux/selectors/sisPossiblePar
 import { sisStateSelector } from '../../redux/selectors/sisStatus';
 import { sisSupervisedCoursesSelector } from '../../redux/selectors/sisSupervisedCourses';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupDataAccessorSelector } from '../../redux/selectors/groups';
+import { groupAccessorSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
 
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
@@ -42,7 +42,7 @@ const filterGroupsForBinding = (groups, alreadyBoundGroups) => {
 };
 
 class SisSupervisorGroupsContainer extends Component {
-  state = { createDialog: null, bindDialog: null };
+  state = { createDialog: null, bindDialog: null, pendingUnbinds: {} };
 
   openCreateDialog = (possibleParents, course, term) => {
     this.setState({
@@ -100,6 +100,19 @@ class SisSupervisorGroupsContainer extends Component {
     });
   };
 
+  isUnbindPending = (courseId, groupId) => {
+    const key = `${courseId}:${groupId}`;
+    return Boolean(this.state.pendingUnbinds[key]);
+  };
+
+  unbindGroup = (courseId, groupId, userId, year, term) => {
+    const key = `${courseId}:${groupId}`;
+    this.setState({ pendingUnbinds: { ...this.state.pendingUnbinds, [key]: true } });
+    this.props.unbindGroup(courseId, groupId, userId, year, term).finally(() => {
+      this.setState({ pendingUnbinds: { ...this.state.pendingUnbinds, [key]: false } });
+    });
+  };
+
   componentDidMount() {
     this.props.loadData(this.props.currentUserId);
   }
@@ -115,7 +128,7 @@ class SisSupervisorGroupsContainer extends Component {
             .map(({ year, term }) =>
               dispatch(fetchSisSupervisedCourses(loggedInUserId, year, term))
                 .then(res => res.value)
-                .then(courses =>
+                .then(({ courses }) =>
                   courses.map(course =>
                     dispatch(fetchSisPossibleParentsIfNeeded(course.course.code))
                       .then(res => res.value)
@@ -135,9 +148,9 @@ class SisSupervisorGroupsContainer extends Component {
       sisStatus,
       sisCourses,
       currentUserId,
-      unbindGroup,
       sisPossibleParents,
       groupsAccessor,
+      groupsResourcesAccessor,
       links: { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
       intl: { locale },
     } = this.props;
@@ -213,7 +226,7 @@ class SisSupervisorGroupsContainer extends Component {
                                         eventKey={i}
                                         bsStyle={course.course.type === 'lecture' ? 'info' : 'success'}>
                                         {course.groups.length > 0 ? (
-                                          <Table hover>
+                                          <Table hover className="no-margin">
                                             <thead>
                                               <tr>
                                                 <th className="shrink-col" />
@@ -230,136 +243,169 @@ class SisSupervisorGroupsContainer extends Component {
                                               </tr>
                                             </thead>
                                             <tbody>
-                                              {course.groups.map((group, i) => (
-                                                <tr key={i}>
-                                                  <td className="shrink-col">
-                                                    {group.organizational && (
-                                                      <OverlayTrigger
-                                                        placement="bottom"
-                                                        overlay={
-                                                          <Tooltip id={`hint:${course.course.code}:${group.id}`}>
-                                                            <FormattedMessage
-                                                              id="app.sisSupervisor.organizationalGroupWarning"
-                                                              defaultMessage="Students cannot join organizational groups."
-                                                            />
-                                                          </Tooltip>
-                                                        }>
-                                                        <GroupIcon organizational gapRight />
-                                                      </OverlayTrigger>
-                                                    )}
-                                                  </td>
-                                                  <td>
-                                                    {getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
-                                                    {safeGet(group, ['privateData', 'bindings', 'sis'], []).length >
-                                                      1 && (
-                                                      <OverlayTrigger
-                                                        placement="right"
-                                                        overlay={
-                                                          <Popover
-                                                            id={`grp-pop-${group.id}`}
-                                                            title={
-                                                              <FormattedMessage
-                                                                id="app.sisSupervisor.multiGroupPopover.title"
-                                                                defaultMessage="The group has multiple bindings:"
-                                                              />
-                                                            }>
-                                                            <ul className="em-padding-left">
-                                                              {group.privateData.bindings.sis.sort().map(code => (
-                                                                <li key={code}>
-                                                                  <code>{code}</code>
-                                                                  {code === course.course.code && (
-                                                                    <Icon
-                                                                      icon={['far', 'star']}
-                                                                      className="text-muted"
-                                                                      gapLeft
+                                              {course.groups.map(groupId => (
+                                                <ResourceRenderer
+                                                  key={groupId}
+                                                  resource={groupsResourcesAccessor(groupId)}
+                                                  loading={
+                                                    <tr>
+                                                      <td colSpan="4">
+                                                        <LoadingIcon />
+                                                      </td>
+                                                    </tr>
+                                                  }>
+                                                  {group =>
+                                                    group ? (
+                                                      <tr>
+                                                        <td className="shrink-col">
+                                                          {group.organizational && (
+                                                            <OverlayTrigger
+                                                              placement="bottom"
+                                                              overlay={
+                                                                <Tooltip id={`hint:${course.course.code}:${group.id}`}>
+                                                                  <FormattedMessage
+                                                                    id="app.sisSupervisor.organizationalGroupWarning"
+                                                                    defaultMessage="Students cannot join organizational groups."
+                                                                  />
+                                                                </Tooltip>
+                                                              }>
+                                                              <GroupIcon organizational gapRight />
+                                                            </OverlayTrigger>
+                                                          )}
+                                                        </td>
+                                                        <td>
+                                                          {getGroupCanonicalLocalizedName(
+                                                            group,
+                                                            groupsAccessor,
+                                                            locale
+                                                          )}
+                                                          {safeGet(group, ['privateData', 'bindings', 'sis'], [])
+                                                            .length > 1 && (
+                                                            <OverlayTrigger
+                                                              placement="right"
+                                                              overlay={
+                                                                <Popover
+                                                                  id={`grp-pop-${group.id}`}
+                                                                  title={
+                                                                    <FormattedMessage
+                                                                      id="app.sisSupervisor.multiGroupPopover.title"
+                                                                      defaultMessage="The group has multiple bindings:"
                                                                     />
-                                                                  )}
-                                                                </li>
-                                                              ))}
-                                                            </ul>
-                                                          </Popover>
-                                                        }>
-                                                        <Icon
-                                                          icon="people-carry"
-                                                          largeGapLeft
-                                                          className="text-warning"
-                                                        />
-                                                      </OverlayTrigger>
-                                                    )}
-                                                  </td>
-                                                  <td>
-                                                    {group.primaryAdminsIds.map(id => (
-                                                      <UsersNameContainer key={id} userId={id} isSimple />
-                                                    ))}
-                                                  </td>
-                                                  <td className="text-right">
-                                                    {hasPermissions(group, 'update') && (
-                                                      <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
-                                                        <Button bsStyle="warning" bsSize="xs">
-                                                          <EditIcon gapRight />
-                                                          <FormattedMessage
-                                                            id="app.editGroup.title"
-                                                            defaultMessage="Edit Group"
-                                                          />
-                                                        </Button>
-                                                      </LinkContainer>
-                                                    )}
+                                                                  }>
+                                                                  <ul className="em-padding-left">
+                                                                    {group.privateData.bindings.sis.sort().map(code => (
+                                                                      <li key={code}>
+                                                                        <code>{code}</code>
+                                                                        {code === course.course.code && (
+                                                                          <Icon
+                                                                            icon={['far', 'star']}
+                                                                            className="text-muted"
+                                                                            gapLeft
+                                                                          />
+                                                                        )}
+                                                                      </li>
+                                                                    ))}
+                                                                  </ul>
+                                                                </Popover>
+                                                              }>
+                                                              <Icon
+                                                                icon="people-carry"
+                                                                largeGapLeft
+                                                                className="text-warning"
+                                                              />
+                                                            </OverlayTrigger>
+                                                          )}
+                                                        </td>
+                                                        <td>
+                                                          {group.primaryAdminsIds.map(id => (
+                                                            <UsersNameContainer key={id} userId={id} isSimple />
+                                                          ))}
+                                                        </td>
+                                                        <td className="text-right">
+                                                          {hasPermissions(group, 'update') && (
+                                                            <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
+                                                              <Button bsStyle="warning" bsSize="xs">
+                                                                <EditIcon gapRight />
+                                                                <FormattedMessage
+                                                                  id="app.editGroup.title"
+                                                                  defaultMessage="Edit Group"
+                                                                />
+                                                              </Button>
+                                                            </LinkContainer>
+                                                          )}
 
-                                                    <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                                      <Button bsStyle="primary" bsSize="xs">
-                                                        <GroupIcon gapRight />
-                                                        <FormattedMessage
-                                                          id="app.group.info"
-                                                          defaultMessage="Group Info"
-                                                        />
-                                                      </Button>
-                                                    </LinkContainer>
+                                                          <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
+                                                            <Button bsStyle="primary" bsSize="xs">
+                                                              <GroupIcon gapRight />
+                                                              <FormattedMessage
+                                                                id="app.group.info"
+                                                                defaultMessage="Group Info"
+                                                              />
+                                                            </Button>
+                                                          </LinkContainer>
 
-                                                    {hasPermissions(group, 'viewDetail') && (
-                                                      <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                                        <Button bsStyle="primary" bsSize="xs">
-                                                          <AssignmentsIcon gapRight />
-                                                          <FormattedMessage
-                                                            id="app.group.assignments"
-                                                            defaultMessage="Assignments"
-                                                          />
-                                                        </Button>
-                                                      </LinkContainer>
-                                                    )}
+                                                          {hasPermissions(group, 'viewDetail') && (
+                                                            <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                                              <Button bsStyle="primary" bsSize="xs">
+                                                                <AssignmentsIcon gapRight />
+                                                                <FormattedMessage
+                                                                  id="app.group.assignments"
+                                                                  defaultMessage="Assignments"
+                                                                />
+                                                              </Button>
+                                                            </LinkContainer>
+                                                          )}
 
-                                                    <Confirm
-                                                      id={`${course.course.code}:${group.id}`}
-                                                      onConfirmed={() =>
-                                                        unbindGroup(
-                                                          course.course.code,
-                                                          group.id,
-                                                          currentUserId,
-                                                          term.year,
-                                                          term.term
-                                                        )
-                                                      }
-                                                      question={
-                                                        <FormattedMessage
-                                                          id="app.group.unbind.confirmQuestion"
-                                                          defaultMessage="Do you really wish to unbind the group? The group will linger on, but it will be detached from the SIS so the students will not see it."
-                                                        />
-                                                      }>
-                                                      <Button bsStyle="danger" bsSize="xs">
-                                                        <Icon icon={['far', 'hand-scissors']} gapRight />
-                                                        <FormattedMessage
-                                                          id="app.group.unbind"
-                                                          defaultMessage="Unbind"
-                                                        />
-                                                      </Button>
-                                                    </Confirm>
+                                                          <Confirm
+                                                            id={`${course.course.code}:${group.id}`}
+                                                            onConfirmed={() =>
+                                                              this.unbindGroup(
+                                                                course.course.code,
+                                                                group.id,
+                                                                currentUserId,
+                                                                term.year,
+                                                                term.term
+                                                              )
+                                                            }
+                                                            question={
+                                                              <FormattedMessage
+                                                                id="app.group.unbind.confirmQuestion"
+                                                                defaultMessage="Do you really wish to unbind the group? The group will linger on, but it will be detached from the SIS so the students will not see it."
+                                                              />
+                                                            }
+                                                            disabled={this.isUnbindPending(
+                                                              course.course.code,
+                                                              group.id
+                                                            )}>
+                                                            <Button
+                                                              bsStyle="danger"
+                                                              bsSize="xs"
+                                                              disabled={this.isUnbindPending(
+                                                                course.course.code,
+                                                                group.id
+                                                              )}>
+                                                              {this.isUnbindPending(course.course.code, group.id) ? (
+                                                                <LoadingIcon gapRight />
+                                                              ) : (
+                                                                <Icon icon={['far', 'hand-scissors']} gapRight />
+                                                              )}
+                                                              <FormattedMessage
+                                                                id="app.group.unbind"
+                                                                defaultMessage="Unbind"
+                                                              />
+                                                            </Button>
+                                                          </Confirm>
 
-                                                    {hasPermissions(group, 'remove') &&
-                                                      group.parentGroupId !== null &&
-                                                      group.childGroups.length === 0 && (
-                                                        <DeleteGroupButtonContainer id={group.id} bsSize="xs" />
-                                                      )}
-                                                  </td>
-                                                </tr>
+                                                          {hasPermissions(group, 'remove') &&
+                                                            group.parentGroupId !== null &&
+                                                            group.childGroups.length === 0 && (
+                                                              <DeleteGroupButtonContainer id={group.id} bsSize="xs" />
+                                                            )}
+                                                        </td>
+                                                      </tr>
+                                                    ) : null
+                                                  }
+                                                </ResourceRenderer>
                                               ))}
                                             </tbody>
                                           </Table>
@@ -438,7 +484,7 @@ class SisSupervisorGroupsContainer extends Component {
             isOpen={this.state.createDialog !== null}
             onClose={this.closeCreateDialog}
             onSubmit={this.submitCreateDialog}
-            groups={this.state.createDialog && this.state.createDialog.possibleParents}
+            groupIds={this.state.createDialog && this.state.createDialog.possibleParents}
             groupsAccessor={groupsAccessor}
             course={this.state.createDialog && this.state.createDialog.course}
             courseGroupsCount={this.state.createDialog && this.state.createDialog.groupsCount}
@@ -471,6 +517,7 @@ SisSupervisorGroupsContainer.propTypes = {
   links: PropTypes.object,
   sisPossibleParents: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
+  groupsResourcesAccessor: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 
@@ -485,6 +532,7 @@ export default injectIntl(
           sisCourses: sisSupervisedCoursesSelector(state),
           sisPossibleParents: sisPossibleParentsSelector(state),
           groupsAccessor: groupDataAccessorSelector(state),
+          groupsResourcesAccessor: groupAccessorSelector(state),
         };
       },
       dispatch => ({

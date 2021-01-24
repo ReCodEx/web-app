@@ -26,7 +26,7 @@ export const getLocalizedData = (obj, locale) => {
 };
 
 const MAIN_STYLE = { display: 'inline-block', width: '100%' };
-const SCHEDULING_STYLE = { display: 'inline-block', minWidth: '7.5em', wordSpacing: '0.25em' };
+const SCHEDULING_STYLE = { display: 'inline-block', minWidth: '10em', wordSpacing: '0.25em' };
 
 const CourseLabel = ({
   type,
@@ -61,9 +61,8 @@ const CourseLabel = ({
     {dayOfWeek !== null || time !== null || room !== null ? (
       <span className="text-nowrap" style={SCHEDULING_STYLE}>
         <strong>
-          {getLocalizedData(days, locale)[dayOfWeek]} {time}{' '}
-          {fortnightly ? getLocalizedData(oddEven, locale)[oddWeeks ? 0 : 1] : ''}
-          {room}
+          {getLocalizedData(days, locale)[dayOfWeek]} {time}
+          {fortnightly ? <small> ({getLocalizedData(oddEven, locale)[oddWeeks ? 0 : 1]})</small> : ''} {room}
         </strong>
       </span>
     ) : (
