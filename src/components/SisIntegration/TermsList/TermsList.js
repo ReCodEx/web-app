@@ -8,6 +8,7 @@ const TermsList = ({ terms = [], createActions, intl, ...rest }) => (
   <Table hover striped>
     <thead>
       <tr>
+        <th className="shrink-col" />
         <th>
           <FormattedMessage id="app.termsList.year" defaultMessage="Year" />
         </th>

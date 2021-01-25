@@ -31,16 +31,19 @@ const EditTerm = ({
       <Field
         name="beginning"
         component={DatetimeField}
+        onlyDate
         label={<FormattedMessage id="app.editSisTerm.beginning" defaultMessage="Beginning of the term:" />}
       />
       <Field
         name="end"
         component={DatetimeField}
+        onlyDate
         label={<FormattedMessage id="app.editSisTerm.end" defaultMessage="End of the term:" />}
       />
       <Field
         name="advertiseUntil"
         component={DatetimeField}
+        onlyDate
         label={
           <FormattedMessage
             id="app.editSisTerm.advertiseUntil"
