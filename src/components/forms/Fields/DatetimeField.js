@@ -32,6 +32,7 @@ class DatetimeField extends Component {
       input,
       meta: { active, dirty, error, warning },
       disabled,
+      onlyDate = false,
       label = null,
       ignoreDirty = false,
       ...props
@@ -46,7 +47,7 @@ class DatetimeField extends Component {
           {...input}
           {...props}
           locale={lang}
-          timeFormat="H:mm"
+          timeFormat={onlyDate ? false : 'H:mm'}
           onFocus={() => this.onFocus()}
           inputProps={{ disabled }}
           bsClass={classnames({
@@ -83,6 +84,7 @@ DatetimeField.propTypes = {
   }).isRequired,
   disabled: PropTypes.bool,
   ignoreDirty: PropTypes.bool,
+  onlyDate: PropTypes.bool,
 };
 
 export default withLinks(DatetimeField);

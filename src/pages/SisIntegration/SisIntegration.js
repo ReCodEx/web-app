@@ -13,7 +13,7 @@ import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsCo
 import AddSisTermForm from '../../components/forms/AddSisTermForm/AddSisTermForm';
 import TermsList from '../../components/SisIntegration/TermsList/TermsList';
 import Confirm from '../../components/forms/Confirm';
-import { EditIcon, DeleteIcon, UserIcon } from '../../components/icons';
+import Icon, { ArchiveGroupIcon, EditIcon, DeleteIcon, UserIcon } from '../../components/icons';
 import EditTerm from '../../components/SisIntegration/EditTerm';
 import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -34,7 +34,22 @@ const ADD_SIS_TERM_INITIAL_VALUES = {
 };
 
 class SisIntegration extends Component {
-  state = { openEdit: null };
+  state = { openEdit: null, editInitialValues: null, openArchive: null, openPlanting: null };
+
+  openEditDialog = (openEdit, data) => {
+    const editInitialValues = {
+      beginning: data.beginning * 1000,
+      end: data.end * 1000,
+      advertiseUntil: data.advertiseUntil * 1000,
+    };
+    this.setState({ openEdit, editInitialValues });
+  };
+
+  closeEditDialog = () => {
+    this.setState({ openEdit: null, editInitialValues: null });
+  };
+
+  submitEditDialog = data => this.props.editTerm(this.state.openEdit, data).then(this.closeEditDialog);
 
   static loadAsync = (params, dispatch) => dispatch(fetchAllTerms());
 
@@ -58,7 +73,6 @@ class SisIntegration extends Component {
       allGroups,
       createNewTerm,
       deleteTerm,
-      editTerm,
       sisTerms,
     } = this.props;
 
@@ -125,7 +139,23 @@ class SisIntegration extends Component {
                             terms={sisTerms}
                             createActions={(id, data) => (
                               <div>
-                                <Button bsSize="xs" bsStyle="warning" onClick={() => this.setState({ openEdit: id })}>
+                                {Date.now() <= data.advertiseUntil * 1000 && (
+                                  <Button
+                                    bsSize="xs"
+                                    bsStyle="success"
+                                    onClick={() => this.setState({ openPlanting: id })}>
+                                    <Icon icon="seedling" gapRight />
+                                    <FormattedMessage id="app.sisIntegration.plantButton" defaultMessage="Plant" />
+                                  </Button>
+                                )}
+                                <Button
+                                  bsSize="xs"
+                                  bsStyle="primary"
+                                  onClick={() => this.setState({ openArchive: id })}>
+                                  <ArchiveGroupIcon gapRight />
+                                  <FormattedMessage id="app.archiveGroupButton.setShort" defaultMessage="Archive" />
+                                </Button>
+                                <Button bsSize="xs" bsStyle="warning" onClick={() => this.openEditDialog(id, data)}>
                                   <EditIcon gapRight />
                                   <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                                 </Button>
@@ -143,19 +173,6 @@ class SisIntegration extends Component {
                                     <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                                   </Button>
                                 </Confirm>
-                                <EditTerm
-                                  form={id}
-                                  isOpen={this.state.openEdit === id}
-                                  onClose={() => this.setState({ openEdit: null })}
-                                  onSubmit={data =>
-                                    editTerm(this.state.openEdit, data).then(() => this.setState({ openEdit: null }))
-                                  }
-                                  initialValues={{
-                                    beginning: data.beginning * 1000,
-                                    end: data.end * 1000,
-                                    advertiseUntil: data.advertiseUntil * 1000,
-                                  }}
-                                />
                               </div>
                             )}
                           />
@@ -168,6 +185,13 @@ class SisIntegration extends Component {
                   </Col>
                 </Row>
               )}
+
+              <EditTerm
+                isOpen={this.state.openEdit !== null}
+                onClose={this.closeEditDialog}
+                onSubmit={this.submitEditDialog}
+                initialValues={this.state.editInitialValues}
+              />
             </React.Fragment>
           ) : (
             <div className="callout callout-warning">
