@@ -366,3 +366,27 @@ table.table tbody:first-child tr:first-child th {
 }
 
 /******************************************************************************/
+
+/*
+ * Standalone checkbox
+ */
+
+.simple-checkbox-container {
+  margin: 0;
+  padding: 0;
+}
+
+.simple-checkbox-container label {
+  margin: 0;
+  padding: 0 0.2em;
+}
+
+.simple-checkbox-container input[type="checkbox"] {
+  display: none;
+}
+
+.simple-checkbox-container .checkmark {
+  font-size: 125%;
+  position: relative;
+  top: -0.1em;
+}

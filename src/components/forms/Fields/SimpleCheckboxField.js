@@ -1,28 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-
 import { FormGroup, Checkbox, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Icon, { WarningIcon } from '../../icons';
 
-import OnOffCheckbox from '../OnOffCheckbox';
-import { WarningIcon } from '../../icons';
-
-const CheckboxField = ({
-  input,
-  onOff = false,
-  meta: { dirty, error, warning },
-  ignoreDirty = false,
-  label,
-  ...props
-}) => {
-  const Component = onOff ? OnOffCheckbox : Checkbox;
-  /* eslint-disable no-unneeded-ternary */
+const SimpleCheckboxField = ({ input, meta: { dirty, error, warning }, ignoreDirty = false, ...props }) => {
   return (
     <FormGroup
       validationState={error ? 'error' : warning ? 'warning' : dirty && !ignoreDirty ? 'success' : undefined}
-      controlId={input.name}>
-      <Component {...props} {...input} checked={Boolean(input.value)}>
-        {label}
+      controlId={input.name}
+      className="no-margin">
+      <Checkbox {...props} {...input} checked={Boolean(input.value)} className="simple-checkbox-container">
+        <span className="checkmark">
+          {input.value ? <Icon icon={['far', 'check-square']} /> : <Icon icon={['far', 'square']} />}
+        </span>
+
         {Boolean(error || warning) && (
           <OverlayTrigger
             placement="bottom"
@@ -34,12 +25,12 @@ const CheckboxField = ({
             <WarningIcon gapLeft className={error ? 'text-danger' : 'text-warning'} />
           </OverlayTrigger>
         )}
-      </Component>
+      </Checkbox>
     </FormGroup>
   );
 };
 
-CheckboxField.propTypes = {
+SimpleCheckboxField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
@@ -50,13 +41,7 @@ CheckboxField.propTypes = {
     warning: PropTypes.any,
   }).isRequired,
   type: PropTypes.string,
-  onOff: PropTypes.bool,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]).isRequired,
   ignoreDirty: PropTypes.bool,
 };
 
-export default CheckboxField;
+export default SimpleCheckboxField;
