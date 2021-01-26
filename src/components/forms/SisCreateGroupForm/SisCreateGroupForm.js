@@ -17,7 +17,7 @@ class SisCreateGroupForm extends Component {
       isOpen,
       onClose,
       invalid,
-      anyTouched,
+      dirty,
       handleSubmit,
       submitFailed,
       submitting,
@@ -85,7 +85,7 @@ class SisCreateGroupForm extends Component {
               id="sisCreateGroup"
               invalid={invalid}
               submitting={submitting}
-              dirty={anyTouched}
+              dirty={dirty}
               hasSucceeded={submitSucceeded}
               hasFailed={submitFailed}
               handleSubmit={handleSubmit}
@@ -114,7 +114,7 @@ SisCreateGroupForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
