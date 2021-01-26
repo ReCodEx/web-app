@@ -95,7 +95,7 @@ const EditGroupForm = ({
         label={
           <FormattedMessage
             id="app.createGroup.externalId"
-            defaultMessage="External ID of the group (e.g., ID of schedule event in the school IS):"
+            defaultMessage="External ID of the group (helps create bindings to external data sources):"
           />
         }
       />

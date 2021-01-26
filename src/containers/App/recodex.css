@@ -382,11 +382,19 @@ table.table tbody:first-child tr:first-child th {
 }
 
 .simple-checkbox-container input[type="checkbox"] {
-  display: none;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .simple-checkbox-container .checkmark {
   font-size: 125%;
   position: relative;
   top: -0.1em;
+}
+
+.simple-checkbox-container input:focus ~ .checkmark > * {
+  box-shadow: #fe9 0 0 0.4em 0.1em;
 }

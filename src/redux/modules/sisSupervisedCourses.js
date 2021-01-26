@@ -88,8 +88,10 @@ const reducer = handleActions(
       state.update('resources', users =>
         users.map(userTerms =>
           userTerms.map(term =>
-            term.update('data', courses =>
-              courses.map(course => course.update('groups', groups => groups.filter(g => g !== groupId)))
+            term.update(
+              'data',
+              courses =>
+                courses && courses.map(course => course.update('groups', groups => groups.filter(g => g !== groupId)))
             )
           )
         )

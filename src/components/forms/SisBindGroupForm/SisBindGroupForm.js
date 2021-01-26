@@ -15,7 +15,7 @@ const SisBindGroupForm = ({
   isOpen,
   onClose,
   invalid,
-  anyTouched,
+  dirty,
   handleSubmit,
   submitFailed,
   submitting,
@@ -81,7 +81,7 @@ const SisBindGroupForm = ({
           id="sisBindGroup"
           invalid={invalid}
           submitting={submitting}
-          dirty={anyTouched}
+          dirty={dirty}
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           handleSubmit={handleSubmit}
@@ -106,7 +106,7 @@ SisBindGroupForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool,
   submitting: PropTypes.bool,
