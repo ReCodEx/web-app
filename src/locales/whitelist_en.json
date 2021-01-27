@@ -194,6 +194,7 @@
   "app.createGroup.hasThreshold",
   "app.createGroup.isOrganizational",
   "app.createGroup.isPublic",
+  "app.createGroup.makeMeAdmin",
   "app.createGroup.publicStats",
   "app.createGroup.threshold",
   "app.createUserForm.validation.emailTaken",

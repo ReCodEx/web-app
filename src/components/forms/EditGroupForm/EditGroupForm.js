@@ -21,6 +21,7 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   hasThreshold: false,
   isOrganizational: false,
   detaining: false,
+  makeMeAdmin: true,
   threshold: 0,
   localizedTexts: getLocalizedTextsInitialValues([], EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
 };
@@ -119,6 +120,7 @@ const EditGroupForm = ({
             />
           </Col>
         )}
+
         <Col lg={6}>
           <Field
             name="publicStats"
@@ -133,6 +135,7 @@ const EditGroupForm = ({
             }
           />
         </Col>
+
         {createNew && (
           <Col lg={6}>
             <Field
@@ -149,6 +152,7 @@ const EditGroupForm = ({
             />
           </Col>
         )}
+
         {!isOrganizational && (
           <Col lg={6}>
             <Field
@@ -162,6 +166,18 @@ const EditGroupForm = ({
                   defaultMessage="Detaining students (only supervisor can remove them)"
                 />
               }
+            />
+          </Col>
+        )}
+
+        {createNew && (
+          <Col lg={6}>
+            <Field
+              name="makeMeAdmin"
+              tabIndex={5}
+              component={CheckboxField}
+              onOff
+              label={<FormattedMessage id="app.createGroup.makeMeAdmin" defaultMessage="Make me a group admin" />}
             />
           </Col>
         )}

@@ -194,6 +194,7 @@
   "app.createGroup.hasThreshold": "Studenti potřebují určitý počet bodů pro splnění kurzu",
   "app.createGroup.isOrganizational": "Organizační (pro vytváření hierarchie)",
   "app.createGroup.isPublic": "Veřejná (skupinu vidí všichni uživatelé a můžou se do ní přidat)",
+  "app.createGroup.makeMeAdmin": "Chci být administrátorem skupiny",
   "app.createGroup.publicStats": "Studenti mohou vidět dosažené body ostatních",
   "app.createGroup.threshold": "Minimální procentuální hranice potřebná ke splnění tohoto kurzu:",
   "app.createUserForm.validation.emailTaken": "Tato emailová adresa již patří jinému uživateli.",
