@@ -210,13 +210,14 @@ export default withLinks(
         },
       }
     ) => ({
-      createGroup: userId => ({ localizedTexts, hasThreshold, threshold, ...data }) =>
+      createGroup: userId => ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
         dispatch(
           createGroup({
             ...data,
             hasThreshold,
             threshold: hasThreshold ? threshold : undefined,
             localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+            noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
             instanceId,
           })
         ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),

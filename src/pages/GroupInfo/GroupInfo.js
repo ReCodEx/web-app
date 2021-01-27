@@ -278,13 +278,14 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = (dispatch, { match: { params } }) => ({
-  addSubgroup: (instanceId, userId) => ({ localizedTexts, hasThreshold, threshold, ...data }) =>
+  addSubgroup: (instanceId, userId) => ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
     dispatch(
       createGroup({
         ...data,
         hasThreshold,
         threshold: hasThreshold ? threshold : undefined,
         localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+        noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
         instanceId,
         parentGroupId: params.groupId,
       })
@@ -293,7 +294,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(injectIntl(GroupInfo));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo));
