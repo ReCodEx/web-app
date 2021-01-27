@@ -8,7 +8,37 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
+import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
+import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
+import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
+import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
+import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
+import CommentThreadContainer from '../../containers/CommentThreadContainer';
+
+import Page from '../../components/layout/Page';
+import { ChatIcon, EditIcon, DownloadIcon, SearchIcon } from '../../components/icons';
+import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
+import UsersName from '../../components/Users/UsersName';
+import Points from '../../components/Assignments/SolutionsTable/Points';
+import SolutionsTable from '../../components/Assignments/SolutionsTable';
+import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
+import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
+import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
+import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
+import DateTime from '../../components/widgets/DateTime';
+import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import { createUserNameComparator } from '../../components/helpers/users';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
+import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
+
+import { fetchStudents } from '../../redux/modules/users';
+import { fetchAssignmentIfNeeded, downloadBestSolutionsArchive } from '../../redux/modules/assignments';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
 import { usersSelector } from '../../redux/selectors/users';
 import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
 import {
@@ -17,43 +47,13 @@ import {
   getUserSolutionsSortedData,
   getAssigmentSolutions,
 } from '../../redux/selectors/assignments';
-
-import { fetchStudents } from '../../redux/modules/users';
-import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
-import { fetchAssignmentIfNeeded, downloadBestSolutionsArchive } from '../../redux/modules/assignments';
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-
-import Page from '../../components/layout/Page';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import Box from '../../components/widgets/Box';
-import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
-import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
-import { ChatIcon, EditIcon, DownloadIcon, SearchIcon } from '../../components/icons';
-import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
-import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
-import UsersName from '../../components/Users/UsersName';
-import DateTime from '../../components/widgets/DateTime';
-import Points from '../../components/Assignments/SolutionsTable/Points';
-import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
-import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
-import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
-import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
-import CommentThreadContainer from '../../containers/CommentThreadContainer';
-
-import { safeGet, identity } from '../../helpers/common';
-import { createUserNameComparator } from '../../components/helpers/users';
-import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/localizedData';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
-import SolutionsTable from '../../components/Assignments/SolutionsTable';
-import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
 import { fetchManyAssignmentSolutionsStatus } from '../../redux/selectors/solutions';
-import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
-import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
-import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
+import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
+
+import { getLocalizedName } from '../../helpers/localizedData';
+import withLinks from '../../helpers/withLinks';
+import { safeGet, identity, arrayToObject } from '../../helpers/common';
 
 const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, locale, links) => {
   const { SOLUTION_DETAIL_URI_FACTORY } = links;
@@ -179,9 +179,11 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
 });
 
 const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvironments, onlyBestSolutionsCheckbox) => {
+  const usersIndex = arrayToObject(users);
   return assigmentSolutions
     .toArray()
     .map(getJsData)
+    .filter(solution => solution && solution.solution && usersIndex[solution.solution.userId])
     .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
     .map(
       ({
@@ -205,7 +207,7 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
         const userId = solution && solution.userId;
         return {
           icon: { id, commentsStats, lastSubmission, accepted, reviewed, isBestSolution },
-          user: users.find(({ id }) => id === userId),
+          user: usersIndex[userId],
           date: solution && solution.createdAt,
           validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
           points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
