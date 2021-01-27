@@ -14,17 +14,16 @@ import AddSisTermForm from '../../components/forms/AddSisTermForm/AddSisTermForm
 import TermsList from '../../components/SisIntegration/TermsList/TermsList';
 import Confirm from '../../components/forms/Confirm';
 import Icon, { ArchiveGroupIcon, EditIcon, DeleteIcon, UserIcon } from '../../components/icons';
-import PlantTerm, { createDefaultSemesterLocalization } from '../../components/SisIntegration/PlantTerm';
+import PlantTermGroups, { createDefaultSemesterLocalization } from '../../components/SisIntegration/PlantTermGroups';
+import ArchiveTermGroups from '../../components/SisIntegration/ArchiveTermGroups';
 import EditTerm from '../../components/SisIntegration/EditTerm';
 import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Button from '../../components/widgets/FlatButton';
 
 import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
-import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
-import { fetchUser } from '../../redux/modules/users';
+import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/groups';
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { loggedInSupervisorOfSelector } from '../../redux/selectors/usersGroups';
@@ -48,9 +47,11 @@ class SisIntegration extends Component {
     openPlant: null,
     plantInitialValues: null,
     plantRootGroups: [],
+    openArchive: null,
+    archiveInitialValues: null,
+    archiveGroups: [],
     openEdit: null,
     editInitialValues: null,
-    openArchive: null,
   };
 
   // planting new groups
@@ -88,7 +89,7 @@ class SisIntegration extends Component {
   };
 
   submitPlantDialog = ({ groups, ...data }) => {
-    const { addSubgroup, refreshGroupsAndUser, loggedInUserId } = this.props;
+    const { addSubgroup, refreshGroups } = this.props;
     const groupTemplate = {
       publicStats: false,
       detaining: false,
@@ -100,13 +101,59 @@ class SisIntegration extends Component {
 
     return Promise.all(
       Object.entries(groups)
-        .filter(([_, value]) => value)
-        .map(([key, _]) => this.state.plantRootGroups.find(group => group.id === key))
+        .filter(([_, selected]) => selected)
+        .map(([id, _]) => this.state.plantRootGroups.find(group => group.id === id))
         .filter(group => group)
         .map(group => addSubgroup(group, { ...groupTemplate, ...data }))
     ).then(() => {
       this.closePlantDialog();
-      return refreshGroupsAndUser(loggedInUserId);
+      return refreshGroups();
+    });
+  };
+
+  // archiving
+  openArchiveDialog = ({ year, term }, groups) => {
+    const externalId = `${year}-${term}`;
+    const {
+      intl: { locale },
+    } = this.props;
+
+    const mainRootGroup = groups.find(group => group.parentGroupId === null);
+    const rootGroups = mainRootGroup ? groups.filter(group => group.parentGroupId === mainRootGroup.id) : [];
+    const rootGroupsIndex = arrayToObject(rootGroups);
+    const archiveGroups = groups
+      .filter(group => rootGroupsIndex[group.parentGroupId] && group.externalId === externalId)
+      .map(group => ({
+        id: group.id,
+        name: `${getLocalizedName(rootGroupsIndex[group.parentGroupId], locale)} / ${getLocalizedName(group, locale)}`,
+      }));
+
+    archiveGroups.sort((a, b) => a.name.localeCompare(b.name, locale));
+
+    const archiveInitialValues = {
+      groups: arrayToObject(
+        archiveGroups,
+        g => g.id,
+        () => false
+      ),
+    };
+
+    this.setState({ openArchive: externalId, archiveInitialValues, archiveGroups });
+  };
+
+  closeArchiveDialog = () => {
+    this.setState({ openArchive: null });
+  };
+
+  submitArchiveDialog = ({ groups }) => {
+    const { setArchived, refreshGroups } = this.props;
+    return Promise.all(
+      Object.entries(groups)
+        .filter(([_, selected]) => selected)
+        .map(([id, _]) => setArchived(id))
+    ).then(() => {
+      this.closeArchiveDialog();
+      return refreshGroups();
     });
   };
 
@@ -230,7 +277,7 @@ class SisIntegration extends Component {
                                       <Button
                                         bsSize="xs"
                                         bsStyle="primary"
-                                        onClick={() => this.setState({ openArchive: id })}>
+                                        onClick={() => this.openArchiveDialog(data, groups)}>
                                         <ArchiveGroupIcon gapRight />
                                         <FormattedMessage
                                           id="app.archiveGroupButton.setShort"
@@ -271,7 +318,7 @@ class SisIntegration extends Component {
                       </Row>
                     )}
 
-                    <PlantTerm
+                    <PlantTermGroups
                       isOpen={this.state.openPlant !== null}
                       onClose={this.closePlantDialog}
                       onSubmit={this.submitPlantDialog}
@@ -279,6 +326,15 @@ class SisIntegration extends Component {
                       groups={groups}
                       rootGroups={this.state.plantRootGroups}
                       initialValues={this.state.plantInitialValues}
+                    />
+
+                    <ArchiveTermGroups
+                      isOpen={this.state.openArchive !== null}
+                      onClose={this.closeArchiveDialog}
+                      onSubmit={this.submitArchiveDialog}
+                      externalId={this.state.openArchive}
+                      groups={this.state.archiveGroups}
+                      initialValues={this.state.archiveInitialValues}
                     />
 
                     <EditTerm
@@ -306,7 +362,6 @@ class SisIntegration extends Component {
 }
 
 SisIntegration.propTypes = {
-  loggedInUserId: PropTypes.string,
   loggedInUser: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
   fetchStatus: PropTypes.string,
@@ -318,13 +373,13 @@ SisIntegration.propTypes = {
   deleteTerm: PropTypes.func,
   editTerm: PropTypes.func,
   addSubgroup: PropTypes.func,
-  refreshGroupsAndUser: PropTypes.func,
+  setArchived: PropTypes.func,
+  refreshGroups: PropTypes.func,
   intl: intlShape.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
-    loggedInUserId: loggedInUserIdSelector(state),
     loggedInUser: loggedInUserSelector(state),
     effectiveRole: getLoggedInUserEffectiveRole(state),
     fetchStatus: fetchManyStatus(state),
@@ -356,7 +411,8 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
         parentGroupId: parentGroup.id,
       })
     ).then(),
-  refreshGroupsAndUser: userId => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))]),
+  setArchived: groupId => dispatch(setArchived(groupId, true)),
+  refreshGroups: () => dispatch(fetchAllGroups()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SisIntegration));
