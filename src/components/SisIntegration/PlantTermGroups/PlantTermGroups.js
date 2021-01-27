@@ -67,7 +67,7 @@ const getExistingSemestralGroups = defaultMemoize((groups, rootGroups, externalI
   return result;
 });
 
-const PlantTerm = ({
+const PlantTermGroups = ({
   isOpen,
   onClose,
   externalId,
@@ -185,7 +185,7 @@ const PlantTerm = ({
   );
 };
 
-PlantTerm.propTypes = {
+PlantTermGroups.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
@@ -236,4 +236,4 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate,
-})(injectIntl(PlantTerm));
+})(injectIntl(PlantTermGroups));
