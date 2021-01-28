@@ -26,7 +26,7 @@ const AttachmentFilesTableContainer = ({
 }) => (
   <FilesTableContainer
     uploadId={`attachment-exercise-files-${exercise.id}`}
-    attachments={attachmentFiles}
+    files={attachmentFiles}
     loadFiles={loadFiles}
     addFiles={addFiles}
     removeFile={removeFile}

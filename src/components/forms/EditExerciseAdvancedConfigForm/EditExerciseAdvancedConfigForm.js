@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
@@ -11,10 +10,8 @@ import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
-import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest';
-import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { encodeNumId } from '../../../helpers/common';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
 import { advancedExerciseConfigFormFill } from '../../../redux/modules/exerciseConfigs';
@@ -79,30 +76,26 @@ class EditExerciseAdvancedConfigForm extends Component {
         )}
 
         {pipelinesVariables && (
-          <ResourceRenderer resource={supplementaryFiles.toArray()}>
-            {(...files) => (
-              <Table
-                className={classnames({
-                  'no-margin': true,
-                  [styles.configTable]: true,
-                })}>
-                {exerciseTests
-                  .sort((a, b) => a.name.localeCompare(b.name, locale))
-                  .map((test, idx) => (
-                    <EditExerciseAdvancedConfigTest
-                      key={idx}
-                      pipelines={pipelines}
-                      pipelinesVariables={pipelinesVariables}
-                      supplementaryFiles={files}
-                      testName={test.name}
-                      test={'config.' + encodeNumId(test.id)}
-                      testErrors={formErrors && formErrors[encodeNumId(test.id)]}
-                      rawFill={exerciseTests.length > 1 ? rawFill(test.id, exerciseTests) : undefined}
-                    />
-                  ))}
-              </Table>
-            )}
-          </ResourceRenderer>
+          <Table
+            className={classnames({
+              'no-margin': true,
+              [styles.configTable]: true,
+            })}>
+            {exerciseTests
+              .sort((a, b) => a.name.localeCompare(b.name, locale))
+              .map((test, idx) => (
+                <EditExerciseAdvancedConfigTest
+                  key={idx}
+                  pipelines={pipelines}
+                  pipelinesVariables={pipelinesVariables}
+                  supplementaryFiles={supplementaryFiles}
+                  testName={test.name}
+                  test={'config.' + encodeNumId(test.id)}
+                  testErrors={formErrors && formErrors[encodeNumId(test.id)]}
+                  rawFill={exerciseTests.length > 1 ? rawFill(test.id, exerciseTests) : undefined}
+                />
+              ))}
+          </Table>
         )}
       </FormBox>
     );
@@ -124,7 +117,7 @@ EditExerciseAdvancedConfigForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   formErrors: PropTypes.object,
-  supplementaryFiles: ImmutablePropTypes.map,
+  supplementaryFiles: PropTypes.array,
   rawFill: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
@@ -134,7 +127,6 @@ const FORM_NAME = 'editExerciseAdvancedConfig';
 export default connect(
   (state, { exerciseId }) => {
     return {
-      supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),
       formErrors: exerciseConfigFormErrors(state, FORM_NAME),
     };
   },

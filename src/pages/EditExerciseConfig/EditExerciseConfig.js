@@ -35,6 +35,12 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables';
 import { getExercisePielinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables';
+import {
+  getSupplementaryFilesForExercise,
+  fetchSupplementaryFilesForExerciseStatus,
+} from '../../redux/selectors/supplementaryFiles';
+import { isLoadingState } from '../../redux/helpers/resourceManager/status';
+
 /*
 import {
   deletePipeline,
@@ -74,7 +80,11 @@ import {
   getPossibleVariablesNames,
 } from '../../helpers/exercise/environments';
 import { isSimple, SIMPLE_CONFIG_TYPE, ADVANCED_CONFIG_TYPE } from '../../helpers/exercise/config';
-import { getSimpleConfigInitValues, transformSimpleConfigValues } from '../../helpers/exercise/configSimple';
+import {
+  getSimpleConfigInitValues,
+  transformSimpleConfigValues,
+  extractUsedFilesFromConfig,
+} from '../../helpers/exercise/configSimple';
 import {
   getPipelines,
   getPipelinesInitialValues,
@@ -272,6 +282,8 @@ class EditExerciseConfig extends Component {
       // exercisePipelines,
       environmentsWithEntryPoints,
       pipelinesVariables,
+      supplementaryFiles,
+      supplementaryFilesStatus,
       intl: { locale },
       links: {
         EXERCISE_URI_FACTORY,
@@ -387,41 +399,48 @@ class EditExerciseConfig extends Component {
                           </Row>
                         )}
 
-                        <Row>
-                          <Col lg={6}>
-                            {scoreConfig &&
-                              scoreConfig.calculator !== UNIVERSAL_SCORE_CALCULATOR &&
-                              this.renderTestsAndScoreBox(exercise, tests, scoreConfig)}
+                        <ResourceRenderer resource={exerciseConfig}>
+                          {config => (
+                            <Row>
+                              <Col lg={6}>
+                                {scoreConfig &&
+                                  scoreConfig.calculator !== UNIVERSAL_SCORE_CALCULATOR &&
+                                  this.renderTestsAndScoreBox(exercise, tests, scoreConfig)}
 
-                            {isSimple(exercise) && hasPermissions(exercise, 'update') && (
-                              <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
-                                {(config, environmentConfigs) => (
-                                  <ResourceRenderer
-                                    resource={runtimeEnvironments.toArray()}
-                                    returnAsArray
-                                    forceLoading={runtimeEnvironments.size === 0}>
-                                    {environments => (
-                                      <EditEnvironmentSimpleForm
-                                        initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}
-                                        runtimeEnvironments={onlySimpleEnvironments(environments)}
-                                        onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
-                                          pipelines,
-                                          environments,
-                                          tests,
-                                          config,
-                                          environmentConfigs
+                                {isSimple(exercise) && hasPermissions(exercise, 'update') && (
+                                  <ResourceRenderer resource={exerciseEnvironmentConfig}>
+                                    {environmentConfigs => (
+                                      <ResourceRenderer
+                                        resource={runtimeEnvironments.toArray()}
+                                        returnAsArray
+                                        forceLoading={runtimeEnvironments.size === 0}>
+                                        {environments => (
+                                          <EditEnvironmentSimpleForm
+                                            initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}
+                                            runtimeEnvironments={onlySimpleEnvironments(environments)}
+                                            onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
+                                              pipelines,
+                                              environments,
+                                              tests,
+                                              config,
+                                              environmentConfigs
+                                            )}
+                                          />
                                         )}
-                                      />
+                                      </ResourceRenderer>
                                     )}
                                   </ResourceRenderer>
                                 )}
-                              </ResourceRenderer>
-                            )}
-                          </Col>
-                          <Col lg={6}>
-                            <SupplementaryFilesTableContainer exercise={exercise} />
-                          </Col>
-                        </Row>
+                              </Col>
+                              <Col lg={6}>
+                                <SupplementaryFilesTableContainer
+                                  exercise={exercise}
+                                  usedFiles={extractUsedFilesFromConfig(config)}
+                                />
+                              </Col>
+                            </Row>
+                          )}
+                        </ResourceRenderer>
                       </React.Fragment>
                     )}
                   </ResourceRenderer>
@@ -577,76 +596,85 @@ class EditExerciseConfig extends Component {
                       <Row>
                         <Col sm={12}>
                           <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
-                            {(config, envConfig) =>
-                              tests.length > 0 ? (
-                                isSimple(exercise) ? (
-                                  <EditExerciseSimpleConfigForm
-                                    initialValues={getSimpleConfigInitValues(config, tests, envConfig)}
-                                    exercise={exercise}
-                                    exerciseTests={tests}
-                                    environmentsWithEntryPoints={environmentsWithEntryPoints}
-                                    onSubmit={this.transformAndSendConfigValuesCreator(
-                                      transformSimpleConfigValues,
-                                      pipelines,
-                                      envConfig,
-                                      tests,
-                                      config
-                                    )}
-                                  />
-                                ) : pipelinesVariables && pipelinesVariables.length > 0 ? (
-                                  <EditExerciseAdvancedConfigForm
-                                    exerciseId={exerciseId}
-                                    exerciseTests={tests}
-                                    pipelines={pipelines}
-                                    pipelinesVariables={pipelinesVariables}
-                                    initialValues={getAdvancedConfigInitValues(
-                                      config,
-                                      getFirstEnvironmentId(envConfig),
-                                      tests,
-                                      pipelinesVariables
-                                    )}
-                                    onSubmit={this.transformAndSendConfigValuesCreator(
-                                      transformAdvancedConfigValues,
-                                      getFirstEnvironmentId(envConfig),
-                                      tests,
-                                      pipelinesVariables
-                                    )}
-                                  />
-                                ) : (
-                                  <div className="callout callout-warning">
-                                    <h4>
-                                      <WarningIcon gapRight />
-                                      <FormattedMessage
-                                        id="app.editExercise.editConfig"
-                                        defaultMessage="Edit Exercise Configuration"
+                            {(config, envConfig) => (
+                              <ResourceRenderer
+                                resource={supplementaryFiles.toArray()}
+                                returnAsArray
+                                forceLoading={isLoadingState(supplementaryFilesStatus)}>
+                                {files =>
+                                  tests.length > 0 ? (
+                                    isSimple(exercise) ? (
+                                      <EditExerciseSimpleConfigForm
+                                        initialValues={getSimpleConfigInitValues(config, tests, envConfig)}
+                                        exercise={exercise}
+                                        exerciseTests={tests}
+                                        environmentsWithEntryPoints={environmentsWithEntryPoints}
+                                        supplementaryFiles={files}
+                                        onSubmit={this.transformAndSendConfigValuesCreator(
+                                          transformSimpleConfigValues,
+                                          pipelines,
+                                          envConfig,
+                                          tests,
+                                          config
+                                        )}
                                       />
-                                    </h4>
-                                    <FormattedMessage
-                                      id="app.editExerciseConfig.noPipelines"
-                                      defaultMessage="There are no pipelines selected yet. The form cannot be displayed until at least one pipeline is selected."
-                                    />
-                                  </div>
-                                )
-                              ) : (
-                                <div className="callout callout-warning">
-                                  <h4>
-                                    <WarningIcon gapRight />
-                                    <FormattedMessage
-                                      id="app.editExercise.editConfig"
-                                      defaultMessage="Edit Exercise Configuration"
-                                    />
-                                  </h4>
-                                  <FormattedMessage
-                                    id="app.editExerciseConfig.noTests"
-                                    defaultMessage="There are no tests yet."
-                                  />
-                                  <FormattedMessage
-                                    id="app.editExerciseConfig.cannotDisplayConfigForm"
-                                    defaultMessage="The exercise configuration form cannot be displayed until at least one test is defined."
-                                  />
-                                </div>
-                              )
-                            }
+                                    ) : pipelinesVariables && pipelinesVariables.length > 0 ? (
+                                      <EditExerciseAdvancedConfigForm
+                                        exerciseId={exerciseId}
+                                        exerciseTests={tests}
+                                        pipelines={pipelines}
+                                        pipelinesVariables={pipelinesVariables}
+                                        supplementaryFiles={files}
+                                        initialValues={getAdvancedConfigInitValues(
+                                          config,
+                                          getFirstEnvironmentId(envConfig),
+                                          tests,
+                                          pipelinesVariables
+                                        )}
+                                        onSubmit={this.transformAndSendConfigValuesCreator(
+                                          transformAdvancedConfigValues,
+                                          getFirstEnvironmentId(envConfig),
+                                          tests,
+                                          pipelinesVariables
+                                        )}
+                                      />
+                                    ) : (
+                                      <div className="callout callout-warning">
+                                        <h4>
+                                          <WarningIcon gapRight />
+                                          <FormattedMessage
+                                            id="app.editExercise.editConfig"
+                                            defaultMessage="Edit Exercise Configuration"
+                                          />
+                                        </h4>
+                                        <FormattedMessage
+                                          id="app.editExerciseConfig.noPipelines"
+                                          defaultMessage="There are no pipelines selected yet. The form cannot be displayed until at least one pipeline is selected."
+                                        />
+                                      </div>
+                                    )
+                                  ) : (
+                                    <div className="callout callout-warning">
+                                      <h4>
+                                        <WarningIcon gapRight />
+                                        <FormattedMessage
+                                          id="app.editExercise.editConfig"
+                                          defaultMessage="Edit Exercise Configuration"
+                                        />
+                                      </h4>
+                                      <FormattedMessage
+                                        id="app.editExerciseConfig.noTests"
+                                        defaultMessage="There are no tests yet."
+                                      />
+                                      <FormattedMessage
+                                        id="app.editExerciseConfig.cannotDisplayConfigForm"
+                                        defaultMessage="The exercise configuration form cannot be displayed until at least one test is defined."
+                                      />
+                                    </div>
+                                  )
+                                }
+                              </ResourceRenderer>
+                            )}
                           </ResourceRenderer>
                         </Col>
                       </Row>
@@ -679,6 +707,8 @@ EditExerciseConfig.propTypes = {
   exercisePipelines: ImmutablePropTypes.map,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   pipelinesVariables: PropTypes.array,
+  supplementaryFiles: ImmutablePropTypes.map,
+  supplementaryFilesStatus: PropTypes.string,
   links: PropTypes.object.isRequired,
   intl: intlShape.isRequired,
   loadAsync: PropTypes.func.isRequired,
@@ -725,6 +755,8 @@ export default withLinks(
         //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
         pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state),
+        supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),
+        supplementaryFilesStatus: fetchSupplementaryFilesForExerciseStatus(state)(exerciseId),
       };
     },
     (

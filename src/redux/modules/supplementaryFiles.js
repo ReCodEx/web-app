@@ -20,9 +20,11 @@ export const actionTypes = {
   DOWNLOAD_SUPPLEMENTARY_ARCHIVE: 'recodex/supplementaryFiles/DOWNLOAD_SUPPLEMENTARY_ARCHIVE',
 };
 
+export const fetchSupplementaryFilesForExerciseEndpoint = exerciseId => `/exercises/${exerciseId}/supplementary-files`;
+
 export const fetchSupplementaryFilesForExercise = exerciseId =>
   actions.fetchMany({
-    endpoint: `/exercises/${exerciseId}/supplementary-files`,
+    endpoint: fetchSupplementaryFilesForExerciseEndpoint(exerciseId),
   });
 
 export const addSupplementaryFiles = (exerciseId, files) =>

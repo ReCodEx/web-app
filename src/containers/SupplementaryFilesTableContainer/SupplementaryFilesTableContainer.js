@@ -14,12 +14,16 @@ import {
   downloadSupplementaryArchive,
 } from '../../redux/modules/supplementaryFiles';
 import { downloadSupplementaryFile } from '../../redux/modules/files';
-
-import { getSupplementaryFilesForExercise } from '../../redux/selectors/supplementaryFiles';
+import {
+  getSupplementaryFilesForExercise,
+  fetchSupplementaryFilesForExerciseStatus,
+} from '../../redux/selectors/supplementaryFiles';
 
 const SupplementaryFilesTableContainer = ({
   exercise,
   supplementaryFiles,
+  supplementaryFilesStatus,
+  usedFiles,
   loadFiles,
   addFiles,
   removeFile,
@@ -29,8 +33,10 @@ const SupplementaryFilesTableContainer = ({
 }) => (
   <FilesTableContainer
     uploadId={`supplementary-files-${exercise.id}`}
-    attachments={supplementaryFiles}
+    files={supplementaryFiles}
+    usedFiles={usedFiles}
     loadFiles={loadFiles}
+    fetchFilesStatus={supplementaryFilesStatus}
     addFiles={addFiles}
     removeFile={removeFile}
     downloadFile={downloadFile}
@@ -56,6 +62,8 @@ SupplementaryFilesTableContainer.propTypes = {
     permissionHints: PropTypes.object.isRequired,
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
+  supplementaryFilesStatus: PropTypes.string,
+  usedFiles: PropTypes.instanceOf(Set),
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
@@ -67,6 +75,7 @@ export default connect(
   (state, { exercise }) => {
     return {
       supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
+      supplementaryFilesStatus: fetchSupplementaryFilesForExerciseStatus(state)(exercise.id),
     };
   },
   (dispatch, { exercise }) => ({

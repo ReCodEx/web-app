@@ -26,7 +26,7 @@ const PipelineFilesTableContainer = ({
 }) => (
   <FilesTableContainer
     uploadId={`pipeline-files-${pipeline.id}`}
-    attachments={supplementaryFiles}
+    files={supplementaryFiles}
     loadFiles={loadFiles}
     addFiles={addFiles}
     removeFile={removeFile}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
@@ -11,10 +10,8 @@ import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
-import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
-import { getSupplementaryFilesForExercise } from '../../../redux/selectors/supplementaryFiles';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
 import { ENV_JAVA_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments';
 import {
@@ -28,7 +25,7 @@ import {
   exerciseConfigFormSmartFillExtraFiles,
 } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
-import { encodeNumId, createIndex, safeSet, safeGet } from '../../../helpers/common';
+import { encodeNumId, createIndex, safeSet, safeGet, deepReduce } from '../../../helpers/common';
 
 const supplementaryFilesOptions = defaultMemoize((files, locale) =>
   files
@@ -40,7 +37,54 @@ const supplementaryFilesOptions = defaultMemoize((files, locale) =>
     }))
 );
 
+const supplementaryFilesNamesIndex = defaultMemoize(
+  files => files && new Set(deepReduce(files, [null, 'name']).filter(name => name))
+);
+
+/**
+ * Make sure file(s) in form data (specified by given path) exist.
+ * If not, proper form error message(s) is/are filled.
+ */
+const validateFileExists = (data, errors, path, existingFiles) => {
+  if (!existingFiles) {
+    return; // safeguard if the suplementary files are not loaded yet
+  }
+
+  let target = safeGet(data, path);
+  if (target) {
+    if (typeof target === 'object') {
+      // it is an object, we need to dig deeper
+      if (Array.isArray(target)) {
+        target.forEach((_, idx) => validateFileExists(data, errors, [...path, idx], existingFiles));
+        return;
+      } else {
+        target = target.file;
+        path = [...path, 'file'];
+      }
+    }
+
+    if (target && typeof target === 'string' && !existingFiles.has(target)) {
+      safeSet(
+        errors,
+        path,
+        <FormattedMessage
+          id="app.editExerciseConfigForm.validation.fileDoesNotExist"
+          defaultMessage="File '{file}' was selected here, but no such file exists."
+          values={{ file: target }}
+        />
+      );
+    }
+  }
+};
+
 class EditExerciseSimpleConfigForm extends Component {
+  componentDidUpdate(prevProps) {
+    if (prevProps.supplementaryFiles !== this.props.supplementaryFiles) {
+      // enforce re-validation if supplementary files have changed
+      this.props.change('_validationHack', Date.now());
+    }
+  }
+
   render() {
     const {
       reset,
@@ -130,41 +174,40 @@ class EditExerciseSimpleConfigForm extends Component {
               />
             </div>
           }>
-          {submitFailed && (
-            <Alert bsStyle="danger">
-              <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-            </Alert>
-          )}
-          <ResourceRenderer resource={supplementaryFiles.toArray()}>
-            {(...files) => (
-              <div>
-                {exerciseTests
-                  .sort((a, b) => a.name.localeCompare(b.name, locale))
-                  .map((test, idx) => {
-                    const testData = formValues && formValues.config && formValues.config[encodeNumId(test.id)];
-                    return (
-                      <EditExerciseSimpleConfigTest
-                        change={change}
-                        environmentsWithEntryPoints={environmentsWithEntryPoints}
-                        exercise={exercise}
-                        extraFiles={testData && testData['extra-files']}
-                        jarFiles={testData && testData['jar-files']}
-                        key={idx}
-                        smartFill={
-                          idx === 0 && exerciseTests.length > 1 ? smartFill(test.id, exerciseTests, files) : undefined
-                        }
-                        supplementaryFiles={supplementaryFilesOptions(files, locale)}
-                        test={'config.' + encodeNumId(test.id)}
-                        testErrors={formErrors && formErrors[encodeNumId(test.id)]}
-                        testName={test.name}
-                        useCustomJudge={testData && testData.useCustomJudge}
-                        useOutFile={testData && testData.useOutFile}
-                      />
-                    );
-                  })}
-              </div>
+          <div>
+            {submitFailed && (
+              <Alert bsStyle="danger">
+                <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
+              </Alert>
             )}
-          </ResourceRenderer>
+
+            {exerciseTests
+              .sort((a, b) => a.name.localeCompare(b.name, locale))
+              .map((test, idx) => {
+                const testData = formValues && formValues.config && formValues.config[encodeNumId(test.id)];
+                return (
+                  <EditExerciseSimpleConfigTest
+                    change={change}
+                    environmentsWithEntryPoints={environmentsWithEntryPoints}
+                    exercise={exercise}
+                    extraFiles={testData && testData['extra-files']}
+                    jarFiles={testData && testData['jar-files']}
+                    key={idx}
+                    smartFill={
+                      idx === 0 && exerciseTests.length > 1
+                        ? smartFill(test.id, exerciseTests, supplementaryFiles)
+                        : undefined
+                    }
+                    supplementaryFiles={supplementaryFilesOptions(supplementaryFiles, locale)}
+                    test={'config.' + encodeNumId(test.id)}
+                    testErrors={formErrors && formErrors[encodeNumId(test.id)]}
+                    testName={test.name}
+                    useCustomJudge={testData && testData.useCustomJudge}
+                    useOutFile={testData && testData.useOutFile}
+                  />
+                );
+              })}
+          </div>
         </FormBox>
       </div>
     );
@@ -185,7 +228,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   invalid: PropTypes.bool,
   formValues: PropTypes.object,
   formErrors: PropTypes.object,
-  supplementaryFiles: ImmutablePropTypes.map,
+  supplementaryFiles: PropTypes.array,
   exercise: PropTypes.object,
   exerciseTests: PropTypes.array,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
@@ -193,11 +236,13 @@ EditExerciseSimpleConfigForm.propTypes = {
   intl: intlShape.isRequired,
 };
 
-const validate = (formData, { exercise }) => {
+const validate = (formData, { exercise, supplementaryFiles }) => {
   const errors = {};
+  const existingFiles = supplementaryFilesNamesIndex(supplementaryFiles);
 
   for (const testKey in formData.config) {
     const test = formData.config[testKey];
+
     // Check the input file names for duplicities
     if (test['input-files'] && test['input-files'].length > 1) {
       const nameIndex = createIndex(test['input-files'].map(({ name }) => name && name.trim()).filter(name => name));
@@ -243,6 +288,9 @@ const validate = (formData, { exercise }) => {
           }
         }
       }
+
+      validateFileExists(formData, errors, ['config', testKey, 'extra-files', envId], existingFiles);
+      validateFileExists(formData, errors, ['config', testKey, 'entry-point', envId], existingFiles);
     }
 
     // Special test for Java JAR files only !!!
@@ -295,6 +343,14 @@ const validate = (formData, { exercise }) => {
           />
         );
       }
+    }
+
+    validateFileExists(formData, errors, ['config', testKey, 'stdin-file'], existingFiles);
+    validateFileExists(formData, errors, ['config', testKey, 'input-files'], existingFiles);
+    validateFileExists(formData, errors, ['config', testKey, 'expected-output'], existingFiles);
+    validateFileExists(formData, errors, ['config', testKey, 'jar-files', ENV_JAVA_ID], existingFiles);
+    if (test.useCustomJudge) {
+      validateFileExists(formData, errors, ['config', testKey, 'custom-judge'], existingFiles);
     }
   }
 
@@ -363,9 +419,8 @@ const warn = formData => {
 };
 
 export default connect(
-  (state, { exercise }) => {
+  state => {
     return {
-      supplementaryFiles: getSupplementaryFilesForExercise(exercise.id)(state),
       formValues: getFormValues(FORM_NAME)(state),
       formErrors: exerciseConfigFormErrors(state, FORM_NAME),
     };

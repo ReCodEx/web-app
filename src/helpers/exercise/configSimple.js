@@ -1,5 +1,5 @@
 import { defaultMemoize } from 'reselect';
-import { safeGet, encodeNumId, identity, EMPTY_ARRAY } from '../common';
+import { safeGet, encodeNumId, identity, deepReduce, EMPTY_ARRAY } from '../common';
 import {
   ENV_DATA_ONLY_ID,
   ENV_JAVA_ID,
@@ -441,3 +441,26 @@ export const transformSimpleConfigValues = (formData, pipelines, environments, t
 
   return { config: envs };
 };
+
+/**
+ * Collect all remote files variables and aggregate a Set of all file names.
+ * @param {Array} config of the exercise tests
+ * @return {Set} containing names of all files used in the config
+ */
+export const extractUsedFilesFromConfig = defaultMemoize(
+  //  config => deepReduce(config, [null, 'tests', null, 'pipelines', null, 'variables', null], (_, x) => console.log(x))
+  config =>
+    deepReduce(
+      config,
+      [null, 'tests', null, 'pipelines', null, 'variables', null],
+      (set, { type, value }) => {
+        if (type === 'remote-file' && value) {
+          set.add(value);
+        } else if (type === 'remote-file[]') {
+          value.filter(item => item).forEach(item => set.add(item));
+        }
+        return set;
+      },
+      new Set()
+    )
+);
