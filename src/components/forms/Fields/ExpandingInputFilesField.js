@@ -14,9 +14,7 @@ const EMPTY_VALUE = { file: '', name: '' };
 const validate = value =>
   !value || value.trim() === '' ? (
     <FormattedMessage id="app.expandingInputFilesField.validateEmpty" defaultMessage="This value must not be empty." />
-  ) : (
-    undefined
-  );
+  ) : undefined;
 
 const handleSelectChange = (oldValue, fieldName, change) => e => {
   if (oldValue.file === oldValue.name || (!oldValue.file && !oldValue.name)) {
@@ -24,15 +22,7 @@ const handleSelectChange = (oldValue, fieldName, change) => e => {
   }
 };
 
-const ExpandingInputFilesField = ({
-  fields,
-  leftLabel = null,
-  rightLabel = null,
-  noItems = null,
-  options,
-  change,
-  ...props
-}) => (
+const ExpandingInputFilesField = ({ fields, leftLabel = null, rightLabel = null, noItems = null, options, change }) => (
   <div>
     {fields.length > 0 && (
       <table>
@@ -55,18 +45,10 @@ const ExpandingInputFilesField = ({
                   addEmptyOption={true}
                   validate={validate}
                   onChange={handleSelectChange(fields.get(index), `${field}.name`, change)}
-                  {...props}
                 />
               </td>
               <td className="valign-top">
-                <Field
-                  name={`${field}.name`}
-                  component={TextField}
-                  label={''}
-                  validate={validate}
-                  maxLength={64}
-                  {...props}
-                />
+                <Field name={`${field}.name`} component={TextField} label={''} validate={validate} maxLength={64} />
               </td>
               <td className="valign-top">
                 <OverlayTrigger

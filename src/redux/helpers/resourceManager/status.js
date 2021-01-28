@@ -13,12 +13,13 @@ export const resourceStatus = {
   DELETED: 'DELETED',
 };
 
+export const isLoadingState = state => state === resourceStatus.PENDING || state === resourceStatus.RELOADING;
+
 /**
  * @param {Object} item The item
  * @return {boolean} True when the item is loading or reloaing.
  */
-export const isLoading = item =>
-  !item || item.get('state') === resourceStatus.PENDING || item.get('state') === resourceStatus.RELOADING;
+export const isLoading = item => !item || isLoadingState(item.get('state'));
 
 /**
  * @param {Object} item The item

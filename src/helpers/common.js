@@ -8,7 +8,13 @@ export const EMPTY_MAP = Map();
 export const EMPTY_FNC = () => {};
 export const identity = x => x;
 
-// Safe getter to traverse compex object/array structures.
+/**
+ * Safe getter to traverse compex object/array structures.
+ * @param {*} obj the root of the structure being traversed (object, array)
+ * @param {Array} path sequence of steps, each step is either an explicit key or a function;
+ *                     function can be only used in arrays and they are applied as .find() callbacks
+ * @param {*} def default value, which is returned if the path does not exist in obj structure
+ */
 export const safeGet = (obj, path, def = undefined) => {
   if (!Array.isArray(path)) {
     path = [path];
@@ -191,6 +197,52 @@ export const deepCompare = (a, b) => {
     const aKeys = Object.keys(a);
     const bKeys = new Set(Object.keys(b));
     return aKeys.length === bKeys.size ? aKeys.every(key => bKeys.has(key) && deepCompare(a[key], b[key])) : false;
+  }
+};
+
+// default deepReduce reductor that appends everything into an array
+const _deepReduceArrayReductor = (acc, val) => [...acc, val];
+
+/**
+ * Performs a deep reduce using similar approach like safeGet -- exploring given data structure using path descriptor.
+ * @param {*} obj root of the structure being explored
+ * @param {Array} path sequence of steps within the data structure where individual steps have the following semantics:
+ *                     numbers and strings are keys (in object/arrays), functions are used as .find() callbacks,
+ *                     null works as asterisk (foreach loop at given level)
+ * @param {Function} reductor callback with almost the same args as in Array.reduce(),
+ *                            but it only gets accumulator and reduced value
+ * @param {*} initialValue for the reduction
+ */
+export const deepReduce = (obj, path, reductor = _deepReduceArrayReductor, initialValue = []) => {
+  if (path.length === 0) {
+    // end of the path -- let's reduce!
+    return reductor(initialValue, obj);
+  }
+
+  if (typeof obj !== 'object') {
+    return initialValue; // obj is not an object, but we need to go deeper -> path does not exist
+  }
+
+  const [step, ...restPath] = path;
+
+  if (step === null) {
+    // null is an asterisk, reduce over all sub-items
+    let res = initialValue;
+    Object.values(obj).forEach(nested => {
+      res = deepReduce(nested, restPath, reductor, res);
+    });
+    return res;
+  } else {
+    // perform just one step
+    if (typeof step === 'function') {
+      if (!Array.isArray(obj)) {
+        return initialValue; // function can be only applied on arrays in .find() callback
+      }
+      obj = obj.find(step);
+    } else {
+      obj = obj[step];
+    }
+    return deepReduce(obj, restPath, reductor, initialValue);
   }
 };
 
