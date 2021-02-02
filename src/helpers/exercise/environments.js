@@ -1,53 +1,55 @@
 import { defaultMemoize } from 'reselect';
 import { safeGet, arrayToObject, createIndex } from '../../helpers/common';
 
+export const ENV_ARDUINO_ID = 'arduino-gcc';
+export const ENV_BASH_ID = 'bash';
 export const ENV_C_GCC_ID = 'c-gcc-linux';
 export const ENV_CPP_GCC_ID = 'cxx-gcc-linux';
 export const ENV_CS_DOTNET_CORE_ID = 'cs-dotnet-core';
 export const ENV_DATA_ONLY_ID = 'data-linux';
 export const ENV_FREEPASCAL_ID = 'freepascal-linux';
+export const ENV_GO_ID = 'go';
+export const ENV_GROOVY_ID = 'groovy';
+export const ENV_HASKELL_ID = 'haskell';
 export const ENV_JAVA_ID = 'java';
+export const ENV_KOTLIN_ID = 'kotlin';
 export const ENV_NODEJS_ID = 'node-linux';
 export const ENV_PHP_ID = 'php-linux';
-export const ENV_PYTHON3_ID = 'python3';
 export const ENV_PROLOG_ID = 'prolog';
-export const ENV_HASKELL_ID = 'haskell';
+export const ENV_PYTHON3_ID = 'python3';
 export const ENV_RUST_ID = 'rust';
-export const ENV_GO_ID = 'go';
-export const ENV_KOTLIN_ID = 'kotlin';
-export const ENV_GROOVY_ID = 'groovy';
 export const ENV_SCALA_ID = 'scala';
-export const ENV_BASH_ID = 'bash';
 
 /**
  * List of environment IDs allowed in simple form.
  * @todo If we find a better way how to do this ...
  */
 const SIMPLE_FORM_ENVIRONMENTS = [
+  ENV_ARDUINO_ID,
+  ENV_BASH_ID,
   ENV_C_GCC_ID,
   ENV_CPP_GCC_ID,
+  ENV_CS_DOTNET_CORE_ID,
   ENV_DATA_ONLY_ID,
   ENV_FREEPASCAL_ID,
+  ENV_GO_ID,
+  ENV_GROOVY_ID,
+  ENV_HASKELL_ID,
   ENV_JAVA_ID,
-  ENV_CS_DOTNET_CORE_ID,
+  ENV_KOTLIN_ID,
   ENV_NODEJS_ID,
   ENV_PHP_ID,
-  ENV_PYTHON3_ID,
   ENV_PROLOG_ID,
-  ENV_HASKELL_ID,
+  ENV_PYTHON3_ID,
   ENV_RUST_ID,
-  ENV_GO_ID,
-  ENV_KOTLIN_ID,
-  ENV_GROOVY_ID,
   ENV_SCALA_ID,
-  ENV_BASH_ID,
 ];
 
 /**
  * List of environments that must stand alone
  * (exercise must be configured solely for this environment).
  */
-export const STANDALONE_ENVIRONMENTS = [ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID];
+export const STANDALONE_ENVIRONMENTS = [ENV_ARDUINO_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID];
 
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
 
