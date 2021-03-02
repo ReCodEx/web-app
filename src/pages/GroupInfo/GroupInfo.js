@@ -176,7 +176,7 @@ class GroupInfo extends Component {
                     <SupervisorsList
                       groupId={data.id}
                       users={supervisors}
-                      isAdmin={isAdmin}
+                      isAdmin={isAdmin && hasPermissions(data, 'setAdmin') && !data.archived}
                       primaryAdminsIds={data.primaryAdminsIds}
                       isLoaded={supervisors.length === data.privateData.supervisors.length}
                     />
