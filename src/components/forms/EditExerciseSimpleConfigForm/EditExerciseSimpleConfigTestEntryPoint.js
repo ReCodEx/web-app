@@ -19,7 +19,7 @@ const entryPointValidate = value => {
   );
 };
 
-const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, testErrors }) => (
+const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, testErrors, readOnly = false }) => (
   <table className="full-width">
     <tbody>
       <tr>
@@ -40,30 +40,33 @@ const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, tes
             maxLength={256}
             validate={entryPointValidate}
             label={null}
+            disabled={readOnly}
           />
         </td>
 
-        <td className="valign-top">
-          {Boolean(smartFillEntryPoint) && (
-            <Confirm
-              id="smartFillEntryPoint"
-              onConfirmed={smartFillEntryPoint}
-              question={
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.smartFillEntryPoint.yesNoQuestion"
-                  defaultMessage="Do you really wish to overwrite entry-point configuration of all subsequent tests using the first test as a template?"
-                />
-              }>
-              <Button bsStyle="primary" className="btn-flat" disabled={Boolean(testErrors)}>
-                <Icon icon="arrows-alt" gapRight />
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.smartFillEntryPoint"
-                  defaultMessage="Smart Fill Entry Point"
-                />
-              </Button>
-            </Confirm>
-          )}
-        </td>
+        {!readOnly && (
+          <td className="valign-top">
+            {Boolean(smartFillEntryPoint) && (
+              <Confirm
+                id="smartFillEntryPoint"
+                onConfirmed={smartFillEntryPoint}
+                question={
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.smartFillEntryPoint.yesNoQuestion"
+                    defaultMessage="Do you really wish to overwrite entry-point configuration of all subsequent tests using the first test as a template?"
+                  />
+                }>
+                <Button bsStyle="primary" className="btn-flat" disabled={Boolean(testErrors)}>
+                  <Icon icon="arrows-alt" gapRight />
+                  <FormattedMessage
+                    id="app.editExerciseConfigForm.smartFillEntryPoint"
+                    defaultMessage="Smart Fill Entry Point"
+                  />
+                </Button>
+              </Confirm>
+            )}
+          </td>
+        )}
       </tr>
     </tbody>
   </table>
@@ -73,6 +76,7 @@ EditExerciseSimpleConfigTestEntryPoint.propTypes = {
   smartFillEntryPoint: PropTypes.func,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
+  readOnly: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTestEntryPoint;

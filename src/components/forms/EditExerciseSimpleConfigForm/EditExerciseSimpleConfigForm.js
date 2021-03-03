@@ -102,6 +102,7 @@ class EditExerciseSimpleConfigForm extends Component {
       exercise,
       exerciseTests,
       smartFill,
+      readOnly = false,
       intl: { locale },
     } = this.props;
 
@@ -146,33 +147,35 @@ class EditExerciseSimpleConfigForm extends Component {
 
         <FormBox
           id="exercise-config-form"
-          title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Edit Exercise Configuration" />}
+          title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Exercise Configuration" />}
           unlimitedHeight
           noPadding
           success={submitSucceeded}
           dirty={dirty}
           footer={
-            <div className="text-center">
-              {dirty && (
-                <span>
-                  <Button type="reset" onClick={reset} bsStyle="danger">
-                    <RefreshIcon gapRight />
-                    <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                  </Button>
-                </span>
-              )}
+            !readOnly ? (
+              <div className="text-center">
+                {dirty && (
+                  <span>
+                    <Button type="reset" onClick={reset} bsStyle="danger">
+                      <RefreshIcon gapRight />
+                      <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                    </Button>
+                  </span>
+                )}
 
-              <SubmitButton
-                id="editExerciseSimpleConfig"
-                invalid={invalid}
-                submitting={submitting}
-                dirty={dirty}
-                hasSucceeded={submitSucceeded}
-                hasFailed={submitFailed}
-                handleSubmit={handleSubmit}
-                messages={SUBMIT_BUTTON_MESSAGES}
-              />
-            </div>
+                <SubmitButton
+                  id="editExerciseSimpleConfig"
+                  invalid={invalid}
+                  submitting={submitting}
+                  dirty={dirty}
+                  hasSucceeded={submitSucceeded}
+                  hasFailed={submitFailed}
+                  handleSubmit={handleSubmit}
+                  messages={SUBMIT_BUTTON_MESSAGES}
+                />
+              </div>
+            ) : null
           }>
           <div>
             {submitFailed && (
@@ -204,6 +207,7 @@ class EditExerciseSimpleConfigForm extends Component {
                     testName={test.name}
                     useCustomJudge={testData && testData.useCustomJudge}
                     useOutFile={testData && testData.useOutFile}
+                    readOnly={readOnly}
                   />
                 );
               })}
@@ -233,6 +237,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   exerciseTests: PropTypes.array,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 

@@ -22,15 +22,23 @@ const handleSelectChange = (oldValue, fieldName, change) => e => {
   }
 };
 
-const ExpandingInputFilesField = ({ fields, leftLabel = null, rightLabel = null, noItems = null, options, change }) => (
+const ExpandingInputFilesField = ({
+  fields,
+  leftLabel = null,
+  rightLabel = null,
+  noItems = null,
+  options,
+  change,
+  readOnly = false,
+}) => (
   <div>
     {fields.length > 0 && (
-      <table>
+      <table className="full-width">
         <thead>
           <tr>
-            <th width="50%">{Boolean(leftLabel) && <ControlLabel>{leftLabel}</ControlLabel>}</th>
-            <th width="50%">{Boolean(rightLabel) && <ControlLabel>{rightLabel}</ControlLabel>}</th>
-            <th />
+            <th className="half-width">{Boolean(leftLabel) && <ControlLabel>{leftLabel}</ControlLabel>}</th>
+            <th className="half-width">{Boolean(rightLabel) && <ControlLabel>{rightLabel}</ControlLabel>}</th>
+            {!readOnly && <th />}
           </tr>
         </thead>
         <tbody>
@@ -45,27 +53,37 @@ const ExpandingInputFilesField = ({ fields, leftLabel = null, rightLabel = null,
                   addEmptyOption={true}
                   validate={validate}
                   onChange={handleSelectChange(fields.get(index), `${field}.name`, change)}
+                  disabled={readOnly}
                 />
               </td>
               <td className="valign-top">
-                <Field name={`${field}.name`} component={TextField} label={''} validate={validate} maxLength={64} />
+                <Field
+                  name={`${field}.name`}
+                  component={TextField}
+                  label={''}
+                  validate={validate}
+                  maxLength={64}
+                  disabled={readOnly}
+                />
               </td>
-              <td className="valign-top">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip id={Date.now()}>
-                      <FormattedMessage
-                        id="app.expandingInputFilesField.tooltip.remove"
-                        defaultMessage="Remove this file."
-                      />
-                    </Tooltip>
-                  }>
-                  <FlatButton onClick={() => fields.remove(index)}>
-                    <CloseIcon />
-                  </FlatButton>
-                </OverlayTrigger>
-              </td>
+              {!readOnly && (
+                <td className="valign-top">
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id={Date.now()}>
+                        <FormattedMessage
+                          id="app.expandingInputFilesField.tooltip.remove"
+                          defaultMessage="Remove this file."
+                        />
+                      </Tooltip>
+                    }>
+                    <FlatButton onClick={() => fields.remove(index)}>
+                      <CloseIcon />
+                    </FlatButton>
+                  </OverlayTrigger>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -79,17 +97,19 @@ const ExpandingInputFilesField = ({ fields, leftLabel = null, rightLabel = null,
           )}
         </span>
       )}
-      <OverlayTrigger
-        placement="right"
-        overlay={
-          <Tooltip id={Date.now()}>
-            <FormattedMessage id="app.expandingInputFilesField.tooltip.add" defaultMessage="Add another file." />
-          </Tooltip>
-        }>
-        <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
-          <AddIcon />
-        </FlatButton>
-      </OverlayTrigger>
+      {!readOnly && (
+        <OverlayTrigger
+          placement="right"
+          overlay={
+            <Tooltip id={Date.now()}>
+              <FormattedMessage id="app.expandingInputFilesField.tooltip.add" defaultMessage="Add another file." />
+            </Tooltip>
+          }>
+          <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
+            <AddIcon />
+          </FlatButton>
+        </OverlayTrigger>
+      )}
     </div>
   </div>
 );
@@ -119,6 +139,7 @@ ExpandingInputFilesField.propTypes = {
   ]),
   options: PropTypes.array,
   change: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
 };
 
 export default ExpandingInputFilesField;

@@ -13,6 +13,7 @@ const ExpandingSelectField = ({
   meta: { active, dirty, error, warning },
   label = null,
   noItems = null,
+  readOnly = false,
   ...props
 }) => (
   <div>
@@ -24,41 +25,53 @@ const ExpandingSelectField = ({
             {fields.map((field, index) => (
               <tr key={index}>
                 <td width="100%" className="valign-top">
-                  <Field name={field} component={SelectField} label={''} addEmptyOption {...props} />
+                  <Field
+                    name={field}
+                    component={SelectField}
+                    label={''}
+                    addEmptyOption
+                    disabled={readOnly}
+                    {...props}
+                  />
                 </td>
-                <td className="valign-top">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id={Date.now()}>
-                        <FormattedMessage
-                          id="app.expandingTextField.tooltip.addAbove"
-                          defaultMessage="Insert new item right above."
-                        />
-                      </Tooltip>
-                    }>
-                    <FlatButton onClick={() => fields.insert(index, '')}>
-                      <AddIcon size="xs" />
-                      <Icon icon="level-up-alt" />
-                    </FlatButton>
-                  </OverlayTrigger>
-                </td>
-                <td className="valign-top">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id={Date.now()}>
-                        <FormattedMessage
-                          id="app.expandingTextField.tooltip.remove"
-                          defaultMessage="Remove this item from the list."
-                        />
-                      </Tooltip>
-                    }>
-                    <FlatButton onClick={() => fields.remove(index)}>
-                      <CloseIcon />
-                    </FlatButton>
-                  </OverlayTrigger>
-                </td>
+
+                {!readOnly && (
+                  <React.Fragment>
+                    <td className="valign-top">
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id={Date.now()}>
+                            <FormattedMessage
+                              id="app.expandingTextField.tooltip.addAbove"
+                              defaultMessage="Insert new item right above."
+                            />
+                          </Tooltip>
+                        }>
+                        <FlatButton onClick={() => fields.insert(index, '')}>
+                          <AddIcon size="xs" />
+                          <Icon icon="level-up-alt" />
+                        </FlatButton>
+                      </OverlayTrigger>
+                    </td>
+                    <td className="valign-top">
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id={Date.now()}>
+                            <FormattedMessage
+                              id="app.expandingTextField.tooltip.remove"
+                              defaultMessage="Remove this item from the list."
+                            />
+                          </Tooltip>
+                        }>
+                        <FlatButton onClick={() => fields.remove(index)}>
+                          <CloseIcon />
+                        </FlatButton>
+                      </OverlayTrigger>
+                    </td>
+                  </React.Fragment>
+                )}
               </tr>
             ))}
           </tbody>
@@ -73,17 +86,20 @@ const ExpandingSelectField = ({
           )}
         </span>
       )}
-      <OverlayTrigger
-        placement="right"
-        overlay={
-          <Tooltip id={Date.now()}>
-            <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
-          </Tooltip>
-        }>
-        <FlatButton onClick={() => fields.push('')}>
-          <AddIcon />
-        </FlatButton>
-      </OverlayTrigger>
+
+      {!readOnly && (
+        <OverlayTrigger
+          placement="right"
+          overlay={
+            <Tooltip id={Date.now()}>
+              <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
+            </Tooltip>
+          }>
+          <FlatButton onClick={() => fields.push('')}>
+            <AddIcon />
+          </FlatButton>
+        </OverlayTrigger>
+      )}
     </div>
   </div>
 );
@@ -107,6 +123,7 @@ ExpandingSelectField.propTypes = {
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
   ]),
   options: PropTypes.array,
+  readOnly: PropTypes.bool,
 };
 
 export default ExpandingSelectField;

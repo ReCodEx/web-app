@@ -18,9 +18,7 @@ const validateFileName = value =>
       id="app.editExerciseAdvancedConfigForm.validation.emptyFileName"
       defaultMessage="Please, fill in a vaild file name."
     />
-  ) : (
-    undefined
-  );
+  ) : undefined;
 
 const prepareFilesOptions = defaultMemoize((supplementaryFiles, locale) => {
   const supplementaryFilesOptions = unique(supplementaryFiles.map(({ name }) => name))
@@ -36,6 +34,7 @@ class EditExerciseAdvancedConfigTest extends Component {
   createField = (name, type) => {
     const {
       supplementaryFiles,
+      readOnly = false,
       intl: { locale },
     } = this.props;
     const isArray = type.endsWith('[]');
@@ -53,14 +52,18 @@ class EditExerciseAdvancedConfigTest extends Component {
     }
 
     return isArray ? (
-      <FieldArray {...commonProps} component={type === 'remote-file[]' ? ExpandingSelectField : ExpandingTextField} />
+      <FieldArray
+        {...commonProps}
+        component={type === 'remote-file[]' ? ExpandingSelectField : ExpandingTextField}
+        readOnly={readOnly}
+      />
     ) : (
-      <Field {...commonProps} component={type === 'remote-file' ? SelectField : TextField} />
+      <Field {...commonProps} component={type === 'remote-file' ? SelectField : TextField} disabled={readOnly} />
     );
   };
 
   render() {
-    const { pipelines, pipelinesVariables, testName, test, testErrors, rawFill } = this.props;
+    const { pipelines, pipelinesVariables, testName, test, testErrors, rawFill, readOnly = false } = this.props;
     return (
       <tbody>
         <tr>
@@ -68,7 +71,7 @@ class EditExerciseAdvancedConfigTest extends Component {
             <h3>{testName}</h3>
           </td>
           <td className="shrink-col text-right">
-            {Boolean(rawFill) && (
+            {Boolean(rawFill) && !readOnly && (
               <Confirm
                 id="rawFill-all"
                 onConfirmed={rawFill.all}
@@ -96,7 +99,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                 </h5>
               </td>
               <td className="shrink-col text-right">
-                {Boolean(rawFill) && (
+                {Boolean(rawFill) && !readOnly && (
                   <Confirm
                     id={`rawFill-${idx}`}
                     onConfirmed={rawFill.pipeline(idx)}
@@ -131,7 +134,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                     {/* TODO -- description once additional metadata are added to pipelines */}
                   </td>
                   <td className="shrink-col text-right">
-                    {Boolean(rawFill) && (
+                    {Boolean(rawFill) && !readOnly && (
                       <Confirm
                         id={`rawFill-${idx}-${name}`}
                         onConfirmed={rawFill.variable(idx, name)}
@@ -169,6 +172,7 @@ EditExerciseAdvancedConfigTest.propTypes = {
   pipelinesVariables: PropTypes.array,
   testErrors: PropTypes.array,
   rawFill: PropTypes.object,
+  readOnly: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 

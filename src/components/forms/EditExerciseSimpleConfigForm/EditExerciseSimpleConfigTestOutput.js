@@ -14,9 +14,7 @@ const validateOutputFile = value =>
       id="app.editExerciseSimpleConfigForm.validation.outputFile"
       defaultMessage="Please, fill in the name of the output file."
     />
-  ) : (
-    undefined
-  );
+  ) : undefined;
 
 const validateExpectedOutput = value =>
   !value || value.trim() === '' ? (
@@ -24,9 +22,7 @@ const validateExpectedOutput = value =>
       id="app.editExerciseSimpleConfigForm.validation.expectedOutput"
       defaultMessage="Please, fill in the expected output file."
     />
-  ) : (
-    undefined
-  );
+  ) : undefined;
 
 const EditExerciseSimpleConfigTestOutput = ({
   smartFillOutput,
@@ -35,6 +31,7 @@ const EditExerciseSimpleConfigTestOutput = ({
   testErrors,
   useOutFile,
   showOutFile = true,
+  readOnly = false,
 }) => (
   <React.Fragment>
     <h4>
@@ -46,6 +43,7 @@ const EditExerciseSimpleConfigTestOutput = ({
         name={`${test}.useOutFile`}
         component={CheckboxField}
         onOff
+        disabled={readOnly}
         label={
           <FormattedMessage
             id="app.editExerciseSimpleConfigTests.useOutfile"
@@ -61,6 +59,7 @@ const EditExerciseSimpleConfigTestOutput = ({
         component={TextField}
         validate={validateOutputFile}
         maxLength={64}
+        disabled={readOnly}
         label={<FormattedMessage id="app.editExerciseSimpleConfigTests.outputFile" defaultMessage="Output file:" />}
       />
     )}
@@ -71,12 +70,13 @@ const EditExerciseSimpleConfigTestOutput = ({
       options={supplementaryFiles}
       addEmptyOption={true}
       validate={validateExpectedOutput}
+      disabled={readOnly}
       label={
         <FormattedMessage id="app.editExerciseSimpleConfigTests.expectedOutput" defaultMessage="Expected output:" />
       }
     />
 
-    {Boolean(smartFillOutput) && (
+    {Boolean(smartFillOutput) && !readOnly && (
       <div className="smart-fill-tinybar">
         <Confirm
           id="smartFillOutput"
@@ -104,6 +104,7 @@ EditExerciseSimpleConfigTestOutput.propTypes = {
   testErrors: PropTypes.object,
   useOutFile: PropTypes.bool,
   showOutFile: PropTypes.bool,
+  readOnly: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTestOutput;

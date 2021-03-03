@@ -16,6 +16,7 @@ const EditExerciseSimpleConfigTestInputs = ({
   testErrors,
   showInputFiles = false,
   showStdinFile = false,
+  readOnly = false,
 }) => (
   <React.Fragment>
     <h4>
@@ -28,6 +29,7 @@ const EditExerciseSimpleConfigTestInputs = ({
         component={ExpandingInputFilesField}
         options={supplementaryFiles}
         change={change}
+        readOnly={readOnly}
         leftLabel={
           <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesActual" defaultMessage="Input file:" />
         }
@@ -43,11 +45,12 @@ const EditExerciseSimpleConfigTestInputs = ({
         component={SelectField}
         options={supplementaryFiles}
         addEmptyOption={true}
+        disabled={readOnly}
         label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Std. input:" />}
       />
     )}
 
-    {Boolean(smartFillInputs) && (
+    {Boolean(smartFillInputs) && !readOnly && (
       <div className="smart-fill-tinybar">
         <Confirm
           id="smartFillInput"
@@ -76,6 +79,7 @@ EditExerciseSimpleConfigTestInputs.propTypes = {
   testErrors: PropTypes.object,
   showInputFiles: PropTypes.bool,
   showStdinFile: PropTypes.bool,
+  readOnly: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTestInputs;

@@ -286,7 +286,7 @@
   "app.editExercise.deleteExercise": "Delete the exercise",
   "app.editExercise.deleteExerciseWarning": "Deletion of an exercise will not affect any existing assignments nor their solutions, except they could not be synchronized anymore. However, the deletion will effectively remove the exercise from all groups of residence.",
   "app.editExercise.description": "Change exercise settings",
-  "app.editExercise.editConfig": "Edit Exercise Configuration",
+  "app.editExercise.editConfig": "Exercise Configuration",
   "app.editExercise.editTags": "Edit Tags",
   "app.editExercise.title": "Edit exercise",
   "app.editExerciseAdvancedConfigForm.validation.emptyFileName": "Please, fill in a vaild file name.",

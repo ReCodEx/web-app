@@ -69,7 +69,16 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
   }
 
   render() {
-    const { change, exercise, smartFillCompilation, supplementaryFiles, test, testErrors, intl } = this.props;
+    const {
+      change,
+      exercise,
+      smartFillCompilation,
+      supplementaryFiles,
+      test,
+      testErrors,
+      intl,
+      readOnly = false,
+    } = this.props;
     return (
       <React.Fragment>
         {this.state.compilationOpen === true ||
@@ -127,6 +136,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                           defaultMessage="There are no additional JAR files yet..."
                                         />
                                       }
+                                      readOnly={readOnly}
                                     />
                                     {exercise.runtimeEnvironments.length !== 1 && <hr />}
                                   </Col>
@@ -160,6 +170,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                         defaultMessage="There are no extra files yet..."
                                       />
                                     }
+                                    readOnly={readOnly}
                                   />
                                   <br />
                                   {possibleEntryPoints.length > 0 && (
@@ -168,6 +179,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                       component={SelectField}
                                       options={this.getPossibleEntryPoints(env.id)}
                                       addEmptyOption={true}
+                                      disabled={readOnly}
                                       label={
                                         <FormattedMessage
                                           id="app.editExerciseSimpleConfigTests.entryPoint"
@@ -187,7 +199,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
               </table>
             </div>
 
-            {Boolean(smartFillCompilation) && (
+            {Boolean(smartFillCompilation) && !readOnly && (
               <div className="smart-fill-tinybar">
                 <Confirm
                   id="smartFillCompilation"
@@ -236,6 +248,7 @@ EditExerciseSimpleConfigTestCompilation.propTypes = {
   testErrors: PropTypes.object,
   smartFillCompilation: PropTypes.func,
   change: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 

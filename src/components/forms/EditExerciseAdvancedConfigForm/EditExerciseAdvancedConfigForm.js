@@ -35,39 +35,42 @@ class EditExerciseAdvancedConfigForm extends Component {
       supplementaryFiles,
       exerciseTests,
       rawFill,
+      readOnly = false,
       intl: { locale },
     } = this.props;
 
     return (
       <FormBox
         id="exercise-config-form"
-        title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Edit Exercise Configuration" />}
+        title={<FormattedMessage id="app.editExercise.editConfig" defaultMessage="Exercise Configuration" />}
         unlimitedHeight
         noPadding
         success={submitSucceeded}
         dirty={dirty}
         footer={
-          <div className="text-center">
-            {dirty && (
-              <span>
-                <Button type="reset" onClick={reset} bsStyle="danger">
-                  <RefreshIcon gapRight />
-                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                </Button>
-              </span>
-            )}
+          !readOnly ? (
+            <div className="text-center">
+              {dirty && (
+                <span>
+                  <Button type="reset" onClick={reset} bsStyle="danger">
+                    <RefreshIcon gapRight />
+                    <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                  </Button>
+                </span>
+              )}
 
-            <SubmitButton
-              id="editExerciseAdvancedConfig"
-              invalid={invalid}
-              submitting={submitting}
-              dirty={dirty}
-              hasSucceeded={submitSucceeded}
-              hasFailed={submitFailed}
-              handleSubmit={handleSubmit}
-              messages={SUBMIT_BUTTON_MESSAGES}
-            />
-          </div>
+              <SubmitButton
+                id="editExerciseAdvancedConfig"
+                invalid={invalid}
+                submitting={submitting}
+                dirty={dirty}
+                hasSucceeded={submitSucceeded}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+                messages={SUBMIT_BUTTON_MESSAGES}
+              />
+            </div>
+          ) : null
         }>
         {submitFailed && (
           <Alert bsStyle="danger">
@@ -93,6 +96,7 @@ class EditExerciseAdvancedConfigForm extends Component {
                   test={'config.' + encodeNumId(test.id)}
                   testErrors={formErrors && formErrors[encodeNumId(test.id)]}
                   rawFill={exerciseTests.length > 1 ? rawFill(test.id, exerciseTests) : undefined}
+                  readOnly={readOnly}
                 />
               ))}
           </Table>
@@ -119,6 +123,7 @@ EditExerciseAdvancedConfigForm.propTypes = {
   formErrors: PropTypes.object,
   supplementaryFiles: PropTypes.array,
   rawFill: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 

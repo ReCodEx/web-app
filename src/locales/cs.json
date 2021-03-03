@@ -286,7 +286,7 @@
   "app.editExercise.deleteExercise": "Smazat úlohu",
   "app.editExercise.deleteExerciseWarning": "Smazání úlohy nebude mít žádný vliv na již zadané instance této úlohy ani jejich řešení, zadané úlohy pouze již nebude možné aktualizovat. Smazání ovšem efektivně odebre tuto úlohu ze všech domovských skupin.",
   "app.editExercise.description": "Změna nastavení úlohy",
-  "app.editExercise.editConfig": "Nastavení konfigurace úlohy",
+  "app.editExercise.editConfig": "Konfigurace úlohy",
   "app.editExercise.editTags": "Editace nálepek",
   "app.editExercise.title": "Změna nastavení úlohy",
   "app.editExerciseAdvancedConfigForm.validation.emptyFileName": "Prosíme, vložte platné jméno.",

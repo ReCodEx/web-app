@@ -49,6 +49,7 @@ class EditEnvironmentSimpleForm extends Component {
       invalid,
       error,
       runtimeEnvironments,
+      readOnly = false,
       intl: { locale },
     } = this.props;
 
@@ -62,7 +63,7 @@ class EditEnvironmentSimpleForm extends Component {
         }
         unlimitedHeight
         customIcons={
-          selectedEnvs.length > 0 ? (
+          !readOnly && selectedEnvs.length > 0 ? (
             <OverlayTrigger
               placement="left"
               overlay={
@@ -82,7 +83,7 @@ class EditEnvironmentSimpleForm extends Component {
             </OverlayTrigger>
           ) : null
         }>
-        {this.state.expanded || selectedEnvs.length === 0 ? (
+        {!readOnly && (this.state.expanded || selectedEnvs.length === 0) ? (
           <React.Fragment>
             {environmentsHelpUrl && (
               <Well bsSize="sm">
@@ -165,10 +166,12 @@ class EditEnvironmentSimpleForm extends Component {
                 ))}
               </tbody>
             </Table>
-            <div className="text-center text-primary clickable small halfem-margin-top" onClick={this.toggleExpanded}>
-              <FormattedMessage id="generic.showAll" defaultMessage="Show All" />
-              ...
-            </div>
+            {!readOnly && (
+              <div className="text-center text-primary clickable small halfem-margin-top" onClick={this.toggleExpanded}>
+                <FormattedMessage id="generic.showAll" defaultMessage="Show All" />
+                ...
+              </div>
+            )}
           </React.Fragment>
         )}
       </Box>
@@ -187,6 +190,7 @@ EditEnvironmentSimpleForm.propTypes = {
   error: PropTypes.any,
   initialValues: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
+  readOnly: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 
