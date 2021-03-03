@@ -108,7 +108,7 @@ class EditExerciseConfig extends Component {
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
         ({ value: exercise }) =>
-          hasPermissions(exercise, 'update') &&
+          hasPermissions(exercise, 'viewConfig') &&
           Promise.all([
             dispatch(fetchExerciseConfigIfNeeded(exerciseId)),
             dispatch(fetchExerciseEnvironmentConfigIfNeeded(exerciseId)),
@@ -407,7 +407,7 @@ class EditExerciseConfig extends Component {
                                   scoreConfig.calculator !== UNIVERSAL_SCORE_CALCULATOR &&
                                   this.renderTestsAndScoreBox(exercise, tests, scoreConfig)}
 
-                                {isSimple(exercise) && hasPermissions(exercise, 'update') && (
+                                {isSimple(exercise) && hasPermissions(exercise, 'viewConfig') && (
                                   <ResourceRenderer resource={exerciseEnvironmentConfig}>
                                     {environmentConfigs => (
                                       <ResourceRenderer
@@ -416,6 +416,7 @@ class EditExerciseConfig extends Component {
                                         forceLoading={runtimeEnvironments.size === 0}>
                                         {environments => (
                                           <EditEnvironmentSimpleForm
+                                            readOnly={!hasPermissions(exercise, 'update')}
                                             initialValues={getSimpleEnvironmentsInitValues(environmentConfigs)}
                                             runtimeEnvironments={onlySimpleEnvironments(environments)}
                                             onSubmit={this.transformAndSendSimpleRuntimesValuesCreator(
@@ -591,7 +592,7 @@ class EditExerciseConfig extends Component {
                     </ResourceRenderer>
                   )}
 
-                  {hasPermissions(exercise, 'update') && (
+                  {hasPermissions(exercise, 'viewConfig') && (
                     <div className="em-margin-vertical">
                       <Row>
                         <Col sm={12}>
@@ -605,6 +606,7 @@ class EditExerciseConfig extends Component {
                                   tests.length > 0 ? (
                                     isSimple(exercise) ? (
                                       <EditExerciseSimpleConfigForm
+                                        readOnly={!hasPermissions(exercise, 'update')}
                                         initialValues={getSimpleConfigInitValues(config, tests, envConfig)}
                                         exercise={exercise}
                                         exerciseTests={tests}
@@ -620,6 +622,7 @@ class EditExerciseConfig extends Component {
                                       />
                                     ) : pipelinesVariables && pipelinesVariables.length > 0 ? (
                                       <EditExerciseAdvancedConfigForm
+                                        readOnly={!hasPermissions(exercise, 'update')}
                                         exerciseId={exerciseId}
                                         exerciseTests={tests}
                                         pipelines={pipelines}
@@ -644,7 +647,7 @@ class EditExerciseConfig extends Component {
                                           <WarningIcon gapRight />
                                           <FormattedMessage
                                             id="app.editExercise.editConfig"
-                                            defaultMessage="Edit Exercise Configuration"
+                                            defaultMessage="Exercise Configuration"
                                           />
                                         </h4>
                                         <FormattedMessage
@@ -659,7 +662,7 @@ class EditExerciseConfig extends Component {
                                         <WarningIcon gapRight />
                                         <FormattedMessage
                                           id="app.editExercise.editConfig"
-                                          defaultMessage="Edit Exercise Configuration"
+                                          defaultMessage="Exercise Configuration"
                                         />
                                       </h4>
                                       <FormattedMessage

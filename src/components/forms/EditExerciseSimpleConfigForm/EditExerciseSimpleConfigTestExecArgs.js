@@ -9,7 +9,7 @@ import Icon from '../../icons';
 import Explanation from '../../widgets/Explanation';
 import Button from '../../widgets/FlatButton';
 
-const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors }) => (
+const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors, readOnly = false }) => (
   <React.Fragment>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.cmdlineTitle" defaultMessage="Command Line" />
@@ -19,6 +19,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors 
       name={`${test}.run-args`}
       component={ExpandingTextField}
       maxLength={64}
+      readOnly={readOnly}
       label={
         <React.Fragment>
           <FormattedMessage
@@ -35,7 +36,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors 
       }
     />
 
-    {Boolean(smartFillArgs) && (
+    {Boolean(smartFillArgs) && !readOnly && (
       <div className="smart-fill-tinybar">
         <Confirm
           id="smartFillArgs"
@@ -60,6 +61,7 @@ EditExerciseSimpleConfigTestExecArgs.propTypes = {
   smartFillArgs: PropTypes.func,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
+  readOnly: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTestExecArgs;

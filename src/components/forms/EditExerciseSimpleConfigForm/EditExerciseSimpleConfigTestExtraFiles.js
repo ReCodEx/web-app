@@ -15,6 +15,7 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
   test,
   testErrors,
   environmentId,
+  readOnly = false,
 }) => (
   <React.Fragment>
     <h4>
@@ -26,6 +27,7 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
       component={ExpandingInputFilesField}
       options={supplementaryFiles}
       change={change}
+      readOnly={readOnly}
       leftLabel={
         <FormattedMessage id="app.editExerciseSimpleConfigTests.extraFilesActual" defaultMessage="Extra file:" />
       }
@@ -40,7 +42,7 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
       }
     />
 
-    {Boolean(smartFillExtraFiles) && (
+    {Boolean(smartFillExtraFiles) && !readOnly && (
       <div className="smart-fill-tinybar">
         <Confirm
           id="smartFillExtraFiles"
@@ -71,6 +73,7 @@ EditExerciseSimpleConfigTestExtraFiles.propTypes = {
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   environmentId: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTestExtraFiles;

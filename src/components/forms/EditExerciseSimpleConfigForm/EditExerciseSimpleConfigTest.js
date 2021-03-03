@@ -58,6 +58,7 @@ class EditExerciseSimpleConfigTest extends Component {
       testName,
       useCustomJudge,
       useOutFile,
+      readOnly = false,
     } = this.props;
 
     // Find out whether environment with override is selected (only standalone envs should have overrides)
@@ -104,6 +105,7 @@ class EditExerciseSimpleConfigTest extends Component {
             supplementaryFiles={supplementaryFiles}
             test={test}
             testErrors={testErrors}
+            readOnly={readOnly}
           />
         )}
 
@@ -114,6 +116,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 smartFillEntryPoint={smartFill ? smartFill.entryPoint : null}
                 test={test}
                 testErrors={testErrors}
+                readOnly={readOnly}
               />
             </Col>
           </Row>
@@ -130,6 +133,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 testErrors={testErrors}
                 showInputFiles={showInputsFiles}
                 showStdinFile={showInputsStdIn}
+                readOnly={readOnly}
               />
             </Col>
           )}
@@ -143,6 +147,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 test={test}
                 testErrors={testErrors}
                 environmentId={environmentWithOverride}
+                readOnly={readOnly}
               />
             </Col>
           )}
@@ -153,6 +158,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 smartFillArgs={smartFill ? smartFill.args : null}
                 test={test}
                 testErrors={testErrors}
+                readOnly={readOnly}
               />
             </Col>
           )}
@@ -166,6 +172,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 testErrors={testErrors}
                 useOutFile={useOutFile}
                 showOutFile={showOutputFile}
+                readOnly={readOnly}
               />
             </Col>
           )}
@@ -180,12 +187,13 @@ class EditExerciseSimpleConfigTest extends Component {
                 useCustomJudge={useCustomJudge}
                 showBuiltins={showJudgeBuiltins}
                 showJudgeArgs={showJudgeArgs}
+                readOnly={readOnly}
               />
             </Col>
           )}
         </Row>
 
-        {Boolean(smartFill) && (
+        {Boolean(smartFill) && !readOnly && (
           <div className="smart-fill-bar">
             <Confirm
               id="smartFillAll"
@@ -222,6 +230,7 @@ EditExerciseSimpleConfigTest.propTypes = {
   testName: PropTypes.string.isRequired,
   useCustomJudge: PropTypes.bool,
   useOutFile: PropTypes.bool,
+  readOnly: PropTypes.bool,
 };
 
 export default EditExerciseSimpleConfigTest;

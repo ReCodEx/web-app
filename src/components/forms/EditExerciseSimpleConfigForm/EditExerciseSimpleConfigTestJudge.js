@@ -64,6 +64,7 @@ const EditExerciseSimpleConfigTestJudge = ({
   useCustomJudge,
   showBuiltins = true,
   showJudgeArgs = true,
+  readOnly = false,
   intl,
 }) => (
   <React.Fragment>
@@ -76,6 +77,7 @@ const EditExerciseSimpleConfigTestJudge = ({
         name={`${test}.useCustomJudge`}
         component={CheckboxField}
         onOff
+        disabled={readOnly}
         label={
           <FormattedMessage
             id="app.editExerciseSimpleConfigTests.useCustomJudge"
@@ -92,6 +94,7 @@ const EditExerciseSimpleConfigTestJudge = ({
         options={supplementaryFiles}
         addEmptyOption={true}
         validate={validateCustomJudge}
+        disabled={readOnly}
         label={
           <FormattedMessage
             id="app.editExerciseSimpleConfigTests.customJudgeBinary"
@@ -141,6 +144,7 @@ const EditExerciseSimpleConfigTestJudge = ({
             name: intl.formatMessage(messages.diff),
           },
         ]}
+        disabled={readOnly}
         label={<FormattedMessage id="app.editExerciseSimpleConfigTests.judgeType" defaultMessage="Judge:" />}
       />
     )}
@@ -150,6 +154,7 @@ const EditExerciseSimpleConfigTestJudge = ({
         name={`${test}.judge-args`}
         component={ExpandingTextField}
         maxLength={64}
+        readOnly={readOnly}
         label={
           <React.Fragment>
             <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeArgs" defaultMessage="Judge arguments:" />
@@ -164,7 +169,7 @@ const EditExerciseSimpleConfigTestJudge = ({
       />
     )}
 
-    {Boolean(smartFillJudge) && (
+    {Boolean(smartFillJudge) && !readOnly && (
       <div className="smart-fill-tinybar">
         <Confirm
           id="smartFillJudge"
@@ -194,6 +199,7 @@ EditExerciseSimpleConfigTestJudge.propTypes = {
   showBuiltins: PropTypes.bool,
   showJudgeArgs: PropTypes.bool,
   onlyCustomJudge: PropTypes.bool,
+  readOnly: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 
