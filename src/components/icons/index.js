@@ -58,6 +58,7 @@ export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const SendIcon = props => <Icon {...props} icon={['far', 'paper-plane']} />;
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
 export const ShadowAssignmentIcon = props => <Icon {...props} icon="user-secret" />;
+export const SignInIcon = props => <Icon {...props} icon="sign-in-alt" />;
 export const SortedIcon = ({ active = true, descending = false, ...props }) => (
   <Icon
     icon={!active || !descending ? 'sort-alpha-down' : 'sort-alpha-up'}

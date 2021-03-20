@@ -19,7 +19,7 @@ import { getErrorMessage } from '../../locales/apiErrorMessages';
 
 import withLinks from '../../helpers/withLinks';
 
-const ALLOW_CAS_REGISTRATION = getConfigVar('ALLOW_CAS_REGISTRATION');
+const EXTERNAL_AUTH_URL = getConfigVar('EXTERNAL_AUTH_URL');
 
 class Login extends Component {
   /**
@@ -136,9 +136,9 @@ class Login extends Component {
             <Row>
               <Col
                 lg={4}
-                lgOffset={ALLOW_CAS_REGISTRATION ? 1 : 4}
+                lgOffset={EXTERNAL_AUTH_URL ? 1 : 4}
                 md={6}
-                mdOffset={ALLOW_CAS_REGISTRATION ? 0 : 3}
+                mdOffset={EXTERNAL_AUTH_URL ? 0 : 3}
                 sm={8}
                 smOffset={2}>
                 <LoginForm onSubmit={this.loginAndRedirect} />
@@ -152,9 +152,10 @@ class Login extends Component {
                   </Link>
                 </p>
               </Col>
-              {ALLOW_CAS_REGISTRATION && (
+
+              {EXTERNAL_AUTH_URL && (
                 <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
-                  <CASLoginBox afterLogin={this.redirectAfterLogin} />
+                  {/* TODO FIXME */ false && <CASLoginBox afterLogin={this.redirectAfterLogin} />}
                 </Col>
               )}
             </Row>

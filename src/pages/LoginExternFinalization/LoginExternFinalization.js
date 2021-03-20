@@ -9,8 +9,8 @@ import styles from './LoginExternFinalization.less';
  * Also controls the state of the sidebar - collapsing and showing the sidebar.
  */
 class LoginExternFinalization extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.closeTimeout = null;
   }
 

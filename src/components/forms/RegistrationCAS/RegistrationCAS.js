@@ -9,8 +9,9 @@ import { safeGet } from '../../../helpers/common';
 import { getConfigVar } from '../../../helpers/config';
 import { getErrorMessage } from '../../../locales/apiErrorMessages';
 
-const casHelpdeskUrl = getConfigVar('CAS_HELPDESK_URL');
+const casHelpdeskUrl = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
 
+/* TODO DEPRECATED REMOVE  */
 class RegistrationCAS extends Component {
   state = { instanceId: null, lastError: null };
 
