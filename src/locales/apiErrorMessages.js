@@ -8,6 +8,15 @@ const apiErrorCodes = defineMessages({
       'The user has multiple e-mail addresses and multiple matching accounts already exist. Accounts cannot be associated due to ambiguity.',
   },
   '400-101': { id: 'app.apiErrorCodes.400-101', defaultMessage: 'The credentials are not valid.' },
+  '400-104': {
+    id: 'app.apiErrorCodes.400-104',
+    defaultMessage: 'User was correctly authenticated, but there is no corresponding account in ReCodEx.',
+  },
+  '400-105': {
+    id: 'app.apiErrorCodes.400-105',
+    defaultMessage:
+      'Attempt to register a new user failed since external authenticator did not provide a role. The external user identity may not have required attributes.',
+  },
   '400-106': { id: 'app.apiErrorCodes.400-106', defaultMessage: 'The user is already registered.' },
   '403-001': { id: 'app.apiErrorCodes.403-001', defaultMessage: 'The user account does not exist.' },
   '403-002': { id: 'app.apiErrorCodes.403-002', defaultMessage: 'The user account has been disabled.' },

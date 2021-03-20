@@ -81,12 +81,10 @@ Sample content of this file is following:
   "API_BASE": "https://recodex.base.domain/api/v1",
   "TITLE": "ReCodEx",
   "SKIN": "skin-green",
-  "ALLOW_NORMAL_REGISTRATION": true,
-  "ALLOW_LDAP_REGISTRATION": false,
-  "ALLOW_CAS_REGISTRATION": true,
+  "ALLOW_LOCAL_REGISTRATION": true,
   "URL_PATH_PREFIX": "",
   "PERSISTENT_TOKENS_KEY_PREFIX": "recodex",
-  "CAS_HELPDESK_URL": "mailto:recodex@example.domain"
+  "EXTERNAL_AUTH_HELPDESK_URL": "mailto:recodex@example.domain"
 }
 ```
 
@@ -99,7 +97,7 @@ Meaning of individual values:
 * `ALLOW_*` - Allows or disables different forms for registration. Note that this configuration should match which registration types are supported by the API.
 * `URL_PATH_PREFIX` - If the ReCodEx is not placed in the root path of the current domain, the path prefix should be placed here. This also allows running multiple ReCodEx frontends on one domain.
 * `PERSISTENT_TOKENS_KEY_PREFIX` - Prefix used for security token identifiers (in cookies or in local storage). If you run multiple ReCodEx instances on the same domain, it might be necessary to give each instance different prefix.
-* `CAS_HELPDESK_URL` - URL for a link that is displayed in case CAS registration fails. The URL may be either `mailto:` URL (with email to tech support) or `http(s):` URL leading to a web page where help can be found.
+* `EXTERNAL_AUTH_HELPDESK_URL` - URL for a link that is displayed in case CAS registration fails. The URL may be either `mailto:` URL (with email to tech support) or `http(s):` URL leading to a web page where help can be found.
 
 ## Usage
 

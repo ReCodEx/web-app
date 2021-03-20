@@ -1,30 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset, startAsyncValidation } from 'redux-form';
 import { defaultMemoize } from 'reselect';
+import { Row, Col, Well } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import RegistrationForm from '../../components/forms/RegistrationForm';
-import ExternalRegistrationForm from '../../components/forms/ExternalRegistrationForm';
 import RegistrationCAS from '../../components/forms/RegistrationCAS';
+import Box from '../../components/widgets/Box';
+import Button from '../../components/widgets/FlatButton';
+import { MailIcon, LinkIcon, SignInIcon } from '../../components/icons';
 
 import { createAccount, createExternalAccount } from '../../redux/modules/registration';
 import { fetchInstances } from '../../redux/modules/instances';
 import { publicInstancesSelector } from '../../redux/selectors/instances';
 import { hasSucceeded } from '../../redux/selectors/registration';
 
-import { getConfigVar } from '../../helpers/config';
+import { getConfigVar, getConfigVarLocalized } from '../../helpers/config';
 import withLinks from '../../helpers/withLinks';
 
 // Configuration properties
-const ALLOW_NORMAL_REGISTRATION = getConfigVar('ALLOW_NORMAL_REGISTRATION');
-const ALLOW_LDAP_REGISTRATION = getConfigVar('ALLOW_LDAP_REGISTRATION');
-const ALLOW_CAS_REGISTRATION = getConfigVar('ALLOW_CAS_REGISTRATION');
+const ALLOW_LOCAL_REGISTRATION = getConfigVar('ALLOW_LOCAL_REGISTRATION');
+const EXTERNAL_AUTH_HELPDESK_URL = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
 
 const getInitialValues = defaultMemoize(instances => {
   const firstInstance = instances && instances[0];
@@ -62,11 +64,13 @@ class Registration extends Component {
       instances,
       createAccount,
       createExternalAccount,
-      links: { HOME_URI },
+      links: { HOME_URI, LOGIN_URI },
+      intl: { locale },
     } = this.props;
 
-    const registratorsCount =
-      (ALLOW_NORMAL_REGISTRATION ? 1 : 0) + (ALLOW_LDAP_REGISTRATION ? 1 : 0) + (ALLOW_CAS_REGISTRATION ? 1 : 0);
+    const EXTERNAL_AUTH_NAME = getConfigVarLocalized('EXTERNAL_AUTH_NAME', locale);
+    const showExternalInfo = Boolean(!ALLOW_LOCAL_REGISTRATION && EXTERNAL_AUTH_NAME && EXTERNAL_AUTH_HELPDESK_URL);
+
     return (
       <PageContent
         title={<FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCodEx account" />}
@@ -85,40 +89,59 @@ class Registration extends Component {
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
           {instances => (
             <Row>
-              {ALLOW_NORMAL_REGISTRATION && (
-                <Col
-                  lg={4}
-                  lgOffset={registratorsCount === 1 ? 4 : 0}
-                  md={6}
-                  mdOffset={registratorsCount === 1 ? 3 : 0}
-                  sm={12}
-                  smOffset={0}>
+              <Col lg={8} lgOffset={2} md={10} mdOffset={1} sm={12} smOffset={0}>
+                {ALLOW_LOCAL_REGISTRATION && (
                   <RegistrationForm
                     instances={instances}
                     initialValues={getInitialValues(instances)}
                     onSubmit={createAccount}
                   />
-                </Col>
-              )}
-              {ALLOW_LDAP_REGISTRATION && (
-                <Col
-                  lg={4}
-                  lgOffset={registratorsCount === 1 ? 4 : 0}
-                  md={6}
-                  mdOffset={registratorsCount === 1 ? 3 : 0}
-                  sm={12}
-                  smOffset={0}>
-                  <ExternalRegistrationForm instances={instances} onSubmit={createExternalAccount()} />
-                </Col>
-              )}
-              {ALLOW_CAS_REGISTRATION && (
-                <Col
-                  lg={4}
-                  lgOffset={registratorsCount === 1 ? 4 : 0}
-                  md={6}
-                  mdOffset={registratorsCount === 1 ? 3 : 0}
-                  sm={12}
-                  smOffset={0}>
+                )}
+
+                {showExternalInfo && (
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.registration.externalTitle"
+                        defaultMessage="External Authentication Enabled"
+                      />
+                    }
+                    footer={
+                      <div className="text-center">
+                        <Link to={LOGIN_URI}>
+                          <Button bsStyle="primary">
+                            <SignInIcon gapRight />
+                            <FormattedMessage id="app.registration.external.gotoSignin" defaultMessage="Sign-in Page" />
+                          </Button>
+                        </Link>
+
+                        <a href={EXTERNAL_AUTH_HELPDESK_URL} className="em-margin-left">
+                          {EXTERNAL_AUTH_HELPDESK_URL.startsWith('mailto:') ? (
+                            <Button bsStyle="primary">
+                              <MailIcon gapRight />
+                              <FormattedMessage id="app.registration.external.mail" defaultMessage="Contact Support" />
+                            </Button>
+                          ) : (
+                            <Button bsStyle="primary">
+                              <LinkIcon gapRight />
+                              <FormattedMessage id="app.registration.external.link" defaultMessage="Visit Help Page" />
+                            </Button>
+                          )}
+                        </a>
+                      </div>
+                    }>
+                    <Well>
+                      <FormattedMessage
+                        id="app.registration.externalInfo"
+                        defaultMessage="Registration of local accounts is disabled. However, external authenticator '{authName}' is registered which is allowed to create or connect ReCodEx accounts. Simply visit 'Sign in' page and use this authenticator."
+                        values={{ authName: EXTERNAL_AUTH_NAME }}
+                      />
+                    </Well>
+                  </Box>
+                )}
+              </Col>
+              {/* TODO DEPRECATED REMOVE */ false && (
+                <Col lg={4} lgOffset={0} md={6} mdOffset={0} sm={12} smOffset={0}>
                   <RegistrationCAS instances={instances} onSubmit={createExternalAccount('cas')} />
                 </Col>
               )}
@@ -139,6 +162,7 @@ Registration.propTypes = {
   reset: PropTypes.func.isRequired,
   triggerAsyncValidation: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
+  intl: intlShape,
 };
 
 export default withLinks(
@@ -159,5 +183,5 @@ export default withLinks(
         dispatch(reset('external-registration'));
       },
     })
-  )(Registration)
+  )(injectIntl(Registration))
 );
