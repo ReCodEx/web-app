@@ -70,7 +70,7 @@ LOGGER_MIDDLEWARE_EXCEPTIONS=true
 Compiled bundle properties can be modified by runtime configuration file. The
 file is located in `etc/env.json` file. New values of these properties are
 applied after restart of the app. Note, that all these values are directly
-accesible to JavaScript code in browsers, so it is not a good place to store any
+accessible to JavaScript code in browsers, so it is not a good place to store any
 kind of secrets.
 
 Sample content of this file is following:
@@ -81,10 +81,17 @@ Sample content of this file is following:
   "API_BASE": "https://recodex.base.domain/api/v1",
   "TITLE": "ReCodEx",
   "SKIN": "skin-green",
-  "ALLOW_LOCAL_REGISTRATION": true,
   "URL_PATH_PREFIX": "",
   "PERSISTENT_TOKENS_KEY_PREFIX": "recodex",
-  "EXTERNAL_AUTH_HELPDESK_URL": "mailto:recodex@example.domain"
+  "ENVIRONMENTS_INFO_URL": "https://github.com/ReCodEx/wiki/wiki/Runtime-Environments",
+  "ALLOW_LOCAL_REGISTRATION": false,
+  "EXTERNAL_AUTH_URL": "https://some.other.domain/cas/",
+  "EXTERNAL_AUTH_SERVICE_ID": "id-from-core-api",
+  "EXTERNAL_AUTH_NAME": {
+    "cs": "Univerzitní CAS",
+    "en": "University CAS"
+  },
+  "EXTERNAL_AUTH_HELPDESK_URL": "mailto:cas@some.other.domain"
 }
 ```
 
@@ -94,10 +101,15 @@ Meaning of individual values:
 * `API_BASE` - URL of API to which the frontend is connected.
 * `TITLE` - Prefix for the web page title.
 * `SKIN` - Which [skin color](https://adminlte.io/themes/AdminLTE/documentation/index.html) of the AdminLTE should be used.
-* `ALLOW_*` - Allows or disables different forms for registration. Note that this configuration should match which registration types are supported by the API.
 * `URL_PATH_PREFIX` - If the ReCodEx is not placed in the root path of the current domain, the path prefix should be placed here. This also allows running multiple ReCodEx frontends on one domain.
 * `PERSISTENT_TOKENS_KEY_PREFIX` - Prefix used for security token identifiers (in cookies or in local storage). If you run multiple ReCodEx instances on the same domain, it might be necessary to give each instance different prefix.
+* `ENVIRONMENTS_INFO_URL` - Link to a web page where individual runtime environments are explained (default refers to our wiki).
+* `ALLOW_LOCAL_REGISTRATION` - Allows or disables different forms for registration. Note that this configuration should match which registration types are supported by the API.
+* `EXTERNAL_AUTH_URL` - URL of external authentication service (that implements [ReCodEx protocol](https://github.com/ReCodEx/wiki/wiki/External-Authenticators)).
+* `EXTERNAL_AUTH_SERVICE_ID` - Identifier (name) of the external authenticator as specified in core-api configuration (and in database).
+* `EXTERNAL_AUTH_NAME` - Caption (string) or object with localized captions (keys are locales) of the service (will be displayed in UI).
 * `EXTERNAL_AUTH_HELPDESK_URL` - URL for a link that is displayed in case CAS registration fails. The URL may be either `mailto:` URL (with email to tech support) or `http(s):` URL leading to a web page where help can be found.
+
 
 ## Usage
 
@@ -133,4 +145,4 @@ There is `.env-sample` file which can be just copied and altered.
 
 ## Documentation
 
-The descriptin and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki) of the ReCodEx project.
+The description and documentation of the project is placed in the [global wiki](https://github.com/ReCodEx/wiki/wiki) of the ReCodEx project.
