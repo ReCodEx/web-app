@@ -76,15 +76,6 @@ export const externalLoginFailed = service => ({
   meta: { service },
 });
 
-// TODO DEPREACTED REMOVE
-export const loginServices = {
-  local: LOCAL_LOGIN,
-  external: {
-    CAS_UK: 'cas-uk',
-    CAS_UK_TICKET: 'cas-uk/cas',
-  },
-};
-
 export const refresh = () =>
   createApiAction({
     type: actionTypes.LOGIN,
