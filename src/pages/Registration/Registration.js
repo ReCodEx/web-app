@@ -62,7 +62,6 @@ class Registration extends Component {
     const {
       instances,
       createAccount,
-      createExternalAccount,
       links: { HOME_URI, LOGIN_URI },
       intl: { locale },
     } = this.props;

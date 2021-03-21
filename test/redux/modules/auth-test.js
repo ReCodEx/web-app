@@ -8,7 +8,7 @@ import reducerFactory, {
   logout,
   login,
   externalLogin,
-  loginServices,
+  LOCAL_LOGIN,
 } from '../../../src/redux/modules/auth';
 import { isLoggedIn, hasSucceeded, hasFailed, statusSelector } from '../../../src/redux/selectors/auth';
 
@@ -31,23 +31,20 @@ describe('Authentication', () => {
         method: 'POST',
         endpoint: '/login',
         body: { username: 'usr', password: 'pwd' },
-        meta: { service: loginServices.local },
+        meta: { service: LOCAL_LOGIN },
       });
     });
 
     it('must create correct external login request action', () => {
       const serviceId = 'some-ext-service';
-      const action = externalLogin(serviceId)({
-        serviceToken: 'xyz',
-        otherData: 'uvw',
-      });
+      const token = 'kzr-pzr';
+      const action = externalLogin(serviceId, token);
       expect(action.request).to.eql({
         type: actionTypes.LOGIN,
         method: 'POST',
         endpoint: `/login/${serviceId}`,
         body: {
-          serviceToken: 'xyz',
-          otherData: 'uvw',
+          token,
         },
         meta: { service: serviceId, popupWindow: null },
       });
