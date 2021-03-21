@@ -36,6 +36,8 @@ const apiErrorCodes = defineMessages({
   '500-000': { id: 'app.apiErrorCodes.500-000', defaultMessage: 'Unexpected internal error.' },
 });
 
+export const hasErrorMessage = error => Boolean(error && error.code && apiErrorCodes[error.code]);
+
 export const getErrorMessage = formatMessage => error => {
   const code = error && error.code;
   const parameters = (error && error.parameters) || {};

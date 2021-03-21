@@ -62,12 +62,12 @@ export const validatePasswordStrength = password =>
     body: { password },
   });
 
-export const externalLogin = service => (credentials, popupWindow = null) =>
+export const externalLogin = (service, token, popupWindow = null) =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
     endpoint: `/login/${service}`,
-    body: credentials,
+    body: { token },
     meta: { service, popupWindow },
   });
 
@@ -76,6 +76,7 @@ export const externalLoginFailed = service => ({
   meta: { service },
 });
 
+// TODO DEPREACTED REMOVE
 export const loginServices = {
   local: LOCAL_LOGIN,
   external: {

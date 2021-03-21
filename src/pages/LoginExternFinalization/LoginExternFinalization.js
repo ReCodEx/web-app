@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
-
-import { getTicketFromUrl } from '../../helpers/cas';
-
+import PropTypes from 'prop-types';
+import { getConfigVar } from '../../helpers/config';
 import styles from './LoginExternFinalization.less';
+
+const EXTERNAL_AUTH_SERVICE_ID = getConfigVar('EXTERNAL_AUTH_SERVICE_ID');
+
+export const getTokenFromUrl = url => {
+  const match = url.match(/[?&]token=([^&\b]+)/);
+  return match === null ? null : match[1];
+};
 
 /**
  * Handles the dependency injection of the localized links based on the current language stated in the URL.
@@ -31,13 +37,20 @@ class LoginExternFinalization extends Component {
   };
 
   componentDidMount() {
-    const ticket = getTicketFromUrl(window.location.href);
-    if (!ticket || !window.opener || window.opener.closed) {
+    if (this.props.match.params.service !== EXTERNAL_AUTH_SERVICE_ID) {
+      // this is not the auth. service you are looking for...
       window.close();
       return;
     }
 
-    window.opener.postMessage(ticket, window.location.origin);
+    const externToken = getTokenFromUrl(window.location.href);
+    if (!externToken || !window.opener || window.opener.closed) {
+      // we have nothing to send or no one to send it to
+      window.close();
+      return;
+    }
+
+    window.opener.postMessage(externToken, window.location.origin);
     window.addEventListener('message', this.messageHandler);
   }
 
@@ -48,10 +61,18 @@ class LoginExternFinalization extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <p className={styles.centered}>Processing CAS authentication...</p>
+        <p className={styles.centered}>Processing external authentication data...</p>
       </div>
     );
   }
 }
+
+LoginExternFinalization.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      service: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default LoginExternFinalization;

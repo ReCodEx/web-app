@@ -9,17 +9,19 @@ import { Row, Col } from 'react-bootstrap';
 
 import PageContent from '../../components/layout/PageContent';
 import LoginForm from '../../components/forms/LoginForm';
-import CASLoginBox from '../../containers/CAS';
+import ExternalLoginBox from '../../containers/ExternalLogin';
 
 import { login } from '../../redux/modules/auth';
 import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';
-import { getConfigVar } from '../../helpers/config';
+import { getConfigVar, getConfigVarLocalized } from '../../helpers/config';
 import { getErrorMessage } from '../../locales/apiErrorMessages';
 
 import withLinks from '../../helpers/withLinks';
 
 const EXTERNAL_AUTH_URL = getConfigVar('EXTERNAL_AUTH_URL');
+const EXTERNAL_AUTH_SERVICE_ID = getConfigVar('EXTERNAL_AUTH_SERVICE_ID');
+const EXTERNAL_AUTH_HELPDESK_URL = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
 
 class Login extends Component {
   /**
@@ -91,7 +93,10 @@ class Login extends Component {
         params: { redirect = null },
       },
       links: { HOME_URI, RESET_PASSWORD_URI },
+      intl: { locale },
     } = this.props;
+
+    const external = EXTERNAL_AUTH_URL && EXTERNAL_AUTH_SERVICE_ID;
 
     return (
       <PageContent
@@ -136,11 +141,13 @@ class Login extends Component {
             <Row>
               <Col
                 lg={4}
-                lgOffset={EXTERNAL_AUTH_URL ? 1 : 4}
+                lgOffset={external ? 1 : 4}
                 md={6}
-                mdOffset={EXTERNAL_AUTH_URL ? 0 : 3}
-                sm={8}
-                smOffset={2}>
+                mdOffset={external ? 0 : 3}
+                sm={10}
+                smOffset={2}
+                xs={12}
+                xsOffset={0}>
                 <LoginForm onSubmit={this.loginAndRedirect} />
                 <p className="text-center">
                   <FormattedMessage
@@ -153,9 +160,15 @@ class Login extends Component {
                 </p>
               </Col>
 
-              {EXTERNAL_AUTH_URL && (
-                <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={8} smOffset={2}>
-                  {/* TODO FIXME */ false && <CASLoginBox afterLogin={this.redirectAfterLogin} />}
+              {external && (
+                <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={10} smOffset={2} xs={12} xsOffset={0}>
+                  <ExternalLoginBox
+                    name={getConfigVarLocalized('EXTERNAL_AUTH_NAME', locale)}
+                    url={EXTERNAL_AUTH_URL}
+                    service={EXTERNAL_AUTH_SERVICE_ID}
+                    helpUrl={EXTERNAL_AUTH_HELPDESK_URL}
+                    afterLogin={this.redirectAfterLogin}
+                  />
                 </Col>
               )}
             </Row>
