@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import RegistrationForm from '../../components/forms/RegistrationForm';
-import RegistrationCAS from '../../components/forms/RegistrationCAS';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
 import { MailIcon, LinkIcon, SignInIcon } from '../../components/icons';
@@ -140,11 +139,6 @@ class Registration extends Component {
                   </Box>
                 )}
               </Col>
-              {/* TODO DEPRECATED REMOVE */ false && (
-                <Col lg={4} lgOffset={0} md={6} mdOffset={0} sm={12} smOffset={0}>
-                  <RegistrationCAS instances={instances} onSubmit={createExternalAccount('cas')} />
-                </Col>
-              )}
             </Row>
           )}
         </ResourceRenderer>
