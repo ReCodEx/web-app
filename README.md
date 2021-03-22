@@ -88,8 +88,8 @@ Sample content of this file is following:
   "EXTERNAL_AUTH_URL": "https://some.other.domain/cas/",
   "EXTERNAL_AUTH_SERVICE_ID": "id-from-core-api",
   "EXTERNAL_AUTH_NAME": {
-    "cs": "Univerzitní CAS",
-    "en": "University CAS"
+    "cs": "Univerzitní login",
+    "en": "University login"
   },
   "EXTERNAL_AUTH_HELPDESK_URL": "mailto:cas@some.other.domain"
 }
