@@ -20,7 +20,7 @@ class ExternalLoginBox extends Component {
 
   constructor(props) {
     super(props);
-    this.casWindow = null;
+    this.popupWindow = null;
     this.pollPopupClosed = null;
   }
 
@@ -28,10 +28,10 @@ class ExternalLoginBox extends Component {
   messageHandler = e => {
     const token = e.data; // the message should be the external JWT token
 
-    if (token !== null && e.source === this.casWindow && this.casWindow !== null) {
+    if (token !== null && e.source === this.popupWindow && this.popupWindow !== null) {
       // cancel the window and the interval
-      this.casWindow.postMessage('received', e.origin);
-      this.props.login(token, this.casWindow, error => {
+      this.popupWindow.postMessage('received', e.origin);
+      this.props.login(token, this.popupWindow, error => {
         error.json().then(body => {
           if (body && body.error && hasErrorMessage(body.error)) {
             this.setState({ lastError: body.error });
@@ -43,11 +43,11 @@ class ExternalLoginBox extends Component {
   };
 
   onClick = () => {
-    if (this.casWindow === null || this.casWindow.closed) {
+    if (this.popupWindow === null || this.popupWindow.closed) {
       const { url, fail } = this.props;
 
-      this.casWindow = openPopupWindow(url);
-      if (!this.casWindow) {
+      this.popupWindow = openPopupWindow(url);
+      if (!this.popupWindow) {
         fail(); // not in browser or for some reason the window could not have been opened
       } else {
         // the window is open, now periodically check if the user has already logged in
@@ -55,14 +55,14 @@ class ExternalLoginBox extends Component {
         this.pollPopupClosed = window.setInterval(this.pollPopupClosedHandler, 100);
       }
     } else {
-      this.casWindow.focus(); // no need to create the window again
+      this.popupWindow.focus(); // no need to create the window again
     }
     this.setState({ pending: true, lastError: null });
   };
 
   pollPopupClosedHandler = () => {
     // Check, whether the popup has been closed ...
-    if (!this.casWindow || this.casWindow.closed === true) {
+    if (!this.popupWindow || this.popupWindow.closed === true) {
       this.dispose();
     }
   };
@@ -78,8 +78,8 @@ class ExternalLoginBox extends Component {
       this.pollPopupClosed = null;
     }
 
-    if (this.casWindow) {
-      this.casWindow = null;
+    if (this.popupWindow) {
+      this.popupWindow = null;
     }
 
     this.setState({ pending: false });
