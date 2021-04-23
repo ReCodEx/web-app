@@ -7,7 +7,10 @@ import MenuItem from '../../widgets/Sidebar/MenuItem';
 
 import withLinks from '../../../helpers/withLinks';
 
-const Admin = ({ currentUrl, links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI, BROKER_URI, MESSAGES_URI } }) => (
+const Admin = ({
+  currentUrl,
+  links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI, SERVER_MANAGEMENT_URI, MESSAGES_URI },
+}) => (
   <ul className="sidebar-menu">
     <MenuTitle title={<FormattedMessage id="app.sudebar.menu.admin.title" defaultMessage="Administration" />} />
     <MenuItem
@@ -36,9 +39,9 @@ const Admin = ({ currentUrl, links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_U
     />
     <MenuItem
       icon="server"
-      title={<FormattedMessage id="app.sidebar.menu.admin.broker" defaultMessage="Broker Management" />}
+      title={<FormattedMessage id="app.sidebar.menu.admin.server" defaultMessage="Server Management" />}
       currentPath={currentUrl}
-      link={BROKER_URI}
+      link={SERVER_MANAGEMENT_URI}
     />
   </ul>
 );

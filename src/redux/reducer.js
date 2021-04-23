@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import app from './modules/app';
 import assignments from './modules/assignments';
+import asyncJobs from './modules/asyncJobs';
 import attachmentFiles from './modules/attachmentFiles';
 import auth, { actionTypes as authActionTypes } from './modules/auth';
 import boxes from './modules/boxes';
@@ -56,6 +57,7 @@ import systemMessages from './modules/systemMessages';
 const createRecodexReducers = (token, instanceId, lang) => ({
   app: app(lang),
   assignments,
+  asyncJobs,
   attachmentFiles,
   auth: auth(token, instanceId),
   boxes,

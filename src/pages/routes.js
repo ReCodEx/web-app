@@ -42,7 +42,7 @@ import Archive from './Archive';
 import SystemMessages from './SystemMessages/SystemMessages';
 import ChangePassword from './ChangePassword';
 import ResetPassword from './ResetPassword';
-import Broker from './Broker/Broker';
+import ServerManagement from './ServerManagement';
 
 import { LOGIN_URI_PREFIX, createLoginLinkWithRedirect } from '../redux/helpers/api/tools';
 import { API_BASE, URL_PATH_PREFIX } from '../helpers/config';
@@ -105,7 +105,7 @@ const routesDescriptors = [
   r('app/system-messages', SystemMessages, 'MESSAGES_URI', true),
   r('app/sis-integration', SisIntegration, 'SIS_INTEGRATION_URI', true),
   r('app/archive', Archive, 'ARCHIVE_URI', true),
-  r('app/broker', Broker, 'BROKER_URI', true),
+  r('app/server', ServerManagement, 'SERVER_MANAGEMENT_URI', true),
   r('admin/instances', Instances, 'ADMIN_INSTANCES_URI', true),
   r('admin/instances/:instanceId/edit', EditInstances, 'ADMIN_EDIT_INSTANCE_URI_FACTORY', true),
 
