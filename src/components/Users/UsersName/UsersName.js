@@ -26,6 +26,7 @@ const UsersName = ({
   large = false,
   isVerified,
   noLink = false,
+  noAvatar = false,
   privateData = null,
   showEmail = null,
   showExternalIdentifiers = false,
@@ -39,7 +40,7 @@ const UsersName = ({
   const externalIds = privateData && privateData.externalIds;
   return (
     <span className={styles.wrapper}>
-      {(!privateData || privateData.isAllowed) && (
+      {(!privateData || privateData.isAllowed) && !noAvatar && (
         <span className={styles.avatar}>
           <AvatarContainer avatarUrl={avatarUrl} fullName={fullName} firstName={firstName} size={size} />
         </span>
@@ -120,6 +121,7 @@ UsersName.propTypes = {
   size: PropTypes.number,
   large: PropTypes.bool,
   noLink: PropTypes.bool,
+  noAvatar: PropTypes.bool,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,

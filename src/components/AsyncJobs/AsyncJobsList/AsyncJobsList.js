@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Table, Popover, OverlayTrigger } from 'react-bootstrap';
+import { Table, Popover, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import Confirm from '../../forms/Confirm';
-import Icon from '../../icons';
+import { AbortIcon, AssignmentIcon } from '../../icons';
+import withLinks from '../../../helpers/withLinks';
 
 const formatArgs = args =>
   args && typeof args === 'object'
@@ -15,7 +17,7 @@ const formatArgs = args =>
         .join(', ')
     : args;
 
-const AsyncJobsList = ({ asyncJobs, abort = null }) => (
+const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI_FACTORY } }) => (
   <Box title={<FormattedMessage id="app.asyncJobs.list.title" defaultMessage="Recent Jobs" />} noPadding>
     {asyncJobs && asyncJobs.length > 0 ? (
       <Table responsive condensed hover>
@@ -101,7 +103,23 @@ const AsyncJobsList = ({ asyncJobs, abort = null }) => (
                   )}
                 </td>
                 <td className="small text-nowrap">{job.error}</td>
-                <td>{job.associatedAssignment}</td>
+                <td>
+                  {job.associatedAssignment && (
+                    <OverlayTrigger
+                      overlay={
+                        <Tooltip id={`assignment-${job.id}`}>
+                          <FormattedMessage
+                            id="app.asyncJobs.list.associatedAssignment"
+                            defaultMessage="Associated assignment"
+                          />
+                        </Tooltip>
+                      }>
+                      <Link to={ASSIGNMENT_DETAIL_URI_FACTORY(job.associatedAssignment)}>
+                        <AssignmentIcon />
+                      </Link>
+                    </OverlayTrigger>
+                  )}
+                </td>
                 <td>
                   {abort && !job.startedAt && !job.terminatedAt && (
                     <Confirm
@@ -113,7 +131,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null }) => (
                           defaultMessage="Do you really wish to abort selected background job?"
                         />
                       }>
-                      <Icon icon="car-crash" className="text-danger" gapRight />
+                      <AbortIcon className="text-danger" gapRight />
                     </Confirm>
                   )}
                 </td>
@@ -135,6 +153,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null }) => (
 AsyncJobsList.propTypes = {
   asyncJobs: PropTypes.array.isRequired,
   abort: PropTypes.func,
+  links: PropTypes.object,
 };
 
-export default AsyncJobsList;
+export default withLinks(AsyncJobsList);

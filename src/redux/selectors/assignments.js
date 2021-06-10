@@ -1,6 +1,7 @@
 import { createSelector, defaultMemoize } from 'reselect';
 import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
 import { getSolutions } from './solutions';
+import { getAsyncJob } from './asyncJobs';
 import { runtimeEnvironmentSelector } from './runtimeEnvironments';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
@@ -9,10 +10,7 @@ export const getAssignments = state => state.assignments;
 const getAssignmentResources = state => getAssignments(state).get('resources');
 const getParam = (state, id) => id;
 
-export const getAssignment = createSelector(
-  getAssignmentResources,
-  assignments => id => assignments.get(id)
-);
+export const getAssignment = createSelector(getAssignmentResources, assignments => id => assignments.get(id));
 
 export const getExerciseAssignments = createSelector(
   [getAssignmentResources, (state, exerciseId) => exerciseId],
@@ -46,39 +44,43 @@ export const getAssigmentSolutions = createSelector(
       .filter(a => a)
 );
 
-export const getUserSolutions = createSelector(
-  [getSolutions, getAssignments],
-  (solutions, assignments) =>
-    defaultMemoize((userId, assignmentId) =>
-      assignments
-        .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
-        .map(id => solutions.get(id))
-        .filter(a => a)
-    )
+export const getUserSolutions = createSelector([getSolutions, getAssignments], (solutions, assignments) =>
+  defaultMemoize((userId, assignmentId) =>
+    assignments
+      .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
+      .map(id => solutions.get(id))
+      .filter(a => a)
+  )
 );
 
-export const getUserSolutionsSortedData = createSelector(
-  [getSolutions, getAssignments],
-  (solutions, assignments) =>
-    defaultMemoize((userId, assignmentId) =>
-      assignments
-        .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
-        .map(id => solutions.get(id))
-        .filter(a => a)
-        .sort((a, b) => {
-          var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
-          var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
-          return bTimestamp - aTimestamp;
-        })
-        .map(getJsData)
-    )
+export const getUserSolutionsSortedData = createSelector([getSolutions, getAssignments], (solutions, assignments) =>
+  defaultMemoize((userId, assignmentId) =>
+    assignments
+      .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
+      .map(id => solutions.get(id))
+      .filter(a => a)
+      .sort((a, b) => {
+        var aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
+        var bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
+        return bTimestamp - aTimestamp;
+      })
+      .map(getJsData)
+  )
 );
 
-export const isResubmitAllPending = assignmentId =>
-  createSelector(
-    getAssignment,
-    assignmentSelector => {
-      const assignment = assignmentSelector(assignmentId);
-      return assignment.getIn(['data', 'resubmit-all-pending'], false);
-    }
-  );
+export const isResubmitAllFetchPending = assignmentId =>
+  createSelector(getAssignment, assignmentSelector => {
+    const assignment = assignmentSelector(assignmentId);
+    return assignment.getIn(['resubmit-all', 'fetchPending'], false);
+  });
+
+// yes, this might seem awkward, but we really need only the last pending/failed job
+const getResubmitAllLastJob = type => assignmentId =>
+  createSelector([getAssignment, getAsyncJob], (assignmentSelector, asyncJobsSelector) => {
+    const assignment = assignmentSelector(assignmentId);
+    const jobId = assignment.getIn(['resubmit-all', type, 0], null);
+    return jobId && asyncJobsSelector(jobId);
+  });
+
+export const getResubmitAllPendingJob = getResubmitAllLastJob('pending');
+export const getResubmitAllFailedJob = getResubmitAllLastJob('failed');

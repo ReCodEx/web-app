@@ -23,8 +23,9 @@ class UsersNameContainer extends Component {
   render() {
     const {
       user,
-      large,
-      noLink,
+      large = false,
+      noLink = false,
+      noAvatar = false,
       currentUser,
       isSimple = false,
       showEmail = null,
@@ -44,6 +45,7 @@ class UsersNameContainer extends Component {
           ) : (
             <UsersName
               {...user}
+              noAvatar={noAvatar}
               large={large}
               size={size}
               noLink={noLink}
@@ -64,6 +66,7 @@ UsersNameContainer.propTypes = {
   large: PropTypes.bool,
   user: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
+  noAvatar: PropTypes.bool,
   isSimple: PropTypes.bool,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
