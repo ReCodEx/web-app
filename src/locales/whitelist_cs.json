@@ -161,6 +161,6 @@
   "app.pipeline.title",
   "app.faq.title",
   "app.faq.description",
-  "generic.email",
-  "app.broker.title"
+  "app.broker.title",
+  "generic.email"
 ]

@@ -9,11 +9,13 @@ import { NeedFixingIcon, ExercisePrefixIcons, LockIcon, CheckRequiredIcon } from
 
 const defaultMessageIcon = ['far', 'envelope'];
 
+export const AbortIcon = props => <Icon {...props} icon="car-crash" />;
 export const AddIcon = props => <Icon {...props} icon="plus-circle" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
 export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
   <Icon {...props} icon={archived ? 'dolly' : 'archive'} />
 );
+export const AssignmentIcon = props => <Icon {...props} icon="laptop-code" />;
 export const AssignmentsIcon = props => <Icon {...props} icon="tasks" />;
 export const BanIcon = props => <Icon {...props} icon="ban" />;
 export const BindIcon = props => <Icon {...props} icon="link" />;
@@ -103,6 +105,7 @@ export const VisibleIcon = ({ visible = true, ...props }) =>
     <Icon {...props} icon={['far', 'eye-slash']} className="text-muted" />
   );
 export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
+export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;
 
 ExpandCollapseIcon.propTypes = {
   isOpen: PropTypes.bool,

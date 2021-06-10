@@ -25,6 +25,10 @@ export const additionalActionTypes = {
   DOWNLOAD_BEST_SOLUTIONS_ARCHIVE: 'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE',
   LOAD_EXERCISE_ASSIGNMENTS: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS',
   LOAD_EXERCISE_ASSIGNMENTS_FULFILLED: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS_FULFILLED',
+  RESUBMIT_ALL: 'recodex/assignment/RESUBMIT_ALL',
+  RESUBMIT_ALL_PENDING: 'recodex/assignment/RESUBMIT_ALL_PENDING',
+  RESUBMIT_ALL_FULFILLED: 'recodex/assignment/RESUBMIT_ALL_FULFILLED',
+  RESUBMIT_ALL_REJECTED: 'recodex/assignment/RESUBMIT_ALL_REJECTED',
 };
 
 /**
@@ -75,6 +79,22 @@ export const fetchExerciseAssignments = exerciseId =>
     meta: { exerciseId },
   });
 
+export const fetchResubmitAllStatus = assignmentId =>
+  createApiAction({
+    type: additionalActionTypes.RESUBMIT_ALL,
+    method: 'GET',
+    endpoint: `/exercise-assignments/${assignmentId}/resubmit-all`,
+    meta: { assignmentId },
+  });
+
+export const resubmitAllSolutions = assignmentId =>
+  createApiAction({
+    type: additionalActionTypes.RESUBMIT_ALL,
+    method: 'POST',
+    endpoint: `/exercise-assignments/${assignmentId}/resubmit-all`,
+    meta: { assignmentId },
+  });
+
 /**
  * Reducer
  */
@@ -87,7 +107,11 @@ const reducer = handleActions(
     [additionalActionTypes.LOAD_EXERCISE_ASSIGNMENTS_FULFILLED]: (state, { payload }) =>
       state.mergeIn(
         ['resources'],
-        arrayToObject(payload, ({ id }) => id, data => createRecord({ state: resourceStatus.FULFILLED, data }))
+        arrayToObject(
+          payload,
+          ({ id }) => id,
+          data => createRecord({ state: resourceStatus.FULFILLED, data })
+        )
       ),
 
     [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload: { solution }, meta: { submissionType } }) => {
@@ -108,7 +132,7 @@ const reducer = handleActions(
       state.setIn(['solutions', assignmentId, userId], fromJS(payload.map(solution => solution.id))),
 
     [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: (state, { payload, meta: { assignmentId } }) => {
-      payload.forEach(function(solution) {
+      payload.forEach(function (solution) {
         if (!state.hasIn(['solutions', assignmentId, solution.solution.userId])) {
           state = state.setIn(['solutions', assignmentId, solution.solution.userId], List());
         }
@@ -124,14 +148,21 @@ const reducer = handleActions(
       return state;
     },
 
-    [solutionsActionTypes.RESUBMIT_ALL_PENDING]: (state, { meta: { assignmentId } }) =>
-      state.setIn(['resources', assignmentId, 'data', 'resubmit-all-pending'], true),
+    [additionalActionTypes.RESUBMIT_ALL_PENDING]: (state, { meta: { assignmentId } }) =>
+      state.setIn(['resources', assignmentId, 'resubmit-all', 'fetchPending'], true),
 
-    [solutionsActionTypes.RESUBMIT_ALL_REJECTED]: (state, { meta: { assignmentId } }) =>
-      state.setIn(['resources', assignmentId, 'data', 'resubmit-all-pending'], false),
+    [additionalActionTypes.RESUBMIT_ALL_REJECTED]: (state, { meta: { assignmentId } }) =>
+      state.setIn(['resources', assignmentId, 'resubmit-all', 'fetchPending'], false),
 
-    [solutionsActionTypes.RESUBMIT_ALL_FULFILLED]: (state, { meta: { assignmentId } }) =>
-      state.setIn(['resources', assignmentId, 'data', 'resubmit-all-pending'], false),
+    [additionalActionTypes.RESUBMIT_ALL_FULFILLED]: (state, { payload: { pending, failed }, meta: { assignmentId } }) =>
+      state.setIn(
+        ['resources', assignmentId, 'resubmit-all'],
+        fromJS({
+          pending: pending.map(job => job.id),
+          failed: failed.map(job => job.id),
+          fetchPending: false,
+        })
+      ),
   }),
   initialState
 );

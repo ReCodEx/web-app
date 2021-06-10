@@ -46,10 +46,6 @@ export const additionalActionTypes = {
   SET_FLAG_PENDING: 'recodex/solutions/SET_FLAG_PENDING',
   SET_FLAG_FULFILLED: 'recodex/solutions/SET_FLAG_FULFILLED',
   SET_FLAG_REJECTED: 'recodex/solutions/SET_FLAG_REJECTED',
-  RESUBMIT_ALL: 'recodex/solutions/RESUBMIT_ALL',
-  RESUBMIT_ALL_PENDING: 'recodex/solutions/RESUBMIT_ALL_PENDING',
-  RESUBMIT_ALL_FULFILLED: 'recodex/solutions/RESUBMIT_ALL_FULFILLED',
-  RESUBMIT_ALL_REJECTED: 'recodex/solutions/RESUBMIT_ALL_REJECTED',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE',
 };
 
@@ -91,14 +87,6 @@ export const resubmitSolution = (id, isPrivate, progressObserverId = null, isDeb
     endpoint: `/assignment-solutions/${id}/resubmit`,
     body: { private: isPrivate, debug: isDebug },
     meta: { submissionType: 'assignmentSolution', progressObserverId },
-  });
-
-export const resubmitAllSolutions = assignmentId =>
-  createApiAction({
-    type: additionalActionTypes.RESUBMIT_ALL,
-    method: 'POST',
-    endpoint: `/exercise-assignments/${assignmentId}/resubmit-all`,
-    meta: { assignmentId },
   });
 
 export const fetchManyAssignmentSolutionsEndpoint = assignmentId => `/exercise-assignments/${assignmentId}/solutions`;

@@ -1,6 +1,9 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState, resourceStatus, createRecord } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
+import { additionalActionTypes as assignmentsActionTypes } from './assignments';
+import { arrayToObject } from '../../helpers/common';
+import { Map } from 'immutable';
 
 const resourceName = 'asyncJobs';
 var { actions, actionTypes: resourceActionTypes, reduceActions } = factory({
@@ -78,6 +81,19 @@ const reducer = handleActions(
       state.delete('ping').setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
 
     [actionTypes.ASYNC_JOBS_PING_REJECTED]: state => state.set('ping', resourceStatus.REJECTED),
+
+    [assignmentsActionTypes.RESUBMIT_ALL_FULFILLED]: (state, { payload: { pending, failed } }) =>
+      state.update('resources', jobs =>
+        jobs.merge(
+          new Map(
+            arrayToObject(
+              [...pending, ...failed],
+              o => o.id,
+              data => createRecord({ state: resourceStatus.FULFILLED, data })
+            )
+          )
+        )
+      ),
   }),
   initialState
 );
