@@ -6,7 +6,7 @@
 export const resourceStatus = {
   PENDING: 'PENDING',
   RELOADING: 'RELOADING', // similar to pending, but the old record data are still available whilst being re-fetched
-  UPDATING: 'RELOADING', // similar to reloading, but some modification is in progress
+  UPDATING: 'UPDATING', // similar to reloading, but some modification is in progress
   FAILED: 'FAILED',
   FULFILLED: 'FULFILLED',
   POSTING: 'POSTING',

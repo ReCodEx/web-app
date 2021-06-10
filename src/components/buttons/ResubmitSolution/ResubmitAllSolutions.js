@@ -80,7 +80,13 @@ const ResubmitAllSolutions = ({
                     )}
                     {!pendingJob && (
                       <p>
-                        <FormattedMessage id="generic.reason" defaultMessage="Reason" />: <code>{job.error}</code>
+                        <FormattedMessage id="generic.reason" defaultMessage="Reason" />:{' '}
+                        {job.error.split('\n').map(row => (
+                          <>
+                            <code>{row}</code>
+                            <br />
+                          </>
+                        ))}
                       </p>
                     )}
 
