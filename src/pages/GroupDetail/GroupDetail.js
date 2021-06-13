@@ -388,7 +388,7 @@ class GroupDetail extends Component {
                     footer={
                       hasPermissions(data, 'createExercise') && !data.archived ? (
                         <p className="text-center">
-                          <Button variant="success" bsSize="sm" onClick={this.createGroupExercise}>
+                          <Button variant="success" size="sm" onClick={this.createGroupExercise}>
                             <AddIcon gapRight />
                             <FormattedMessage id="app.group.createExercise" defaultMessage="Create Exercise in Group" />
                           </Button>

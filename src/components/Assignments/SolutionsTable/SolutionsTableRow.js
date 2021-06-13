@@ -139,14 +139,14 @@ const SolutionsTableRow = ({
                 locale={locale}
                 captionAsTooltip={compact}
                 shortLabel={!compact}
-                bsSize="xs"
+                size="xs"
               />
-              <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} bsSize="xs" />
+              <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
             </React.Fragment>
           )}
 
           {permissionHints && permissionHints.delete && (
-            <DeleteSolutionButtonContainer id={id} groupId={groupId} bsSize="xs" captionAsTooltip={compact} />
+            <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
           )}
         </td>
       </tr>

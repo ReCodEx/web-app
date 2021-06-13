@@ -20,14 +20,14 @@ const MakeRemoveSupervisorButtonContainer = ({
   ...props
 }) =>
   isSupervisor ? (
-    <RemoveSupervisorButton {...props} onClick={() => removeSupervisor(groupId, userId)} bsSize="xs" />
+    <RemoveSupervisorButton {...props} onClick={() => removeSupervisor(groupId, userId)} size="xs" />
   ) : (
     <MakeSupervisorButton
       {...props}
       onClick={() => {
         fetchUserIfNeeded(userId).then(() => makeSupervisor(groupId, userId));
       }}
-      bsSize="xs"
+      size="xs"
     />
   );
 
@@ -51,9 +51,4 @@ const mapDispatchToProps = {
   fetchUserIfNeeded,
 };
 
-export default injectIntl(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(MakeRemoveSupervisorButtonContainer)
-);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(MakeRemoveSupervisorButtonContainer));

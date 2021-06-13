@@ -33,7 +33,7 @@ const AttachmentFilesTableRow = ({ id, name, size, uploadedAt, removeFile, links
             />
           }
           className="pull-right">
-          <Button bsSize="xs" variant="danger">
+          <Button size="xs" variant="danger">
             <DeleteIcon gapRight />
             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
           </Button>

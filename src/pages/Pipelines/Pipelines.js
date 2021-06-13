@@ -86,7 +86,7 @@ class Pipelines extends Component {
               <Button
                 variant="success"
                 className="btn-flat"
-                bsSize="sm"
+                size="sm"
                 onClick={() => {
                   this.newPipeline();
                 }}>
@@ -122,17 +122,12 @@ class Pipelines extends Component {
                   isAuthorOfPipeline(id) && (
                     <div>
                       <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
-                        <Button bsSize="xs" variant="warning">
+                        <Button size="xs" variant="warning">
                           <EditIcon gapRight />
                           <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                         </Button>
                       </LinkContainer>
-                      <DeletePipelineButtonContainer
-                        id={id}
-                        bsSize="xs"
-                        resourceless={true}
-                        onDeleted={() => reload()}
-                      />
+                      <DeletePipelineButtonContainer id={id} size="xs" resourceless={true} onDeleted={() => reload()} />
                     </div>
                   )
                 }

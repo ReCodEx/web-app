@@ -264,7 +264,7 @@ class SisIntegration extends Component {
                                     <div>
                                       {Date.now() <= data.advertiseUntil * 1000 && (
                                         <Button
-                                          bsSize="xs"
+                                          size="xs"
                                           variant="success"
                                           onClick={() => this.openPlantDialog(data, groups)}>
                                           <Icon icon="seedling" gapRight />
@@ -275,7 +275,7 @@ class SisIntegration extends Component {
                                         </Button>
                                       )}
                                       <Button
-                                        bsSize="xs"
+                                        size="xs"
                                         variant="primary"
                                         onClick={() => this.openArchiveDialog(data, groups)}>
                                         <ArchiveGroupIcon gapRight />
@@ -284,10 +284,7 @@ class SisIntegration extends Component {
                                           defaultMessage="Archive"
                                         />
                                       </Button>
-                                      <Button
-                                        bsSize="xs"
-                                        variant="warning"
-                                        onClick={() => this.openEditDialog(id, data)}>
+                                      <Button size="xs" variant="warning" onClick={() => this.openEditDialog(id, data)}>
                                         <EditIcon gapRight />
                                         <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                                       </Button>
@@ -300,7 +297,7 @@ class SisIntegration extends Component {
                                             defaultMessage="Are you sure you want to delete the SIS term?"
                                           />
                                         }>
-                                        <Button bsSize="xs" variant="danger">
+                                        <Button size="xs" variant="danger">
                                           <DeleteIcon gapRight />
                                           <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                                         </Button>

@@ -101,7 +101,7 @@ class Users extends Component {
         <div>
           {privateData && privateData.isAllowed && (
             <Button
-              bsSize="xs"
+              size="xs"
               variant="primary"
               onClick={() =>
                 takeOver(id).then(() => {
@@ -115,15 +115,15 @@ class Users extends Component {
           )}
 
           <LinkContainer to={EDIT_USER_URI_FACTORY(id)}>
-            <Button bsSize="xs" variant="warning">
+            <Button size="xs" variant="warning">
               <SettingsIcon gapRight />
               <FormattedMessage id="generic.settings" defaultMessage="Settings" />
             </Button>
           </LinkContainer>
 
-          <AllowUserButtonContainer id={id} bsSize="xs" />
+          <AllowUserButtonContainer id={id} size="xs" />
 
-          <DeleteUserButtonContainer id={id} bsSize="xs" resourceless={true} onDeleted={reload} />
+          <DeleteUserButtonContainer id={id} size="xs" resourceless={true} onDeleted={reload} />
         </div>
       )
     );
@@ -185,7 +185,7 @@ class Users extends Component {
                         <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />
                       </Button>
 
-                      <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+                      <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
                         <Modal.Header closeButton>
                           <Modal.Title>
                             <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />

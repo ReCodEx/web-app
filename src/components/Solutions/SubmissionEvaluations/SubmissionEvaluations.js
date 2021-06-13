@@ -11,13 +11,13 @@ import Icon, { DeleteIcon } from '../../icons';
 const deleteButton = (id, onDelete, confirmation = null) =>
   confirmation ? (
     <Confirm id={id} onConfirmed={() => onDelete(id)} question={confirmation}>
-      <Button variant="danger" bsSize="xs">
+      <Button variant="danger" size="xs">
         <DeleteIcon gapRight />
         <FormattedMessage id="generic.delete" defaultMessage="Delete" />
       </Button>
     </Confirm>
   ) : (
-    <Button variant="danger" bsSize="xs" onClick={() => onDelete(id)}>
+    <Button variant="danger" size="xs" onClick={() => onDelete(id)}>
       <DeleteIcon gapRight />
       <FormattedMessage id="generic.delete" defaultMessage="Delete" />
     </Button>
@@ -56,13 +56,13 @@ const SubmissionEvaluations = ({
         renderButtons={(id, idx) => (
           <td className="text-right">
             {id === activeSubmissionId ? (
-              <Button variant="success" bsSize="xs" disabled>
+              <Button variant="success" size="xs" disabled>
                 <Icon icon={['far', 'eye']} gapRight />
                 <FormattedMessage id="app.submissionEvaluation.visible" defaultMessage="Visible" />
               </Button>
             ) : (
               <React.Fragment>
-                <Button variant="primary" bsSize="xs" onClick={() => onSelect(id)}>
+                <Button variant="primary" size="xs" onClick={() => onSelect(id)}>
                   <Icon icon={['far', 'eye']} gapRight />
                   <FormattedMessage id="app.submissionEvaluation.show" defaultMessage="Show" />
                 </Button>

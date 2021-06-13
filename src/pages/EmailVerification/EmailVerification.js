@@ -92,7 +92,7 @@ class EmailVerification extends Component {
                 </Alert>
                 {userId !== null && (
                   <p className="text-center">
-                    <ResendVerificationEmailContainer bsSize="sm" userId={userId} />
+                    <ResendVerificationEmailContainer size="sm" userId={userId} />
                   </p>
                 )}
               </div>

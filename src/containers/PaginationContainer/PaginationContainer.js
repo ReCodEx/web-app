@@ -254,7 +254,7 @@ class PaginationContainer extends Component {
                 <Row>
                   <Col md={3}>
                     {this.showLimitsButtons() && (
-                      <ButtonGroup bsSize="small">
+                      <ButtonGroup size="small">
                         {limits
                           .map((l, idx) =>
                             idx < 1 || totalCount > limits[idx - 1] || l === limit ? this.createLimitButton(l) : null
@@ -273,7 +273,7 @@ class PaginationContainer extends Component {
                           boundaryLinks
                           items={this.getTotalPages()}
                           activePage={this.getActivePage()}
-                          bsSize="small"
+                          size="small"
                           className={styles.pagination}
                           onSelect={this.handlePagination}
                         />

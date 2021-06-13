@@ -186,7 +186,7 @@ class SubmitSolution extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose} bsSize="large">
+      <Modal show={isOpen} backdrop="static" onHide={onClose} size="large">
         <Modal.Header closeButton>
           <Modal.Title>{formatMessage(messages.title)}</Modal.Title>
         </Modal.Header>

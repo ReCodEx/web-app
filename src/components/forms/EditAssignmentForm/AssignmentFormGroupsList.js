@@ -22,7 +22,7 @@ const AssignmentFormGroupsList = ({ groups, groupsAccessor, isOpen, toggleOpenSt
 
     <div className="text-center">
       {toggleOpenState !== null && (
-        <Button bsSize="xs" variant="primary" onClick={toggleOpenState}>
+        <Button size="xs" variant="primary" onClick={toggleOpenState}>
           {isOpen ? (
             <span>
               <Icon icon="minus-square" gapRight />

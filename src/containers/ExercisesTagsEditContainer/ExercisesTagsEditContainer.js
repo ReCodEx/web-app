@@ -34,7 +34,7 @@ const ExercisesTagsEditContainer = ({ exercise, tags, tagsLoading, updatePending
                   </td>
                   <td className="full-width">{tag}</td>
                   <td>
-                    <Button variant="danger" bsSize="xs" onClick={() => removeTag(tag)} disabled={updatePending}>
+                    <Button variant="danger" size="xs" onClick={() => removeTag(tag)} disabled={updatePending}>
                       {updatePending ? <LoadingIcon gapRight /> : <RemoveIcon gapRight />}
                       <FormattedMessage id="generic.remove" defaultMessage="Remove" />
                     </Button>

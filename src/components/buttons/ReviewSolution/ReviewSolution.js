@@ -11,7 +11,7 @@ const ReviewSolution = ({
   setReviewed,
   unsetReviewed,
   captionAsTooltip = false,
-  bsSize = undefined,
+  size = undefined,
 }) => {
   const label = reviewed ? (
     <FormattedMessage id="app.reviewedSolution.revoke" defaultMessage="Revoke Review" />
@@ -22,7 +22,7 @@ const ReviewSolution = ({
     <OptionalTooltipWrapper tooltip={label} hide={!captionAsTooltip}>
       <Button
         variant={reviewed ? 'info' : 'primary'}
-        bsSize={bsSize}
+        size={size}
         onClick={reviewed ? unsetReviewed : setReviewed}
         disabled={reviewPending}>
         <Icon icon={reviewed ? 'eraser' : 'stamp'} gapRight={!captionAsTooltip} />
@@ -38,7 +38,7 @@ ReviewSolution.propTypes = {
   setReviewed: PropTypes.func.isRequired,
   unsetReviewed: PropTypes.func.isRequired,
   captionAsTooltip: PropTypes.bool,
-  bsSize: PropTypes.string,
+  size: PropTypes.string,
 };
 
 export default ReviewSolution;

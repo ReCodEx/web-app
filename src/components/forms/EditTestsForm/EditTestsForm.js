@@ -219,7 +219,7 @@ class EditTestsForm extends Component {
                       </Button>
                     </OptionalTooltipWrapper>
 
-                    <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+                    <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
                       <Modal.Header closeButton>
                         <Modal.Title>
                           <FormattedMessage

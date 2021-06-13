@@ -32,11 +32,11 @@ const SupervisorsListItem = ({
       {isAdmin && (
         <td className="text-right">
           {isGroupAdmin ? (
-            <RemoveGroupAdminButton onClick={() => removeAdmin(groupId, id)} bsSize="xs" />
+            <RemoveGroupAdminButton onClick={() => removeAdmin(groupId, id)} size="xs" />
           ) : (
             <React.Fragment>
               <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
-              <MakeGroupAdminButton onClick={() => addAdmin(groupId, id)} bsSize="xs" />
+              <MakeGroupAdminButton onClick={() => addAdmin(groupId, id)} size="xs" />
             </React.Fragment>
           )}
         </td>
@@ -65,7 +65,4 @@ const mapDispatchToProps = {
   removeAdmin,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SupervisorsListItem);
+export default connect(mapStateToProps, mapDispatchToProps)(SupervisorsListItem);

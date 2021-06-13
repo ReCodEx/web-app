@@ -24,7 +24,6 @@ const TagsSelectorField = ({ tags = [], fields, label = null }) => {
         {tags.sort().map(tag => (
           <Badge
             key={tag}
-            bsSize="lg"
             style={getTagStyle(tag)}
             className={classnames({
               'tag-margin': true,

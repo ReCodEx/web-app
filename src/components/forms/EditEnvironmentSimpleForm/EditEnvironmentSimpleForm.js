@@ -87,7 +87,7 @@ class EditEnvironmentSimpleForm extends Component {
         {!readOnly && (this.state.expanded || selectedEnvs.length === 0) ? (
           <React.Fragment>
             {environmentsHelpUrl && (
-              <InsetPanel bsSize="sm">
+              <InsetPanel size="sm">
                 <div className="small text-muted">
                   <FormattedHTMLMessage
                     id="app.editEnvironmentSimpleForm.linkToWiki"

@@ -97,7 +97,7 @@ class ShadowAssignmentPointsTable extends Component {
                     {points === null ? (
                       <td className="shrink-col text-nowrap text-right">
                         {permissionHints.createPoints && (
-                          <Button variant="success" onClick={() => this.openDialog(student.id)} bsSize="xs">
+                          <Button variant="success" onClick={() => this.openDialog(student.id)} size="xs">
                             <Icon gapRight icon={['far', 'star']} />
                             <FormattedMessage
                               id="app.shadowAssignmentPointsTable.createPointsButton"
@@ -109,7 +109,7 @@ class ShadowAssignmentPointsTable extends Component {
                     ) : (
                       <td className="shrink-col text-nowrap text-right">
                         {permissionHints.updatePoints && (
-                          <Button variant="warning" onClick={() => this.openDialog(student.id, pointsId)} bsSize="xs">
+                          <Button variant="warning" onClick={() => this.openDialog(student.id, pointsId)} size="xs">
                             <EditIcon gapRight />
                             <FormattedMessage
                               id="app.shadowAssignmentPointsTable.updatePointsButton"
@@ -128,7 +128,7 @@ class ShadowAssignmentPointsTable extends Component {
                                 defaultMessage="Do you really wish to remove awarded points?"
                               />
                             }>
-                            <Button variant="danger" bsSize="xs">
+                            <Button variant="danger" size="xs">
                               <DeleteIcon gapRight />
                               <FormattedMessage id="generic.remove" defaultMessage="Remove" />
                             </Button>
@@ -141,7 +141,7 @@ class ShadowAssignmentPointsTable extends Component {
               })}
             </tbody>
           </Table>
-          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage

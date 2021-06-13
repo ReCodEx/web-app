@@ -77,7 +77,7 @@ class SubmissionFailures extends Component {
                     <Button
                       variant="warning"
                       className="btn-flat"
-                      bsSize="xs"
+                      size="xs"
                       onClick={() => this.setState({ isOpen: true, activeId: id })}>
                       <FormattedMessage id="app.submissionFailures.resolve" defaultMessage="Resolve" />
                     </Button>

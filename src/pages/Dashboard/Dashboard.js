@@ -202,13 +202,13 @@ class Dashboard extends Component {
                                       footer={
                                         <p className="text-center">
                                           <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                            <Button bsSize="sm">
+                                            <Button size="sm">
                                               <GroupIcon gapRight />
                                               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                             </Button>
                                           </LinkContainer>
                                           <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                            <Button bsSize="sm">
+                                            <Button size="sm">
                                               <AssignmentsIcon gapRight />
                                               <FormattedMessage
                                                 id="app.group.assignments"
@@ -265,13 +265,13 @@ class Dashboard extends Component {
                                       footer={
                                         <p className="text-center">
                                           <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                            <Button bsSize="sm">
+                                            <Button size="sm">
                                               <InfoIcon gapRight />
                                               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                             </Button>
                                           </LinkContainer>
                                           <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                            <Button bsSize="sm">
+                                            <Button size="sm">
                                               <GroupIcon gapRight />
                                               <FormattedMessage
                                                 id="app.group.assignments"

@@ -114,7 +114,7 @@ class Badge extends Component {
             show={this.state.effectiveRoleDialogOpened}
             backdrop="static"
             onHide={this.closeEffectiveRoleDialog}
-            bsSize="large">
+            size="large">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage id="app.badge.effectiveRoleDialog.title" defaultMessage="Change Effective Role" />

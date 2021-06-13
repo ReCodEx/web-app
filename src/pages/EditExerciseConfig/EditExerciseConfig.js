@@ -522,7 +522,7 @@ class EditExerciseConfig extends Component {
                         <Button
                           variant="success"
                           className="btn-flat"
-                          bsSize="sm"
+                          size="sm"
                           onClick={this.createExercisePipeline}
                         >
                           <AddIcon gapRight />
@@ -548,7 +548,7 @@ class EditExerciseConfig extends Component {
                                 to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
                               >
                                 <Button
-                                  bsSize="xs"
+                                  size="xs"
                                   className="btn-flat"
                                   variant="warning"
                                 >
@@ -570,7 +570,7 @@ class EditExerciseConfig extends Component {
                                 }
                               >
                                 <Button
-                                  bsSize="xs"
+                                  size="xs"
                                   className="btn-flat"
                                   variant="danger"
                                 >

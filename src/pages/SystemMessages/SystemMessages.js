@@ -123,7 +123,7 @@ class SystemMessages extends Component {
                     renderActions={message => (
                       <React.Fragment>
                         <Button
-                          bsSize="xs"
+                          size="xs"
                           variant="warning"
                           onClick={() => {
                             this.setState({
@@ -137,7 +137,7 @@ class SystemMessages extends Component {
                         </Button>
                         <DeleteSystemMessageButtonContainer
                           id={message.id}
-                          bsSize="xs"
+                          size="xs"
                           locale={locale /* Hack to force re-rendering when locale changes */}
                         />
                       </React.Fragment>

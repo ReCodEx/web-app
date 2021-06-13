@@ -68,14 +68,14 @@ const ShadowAssignmentsTableRow = ({
     <td className="text-right shrink-col text-nowrap">
       {permissionHints.update && (
         <LinkContainer to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
-          <Button bsSize="xs" variant="warning">
+          <Button size="xs" variant="warning">
             <EditIcon gapRight />
             <FormattedMessage id="generic.edit" defaultMessage="Edit" />
           </Button>
         </LinkContainer>
       )}
 
-      {permissionHints.remove && <DeleteShadowAssignmentButtonContainer id={id} bsSize="xs" />}
+      {permissionHints.remove && <DeleteShadowAssignmentButtonContainer id={id} size="xs" />}
     </td>
   </tr>
 );
