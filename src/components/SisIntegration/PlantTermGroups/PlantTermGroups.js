@@ -87,7 +87,7 @@ const PlantTermGroups = ({
   const existingSemestralGroups = getExistingSemestralGroups(groups, rootGroups, externalId);
 
   return (
-    <Modal show={isOpen} backdrop="static" onHide={onClose} bsSize="large">
+    <Modal show={isOpen} backdrop="static" onHide={onClose} size="large">
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage id="app.plantSisTerm.title" defaultMessage="Plant Groups for SIS Term" />
@@ -119,7 +119,7 @@ const PlantTermGroups = ({
                     <DeleteGroupButtonContainer
                       key={existGroup.id}
                       id={existGroup.id}
-                      bsSize="xs"
+                      size="xs"
                       disabled={existGroup.childGroups.length > 0}
                     />
                   ))}

@@ -12,7 +12,7 @@ const AcceptSolution = ({
   unaccept,
   shortLabel = false,
   captionAsTooltip = false,
-  bsSize = undefined,
+  size = undefined,
 }) => {
   const label =
     accepted === true ? (
@@ -31,7 +31,7 @@ const AcceptSolution = ({
     <OptionalTooltipWrapper tooltip={label} hide={!captionAsTooltip}>
       <Button
         variant={accepted ? 'warning' : 'success'}
-        bsSize={bsSize}
+        size={size}
         onClick={accepted ? unaccept : accept}
         disabled={acceptPending}>
         <Icon icon={accepted ? 'check-circle' : ['far', 'check-circle']} gapRight={!captionAsTooltip} />
@@ -48,7 +48,7 @@ AcceptSolution.propTypes = {
   unaccept: PropTypes.func.isRequired,
   shortLabel: PropTypes.bool,
   captionAsTooltip: PropTypes.bool,
-  bsSize: PropTypes.string,
+  size: PropTypes.string,
 };
 
 export default AcceptSolution;

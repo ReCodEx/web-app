@@ -23,7 +23,7 @@ class ExerciseGroups extends Component {
     return (
       <Button
         variant="success"
-        bsSize="xs"
+        size="xs"
         disabled={Boolean(attachingGroupId)}
         onClick={ev => {
           ev.stopPropagation();
@@ -40,7 +40,7 @@ class ExerciseGroups extends Component {
     return (
       <Button
         variant="danger"
-        bsSize="xs"
+        size="xs"
         disabled={Boolean(detachingGroupId) || groupsIds.length <= 1 /* last one standing */}
         onClick={ev => {
           ev.stopPropagation();
@@ -90,7 +90,7 @@ class ExerciseGroups extends Component {
           </Table>
 
           {showButtons && (
-            <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+            <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage

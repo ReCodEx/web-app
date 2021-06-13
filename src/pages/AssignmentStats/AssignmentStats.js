@@ -163,12 +163,12 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
           )}
           {solution.permissionHints && solution.permissionHints.setFlag && (
             <React.Fragment>
-              <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel bsSize="xs" />
-              <ReviewSolutionContainer id={solution.id} locale={locale} bsSize="xs" />
+              <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel size="xs" />
+              <ReviewSolutionContainer id={solution.id} locale={locale} size="xs" />
             </React.Fragment>
           )}
           {solution.permissionHints && solution.permissionHints.delete && (
-            <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} bsSize="xs" />
+            <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} size="xs" />
           )}
         </React.Fragment>
       ),
@@ -350,11 +350,7 @@ class AssignmentStats extends Component {
                   </Button>
                 </p>
 
-                <Modal
-                  show={this.state.assignmentDialogOpen}
-                  backdrop="static"
-                  onHide={this.closeDialog}
-                  bsSize="large">
+                <Modal show={this.state.assignmentDialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
                   <CommentThreadContainer
                     threadId={assignment.id}
                     title={

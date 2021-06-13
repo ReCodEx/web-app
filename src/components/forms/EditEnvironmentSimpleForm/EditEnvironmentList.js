@@ -70,19 +70,19 @@ const EditEnvironmentList = ({
         <Col>
           <div className="text-center">
             {Boolean(selectAllRuntimesHandler) && (
-              <Button onClick={selectAllRuntimesHandler} variant="primary" bsSize="sm">
+              <Button onClick={selectAllRuntimesHandler} variant="primary" size="sm">
                 <Icon icon={['far', 'check-square']} gapRight />
                 <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
               </Button>
             )}
             {Boolean(clearAllRuntimesHandler) && (
-              <Button onClick={clearAllRuntimesHandler} variant="primary" bsSize="sm">
+              <Button onClick={clearAllRuntimesHandler} variant="primary" size="sm">
                 <Icon icon={['far', 'square']} gapRight />
                 <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
               </Button>
             )}
             {Boolean(invertRuntimeSelectionHandler) && (
-              <Button onClick={invertRuntimeSelectionHandler} variant="primary" bsSize="sm">
+              <Button onClick={invertRuntimeSelectionHandler} variant="primary" size="sm">
                 <Icon icon="yin-yang" gapRight />
                 <FormattedMessage id="generic.invertSelection" defaultMessage="Invert Selection" />
               </Button>

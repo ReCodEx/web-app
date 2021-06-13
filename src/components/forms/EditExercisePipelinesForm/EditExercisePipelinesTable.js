@@ -19,12 +19,12 @@ class EditExercisePipelinesTable extends Component {
           <Button
             onClick={() => fields.swap(idx - 1, idx)}
             variant="warning"
-            bsSize="xs"
+            size="xs"
             style={{ position: 'relative', top: '-20px', marginRight: '1em' }}>
             <TransferIcon rotation={90} />
           </Button>
         )}
-        <Button onClick={() => fields.remove(idx)} variant="danger" bsSize="xs">
+        <Button onClick={() => fields.remove(idx)} variant="danger" size="xs">
           <DeleteIcon />
         </Button>
       </React.Fragment>

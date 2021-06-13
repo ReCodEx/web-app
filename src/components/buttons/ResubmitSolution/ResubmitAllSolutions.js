@@ -100,7 +100,7 @@ const ResubmitAllSolutions = ({
 
                     {pendingJob && (
                       <p className="text-center">
-                        <Button bsSize="xs" variant="danger" onClick={() => abort(job.id)}>
+                        <Button size="xs" variant="danger" onClick={() => abort(job.id)}>
                           <AbortIcon gapRight />
                           <FormattedMessage id="app.asyncJobs.abort" defaultMessage="Abort background job" />
                         </Button>

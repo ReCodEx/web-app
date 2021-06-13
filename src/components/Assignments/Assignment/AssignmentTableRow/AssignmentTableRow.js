@@ -113,12 +113,12 @@ const AssignmentTableRow = ({
                 <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
               </Tooltip>
             }>
-            <Button bsSize="xs" variant="info" onClick={discussionOpen}>
+            <Button size="xs" variant="info" onClick={discussionOpen}>
               <ChatIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
         ) : (
-          <Button bsSize="xs" variant="info" onClick={discussionOpen}>
+          <Button size="xs" variant="info" onClick={discussionOpen}>
             <ChatIcon gapRight />
             <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
           </Button>
@@ -134,7 +134,7 @@ const AssignmentTableRow = ({
                   <FormattedMessage id="generic.results" defaultMessage="Results" />
                 </Tooltip>
               }>
-              <Button bsSize="xs" variant="primary">
+              <Button size="xs" variant="primary">
                 <ResultsIcon smallGapLeft smallGapRight />
               </Button>
             </OverlayTrigger>
@@ -148,13 +148,13 @@ const AssignmentTableRow = ({
                   <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                 </Tooltip>
               }>
-              <Button bsSize="xs" variant="warning">
+              <Button size="xs" variant="warning">
                 <EditIcon smallGapLeft smallGapRight />
               </Button>
             </OverlayTrigger>
           </LinkContainer>
 
-          <DeleteAssignmentButtonContainer id={id} bsSize="xs" captionAsTooltip />
+          <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />
         </React.Fragment>
       )}
     </td>

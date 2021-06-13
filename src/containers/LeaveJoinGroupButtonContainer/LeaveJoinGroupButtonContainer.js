@@ -24,7 +24,7 @@ const LeaveJoinGroupButtonContainer = ({
   fetchAssignmentsForGroup,
   fetchGroup,
   fetchGroupStatsIfNeeded,
-  bsSize = 'xs',
+  size = 'xs',
   history: { replace },
   links: { DASHBOARD_URI },
   redirectAfterLeave = false,
@@ -42,10 +42,10 @@ const LeaveJoinGroupButtonContainer = ({
             redirectAfterLeave && replace(DASHBOARD_URI);
           })
         }
-        bsSize={bsSize}
+        size={size}
       />
     ) : (
-      <RemoveFromGroupButton {...props} onClick={() => leaveGroup(groupId, userId)} bsSize={bsSize} />
+      <RemoveFromGroupButton {...props} onClick={() => leaveGroup(groupId, userId)} size={size} />
     )
   ) : (
     <JoinGroupButton
@@ -60,7 +60,7 @@ const LeaveJoinGroupButtonContainer = ({
           ]);
         })
       }
-      bsSize={bsSize}
+      size={size}
     />
   );
 
@@ -78,7 +78,7 @@ LeaveJoinGroupButtonContainer.propTypes = {
   fetchAssignmentsForGroup: PropTypes.func.isRequired,
   fetchGroup: PropTypes.func.isRequired,
   fetchGroupStatsIfNeeded: PropTypes.func.isRequired,
-  bsSize: PropTypes.string,
+  size: PropTypes.string,
   redirectAfterLeave: PropTypes.bool,
   onJoin: PropTypes.func,
   onLeave: PropTypes.func,

@@ -120,7 +120,7 @@ class AssignmentsTable extends Component {
           </tbody>
         </Table>
 
-        <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} bsSize="large">
+        <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="large">
           {this.state.dialogAssignment && (
             <CommentThreadContainer
               threadId={this.state.dialogAssignment.id}

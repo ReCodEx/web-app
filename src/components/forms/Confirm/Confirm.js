@@ -53,7 +53,7 @@ class Confirm extends Component {
       <Overlay show={showPopup} target={target} placement={placement}>
         <Popover id={id} title={question}>
           <div className="text-center">
-            <ButtonGroup bsSize="sm">
+            <ButtonGroup size="sm">
               <Button onClick={this.confirm}>{yes}</Button>
               <Button onClick={this.dismiss}>{no}</Button>
             </ButtonGroup>

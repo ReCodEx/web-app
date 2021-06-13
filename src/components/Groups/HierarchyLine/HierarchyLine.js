@@ -8,7 +8,7 @@ import InsetPanel from '../../widgets/InsetPanel';
 import './HierarchyLine.css';
 
 const HierarchyLine = ({ groupId, parentGroupsIds }) => (
-  <InsetPanel bsSize="sm" className="groupParents">
+  <InsetPanel size="sm" className="groupParents">
     <GroupIcon className="slashStyle" />
     {parentGroupsIds.map(
       (groupId, i) =>

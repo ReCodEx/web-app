@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
-import FlatButton from '../../widgets/FlatButton';
+import Button from '../../widgets/FlatButton';
 import Confirm from '../../forms/Confirm';
 import LimitsValueField from './LimitsValueField';
 
@@ -79,9 +79,9 @@ const EditLimitsField = ({
                             />
                           </Tooltip>
                         }>
-                        <FlatButton onClick={cloneVertically('memory')} bsSize="xs">
+                        <Button onClick={cloneVertically('memory')} size="xs">
                           <Icon icon="arrows-alt-v" />
-                        </FlatButton>
+                        </Button>
                       </OverlayTrigger>
                     )}
                     {environmentsCount > 1 && (
@@ -104,9 +104,9 @@ const EditLimitsField = ({
                               />
                             </Tooltip>
                           }>
-                          <FlatButton bsSize="xs">
+                          <Button size="xs">
                             <Icon icon="arrows-alt-h" />
-                          </FlatButton>
+                          </Button>
                         </OverlayTrigger>
                       </Confirm>
                     )}
@@ -130,9 +130,9 @@ const EditLimitsField = ({
                               />
                             </Tooltip>
                           }>
-                          <FlatButton bsSize="xs">
+                          <Button size="xs">
                             <Icon icon="arrows-alt" />
-                          </FlatButton>
+                          </Button>
                         </OverlayTrigger>
                       </Confirm>
                     )}
@@ -169,9 +169,9 @@ const EditLimitsField = ({
                             />
                           </Tooltip>
                         }>
-                        <FlatButton onClick={cloneVertically('time')} bsSize="xs">
+                        <Button onClick={cloneVertically('time')} size="xs">
                           <Icon icon="arrows-alt-v" />
-                        </FlatButton>
+                        </Button>
                       </OverlayTrigger>
                     )}
                     {environmentsCount > 1 && (
@@ -194,9 +194,9 @@ const EditLimitsField = ({
                               />
                             </Tooltip>
                           }>
-                          <FlatButton bsSize="xs">
+                          <Button size="xs">
                             <Icon icon="arrows-alt-h" />
-                          </FlatButton>
+                          </Button>
                         </OverlayTrigger>
                       </Confirm>
                     )}
@@ -220,9 +220,9 @@ const EditLimitsField = ({
                               />
                             </Tooltip>
                           }>
-                          <FlatButton bsSize="xs">
+                          <Button size="xs">
                             <Icon icon="arrows-alt" />
-                          </FlatButton>
+                          </Button>
                         </OverlayTrigger>
                       </Confirm>
                     )}

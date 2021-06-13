@@ -197,7 +197,7 @@ class TestResultsTable extends Component {
               <Button
                 variant={this.isLogOpen(testName) ? 'warning' : 'primary'}
                 className="btn-flat"
-                bsSize="xs"
+                size="xs"
                 onClick={() => this.toggleLogOpen(testName)}>
                 {this.isLogOpen(testName) ? (
                   <FormattedMessage id="app.submissions.testResultsTable.hideLog" defaultMessage="Hide Log" />
@@ -390,7 +390,7 @@ class TestResultsTable extends Component {
                   <Button
                     variant={allLogsClosed ? 'primary' : 'warning'}
                     className="btn-flat"
-                    bsSize="xs"
+                    size="xs"
                     onClick={this.setAllLogsState(allLogsClosed)}>
                     {allLogsClosed ? (
                       <FormattedMessage id="generic.showAll" defaultMessage="Show All" />

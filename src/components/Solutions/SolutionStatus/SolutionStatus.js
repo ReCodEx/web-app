@@ -312,7 +312,7 @@ class SolutionStatus extends Component {
         </Box>
 
         {Boolean(editNote) && (
-          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} bsSize="large">
+          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage id="app.solution.editNoteModalTitle" defaultMessage="Edit Solution Note" />

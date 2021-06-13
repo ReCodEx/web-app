@@ -9,14 +9,14 @@ const ArchiveGroupButton = ({
   pending,
   disabled = false,
   setArchived,
-  bsSize = undefined,
+  size = undefined,
   shortLabels = false,
 }) => (
   <Button
     variant={disabled ? 'default' : 'info'}
     onClick={setArchived(!archived)}
     disabled={pending || disabled}
-    bsSize={bsSize}>
+    size={size}>
     {pending ? <LoadingIcon gapRight /> : <ArchiveGroupIcon archived={archived} gapRight />}
     {archived === true ? (
       shortLabels ? (
@@ -37,7 +37,7 @@ ArchiveGroupButton.propTypes = {
   pending: PropTypes.bool.isRequired,
   disabled: PropTypes.bool,
   setArchived: PropTypes.func.isRequired,
-  bsSize: PropTypes.string,
+  size: PropTypes.string,
   shortLabels: PropTypes.bool,
 };
 

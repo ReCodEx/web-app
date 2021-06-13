@@ -12,7 +12,7 @@ import { identity } from '../../helpers/common';
 
 class ArchiveGroupButtonContainer extends Component {
   render() {
-    const { group, pending, setArchived, bsSize = undefined, ...props } = this.props;
+    const { group, pending, setArchived, size = undefined, ...props } = this.props;
     return (
       <ResourceRenderer resource={group}>
         {({ directlyArchived, permissionHints }) =>
@@ -21,7 +21,7 @@ class ArchiveGroupButtonContainer extends Component {
               archived={directlyArchived}
               pending={pending}
               setArchived={setArchived}
-              bsSize={bsSize}
+              size={size}
               {...props}
             />
           ) : null
@@ -37,7 +37,7 @@ ArchiveGroupButtonContainer.propTypes = {
   pending: PropTypes.bool.isRequired,
   setArchived: PropTypes.func.isRequired,
   onChange: PropTypes.func,
-  bsSize: PropTypes.string,
+  size: PropTypes.string,
 };
 
 const mapStateToProps = (state, { id }) => ({
@@ -52,7 +52,4 @@ const mapDispatchToProps = (dispatch, { id, onChange = identity }) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ArchiveGroupButtonContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ArchiveGroupButtonContainer);

@@ -56,7 +56,7 @@ const GroupTopButtons = ({
       )}
 
       {canLeaveJoin && !group.organizational && (
-        <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} bsSize={null} redirectAfterLeave />
+        <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} size={null} redirectAfterLeave />
       )}
 
       {studentEmails && (

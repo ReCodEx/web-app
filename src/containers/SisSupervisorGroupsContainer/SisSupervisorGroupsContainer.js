@@ -325,7 +325,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                           <td className="text-right">
                                                             {hasPermissions(group, 'update') && (
                                                               <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
-                                                                <Button variant="warning" bsSize="xs">
+                                                                <Button variant="warning" size="xs">
                                                                   <EditIcon gapRight />
                                                                   <FormattedMessage
                                                                     id="app.editGroup.title"
@@ -336,7 +336,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                             )}
 
                                                             <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                                              <Button variant="primary" bsSize="xs">
+                                                              <Button variant="primary" size="xs">
                                                                 <GroupIcon gapRight />
                                                                 <FormattedMessage
                                                                   id="app.group.info"
@@ -347,7 +347,7 @@ class SisSupervisorGroupsContainer extends Component {
 
                                                             {hasPermissions(group, 'viewDetail') && (
                                                               <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                                                <Button variant="primary" bsSize="xs">
+                                                                <Button variant="primary" size="xs">
                                                                   <AssignmentsIcon gapRight />
                                                                   <FormattedMessage
                                                                     id="app.group.assignments"
@@ -380,7 +380,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                               )}>
                                                               <Button
                                                                 variant="danger"
-                                                                bsSize="xs"
+                                                                size="xs"
                                                                 disabled={this.isUnbindPending(
                                                                   course.course.code,
                                                                   group.id
@@ -400,7 +400,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                             {hasPermissions(group, 'remove') &&
                                                               group.parentGroupId !== null &&
                                                               group.childGroups.length === 0 && (
-                                                                <DeleteGroupButtonContainer id={group.id} bsSize="xs" />
+                                                                <DeleteGroupButtonContainer id={group.id} size="xs" />
                                                               )}
                                                           </td>
                                                         </tr>

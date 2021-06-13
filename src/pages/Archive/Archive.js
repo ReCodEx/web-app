@@ -88,7 +88,7 @@ class Archive extends Component {
       <span>
         <Button
           variant="default"
-          bsSize="xs"
+          size="xs"
           onClick={ev => {
             ev.stopPropagation();
             this.setState({ rootGroup: isRoot ? null : groupId });
@@ -101,18 +101,18 @@ class Archive extends Component {
           )}
         </Button>
         <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
-          <Button variant="primary" bsSize="xs">
+          <Button variant="primary" size="xs">
             <GroupIcon gapRight />
             <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
           </Button>
         </LinkContainer>
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
-          <Button variant="primary" bsSize="xs">
+          <Button variant="primary" size="xs">
             <AssignmentsIcon gapRight />
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
         </LinkContainer>
-        <ArchiveGroupButtonContainer id={groupId} bsSize="xs" shortLabels onChange={() => loadAsync(instanceId)} />
+        <ArchiveGroupButtonContainer id={groupId} size="xs" shortLabels onChange={() => loadAsync(instanceId)} />
       </span>
     );
   };

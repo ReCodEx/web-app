@@ -30,7 +30,7 @@ const AssignExerciseButton = ({ id, isLocked, isBroken, hasReferenceSolutions, a
             )}
           </Tooltip>
         }>
-        <Button bsSize="xs" disabled={true}>
+        <Button size="xs" disabled={true}>
           <BanIcon gapRight />
           {isBroken ? (
             <FormattedMessage id="app.assignExerciseButton.isBroken" defaultMessage="Broken" />
@@ -44,7 +44,7 @@ const AssignExerciseButton = ({ id, isLocked, isBroken, hasReferenceSolutions, a
     );
   } else {
     return (
-      <Button onClick={assignExercise} bsSize="xs" variant="success">
+      <Button onClick={assignExercise} size="xs" variant="success">
         <SendIcon gapRight />
         <FormattedMessage id="app.exercise.assignButton" defaultMessage="Assign" />
       </Button>

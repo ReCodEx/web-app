@@ -100,7 +100,7 @@ class AddComment extends Component {
             </InputGroup.Append>
           </InputGroup>
           <HelpBlock>
-            <Button onClick={this.togglePrivate} bsSize="xs" disabled={!addComment} className="halfem-margin-right">
+            <Button onClick={this.togglePrivate} size="xs" disabled={!addComment} className="halfem-margin-right">
               {isPrivate ? (
                 <Icon icon="lock" className="text-success" />
               ) : (

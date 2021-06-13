@@ -17,7 +17,7 @@ const FilterArchiveGroupsForm = ({
   dirty,
 }) => (
   <Form method="POST" onSubmit={onSubmit}>
-    <InsetPanel bsSize="sm">
+    <InsetPanel size="sm">
       {submitFailed && (
         <Alert variant="danger">
           <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />

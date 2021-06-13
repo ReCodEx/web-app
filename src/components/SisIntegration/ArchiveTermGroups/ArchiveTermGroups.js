@@ -37,7 +37,7 @@ class ArchiveTermGroups extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose} bsSize="large">
+      <Modal show={isOpen} backdrop="static" onHide={onClose} size="large">
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage id="app.archiveSisTerm.title" defaultMessage="Archive Groups of SIS Term" /> {externalId}

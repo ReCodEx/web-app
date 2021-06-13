@@ -100,7 +100,7 @@ class FilterExercisesListForm extends Component {
 
     return (
       <Form method="POST" onSubmit={onSubmit}>
-        <InsetPanel bsSize="sm">
+        <InsetPanel size="sm">
           {submitFailed && (
             <Alert variant="danger">
               <FormattedMessage

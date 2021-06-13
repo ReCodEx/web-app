@@ -141,7 +141,7 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEdit" defaultMessage="Settings" />
               </Tooltip>
             }>
-            <Button bsSize="xs" variant="warning">
+            <Button size="xs" variant="warning">
               <EditIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
@@ -156,7 +156,7 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEditConfig" defaultMessage="Tests" />
               </Tooltip>
             }>
-            <Button bsSize="xs" variant={permissionHints.setScoreConfig ? 'warning' : 'default'}>
+            <Button size="xs" variant={permissionHints.setScoreConfig ? 'warning' : 'default'}>
               <TestsIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
@@ -171,14 +171,14 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEditLimits" defaultMessage="Limits" />
               </Tooltip>
             }>
-            <Button bsSize="xs" variant={permissionHints.setLimits ? 'warning' : 'default'}>
+            <Button size="xs" variant={permissionHints.setLimits ? 'warning' : 'default'}>
               <LimitsIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
         </LinkContainer>
       )}
       {permissionHints.remove && (
-        <DeleteExerciseButtonContainer id={id} bsSize="xs" resourceless captionAsTooltip onDeleted={reload} />
+        <DeleteExerciseButtonContainer id={id} size="xs" resourceless captionAsTooltip onDeleted={reload} />
       )}
     </td>
   </tr>
