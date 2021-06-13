@@ -51,7 +51,7 @@ class EditEnvironmentConfigForm extends Component {
         footer={
           <div className="text-center">
             {dirty && (
-              <Button type="reset" onClick={reset} bsStyle="danger">
+              <Button type="reset" onClick={reset} variant="danger">
                 <RefreshIcon gapRight />
                 <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>
@@ -68,7 +68,7 @@ class EditEnvironmentConfigForm extends Component {
             />
 
             {Boolean(selectedRuntimeId) && !hasDefaultVariables && (
-              <Button onClick={this.setDefaultVariables} bsStyle="primary">
+              <Button onClick={this.setDefaultVariables} variant="primary">
                 <RefreshIcon gapRight />
                 <FormattedMessage
                   id="app.editEnvironmentConfig.setDefaultVariables"
@@ -125,7 +125,7 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         {!selectedRuntimeId && (
-          <Alert bsStyle="warning" className="em-margin-top">
+          <Alert variant="warning" className="em-margin-top">
             <FormattedMessage
               id="app.editEnvironmentConfig.noRuntimeSelected"
               defaultMessage="There must be a runtime environment selected before you can proceed with exercise configuration."
@@ -134,19 +134,19 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         {submitFailed && (
-          <Alert bsStyle="danger" className="em-margin-top">
+          <Alert variant="danger" className="em-margin-top">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
         {error && (
-          <Alert bsStyle="danger" className="em-margin-top">
+          <Alert variant="danger" className="em-margin-top">
             {error}
           </Alert>
         )}
 
         {warning && (
-          <Alert bsStyle="warning" className="em-margin-top">
+          <Alert variant="warning" className="em-margin-top">
             {warning}
           </Alert>
         )}

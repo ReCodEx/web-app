@@ -45,7 +45,7 @@ class ForkPipelineForm extends Component {
     switch (forkStatus) {
       case forkStatuses.FULFILLED:
         return (
-          <Button bsStyle="success" bsSize="sm" className="btn-flat" onClick={() => this.viewForkedPipeline()}>
+          <Button variant="success" bsSize="sm" className="btn-flat" onClick={() => this.viewForkedPipeline()}>
             <SuccessIcon gapRight />
             <FormattedMessage id="app.forkPipelineButton.success" defaultMessage="Show the forked pipeline" />
           </Button>
@@ -54,7 +54,7 @@ class ForkPipelineForm extends Component {
         return (
           <div>
             {submitFailed && (
-              <Alert bsStyle="danger">
+              <Alert variant="danger">
                 <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
               </Alert>
             )}

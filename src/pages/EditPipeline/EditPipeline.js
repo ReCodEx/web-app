@@ -66,7 +66,7 @@ class EditPipeline extends Component {
           <div>
             <Row>
               <Col lg={12}>
-                <Alert bsStyle="warning">
+                <Alert variant="warning">
                   <h4>
                     <FormattedMessage id="app.editPipeline.disclaimer" defaultMessage="Disclaimer" />
                   </h4>

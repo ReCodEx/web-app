@@ -54,9 +54,9 @@ class EvaluationProgress extends Component {
         </Modal.Header>
         <Modal.Body>
           <ProgressBar>
-            <ProgressBar now={completed} bsStyle="success" active={!finished} />
-            <ProgressBar now={skipped} bsStyle="warning" active={!finished} />
-            <ProgressBar now={failed} bsStyle="danger" active={!finished} />
+            <ProgressBar now={completed} variant="success" active={!finished} />
+            <ProgressBar now={skipped} variant="warning" active={!finished} />
+            <ProgressBar now={failed} variant="danger" active={!finished} />
           </ProgressBar>
           {messages && (
             <div
@@ -98,7 +98,7 @@ class EvaluationProgress extends Component {
         <Modal.Footer>
           <p className="text-center">
             <Button
-              bsStyle={finished ? 'success' : 'default'}
+              variant={finished ? 'success' : 'default'}
               onClick={finishProcessing}
               disabled={!showContinueButton}>
               <FormattedMessage id="app.evaluationProgress.continue" defaultMessage="See The Results" />

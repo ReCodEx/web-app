@@ -74,7 +74,7 @@ class ShadowAssignment extends Component {
                 {hasPermissions(shadowAssignment, 'update') && (
                   <p>
                     <LinkContainer to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id)}>
-                      <Button bsStyle="warning">
+                      <Button variant="warning">
                         <EditIcon gapRight />
                         <FormattedMessage
                           id="app.shadowAssignment.editSettings"

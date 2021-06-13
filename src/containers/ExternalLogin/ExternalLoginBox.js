@@ -106,7 +106,7 @@ class ExternalLoginBox extends Component {
         title={<FormattedMessage id="app.externalLogin.title" defaultMessage="Sign-in by External Authenticator" />}
         footer={
           <div className="text-center">
-            <Button bsStyle="success" onClick={this.onClick} disabled={pending || loggedIn}>
+            <Button variant="success" onClick={this.onClick} disabled={pending || loggedIn}>
               {pending ? <LoadingIcon gapRight /> : loggedIn ? <SuccessIcon gapRight /> : <LinkIcon gapRight />}
               {pending ? (
                 <FormattedMessage id="app.externalLogin.button.authenticating" defaultMessage="Authenticating..." />

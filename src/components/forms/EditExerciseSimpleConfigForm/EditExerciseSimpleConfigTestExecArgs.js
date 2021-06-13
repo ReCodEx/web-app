@@ -47,7 +47,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors,
               defaultMessage="Do you really wish to overwrite command line configuration of all subsequent tests using the first test as a template?"
             />
           }>
-          <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
+          <Button variant={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
             <Icon icon="arrows-alt" gapRight />
             <FormattedMessage id="app.editExerciseConfigForm.smartFillArgs" defaultMessage="Smart Fill Arguments" />
           </Button>

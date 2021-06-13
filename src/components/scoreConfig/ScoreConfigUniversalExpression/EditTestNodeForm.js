@@ -64,8 +64,8 @@ class EditTestNodeForm extends Component {
 
         {tests.length > 10 ? (
           <FormControl
-            componentClass="select"
-            bsClass={classnames({
+            as="select"
+            bsPrefix={classnames({
               'form-control': true,
               [formStyles.dirty]: this.dirty(),
               'full-width': true,
@@ -105,11 +105,11 @@ class EditTestNodeForm extends Component {
         <hr />
 
         <div className="text-center">
-          <Button onClick={this.save} bsStyle="success" disabled={tests.length === 0 || !this.dirty()}>
+          <Button onClick={this.save} variant="success" disabled={tests.length === 0 || !this.dirty()}>
             <SendIcon gapRight />
             <FormattedMessage id="generic.save" defaultMessage="Save" />
           </Button>
-          <Button onClick={close} bsStyle="default">
+          <Button onClick={close} variant="default">
             <CloseIcon gapRight />
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>

@@ -37,7 +37,7 @@ const UploadsTable = ({
           <td>{payload.name}</td>
           <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
-            <Button bsSize="xs" bsStyle="default" onClick={() => removeFile(payload)}>
+            <Button bsSize="xs" variant="default" onClick={() => removeFile(payload)}>
               <DeleteIcon />
             </Button>
           </td>
@@ -64,10 +64,10 @@ const UploadsTable = ({
           <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
-              <Button bsSize="xs" bsStyle="default" onClick={() => removeFailedFile(payload)}>
+              <Button bsSize="xs" variant="default" onClick={() => removeFailedFile(payload)}>
                 <DeleteIcon />
               </Button>
-              <Button bsSize="xs" bsStyle="default" onClick={() => retryUploadFile(payload)}>
+              <Button bsSize="xs" variant="default" onClick={() => retryUploadFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>
@@ -86,7 +86,7 @@ const UploadsTable = ({
           <td className="text-muted">{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
-              <Button bsSize="xs" bsStyle="default" onClick={() => returnFile(payload)}>
+              <Button bsSize="xs" variant="default" onClick={() => returnFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>

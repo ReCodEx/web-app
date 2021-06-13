@@ -32,7 +32,7 @@ const HeaderSystemMessagesDropdown = ({
     onMouseDown={isOpen ? preventClickPropagation : undefined}>
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
       <Icon icon={['far', 'envelope']} />
-      {systemMessages.length > 0 && <Label bsStyle="warning">{systemMessages.length}</Label>}
+      {systemMessages.length > 0 && <Label variant="warning">{systemMessages.length}</Label>}
     </a>
     <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>
       <li className="header">

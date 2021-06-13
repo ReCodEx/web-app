@@ -62,7 +62,7 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
   return messages.length > 0 ? (
     <Row>
       <Col sm={12}>
-        <Alert bsStyle="warning">
+        <Alert variant="warning">
           <h4>
             <FormattedMessage
               id="app.assignment.syncRequired"
@@ -81,7 +81,7 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
             <ul>{messages}</ul>
           </div>
           <p>
-            <Button bsStyle="primary" onClick={exerciseSync} disabled={!syncInfo.isSynchronizationPossible}>
+            <Button variant="primary" onClick={exerciseSync} disabled={!syncInfo.isSynchronizationPossible}>
               <FormattedMessage id="app.assignment.syncButton" defaultMessage="Update Assignment" />
             </Button>
 

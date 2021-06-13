@@ -27,7 +27,7 @@ const RelocateGroupForm = ({
 }) => (
   <div>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <WarningIcon gapRight />
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>

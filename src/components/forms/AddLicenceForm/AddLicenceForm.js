@@ -43,7 +43,7 @@ const AddLicenceForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.addLicence.failed" defaultMessage="Cannot add the licence." />
       </Alert>
     )}

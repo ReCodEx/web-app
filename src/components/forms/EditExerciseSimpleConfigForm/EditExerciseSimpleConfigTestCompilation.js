@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
@@ -114,7 +114,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                               </h4>
                             )}
 
-                            <Grid fluid>
+                            <Container fluid>
                               <Row>
                                 {env.id === ENV_JAVA_ID && (
                                   /*
@@ -191,7 +191,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                   )}
                                 </Col>
                               </Row>
-                            </Grid>
+                            </Container>
                           </td>
                         );
                       })}
@@ -211,7 +211,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                       defaultMessage="Do you really wish to overwrite compilation and execution configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
                     />
                   }>
-                  <Button bsStyle="primary" className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
+                  <Button variant="primary" className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
                     <Icon icon="arrows-alt" gapRight />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillCompilation"

@@ -96,7 +96,7 @@ class SubmitButton extends Component {
       <Confirm id="confirm-submit" onConfirmed={this.submit} question={confirmQuestion} disabled={!confirmQuestion}>
         <Button
           type="submit"
-          bsStyle={hasSucceeded ? 'success' : hasFailed ? 'danger' : invalid ? 'warning' : 'success'}
+          variant={hasSucceeded ? 'success' : hasFailed ? 'danger' : invalid ? 'warning' : 'success'}
           disabled={invalid || asyncValidating !== false || submitting || disabled}>
           {!noIcons && icons[buttonState]}
           {formattedMessages[buttonState]}

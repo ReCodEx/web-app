@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
 import FlatButton from '../../widgets/FlatButton';
@@ -49,7 +49,7 @@ const EditLimitsField = ({
   ...props
 }) => {
   return (
-    <Grid fluid>
+    <Container fluid>
       <Row>
         <Col lg={environmentsCount >= 3 ? 12 : 6} md={12}>
           <table>
@@ -233,7 +233,7 @@ const EditLimitsField = ({
           </table>
         </Col>
       </Row>
-    </Grid>
+    </Container>
   );
 };
 

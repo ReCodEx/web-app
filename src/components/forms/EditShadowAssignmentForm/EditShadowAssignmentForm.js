@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Alert, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Container, Row, Col } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import { CheckboxField, NumericTextField } from '../Fields';
@@ -64,7 +64,7 @@ const EditShadowAssignmentForm = ({
         </div>
       }>
       {submitFailed && (
-        <Alert bsStyle="danger">
+        <Alert variant="danger">
           <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
         </Alert>
       )}
@@ -81,7 +81,7 @@ const EditShadowAssignmentForm = ({
         }
       />
 
-      <Grid fluid>
+      <Container fluid>
         <Row>
           <Col sm={6}>
             <Field
@@ -124,9 +124,9 @@ const EditShadowAssignmentForm = ({
             </Col>
           )}
         </Row>
-      </Grid>
+      </Container>
 
-      {error && <Alert bsStyle="danger">{error}</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}
     </FormBox>
   </div>
 );

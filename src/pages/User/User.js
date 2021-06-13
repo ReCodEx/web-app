@@ -123,7 +123,7 @@ class User extends Component {
             <p>
               {(isAdmin || userId === loggedInUserId) && (
                 <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
-                  <Button bsStyle="warning" bsSize="sm">
+                  <Button variant="warning" bsSize="sm">
                     <EditIcon />
                     &nbsp;
                     <FormattedMessage id="app.editUser.title" defaultMessage="Edit user's profile" />
@@ -132,7 +132,7 @@ class User extends Component {
               )}
 
               {isAdmin && userId !== loggedInUserId && user.privateData.isAllowed && (
-                <Button bsSize="sm" bsStyle="primary" onClick={() => takeOver(userId)}>
+                <Button bsSize="sm" variant="primary" onClick={() => takeOver(userId)}>
                   <TransferIcon gapRight />
                   <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
                 </Button>
@@ -234,7 +234,7 @@ class User extends Component {
                     </p>
                     <p className="text-center">
                       <LinkContainer to={INSTANCE_URI_FACTORY(user.instanceId)}>
-                        <Button bsStyle="success">
+                        <Button variant="success">
                           <FormattedMessage id="app.user.examineGroupsInstance" defaultMessage="Find your groups" />
                         </Button>
                       </LinkContainer>
@@ -282,9 +282,7 @@ export default withLinks(
       const loggedInUserId = loggedInUserIdSelector(state);
       const isSuperadmin = isLoggedAsSuperAdmin(state);
 
-      const studentOfArray = studentOfSelector(userId)(state)
-        .toList()
-        .toArray();
+      const studentOfArray = studentOfSelector(userId)(state).toList().toArray();
       const studentOf = new Set(
         studentOfSelector(userId)(state)
           .toList()

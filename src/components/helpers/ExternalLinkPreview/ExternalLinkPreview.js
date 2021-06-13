@@ -136,7 +136,7 @@ class ExternalLinkPreview extends Component {
           </InsetPanel>
         )}
 
-        {error && <Alert bsStyle="warning">{error}</Alert>}
+        {error && <Alert variant="warning">{error}</Alert>}
 
         {text && <div>{isMarkdown ? <Markdown source={text} /> : <pre style={{ marginTop: '20px' }}>{text}</pre>}</div>}
       </div>

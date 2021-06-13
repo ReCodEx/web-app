@@ -10,7 +10,7 @@ const PipelineField = ({ input, meta: { touched, error }, label, ...props }) => 
   <FormGroup controlId={input.name} validationState={error ? (touched ? 'error' : 'warning') : undefined}>
     <ControlLabel>{label}</ControlLabel>
     <div className="hidden">
-      <FormControl {...input} {...props} componentClass="textarea" rows={8} style={{ fontFamily: 'mono' }} />
+      <FormControl {...input} {...props} as="textarea" rows={8} style={{ fontFamily: 'mono' }} />
     </div>
     <PipelineVisualEditor source={input.value} onChange={input.onChange} />{' '}
     {error && (

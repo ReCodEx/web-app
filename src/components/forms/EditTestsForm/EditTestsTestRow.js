@@ -44,7 +44,7 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, used = false, r
             <FormattedMessage id="app.editTestsTest.testUsedInExpression" defaultMessage="used in expression" />
           </em>
         ) : (
-          <Button onClick={onRemove} bsStyle="danger" bsSize="xs">
+          <Button onClick={onRemove} variant="danger" bsSize="xs">
             <RemoveIcon gapRight />
             <FormattedMessage id="generic.remove" defaultMessage="Remove" />
           </Button>

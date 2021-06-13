@@ -21,7 +21,7 @@ const ReviewSolution = ({
   return (
     <OptionalTooltipWrapper tooltip={label} hide={!captionAsTooltip}>
       <Button
-        bsStyle={reviewed ? 'info' : 'primary'}
+        variant={reviewed ? 'info' : 'primary'}
         bsSize={bsSize}
         onClick={reviewed ? unsetReviewed : setReviewed}
         disabled={reviewPending}>

@@ -47,7 +47,7 @@ const stateLabels = {
 
 const DeleteButtonInternal = ({ id, icon, label, disabled, small, captionAsTooltip, ...props }) => (
   <OptionalTooltipWrapper tooltip={label} hide={!captionAsTooltip} tooltipId={`delete-${id}`}>
-    <Button disabled={disabled} bsStyle="danger" bsSize={small ? 'sm' : undefined} {...props}>
+    <Button disabled={disabled} variant="danger" bsSize={small ? 'sm' : undefined} {...props}>
       {icon}
       {!captionAsTooltip && label}
     </Button>

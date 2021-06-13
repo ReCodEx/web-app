@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm } from 'redux-form';
-import { Alert, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Container, Row, Col } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
@@ -43,12 +43,12 @@ const PointsForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.pointsForm.failed" defaultMessage="Cannot save the bonus points." />
       </Alert>
     )}
 
-    <Grid fluid>
+    <Container fluid>
       <Row>
         <Col sm={12}>
           <p>
@@ -81,9 +81,9 @@ const PointsForm = ({
           />
         </Col>
       </Row>
-    </Grid>
+    </Container>
 
-    {warning && <Alert bsStyle="warning">{warning}</Alert>}
+    {warning && <Alert variant="warning">{warning}</Alert>}
   </FormBox>
 );
 

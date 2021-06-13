@@ -51,7 +51,7 @@ const AddSisTermForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.addSisTermForm.failed" defaultMessage="Cannot save the new SIS term." />
       </Alert>
     )}

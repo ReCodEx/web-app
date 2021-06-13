@@ -144,13 +144,13 @@ class Assignment extends Component {
                 {(isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)) && ( // includes superadmin
                   <p>
                     <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                      <Button bsStyle="warning">
+                      <Button variant="warning">
                         <EditIcon gapRight />
                         <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                       </Button>
                     </LinkContainer>
                     <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
-                      <Button bsStyle="primary">
+                      <Button variant="primary">
                         <ResultsIcon gapRight />
                         <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
                       </Button>
@@ -165,7 +165,7 @@ class Assignment extends Component {
             )}
 
             {!assignment.exerciseId && assignment.permissionHints.update && (
-              <Alert bsStyle="warning">
+              <Alert variant="warning">
                 <h3 className="no-margin ">
                   <Icon icon="ghost" gapRight />
                   <FormattedMessage

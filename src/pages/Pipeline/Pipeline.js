@@ -90,7 +90,7 @@ class Pipeline extends Component {
               <ButtonGroup>
                 {isAuthorOfPipeline(pipeline.id) && (
                   <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}>
-                    <Button bsStyle="warning" bsSize="sm">
+                    <Button variant="warning" bsSize="sm">
                       <EditIcon />
                       &nbsp;
                       <FormattedMessage id="app.pipeline.editSettings" defaultMessage="Edit pipeline" />

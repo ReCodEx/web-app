@@ -69,7 +69,7 @@ class CreateExerciseForm extends Component {
           </table>
 
           {submitFailed && (
-            <Alert bsStyle="danger">
+            <Alert variant="danger">
               <WarningIcon gapRight />
               <FormattedMessage id="generic.creationFailed" defaultMessage="Creation failed. Please try again later." />
             </Alert>

@@ -48,7 +48,7 @@ const RegistrationForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage
           id="app.registrationForm.failed"
           defaultMessage="Login failed. Please check your credentials."
@@ -122,7 +122,7 @@ const RegistrationForm = ({
       }
     />
 
-    {error && <Alert bsStyle="danger">{error}</Alert>}
+    {error && <Alert variant="danger">{error}</Alert>}
   </FormBox>
 );
 

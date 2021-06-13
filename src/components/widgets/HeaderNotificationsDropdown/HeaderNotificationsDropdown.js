@@ -35,7 +35,7 @@ const HeaderNotificationsDropdown = ({
         <Icon icon={['fas', 'bell']} className="faa-shake animated" />
       )}
       {newNotifications.size > 0 && (
-        <Label bsStyle="danger">{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Label>
+        <Label variant="danger">{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Label>
       )}
     </a>
     <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>

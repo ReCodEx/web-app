@@ -18,13 +18,13 @@ class EditExercisePipelinesTable extends Component {
         {idx > 0 && (
           <Button
             onClick={() => fields.swap(idx - 1, idx)}
-            bsStyle="warning"
+            variant="warning"
             bsSize="xs"
             style={{ position: 'relative', top: '-20px', marginRight: '1em' }}>
             <TransferIcon rotation={90} />
           </Button>
         )}
-        <Button onClick={() => fields.remove(idx)} bsStyle="danger" bsSize="xs">
+        <Button onClick={() => fields.remove(idx)} variant="danger" bsSize="xs">
           <DeleteIcon />
         </Button>
       </React.Fragment>
@@ -69,7 +69,7 @@ class EditExercisePipelinesTable extends Component {
                   :
                 </ControlLabel>
                 <FormControl
-                  componentClass="select"
+                  as="select"
                   onChange={e => this.setState({ selectedPipeline: e.target.value })}
                   value={this.state.selectedPipeline || ''}>
                   <option value={null} />
@@ -90,7 +90,7 @@ class EditExercisePipelinesTable extends Component {
                       this.setState({ selectedPipeline: null });
                     }
                   }}
-                  bsStyle="primary"
+                  variant="primary"
                   disabled={!this.state.selectedPipeline}>
                   <AddIcon gapRight />
                   <FormattedMessage id="app.editExercisePipelines.addPipeline" defaultMessage="Add Pipeline" />

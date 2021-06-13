@@ -16,7 +16,7 @@ const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSu
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button type="submit" onClick={handleSubmit} bsStyle="success" disabled={invalid || submitting || hasSucceeded}>
+        <Button type="submit" onClick={handleSubmit} variant="success" disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
@@ -39,7 +39,7 @@ const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSu
       </div>
     }>
     {hasSucceeded && (
-      <Alert bsStyle="success">
+      <Alert variant="success">
         <FormattedMessage
           id="app.changePasswordForm.succeeded"
           defaultMessage="You can now log in with your new password."
@@ -48,7 +48,7 @@ const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSu
     )}
 
     {hasFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.changePasswordForm.failed" defaultMessage="Changing password failed." />
       </Alert>
     )}

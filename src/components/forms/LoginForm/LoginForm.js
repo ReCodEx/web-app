@@ -17,7 +17,7 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button type="submit" bsStyle="success" onClick={handleSubmit} disabled={invalid || submitting || hasSucceeded}>
+        <Button type="submit" variant="success" onClick={handleSubmit} disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
@@ -39,7 +39,7 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
         </Button>
       </div>
     }>
-    {hasFailed && error && <Alert bsStyle="danger">{error}</Alert>}
+    {hasFailed && error && <Alert variant="danger">{error}</Alert>}
 
     <Field
       name="email"

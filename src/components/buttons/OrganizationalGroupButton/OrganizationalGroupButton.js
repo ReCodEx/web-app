@@ -6,7 +6,7 @@ import Button from '../../widgets/FlatButton';
 
 const OrganizationalGroupButton = ({ organizational, pending, disabled = false, setOrganizational }) => (
   <Button
-    bsStyle={disabled ? 'default' : 'info'}
+    variant={disabled ? 'default' : 'info'}
     onClick={setOrganizational(!organizational)}
     disabled={pending || disabled}>
     {pending ? <LoadingIcon gapRight /> : <GroupIcon organizational={!organizational} gapRight />}

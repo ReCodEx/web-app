@@ -329,13 +329,13 @@ class AssignmentStats extends Component {
               <Col md={12} lg={7}>
                 <p>
                   <LinkContainer to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                    <Button bsStyle="warning">
+                    <Button variant="warning">
                       <EditIcon gapRight />
                       <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                     </Button>
                   </LinkContainer>
                   <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
-                    <Button bsStyle="primary">
+                    <Button variant="primary">
                       <DownloadIcon gapRight />
                       <FormattedMessage
                         id="app.assignment.downloadBestSolutionsArchive"
@@ -344,7 +344,7 @@ class AssignmentStats extends Component {
                     </Button>
                   </a>
                   <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
-                  <Button bsStyle="info" onClick={this.openDialog}>
+                  <Button variant="info" onClick={this.openDialog}>
                     <ChatIcon gapRight />
                     <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
                   </Button>

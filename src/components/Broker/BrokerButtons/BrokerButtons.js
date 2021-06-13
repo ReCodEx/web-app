@@ -18,13 +18,13 @@ const BrokerButtons = ({
   return (
     <div className="em-margin-bottom em-margin-right">
       <ButtonGroup>
-        <Button onClick={refreshBrokerStats} bsStyle="primary">
+        <Button onClick={refreshBrokerStats} variant="primary">
           <RefreshIcon gapRight />
           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
         </Button>
 
         <Button
-          bsStyle="danger"
+          variant="danger"
           onClick={freezeBroker}
           disabled={pending}
           confirmId="freeze-broker"
@@ -47,7 +47,7 @@ const BrokerButtons = ({
         </Button>
 
         <Button
-          bsStyle="success"
+          variant="success"
           onClick={unfreezeBroker}
           disabled={pending}
           confirmId="unfreeze-broker"

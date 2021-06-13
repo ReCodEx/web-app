@@ -30,7 +30,7 @@ const AcceptSolution = ({
   return (
     <OptionalTooltipWrapper tooltip={label} hide={!captionAsTooltip}>
       <Button
-        bsStyle={accepted ? 'warning' : 'success'}
+        variant={accepted ? 'warning' : 'success'}
         bsSize={bsSize}
         onClick={accepted ? unaccept : accept}
         disabled={acceptPending}>

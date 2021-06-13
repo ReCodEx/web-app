@@ -383,7 +383,7 @@ class ScoreConfigUniversalExpression extends Component {
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
-                <Button onClick={this.closeDialog} bsStyle="default">
+                <Button onClick={this.closeDialog} variant="default">
                   <CloseIcon gapRight />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
@@ -414,7 +414,7 @@ class ScoreConfigUniversalExpression extends Component {
                 <tbody>
                   <tr>
                     <td className="em-padding valign-middle">
-                      <Button onClick={() => this.performOptimizations(removeConstantExpressions)} bsStyle="success">
+                      <Button onClick={() => this.performOptimizations(removeConstantExpressions)} variant="success">
                         <FormattedMessage
                           id="app.scoreConfigExpression.optimize.removeConstantsButton"
                           defaultMessage="Replace Constant Sub-expressions"
@@ -430,7 +430,7 @@ class ScoreConfigUniversalExpression extends Component {
                   </tr>
                   <tr>
                     <td className="em-padding valign-middle">
-                      <Button onClick={() => this.performOptimizations(optimize)} bsStyle="success">
+                      <Button onClick={() => this.performOptimizations(optimize)} variant="success">
                         <FormattedMessage
                           id="app.scoreConfigExpression.optimize.optimizeButton"
                           defaultMessage="Basic Optimizations"
@@ -448,7 +448,7 @@ class ScoreConfigUniversalExpression extends Component {
                     <td className="em-padding valign-middle">
                       <Button
                         onClick={() => this.performOptimizations(removeConstantExpressions, optimize)}
-                        bsStyle="success">
+                        variant="success">
                         <FormattedMessage
                           id="app.scoreConfigExpression.optimize.allButton"
                           defaultMessage="All Optimizations"
@@ -467,7 +467,7 @@ class ScoreConfigUniversalExpression extends Component {
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
-                <Button onClick={this.closeDialog} bsStyle="default">
+                <Button onClick={this.closeDialog} variant="default">
                   <CloseIcon gapRight />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
@@ -513,7 +513,7 @@ class ScoreConfigUniversalExpression extends Component {
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
-                <Button onClick={this.closeDialog} bsStyle="default">
+                <Button onClick={this.closeDialog} variant="default">
                   <CloseIcon gapRight />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>

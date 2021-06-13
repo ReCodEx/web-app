@@ -44,7 +44,7 @@ class GroupTree extends Component {
               </Tooltip>
             }>
             <LinkContainer to={GROUP_EDIT_URI_FACTORY(groupId)}>
-              <Button bsStyle="warning" bsSize="xs" className="btn-flat">
+              <Button variant="warning" bsSize="xs" className="btn-flat">
                 <EditIcon smallGapLeft smallGapRight />
               </Button>
             </LinkContainer>
@@ -59,7 +59,7 @@ class GroupTree extends Component {
             </Tooltip>
           }>
           <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
-            <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+            <Button variant="primary" bsSize="xs" className="btn-flat">
               <GroupIcon />
             </Button>
           </LinkContainer>
@@ -74,7 +74,7 @@ class GroupTree extends Component {
               </Tooltip>
             }>
             <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
-              <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+              <Button variant="primary" bsSize="xs" className="btn-flat">
                 <AssignmentsIcon smallGapLeft smallGapRight />
               </Button>
             </LinkContainer>

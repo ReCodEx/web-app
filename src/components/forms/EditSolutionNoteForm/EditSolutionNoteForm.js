@@ -18,7 +18,7 @@ const EditSolutionNoteForm = ({
 }) => (
   <Form method="POST" onSubmit={onSubmit}>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.editSolutionNoteForm.failed" defaultMessage="Cannot save the solution note." />
       </Alert>
     )}

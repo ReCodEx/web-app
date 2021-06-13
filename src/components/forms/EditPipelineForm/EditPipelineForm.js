@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { reduxForm, Field, touch, formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Container, Row, Col } from 'react-bootstrap';
 
 import { TextField, MarkdownTextAreaField, PipelineField, PipelineVariablesField } from '../Fields';
 
@@ -71,12 +71,12 @@ class EditPipelineForm extends Component {
           </div>
         }>
         {submitFailed && (
-          <Alert bsStyle="danger">
+          <Alert variant="danger">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
 
-        <Grid fluid>
+        <Container fluid>
           <Row>
             <Col lg={12}>
               <Field
@@ -123,7 +123,7 @@ class EditPipelineForm extends Component {
               />
             </Col>
           </Row>
-        </Grid>
+        </Container>
       </FormBox>
     );
   }

@@ -88,7 +88,7 @@ class Registration extends Component {
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
           {instances => (
             <Row>
-              <Col lg={8} lgOffset={2} md={10} mdOffset={1} sm={12} smOffset={0}>
+              <Col lg={{ span: 8, offset: 2 }} md={{ span: 10, offset: 1 }} sm={{ span: 12, offset: 0 }}>
                 {ALLOW_LOCAL_REGISTRATION && (
                   <RegistrationForm
                     instances={instances}
@@ -108,7 +108,7 @@ class Registration extends Component {
                     footer={
                       <div className="text-center">
                         <Link to={LOGIN_URI}>
-                          <Button bsStyle="primary">
+                          <Button variant="primary">
                             <SignInIcon gapRight />
                             <FormattedMessage id="app.registration.external.gotoSignin" defaultMessage="Sign-in Page" />
                           </Button>
@@ -116,12 +116,12 @@ class Registration extends Component {
 
                         <a href={EXTERNAL_AUTH_HELPDESK_URL} className="em-margin-left">
                           {EXTERNAL_AUTH_HELPDESK_URL.startsWith('mailto:') ? (
-                            <Button bsStyle="primary">
+                            <Button variant="primary">
                               <MailIcon gapRight />
                               <FormattedMessage id="app.registration.external.mail" defaultMessage="Contact Support" />
                             </Button>
                           ) : (
-                            <Button bsStyle="primary">
+                            <Button variant="primary">
                               <LinkIcon gapRight />
                               <FormattedMessage id="app.registration.external.link" defaultMessage="Visit Help Page" />
                             </Button>

@@ -387,7 +387,7 @@ class ResultsTable extends Component {
         {(isAdmin || isSupervisor) && (
           <div className="text-center">
             <Button
-              bsStyle="primary"
+              variant="primary"
               className={styles.downloadButton}
               onClick={() =>
                 downloadString(

@@ -125,7 +125,7 @@ class SubmitSolution extends Component {
       <Button
         type="submit"
         disabled={!canSubmit || !limitsOK}
-        bsStyle={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
+        variant={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
         className="btn-flat"
         {...btnProps}>
         {hasFailed ? <WarningIcon gapRight /> : <SendIcon gapRight />}
@@ -235,7 +235,7 @@ class SubmitSolution extends Component {
                   <React.Fragment>
                     <FormControl
                       onChange={e => changeRuntimeEnvironment(e.target.value)}
-                      componentClass="select"
+                      as="select"
                       defaultValue={selectedEnvironment}>
                       {presubmitEnvironments.map(rte => (
                         <option key={rte.id} value={rte.id}>
@@ -270,7 +270,7 @@ class SubmitSolution extends Component {
                   <ControlLabel>{formatMessage(commonMessages.entryPoint)}</ControlLabel>
                   <FormControl
                     onChange={e => changeEntryPoint(e.target.value)}
-                    componentClass="select"
+                    as="select"
                     defaultValue={selectedEntryPoint}>
                     {attachedFiles
                       .map(item => item.name)
@@ -302,7 +302,7 @@ class SubmitSolution extends Component {
         <Modal.Footer>
           <div className="text-center em-margin-bottomm">
             {isSending && (
-              <Button type="submit" disabled={true} bsStyle="success" className="btn-flat">
+              <Button type="submit" disabled={true} variant="success" className="btn-flat">
                 <LoadingIcon gapRight />
                 {formatMessage(commonMessages.submitting)}
               </Button>
@@ -310,12 +310,12 @@ class SubmitSolution extends Component {
 
             {!isSending && this.createSubmitButton()}
 
-            <Button bsStyle="default" className="btn-flat" onClick={reset}>
+            <Button variant="default" className="btn-flat" onClick={reset}>
               <DeleteIcon gapRight />
               {formatMessage(commonMessages.resetForm)}
             </Button>
 
-            <Button bsStyle="default" className="btn-flat" onClick={onClose}>
+            <Button variant="default" className="btn-flat" onClick={onClose}>
               <CloseIcon gapRight />
               {formatMessage(commonMessages.closeForm)}
             </Button>

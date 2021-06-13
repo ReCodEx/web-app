@@ -67,7 +67,7 @@ class ArchiveTermGroups extends Component {
           )}
 
           {submitFailed && (
-            <Alert bsStyle="danger">
+            <Alert variant="danger">
               <FormattedMessage
                 id="app.archiveSisTerm.failed"
                 defaultMessage="Archivation failed. Some of the groups may not have been archived."
@@ -81,7 +81,7 @@ class ArchiveTermGroups extends Component {
           <div className="text-center">
             {groups.length > 0 && (
               <React.Fragment>
-                <Button bsStyle="primary" onClick={this.checkAllGroups}>
+                <Button variant="primary" onClick={this.checkAllGroups}>
                   <Icon icon={['far', 'check-square']} gapRight />
                   <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
                 </Button>
@@ -103,7 +103,7 @@ class ArchiveTermGroups extends Component {
               </React.Fragment>
             )}
 
-            <Button bsStyle="default" onClick={onClose}>
+            <Button variant="default" onClick={onClose}>
               <CloseIcon gapRight />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>

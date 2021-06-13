@@ -223,7 +223,7 @@ class ExerciseAssignments extends Component {
                     <Box
                       title={formatMessage(messages.groupsBoxTitle)}
                       description={
-                        <Alert bsStyle="info">
+                        <Alert variant="info">
                           <FormattedMessage
                             id="app.exercise.assignToGroup"
                             defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."

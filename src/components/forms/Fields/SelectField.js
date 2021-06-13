@@ -27,8 +27,8 @@ const SelectField = ({
             <FormControl
               {...input}
               {...props}
-              componentClass="select"
-              bsClass={classnames({
+              as="select"
+              bsPrefix={classnames({
                 'form-control': true,
                 [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
                 [styles.active]: active,

@@ -18,7 +18,7 @@ const ExerciseConfigTypeButton = ({
   ...props
 }) => (
   <Confirm id="confirm-exercise-config-type-change" onConfirmed={setExerciseConfigType} question={question}>
-    <Button disabled={disabled} bsStyle="primary" {...props}>
+    <Button disabled={disabled} variant="primary" {...props}>
       <Icon icon={isSimple ? 'cubes' : 'cube'} gapRight />
       {isSimple ? (
         <FormattedMessage

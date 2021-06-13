@@ -40,7 +40,7 @@ const ResetPassword = ({ resetPassword, isReseting, hasFailed, hasSucceeded, lin
       },
     ]}>
     <Row>
-      <Col md={6} mdOffset={3} sm={8} smOffset={2}>
+      <Col md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }}>
         <ResetPasswordForm
           onSubmit={resetPassword}
           istTryingToCreateAccount={isReseting}

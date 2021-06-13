@@ -27,9 +27,7 @@ const createMewMessageInitialValues = () => ({
   type: 'success',
   role: 'student',
   visibleFrom: moment(),
-  visibleTo: moment()
-    .add(1, 'week')
-    .endOf('day'),
+  visibleTo: moment().add(1, 'week').endOf('day'),
 });
 
 const getMessageInitialValues = message => {
@@ -126,7 +124,7 @@ class SystemMessages extends Component {
                       <React.Fragment>
                         <Button
                           bsSize="xs"
-                          bsStyle="warning"
+                          variant="warning"
                           onClick={() => {
                             this.setState({
                               isOpen: true,
@@ -147,7 +145,7 @@ class SystemMessages extends Component {
                   />
                   <hr className="no-margin" />
                   <p className="em-margin-top text-center">
-                    <Button onClick={() => this.setState({ isOpen: true, createNew: true })} bsStyle="success">
+                    <Button onClick={() => this.setState({ isOpen: true, createNew: true })} variant="success">
                       <AddIcon gapRight />
                       <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
                     </Button>

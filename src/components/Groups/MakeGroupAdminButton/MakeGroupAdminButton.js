@@ -5,7 +5,7 @@ import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 
 const MakeGroupAdminButton = ({ onClick, ...props }) => (
-  <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
+  <Button {...props} onClick={onClick} variant="success" className="btn-flat">
     <Icon icon="user-secret" gapRight />
     <FormattedMessage id="app.groups.makeGroupAdminButton" defaultMessage="Promote to group admin" />
   </Button>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedHTMLMessage, injectIntl, defineMessages, intlShape } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert, OverlayTrigger, Tooltip, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, OverlayTrigger, Tooltip, Container, Row, Col } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import FormBox from '../../widgets/FormBox';
@@ -86,7 +86,7 @@ const GenerateTokenForm = ({
                   <FormattedMessage id="app.generateTokenForm.copied" defaultMessage="Copied!" />
                 </Tooltip>
               }>
-              <Button bsStyle="info">
+              <Button variant="info">
                 <CopyIcon gapRight fixedWidth />
                 <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
               </Button>
@@ -119,7 +119,7 @@ const GenerateTokenForm = ({
     <h4 className="em-margin-bottom">
       <FormattedMessage id="app.generateTokenForm.scopes" defaultMessage="Scopes:" />
     </h4>
-    <Grid fluid>
+    <Container fluid>
       <Row>
         {Object.values(
           objectMap(availableScopes, (message, scope) => (
@@ -135,14 +135,14 @@ const GenerateTokenForm = ({
           ))
         )}
       </Row>
-    </Grid>
+    </Container>
 
-    {warning && <Alert bsStyle="warning">{warning}</Alert>}
+    {warning && <Alert variant="warning">{warning}</Alert>}
 
-    {error && <Alert bsStyle="danger">{error}</Alert>}
+    {error && <Alert variant="danger">{error}</Alert>}
 
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage
           id="app.generateTokenForm.failed"
           defaultMessage="The process of token creation has failed. Please try again later."

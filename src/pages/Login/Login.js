@@ -140,14 +140,10 @@ class Login extends Component {
           {!isLoggedIn && (
             <Row>
               <Col
-                lg={4}
-                lgOffset={external ? 1 : 4}
-                md={6}
-                mdOffset={external ? 0 : 3}
-                sm={10}
-                smOffset={2}
-                xs={12}
-                xsOffset={0}>
+                lg={{ span: 4, offset: external ? 1 : 4 }}
+                md={{ span: 6, offset: external ? 0 : 3 }}
+                sm={{ span: 10, offset: 2 }}
+                xs={{ spna: 12, offset: 0 }}>
                 <LoginForm onSubmit={this.loginAndRedirect} />
                 <p className="text-center">
                   <FormattedMessage
@@ -161,7 +157,11 @@ class Login extends Component {
               </Col>
 
               {external && (
-                <Col lg={4} lgOffset={2} md={6} mdOffset={0} sm={10} smOffset={2} xs={12} xsOffset={0}>
+                <Col
+                  lg={{ span: 4, offset: 2 }}
+                  md={{ span: 6, offset: 0 }}
+                  sm={{ span: 10, offset: 2 }}
+                  xs={{ span: 12, offset: 0 }}>
                   <ExternalLoginBox
                     name={getConfigVarLocalized('EXTERNAL_AUTH_NAME', locale)}
                     url={EXTERNAL_AUTH_URL}

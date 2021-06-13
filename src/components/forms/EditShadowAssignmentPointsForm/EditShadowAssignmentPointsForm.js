@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Form, FormGroup, Alert, Grid, Row, Col } from 'react-bootstrap';
+import { Form, FormGroup, Alert, Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 
 import SubmitButton from '../SubmitButton';
@@ -48,7 +48,7 @@ const EditShadowAssignmentPointsForm = ({
 }) => (
   <Form method="POST">
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage
           id="app.editShadowAssignmentPointsForm.failed"
           defaultMessage="Cannot save the shadow assignment points."
@@ -56,7 +56,7 @@ const EditShadowAssignmentPointsForm = ({
       </Alert>
     )}
 
-    <Grid fluid>
+    <Container fluid>
       <Row>
         <Col md={12} lg={5}>
           <NumericTextField
@@ -106,15 +106,15 @@ const EditShadowAssignmentPointsForm = ({
           />
         </Col>
       </Row>
-    </Grid>
+    </Container>
 
     <hr />
 
-    {warning && <Alert bsStyle="warning">{warning}</Alert>}
+    {warning && <Alert variant="warning">{warning}</Alert>}
 
     <div className="text-center">
       {dirty && (
-        <Button type="reset" onClick={reset} bsStyle={'danger'}>
+        <Button type="reset" onClick={reset} variant={'danger'}>
           <RefreshIcon gapRight />
           <FormattedMessage id="generic.reset" defaultMessage="Reset" />
         </Button>
@@ -135,7 +135,7 @@ const EditShadowAssignmentPointsForm = ({
       />
 
       {onRemovePoints && (
-        <Button onClick={onRemovePoints} bsStyle="danger" className="em-margin-left">
+        <Button onClick={onRemovePoints} variant="danger" className="em-margin-left">
           <DeleteIcon gapRight />
           <FormattedMessage
             id="app.editShadowAssignmentPointsForm.removePoints"

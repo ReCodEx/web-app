@@ -87,7 +87,7 @@ class Instance extends Component {
                 <Col sm={12} md={6}>
                   <p>
                     <LinkContainer to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
-                      <Button bsStyle="warning">
+                      <Button variant="warning">
                         <EditIcon gapRight />
                         <FormattedMessage id="app.instance.edit" defaultMessage="Edit instance" />
                       </Button>

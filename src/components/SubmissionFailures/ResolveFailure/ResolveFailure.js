@@ -13,9 +13,7 @@ const maxNoteLength = value =>
       id="app.submissionFailures.resolveMaxLengthExceeded"
       defaultMessage="Maximum length of the note exceeded."
     />
-  ) : (
-    undefined
-  );
+  ) : undefined;
 
 const ResolveFailure = ({
   isOpen,
@@ -66,7 +64,7 @@ const ResolveFailure = ({
         }}
       />
 
-      <Button bsStyle="default" className="btn-flat" onClick={onClose}>
+      <Button variant="default" className="btn-flat" onClick={onClose}>
         <CloseIcon gapRight />
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
