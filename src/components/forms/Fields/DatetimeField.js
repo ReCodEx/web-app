@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
-import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { FormGroup, FormLabel, HelpBlock } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import withLinks from '../../../helpers/withLinks';
@@ -42,7 +42,7 @@ class DatetimeField extends Component {
 
     return (
       <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
-        {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
+        {Boolean(label) && <FormLabel>{label}</FormLabel>}
         <Datetime
           {...input}
           {...props}

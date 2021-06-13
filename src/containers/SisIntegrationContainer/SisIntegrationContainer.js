@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Panel, Table } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
@@ -127,62 +127,66 @@ class SisIntegrationContainer extends Component {
                                 preprocessCourses(courses, groupsAccessor, locale).map(
                                   course =>
                                     course && (
-                                      <Panel
-                                        key={course.course.code}
-                                        header={<div>{course && <CourseLabel {...course.course} />}</div>}>
-                                        <Table className="no-margin">
-                                          <tbody>
-                                            {course.groups &&
-                                              course.groups.map((group, i) => (
-                                                <tr key={i}>
-                                                  <td style={{ width: '55%' }}>
-                                                    {getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
-                                                  </td>
-                                                  <td style={{ width: '30%' }}>
-                                                    {group.primaryAdminsIds.map(id => (
-                                                      <UsersNameContainer key={id} userId={id} isSimple />
-                                                    ))}
-                                                  </td>
-                                                  <td className="text-right text-nowrap" style={{ width: '15%' }}>
-                                                    <span>
-                                                      {group.privateData &&
-                                                        group.privateData.students.includes(currentUserId) && (
-                                                          <LinkContainer
-                                                            to={
-                                                              group.organizational ||
-                                                              // this is inacurate, but public groups are visible to students who cannot see detail until they join
-                                                              group.public
-                                                                ? GROUP_INFO_URI_FACTORY(group.id)
-                                                                : GROUP_DETAIL_URI_FACTORY(group.id)
-                                                            }>
-                                                            <Button variant="primary" bsSize="xs" className="btn-flat">
-                                                              <AssignmentsIcon gapRight />
-                                                              <FormattedMessage
-                                                                id="app.group.assignments"
-                                                                defaultMessage="Assignments"
-                                                              />
-                                                            </Button>
-                                                          </LinkContainer>
-                                                        )}
+                                      <Card key={course.course.code}>
+                                        <Card.Header>{course && <CourseLabel {...course.course} />}</Card.Header>
+                                        <Card.Body>
+                                          <Table className="no-margin">
+                                            <tbody>
+                                              {course.groups &&
+                                                course.groups.map((group, i) => (
+                                                  <tr key={i}>
+                                                    <td style={{ width: '55%' }}>
+                                                      {getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
+                                                    </td>
+                                                    <td style={{ width: '30%' }}>
+                                                      {group.primaryAdminsIds.map(id => (
+                                                        <UsersNameContainer key={id} userId={id} isSimple />
+                                                      ))}
+                                                    </td>
+                                                    <td className="text-right text-nowrap" style={{ width: '15%' }}>
+                                                      <span>
+                                                        {group.privateData &&
+                                                          group.privateData.students.includes(currentUserId) && (
+                                                            <LinkContainer
+                                                              to={
+                                                                group.organizational ||
+                                                                // this is inacurate, but public groups are visible to students who cannot see detail until they join
+                                                                group.public
+                                                                  ? GROUP_INFO_URI_FACTORY(group.id)
+                                                                  : GROUP_DETAIL_URI_FACTORY(group.id)
+                                                              }>
+                                                              <Button
+                                                                variant="primary"
+                                                                bsSize="xs"
+                                                                className="btn-flat">
+                                                                <AssignmentsIcon gapRight />
+                                                                <FormattedMessage
+                                                                  id="app.group.assignments"
+                                                                  defaultMessage="Assignments"
+                                                                />
+                                                              </Button>
+                                                            </LinkContainer>
+                                                          )}
 
-                                                      {!group.organizational &&
-                                                        (!group.privateData ||
-                                                          !group.privateData.detaining ||
-                                                          !group.privateData.students.includes(currentUserId)) && (
-                                                          <LeaveJoinGroupButtonContainer
-                                                            userId={currentUserId}
-                                                            groupId={group.id}
-                                                            onJoin={this.reloadData}
-                                                            onLeave={this.reloadData}
-                                                          />
-                                                        )}
-                                                    </span>
-                                                  </td>
-                                                </tr>
-                                              ))}
-                                          </tbody>
-                                        </Table>
-                                      </Panel>
+                                                        {!group.organizational &&
+                                                          (!group.privateData ||
+                                                            !group.privateData.detaining ||
+                                                            !group.privateData.students.includes(currentUserId)) && (
+                                                            <LeaveJoinGroupButtonContainer
+                                                              userId={currentUserId}
+                                                              groupId={group.id}
+                                                              onJoin={this.reloadData}
+                                                              onLeave={this.reloadData}
+                                                            />
+                                                          )}
+                                                      </span>
+                                                    </td>
+                                                  </tr>
+                                                ))}
+                                            </tbody>
+                                          </Table>
+                                        </Card.Body>
+                                      </Card>
                                     )
                                 )
                               ) : (

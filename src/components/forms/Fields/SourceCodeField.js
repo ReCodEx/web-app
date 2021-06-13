@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { FormGroup, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { FormGroup, FormLabel, HelpBlock } from 'react-bootstrap';
 
 import ClientOnly from '../../helpers/ClientOnly';
 import { UserSettingsContext } from '../../../helpers/contexts';
@@ -22,7 +22,7 @@ const SourceCodeField = ({
   ...props
 }) => (
   <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
-    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
+    {Boolean(label) && <FormLabel>{label}</FormLabel>}
     <ClientOnly>
       <div className={readOnly ? 'noselection' : ''}>
         <UserSettingsContext.Consumer>

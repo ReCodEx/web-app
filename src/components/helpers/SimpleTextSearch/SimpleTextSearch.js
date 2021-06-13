@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Button, FormGroup, ControlLabel, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, FormGroup, FormLabel, FormControl, InputGroup } from 'react-bootstrap';
 import { LoadingIcon, SearchIcon, WarningIcon } from '../../icons';
 
 class SimpleTextSearch extends Component {
@@ -21,12 +21,12 @@ class SimpleTextSearch extends Component {
     return (
       <form>
         <FormGroup>
-          <ControlLabel htmlFor={id}>
+          <FormLabel htmlFor={id}>
             <FormattedMessage id="generic.search" defaultMessage="Search" />:
-          </ControlLabel>
+          </FormLabel>
           <InputGroup>
             <FormControl id={id} type="text" value={this.state.query} onChange={this.queryChangeHandler} />
-            <InputGroup.Button>
+            <InputGroup.Append>
               <Button
                 type="submit"
                 onClick={e => {
@@ -38,7 +38,7 @@ class SimpleTextSearch extends Component {
                 {hasFailed && <WarningIcon />}
                 {!isLoading && !hasFailed && <SearchIcon />}
               </Button>
-            </InputGroup.Button>
+            </InputGroup.Append>
           </InputGroup>
         </FormGroup>
       </form>

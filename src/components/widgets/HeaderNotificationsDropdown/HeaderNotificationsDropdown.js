@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
-import { Label } from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
 
 import Icon from '../../icons';
 import HeaderNotification from '../HeaderNotification';
@@ -35,7 +35,7 @@ const HeaderNotificationsDropdown = ({
         <Icon icon={['fas', 'bell']} className="faa-shake animated" />
       )}
       {newNotifications.size > 0 && (
-        <Label variant="danger">{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Label>
+        <Badge variant="danger">{newNotifications.reduce((acc, n) => acc + n.count, 0)}</Badge>
       )}
     </a>
     <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>

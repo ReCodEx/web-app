@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import FlatButton from '../../widgets/FlatButton';
 import TextField from './TextField';
@@ -18,7 +18,7 @@ const ExpandingTextField = ({
   ...props
 }) => (
   <div>
-    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
+    {Boolean(label) && <FormLabel>{label}</FormLabel>}
     <table>
       <tbody>
         {fields.map((field, index) => (

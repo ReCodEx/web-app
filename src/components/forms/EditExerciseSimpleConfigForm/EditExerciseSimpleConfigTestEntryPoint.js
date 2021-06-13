@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { ControlLabel } from 'react-bootstrap';
+import { FormLabel } from 'react-bootstrap';
 
 import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
@@ -24,12 +24,12 @@ const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, tes
     <tbody>
       <tr>
         <td>
-          <ControlLabel>
+          <FormLabel>
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.entryPointLabel"
               defaultMessage="Entry point identifier:"
             />
-          </ControlLabel>
+          </FormLabel>
         </td>
       </tr>
       <tr>

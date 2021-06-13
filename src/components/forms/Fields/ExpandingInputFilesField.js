@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import FlatButton from '../../widgets/FlatButton';
 import SelectField from './SelectField';
@@ -36,8 +36,8 @@ const ExpandingInputFilesField = ({
       <table className="full-width">
         <thead>
           <tr>
-            <th className="half-width">{Boolean(leftLabel) && <ControlLabel>{leftLabel}</ControlLabel>}</th>
-            <th className="half-width">{Boolean(rightLabel) && <ControlLabel>{rightLabel}</ControlLabel>}</th>
+            <th className="half-width">{Boolean(leftLabel) && <FormLabel>{leftLabel}</FormLabel>}</th>
+            <th className="half-width">{Boolean(rightLabel) && <FormLabel>{rightLabel}</FormLabel>}</th>
             {!readOnly && <th />}
           </tr>
         </thead>

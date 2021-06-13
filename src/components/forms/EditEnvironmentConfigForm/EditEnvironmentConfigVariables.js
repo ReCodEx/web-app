@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import FlatButton from '../../widgets/FlatButton';
 import TextField from '../Fields/TextField';
@@ -25,12 +25,13 @@ const validateWildcard = value => {
       id="app.editEnvironmentConfig.validateWildcard"
       defaultMessage="This value is not a valid file name or wildcard."
     />
-  ) : (
-    undefined
-  );
+  ) : undefined;
 };
 
-const VARIABLE_TYPES_OPTIONS = [{ name: 'file', key: 'file' }, { name: 'file[]', key: 'file[]' }];
+const VARIABLE_TYPES_OPTIONS = [
+  { name: 'file', key: 'file' },
+  { name: 'file[]', key: 'file[]' },
+];
 
 const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
   <div>
@@ -39,19 +40,19 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
         <thead>
           <tr>
             <th width="40%">
-              <ControlLabel>
+              <FormLabel>
                 <FormattedMessage id="app.editEnvironmentConfig.variableName" defaultMessage="Source Files Variable" />:
-              </ControlLabel>
+              </FormLabel>
             </th>
             <th width="40%">
-              <ControlLabel>
+              <FormLabel>
                 <FormattedMessage id="app.editEnvironmentConfig.variableValue" defaultMessage="Wildcard Pattern" />:
-              </ControlLabel>
+              </FormLabel>
             </th>
             <th width="20%">
-              <ControlLabel>
+              <FormLabel>
                 <FormattedMessage id="app.editEnvironmentConfig.variableType" defaultMessage="Type" />:
-              </ControlLabel>
+              </FormLabel>
             </th>
             <th />
           </tr>

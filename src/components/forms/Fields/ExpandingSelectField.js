@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { ControlLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import FlatButton from '../../widgets/FlatButton';
 import SelectField from './SelectField';
@@ -19,7 +19,7 @@ const ExpandingSelectField = ({
   <div>
     {fields.length > 0 && (
       <React.Fragment>
-        {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
+        {Boolean(label) && <FormLabel>{label}</FormLabel>}
         <table>
           <tbody>
             {fields.map((field, index) => (

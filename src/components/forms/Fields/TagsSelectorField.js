@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { ControlLabel, Label } from 'react-bootstrap';
+import { FormLabel, Badge } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import classnames from 'classnames';
 
@@ -19,10 +19,10 @@ const TagsSelectorField = ({ tags = [], fields, label = null }) => {
 
   return (
     <React.Fragment>
-      {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
+      {Boolean(label) && <FormLabel>{label}</FormLabel>}
       <div className="larger">
         {tags.sort().map(tag => (
-          <Label
+          <Badge
             key={tag}
             bsSize="lg"
             style={getTagStyle(tag)}
@@ -35,7 +35,7 @@ const TagsSelectorField = ({ tags = [], fields, label = null }) => {
             onClick={() => (active[tag] === undefined ? fields.push(tag) : fields.remove(active[tag]))}>
             {tag}
             {active[tag] === undefined ? <AddIcon gapLeft /> : <CloseIcon gapLeft />}
-          </Label>
+          </Badge>
         ))}
       </div>
     </React.Fragment>
