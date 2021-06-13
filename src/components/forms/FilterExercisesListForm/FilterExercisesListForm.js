@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
-import { Alert, Well, Grid, Row, Col, Form, Button, ControlLabel } from 'react-bootstrap';
+import { Alert, Grid, Row, Col, Form, Button, ControlLabel } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises';
@@ -22,6 +22,7 @@ import SubmitButton from '../SubmitButton';
 import { TextField, SelectField, TagsSelectorField } from '../Fields';
 import { identity, safeGet } from '../../../helpers/common';
 import { ExpandCollapseIcon } from '../../icons';
+import InsetPanel from '../../widgets/InsetPanel';
 
 const RTE_PREFIX = 'runtimeEnvironments.';
 
@@ -99,7 +100,7 @@ class FilterExercisesListForm extends Component {
 
     return (
       <Form method="POST" onSubmit={onSubmit}>
-        <Well bsSize="sm">
+        <InsetPanel bsSize="sm">
           {submitFailed && (
             <Alert bsStyle="danger">
               <FormattedMessage
@@ -277,7 +278,7 @@ class FilterExercisesListForm extends Component {
               </Grid>
             )}
           </ResourceRenderer>
-        </Well>
+        </InsetPanel>
       </Form>
     );
   }

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Well } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
+import InsetPanel from '../../widgets/InsetPanel';
 import { safeGet, EMPTY_OBJ, arrayToObject } from '../../../helpers/common';
 
 const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
@@ -72,12 +73,12 @@ const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
           </tfoot>
         </Table>
       ) : (
-        <Well>
+        <InsetPanel>
           <FormattedMessage
             id="app.scoreConfigInfoWeighted.noTests"
             defaultMessage="There are no test weights specified in the configuration."
           />
-        </Well>
+        </InsetPanel>
       )}
     </div>
   );

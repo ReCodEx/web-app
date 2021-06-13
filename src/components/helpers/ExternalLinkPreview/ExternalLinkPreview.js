@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Well, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 
 import OnOffCheckbox from '../../forms/OnOffCheckbox';
 import { LoadingIcon } from '../../icons';
 import Markdown from '../../widgets/Markdown';
+import InsetPanel from '../../widgets/InsetPanel';
 
 class ExternalLinkPreview extends Component {
   state = {
@@ -129,10 +130,10 @@ class ExternalLinkPreview extends Component {
         )}
 
         {pending && (
-          <Well>
+          <InsetPanel>
             <LoadingIcon gapRight />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-          </Well>
+          </InsetPanel>
         )}
 
         {error && <Alert bsStyle="warning">{error}</Alert>}

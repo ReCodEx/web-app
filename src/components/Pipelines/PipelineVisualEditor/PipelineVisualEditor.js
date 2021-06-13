@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Well } from 'react-bootstrap';
 
 import Button from '../../widgets/FlatButton';
 import { AddIcon } from '../../icons';
@@ -11,6 +10,7 @@ import EditBoxForm from '../BoxForm/EditBoxForm';
 import PipelineVisualisation from '../PipelineVisualisation';
 
 import { addNode, replaceNode, removeNode, createGraphFromNodes } from '../../../helpers/pipelineGraph';
+import InsetPanel from '../../widgets/InsetPanel';
 
 import './pipeline.css';
 
@@ -94,7 +94,7 @@ class PipelineVisualEditor extends Component {
         ref={el => {
           this.editorWrapper = el;
         }}>
-        <Well className="pipeline">
+        <InsetPanel className="pipeline">
           {graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}
           <p className="text-center">
             <Button onClick={this.showAddNodeForm}>
@@ -102,7 +102,7 @@ class PipelineVisualEditor extends Component {
               <FormattedMessage id="app.pipelineVisualEditor.addBoxButton" defaultMessage="Add box" />
             </Button>
           </p>
-        </Well>
+        </InsetPanel>
         <AddBoxForm add={this.addNode} show={addItem} onHide={this.onHideModal} />
         <EditBoxForm
           item={nodeToEdit}

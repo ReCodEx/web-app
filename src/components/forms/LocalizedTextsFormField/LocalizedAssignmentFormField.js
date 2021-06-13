@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
-import { Well } from 'react-bootstrap';
 
 import SharedLocalizedFields from './SharedLocalizedFields';
 import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields';
 import { MarkdownTextAreaField } from '../Fields';
+import InsetPanel from '../../widgets/InsetPanel';
 
 const LocalizedAssignmentFormField = ({ prefix, data: enabled }) => (
-  <Well>
+  <InsetPanel>
     <SharedLocalizedFields prefix={prefix} enabled={enabled} />
     <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
 
@@ -24,7 +24,7 @@ const LocalizedAssignmentFormField = ({ prefix, data: enabled }) => (
         />
       }
     />
-  </Well>
+  </InsetPanel>
 );
 
 LocalizedAssignmentFormField.propTypes = {

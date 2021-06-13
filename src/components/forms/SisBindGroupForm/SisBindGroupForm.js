@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Alert, Modal, Well } from 'react-bootstrap';
+import { Alert, Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import CourseLabel from '../../SisIntegration/CourseLabel';
 import { CloseIcon, InfoIcon } from '../../icons';
@@ -40,13 +41,13 @@ const SisBindGroupForm = ({
     </Modal.Header>
 
     <Modal.Body>
-      <Well>
+      <InsetPanel>
         <InfoIcon gapRight />
         <FormattedMessage
           id="app.sisBindGroupForm.info"
           defaultMessage="The selected course (mentioned above) will be bound to selected existing group. If you do not have an appropriate group yet, use 'Create group' button instead."
         />
-      </Well>
+      </InsetPanel>
 
       <Field
         name="groupId"

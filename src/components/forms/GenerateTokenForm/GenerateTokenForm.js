@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedHTMLMessage, injectIntl, defineMessages, intlShape } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert, Well, OverlayTrigger, Tooltip, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, OverlayTrigger, Tooltip, Grid, Row, Col } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/FlatButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField } from '../Fields';
 import { CopyIcon } from '../../icons';
@@ -108,12 +109,12 @@ const GenerateTokenForm = ({
         />
       </div>
     }>
-    <Well>
+    <InsetPanel>
       <FormattedMessage
         id="app.generateTokenForm.info"
         defaultMessage="This form should help advanced users to access API directly. It may be used to generate security tokens which are used for authentication and authorization of API operations. The scopes may restrict the set of operations authorized by the token beyond the limitations of the user role."
       />
-    </Well>
+    </InsetPanel>
 
     <h4 className="em-margin-bottom">
       <FormattedMessage id="app.generateTokenForm.scopes" defaultMessage="Scopes:" />
@@ -169,9 +170,9 @@ const GenerateTokenForm = ({
         <h4>
           <FormattedMessage id="app.generateTokenForm.lastToken" defaultMessage="Last Token:" />
         </h4>
-        <Well className="tokenWell">
+        <InsetPanel className="tokenWell">
           <code>{lastToken}</code>
-        </Well>
+        </InsetPanel>
       </div>
     )}
   </FormBox>

@@ -5,7 +5,7 @@ import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset, startAsyncValidation } from 'redux-form';
 import { defaultMemoize } from 'reselect';
-import { Row, Col, Well } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import PageContent from '../../components/layout/PageContent';
@@ -13,6 +13,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
+import InsetPanel from '../../components/widgets/InsetPanel';
 import { MailIcon, LinkIcon, SignInIcon } from '../../components/icons';
 
 import { createAccount, createExternalAccount } from '../../redux/modules/registration';
@@ -128,13 +129,13 @@ class Registration extends Component {
                         </a>
                       </div>
                     }>
-                    <Well>
+                    <InsetPanel>
                       <FormattedMessage
                         id="app.registration.externalInfo"
                         defaultMessage="Registration of local accounts is disabled. However, external authenticator '{authName}' is registered which is allowed to create or connect ReCodEx accounts. Simply visit 'Sign in' page and use this authenticator."
                         values={{ authName: EXTERNAL_AUTH_NAME }}
                       />
-                    </Well>
+                    </InsetPanel>
                   </Box>
                 )}
               </Col>

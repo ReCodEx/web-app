@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Well } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import ScoreConfigUniversalExpression from '../ScoreConfigUniversalExpression';
 import { Ast } from '../../../helpers/exercise/scoreAst';
 import { arrayToObject } from '../../../helpers/common';
+import InsetPanel from '../../widgets/InsetPanel';
 
 const createAst = defaultMemoize((config, testResults) => {
   const results =
@@ -35,9 +35,9 @@ const ScoreConfigInfoUniversal = ({ scoreConfig, testResults }) => (
       />
     </p>
 
-    <Well>
+    <InsetPanel>
       <ScoreConfigUniversalExpression ast={createAst(scoreConfig.config, testResults)} editable={false} />
-    </Well>
+    </InsetPanel>
   </div>
 );
 

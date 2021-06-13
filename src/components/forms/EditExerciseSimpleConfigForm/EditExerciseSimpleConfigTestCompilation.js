@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { Well, Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
 import Button from '../../widgets/FlatButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { ExpandCollapseIcon } from '../../icons';
 import { SelectField, ExpandingInputFilesField, ExpandingSelectField } from '../Fields';
 import Confirm from '../../forms/Confirm';
@@ -83,7 +84,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
       <React.Fragment>
         {this.state.compilationOpen === true ||
         (this.state.compilationOpen === null && this.hasCompilationExtraFiles()) ? (
-          <Well>
+          <InsetPanel>
             <h4 className="compilation-close" onClick={this.compilationClose}>
               <ExpandCollapseIcon isOpen={true} gapRight />
               <FormattedMessage
@@ -220,7 +221,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                 </Confirm>
               </div>
             )}
-          </Well>
+          </InsetPanel>
         ) : (
           <div className="text-muted compilation-open" onClick={this.compilationOpen}>
             <ExpandCollapseIcon isOpen={false} gapRight />
