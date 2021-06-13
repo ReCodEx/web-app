@@ -48,7 +48,7 @@ const PasswordStrength = ({ input: { name, value: level }, meta: { dirty }, labe
   <FormGroup controlId={name}>
     {dirty && (
       <ProgressBar
-        bsStyle={getStyle(level)}
+        variant={getStyle(level)}
         now={getPercent(level)}
         label={getTitle(level)}
         striped={level === 0}

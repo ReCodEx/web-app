@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Table, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Table, Container, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
@@ -48,7 +48,7 @@ class EditLimitsForm extends Component {
             <div className="text-center">
               {dirty && (
                 <span>
-                  <Button type="reset" onClick={reset} bsStyle={'danger'}>
+                  <Button type="reset" onClick={reset} variant={'danger'}>
                     <RefreshIcon gapRight />
                     <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>
@@ -72,7 +72,7 @@ class EditLimitsForm extends Component {
             </div>
           ) : null
         }>
-        <Grid fluid>
+        <Container fluid>
           <Row>
             <Col lg={3}>
               <div className={styles.preciseTime}>
@@ -99,7 +99,7 @@ class EditLimitsForm extends Component {
               </div>
             </Col>
           </Row>
-        </Grid>
+        </Container>
 
         <hr />
 
@@ -149,7 +149,7 @@ class EditLimitsForm extends Component {
         </Table>
 
         {submitFailed && (
-          <Alert bsStyle="danger">
+          <Alert variant="danger">
             <FormattedMessage
               id="app.editLimitsForm.failed"
               defaultMessage="Cannot save the exercise limits. Please try again later."
@@ -159,7 +159,7 @@ class EditLimitsForm extends Component {
 
         {error && (
           <div className="em-padding-horizontal">
-            <Alert bsStyle="danger">{error}</Alert>
+            <Alert variant="danger">{error}</Alert>
           </div>
         )}
       </FormBox>

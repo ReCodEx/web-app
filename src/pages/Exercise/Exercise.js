@@ -192,7 +192,7 @@ class Exercise extends Component {
                         hasPermissions(exercise, 'addReferenceSolution') && (
                           <div className="text-center">
                             <Button
-                              bsStyle={exercise.isBroken ? 'default' : 'success'}
+                              variant={exercise.isBroken ? 'default' : 'success'}
                               onClick={() => initCreateReferenceSolution(userId)}
                               disabled={exercise.isBroken}>
                               {exercise.isBroken ? (
@@ -236,7 +236,7 @@ class Exercise extends Component {
                                             defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
                                           />
                                         }>
-                                        <Button bsSize="xs" className="btn-flat" bsStyle="danger">
+                                        <Button bsSize="xs" className="btn-flat" variant="danger">
                                           <DeleteIcon gapRight />
                                           <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                                         </Button>

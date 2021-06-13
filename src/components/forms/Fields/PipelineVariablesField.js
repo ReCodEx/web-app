@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Row, Col, Grid } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 import { TextField, SelectField, ExpandingTextField, ExpandingSelectField } from '../Fields';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
@@ -17,7 +17,7 @@ const isArray = (firstVal, type = '') =>
 const firstValue = value => (Array.isArray(value) ? value[0] || '' : value);
 
 const PipelineVariablesField = ({ input, label, variables, supplementaryFiles, intl }) => (
-  <Grid fluid>
+  <Container fluid>
     <Row>
       <h4>{label}</h4>
       {variables.length === 0 && <FormattedMessage id="app.portsField.empty" defaultMessage="There are no ports." />}
@@ -83,7 +83,7 @@ const PipelineVariablesField = ({ input, label, variables, supplementaryFiles, i
           </Col>
         ))}
     </Row>
-  </Grid>
+  </Container>
 );
 
 PipelineVariablesField.propTypes = {

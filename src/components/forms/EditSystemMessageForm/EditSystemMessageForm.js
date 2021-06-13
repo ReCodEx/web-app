@@ -53,7 +53,7 @@ const EditSystemMessageForm = ({
     </Modal.Header>
     <Modal.Body>
       {submitFailed && (
-        <Alert bsStyle="danger">
+        <Alert variant="danger">
           <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
         </Alert>
       )}
@@ -101,7 +101,7 @@ const EditSystemMessageForm = ({
         }
       />
 
-      {error && dirty && <Alert bsStyle="danger">{error}</Alert>}
+      {error && dirty && <Alert variant="danger">{error}</Alert>}
     </Modal.Body>
     <Modal.Footer>
       <div className="text-center">
@@ -121,7 +121,7 @@ const EditSystemMessageForm = ({
           }}
         />
 
-        <Button bsStyle="default" onClick={onClose}>
+        <Button variant="default" onClick={onClose}>
           <CloseIcon gapRight />
           <FormattedMessage id="generic.close" defaultMessage="Close" />
         </Button>

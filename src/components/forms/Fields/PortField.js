@@ -22,7 +22,7 @@ const PortField = ({
   <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
     <ControlLabel>
       {label}{' '}
-      <Label style={{ fontFamily: 'monospace' }} bsStyle={getLabelStyle(portType)}>
+      <Label style={{ fontFamily: 'monospace' }} variant={getLabelStyle(portType)}>
         {portType}
       </Label>
     </ControlLabel>
@@ -30,7 +30,7 @@ const PortField = ({
       {...input}
       {...props}
       type="text"
-      bsClass={classnames({
+      bsPrefix={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
         [styles.active]: active,

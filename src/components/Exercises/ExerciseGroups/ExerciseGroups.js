@@ -22,7 +22,7 @@ class ExerciseGroups extends Component {
     const { attachingGroupId, attachExerciseToGroup } = this.props;
     return (
       <Button
-        bsStyle="success"
+        variant="success"
         bsSize="xs"
         disabled={Boolean(attachingGroupId)}
         onClick={ev => {
@@ -39,7 +39,7 @@ class ExerciseGroups extends Component {
     const { groupsIds, detachingGroupId, detachExerciseFromGroup } = this.props;
     return (
       <Button
-        bsStyle="danger"
+        variant="danger"
         bsSize="xs"
         disabled={Boolean(detachingGroupId) || groupsIds.length <= 1 /* last one standing */}
         onClick={ev => {
@@ -64,7 +64,7 @@ class ExerciseGroups extends Component {
         footer={
           showButtons ? (
             <div className="text-center">
-              <Button bsStyle="primary" onClick={this.openDialog}>
+              <Button variant="primary" onClick={this.openDialog}>
                 <Icon icon="paperclip" gapRight />
                 <FormattedMessage id="app.exercise.manageGroupAttachments" defaultMessage="Manage Group Attachments" />
               </Button>

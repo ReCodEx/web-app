@@ -84,7 +84,7 @@ class Pipelines extends Component {
           footer={
             <p className="text-center">
               <Button
-                bsStyle="success"
+                variant="success"
                 className="btn-flat"
                 bsSize="sm"
                 onClick={() => {
@@ -122,7 +122,7 @@ class Pipelines extends Component {
                   isAuthorOfPipeline(id) && (
                     <div>
                       <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
-                        <Button bsSize="xs" bsStyle="warning">
+                        <Button bsSize="xs" variant="warning">
                           <EditIcon gapRight />
                           <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                         </Button>

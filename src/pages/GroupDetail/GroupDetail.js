@@ -272,7 +272,7 @@ class GroupDetail extends Component {
                       footer={
                         hasPermissions(data, 'createShadowAssignment') ? (
                           <p className="em-margin-top text-center">
-                            <Button onClick={this.createShadowAssignment} bsStyle="success">
+                            <Button onClick={this.createShadowAssignment} variant="success">
                               <AddIcon gapRight />
                               <FormattedMessage
                                 id="app.groupDetail.newShadowAssignment"
@@ -388,7 +388,7 @@ class GroupDetail extends Component {
                     footer={
                       hasPermissions(data, 'createExercise') && !data.archived ? (
                         <p className="text-center">
-                          <Button bsStyle="success" bsSize="sm" onClick={this.createGroupExercise}>
+                          <Button variant="success" bsSize="sm" onClick={this.createGroupExercise}>
                             <AddIcon gapRight />
                             <FormattedMessage id="app.group.createExercise" defaultMessage="Create Exercise in Group" />
                           </Button>

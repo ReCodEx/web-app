@@ -30,7 +30,7 @@ const EditHardwareGroupForm = ({
       <div className="text-center">
         {dirty && !submitting && !submitSucceeded && (
           <span>
-            <Button type="reset" onClick={reset} bsStyle={'danger'} className="btn-flat">
+            <Button type="reset" onClick={reset} variant={'danger'} className="btn-flat">
               <RefreshIcon gapRight />
               <FormattedMessage id="generic.reset" defaultMessage="Reset" />
             </Button>
@@ -61,7 +61,7 @@ const EditHardwareGroupForm = ({
     </p>
 
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage
           id="app.editHardwareGroupForm.failed"
           defaultMessage="Cannot change the hardware group of the exercise."

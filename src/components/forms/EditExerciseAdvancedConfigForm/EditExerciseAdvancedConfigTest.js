@@ -81,7 +81,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                     defaultMessage="Do you really wish to spread all values of this test to every other test?"
                   />
                 }>
-                <Button bsStyle="primary" bsSize="sm" disabled={Boolean(testErrors)}>
+                <Button variant="primary" bsSize="sm" disabled={Boolean(testErrors)}>
                   <Icon icon="arrows-alt" gapRight />
                   <FormattedMessage id="app.editExerciseConfigForm.rawFillTest" defaultMessage="Spread Test" />
                 </Button>
@@ -109,7 +109,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                         defaultMessage="Do you really wish to spread all values of this pipeline to every other test?"
                       />
                     }>
-                    <Button bsStyle="primary" bsSize="xs" disabled={Boolean(safeGet(testErrors, [idx]))}>
+                    <Button variant="primary" bsSize="xs" disabled={Boolean(safeGet(testErrors, [idx]))}>
                       <Icon icon="arrows-alt" gapRight />
                       <FormattedMessage
                         id="app.editExerciseConfigForm.rawFillPipeline"
@@ -145,7 +145,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                           />
                         }>
                         <Button
-                          bsStyle="primary"
+                          variant="primary"
                           bsSize="xs"
                           disabled={Boolean(safeGet(testErrors, [idx, encodeId(name)]))}>
                           <Icon icon="arrows-alt" gapRight />

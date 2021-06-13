@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { Alert, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, Container, Row, Col } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
@@ -79,7 +79,7 @@ const EditGroupForm = ({
     isOpen={isOpen}
     unlimitedheight>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>
     )}
@@ -102,7 +102,7 @@ const EditGroupForm = ({
       />
     )}
     <br />
-    <Grid fluid>
+    <Container fluid>
       <Row>
         {(isSuperAdmin || isPublic) && ( // any user can turn public flag off, but only superuser may turn it on :)
           <Col lg={6}>
@@ -216,9 +216,9 @@ const EditGroupForm = ({
           )}
         </Col>
       </Row>
-    </Grid>
+    </Container>
 
-    {error && dirty && <Alert bsStyle="danger">{error}</Alert>}
+    {error && dirty && <Alert variant="danger">{error}</Alert>}
   </FormBox>
 );
 

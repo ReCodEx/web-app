@@ -12,7 +12,7 @@ const LeaveGroupButton = ({ onClick, ...props }) => (
     question={
       <FormattedMessage id="app.leaveGroup.confirm" defaultMessage="Are you sure you want to leave this group?" />
     }>
-    <Button {...props} onClick={onClick} bsStyle="warning">
+    <Button {...props} onClick={onClick} variant="warning">
       <Icon icon="user-times" gapRight />
       <FormattedMessage id="app.groups.leaveGroupButton" defaultMessage="Leave group" />
     </Button>

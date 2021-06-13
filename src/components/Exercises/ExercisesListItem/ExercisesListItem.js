@@ -141,7 +141,7 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEdit" defaultMessage="Settings" />
               </Tooltip>
             }>
-            <Button bsSize="xs" bsStyle="warning">
+            <Button bsSize="xs" variant="warning">
               <EditIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
@@ -156,7 +156,7 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEditConfig" defaultMessage="Tests" />
               </Tooltip>
             }>
-            <Button bsSize="xs" bsStyle={permissionHints.setScoreConfig ? 'warning' : 'default'}>
+            <Button bsSize="xs" variant={permissionHints.setScoreConfig ? 'warning' : 'default'}>
               <TestsIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
@@ -171,7 +171,7 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEditLimits" defaultMessage="Limits" />
               </Tooltip>
             }>
-            <Button bsSize="xs" bsStyle={permissionHints.setLimits ? 'warning' : 'default'}>
+            <Button bsSize="xs" variant={permissionHints.setLimits ? 'warning' : 'default'}>
               <LimitsIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>

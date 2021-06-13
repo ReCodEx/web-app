@@ -29,7 +29,7 @@ const FilesTable = ({
     {!viewOnly && <UploadContainer id={uploadId} />}
     {!viewOnly && newFiles && newFiles.length > 0 && (
       <p className="text-center">
-        <Button bsStyle="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
+        <Button variant="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
           <SendIcon gapRight />
           <FormattedMessage id="app.filesTable.addFiles" defaultMessage="Save files" />
         </Button>
@@ -68,7 +68,7 @@ const FilesTable = ({
 
       {downloadArchive && files.length > 1 && (
         <div className="text-center">
-          <Button bsStyle="primary" onClick={downloadArchive}>
+          <Button variant="primary" onClick={downloadArchive}>
             <DownloadIcon gapRight />
             <FormattedMessage id="app.filesTable.downloadArchive" defaultMessage="Download All" />
           </Button>

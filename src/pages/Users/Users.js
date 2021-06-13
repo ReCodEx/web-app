@@ -102,7 +102,7 @@ class Users extends Component {
           {privateData && privateData.isAllowed && (
             <Button
               bsSize="xs"
-              bsStyle="primary"
+              variant="primary"
               onClick={() =>
                 takeOver(id).then(() => {
                   App.ignoreNextLocationChange();
@@ -115,7 +115,7 @@ class Users extends Component {
           )}
 
           <LinkContainer to={EDIT_USER_URI_FACTORY(id)}>
-            <Button bsSize="xs" bsStyle="warning">
+            <Button bsSize="xs" variant="warning">
               <SettingsIcon gapRight />
               <FormattedMessage id="generic.settings" defaultMessage="Settings" />
             </Button>
@@ -180,7 +180,7 @@ class Users extends Component {
                 footer={
                   isSuperadminRole(effectiveRole) ? (
                     <div className="text-center">
-                      <Button bsStyle="success" onClick={this.openDialog}>
+                      <Button variant="success" onClick={this.openDialog}>
                         <UserIcon gapRight />
                         <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />
                       </Button>
@@ -199,9 +199,7 @@ class Users extends Component {
                         </Modal.Body>
                       </Modal>
                     </div>
-                  ) : (
-                    undefined
-                  )
+                  ) : undefined
                 }>
                 <div>
                   <PaginationContainer

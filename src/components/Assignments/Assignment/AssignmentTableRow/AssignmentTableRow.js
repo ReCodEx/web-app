@@ -113,12 +113,12 @@ const AssignmentTableRow = ({
                 <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
               </Tooltip>
             }>
-            <Button bsSize="xs" bsStyle="info" onClick={discussionOpen}>
+            <Button bsSize="xs" variant="info" onClick={discussionOpen}>
               <ChatIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
         ) : (
-          <Button bsSize="xs" bsStyle="info" onClick={discussionOpen}>
+          <Button bsSize="xs" variant="info" onClick={discussionOpen}>
             <ChatIcon gapRight />
             <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
           </Button>
@@ -134,7 +134,7 @@ const AssignmentTableRow = ({
                   <FormattedMessage id="generic.results" defaultMessage="Results" />
                 </Tooltip>
               }>
-              <Button bsSize="xs" bsStyle="primary">
+              <Button bsSize="xs" variant="primary">
                 <ResultsIcon smallGapLeft smallGapRight />
               </Button>
             </OverlayTrigger>
@@ -148,7 +148,7 @@ const AssignmentTableRow = ({
                   <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                 </Tooltip>
               }>
-              <Button bsSize="xs" bsStyle="warning">
+              <Button bsSize="xs" variant="warning">
                 <EditIcon smallGapLeft smallGapRight />
               </Button>
             </OverlayTrigger>

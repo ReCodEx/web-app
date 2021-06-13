@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Modal, Table, Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Alert, Modal, Table, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import EditTestsTest from './EditTestsTest';
@@ -140,12 +140,12 @@ class EditTestsForm extends Component {
         }>
         <React.Fragment>
           {submitFailed && (
-            <Alert bsStyle="danger">
+            <Alert variant="danger">
               <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
             </Alert>
           )}
 
-          <Grid fluid className="no-padding">
+          <Container fluid className="no-padding">
             <Row className={style.relativeContainer}>
               <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="no-padding">
                 <FieldArray
@@ -171,14 +171,14 @@ class EditTestsForm extends Component {
                             },
                           ])
                         }
-                        bsStyle="primary">
+                        variant="primary">
                         <AddIcon gapRight />
                         <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
                       </Button>
                     )}
 
                     {(dirty || (this.getAst() && this.getAst().canUndo())) && !submitting && (
-                      <Button type="reset" onClick={this.reset} bsStyle="danger">
+                      <Button type="reset" onClick={this.reset} variant="danger">
                         <RefreshIcon gapRight />
                         <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                       </Button>
@@ -211,7 +211,7 @@ class EditTestsForm extends Component {
                       hide={!dirty}>
                       <Button
                         onClick={this.openDialog}
-                        bsStyle={dirty ? 'default' : 'primary'}
+                        variant={dirty ? 'default' : 'primary'}
                         className="em-margin-left"
                         disabled={dirty}>
                         <Icon icon="calculator" gapRight />
@@ -307,7 +307,7 @@ class EditTestsForm extends Component {
                               ),
                             }}
                           />
-                          <Button onClick={this.closeDialog} bsStyle="default">
+                          <Button onClick={this.closeDialog} variant="default">
                             <CloseIcon gapRight />
                             <FormattedMessage id="generic.close" defaultMessage="Close" />
                           </Button>
@@ -329,7 +329,7 @@ class EditTestsForm extends Component {
                 </div>
               )}
             </Row>
-          </Grid>
+          </Container>
         </React.Fragment>
       </Box>
     );

@@ -35,7 +35,7 @@ const ResendEmailVerification = ({ resend, state, intl: { formatMessage }, ...pr
   return (
     <FlatButton
       onClick={state !== resourceStatus.PENDING ? resend : undefined}
-      bsStyle={bsStyles[state] || 'primary'}
+      variant={bsStyles[state] || 'primary'}
       {...props}>
       {icons[state] || <MailIcon gapRight />}
       {messages[state] ? (

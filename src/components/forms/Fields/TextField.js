@@ -25,7 +25,7 @@ const TextField = ({
       {...props}
       type={type}
       value={Array.isArray(value) ? value[0] : value}
-      bsClass={classnames({
+      bsPrefix={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
         [styles.active]: active,

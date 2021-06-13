@@ -155,7 +155,7 @@ class SisIntegrationContainer extends Component {
                                                                 ? GROUP_INFO_URI_FACTORY(group.id)
                                                                 : GROUP_DETAIL_URI_FACTORY(group.id)
                                                             }>
-                                                            <Button bsStyle="primary" bsSize="xs" className="btn-flat">
+                                                            <Button variant="primary" bsSize="xs" className="btn-flat">
                                                               <AssignmentsIcon gapRight />
                                                               <FormattedMessage
                                                                 id="app.group.assignments"

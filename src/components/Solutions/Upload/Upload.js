@@ -34,7 +34,7 @@ const Upload = ({
         <FormattedMessage id="app.submitSolution.dragAndDrop" defaultMessage="Drag and drop files here." />
       </p>
       <p>
-        <Button bsStyle="primary">
+        <Button variant="primary">
           <UploadIcon gapRight />
           <FormattedMessage id="app.submitSolution.addFile" defaultMessage="Add File(s)" />
         </Button>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
-import { Alert, Grid, Row, Col, Form, Button, ControlLabel } from 'react-bootstrap';
+import { Alert, Container, Row, Col, Form, Button, ControlLabel } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises';
@@ -102,7 +102,7 @@ class FilterExercisesListForm extends Component {
       <Form method="POST" onSubmit={onSubmit}>
         <InsetPanel bsSize="sm">
           {submitFailed && (
-            <Alert bsStyle="danger">
+            <Alert variant="danger">
               <FormattedMessage
                 id="generic.operationFailed"
                 defaultMessage="Operation failed. Please try again later."
@@ -112,7 +112,7 @@ class FilterExercisesListForm extends Component {
 
           <ResourceRenderer resource={authors} returnAsArray forceLoading={authorsLoading || tagsLoading} bulkyLoading>
             {authors => (
-              <Grid fluid>
+              <Container fluid>
                 <Row>
                   <Col sm={12} md={this.isOpen() ? 6 : 4}>
                     <Field
@@ -275,7 +275,7 @@ class FilterExercisesListForm extends Component {
                     </p>
                   </Col>
                 </Row>
-              </Grid>
+              </Container>
             )}
           </ResourceRenderer>
         </InsetPanel>

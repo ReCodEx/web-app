@@ -87,7 +87,7 @@ class Archive extends Component {
     return (
       <span>
         <Button
-          bsStyle="default"
+          variant="default"
           bsSize="xs"
           onClick={ev => {
             ev.stopPropagation();
@@ -101,13 +101,13 @@ class Archive extends Component {
           )}
         </Button>
         <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
-          <Button bsStyle="primary" bsSize="xs">
+          <Button variant="primary" bsSize="xs">
             <GroupIcon gapRight />
             <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
           </Button>
         </LinkContainer>
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
-          <Button bsStyle="primary" bsSize="xs">
+          <Button variant="primary" bsSize="xs">
             <AssignmentsIcon gapRight />
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>

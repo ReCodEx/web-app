@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
+import { Alert, HelpBlock, Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
@@ -271,7 +271,7 @@ class EditAssignmentForm extends Component {
     ) : (
       <React.Fragment>
         {submitFailed && (
-          <Alert bsStyle="danger">
+          <Alert variant="danger">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}
@@ -294,7 +294,7 @@ class EditAssignmentForm extends Component {
           />
         )}
 
-        <Grid fluid>
+        <Container fluid>
           <Row>
             <Col md={6}>
               <Field
@@ -373,10 +373,10 @@ class EditAssignmentForm extends Component {
               </Col>
             </Row>
           )}
-        </Grid>
+        </Container>
 
         <hr />
-        <Grid fluid>
+        <Container fluid>
           <Row>
             <Col md={6}>
               <NumericTextField
@@ -464,11 +464,11 @@ class EditAssignmentForm extends Component {
               />
             </Col>
           </Row>
-        </Grid>
+        </Container>
 
         <br />
 
-        <Grid fluid>
+        <Container fluid>
           <Row>
             <Col md={mergeJudgeLogs ? 6 : 12} lg={mergeJudgeLogs ? 6 : 4}>
               <Field
@@ -566,7 +566,7 @@ class EditAssignmentForm extends Component {
               />
             </Col>
           </Row>
-        </Grid>
+        </Container>
 
         <hr />
 
@@ -578,7 +578,7 @@ class EditAssignmentForm extends Component {
         </h4>
         <br />
 
-        <Grid fluid>
+        <Container fluid>
           <Row>
             {assignment.runtimeEnvironmentIds.map((item, i) => (
               <Col key={i} sm={6}>
@@ -595,14 +595,14 @@ class EditAssignmentForm extends Component {
               </Col>
             ))}
           </Row>
-        </Grid>
+        </Container>
 
         <hr />
 
         <h4>
           <FormattedMessage id="app.editAssignmentForm.visibility" defaultMessage="Visibility" />
         </h4>
-        <Grid fluid>
+        <Container fluid>
           <Row>
             <Col md={4}>
               <Field name="visibility" component={RadioField} options={VISIBILITY_STATES} />
@@ -633,7 +633,7 @@ class EditAssignmentForm extends Component {
               </Col>
             )}
           </Row>
-        </Grid>
+        </Container>
 
         {editTexts && (
           <React.Fragment>
@@ -651,9 +651,9 @@ class EditAssignmentForm extends Component {
           </React.Fragment>
         )}
 
-        {error && <Alert bsStyle="danger">{error}</Alert>}
+        {error && <Alert variant="danger">{error}</Alert>}
 
-        {warning && !error && <Alert bsStyle="warning">{warning}</Alert>}
+        {warning && !error && <Alert variant="warning">{warning}</Alert>}
 
         <div className="text-center">
           <SubmitButton

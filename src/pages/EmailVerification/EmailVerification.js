@@ -75,10 +75,10 @@ class EmailVerification extends Component {
           },
         ]}>
         <Row>
-          <Col sm={8} smOffset={2} md={6} mdOffset={3} lg={4} lgOffset={4}>
+          <Col sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }}>
             {canUseDOM && !token && !decodedToken && (
               <div>
-                <Alert bsStyle="warning">
+                <Alert variant="warning">
                   <strong>
                     <FormattedMessage
                       id="app.emailVerification.tokenExpired"

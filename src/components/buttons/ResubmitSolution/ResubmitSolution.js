@@ -15,7 +15,7 @@ const ResubmitSolution = ({ id, resubmit, progressObserverId, isDebug }) => (
         defaultMessage="Are you sure you want to resubmit this solution?"
       />
     }>
-    <Button bsStyle={isDebug ? 'danger' : 'success'}>
+    <Button variant={isDebug ? 'danger' : 'success'}>
       <Icon icon="redo" gapRight />
       {isDebug && <FormattedMessage id="app.resubmitSolution.resubmitDebug" defaultMessage="Resubmit (debug mode)" />}
       {!isDebug && (

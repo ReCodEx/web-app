@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Grid, Row, Col, Form } from 'react-bootstrap';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { CheckboxField } from '../Fields';
@@ -17,7 +17,7 @@ const FilterSystemMessagesForm = ({
   intl: { locale },
 }) => (
   <Form method="POST" onSubmit={onSubmit}>
-    <Grid fluid>
+    <Container fluid>
       <Row>
         <Col sm={9} md={10}>
           <Field
@@ -50,7 +50,7 @@ const FilterSystemMessagesForm = ({
           </div>
         </Col>
       </Row>
-    </Grid>
+    </Container>
   </Form>
 );
 

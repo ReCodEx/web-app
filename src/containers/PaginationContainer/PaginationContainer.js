@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Grid, Row, Col, Pagination, ButtonGroup, Button } from 'react-bootstrap';
+import { Container, Row, Col, Pagination, ButtonGroup, Button } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { SortedIcon, LoadingIcon } from '../../components/icons';
@@ -130,7 +130,7 @@ class PaginationContainer extends Component {
       <Button
         key={amount}
         active={limit === amount}
-        bsStyle={limit === amount ? 'primary' : 'default'}
+        variant={limit === amount ? 'primary' : 'default'}
         onClick={() => setPage(locale, Math.floor(offset / amount) * amount, amount)}>
         {amount}
       </Button>
@@ -250,7 +250,7 @@ class PaginationContainer extends Component {
             </div>
 
             {(this.showLimitsButtons() || this.getTotalPages() > 1) && (
-              <Grid fluid>
+              <Container fluid>
                 <Row>
                   <Col md={3}>
                     {this.showLimitsButtons() && (
@@ -281,7 +281,7 @@ class PaginationContainer extends Component {
                     </Col>
                   )}
                 </Row>
-              </Grid>
+              </Container>
             )}
           </div>
         ) : (

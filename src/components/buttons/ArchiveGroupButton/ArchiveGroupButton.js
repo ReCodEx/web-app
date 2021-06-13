@@ -13,7 +13,7 @@ const ArchiveGroupButton = ({
   shortLabels = false,
 }) => (
   <Button
-    bsStyle={disabled ? 'default' : 'info'}
+    variant={disabled ? 'default' : 'info'}
     onClick={setArchived(!archived)}
     disabled={pending || disabled}
     bsSize={bsSize}>

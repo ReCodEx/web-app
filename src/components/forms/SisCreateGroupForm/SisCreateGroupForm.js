@@ -69,7 +69,7 @@ class SisCreateGroupForm extends Component {
           />
 
           {submitFailed && (
-            <Alert bsStyle="danger">
+            <Alert variant="danger">
               <FormattedMessage
                 id="app.sisCreateGroupForm.failed"
                 defaultMessage="Creating group failed. Please try again later."
@@ -100,7 +100,7 @@ class SisCreateGroupForm extends Component {
               }}
             />
 
-            <Button bsStyle="default" className="btn-flat" onClick={onClose}>
+            <Button variant="default" className="btn-flat" onClick={onClose}>
               <CloseIcon gapRight />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>

@@ -32,7 +32,7 @@ const GroupTopButtons = ({
     <p>
       {canEdit && (
         <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
-          <Button bsStyle="warning">
+          <Button variant="warning">
             <EditIcon gapRight />
             <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
           </Button>
@@ -40,7 +40,7 @@ const GroupTopButtons = ({
       )}
 
       <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-        <Button bsStyle="primary">
+        <Button variant="primary">
           <GroupIcon gapRight />
           <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
         </Button>
@@ -48,7 +48,7 @@ const GroupTopButtons = ({
 
       {canSeeDetail && (
         <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-          <Button bsStyle="primary">
+          <Button variant="primary">
             <AssignmentsIcon gapRight />
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
@@ -61,7 +61,7 @@ const GroupTopButtons = ({
 
       {studentEmails && (
         <a href={`mailto:?bcc=${studentEmails}`} className="pull-right">
-          <Button bsStyle="default">
+          <Button variant="default">
             <MailIcon gapRight />
             <FormattedMessage id="app.group.mailtoAll" defaultMessage="Mail to All Students" />
           </Button>

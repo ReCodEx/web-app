@@ -65,7 +65,7 @@ const SisBindGroupForm = ({
       />
 
       {submitFailed && (
-        <Alert bsStyle="danger">
+        <Alert variant="danger">
           <FormattedMessage
             id="app.sisBindGroupForm.failed"
             defaultMessage="Binding group failed. Please try again later."
@@ -94,7 +94,7 @@ const SisBindGroupForm = ({
           }}
         />
 
-        <Button bsStyle="default" onClick={onClose}>
+        <Button variant="default" onClick={onClose}>
           <CloseIcon gapRight />
           <FormattedMessage id="generic.close" defaultMessage="Close" />
         </Button>

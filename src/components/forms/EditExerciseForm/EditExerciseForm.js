@@ -81,7 +81,7 @@ const EditExerciseForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Alert>
     )}
@@ -201,7 +201,7 @@ const EditExerciseForm = ({
       }
     />
 
-    {error && dirty && <Alert bsStyle="danger">{error}</Alert>}
+    {error && dirty && <Alert variant="danger">{error}</Alert>}
   </FormBox>
 );
 

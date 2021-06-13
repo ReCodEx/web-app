@@ -224,7 +224,7 @@ class SisSupervisorGroupsContainer extends Component {
                                           </div>
                                         }
                                         eventKey={i}
-                                        bsStyle={course.course.type === 'lecture' ? 'info' : 'success'}>
+                                        variant={course.course.type === 'lecture' ? 'info' : 'success'}>
                                         {course.groups.length > 0 ? (
                                           <Table hover className="no-margin">
                                             <thead>
@@ -324,7 +324,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                         <td className="text-right">
                                                           {hasPermissions(group, 'update') && (
                                                             <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
-                                                              <Button bsStyle="warning" bsSize="xs">
+                                                              <Button variant="warning" bsSize="xs">
                                                                 <EditIcon gapRight />
                                                                 <FormattedMessage
                                                                   id="app.editGroup.title"
@@ -335,7 +335,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                           )}
 
                                                           <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                                            <Button bsStyle="primary" bsSize="xs">
+                                                            <Button variant="primary" bsSize="xs">
                                                               <GroupIcon gapRight />
                                                               <FormattedMessage
                                                                 id="app.group.info"
@@ -346,7 +346,7 @@ class SisSupervisorGroupsContainer extends Component {
 
                                                           {hasPermissions(group, 'viewDetail') && (
                                                             <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                                              <Button bsStyle="primary" bsSize="xs">
+                                                              <Button variant="primary" bsSize="xs">
                                                                 <AssignmentsIcon gapRight />
                                                                 <FormattedMessage
                                                                   id="app.group.assignments"
@@ -378,7 +378,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                               group.id
                                                             )}>
                                                             <Button
-                                                              bsStyle="danger"
+                                                              variant="danger"
                                                               bsSize="xs"
                                                               disabled={this.isUnbindPending(
                                                                 course.course.code,
@@ -430,7 +430,7 @@ class SisSupervisorGroupsContainer extends Component {
                                               {possibleParents => (
                                                 <div className="text-center">
                                                   <Button
-                                                    bsStyle="success"
+                                                    variant="success"
                                                     className="em-margin-right"
                                                     onClick={() =>
                                                       this.openCreateDialog(possibleParents, course, term)
@@ -443,7 +443,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                   </Button>
 
                                                   <Button
-                                                    bsStyle="success"
+                                                    variant="success"
                                                     onClick={() => this.openBindDialog(course, term)}>
                                                     <BindIcon gapRight />
                                                     <FormattedMessage

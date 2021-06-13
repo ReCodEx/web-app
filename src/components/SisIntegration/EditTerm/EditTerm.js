@@ -68,7 +68,7 @@ const EditTerm = ({
         }}
       />
 
-      <Button bsStyle="default" onClick={onClose}>
+      <Button variant="default" onClick={onClose}>
         <CloseIcon gapRight />
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>

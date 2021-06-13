@@ -14,7 +14,7 @@ const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) => 
         <ProgressBar
           className="progress-xs"
           now={stats.points.total > 0 ? Math.min(1, stats.points.gained / stats.points.total) * 100 : 0}
-          bsStyle={!stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'}
+          variant={!stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'}
         />
       )}
     </td>

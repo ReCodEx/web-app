@@ -16,7 +16,7 @@ const LoginCASForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitti
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button type="submit" bsStyle="success" onClick={handleSubmit} disabled={invalid || submitting || hasSucceeded}>
+        <Button type="submit" variant="success" onClick={handleSubmit} disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
@@ -36,7 +36,7 @@ const LoginCASForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitti
       </div>
     }>
     {hasFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.loginCASForm.failed" defaultMessage="Login failed. Please check your credentials." />
       </Alert>
     )}

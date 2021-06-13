@@ -61,7 +61,7 @@ const EditExerciseSimpleConfigTestInputs = ({
               defaultMessage="Do you really wish to overwrite input configuration of all subsequent tests using the first test as a template? Files will be paired to individual test configurations by a heuristics based on matching name substrings."
             />
           }>
-          <Button bsStyle={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
+          <Button variant={'primary'} className="btn-flat" bsSize="xs" disabled={Boolean(testErrors)}>
             <Icon icon="arrows-alt" gapRight />
             <FormattedMessage id="app.editExerciseConfigForm.smartFillInput" defaultMessage="Smart Fill Inputs" />
           </Button>

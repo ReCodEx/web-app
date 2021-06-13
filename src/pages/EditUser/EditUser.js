@@ -107,14 +107,14 @@ class EditUser extends Component {
             {data && (
               <p>
                 {!data.privateData.isLocal && (
-                  <Button bsStyle="warning" onClick={makeLocalLogin}>
+                  <Button variant="warning" onClick={makeLocalLogin}>
                     <LocalIcon gapRight />
                     <FormattedMessage id="app.editUser.makeLocal" defaultMessage="Create local account" />
                   </Button>
                 )}
 
                 {isSuperAdmin && data.id !== loggedUserId && data.privateData.isAllowed && (
-                  <Button bsStyle="primary" onClick={() => takeOver(data.id)}>
+                  <Button variant="primary" onClick={() => takeOver(data.id)}>
                     <TransferIcon gapRight />
                     <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
                   </Button>
@@ -150,7 +150,7 @@ class EditUser extends Component {
                     userId={data.id}
                     locale={locale /* a hack that enforce component refresh on locale change */}
                   />
-                  <Button bsStyle="default" onClick={refreshUser}>
+                  <Button variant="default" onClick={refreshUser}>
                     <RefreshIcon gapRight />
                     <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
                   </Button>
@@ -270,7 +270,10 @@ export default connect(
     makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
     generateToken: formData =>
       dispatch(
-        generateToken(formData.expiration, Object.keys(formData.scopes).filter(key => formData.scopes[key] === true))
+        generateToken(
+          formData.expiration,
+          Object.keys(formData.scopes).filter(key => formData.scopes[key] === true)
+        )
       ),
     setRole: role => dispatch(setRole(userId, role)),
     takeOver: userId => dispatch(takeOver(userId)),

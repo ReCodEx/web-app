@@ -16,7 +16,7 @@ const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSuc
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button type="submit" onClick={handleSubmit} bsStyle="success" disabled={invalid || submitting || hasSucceeded}>
+        <Button type="submit" onClick={handleSubmit} variant="success" disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
@@ -36,7 +36,7 @@ const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSuc
       </div>
     }>
     {hasFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage
           id="app.resetPassword.failed"
           defaultMessage="Resetting password failed. Please check your email address."
@@ -45,7 +45,7 @@ const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSuc
     )}
 
     {hasSucceeded && (
-      <Alert bsStyle="success">
+      <Alert variant="success">
         <FormattedMessage
           id="app.resetPassword.succeeded"
           defaultMessage="Resetting password succeeded. Please check your email for further instructions."

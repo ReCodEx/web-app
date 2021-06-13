@@ -22,7 +22,7 @@ const AllowUserButton = ({ id, isAllowed, pending = false, setIsAllowed, disable
         />
       )
     }>
-    <Button disabled={disabled || pending || pending === null} bsStyle={isAllowed ? 'danger' : 'success'} {...props}>
+    <Button disabled={disabled || pending || pending === null} variant={isAllowed ? 'danger' : 'success'} {...props}>
       {pending ? <LoadingIcon gapRight /> : isAllowed ? <LockIcon gapRight /> : <UnlockIcon gapRight />}
       {isAllowed ? (
         <FormattedMessage id="generic.disable" defaultMessage="Disable" />

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert, Grid, Row, Col, Form } from 'react-bootstrap';
+import { Alert, Container, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, TextField } from '../Fields';
@@ -21,12 +21,12 @@ const FilterUsersListForm = ({
   <Form method="POST" onSubmit={onSubmit}>
     <InsetPanel bsSize="sm">
       {submitFailed && (
-        <Alert bsStyle="danger">
+        <Alert variant="danger">
           <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
         </Alert>
       )}
 
-      <Grid fluid>
+      <Container fluid>
         <Row>
           <Col sm={12}>
             <Field
@@ -67,7 +67,7 @@ const FilterUsersListForm = ({
             </div>
           </Col>
         </Row>
-      </Grid>
+      </Container>
     </InsetPanel>
   </Form>
 );

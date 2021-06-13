@@ -133,7 +133,7 @@ class EditAssignment extends Component {
                   {assignment.permissionHints.viewDetail && (
                     <p>
                       <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
-                        <Button bsStyle="primary">
+                        <Button variant="primary">
                           <ResultsIcon gapRight />
                           <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
                         </Button>
@@ -151,7 +151,7 @@ class EditAssignment extends Component {
               )}
 
               {!assignment.exerciseId && assignment.permissionHints.update && (
-                <Alert bsStyle="warning">
+                <Alert variant="warning">
                   <h3 className="no-margin ">
                     <Icon icon="ghost" gapRight />
                     <FormattedMessage

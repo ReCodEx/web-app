@@ -52,7 +52,7 @@ class EditExerciseAdvancedConfigForm extends Component {
             <div className="text-center">
               {dirty && (
                 <span>
-                  <Button type="reset" onClick={reset} bsStyle="danger">
+                  <Button type="reset" onClick={reset} variant="danger">
                     <RefreshIcon gapRight />
                     <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>
@@ -73,7 +73,7 @@ class EditExerciseAdvancedConfigForm extends Component {
           ) : null
         }>
         {submitFailed && (
-          <Alert bsStyle="danger">
+          <Alert variant="danger">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Alert>
         )}

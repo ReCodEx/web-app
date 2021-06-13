@@ -84,7 +84,7 @@ class EditLiteralNodeForm extends Component {
             autoFocus
             type="text"
             value={value}
-            bsClass={classnames({
+            bsPrefix={classnames({
               'form-control': true,
               [formStyles.dirty]: this.dirty(),
             })}
@@ -105,11 +105,11 @@ class EditLiteralNodeForm extends Component {
         <hr />
 
         <div className="text-center">
-          <Button onClick={this.save} bsStyle="success" disabled={!this.dirty() || !this.valid()}>
+          <Button onClick={this.save} variant="success" disabled={!this.dirty() || !this.valid()}>
             <SendIcon gapRight />
             <FormattedMessage id="generic.save" defaultMessage="Save" />
           </Button>
-          <Button onClick={close} bsStyle="default">
+          <Button onClick={close} variant="default">
             <CloseIcon gapRight />
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>

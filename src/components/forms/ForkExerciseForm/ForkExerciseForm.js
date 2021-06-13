@@ -69,7 +69,7 @@ class ForkExerciseForm extends Component {
                     </p>
                   </td>
                   <td className="text-right">
-                    <Button bsStyle="primary" onClick={this.viewForkedExercise}>
+                    <Button variant="primary" onClick={this.viewForkedExercise}>
                       <FormattedMessage
                         id="app.forkExerciseForm.showForkedExerciseButton"
                         defaultMessage="Show the Forked Exercise"
@@ -91,7 +91,7 @@ class ForkExerciseForm extends Component {
         return (
           <div>
             {submitFailed && (
-              <Alert bsStyle="danger">
+              <Alert variant="danger">
                 <WarningIcon gapRight />
                 <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
               </Alert>

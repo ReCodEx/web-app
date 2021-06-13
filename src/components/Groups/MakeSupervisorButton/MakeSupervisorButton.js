@@ -5,7 +5,7 @@ import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 
 const MakeSupervisorButton = ({ onClick, ...props }) => (
-  <Button {...props} onClick={onClick} bsStyle="success" className="btn-flat">
+  <Button {...props} onClick={onClick} variant="success" className="btn-flat">
     <Icon icon="user-plus" gapRight />
     <FormattedMessage id="app.groups.makeSupervisorButton" defaultMessage="Make supervisor" />
   </Button>

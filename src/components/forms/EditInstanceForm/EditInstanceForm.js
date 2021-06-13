@@ -40,7 +40,7 @@ const EditInstanceForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.editInstanceForm.failed" defaultMessage="Cannot update instance." />
       </Alert>
     )}

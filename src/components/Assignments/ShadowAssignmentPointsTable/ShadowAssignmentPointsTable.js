@@ -97,7 +97,7 @@ class ShadowAssignmentPointsTable extends Component {
                     {points === null ? (
                       <td className="shrink-col text-nowrap text-right">
                         {permissionHints.createPoints && (
-                          <Button bsStyle="success" onClick={() => this.openDialog(student.id)} bsSize="xs">
+                          <Button variant="success" onClick={() => this.openDialog(student.id)} bsSize="xs">
                             <Icon gapRight icon={['far', 'star']} />
                             <FormattedMessage
                               id="app.shadowAssignmentPointsTable.createPointsButton"
@@ -109,7 +109,7 @@ class ShadowAssignmentPointsTable extends Component {
                     ) : (
                       <td className="shrink-col text-nowrap text-right">
                         {permissionHints.updatePoints && (
-                          <Button bsStyle="warning" onClick={() => this.openDialog(student.id, pointsId)} bsSize="xs">
+                          <Button variant="warning" onClick={() => this.openDialog(student.id, pointsId)} bsSize="xs">
                             <EditIcon gapRight />
                             <FormattedMessage
                               id="app.shadowAssignmentPointsTable.updatePointsButton"
@@ -128,7 +128,7 @@ class ShadowAssignmentPointsTable extends Component {
                                 defaultMessage="Do you really wish to remove awarded points?"
                               />
                             }>
-                            <Button bsStyle="danger" bsSize="xs">
+                            <Button variant="danger" bsSize="xs">
                               <DeleteIcon gapRight />
                               <FormattedMessage id="generic.remove" defaultMessage="Remove" />
                             </Button>

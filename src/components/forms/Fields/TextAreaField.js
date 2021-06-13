@@ -20,9 +20,9 @@ const TextAreaField = ({
     <FormControl
       {...input}
       {...props}
-      componentClass="textarea"
+      as="textarea"
       rows={8}
-      bsClass={classnames({
+      bsPrefix={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
         [styles.active]: active,

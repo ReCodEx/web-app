@@ -77,7 +77,7 @@ class AddComment extends Component {
         <FormGroup>
           <InputGroup>
             <FormControl
-              componentClass="textarea"
+              as="textarea"
               rows={1}
               style={textareaStyle}
               disabled={!addComment}
@@ -89,12 +89,12 @@ class AddComment extends Component {
             <InputGroup.Button>
               <Button
                 type="submit"
-                bsStyle={isPrivate ? 'success' : 'primary'}
+                variant={isPrivate ? 'success' : 'primary'}
                 disabled={text.length === 0 || !addComment}
                 onClick={this.addComment}>
                 <FormattedMessage id="app.comments.addComment" defaultMessage="Send" />
               </Button>
-              <Button bsStyle="default" onClick={refresh}>
+              <Button variant="default" onClick={refresh}>
                 <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
               </Button>
             </InputGroup.Button>

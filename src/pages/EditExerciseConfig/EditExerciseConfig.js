@@ -520,7 +520,7 @@ class EditExerciseConfig extends Component {
                     footer={
                       <p className="text-center">
                         <Button
-                          bsStyle="success"
+                          variant="success"
                           className="btn-flat"
                           bsSize="sm"
                           onClick={this.createExercisePipeline}
@@ -550,7 +550,7 @@ class EditExerciseConfig extends Component {
                                 <Button
                                   bsSize="xs"
                                   className="btn-flat"
-                                  bsStyle="warning"
+                                  variant="warning"
                                 >
                                   <EditIcon gapRight />
                                   <FormattedMessage
@@ -572,7 +572,7 @@ class EditExerciseConfig extends Component {
                                 <Button
                                   bsSize="xs"
                                   className="btn-flat"
-                                  bsStyle="danger"
+                                  variant="danger"
                                 >
                                   <DeleteIcon gapRight />
                                   <FormattedMessage

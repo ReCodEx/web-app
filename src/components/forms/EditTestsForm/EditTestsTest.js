@@ -54,7 +54,7 @@ const EditTestsTest = ({ fields, calculator, testValues, usedTests, readOnly = f
           </tbody>
         </Table>
       ) : (
-        <Alert bsStyle="warning">
+        <Alert variant="warning">
           <FormattedMessage
             id="app.editTestsTest.noTests"
             defaultMessage="There are no tests yet. It is highly recommended to set up the tests first since most of the remaining configurations depends on them."

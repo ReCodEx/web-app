@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
-import { Grid, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button from '../../widgets/FlatButton';
 import { CheckboxField } from '../Fields';
@@ -19,7 +19,7 @@ const EditEnvironmentList = ({
   fullWidth = false,
   intl: { locale },
 }) => (
-  <Grid fluid>
+  <Container fluid>
     <Row>
       {runtimeEnvironments
         .sort((a, b) => a.longName.localeCompare(b.longName, locale))
@@ -70,19 +70,19 @@ const EditEnvironmentList = ({
         <Col>
           <div className="text-center">
             {Boolean(selectAllRuntimesHandler) && (
-              <Button onClick={selectAllRuntimesHandler} bsStyle="primary" bsSize="sm">
+              <Button onClick={selectAllRuntimesHandler} variant="primary" bsSize="sm">
                 <Icon icon={['far', 'check-square']} gapRight />
                 <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
               </Button>
             )}
             {Boolean(clearAllRuntimesHandler) && (
-              <Button onClick={clearAllRuntimesHandler} bsStyle="primary" bsSize="sm">
+              <Button onClick={clearAllRuntimesHandler} variant="primary" bsSize="sm">
                 <Icon icon={['far', 'square']} gapRight />
                 <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
               </Button>
             )}
             {Boolean(invertRuntimeSelectionHandler) && (
-              <Button onClick={invertRuntimeSelectionHandler} bsStyle="primary" bsSize="sm">
+              <Button onClick={invertRuntimeSelectionHandler} variant="primary" bsSize="sm">
                 <Icon icon="yin-yang" gapRight />
                 <FormattedMessage id="generic.invertSelection" defaultMessage="Invert Selection" />
               </Button>
@@ -91,7 +91,7 @@ const EditEnvironmentList = ({
         </Col>
       </Row>
     )}
-  </Grid>
+  </Container>
 );
 
 EditEnvironmentList.propTypes = {

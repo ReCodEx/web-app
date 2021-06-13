@@ -174,7 +174,7 @@ index 263acffc..d5e0b6c7 100644
                                />}
                            </ResourceRenderer>
 +                          <Button
-+                            bsStyle="danger"
++                            variant="danger"
 +                            onClick={() => this.setState({ luckyOpen: true })}
 +                          >
 +                            {"I'm Feeling Lucky"}

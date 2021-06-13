@@ -75,7 +75,7 @@ class SubmissionFailures extends Component {
                   failures={submissionFailures}
                   createActions={id => (
                     <Button
-                      bsStyle="warning"
+                      variant="warning"
                       className="btn-flat"
                       bsSize="xs"
                       onClick={() => this.setState({ isOpen: true, activeId: id })}>

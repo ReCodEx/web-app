@@ -118,9 +118,9 @@ class ChangePassword extends Component {
           },
         ]}>
         <Row>
-          <Col md={6} mdOffset={3} sm={8} smOffset={2}>
+          <Col md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }}>
             {!token && !decodedToken && (
-              <Alert bsStyle="warning">
+              <Alert variant="warning">
                 <strong>
                   <FormattedMessage
                     id="app.changePassword.tokenExpired"

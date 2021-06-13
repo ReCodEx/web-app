@@ -195,7 +195,7 @@ class TestResultsTable extends Component {
           <td className="text-right">
             {((judgeLogStdout && showJudgeLogStdout) || (judgeLogStderr && showJudgeLogStderr)) && (
               <Button
-                bsStyle={this.isLogOpen(testName) ? 'warning' : 'primary'}
+                variant={this.isLogOpen(testName) ? 'warning' : 'primary'}
                 className="btn-flat"
                 bsSize="xs"
                 onClick={() => this.toggleLogOpen(testName)}>
@@ -388,7 +388,7 @@ class TestResultsTable extends Component {
               <th className="text-right">
                 {showLogButton && (
                   <Button
-                    bsStyle={allLogsClosed ? 'primary' : 'warning'}
+                    variant={allLogsClosed ? 'primary' : 'warning'}
                     className="btn-flat"
                     bsSize="xs"
                     onClick={this.setAllLogsState(allLogsClosed)}>

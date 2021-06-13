@@ -11,13 +11,13 @@ const AsyncJobsButtons = ({ refresh, pingAction, pingStatus = null }) => {
   return (
     <div className="em-margin-bottom em-margin-right">
       <ButtonGroup>
-        <Button onClick={refresh} bsStyle="primary">
+        <Button onClick={refresh} variant="primary">
           <RefreshIcon gapRight />
           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
         </Button>
         <Button
           onClick={pingAction}
-          bsStyle={pingStatus === resourceStatus.FAILED ? 'danger' : 'success'}
+          variant={pingStatus === resourceStatus.FAILED ? 'danger' : 'success'}
           disabled={pingStatus === resourceStatus.PENDING}>
           {pingStatus ? (
             pingStatus === resourceStatus.PENDING ? (

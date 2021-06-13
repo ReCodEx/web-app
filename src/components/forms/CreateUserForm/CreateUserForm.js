@@ -70,7 +70,7 @@ const CreateUserForm = ({
     />
 
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
       </Alert>
     )}

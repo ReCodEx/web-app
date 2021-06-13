@@ -64,7 +64,7 @@ const EditUserSettingsForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert bsStyle="danger">
+      <Alert variant="danger">
         <FormattedMessage id="app.editUserSettings.failed" defaultMessage="Cannot save profile settings." />
       </Alert>
     )}

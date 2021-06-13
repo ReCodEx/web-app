@@ -51,7 +51,7 @@ class BoxForm extends Component {
         <Modal.Header closeButton>{title}</Modal.Header>
         <Modal.Body>
           {submitFailed && (
-            <Alert bsStyle="danger">
+            <Alert variant="danger">
               <FormattedMessage
                 id="app.pipelineEditor.BoxForm.failed"
                 defaultMessage="We are sorry but we weren't able to save the box."
