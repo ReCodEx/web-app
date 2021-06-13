@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { FormGroup, FormControl, FormLabel, HelpBlock } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import styles from './commonStyles.less';
@@ -16,7 +16,7 @@ const TextAreaField = ({
   ...props
 }) => (
   <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
-    {Boolean(label) && <ControlLabel>{label}</ControlLabel>}
+    {Boolean(label) && <FormLabel>{label}</FormLabel>}
     <FormControl
       {...input}
       {...props}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { Table, Label } from 'react-bootstrap';
+import { Table, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import Box from '../../widgets/Box';
@@ -104,9 +104,9 @@ const ExerciseDetail = ({
           </th>
           <td>
             {tags.sort().map(tag => (
-              <Label key={tag} className="tag-margin" style={getTagStyle(tag)}>
+              <Badge key={tag} className="tag-margin" style={getTagStyle(tag)}>
                 {tag}
-              </Label>
+              </Badge>
             ))}
           </td>
         </tr>

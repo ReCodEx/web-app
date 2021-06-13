@@ -86,7 +86,7 @@ class AddComment extends Component {
               placeholder={formatMessage(messages.placeholder)}
               value={text}
             />
-            <InputGroup.Button>
+            <InputGroup.Append>
               <Button
                 type="submit"
                 variant={isPrivate ? 'success' : 'primary'}
@@ -97,7 +97,7 @@ class AddComment extends Component {
               <Button variant="default" onClick={refresh}>
                 <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
               </Button>
-            </InputGroup.Button>
+            </InputGroup.Append>
           </InputGroup>
           <HelpBlock>
             <Button onClick={this.togglePrivate} bsSize="xs" disabled={!addComment} className="halfem-margin-right">

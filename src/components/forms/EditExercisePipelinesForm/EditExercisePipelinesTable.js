@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Table, FormControl, ControlLabel } from 'react-bootstrap';
+import { Table, FormControl, FormLabel } from 'react-bootstrap';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 
 import Button from '../../widgets/FlatButton';
@@ -61,13 +61,13 @@ class EditExercisePipelinesTable extends Component {
           {!readOnly && (
             <tr>
               <td colSpan={4} className="full-width">
-                <ControlLabel>
+                <FormLabel>
                   <FormattedMessage
                     id="app.editExercisePipelines.availablePipelines"
                     defaultMessage="Available pipelines"
                   />
                   :
-                </ControlLabel>
+                </FormLabel>
                 <FormControl
                   as="select"
                   onChange={e => this.setState({ selectedPipeline: e.target.value })}

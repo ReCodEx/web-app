@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, defineMessages, FormattedHTMLMessage } from 'react-intl';
-import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock, Row, Col } from 'react-bootstrap';
+import { Modal, Button, FormGroup, FormLabel, FormControl, HelpBlock, Row, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
@@ -223,7 +223,7 @@ class SubmitSolution extends Component {
             </Col>
             <Col md={12} lg={6}>
               <FormGroup>
-                <ControlLabel>{formatMessage(commonMessages.runtimeEnvironment)}</ControlLabel>
+                <FormLabel>{formatMessage(commonMessages.runtimeEnvironment)}</FormLabel>
                 {isValidating ? (
                   <p>
                     <LoadingIcon gapRight />
@@ -267,7 +267,7 @@ class SubmitSolution extends Component {
                   hasEntryPoint(presubmitVariables, selectedEnvironment)
               ) && (
                 <FormGroup>
-                  <ControlLabel>{formatMessage(commonMessages.entryPoint)}</ControlLabel>
+                  <FormLabel>{formatMessage(commonMessages.entryPoint)}</FormLabel>
                   <FormControl
                     onChange={e => changeEntryPoint(e.target.value)}
                     as="select"
@@ -287,7 +287,7 @@ class SubmitSolution extends Component {
               <hr />
 
               <FormGroup>
-                <ControlLabel>{formatMessage(messages.noteLabel)}</ControlLabel>
+                <FormLabel>{formatMessage(messages.noteLabel)}</FormLabel>
                 <FormControl onChange={e => saveNote(e.target.value)} value={note} type="text" maxLength={1024} />
               </FormGroup>
               {isReferenceSolution && note.trim().length === 0 && (

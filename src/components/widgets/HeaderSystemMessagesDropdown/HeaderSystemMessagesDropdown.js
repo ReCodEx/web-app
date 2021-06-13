@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
-import { Label, Table } from 'react-bootstrap';
+import { Badge, Table } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Icon, { TypedMessageIcon } from '../../icons';
@@ -32,7 +32,7 @@ const HeaderSystemMessagesDropdown = ({
     onMouseDown={isOpen ? preventClickPropagation : undefined}>
     <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
       <Icon icon={['far', 'envelope']} />
-      {systemMessages.length > 0 && <Label variant="warning">{systemMessages.length}</Label>}
+      {systemMessages.length > 0 && <Badge variant="warning">{systemMessages.length}</Badge>}
     </a>
     <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>
       <li className="header">

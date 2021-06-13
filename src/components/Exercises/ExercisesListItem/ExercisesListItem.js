@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
-import { Label, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import DifficultyIcon from '../DifficultyIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -78,9 +78,9 @@ const ExercisesListItem = ({
 
     <td className="small">
       {tags.sort().map(tag => (
-        <Label key={tag} className="tag-margin" style={getTagStyle(tag)}>
+        <Badge key={tag} className="tag-margin" style={getTagStyle(tag)}>
           {tag}
-        </Label>
+        </Badge>
       ))}
     </td>
 

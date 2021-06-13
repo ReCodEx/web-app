@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { FormGroup, FormControl, ControlLabel, HelpBlock, Label } from 'react-bootstrap';
+import { FormGroup, FormControl, FormLabel, HelpBlock, Badge } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { isArrayType } from '../../../helpers/boxes';
@@ -20,12 +20,12 @@ const PortField = ({
   ...props
 }) => (
   <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
-    <ControlLabel>
+    <FormLabel>
       {label}{' '}
-      <Label style={{ fontFamily: 'monospace' }} variant={getLabelStyle(portType)}>
+      <Badge style={{ fontFamily: 'monospace' }} variant={getLabelStyle(portType)}>
         {portType}
-      </Label>
-    </ControlLabel>
+      </Badge>
+    </FormLabel>
     <FormControl
       {...input}
       {...props}
