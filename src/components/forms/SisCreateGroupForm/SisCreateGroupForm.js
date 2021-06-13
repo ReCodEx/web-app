@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Alert, Modal, Well } from 'react-bootstrap';
+import { Alert, Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/FlatButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import CourseLabel from '../../SisIntegration/CourseLabel';
 import { CloseIcon, InfoIcon } from '../../icons';
@@ -44,13 +45,13 @@ class SisCreateGroupForm extends Component {
         </Modal.Header>
 
         <Modal.Body>
-          <Well>
+          <InsetPanel>
             <InfoIcon gapRight />
             <FormattedMessage
               id="app.sisCreateGroupForm.info"
               defaultMessage="The newly created group will be placed right under selected parent group and it will be automatically bind to selected course (mentioned above). The name of the new group will be derived from the name of the course and its scheduling (you may change it later)."
             />
-          </Well>
+          </InsetPanel>
 
           <Field
             name="parentGroupId"

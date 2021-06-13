@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { FormControl, Table, Well } from 'react-bootstrap';
+import { FormControl, Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
 import Button from '../../widgets/FlatButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SendIcon } from '../../icons';
 import { AstNode, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
 
@@ -54,12 +55,12 @@ class EditTestNodeForm extends Component {
 
     return (
       <React.Fragment>
-        <Well>
+        <InsetPanel>
           <FormattedMessage
             id="app.scoreConfigExpression.editTestDialog.description"
             defaultMessage="The value of the test result node is the actual score assigned by the judge to the selected test. Normally, the judge assigns value 1 to passed tests and 0 to failed tests; however, a custom judge may score any real value from [0,1] range. Please select the corresponding test."
           />
-        </Well>
+        </InsetPanel>
 
         {tests.length > 10 ? (
           <FormControl

@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Well } from 'react-bootstrap';
 
+import InsetPanel from '../../widgets/InsetPanel';
 import SharedLocalizedFields from './SharedLocalizedFields';
 import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields';
 
 const LocalizedShadowAssignmentFormField = ({ prefix, data: enabled }) => (
-  <Well>
+  <InsetPanel>
     <SharedLocalizedFields prefix={prefix} enabled={enabled} />
     <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
-  </Well>
+  </InsetPanel>
 );
 
 LocalizedShadowAssignmentFormField.propTypes = {

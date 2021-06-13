@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert, Well, Grid, Row, Col, Form } from 'react-bootstrap';
+import { Alert, Grid, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, CheckboxField } from '../Fields';
+import InsetPanel from '../../widgets/InsetPanel';
 
 const FilterArchiveGroupsForm = ({
   onSubmit,
@@ -16,7 +17,7 @@ const FilterArchiveGroupsForm = ({
   dirty,
 }) => (
   <Form method="POST" onSubmit={onSubmit}>
-    <Well bsSize="sm">
+    <InsetPanel bsSize="sm">
       {submitFailed && (
         <Alert bsStyle="danger">
           <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
@@ -71,7 +72,7 @@ const FilterArchiveGroupsForm = ({
           </Col>
         </Row>
       </Grid>
-    </Well>
+    </InsetPanel>
   </Form>
 );
 

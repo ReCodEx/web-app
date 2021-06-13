@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, defineMessages, FormattedHTMLMessage } from 'react-intl';
-import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock, Well, Row, Col } from 'react-bootstrap';
+import { Modal, Button, FormGroup, ControlLabel, FormControl, HelpBlock, Row, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
+import InsetPanel from '../../widgets/InsetPanel';
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Confirm from '../../forms/Confirm';
@@ -320,9 +321,9 @@ class SubmitSolution extends Component {
             </Button>
           </div>
 
-          <Well className="em-margin-top">
+          <InsetPanel className="em-margin-top">
             <HelpBlock className="text-left">{formatMessage(commonMessages.instructions)}</HelpBlock>
-          </Well>
+          </InsetPanel>
         </Modal.Footer>
       </Modal>
     );

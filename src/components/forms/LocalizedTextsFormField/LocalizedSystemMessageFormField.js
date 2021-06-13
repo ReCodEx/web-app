@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Well } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 
+import InsetPanel from '../../widgets/InsetPanel';
 import { MarkdownTextAreaField, CheckboxField } from '../Fields';
 
 const LocalizedSystemMessageFormField = ({ prefix, data: enabled }) => (
-  <Well>
+  <InsetPanel>
     <Field
       name={`${prefix}._enabled`}
       component={CheckboxField}
@@ -31,7 +31,7 @@ const LocalizedSystemMessageFormField = ({ prefix, data: enabled }) => (
         />
       }
     />
-  </Well>
+  </InsetPanel>
 );
 
 LocalizedSystemMessageFormField.propTypes = {

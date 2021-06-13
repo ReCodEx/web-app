@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Panel, Table, Well } from 'react-bootstrap';
+import { Panel, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
+import InsetPanel from '../../components/widgets/InsetPanel';
 import UsersNameContainer from '../UsersNameContainer';
 import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -185,12 +186,12 @@ class SisIntegrationContainer extends Component {
                                     )
                                 )
                               ) : (
-                                <Well>
+                                <InsetPanel>
                                   <FormattedMessage
                                     id="app.sisIntegration.noCoursesGroupsAvailable"
                                     defaultMessage="There are currently no groups in ReCodEx bound to courses you are enrolled to in this semester."
                                   />
-                                </Well>
+                                </InsetPanel>
                               )}
                             </div>
                           )}

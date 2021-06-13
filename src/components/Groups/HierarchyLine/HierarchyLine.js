@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Well } from 'react-bootstrap';
+
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { GroupIcon } from '../../icons';
+import InsetPanel from '../../widgets/InsetPanel';
 
 import './HierarchyLine.css';
 
 const HierarchyLine = ({ groupId, parentGroupsIds }) => (
-  <Well bsSize="sm" className="groupParents">
+  <InsetPanel bsSize="sm" className="groupParents">
     <GroupIcon className="slashStyle" />
     {parentGroupsIds.map(
       (groupId, i) =>
@@ -18,7 +19,7 @@ const HierarchyLine = ({ groupId, parentGroupsIds }) => (
         )
     )}
     <GroupsNameContainer groupId={groupId} />
-  </Well>
+  </InsetPanel>
 );
 
 HierarchyLine.propTypes = {

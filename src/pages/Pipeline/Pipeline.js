@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Well, ButtonGroup } from 'react-bootstrap';
+import { Row, Col, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/FlatButton';
+import InsetPanel from '../../components/widgets/InsetPanel';
 import { EditIcon } from '../../components/icons';
 // import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
 
@@ -119,7 +120,9 @@ class Pipeline extends Component {
                   title={<FormattedMessage id="app.pipeline.visualization" defaultMessage="Visualization" />}
                   noPadding
                   unlimitedHeight>
-                  <Well className="pipeline">{graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}</Well>
+                  <InsetPanel className="pipeline">
+                    {graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}
+                  </InsetPanel>
                 </Box>
               </Col>
             </Row>

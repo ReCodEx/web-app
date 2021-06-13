@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Well, Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap';
 
 import Confirm from '../Confirm';
 import { CloseIcon } from '../../icons';
 import { identity } from '../../../helpers/common';
+import InsetPanel from '../../widgets/InsetPanel';
 
 class TabbedArrayField extends Component {
   state = { activeTab: 0 };
@@ -83,7 +84,7 @@ class TabbedArrayField extends Component {
           </Tabs>
         )}
 
-        {fields.length === 0 && <Well>{emptyMessage}</Well>}
+        {fields.length === 0 && <InsetPanel>{emptyMessage}</InsetPanel>}
       </div>
     );
   }

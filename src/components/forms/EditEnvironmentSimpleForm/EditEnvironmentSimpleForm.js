@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
-import { Alert, Well, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
+import { Alert, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import EditEnvironmentList from './EditEnvironmentList';
 import SubmitButton from '../SubmitButton';
 import Box from '../../widgets/Box';
 import Button from '../../widgets/FlatButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { RefreshIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
 import { getConfigVar } from '../../../helpers/config';
@@ -86,7 +87,7 @@ class EditEnvironmentSimpleForm extends Component {
         {!readOnly && (this.state.expanded || selectedEnvs.length === 0) ? (
           <React.Fragment>
             {environmentsHelpUrl && (
-              <Well bsSize="sm">
+              <InsetPanel bsSize="sm">
                 <div className="small text-muted">
                   <FormattedHTMLMessage
                     id="app.editEnvironmentSimpleForm.linkToWiki"
@@ -94,7 +95,7 @@ class EditEnvironmentSimpleForm extends Component {
                     values={{ url: environmentsHelpUrl }}
                   />
                 </div>
-              </Well>
+              </InsetPanel>
             )}
 
             <EditEnvironmentList runtimeEnvironments={runtimeEnvironments} showExclusive />

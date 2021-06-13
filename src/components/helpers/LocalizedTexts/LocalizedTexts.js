@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Tabs, Tab, Well } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap';
 
 import ExternalLinkPreview from '../ExternalLinkPreview';
 import Icon from '../../icons';
 import Markdown from '../../widgets/Markdown';
+import InsetPanel from '../../widgets/InsetPanel';
 import { knownLocales } from '../../../helpers/localizedData';
 import { UrlContext } from '../../../helpers/contexts';
 
@@ -33,7 +34,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
             <Tab key={i} eventKey={locale} title={locale}>
               {link && link !== '' && (
                 <div>
-                  <Well>
+                  <InsetPanel>
                     <h4>
                       <FormattedMessage
                         id="app.localizedTexts.externalLink"
@@ -44,7 +45,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                     <a href={link} target="_blank" rel="noopener noreferrer">
                       {link}
                     </a>
-                  </Well>
+                  </InsetPanel>
                   <ExternalLinkPreview url={link} />
                 </div>
               )}

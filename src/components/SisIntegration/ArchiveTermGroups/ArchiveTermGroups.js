@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Table, Alert, Well } from 'react-bootstrap';
+import { Modal, Table, Alert } from 'react-bootstrap';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
 import { SimpleCheckboxField } from '../../forms/Fields';
 import SubmitButton from '../../forms/SubmitButton';
+import InsetPanel from '../../widgets/InsetPanel';
 
 import Button from '../../widgets/FlatButton';
 import Icon, { CloseIcon } from '../../icons';
@@ -57,12 +58,12 @@ class ArchiveTermGroups extends Component {
               </tbody>
             </Table>
           ) : (
-            <Well>
+            <InsetPanel>
               <FormattedMessage
                 id="app.archiveSisTerm.noGroups"
                 defaultMessage="There are no groups associated with this semester. Perhaps they have all been archived already."
               />
-            </Well>
+            </InsetPanel>
           )}
 
           {submitFailed && (

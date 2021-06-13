@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Table, Well } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
 import Button from '../../widgets/FlatButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SendIcon } from '../../icons';
 import { AST_FUNCTION_CLASSES, KNOWN_AST_CLASSES, AstNode } from '../../../helpers/exercise/scoreAst';
 
@@ -59,12 +60,12 @@ class EditFunctionNodeForm extends Component {
             />
           </div>
         ) : (
-          <Well>
+          <InsetPanel>
             <FormattedMessage
               id="app.scoreConfigExpression.editFunctionDialog.addDescription"
               defaultMessage="Please select the function of the newly created node."
             />
-          </Well>
+          </InsetPanel>
         )}
 
         <Table hover>
