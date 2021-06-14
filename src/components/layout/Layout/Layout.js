@@ -44,12 +44,12 @@ const Layout = ({
       currentLang={lang}
       setLang={setLang}
       currentUrl={currentUrl}
-      pendingFetchOperations={pendingFetchOperations}
     />
     <SidebarContainer
       isCollapsed={sidebarIsCollapsed}
       small={!sidebarIsOpen && sidebarIsCollapsed} // does not always work, but is good enough
       currentUrl={currentUrl}
+      pendingFetchOperations={pendingFetchOperations}
     />
     <div onClick={onCloseSidebar}>
       {children}

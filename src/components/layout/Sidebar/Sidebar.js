@@ -5,12 +5,14 @@ import classnames from 'classnames';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Admin from './Admin';
 import BadgeContainer from '../../../containers/BadgeContainer';
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
+import { LoadingIcon } from '../../icons';
 import { isReady, getJsData, getId } from '../../../redux/helpers/resourceManager';
 import { getLocalizedResourceName } from '../../../helpers/localizedData';
 import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles';
@@ -23,6 +25,8 @@ import styles from './sidebar.less';
 const getUserData = defaultMemoize(user => getJsData(user));
 
 const Sidebar = ({
+  pendingFetchOperations,
+  isCollapsed,
   loggedInUser,
   effectiveRole = null,
   studentOf,
@@ -31,6 +35,7 @@ const Sidebar = ({
   instances,
   small = false,
   links: {
+    HOME_URI,
     FAQ_URL,
     LOGIN_URI,
     REGISTRATION_URI,
@@ -62,10 +67,33 @@ const Sidebar = ({
   const currentLink = pathname + search;
 
   return (
-    <aside className={classnames(['main-sidebar', styles.mainSidebar])}>
-      <section className="sidebar">
+    <aside className={classnames(['main-sidebar', 'sidebar-dark-primary', styles.mainSidebar])}>
+      <Link to={HOME_URI} className="brand-link">
+        {isCollapsed ? (
+          <span className="brand-text">
+            {pendingFetchOperations ? (
+              <LoadingIcon gapRight />
+            ) : (
+              <>
+                Re<b>X</b>
+              </>
+            )}
+          </span>
+        ) : (
+          <span className="brand-text">
+            {pendingFetchOperations && (
+              <span style={{ position: 'absolute', left: '1em' }}>
+                <LoadingIcon gapRight />
+              </span>
+            )}
+            Re<b>CodEx</b>
+          </span>
+        )}
+      </Link>
+
+      <div className="sidebar">
         {!user && (
-          <ul className="sidebar-menu">
+          <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
             <MenuTitle title="ReCodEx" />
             <MenuItem
               title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
@@ -86,7 +114,7 @@ const Sidebar = ({
         {Boolean(user) && (
           <React.Fragment>
             <BadgeContainer small={small} />
-            <ul className="sidebar-menu">
+            <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
               <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
               <MenuItem
                 title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
@@ -119,7 +147,6 @@ const Sidebar = ({
                   icon={'user-circle'}
                   currentPath={currentUrl}
                   createLink={createLink}
-                  forceOpen={false}
                   isActive={studentOfItems.find(item => createLink(item) === currentLink) !== undefined}
                 />
               )}
@@ -134,7 +161,6 @@ const Sidebar = ({
                   icon="graduation-cap"
                   currentPath={currentUrl}
                   createLink={createLink}
-                  forceOpen={false}
                   isActive={supervisorOfItems.find(item => createLink(item) === currentLink) !== undefined}
                 />
               )}
@@ -184,12 +210,14 @@ const Sidebar = ({
         )}
 
         {isSuperadminRole(effectiveRole) && <Admin currentUrl={currentUrl} />}
-      </section>
+      </div>
     </aside>
   );
 };
 
 Sidebar.propTypes = {
+  pendingFetchOperations: PropTypes.bool,
+  isCollapsed: PropTypes.bool,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
     search: PropTypes.string.isRequired,

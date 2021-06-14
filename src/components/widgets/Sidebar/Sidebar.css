@@ -1,0 +1,27 @@
+.sidebarAvatar {
+  margin-right: 6px;
+}
+
+.sidebarMenuItem {
+  white-space: normal;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.sidebarCursorPointer {
+  cursor: pointer;
+}
+
+.sidebarArrowIcon {
+  height: 15px !important;
+  transition: transform 0.5s ease;
+}
+
+.menu-is-opening .sidebarArrowIcon{
+  transform: rotate(-90deg);
+}
+
+.sidebarDropdown {
+  overflow-y: auto;
+  overflow-x: hidden;
+}

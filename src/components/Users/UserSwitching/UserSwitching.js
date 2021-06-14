@@ -10,7 +10,7 @@ const UserSwitching = ({ users = [], currentUser, loginAs, removeUser }) => (
   <ResourceRenderer resource={currentUser}>
     {activeUser =>
       users.filter(switching => switching.user.id !== activeUser.id).length > 0 ? (
-        <ul className="sidebar-menu">
+        <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
           <MenuTitle title={<FormattedMessage id="app.userSwitching.loginAs" defaultMessage="Login as" />} />
 
           {users.map(

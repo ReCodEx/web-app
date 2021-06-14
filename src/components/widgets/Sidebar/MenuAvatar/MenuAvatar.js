@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import styles from '../Sidebar.less';
+import '../Sidebar.css';
 import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
 import Icon from '../../../icons';
 
@@ -17,6 +17,7 @@ const MenuAvatar = ({
 }) => (
   <li
     className={classnames({
+      'nav-item': true,
       active: isActive,
     })}>
     <a
@@ -24,15 +25,15 @@ const MenuAvatar = ({
         ev.preventDefault();
         onClick();
       }}
-      className={styles.cursorPointer}>
+      className="nav-link sidebarCursorPointer">
       <AvatarContainer
         avatarUrl={avatarUrl}
         fullName={title}
         firstName={firstName}
         size={20}
-        altClassName={styles.avatar}
+        altClassName="sidebarAvatar"
       />
-      <span className={styles.menuItem}>{title}</span>
+      <span className="sidebarMenuItem">{title}</span>
       {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
 
       {onRemove && (

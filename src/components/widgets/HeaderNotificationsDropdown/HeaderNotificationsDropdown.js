@@ -23,12 +23,12 @@ const HeaderNotificationsDropdown = ({
 }) => (
   <li
     className={classnames({
-      'notifications-menu': true,
+      'nav-item': true,
       dropdown: true,
       open: isOpen,
     })}
     onMouseDown={isOpen ? preventClickPropagation : undefined}>
-    <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
+    <a href="#" className="nav-link" data-toggle="dropdown" onClick={toggleOpen}>
       {newNotifications.size === 0 ? (
         <Icon icon={['far', 'bell']} />
       ) : (
@@ -39,7 +39,7 @@ const HeaderNotificationsDropdown = ({
       )}
     </a>
     <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>
-      <li className="header">
+      <li className="nav-header">
         <FormattedMessage
           id="app.notifications.title"
           defaultMessage="You have {count, number} new {count, plural, one {notification} two {notifications} other {notifications}}"

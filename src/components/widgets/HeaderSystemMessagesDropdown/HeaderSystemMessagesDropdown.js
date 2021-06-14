@@ -25,17 +25,17 @@ const HeaderSystemMessagesDropdown = ({
 }) => (
   <li
     className={classnames({
-      'notifications-menu': true,
+      'nav-item': true,
       dropdown: true,
       open: isOpen,
     })}
     onMouseDown={isOpen ? preventClickPropagation : undefined}>
-    <a href="#" className="dropdown-toggle" onClick={toggleOpen}>
+    <a href="#" className="nav-link" data-toggle="dropdown" onClick={toggleOpen}>
       <Icon icon={['far', 'envelope']} />
       {systemMessages.length > 0 && <Badge variant="warning">{systemMessages.length}</Badge>}
     </a>
     <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>
-      <li className="header">
+      <li className="nav-header">
         <small>
           <FormattedMessage
             id="app.systemMessages.titleLong"
