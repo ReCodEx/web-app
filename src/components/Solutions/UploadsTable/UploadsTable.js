@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Table, Button, ButtonGroup } from 'react-bootstrap';
+import { Table, ButtonGroup } from 'react-bootstrap';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Icon, { DeleteIcon } from '../../icons';
+import Button from '../../widgets/FlatButton';
 
 const UploadsTable = ({
   uploadingFiles = [],
@@ -37,7 +38,7 @@ const UploadsTable = ({
           <td>{payload.name}</td>
           <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
-            <Button size="xs" variant="default" onClick={() => removeFile(payload)}>
+            <Button size="xs" variant="outline-secondary" onClick={() => removeFile(payload)}>
               <DeleteIcon />
             </Button>
           </td>
@@ -64,10 +65,10 @@ const UploadsTable = ({
           <td>{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
-              <Button size="xs" variant="default" onClick={() => removeFailedFile(payload)}>
+              <Button size="xs" variant="outline-secondary" onClick={() => removeFailedFile(payload)}>
                 <DeleteIcon />
               </Button>
-              <Button size="xs" variant="default" onClick={() => retryUploadFile(payload)}>
+              <Button size="xs" variant="outline-secondary" onClick={() => retryUploadFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>
@@ -86,7 +87,7 @@ const UploadsTable = ({
           <td className="text-muted">{prettyPrintBytes(payload.file.size)}</td>
           <td>
             <ButtonGroup>
-              <Button size="xs" variant="default" onClick={() => returnFile(payload)}>
+              <Button size="xs" variant="outline-secondary" onClick={() => returnFile(payload)}>
                 <Icon icon="sync" />
               </Button>
             </ButtonGroup>

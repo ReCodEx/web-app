@@ -5,7 +5,7 @@ import Button from '../../widgets/FlatButton';
 import { UserIcon } from '../../icons';
 
 const RemoveGroupAdminButton = ({ onClick, ...props }) => (
-  <Button {...props} onClick={onClick} variant="danger" className="btn-flat">
+  <Button {...props} onClick={onClick} variant="danger">
     <UserIcon gapRight />
     <FormattedMessage id="app.groups.removeGroupAdminButton" defaultMessage="Suspend to supervisor" />
   </Button>

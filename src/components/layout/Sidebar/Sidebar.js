@@ -8,7 +8,7 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import Admin from './Admin';
-import BadgeContainer from '../../../containers/BadgeContainer';
+import UserPanelContainer from '../../../containers/UserPanelContainer';
 import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
@@ -67,7 +67,7 @@ const Sidebar = ({
   const currentLink = pathname + search;
 
   return (
-    <aside className={classnames(['main-sidebar', 'sidebar-dark-primary', styles.mainSidebar])}>
+    <aside className={classnames(['main-sidebar', 'sidebar-dark-primary', 'elevation-4', styles.mainSidebar])}>
       <Link to={HOME_URI} className="brand-link">
         {isCollapsed ? (
           <span className="brand-text">
@@ -113,7 +113,7 @@ const Sidebar = ({
 
         {Boolean(user) && (
           <React.Fragment>
-            <BadgeContainer small={small} />
+            <UserPanelContainer small={small} />
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
               <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
               <MenuItem

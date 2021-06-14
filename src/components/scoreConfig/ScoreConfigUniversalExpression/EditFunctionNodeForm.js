@@ -103,7 +103,7 @@ class EditFunctionNodeForm extends Component {
             <SendIcon gapRight />
             <FormattedMessage id="generic.save" defaultMessage="Save" />
           </Button>
-          <Button onClick={close} variant="default">
+          <Button onClick={close} variant="outline-secondary">
             <CloseIcon gapRight />
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>

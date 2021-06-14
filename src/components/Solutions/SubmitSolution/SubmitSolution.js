@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, defineMessages, FormattedHTMLMessage } from 'react-intl';
-import { Modal, Button, FormGroup, FormLabel, FormControl, HelpBlock, Row, Col } from 'react-bootstrap';
+import { Modal, FormGroup, FormLabel, FormControl, HelpBlock, Row, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
+import Button from '../../widgets/FlatButton';
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Confirm from '../../forms/Confirm';
@@ -302,7 +303,7 @@ class SubmitSolution extends Component {
         <Modal.Footer>
           <div className="text-center em-margin-bottomm">
             {isSending && (
-              <Button type="submit" disabled={true} variant="success" className="btn-flat">
+              <Button type="submit" disabled={true} variant="success">
                 <LoadingIcon gapRight />
                 {formatMessage(commonMessages.submitting)}
               </Button>
@@ -310,12 +311,12 @@ class SubmitSolution extends Component {
 
             {!isSending && this.createSubmitButton()}
 
-            <Button variant="default" className="btn-flat" onClick={reset}>
+            <Button variant="outline-secondary" onClick={reset}>
               <DeleteIcon gapRight />
               {formatMessage(commonMessages.resetForm)}
             </Button>
 
-            <Button variant="default" className="btn-flat" onClick={onClose}>
+            <Button variant="outline-secondary" onClick={onClose}>
               <CloseIcon gapRight />
               {formatMessage(commonMessages.closeForm)}
             </Button>

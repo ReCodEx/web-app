@@ -87,7 +87,7 @@ class Archive extends Component {
     return (
       <span>
         <Button
-          variant="default"
+          variant="outline-secondary"
           size="xs"
           onClick={ev => {
             ev.stopPropagation();

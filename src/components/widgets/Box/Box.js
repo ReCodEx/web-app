@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
 import { withRouter } from 'react-router';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Icon from '../../icons';
@@ -26,7 +26,9 @@ class Box extends Component {
     }
   }
 
-  toggleDetails = () => {
+  toggleDetails = ev => {
+    ev.preventDefault();
+
     if (!this.props.collapsable) {
       return;
     }
@@ -59,20 +61,20 @@ class Box extends Component {
       unlimitedHeight = false,
     } = this.props;
     return (
-      <div>
-        {description && <div className={styles.description}>{description}</div>}
-        <div
-          className={classnames({
-            'box-body': true,
+      <>
+        <Card.Body
+          bsPrefix={classnames({
+            'card-body': true,
             'no-padding': noPadding,
             [styles.extraPadding]: !noPadding && extraPadding,
             [styles.limited]: !unlimitedHeight,
             [styles.unlimited]: unlimitedHeight,
           })}>
-          {children}
-        </div>
-        {footer && <div className="box-footer">{footer}</div>}
-      </div>
+          {description && <div className={styles.description}>{description}</div>}
+          <div>{children}</div>
+        </Card.Body>
+        {footer && <Card.Footer>{footer}</Card.Footer>}
+      </>
     );
   }
 
@@ -80,7 +82,7 @@ class Box extends Component {
     const {
       id = null,
       title,
-      type = 'default',
+      type = 'light',
       solid = false,
       collapsable = false,
       customIcons = null,
@@ -89,17 +91,16 @@ class Box extends Component {
     const { isOpen = true } = this.state;
 
     return (
-      <div
+      <Card
         id={id}
-        className={classnames({
-          box: true,
-          [`box-${type}`]: typeof type !== 'undefined',
-          panel: true,
-          'box-solid': solid,
+        bsPrefix={classnames({
+          card: true,
+          'card-outline': !solid && type && type.length > 0,
+          [`card-${type}`]: type && type.length > 0,
           [className]: className.length > 0,
         })}>
-        <div className="box-header with-border" onClick={this.toggleDetails}>
-          <h3 className="box-title">
+        <Card.Header onClick={this.toggleDetails}>
+          <Card.Title>
             {title}
 
             <span className="whenTargetted text-warning">
@@ -116,24 +117,23 @@ class Box extends Component {
                 <Icon icon="highlighter" gapLeft timid onClick={this.removeUrlHash} />
               </OverlayTrigger>
             </span>
-          </h3>
+          </Card.Title>
 
           {customIcons && <span className={styles.customIcons}>{customIcons}</span>}
 
           {collapsable && !customIcons && (
-            <div className="box-tools">
-              <button type="button" className="btn btn-box-tool" onClick={this.toggleDetails}>
-                <Icon icon={isOpen ? 'minus' : 'plus'} />
-              </button>
+            <div className="card-tools mr-1">
+              <Icon icon={isOpen ? 'minus' : 'plus'} onClick={this.toggleDetails} />
             </div>
           )}
-        </div>
-        <div>
+        </Card.Header>
+
+        <>
           {collapsable && <Collapse isOpened={isOpen}>{this.renderBody()}</Collapse>}
 
           {!collapsable && this.renderBody()}
-        </div>
-      </div>
+        </>
+      </Card>
     );
   }
 }

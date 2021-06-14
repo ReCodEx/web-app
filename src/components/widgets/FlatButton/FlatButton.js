@@ -16,6 +16,7 @@ const FlatButtonInternal = ({ className, onClick = null, ...props }) => (
 );
 
 const FlatButton = ({
+  variant = 'outline-secondary',
   className = '',
   onClick = null,
   confirm = null,
@@ -25,10 +26,10 @@ const FlatButton = ({
 }) =>
   confirm ? (
     <Confirm id={confirmId} onConfirmed={onClick} question={confirm}>
-      <FlatButtonInternal className={className} {...props} />
+      <FlatButtonInternal className={className} variant={variant} {...props} />
     </Confirm>
   ) : (
-    <FlatButtonInternal className={className} onClick={onClick} {...props} />
+    <FlatButtonInternal className={className} variant={variant} onClick={onClick} {...props} />
   );
 
 FlatButtonInternal.propTypes = {
@@ -37,6 +38,7 @@ FlatButtonInternal.propTypes = {
 };
 
 FlatButton.propTypes = {
+  variant: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
   confirm: PropTypes.any,

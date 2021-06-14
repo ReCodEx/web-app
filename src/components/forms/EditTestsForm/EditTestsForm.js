@@ -307,7 +307,7 @@ class EditTestsForm extends Component {
                               ),
                             }}
                           />
-                          <Button onClick={this.closeDialog} variant="default">
+                          <Button onClick={this.closeDialog} variant="outline-secondary">
                             <CloseIcon gapRight />
                             <FormattedMessage id="generic.close" defaultMessage="Close" />
                           </Button>

@@ -10,7 +10,7 @@ import { fetchManyStatus, readySubmissionFailuresSelector } from '../../redux/se
 import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList';
 import Box from '../../components/widgets/Box/Box';
 import ResolveFailure from '../../components/SubmissionFailures/ResolveFailure/ResolveFailure';
-import { Button } from 'react-bootstrap';
+import Button from '../../components/widgets/FlatButton';
 
 class SubmissionFailures extends Component {
   state = { isOpen: false, activeId: null };

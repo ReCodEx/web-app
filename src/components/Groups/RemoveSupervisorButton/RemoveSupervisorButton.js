@@ -5,7 +5,7 @@ import Button from '../../widgets/FlatButton';
 import Icon from '../../icons';
 
 const RemoveSupervisorButton = ({ onClick, ...props }) => (
-  <Button {...props} onClick={onClick} variant="warning" className="btn-flat">
+  <Button {...props} onClick={onClick} variant="warning">
     <Icon icon="user-times" gapRight />
     <FormattedMessage id="app.groups.removeSupervisorButton" defaultMessage="Remove supervisor" />
   </Button>

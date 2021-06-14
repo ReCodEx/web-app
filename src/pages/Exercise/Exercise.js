@@ -236,7 +236,7 @@ class Exercise extends Component {
                                             defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
                                           />
                                         }>
-                                        <Button size="xs" className="btn-flat" variant="danger">
+                                        <Button size="xs" variant="danger">
                                           <DeleteIcon gapRight />
                                           <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                                         </Button>

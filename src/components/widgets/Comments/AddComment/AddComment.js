@@ -94,7 +94,7 @@ class AddComment extends Component {
                 onClick={this.addComment}>
                 <FormattedMessage id="app.comments.addComment" defaultMessage="Send" />
               </Button>
-              <Button variant="default" onClick={refresh}>
+              <Button variant="outline-secondary" onClick={refresh}>
                 <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
               </Button>
             </InputGroup.Append>

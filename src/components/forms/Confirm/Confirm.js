@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Popover, Overlay, ButtonGroup, Button } from 'react-bootstrap';
+import { Popover, Overlay, ButtonGroup } from 'react-bootstrap';
 import { SuccessIcon, CloseIcon } from '../../icons';
+import Button from '../../widgets/FlatButton';
 
 const wrapperSpanStyle = { display: 'inline-block', position: 'relative' };
 

@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { CloseIcon } from '../../icons';
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
+
 import SubmitButton from '../../forms/SubmitButton';
 import { TextField, CheckboxField } from '../../forms/Fields';
+import Button from '../../widgets/FlatButton';
 
 const maxNoteLength = value =>
   value && value.length >= 255 ? (
@@ -64,7 +66,7 @@ const ResolveFailure = ({
         }}
       />
 
-      <Button variant="default" className="btn-flat" onClick={onClose}>
+      <Button variant="outline-secondary" onClick={onClose}>
         <CloseIcon gapRight />
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>

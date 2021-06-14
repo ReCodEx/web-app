@@ -100,7 +100,7 @@ class SisCreateGroupForm extends Component {
               }}
             />
 
-            <Button variant="default" className="btn-flat" onClick={onClose}>
+            <Button variant="outline-secondary" onClick={onClose}>
               <CloseIcon gapRight />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
-import { Alert, Container, Row, Col, Form, Button, FormLabel } from 'react-bootstrap';
+import { Alert, Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises';
@@ -23,6 +23,7 @@ import { TextField, SelectField, TagsSelectorField } from '../Fields';
 import { identity, safeGet } from '../../../helpers/common';
 import { ExpandCollapseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
+import Button from '../../widgets/FlatButton';
 
 const RTE_PREFIX = 'runtimeEnvironments.';
 
@@ -145,11 +146,11 @@ class FilterExercisesListForm extends Component {
                       }
                       associatedButton={
                         <div className="text-nowrap">
-                          <Button className="btn-flat" onClick={() => change('author', null)}>
+                          <Button onClick={() => change('author', null)}>
                             <FormattedMessage id="app.filterExercisesListForm.allButton" defaultMessage="All" />
                           </Button>
                           {authors.find(author => author.id === loggedUserId) && (
-                            <Button className="btn-flat" onClick={() => change('author', loggedUserId)}>
+                            <Button onClick={() => change('author', loggedUserId)}>
                               <FormattedMessage id="app.filterExercisesListForm.mineButton" defaultMessage="Mine" />
                             </Button>
                           )}
