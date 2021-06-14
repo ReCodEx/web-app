@@ -46,7 +46,7 @@ export const abort = id =>
   createApiAction({
     type: actionTypes.ASYNC_JOBS_ABORT,
     method: 'POST',
-    endpoint: `/async-jobs/abort/${id}`,
+    endpoint: `/async-jobs/${id}/abort`,
     meta: { id },
   });
 

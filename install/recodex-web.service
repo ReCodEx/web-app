@@ -3,7 +3,7 @@
 # This file should be placed in /lib/systemd/system/ directory
 
 [Unit]
-Description=Recodex Web App
+Description=ReCodEx Web App
 Documentation=http://recodex.github.io/web-app/,https://github.com/ReCodEx/GlobalWiki/wiki
 DefaultDependencies=true
 
