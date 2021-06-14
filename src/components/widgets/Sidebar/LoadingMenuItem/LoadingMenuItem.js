@@ -2,15 +2,15 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon } from '../../../icons';
 
-import styles from '../Sidebar.less';
+import '../Sidebar.css';
 
 const LoadingMenuItem = () => (
-  <li>
-    <a>
-      <LoadingIcon gapRight />
-      <span className={styles.menuItem}>
+  <li className="nav-item">
+    <a className="nav-link">
+      <LoadingIcon gapRight className="nav-icon" />
+      <p className="sidebarMenuItem">
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-      </span>
+      </p>
     </a>
   </li>
 );

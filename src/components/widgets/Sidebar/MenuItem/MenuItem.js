@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import Icon from '../../../icons';
-import styles from '../Sidebar.less';
+import '../Sidebar.css';
 
 const MenuItem = ({
   title,
@@ -20,13 +20,14 @@ const MenuItem = ({
 }) => (
   <li
     className={classnames({
+      'nav-item': true,
       active: link === pathname + search,
-      small,
+      small: true,
     })}>
-    <Link to={link} target={inNewTab ? '_blank' : undefined}>
-      <Icon icon={icon} fixedWidth gapRight />
-      <span className={styles.menuItem}>{title}</span>
-      {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
+    <Link to={link} target={inNewTab ? '_blank' : undefined} className="nav-link">
+      <Icon icon={icon} fixedWidth gapRight className="nav-icon" />
+      <p className="sidebarMenuItem">{title}</p>
+      {notificationsCount > 0 && <span className="right badge badge-warning">{notificationsCount}</span>}
     </Link>
   </li>
 );

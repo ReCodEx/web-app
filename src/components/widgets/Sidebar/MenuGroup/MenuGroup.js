@@ -10,7 +10,7 @@ import { isLoading } from '../../../../redux/helpers/resourceManager';
 import { getLocalizedName } from '../../../../helpers/localizedData';
 import Icon from '../../../icons';
 
-import styles from '../Sidebar.less';
+import '../Sidebar.css';
 
 class MenuGroup extends Component {
   state = {
@@ -34,7 +34,6 @@ class MenuGroup extends Component {
   };
 
   render() {
-    const { open } = this.state;
     const {
       title,
       icon = 'th',
@@ -42,7 +41,6 @@ class MenuGroup extends Component {
       createLink,
       currentPath,
       notifications,
-      forceOpen = false,
       intl: { locale },
     } = this.props;
 
@@ -52,18 +50,20 @@ class MenuGroup extends Component {
     return (
       <li
         className={classnames({
-          active: open || forceOpen,
-          treeview: true,
+          'nav-item': true,
+          small: true,
+          // todo -- isActive - otevrit
         })}>
-        <a href="#" onClick={this.toggle}>
-          <Icon icon={icon} gapRight fixedWidth />
-          <span className={styles.menuItem}>{title}</span>
-          <span className="pull-right-container">
-            {notificationsCount > 0 && <small className="label pull-right bg-blue">{notificationsCount}</small>}
-            <Icon icon="angle-left" className={classnames({ [styles.arrowIcon]: true, 'pull-right': true })} />
-          </span>
+        <a href="#" className="nav-link">
+          <Icon icon={icon} gapRight fixedWidth className="nav-icon small" />
+          <p className="sidebarMenuItem">
+            <Icon icon="angle-left" className="sidebarArrowIcon right" />
+            {notificationsCount > 0 && <span className="right badge badge-primary">{notificationsCount}</span>}
+            {title}
+          </p>
         </a>
-        <ul className={classnames({ 'treeview-menu': true, [styles.dropdown]: true })}>
+
+        <ul className="nav nav-treeview sidebarDropdown">
           {items.map((item, key) =>
             isLoading(item) ? (
               <LoadingMenuItem key={key} />
@@ -97,7 +97,6 @@ MenuGroup.propTypes = {
   link: PropTypes.string,
   items: ImmutablePropTypes.list,
   currentPath: PropTypes.string,
-  forceOpen: PropTypes.bool,
   createLink: PropTypes.func.isRequired,
   notifications: PropTypes.object,
   isActive: PropTypes.bool,

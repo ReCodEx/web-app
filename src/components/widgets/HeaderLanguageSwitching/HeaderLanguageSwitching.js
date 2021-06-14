@@ -4,12 +4,14 @@ import classnames from 'classnames';
 
 const HeaderLanguageSwitching = ({ lang, setLang, active = false }) => (
   <li
-    className={classnames({ active })}
+    className={classnames({ 'nav-item': true, active })}
     onClick={ev => {
       setLang(lang);
       ev.preventDefault();
     }}>
-    <a href="#">{lang}</a>
+    <a href="#" className="nav-link">
+      {lang}
+    </a>
   </li>
 );
 

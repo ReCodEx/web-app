@@ -8,12 +8,8 @@
     <%- head.link.toString() %>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href="<%= urlPrefix %>/public/favicon.ico" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">    
     <link
@@ -75,7 +71,7 @@
     </style>
   </head>
 
-  <body class="loading">
+  <body class="loading" style="height: auto">
     <div id="loading-screen">
       <%= ((new Date()).getMonth() === 3 && (new Date()).getDate() === 1) ? 'Loudím' : 'Loading' %>...
     </div>
@@ -96,7 +92,8 @@
 
     <script>
       document.getElementById('loading-screen').remove();
-      document.body.className = "<%- skin ? skin : 'skin-green' %> fixed";
+//      document.body.className = "<%- skin ? skin : 'skin-green' %> fixed";
+      document.body.className = "sidebar-mini layout-fixed layout-navbar-fixed";
     </script>
   </body>
 </html>

@@ -34,7 +34,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@iktakahiro/markdown-it-katex": "^3.0.3",
-    "admin-lte": "2.3.11",
+    "admin-lte": "3.1.0",
     "ajv": "5.5.1",
     "ajv-keywords": "2.1.1",
     "babel-plugin-react-intl": "^4.1.2",
