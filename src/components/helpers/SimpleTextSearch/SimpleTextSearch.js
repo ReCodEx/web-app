@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Button, FormGroup, FormLabel, FormControl, InputGroup } from 'react-bootstrap';
+import { FormGroup, FormLabel, FormControl, InputGroup } from 'react-bootstrap';
 import { LoadingIcon, SearchIcon, WarningIcon } from '../../icons';
+import Button from '../../widgets/FlatButton';
 
 class SimpleTextSearch extends Component {
   state = { query: this.props.query, lastPropsQuery: this.props.query };
@@ -28,6 +29,7 @@ class SimpleTextSearch extends Component {
             <FormControl id={id} type="text" value={this.state.query} onChange={this.queryChangeHandler} />
             <InputGroup.Append>
               <Button
+                variant="secondary"
                 type="submit"
                 onClick={e => {
                   e.preventDefault();

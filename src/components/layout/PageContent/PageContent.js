@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { Container, Row, Col } from 'react-bootstrap';
 import Breadcrumbs from '../../widgets/Breadcrumbs';
 
 const getMessage = (item, formatMessage) =>
@@ -22,14 +23,22 @@ const getMessage = (item, formatMessage) =>
 const PageContent = ({ intl: { formatMessage }, title = '', description = '', breadcrumbs = [], children }) => (
   <div className="content-wrapper">
     <Helmet title={getMessage(title, formatMessage)} description={getMessage(description, formatMessage)} />
-    <section className="content-header">
-      <h1>
-        {title}
-        <small className="halfem-margin-left">{description}</small>
-      </h1>
-      {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+    <div className="content-header">
+      <Container fluid>
+        <Row className="mb-2">
+          <Col sm={6}>
+            <h1 className="m-0 text-dark">
+              {title}
+              <small className="halfem-margin-left">{description}</small>
+            </h1>
+          </Col>
+          <Col sm={6}>{breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}</Col>
+        </Row>
+      </Container>
+    </div>
+    <section className="content">
+      <Container fluid>{children}</Container>
     </section>
-    <section className="content">{children}</section>
   </div>
 );
 

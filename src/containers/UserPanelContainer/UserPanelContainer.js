@@ -4,20 +4,20 @@ import { connect } from 'react-redux';
 
 import UserSwitchingContainer from '../../containers/UserSwitchingContainer';
 
-import Badge, { LoadingBadge, FailedBadge } from '../../components/widgets/Badge';
+import UserPanel, { UserPanelLoading, UserPanelFailed } from '../../components/widgets/Sidebar/UserPanel';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import { accessTokenExpiration } from '../../redux/selectors/auth';
 import { logout, restrictEffectiveRole } from '../../redux/modules/auth';
 
-const BadgeContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration, logout, small = false }) => (
+const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration, logout, small = false }) => (
   <ResourceRenderer
-    loading={<LoadingBadge small={small} />}
-    failed={<FailedBadge color="black" small={small} />}
+    loading={<UserPanelLoading small={small} />}
+    failed={<UserPanelFailed color="black" small={small} />}
     resource={user}>
     {user => (
       <span>
-        <Badge
+        <UserPanel
           user={user}
           effectiveRole={effectiveRole}
           setEffectiveRole={restrictEffectiveRole}
@@ -31,7 +31,7 @@ const BadgeContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration
   </ResourceRenderer>
 );
 
-BadgeContainer.propTypes = {
+UserPanelContainer.propTypes = {
   user: PropTypes.object,
   effectiveRole: PropTypes.string,
   expiration: PropTypes.number.isRequired,
@@ -51,4 +51,4 @@ export default connect(
     logout: () => dispatch(logout()),
     restrictEffectiveRole: role => dispatch(restrictEffectiveRole(role)),
   })
-)(BadgeContainer);
+)(UserPanelContainer);

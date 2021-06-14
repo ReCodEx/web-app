@@ -30,7 +30,7 @@ const EditHardwareGroupForm = ({
       <div className="text-center">
         {dirty && !submitting && !submitSucceeded && (
           <span>
-            <Button type="reset" onClick={reset} variant={'danger'} className="btn-flat">
+            <Button type="reset" onClick={reset} variant="danger">
               <RefreshIcon gapRight />
               <FormattedMessage id="generic.reset" defaultMessage="Reset" />
             </Button>

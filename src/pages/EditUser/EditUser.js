@@ -150,7 +150,7 @@ class EditUser extends Component {
                     userId={data.id}
                     locale={locale /* a hack that enforce component refresh on locale change */}
                   />
-                  <Button variant="default" onClick={refreshUser}>
+                  <Button variant="outline-secondary" onClick={refreshUser}>
                     <RefreshIcon gapRight />
                     <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
                   </Button>

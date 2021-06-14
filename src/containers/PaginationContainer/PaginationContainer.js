@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Container, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
+import { Container, Row, Col, ButtonGroup } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { SortedIcon, LoadingIcon } from '../../components/icons';
 import PaginationButtons from '../../components/widgets/PaginationButtons';
+import Button from '../../components/widgets/FlatButton';
 import {
   getPaginationOffset,
   getPaginationLimit,

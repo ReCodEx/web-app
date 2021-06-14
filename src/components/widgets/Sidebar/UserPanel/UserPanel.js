@@ -4,14 +4,14 @@ import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Tooltip, OverlayTrigger, Modal } from 'react-bootstrap';
 
-import UserName from '../../Users/UsersName';
-import EffectiveRoleSwitching from '../../Users/EffectiveRoleSwitching';
-import withLinks from '../../../helpers/withLinks';
-import Icon from '../../icons';
-import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
-import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../helpers/usersRoles';
+import UserName from '../../../Users/UsersName';
+import EffectiveRoleSwitching from '../../../Users/EffectiveRoleSwitching';
+import withLinks from '../../../../helpers/withLinks';
+import Icon from '../../../icons';
+import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
+import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../../helpers/usersRoles';
 
-class Badge extends Component {
+class UserPanel extends Component {
   state = { effectiveRoleDialogOpened: false, effectiveRoleUpdating: null };
 
   openEffectiveRoleDialog = () => {
@@ -43,7 +43,7 @@ class Badge extends Component {
 
     return (
       <React.Fragment>
-        <div className="user-panel">
+        <div className="user-panel mt-2 pb-2 mb-2">
           <div className="text-center">
             {small ? (
               <AvatarContainer
@@ -57,7 +57,7 @@ class Badge extends Component {
             )}
           </div>
 
-          <div className="small text-center halfem-margin-top">
+          <div className="small text-center mt-1">
             <Link to={EDIT_USER_URI_FACTORY(user.id)}>
               <Icon icon="edit" className="text-warning" gapRight={!small} />
               {!small && <FormattedMessage id="generic.settings" defaultMessage="Settings" />}
@@ -135,7 +135,7 @@ class Badge extends Component {
   }
 }
 
-Badge.propTypes = {
+UserPanel.propTypes = {
   user: PropTypes.object.isRequired,
   effectiveRole: PropTypes.string,
   setEffectiveRole: PropTypes.func.isRequired,
@@ -145,4 +145,4 @@ Badge.propTypes = {
   links: PropTypes.object,
 };
 
-export default withLinks(Badge);
+export default withLinks(UserPanel);

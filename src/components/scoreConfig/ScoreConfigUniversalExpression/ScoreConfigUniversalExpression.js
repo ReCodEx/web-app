@@ -383,7 +383,7 @@ class ScoreConfigUniversalExpression extends Component {
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
-                <Button onClick={this.closeDialog} variant="default">
+                <Button onClick={this.closeDialog} variant="outline-secondary">
                   <CloseIcon gapRight />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
@@ -467,7 +467,7 @@ class ScoreConfigUniversalExpression extends Component {
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
-                <Button onClick={this.closeDialog} variant="default">
+                <Button onClick={this.closeDialog} variant="outline-secondary">
                   <CloseIcon gapRight />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
@@ -513,7 +513,7 @@ class ScoreConfigUniversalExpression extends Component {
             </Modal.Body>
             <Modal.Footer>
               <div className="text-center">
-                <Button onClick={this.closeDialog} variant="default">
+                <Button onClick={this.closeDialog} variant="outline-secondary">
                   <CloseIcon gapRight />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>

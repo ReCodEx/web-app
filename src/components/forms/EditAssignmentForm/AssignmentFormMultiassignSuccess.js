@@ -43,13 +43,13 @@ const AssignmentFormMultiassignSuccess = ({
               <td>{getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}</td>
               <td className="text-right">
                 <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
-                  <Button size="xs" variant="primary" className="btn-flat">
+                  <Button size="xs" variant="primary">
                     <GroupIcon gapRight />
                     <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                   </Button>
                 </LinkContainer>
                 <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                  <Button size="xs" variant="primary" className="btn-flat">
+                  <Button size="xs" variant="primary">
                     <AssignmentsIcon gapRight />
                     <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                   </Button>
@@ -61,7 +61,7 @@ const AssignmentFormMultiassignSuccess = ({
     </Table>
 
     <div className="text-center">
-      <Button variant="warning" className="btn-flat" onClick={acknowledgeSuccess}>
+      <Button variant="warning" onClick={acknowledgeSuccess}>
         <Icon icon={['far', 'smile']} gapRight />
         <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
       </Button>

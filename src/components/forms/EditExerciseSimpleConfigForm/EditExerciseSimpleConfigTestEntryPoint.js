@@ -56,7 +56,7 @@ const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, tes
                     defaultMessage="Do you really wish to overwrite entry-point configuration of all subsequent tests using the first test as a template?"
                   />
                 }>
-                <Button variant="primary" className="btn-flat" disabled={Boolean(testErrors)}>
+                <Button variant="primary" disabled={Boolean(testErrors)}>
                   <Icon icon="arrows-alt" gapRight />
                   <FormattedMessage
                     id="app.editExerciseConfigForm.smartFillEntryPoint"
