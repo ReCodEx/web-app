@@ -123,9 +123,9 @@ const createErrorLink = (tag, exerciseId, links) => {
 
   const link = links[errorLinks[tag]](exerciseId) + (errorLinksHashes[tag] || '');
   return (
-    <React.Fragment>
+    <>
       (<Link to={link}>{errorLinkCaptions[tag]}</Link>)
-    </React.Fragment>
+    </>
   );
 };
 
@@ -144,7 +144,7 @@ const transformErrors = defaultMemoize((errors, exerciseId, links) => {
   });
 
   return (
-    <React.Fragment>
+    <>
       {errorTypes
         .filter(tag => taggedErrors[tag])
         .map(tag => (
@@ -173,7 +173,7 @@ const transformErrors = defaultMemoize((errors, exerciseId, links) => {
             <code>{error}</code>
           </li>
         ))}
-    </React.Fragment>
+    </>
   );
 });
 
@@ -185,7 +185,7 @@ const ExerciseCallouts = ({
   permissionHints = null,
   links,
 }) => (
-  <React.Fragment>
+  <>
     {isBroken && (
       <div className="callout callout-warning">
         <h4>
@@ -228,7 +228,7 @@ const ExerciseCallouts = ({
         )}
       </div>
     )}
-  </React.Fragment>
+  </>
 );
 
 ExerciseCallouts.propTypes = {

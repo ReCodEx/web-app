@@ -6,7 +6,7 @@ import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { InfoIcon, RefreshIcon } from '../../icons';
 
 import { SelectField } from '../Fields';

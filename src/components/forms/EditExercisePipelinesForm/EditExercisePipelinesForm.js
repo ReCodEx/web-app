@@ -7,7 +7,7 @@ import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
 import EditExercisePipelinesTable from './EditExercisePipelinesTable';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { RefreshIcon } from '../../icons';
 import { createIndex } from '../../../helpers/common';
 

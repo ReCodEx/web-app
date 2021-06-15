@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import FlatButton from '../../widgets/FlatButton';
+import TheButton from '../../widgets/TheButton';
 import SelectField from './SelectField';
 import TextField from './TextField';
 import { AddIcon, CloseIcon } from '../../icons';
@@ -78,9 +78,9 @@ const ExpandingInputFilesField = ({
                         />
                       </Tooltip>
                     }>
-                    <FlatButton onClick={() => fields.remove(index)}>
+                    <TheButton onClick={() => fields.remove(index)}>
                       <CloseIcon />
-                    </FlatButton>
+                    </TheButton>
                   </OverlayTrigger>
                 </td>
               )}
@@ -105,9 +105,9 @@ const ExpandingInputFilesField = ({
               <FormattedMessage id="app.expandingInputFilesField.tooltip.add" defaultMessage="Add another file." />
             </Tooltip>
           }>
-          <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
+          <TheButton onClick={() => fields.push(EMPTY_VALUE)}>
             <AddIcon />
-          </FlatButton>
+          </TheButton>
         </OverlayTrigger>
       )}
     </div>

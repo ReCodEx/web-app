@@ -30,8 +30,9 @@ const OptionalPopoverWrapper = ({
         onMouseLeave={hoverTrigger ? () => setShown(false) : undefined}>
         {children}
         <Overlay show={Boolean(contents) && !hide && shown} target={ref.current} placement={placement}>
-          <Popover id={popoverId} title={title}>
-            {contents}
+          <Popover id={popoverId}>
+            <Popover.Title>{title}</Popover.Title>
+            <Popover.Content>{contents}</Popover.Content>
           </Popover>
         </Overlay>
       </span>

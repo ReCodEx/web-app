@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import FlatButton from '../../widgets/FlatButton';
+import TheButton from '../../widgets/TheButton';
 import SelectField from './SelectField';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
@@ -18,7 +18,7 @@ const ExpandingSelectField = ({
 }) => (
   <div>
     {fields.length > 0 && (
-      <React.Fragment>
+      <>
         {Boolean(label) && <FormLabel>{label}</FormLabel>}
         <table>
           <tbody>
@@ -36,7 +36,7 @@ const ExpandingSelectField = ({
                 </td>
 
                 {!readOnly && (
-                  <React.Fragment>
+                  <>
                     <td className="valign-top">
                       <OverlayTrigger
                         placement="top"
@@ -48,10 +48,10 @@ const ExpandingSelectField = ({
                             />
                           </Tooltip>
                         }>
-                        <FlatButton onClick={() => fields.insert(index, '')}>
+                        <TheButton onClick={() => fields.insert(index, '')}>
                           <AddIcon size="xs" />
                           <Icon icon="level-up-alt" />
-                        </FlatButton>
+                        </TheButton>
                       </OverlayTrigger>
                     </td>
                     <td className="valign-top">
@@ -65,18 +65,18 @@ const ExpandingSelectField = ({
                             />
                           </Tooltip>
                         }>
-                        <FlatButton onClick={() => fields.remove(index)}>
+                        <TheButton onClick={() => fields.remove(index)}>
                           <CloseIcon />
-                        </FlatButton>
+                        </TheButton>
                       </OverlayTrigger>
                     </td>
-                  </React.Fragment>
+                  </>
                 )}
               </tr>
             ))}
           </tbody>
         </table>
-      </React.Fragment>
+      </>
     )}
     <div style={{ textAlign: 'center' }}>
       {fields.length === 0 && (
@@ -95,9 +95,9 @@ const ExpandingSelectField = ({
               <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
             </Tooltip>
           }>
-          <FlatButton onClick={() => fields.push('')}>
+          <TheButton onClick={() => fields.push('')}>
             <AddIcon />
-          </FlatButton>
+          </TheButton>
         </OverlayTrigger>
       )}
     </div>

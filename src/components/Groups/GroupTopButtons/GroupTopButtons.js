@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 import { GroupIcon, EditIcon, AssignmentsIcon, MailIcon } from '../../icons';
 import { identity, hasPermissions } from '../../../helpers/common';
@@ -31,28 +31,28 @@ const GroupTopButtons = ({
   return (
     <p>
       {canEdit && (
-        <LinkContainer to={GROUP_EDIT_URI_FACTORY(group.id)}>
+        <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
           <Button variant="warning">
             <EditIcon gapRight />
             <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
           </Button>
-        </LinkContainer>
+        </Link>
       )}
 
-      <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
+      <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
         <Button variant="primary">
           <GroupIcon gapRight />
           <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
         </Button>
-      </LinkContainer>
+      </Link>
 
       {canSeeDetail && (
-        <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+        <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
           <Button variant="primary">
             <AssignmentsIcon gapRight />
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
-        </LinkContainer>
+        </Link>
       )}
 
       {canLeaveJoin && !group.organizational && (
@@ -60,7 +60,7 @@ const GroupTopButtons = ({
       )}
 
       {studentEmails && (
-        <a href={`mailto:?bcc=${studentEmails}`} className="pull-right">
+        <a href={`mailto:?bcc=${studentEmails}`} className="float-right">
           <Button variant="outline-secondary">
             <MailIcon gapRight />
             <FormattedMessage id="app.group.mailtoAll" defaultMessage="Mail to All Students" />

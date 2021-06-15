@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import { Table } from 'react-bootstrap';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { SendIcon, DownloadIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon from '../../icons';
 import { SelectField, TextField, CheckboxField } from '../Fields';
 import Confirm from '../../forms/Confirm';
@@ -33,7 +33,7 @@ const EditExerciseSimpleConfigTestOutput = ({
   showOutFile = true,
   readOnly = false,
 }) => (
-  <React.Fragment>
+  <>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.outputTitle" defaultMessage="Output" />
     </h4>
@@ -94,7 +94,7 @@ const EditExerciseSimpleConfigTestOutput = ({
         </Confirm>
       </div>
     )}
-  </React.Fragment>
+  </>
 );
 
 EditExerciseSimpleConfigTestOutput.propTypes = {

@@ -69,11 +69,7 @@ export const SortedIcon = ({ active = true, descending = false, ...props }) => (
     {...props}
   />
 );
-export const SuccessIcon = props => (
-  <strong className="text-success">
-    <Icon {...props} icon="check" />
-  </strong>
-);
+export const SuccessIcon = props => <Icon {...props} icon="check" />;
 export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
   success ? <SuccessIcon {...props} /> : <FailureIcon {...props} />;
 export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;

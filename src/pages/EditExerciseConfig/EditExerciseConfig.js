@@ -392,7 +392,7 @@ class EditExerciseConfig extends Component {
 
                   <ResourceRenderer resource={exerciseScoreConfig}>
                     {scoreConfig => (
-                      <React.Fragment>
+                      <>
                         {scoreConfig && scoreConfig.calculator === UNIVERSAL_SCORE_CALCULATOR && (
                           <Row>
                             <Col lg={12}>{this.renderTestsAndScoreBox(exercise, tests, scoreConfig)}</Col>
@@ -442,7 +442,7 @@ class EditExerciseConfig extends Component {
                             </Row>
                           )}
                         </ResourceRenderer>
-                      </React.Fragment>
+                      </>
                     )}
                   </ResourceRenderer>
 
@@ -521,7 +521,6 @@ class EditExerciseConfig extends Component {
                       <p className="text-center">
                         <Button
                           variant="success"
-                          className="btn-flat"
                           size="sm"
                           onClick={this.createExercisePipeline}
                         >
@@ -544,12 +543,11 @@ class EditExerciseConfig extends Component {
                           pipelines={pipelines}
                           createActions={pipelineId =>
                             <div>
-                              <LinkContainer
+                              <Link
                                 to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
                               >
                                 <Button
                                   size="xs"
-                                  className="btn-flat"
                                   variant="warning"
                                 >
                                   <EditIcon gapRight />
@@ -558,7 +556,7 @@ class EditExerciseConfig extends Component {
                                     defaultMessage="Edit"
                                   />
                                 </Button>
-                              </LinkContainer>
+                              </Link>
                               <Confirm
                                 id={pipelineId}
                                 onConfirmed={() => deletePipeline(pipelineId)}
@@ -571,7 +569,6 @@ class EditExerciseConfig extends Component {
                               >
                                 <Button
                                   size="xs"
-                                  className="btn-flat"
                                   variant="danger"
                                 >
                                   <DeleteIcon gapRight />

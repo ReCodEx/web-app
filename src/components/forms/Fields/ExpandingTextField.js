@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import FlatButton from '../../widgets/FlatButton';
+import TheButton from '../../widgets/TheButton';
 import TextField from './TextField';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
@@ -35,7 +35,7 @@ const ExpandingTextField = ({
             </td>
 
             {!readOnly && (
-              <React.Fragment>
+              <>
                 <td className="valign-top">
                   <OverlayTrigger
                     placement="top"
@@ -47,10 +47,10 @@ const ExpandingTextField = ({
                         />
                       </Tooltip>
                     }>
-                    <FlatButton onClick={() => fields.insert(index, '')}>
+                    <TheButton onClick={() => fields.insert(index, '')}>
                       <AddIcon size="xs" />
                       <Icon icon="level-up-alt" />
-                    </FlatButton>
+                    </TheButton>
                   </OverlayTrigger>
                 </td>
                 <td className="valign-top">
@@ -64,12 +64,12 @@ const ExpandingTextField = ({
                         />
                       </Tooltip>
                     }>
-                    <FlatButton onClick={() => fields.remove(index)}>
+                    <TheButton onClick={() => fields.remove(index)}>
                       <CloseIcon />
-                    </FlatButton>
+                    </TheButton>
                   </OverlayTrigger>
                 </td>
-              </React.Fragment>
+              </>
             )}
           </tr>
         ))}
@@ -92,9 +92,9 @@ const ExpandingTextField = ({
               <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
             </Tooltip>
           }>
-          <FlatButton onClick={() => fields.push('')}>
+          <TheButton onClick={() => fields.push('')}>
             <AddIcon />
-          </FlatButton>
+          </TheButton>
         </OverlayTrigger>
       )}
     </div>

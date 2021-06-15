@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -13,7 +12,7 @@ import DeleteExerciseButtonContainer from '../../../containers/DeleteExerciseBut
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import { ExercisePrefixIcons, EditIcon, LimitsIcon, TestsIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import AssignExerciseButton from '../../buttons/AssignExerciseButton';
 import { getTagStyle } from '../../../helpers/exercise/tags';
@@ -133,7 +132,7 @@ const ExercisesListItem = ({
         />
       )}
       {permissionHints.update && (
-        <LinkContainer to={EXERCISE_EDIT_URI_FACTORY(id)}>
+        <Link to={EXERCISE_EDIT_URI_FACTORY(id)}>
           <OverlayTrigger
             placement="bottom"
             overlay={
@@ -145,10 +144,10 @@ const ExercisesListItem = ({
               <EditIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
-        </LinkContainer>
+        </Link>
       )}
       {permissionHints.viewPipelines && permissionHints.viewScoreConfig && (
-        <LinkContainer to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
+        <Link to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
           <OverlayTrigger
             placement="bottom"
             overlay={
@@ -156,14 +155,14 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEditConfig" defaultMessage="Tests" />
               </Tooltip>
             }>
-            <Button size="xs" variant={permissionHints.setScoreConfig ? 'warning' : 'default'}>
+            <Button size="xs" variant={permissionHints.setScoreConfig ? 'warning' : 'secondary'}>
               <TestsIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
-        </LinkContainer>
+        </Link>
       )}
       {permissionHints.viewLimits && (
-        <LinkContainer to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}>
+        <Link to={EXERCISE_EDIT_LIMITS_URI_FACTORY(id)}>
           <OverlayTrigger
             placement="bottom"
             overlay={
@@ -171,11 +170,11 @@ const ExercisesListItem = ({
                 <FormattedMessage id="app.exercises.listEditLimits" defaultMessage="Limits" />
               </Tooltip>
             }>
-            <Button size="xs" variant={permissionHints.setLimits ? 'warning' : 'default'}>
+            <Button size="xs" variant={permissionHints.setLimits ? 'warning' : 'secondary'}>
               <LimitsIcon smallGapLeft smallGapRight />
             </Button>
           </OverlayTrigger>
-        </LinkContainer>
+        </Link>
       )}
       {permissionHints.remove && (
         <DeleteExerciseButtonContainer id={id} size="xs" resourceless captionAsTooltip onDeleted={reload} />

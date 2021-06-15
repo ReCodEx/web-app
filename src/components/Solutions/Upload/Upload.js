@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import DropZone from 'react-dropzone';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import UploadsTable from '../UploadsTable';
 import { UploadIcon } from '../../icons';
 

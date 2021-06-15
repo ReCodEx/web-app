@@ -4,7 +4,7 @@ import { Field, FieldArray } from 'redux-form';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { PipelineIcon } from '../../icons';
 import { SelectField, TextField, ExpandingTextField, ExpandingSelectField } from '../Fields';
 import Confirm from '../../forms/Confirm';

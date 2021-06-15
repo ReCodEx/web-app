@@ -20,16 +20,16 @@ const ScoreConfigInfo = ({ scoreConfig, testResults, canResubmit = false }) => {
     (scoreConfig && scoreConfig.calculator && knownCalculators[scoreConfig.calculator]) || ScoreConfigInfoDefault;
 
   return (
-    <React.Fragment>
+    <>
       {scoreConfig ? (
-        <React.Fragment>
+        <>
           <ScoreConfigCalculatorPresenter scoreConfig={scoreConfig} testResults={testResults} />
           <p className="small text-right text-nowrap text-muted em-padding-right">
             <FormattedMessage id="app.scoreConfigInfo.createdAt" defaultMessage="Configured at" />
             :&nbsp;
             <DateTime unixts={scoreConfig.createdAt} showRelative />
           </p>
-        </React.Fragment>
+        </>
       ) : (
         <div className="callout callout-info">
           <h4>
@@ -54,7 +54,7 @@ const ScoreConfigInfo = ({ scoreConfig, testResults, canResubmit = false }) => {
           )}
         </div>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

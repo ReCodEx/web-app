@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { EditLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { InfoIcon, RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId, identity } from '../../../helpers/common';
 import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';

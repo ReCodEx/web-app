@@ -7,7 +7,7 @@ import moment from 'moment';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { RefreshIcon, DeleteIcon } from '../../icons';
 
 export const getPointsFormInitialValues = (userPoints, awardeeId) => {

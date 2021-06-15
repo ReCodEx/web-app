@@ -6,7 +6,7 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { ExpandCollapseIcon } from '../../icons';
 import { SelectField, ExpandingInputFilesField, ExpandingSelectField } from '../Fields';
@@ -81,7 +81,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
       readOnly = false,
     } = this.props;
     return (
-      <React.Fragment>
+      <>
         {this.state.compilationOpen === true ||
         (this.state.compilationOpen === null && this.hasCompilationExtraFiles()) ? (
           <InsetPanel>
@@ -231,7 +231,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
             />
           </div>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

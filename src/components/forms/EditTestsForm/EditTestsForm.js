@@ -11,7 +11,7 @@ import ScoreConfigUniversalExpression from '../../scoreConfig/ScoreConfigUnivers
 import SubmitButton from '../SubmitButton';
 import StandaloneRadioField from '../Fields/StandaloneRadioField';
 import Box from '../../widgets/Box';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 import Icon, { AddIcon, CloseIcon, RefreshIcon, WarningIcon } from '../../icons';
 import {
@@ -138,7 +138,7 @@ class EditTestsForm extends Component {
             </OverlayTrigger>
           ) : null
         }>
-        <React.Fragment>
+        <>
           {submitFailed && (
             <Alert variant="danger">
               <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
@@ -211,7 +211,7 @@ class EditTestsForm extends Component {
                       hide={!dirty}>
                       <Button
                         onClick={this.openDialog}
-                        variant={dirty ? 'default' : 'primary'}
+                        variant={dirty ? 'secondary' : 'primary'}
                         className="em-margin-left"
                         disabled={dirty}>
                         <Icon icon="calculator" gapRight />
@@ -219,7 +219,7 @@ class EditTestsForm extends Component {
                       </Button>
                     </OptionalTooltipWrapper>
 
-                    <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+                    <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
                       <Modal.Header closeButton>
                         <Modal.Title>
                           <FormattedMessage
@@ -330,7 +330,7 @@ class EditTestsForm extends Component {
               )}
             </Row>
           </Container>
-        </React.Fragment>
+        </>
       </Box>
     );
   }

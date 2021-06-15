@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
 
 const ResubmitSolution = ({ id, resubmit, progressObserverId, isDebug }) => (

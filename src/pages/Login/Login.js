@@ -113,7 +113,7 @@ class Login extends Component {
             iconName: 'sign-in-alt',
           },
         ]}>
-        <React.Fragment>
+        <>
           {redirect && (
             <Row>
               <Col sm={12}>
@@ -173,7 +173,7 @@ class Login extends Component {
               )}
             </Row>
           )}
-        </React.Fragment>
+        </>
       </PageContent>
     );
   }

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import MediaQuery from 'react-responsive';
 
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderSystemMessagesContainer from '../../../containers/HeaderSystemMessagesContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import ClientOnly from '../../helpers/ClientOnly';
-import Icon, { LoadingIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
+import Icon from '../../icons';
+import { getConfigVar } from '../../../helpers/config';
+
+const SKIN = getConfigVar('SKIN') || 'green';
 
 class Header extends Component {
   toggleSidebarSize = e => {
@@ -22,10 +22,10 @@ class Header extends Component {
   };
 
   render() {
-    const { isLoggedIn, availableLangs = [], currentLang, setLang, pendingFetchOperations } = this.props;
+    const { isLoggedIn, availableLangs = [], currentLang, setLang } = this.props;
 
     return (
-      <nav className="main-header navbar navbar-expand navbar-green navbar-dark">
+      <nav className={`main-header navbar navbar-expand navbar-dark navbar-${SKIN} elevation-2`}>
         <ClientOnly>
           <ul className="navbar-nav">
             <li className="nav-item">
@@ -34,34 +34,12 @@ class Header extends Component {
               </a>
             </li>
           </ul>
-
-          {/* <MediaQuery maxWidth={767}>
-            <a href="#" className="sidebar-toggle" role="button" onClick={this.toggleSidebarVisibility}>
-              <span className="sr-only">
-                <FormattedMessage id="app.header.toggleSidebar" defaultMessage="Show/hide sidebar" />
-              </span>
-            </a>
-          </MediaQuery>
-          <MediaQuery minWidth={768}>
-            <a
-              href="#"
-              className="sidebar-toggle"
-              role="button"
-              onClick={this.toggleSidebarSize}
-              style={{ fontFamily: 'sans' }}>
-              <span className="sr-only">
-                <FormattedMessage id="app.header.toggleSidebarSize" defaultMessage="Expand/minimize sidebar" />
-              </span>
-            </a>
-              </MediaQuery> */}
         </ClientOnly>
 
         <ul className="navbar-nav ml-auto">
           {isLoggedIn && <HeaderSystemMessagesContainer locale={currentLang} />}
           <HeaderNotificationsContainer />
-          {availableLangs.map(lang => (
-            <HeaderLanguageSwitching lang={lang} active={currentLang === lang} key={lang} setLang={setLang} />
-          ))}
+          <HeaderLanguageSwitching availableLangs={availableLangs} currentLang={currentLang} setLang={setLang} />
         </ul>
       </nav>
     );

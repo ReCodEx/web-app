@@ -8,15 +8,7 @@ import { hideNotification } from '../../redux/modules/notifications';
 import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications';
 
 class HeaderNotificationsContainer extends Component {
-  state = { isOpen: false, showAll: false, visibleNotifications: null };
-
-  static getDerivedStateFromProps(props, state) {
-    const visibleNotifications = props.newNotifications.reduce((acc, notification) => acc + notification.count, 0);
-    if (state.visibleNotifications !== visibleNotifications && visibleNotifications > 0) {
-      return { isOpen: true, visibleNotifications }; // force open the notifications dropdown - there are some new notifications
-    }
-    return null;
-  }
+  state = { showAll: false };
 
   // Monitor clicking and hide the notifications panel when the user clicks sideways
   componentDidMount = () => {
@@ -31,30 +23,17 @@ class HeaderNotificationsContainer extends Component {
     }
   };
 
-  toggleOpen = e => {
-    e.preventDefault();
-    this.state.isOpen ? this.close() : this.open();
-  };
-
   toggleShowAll = e => {
     e.preventDefault();
     this.setState({ showAll: !this.state.showAll });
   };
 
-  close = () => {
-    this.setState({ isOpen: false, showAll: false });
-  };
-
-  open = () => this.setState({ isOpen: true });
-
   render() {
     const { newNotifications, oldNotifications, hideNotification } = this.props;
-    const { isOpen, showAll } = this.state;
+    const { showAll } = this.state;
 
     return (
       <HeaderNotificationsDropdown
-        isOpen={isOpen}
-        toggleOpen={this.toggleOpen}
         showAll={showAll}
         toggleShowAll={this.toggleShowAll}
         hideNotification={hideNotification}
@@ -78,7 +57,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = { hideNotification };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(HeaderNotificationsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderNotificationsContainer);

@@ -19,7 +19,7 @@ import ArchiveTermGroups from '../../components/SisIntegration/ArchiveTermGroups
 import EditTerm from '../../components/SisIntegration/EditTerm';
 import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 
 import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
 import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/groups';
@@ -218,7 +218,7 @@ class SisIntegration extends Component {
           const externalId = getExternalIdForCAS(user);
 
           return externalId ? (
-            <React.Fragment>
+            <>
               <div className="callout callout-info">
                 <UserIcon gapRight />
                 <FormattedMessage
@@ -232,7 +232,7 @@ class SisIntegration extends Component {
                 resource={isSuperadminRole(effectiveRole) ? allGroups.toArray() : supervisorOfGroups.toArray()}
                 returnAsArray={true}>
                 {groups => (
-                  <React.Fragment>
+                  <>
                     {isStudentRole(effectiveRole) && (
                       <Row>
                         <Col lg={12}>
@@ -340,10 +340,10 @@ class SisIntegration extends Component {
                       onSubmit={this.submitEditDialog}
                       initialValues={this.state.editInitialValues}
                     />
-                  </React.Fragment>
+                  </>
                 )}
               </ResourceRenderer>
-            </React.Fragment>
+            </>
           ) : (
             <div className="callout callout-warning">
               <FormattedMessage

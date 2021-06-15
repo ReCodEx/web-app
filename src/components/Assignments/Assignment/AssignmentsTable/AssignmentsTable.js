@@ -37,7 +37,7 @@ class AssignmentsTable extends Component {
       intl: { locale },
     } = this.props;
     return (
-      <React.Fragment>
+      <>
         <Table hover>
           {assignments.size > 0 && (
             <thead>
@@ -120,23 +120,23 @@ class AssignmentsTable extends Component {
           </tbody>
         </Table>
 
-        <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="large">
+        <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="xl">
           {this.state.dialogAssignment && (
             <CommentThreadContainer
               threadId={this.state.dialogAssignment.id}
               title={
-                <React.Fragment>
+                <>
                   <FormattedMessage id="app.assignments.discussionModalTitle" defaultMessage="Public Discussion" />:{' '}
                   <LocalizedExerciseName
                     entity={{ name: '??', localizedTexts: this.state.dialogAssignment.localizedTexts }}
                   />
-                </React.Fragment>
+                </>
               }
               inModal
             />
           )}
         </Modal>
-      </React.Fragment>
+      </>
     );
   }
 }

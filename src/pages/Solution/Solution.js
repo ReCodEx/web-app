@@ -12,7 +12,7 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -122,16 +122,16 @@ class Solution extends Component {
                 (assignment.permissionHints && assignment.permissionHints.resubmitSubmissions)) && (
                 <p>
                   {solution.permissionHints && solution.permissionHints.setFlag && (
-                    <React.Fragment>
+                    <>
                       <AcceptSolutionContainer id={solution.id} locale={locale} />
                       <ReviewSolutionContainer id={solution.id} locale={locale} />
-                    </React.Fragment>
+                    </>
                   )}
 
                   {assignment.permissionHints &&
                   assignment.permissionHints.resubmitSubmissions &&
                   assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) ? (
-                    <React.Fragment>
+                    <>
                       <ResubmitSolutionContainer
                         id={solution.id}
                         assignmentId={assignment.id}
@@ -157,7 +157,7 @@ class Solution extends Component {
                           locale={locale}
                         />
                       )}
-                    </React.Fragment>
+                    </>
                   ) : (
                     <span>
                       <WarningIcon largeGapLeft gapRight className="text-warning" />

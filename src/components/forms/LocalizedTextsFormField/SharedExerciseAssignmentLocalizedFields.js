@@ -15,7 +15,7 @@ const isURL = url => {
 };
 
 const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) => (
-  <React.Fragment>
+  <>
     <Field
       name={`${prefix}.text`}
       component={MarkdownTextAreaField}
@@ -41,7 +41,7 @@ const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) => (
       }
       validate={isURL}
     />
-  </React.Fragment>
+  </>
 );
 
 SharedExerciseAssignmentLocalizedFields.propTypes = {

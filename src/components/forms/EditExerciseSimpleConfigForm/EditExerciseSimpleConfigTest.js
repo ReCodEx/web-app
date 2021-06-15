@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon from '../../icons';
 import Confirm from '../../forms/Confirm';
 import { ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments';

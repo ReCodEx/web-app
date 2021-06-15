@@ -4,10 +4,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Col, Row, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
-import { LinkContainer } from 'react-router-bootstrap';
 
 import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments';
 import { canSubmit } from '../../redux/modules/canSubmit';
@@ -143,18 +143,18 @@ class Assignment extends Component {
                 )}
                 {(isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)) && ( // includes superadmin
                   <p>
-                    <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                    <Link to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                       <Button variant="warning">
                         <EditIcon gapRight />
                         <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                       </Button>
-                    </LinkContainer>
-                    <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                    </Link>
+                    <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
                       <Button variant="primary">
                         <ResultsIcon gapRight />
                         <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
                       </Button>
-                    </LinkContainer>
+                    </Link>
                   </p>
                 )}
               </Col>

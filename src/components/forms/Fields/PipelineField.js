@@ -2,22 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { FormGroup, FormControl, FormLabel, HelpBlock } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 
 import PipelineVisualEditor from '../../Pipelines/PipelineVisualEditor';
 
 const PipelineField = ({ input, meta: { touched, error }, label, ...props }) => (
-  <FormGroup controlId={input.name} validationState={error ? (touched ? 'error' : 'warning') : undefined}>
-    <FormLabel>{label}</FormLabel>
+  <FormGroup controlId={input.name}>
+    <FormLabel className={error ? 'text-danger' : undefined}>{label}</FormLabel>
     <div className="hidden">
-      <FormControl {...input} {...props} as="textarea" rows={8} style={{ fontFamily: 'mono' }} />
+      <FormControl
+        {...input}
+        {...props}
+        isInvalid={Boolean(error)}
+        as="textarea"
+        rows={8}
+        style={{ fontFamily: 'mono' }}
+      />
     </div>
     <PipelineVisualEditor source={input.value} onChange={input.onChange} />{' '}
     {error && (
-      <HelpBlock>
+      <Form.Text className="text-danger">
         {' '}
         {touched ? error : <FormattedMessage defaultMessage="This field is required." id="app.field.isRequired" />}{' '}
-      </HelpBlock>
+      </Form.Text>
     )}
   </FormGroup>
 );

@@ -31,7 +31,7 @@ class TreeViewInnerNode extends Component {
     const { loading, children, ...props } = this.props;
 
     return (
-      <ul className="nav nav-stacked">
+      <ul className="nav flex-column">
         <TreeViewLeaf
           {...props}
           loading={loading}

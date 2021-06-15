@@ -10,7 +10,7 @@ import Page from '../../components/layout/Page';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 
 import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -102,9 +102,9 @@ class ReferenceSolution extends Component {
         {referenceSolution => (
           <ResourceRenderer resource={exercise}>
             {exercise => (
-              <React.Fragment>
+              <>
                 {hasPermissions(referenceSolution, 'evaluate') && (
-                  <React.Fragment>
+                  <>
                     {exercise.isBroken ? (
                       <p className="callout callout-warning">
                         <FormattedMessage
@@ -140,7 +140,7 @@ class ReferenceSolution extends Component {
                         )}
                       </p>
                     )}
-                  </React.Fragment>
+                  </>
                 )}
 
                 <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
@@ -158,7 +158,7 @@ class ReferenceSolution extends Component {
                     />
                   )}
                 </FetchManyResourceRenderer>
-              </React.Fragment>
+              </>
             )}
           </ResourceRenderer>
         )}

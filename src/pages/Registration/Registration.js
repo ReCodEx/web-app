@@ -12,7 +12,7 @@ import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import InsetPanel from '../../components/widgets/InsetPanel';
 import { MailIcon, LinkIcon, SignInIcon } from '../../components/icons';
 
@@ -169,7 +169,7 @@ export default withLinks(
       loadAsync: () => Promise.all([dispatch(fetchInstances())]),
       createAccount: ({ firstName, lastName, email, password, passwordConfirm, instanceId }) =>
         dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId)),
-      createExternalAccount: (authType = 'default') => ({ instanceId, serviceId, ...credentials }) =>
+      createExternalAccount: (authType = 'secondary') => ({ instanceId, serviceId, ...credentials }) =>
         dispatch(createExternalAccount(instanceId, serviceId, credentials, authType)),
       triggerAsyncValidation: () => dispatch(startAsyncValidation('registration')),
       reset: () => {

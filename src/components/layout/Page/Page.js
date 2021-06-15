@@ -28,7 +28,7 @@ const Page = ({
     </span>
   ),
   failedDescription = (
-    <React.Fragment>
+    <>
       <p>
         <FormattedMessage
           id="app.page.failedDescription.explain"
@@ -41,7 +41,7 @@ const Page = ({
           defaultMessage="We are sorry for the inconvenience, please try again later. If the problem prevails, verify that the requested resource still exists."
         />
       </p>
-    </React.Fragment>
+    </>
   ),
   children,
   ...props

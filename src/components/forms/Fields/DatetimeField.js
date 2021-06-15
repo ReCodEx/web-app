@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
-import { FormGroup, FormLabel, HelpBlock } from 'react-bootstrap';
+import { Form, FormGroup, FormLabel } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import withLinks from '../../../helpers/withLinks';
@@ -41,23 +41,29 @@ class DatetimeField extends Component {
     const { lang } = this.context;
 
     return (
-      <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
-        {Boolean(label) && <FormLabel>{label}</FormLabel>}
+      <FormGroup controlId={input.name}>
+        {Boolean(label) && (
+          <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
+        )}
         <Datetime
           {...input}
           {...props}
           locale={lang}
           timeFormat={onlyDate ? false : 'H:mm'}
           onFocus={() => this.onFocus()}
-          inputProps={{ disabled }}
-          bsClass={classnames({
-            'form-control': true,
-            [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-            [styles.active]: active,
-          })}
+          inputProps={{
+            disabled,
+            className: classnames({
+              'form-control': true,
+              [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+              [styles.active]: active,
+              'border-danger': error,
+              'border-warning': !error && warning,
+            }),
+          }}
         />
-        {error && <HelpBlock>{error}</HelpBlock>}
-        {!error && warning && <HelpBlock>{warning}</HelpBlock>}
+        {error && <Form.Text className="text-danger">{error}</Form.Text>}
+        {!error && warning && <Form.Text className="text-warning">{warning}</Form.Text>}
       </FormGroup>
     );
   }

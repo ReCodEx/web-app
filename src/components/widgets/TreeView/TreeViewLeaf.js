@@ -81,7 +81,7 @@ const TreeViewLeaf = ({
         <Icon icon="eye" className="text-muted" gapLeft />
       </OverlayTrigger>
     )}
-    <span className="pull-right">{actions}</span>
+    <span className="float-right">{actions}</span>
   </li>
 );
 

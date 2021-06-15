@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { FormGroup, FormControl, FormLabel, HelpBlock, Badge } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, FormLabel, Badge } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { isArrayType } from '../../../helpers/boxes';
@@ -19,8 +19,8 @@ const PortField = ({
   ignoreDirty = false,
   ...props
 }) => (
-  <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
-    <FormLabel>
+  <FormGroup controlId={input.name}>
+    <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>
       {label}{' '}
       <Badge style={{ fontFamily: 'monospace' }} variant={getLabelStyle(portType)}>
         {portType}
@@ -30,14 +30,17 @@ const PortField = ({
       {...input}
       {...props}
       type="text"
-      bsPrefix={classnames({
+      isInvalid={Boolean(error)}
+      className={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
         [styles.active]: active,
+        'border-danger': error,
+        'border-warning': !error && warning,
       })}
     />
-    {error && <HelpBlock> {error} </HelpBlock>}
-    {!error && warning && <HelpBlock> {warning} </HelpBlock>}
+    {error && <Form.Text className="text-danger"> {error} </Form.Text>}
+    {!error && warning && <Form.Text className="text-warning"> {warning} </Form.Text>}
   </FormGroup>
 );
 

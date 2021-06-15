@@ -1,24 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import { Dropdown } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
+import { knownLocalesNames } from '../../../helpers/localizedData';
 
-const HeaderLanguageSwitching = ({ lang, setLang, active = false }) => (
-  <li
-    className={classnames({ 'nav-item': true, active })}
-    onClick={ev => {
-      setLang(lang);
-      ev.preventDefault();
-    }}>
-    <a href="#" className="nav-link">
-      {lang}
-    </a>
-  </li>
+const HeaderLanguageSwitching = ({ currentLang, availableLangs, setLang }) => (
+  <Dropdown as="li" alignRight className="nav-item">
+    <Dropdown.Toggle as="a" id="dropdown-header-lang-switch" bsPrefix="nav-link">
+      {currentLang}&nbsp;
+    </Dropdown.Toggle>
+    <Dropdown.Menu rootCloseEvent="mousedown">
+      <Dropdown.Header>
+        <FormattedMessage id="app.header.languageSwitching.translationTitle" defaultMessage="Translation" />
+      </Dropdown.Header>
+      <Dropdown.Divider />
+      {availableLangs.map(lang => (
+        <Dropdown.Item
+          key={lang}
+          active={currentLang === lang}
+          onClick={ev => {
+            setLang(lang);
+            ev.preventDefault();
+          }}>
+          {knownLocalesNames[lang] || lang}
+        </Dropdown.Item>
+      ))}
+    </Dropdown.Menu>
+  </Dropdown>
 );
 
 HeaderLanguageSwitching.propTypes = {
+  currentLang: PropTypes.string.isRequired,
   setLang: PropTypes.func.isRequired,
-  lang: PropTypes.string.isRequired,
-  active: PropTypes.bool,
+  availableLangs: PropTypes.array,
 };
 
 export default HeaderLanguageSwitching;

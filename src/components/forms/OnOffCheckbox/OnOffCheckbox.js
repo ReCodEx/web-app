@@ -11,7 +11,6 @@ import './OnOffCheckbox.css'; // eslint-disable-line import/no-deprecated
 
 const OnOffCheckbox = ({ children, name, className, disabled, checked, ...props }) => (
   <FormLabel
-    htmlFor={name}
     className={classnames({
       [className]: className && className.length > 0,
       [styles.labelDisabled]: disabled,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { LoadingIcon, LockIcon, UnlockIcon } from '../../icons';
 import Confirm from '../../forms/Confirm';
 

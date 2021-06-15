@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 import Confirm from '../../forms/Confirm';
 import { isReady, isLoading, isDeleting, isDeleted } from '../../../redux/helpers/resourceManager';

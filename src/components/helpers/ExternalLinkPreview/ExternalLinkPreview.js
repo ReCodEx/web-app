@@ -118,7 +118,7 @@ class ExternalLinkPreview extends Component {
     return url !== null ? (
       <div>
         {text && (
-          <OnOffCheckbox checked={isMarkdown} onChange={this.toggleIsMarkdown} className="pull-right">
+          <OnOffCheckbox checked={isMarkdown} onChange={this.toggleIsMarkdown} className="float-right">
             <FormattedMessage id="app.externalLinkPreview.showAsMarkdown" defaultMessage="Show as markdown" />
           </OnOffCheckbox>
         )}

@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { Container, Row, Col, ButtonGroup } from 'react-bootstrap';
+import { Container, Row, Col, Pagination } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { SortedIcon, LoadingIcon } from '../../components/icons';
 import PaginationButtons from '../../components/widgets/PaginationButtons';
-import Button from '../../components/widgets/FlatButton';
 import {
   getPaginationOffset,
   getPaginationLimit,
@@ -129,13 +128,12 @@ class PaginationContainer extends Component {
       setPage,
     } = this.props;
     return (
-      <Button
+      <Pagination.Item
         key={amount}
         active={limit === amount}
-        variant={limit === amount ? 'primary' : 'default'}
         onClick={() => setPage(locale, Math.floor(offset / amount) * amount, amount)}>
         {amount}
-      </Button>
+      </Pagination.Item>
     );
   };
 
@@ -256,18 +254,18 @@ class PaginationContainer extends Component {
                 <Row>
                   <Col md={3}>
                     {this.showLimitsButtons() && (
-                      <ButtonGroup size="small">
+                      <Pagination size="small">
                         {limits
                           .map((l, idx) =>
                             idx < 1 || totalCount > limits[idx - 1] || l === limit ? this.createLimitButton(l) : null
                           )
                           .filter(identity)}
-                      </ButtonGroup>
+                      </Pagination>
                     )}
                   </Col>
                   {totalCount > limit && (
                     <Col md={9}>
-                      <div className="text-right">
+                      <div className="float-right">
                         <PaginationButtons
                           prev
                           next

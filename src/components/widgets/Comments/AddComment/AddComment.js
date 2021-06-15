@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedHTMLMessage, injectIntl, intlShape, defineMessages } from 'react-intl';
-import { Form, FormGroup, FormControl, InputGroup, HelpBlock } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
 
-import Button from '../../FlatButton';
+import Button from '../../TheButton';
 import Icon from '../../../icons';
 import { safeGet } from '../../../../helpers/common';
 
@@ -68,7 +68,6 @@ class AddComment extends Component {
     const { text, isPrivate } = this.state;
     const {
       addComment,
-      refresh,
       intl: { formatMessage },
     } = this.props;
 
@@ -86,6 +85,7 @@ class AddComment extends Component {
               placeholder={formatMessage(messages.placeholder)}
               value={text}
             />
+
             <InputGroup.Append>
               <Button
                 type="submit"
@@ -94,18 +94,18 @@ class AddComment extends Component {
                 onClick={this.addComment}>
                 <FormattedMessage id="app.comments.addComment" defaultMessage="Send" />
               </Button>
-              <Button variant="outline-secondary" onClick={refresh}>
-                <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
-              </Button>
             </InputGroup.Append>
           </InputGroup>
-          <HelpBlock>
-            <Button onClick={this.togglePrivate} size="xs" disabled={!addComment} className="halfem-margin-right">
-              {isPrivate ? (
-                <Icon icon="lock" className="text-success" />
-              ) : (
-                <Icon icon="unlock-alt" className="text-warning" />
-              )}
+
+          <Form.Text>
+            <Button
+              onClick={this.togglePrivate}
+              size="xs"
+              variant={isPrivate ? 'outline-success' : 'outline-warning'}
+              disabled={!addComment}
+              noShadow
+              className="mr-2">
+              {isPrivate ? <Icon icon="lock" /> : <Icon icon="unlock-alt" />}
             </Button>
             {isPrivate && (
               <FormattedHTMLMessage
@@ -119,7 +119,7 @@ class AddComment extends Component {
                 defaultMessage="<strong>Everyone on this page will see this comment.</strong>"
               />
             )}
-          </HelpBlock>
+          </Form.Text>
         </FormGroup>
       </Form>
     );
@@ -128,7 +128,6 @@ class AddComment extends Component {
 
 AddComment.propTypes = {
   addComment: PropTypes.func,
-  refresh: PropTypes.func,
   intl: intlShape.isRequired,
 };
 

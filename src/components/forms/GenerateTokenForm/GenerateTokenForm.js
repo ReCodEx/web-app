@@ -6,7 +6,7 @@ import { Alert, OverlayTrigger, Tooltip, Container, Row, Col } from 'react-boots
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import FormBox from '../../widgets/FormBox';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField } from '../Fields';

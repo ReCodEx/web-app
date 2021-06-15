@@ -5,7 +5,7 @@ import { FormControl, Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SendIcon } from '../../icons';
 import { AstNode, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
@@ -54,7 +54,7 @@ class EditTestNodeForm extends Component {
     const selected = this.state.selected || (node && String(node.test));
 
     return (
-      <React.Fragment>
+      <>
         <InsetPanel>
           <FormattedMessage
             id="app.scoreConfigExpression.editTestDialog.description"
@@ -65,7 +65,7 @@ class EditTestNodeForm extends Component {
         {tests.length > 10 ? (
           <FormControl
             as="select"
-            bsPrefix={classnames({
+            className={classnames({
               'form-control': true,
               [formStyles.dirty]: this.dirty(),
               'full-width': true,
@@ -114,7 +114,7 @@ class EditTestNodeForm extends Component {
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -49,16 +49,18 @@ const pipelineParameterMapping = parameter => {
 
 const ParametersList = ({ parameters }) => (
   <Table>
-    {Object.keys(parameters).map(parameterName => (
-      <tr key={parameterName}>
-        <td className="shrink-col">
-          <i>{pipelineParameterMapping(parameterName)}</i>:
-        </td>
-        <td className="em-padding-left">
-          <code>{String(parameters[parameterName])}</code>
-        </td>
-      </tr>
-    ))}
+    <tbody>
+      {Object.keys(parameters).map(parameterName => (
+        <tr key={parameterName}>
+          <td className="shrink-col">
+            <i>{pipelineParameterMapping(parameterName)}</i>:
+          </td>
+          <td className="em-padding-left">
+            <code>{String(parameters[parameterName])}</code>
+          </td>
+        </tr>
+      ))}
+    </tbody>
   </Table>
 );
 

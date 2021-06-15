@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Tabs, Tab } from 'react-bootstrap';
+import { Card, Tab, Nav } from 'react-bootstrap';
 
 import ExternalLinkPreview from '../ExternalLinkPreview';
 import Icon from '../../icons';
@@ -24,55 +24,76 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
   return (
     <UrlContext.Consumer>
       {({ lang = 'en' }) => (
-        <Tabs
+        <Tab.Container
           defaultActiveKey={
             localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0 ? lang : localeTabs[0].locale
           }
-          className="nav-tabs-custom"
           id="localized-texts">
-          {localeTabs.map(({ locale, text, link = '', studentHint = null }, i) => (
-            <Tab key={i} eventKey={locale} title={locale}>
-              {link && link !== '' && (
-                <div>
-                  <InsetPanel>
-                    <h4>
-                      <FormattedMessage
-                        id="app.localizedTexts.externalLink"
-                        defaultMessage="The description is located beyond the realms of ReCodEx"
-                      />
-                    </h4>
-                    <Icon icon="link" gapRight />
-                    <a href={link} target="_blank" rel="noopener noreferrer">
-                      {link}
-                    </a>
-                  </InsetPanel>
-                  <ExternalLinkPreview url={link} />
-                </div>
-              )}
+          <Card>
+            <Card.Header>
+              <Nav
+                variant="tabs"
+                defaultActiveKey={
+                  localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0
+                    ? lang
+                    : localeTabs[0].locale
+                }
+                className="nav-tabs-custom"
+                id="localized-texts">
+                {localeTabs.map(({ locale }) => (
+                  <Nav.Item key={locale}>
+                    <Nav.Link eventKey={locale}>{locale}</Nav.Link>
+                  </Nav.Item>
+                ))}
+              </Nav>
+            </Card.Header>
+            <Tab.Content>
+              {localeTabs.map(({ locale, text, link = '', studentHint = null }) => (
+                <Tab.Pane key={locale} eventKey={locale}>
+                  <Card.Body>
+                    {link && link !== '' && (
+                      <div>
+                        <InsetPanel>
+                          <h4>
+                            <FormattedMessage
+                              id="app.localizedTexts.externalLink"
+                              defaultMessage="The description is located beyond the realms of ReCodEx"
+                            />
+                          </h4>
+                          <Icon icon="link" gapRight />
+                          <a href={link} target="_blank" rel="noopener noreferrer">
+                            {link}
+                          </a>
+                        </InsetPanel>
+                        <ExternalLinkPreview url={link} />
+                      </div>
+                    )}
 
-              {text.trim() !== '' && <Markdown source={text} />}
+                    {text.trim() !== '' && <Markdown source={text} />}
 
-              {!text.trim() && !link && (
-                <div className="callout callout-warning em-margin">
-                  <FormattedMessage
-                    id="app.localizedTexts.noText"
-                    defaultMessage="There is no text nor link for given localization. The exercise is not fully specified yet."
-                  />
-                </div>
-              )}
+                    {!text.trim() && !link && (
+                      <div className="callout callout-warning em-margin">
+                        <FormattedMessage
+                          id="app.localizedTexts.noText"
+                          defaultMessage="There is no text nor link for given localization. The exercise is not fully specified yet."
+                        />
+                      </div>
+                    )}
+                  </Card.Body>
 
-              {studentHint && studentHint !== '' && (
-                <div>
-                  <hr />
-                  <h4>
-                    <FormattedMessage id="app.localizedTexts.studentHintHeading" defaultMessage="Hint" />
-                  </h4>
-                  <Markdown source={studentHint} />
-                </div>
-              )}
-            </Tab>
-          ))}
-        </Tabs>
+                  {studentHint && studentHint !== '' && (
+                    <Card.Footer>
+                      <h4>
+                        <FormattedMessage id="app.localizedTexts.studentHintHeading" defaultMessage="Hint" />
+                      </h4>
+                      <Markdown source={studentHint} />
+                    </Card.Footer>
+                  )}
+                </Tab.Pane>
+              ))}
+            </Tab.Content>
+          </Card>
+        </Tab.Container>
       )}
     </UrlContext.Consumer>
   );

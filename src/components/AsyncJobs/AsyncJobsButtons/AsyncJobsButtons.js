@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { ButtonGroup } from 'react-bootstrap';
 
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { LoadingIcon, RefreshIcon, WarningIcon } from '../../icons';
 
 const AsyncJobsButtons = ({ refresh, pingAction, pingStatus = null }) => {

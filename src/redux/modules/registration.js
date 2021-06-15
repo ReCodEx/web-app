@@ -37,7 +37,7 @@ export const createAccount = (
     meta: { instanceId, createdBySuperadmin },
   });
 
-export const createExternalAccount = (instanceId, serviceId, credentials, authType = 'default') =>
+export const createExternalAccount = (instanceId, serviceId, credentials, authType = 'secondary') =>
   createApiAction({
     type: actionTypes.CREATE_ACCOUNT,
     method: 'POST',

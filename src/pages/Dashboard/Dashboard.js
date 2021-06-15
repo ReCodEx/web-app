@@ -4,9 +4,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import { Link } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -201,13 +200,13 @@ class Dashboard extends Component {
                                       isOpen
                                       footer={
                                         <p className="text-center">
-                                          <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
+                                          <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                             <Button size="sm">
                                               <GroupIcon gapRight />
                                               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                             </Button>
-                                          </LinkContainer>
-                                          <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                          </Link>
+                                          <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                             <Button size="sm">
                                               <AssignmentsIcon gapRight />
                                               <FormattedMessage
@@ -215,7 +214,7 @@ class Dashboard extends Component {
                                                 defaultMessage="Assignments"
                                               />
                                             </Button>
-                                          </LinkContainer>
+                                          </Link>
                                         </p>
                                       }
                                       unlimitedHeight>
@@ -264,13 +263,13 @@ class Dashboard extends Component {
                                       isOpen
                                       footer={
                                         <p className="text-center">
-                                          <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
+                                          <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                             <Button size="sm">
                                               <InfoIcon gapRight />
                                               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                             </Button>
-                                          </LinkContainer>
-                                          <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                          </Link>
+                                          <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                             <Button size="sm">
                                               <GroupIcon gapRight />
                                               <FormattedMessage
@@ -278,7 +277,7 @@ class Dashboard extends Component {
                                                 defaultMessage="Assignments"
                                               />
                                             </Button>
-                                          </LinkContainer>
+                                          </Link>
                                         </p>
                                       }>
                                       <StudentsListContainer groupId={group.id} />

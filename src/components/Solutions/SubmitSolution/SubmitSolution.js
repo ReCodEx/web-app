@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape, defineMessages, FormattedHTMLMessage } from 'react-intl';
-import { Modal, FormGroup, FormLabel, FormControl, HelpBlock, Row, Col } from 'react-bootstrap';
+import { Modal, Form, FormGroup, FormLabel, FormControl, Row, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Confirm from '../../forms/Confirm';
@@ -126,8 +126,7 @@ class SubmitSolution extends Component {
       <Button
         type="submit"
         disabled={!canSubmit || !limitsOK}
-        variant={hasFailed ? 'danger' : canSubmit ? 'success' : 'default'}
-        className="btn-flat"
+        variant={hasFailed ? 'danger' : canSubmit ? 'success' : 'secondary'}
         {...btnProps}>
         {hasFailed ? <WarningIcon gapRight /> : <SendIcon gapRight />}
         {formatMessage(commonMessages.submitButton)}
@@ -187,7 +186,7 @@ class SubmitSolution extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose} size="large">
+      <Modal show={isOpen} backdrop="static" onHide={onClose} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>{formatMessage(messages.title)}</Modal.Title>
         </Modal.Header>
@@ -233,7 +232,7 @@ class SubmitSolution extends Component {
                 ) : !presubmitEnvironments ? (
                   <p className="text-left callout callout-info">{formatMessage(commonMessages.uploadFilesFirst)}</p>
                 ) : presubmitEnvironments.length > 0 ? (
-                  <React.Fragment>
+                  <>
                     <FormControl
                       onChange={e => changeRuntimeEnvironment(e.target.value)}
                       as="select"
@@ -253,7 +252,7 @@ class SubmitSolution extends Component {
                         />
                       </p>
                     )}
-                  </React.Fragment>
+                  </>
                 ) : (
                   <p className="text-left callout callout-danger">{formatMessage(commonMessages.noEnvironments)}</p>
                 )}
@@ -323,7 +322,7 @@ class SubmitSolution extends Component {
           </div>
 
           <InsetPanel className="em-margin-top">
-            <HelpBlock className="text-left">{formatMessage(commonMessages.instructions)}</HelpBlock>
+            <Form.Text className="text-left">{formatMessage(commonMessages.instructions)}</Form.Text>
           </InsetPanel>
         </Modal.Footer>
       </Modal>

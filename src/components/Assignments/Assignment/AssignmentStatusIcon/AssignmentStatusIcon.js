@@ -20,7 +20,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
           accepted={accepted}
           icon={<Icon icon={isBestSolution ? 'thumbs-up' : ['far', 'thumbs-up']} className="text-green" />}
           message={
-            <React.Fragment>
+            <>
               <FormattedMessage
                 id="app.assignemntStatusIcon.ok"
                 defaultMessage="Assignment is successfully completed."
@@ -31,7 +31,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
                   defaultMessage="This is the best solution of the author submitted so far."
                 />
               )}
-            </React.Fragment>
+            </>
           }
         />
       );
@@ -57,7 +57,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
           accepted={accepted}
           icon={<Icon icon={isBestSolution ? 'thumbs-down' : ['far', 'thumbs-down']} className="text-red" />}
           message={
-            <React.Fragment>
+            <>
               <FormattedMessage
                 id="app.assignemntStatusIcon.failed"
                 defaultMessage="No correct solution was submitted yet."
@@ -68,7 +68,7 @@ const AssignmentStatusIcon = ({ id, status, accepted = false, isBestSolution = f
                   defaultMessage="This is the best solution of the author submitted so far."
                 />
               )}
-            </React.Fragment>
+            </>
           }
         />
       );

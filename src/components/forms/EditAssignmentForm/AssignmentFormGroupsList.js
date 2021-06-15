@@ -5,11 +5,11 @@ import { Field } from 'redux-form';
 
 import { CheckboxField } from '../Fields';
 import Icon from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 
 const AssignmentFormGroupsList = ({ groups, groupsAccessor, isOpen, toggleOpenState, intl: { locale } }) => (
-  <React.Fragment>
+  <>
     {groups.map((group, i) => (
       <Field
         key={group.id}
@@ -38,7 +38,7 @@ const AssignmentFormGroupsList = ({ groups, groupsAccessor, isOpen, toggleOpenSt
       )}
     </div>
     <hr />
-  </React.Fragment>
+  </>
 );
 
 AssignmentFormGroupsList.propTypes = {

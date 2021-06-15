@@ -8,7 +8,7 @@ import { defaultMemoize } from 'reselect';
 import EditEnvironmentList from './EditEnvironmentList';
 import SubmitButton from '../SubmitButton';
 import Box from '../../widgets/Box';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { RefreshIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
@@ -85,7 +85,7 @@ class EditEnvironmentSimpleForm extends Component {
           ) : null
         }>
         {!readOnly && (this.state.expanded || selectedEnvs.length === 0) ? (
-          <React.Fragment>
+          <>
             {environmentsHelpUrl && (
               <InsetPanel size="sm">
                 <div className="small text-muted">
@@ -144,9 +144,9 @@ class EditEnvironmentSimpleForm extends Component {
                 }}
               />
             </div>
-          </React.Fragment>
+          </>
         ) : (
-          <React.Fragment>
+          <>
             <Table responsive hover>
               <tbody>
                 {selectedEnvs.map(env => (
@@ -173,7 +173,7 @@ class EditEnvironmentSimpleForm extends Component {
                 ...
               </div>
             )}
-          </React.Fragment>
+          </>
         )}
       </Box>
     );

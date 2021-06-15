@@ -65,7 +65,7 @@ class Exercises extends Component {
             iconName: 'puzzle-piece',
           },
         ]}>
-        <React.Fragment>
+        <>
           <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
             <ExercisesListContainer id="exercises-all" showGroups />
           </Box>
@@ -79,7 +79,7 @@ class Exercises extends Component {
               />
             )}
           </ResourceRenderer>
-        </React.Fragment>
+        </>
       </PageContent>
     );
   }

@@ -9,7 +9,7 @@ import FormBox from '../../widgets/FormBox';
 import { EmailField, PasswordField } from '../Fields';
 
 import { Alert } from 'react-bootstrap';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded, error }) => (
   <FormBox

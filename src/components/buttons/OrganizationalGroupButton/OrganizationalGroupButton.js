@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { GroupIcon, LoadingIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const OrganizationalGroupButton = ({ organizational, pending, disabled = false, setOrganizational }) => (
   <Button
-    variant={disabled ? 'default' : 'info'}
+    variant={disabled ? 'secondary' : 'info'}
     onClick={setOrganizational(!organizational)}
     disabled={pending || disabled}>
     {pending ? <LoadingIcon gapRight /> : <GroupIcon organizational={!organizational} gapRight />}

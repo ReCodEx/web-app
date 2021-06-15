@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { SendIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
 import Confirm from '../Confirm';
 

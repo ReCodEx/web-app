@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const StandaloneRadioInput = ({ name, value, checked, disabled, readOnly, onChange }) => {
   return (
     <div className="radio-container">
-      <label>
+      <label className="form-check-label">
         <input
           type="radio"
           name={name}

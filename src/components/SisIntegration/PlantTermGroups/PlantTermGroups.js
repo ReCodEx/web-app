@@ -10,7 +10,7 @@ import LocalizedTextsFormField from '../../forms/LocalizedTextsFormField';
 import { TextField, SimpleCheckboxField } from '../../forms/Fields';
 import SubmitButton from '../../forms/SubmitButton';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { CloseIcon } from '../../icons';
 import { getLocalizedName, validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 import { arrayToObject } from '../../../helpers/common';
@@ -87,7 +87,7 @@ const PlantTermGroups = ({
   const existingSemestralGroups = getExistingSemestralGroups(groups, rootGroups, externalId);
 
   return (
-    <Modal show={isOpen} backdrop="static" onHide={onClose} size="large">
+    <Modal show={isOpen} backdrop="static" onHide={onClose} size="xl">
       <Modal.Header closeButton>
         <Modal.Title>
           <FormattedMessage id="app.plantSisTerm.title" defaultMessage="Plant Groups for SIS Term" />

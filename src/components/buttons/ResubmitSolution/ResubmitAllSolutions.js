@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Icon, { AbortIcon, LoadingIcon, WarningIcon, WorkingIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import OptionalPopoverWrapper from '../../widgets/OptionalPopoverWrapper';
 import Confirm from '../../forms/Confirm';
 import ResourceRenderer from '../../helpers/ResourceRenderer';

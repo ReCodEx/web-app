@@ -8,7 +8,7 @@ import { SimpleCheckboxField } from '../../forms/Fields';
 import SubmitButton from '../../forms/SubmitButton';
 import InsetPanel from '../../widgets/InsetPanel';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { CloseIcon } from '../../icons';
 
 class ArchiveTermGroups extends Component {
@@ -37,7 +37,7 @@ class ArchiveTermGroups extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose} size="large">
+      <Modal show={isOpen} backdrop="static" onHide={onClose} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage id="app.archiveSisTerm.title" defaultMessage="Archive Groups of SIS Term" /> {externalId}
@@ -80,7 +80,7 @@ class ArchiveTermGroups extends Component {
         <Modal.Footer>
           <div className="text-center">
             {groups.length > 0 && (
-              <React.Fragment>
+              <>
                 <Button variant="primary" onClick={this.checkAllGroups}>
                   <Icon icon={['far', 'check-square']} gapRight />
                   <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
@@ -100,7 +100,7 @@ class ArchiveTermGroups extends Component {
                     success: <FormattedMessage id="app.archiveSisTerm.archived" defaultMessage="Archived" />,
                   }}
                 />
-              </React.Fragment>
+              </>
             )}
 
             <Button variant="outline-secondary" onClick={onClose}>

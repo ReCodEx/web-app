@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
 import GroupTree from '../../components/Groups/GroupTree';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
@@ -86,12 +86,12 @@ class Instance extends Component {
               <Row>
                 <Col sm={12} md={6}>
                   <p>
-                    <LinkContainer to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
+                    <Link to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
                       <Button variant="warning">
                         <EditIcon gapRight />
                         <FormattedMessage id="app.instance.edit" defaultMessage="Edit instance" />
                       </Button>
-                    </LinkContainer>
+                    </Link>
                   </p>
                 </Col>
               </Row>
@@ -102,10 +102,10 @@ class Instance extends Component {
                 <InstanceInfoTable instance={data} locale={locale} />
 
                 {(isSuperAdmin || isAdmin) && (
-                  <React.Fragment>
+                  <>
                     <LicencesTableContainer instance={data} />
                     <AddLicenceFormContainer instanceId={data.id} />
-                  </React.Fragment>
+                  </>
                 )}
               </Col>
               <Col sm={12} md={6}>

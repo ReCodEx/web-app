@@ -132,7 +132,7 @@ const EditUserSettingsForm = ({
     </h4>
 
     {isStudentRole(user.privateData.role) && (
-      <React.Fragment>
+      <>
         <Field
           name="newAssignmentEmails"
           component={CheckboxField}
@@ -177,7 +177,7 @@ const EditUserSettingsForm = ({
             />
           }
         />
-      </React.Fragment>
+      </>
     )}
 
     <Field

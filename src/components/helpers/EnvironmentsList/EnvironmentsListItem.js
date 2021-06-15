@@ -4,7 +4,9 @@ import { OverlayTrigger, Tooltip, Badge } from 'react-bootstrap';
 
 const EnvironmentsListItem = ({ runtimeEnvironment, longNames = false }) => (
   <OverlayTrigger placement="bottom" overlay={<Tooltip id={Date.now()}>{runtimeEnvironment.description}</Tooltip>}>
-    <Badge className="tag-margin">{longNames ? runtimeEnvironment.longName : runtimeEnvironment.name}</Badge>
+    <Badge className="tag-margin" variant="secondary">
+      {longNames ? runtimeEnvironment.longName : runtimeEnvironment.name}
+    </Badge>
   </OverlayTrigger>
 );
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Confirm from '../../../components/forms/Confirm';
@@ -46,7 +46,7 @@ const SupplementaryFilesTableRow = ({
                   defaultMessage="Are you sure you want to delete the file? This cannot be undone."
                 />
               }
-              className="pull-right">
+              className="float-right">
               <Button size="xs" variant="danger">
                 <DeleteIcon gapRight />
                 <FormattedMessage id="generic.delete" defaultMessage="Delete" />

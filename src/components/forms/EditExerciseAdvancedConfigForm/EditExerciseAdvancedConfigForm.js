@@ -7,7 +7,7 @@ import { Alert, Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import FormBox from '../../widgets/FormBox';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 

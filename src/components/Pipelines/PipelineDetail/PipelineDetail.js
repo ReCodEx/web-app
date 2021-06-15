@@ -25,7 +25,7 @@ const PipelineDetail = ({
   parameters,
 }) => (
   <Box title={name} noPadding unlimitedHeight>
-    <Table responsive condensed>
+    <Table responsive size="sm">
       <tbody>
         {Boolean(author) && (
           <tr>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import { Tabs, Tab } from 'react-bootstrap';
+import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { Card, Tab, Nav } from 'react-bootstrap';
 
 import Confirm from '../Confirm';
 import { CloseIcon } from '../../icons';
@@ -9,19 +9,24 @@ import { identity } from '../../../helpers/common';
 import InsetPanel from '../../widgets/InsetPanel';
 
 class TabbedArrayField extends Component {
-  state = { activeTab: 0 };
-
-  changeTab = n => this.setState({ activeTab: n });
-
   prepareFieldsIndices = () => {
-    const { fields, tabComparator = null } = this.props;
-    if (!tabComparator) {
-      return [...Array(fields.length).keys()];
+    const {
+      fields,
+      tabComparator = null,
+      intl: { locale: currentLocale },
+    } = this.props;
+
+    const texts = [...Array(fields.length).keys()].map((_, i) => ({ field: fields.get(i), i }));
+    if (tabComparator) {
+      texts.sort(({ field: a }, { field: b }) => tabComparator(a, b));
     }
-    return fields
-      .map((unused, i) => ({ field: fields.get(i), i }))
-      .sort(({ field: a }, { field: b }) => tabComparator(a, b))
-      .map(({ i }) => i);
+
+    const defaultIndex = Math.max(
+      texts.findIndex(({ field: { locale } }) => locale === currentLocale),
+      0
+    );
+
+    return [texts.map(({ i }) => i), defaultIndex];
   };
 
   render() {
@@ -42,46 +47,58 @@ class TabbedArrayField extends Component {
       ...props
     } = this.props;
 
-    const indices = this.prepareFieldsIndices(fields);
+    const [indices, defaultIndex] = this.prepareFieldsIndices(fields);
 
     return (
       <div>
         {fields.length > 0 && (
-          <Tabs id={id} className="nav-tabs-custom" activeKey={this.state.activeTab} onSelect={this.changeTab}>
-            {indices.map((fieldIdx, tabIdx) => {
-              const prefix = `${fields.name}[${fieldIdx}]`;
-              const fieldData = fields.get(fieldIdx);
-              return (
-                <Tab
-                  key={`${id}-tab-${tabIdx}`}
-                  eventKey={tabIdx}
-                  title={
-                    <span>
-                      {renderTitle(fieldData)}
-                      {removableTabs && (
-                        <Confirm
-                          id={`${id}-remove-${fieldIdx}`}
-                          question={removeQuestion}
-                          onConfirmed={() => {
-                            fields.remove(fieldIdx);
-                            this.changeTab(Math.min(tabIdx, fields.length - 2));
-                          }}>
-                          <CloseIcon gapLeft />
-                        </Confirm>
-                      )}
-                    </span>
-                  }
-                  mountOnEnter
-                  unmountOnExit>
-                  <ContentComponent
-                    {...props}
-                    prefix={prefix}
-                    data={tabDataSelector && tabDataSelector(fields.get(fieldIdx))}
-                  />
-                </Tab>
-              );
-            })}
-          </Tabs>
+          <Tab.Container id={id} defaultActiveKey={defaultIndex}>
+            <Card>
+              <Card.Header>
+                <Nav variant="tabs" className="nav-tabs-custom" id="localized-texts">
+                  {indices.map((fieldIdx, tabIdx) => {
+                    const fieldData = fields.get(fieldIdx);
+                    return (
+                      <Nav.Item key={tabIdx}>
+                        <Nav.Link eventKey={tabIdx}>
+                          {renderTitle(fieldData)}
+                          {removableTabs && (
+                            <Confirm
+                              id={`${id}-remove-${fieldIdx}`}
+                              question={removeQuestion}
+                              onConfirmed={() => {
+                                fields.remove(fieldIdx);
+                                this.changeTab(Math.min(tabIdx, fields.length - 2));
+                              }}>
+                              <CloseIcon gapLeft />
+                            </Confirm>
+                          )}
+                        </Nav.Link>
+                      </Nav.Item>
+                    );
+                  })}
+                </Nav>
+              </Card.Header>
+
+              <Tab.Content>
+                {indices.map((fieldIdx, tabIdx) => {
+                  const prefix = `${fields.name}[${fieldIdx}]`;
+
+                  return (
+                    <Tab.Pane key={`${id}-tab-${tabIdx}`} eventKey={tabIdx} mountOnEnter unmountOnExit>
+                      <Card.Body>
+                        <ContentComponent
+                          {...props}
+                          prefix={prefix}
+                          data={tabDataSelector && tabDataSelector(fields.get(fieldIdx))}
+                        />
+                      </Card.Body>
+                    </Tab.Pane>
+                  );
+                })}
+              </Tab.Content>
+            </Card>
+          </Tab.Container>
         )}
 
         {fields.length === 0 && <InsetPanel>{emptyMessage}</InsetPanel>}
@@ -100,6 +117,7 @@ TabbedArrayField.propTypes = {
   ContentComponent: PropTypes.any,
   emptyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   removeQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  intl: intlShape.isRequired,
 };
 
-export default TabbedArrayField;
+export default injectIntl(TabbedArrayField);

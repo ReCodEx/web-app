@@ -5,7 +5,7 @@ import { Field } from 'redux-form';
 import { TextField, CheckboxField } from '../Fields';
 
 const SharedLocalizedFields = ({ prefix, enabled }) => (
-  <React.Fragment>
+  <>
     <Field
       name={`${prefix}._enabled`}
       component={CheckboxField}
@@ -29,7 +29,7 @@ const SharedLocalizedFields = ({ prefix, enabled }) => (
         </span>
       }
     />
-  </React.Fragment>
+  </>
 );
 
 SharedLocalizedFields.propTypes = {

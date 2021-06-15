@@ -7,8 +7,9 @@ const Explanation = ({ id = null, title = null, children, placement = 'right' })
   <OverlayTrigger
     placement={placement}
     overlay={
-      <Popover id={id || Date.now()} title={title}>
-        <small>{children}</small>
+      <Popover id={id || Date.now()}>
+        {title && <Popover.Title>{title}</Popover.Title>}
+        <Popover.Content className="small">{children}</Popover.Content>
       </Popover>
     }>
     <Icon icon={['far', 'question-circle']} className="text-muted small" gapLeft gapRight />

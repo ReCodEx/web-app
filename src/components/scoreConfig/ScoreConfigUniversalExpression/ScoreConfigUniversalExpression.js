@@ -13,7 +13,7 @@ import EditLiteralNodeForm from './EditLiteralNodeForm';
 import { createTestNameIndex } from '../../../helpers/exercise/testsAndScore';
 import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst';
 import { removeConstantExpressions, optimize } from '../../../helpers/exercise/scoreAstFunctions';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { CopyIcon, UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
 import { composeFunctions } from '../../../helpers/common';
 
@@ -176,7 +176,7 @@ class ScoreConfigUniversalExpression extends Component {
     const testsIndex = tests && createTestNameIndexMemoized(tests);
 
     return root ? (
-      <React.Fragment>
+      <>
         {editable && (
           <span className={style.iconBar}>
             <OverlayTrigger
@@ -320,7 +320,7 @@ class ScoreConfigUniversalExpression extends Component {
           })}
 
         {editable && (
-          <Modal show={this.state.helpDialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+          <Modal show={this.state.helpDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -393,7 +393,7 @@ class ScoreConfigUniversalExpression extends Component {
         )}
 
         {editable && (
-          <Modal show={this.state.optimizationDialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+          <Modal show={this.state.optimizationDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -477,7 +477,7 @@ class ScoreConfigUniversalExpression extends Component {
         )}
 
         {editable && (
-          <Modal show={this.state.debugDialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+          <Modal show={this.state.debugDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage id="app.scoreConfigExpression.debug.title" defaultMessage="Debug Log" />
@@ -492,7 +492,7 @@ class ScoreConfigUniversalExpression extends Component {
               </p>
               <pre className="small">
                 <CopyIcon
-                  className="pull-right"
+                  className="float-right"
                   size="2x"
                   onClick={ev => {
                     let node = ev.target;
@@ -521,7 +521,7 @@ class ScoreConfigUniversalExpression extends Component {
             </Modal.Footer>
           </Modal>
         )}
-      </React.Fragment>
+      </>
     ) : null;
   }
 }

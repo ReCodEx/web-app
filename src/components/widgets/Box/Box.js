@@ -63,8 +63,7 @@ class Box extends Component {
     return (
       <>
         <Card.Body
-          bsPrefix={classnames({
-            'card-body': true,
+          className={classnames({
             'no-padding': noPadding,
             [styles.extraPadding]: !noPadding && extraPadding,
             [styles.limited]: !unlimitedHeight,
@@ -93,8 +92,7 @@ class Box extends Component {
     return (
       <Card
         id={id}
-        bsPrefix={classnames({
-          card: true,
+        className={classnames({
           'card-outline': !solid && type && type.length > 0,
           [`card-${type}`]: type && type.length > 0,
           [className]: className.length > 0,

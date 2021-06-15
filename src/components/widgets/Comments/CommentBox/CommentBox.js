@@ -49,15 +49,15 @@ class CommentBox extends Component {
     } = this.props;
 
     return inModal ? (
-      <React.Fragment>
+      <>
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{this.renderMessages()}</Modal.Body>
         <Modal.Footer>
-          <div className="text-left">{footer}</div>
+          <div className="full-width">{footer}</div>
         </Modal.Footer>
-      </React.Fragment>
+      </>
     ) : (
       <Box title={title} noPadding={false} collapsable footer={footer} className="direct-chat">
         {this.renderMessages()}

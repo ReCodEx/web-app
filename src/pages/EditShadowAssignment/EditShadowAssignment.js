@@ -118,7 +118,7 @@ class EditShadowAssignment extends Component {
         ]}>
         {shadowAssignment =>
           shadowAssignment && (
-            <React.Fragment>
+            <>
               <Row>
                 <Col xs={12}>
                   <HierarchyLineContainer groupId={shadowAssignment.groupId} />
@@ -156,7 +156,7 @@ class EditShadowAssignment extends Component {
                   </div>
                 </Box>
               )}
-            </React.Fragment>
+            </>
           )
         }
       </Page>

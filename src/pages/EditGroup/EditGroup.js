@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { HelpBlock, Row, Col } from 'react-bootstrap';
+import { Row, Col, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -122,7 +122,7 @@ class EditGroup extends Component {
             <GroupArchivedWarning archived={group.archived} directlyArchived={group.directlyArchived} />
 
             {hasPermissions(group, 'update') && (
-              <React.Fragment>
+              <>
                 <Row>
                   <Col lg={3}>
                     <p>
@@ -157,7 +157,7 @@ class EditGroup extends Component {
                     </Col>
                   </Row>
                 )}
-              </React.Fragment>
+              </>
             )}
 
             {hasPermissions(group, 'update') && !group.archived && (
@@ -217,21 +217,21 @@ class EditGroup extends Component {
                     />
 
                     {group.parentGroupId === null && (
-                      <HelpBlock>
+                      <Form.Text>
                         <FormattedMessage
                           id="app.editGroup.cannotDeleteRootGroup"
                           defaultMessage="This is a so-called root group and it cannot be deleted."
                         />
-                      </HelpBlock>
+                      </Form.Text>
                     )}
 
                     {group.parentGroupId !== null && group.childGroups && group.childGroups.length > 0 && (
-                      <HelpBlock>
+                      <Form.Text>
                         <FormattedMessage
                           id="app.editGroup.cannotDeleteGroupWithSubgroups"
                           defaultMessage="Group with nested sub-groups cannot be deleted."
                         />
-                      </HelpBlock>
+                      </Form.Text>
                     )}
                   </p>
                 </div>

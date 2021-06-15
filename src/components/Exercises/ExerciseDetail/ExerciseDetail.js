@@ -37,7 +37,7 @@ const ExerciseDetail = ({
   links: { EXERCISE_URI_FACTORY },
 }) => (
   <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding>
-    <Table responsive condensed>
+    <Table responsive size="sm">
       <tbody>
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">

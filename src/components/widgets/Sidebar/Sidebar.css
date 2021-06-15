@@ -8,6 +8,13 @@
   vertical-align: top;
 }
 
+.sidebarEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 2.5em;
+  max-width: 100%;
+}
+
 .sidebarCursorPointer {
   cursor: pointer;
 }
@@ -24,4 +31,9 @@
 .sidebarDropdown {
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.sidebarAvatarRemoveIcon {
+  position: absolute;
+  right: 0;
 }

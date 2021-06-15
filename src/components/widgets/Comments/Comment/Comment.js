@@ -30,19 +30,19 @@ const Comment = ({
 }) => (
   <div
     className={classnames({
-      'direct-chat-success': isPrivate,
+      'direct-chat-light': isPrivate,
       'direct-chat-primary': !isPrivate,
     })}>
     <div
       className={classnames({
         'direct-chat-msg': true,
-        right: right,
+        right,
       })}>
       <div className="direct-chat-info clearfix">
         <span
           className={classnames({
             'direct-chat-name': true,
-            'pull-right': right,
+            'float-right': right,
           })}>
           <Link to={USER_URI_FACTORY(user.id)}>{user.name}</Link>
         </span>
@@ -61,7 +61,7 @@ const Comment = ({
         {isFromCurrentUser && (
           <DeleteIcon
             gapLeft
-            className={classnames({ 'pull-right': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
+            className={classnames({ 'float-right': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
             onClick={() => deleteComment(id)}
             timid
           />
@@ -87,7 +87,7 @@ const Comment = ({
             <Icon
               icon={isToggling ? 'circle-notch' : isPrivate ? 'lock' : 'unlock-alt'}
               onClick={() => togglePrivacy(id)}
-              className={classnames({ 'pull-right': true, [styles.iconButton]: true, [styles.iconButtonLock]: true })}
+              className={classnames({ 'float-right': true, [styles.iconButton]: true, [styles.iconButtonLock]: true })}
               spin={isToggling}
               timid
             />

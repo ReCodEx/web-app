@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import withLinks from '../../../helpers/withLinks';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import Confirm from '../../../components/forms/Confirm';
 import { DeleteIcon } from '../../../components/icons';
@@ -32,7 +32,7 @@ const AttachmentFilesTableRow = ({ id, name, size, uploadedAt, removeFile, links
               defaultMessage="Are you sure you want to delete the file? This cannot be undone."
             />
           }
-          className="pull-right">
+          className="float-right">
           <Button size="xs" variant="danger">
             <DeleteIcon gapRight />
             <FormattedMessage id="generic.delete" defaultMessage="Delete" />

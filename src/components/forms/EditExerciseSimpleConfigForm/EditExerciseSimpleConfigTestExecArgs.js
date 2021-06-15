@@ -7,10 +7,10 @@ import { ExpandingTextField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import Icon from '../../icons';
 import Explanation from '../../widgets/Explanation';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors, readOnly = false }) => (
-  <React.Fragment>
+  <>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.cmdlineTitle" defaultMessage="Command Line" />
     </h4>
@@ -21,7 +21,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors,
       maxLength={64}
       readOnly={readOnly}
       label={
-        <React.Fragment>
+        <>
           <FormattedMessage
             id="app.editExerciseSimpleConfigTests.executionArguments"
             defaultMessage="Execution arguments:"
@@ -32,7 +32,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors,
               defaultMessage="Please, place individual arguments into individual input boxes. Any whitespace inside the input box will be treated as a regular part of the argument value (not as a separator of arguments)."
             />
           </Explanation>
-        </React.Fragment>
+        </>
       }
     />
 
@@ -54,7 +54,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors,
         </Confirm>
       </div>
     )}
-  </React.Fragment>
+  </>
 );
 
 EditExerciseSimpleConfigTestExecArgs.propTypes = {

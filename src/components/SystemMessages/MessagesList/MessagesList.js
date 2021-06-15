@@ -95,7 +95,7 @@ class MessagesList extends Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <FilterSystemMessagesForm
           onSubmit={({ showAll }) => {
             this.setState({
@@ -120,7 +120,7 @@ class MessagesList extends Component {
             </div>
           }
         />
-      </React.Fragment>
+      </>
     );
   }
 }

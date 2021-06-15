@@ -15,7 +15,6 @@ export { default as PortsField } from './PortsField';
 export { default as RadioField } from './RadioField';
 export { default as SelectField } from './SelectField';
 export { default as SimpleCheckboxField } from './SimpleCheckboxField';
-export { default as SingleUploadField } from './SingleUploadField';
 export { default as SourceCodeField } from './SourceCodeField';
 export { default as TabbedArrayField } from './TabbedArrayField';
 export { default as TextAreaField } from './TextAreaField';

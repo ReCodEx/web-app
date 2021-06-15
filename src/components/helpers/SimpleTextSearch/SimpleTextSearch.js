@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { FormGroup, FormLabel, FormControl, InputGroup } from 'react-bootstrap';
 import { LoadingIcon, SearchIcon, WarningIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 class SimpleTextSearch extends Component {
   state = { query: this.props.query, lastPropsQuery: this.props.query };

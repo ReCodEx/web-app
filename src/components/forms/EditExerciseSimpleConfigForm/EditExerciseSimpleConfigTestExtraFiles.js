@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon from '../../icons';
 import { ExpandingInputFilesField } from '../Fields';
 import Confirm from '../../forms/Confirm';
@@ -17,7 +17,7 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
   environmentId,
   readOnly = false,
 }) => (
-  <React.Fragment>
+  <>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.extraFilesTitle" defaultMessage="Extra Files" />
     </h4>
@@ -63,7 +63,7 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
         </Confirm>
       </div>
     )}
-  </React.Fragment>
+  </>
 );
 
 EditExerciseSimpleConfigTestExtraFiles.propTypes = {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, Alert } from 'react-bootstrap';
 
-import Button from '../../../widgets/FlatButton';
+import Button from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
 import Explanation from '../../../widgets/Explanation';
 

@@ -21,7 +21,7 @@ import { getLocalizedName } from '../../../helpers/localizedData';
 import { createUserNameComparator } from '../../helpers/users';
 import { compareAssignments, compareShadowAssignments } from '../../helpers/assignments';
 import { downloadString } from '../../../redux/helpers/api/download';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { DownloadIcon, LoadingIcon } from '../../icons';
 import { safeGet, EMPTY_ARRAY, EMPTY_OBJ } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
@@ -369,7 +369,7 @@ class ResultsTable extends Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <SortableTable
           hover
           columns={this.prepareColumnDescriptors(assignments, shadowAssignments, loggedUser, locale)}
@@ -425,7 +425,7 @@ class ResultsTable extends Component {
                   <LoadingIcon />
                 </div>
               ) : (
-                <React.Fragment>
+                <>
                   <UsersNameContainer userId={this.state.dialogUserId} showEmail="icon" large />
                   <hr />
 
@@ -458,12 +458,12 @@ class ResultsTable extends Component {
                       onRemovePoints={this.removeShadowPoints}
                     />
                   )}
-                </React.Fragment>
+                </>
               )}
             </Modal.Body>
           </Modal>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

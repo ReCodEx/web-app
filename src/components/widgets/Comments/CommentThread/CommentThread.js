@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import CommentBox from '../CommentBox';
 import AddComment from '../AddComment';
 import { UsersComment, SomebodyElsesComment } from '../Comment';
+import { RefreshIcon } from '../../../icons';
 
 const CommentThread = ({
   title = <FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />,
@@ -20,7 +21,7 @@ const CommentThread = ({
   <CommentBox
     title={title}
     commentsCount={comments.length}
-    footer={addComment && <AddComment addComment={addComment} refresh={refresh} />}
+    footer={addComment && <AddComment addComment={addComment} />}
     inModal={inModal}>
     <div>
       {comments.map((comment, i) =>
@@ -45,6 +46,18 @@ const CommentThread = ({
           />
         </p>
       )}
+
+      <p className="text-center small text-muted">
+        <a
+          href="#"
+          onClick={ev => {
+            ev.preventDefault();
+            refresh();
+          }}>
+          <RefreshIcon gapRight />
+          <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
+        </a>
+      </p>
     </div>
   </CommentBox>
 );

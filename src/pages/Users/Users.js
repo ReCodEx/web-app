@@ -4,12 +4,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Row, Col, Modal } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import App from '../../containers/App';
 import { SettingsIcon, TransferIcon, BanIcon, UserIcon } from '../../components/icons';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import Page from '../../components/layout/Page';
@@ -114,12 +114,12 @@ class Users extends Component {
             </Button>
           )}
 
-          <LinkContainer to={EDIT_USER_URI_FACTORY(id)}>
+          <Link to={EDIT_USER_URI_FACTORY(id)}>
             <Button size="xs" variant="warning">
               <SettingsIcon gapRight />
               <FormattedMessage id="generic.settings" defaultMessage="Settings" />
             </Button>
-          </LinkContainer>
+          </Link>
 
           <AllowUserButtonContainer id={id} size="xs" />
 
@@ -185,7 +185,7 @@ class Users extends Component {
                         <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />
                       </Button>
 
-                      <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+                      <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
                         <Modal.Header closeButton>
                           <Modal.Title>
                             <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />

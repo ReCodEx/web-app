@@ -14,6 +14,7 @@ import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer
 import { SearchIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
+import Button from '../../widgets/TheButton';
 
 import withLinks from '../../../helpers/withLinks';
 import SolutionTableRowIcons from './SolutionTableRowIcons';
@@ -125,15 +126,17 @@ const SolutionsTableRow = ({
               tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
               hide={!compact}
               tooltipId={`detail-${id}`}>
-              <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)} className="btn btn-flat btn-default btn-xs">
-                <SearchIcon gapRight={!compact} />
-                {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+              <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
+                <Button size="xs" variant="secondary">
+                  <SearchIcon gapRight={!compact} />
+                  {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                </Button>
               </Link>
             </OptionalTooltipWrapper>
           )}
 
           {permissionHints && permissionHints.setFlag && (
-            <React.Fragment>
+            <>
               <AcceptSolutionContainer
                 id={id}
                 locale={locale}
@@ -142,7 +145,7 @@ const SolutionsTableRow = ({
                 size="xs"
               />
               <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
-            </React.Fragment>
+            </>
           )}
 
           {permissionHints && permissionHints.delete && (

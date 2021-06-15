@@ -7,7 +7,7 @@ import { reduxForm, Field, formValueSelector } from 'redux-form';
 
 import { TextField, SelectField, PortsField } from '../../forms/Fields';
 import { Modal, Alert } from 'react-bootstrap';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import DeleteButton from '../../buttons/DeleteButton';
 
 import SubmitButton from '../../forms/SubmitButton';
@@ -47,7 +47,7 @@ class BoxForm extends Component {
     const getPortsArray = ports => Object.keys(ports).map(port => ({ name: port, ...ports[port] }));
 
     return (
-      <Modal show={show} onHide={onHide} keyboard>
+      <Modal show={show} onHide={onHide} keyboard size="lg">
         <Modal.Header closeButton>{title}</Modal.Header>
         <Modal.Body>
           {submitFailed && (
@@ -127,7 +127,7 @@ class BoxForm extends Component {
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
             <span style={{ display: 'inline-block', width: '5px' }} />
-            <DeleteButton id="delete-box" resourceless onClick={onDelete} small={false} />
+            <DeleteButton id="delete-box" resourceless deleteAction={onDelete} small={false} />
           </p>
         </Modal.Footer>
       </Modal>

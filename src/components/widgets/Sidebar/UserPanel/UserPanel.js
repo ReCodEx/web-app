@@ -42,7 +42,7 @@ class UserPanel extends Component {
     } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <div className="user-panel mt-2 pb-2 mb-2">
           <div className="text-center">
             {small ? (
@@ -130,7 +130,7 @@ class UserPanel extends Component {
             </Modal.Body>
           </Modal>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

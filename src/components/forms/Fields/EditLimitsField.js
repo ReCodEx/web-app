@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
 import LimitsValueField from './LimitsValueField';
 

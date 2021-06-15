@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages';
@@ -113,15 +113,15 @@ class SystemMessages extends Component {
                 iconName: 'envelope',
               },
             ]}>
-            <React.Fragment>
+            <>
               <Box
                 title={<FormattedMessage id="app.systemMessages.listTitle" defaultMessage="System Messages" />}
                 unlimitedHeight>
-                <React.Fragment>
+                <>
                   <MessagesList
                     systemMessages={systemMessages}
                     renderActions={message => (
-                      <React.Fragment>
+                      <>
                         <Button
                           size="xs"
                           variant="warning"
@@ -140,7 +140,7 @@ class SystemMessages extends Component {
                           size="xs"
                           locale={locale /* Hack to force re-rendering when locale changes */}
                         />
-                      </React.Fragment>
+                      </>
                     )}
                   />
                   <hr className="no-margin" />
@@ -150,7 +150,7 @@ class SystemMessages extends Component {
                       <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
                     </Button>
                   </p>
-                </React.Fragment>
+                </>
               </Box>
 
               <EditSystemMessageForm
@@ -164,7 +164,7 @@ class SystemMessages extends Component {
                     : createMessage(data).then(() => this.formReset())
                 }
               />
-            </React.Fragment>
+            </>
           </PageContent>
         )}
       </FetchManyResourceRenderer>

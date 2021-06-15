@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import DatetimeField from '../../forms/Fields/DatetimeField';
 import SubmitButton from '../../forms/SubmitButton';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { CloseIcon } from '../../icons';
 
 const EditTerm = ({
@@ -21,7 +21,7 @@ const EditTerm = ({
   invalid,
   reset,
 }) => (
-  <Modal show={isOpen} backdrop="static" onHide={onClose}>
+  <Modal show={isOpen} backdrop="static" onHide={onClose} size="lg">
     <Modal.Header closeButton>
       <Modal.Title>
         <FormattedMessage id="app.editSisTerm.title" defaultMessage="Edit SIS Term" />

@@ -19,7 +19,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
 import Icon, { WarningIcon, RefreshIcon, EvaluationFailedIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
@@ -172,7 +172,7 @@ class SolutionDetail extends Component {
               )}
 
               {failure && (
-                <React.Fragment>
+                <>
                   <div className="callout callout-danger">
                     <h4>
                       <EvaluationFailedIcon gapRight />
@@ -202,7 +202,7 @@ class SolutionDetail extends Component {
 
                   {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
                     <div className="callout callout-success">
-                      <span className="small pull-right">
+                      <span className="small float-right">
                         (<DateTime unixts={failure.resolvedAt} />)
                       </span>
                       <h4>
@@ -221,7 +221,7 @@ class SolutionDetail extends Component {
                       </p>
                     </div>
                   )}
-                </React.Fragment>
+                </>
               )}
 
               {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (

@@ -8,7 +8,7 @@ import Box from '../Box';
  */
 const FormBox = ({ id = null, onSubmit, succeeded = false, dirty = false, children, ...props }) => (
   <Form method="POST" onSubmit={onSubmit}>
-    <Box id={id} type={succeeded ? 'success' : dirty ? 'warning' : 'default'} {...props} unlimitedHeight>
+    <Box id={id} type={succeeded ? 'success' : dirty ? 'warning' : 'secondary'} {...props} unlimitedHeight>
       <div>{children}</div>
     </Box>
   </Form>

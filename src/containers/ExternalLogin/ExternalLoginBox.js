@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
 
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
 import { LinkIcon, LoadingIcon, SuccessIcon } from '../../components/icons';
 import { externalLogin, externalLoginFailed, statusTypes } from '../../redux/modules/auth';

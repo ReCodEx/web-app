@@ -23,7 +23,7 @@ import { TextField, SelectField, TagsSelectorField } from '../Fields';
 import { identity, safeGet } from '../../../helpers/common';
 import { ExpandCollapseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const RTE_PREFIX = 'runtimeEnvironments.';
 
@@ -180,9 +180,9 @@ class FilterExercisesListForm extends Component {
                 </Row>
 
                 {this.isOpen() && (
-                  <React.Fragment>
+                  <>
                     {tags && tags.length > 0 && (
-                      <React.Fragment>
+                      <>
                         <Row>
                           <Col lg={12}>
                             <hr />
@@ -203,7 +203,7 @@ class FilterExercisesListForm extends Component {
                             />
                           </Col>
                         </Row>
-                      </React.Fragment>
+                      </>
                     )}
 
                     <Row>
@@ -232,7 +232,7 @@ class FilterExercisesListForm extends Component {
                         />
                       </Col>
                     </Row>
-                  </React.Fragment>
+                  </>
                 )}
 
                 <Row>

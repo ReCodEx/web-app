@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
-import { Row, Col, HelpBlock } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
 
 import Markdown from '../../widgets/Markdown';
 import SourceCodeField from './SourceCodeField';
@@ -42,7 +42,7 @@ class MarkdownTextAreaField extends Component {
             </OnOffCheckbox>
           </Col>
           <Col sm={8}>
-            <HelpBlock className="text-right">
+            <Form.Text className="text-right">
               <FormattedHTMLMessage
                 id="app.markdownTextArea.canUseMarkdown"
                 defaultMessage="You can use <a href='{markdownUrl}' target='_blank'>markdown syntax</a> in this field."
@@ -50,7 +50,7 @@ class MarkdownTextAreaField extends Component {
                   markdownUrl: 'https://github.com/ReCodEx/wiki/wiki/Markdown',
                 }}
               />
-            </HelpBlock>
+            </Form.Text>
           </Col>
         </Row>
 

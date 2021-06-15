@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import FlatButton from '../../widgets/FlatButton';
+import TheButton from '../../widgets/TheButton';
 import TextField from '../Fields/TextField';
 import SelectField from '../Fields/SelectField';
 import { AddIcon, CloseIcon } from '../../icons';
@@ -92,9 +92,9 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                       />
                     </Tooltip>
                   }>
-                  <FlatButton onClick={() => fields.remove(index)}>
+                  <TheButton onClick={() => fields.remove(index)}>
                     <CloseIcon />
-                  </FlatButton>
+                  </TheButton>
                 </OverlayTrigger>
               </td>
             </tr>
@@ -120,9 +120,9 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
             <FormattedMessage id="app.editEnvironmentConfig.tooltip.add" defaultMessage="Add another variable." />
           </Tooltip>
         }>
-        <FlatButton onClick={() => fields.push(EMPTY_VALUE)}>
+        <TheButton onClick={() => fields.push(EMPTY_VALUE)}>
           <AddIcon />
-        </FlatButton>
+        </TheButton>
       </OverlayTrigger>
     </div>
   </div>

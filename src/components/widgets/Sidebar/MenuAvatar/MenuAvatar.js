@@ -33,11 +33,11 @@ const MenuAvatar = ({
         size={20}
         altClassName="sidebarAvatar"
       />
-      <span className="sidebarMenuItem">{title}</span>
-      {notificationsCount > 0 && <small className="label pull-right bg-yellow">{notificationsCount}</small>}
+      <span className="sidebarMenuItem text-nowrap sidebarEllipsis">{title}</span>
+      {notificationsCount > 0 && <small className="label float-right bg-yellow">{notificationsCount}</small>}
 
       {onRemove && (
-        <span className="pull-right">
+        <span className="sidebarAvatarRemoveIcon">
           <Icon
             icon="user-slash"
             className="text-danger"
