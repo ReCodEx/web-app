@@ -12,8 +12,8 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import DateTime from '../../widgets/DateTime';
 
 const isFailedJobTooOld = failedJob => {
-  const terminatedAt = (failedJob && failedJob.getIn(['data', 'terminatedAt'])) || Date.now() / 1000;
-  return terminatedAt + 600 < Date.now() / 1000;
+  const finishedAt = (failedJob && failedJob.getIn(['data', 'finishedAt'])) || Date.now() / 1000;
+  return finishedAt + 600 < Date.now() / 1000;
 };
 
 const ResubmitAllSolutions = ({
@@ -74,8 +74,8 @@ const ResubmitAllSolutions = ({
 
                     {!pendingJob && (
                       <p>
-                        <FormattedMessage id="generic.terminatedAt" defaultMessage="Terminated at" />:{' '}
-                        <DateTime unixts={job.terminatedAt} showRelative />
+                        <FormattedMessage id="generic.finishedAt" defaultMessage="Finished at" />:{' '}
+                        <DateTime unixts={job.finishedAt} showRelative />
                       </p>
                     )}
                     {!pendingJob && (

@@ -1566,7 +1566,7 @@
   "generic.submitted": "Odevzdáno",
   "generic.submitting": "Odevzdávání...",
   "generic.tags": "Nálepky",
-  "generic.terminatedAt": "Ukončeno",
+  "generic.finishedAt": "Ukončeno",
   "generic.updated": "Změněno",
   "generic.uploadedAt": "Nahráno",
   "generic.validating": "Validování...",

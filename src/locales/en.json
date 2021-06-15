@@ -1566,7 +1566,7 @@
   "generic.submitted": "Submitted",
   "generic.submitting": "Submitting...",
   "generic.tags": "Tags",
-  "generic.terminatedAt": "Terminated at",
+  "generic.finishedAt": "Finished at",
   "generic.updated": "Updated",
   "generic.uploadedAt": "Uploaded at",
   "generic.validating": "Validating...",

@@ -33,7 +33,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
               <FormattedMessage id="generic.startedAt" defaultMessage="Started at" />
             </th>
             <th>
-              <FormattedMessage id="generic.terminatedAt" defaultMessage="Terminated at" />
+              <FormattedMessage id="generic.finishedAt" defaultMessage="Finished at" />
             </th>
             <th>
               <FormattedMessage id="app.asyncJobs.list.command" defaultMessage="Command" />
@@ -49,7 +49,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
           {asyncJobs
             .sort((a, b) => b.createdAt - a.createdAt)
             .map(job => (
-              <tr key={job.id} className={job.terminatedAt ? 'text-muted' : ''}>
+              <tr key={job.id} className={job.finishedAt ? 'text-muted' : ''}>
                 <td className="small text-nowrap">
                   <DateTime unixts={job.createdAt} />
                 </td>
@@ -84,7 +84,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                   )}
                 </td>
                 <td className="small text-nowrap">
-                  <DateTime unixts={job.terminatedAt} emptyPlaceholder="-" />
+                  <DateTime unixts={job.finishedAt} emptyPlaceholder="-" />
                 </td>
                 <td>
                   {job.arguments && Object.keys(job.arguments).length > 0 ? (
@@ -121,7 +121,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                   )}
                 </td>
                 <td>
-                  {abort && !job.startedAt && !job.terminatedAt && (
+                  {abort && !job.startedAt && !job.finishedAt && (
                     <Confirm
                       id={`confirm-${job.id}`}
                       onConfirmed={() => abort(job.id)}
