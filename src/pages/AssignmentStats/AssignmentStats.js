@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber, intlShape } from 'react-intl';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
@@ -25,7 +24,7 @@ import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/L
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import DateTime from '../../components/widgets/DateTime';
 import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -152,25 +151,25 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
     new SortableTableColumnDescriptor('actionButtons', '', {
       className: 'text-right valign-middle text-nowrap',
       cellRenderer: solution => (
-        <React.Fragment>
+        <>
           {solution.permissionHints && solution.permissionHints.viewDetail && (
-            <Link
-              to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}
-              className="btn btn-flat btn-default btn-xs">
-              <SearchIcon gapRight />
-              <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+            <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
+              <Button size="xs" variant="secondary">
+                <SearchIcon gapRight />
+                <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+              </Button>
             </Link>
           )}
           {solution.permissionHints && solution.permissionHints.setFlag && (
-            <React.Fragment>
+            <>
               <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel size="xs" />
               <ReviewSolutionContainer id={solution.id} locale={locale} size="xs" />
-            </React.Fragment>
+            </>
           )}
           {solution.permissionHints && solution.permissionHints.delete && (
             <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} size="xs" />
           )}
-        </React.Fragment>
+        </>
       ),
     }),
   ];
@@ -328,12 +327,12 @@ class AssignmentStats extends Component {
             <Row>
               <Col md={12} lg={7}>
                 <p>
-                  <LinkContainer to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                  <Link to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                     <Button variant="warning">
                       <EditIcon gapRight />
                       <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                     </Button>
-                  </LinkContainer>
+                  </Link>
                   <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
                     <Button variant="primary">
                       <DownloadIcon gapRight />
@@ -350,17 +349,17 @@ class AssignmentStats extends Component {
                   </Button>
                 </p>
 
-                <Modal show={this.state.assignmentDialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+                <Modal show={this.state.assignmentDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
                   <CommentThreadContainer
                     threadId={assignment.id}
                     title={
-                      <React.Fragment>
+                      <>
                         <FormattedMessage
                           id="app.assignments.discussionModalTitle"
                           defaultMessage="Public Discussion"
                         />
                         : <LocalizedExerciseName entity={{ name: '??', localizedTexts: assignment.localizedTexts }} />
-                      </React.Fragment>
+                      </>
                     }
                     inModal
                   />

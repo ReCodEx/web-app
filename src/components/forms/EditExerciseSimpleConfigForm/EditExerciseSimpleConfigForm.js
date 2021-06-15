@@ -7,7 +7,7 @@ import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 

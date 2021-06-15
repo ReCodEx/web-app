@@ -68,7 +68,7 @@ const EvaluationDetail = ({
               <FormattedNumber style="percent" value={evaluation.score} />
             </b>
             {showScoreDetail && (
-              <span className="pull-right clickable text-primary" onClick={showScoreDetail}>
+              <span className="float-right clickable text-primary" onClick={showScoreDetail}>
                 <FormattedMessage id="app.evaluationDetail.explainCorrectness" defaultMessage="explain" />
                 <Icon icon="calculator" gapLeft gapRight />
               </span>

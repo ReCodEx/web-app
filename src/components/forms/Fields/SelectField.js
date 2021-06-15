@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { FormGroup, FormControl, FormLabel, HelpBlock } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import styles from './commonStyles.less';
@@ -17,8 +17,10 @@ const SelectField = ({
   associatedButton = null,
   ...props
 }) => (
-  <FormGroup controlId={input.name} validationState={error ? 'error' : warning ? 'warning' : undefined}>
-    {Boolean(label) && <FormLabel>{label}</FormLabel>}
+  <FormGroup controlId={input.name}>
+    {Boolean(label) && (
+      <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
+    )}
 
     <table className="full-width">
       <tbody>
@@ -28,11 +30,14 @@ const SelectField = ({
               {...input}
               {...props}
               as="select"
-              bsPrefix={classnames({
+              isInvalid={Boolean(error)}
+              className={classnames({
                 'form-control': true,
+                'full-width': true,
                 [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
                 [styles.active]: active,
-                'full-width': true,
+                'border-danger': error,
+                'border-warning': !error && warning,
               })}>
               {addEmptyOption && (
                 <option value={''} key={'-1'}>
@@ -51,8 +56,8 @@ const SelectField = ({
       </tbody>
     </table>
 
-    {error && <HelpBlock> {error} </HelpBlock>}
-    {!error && warning && <HelpBlock> {warning} </HelpBlock>}
+    {error && <Form.Text className="text-danger"> {error} </Form.Text>}
+    {!error && warning && <Form.Text className="text-warning"> {warning} </Form.Text>}
   </FormGroup>
 );
 

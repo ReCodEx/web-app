@@ -97,7 +97,7 @@ export const validateExercise = (id, version) =>
   });
 
 export const getVariablesForPipelines = (exerciseId, runtimeEnvironmentId, pipelinesIds) => {
-  const body = runtimeEnvironmentId === 'default' ? { pipelinesIds } : { runtimeEnvironmentId, pipelinesIds };
+  const body = runtimeEnvironmentId === 'secondary' ? { pipelinesIds } : { runtimeEnvironmentId, pipelinesIds };
   return createApiAction({
     type: additionalActionTypes.GET_PIPELINE_VARIABLES,
     method: 'POST',

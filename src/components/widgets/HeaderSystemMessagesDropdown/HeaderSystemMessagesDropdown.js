@@ -1,110 +1,109 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import classnames from 'classnames';
-import { Badge, Table } from 'react-bootstrap';
+import { Badge, Table, Dropdown } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Icon, { TypedMessageIcon } from '../../icons';
 import Markdown from '../Markdown';
 import { getLocalizedText } from '../../../helpers/localizedData';
 
-import styles from './HeaderSystemMessagesDropdown.less';
+import styles from '../Header/Header.less';
 import DateTime from '../DateTime';
 
 const preventClickPropagation = ev => ev.stopPropagation();
 
 const HeaderSystemMessagesDropdown = ({
-  isOpen,
-  toggleOpen,
   systemMessages,
   totalMessagesCount,
   locale,
   acceptActiveMessages,
   unacceptActiveMessages,
 }) => (
-  <li
-    className={classnames({
-      'nav-item': true,
-      dropdown: true,
-      open: isOpen,
-    })}
-    onMouseDown={isOpen ? preventClickPropagation : undefined}>
-    <a href="#" className="nav-link" data-toggle="dropdown" onClick={toggleOpen}>
+  <Dropdown as="li" alignRight navbar className="nav-item">
+    <Dropdown.Toggle as="a" id="dropdown-header-system-messages" bsPrefix="nav-link">
       <Icon icon={['far', 'envelope']} />
-      {systemMessages.length > 0 && <Badge variant="warning">{systemMessages.length}</Badge>}
-    </a>
-    <ul className={classnames(['dropdown-menu', styles.dropdownMenu])}>
-      <li className="nav-header">
-        <small>
-          <FormattedMessage
-            id="app.systemMessages.titleLong"
-            defaultMessage="You have {totalMessagesCount, number} active {totalMessagesCount, plural, one {message} two {messages} other {messages}} ({unreadCount, number} unread {unreadCount, plural, one {message} two {messages} other {messages}})"
-            values={{
-              totalMessagesCount,
-              unreadCount: systemMessages.length,
-            }}
-          />
-        </small>
-      </li>
+      {systemMessages.length > 0 && (
+        <span className={styles.iconBadgeWrapper}>
+          <Badge variant="warning" pill>
+            {systemMessages.length}
+          </Badge>
+        </span>
+      )}
+    </Dropdown.Toggle>
 
-      <li>
-        <ul className={classnames(['menu', styles.messageList])}>
-          <li>
-            <Table responsive hover className="no-margin">
-              <tbody>
-                {systemMessages.map((message, idx) => (
-                  <tr key={idx}>
-                    <td className={`text-${message.type} bg-${message.type} shrink-col valign-middle text-center`}>
-                      <TypedMessageIcon type={message.type} size="lg" />
-                    </td>
-                    <td>
-                      <Markdown source={getLocalizedText(message, locale)} />
-                      <small className="text-muted text-nowrap pull-right">
-                        <UsersNameContainer userId={message.authorId} isSimple />
-                        &nbsp;
-                        <DateTime
-                          unixts={message.visibleFrom}
-                          showDate={false}
-                          showTime={false}
-                          showRelative={true}
-                          showOverlay={true}
-                        />
-                      </small>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </li>
+    <Dropdown.Menu rootCloseEvent="mousedown" className={styles.dropdownMenuWide} onMouseDown={preventClickPropagation}>
+      <Dropdown.Header>
+        <FormattedMessage
+          id="app.systemMessages.titleLong"
+          defaultMessage="You have {totalMessagesCount, number} active {totalMessagesCount, plural, one {message} two {messages} other {messages}} ({unreadCount, number} unread {unreadCount, plural, one {message} two {messages} other {messages}})"
+          values={{
+            totalMessagesCount,
+            unreadCount: systemMessages.length,
+          }}
+        />
+      </Dropdown.Header>
 
-          {systemMessages.length > 0 && (
-            <li className="footer text-center clickable" onClick={acceptActiveMessages}>
-              <FormattedMessage
-                id="app.systemMessages.acceptActiveMessages"
-                defaultMessage="Hide messages (mark them as read)"
-              />
-            </li>
-          )}
+      <Dropdown.Divider className="mb-0" />
 
-          {systemMessages.length === 0 && totalMessagesCount > 0 && (
-            <li className="footer text-center clickable" onClick={unacceptActiveMessages}>
-              <FormattedMessage
-                id="app.systemMessages.unacceptActiveMessages"
-                defaultMessage="Show all messages (mark them as unread)"
-              />
-            </li>
-          )}
-        </ul>
-      </li>
-    </ul>
-  </li>
+      <div className={styles.messageList}>
+        <Table responsive hover className="no-margin">
+          <tbody>
+            {systemMessages.map((message, idx) => (
+              <tr key={idx}>
+                <td className={`text-${message.type} bg-${message.type} shrink-col valign-middle text-center`}>
+                  <TypedMessageIcon type={message.type} size="lg" />
+                </td>
+                <td>
+                  <Markdown source={getLocalizedText(message, locale)} />
+                  <small className="text-muted text-nowrap float-right">
+                    <UsersNameContainer userId={message.authorId} isSimple />
+                    &nbsp;
+                    <DateTime
+                      unixts={message.visibleFrom}
+                      showDate={false}
+                      showTime={false}
+                      showRelative={true}
+                      showOverlay={true}
+                    />
+                  </small>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+
+      {(systemMessages.length > 0 || totalMessagesCount > 0) && (
+        <>
+          <Dropdown.Divider className="mt-0" />
+          <div className="text-center small p-1">
+            {systemMessages.length > 0 && (
+              <a href="#" onClick={acceptActiveMessages}>
+                <FormattedMessage
+                  id="app.systemMessages.acceptActiveMessages"
+                  defaultMessage="Hide messages (mark them as read)"
+                />
+              </a>
+            )}
+
+            {systemMessages.length === 0 && totalMessagesCount > 0 && (
+              <a href="#" onClick={unacceptActiveMessages}>
+                <FormattedMessage
+                  id="app.systemMessages.unacceptActiveMessages"
+                  defaultMessage="Show all messages (mark them as unread)"
+                />
+              </a>
+            )}
+          </div>
+        </>
+      )}
+    </Dropdown.Menu>
+  </Dropdown>
 );
 
 HeaderSystemMessagesDropdown.propTypes = {
-  isOpen: PropTypes.bool,
   showAll: PropTypes.bool,
-  toggleOpen: PropTypes.func.isRequired,
   systemMessages: PropTypes.array.isRequired,
   totalMessagesCount: PropTypes.number.isRequired,
   locale: PropTypes.string.isRequired,

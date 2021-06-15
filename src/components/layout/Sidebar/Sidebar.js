@@ -19,8 +19,12 @@ import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '.
 import withLinks from '../../../helpers/withLinks';
 import { getExternalIdForCAS } from '../../../helpers/cas';
 import { EMPTY_OBJ } from '../../../helpers/common';
+import { getConfigVar } from '../../../helpers/config';
 
 import styles from './sidebar.less';
+
+const SKIN = getConfigVar('SKIN') || 'green';
+const URL_PREFIX = getConfigVar('URL_PATH_PREFIX');
 
 const getUserData = defaultMemoize(user => getJsData(user));
 
@@ -67,28 +71,23 @@ const Sidebar = ({
   const currentLink = pathname + search;
 
   return (
-    <aside className={classnames(['main-sidebar', 'sidebar-dark-primary', 'elevation-4', styles.mainSidebar])}>
-      <Link to={HOME_URI} className="brand-link">
-        {isCollapsed ? (
-          <span className="brand-text">
-            {pendingFetchOperations ? (
-              <LoadingIcon gapRight />
-            ) : (
-              <>
-                Re<b>X</b>
-              </>
-            )}
-          </span>
-        ) : (
+    <aside className={classnames(['main-sidebar', `sidebar-dark-${SKIN}`, 'elevation-4', styles.mainSidebar])}>
+      <Link to={HOME_URI} className="brand-link elevation-2">
+        <>
+          <img
+            src={`${URL_PREFIX}/public/logo-bare.png`}
+            alt="ReCodEx Logo"
+            className="pt-1 mr-3 brand-image almost-opaque"
+          />
           <span className="brand-text">
             {pendingFetchOperations && (
-              <span style={{ position: 'absolute', left: '1em' }}>
+              <span style={{ position: 'absolute', right: '1em' }}>
                 <LoadingIcon gapRight />
               </span>
             )}
             Re<b>CodEx</b>
           </span>
-        )}
+        </>
       </Link>
 
       <div className="sidebar">
@@ -112,7 +111,7 @@ const Sidebar = ({
         )}
 
         {Boolean(user) && (
-          <React.Fragment>
+          <>
             <UserPanelContainer small={small} />
             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
               <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
@@ -206,7 +205,7 @@ const Sidebar = ({
                 currentPath={currentUrl}
               />
             </ul>
-          </React.Fragment>
+          </>
         )}
 
         {isSuperadminRole(effectiveRole) && <Admin currentUrl={currentUrl} />}

@@ -16,7 +16,7 @@ import {
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { getTagCSSColor } from '../../helpers/exercise/tags';
 import { LoadingIcon, RemoveIcon, TagIcon } from '../../components/icons';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 
 const ADD_TAG_INITIAL_VALUES = { tag: '' };
 
@@ -25,7 +25,7 @@ const ExercisesTagsEditContainer = ({ exercise, tags, tagsLoading, updatePending
     {exercise => (
       <div>
         {exercise.tags && exercise.tags.length > 0 ? (
-          <Table hover condensed>
+          <Table hover size="sm">
             <tbody>
               {exercise.tags.sort().map(tag => (
                 <tr key={`${exercise.id}:${tag}`}>

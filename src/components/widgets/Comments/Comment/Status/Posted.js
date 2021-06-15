@@ -7,8 +7,8 @@ const Posted = ({ right, postedAt }) => (
   <span
     className={classnames({
       'direct-chat-timestamp': true,
-      'pull-right': right,
-      'pull-left': !right,
+      'float-right': right,
+      'float-left': !right,
     })}>
     <FormattedRelative value={postedAt * 1000} />
   </span>

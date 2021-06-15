@@ -11,7 +11,7 @@ import EditShadowAssignmentPointsForm, {
 } from '../../forms/EditShadowAssignmentPointsForm';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
 import Icon, { EditIcon, DeleteIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users';
@@ -62,7 +62,7 @@ class ShadowAssignmentPointsTable extends Component {
         isOpen
         noPadding
         unlimitedHeight>
-        <React.Fragment>
+        <>
           <Table responsive hover>
             <thead>
               <tr>
@@ -141,7 +141,7 @@ class ShadowAssignmentPointsTable extends Component {
               })}
             </tbody>
           </Table>
-          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -163,7 +163,7 @@ class ShadowAssignmentPointsTable extends Component {
               />
             </Modal.Body>
           </Modal>
-        </React.Fragment>
+        </>
       </Box>
     );
   }

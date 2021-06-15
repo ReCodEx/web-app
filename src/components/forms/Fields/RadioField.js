@@ -1,29 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Form, FormGroup, FormCheck } from 'react-bootstrap';
+import classnames from 'classnames';
 
-import { FormGroup, HelpBlock, Radio } from 'react-bootstrap';
-
-const RadioField = ({ input, meta: { error, warning }, options }) => {
-  return (
-    <FormGroup validationState={error ? 'error' : warning ? 'warning' : undefined} controlId={input.name}>
-      {options.map(({ key, name }, idx) => (
-        <Radio
-          className="radio-container"
-          key={`radio${idx}-${key}`}
-          name={input.name}
-          value={key}
-          checked={input.value === key}
-          onChange={input.onChange}>
+const RadioField = ({ input, meta: { error, warning }, options }) => (
+  <FormGroup controlId={input.name}>
+    {options.map(({ key, name }, idx) => (
+      <FormCheck type="radio" className="radio-container" key={`radio${idx}-${key}`}>
+        <label
+          className={classnames({
+            'form-check-label': true,
+            'text-danger': error,
+            'text-warninig': !error && warning,
+          })}>
+          <input type="radio" name={input.name} value={key} checked={input.value === key} onChange={input.onChange} />
           {name}
           <span className="radiomark"></span>
-        </Radio>
-      ))}
+        </label>
+      </FormCheck>
+    ))}
 
-      {error && <HelpBlock> {error} </HelpBlock>}
-      {!error && warning && <HelpBlock> {warning} </HelpBlock>}
-    </FormGroup>
-  );
-};
+    {error && <Form.Text className="text-danger"> {error} </Form.Text>}
+    {!error && warning && <Form.Text className="text-warning"> {warning} </Form.Text>}
+  </FormGroup>
+);
 
 RadioField.propTypes = {
   input: PropTypes.shape({

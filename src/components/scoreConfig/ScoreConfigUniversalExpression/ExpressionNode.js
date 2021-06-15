@@ -190,9 +190,9 @@ const ExpressionNode = ({
         </OptionalTooltipWrapper>
 
         {editNode && (
-          <React.Fragment>
+          <>
             {isSelected && selectedNodesCount === 1 && (
-              <React.Fragment>
+              <>
                 <OverlayTrigger
                   placement="bottom"
                   overlay={
@@ -210,14 +210,14 @@ const ExpressionNode = ({
                     onClick={() => editNode(node, null, FUNCTION_NODE, true)}
                   />
                 </OverlayTrigger>
-              </React.Fragment>
+              </>
             )}
 
             {isSelected &&
               selectedNodesCount === 1 &&
               node.getRealChildren().length > 0 &&
               getVacantChildrenPositions(node.getParent()) + 1 >= node.getRealChildren().length && (
-                <React.Fragment>
+                <>
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
@@ -230,7 +230,7 @@ const ExpressionNode = ({
                     }>
                     <Icon icon="sign-out-alt" className="text-danger" gapLeft onClick={() => node.remove()} />
                   </OverlayTrigger>
-                </React.Fragment>
+                </>
               )}
 
             {!isSelected &&
@@ -238,7 +238,7 @@ const ExpressionNode = ({
             ancestorIndex && // ancestorIndex exists -> exactly one node is selected
             !ancestorIndex[node.id] && // node is not parent of selected node
             (selectedNode.getParent() !== node.getParent() || !node.getParent().isComutative()) && ( // node is not sibling, or the order of sbilings matter
-                <React.Fragment>
+                <>
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
@@ -251,7 +251,7 @@ const ExpressionNode = ({
                     }>
                     <SwapIcon className="text-success" gapLeft onClick={() => node.swap(selectedNode)} />
                   </OverlayTrigger>
-                </React.Fragment>
+                </>
               )}
 
             <OverlayTrigger
@@ -263,7 +263,7 @@ const ExpressionNode = ({
               }>
               <CloseIcon className="text-danger" gapLeft timid onClick={() => node.removeWholeSubtree()} />
             </OverlayTrigger>
-          </React.Fragment>
+          </>
         )}
       </span>
 

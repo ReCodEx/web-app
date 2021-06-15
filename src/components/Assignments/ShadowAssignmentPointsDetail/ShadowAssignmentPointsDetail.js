@@ -12,7 +12,7 @@ const ShadowAssignmentPointsDetail = ({ points = null, awardedAt = null, authorI
   <Box
     title={<FormattedMessage id="app.shadowAssignmentPointsDetail.title" defaultMessage="Awarded Points" />}
     noPadding>
-    <Table responsive condensed>
+    <Table responsive size="sm">
       <tbody>
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">

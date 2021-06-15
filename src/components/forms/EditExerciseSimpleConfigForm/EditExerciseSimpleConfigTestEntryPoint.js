@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { FormLabel } from 'react-bootstrap';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon from '../../icons';
 import { TextField } from '../Fields';
 import Confirm from '../../forms/Confirm';

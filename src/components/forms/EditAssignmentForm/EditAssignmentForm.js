@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
-import { Alert, HelpBlock, Container, Row, Col } from 'react-bootstrap';
+import { Alert, Container, Row, Col, Form } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
@@ -269,7 +269,7 @@ class EditAssignmentForm extends Component {
         acknowledgeSuccess={this.acknowledgeSuccess}
       />
     ) : (
-      <React.Fragment>
+      <>
         {submitFailed && (
           <Alert variant="danger">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
@@ -348,12 +348,12 @@ class EditAssignmentForm extends Component {
                   }
                 />
                 {!firstDeadline && (
-                  <HelpBlock>
+                  <Form.Text>
                     <FormattedMessage
                       id="app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline"
                       defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
                     />
-                  </HelpBlock>
+                  </Form.Text>
                 )}
               </Col>
               <Col md={6}>
@@ -636,7 +636,7 @@ class EditAssignmentForm extends Component {
         </Container>
 
         {editTexts && (
-          <React.Fragment>
+          <>
             <hr />
 
             <div className="callout callout-info">
@@ -648,7 +648,7 @@ class EditAssignmentForm extends Component {
             </div>
 
             <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="assignment" />
-          </React.Fragment>
+          </>
         )}
 
         {error && <Alert variant="danger">{error}</Alert>}
@@ -668,7 +668,7 @@ class EditAssignmentForm extends Component {
             messages={submitButtonMessages}
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

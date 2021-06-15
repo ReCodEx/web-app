@@ -7,7 +7,7 @@ import { defaultMemoize } from 'reselect';
 
 import { SelectField, DatetimeField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 import withLinks from '../../../helpers/withLinks';

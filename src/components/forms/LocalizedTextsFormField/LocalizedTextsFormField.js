@@ -21,7 +21,7 @@ const fieldTypes = {
 };
 
 const renderTitle = ({ locale, _enabled }) => (
-  <span>
+  <span key={`${locale}-${_enabled}`}>
     <OverlayTrigger
       placement="bottom"
       overlay={<Tooltip id={`editLocalizedTextForm-${locale}`}>{knownLocalesNames[locale] || '??'}</Tooltip>}>
@@ -39,7 +39,7 @@ const renderTitle = ({ locale, _enabled }) => (
             />
           </Tooltip>
         }>
-        <WarningIcon gapLeft />
+        <WarningIcon gapLeft className="text-secondary" />
       </OverlayTrigger>
     )}
   </span>

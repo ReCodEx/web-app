@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { CheckboxField } from '../Fields';
 import Icon, { InfoIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';

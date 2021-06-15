@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
 import { MailIcon, SuccessIcon, LoadingIcon, FailureIcon } from '../../icons';
-import FlatButton from '../../widgets/FlatButton';
+import TheButton from '../../widgets/TheButton';
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
 
 const bsStyles = {
@@ -33,7 +33,7 @@ const messages = defineMessages({
 
 const ResendEmailVerification = ({ resend, state, intl: { formatMessage }, ...props }) => {
   return (
-    <FlatButton
+    <TheButton
       onClick={state !== resourceStatus.PENDING ? resend : undefined}
       variant={bsStyles[state] || 'primary'}
       {...props}>
@@ -43,7 +43,7 @@ const ResendEmailVerification = ({ resend, state, intl: { formatMessage }, ...pr
       ) : (
         <FormattedMessage id="app.resendEmailVerification.resend" defaultMessage="Resend verification email" />
       )}
-    </FlatButton>
+    </TheButton>
   );
 };
 

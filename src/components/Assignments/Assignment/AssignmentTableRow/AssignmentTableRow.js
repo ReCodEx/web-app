@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { ChatIcon, EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisibleAssignmentIcon } from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
-import Button from '../../../widgets/FlatButton';
+import Button from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
@@ -125,8 +124,8 @@ const AssignmentTableRow = ({
         ))}
 
       {isAdmin && (
-        <React.Fragment>
-          <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
+        <>
+          <Link to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
             <OverlayTrigger
               placement="bottom"
               overlay={
@@ -138,9 +137,9 @@ const AssignmentTableRow = ({
                 <ResultsIcon smallGapLeft smallGapRight />
               </Button>
             </OverlayTrigger>
-          </LinkContainer>
+          </Link>
 
-          <LinkContainer to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+          <Link to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
             <OverlayTrigger
               placement="bottom"
               overlay={
@@ -152,10 +151,10 @@ const AssignmentTableRow = ({
                 <EditIcon smallGapLeft smallGapRight />
               </Button>
             </OverlayTrigger>
-          </LinkContainer>
+          </Link>
 
           <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />
-        </React.Fragment>
+        </>
       )}
     </td>
   </tr>

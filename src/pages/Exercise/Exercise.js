@@ -4,9 +4,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
@@ -192,7 +192,7 @@ class Exercise extends Component {
                         hasPermissions(exercise, 'addReferenceSolution') && (
                           <div className="text-center">
                             <Button
-                              variant={exercise.isBroken ? 'default' : 'success'}
+                              variant={exercise.isBroken ? 'secondary' : 'success'}
                               onClick={() => initCreateReferenceSolution(userId)}
                               disabled={exercise.isBroken}>
                               {exercise.isBroken ? (
@@ -219,13 +219,12 @@ class Exercise extends Component {
                                 runtimeEnvironments={runtimes}
                                 renderButtons={(solutionId, permissionHints) => (
                                   <div>
-                                    <LinkContainer
-                                      to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
+                                    <Link to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
                                       <Button size="xs">
                                         <SendIcon gapRight />
                                         <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                                       </Button>
-                                    </LinkContainer>
+                                    </Link>
                                     {permissionHints && permissionHints.delete !== false && (
                                       <Confirm
                                         id={solutionId}

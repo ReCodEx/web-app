@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Alert } from 'react-bootstrap';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 import { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';

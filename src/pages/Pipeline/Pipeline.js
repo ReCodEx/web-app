@@ -4,11 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import InsetPanel from '../../components/widgets/InsetPanel';
 import { EditIcon } from '../../components/icons';
 // import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
@@ -89,13 +89,13 @@ class Pipeline extends Component {
             <div>
               <ButtonGroup>
                 {isAuthorOfPipeline(pipeline.id) && (
-                  <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}>
+                  <Link to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}>
                     <Button variant="warning" size="sm">
                       <EditIcon />
                       &nbsp;
                       <FormattedMessage id="app.pipeline.editSettings" defaultMessage="Edit pipeline" />
                     </Button>
-                  </LinkContainer>
+                  </Link>
                 )}
                 {/* TODO Fork form needs redesigning (better selection of exercises).
                 <ForkPipelineForm

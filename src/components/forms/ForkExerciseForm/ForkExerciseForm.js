@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../../components/widgets/FlatButton';
+import Button from '../../../components/widgets/TheButton';
 import Icon, { SuccessIcon, WarningIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
@@ -99,7 +99,7 @@ class ForkExerciseForm extends Component {
             <Form inline className="forkForm">
               <ResourceRenderer resource={groups.toArray()} returnAsArray>
                 {groups => (
-                  <React.Fragment>
+                  <>
                     <Field
                       name={'groupId'}
                       component={SelectField}
@@ -140,7 +140,7 @@ class ForkExerciseForm extends Component {
                         ),
                       }}
                     />
-                  </React.Fragment>
+                  </>
                 )}
               </ResourceRenderer>
             </Form>

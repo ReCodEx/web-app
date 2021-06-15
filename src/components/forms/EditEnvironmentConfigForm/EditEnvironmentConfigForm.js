@@ -9,7 +9,7 @@ import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables';
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { InfoIcon, RefreshIcon } from '../../icons';
 import { compareVariablesForEquality } from '../../../helpers/exercise/environments';
 import { safeGet, safeSet } from '../../../helpers/common';
@@ -112,7 +112,7 @@ class EditEnvironmentConfigForm extends Component {
         />
 
         {Boolean(selectedRuntimeId) && (
-          <React.Fragment>
+          <>
             <p className="text-muted small em-padding-horizontal">
               <InfoIcon gapRight />
               <FormattedHTMLMessage
@@ -121,7 +121,7 @@ class EditEnvironmentConfigForm extends Component {
               />
             </p>
             <FieldArray name="variables" component={EditEnvironmentConfigVariables} />
-          </React.Fragment>
+          </>
         )}
 
         {!selectedRuntimeId && (

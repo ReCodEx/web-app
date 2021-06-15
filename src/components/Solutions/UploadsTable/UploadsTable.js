@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Table, ButtonGroup } from 'react-bootstrap';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Icon, { DeleteIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const UploadsTable = ({
   uploadingFiles = [],

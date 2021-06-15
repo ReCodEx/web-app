@@ -4,18 +4,20 @@ import { Button } from 'react-bootstrap';
 import classnames from 'classnames';
 import Confirm from '../../forms/Confirm';
 
-const FlatButtonInternal = ({ className, onClick = null, ...props }) => (
+const TheButtonInternal = ({ className, onClick = null, variant, noShadow = false, ...props }) => (
   <Button
     className={classnames({
-      'btn-flat': true,
+      'elevation-2': !noShadow,
+      [`bg-gradient-${variant}`]: !variant.startsWith('outline-'),
       [className]: className.length > 0,
     })}
     onClick={onClick}
+    variant={variant.startsWith('outline-') ? variant : null}
     {...props}
   />
 );
 
-const FlatButton = ({
+const TheButton = ({
   variant = 'outline-secondary',
   className = '',
   onClick = null,
@@ -26,24 +28,27 @@ const FlatButton = ({
 }) =>
   confirm ? (
     <Confirm id={confirmId} onConfirmed={onClick} question={confirm}>
-      <FlatButtonInternal className={className} variant={variant} {...props} />
+      <TheButtonInternal className={className} variant={variant} {...props} />
     </Confirm>
   ) : (
-    <FlatButtonInternal className={className} variant={variant} onClick={onClick} {...props} />
+    <TheButtonInternal className={className} variant={variant} onClick={onClick} {...props} />
   );
 
-FlatButtonInternal.propTypes = {
+TheButtonInternal.propTypes = {
+  variant: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  noShadow: PropTypes.bool,
 };
 
-FlatButton.propTypes = {
+TheButton.propTypes = {
   variant: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
   confirm: PropTypes.any,
   staticContext: PropTypes.any,
   confirmId: PropTypes.string,
+  noShadow: PropTypes.bool,
 };
 
-export default FlatButton;
+export default TheButton;

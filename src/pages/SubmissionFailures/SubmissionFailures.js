@@ -10,7 +10,7 @@ import { fetchManyStatus, readySubmissionFailuresSelector } from '../../redux/se
 import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList';
 import Box from '../../components/widgets/Box/Box';
 import ResolveFailure from '../../components/SubmissionFailures/ResolveFailure/ResolveFailure';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 
 class SubmissionFailures extends Component {
   state = { isOpen: false, activeId: null };
@@ -74,11 +74,7 @@ class SubmissionFailures extends Component {
                 <FailuresList
                   failures={submissionFailures}
                   createActions={id => (
-                    <Button
-                      variant="warning"
-                      className="btn-flat"
-                      size="xs"
-                      onClick={() => this.setState({ isOpen: true, activeId: id })}>
+                    <Button variant="warning" size="xs" onClick={() => this.setState({ isOpen: true, activeId: id })}>
                       <FormattedMessage id="app.submissionFailures.resolve" defaultMessage="Resolve" />
                     </Button>
                   )}

@@ -4,9 +4,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import { Link } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Set } from 'immutable';
 
 import Page from '../../components/layout/Page';
@@ -122,13 +121,13 @@ class User extends Component {
 
             <p>
               {(isAdmin || userId === loggedInUserId) && (
-                <LinkContainer to={EDIT_USER_URI_FACTORY(userId)}>
+                <Link to={EDIT_USER_URI_FACTORY(userId)}>
                   <Button variant="warning" size="sm">
                     <EditIcon />
                     &nbsp;
                     <FormattedMessage id="app.editUser.title" defaultMessage="Edit user's profile" />
                   </Button>
-                </LinkContainer>
+                </Link>
               )}
 
               {isAdmin && userId !== loggedInUserId && user.privateData.isAllowed && (
@@ -168,19 +167,19 @@ class User extends Component {
                               unlimitedHeight
                               footer={
                                 <p className="text-center">
-                                  <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
+                                  <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                     <Button size="sm">
                                       <GroupIcon gapRight />
                                       <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                     </Button>
-                                  </LinkContainer>
+                                  </Link>
 
-                                  <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                  <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                                     <Button size="sm">
                                       <AssignmentsIcon gapRight />
                                       <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                                     </Button>
-                                  </LinkContainer>
+                                  </Link>
                                 </p>
                               }>
                               <AssignmentsTable
@@ -233,11 +232,11 @@ class User extends Component {
                       />
                     </p>
                     <p className="text-center">
-                      <LinkContainer to={INSTANCE_URI_FACTORY(user.instanceId)}>
+                      <Link to={INSTANCE_URI_FACTORY(user.instanceId)}>
                         <Button variant="success">
                           <FormattedMessage id="app.user.examineGroupsInstance" defaultMessage="Find your groups" />
                         </Button>
-                      </LinkContainer>
+                      </Link>
                     </p>
                   </div>
                 </Col>

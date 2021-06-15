@@ -81,7 +81,6 @@ const renderPage = (res, store = null, html = '') => {
     html,
     head,
     reduxState,
-    skin: parsedConfig.SKIN,
     bundle,
     style,
     config,

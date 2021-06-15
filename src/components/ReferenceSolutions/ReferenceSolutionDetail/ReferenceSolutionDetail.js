@@ -15,7 +15,7 @@ import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
 
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { RefreshIcon, WarningIcon, EvaluationFailedIcon } from '../../icons';
@@ -184,7 +184,7 @@ class ReferenceSolutionDetail extends Component {
               )}
 
               {failure && (
-                <React.Fragment>
+                <>
                   <div className="callout callout-danger">
                     <h4>
                       <EvaluationFailedIcon gapRight />
@@ -214,7 +214,7 @@ class ReferenceSolutionDetail extends Component {
 
                   {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
                     <div className="callout callout-success">
-                      <span className="small pull-right">
+                      <span className="small float-right">
                         (<DateTime unixts={failure.resolvedAt} />)
                       </span>
                       <h4>
@@ -233,7 +233,7 @@ class ReferenceSolutionDetail extends Component {
                       </p>
                     </div>
                   )}
-                </React.Fragment>
+                </>
               )}
 
               {evaluation && (

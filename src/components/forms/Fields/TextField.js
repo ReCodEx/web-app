@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { FormGroup, FormControl, FormLabel, HelpBlock } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import styles from './commonStyles.less';
@@ -15,24 +15,24 @@ const TextField = ({
   ignoreDirty = false,
   ...props
 }) => (
-  <FormGroup
-    controlId={input.name}
-    validationState={error ? 'error' : warning ? 'warning' : undefined}
-    className={groupClassName}>
+  <FormGroup controlId={input.name} className={groupClassName}>
     {Boolean(label) && <FormLabel>{label}</FormLabel>}
     <FormControl
       {...input}
       {...props}
+      isInvalid={Boolean(error)}
       type={type}
       value={Array.isArray(value) ? value[0] : value}
-      bsPrefix={classnames({
+      className={classnames({
         'form-control': true,
         [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
         [styles.active]: active,
+        'text-danger': error,
+        'border-warning': !error && warning,
       })}
     />
-    {error && <HelpBlock> {error} </HelpBlock>}
-    {!error && warning && <HelpBlock> {warning} </HelpBlock>}
+    {error && <Form.Text className="text-danger"> {error} </Form.Text>}
+    {!error && warning && <Form.Text className="text-warning"> {warning} </Form.Text>}
   </FormGroup>
 );
 

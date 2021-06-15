@@ -16,7 +16,7 @@ const SolutionTableRowIcons = ({
   lastSubmission,
   commentsStats = null,
 }) => (
-  <React.Fragment>
+  <>
     <AssignmentStatusIcon
       id={id}
       status={getStatusDesc(status, lastSubmission)}
@@ -40,7 +40,7 @@ const SolutionTableRowIcons = ({
     )}
 
     <CommentsIcon id={id} commentsStats={commentsStats} gapLeft />
-  </React.Fragment>
+  </>
 );
 
 SolutionTableRowIcons.propTypes = {

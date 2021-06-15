@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import { DownloadIcon, LoadingIcon } from '../../components/icons';
 
 import { fetchFileIfNeeded, download } from '../../redux/modules/files';
@@ -34,7 +34,7 @@ class SourceCodeViewerContainer extends Component {
     return (
       <ResourceRenderer
         loading={
-          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
+          <Modal show={show} onHide={onHide} dialogClassName={styles.modal} size="xl">
             <div>
               <Modal.Header closeButton>
                 <Modal.Title>
@@ -62,7 +62,7 @@ class SourceCodeViewerContainer extends Component {
         }
         resource={[file, content]}>
         {(file, content) => (
-          <Modal show={show} onHide={onHide} dialogClassName={styles.modal}>
+          <Modal show={show} onHide={onHide} dialogClassName={styles.modal} size="xl">
             <div>
               <Modal.Header closeButton>
                 <Modal.Title>{file.name}</Modal.Title>

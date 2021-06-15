@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
+import { Form, FormGroup, FormControl } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { CloseIcon, SendIcon } from '../../icons';
 import { AstNode, AstNodeValue } from '../../../helpers/exercise/scoreAst';
 
@@ -78,27 +78,29 @@ class EditLiteralNodeForm extends Component {
     const value = this.state.value !== null ? this.state.value : (node && node.value && `${node.value}`) || '';
 
     return (
-      <React.Fragment>
-        <FormGroup validationState={!this.valid() ? 'error' : undefined}>
+      <>
+        <FormGroup>
           <FormControl
             autoFocus
             type="text"
             value={value}
-            bsPrefix={classnames({
+            isInvalid={!this.valid()}
+            className={classnames({
               'form-control': true,
               [formStyles.dirty]: this.dirty(),
+              'border-danger': !this.valid(),
             })}
             onChange={this.changeValue}
             onKeyDown={this.keyDown}
           />
 
           {!this.valid() && (
-            <HelpBlock>
+            <Form.Text className="text-danger">
               <FormattedMessage
                 id="app.scoreConfigExpression.editLiteralDialog.invalidInput"
                 defaultMessage="The literal value must be a valid number."
               />
-            </HelpBlock>
+            </Form.Text>
           )}
         </FormGroup>
 
@@ -114,7 +116,7 @@ class EditLiteralNodeForm extends Component {
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

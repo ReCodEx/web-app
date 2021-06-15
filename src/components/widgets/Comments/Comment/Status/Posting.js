@@ -8,8 +8,8 @@ const Posting = ({ right }) => (
   <span
     className={classnames({
       'direct-chat-timestamp': true,
-      'pull-right': right,
-      'pull-left': !right,
+      'float-right': right,
+      'float-left': !right,
     })}>
     <LoadingIcon gapRight />
     <FormattedMessage id="app.comments.publishing" defaultMessage="Publishing..." />

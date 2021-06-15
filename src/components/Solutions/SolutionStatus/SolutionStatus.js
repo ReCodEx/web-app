@@ -77,7 +77,7 @@ class SolutionStatus extends Component {
     const important = getImportantSolutions(otherSolutions, id);
 
     return (
-      <React.Fragment>
+      <>
         <Box
           title={<FormattedMessage id="app.solution.title" defaultMessage="The Solution" />}
           noPadding={true}
@@ -103,7 +103,7 @@ class SolutionStatus extends Component {
                     )}
 
                     {Boolean(editNote) && (
-                      <span className="pull-right text-warning">
+                      <span className="float-right text-warning">
                         <EditIcon gapLeft gapRight onClick={this.openDialog} />
                       </span>
                     )}
@@ -211,7 +211,7 @@ class SolutionStatus extends Component {
                   </b>
 
                   {important.accepted && (
-                    <React.Fragment>
+                    <>
                       <OverlayTrigger
                         placement="bottom"
                         overlay={
@@ -225,16 +225,16 @@ class SolutionStatus extends Component {
                         <WarningIcon largeGapLeft largeGapRight className="text-warning" />
                       </OverlayTrigger>
 
-                      <span className="small pull-right">
+                      <span className="small float-right">
                         <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.accepted.id)}>
                           <FormattedMessage id="app.solution.accepted" defaultMessage="accepted" />
                           <LinkIcon gapLeft />
                         </Link>
                       </span>
-                    </React.Fragment>
+                    </>
                   )}
                   {!important.accepted && important.best && (
-                    <React.Fragment>
+                    <>
                       <OverlayTrigger
                         placement="bottom"
                         overlay={
@@ -248,13 +248,13 @@ class SolutionStatus extends Component {
                         <WarningIcon largeGapLeft largeGapRight className="text-warning" />
                       </OverlayTrigger>
 
-                      <span className="small pull-right">
+                      <span className="small float-right">
                         <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.best.id)}>
                           <FormattedMessage id="app.solution.best" defaultMessage="best" />
                           <LinkIcon gapLeft />
                         </Link>
                       </span>
-                    </React.Fragment>
+                    </>
                   )}
                 </td>
               </tr>
@@ -270,7 +270,7 @@ class SolutionStatus extends Component {
                   <SuccessOrFailureIcon success={reviewed} />
 
                   {important.lastReviewed && (
-                    <span className="small pull-right">
+                    <span className="small float-right">
                       <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.lastReviewed.id)}>
                         <FormattedMessage id="app.solution.lastReviewed" defaultMessage="last reviewed" />
                         <LinkIcon gapLeft />
@@ -298,7 +298,7 @@ class SolutionStatus extends Component {
                   />
 
                   {important.last && (
-                    <span className="small pull-right">
+                    <span className="small float-right">
                       <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.last.id)}>
                         <FormattedMessage id="app.solution.lastSolution" defaultMessage="last" />
                         <LinkIcon gapLeft />
@@ -312,7 +312,7 @@ class SolutionStatus extends Component {
         </Box>
 
         {Boolean(editNote) && (
-          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+          <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage id="app.solution.editNoteModalTitle" defaultMessage="Edit Solution Note" />
@@ -326,7 +326,7 @@ class SolutionStatus extends Component {
             </Modal.Body>
           </Modal>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
-
-import Button from '../../components/widgets/FlatButton';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
+import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import ShadowAssignmentPointsContainer from '../../containers/ShadowAssignmentPointsContainer';
@@ -73,7 +72,7 @@ class ShadowAssignment extends Component {
                 <HierarchyLineContainer groupId={shadowAssignment.groupId} />
                 {hasPermissions(shadowAssignment, 'update') && (
                   <p>
-                    <LinkContainer to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id)}>
+                    <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id)}>
                       <Button variant="warning">
                         <EditIcon gapRight />
                         <FormattedMessage
@@ -81,7 +80,7 @@ class ShadowAssignment extends Component {
                           defaultMessage="Edit Shadow Assignment Settings"
                         />
                       </Button>
-                    </LinkContainer>
+                    </Link>
                   </p>
                 )}
               </Col>

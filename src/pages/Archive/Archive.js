@@ -3,24 +3,24 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-
-import { LinkContainer } from 'react-router-bootstrap';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
+import GroupTree from '../../components/Groups/GroupTree';
 import withLinks from '../../helpers/withLinks';
+import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
+import { getLocalizedName } from '../../helpers/localizedData';
+import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
+import { GroupIcon, SuccessOrFailureIcon, AssignmentsIcon } from '../../components/icons';
+
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchInstancesIfNeeded } from '../../redux/modules/instances';
 import { selectedInstanceId } from '../../redux/selectors/auth';
 import { selectedInstance } from '../../redux/selectors/instances';
 import { groupsSelector } from '../../redux/selectors/groups';
-import GroupTree from '../../components/Groups/GroupTree';
 import { getJsData } from '../../redux/helpers/resourceManager';
-import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
-import { getLocalizedName } from '../../helpers/localizedData';
-import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
-import { GroupIcon, SuccessOrFailureIcon, AssignmentsIcon } from '../../components/icons';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
@@ -100,18 +100,18 @@ class Archive extends Component {
             <FormattedMessage id="app.group.setRoot" defaultMessage="Select" />
           )}
         </Button>
-        <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
+        <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
           <Button variant="primary" size="xs">
             <GroupIcon gapRight />
             <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
           </Button>
-        </LinkContainer>
-        <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+        </Link>
+        <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
           <Button variant="primary" size="xs">
             <AssignmentsIcon gapRight />
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
-        </LinkContainer>
+        </Link>
         <ArchiveGroupButtonContainer id={groupId} size="xs" shortLabels onChange={() => loadAsync(instanceId)} />
       </span>
     );
@@ -139,7 +139,7 @@ class Archive extends Component {
           <Box
             title={<FormattedMessage id="app.archive.archivedGroups" defaultMessage="All Groups Including Archived" />}
             unlimitedHeight>
-            <React.Fragment>
+            <>
               <FilterArchiveGroupsForm
                 form="archive-filters"
                 initialValues={{
@@ -172,7 +172,7 @@ class Archive extends Component {
                   forceRootButtons={true}
                 />
               )}
-            </React.Fragment>
+            </>
           </Box>
         )}
       </Page>

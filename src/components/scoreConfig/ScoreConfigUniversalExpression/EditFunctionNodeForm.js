@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SendIcon } from '../../icons';
 import { AST_FUNCTION_CLASSES, KNOWN_AST_CLASSES, AstNode } from '../../../helpers/exercise/scoreAst';
@@ -51,7 +51,7 @@ class EditFunctionNodeForm extends Component {
     const selected = this.state.selected || (node && !pushDown ? node.getType() : null);
 
     return (
-      <React.Fragment>
+      <>
         {node && !pushDown ? (
           <div className="callout callout-warning">
             <FormattedMessage
@@ -108,7 +108,7 @@ class EditFunctionNodeForm extends Component {
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

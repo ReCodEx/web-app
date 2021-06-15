@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { FormGroup, Checkbox, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormGroup, FormCheck, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import OnOffCheckbox from '../OnOffCheckbox';
 import { WarningIcon } from '../../icons';
@@ -15,13 +15,13 @@ const CheckboxField = ({
   label,
   ...props
 }) => {
-  const Component = onOff ? OnOffCheckbox : Checkbox;
+  const Component = onOff ? OnOffCheckbox : FormCheck;
   /* eslint-disable no-unneeded-ternary */
   return (
     <FormGroup
-      validationState={error ? 'error' : warning ? 'warning' : dirty && !ignoreDirty ? 'success' : undefined}
+      className={error ? 'text-danger' : warning ? 'text-warning' : dirty && !ignoreDirty ? 'text-success' : undefined}
       controlId={input.name}>
-      <Component {...props} {...input} checked={Boolean(input.value)}>
+      <Component {...props} {...input} type="checkbox" checked={Boolean(input.value)}>
         {label}
         {Boolean(error || warning) && (
           <OverlayTrigger

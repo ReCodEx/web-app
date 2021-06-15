@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { LinkContainer } from 'react-router-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { EditIcon, MaybeBonusAssignmentIcon, VisibleIcon, WarningIcon } from '../../../icons';
 import DeleteShadowAssignmentButtonContainer from '../../../../containers/DeleteShadowAssignmentButtonContainer';
-import Button from '../../../widgets/FlatButton';
+import Button from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
 import { safeGet } from '../../../../helpers/common';
 
@@ -67,12 +66,12 @@ const ShadowAssignmentsTableRow = ({
 
     <td className="text-right shrink-col text-nowrap">
       {permissionHints.update && (
-        <LinkContainer to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+        <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
           <Button size="xs" variant="warning">
             <EditIcon gapRight />
             <FormattedMessage id="generic.edit" defaultMessage="Edit" />
           </Button>
-        </LinkContainer>
+        </Link>
       )}
 
       {permissionHints.remove && <DeleteShadowAssignmentButtonContainer id={id} size="xs" />}

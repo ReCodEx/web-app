@@ -1,0 +1,85 @@
+.dropdownMenu {
+  width: 42vw !important;
+  min-width: 400px !important;
+  box-shadow: 8px 8px 16px #999 !important;
+}
+
+.dropdownMenuWide {
+  &:extend(.dropdownMenu);
+  width: 70vw !important;
+}
+
+
+
+/*
+ * notifications
+ */
+
+.iconBadgeWrapper {
+  position: relative;
+  top: 5px;
+  font-size: 75%;
+}
+
+.notification {
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 2rem!important;
+}
+
+.badgeContainer {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  margin-top: 0px;
+}
+
+.copy,
+.copy:visited {
+  color: black;
+}
+
+.copy:hover {
+  color: orange;
+  cursor: pointer;
+}
+
+.delete {
+  cursor: pointer;
+}
+
+@keyframes notificationShowdown {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: #ffcccc;
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.newNotification {
+  animation: notificationShowdown 2s linear 0.5s;
+}
+
+/*
+ * system messages
+ */
+
+.messageList {
+  max-height: calc(100vh - 100px) !important;
+}
+
+.messageList small {
+	margin-top: -5px;
+	font-size: 75%;
+}
+
+.messageAlert {
+  margin-bottom: 0px;
+  border-radius: 0px !important;
+  border-style: none;
+}

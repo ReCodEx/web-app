@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Popover, Overlay, ButtonGroup } from 'react-bootstrap';
 import { SuccessIcon, CloseIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const wrapperSpanStyle = { display: 'inline-block', position: 'relative' };
 
@@ -52,13 +52,18 @@ class Confirm extends Component {
 
     return (
       <Overlay show={showPopup} target={target} placement={placement}>
-        <Popover id={id} title={question}>
-          <div className="text-center">
+        <Popover id={id}>
+          <Popover.Title>{question}</Popover.Title>
+          <Popover.Content className="text-center">
             <ButtonGroup size="sm">
-              <Button onClick={this.confirm}>{yes}</Button>
-              <Button onClick={this.dismiss}>{no}</Button>
+              <Button onClick={this.confirm} variant="success">
+                {yes}
+              </Button>
+              <Button onClick={this.dismiss} variant="danger">
+                {no}
+              </Button>
             </ButtonGroup>
-          </div>
+          </Popover.Content>
         </Popover>
       </Overlay>
     );

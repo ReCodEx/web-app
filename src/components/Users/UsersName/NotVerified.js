@@ -11,25 +11,26 @@ const NotVerified = ({ userId, currentUserId }) => {
       trigger="click"
       rootClose={true}
       overlay={
-        <Popover
-          id={userId}
-          title={
+        <Popover id={userId}>
+          <Popover.Title>
             <FormattedMessage
               id="app.usersName.notVerified.title"
               defaultMessage="This account does not have a verified email address yet."
             />
-          }>
-          <p>
-            <FormattedMessage
-              id="app.usersname.notVerified.description"
-              defaultMessage="This user has not verified his/her email address via an activation link he has received to his email address."
-            />
-          </p>
-          {userId === currentUserId && (
-            <p className="text-center">
-              <ResendVerificationEmail userId={userId} />
+          </Popover.Title>
+          <Popover.Content>
+            <p>
+              <FormattedMessage
+                id="app.usersname.notVerified.description"
+                defaultMessage="This user has not verified his/her email address via an activation link he has received to his email address."
+              />
             </p>
-          )}
+            {userId === currentUserId && (
+              <p className="text-center">
+                <ResendVerificationEmail userId={userId} />
+              </p>
+            )}
+          </Popover.Content>
         </Popover>
       }>
       <span>

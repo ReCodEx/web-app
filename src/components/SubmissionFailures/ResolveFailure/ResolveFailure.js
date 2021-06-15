@@ -7,7 +7,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import SubmitButton from '../../forms/SubmitButton';
 import { TextField, CheckboxField } from '../../forms/Fields';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const maxNoteLength = value =>
   value && value.length >= 255 ? (
@@ -29,7 +29,7 @@ const ResolveFailure = ({
   invalid,
   reset,
 }) => (
-  <Modal show={isOpen} backdrop="static" onHide={onClose}>
+  <Modal show={isOpen} backdrop="static" onHide={onClose} size="xl">
     <Modal.Header closeButton>
       <Modal.Title>
         <FormattedMessage id="app.submissionFailures.resolveTitle" defaultMessage="Resolve Failure" />

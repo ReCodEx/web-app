@@ -3,10 +3,18 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import classnames from 'classnames';
 
 import DateTime from '../../widgets/DateTime';
 import Icon from '../../icons';
 import withLinks from '../../../helpers/withLinks';
+
+const ERROR_ICONS = {
+  broker_reject: 'exchange-alt',
+  evaluation_failure: 'graduation-cap',
+  loading_failure: 'download',
+  soft_config_error: 'feather',
+};
 
 const FailuresListItem = ({
   id,
@@ -14,13 +22,17 @@ const FailuresListItem = ({
   failure,
   links: { SOLUTION_DETAIL_URI_FACTORY, EXERCISE_REFERENCE_SOLUTION_URI_FACTORY },
 }) => (
-  <tr className={failure.resolvedAt ? 'success' : 'danger'}>
-    <td className="text-center">
+  <tr>
+    <td
+      className={classnames({
+        'text-center': true,
+        'vertical-align': true,
+        'bg-success': failure.resolvedAt,
+        'bg-danger': !failure.resolvedAt,
+      })}>
       <OverlayTrigger placement="top" overlay={<Tooltip id={id}>{failure.type}</Tooltip>}>
         <div>
-          {failure.type === 'broker_reject' && <Icon icon="exchange-alt" />}
-          {failure.type === 'evaluation_failure' && <Icon icon="graduation-cap" />}
-          {failure.type === 'loading_failure' && <Icon icon="download" />}
+          {ERROR_ICONS[failure.type] ? <Icon icon={ERROR_ICONS[failure.type]} /> : <Icon icon="exclamation-circle" />}
         </div>
       </OverlayTrigger>
     </td>

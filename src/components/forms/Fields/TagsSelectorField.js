@@ -18,7 +18,7 @@ const TagsSelectorField = ({ tags = [], fields, label = null }) => {
   const active = activeTagsIndex(fields);
 
   return (
-    <React.Fragment>
+    <>
       {Boolean(label) && <FormLabel>{label}</FormLabel>}
       <div className="larger">
         {tags.sort().map(tag => (
@@ -37,7 +37,7 @@ const TagsSelectorField = ({ tags = [], fields, label = null }) => {
           </Badge>
         ))}
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

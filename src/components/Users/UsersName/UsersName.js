@@ -67,25 +67,28 @@ const UsersName = ({
           <OverlayTrigger
             placement="right"
             overlay={
-              <Popover
-                id={id}
-                title={<FormattedMessage id="app.userName.externalIds" defaultMessage="External identifiers" />}>
-                <table>
-                  <tbody>
-                    {Object.keys(externalIds).map(service => (
-                      <tr key={service}>
-                        <td className="em-padding-right">{service}:</td>
-                        <td>
-                          <strong>
-                            {Array.isArray(externalIds[service])
-                              ? externalIds[service].join(', ')
-                              : externalIds[service]}
-                          </strong>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <Popover id={id}>
+                <Popover.Title>
+                  <FormattedMessage id="app.userName.externalIds" defaultMessage="External identifiers" />
+                </Popover.Title>
+                <Popover.Content>
+                  <table>
+                    <tbody>
+                      {Object.keys(externalIds).map(service => (
+                        <tr key={service}>
+                          <td className="em-padding-right">{service}:</td>
+                          <td>
+                            <strong>
+                              {Array.isArray(externalIds[service])
+                                ? externalIds[service].join(', ')
+                                : externalIds[service]}
+                            </strong>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </Popover.Content>
               </Popover>
             }>
             <Icon icon={['far', 'id-card']} gapLeft className="text-muted half-opaque" />

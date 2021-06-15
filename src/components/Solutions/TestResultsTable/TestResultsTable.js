@@ -5,7 +5,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import exitCodeMapping from '../../helpers/exitCodeMapping';
 import Icon from '../../icons';
@@ -196,7 +196,6 @@ class TestResultsTable extends Component {
             {((judgeLogStdout && showJudgeLogStdout) || (judgeLogStderr && showJudgeLogStderr)) && (
               <Button
                 variant={this.isLogOpen(testName) ? 'warning' : 'primary'}
-                className="btn-flat"
                 size="xs"
                 onClick={() => this.toggleLogOpen(testName)}>
                 {this.isLogOpen(testName) ? (
@@ -389,7 +388,6 @@ class TestResultsTable extends Component {
                 {showLogButton && (
                   <Button
                     variant={allLogsClosed ? 'primary' : 'warning'}
-                    className="btn-flat"
                     size="xs"
                     onClick={this.setAllLogsState(allLogsClosed)}>
                     {allLogsClosed ? (

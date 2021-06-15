@@ -37,11 +37,11 @@ const PaginationButtons = ({
   items,
   activePage = 1,
   size = 'sm',
-  bsPrefix = '',
+  className = '',
   onSelect = null,
 }) => {
   return (
-    <Pagination size={size} bsPrefix={bsPrefix}>
+    <Pagination size={size} className={className}>
       {prev && <Pagination.Prev disabled={activePage <= 1} onClick={() => onSelect && onSelect(activePage - 1)} />}
       {prepareButtonsIndices(activePage, items, maxButtons).map(index =>
         index ? (
@@ -64,7 +64,7 @@ PaginationButtons.propTypes = {
   items: PropTypes.number.isRequired,
   activePage: PropTypes.number,
   size: PropTypes.string,
-  bsPrefix: PropTypes.string,
+  className: PropTypes.string,
   onSelect: PropTypes.func,
 };
 

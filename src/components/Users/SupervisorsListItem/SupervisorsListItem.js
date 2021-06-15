@@ -34,10 +34,10 @@ const SupervisorsListItem = ({
           {isGroupAdmin ? (
             <RemoveGroupAdminButton onClick={() => removeAdmin(groupId, id)} size="xs" />
           ) : (
-            <React.Fragment>
+            <>
               <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
               <MakeGroupAdminButton onClick={() => addAdmin(groupId, id)} size="xs" />
-            </React.Fragment>
+            </>
           )}
         </td>
       )}

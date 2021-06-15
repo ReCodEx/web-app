@@ -13,26 +13,6 @@ import Icon from '../../../icons';
 import '../Sidebar.css';
 
 class MenuGroup extends Component {
-  state = {
-    open: null,
-    defaultOpen: null,
-  };
-
-  static getDerivedStateFromProps = ({ isActive = false }, state) =>
-    state.defaultOpen !== isActive // props have changed -> reinitialize
-      ? {
-          open: isActive, // this is actual state value indicating expanded/collapsed menu
-          defaultOpen: isActive, // this is only derived from props, so we can detect props change and reinitialize state
-        }
-      : null;
-
-  toggle = e => {
-    e.preventDefault();
-    this.setState({
-      open: !this.state.open,
-    });
-  };
-
   render() {
     const {
       title,
@@ -41,6 +21,7 @@ class MenuGroup extends Component {
       createLink,
       currentPath,
       notifications,
+      isActive = false,
       intl: { locale },
     } = this.props;
 
@@ -51,8 +32,8 @@ class MenuGroup extends Component {
       <li
         className={classnames({
           'nav-item': true,
-          small: true,
-          // todo -- isActive - otevrit
+          'menu-is-opening': isActive,
+          'menu-open': isActive,
         })}>
         <a href="#" className="nav-link">
           <Icon icon={icon} gapRight fixedWidth className="nav-icon small" />
@@ -77,7 +58,7 @@ class MenuGroup extends Component {
                   },
                   locale
                 )}
-                icon={['far', 'circle']}
+                icon="users"
                 currentPath={currentPath}
                 notificationsCount={itemsNotificationsCount(item)}
                 link={createLink(item)}

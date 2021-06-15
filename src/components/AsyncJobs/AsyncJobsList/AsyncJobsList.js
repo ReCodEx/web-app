@@ -20,7 +20,7 @@ const formatArgs = args =>
 const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI_FACTORY } }) => (
   <Box title={<FormattedMessage id="app.asyncJobs.list.title" defaultMessage="Recent Jobs" />} noPadding>
     {asyncJobs && asyncJobs.length > 0 ? (
-      <Table responsive condensed hover>
+      <Table responsive size="sm" hover>
         <thead>
           <tr>
             <th>
@@ -60,17 +60,16 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                   {job.startedAt ? (
                     <OverlayTrigger
                       overlay={
-                        <Popover
-                          id={`start-${job.id}`}
-                          title={
+                        <Popover id={`start-${job.id}`}>
+                          <Popover.Title>
                             <FormattedMessage id="app.asyncJobs.list.processInfo" defaultMessage="Processing info" />
-                          }>
-                          <small>
+                          </Popover.Title>
+                          <Popover.Content className="small">
                             <FormattedMessage id="app.asyncJobs.list.worker" defaultMessage="Worker" />:
                             <code>{job.workerId}</code>
                             <br />
                             <FormattedMessage id="app.asyncJobs.list.retries" defaultMessage="Retries" />: {job.retries}
-                          </small>
+                          </Popover.Content>
                         </Popover>
                       }>
                       {
@@ -90,10 +89,13 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                   {job.arguments && Object.keys(job.arguments).length > 0 ? (
                     <OverlayTrigger
                       overlay={
-                        <Popover
-                          id={`pop-${job.id}`}
-                          title={<FormattedMessage id="app.asyncJobs.list.args" defaultMessage="Command arguments" />}>
-                          <code>{formatArgs(job.arguments)}</code>
+                        <Popover id={`pop-${job.id}`}>
+                          <Popover.Title>
+                            <FormattedMessage id="app.asyncJobs.list.args" defaultMessage="Command arguments" />
+                          </Popover.Title>
+                          <Popover.Content>
+                            <code>{formatArgs(job.arguments)}</code>
+                          </Popover.Content>
                         </Popover>
                       }>
                       <code>{job.command}</code>

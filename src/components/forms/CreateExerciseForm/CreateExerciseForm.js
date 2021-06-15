@@ -34,7 +34,7 @@ class CreateExerciseForm extends Component {
       <FormBox
         title={<FormattedMessage id="app.createExerciseForm.title" defaultMessage="Create New Exercise" />}
         type={submitSucceeded ? 'success' : undefined}>
-        <React.Fragment>
+        <>
           <table>
             <tbody>
               <tr>
@@ -74,7 +74,7 @@ class CreateExerciseForm extends Component {
               <FormattedMessage id="generic.creationFailed" defaultMessage="Creation failed. Please try again later." />
             </Alert>
           )}
-        </React.Fragment>
+        </>
       </FormBox>
     );
   }

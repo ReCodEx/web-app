@@ -9,7 +9,7 @@ import Version from '../../../widgets/Version/Version';
 
 const ShadowAssignmentDetail = ({ maxPoints, isBonus, isPublic, createdAt, updatedAt, version, permissionHints }) => (
   <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding>
-    <Table responsive condensed>
+    <Table responsive size="sm">
       <tbody>
         <tr>
           <td className="text-center shrink-col em-padding-left em-padding-right">

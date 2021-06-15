@@ -7,7 +7,7 @@ import { SelectField, ExpandingTextField, CheckboxField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import Icon from '../../icons';
 import Explanation from '../../widgets/Explanation';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const messages = defineMessages({
   normal: {
@@ -67,7 +67,7 @@ const EditExerciseSimpleConfigTestJudge = ({
   readOnly = false,
   intl,
 }) => (
-  <React.Fragment>
+  <>
     <h4>
       <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeTitle" defaultMessage="Judge" />
     </h4>
@@ -156,7 +156,7 @@ const EditExerciseSimpleConfigTestJudge = ({
         maxLength={64}
         readOnly={readOnly}
         label={
-          <React.Fragment>
+          <>
             <FormattedMessage id="app.editExerciseSimpleConfigTests.judgeArgs" defaultMessage="Judge arguments:" />
             <Explanation id={`${test}.judge-args-explanation`}>
               <FormattedMessage
@@ -164,7 +164,7 @@ const EditExerciseSimpleConfigTestJudge = ({
                 defaultMessage="Please, place individual arguments into individual input boxes. Any whitespace inside the input box will be treated as a regular part of the argument value (not as a separator of arguments)."
               />
             </Explanation>
-          </React.Fragment>
+          </>
         }
       />
     )}
@@ -187,7 +187,7 @@ const EditExerciseSimpleConfigTestJudge = ({
         </Confirm>
       </div>
     )}
-  </React.Fragment>
+  </>
 );
 
 EditExerciseSimpleConfigTestJudge.propTypes = {

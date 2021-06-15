@@ -80,7 +80,7 @@ Sample content of this file is following:
   "PORT": 8080,
   "API_BASE": "https://recodex.base.domain/api/v1",
   "TITLE": "ReCodEx",
-  "SKIN": "skin-green",
+  "SKIN": "green",
   "URL_PATH_PREFIX": "",
   "PERSISTENT_TOKENS_KEY_PREFIX": "recodex",
   "ENVIRONMENTS_INFO_URL": "https://github.com/ReCodEx/wiki/wiki/Runtime-Environments",
@@ -100,7 +100,7 @@ Meaning of individual values:
 * `PORT` - On which port the node.js express server listens.
 * `API_BASE` - URL of API to which the frontend is connected.
 * `TITLE` - Prefix for the web page title.
-* `SKIN` - Which [skin color](https://adminlte.io/themes/AdminLTE/documentation/index.html) of the AdminLTE should be used.
+* `SKIN` - Which [skin color](https://adminlte.io/docs/3.1//layout.html) of the AdminLTE should be used. This is only a color suffix (e.g., `green` or `primary`).
 * `URL_PATH_PREFIX` - If the ReCodEx is not placed in the root path of the current domain, the path prefix should be placed here. This also allows running multiple ReCodEx frontends on one domain.
 * `PERSISTENT_TOKENS_KEY_PREFIX` - Prefix used for security token identifiers (in cookies or in local storage). If you run multiple ReCodEx instances on the same domain, it might be necessary to give each instance different prefix.
 * `ENVIRONMENTS_INFO_URL` - Link to a web page where individual runtime environments are explained (default refers to our wiki).

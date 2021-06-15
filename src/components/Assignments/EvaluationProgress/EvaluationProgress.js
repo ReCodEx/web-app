@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Modal, ProgressBar, Table } from 'react-bootstrap';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import EvaluationStatusText from './EvaluationStatusText';
 import Icon from '../../icons';
 
@@ -46,7 +46,7 @@ class EvaluationProgress extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose}>
+      <Modal show={isOpen} backdrop="static" onHide={onClose} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage id="app.evaluationProgress.title" defaultMessage="Solution is being evaluated" />
@@ -98,7 +98,7 @@ class EvaluationProgress extends Component {
         <Modal.Footer>
           <p className="text-center">
             <Button
-              variant={finished ? 'success' : 'default'}
+              variant={finished ? 'success' : 'secondary'}
               onClick={finishProcessing}
               disabled={!showContinueButton}>
               <FormattedMessage id="app.evaluationProgress.continue" defaultMessage="See The Results" />

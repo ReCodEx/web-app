@@ -33,7 +33,7 @@ const AssignmentDetails = ({
   isStudent,
 }) => (
   <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding collapsable isOpen={isOpen}>
-    <Table responsive condensed>
+    <Table responsive size="sm">
       <tbody>
         {permissionHints.update && (
           <tr>
@@ -112,7 +112,7 @@ const AssignmentDetails = ({
         </tr>
 
         {allowSecondDeadline && (
-          <React.Fragment>
+          <>
             <tr
               className={classnames({
                 'text-danger': isAfterSecondDeadline,
@@ -144,7 +144,7 @@ const AssignmentDetails = ({
               </th>
               <td>{maxPointsBeforeSecondDeadline}</td>
             </tr>
-          </React.Fragment>
+          </>
         )}
 
         <tr>

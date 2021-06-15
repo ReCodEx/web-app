@@ -5,9 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import { Col, Row, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import EditAssignmentForm, {
   prepareInitialValues as prepareEditFormInitialValues,
@@ -126,18 +126,18 @@ class EditAssignment extends Component {
         ]}>
         {assignment =>
           assignment && (
-            <React.Fragment>
+            <>
               <Row>
                 <Col xs={12}>
                   <HierarchyLineContainer groupId={assignment.groupId} />
                   {assignment.permissionHints.viewDetail && (
                     <p>
-                      <LinkContainer to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                      <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
                         <Button variant="primary">
                           <ResultsIcon gapRight />
                           <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
                         </Button>
-                      </LinkContainer>
+                      </Link>
                       {assignment.permissionHints.resubmitSolutions && (
                         <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
                       )}
@@ -223,7 +223,7 @@ class EditAssignment extends Component {
                   </div>
                 </Box>
               )}
-            </React.Fragment>
+            </>
           )
         }
       </Page>

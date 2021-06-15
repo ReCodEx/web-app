@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import GroupsName from '../GroupsName';
@@ -43,11 +43,11 @@ class GroupTree extends Component {
                 <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
               </Tooltip>
             }>
-            <LinkContainer to={GROUP_EDIT_URI_FACTORY(groupId)}>
+            <Link to={GROUP_EDIT_URI_FACTORY(groupId)}>
               <Button variant="warning" size="xs">
                 <EditIcon smallGapLeft smallGapRight />
               </Button>
-            </LinkContainer>
+            </Link>
           </OverlayTrigger>
         )}
 
@@ -58,11 +58,11 @@ class GroupTree extends Component {
               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
             </Tooltip>
           }>
-          <LinkContainer to={GROUP_INFO_URI_FACTORY(groupId)}>
+          <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
             <Button variant="primary" size="xs">
               <GroupIcon />
             </Button>
-          </LinkContainer>
+          </Link>
         </OverlayTrigger>
 
         {permissionHints && permissionHints.viewDetail && (
@@ -73,11 +73,11 @@ class GroupTree extends Component {
                 <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
               </Tooltip>
             }>
-            <LinkContainer to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+            <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
               <Button variant="primary" size="xs">
                 <AssignmentsIcon smallGapLeft smallGapRight />
               </Button>
-            </LinkContainer>
+            </Link>
           </OverlayTrigger>
         )}
       </span>

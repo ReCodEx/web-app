@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
 import Box from '../../widgets/Box';
 import EvaluationTable from '../../ReferenceSolutions/EvaluationTable';
@@ -41,7 +41,7 @@ const SubmissionEvaluations = ({
     noPadding={true}
     collapsable={true}
     isOpen={true}>
-    <React.Fragment>
+    <>
       {showInfo && (
         <p className="callout callout-info small em-margin">
           <FormattedMessage
@@ -61,7 +61,7 @@ const SubmissionEvaluations = ({
                 <FormattedMessage id="app.submissionEvaluation.visible" defaultMessage="Visible" />
               </Button>
             ) : (
-              <React.Fragment>
+              <>
                 <Button variant="primary" size="xs" onClick={() => onSelect(id)}>
                   <Icon icon={['far', 'eye']} gapRight />
                   <FormattedMessage id="app.submissionEvaluation.show" defaultMessage="Show" />
@@ -77,12 +77,12 @@ const SubmissionEvaluations = ({
                       />
                     )
                   )}
-              </React.Fragment>
+              </>
             )}
           </td>
         )}
       />
-    </React.Fragment>
+    </>
   </Box>
 );
 

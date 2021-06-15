@@ -16,7 +16,7 @@ import {
 } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import { LocalIcon, TransferIcon, BanIcon, WarningIcon, RefreshIcon } from '../../components/icons';
 import { UserRoleIcon } from '../../components/helpers/usersRoles';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
@@ -236,7 +236,7 @@ class GroupDetail extends Component {
             <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />
 
             {!data.organizational && hasPermissions(data, 'viewAssignments') && (
-              <React.Fragment>
+              <>
                 <Row>
                   <Col lg={12}>
                     <Box
@@ -271,7 +271,7 @@ class GroupDetail extends Component {
                       isOpen={shadowAssignments && shadowAssignments.size > 0}
                       footer={
                         hasPermissions(data, 'createShadowAssignment') ? (
-                          <p className="em-margin-top text-center">
+                          <div className="text-center">
                             <Button onClick={this.createShadowAssignment} variant="success">
                               <AddIcon gapRight />
                               <FormattedMessage
@@ -279,7 +279,7 @@ class GroupDetail extends Component {
                                 defaultMessage="New Shadow Assignment"
                               />
                             </Button>
-                          </p>
+                          </div>
                         ) : null
                       }>
                       <ShadowAssignmentsTable
@@ -290,12 +290,12 @@ class GroupDetail extends Component {
                     </Box>
                   </Col>
                 </Row>
-              </React.Fragment>
+              </>
             )}
 
             <ResourceRenderer resource={loggedUser}>
               {loggedUser => (
-                <React.Fragment>
+                <>
                   {!data.organizational && hasPermissions(data, 'viewAssignments', 'viewStudents') && (
                     <Row>
                       <Col lg={12}>
@@ -374,7 +374,7 @@ class GroupDetail extends Component {
                         </Col>
                       </Row>
                     )}
-                </React.Fragment>
+                </>
               )}
             </ResourceRenderer>
 
@@ -387,12 +387,12 @@ class GroupDetail extends Component {
                     }
                     footer={
                       hasPermissions(data, 'createExercise') && !data.archived ? (
-                        <p className="text-center">
-                          <Button variant="success" size="sm" onClick={this.createGroupExercise}>
+                        <div className="text-center">
+                          <Button variant="success" onClick={this.createGroupExercise}>
                             <AddIcon gapRight />
                             <FormattedMessage id="app.group.createExercise" defaultMessage="Create Exercise in Group" />
                           </Button>
-                        </p>
+                        </div>
                       ) : undefined
                     }
                     isOpen

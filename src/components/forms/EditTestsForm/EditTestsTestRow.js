@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
 import { TextField, NumericTextField } from '../Fields';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import Icon, { RemoveIcon } from '../../icons';
 import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
 

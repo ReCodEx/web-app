@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import { Card, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/FlatButton';
+import Button from '../../components/widgets/TheButton';
 import InsetPanel from '../../components/widgets/InsetPanel';
 import UsersNameContainer from '../UsersNameContainer';
 import LeaveJoinGroupButtonContainer from '../LeaveJoinGroupButtonContainer';
@@ -147,7 +147,7 @@ class SisIntegrationContainer extends Component {
                                                       <span>
                                                         {group.privateData &&
                                                           group.privateData.students.includes(currentUserId) && (
-                                                            <LinkContainer
+                                                            <Link
                                                               to={
                                                                 group.organizational ||
                                                                 // this is inacurate, but public groups are visible to students who cannot see detail until they join
@@ -162,7 +162,7 @@ class SisIntegrationContainer extends Component {
                                                                   defaultMessage="Assignments"
                                                                 />
                                                               </Button>
-                                                            </LinkContainer>
+                                                            </Link>
                                                           )}
 
                                                         {!group.organizational &&

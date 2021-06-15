@@ -9,7 +9,7 @@ import DateTime from '../../widgets/DateTime';
 
 const LicencesTable = ({ instance, licences }) => (
   <Box title={<FormattedMessage id="app.instance.licencesTitle" defaultMessage="Licences" />}>
-    <React.Fragment>
+    <>
       <p>
         <FormattedMessage
           id="app.instance.hasValidLicence"
@@ -19,7 +19,7 @@ const LicencesTable = ({ instance, licences }) => (
         &nbsp;
         <SuccessOrFailureIcon success={instance.hasValidLicence} />
       </p>
-      <Table condensed hover>
+      <Table size="sm" hover>
         <thead>
           <tr>
             <th>
@@ -57,7 +57,7 @@ const LicencesTable = ({ instance, licences }) => (
           )}
         </tbody>
       </Table>
-    </React.Fragment>
+    </>
   </Box>
 );
 

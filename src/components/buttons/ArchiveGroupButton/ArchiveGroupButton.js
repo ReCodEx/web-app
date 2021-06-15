@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { ArchiveGroupIcon, LoadingIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 
 const ArchiveGroupButton = ({
   archived,
@@ -13,7 +13,7 @@ const ArchiveGroupButton = ({
   shortLabels = false,
 }) => (
   <Button
-    variant={disabled ? 'default' : 'info'}
+    variant={disabled ? 'secondary' : 'info'}
     onClick={setArchived(!archived)}
     disabled={pending || disabled}
     size={size}>

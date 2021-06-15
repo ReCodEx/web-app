@@ -8,7 +8,7 @@ import ScoreConfigInfo from './ScoreConfigInfo';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const ScoreConfigInfoDialog = ({ show, onHide, scoreConfig, testResults, canResubmit = false }) => (
-  <Modal show={show} backdrop="static" onHide={onHide} size="large">
+  <Modal show={show} backdrop="static" onHide={onHide} size="xl">
     <Modal.Header closeButton>
       <Modal.Title>
         <FormattedMessage id="app.scoreConfigInfo.dialogTitle" defaultMessage="Correctness Algorithm" />

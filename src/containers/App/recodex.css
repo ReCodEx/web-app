@@ -216,7 +216,7 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
 /*
  * AdminLTE Boxes
  */
-@keyframes box-target {
+@keyframes card-target {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 240, 96, 0);
   }
@@ -231,9 +231,9 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
   }
 }
 
-.box:target {
+.card:target {
   /*box-shadow: 0 0 5px 2px #fd6!important;*/
-  animation: 3s ease infinite running box-target;
+  animation: 3s ease infinite running card-target;
   border-color: #fe9 !important;
   border-bottom: 1px solid;
   border-left: 1px solid;
@@ -248,12 +248,12 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
   display: initial;
 }
 
-.box-body>.table-responsive>.table {
+.card-body > .table-responsive > .table {
   margin-bottom: 0;
 }
 
 /*
- * Bootstrap Enhancments
+ * Bootstrap Enhancements
  */
 .wider-tooltip {
   width: 300px;
@@ -276,6 +276,9 @@ table.table tbody:first-child tr:first-child th {
   border-top: 0;
 }
 
+.accordion > .card {
+  margin-bottom: 0;
+}
 
 /*
  * ACE Editor Overrides

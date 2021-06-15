@@ -4,7 +4,7 @@ import { FormattedHTMLMessage } from 'react-intl';
 
 const Footer = ({ version }) => (
   <footer className="main-footer">
-    <div className="pull-right hidden-xs">
+    <div className="float-right hidden-xs">
       <FormattedHTMLMessage
         id="app.footer.version"
         defaultMessage="<strong>Version</strong> {version} (<a href='{changelogUrl}' target='_blank'>changelog</a>)"

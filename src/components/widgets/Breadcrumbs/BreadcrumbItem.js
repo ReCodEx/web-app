@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'react-bootstrap';
 
 import Icon from '../../icons';
@@ -9,17 +9,15 @@ import withLinks from '../../../helpers/withLinks';
 
 const BreadcrumbItem = ({ text, link = null, iconName = null, isActive = false, links }) => {
   const content = (
-    <Breadcrumb.Item active={isActive}>
+    <>
       {Boolean(iconName) && <Icon icon={iconName} smallGapRight />} {text}
-    </Breadcrumb.Item>
+    </>
   );
 
-  return link !== null ? (
-    <LinkContainer to={typeof link === 'function' ? link(links) : link} active={isActive}>
-      {content}
-    </LinkContainer>
-  ) : (
-    content
+  return (
+    <Breadcrumb.Item active={isActive} linkAs="span">
+      {link !== null ? <Link to={typeof link === 'function' ? link(links) : link}>{content}</Link> : content}
+    </Breadcrumb.Item>
   );
 };
 

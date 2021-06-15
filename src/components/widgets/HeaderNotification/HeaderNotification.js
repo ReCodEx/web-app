@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, OverlayTrigger, Overlay, Badge } from 'react-bootstrap';
+import { Tooltip, OverlayTrigger, Overlay, Badge, Dropdown } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classnames from 'classnames';
@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { SuccessIcon, WarningIcon, DeleteIcon, CopyIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 
-import styles from './headerNotification.less';
+import styles from '../Header/Header.less';
 
 class HeaderNotification extends Component {
   state = { hovering: false, clickedCopy: false };
@@ -39,7 +39,7 @@ class HeaderNotification extends Component {
     const deleteOnClick = hide && hovering;
 
     return (
-      <li
+      <Dropdown.Item
         className={classnames({
           [styles.notification]: true,
           [styles.newNotification]: isNew,
@@ -55,7 +55,7 @@ class HeaderNotification extends Component {
               </span>
             </Tooltip>
           }>
-          <a>
+          <>
             <span
               className="fa"
               onMouseOver={() => this.setState({ hovering: true })}
@@ -94,12 +94,12 @@ class HeaderNotification extends Component {
             <span>{msg}</span>
             {count > 1 && (
               <span className={styles.badgeContainer}>
-                <Badge>{count}</Badge>
+                <Badge variant="secondary">{count}</Badge>
               </span>
             )}
-          </a>
+          </>
         </OverlayTrigger>
-      </li>
+      </Dropdown.Item>
     );
   }
 }

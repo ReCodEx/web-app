@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../../components/widgets/FlatButton';
+import Button from '../../../components/widgets/TheButton';
 import { SuccessIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/pipelines';
 import { getFork } from '../../../redux/selectors/pipelines';

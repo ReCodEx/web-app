@@ -7,7 +7,7 @@ import { Table, Modal } from 'react-bootstrap';
 import Box from '../../widgets/Box';
 import Icon, { GroupIcon, LoadingIcon } from '../../icons';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import GroupTree from '../../Groups/GroupTree';
 import { arrayToObject, identity } from '../../../helpers/common';
 
@@ -72,7 +72,7 @@ class ExerciseGroups extends Component {
           ) : null
         }
         noPadding>
-        <React.Fragment>
+        <>
           <Table hover>
             <tbody>
               {groupsIds.map(groupId => (
@@ -90,7 +90,7 @@ class ExerciseGroups extends Component {
           </Table>
 
           {showButtons && (
-            <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="large">
+            <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage
@@ -109,7 +109,7 @@ class ExerciseGroups extends Component {
               </Modal.Body>
             </Modal>
           )}
-        </React.Fragment>
+        </>
       </Box>
     );
   }

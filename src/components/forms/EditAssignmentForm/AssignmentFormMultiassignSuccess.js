@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 import Icon, { GroupIcon, AssignmentsIcon } from '../../icons';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { identity } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
@@ -18,7 +18,7 @@ const AssignmentFormMultiassignSuccess = ({
   intl: { locale },
   links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
 }) => (
-  <React.Fragment>
+  <>
     <div className="callout callout-success">
       <h4>
         <FormattedMessage id="app.multiAssignForm.successHeading" defaultMessage="Exercise Assigned" />
@@ -42,18 +42,18 @@ const AssignmentFormMultiassignSuccess = ({
               </td>
               <td>{getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}</td>
               <td className="text-right">
-                <LinkContainer to={GROUP_INFO_URI_FACTORY(group.id)}>
+                <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                   <Button size="xs" variant="primary">
                     <GroupIcon gapRight />
                     <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                   </Button>
-                </LinkContainer>
-                <LinkContainer to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                </Link>
+                <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
                   <Button size="xs" variant="primary">
                     <AssignmentsIcon gapRight />
                     <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                   </Button>
-                </LinkContainer>
+                </Link>
               </td>
             </tr>
           ))}
@@ -66,7 +66,7 @@ const AssignmentFormMultiassignSuccess = ({
         <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
       </Button>
     </div>
-  </React.Fragment>
+  </>
 );
 
 AssignmentFormMultiassignSuccess.propTypes = {

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/widgets/FlatButton';
-import { LinkContainer } from 'react-router-bootstrap';
+import Button from '../../components/widgets/TheButton';
+import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import App from '../../containers/App';
@@ -82,10 +82,9 @@ class Pipelines extends Component {
         <Box
           title={<FormattedMessage id="app.pipelines.listTitle" defaultMessage="Pipelines" />}
           footer={
-            <p className="text-center">
+            <div className="text-center">
               <Button
                 variant="success"
-                className="btn-flat"
                 size="sm"
                 onClick={() => {
                   this.newPipeline();
@@ -93,7 +92,7 @@ class Pipelines extends Component {
                 <AddIcon gapRight />
                 <FormattedMessage id="app.pipelines.createNew" defaultMessage="Create New Pipeline" />
               </Button>
-            </p>
+            </div>
           }
           unlimitedHeight>
           <PaginationContainer
@@ -121,12 +120,12 @@ class Pipelines extends Component {
                 createActions={id =>
                   isAuthorOfPipeline(id) && (
                     <div>
-                      <LinkContainer to={PIPELINE_EDIT_URI_FACTORY(id)}>
+                      <Link to={PIPELINE_EDIT_URI_FACTORY(id)}>
                         <Button size="xs" variant="warning">
                           <EditIcon gapRight />
                           <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                         </Button>
-                      </LinkContainer>
+                      </Link>
                       <DeletePipelineButtonContainer id={id} size="xs" resourceless={true} onDeleted={() => reload()} />
                     </div>
                   )

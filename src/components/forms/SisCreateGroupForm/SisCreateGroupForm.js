@@ -6,7 +6,7 @@ import { Alert, Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/FlatButton';
+import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import CourseLabel from '../../SisIntegration/CourseLabel';
@@ -32,7 +32,7 @@ class SisCreateGroupForm extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose} size="lg">
+      <Modal show={isOpen} backdrop="static" onHide={onClose} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage
@@ -40,12 +40,12 @@ class SisCreateGroupForm extends Component {
               defaultMessage="Create a new group associated with SIS scheduling event"
             />
           </Modal.Title>
-          <hr />
-          {course && <CourseLabel {...course} groupsCount={courseGroupsCount} />}
         </Modal.Header>
 
         <Modal.Body>
-          <InsetPanel>
+          {course && <CourseLabel {...course} groupsCount={courseGroupsCount} />}
+          <hr />
+          <InsetPanel className="small">
             <InfoIcon gapRight />
             <FormattedMessage
               id="app.sisCreateGroupForm.info"
