@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+import 'cross-fetch/polyfill';
 
 import React from 'react';
 import { render } from 'react-dom';
