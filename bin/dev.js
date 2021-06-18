@@ -2,7 +2,7 @@ import Express from 'express';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import path from 'path';
-import config from '../config/webpack.config-dev';
+import config from '../config/webpack.config-dev.js';
 import colors from 'colors';
 import fs from 'fs';
 
@@ -13,7 +13,7 @@ const PORT = parsedConfig.PORT;
 const SKIN = parsedConfig.SKIN;
 const urlPrefix = parsedConfig.URL_PATH_PREFIX || '';
 
-let app = new Express();
+const app = new Express();
 app.set('view engine', 'ejs');
 app.use(urlPrefix, Express.static(path.join(__dirname, '../public')));
 

@@ -1,8 +1,5 @@
 import { expect } from 'chai';
-import {
-  createBoxFromFormInputs,
-  transformPipelineDataForApi
-} from '../../src/helpers/boxes';
+import { createBoxFromFormInputs, transformPipelineDataForApi } from '../../src/helpers/boxes';
 
 global.atob = b64Encoded => Buffer.from(b64Encoded, 'base64').toString();
 global.Buffer = global.Buffer || require('buffer').Buffer;
@@ -15,25 +12,25 @@ describe('helpers', () => {
         type: 'box-type-A',
         portsIn: {
           A: { type: 'file[]' },
-          B: { type: 'file' }
+          B: { type: 'file' },
         },
         portsOut: {
-          C: { type: 'string' }
-        }
+          C: { type: 'string' },
+        },
       };
       const boxTypes = [
         {
           type: 'box-type-A',
           portsIn: {
             A: {
-              type: 'file[]'
+              type: 'file[]',
             },
             B: {
-              type: 'file'
-            }
+              type: 'file',
+            },
           },
-          portsOut: {}
-        }
+          portsOut: {},
+        },
       ];
 
       const transformedBox = createBoxFromFormInputs(data, boxTypes);
@@ -43,9 +40,9 @@ describe('helpers', () => {
         type: 'box-type-A',
         portsIn: {
           A: { type: 'file[]' },
-          B: { type: 'file' }
+          B: { type: 'file' },
         },
-        portsOut: {}
+        portsOut: {},
       });
     });
   });
@@ -57,14 +54,14 @@ describe('helpers', () => {
           name: 'Input Data',
           type: 'data-in',
           portsIn: [],
-          portsOut: { 'in-data': { type: '?', value: '' } }
+          portsOut: { 'in-data': { type: '?', value: '' } },
         },
         {
           name: 'GCC Compilation',
           type: 'gcc',
           portsIn: { 'source-files': { type: 'file[]', value: '' } },
-          portsOut: { 'binary-file': { type: 'file', value: '' } }
-        }
+          portsOut: { 'binary-file': { type: 'file', value: '' } },
+        },
       ];
       const pipeline = {
         boxes: [
@@ -72,48 +69,42 @@ describe('helpers', () => {
             name: 'A',
             portsIn: {},
             portsOut: { 'in-data': { value: 'a', type: 'file[]' } },
-            type: 'data-in'
+            type: 'data-in',
           },
           {
             name: 'B',
             portsIn: { 'source-files': { value: 'a', type: 'file[]' } },
             portsOut: {},
-            type: 'gcc'
-          }
+            type: 'gcc',
+          },
         ],
-        variables: { 'YQ==': ['ABC'] }
+        variables: { 'YQ==': ['ABC'] },
       };
-      const extractedVariables = [
-        { name: 'in-data', type: 'file[]', value: 'YQ==' }
-      ];
+      const extractedVariables = [{ name: 'in-data', type: 'file[]', value: 'YQ==' }];
 
-      const transformedData = transformPipelineDataForApi(
-        boxTypes,
-        pipeline,
-        extractedVariables
-      );
+      const transformedData = transformPipelineDataForApi(boxTypes, pipeline, extractedVariables);
 
       expect(transformedData).to.eql({
         boxes: [
           {
             name: 'A',
             portsOut: { 'in-data': { value: 'a', type: 'file[]' } },
-            type: 'data-in'
+            type: 'data-in',
           },
           {
             name: 'B',
             portsIn: { 'source-files': { value: 'a', type: 'file[]' } },
             portsOut: { 'binary-file': { value: '', type: 'file' } },
-            type: 'gcc'
-          }
+            type: 'gcc',
+          },
         ],
         variables: [
           {
             name: 'a',
             type: 'file[]',
-            value: ['ABC']
-          }
-        ]
+            value: ['ABC'],
+          },
+        ],
       });
     });
   });

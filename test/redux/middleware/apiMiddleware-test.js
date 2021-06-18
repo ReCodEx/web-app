@@ -44,26 +44,29 @@ describe('API middleware and helper functions', () => {
         dispatchSpy();
         return action;
       };
-
       const alteredAction = middleware({ dispatch })(next)(action);
       alteredAction.payload.promise.then(resp => {
-        // exactly one dispatch incrementing and one decrementing the number of pending api calls ...
-        expect(dispatchSpy).to.have.been.called.twice();
+        try {
+          // exactly one dispatch incrementing and one decrementing the number of pending api calls ...
+          expect(dispatchSpy).to.have.been.called.twice;
 
-        // examine the HTTP request
-        expect(fetchMock.calls().matched.length).to.equal(1);
-        expect(fetchMock.calls().unmatched.length).to.equal(0);
-        const [url, req] = fetchMock.calls().matched.pop();
-        expect(url).to.equal(endpoint);
-        expect(req.method.toLowerCase()).to.equal('get');
-        fetchMock.restore();
+          // examine the HTTP request
+          expect(fetchMock.calls('matched').length).to.equal(1);
+          expect(fetchMock.calls('unmatched').length).to.equal(0);
+          const [url, req] = fetchMock.calls('matched').pop();
+          expect(url).to.equal(endpoint);
+          expect(req.method.toLowerCase()).to.equal('get');
+          fetchMock.restore();
 
-        // examine the NEXT call
-        expect(spy).to.have.been.called();
-        expect(spy).to.have.been.called.once();
+          // examine the NEXT call
+          expect(spy).to.have.been.called();
+          expect(spy).to.have.been.called.once;
 
-        fetchMock.restore();
-        done();
+          fetchMock.restore();
+          done();
+        } catch (e) {
+          console.log(e);
+        }
       });
     });
   });

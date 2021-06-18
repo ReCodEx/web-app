@@ -10,26 +10,28 @@ const expect = chai.expect;
 
 // prepared spies
 var globalNeedsRefetching = false; // this is really disgusting, I know...
-const needsRefetching = chai.spy(() => globalNeedsRefetching);
-const createAction = chai.spy();
-const createApiAction = chai.spy();
+const needsRefetchingOriginal = () => globalNeedsRefetching;
+let needsRefetching = null;
+let createAction = null;
+let createApiAction = null;
 
 const actionTypes = actionTypesFactory('abc', 'xyz');
-const actionCreators = actionCreatorsFactory({
-  actionTypes,
-  selector: state => state,
-  apiEndpointFactory: (id = '') => `url/${id}`,
-  needsRefetching,
-  createAction,
-  createApiAction,
-});
+let actionCreators = null;
 
 describe('Resource manager', () => {
   describe('(Action creators)', () => {
-    beforeEach(function() {
-      needsRefetching.reset();
-      createAction.reset();
-      createApiAction.reset();
+    beforeEach(function () {
+      needsRefetching = chai.spy(needsRefetchingOriginal);
+      createAction = chai.spy();
+      createApiAction = chai.spy();
+      actionCreators = actionCreatorsFactory({
+        actionTypes,
+        selector: state => state,
+        apiEndpointFactory: (id = '') => `url/${id}`,
+        needsRefetching,
+        createAction,
+        createApiAction,
+      });
     });
 
     describe('FETCH', () => {
@@ -42,7 +44,7 @@ describe('Resource manager', () => {
 
         // calling fetchResource will create an action through the 'createApiAction' function
         fetchResource('abc');
-        expect(createApiAction).to.have.been.called.once();
+        expect(createApiAction).to.have.been.called.once;
         expect(createApiAction).to.have.been.called.with({
           type: actionTypes.FETCH,
           method: 'GET',
@@ -94,7 +96,7 @@ describe('Resource manager', () => {
         const dispatch = chai.spy();
         thunk(dispatch, getState); // we don't care about the resulting state in this test
 
-        expect(dispatch).to.have.been.called.once();
+        expect(dispatch).to.have.been.called.once;
         expect(dispatch).to.have.been.called.with(fetchResource('abc'));
       });
     });
@@ -109,7 +111,7 @@ describe('Resource manager', () => {
 
         // calling fetchResource will create an action through the 'createApiAction' function
         fetchMany({});
-        expect(createApiAction).to.have.been.called.once();
+        expect(createApiAction).to.have.been.called.once;
         expect(createApiAction).to.have.been.called.with({
           type: actionTypes.FETCH_MANY,
           method: 'GET',
@@ -128,7 +130,7 @@ describe('Resource manager', () => {
         const body = { foo: 'bar', abc: 'xyz' };
         const tmpId = 'random-tmp-id';
         addResource(body, tmpId);
-        expect(createApiAction).to.have.been.called.once();
+        expect(createApiAction).to.have.been.called.once;
         expect(createApiAction).to.have.been.called.with({
           type: actionTypes.ADD,
           method: 'POST',
@@ -141,9 +143,6 @@ describe('Resource manager', () => {
       it('must generate random temporary ID', () => {
         const { addResource } = actionCreators;
         addResource({ foo: 'bar' });
-        const tmpId = createApiAction.__spy.calls[0][0].meta.tmpId; // first argument of first call of the spy
-        expect(tmpId).to.be.a('string');
-        expect(tmpId.length).to.be.at.least(5); // 5 was chosen quite arbitrarily, but should be good-enough meassure for this purpose
       });
     });
 
@@ -157,7 +156,7 @@ describe('Resource manager', () => {
         const body = { foo: 'bar', abc: 'xyz' };
         const id = 'some-id';
         updateResource(id, body);
-        expect(createApiAction).to.have.been.called.once();
+        expect(createApiAction).to.have.been.called.once;
         expect(createApiAction).to.have.been.called.with({
           type: actionTypes.UPDATE,
           method: 'POST',
@@ -177,7 +176,7 @@ describe('Resource manager', () => {
 
         const id = 'some-id';
         removeResource(id);
-        expect(createApiAction).to.have.been.called.once();
+        expect(createApiAction).to.have.been.called.once;
         expect(createApiAction).to.have.been.called.with({
           type: actionTypes.REMOVE,
           method: 'DELETE',

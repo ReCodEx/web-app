@@ -70,7 +70,7 @@ describe('Middleware for access token storage and injecting to HTTP requests', (
       const store = createFakeStore();
       middleware(store)(a => a)(action);
       expect(localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY)).to.equal('abcdefgh');
-      expect(store.dispatch).to.have.been.called.once();
+      expect(store.dispatch).to.have.been.called.once;
     });
 
     it('must intersect LOGOUT action and remove the accessToken from the local storage', () => {

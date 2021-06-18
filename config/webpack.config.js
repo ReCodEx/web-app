@@ -69,7 +69,6 @@ module.exports = {
     minimize: true,
     minimizer: [
       new TerserPlugin({
-        //cache: true,
         parallel: true,
       }),
     ],
