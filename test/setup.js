@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import 'mock-local-storage';
-import 'isomorphic-fetch';
+import 'cross-fetch/polyfill';
 
 global.document = new JSDOM('<!doctype html><html><body></body></html>');
 global.window = global.document.window;

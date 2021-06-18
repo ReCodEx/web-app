@@ -1,5 +1,5 @@
 // necessary polyfill for both browser and server
-import 'isomorphic-fetch';
+import 'cross-fetch/polyfill';
 
 // server setup
 import React from 'react';
