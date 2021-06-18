@@ -41,9 +41,7 @@ module.exports = {
     alias: {
       moment: 'moment/moment.js',
     },
-  },
-  node: {
-    fs: 'empty',
+    fallback: { fs: false },
   },
   module: {
     rules: [
@@ -71,7 +69,7 @@ module.exports = {
     minimize: true,
     minimizer: [
       new TerserPlugin({
-        cache: true,
+        //cache: true,
         parallel: true,
       }),
     ],
@@ -80,9 +78,9 @@ module.exports = {
     extractCss,
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: "'" + process.env.NODE_ENV + "'",
-        LOGGER_MIDDLEWARE_VERBOSE: "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
-        LOGGER_MIDDLEWARE_EXCEPTIONS: "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
+        NODE_ENV: `'${process.env.NODE_ENV}'`,
+        LOGGER_MIDDLEWARE_VERBOSE: `'${process.env.LOGGER_MIDDLEWARE_VERBOSE}'`,
+        LOGGER_MIDDLEWARE_EXCEPTIONS: `'${process.env.LOGGER_MIDDLEWARE_EXCEPTIONS}'`,
         VERSION: getVersion(),
       },
     }),

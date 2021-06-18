@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
 
 // load variables from .env
 require('dotenv').config();
@@ -31,9 +31,7 @@ module.exports = {
     alias: {
       moment: 'moment/moment.js',
     },
-  },
-  node: {
-    fs: 'empty',
+    fallback: { fs: false },
   },
   module: {
     rules: [
@@ -61,12 +59,17 @@ module.exports = {
     extractCss,
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: "'" + process.env.NODE_ENV + "'",
-        REDUX_DEV_SERVER_PORT: "'" + process.env.REDUX_DEV_SERVER_PORT + "'",
-        LOGGER_MIDDLEWARE_VERBOSE: "'" + process.env.LOGGER_MIDDLEWARE_VERBOSE + "'",
-        LOGGER_MIDDLEWARE_EXCEPTIONS: "'" + process.env.LOGGER_MIDDLEWARE_EXCEPTIONS + "'",
+        NODE_ENV: `'${process.env.NODE_ENV}'`,
+        REDUX_DEV_SERVER_PORT: `'${process.env.REDUX_DEV_SERVER_PORT}'`,
+        LOGGER_MIDDLEWARE_VERBOSE: `'${process.env.LOGGER_MIDDLEWARE_VERBOSE}'`,
+        LOGGER_MIDDLEWARE_EXCEPTIONS: `'${process.env.LOGGER_MIDDLEWARE_EXCEPTIONS}'`,
         VERSION: JSON.stringify(gitRevisionPlugin.version()),
       },
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
     }),
   ],
 };
