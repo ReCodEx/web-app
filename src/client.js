@@ -22,7 +22,7 @@ const ini = window.__INITIAL_STATE__;
 const blacklist = ['userSwitching'];
 if (ini) {
   state = {};
-  Object.keys(ini).map(key => {
+  Object.keys(ini).forEach(key => {
     state[key] = blacklist.includes(key) ? ini[key] : fromJS(ini[key]);
   });
 }

@@ -174,7 +174,7 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
     dispatch(validatePipeline(id, version))
       .then(res => res.value)
       .then(({ versionIsUpToDate }) => {
-        var errors = {};
+        const errors = {};
         if (versionIsUpToDate === false) {
           errors.name = (
             <FormattedMessage

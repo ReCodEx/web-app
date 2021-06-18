@@ -34,7 +34,7 @@ export const additionalActionTypes = {
 };
 
 const resourceName = 'users';
-var { actions, actionTypes, reduceActions } = factory({ resourceName });
+const { actions, actionTypes, reduceActions } = factory({ resourceName });
 
 export { actionTypes };
 

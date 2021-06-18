@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
 
 const resourceName = 'systemMessages';
-var { actions, reduceActions } = factory({ resourceName, apiEndpointFactory: id => `/notifications/${id}` });
+const { actions, reduceActions } = factory({ resourceName, apiEndpointFactory: id => `/notifications/${id}` });
 
 /**
  * Actions

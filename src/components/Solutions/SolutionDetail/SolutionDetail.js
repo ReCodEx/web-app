@@ -78,9 +78,9 @@ class SolutionDetail extends Component {
     const activeSubmissionId = this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
     const evaluationsJS = evaluations.toJS();
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
-      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } = evaluationsJS[
-        activeSubmissionId
-      ].data;
+      /* eslint-disable no-var */
+      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } =
+        evaluationsJS[activeSubmissionId].data;
     } else {
       evaluationStatus = 'missing-submission';
     }

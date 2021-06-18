@@ -4,7 +4,7 @@ import { createApiAction } from '../middleware/apiMiddleware';
 import { fromJS } from 'immutable';
 
 const resourceName = 'submissionFailures';
-var { actions, reduceActions } = factory({ resourceName });
+const { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
   RESOLVE: 'recodex/submissionFailures/RESOLVE',

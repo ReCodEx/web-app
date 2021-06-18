@@ -262,7 +262,7 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
     dispatch(validateExercise(id, version))
       .then(res => res.value)
       .then(({ versionIsUpToDate }) => {
-        var errors = {};
+        const errors = {};
         if (versionIsUpToDate === false) {
           errors.name = (
             <FormattedMessage

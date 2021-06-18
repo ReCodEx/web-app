@@ -1,6 +1,6 @@
 const middleware = (noDOM, verbose, fullException) => store => next => action => {
   /* eslint no-console: ["error", { allow: ["log", "error", "debug"] }] */
-  var actionType = action.type;
+  const actionType = action.type;
   const logger = noDOM ? console.log : console.debug; // older nodejs do not have console.debug()
   if (verbose) {
     logger('Starting ' + actionType);
@@ -9,8 +9,9 @@ const middleware = (noDOM, verbose, fullException) => store => next => action =>
     logger(actionType);
   }
 
+  let res = null;
   try {
-    var res = next(action);
+    res = next(action);
   } catch (e) {
     console.log('Exception thrown when processing action ' + actionType);
     if (fullException) console.error(e);

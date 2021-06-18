@@ -40,9 +40,9 @@ const ADD_NODE_TOOLTIPS = {
 };
 
 // Internal variables for getAncestorNodesIndex memoization
-var _ancestorIndex = null;
-var _ancestorIndexOrigin = null;
-var _ancestorIndexParent = null;
+let _ancestorIndex = null;
+let _ancestorIndexOrigin = null;
+let _ancestorIndexParent = null;
 
 /**
  * Return all ancestors of node in an object (keys are node IDs).
@@ -234,10 +234,10 @@ const ExpressionNode = ({
               )}
 
             {!isSelected &&
-            !hasSelectedParent && // selected node is not parent of node
-            ancestorIndex && // ancestorIndex exists -> exactly one node is selected
-            !ancestorIndex[node.id] && // node is not parent of selected node
-            (selectedNode.getParent() !== node.getParent() || !node.getParent().isComutative()) && ( // node is not sibling, or the order of sbilings matter
+              !hasSelectedParent && // selected node is not parent of node
+              ancestorIndex && // ancestorIndex exists -> exactly one node is selected
+              !ancestorIndex[node.id] && // node is not parent of selected node
+              (selectedNode.getParent() !== node.getParent() || !node.getParent().isComutative()) && ( // node is not sibling, or the order of sbilings matter
                 <>
                   <OverlayTrigger
                     placement="bottom"

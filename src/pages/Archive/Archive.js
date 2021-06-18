@@ -30,7 +30,7 @@ const normalizeString = str =>
     .replace(/[\u0300-\u036f]/g, '');
 
 const getVisibleArchiveGroupsMap = (groups, showAll, search, locale, rootGroup) => {
-  var result = {};
+  const result = {};
   const groupArray = groups.toArray();
 
   // first mark all possibly visible
