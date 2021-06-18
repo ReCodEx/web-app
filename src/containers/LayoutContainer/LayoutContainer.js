@@ -19,10 +19,6 @@ import { buildRoutes, getLinks } from '../../pages/routes';
 
 import 'admin-lte/dist/css/adminlte.min.css';
 import 'admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css';
-import 'admin-lte/plugins/jquery/jquery.min.js';
-import 'admin-lte/plugins/jquery-ui/jquery-ui.min.js';
-import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js';
-import 'admin-lte/dist/js/adminlte.js';
 
 const ADDITIONAL_INTL_FORMATS = {
   time: {

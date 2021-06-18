@@ -11,6 +11,11 @@ import { getToken, getInstanceId } from './redux/middleware/authMiddleware';
 import { getLang } from './redux/middleware/langMiddleware';
 import App from './containers/App';
 
+import 'admin-lte/plugins/jquery/jquery.min.js';
+import 'admin-lte/plugins/jquery-ui/jquery-ui.min.js';
+import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js';
+import 'admin-lte/dist/js/adminlte.js';
+
 // load the initial state form the server - if any
 let state;
 const ini = window.__INITIAL_STATE__;
