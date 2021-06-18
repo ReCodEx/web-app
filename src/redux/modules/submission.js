@@ -53,39 +53,33 @@ export const cancel = createAction(actionTypes.CANCEL);
 
 export const changeNote = createAction(actionTypes.CHANGE_NOTE);
 
-const submit = (endpoint, submissionType = 'assignmentSolution') => (
-  userId,
-  id,
-  note,
-  files,
-  runtimeEnvironmentId = null,
-  entryPoint = null,
-  progressObserverId = null
-) => {
-  var submitBody = {
-    userId,
-    files: files.map(file => file.id),
-    note,
-  };
-
-  if (runtimeEnvironmentId) {
-    submitBody.runtimeEnvironmentId = runtimeEnvironmentId;
-  }
-
-  if (entryPoint) {
-    submitBody.solutionParams = {
-      variables: [{ name: 'entry-point', value: entryPoint }],
+const submit =
+  (endpoint, submissionType = 'assignmentSolution') =>
+  (userId, id, note, files, runtimeEnvironmentId = null, entryPoint = null, progressObserverId = null) => {
+    const submitBody = {
+      userId,
+      files: files.map(file => file.id),
+      note,
     };
-  }
 
-  return createApiAction({
-    type: actionTypes.SUBMIT,
-    method: 'POST',
-    endpoint: endpoint(id),
-    body: submitBody,
-    meta: { urlId: id, submissionType, progressObserverId },
-  });
-};
+    if (runtimeEnvironmentId) {
+      submitBody.runtimeEnvironmentId = runtimeEnvironmentId;
+    }
+
+    if (entryPoint) {
+      submitBody.solutionParams = {
+        variables: [{ name: 'entry-point', value: entryPoint }],
+      };
+    }
+
+    return createApiAction({
+      type: actionTypes.SUBMIT,
+      method: 'POST',
+      endpoint: endpoint(id),
+      body: submitBody,
+      meta: { urlId: id, submissionType, progressObserverId },
+    });
+  };
 
 export const submitAssignmentSolution = submit(id => `/exercise-assignments/${id}/submit`);
 
@@ -102,7 +96,7 @@ const presubmit = endpoint => (id, files) => {
     return createAction(actionTypes.PRESUBMIT_RESET)(/* immediate instantiation without payload */);
   }
 
-  var submitBody = {
+  const submitBody = {
     files: files.map(file => file.id),
   };
   return createApiAction({
@@ -125,11 +119,7 @@ export const presubmitReferenceSolution = presubmit(id => `/reference-solutions/
 const reducer = handleActions(
   {
     [actionTypes.INIT]: (state, { payload: { userId, id } }) =>
-      initialState
-        .set('userId', userId)
-        .set('id', id)
-        .set('status', submissionStatus.CREATING)
-        .set('presubmit', null),
+      initialState.set('userId', userId).set('id', id).set('status', submissionStatus.CREATING).set('presubmit', null),
 
     [actionTypes.CHANGE_NOTE]: (state, { payload }) =>
       state.set('note', payload).set('status', submissionStatus.CREATING),

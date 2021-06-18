@@ -1,4 +1,4 @@
-var pending = {};
+const pending = {};
 
 export function eventAggregator(id, fnc, timeout) {
   if (typeof fnc !== 'function') {

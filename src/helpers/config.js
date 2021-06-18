@@ -2,7 +2,7 @@ import { canUseDOM } from 'exenv';
 import { safeGet } from './common';
 
 export const getConfigVar = name => {
-  var MY_VAR = '';
+  let MY_VAR = '';
   if (canUseDOM) {
     MY_VAR = safeGet(window, ['__RECODEX_CONFIG__', name], '');
   } else {

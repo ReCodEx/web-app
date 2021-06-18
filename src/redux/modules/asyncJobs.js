@@ -6,7 +6,11 @@ import { arrayToObject } from '../../helpers/common';
 import { Map } from 'immutable';
 
 const resourceName = 'asyncJobs';
-var { actions, actionTypes: resourceActionTypes, reduceActions } = factory({
+const {
+  actions,
+  actionTypes: resourceActionTypes,
+  reduceActions,
+} = factory({
   resourceName,
   apiEndpointFactory: id => `/async-jobs/${id}`,
 });

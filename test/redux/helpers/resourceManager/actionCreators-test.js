@@ -9,7 +9,7 @@ chai.use(spies);
 const expect = chai.expect;
 
 // prepared spies
-var globalNeedsRefetching = false; // this is really disgusting, I know...
+let globalNeedsRefetching = false; // this is really disgusting, I know...
 const needsRefetchingOriginal = () => globalNeedsRefetching;
 let needsRefetching = null;
 let createAction = null;

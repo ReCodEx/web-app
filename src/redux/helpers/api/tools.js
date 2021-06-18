@@ -54,7 +54,7 @@ export const flattenBody = body => {
   const flattened = flatten(body, { delimiter: ':' });
   body = {};
 
-  Object.keys(flattened).map(key => {
+  Object.keys(flattened).forEach(key => {
     // 'a:b:c:d' => 'a[b][c][d]'
     const bracketedKey = key.replace(/:([^:$]+)/g, '[$1]');
     body[bracketedKey] = flattened[key];

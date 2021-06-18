@@ -75,9 +75,9 @@ class ReferenceSolutionDetail extends Component {
     const activeSubmissionId = evaluationsJS && (this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS));
 
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
-      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } = evaluationsJS[
-        activeSubmissionId
-      ].data;
+      /* eslint-disable no-var */
+      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } =
+        evaluationsJS[activeSubmissionId].data;
     } else evaluationStatus = 'missing-submission';
 
     const filesSize = files.reduce((acc, { size }) => acc + size, 0);

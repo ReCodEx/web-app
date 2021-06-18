@@ -296,7 +296,7 @@ const asyncValidate = ({ email, password = '' }, dispatch) => {
     dispatch(validateRegistrationData(email, password))
       .then(res => res.value)
       .then(({ usernameIsFree, passwordScore }) => {
-        var errors = {};
+        const errors = {};
         if (!usernameIsFree) {
           errors.email = (
             <FormattedMessage

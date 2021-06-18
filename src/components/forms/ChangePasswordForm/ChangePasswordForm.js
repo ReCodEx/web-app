@@ -109,7 +109,7 @@ const asyncValidate = ({ password = '' }, dispatch) =>
     dispatch(validatePasswordStrength(password))
       .then(res => res.value)
       .then(({ passwordScore }) => {
-        var errors = {};
+        const errors = {};
         if (passwordScore <= 0) {
           errors.password = (
             <FormattedMessage
