@@ -413,7 +413,7 @@ class ResultsTable extends Component {
             show={Boolean(this.state.dialogOpen && this.state.dialogUserId)}
             backdrop="static"
             onHide={this.closeDialog}
-            size="large">
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <LocalizedExerciseName entity={this.getDialogAssignment() || this.getDialogShadowAssignment()} />
