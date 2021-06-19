@@ -47,13 +47,7 @@ const getTitle = level => {
 const PasswordStrength = ({ input: { name, value: level }, meta: { dirty }, label }) => (
   <FormGroup controlId={name}>
     {dirty && (
-      <ProgressBar
-        variant={getStyle(level)}
-        now={getPercent(level)}
-        label={getTitle(level)}
-        striped={level === 0}
-        active={level === 0}
-      />
+      <ProgressBar variant={getStyle(level)} now={getPercent(level)} label={getTitle(level)} striped={level === 0} />
     )}
   </FormGroup>
 );

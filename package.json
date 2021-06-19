@@ -46,7 +46,7 @@
     "cross-fetch": "^3.1.4",
     "css-loader": "^5.2.6",
     "deep-equal": "^2.0.5",
-    "ejs": "^2.6.1",
+    "ejs": "^3.1.6",
     "exenv": "^1.2.1",
     "express": "^4.13.4",
     "file-saver": "^2.0.5",
@@ -90,7 +90,7 @@
     "reselect": "^4.0.0",
     "serialize-javascript": "^5.0.1",
     "statuscode": "0.0.0",
-    "validator": "^7.0.0",
+    "validator": "^13.6.0",
     "viz.js": "^1.8.0"
   },
   "devDependencies": {
