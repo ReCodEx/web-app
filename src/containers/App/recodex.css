@@ -291,6 +291,13 @@ table.table tbody:first-child tr:first-child th {
   color: transparent !important;
 }
 
+/*
+ * react-collapse additional styles for animation
+ */
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}
+
 /******************************************************************************/
 /* Radio Input Styling                                                        */
 /* Taken from W3Schools and adapted for our use case...                       */

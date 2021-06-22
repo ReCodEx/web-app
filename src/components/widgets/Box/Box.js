@@ -51,41 +51,21 @@ class Box extends Component {
     window.setTimeout(() => window.scrollTo(0, scrollPosition), 0);
   };
 
-  renderBody() {
-    const {
-      description = null,
-      noPadding = false,
-      extraPadding = false,
-      children,
-      footer,
-      unlimitedHeight = false,
-    } = this.props;
-    return (
-      <>
-        <Card.Body
-          className={classnames({
-            'no-padding': noPadding,
-            [styles.extraPadding]: !noPadding && extraPadding,
-            [styles.limited]: !unlimitedHeight,
-            [styles.unlimited]: unlimitedHeight,
-          })}>
-          {description && <div className={styles.description}>{description}</div>}
-          <div>{children}</div>
-        </Card.Body>
-        {footer && <Card.Footer>{footer}</Card.Footer>}
-      </>
-    );
-  }
-
   render() {
     const {
       id = null,
       title,
+      description = null,
       type = 'light',
       solid = false,
       collapsable = false,
+      noPadding = false,
+      extraPadding = false,
+      unlimitedHeight = false,
       customIcons = null,
       className = '',
+      children,
+      footer,
     } = this.props;
     const { isOpen = true } = this.state;
 
@@ -126,11 +106,19 @@ class Box extends Component {
           )}
         </Card.Header>
 
-        <>
-          {collapsable && <Collapse isOpened={isOpen}>{this.renderBody()}</Collapse>}
-
-          {!collapsable && this.renderBody()}
-        </>
+        <Collapse isOpened={!collapsable || isOpen}>
+          <Card.Body
+            className={classnames({
+              'no-padding': noPadding,
+              [styles.extraPadding]: !noPadding && extraPadding,
+              [styles.limited]: !unlimitedHeight,
+              [styles.unlimited]: unlimitedHeight,
+            })}>
+            {description && <div className={styles.description}>{description}</div>}
+            <div>{children}</div>
+          </Card.Body>
+          {footer && <Card.Footer>{footer}</Card.Footer>}
+        </Collapse>
       </Card>
     );
   }
