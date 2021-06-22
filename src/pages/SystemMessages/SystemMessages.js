@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Button from '../../components/widgets/TheButton';
 import PageContent from '../../components/layout/PageContent';
@@ -178,7 +178,7 @@ SystemMessages.propTypes = {
   createMessage: PropTypes.func,
   editMessage: PropTypes.func,
   systemMessages: PropTypes.array.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default connect(

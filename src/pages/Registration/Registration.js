@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset, startAsyncValidation } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -76,12 +76,12 @@ class Registration extends Component {
         description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCodEx today" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.homepage.title" />,
+            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — ReCodEx Code Examiner" />,
             link: HOME_URI,
             iconName: 'home',
           },
           {
-            text: <FormattedMessage id="app.registration.title" />,
+            text: <FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCodEx account" />,
             iconName: 'user-plus',
           },
         ]}>
@@ -156,7 +156,7 @@ Registration.propTypes = {
   reset: PropTypes.func.isRequired,
   triggerAsyncValidation: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default withLinks(
@@ -169,8 +169,10 @@ export default withLinks(
       loadAsync: () => Promise.all([dispatch(fetchInstances())]),
       createAccount: ({ firstName, lastName, email, password, passwordConfirm, instanceId }) =>
         dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId)),
-      createExternalAccount: (authType = 'secondary') => ({ instanceId, serviceId, ...credentials }) =>
-        dispatch(createExternalAccount(instanceId, serviceId, credentials, authType)),
+      createExternalAccount:
+        (authType = 'secondary') =>
+        ({ instanceId, serviceId, ...credentials }) =>
+          dispatch(createExternalAccount(instanceId, serviceId, credentials, authType)),
       triggerAsyncValidation: () => dispatch(startAsyncValidation('registration')),
       reset: () => {
         dispatch(reset('registration'));

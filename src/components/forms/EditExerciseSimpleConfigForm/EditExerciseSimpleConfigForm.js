@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
@@ -128,7 +128,7 @@ class EditExerciseSimpleConfigForm extends Component {
             <p>
               <FormattedMessage
                 id="app.editExerciseSimpleConfigForm.isPrologOnly"
-                defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file holds a Prolog query in text format. The output holds enumeration of all possible answers, each answer on a separate line. The answers are sorted in ascending lexicographical order to avoid ambiguity."
+                defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file comprise Prolog queries in text format, each on a single line. The output holds the serialized answers, each answer on a corresponding line to the input query. The answer comprise of all possible satisfactions of the query, sorted in ascending lexicographical order to avoid ambiguity."
               />
             </p>
           </div>
@@ -238,7 +238,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = (formData, { exercise, supplementaryFiles }) => {

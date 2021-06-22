@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 
 import { CheckboxField } from '../Fields';
@@ -46,7 +46,7 @@ AssignmentFormGroupsList.propTypes = {
   groupsAccessor: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   toggleOpenState: PropTypes.func,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(AssignmentFormGroupsList);

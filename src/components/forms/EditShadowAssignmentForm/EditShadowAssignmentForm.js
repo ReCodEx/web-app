@@ -57,7 +57,7 @@ const EditShadowAssignmentForm = ({
             asyncValidating={asyncValidating}
             messages={{
               submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving ..." />,
+              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
               success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
             }}
           />

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { FormattedRelative } from 'react-intl';
+import { FormattedRelativeTime } from 'react-intl';
 
 const Posted = ({ right, postedAt }) => (
   <span
@@ -10,7 +10,7 @@ const Posted = ({ right, postedAt }) => (
       'float-right': right,
       'float-left': !right,
     })}>
-    <FormattedRelative value={postedAt * 1000} />
+    <FormattedRelativeTime value={Date.now() / 1000 - postedAt} units="seconds" />
   </span>
 );
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelativeTime } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Tooltip, OverlayTrigger, Modal } from 'react-bootstrap';
 
@@ -70,7 +70,7 @@ class UserPanel extends Component {
               overlay={
                 <Tooltip id="tokenExpiration">
                   <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
-                  <FormattedRelative value={expiration} />
+                  <FormattedRelativeTime value={Date.now() / 1000 - expiration} units="seconds" />
                 </Tooltip>
               }>
               <a

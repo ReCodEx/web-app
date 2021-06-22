@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl, FormattedMessage, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
@@ -168,7 +168,7 @@ ForkExerciseForm.propTypes = {
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 const validate = ({ groupId }) => {

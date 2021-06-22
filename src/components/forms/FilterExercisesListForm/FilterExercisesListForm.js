@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
 import { Alert, Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
@@ -300,7 +300,7 @@ FilterExercisesListForm.propTypes = {
   envValueSelector: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
   loggedUserId: PropTypes.string.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default connect((state, { rootGroup = null, form }) => ({

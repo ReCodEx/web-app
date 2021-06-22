@@ -1,24 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 const Footer = ({ version }) => (
   <footer className="main-footer">
     <div className="float-right hidden-xs">
-      <FormattedHTMLMessage
+      <FormattedMessage
         id="app.footer.version"
-        defaultMessage="<strong>Version</strong> {version} (<a href='{changelogUrl}' target='_blank'>changelog</a>)"
+        defaultMessage="<strong>Version</strong> {version} (<a>changelog</a>)"
         values={{
           version,
-          changelogUrl: 'https://github.com/ReCodEx/wiki/wiki/Changelog',
+          strong: text => <strong>{text}</strong>,
+          a: caption => (
+            <a href="https://github.com/ReCodEx/wiki/wiki/Changelog" target="_blank" rel="noreferrer">
+              {caption}
+            </a>
+          ),
         }}
       />
     </div>
-    <FormattedHTMLMessage
+    <FormattedMessage
       id="app.footer.copyright"
-      defaultMessage="Copyright © 2016-{year} <a href='{website}' target='_blank'>ReCodEx</a>. All rights reserved."
+      defaultMessage="Copyright © 2016-{year} <a>ReCodEx</a>. All rights reserved."
       values={{
-        website: 'http://github.com/recodex',
+        a: caption => (
+          <a href="http://github.com/recodex" target="_blank" rel="noreferrer">
+            {caption}
+          </a>
+        ),
         year: Math.max(new Date().getFullYear(), 2018),
       }}
     />

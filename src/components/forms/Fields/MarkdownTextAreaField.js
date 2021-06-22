@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Form, Row, Col } from 'react-bootstrap';
 
 import Markdown from '../../widgets/Markdown';
@@ -43,11 +43,15 @@ class MarkdownTextAreaField extends Component {
           </Col>
           <Col sm={8}>
             <Form.Text className="text-right">
-              <FormattedHTMLMessage
+              <FormattedMessage
                 id="app.markdownTextArea.canUseMarkdown"
-                defaultMessage="You can use <a href='{markdownUrl}' target='_blank'>markdown syntax</a> in this field."
+                defaultMessage="You can use <a>markdown syntax</a> in this field."
                 values={{
-                  markdownUrl: 'https://github.com/ReCodEx/wiki/wiki/Markdown',
+                  a: caption => (
+                    <a href="https://github.com/ReCodEx/wiki/wiki/Markdown" target="_blank" rel="noreferrer">
+                      {caption}
+                    </a>
+                  ),
                 }}
               />
             </Form.Text>

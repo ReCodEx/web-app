@@ -225,7 +225,7 @@ const AssignmentDetails = ({
               {canSubmit.canSubmit ? <Icon icon="coffee" /> : <Icon icon="ban" />}
             </td>
             <th>
-              <FormattedMessage id="app.assignment.alreadySubmitted" defaultMessage="Already submitted solutions" />:
+              <FormattedMessage id="app.assignment.alreadySubmitted" defaultMessage="Already submitted" />:
             </th>
             <td>
               {canSubmit.submittedCount}

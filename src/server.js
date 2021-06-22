@@ -14,9 +14,6 @@ import fs from 'fs';
 
 import { StaticRouter } from 'react-router';
 
-import { addLocaleData } from 'react-intl';
-import cs from 'react-intl/locale-data/cs';
-
 import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from './redux/selectors/users';
@@ -25,7 +22,12 @@ import { TOKEN_COOKIES_KEY, INSTANCEID_COOKIES_KEY } from './redux/middleware/au
 import { LANG_COOKIES_KEY } from './redux/middleware/langMiddleware';
 import App from './containers/App';
 
-addLocaleData([...cs]);
+import '@formatjs/intl-pluralrules/polyfill';
+import '@formatjs/intl-pluralrules/locale-data/en';
+import '@formatjs/intl-pluralrules/locale-data/cs';
+import '@formatjs/intl-relativetimeformat/polyfill';
+import '@formatjs/intl-relativetimeformat/locale-data/en';
+import '@formatjs/intl-relativetimeformat/locale-data/cs';
 
 // Register global atob a btoa functions
 global.Buffer = global.Buffer || require('buffer').Buffer;

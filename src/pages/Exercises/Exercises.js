@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import { defaultMemoize } from 'reselect';
 
@@ -55,13 +55,11 @@ class Exercises extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id="app.exercises.title" defaultMessage="Exercise List" />}
-        description={
-          <FormattedMessage id="app.instance.description" defaultMessage="List and assign exercises to your groups." />
-        }
+        title={<FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />}
+        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercise List" />,
+            text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />,
             iconName: 'puzzle-piece',
           },
         ]}>
@@ -93,7 +91,7 @@ Exercises.propTypes = {
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   query: PropTypes.string,
-  intl: intlShape,
+  intl: PropTypes.object,
   links: PropTypes.object.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
 };

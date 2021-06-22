@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
 
@@ -87,7 +87,7 @@ CreateExerciseForm.propTypes = {
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   groups: PropTypes.array.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
   links: PropTypes.object,
 };
 const validate = ({ groupId }) => {

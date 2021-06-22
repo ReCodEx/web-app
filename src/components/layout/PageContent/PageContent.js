@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 import Breadcrumbs from '../../widgets/Breadcrumbs';
 
@@ -47,7 +47,7 @@ PageContent.propTypes = {
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   breadcrumbs: PropTypes.array,
   children: PropTypes.element,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(PageContent);

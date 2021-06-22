@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert, Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -124,7 +124,7 @@ EditExerciseAdvancedConfigForm.propTypes = {
   supplementaryFiles: PropTypes.array,
   rawFill: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const FORM_NAME = 'editExerciseAdvancedConfig';

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
@@ -248,7 +248,7 @@ Users.propTypes = {
   createUser: PropTypes.func.isRequired,
   reloadPagination: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default withLinks(

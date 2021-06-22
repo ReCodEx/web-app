@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Table, Alert } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
@@ -200,7 +200,7 @@ PlantTermGroups.propTypes = {
   externalId: PropTypes.string,
   groups: PropTypes.array.isRequired,
   rootGroups: PropTypes.array.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ groups, localizedTexts }) => {

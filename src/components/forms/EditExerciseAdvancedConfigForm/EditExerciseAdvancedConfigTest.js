@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import Button from '../../widgets/TheButton';
@@ -173,7 +173,7 @@ EditExerciseAdvancedConfigTest.propTypes = {
   testErrors: PropTypes.array,
   rawFill: PropTypes.object,
   readOnly: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(EditExerciseAdvancedConfigTest);

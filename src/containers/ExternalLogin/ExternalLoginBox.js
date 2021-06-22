@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
@@ -128,10 +128,12 @@ class ExternalLoginBox extends Component {
           </p>
           {helpUrl && (
             <p>
-              <FormattedHTMLMessage
+              <FormattedMessage
                 id="app.externalLogin.help"
-                defaultMessage="In case of any problems, <a href='{helpUrl}'>contact the support</a>."
-                values={{ helpUrl }}
+                defaultMessage="In case of any problems, <a>contact the support</a>."
+                values={{
+                  a: caption => <a href={helpUrl}>{caption}</a>,
+                }}
               />
             </p>
           )}
@@ -162,7 +164,7 @@ ExternalLoginBox.propTypes = {
   login: PropTypes.func.isRequired,
   fail: PropTypes.func.isRequired,
   afterLogin: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect(

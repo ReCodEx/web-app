@@ -1,9 +1,8 @@
 {
   "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
-    ["react-intl", {
-        "messagesDir": "./tmp/messages/",
-        "enforceDescriptions": false
+    ["formatjs", {
+        "ast": true
     }],
     "transform-object-assign",
     "transform-flow-strip-types",

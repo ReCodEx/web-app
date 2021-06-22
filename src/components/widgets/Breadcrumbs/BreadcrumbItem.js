@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 import Icon from '../../icons';
 import withLinks from '../../../helpers/withLinks';
@@ -22,7 +22,7 @@ const BreadcrumbItem = ({ text, link = null, iconName = null, isActive = false, 
 };
 
 BreadcrumbItem.propTypes = {
-  text: PropTypes.oneOfType([PropTypes.string, PropTypes.element, FormattedMessage]).isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.oneOf([FormattedMessage])]).isRequired,
   iconName: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   link: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   isActive: PropTypes.bool.isRequired,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 
@@ -487,7 +487,7 @@ ResultsTable.propTypes = {
   fetchUsersSolutions: PropTypes.func.isRequired,
   setShadowPoints: PropTypes.func.isRequired,
   removeShadowPoints: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   links: PropTypes.object,
 };
 

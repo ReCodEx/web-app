@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedNumber, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -196,7 +196,7 @@ SolutionsTableRow.propTypes = {
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool.isRequired,
   links: PropTypes.object,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default withLinks(injectIntl(SolutionsTableRow));

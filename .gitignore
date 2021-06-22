@@ -17,5 +17,6 @@ prod/
 package-lock.json
 
 /run_server.bat
-/run_export_strings.bat
+/run_manage_translations.bat
 /etc/env.json
+/bin/server.js.LICENSE.txt

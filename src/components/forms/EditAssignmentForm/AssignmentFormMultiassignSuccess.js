@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -74,7 +74,7 @@ AssignmentFormMultiassignSuccess.propTypes = {
   groups: PropTypes.array.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
   acknowledgeSuccess: PropTypes.func,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   links: PropTypes.object.isRequired,
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { MailIcon, SuccessIcon, LoadingIcon, FailureIcon } from '../../icons';
 import TheButton from '../../widgets/TheButton';
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
@@ -50,7 +50,7 @@ const ResendEmailVerification = ({ resend, state, intl: { formatMessage }, ...pr
 ResendEmailVerification.propTypes = {
   resend: PropTypes.func.isRequired,
   state: PropTypes.string,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default injectIntl(ResendEmailVerification);

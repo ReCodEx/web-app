@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -292,7 +292,7 @@ Assignment.propTypes = {
   exerciseSync: PropTypes.func.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
   fetchManyStatus: PropTypes.string,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default withLinks(

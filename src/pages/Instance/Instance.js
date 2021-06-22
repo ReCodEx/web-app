@@ -76,7 +76,7 @@ class Instance extends Component {
         description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.instance.description" />,
+            text: <FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />,
             iconName: 'info-circle',
           },
         ]}>
@@ -210,17 +210,19 @@ export default withLinks(
         },
       }
     ) => ({
-      createGroup: userId => ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
-        dispatch(
-          createGroup({
-            ...data,
-            hasThreshold,
-            threshold: hasThreshold ? threshold : undefined,
-            localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-            noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
-            instanceId,
-          })
-        ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
+      createGroup:
+        userId =>
+        ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
+          dispatch(
+            createGroup({
+              ...data,
+              hasThreshold,
+              threshold: hasThreshold ? threshold : undefined,
+              localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+              noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
+              instanceId,
+            })
+          ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
       loadAsync: fetchGroupsStatus => Instance.loadAsync({ instanceId, fetchGroupsStatus }, dispatch),
     })
   )(injectIntl(Instance))

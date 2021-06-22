@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Row, Col, Alert } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -288,7 +288,7 @@ ExerciseAssignments.propTypes = {
   allowSecondDeadline: PropTypes.bool,
   visibility: PropTypes.string,
   links: PropTypes.object,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
   editAssignment: PropTypes.func.isRequired,

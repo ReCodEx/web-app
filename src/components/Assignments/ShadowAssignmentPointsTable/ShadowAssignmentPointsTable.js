@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { Table, Modal } from 'react-bootstrap';
 
@@ -176,7 +176,7 @@ ShadowAssignmentPointsTable.propTypes = {
   maxPoints: PropTypes.number.isRequired,
   setPoints: PropTypes.func.isRequired,
   removePoints: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(ShadowAssignmentPointsTable);

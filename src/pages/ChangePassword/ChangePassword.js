@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelativeTime } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 
@@ -108,12 +108,12 @@ class ChangePassword extends Component {
         }
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.homepage.title" />,
+            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — ReCodEx Code Examiner" />,
             link: HOME_URI,
             iconName: 'home',
           },
           {
-            text: <FormattedMessage id="app.changePassword.title" />,
+            text: <FormattedMessage id="app.changePassword.title" defaultMessage="Change forgotten password" />,
             iconName: 'shield-alt',
           },
         ]}>
@@ -143,7 +143,7 @@ class ChangePassword extends Component {
                 />
                 <p>
                   <FormattedMessage id="app.changePassword.tokenExpiresIn" defaultMessage="Token expires: " />{' '}
-                  <FormattedRelative value={decodedToken.exp * 1000} />
+                  <FormattedRelativeTime value={Date.now() / 1000 - decodedToken.exp} units="seconds" />
                 </p>
               </div>
             )}

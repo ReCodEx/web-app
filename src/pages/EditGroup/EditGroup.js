@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector } from 'redux-form';
@@ -267,7 +267,7 @@ EditGroup.propTypes = {
   relocateGroup: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 const editGroupFormSelector = formValueSelector('editGroup');

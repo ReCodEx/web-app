@@ -30,12 +30,12 @@ const ResetPassword = ({ resetPassword, isReseting, hasFailed, hasSucceeded, lin
     }
     breadcrumbs={[
       {
-        text: <FormattedMessage id="app.homepage.title" />,
+        text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — ReCodEx Code Examiner" />,
         link: HOME_URI,
         iconName: 'home',
       },
       {
-        text: <FormattedMessage id="app.resetPassword.title" />,
+        text: <FormattedMessage id="app.resetPassword.title" defaultMessage="Reset password" />,
         iconName: 'key',
       },
     ]}>

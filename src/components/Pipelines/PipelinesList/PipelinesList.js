@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import PipelinesListItem from '../PipelinesListItem';
 import { identity } from '../../../helpers/common';
@@ -41,7 +41,7 @@ PipelinesList.propTypes = {
   pipelines: PropTypes.array,
   heading: PropTypes.any,
   createActions: PropTypes.func,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(PipelinesList);

@@ -24,7 +24,7 @@ const Page = ({
   failedTitle = (
     <span>
       <WarningIcon className="text-warning" gapRight />
-      <FormattedMessage id="app.page.failed" defaultMessage="Cannot Load the Page" />
+      <FormattedMessage id="app.page.failed" defaultMessage="Cannot load the page" />
     </span>
   ),
   failedDescription = (

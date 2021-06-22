@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { exerciseSelector } from '../../redux/selectors/exercises';
@@ -42,7 +42,7 @@ ExercisesNameContainer.propTypes = {
   exerciseId: PropTypes.string.isRequired,
   exercise: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -291,7 +291,7 @@ Exercise.propTypes = {
   forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   referenceSolutions: ImmutablePropTypes.map,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   submitting: PropTypes.bool,
   initCreateReferenceSolution: PropTypes.func.isRequired,
   links: PropTypes.object,

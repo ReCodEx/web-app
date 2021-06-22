@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
@@ -190,7 +190,7 @@ const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, exist
           if (existingVariableType && existingVariableType.type !== portType) {
             portsInErrors[portName] = {
               value: (
-                <FormattedHTMLMessage
+                <FormattedMessage
                   id="app.pipelineEditor.BoxForm.conflictingPortType"
                   defaultMessage="You cannot set this variable to the port - the type of this port is <code>{portType}</code>, but the variable <code>{variable}</code> is already associated with port of type <code>{variableType}</code> (e.g., in box <code>{exampleBox}</code>)."
                   values={{
@@ -198,6 +198,7 @@ const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, exist
                     portType,
                     variableType: existingVariableType.type,
                     exampleBox: existingVariableType.examplePort,
+                    code: text => <code>{text}</code>,
                   }}
                 />
               ),
