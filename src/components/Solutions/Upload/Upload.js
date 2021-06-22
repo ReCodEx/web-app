@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import DropZone from 'react-dropzone';
+import Dropzone from 'react-dropzone';
 import Button from '../../widgets/TheButton';
 import UploadsTable from '../UploadsTable';
 import { UploadIcon } from '../../icons';
@@ -29,17 +29,22 @@ const Upload = ({
   retryUploadFile,
 }) => (
   <div>
-    <DropZone onDrop={uploadFiles} style={dropZoneStyles}>
-      <p>
-        <FormattedMessage id="app.submitSolution.dragAndDrop" defaultMessage="Drag and drop files here." />
-      </p>
-      <p>
-        <Button variant="primary">
-          <UploadIcon gapRight />
-          <FormattedMessage id="app.submitSolution.addFile" defaultMessage="Add File(s)" />
-        </Button>
-      </p>
-    </DropZone>
+    <Dropzone onDrop={uploadFiles}>
+      {({ getRootProps, getInputProps }) => (
+        <div {...getRootProps()} style={dropZoneStyles}>
+          <input {...getInputProps()} />
+          <p>
+            <FormattedMessage id="app.submitSolution.dragAndDrop" defaultMessage="Drag and drop files here." />
+          </p>
+          <p>
+            <Button variant="primary">
+              <UploadIcon gapRight />
+              <FormattedMessage id="app.submitSolution.addFile" defaultMessage="Add File(s)" />
+            </Button>
+          </p>
+        </div>
+      )}
+    </Dropzone>
 
     {(uploadingFiles.length > 0 || attachedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) && (
       <UploadsTable
