@@ -20,3 +20,4 @@ package-lock.json
 /run_manage_translations.bat
 /etc/env.json
 /bin/server.js.LICENSE.txt
+/yarn-error.log

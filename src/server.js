@@ -65,7 +65,7 @@ const style = getFileName('public/style-*.css', `${urlPrefix}/`) || `${urlPrefix
 const app = new Express();
 const ejs = require('ejs').__express;
 app.set('view engine', 'ejs');
-app.engine('.ejs', ejs);
+app.engine('ejs', ejs);
 app.use(
   urlPrefix,
   Express.static('public', {
