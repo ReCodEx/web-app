@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Form, FormGroup, FormLabel } from 'react-bootstrap';
 
 import ClientOnly from '../../helpers/ClientOnly';
@@ -73,11 +72,7 @@ SourceCodeField.propTypes = {
     dirty: PropTypes.bool,
   }),
   tabIndex: PropTypes.number,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   readOnly: PropTypes.bool,
   onBlur: PropTypes.func,
 };

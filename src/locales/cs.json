@@ -974,7 +974,7 @@
   "app.loginForm.validation.emptyEmail": "E-mailová adresa nemůže být prázdná.",
   "app.loginForm.validation.emptyPassword": "Heslo nemůže být prázdné.",
   "app.logout": "Odhlásit",
-  "app.markdownTextArea.canUseMarkdown": "V tomto poli je povoleno používat <a href='{markdownUrl}' target='_blank'>syntaxi markdown</a>.",
+  "app.markdownTextArea.canUseMarkdown": "V tomto poli je povoleno používat <a>syntaxi markdown</a>.",
   "app.markdownTextArea.empty": "Prázdné",
   "app.markdownTextArea.preview": "Náhled:",
   "app.markdownTextArea.showPreview": "Ukaž náhled",

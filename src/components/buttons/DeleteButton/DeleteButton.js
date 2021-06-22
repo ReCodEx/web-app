@@ -103,7 +103,7 @@ const DeleteButton = ({
 DeleteButtonInternal.propTypes = {
   id: PropTypes.string,
   icon: PropTypes.element,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.oneOf([FormattedMessage])]),
+  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   disabled: PropTypes.bool,
   small: PropTypes.bool,
   captionAsTooltip: PropTypes.bool,

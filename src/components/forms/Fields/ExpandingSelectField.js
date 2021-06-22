@@ -112,16 +112,8 @@ ExpandingSelectField.propTypes = {
     error: PropTypes.any,
     warning: PropTypes.any,
   }).isRequired,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
-  noItems: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  noItems: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   options: PropTypes.array,
   readOnly: PropTypes.bool,
 };

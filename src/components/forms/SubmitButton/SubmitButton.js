@@ -125,7 +125,7 @@ SubmitButton.propTypes = {
     submitting: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     validating: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   }),
-  confirmQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element, FormattedMessage]),
+  confirmQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default SubmitButton;

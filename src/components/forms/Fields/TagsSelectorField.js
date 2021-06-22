@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { FormLabel, Badge } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import classnames from 'classnames';
@@ -50,16 +49,8 @@ TagsSelectorField.propTypes = {
     error: PropTypes.any,
     warning: PropTypes.any,
   }).isRequired,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
-  noItems: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  noItems: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   validateEach: PropTypes.func,
 };
 

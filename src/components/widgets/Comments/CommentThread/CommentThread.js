@@ -63,7 +63,7 @@ const CommentThread = ({
 );
 
 CommentThread.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
+  title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   comments: PropTypes.array,
   currentUserId: PropTypes.string.isRequired,
   addComment: PropTypes.func,

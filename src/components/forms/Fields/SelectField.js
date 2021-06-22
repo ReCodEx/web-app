@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -72,11 +71,7 @@ SelectField.propTypes = {
     warning: PropTypes.any,
   }).isRequired,
   type: PropTypes.string,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   options: PropTypes.array.isRequired,
   addEmptyOption: PropTypes.bool,
   emptyOptionCaption: PropTypes.string,

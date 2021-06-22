@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Overlay, Popover } from 'react-bootstrap';
 
 const HOVER = 'hover';
@@ -41,8 +40,8 @@ const OptionalPopoverWrapper = ({
 };
 
 OptionalPopoverWrapper.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
-  contents: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
+  title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  contents: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   popoverId: PropTypes.string,
   placement: PropTypes.string,
   hide: PropTypes.bool,

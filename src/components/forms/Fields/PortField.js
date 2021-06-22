@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 
 import { Form, FormGroup, FormControl, FormLabel, Badge } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -55,11 +54,7 @@ PortField.propTypes = {
     error: PropTypes.any,
     warning: PropTypes.any,
   }).isRequired,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]).isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   portType: PropTypes.string.isRequired,
   ignoreDirty: PropTypes.bool,
 };

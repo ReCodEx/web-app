@@ -138,16 +138,8 @@ class Box extends Component {
 
 Box.propTypes = {
   id: PropTypes.string,
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element,
-  ]).isRequired,
-  description: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element,
-  ]),
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   type: PropTypes.string,
   isOpen: PropTypes.bool,
   collapsable: PropTypes.bool,

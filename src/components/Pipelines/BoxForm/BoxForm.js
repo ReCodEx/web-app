@@ -137,11 +137,7 @@ class BoxForm extends Component {
 
 BoxForm.propTypes = {
   show: PropTypes.bool,
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element,
-  ]).isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   selectedType: PropTypes.string,
   boxTypes: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,

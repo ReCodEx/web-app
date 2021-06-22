@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 
 import Icon from '../../icons';
@@ -31,15 +31,10 @@ InfoBox.propTypes = {
     PropTypes.string,
     PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage, GroupsName]) }),
   ]).isRequired,
-  value: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedNumber]) }),
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.element]),
   icon: PropTypes.string,
   spin: PropTypes.bool,
-  description: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) })]),
+  description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   progress: PropTypes.number,
   color: PropTypes.string,
 };

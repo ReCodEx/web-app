@@ -79,11 +79,7 @@ const FilesTable = ({
 );
 
 FilesTable.propTypes = {
-  description: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element,
-  ]),
+  description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   uploadId: PropTypes.string.isRequired,
   files: PropTypes.array,
   usedFiles: PropTypes.instanceOf(Set),

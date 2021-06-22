@@ -35,14 +35,10 @@ PipelineField.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
     onChange: PropTypes.func.isRequired,
   }).isRequired,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]).isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool,
-    error: PropTypes.oneOfType([PropTypes.string, FormattedMessage]),
+    error: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   }),
 };
 
