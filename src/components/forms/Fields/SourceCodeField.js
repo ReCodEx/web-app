@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, FormLabel } from 'react-bootstrap';
+import { canUseDOM } from 'exenv';
 
-import ClientOnly from '../../helpers/ClientOnly';
 import { UserSettingsContext } from '../../../helpers/contexts';
 
 // load the ACE editor only when rendering in the browser
-import { loadAceEditor, getAceModeFromExtension } from '../../helpers/AceEditorLoader';
-const AceEditor = loadAceEditor();
+import { getAceModeFromExtension } from '../../helpers/ace';
+const AceEditor = canUseDOM ? require('react-ace').default : null;
 
 const SourceCodeField = ({
   input,
@@ -24,7 +24,7 @@ const SourceCodeField = ({
     {Boolean(label) && (
       <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
     )}
-    <ClientOnly>
+    {canUseDOM && (
       <div className={readOnly ? 'noselection' : ''}>
         <UserSettingsContext.Consumer>
           {({ vimMode = false, darkTheme = false }) => (
@@ -52,7 +52,7 @@ const SourceCodeField = ({
           )}
         </UserSettingsContext.Consumer>
       </div>
-    </ClientOnly>
+    )}
     {error && <Form.Text className="text-danger"> {error} </Form.Text>}
     {!error && warning && <Form.Text className="text-warning"> {warning} </Form.Text>}
     {children}

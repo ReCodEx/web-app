@@ -10,7 +10,7 @@ import styles from './MarkdownTextAreaField.less';
 
 import { canUseDOM } from 'exenv';
 if (canUseDOM) {
-  require('brace/mode/markdown');
+  require('ace-builds/src-noconflict/mode-markdown');
 }
 
 class MarkdownTextAreaField extends Component {

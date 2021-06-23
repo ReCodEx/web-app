@@ -115,18 +115,20 @@ class SolutionDetail extends Component {
               otherSolutions={otherSolutions}
             />
             <Row>
-              {files.map(file => (
-                <Col lg={6} md={12} key={file.id}>
-                  <a
-                    href="#"
-                    onClick={e => {
-                      e.preventDefault();
-                      this.openFile(file.id);
-                    }}>
-                    <SourceCodeInfoBox {...file} />
-                  </a>
-                </Col>
-              ))}
+              {files
+                .sort((a, b) => a.name.localeCompare(b.name, 'en'))
+                .map(file => (
+                  <Col lg={6} md={12} key={file.id}>
+                    <a
+                      href="#"
+                      onClick={e => {
+                        e.preventDefault();
+                        this.openFile(file.id);
+                      }}>
+                      <SourceCodeInfoBox {...file} />
+                    </a>
+                  </Col>
+                ))}
               {files.length > 1 && (
                 <Col lg={6} md={12}>
                   <DownloadSolutionArchiveContainer solutionId={id} />
@@ -292,7 +294,15 @@ class SolutionDetail extends Component {
           )}
         </Row>
 
-        <SourceCodeViewerContainer show={openFileId !== null} fileId={openFileId} onHide={() => this.hideFile()} />
+        <SourceCodeViewerContainer
+          solutionId={id}
+          show={openFileId !== null}
+          fileId={openFileId}
+          files={files}
+          openAnotherFile={this.openFile}
+          onHide={this.hideFile}
+          submittedBy={userId}
+        />
 
         {activeSubmissionId && scoreConfigSelector && (
           <ScoreConfigInfoDialog
