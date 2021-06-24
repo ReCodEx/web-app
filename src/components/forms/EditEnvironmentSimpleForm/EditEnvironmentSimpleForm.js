@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
@@ -89,10 +89,16 @@ class EditEnvironmentSimpleForm extends Component {
             {environmentsHelpUrl && (
               <InsetPanel size="sm">
                 <div className="small text-muted">
-                  <FormattedHTMLMessage
+                  <FormattedMessage
                     id="app.editEnvironmentSimpleForm.linkToWiki"
-                    defaultMessage="Select all runtime environments the exercise should support. You may find more information about the environments at our <a href='{url}' target='_blank'>wiki page</a>."
-                    values={{ url: environmentsHelpUrl }}
+                    defaultMessage="Select all runtime environments the exercise should support. You may find more information about the environments at our <a>wiki page</a>."
+                    values={{
+                      a: caption => (
+                        <a href={environmentsHelpUrl} target="_blank" rel="noreferrer">
+                          {caption}
+                        </a>
+                      ),
+                    }}
                   />
                 </div>
               </InsetPanel>
@@ -192,7 +198,7 @@ EditEnvironmentSimpleForm.propTypes = {
   initialValues: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
   readOnly: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = (formData, { runtimeEnvironments }) => {

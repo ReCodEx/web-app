@@ -70,7 +70,7 @@ class CommentThreadContainer extends Component {
 
 CommentThreadContainer.propTypes = {
   threadId: PropTypes.string.isRequired,
-  title: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
+  title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   inModal: PropTypes.bool,
   thread: PropTypes.object,
   user: PropTypes.object,

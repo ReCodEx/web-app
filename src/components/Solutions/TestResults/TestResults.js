@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
 import { defaultMemoize } from 'reselect';
@@ -45,7 +45,7 @@ TestResults.propTypes = {
   isJudgeLogStdoutPublic: PropTypes.bool,
   isJudgeLogStderrPublic: PropTypes.bool,
   isJudgeLogMerged: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(TestResults);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape, defineMessages, FormattedHTMLMessage } from 'react-intl';
+import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Modal, Form, FormGroup, FormLabel, FormControl, Row, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -245,10 +245,16 @@ class SubmitSolution extends Component {
                     </FormControl>
                     {environmentsHelpUrl && (
                       <p className="small text-muted em-margin-top">
-                        <FormattedHTMLMessage
+                        <FormattedMessage
                           id="app.submitSolution.linkToWiki"
-                          defaultMessage="Select the right environment, under which you wish to submit your solution. You may find more information about the environments at our <a href='{url}' target='_blank'>wiki page</a>."
-                          values={{ url: environmentsHelpUrl }}
+                          defaultMessage="Select the right environment, under which you wish to submit your solution. You may find more information about the environments at our <a>wiki page</a>."
+                          values={{
+                            a: caption => (
+                              <a href={environmentsHelpUrl} target="_blank" rel="noreferrer">
+                                {caption}
+                              </a>
+                            ),
+                          }}
                         />
                       </p>
                     )}
@@ -357,7 +363,7 @@ SubmitSolution.propTypes = {
   isReferenceSolution: PropTypes.bool,
   attachedFiles: PropTypes.array,
   messages: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(

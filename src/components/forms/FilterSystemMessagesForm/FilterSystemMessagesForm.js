@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 
@@ -60,7 +60,7 @@ FilterSystemMessagesForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(

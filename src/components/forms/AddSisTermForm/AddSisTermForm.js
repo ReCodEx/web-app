@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import FormBox from '../../widgets/FormBox';
@@ -86,7 +86,7 @@ AddSisTermForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(

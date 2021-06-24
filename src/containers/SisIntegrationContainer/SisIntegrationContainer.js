@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Card, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
@@ -215,7 +215,7 @@ SisIntegrationContainer.propTypes = {
   sisCoursesGroups: PropTypes.func.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default withLinks(

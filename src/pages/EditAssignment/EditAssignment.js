@@ -115,12 +115,12 @@ class EditAssignment extends Component {
                 iconName: 'ghost',
               },
           {
-            text: <FormattedMessage id="app.assignment.title" />,
+            text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
             iconName: 'hourglass-start',
             link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
           },
           {
-            text: <FormattedMessage id="app.editAssignment.title" />,
+            text: <FormattedMessage id="app.editAssignment.title" defaultMessage="Edit assignment settings" />,
             iconName: ['far', 'edit'],
           },
         ]}>

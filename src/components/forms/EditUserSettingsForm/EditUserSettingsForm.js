@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
@@ -240,7 +240,7 @@ EditUserSettingsForm.propTypes = {
   submitting: PropTypes.bool,
   anyTouched: PropTypes.bool,
   invalid: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(

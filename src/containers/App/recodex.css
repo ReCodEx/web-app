@@ -1,4 +1,4 @@
-@import '../../../node_modules/font-awesome-animation/dist/font-awesome-animation.min.css';
+@import '../../../node_modules/font-awesome-animation/css/font-awesome-animation.min.css';
 
 /*
  * Global shared repository of additional CSS styles.
@@ -289,6 +289,13 @@ table.table tbody:first-child tr:first-child th {
 
 .noselection .ace_cursor {
   color: transparent !important;
+}
+
+/*
+ * react-collapse additional styles for animation
+ */
+.ReactCollapse--collapse {
+  transition: height 500ms;
 }
 
 /******************************************************************************/

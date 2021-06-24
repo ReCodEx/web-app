@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
 import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
@@ -151,7 +151,7 @@ AssignmentsTable.propTypes = {
   showNames: PropTypes.bool,
   showGroups: PropTypes.bool,
   groupsAccessor: PropTypes.func,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(AssignmentsTable);

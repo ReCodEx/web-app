@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -710,7 +710,7 @@ EditExerciseConfig.propTypes = {
   supplementaryFiles: ImmutablePropTypes.map,
   supplementaryFilesStatus: PropTypes.string,
   links: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   fetchPipelinesVariables: PropTypes.func.isRequired,
   setExerciseConfigType: PropTypes.func.isRequired,

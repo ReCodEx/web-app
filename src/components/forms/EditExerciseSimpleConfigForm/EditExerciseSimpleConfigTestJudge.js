@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { FormattedMessage, injectIntl, defineMessages, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 
 import { SelectField, ExpandingTextField, CheckboxField } from '../Fields';
 import Confirm from '../../forms/Confirm';
@@ -200,7 +200,7 @@ EditExerciseSimpleConfigTestJudge.propTypes = {
   showJudgeArgs: PropTypes.bool,
   onlyCustomJudge: PropTypes.bool,
   readOnly: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(EditExerciseSimpleConfigTestJudge);

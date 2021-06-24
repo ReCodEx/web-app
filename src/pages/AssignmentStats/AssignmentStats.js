@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage, FormattedNumber, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
@@ -309,7 +309,7 @@ class AssignmentStats extends Component {
             resource: assignment,
             iconName: 'hourglass-start',
             breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise assignment" />,
+              text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
               link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id),
             }),
           },
@@ -475,7 +475,7 @@ AssignmentStats.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   downloadBestSolutionsArchive: PropTypes.func.isRequired,
   fetchManyStatus: PropTypes.string,
-  intl: intlShape,
+  intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
 

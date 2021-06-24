@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button from '../../widgets/TheButton';
@@ -102,7 +102,7 @@ EditEnvironmentList.propTypes = {
   invertRuntimeSelectionHandler: PropTypes.func,
   showExclusive: PropTypes.bool,
   fullWidth: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(EditEnvironmentList);

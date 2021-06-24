@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import Page from '../../components/layout/Page';
@@ -186,7 +186,7 @@ Archive.propTypes = {
   instanceId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default withLinks(

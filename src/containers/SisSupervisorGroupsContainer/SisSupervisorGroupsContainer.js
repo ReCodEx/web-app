@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Table, Accordion, Card, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -520,7 +520,7 @@ SisSupervisorGroupsContainer.propTypes = {
   sisPossibleParents: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   groupsResourcesAccessor: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(

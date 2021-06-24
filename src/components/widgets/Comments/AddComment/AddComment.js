@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedHTMLMessage, injectIntl, intlShape, defineMessages } from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
 
 import Button from '../../TheButton';
@@ -108,15 +108,21 @@ class AddComment extends Component {
               {isPrivate ? <Icon icon="lock" /> : <Icon icon="unlock-alt" />}
             </Button>
             {isPrivate && (
-              <FormattedHTMLMessage
+              <FormattedMessage
                 id="app.comments.warnings.isPrivate"
                 defaultMessage="<strong>Only you will see this comment.</strong>"
+                values={{
+                  strong: text => <strong>{text}</strong>,
+                }}
               />
             )}
             {!isPrivate && (
-              <FormattedHTMLMessage
+              <FormattedMessage
                 id="app.comments.warnings.isPublic"
                 defaultMessage="<strong>Everyone on this page will see this comment.</strong>"
+                values={{
+                  strong: text => <strong>{text}</strong>,
+                }}
               />
             )}
           </Form.Text>
@@ -128,7 +134,7 @@ class AddComment extends Component {
 
 AddComment.propTypes = {
   addComment: PropTypes.func,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(AddComment);

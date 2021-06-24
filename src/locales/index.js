@@ -3,12 +3,15 @@ import { canUseDOM } from 'exenv';
 import messagesCs from './cs'; // eslint-disable-line
 import messagesEn from './en'; // eslint-disable-line
 
-import en from 'react-intl/locale-data/en';
-import cs from 'react-intl/locale-data/cs';
+import '@formatjs/intl-pluralrules/polyfill';
+import '@formatjs/intl-pluralrules/locale-data/en';
+import '@formatjs/intl-pluralrules/locale-data/cs';
+import '@formatjs/intl-relativetimeformat/polyfill';
+import '@formatjs/intl-relativetimeformat/locale-data/en';
+import '@formatjs/intl-relativetimeformat/locale-data/cs';
 
 export const messages = { cs: messagesCs, en: messagesEn };
 export const isAvailable = lang => Object.keys(messages).indexOf(lang) !== -1;
-export const localeData = { cs, en };
 
 export const getDefaultLang = () => {
   if (canUseDOM) {

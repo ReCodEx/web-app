@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -229,7 +229,7 @@ Sidebar.propTypes = {
   instances: ImmutablePropTypes.list,
   small: PropTypes.bool,
   links: PropTypes.object,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default withLinks(withRouter(injectIntl(Sidebar)));

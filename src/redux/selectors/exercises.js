@@ -10,31 +10,19 @@ const getResources = exercises => exercises && exercises.get('resources');
 const getGroupExercises = state => state.groupExercises;
 const getRuntimeEnvironments = exercise => exercise && exercise.getIn(['data', 'runtimeEnvironments'], EMPTY_LIST);
 
-export const exercisesSelector = createSelector(
-  getExercises,
-  getResources
-);
+export const exercisesSelector = createSelector(getExercises, getResources);
 export const exerciseSelector = exerciseId =>
-  createSelector(
-    exercisesSelector,
-    exercises => exercises && exercises.get(exerciseId)
-  );
+  createSelector(exercisesSelector, exercises => exercises && exercises.get(exerciseId));
 
 export const exerciseForkedFromSelector = defaultMemoize(exerciseId =>
-  createSelector(
-    exercisesSelector,
-    exercises => {
-      const fokredId = exercises && exercises.getIn([exerciseId, 'data', 'forkedFrom']);
-      return fokredId && exercises.get(fokredId);
-    }
-  )
+  createSelector(exercisesSelector, exercises => {
+    const fokredId = exercises && exercises.getIn([exerciseId, 'data', 'forkedFrom']);
+    return fokredId && exercises.get(fokredId);
+  })
 );
 
 export const getExercise = id =>
-  createSelector(
-    getExercises,
-    exercises => exercises && exercises.getIn(['resources', id])
-  );
+  createSelector(getExercises, exercises => exercises && exercises.getIn(['resources', id]));
 
 export const getExerciseOfAssignmentJS = createSelector(
   [getExercises, getAssignment],
@@ -46,16 +34,10 @@ export const getExerciseOfAssignmentJS = createSelector(
   }
 );
 
-export const getExerciseSelector = createSelector(
-  getExercises,
-  exercises => id => exercises.getIn(['resources', id])
-);
+export const getExerciseSelector = createSelector(getExercises, exercises => id => exercises.getIn(['resources', id]));
 
 export const getExerciseRuntimeEnvironments = defaultMemoize(id =>
-  createSelector(
-    getExercise(id),
-    getRuntimeEnvironments
-  )
+  createSelector(getExercise(id), getRuntimeEnvironments)
 );
 
 export const getExerciseRuntimeEnvironmentsSelector = createSelector(
@@ -64,10 +46,7 @@ export const getExerciseRuntimeEnvironmentsSelector = createSelector(
 );
 
 export const getFork = (id, forkId) =>
-  createSelector(
-    getExercise(id),
-    exercise => exercise.getIn(['data', 'forks', forkId])
-  );
+  createSelector(getExercise(id), exercise => exercise.getIn(['data', 'forks', forkId]));
 
 export const getExercisesByIdsSelector = ids =>
   createSelector(
@@ -87,20 +66,17 @@ export const getExercisesForGroup = createSelector(
 );
 
 export const getExerciseAttachingGroupId = defaultMemoize(id =>
-  createSelector(
-    getExercise(id),
-    exercise => exercise && exercise.getIn(['data', 'attachingGroupId'], null)
-  )
+  createSelector(getExercise(id), exercise => exercise && exercise.getIn(['data', 'attachingGroupId'], null))
 );
 
 export const getExerciseDetachingGroupId = defaultMemoize(id =>
-  createSelector(
-    getExercise(id),
-    exercise => exercise && exercise.getIn(['data', 'detachingGroupId'], null)
-  )
+  createSelector(getExercise(id), exercise => exercise && exercise.getIn(['data', 'detachingGroupId'], null))
 );
 
-export const getExerciseTags = state => getExercises(state).get('tags', []);
+export const getExerciseTags = state => {
+  const res = getExercises(state).get('tags');
+  return res && Array.isArray(res) ? res : [];
+};
 export const getExerciseTagsLoading = state => getExercises(state).get('tags') === null;
 
 export const getExerciseTagsUpdatePending = state => getExercises(state).get('tagsPending', null);

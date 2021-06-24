@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Card, Tab, Nav } from 'react-bootstrap';
 
 import Confirm from '../Confirm';
@@ -117,7 +117,7 @@ TabbedArrayField.propTypes = {
   ContentComponent: PropTypes.any,
   emptyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   removeQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(TabbedArrayField);

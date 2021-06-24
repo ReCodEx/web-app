@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
@@ -116,35 +116,36 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
 
                             <Container fluid>
                               <Row>
-                                {env.id === ENV_JAVA_ID && (
+                                {
+                                  env.id === ENV_JAVA_ID && (
+                                    /*
+                                     * A special case for Java only !!!
+                                     */
+                                    <Col lg={exercise.runtimeEnvironments.length === 1 ? 6 : 12}>
+                                      <FieldArray
+                                        name={`${test}.jar-files.${env.id}`}
+                                        component={ExpandingSelectField}
+                                        options={supplementaryFiles}
+                                        label={
+                                          <FormattedMessage
+                                            id="app.editExerciseSimpleConfigTests.jarFiles"
+                                            defaultMessage="Additional JAR file:"
+                                          />
+                                        }
+                                        noItems={
+                                          <FormattedMessage
+                                            id="app.editExerciseSimpleConfigTests.noJarFiles"
+                                            defaultMessage="There are no additional JAR files yet..."
+                                          />
+                                        }
+                                        readOnly={readOnly}
+                                      />
+                                      {exercise.runtimeEnvironments.length !== 1 && <hr />}
+                                    </Col>
+                                  )
                                   /*
-                                   * A special case for Java only !!!
+                                   * End of special case.
                                    */
-                                  <Col lg={exercise.runtimeEnvironments.length === 1 ? 6 : 12}>
-                                    <FieldArray
-                                      name={`${test}.jar-files.${env.id}`}
-                                      component={ExpandingSelectField}
-                                      options={supplementaryFiles}
-                                      label={
-                                        <FormattedMessage
-                                          id="app.editExerciseSimpleConfigTests.jarFiles"
-                                          defaultMessage="Additional JAR file:"
-                                        />
-                                      }
-                                      noItems={
-                                        <FormattedMessage
-                                          id="app.editExerciseSimpleConfigTests.noJarFiles"
-                                          defaultMessage="There are no additional JAR files yet..."
-                                        />
-                                      }
-                                      readOnly={readOnly}
-                                    />
-                                    {exercise.runtimeEnvironments.length !== 1 && <hr />}
-                                  </Col>
-                                )
-                                /*
-                                 * End of special case.
-                                 */
                                 }
 
                                 <Col lg={exercise.runtimeEnvironments.length === 1 && env.id === ENV_JAVA_ID ? 6 : 12}>
@@ -250,7 +251,7 @@ EditExerciseSimpleConfigTestCompilation.propTypes = {
   smartFillCompilation: PropTypes.func,
   change: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(EditExerciseSimpleConfigTestCompilation);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import Button from '../../components/widgets/TheButton';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
 import App from '../../containers/App';
@@ -356,24 +356,29 @@ class GroupDetail extends Component {
                     </Row>
                   )}
 
-                  {// unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
-                  (isGroupSupervisor || isGroupAdmin) &&
-                    !data.organizational &&
-                    !data.archived &&
-                    isSupervisorRole(effectiveRole) &&
-                    !isStudentRole(effectiveRole) && (
-                      <Row>
-                        <Col sm={6}>
-                          <Box
-                            title={
-                              <FormattedMessage id="app.group.spervisorsView.addStudent" defaultMessage="Add Student" />
-                            }
-                            isOpen>
-                            <AddStudent instanceId={data.privateData.instanceId} groupId={data.id} />
-                          </Box>
-                        </Col>
-                      </Row>
-                    )}
+                  {
+                    // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
+                    (isGroupSupervisor || isGroupAdmin) &&
+                      !data.organizational &&
+                      !data.archived &&
+                      isSupervisorRole(effectiveRole) &&
+                      !isStudentRole(effectiveRole) && (
+                        <Row>
+                          <Col sm={6}>
+                            <Box
+                              title={
+                                <FormattedMessage
+                                  id="app.group.spervisorsView.addStudent"
+                                  defaultMessage="Add Student"
+                                />
+                              }
+                              isOpen>
+                              <AddStudent instanceId={data.privateData.instanceId} groupId={data.id} />
+                            </Box>
+                          </Col>
+                        </Row>
+                      )
+                  }
                 </>
               )}
             </ResourceRenderer>
@@ -445,7 +450,7 @@ GroupDetail.propTypes = {
   setShadowPoints: PropTypes.func.isRequired,
   removeShadowPoints: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 const mapStateToProps = (

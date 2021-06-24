@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -44,11 +43,7 @@ TextAreaField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
   }).isRequired,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   children: PropTypes.any,
   meta: PropTypes.shape({
     active: PropTypes.bool,

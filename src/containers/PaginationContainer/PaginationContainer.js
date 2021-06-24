@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Container, Row, Col, Pagination } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -320,7 +320,7 @@ PaginationContainer.propTypes = {
   setPaginationOrderBy: PropTypes.func.isRequired,
   setPaginationFilters: PropTypes.func.isRequired,
   fetchPaginated: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default connect(

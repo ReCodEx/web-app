@@ -67,7 +67,7 @@ class CommentBox extends Component {
 }
 
 CommentBox.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.oneOf([FormattedMessage]), PropTypes.element, PropTypes.string]),
+  title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   commentsCount: PropTypes.number.isRequired,
   footer: PropTypes.element,
   inModal: PropTypes.bool,

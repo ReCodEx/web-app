@@ -1,26 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { convertGraphToSvg } from '../../../helpers/dot';
-import ClientOnly from '../../../components/helpers/ClientOnly';
 import { canUseDOM } from 'exenv';
 import style from './pipeline.less';
+import { LoadingIcon } from '../../icons';
 
 const PipelineVisualisation = ({ graph }) => {
-  let svg = '';
   if (canUseDOM) {
-    svg = convertGraphToSvg(graph);
-  }
-  return (
-    <ClientOnly>
+    const [svg, setSvg] = useState(null);
+    useEffect(() => {
+      setSvg(null);
+      convertGraphToSvg(graph).then(result => setSvg(result));
+    }, [graph]);
+
+    return svg !== null ? (
       <div
         className={style.pipeline}
         dangerouslySetInnerHTML={{
           __html: svg,
         }}
       />
-    </ClientOnly>
-  );
+    ) : (
+      <div>
+        <LoadingIcon gapRight />
+        <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 };
 
 PipelineVisualisation.propTypes = {

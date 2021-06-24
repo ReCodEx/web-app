@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip, Badge } from 'react-bootstrap';
 
 import Icon, { GroupIcon } from '../../icons';
@@ -103,7 +103,7 @@ CourseLabel.propTypes = {
   oddWeeks: PropTypes.bool,
   room: PropTypes.string,
   groupsCount: PropTypes.number,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(CourseLabel);

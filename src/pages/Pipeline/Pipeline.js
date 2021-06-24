@@ -75,7 +75,7 @@ class Pipeline extends Component {
         description={<FormattedMessage id="app.pipeline.description" defaultMessage="Pipeline overview" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.pipelines.title" defaultMessage="Pipelines" />,
+            text: <FormattedMessage id="app.pipelines.title" defaultMessage="Pipeline list" />,
             iconName: 'random',
             link: PIPELINES_URI,
           },

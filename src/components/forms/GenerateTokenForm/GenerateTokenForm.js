@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedHTMLMessage, injectIntl, defineMessages, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Alert, OverlayTrigger, Tooltip, Container, Row, Col } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -188,7 +188,7 @@ GenerateTokenForm.propTypes = {
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   lastToken: PropTypes.string,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ scopes, expiration }) => {
@@ -199,16 +199,22 @@ const validate = ({ scopes, expiration }) => {
 
   if (!scopes['read-all'] && !scopes.master) {
     errors._error = (
-      <FormattedHTMLMessage
+      <FormattedMessage
         id="app.generateTokenForm.validate.noScopes"
         defaultMessage="At least one main scope (<i>read-only</i> or <i>read-write</i>) has to be selected."
+        values={{
+          i: text => <i>{text}</i>,
+        }}
       />
     );
   } else if (scopes.master && expiration > WEEK_SEC) {
     errors._error = (
-      <FormattedHTMLMessage
+      <FormattedMessage
         id="app.generateTokenForm.validate.expirationTooLong"
         defaultMessage="The <i>read-write</i> scope has restricted maximal expiration time to one week at the moment."
+        values={{
+          i: text => <i>{text}</i>,
+        }}
       />
     );
   }
@@ -219,9 +225,12 @@ const warn = ({ scopes }) => {
   const warnings = {};
   if (scopes && scopes['read-all'] && scopes.master) {
     warnings._warning = (
-      <FormattedHTMLMessage
+      <FormattedMessage
         id="app.generateTokenForm.warnBothMasterAndReadAll"
         defaultMessage="The <i>read-only</i> scope will have no effect whilst <i>read-write</i> scope is set since <i>read-write</i> implicitly contains <i>read-only</i>."
+        values={{
+          i: text => <i>{text}</i>,
+        }}
       />
     );
   }

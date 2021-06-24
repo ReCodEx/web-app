@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
@@ -127,7 +127,7 @@ class MessagesList extends Component {
 
 MessagesList.propTypes = {
   systemMessages: PropTypes.array.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   renderActions: PropTypes.func,
 };
 

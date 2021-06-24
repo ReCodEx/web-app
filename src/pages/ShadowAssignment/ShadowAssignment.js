@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
@@ -127,7 +127,7 @@ ShadowAssignment.propTypes = {
   group: PropTypes.func,
   loadAsync: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default withLinks(

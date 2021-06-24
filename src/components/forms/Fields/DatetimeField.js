@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
@@ -72,11 +71,7 @@ class DatetimeField extends Component {
 DatetimeField.propTypes = {
   lang: PropTypes.string,
   type: PropTypes.string,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),

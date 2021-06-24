@@ -1,4 +1,5 @@
-import Viz from 'viz.js/viz-lite';
+import Viz from 'viz.js';
+const { Module, render } = require('viz.js/lite.render.js');
 
 const subnode = (node, port) => `"${node}__${port}"`;
 
@@ -13,12 +14,14 @@ const createDotForPorts = (name, ports) =>
     .filter(value => value.length > 0)
     .map(port => `${subnode(name, port)} [label="${port}"]`);
 
-const createDotForNodeFactory = dependencies => (name, portsIn = {}, portsOut = {}, i) => {
-  const hasFullSupport = true;
-  const inputs = createDotForPorts(name, portsIn);
-  const outputs = createDotForPorts(name, portsOut);
+const createDotForNodeFactory =
+  dependencies =>
+  (name, portsIn = {}, portsOut = {}, i) => {
+    const hasFullSupport = true;
+    const inputs = createDotForPorts(name, portsIn);
+    const outputs = createDotForPorts(name, portsOut);
 
-  return `
+    return `
       subgraph cluster_${i} {
         label = "${name}";
         id = "B-${name}";
@@ -44,7 +47,7 @@ const createDotForNodeFactory = dependencies => (name, portsIn = {}, portsOut = 
         }
         ${inputs.length === 0 && outputs.length === 0 ? `"E-${name}" [label="void"]` : ''}
       }`;
-};
+  };
 
 const createDotForDependencyFactory = nodes => (from, to, name) => {
   const nodeTo = nodes.find(node => node.name === to);
@@ -72,5 +75,6 @@ export const convertGraphToDot = ({ nodes, dependencies }) => {
 
 export const convertGraphToSvg = graph => {
   const dot = graph ? convertGraphToDot(graph) : '';
-  return Viz(dot);
+  const viz = new Viz({ Module, render });
+  return viz.renderString(dot);
 };

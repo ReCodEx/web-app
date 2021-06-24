@@ -95,7 +95,7 @@ class EvaluationProgressContainer extends Component {
         this.updateProgress(data);
         break;
       case 'FINISHED':
-        addMessage(this.formatMessage(data));
+        addMessage(this.formatMessageInternal(data));
         this.closeSocket();
         addMessage({
           wasSuccessful: true,
@@ -106,7 +106,7 @@ class EvaluationProgressContainer extends Component {
     }
   };
 
-  formatMessage = ({
+  formatMessageInternal = ({
     command,
     task_state = 'OK', // eslint-disable-line camelcase
     text = null,
@@ -127,7 +127,7 @@ class EvaluationProgressContainer extends Component {
 
   updateProgress = task => {
     const { completedTask, skippedTask, failedTask } = this.props;
-    const msg = this.formatMessage(task);
+    const msg = this.formatMessageInternal(task);
     switch (task.task_state) {
       case 'COMPLETED':
         completedTask(msg);
@@ -196,7 +196,7 @@ class EvaluationProgressContainer extends Component {
         finishProcessing={this.finish}
         onClose={this.userCloseAction}
         messages={List([
-          this.formatMessage({
+          this.formatMessageInternal({
             command: 'TASK',
             task_state: 'SKIPPED',
             text: (

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FormattedDate, FormattedTime, FormattedRelative } from 'react-intl';
+import { FormattedDate, FormattedTime, FormattedRelativeTime } from 'react-intl';
 import classnames from 'classnames';
 
 import Icon from '../../icons';
@@ -63,7 +63,7 @@ const dateTime = ({
           [styles.trailingRelative]: showDate || showTime,
           [styles.standaloneRelative]: !showDate && !showTime,
         })}>
-        <FormattedRelative value={unixts * 1000} />
+        <FormattedRelativeTime value={Date.now() / 1000 - unixts} units="seconds" />
       </span>
     )}
   </span>

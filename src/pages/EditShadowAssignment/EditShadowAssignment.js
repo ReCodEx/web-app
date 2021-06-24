@@ -107,7 +107,7 @@ class EditShadowAssignment extends Component {
         }
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.shadowAssignment.title" />,
+            text: <FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />,
             iconName: 'user-secret',
             link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
           },

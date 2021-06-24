@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Alert, Container, Row, Col, Form } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
@@ -451,7 +451,7 @@ class EditAssignmentForm extends Component {
                   <span>
                     <FormattedMessage
                       id="app.editExerciseForm.solutionSizeLimit"
-                      defaultMessage="Soluition total size [KiB]:"
+                      defaultMessage="Soluition total size [KiB] limit:"
                     />
                     <Explanation id="solutionSizeLimitExplanation">
                       <FormattedMessage
@@ -698,7 +698,7 @@ EditAssignmentForm.propTypes = {
   assignmentIsPublic: PropTypes.bool,
   submitButtonMessages: PropTypes.object,
   mergeJudgeLogs: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = (

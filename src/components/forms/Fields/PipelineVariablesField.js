@@ -91,11 +91,7 @@ PipelineVariablesField.propTypes = {
     name: PropTypes.string.isRequired,
     value: PropTypes.object,
   }).isRequired,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]).isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   variables: PropTypes.array,
   supplementaryFiles: ImmutablePropTypes.map,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,

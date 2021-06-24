@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Table, Alert } from 'react-bootstrap';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
 import { SimpleCheckboxField } from '../../forms/Fields';
@@ -129,7 +129,7 @@ ArchiveTermGroups.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   externalId: PropTypes.string,
   groups: PropTypes.array.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ groups }) => {

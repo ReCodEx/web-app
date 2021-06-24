@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert, Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
@@ -118,7 +118,7 @@ SisBindGroupForm.propTypes = {
   groupsAccessor: PropTypes.func.isRequired,
   course: PropTypes.object,
   courseGroupsCount: PropTypes.number,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const warn = ({ groupId }) => {

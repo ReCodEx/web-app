@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-
 import { FormGroup, FormCheck, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import OnOffCheckbox from '../OnOffCheckbox';
@@ -51,11 +49,7 @@ CheckboxField.propTypes = {
   }).isRequired,
   type: PropTypes.string,
   onOff: PropTypes.bool,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]).isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   ignoreDirty: PropTypes.bool,
 };
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defaultMemoize } from 'reselect';
 
@@ -183,7 +183,7 @@ ReferenceSolution.propTypes = {
   fetchStatus: PropTypes.string,
   scoreConfigSelector: PropTypes.func,
   evaluations: ImmutablePropTypes.map,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   links: PropTypes.object.isRequired,
 };
 

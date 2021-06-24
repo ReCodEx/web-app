@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import withLinks from '../../../../helpers/withLinks';
@@ -185,7 +185,7 @@ AssignmentTableRow.propTypes = {
   groupsAccessor: PropTypes.func,
   discussionOpen: PropTypes.func,
   links: PropTypes.object,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(withLinks(AssignmentTableRow));

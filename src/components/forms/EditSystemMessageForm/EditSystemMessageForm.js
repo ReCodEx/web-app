@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert, Modal } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
@@ -142,7 +142,7 @@ EditSystemMessageForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   createNew: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
@@ -118,32 +118,38 @@ class ExternalLoginBox extends Component {
             </Button>
           </div>
         }>
-        <p>
-          <FormattedMessage
-            id="app.externalLogin.description"
-            defaultMessage="Sign-in into ReCodEx using external authentication service '{name}'. If you do not have an account in ReCodEx, it will attempt to create one. If you do have a local account, it will be associated with your external identity if both have the same e-mail address."
-            values={{ name }}
-          />
-        </p>
-        {helpUrl && (
+        <>
           <p>
-            <FormattedHTMLMessage
-              id="app.externalLogin.help"
-              defaultMessage="In case of any problems, <a href='{helpUrl}'>contact the support</a>."
-              values={{ helpUrl }}
+            <FormattedMessage
+              id="app.externalLogin.description"
+              defaultMessage="Sign-in into ReCodEx using external authentication service '{name}'. If you do not have an account in ReCodEx, it will attempt to create one. If you do have a local account, it will be associated with your external identity if both have the same e-mail address."
+              values={{ name }}
             />
           </p>
-        )}
+          {helpUrl && (
+            <p>
+              <FormattedMessage
+                id="app.externalLogin.help"
+                defaultMessage="In case of any problems, <a>contact the support</a>."
+                values={{
+                  a: caption => <a href={helpUrl}>{caption}</a>,
+                }}
+              />
+            </p>
+          )}
 
-        {!pending && this.state.lastError && (
-          <p className="callout callout-danger em-margin-top">{getErrorMessage(formatMessage)(this.state.lastError)}</p>
-        )}
+          {!pending && this.state.lastError && (
+            <p className="callout callout-danger em-margin-top">
+              {getErrorMessage(formatMessage)(this.state.lastError)}
+            </p>
+          )}
 
-        {!pending && this.state.lastError === null && loginStatus === statusTypes.LOGIN_FAILED && (
-          <p className="callout callout-danger em-margin-top">
-            <FormattedMessage id="app.externalLogin.failed" defaultMessage="External authentication failed." />
-          </p>
-        )}
+          {!pending && this.state.lastError === null && loginStatus === statusTypes.LOGIN_FAILED && (
+            <p className="callout callout-danger em-margin-top">
+              <FormattedMessage id="app.externalLogin.failed" defaultMessage="External authentication failed." />
+            </p>
+          )}
+        </>
       </Box>
     );
   }
@@ -158,7 +164,7 @@ ExternalLoginBox.propTypes = {
   login: PropTypes.func.isRequired,
   fail: PropTypes.func.isRequired,
   afterLogin: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect(

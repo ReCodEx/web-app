@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { reset, SubmissionError } from 'redux-form';
@@ -104,12 +104,12 @@ class Login extends Component {
         description={<FormattedMessage id="app.login.description" defaultMessage="Please fill your credentials" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.homepage.title" />,
+            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — ReCodEx Code Examiner" />,
             link: HOME_URI,
             iconName: 'home',
           },
           {
-            text: <FormattedMessage id="app.login.title" />,
+            text: <FormattedMessage id="app.login.title" defaultMessage="Sign in" />,
             iconName: 'sign-in-alt',
           },
         ]}>
@@ -195,7 +195,7 @@ Login.propTypes = {
   loggedInUser: ImmutablePropTypes.map,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default withLinks(

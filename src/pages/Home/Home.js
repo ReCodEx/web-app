@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col, Image } from 'react-bootstrap';
 
 import PageContent from '../../components/layout/PageContent';
@@ -11,20 +11,8 @@ import { URL_PATH_PREFIX } from '../../helpers/config';
 
 const Home = ({ links: { GITHUB_BUGS_URL } }) => (
   <PageContent
-    title={
-      <FormattedMessage
-        id="app.homepage.title"
-        defaultMessage="ReCodEx — Code Examinator Reloaded"
-        description="Homepage title"
-      />
-    }
-    description={
-      <FormattedMessage
-        id="app.homepage.description"
-        defaultMessage="ReCodEx - homepage"
-        description="Homepage description"
-      />
-    }>
+    title={<FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — ReCodEx Code Examiner" />}
+    description={<FormattedMessage id="app.homepage.description" defaultMessage="ReCodEx - homepage" />}>
     <div>
       <Row style={{ marginTop: '80px' }}>
         <Col sm={6}>
@@ -48,16 +36,18 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
             <FormattedMessage id="app.homepage.aboutTitle" defaultMessage="About" />
           </h2>
           <p>
-            <FormattedHTMLMessage
+            {/*
+            <FormattedMessage
               id="app.homepage.aboutContentP1"
               defaultMessage='ReCodEx was born in 2016 as a project for the <i>Software Project</i> class. It is a replacement for the previous system CodEx used at MFF UK since 2006. The project is open source under the <a href="https://opensource.org/licenses/MIT">MIT</a> licence hosted on <a href="https://github.com/ReCodEx">GitHub</a>. More detailed info is on the <a href="https://github.com/ReCodEx/wiki/wiki">Wiki</a> page of the project.'
             />
           </p>
           <p>
-            <FormattedHTMLMessage
+            <FormattedMessage
               id="app.homepage.aboutContentP2"
               defaultMessage='During development we found a number of <a href="https://github.com/ReCodEx/wiki/wiki/Conclusion#further-improvements">topics</a> for subsequent student projects of various kinds. If you are interested in making this project more awesome, please contact one of the <a href="https://github.com/orgs/ReCodEx/people">authors</a> or teachers.'
             />
+            */}
           </p>
           <p>
             <FormattedMessage
@@ -73,7 +63,7 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
           <Row>
             <Col sm={6}>
               <p>
-                <FormattedHTMLMessage
+                <FormattedMessage
                   id="app.homepage.acknowledgementContent"
                   defaultMessage="This project was supported by the Student Grant Program (SFG) of the Faculty of Mathematics and Physics, Charles University."
                 />
@@ -95,10 +85,12 @@ const Home = ({ links: { GITHUB_BUGS_URL } }) => (
             <FormattedMessage id="app.homepage.help" defaultMessage="Help" />
           </h2>
           <p>
-            <FormattedHTMLMessage
+            {/*
+            <FormattedMessage
               id="app.homepage.helpContent"
               defaultMessage='If you have any issues with ReCodEx, please consult the <a href="https://github.com/ReCodEx/wiki/wiki/User-documentation">user documentation</a> first.'
             />
+            */}
           </p>
         </Col>
         <Col sm={6}>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
@@ -218,7 +218,7 @@ Solution.propTypes = {
   editNote: PropTypes.func.isRequired,
   deleteEvaluation: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect(

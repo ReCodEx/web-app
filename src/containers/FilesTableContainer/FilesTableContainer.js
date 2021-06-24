@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
 
 import FilesTable from '../../components/Exercises/FilesTable';
 import Box from '../../components/widgets/Box';
@@ -45,11 +44,7 @@ class FilesTableContainer extends Component {
 
 FilesTableContainer.propTypes = {
   uploadId: PropTypes.string.isRequired,
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-    PropTypes.element,
-  ]).isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   isOpen: PropTypes.bool,
   files: ImmutablePropTypes.map,
   usedFiles: PropTypes.instanceOf(Set),

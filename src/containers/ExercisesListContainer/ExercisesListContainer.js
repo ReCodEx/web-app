@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 import { withRouter } from 'react-router';
 
@@ -34,28 +34,29 @@ const filterInitialValues = defaultMemoize(
 );
 
 const transformAndSetFilterData = defaultMemoize(
-  (setFilters, rootGroup) => ({ search, author, tags, runtimeEnvironments }) => {
-    const data = {};
-    if (search.trim()) {
-      data.search = search.trim();
-    }
-    if (author) {
-      data.authorsIds = [author];
-    }
-    if (rootGroup) {
-      data.groupsIds = [rootGroup];
-    }
-    if (tags.length > 0) {
-      data.tags = tags;
-    }
+  (setFilters, rootGroup) =>
+    ({ search, author, tags, runtimeEnvironments }) => {
+      const data = {};
+      if (search.trim()) {
+        data.search = search.trim();
+      }
+      if (author) {
+        data.authorsIds = [author];
+      }
+      if (rootGroup) {
+        data.groupsIds = [rootGroup];
+      }
+      if (tags.length > 0) {
+        data.tags = tags;
+      }
 
-    data.runtimeEnvironments = Object.keys(runtimeEnvironments).filter(rte => runtimeEnvironments[rte]);
-    if (runtimeEnvironments.length === 0) {
-      delete data.runtimeEnvironments;
-    }
+      data.runtimeEnvironments = Object.keys(runtimeEnvironments).filter(rte => runtimeEnvironments[rte]);
+      if (runtimeEnvironments.length === 0) {
+        delete data.runtimeEnvironments;
+      }
 
-    return setFilters(data);
-  }
+      return setFilters(data);
+    }
 );
 
 const getDefaultFilters = defaultMemoize(rootGroup => (rootGroup ? { groupsIds: [rootGroup] } : EMPTY_OBJ));
@@ -184,7 +185,7 @@ ExercisesListContainer.propTypes = {
   fetchTags: PropTypes.func.isRequired,
   runtimeEnvironments: ImmutablePropTypes.map.isRequired,
   assignExercise: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   links: PropTypes.object.isRequired,
 };
 

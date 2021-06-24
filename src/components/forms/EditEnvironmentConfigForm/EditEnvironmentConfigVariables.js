@@ -136,11 +136,7 @@ EditEnvironmentConfigVariables.propTypes = {
     error: PropTypes.any,
     warning: PropTypes.any,
   }).isRequired,
-  noItems: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]),
+  noItems: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 };
 
 export default EditEnvironmentConfigVariables;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { IntlProvider, addLocaleData } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 import moment from 'moment';
 import { canUseDOM } from 'exenv';
 
@@ -12,7 +12,7 @@ import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modu
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { isLoggedIn } from '../../redux/selectors/auth';
 import { getLoggedInUserSettings } from '../../redux/selectors/users';
-import { messages, localeData } from '../../locales';
+import { messages } from '../../locales';
 import { UserSettingsContext, LinksContext, UrlContext } from '../../helpers/contexts';
 
 import { buildRoutes, getLinks } from '../../pages/routes';
@@ -85,8 +85,6 @@ class LayoutContainer extends Component {
 
   getMessages = lang => messages[lang] || messages[this.getDefaultLang()];
 
-  getLocaleData = lang => localeData[lang] || localeData[this.getDefaultLang()];
-
   render() {
     const {
       lang,
@@ -101,7 +99,6 @@ class LayoutContainer extends Component {
       setLang,
     } = this.props;
 
-    addLocaleData([...this.getLocaleData(lang)]);
     moment.locale(lang);
 
     return (

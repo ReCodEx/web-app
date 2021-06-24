@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedHTMLMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
@@ -20,9 +20,9 @@ const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) => 
     </td>
     <td>
       {stats && (
-        <FormattedHTMLMessage
+        <FormattedMessage
           id="app.studentsList.gainedPointsOfWithoutBreakingSpaces"
-          defaultMessage="{gained, number}&nbsp;of&nbsp;{total, number}"
+          defaultMessage="{gained, number} of {total, number}"
           values={{ ...stats.points }}
         />
       )}

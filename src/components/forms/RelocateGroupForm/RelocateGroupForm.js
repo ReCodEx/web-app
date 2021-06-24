@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { Alert, Form } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -78,7 +78,7 @@ RelocateGroupForm.propTypes = {
   links: PropTypes.object,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default reduxForm({

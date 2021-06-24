@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
-import { injectIntl, intlShape, FormattedMessage, defineMessages } from 'react-intl';
+import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
@@ -130,7 +130,10 @@ const EditExerciseForm = ({
       nullable
       label={
         <span>
-          <FormattedMessage id="app.editExerciseForm.solutionSizeLimit" defaultMessage="Soluition total size [KiB]:" />
+          <FormattedMessage
+            id="app.editExerciseForm.solutionSizeLimit"
+            defaultMessage="Soluition total size [KiB] limit:"
+          />
           <Explanation id="solutionSizeLimitExplanation">
             <FormattedMessage
               id="app.exercise.solutionSizeLimitExplanation"
@@ -210,7 +213,7 @@ EditExerciseForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,

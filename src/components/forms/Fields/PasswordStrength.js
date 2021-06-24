@@ -47,23 +47,13 @@ const getTitle = level => {
 const PasswordStrength = ({ input: { name, value: level }, meta: { dirty }, label }) => (
   <FormGroup controlId={name}>
     {dirty && (
-      <ProgressBar
-        variant={getStyle(level)}
-        now={getPercent(level)}
-        label={getTitle(level)}
-        striped={level === 0}
-        active={level === 0}
-      />
+      <ProgressBar variant={getStyle(level)} now={getPercent(level)} label={getTitle(level)} striped={level === 0} />
     )}
   </FormGroup>
 );
 
 PasswordStrength.propTypes = {
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element,
-    PropTypes.shape({ type: PropTypes.oneOf([FormattedMessage]) }),
-  ]).isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

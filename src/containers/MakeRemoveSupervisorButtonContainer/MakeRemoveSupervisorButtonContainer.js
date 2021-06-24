@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -38,7 +38,7 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
   makeSupervisor: PropTypes.func.isRequired,
   removeSupervisor: PropTypes.func.isRequired,
   fetchUserIfNeeded: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state, { groupId, userId }) => ({

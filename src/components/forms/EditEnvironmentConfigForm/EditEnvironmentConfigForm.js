@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, FormattedHTMLMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Alert } from 'react-bootstrap';
 
 import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables';
@@ -115,9 +115,12 @@ class EditEnvironmentConfigForm extends Component {
           <>
             <p className="text-muted small em-padding-horizontal">
               <InfoIcon gapRight />
-              <FormattedHTMLMessage
+              <FormattedMessage
                 id="app.editEnvironmentConfig.variablesInfo"
                 defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.[c,h]</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here."
+                values={{
+                  code: text => <code>{text}</code>,
+                }}
               />
             </p>
             <FieldArray name="variables" component={EditEnvironmentConfigVariables} />
@@ -174,7 +177,7 @@ EditEnvironmentConfigForm.propTypes = {
   invalid: PropTypes.bool,
   error: PropTypes.any,
   warning: PropTypes.any,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ environmentId, variables }) => {
