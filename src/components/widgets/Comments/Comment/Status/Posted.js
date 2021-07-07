@@ -10,7 +10,7 @@ const Posted = ({ right, postedAt }) => (
       'float-right': right,
       'float-left': !right,
     })}>
-    <FormattedRelativeTime value={Date.now() / 1000 - postedAt} units="seconds" />
+    <FormattedRelativeTime value={postedAt - Date.now() / 1000} numeric="auto" updateIntervalInSeconds={1000000} />
   </span>
 );
 

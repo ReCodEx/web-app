@@ -143,7 +143,11 @@ class ChangePassword extends Component {
                 />
                 <p>
                   <FormattedMessage id="app.changePassword.tokenExpiresIn" defaultMessage="Token expires: " />{' '}
-                  <FormattedRelativeTime value={Date.now() / 1000 - decodedToken.exp} units="seconds" />
+                  <FormattedRelativeTime
+                    value={decodedToken.exp - Date.now() / 1000}
+                    numeric="auto"
+                    updateIntervalInSeconds={1000000}
+                  />
                 </p>
               </div>
             )}

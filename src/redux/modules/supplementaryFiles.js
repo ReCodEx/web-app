@@ -32,16 +32,8 @@ export const addSupplementaryFiles = (exerciseId, files) =>
     type: actionTypes.ADD_FILES,
     endpoint: `/exercises/${exerciseId}/supplementary-files`,
     method: 'POST',
-    body: {
-      files: files.map(uploaded => uploaded.file.id),
-    },
-    meta: {
-      exerciseId,
-      files: files.map(uploaded => ({
-        tmpId: Math.random().toString(),
-        file: uploaded.file,
-      })),
-    },
+    body: { files: files.map(({ id }) => id) },
+    meta: { exerciseId },
     uploadFiles: true,
   });
 

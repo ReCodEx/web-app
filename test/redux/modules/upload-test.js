@@ -2,15 +2,15 @@ import reducer, {
   actionTypes,
   initialState,
   init,
-  addFile,
+  testAddFile,
   removeFile,
   removeFailedFile,
-  returnFile,
-  uploadSuccessful,
-  uploadFailed,
+  restoreRemovedFile,
+  finalizeUpload,
+  manuallyFailUpload,
 } from '../../../src/redux/modules/upload';
 
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
@@ -30,11 +30,10 @@ describe('Uploading', () => {
 
     it('must remove one file', () => {
       const file = { name: 'XYZ.jpg', size: 123456789 };
-      const id = '123';
-      expect(removeFile(id, file)).to.eql({
+      const containerId = '123';
+      expect(removeFile(containerId, file.name)).to.eql({
         type: actionTypes.REMOVE_FILE,
-        payload: file,
-        meta: { id },
+        payload: { containerId, fileName: file.name },
       });
     });
   });
@@ -50,132 +49,131 @@ describe('Uploading', () => {
 
     describe('file uploading', () => {
       it('must initialise a specific upload process', () => {
-        const id = 'alsdjlaskjdalskjd';
+        const containerId = 'alsdjlaskjdalskjd';
         const state = reducer(undefined, {});
-        expect(reducer(state, init(id))).to.eql(
+        expect(reducer(state, init(containerId))).to.eql(
           fromJS({
-            [id]: {
-              uploaded: [],
-              uploading: [],
-              failed: [],
-              removed: [],
+            [containerId]: {
+              uploaded: {},
+              uploading: {},
+              failed: {},
+              removed: {},
             },
           })
         );
       });
 
       it('must add file among other files for upload', () => {
-        const id = 'abc123';
+        const containerId = 'abc123';
         const file = { name: 'XYZ.jpg', size: 123456789 };
         const action = {
-          type: actionTypes.UPLOAD_PENDING,
-          payload: {
-            [file.name]: file,
-          },
-          meta: { id, fileName: file.name },
+          type: actionTypes.START_UPLOAD_PENDING,
+          meta: { containerId, file },
         };
 
-        let state = reducer(reducer(undefined, {}), init(id));
+        let state = reducer(reducer(undefined, {}), init(containerId));
         state = reducer(state, action);
-        const filesToUpload = state.getIn([id, 'uploading']);
-        expect(filesToUpload).to.be.an.instanceof(List);
+        const filesToUpload = state.getIn([containerId, 'uploading']);
+        expect(filesToUpload).to.be.an.instanceof(Map);
         expect(filesToUpload.size).to.equal(1);
-        expect(filesToUpload.first()).to.eql({
-          name: file.name,
-          file,
-        });
+        expect(filesToUpload.get(file.name)).to.equal(
+          fromJS({
+            file,
+            partialFile: null,
+            uploadedFile: null,
+            cancelRequested: false,
+            canceling: false,
+            completing: false,
+          })
+        );
       });
 
       it('must mark file as uploaded', () => {
-        const id = 'abc123';
+        const containerId = 'abc123';
         const file = { name: 'XYZ.jpg', size: 123456789 };
 
-        let state = reducer(reducer(undefined, {}), init(id));
-        state = reducer(state, addFile(id, file));
-        state = reducer(state, uploadSuccessful(id, file));
+        let state = reducer(reducer(undefined, {}), init(containerId));
+        state = reducer(state, testAddFile(containerId, file));
+        state = reducer(state, finalizeUpload(containerId, file));
 
-        const filesToUpload = state.getIn([id, 'uploading']);
-        const uploadedFiles = state.getIn([id, 'uploaded']);
+        const filesToUpload = state.getIn([containerId, 'uploading']);
+        const uploadedFiles = state.getIn([containerId, 'uploaded']);
 
-        expect(filesToUpload).to.be.an.instanceof(List);
+        expect(filesToUpload).to.be.an.instanceof(Map);
         expect(filesToUpload.size).to.equal(0);
 
-        expect(uploadedFiles).to.be.an.instanceof(List);
+        expect(uploadedFiles).to.be.an.instanceof(Map);
         expect(uploadedFiles.size).to.equal(1);
-        expect(uploadedFiles.first()).to.eql({
-          name: file.name,
-          file,
-        });
       });
 
       it('must mark file as failed', () => {
         const file = { name: 'XYZ.jpg', size: 123456789 };
-        const id = 'abc123';
+        const containerId = 'abc123';
 
-        let state = reducer(reducer(undefined, {}), init(id));
-        state = reducer(state, addFile(id, file));
-        state = reducer(state, uploadFailed(id, file));
+        let state = reducer(reducer(undefined, {}), init(containerId));
+        state = reducer(state, testAddFile(containerId, file));
+        state = reducer(state, manuallyFailUpload(containerId, file, 'the msg'));
 
-        const filesToUpload = state.getIn([id, 'uploading']);
-        const failedFiles = state.getIn([id, 'failed']);
+        const filesToUpload = state.getIn([containerId, 'uploading']);
+        const failedFiles = state.getIn([containerId, 'failed']);
 
-        expect(filesToUpload).to.be.an.instanceof(List);
+        expect(filesToUpload).to.be.an.instanceof(Map);
         expect(filesToUpload.size).to.equal(0);
 
-        expect(failedFiles).to.be.an.instanceof(List);
+        expect(failedFiles).to.be.an.instanceof(Map);
         expect(failedFiles.size).to.equal(1);
-        expect(failedFiles.first()).to.eql({
-          name: file.name,
-          file,
-        });
+        expect(failedFiles.first()).to.equal(
+          fromJS({
+            file,
+            errorMessage: 'the msg',
+          })
+        );
       });
 
       it('must remove file from the list of uploaded files and add it to the list of removed files', () => {
         const file = { name: 'XYZ.jpg', size: 123456789 };
-        const id = 'abc123';
+        const containerId = 'abc123';
 
-        let state = reducer(reducer(undefined, {}), init(id));
-        state = reducer(state, addFile(id, file));
-        state = reducer(state, uploadSuccessful(id, file));
+        let state = reducer(reducer(undefined, {}), init(containerId));
+        state = reducer(state, testAddFile(containerId, file));
+        state = reducer(state, finalizeUpload(containerId, file));
 
         // now that the file is in the list, remove it!
-        state = reducer(state, removeFile(id, file));
-        const uploadedFiles = state.getIn([id, 'uploaded']);
-        const removedFiles = state.getIn([id, 'removed']);
+        state = reducer(state, removeFile(containerId, file.name));
+        const uploadedFiles = state.getIn([containerId, 'uploaded']);
+        const removedFiles = state.getIn([containerId, 'removed']);
         expect(uploadedFiles.size).to.equal(0);
         expect(removedFiles.size).to.equal(1);
-        expect(removedFiles.first()).to.eql(file);
       });
 
       it('must return a removed uploaded file among the other uploaded files', () => {
         const file = { name: 'XYZ.jpg', size: 123456789 };
-        const id = 'abc123';
+        const containerId = 'abc123';
 
-        let state = reducer(reducer(undefined, {}), init(id));
-        state = reducer(state, addFile(id, file));
-        state = reducer(state, uploadSuccessful(id, file));
-        state = reducer(state, removeFile(id, file));
+        let state = reducer(reducer(undefined, {}), init(containerId));
+        state = reducer(state, testAddFile(containerId, file));
+        state = reducer(state, finalizeUpload(containerId, file));
+        state = reducer(state, removeFile(containerId, file.name));
 
         // now that the file is removed, return it back
-        state = reducer(state, returnFile(id, file));
-        const removedFiles = state.getIn([id, 'removed']);
-        const uploadedFiles = state.getIn([id, 'uploaded']);
+        state = reducer(state, restoreRemovedFile(containerId, file.name));
+        const removedFiles = state.getIn([containerId, 'removed']);
+        const uploadedFiles = state.getIn([containerId, 'uploaded']);
         expect(removedFiles.size).to.equal(0);
         expect(uploadedFiles.size).to.equal(1);
-        expect(uploadedFiles.first()).to.eql(file);
       });
 
       it('must remove file from the list of failed files and throw it away definitelly', () => {
         const file = { name: 'XYZ.jpg', size: 123456789 };
-        const id = 'abc123';
+        const containerId = 'abc123';
 
-        let state = reducer(reducer(undefined, {}), init(id));
-        state = reducer(state, addFile(id, file));
-        state = reducer(state, uploadFailed(id, file));
+        let state = reducer(reducer(undefined, {}), init(containerId));
+        state = reducer(state, testAddFile(containerId, file));
+        state = reducer(state, manuallyFailUpload(containerId, file, 'the msg'));
 
         // now that the file is in the list, remove it!
-        state = reducer(state, removeFailedFile(id, file));
-        const failedFiles = state.getIn([id, 'failed']);
+        state = reducer(state, removeFailedFile(containerId, file.name));
+        const failedFiles = state.getIn([containerId, 'failed']);
         expect(failedFiles.size).to.equal(0);
       });
     });

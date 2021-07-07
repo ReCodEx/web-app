@@ -30,16 +30,8 @@ export const addAttachmentFiles = (exerciseId, files) =>
     type: actionTypes.ADD_FILES,
     endpoint: `/exercises/${exerciseId}/attachment-files`,
     method: 'POST',
-    body: {
-      files: files.map(uploaded => uploaded.file.id),
-    },
-    meta: {
-      exerciseId,
-      files: files.map(uploaded => ({
-        tmpId: Math.random().toString(),
-        file: uploaded.file,
-      })),
-    },
+    body: { files: files.map(({ id }) => id) },
+    meta: { exerciseId },
     uploadFiles: true,
   });
 
@@ -65,13 +57,13 @@ export const downloadAttachmentArchive = downloadHelper({
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
-    [actionTypes.ADD_FILES_FULFILLED]: (state, { payload, meta: { files } }) =>
+    [actionTypes.ADD_FILES_FULFILLED]: (state, { payload }) =>
       payload.reduce(
         (state, data) => state.setIn(['resources', data.id], createRecord({ data, state: resourceStatus.FULFILLED })),
         state
       ),
-    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { payload, meta: { fileId } }) =>
-      state.deleteIn(['resources', fileId]),
+
+    [actionTypes.REMOVE_FILE_FULFILLED]: (state, { meta: { fileId } }) => state.deleteIn(['resources', fileId]),
   }),
   initialState
 );

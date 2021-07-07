@@ -12,7 +12,7 @@ import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Confirm from '../../forms/Confirm';
 
-import { createGetUploadedFiles } from '../../../redux/selectors/upload';
+import { uploadedFilesSelector } from '../../../redux/selectors/upload';
 import { hasEntryPoint } from '../../../redux/selectors/submission';
 import { getConfigVar } from '../../../helpers/config';
 
@@ -369,7 +369,7 @@ SubmitSolution.propTypes = {
 export default injectIntl(
   connect(
     (state, { uploadId, isReferenceSolution = false }) => ({
-      attachedFiles: createGetUploadedFiles(uploadId)(state),
+      attachedFiles: uploadedFilesSelector(state, uploadId),
       messages: isReferenceSolution ? referenceSolutionMessages : submissionMessages,
     }),
     () => ({})

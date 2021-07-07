@@ -70,7 +70,11 @@ class UserPanel extends Component {
               overlay={
                 <Tooltip id="tokenExpiration">
                   <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
-                  <FormattedRelativeTime value={Date.now() / 1000 - expiration} units="seconds" />
+                  <FormattedRelativeTime
+                    value={(expiration - Date.now()) / 1000}
+                    numeric="auto"
+                    updateIntervalInSeconds={1000000}
+                  />
                 </Tooltip>
               }>
               <a
@@ -83,9 +87,7 @@ class UserPanel extends Component {
                 {!small && <FormattedMessage id="app.logout" defaultMessage="Logout" />}
               </a>
             </OverlayTrigger>
-
             {small && <br />}
-
             {isSuperadminRole(user.privateData.role) && (
               <OverlayTrigger
                 placement="right"
