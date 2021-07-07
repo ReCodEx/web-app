@@ -8,7 +8,7 @@ const SupplementaryFilesTableHeaderRow = ({ viewOnly }) => (
       <FormattedMessage id="app.filesTable.originalFileName" defaultMessage="Original File Name" />
     </th>
     <th>
-      <FormattedMessage id="app.filesTable.fileSize" defaultMessage="File Size" />
+      <FormattedMessage id="app.uploadFiles.fileSize" defaultMessage="File Size" />
     </th>
     <th>
       <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />

@@ -31,7 +31,7 @@ const PipelineFilesTableContainer = ({
     addFiles={addFiles}
     removeFile={removeFile}
     downloadFile={downloadFile}
-    title={<FormattedMessage id="app.pipelineFilesTable.title" defaultMessage="Supplementary files" />}
+    title={<FormattedMessage id="app.pipelineFilesTable.title" defaultMessage="Pipeline files" />}
     description={
       <FormattedMessage
         id="app.pipelineFilesTable.description"

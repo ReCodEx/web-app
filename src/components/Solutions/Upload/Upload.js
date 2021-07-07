@@ -10,52 +10,53 @@ const dropZoneStyles = {
   borderWidth: 2,
   borderColor: '#666',
   borderStyle: 'dashed',
-  padding: 40,
-  marginBottom: 20,
-  borderRadius: 5,
-  fontSize: 20,
+  padding: '0.5em',
+  marginBottom: '0.5em',
+  borderRadius: '5px',
   textAlign: 'center',
 };
 
 const Upload = ({
-  uploadFiles,
   uploadingFiles,
-  attachedFiles,
+  uploadedFiles,
   failedFiles,
   removedFiles,
-  removeFile,
-  returnFile,
-  removeFailedFile,
-  retryUploadFile,
+  doUploadFiles,
+  doRequestUploadCancel,
+  doRemoveFile,
+  doRestoreRemovedFile,
+  doRemoveFailedFile,
+  doRetryUploadFile,
 }) => (
   <div>
-    <Dropzone onDrop={uploadFiles}>
+    <Dropzone onDrop={doUploadFiles}>
       {({ getRootProps, getInputProps }) => (
         <div {...getRootProps()} style={dropZoneStyles}>
           <input {...getInputProps()} />
-          <p>
-            <FormattedMessage id="app.submitSolution.dragAndDrop" defaultMessage="Drag and drop files here." />
-          </p>
-          <p>
+          <div className="my-3">
             <Button variant="primary">
               <UploadIcon gapRight />
-              <FormattedMessage id="app.submitSolution.addFile" defaultMessage="Add File(s)" />
+              <FormattedMessage id="app.uploadFiles.addFileButton" defaultMessage="Select File(s) for Upload" />
             </Button>
-          </p>
+          </div>
+          <div className="small text-muted my-3">
+            <FormattedMessage id="app.uploadFiles.dragAndDrop" defaultMessage="Or simply drag and drop files here..." />
+          </div>
         </div>
       )}
     </Dropzone>
 
-    {(uploadingFiles.length > 0 || attachedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) && (
+    {(uploadingFiles.length > 0 || uploadedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) && (
       <UploadsTable
         uploadingFiles={uploadingFiles}
-        attachedFiles={attachedFiles}
+        uploadedFiles={uploadedFiles}
         failedFiles={failedFiles}
         removedFiles={removedFiles}
-        removeFile={removeFile}
-        returnFile={returnFile}
-        removeFailedFile={removeFailedFile}
-        retryUploadFile={retryUploadFile}
+        doRequestUploadCancel={doRequestUploadCancel}
+        doRemoveFile={doRemoveFile}
+        doRestoreRemovedFile={doRestoreRemovedFile}
+        doRemoveFailedFile={doRemoveFailedFile}
+        doRetryUploadFile={doRetryUploadFile}
       />
     )}
   </div>
@@ -63,14 +64,15 @@ const Upload = ({
 
 Upload.propTypes = {
   uploadingFiles: PropTypes.array.isRequired,
-  attachedFiles: PropTypes.array.isRequired,
+  uploadedFiles: PropTypes.array.isRequired,
   failedFiles: PropTypes.array.isRequired,
   removedFiles: PropTypes.array.isRequired,
-  uploadFiles: PropTypes.func.isRequired,
-  removeFile: PropTypes.func.isRequired,
-  returnFile: PropTypes.func.isRequired,
-  removeFailedFile: PropTypes.func.isRequired,
-  retryUploadFile: PropTypes.func.isRequired,
+  doRequestUploadCancel: PropTypes.func.isRequired,
+  doUploadFiles: PropTypes.func.isRequired,
+  doRemoveFile: PropTypes.func.isRequired,
+  doRestoreRemovedFile: PropTypes.func.isRequired,
+  doRemoveFailedFile: PropTypes.func.isRequired,
+  doRetryUploadFile: PropTypes.func.isRequired,
 };
 
 export default Upload;

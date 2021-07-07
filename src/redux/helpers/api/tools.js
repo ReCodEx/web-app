@@ -73,16 +73,21 @@ const createFormData = body => {
 };
 
 const encodeBody = (body, method, encodeAsMultipart) => {
-  if (method.toUpperCase() !== 'POST') {
-    return undefined;
+  if (method.toUpperCase() === 'PUT') {
+    return body; // put method always sends raw body
   }
 
-  if (encodeAsMultipart) {
-    return body ? createFormData(body) : undefined;
-  } else {
-    // otherwise we encode in JSON
-    return JSON.stringify(body || []);
+  if (method.toUpperCase() === 'POST') {
+    // POST needs to decide whether to use form encoding or JSON
+    if (encodeAsMultipart) {
+      return body ? createFormData(body) : undefined;
+    } else {
+      // otherwise we encode in JSON
+      return JSON.stringify(body || []);
+    }
   }
+
+  return undefined; // other methods do not have a body
 };
 
 let requestAbortController = canUseDOM && 'AbortController' in window ? new window.AbortController() : null;
@@ -210,7 +215,7 @@ const processResponse = (call, dispatch) =>
         if (error && error.message) {
           dispatch && dispatch(addNotification(`Server response: ${error.message}`, false));
         }
-        return Promise.reject(new Error('The API call was not successful.'));
+        return Promise.reject(error || new Error('The API call was not successful.'));
       } else {
         return Promise.resolve(payload);
       }

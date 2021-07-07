@@ -31,7 +31,7 @@ const FilesTable = ({
       <p className="text-center">
         <Button variant="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
           <SendIcon gapRight />
-          <FormattedMessage id="app.filesTable.addFiles" defaultMessage="Save files" />
+          <FormattedMessage id="app.filesTable.saveUploadedFilesButton" defaultMessage="Save Uploaded Files" />
         </Button>
       </p>
     )}
@@ -62,7 +62,7 @@ const FilesTable = ({
       {files.length === 0 && (
         <p className="text-center em-padding">
           <Icon icon={['far', 'folder-open']} gapRight />
-          <FormattedMessage id="app.filesTable.empty" defaultMessage="There are no uploaded files yet." />
+          <FormattedMessage id="app.filesTable.empty" defaultMessage="There are no saved files yet." />
         </p>
       )}
 

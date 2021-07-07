@@ -28,16 +28,8 @@ export const addPipelineFiles = (pipelineId, files) =>
     type: actionTypes.ADD_FILES,
     endpoint: `/pipelines/${pipelineId}/supplementary-files`,
     method: 'POST',
-    body: {
-      files: files.map(uploaded => uploaded.file.id),
-    },
-    meta: {
-      pipelineId,
-      files: files.map(uploaded => ({
-        tmpId: Math.random().toString(),
-        file: uploaded.file,
-      })),
-    },
+    body: { files: files.map(({ id }) => id) },
+    meta: { pipelineId },
     uploadFiles: true,
   });
 

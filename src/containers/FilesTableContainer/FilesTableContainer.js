@@ -8,7 +8,7 @@ import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { reset } from '../../redux/modules/upload';
-import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
+import { uploadedFilesSelector, allFilesUploadedSelector } from '../../redux/selectors/upload';
 import { isLoadingState } from '../../redux/helpers/resourceManager/status';
 
 class FilesTableContainer extends Component {
@@ -57,8 +57,8 @@ FilesTableContainer.propTypes = {
 export default connect(
   (state, { uploadId }) => ({
     uploadId,
-    newFiles: createGetUploadedFiles(uploadId)(state),
-    canSubmit: createAllUploaded(uploadId)(state),
+    newFiles: uploadedFilesSelector(state, uploadId),
+    canSubmit: allFilesUploadedSelector(state, uploadId),
   }),
   (dispatch, { uploadId, addFiles }) => ({
     addFiles: files => addFiles(files).then(dispatch(reset(uploadId))),

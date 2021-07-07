@@ -31,8 +31,9 @@ export const groupSelectorCreator = id => createSelector(groupsSelector, groups 
 export const groupAccessorSelector = createSelector(groupsSelector, groups => groupId => groups.get(groupId));
 
 // This is perhaps the best way how to create simple accessor (selector with parameter).
-export const groupDataAccessorSelector = createSelector(groupsSelector, groups => groupId =>
-  groups.getIn([groupId, 'data'], EMPTY_MAP)
+export const groupDataAccessorSelector = createSelector(
+  groupsSelector,
+  groups => groupId => groups.getIn([groupId, 'data'], EMPTY_MAP)
 );
 
 export const studentOfSelector = userId =>

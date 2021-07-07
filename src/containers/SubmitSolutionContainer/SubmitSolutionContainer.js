@@ -22,7 +22,11 @@ import {
   hasEntryPoint,
 } from '../../redux/selectors/submission';
 
-import { createGetUploadedFiles, createAllUploaded } from '../../redux/selectors/upload';
+import {
+  uploadedFilesSelector,
+  removedUploadFilesSelector,
+  allFilesUploadedSelector,
+} from '../../redux/selectors/upload';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote } from '../../redux/modules/submission';
@@ -38,7 +42,7 @@ class SubmitSolutionContainer extends Component {
     entryPoint: null,
   };
 
-  static getDerivedStateFromProps({ presubmitEnvironments, attachedFiles }, state) {
+  static getDerivedStateFromProps({ presubmitEnvironments, uploadedFiles }, state) {
     const res = {}; // changes of state
 
     // Only check the selection, if presubmit environments are set ...
@@ -57,7 +61,7 @@ class SubmitSolutionContainer extends Component {
     }
 
     // If entry point is no longer valid ...
-    if (state.entryPoint && attachedFiles && !attachedFiles.find(f => f.name === state.entryPoint)) {
+    if (state.entryPoint && uploadedFiles && !uploadedFiles.find(f => f.name === state.entryPoint)) {
       res.entryPoint = null;
     }
 
@@ -65,41 +69,40 @@ class SubmitSolutionContainer extends Component {
   }
 
   getEntryPoint = () => {
-    const { attachedFiles, presubmitVariables } = this.props;
+    const { uploadedFiles, presubmitVariables } = this.props;
     const { selectedEnvironment, entryPoint } = this.state;
 
     if (!hasEntryPoint(presubmitVariables, selectedEnvironment)) {
       return null;
     }
 
-    const defaultEntryPoint = attachedFiles && attachedFiles.length > 0 && attachedFiles.map(f => f.name).sort()[0];
+    const defaultEntryPoint = uploadedFiles && uploadedFiles.length > 0 && uploadedFiles.map(f => f.name).sort()[0];
 
     return entryPoint || defaultEntryPoint;
   };
 
   submit = () => {
-    const { attachedFiles, note, submitSolution } = this.props;
+    const { uploadedFiles, note, submitSolution } = this.props;
     const { selectedEnvironment } = this.state;
 
-    submitSolution(
-      note,
-      attachedFiles.map(item => item.file),
-      selectedEnvironment,
-      this.getEntryPoint(),
-      this.getMyObserverId()
-    );
+    submitSolution(note, uploadedFiles, selectedEnvironment, this.getEntryPoint(), this.getMyObserverId());
   };
 
-  presubmit = ({ removeFile = null, returnFile = null }) => {
-    const { attachedFiles, presubmitSolution } = this.props;
-    let files = attachedFiles;
+  presubmit = ({ removeFile = null, restoreFile = null }) => {
+    const { uploadedFiles, removedFiles, presubmitSolution } = this.props;
+    let files = uploadedFiles;
+
     if (removeFile) {
-      files = files.filter(f => f.file !== removeFile.file);
+      files = files.filter(f => f.name !== removeFile);
     }
-    if (returnFile) {
-      files.push(returnFile);
+    if (restoreFile) {
+      const file = removedFiles.find(f => f.name === restoreFile);
+      if (file) {
+        files.push(file);
+      }
     }
-    presubmitSolution(files.map(item => item.file));
+
+    presubmitSolution(files);
   };
 
   changeRuntimeEnvironment = selectedEnvironment => {
@@ -230,7 +233,8 @@ SubmitSolutionContainer.propTypes = {
   progressObserverId: PropTypes.string,
   submitSolution: PropTypes.func.isRequired,
   presubmitSolution: PropTypes.func.isRequired,
-  attachedFiles: PropTypes.array,
+  uploadedFiles: PropTypes.array,
+  removedFiles: PropTypes.array,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   showProgress: PropTypes.bool,
@@ -244,12 +248,13 @@ export default withLinks(
       return {
         userId: userId || loggedInUserIdSelector(state),
         note: getNote(state),
-        attachedFiles: createGetUploadedFiles(id)(state),
+        uploadedFiles: uploadedFilesSelector(state, id),
+        removedFiles: removedUploadFilesSelector(state, id),
         isProcessing: isProcessing(state),
         isValidating: isValidating(state),
         isSending: isSending(state),
         hasFailed: hasFailed(state),
-        canSubmit: createAllUploaded(id)(state),
+        canSubmit: allFilesUploadedSelector(state, id),
         submissionId: getSubmittedSolutionId(state),
         monitor: getMonitorParams(state),
         presubmitEnvironments: getPresubmitEnvironments(state),

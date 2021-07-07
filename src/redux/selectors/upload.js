@@ -1,35 +1,35 @@
 import { createSelector } from 'reselect';
-import { EMPTY_LIST } from '../../helpers/common';
+import { EMPTY_MAP } from '../../helpers/common';
 
 const getFiles = state => state.upload;
 
-export const createGetUploadingFiles = id =>
-  createSelector(
-    getFiles,
-    state => state.getIn([id, 'uploading'], EMPTY_LIST).toJS()
-  );
+const getParam = (state, id) => id;
 
-export const createGetUploadedFiles = id =>
-  createSelector(
-    getFiles,
-    state => state.getIn([id, 'uploaded'], EMPTY_LIST).toJS()
-  );
+export const uploadingFilesSelector = createSelector([getFiles, getParam], (state, id) =>
+  Object.values(state.getIn([id, 'uploading'], EMPTY_MAP).toJS())
+);
 
-export const createGetFailedFiles = id =>
-  createSelector(
-    getFiles,
-    state => state.getIn([id, 'failed'], EMPTY_LIST).toJS()
-  );
+export const isUploadCanceledByRequest = createSelector(
+  [getFiles, getParam],
+  (state, id) => fileName => state.getIn([id, 'uploading', fileName, 'cancelRequested'], false)
+);
 
-export const createGetRemovedFiles = id =>
-  createSelector(
-    getFiles,
-    state => state.getIn([id, 'removed'], EMPTY_LIST).toJS()
-  );
+export const uploadedFilesSelector = createSelector([getFiles, getParam], (state, id) =>
+  Object.values(state.getIn([id, 'uploaded'], EMPTY_MAP).toJS())
+);
 
-export const createAllUploaded = id =>
-  createSelector(
-    [createGetUploadingFiles(id), createGetUploadedFiles(id), createGetFailedFiles(id)],
-    (uploading, uploaded, failed) =>
-      Boolean(uploading && uploading.length === 0 && uploaded && uploaded.length > 0 && failed && failed.length === 0)
-  );
+export const failedUploadFilesSelector = createSelector([getFiles, getParam], (state, id) =>
+  Object.values(state.getIn([id, 'failed'], EMPTY_MAP).toJS())
+);
+
+export const removedUploadFilesSelector = createSelector([getFiles, getParam], (state, id) =>
+  Object.values(state.getIn([id, 'removed'], EMPTY_MAP).toJS())
+);
+
+export const allFilesUploadedSelector = createSelector(
+  [getFiles, getParam],
+  (state, id) =>
+    state.getIn([id, 'uploaded'], EMPTY_MAP).size > 0 && // at least one file uploaded
+    state.getIn([id, 'uploading'], EMPTY_MAP).size === 0 && // no pending uploads
+    state.getIn([id, 'failed'], EMPTY_MAP).size === 0 // and no failures
+);

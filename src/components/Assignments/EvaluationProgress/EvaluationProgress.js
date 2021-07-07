@@ -54,9 +54,9 @@ class EvaluationProgress extends Component {
         </Modal.Header>
         <Modal.Body>
           <ProgressBar>
-            <ProgressBar now={completed} variant="success" active={!finished} />
-            <ProgressBar now={skipped} variant="warning" active={!finished} />
-            <ProgressBar now={failed} variant="danger" active={!finished} />
+            <ProgressBar now={completed} variant="success" animated={!finished} />
+            <ProgressBar now={skipped} variant="warning" animated={!finished} />
+            <ProgressBar now={failed} variant="danger" animated={!finished} />
           </ProgressBar>
           {messages && (
             <div
