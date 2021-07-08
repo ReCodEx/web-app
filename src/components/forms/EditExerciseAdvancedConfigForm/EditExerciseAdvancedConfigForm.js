@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Alert, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
@@ -73,9 +74,9 @@ class EditExerciseAdvancedConfigForm extends Component {
           ) : null
         }>
         {submitFailed && (
-          <Alert variant="danger">
+          <Callout variant="danger">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Alert>
+          </Callout>
         )}
 
         {pipelinesVariables && (

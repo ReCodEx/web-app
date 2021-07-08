@@ -6,10 +6,10 @@ import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
 
 import { TextField, SelectField, PortsField } from '../../forms/Fields';
-import { Modal, Alert } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import DeleteButton from '../../buttons/DeleteButton';
-
 import SubmitButton from '../../forms/SubmitButton';
 import { CloseIcon } from '../../../components/icons';
 
@@ -51,12 +51,12 @@ class BoxForm extends Component {
         <Modal.Header closeButton>{title}</Modal.Header>
         <Modal.Body>
           {submitFailed && (
-            <Alert variant="danger">
+            <Callout variant="danger">
               <FormattedMessage
                 id="app.pipelineEditor.BoxForm.failed"
                 defaultMessage="We are sorry but we weren't able to save the box."
               />
-            </Alert>
+            </Callout>
           )}
 
           <Field

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Table, Alert } from 'react-bootstrap';
+import { Modal, Table } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
@@ -67,12 +67,12 @@ class ArchiveTermGroups extends Component {
           )}
 
           {submitFailed && (
-            <Alert variant="danger">
+            <Callout variant="danger">
               <FormattedMessage
                 id="app.archiveSisTerm.failed"
                 defaultMessage="Archivation failed. Some of the groups may not have been archived."
               />
-            </Alert>
+            </Callout>
           )}
 
           {error && <Callout variant="warning">{error}</Callout>}

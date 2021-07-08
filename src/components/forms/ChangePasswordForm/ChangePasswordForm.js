@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/TheButton';
 
 import { SuccessIcon, LoadingIcon } from '../../icons';
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { PasswordField, PasswordStrength } from '../Fields';
 import { validatePasswordStrength } from '../../../redux/modules/auth';
@@ -39,18 +39,18 @@ const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSu
       </div>
     }>
     {hasSucceeded && (
-      <Alert variant="success">
+      <Callout variant="success">
         <FormattedMessage
           id="app.changePasswordForm.succeeded"
           defaultMessage="You can now log in with your new password."
         />
-      </Alert>
+      </Callout>
     )}
 
     {hasFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="app.changePasswordForm.failed" defaultMessage="Changing password failed." />
-      </Alert>
+      </Callout>
     )}
 
     <Field

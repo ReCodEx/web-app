@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
-import { Alert } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 // import isInt from 'validator/lib/isInt';
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField } from '../Fields';
@@ -43,9 +43,9 @@ const AddLicenceForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="app.addLicence.failed" defaultMessage="Cannot add the licence." />
-      </Alert>
+      </Callout>
     )}
 
     <Field

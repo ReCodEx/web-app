@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Alert } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-
+import Callout from '../../components/widgets/Callout';
 import EditPipelineForm from '../../components/forms/EditPipelineForm';
 import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
@@ -66,7 +66,7 @@ class EditPipeline extends Component {
           <div>
             <Row>
               <Col lg={12}>
-                <Alert variant="warning">
+                <Callout variant="warning">
                   <h4>
                     <FormattedMessage id="app.editPipeline.disclaimer" defaultMessage="Disclaimer" />
                   </h4>
@@ -76,7 +76,7 @@ class EditPipeline extends Component {
                       defaultMessage="Modifying the pipeline might break all exercises using the pipeline!"
                     />
                   </p>
-                </Alert>
+                </Callout>
               </Col>
             </Row>
             <Row>

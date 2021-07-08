@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import SubmitButton from '../SubmitButton';
 
 import { TextField } from '../Fields';
+import Callout from '../../widgets/Callout';
 
 const EditSolutionNoteForm = ({
   onSubmit,
@@ -18,9 +19,9 @@ const EditSolutionNoteForm = ({
 }) => (
   <Form method="POST" onSubmit={onSubmit}>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="app.editSolutionNoteForm.failed" defaultMessage="Cannot save the solution note." />
-      </Alert>
+      </Callout>
     )}
 
     <Field

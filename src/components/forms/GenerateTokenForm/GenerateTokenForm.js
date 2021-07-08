@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert, OverlayTrigger, Tooltip, Container, Row, Col } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Container, Row, Col } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField } from '../Fields';
@@ -137,17 +138,17 @@ const GenerateTokenForm = ({
       </Row>
     </Container>
 
-    {warning && <Alert variant="warning">{warning}</Alert>}
+    {warning && <Callout variant="warning">{warning}</Callout>}
 
-    {error && <Alert variant="danger">{error}</Alert>}
+    {error && <Callout variant="danger">{error}</Callout>}
 
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage
           id="app.generateTokenForm.failed"
           defaultMessage="The process of token creation has failed. Please try again later."
         />
-      </Alert>
+      </Callout>
     )}
 
     <hr />

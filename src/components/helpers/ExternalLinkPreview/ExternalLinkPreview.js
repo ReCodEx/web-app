@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 
 import OnOffCheckbox from '../../forms/OnOffCheckbox';
 import { LoadingIcon } from '../../icons';
 import Markdown from '../../widgets/Markdown';
 import InsetPanel from '../../widgets/InsetPanel';
+import Callout from '../../widgets/Callout';
 
 class ExternalLinkPreview extends Component {
   state = {
@@ -136,7 +136,7 @@ class ExternalLinkPreview extends Component {
           </InsetPanel>
         )}
 
-        {error && <Alert variant="warning">{error}</Alert>}
+        {error && <Callout variant="warning">{error}</Callout>}
 
         {text && <div>{isMarkdown ? <Markdown source={text} /> : <pre style={{ marginTop: '20px' }}>{text}</pre>}</div>}
       </div>

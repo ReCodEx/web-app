@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert } from 'react-bootstrap';
+
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
@@ -40,9 +41,9 @@ const EditInstanceForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="app.editInstanceForm.failed" defaultMessage="Cannot update instance." />
-      </Alert>
+      </Callout>
     )}
 
     <Field

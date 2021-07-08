@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import EditExercisePipelinesTable from './EditExercisePipelinesTable';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { RefreshIcon } from '../../icons';
 import { createIndex } from '../../../helpers/common';
 
@@ -57,21 +57,21 @@ class EditExercisePipelinesForm extends Component {
         <FieldArray name="pipelines" component={EditExercisePipelinesTable} pipelines={pipelines} readOnly={readOnly} />
 
         {submitFailed && (
-          <Alert variant="danger" className="em-margin">
+          <Callout variant="danger" className="em-margin">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Alert>
+          </Callout>
         )}
 
         {error && (
-          <Alert variant="danger" className="em-margin">
+          <Callout variant="danger" className="em-margin">
             {error}
-          </Alert>
+          </Callout>
         )}
 
         {warning && (
-          <Alert variant="warning" className="em-margin">
+          <Callout variant="warning" className="em-margin">
             {warning}
-          </Alert>
+          </Callout>
         )}
       </FormBox>
     );

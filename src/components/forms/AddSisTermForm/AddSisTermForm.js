@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert } from 'react-bootstrap';
+
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { SelectField, NumericTextField } from '../Fields';
@@ -51,9 +52,9 @@ const AddSisTermForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="app.addSisTermForm.failed" defaultMessage="Cannot save the new SIS term." />
-      </Alert>
+      </Callout>
     )}
 
     <NumericTextField

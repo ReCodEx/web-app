@@ -4,11 +4,11 @@ import { canUseDOM } from 'exenv';
 import { FormattedMessage, FormattedRelativeTime } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import { Row, Col } from 'react-bootstrap';
 
-import { Row, Col, Alert } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
 import ChangePasswordForm from '../../components/forms/ChangePasswordForm';
-
+import Callout from '../../components/widgets/Callout';
 import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
 import { changePassword } from '../../redux/modules/auth';
 import {
@@ -120,7 +120,7 @@ class ChangePassword extends Component {
         <Row>
           <Col md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }}>
             {!token && !decodedToken && (
-              <Alert variant="warning">
+              <Callout variant="warning">
                 <strong>
                   <FormattedMessage
                     id="app.changePassword.tokenExpired"
@@ -131,7 +131,7 @@ class ChangePassword extends Component {
                   id="app.changePassword.requestAnotherLink"
                   defaultMessage="Please request (another) link with an unique token."
                 />
-              </Alert>
+              </Callout>
             )}
             {decodedToken && (
               <div>

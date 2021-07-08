@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Alert, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { SelectField, DatetimeField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 import withLinks from '../../../helpers/withLinks';
@@ -53,9 +54,9 @@ const EditSystemMessageForm = ({
     </Modal.Header>
     <Modal.Body>
       {submitFailed && (
-        <Alert variant="danger">
+        <Callout variant="danger">
           <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-        </Alert>
+        </Callout>
       )}
 
       <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="systemMessage" />
@@ -101,7 +102,7 @@ const EditSystemMessageForm = ({
         }
       />
 
-      {error && dirty && <Alert variant="danger">{error}</Alert>}
+      {error && dirty && <Callout variant="danger">{error}</Callout>}
     </Modal.Body>
     <Modal.Footer>
       <div className="text-center">

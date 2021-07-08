@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Col, Row, Alert } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments';
 import { canSubmit } from '../../redux/modules/canSubmit';
@@ -165,7 +166,7 @@ class Assignment extends Component {
             )}
 
             {!assignment.exerciseId && assignment.permissionHints.update && (
-              <Alert variant="warning">
+              <Callout variant="warning">
                 <h3 className="no-margin ">
                   <Icon icon="ghost" gapRight />
                   <FormattedMessage
@@ -179,7 +180,7 @@ class Assignment extends Component {
                     defaultMessage="The assignment may no longer be synchronized with the exercise and no more assignments of this exercise may be created."
                   />
                 </p>
-              </Alert>
+              </Callout>
             )}
 
             <Row>

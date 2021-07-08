@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import { Row, Col, Alert } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
@@ -222,12 +222,12 @@ class ExerciseAssignments extends Component {
                     <Box
                       title={formatMessage(messages.groupsBoxTitle)}
                       description={
-                        <Alert variant="info">
+                        <Callout variant="info">
                           <FormattedMessage
                             id="app.exercise.assignToGroup"
                             defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
                           />
-                        </Alert>
+                        </Callout>
                       }
                       unlimitedHeight>
                       <ResourceRenderer resource={assignableGroups.toArray()} returnAsArray>

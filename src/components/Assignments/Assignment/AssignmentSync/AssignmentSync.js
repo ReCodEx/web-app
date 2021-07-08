@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col, Alert } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 import Button from '../../../widgets/TheButton';
+import Callout from '../../../widgets/Callout';
 import DateTime from '../../../widgets/DateTime';
 import Explanation from '../../../widgets/Explanation';
 
@@ -62,7 +63,7 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
   return messages.length > 0 ? (
     <Row>
       <Col sm={12}>
-        <Alert variant="warning">
+        <Callout variant="warning">
           <h4>
             <FormattedMessage
               id="app.assignment.syncRequired"
@@ -94,7 +95,7 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
               </span>
             )}
           </p>
-        </Alert>
+        </Callout>
       </Col>
     </Row>
   ) : (

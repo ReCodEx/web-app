@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Alert, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -66,12 +66,12 @@ const SisBindGroupForm = ({
       />
 
       {submitFailed && (
-        <Alert variant="danger">
+        <Callout variant="danger">
           <FormattedMessage
             id="app.sisBindGroupForm.failed"
             defaultMessage="Binding group failed. Please try again later."
           />
-        </Alert>
+        </Callout>
       )}
 
       {warning && <Callout variant="warning">{warning}</Callout>}

@@ -6,10 +6,9 @@ import isEmail from 'validator/lib/isEmail';
 
 import { SignInIcon, SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
-import { EmailField, PasswordField } from '../Fields';
-
-import { Alert } from 'react-bootstrap';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
+import { EmailField, PasswordField } from '../Fields';
 
 const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded, error }) => (
   <FormBox
@@ -39,7 +38,7 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
         </Button>
       </div>
     }>
-    {hasFailed && error && <Alert variant="danger">{error}</Alert>}
+    {hasFailed && error && <Callout variant="danger">{error}</Callout>}
 
     <Field
       name="email"

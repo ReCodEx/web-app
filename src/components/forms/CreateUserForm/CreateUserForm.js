@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, change } from 'redux-form';
-import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import SubmitButton from '../SubmitButton';
+import Callout from '../../widgets/Callout';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import { TextField, PasswordField, PasswordStrength } from '../Fields';
 
@@ -70,9 +70,9 @@ const CreateUserForm = ({
     />
 
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
-      </Alert>
+      </Callout>
     )}
 
     <div className="text-center">

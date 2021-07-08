@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm } from 'redux-form';
-import { Alert, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { knownRoles, roleLabels, roleDescriptions, UserRoleIcon } from '../../helpers/usersRoles';
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import StandaloneRadioField from '../Fields/StandaloneRadioField';
@@ -41,9 +42,9 @@ const EditUserRoleForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-      </Alert>
+      </Callout>
     )}
 
     <Table hover className="no-margin">

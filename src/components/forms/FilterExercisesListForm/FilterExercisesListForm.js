@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
-import { Alert, Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
+import { Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises';
@@ -24,6 +24,7 @@ import { identity, safeGet } from '../../../helpers/common';
 import { ExpandCollapseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 
 const RTE_PREFIX = 'runtimeEnvironments.';
 
@@ -103,12 +104,12 @@ class FilterExercisesListForm extends Component {
       <Form method="POST" onSubmit={onSubmit}>
         <InsetPanel size="sm">
           {submitFailed && (
-            <Alert variant="danger">
+            <Callout variant="danger">
               <FormattedMessage
                 id="generic.operationFailed"
                 defaultMessage="Operation failed. Please try again later."
               />
-            </Alert>
+            </Callout>
           )}
 
           <ResourceRenderer resource={authors} returnAsArray forceLoading={authorsLoading || tagsLoading} bulkyLoading>

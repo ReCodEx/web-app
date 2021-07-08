@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert, Container, Row, Col, Form } from 'react-bootstrap';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, TextField } from '../Fields';
 import { knownRoles, roleLabelsPlural } from '../../helpers/usersRoles';
 import { identity } from '../../../helpers/common';
 import InsetPanel from '../../widgets/InsetPanel';
+import Callout from '../../widgets/Callout';
 
 const FilterUsersListForm = ({
   onSubmit = identity,
@@ -21,9 +22,9 @@ const FilterUsersListForm = ({
   <Form method="POST" onSubmit={onSubmit}>
     <InsetPanel size="sm">
       {submitFailed && (
-        <Alert variant="danger">
+        <Callout variant="danger">
           <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
-        </Alert>
+        </Callout>
       )}
 
       <Container fluid>

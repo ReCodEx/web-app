@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
-import { Alert, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router';
@@ -91,10 +91,10 @@ class ForkExerciseForm extends Component {
         return (
           <div>
             {submitFailed && (
-              <Alert variant="danger">
+              <Callout variant="danger">
                 <WarningIcon gapRight />
                 <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-              </Alert>
+              </Callout>
             )}
             <Form inline className="forkForm">
               <ResourceRenderer resource={groups.toArray()} returnAsArray>

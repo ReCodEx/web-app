@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Alert, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Icon, { WarningIcon } from '../../../components/icons';
+import Icon, { WarningIcon } from '../../icons';
+import Callout from '../../widgets/Callout';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { hasPermissions } from '../../../helpers/common';
 
@@ -27,10 +28,10 @@ const RelocateGroupForm = ({
 }) => (
   <div>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <WarningIcon gapRight />
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-      </Alert>
+      </Callout>
     )}
     <Form>
       <Field
