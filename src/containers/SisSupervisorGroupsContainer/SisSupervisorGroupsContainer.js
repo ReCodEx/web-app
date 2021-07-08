@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/TheButton';
+import Callout from '../../components/widgets/Callout';
 import UsersNameContainer from '../UsersNameContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SisCreateGroupForm from '../../components/forms/SisCreateGroupForm';
@@ -171,12 +172,12 @@ class SisSupervisorGroupsContainer extends Component {
               defaultMessage="SIS courses you teach in particular semesters and which have mapping to ReCodEx. You may create new groups with binding or bind existing groups to these courses."
             />
           </p>
-          <p className="callout callout-warning">
+          <Callout variant="warning">
             <FormattedMessage
               id="app.sisSupervisor.noUsersInNewGroupsWarning"
               defaultMessage="Please note that when a group is created from or bound to a SIS course, no students are added to this group. The binding process only ensures that the group is visible to the students and they are allowed to join it."
             />
-          </p>
+          </Callout>
 
           <ResourceRenderer resource={sisStatus}>
             {sisStatus => (

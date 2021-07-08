@@ -10,6 +10,7 @@ import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
 import LoginForm from '../../components/forms/LoginForm';
 import ExternalLoginBox from '../../containers/ExternalLogin';
+import Callout from '../../components/widgets/Callout';
 
 import { login } from '../../redux/modules/auth';
 import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
@@ -117,12 +118,12 @@ class Login extends Component {
           {redirect && (
             <Row>
               <Col sm={12}>
-                <div className="callout callout-warning">
+                <Callout variant="warning">
                   <FormattedMessage
                     id="app.login.loginIsRequired"
                     defaultMessage="Target page is available for authorized users only. Please sign in first."
                   />
-                </div>
+                </Callout>
               </Col>
             </Row>
           )}
@@ -130,9 +131,9 @@ class Login extends Component {
           {isLoggedIn && (
             <Row>
               <Col sm={12}>
-                <div className="callout callout-success">
+                <Callout variant="success">
                   <FormattedMessage id="app.login.alreadyLoggedIn" defaultMessage="You are already logged in." />
-                </div>
+                </Callout>
               </Col>
             </Row>
           )}

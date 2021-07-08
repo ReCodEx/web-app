@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import Icon, { GroupIcon, AssignmentsIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { identity } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
@@ -19,7 +20,7 @@ const AssignmentFormMultiassignSuccess = ({
   links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
 }) => (
   <>
-    <div className="callout callout-success">
+    <Callout variant="success">
       <h4>
         <FormattedMessage id="app.multiAssignForm.successHeading" defaultMessage="Exercise Assigned" />
       </h4>
@@ -29,7 +30,7 @@ const AssignmentFormMultiassignSuccess = ({
           defaultMessage="The exercise was successfuly assigned to the following groups."
         />
       </p>
-    </div>
+    </Callout>
     <Table>
       <tbody>
         {assignedToGroups

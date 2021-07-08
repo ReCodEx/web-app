@@ -6,6 +6,7 @@ import { Card, Tab, Nav } from 'react-bootstrap';
 import ExternalLinkPreview from '../ExternalLinkPreview';
 import Icon from '../../icons';
 import Markdown from '../../widgets/Markdown';
+import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import { knownLocales } from '../../../helpers/localizedData';
 import { UrlContext } from '../../../helpers/contexts';
@@ -18,7 +19,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
     .filter(tabData => tabData && (tabData.text || tabData.link || tabData.studentHint));
 
   if (localeTabs.length === 0) {
-    return noLocalesMessage ? <div className="callout callout-info">{noLocalesMessage}</div> : null;
+    return noLocalesMessage ? <Callout variant="info">{noLocalesMessage}</Callout> : null;
   }
 
   return (
@@ -72,12 +73,12 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                     {text.trim() !== '' && <Markdown source={text} />}
 
                     {!text.trim() && !link && (
-                      <div className="callout callout-warning em-margin">
+                      <Callout variant="warning" className="em-margin">
                         <FormattedMessage
                           id="app.localizedTexts.noText"
                           defaultMessage="There is no text nor link for given localization. The exercise is not fully specified yet."
                         />
-                      </div>
+                      </Callout>
                     )}
                   </Card.Body>
 

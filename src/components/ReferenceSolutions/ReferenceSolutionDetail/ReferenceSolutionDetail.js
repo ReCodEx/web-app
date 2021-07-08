@@ -16,9 +16,10 @@ import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutio
 
 import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import DateTime from '../../widgets/DateTime';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import Icon, { RefreshIcon, WarningIcon, EvaluationFailedIcon } from '../../icons';
+import { RefreshIcon, WarningIcon, EvaluationFailedIcon } from '../../icons';
 
 import { EMPTY_OBJ, getFirstItemInOrder } from '../../../helpers/common';
 
@@ -104,25 +105,23 @@ class ReferenceSolutionDetail extends Component {
             />
 
             {exercise.solutionFilesLimit !== null && files.length > exercise.solutionFilesLimit && (
-              <div className="callout callout-warning">
-                <WarningIcon gapRight />
+              <Callout variant="warning">
                 <FormattedMessage
                   id="app.referenceSolutionDetail.solutionFilesLimitExceeded"
                   defaultMessage="The total number of submitted files exceeds the default solution files limit ({limit})."
                   values={{ limit: exercise.solutionFilesLimit }}
                 />
-              </div>
+              </Callout>
             )}
 
             {exercise.solutionSizeLimit !== null && filesSize > exercise.solutionSizeLimit && (
-              <div className="callout callout-warning">
-                <WarningIcon gapRight />
+              <Callout variant="warning">
                 <FormattedMessage
                   id="app.referenceSolutionDetail.solutionSizeLimitExceeded"
                   defaultMessage="The total size of all submitted files exceeds the default solution size limit ({limit} KiB)."
                   values={{ limit: Math.ceil(exercise.solutionSizeLimit / 1024) }}
                 />
-              </div>
+              </Callout>
             )}
 
             <Row>
@@ -153,17 +152,16 @@ class ReferenceSolutionDetail extends Component {
           {evaluations && (
             <Col md={6} sm={12}>
               {!evaluation && (!evaluations || evaluations.size === 0) && (
-                <div className="callout callout-danger">
-                  <WarningIcon gapRight />
+                <Callout variant="danger" icon={<WarningIcon />}>
                   <FormattedMessage
                     id="app.submissionEvaluation.noEvaluationsWhatSoEver"
                     defaultMessage="There are no submission evaluations. This is higly unusual, since the solution is submitted for evaluation as soon as it is created. Check the configuration of the exercise and try to resubmit this solution again."
                   />
-                </div>
+                </Callout>
               )}
 
               {!evaluation && !failure && evaluations && evaluations.size > 0 && refreshSolutionEvaluations && (
-                <div className="callout callout-warning">
+                <Callout variant="warning">
                   <table>
                     <tbody>
                       <tr>
@@ -182,14 +180,13 @@ class ReferenceSolutionDetail extends Component {
                       </tr>
                     </tbody>
                   </table>
-                </div>
+                </Callout>
               )}
 
               {failure && (
                 <>
-                  <div className="callout callout-danger">
+                  <Callout variant="danger" icon={<EvaluationFailedIcon />}>
                     <h4>
-                      <EvaluationFailedIcon gapRight />
                       <FormattedMessage
                         id="app.submissionEvaluation.evaluationFailedHeading"
                         defaultMessage="The evaluation has failed!"
@@ -212,15 +209,14 @@ class ReferenceSolutionDetail extends Component {
                         />
                       </p>
                     )}
-                  </div>
+                  </Callout>
 
                   {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
-                    <div className="callout callout-success">
+                    <Callout variant="success" icon="fire-extinguisher">
                       <span className="small float-right">
                         (<DateTime unixts={failure.resolvedAt} />)
                       </span>
                       <h4>
-                        <Icon icon="fire-extinguisher" gapRight />
                         <FormattedMessage
                           id="app.submissionEvaluation.evaluationFailureResolved"
                           defaultMessage="The failure has been resolved by admin!"
@@ -233,7 +229,7 @@ class ReferenceSolutionDetail extends Component {
                         />
                         : <em>{failure.resolutionNote}</em>
                       </p>
-                    </div>
+                    </Callout>
                   )}
                 </>
               )}

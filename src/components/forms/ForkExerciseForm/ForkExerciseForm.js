@@ -9,8 +9,9 @@ import { withRouter } from 'react-router';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../../components/widgets/TheButton';
-import Icon, { SuccessIcon, WarningIcon } from '../../../components/icons';
+import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
+import Icon, { WarningIcon } from '../../icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -55,13 +56,12 @@ class ForkExerciseForm extends Component {
     switch (forkStatus) {
       case forkStatuses.FULFILLED:
         return (
-          <div className="callout callout-success">
+          <Callout variant="success">
             <table className="full-width">
               <tbody>
                 <tr>
                   <td className="valign-middle">
                     <p>
-                      <SuccessIcon gapRight />
                       <FormattedMessage
                         id="app.forkExerciseForm.successMessage"
                         defaultMessage="A copy of the exercise was successfully created in the designated group."
@@ -84,7 +84,7 @@ class ForkExerciseForm extends Component {
                 </tr>
               </tbody>
             </table>
-          </div>
+          </Callout>
         );
 
       default:

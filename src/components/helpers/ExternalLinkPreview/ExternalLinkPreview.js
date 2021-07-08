@@ -66,7 +66,7 @@ class ExternalLinkPreview extends Component {
             error: (
               <FormattedMessage
                 id="app.externalLinkPreview.noTextContent"
-                defaultMessage="Only plain text and Markdown contents can be previewed here. The link refers to a '{contentType}' content."
+                defaultMessage='Only plain text and Markdown contents can be previewed here. The link refers to a \"{contentType}\" content.'
                 values={{ contentType }}
               />
             ),

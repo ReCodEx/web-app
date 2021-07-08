@@ -14,6 +14,7 @@ import { createTestNameIndex } from '../../../helpers/exercise/testsAndScore';
 import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst';
 import { removeConstantExpressions, optimize } from '../../../helpers/exercise/scoreAstFunctions';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import Icon, { CopyIcon, UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
 import { composeFunctions } from '../../../helpers/common';
 
@@ -403,12 +404,12 @@ class ScoreConfigUniversalExpression extends Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div className="callout callout-info">
+              <Callout variant="info">
                 <FormattedMessage
                   id="app.scoreConfigExpression.optimize.info"
                   defaultMessage="The selected optimization is applied on the whole tree as a single operation (i.e., it will register as one undo step). If it cannot improve the tree (since it is already optimal) no modifications will be performed."
                 />
-              </div>
+              </Callout>
 
               <table>
                 <tbody>

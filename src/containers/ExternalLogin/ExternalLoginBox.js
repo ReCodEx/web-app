@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import { LinkIcon, LoadingIcon, SuccessIcon } from '../../components/icons';
 import { externalLogin, externalLoginFailed, statusTypes } from '../../redux/modules/auth';
 import { statusSelector } from '../../redux/selectors/auth';
@@ -122,7 +123,7 @@ class ExternalLoginBox extends Component {
           <p>
             <FormattedMessage
               id="app.externalLogin.description"
-              defaultMessage="Sign-in into ReCodEx using external authentication service '{name}'. If you do not have an account in ReCodEx, it will attempt to create one. If you do have a local account, it will be associated with your external identity if both have the same e-mail address."
+              defaultMessage='Sign-in into ReCodEx using external authentication service "{name}". If you do not have an account in ReCodEx, it will attempt to create one. If you do have a local account, it will be associated with your external identity if both have the same e-mail address.'
               values={{ name }}
             />
           </p>
@@ -139,15 +140,15 @@ class ExternalLoginBox extends Component {
           )}
 
           {!pending && this.state.lastError && (
-            <p className="callout callout-danger em-margin-top">
+            <Callout variant="danger" className="em-margin-top">
               {getErrorMessage(formatMessage)(this.state.lastError)}
-            </p>
+            </Callout>
           )}
 
           {!pending && this.state.lastError === null && loginStatus === statusTypes.LOGIN_FAILED && (
-            <p className="callout callout-danger em-margin-top">
+            <Callout variant="danger" className="em-margin-top">
               <FormattedMessage id="app.externalLogin.failed" defaultMessage="External authentication failed." />
-            </p>
+            </Callout>
           )}
         </>
       </Box>

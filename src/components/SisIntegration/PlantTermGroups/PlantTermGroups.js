@@ -9,8 +9,8 @@ import DeleteGroupButtonContainer from '../../../containers/DeleteGroupButtonCon
 import LocalizedTextsFormField from '../../forms/LocalizedTextsFormField';
 import { TextField, SimpleCheckboxField } from '../../forms/Fields';
 import SubmitButton from '../../forms/SubmitButton';
-
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import Icon, { CloseIcon } from '../../icons';
 import { getLocalizedName, validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 import { arrayToObject } from '../../../helpers/common';
@@ -156,7 +156,7 @@ const PlantTermGroups = ({
           </Alert>
         )}
 
-        {error && <div className="callout callout-warning">{error}</div>}
+        {error && <Callout variant="warning">{error}</Callout>}
       </Modal.Body>
       <Modal.Footer>
         <div className="text-center">

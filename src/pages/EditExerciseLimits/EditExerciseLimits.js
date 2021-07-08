@@ -16,6 +16,7 @@ import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/E
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Icon from '../../components/icons';
+import Callout from '../../components/widgets/Callout';
 
 import {
   fetchExercise,
@@ -302,9 +303,8 @@ class EditExerciseLimits extends Component {
                     readOnly={!exercise.permissionHints.setLimits}
                   />
                 ) : (
-                  <div className="callout callout-warning">
+                  <Callout variant="warning">
                     <h4>
-                      <i className="icon fa fa-warning" />{' '}
                       <FormattedMessage
                         id="app.editExerciseLimits.missingSomethingTitle"
                         defaultMessage="Exercise configuration is incomplete"
@@ -314,7 +314,7 @@ class EditExerciseLimits extends Component {
                       id="app.editExerciseLimits.missingSomething"
                       defaultMessage="The limits can be set only when the exercise configuration is complete. The tests, runtime environments, and a hardware group must be properly set aprior to setting limits."
                     />
-                  </div>
+                  </Callout>
                 )}
               </Col>
             </Row>
@@ -360,16 +360,19 @@ EditExerciseLimits.propTypes = {
   }).isRequired,
 };
 
-const cloneVerticallyWrapper = defaultMemoize(dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-  dispatch(cloneVertically(formName, testName, runtimeEnvironmentId, field))
+const cloneVerticallyWrapper = defaultMemoize(
+  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+    dispatch(cloneVertically(formName, testName, runtimeEnvironmentId, field))
 );
 
-const cloneHorizontallyWrapper = defaultMemoize(dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-  dispatch(cloneHorizontally(formName, testName, runtimeEnvironmentId, field))
+const cloneHorizontallyWrapper = defaultMemoize(
+  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+    dispatch(cloneHorizontally(formName, testName, runtimeEnvironmentId, field))
 );
 
-const cloneAllWrapper = defaultMemoize(dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
-  dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
+const cloneAllWrapper = defaultMemoize(
+  dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
+    dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
 );
 
 const editLimitsFormSelector = formValueSelector('editLimits');

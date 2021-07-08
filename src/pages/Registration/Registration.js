@@ -132,7 +132,7 @@ class Registration extends Component {
                     <InsetPanel>
                       <FormattedMessage
                         id="app.registration.externalInfo"
-                        defaultMessage="Registration of local accounts is disabled. However, external authenticator '{authName}' is registered which is allowed to create or connect ReCodEx accounts. Simply visit 'Sign in' page and use this authenticator."
+                        defaultMessage='Registration of local accounts is disabled. However, external authenticator "{authName}" is registered which is allowed to create or connect ReCodEx accounts. Simply visit "Sign in" page and use this authenticator.'
                         values={{ authName: EXTERNAL_AUTH_NAME }}
                       />
                     </InsetPanel>

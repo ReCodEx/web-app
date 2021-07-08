@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { Dropdown, DropdownButton, Modal } from 'react-bootstrap';
 
 import Button from '../../components/widgets/TheButton';
+import Callout from '../../components/widgets/Callout';
 import { DownloadIcon, LoadingIcon } from '../../components/icons';
 import { fetchFileIfNeeded, download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
@@ -108,7 +109,7 @@ class SourceCodeViewerContainer extends Component {
 
             <Modal.Body className={styles.modalBody}>
               {(content.malformedCharacters || content.tooLarge) && (
-                <div className="callout callout-warning">
+                <Callout variant="warning">
                   {content.malformedCharacters && (
                     <p>
                       <FormattedMessage
@@ -125,7 +126,7 @@ class SourceCodeViewerContainer extends Component {
                       />
                     </p>
                   )}
-                </div>
+                </Callout>
               )}
               <div>
                 <SourceCodeViewer content={content.content} name={file.name} />

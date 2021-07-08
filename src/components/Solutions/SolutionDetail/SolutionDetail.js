@@ -18,8 +18,9 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
-import Icon, { WarningIcon, RefreshIcon, EvaluationFailedIcon } from '../../icons';
+import { RefreshIcon, EvaluationFailedIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import DateTime from '../../widgets/DateTime';
 
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
@@ -151,7 +152,7 @@ class SolutionDetail extends Component {
           {evaluations && (
             <Col md={6} sm={12}>
               {!evaluation && !failure && refreshSolutionEvaluations && (
-                <div className="callout callout-warning">
+                <Callout variant="warning">
                   <table>
                     <tbody>
                       <tr>
@@ -170,14 +171,13 @@ class SolutionDetail extends Component {
                       </tr>
                     </tbody>
                   </table>
-                </div>
+                </Callout>
               )}
 
               {failure && (
                 <>
-                  <div className="callout callout-danger">
+                  <Callout variant="danger" icon={<EvaluationFailedIcon />}>
                     <h4>
-                      <EvaluationFailedIcon gapRight />
                       <FormattedMessage
                         id="app.submissionEvaluation.evaluationFailedHeading"
                         defaultMessage="The evaluation has failed!"
@@ -200,15 +200,14 @@ class SolutionDetail extends Component {
                         />
                       </p>
                     )}
-                  </div>
+                  </Callout>
 
                   {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
-                    <div className="callout callout-success">
+                    <Callout variant="success" icon="fire-extinguisher">
                       <span className="small float-right">
                         (<DateTime unixts={failure.resolvedAt} />)
                       </span>
                       <h4>
-                        <Icon icon="fire-extinguisher" gapRight />
                         <FormattedMessage
                           id="app.submissionEvaluation.evaluationFailureResolved"
                           defaultMessage="The failure has been resolved by admin!"
@@ -221,19 +220,18 @@ class SolutionDetail extends Component {
                         />
                         : <em>{failure.resolutionNote}</em>
                       </p>
-                    </div>
+                    </Callout>
                   )}
                 </>
               )}
 
               {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (
-                <p className="callout callout-warning">
-                  <WarningIcon gapRight />
+                <Callout variant="warning">
                   <FormattedMessage
                     id="app.evaluationDetail.notActualEvaluation"
                     defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom."
                   />
-                </p>
+                </Callout>
               )}
 
               {evaluation && (

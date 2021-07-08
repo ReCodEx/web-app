@@ -20,6 +20,7 @@ import EditTerm from '../../components/SisIntegration/EditTerm';
 import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Button from '../../components/widgets/TheButton';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
 import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/groups';
@@ -219,14 +220,13 @@ class SisIntegration extends Component {
 
           return externalId ? (
             <>
-              <div className="callout callout-info">
-                <UserIcon gapRight />
+              <Callout variant="info" icon={<UserIcon />}>
                 <FormattedMessage
                   id="app.sisIntegration.identityInfo"
-                  defaultMessage="Your ReCodEx account is associated with SIS identity identifier '{externalId}'."
+                  defaultMessage='Your ReCodEx account is associated with SIS identity identifier "{externalId}".'
                   values={{ externalId }}
                 />
-              </div>
+              </Callout>
 
               <ResourceRenderer
                 resource={isSuperadminRole(effectiveRole) ? allGroups.toArray() : supervisorOfGroups.toArray()}
@@ -345,12 +345,12 @@ class SisIntegration extends Component {
               </ResourceRenderer>
             </>
           ) : (
-            <div className="callout callout-warning">
+            <Callout variant="warning">
               <FormattedMessage
                 id="app.sisIntegration.noCasIdentifier"
                 defaultMessage="Your ReCodEx account is not associated with any SIS identity identifier."
               />
-            </div>
+            </Callout>
           );
         }}
       </Page>

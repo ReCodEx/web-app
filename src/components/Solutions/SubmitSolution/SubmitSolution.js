@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Modal, Form, FormGroup, FormLabel, FormControl, Row, Col } from 'react-bootstrap';
-import classnames from 'classnames';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Confirm from '../../forms/Confirm';
@@ -200,12 +200,7 @@ class SubmitSolution extends Component {
               <UploadContainer id={uploadId} onChange={onFilesChange} />
 
               {(!presubmitCountLimitOK || !presubmitSizeLimitOK) && (
-                <div
-                  className={classnames({
-                    callout: true,
-                    'callout-danger': !isReferenceSolution,
-                    'callout-warning': isReferenceSolution,
-                  })}>
+                <Callout variant={isReferenceSolution ? 'warning' : 'danger'}>
                   <h4>
                     <WarningIcon gapRight />
                     {formatMessage(commonMessages.limitsExceeded)}
@@ -218,7 +213,7 @@ class SubmitSolution extends Component {
                       {formatMessage(commonMessages.limitsExceededSize, { limit: Math.ceil(solutionSizeLimit / 1024) })}
                     </p>
                   )}
-                </div>
+                </Callout>
               )}
             </Col>
             <Col md={12} lg={6}>
@@ -230,7 +225,7 @@ class SubmitSolution extends Component {
                     {formatMessage(commonMessages.validating)}
                   </p>
                 ) : !presubmitEnvironments ? (
-                  <p className="text-left callout callout-info">{formatMessage(commonMessages.uploadFilesFirst)}</p>
+                  <Callout variant="info">{formatMessage(commonMessages.uploadFilesFirst)}</Callout>
                 ) : presubmitEnvironments.length > 0 ? (
                   <>
                     <FormControl
@@ -260,7 +255,7 @@ class SubmitSolution extends Component {
                     )}
                   </>
                 ) : (
-                  <p className="text-left callout callout-danger">{formatMessage(commonMessages.noEnvironments)}</p>
+                  <Callout variant="danger">{formatMessage(commonMessages.noEnvironments)}</Callout>
                 )}
               </FormGroup>
 
@@ -297,13 +292,11 @@ class SubmitSolution extends Component {
                 <FormControl onChange={e => saveNote(e.target.value)} value={note} type="text" maxLength={1024} />
               </FormGroup>
               {isReferenceSolution && note.trim().length === 0 && (
-                <p className="callout callout-danger">{formatMessage(commonMessages.emptyNoteWarning)}</p>
+                <Callout variant="danger">{formatMessage(commonMessages.emptyNoteWarning)}</Callout>
               )}
             </Col>
           </Row>
-          {hasFailed && (
-            <p className="text-left callout callout-danger">{formatMessage(commonMessages.submissionRejected)}</p>
-          )}
+          {hasFailed && <Callout variant="danger">{formatMessage(commonMessages.submissionRejected)}</Callout>}
         </Modal.Body>
         <Modal.Footer>
           <div className="text-center em-margin-bottomm">

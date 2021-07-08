@@ -4,6 +4,7 @@ import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
+import Callout from '../../widgets/Callout';
 import Markdown from '../../widgets/Markdown';
 import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
@@ -115,7 +116,7 @@ const GroupInfoTable = ({
                       {knownBindingProviderLabels[provider] || (
                         <FormattedMessage
                           id="app.groupDetail.bindings.genericProvider"
-                          defaultMessage="External binding to '{provider}'"
+                          defaultMessage='External binding to "{provider}"'
                         />
                       )}
                       :
@@ -135,12 +136,12 @@ const GroupInfoTable = ({
       </Table>
     </Box>
     {isPublic && isAdmin && (
-      <p className="callout callout-warning">
+      <Callout variant="warning">
         <FormattedMessage
           id="app.group.isPublicWarning"
           defaultMessage="The group is public, which means that everyone can see this group and join it."
         />
-      </p>
+      </Callout>
     )}
   </div>
 );

@@ -6,6 +6,7 @@ import classnames from 'classnames';
 
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SendIcon } from '../../icons';
 import { AST_FUNCTION_CLASSES, KNOWN_AST_CLASSES, AstNode } from '../../../helpers/exercise/scoreAst';
@@ -53,12 +54,12 @@ class EditFunctionNodeForm extends Component {
     return (
       <>
         {node && !pushDown ? (
-          <div className="callout callout-warning">
+          <Callout variant="warning">
             <FormattedMessage
               id="app.scoreConfigExpression.editFunctionDialog.editDescription"
               defaultMessage="Please note that modifying the type of existing function node may have some effect on the nested nodes. However, nested nodes will be preserved as much as possible."
             />
-          </div>
+          </Callout>
         ) : (
           <InsetPanel>
             <FormattedMessage
