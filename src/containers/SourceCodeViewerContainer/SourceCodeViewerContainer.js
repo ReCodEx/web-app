@@ -90,13 +90,14 @@ class SourceCodeViewerContainer extends Component {
                 <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
               </Button>
 
-              {files.length > 1 && (
+              {files.length > 0 && (
                 <DownloadSolutionArchiveContainer
                   solutionId={solutionId}
                   simpleButton
                   size="sm"
                   variant="outline-secondary"
                   isReference={isReference}
+                  submittedBy={submittedBy}
                 />
               )}
 

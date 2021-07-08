@@ -130,9 +130,9 @@ class SolutionDetail extends Component {
                     </a>
                   </Col>
                 ))}
-              {files.length > 1 && (
+              {files.length > 0 && (
                 <Col lg={6} md={12}>
-                  <DownloadSolutionArchiveContainer solutionId={id} />
+                  <DownloadSolutionArchiveContainer solutionId={id} submittedBy={submittedBy} />
                 </Col>
               )}
             </Row>

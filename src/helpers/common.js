@@ -55,8 +55,10 @@ export const safeSet = (obj, path, value) => {
 };
 
 /*
- * IDs Management
+ * String and related (ID management) functions
  */
+export const toPlainAscii = str => str && str.normalize('NFD').replace(/[^-_a-zA-Z0-9.()[\] ]/g, '');
+
 export const encodeId = id => {
   return 'BID' + btoa(id);
 };
