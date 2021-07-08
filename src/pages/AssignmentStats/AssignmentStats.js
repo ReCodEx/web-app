@@ -52,7 +52,7 @@ import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
-import { safeGet, identity, arrayToObject } from '../../helpers/common';
+import { safeGet, identity, arrayToObject, toPlainAscii } from '../../helpers/common';
 
 const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, locale, links) => {
   const { SOLUTION_DETAIL_URI_FACTORY } = links;
@@ -255,7 +255,7 @@ class AssignmentStats extends Component {
     const name =
       assignment &&
       safeGet(assignment, ['localizedTexts', ({ locale }) => locale === pageLocale, 'name'], assignment.name);
-    const safeName = name && name.normalize('NFD').replace(/[^-_a-zA-Z0-9.()[\] ]/g, '');
+    const safeName = toPlainAscii(name);
     return `${safeName || assignmentId}.zip`;
   };
 

@@ -1,7 +1,7 @@
 import { createApiAction } from '../../middleware/apiMiddleware';
 import { addNotification } from '../../modules/notifications';
 
-const trivialFileNameSelector = (id, state) => id;
+const trivialFileNameSelector = (id, _) => id;
 
 export const downloadHelper =
   ({ fetch, endpoint, actionType, fileNameSelector = trivialFileNameSelector, contentType }) =>
