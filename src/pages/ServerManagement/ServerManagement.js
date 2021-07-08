@@ -12,6 +12,7 @@ import StatsList from '../../components/Broker/StatsList/StatsList';
 import AsyncJobsButtons from '../../components/AsyncJobs/AsyncJobsButtons';
 import AsyncJobsList from '../../components/AsyncJobs/AsyncJobsList';
 import { BanIcon } from '../../components/icons';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchBrokerStats, freezeBroker, unfreezeBroker } from '../../redux/modules/broker';
 import { fetchAllJobs, ping, abort } from '../../redux/modules/asyncJobs';
@@ -79,13 +80,12 @@ class Broker extends Component {
           ) : (
             <Row>
               <Col sm={12}>
-                <p className="callout callout-warning larger">
-                  <BanIcon gapRight />
+                <Callout variant="warning" className="larger" icon={<BanIcon />}>
                   <FormattedMessage
                     id="generic.accessDenied"
                     defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
                   />
-                </p>
+                </Callout>
               </Col>
             </Row>
           )

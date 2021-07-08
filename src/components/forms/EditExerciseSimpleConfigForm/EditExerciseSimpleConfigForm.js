@@ -8,6 +8,7 @@ import { defaultMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
@@ -69,7 +70,7 @@ const validateFileExists = (data, errors, path, existingFiles) => {
         path,
         <FormattedMessage
           id="app.editExerciseConfigForm.validation.fileDoesNotExist"
-          defaultMessage="File '{file}' was selected here, but no such file exists."
+          defaultMessage='File "{file}" was selected here, but no such file exists.'
           values={{ file: target }}
         />
       );
@@ -113,36 +114,30 @@ class EditExerciseSimpleConfigForm extends Component {
     return (
       <div>
         {dataOnly && (
-          <div className="callout callout-info">
-            <p>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.isDataOnly"
-                defaultMessage="The exercise is configured as data-only. It means there is no compilation, the student submits only data, and the data are verified using custom judge. The time and memory limits are applied on the judge itself."
-              />
-            </p>
-          </div>
+          <Callout variant="info">
+            <FormattedMessage
+              id="app.editExerciseSimpleConfigForm.isDataOnly"
+              defaultMessage="The exercise is configured as data-only. It means there is no compilation, the student submits only data, and the data are verified using custom judge. The time and memory limits are applied on the judge itself."
+            />
+          </Callout>
         )}
 
         {prologOnly && (
-          <div className="callout callout-info">
-            <p>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.isPrologOnly"
-                defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file comprise Prolog queries in text format, each on a single line. The output holds the serialized answers, each answer on a corresponding line to the input query. The answer comprise of all possible satisfactions of the query, sorted in ascending lexicographical order to avoid ambiguity."
-              />
-            </p>
-          </div>
+          <Callout variant="info">
+            <FormattedMessage
+              id="app.editExerciseSimpleConfigForm.isPrologOnly"
+              defaultMessage="The exercise is configured for Prolog. Prolog uses specialized setup as the solutions are resolved by a wrapper script. Input file comprise Prolog queries in text format, each on a single line. The output holds the serialized answers, each answer on a corresponding line to the input query. The answer comprise of all possible satisfactions of the query, sorted in ascending lexicographical order to avoid ambiguity."
+            />
+          </Callout>
         )}
 
         {haskellOnly && (
-          <div className="callout callout-info">
-            <p>
-              <FormattedMessage
-                id="app.editExerciseSimpleConfigForm.isHaskellOnly"
-                defaultMessage="The exercise is configured for Haskell. Haskell tests require a name of the entry-point function which is invoked as the main function (without arguments). The result of the function call is serialized to stdout and default ReCodEx judge compares it with the expected output. For testing purposes, you may provide your own testing functions in extra files. Remember, that extra files have to employ modules for code separation (whilst the submitted solution should be in the Main module)."
-              />
-            </p>
-          </div>
+          <Callout variant="info">
+            <FormattedMessage
+              id="app.editExerciseSimpleConfigForm.isHaskellOnly"
+              defaultMessage="The exercise is configured for Haskell. Haskell tests require a name of the entry-point function which is invoked as the main function (without arguments). The result of the function call is serialized to stdout and default ReCodEx judge compares it with the expected output. For testing purposes, you may provide your own testing functions in extra files. Remember, that extra files have to employ modules for code separation (whilst the submitted solution should be in the Main module)."
+            />
+          </Callout>
         )}
 
         <FormBox

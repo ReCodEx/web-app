@@ -15,6 +15,7 @@ import OrganizationalGroupButtonContainer from '../../containers/OrganizationalG
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import { BanIcon, InfoIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, editGroup, relocateGroup } from '../../redux/modules/groups';
@@ -108,13 +109,12 @@ class EditGroup extends Component {
             {!hasPermissions(group, 'update') && (
               <Row>
                 <Col sm={12}>
-                  <p className="callout callout-warning larger">
-                    <BanIcon gapRight />
+                  <Callout variant="warning" className="larger" icon={<BanIcon />}>
                     <FormattedMessage
                       id="generic.accessDenied"
                       defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
                     />
-                  </p>
+                  </Callout>
                 </Col>
               </Row>
             )}

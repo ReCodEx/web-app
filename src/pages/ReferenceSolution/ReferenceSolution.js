@@ -11,6 +11,7 @@ import ReferenceSolutionDetail from '../../components/ReferenceSolutions/Referen
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Button from '../../components/widgets/TheButton';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -106,19 +107,19 @@ class ReferenceSolution extends Component {
                 {hasPermissions(referenceSolution, 'evaluate') && (
                   <>
                     {exercise.isBroken ? (
-                      <p className="callout callout-warning">
+                      <Callout variant="warning">
                         <FormattedMessage
                           id="app.referenceSolution.exerciseBroken"
                           defaultMessage="The exercise is broken. This reference solution may not be resubmitted at the moment."
                         />
-                      </p>
+                      </Callout>
                     ) : !exerciseHasRuntime(exercise, referenceSolution.runtimeEnvironmentId) ? (
-                      <p className="callout callout-info">
+                      <Callout variant="info">
                         <FormattedMessage
                           id="app.referenceSolution.exerciseNoLongerHasEnvironment"
                           defaultMessage="The exercise no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
                         />
-                      </p>
+                      </Callout>
                     ) : (
                       <p>
                         <ResubmitReferenceSolutionContainer id={referenceSolution.id} isDebug={false} locale={locale} />

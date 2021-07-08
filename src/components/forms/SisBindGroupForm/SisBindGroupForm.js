@@ -7,6 +7,7 @@ import { Alert, Modal } from 'react-bootstrap';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import CourseLabel from '../../SisIntegration/CourseLabel';
@@ -73,7 +74,7 @@ const SisBindGroupForm = ({
         </Alert>
       )}
 
-      {warning && <div className="callout callout-warning">{warning}</div>}
+      {warning && <Callout variant="warning">{warning}</Callout>}
     </Modal.Body>
 
     <Modal.Footer>

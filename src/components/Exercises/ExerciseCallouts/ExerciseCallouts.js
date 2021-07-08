@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import Explanation from '../../widgets/Explanation';
 import { NeedFixingIcon, CheckRequiredIcon, LinkIcon } from '../../icons';
+import Callout from '../../widgets/Callout';
 import withLinks from '../../../helpers/withLinks';
 
 export const exerciseCalloutsAreVisible = ({ isBroken, hasReferenceSolutions }) => isBroken || !hasReferenceSolutions;
@@ -187,9 +188,8 @@ const ExerciseCallouts = ({
 }) => (
   <>
     {isBroken && (
-      <div className="callout callout-warning">
+      <Callout variant="warning" icon={<NeedFixingIcon />}>
         <h4>
-          <NeedFixingIcon gapRight />
           <FormattedMessage
             id="app.exercise.isBroken"
             defaultMessage="Exercise configuration is incomplete and needs fixing."
@@ -197,13 +197,12 @@ const ExerciseCallouts = ({
         </h4>
 
         {validationError && <ul>{transformErrors(validationError, id, links)}</ul>}
-      </div>
+      </Callout>
     )}
 
     {!isBroken && !hasReferenceSolutions && (
-      <div className="callout callout-info">
+      <Callout variant="info" icon={<CheckRequiredIcon />}>
         <h4>
-          <CheckRequiredIcon gapRight />
           <FormattedMessage
             id="app.exercise.noReferenceSolutions"
             defaultMessage="There are no reference solutions for this exercise yet."
@@ -226,7 +225,7 @@ const ExerciseCallouts = ({
             </Link>
           </p>
         )}
-      </div>
+      </Callout>
     )}
   </>
 );

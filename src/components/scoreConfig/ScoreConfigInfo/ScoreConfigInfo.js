@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import ScoreConfigInfoDefault from './ScoreConfigInfoDefault';
+import Callout from '../../widgets/Callout';
 import DateTime from '../../widgets/DateTime';
 import ScoreConfigInfoUniform from './ScoreConfigInfoUniform';
 import ScoreConfigInfoWeighted from './ScoreConfigInfoWeighted';
@@ -31,7 +32,7 @@ const ScoreConfigInfo = ({ scoreConfig, testResults, canResubmit = false }) => {
           </p>
         </>
       ) : (
-        <div className="callout callout-info">
+        <Callout variant="info">
           <h4>
             <FormattedMessage
               id="app.scoreConfigInfo.missingTitle"
@@ -52,7 +53,7 @@ const ScoreConfigInfo = ({ scoreConfig, testResults, canResubmit = false }) => {
               />
             </p>
           )}
-        </div>
+        </Callout>
       )}
     </>
   );

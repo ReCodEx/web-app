@@ -10,6 +10,7 @@ import { Set } from 'immutable';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
@@ -199,9 +200,8 @@ class User extends Component {
             )}
 
             {commonGroups.length === 0 && !isAdmin && user.id !== loggedInUserId && (
-              <div className="callout callout-warning">
+              <Callout variant="warning" icon={<InfoIcon />}>
                 <h4>
-                  <InfoIcon gapRight />
                   <FormattedMessage
                     id="app.user.nothingInCommon.title"
                     defaultMessage="{name} is not one of your students"
@@ -213,15 +213,14 @@ class User extends Component {
                   defaultMessage="You are not a supervisor of any group of which is {name} a member and so you don't see any of his results."
                   values={{ name: user.fullName }}
                 />
-              </div>
+              </Callout>
             )}
 
             {student && studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
               <Row>
                 <Col sm={12}>
-                  <div className="callout callout-success">
+                  <Callout variant="success" icon={<InfoIcon />}>
                     <h4>
-                      <InfoIcon gapRight />
                       <FormattedMessage id="app.user.welcomeTitle" defaultMessage="Welcome to ReCodEx" />
                     </h4>
                     <p>
@@ -238,7 +237,7 @@ class User extends Component {
                         </Button>
                       </Link>
                     </p>
-                  </div>
+                  </Callout>
                 </Col>
               </Row>
             )}

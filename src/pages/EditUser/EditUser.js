@@ -17,7 +17,8 @@ import {
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
 import Button from '../../components/widgets/TheButton';
-import { LocalIcon, TransferIcon, BanIcon, WarningIcon, RefreshIcon } from '../../components/icons';
+import Callout from '../../components/widgets/Callout';
+import { LocalIcon, TransferIcon, BanIcon, RefreshIcon } from '../../components/icons';
 import { UserRoleIcon } from '../../components/helpers/usersRoles';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import ResendVerificationEmail from '../../containers/ResendVerificationEmailContainer';
@@ -125,9 +126,8 @@ class EditUser extends Component {
             )}
 
             {data && data.id === loggedUserId && !data.isVerified && (
-              <div className="callout callout-warning">
+              <Callout variant="warning">
                 <h3>
-                  <WarningIcon gapRight />
                   <FormattedMessage
                     id="app.editUser.emailStillNotVerifiedTitle"
                     defaultMessage="Email Address Is Not Verified"
@@ -155,7 +155,7 @@ class EditUser extends Component {
                     <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
                   </Button>
                 </p>
-              </div>
+              </Callout>
             )}
 
             <Row>

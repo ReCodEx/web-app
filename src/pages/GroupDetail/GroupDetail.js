@@ -9,6 +9,7 @@ import { Row, Col } from 'react-bootstrap';
 import App from '../../containers/App';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
 import HierarchyLine from '../../components/Groups/HierarchyLine';
 import { AddIcon, BanIcon } from '../../components/icons';
@@ -209,13 +210,12 @@ class GroupDetail extends Component {
             {!hasOneOfPermissions(data, 'viewAssignments', 'viewExercises') && (
               <Row>
                 <Col sm={12}>
-                  <p className="callout callout-warning larger">
-                    <BanIcon gapRight />
+                  <Callout variant="warning" className="larger" icon={<BanIcon />}>
                     <FormattedMessage
                       id="generic.accessDenied"
                       defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
                     />
-                  </p>
+                  </Callout>
                 </Col>
               </Row>
             )}
@@ -223,12 +223,12 @@ class GroupDetail extends Component {
             {data.organizational && (
               <Row>
                 <Col lg={12}>
-                  <p className="callout callout-info">
+                  <Callout variant="info">
                     <FormattedMessage
                       id="app.group.organizationalExplain"
                       defaultMessage="This group is organizational, so it cannot have any students nor assignments. However, it may have attached exercises which can be assigned in sub-groups."
                     />
-                  </p>
+                  </Callout>
                 </Col>
               </Row>
             )}

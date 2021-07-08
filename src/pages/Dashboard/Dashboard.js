@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
@@ -122,7 +123,7 @@ class Dashboard extends Component {
             {student && studentOfCount(user) === 0 && (
               <Row>
                 <Col sm={12}>
-                  <div className="callout callout-success">
+                  <Callout variant="success">
                     <h4>
                       <InfoIcon gapRight />
                       <FormattedMessage id="app.dashboard.studentNoGroupsTitle" defaultMessage="No Group Memberships" />
@@ -133,7 +134,7 @@ class Dashboard extends Component {
                         defaultMessage="You are not a member of any group yet. A group supervisor may add you into his/her group, or you can use other mechanisms (like the dialog on the SIS integration page) to join some groups that apply to you."
                       />
                     </p>
-                  </div>
+                  </Callout>
                 </Col>
               </Row>
             )}
@@ -141,7 +142,7 @@ class Dashboard extends Component {
             {supervisor && supervisorOfCount(user) === 0 && (
               <Row>
                 <Col sm={12}>
-                  <div className="callout callout-success">
+                  <Callout variant="success">
                     <h4>
                       <InfoIcon gapRight />
                       <FormattedMessage id="app.dashboard.supervisorNoGroupsTitle" defaultMessage="No Groups" />
@@ -152,7 +153,7 @@ class Dashboard extends Component {
                         defaultMessage="You are currently not supervising any groups. An administrator may create a group for you or you can use other mechanisms (like the dialog on the SIS integration page) to create groups for your students."
                       />
                     </p>
-                  </div>
+                  </Callout>
                 </Col>
               </Row>
             )}

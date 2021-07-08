@@ -14,6 +14,7 @@ import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContaine
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import UsersList from '../../components/Users/UsersList';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
@@ -162,13 +163,12 @@ class Users extends Component {
             {(!isSupervisorRole(effectiveRole) || isStudentRole(effectiveRole)) && (
               <Row>
                 <Col sm={12}>
-                  <p className="callout callout-warning larger">
-                    <BanIcon gapRight />
+                  <Callout variant="warning" className="larger" icon={<BanIcon />}>
                     <FormattedMessage
                       id="generic.accessDenied"
                       defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
                     />
-                  </p>
+                  </Callout>
                 </Col>
               </Row>
             )}

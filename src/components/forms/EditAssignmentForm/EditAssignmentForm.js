@@ -13,6 +13,7 @@ import SubmitButton from '../SubmitButton';
 import AssignmentFormGroupsList from './AssignmentFormGroupsList';
 import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess';
 import Explanation from '../../widgets/Explanation';
+import Callout from '../../widgets/Callout';
 import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation';
 import {
   getGroupCanonicalLocalizedName,
@@ -639,13 +640,12 @@ class EditAssignmentForm extends Component {
           <>
             <hr />
 
-            <div className="callout callout-info">
-              <WarningIcon gapRight />
+            <Callout variant="info" icon={<WarningIcon />}>
               <FormattedMessage
                 id="app.editAssignmentForm.localized.assignmentSyncInfo"
                 defaultMessage="Please note that the localized texts are overwritten by actual data from the exercise when exercise update is invoked."
               />
-            </div>
+            </Callout>
 
             <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="assignment" />
           </>

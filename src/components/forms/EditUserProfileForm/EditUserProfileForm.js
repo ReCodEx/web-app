@@ -6,6 +6,7 @@ import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import FormBox from '../../widgets/FormBox';
+import Callout from '../../widgets/Callout';
 import SubmitButton from '../SubmitButton';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
@@ -121,7 +122,7 @@ const EditUserProfileForm = ({
         </p>
 
         {emptyLocalPassword ? (
-          <div className="callout callout-warning">
+          <Callout variant="warning">
             <h4>
               <FormattedMessage
                 id="app.editUserProfile.emptyLocalPassword"
@@ -134,7 +135,7 @@ const EditUserProfileForm = ({
                 defaultMessage="You may not sign in to ReCodEx using local account until you set the password."
               />
             </p>
-          </div>
+          </Callout>
         ) : (
           !canForceChangePassword && (
             <Field

@@ -12,6 +12,7 @@ import SubmitButton from '../SubmitButton';
 import StandaloneRadioField from '../Fields/StandaloneRadioField';
 import Box from '../../widgets/Box';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 import Icon, { AddIcon, CloseIcon, RefreshIcon, WarningIcon } from '../../icons';
 import {
@@ -229,12 +230,12 @@ class EditTestsForm extends Component {
                         </Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                        <div className="callout callout-info">
+                        <Callout variant="info">
                           <FormattedMessage
                             id="app.editTestsForm.changeCalculatorModal.info"
                             defaultMessage="When the scoring algorithm is changed, the score configuration is transformed into corresponding format. Transforming more generic configuration into more specific one may require some reduction or even reinitialization of the score configuration. Please note that the change is performed immediately and any configuration transformations cannot be undone."
                           />
-                        </div>
+                        </Callout>
 
                         <Table hover>
                           <tbody>

@@ -14,7 +14,7 @@ const EditBoxForm = ({ item, edit, onHide, boxTypes, onDelete, ...props }) =>
       title={
         <FormattedMessage
           id="app.pipelineEditor.EditBoxForm.title"
-          defaultMessage="Edit the box '{name}'"
+          defaultMessage='Edit the box "{name}"'
           values={{ name: item.name }}
         />
       }

@@ -7,8 +7,8 @@ import { Field, reduxForm } from 'redux-form';
 import { SimpleCheckboxField } from '../../forms/Fields';
 import SubmitButton from '../../forms/SubmitButton';
 import InsetPanel from '../../widgets/InsetPanel';
-
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import Icon, { CloseIcon } from '../../icons';
 
 class ArchiveTermGroups extends Component {
@@ -75,7 +75,7 @@ class ArchiveTermGroups extends Component {
             </Alert>
           )}
 
-          {error && <div className="callout callout-warning">{error}</div>}
+          {error && <Callout variant="warning">{error}</Callout>}
         </Modal.Body>
         <Modal.Footer>
           <div className="text-center">

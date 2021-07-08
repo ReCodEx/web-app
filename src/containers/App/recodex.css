@@ -280,6 +280,20 @@ table.table tbody:first-child tr:first-child th {
   margin-bottom: 0;
 }
 
+.callout {
+  border-left-width: 50px;
+  position: relative;
+}
+
+.callout .callout-icon {
+  position: absolute;
+  left: -25px;
+  top: 50%;
+  background-color: transparent !important;
+  font-size: 24px;
+  transform: translate(-50%, -50%);
+}
+
 /*
  * ACE Editor Overrides
  */

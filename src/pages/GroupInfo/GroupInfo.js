@@ -26,6 +26,7 @@ import SupervisorsList from '../../components/Users/SupervisorsList';
 import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
@@ -130,13 +131,12 @@ class GroupInfo extends Component {
             {!hasPermissions(data, 'viewDetail') && (
               <Row>
                 <Col sm={12}>
-                  <p className="callout callout-warning larger">
-                    <BanIcon gapRight />
+                  <Callout variant="warning" className="larger" icon={<BanIcon />}>
                     <FormattedMessage
                       id="generic.accessDenied"
                       defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
                     />
-                  </p>
+                  </Callout>
                 </Col>
               </Row>
             )}
@@ -278,18 +278,20 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = (dispatch, { match: { params } }) => ({
-  addSubgroup: (instanceId, userId) => ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
-    dispatch(
-      createGroup({
-        ...data,
-        hasThreshold,
-        threshold: hasThreshold ? threshold : undefined,
-        localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-        noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
-        instanceId,
-        parentGroupId: params.groupId,
-      })
-    ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
+  addSubgroup:
+    (instanceId, userId) =>
+    ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
+      dispatch(
+        createGroup({
+          ...data,
+          hasThreshold,
+          threshold: hasThreshold ? threshold : undefined,
+          localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+          noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
+          instanceId,
+          parentGroupId: params.groupId,
+        })
+      ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
   refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId)),
 });

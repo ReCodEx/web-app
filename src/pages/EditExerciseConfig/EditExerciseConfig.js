@@ -20,7 +20,8 @@ import EditExercisePipelinesForm from '../../components/forms/EditExercisePipeli
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
-import { InfoIcon, WarningIcon } from '../../components/icons';
+import { InfoIcon } from '../../components/icons';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchExercise, fetchExerciseIfNeeded, editExercise, invalidateExercise } from '../../redux/modules/exercises';
 import {
@@ -474,9 +475,8 @@ class EditExerciseConfig extends Component {
                                 onSubmit={this.transformAndSendPipelinesCreator(tests, config, environmentConfigs)}
                               />
                             ) : (
-                              <div className="callout callout-warning">
+                              <Callout variant="warning">
                                 <h4>
-                                  <WarningIcon gapRight />
                                   <FormattedMessage
                                     id="app.editExercisePipelines.title"
                                     defaultMessage="Selected Pipelines"
@@ -506,7 +506,7 @@ class EditExerciseConfig extends Component {
                                     defaultMessage="The tests and runtime environment must be correctly defined before the pipeline configuration becomes available."
                                   />
                                 </p>
-                              </div>
+                              </Callout>
                             )}
 
                             {/* exercise.configurationType !== 'simpleExerciseConfig' &&
@@ -639,9 +639,8 @@ class EditExerciseConfig extends Component {
                                         )}
                                       />
                                     ) : (
-                                      <div className="callout callout-warning">
+                                      <Callout variant="warning">
                                         <h4>
-                                          <WarningIcon gapRight />
                                           <FormattedMessage
                                             id="app.editExercise.editConfig"
                                             defaultMessage="Exercise Configuration"
@@ -651,12 +650,11 @@ class EditExerciseConfig extends Component {
                                           id="app.editExerciseConfig.noPipelines"
                                           defaultMessage="There are no pipelines selected yet. The form cannot be displayed until at least one pipeline is selected."
                                         />
-                                      </div>
+                                      </Callout>
                                     )
                                   ) : (
-                                    <div className="callout callout-warning">
+                                    <Callout variant="warning">
                                       <h4>
-                                        <WarningIcon gapRight />
                                         <FormattedMessage
                                           id="app.editExercise.editConfig"
                                           defaultMessage="Exercise Configuration"
@@ -670,7 +668,7 @@ class EditExerciseConfig extends Component {
                                         id="app.editExerciseConfig.cannotDisplayConfigForm"
                                         defaultMessage="The exercise configuration form cannot be displayed until at least one test is defined."
                                       />
-                                    </div>
+                                    </Callout>
                                   )
                                 }
                               </ResourceRenderer>
