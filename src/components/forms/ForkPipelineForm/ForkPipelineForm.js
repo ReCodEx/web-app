@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Alert, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router';
@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../../components/widgets/TheButton';
+import Callout from '../../../components/widgets/Callout';
 import { SuccessIcon } from '../../../components/icons';
 import { forkStatuses } from '../../../redux/modules/pipelines';
 import { getFork } from '../../../redux/selectors/pipelines';
@@ -54,9 +55,9 @@ class ForkPipelineForm extends Component {
         return (
           <div>
             {submitFailed && (
-              <Alert variant="danger">
+              <Callout variant="danger">
                 <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-              </Alert>
+              </Callout>
             )}
             <Form inline className="formSpace">
               <ResourceRenderer resource={exercises.toArray()}>

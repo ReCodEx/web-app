@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
-import Button from '../../widgets/TheButton';
 import isEmail from 'validator/lib/isEmail';
 
+import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import { EmailField } from '../Fields';
@@ -36,21 +36,21 @@ const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSuc
       </div>
     }>
     {hasFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage
           id="app.resetPassword.failed"
           defaultMessage="Resetting password failed. Please check your email address."
         />
-      </Alert>
+      </Callout>
     )}
 
     {hasSucceeded && (
-      <Alert variant="success">
+      <Callout variant="success">
         <FormattedMessage
           id="app.resetPassword.succeeded"
           defaultMessage="Resetting password succeeded. Please check your email for further instructions."
         />
-      </Alert>
+      </Callout>
     )}
 
     <Field

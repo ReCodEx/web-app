@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Table, Container, Row, Col } from 'react-bootstrap';
+import { Table, Container, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
@@ -9,6 +9,7 @@ import { EditLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId, identity } from '../../../helpers/common';
 import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';
@@ -149,17 +150,17 @@ class EditLimitsForm extends Component {
         </Table>
 
         {submitFailed && (
-          <Alert variant="danger">
+          <Callout variant="danger">
             <FormattedMessage
               id="app.editLimitsForm.failed"
               defaultMessage="Cannot save the exercise limits. Please try again later."
             />
-          </Alert>
+          </Callout>
         )}
 
         {error && (
           <div className="em-padding-horizontal">
-            <Alert variant="danger">{error}</Alert>
+            <Callout variant="danger">{error}</Callout>
           </div>
         )}
       </FormBox>

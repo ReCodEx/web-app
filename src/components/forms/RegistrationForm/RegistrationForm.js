@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import { eventAggregator } from '../../../helpers/eventAggregator';
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { EmailField, TextField, PasswordField, PasswordStrength, SelectField, CheckboxField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users';
@@ -48,12 +48,12 @@ const RegistrationForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage
           id="app.registrationForm.failed"
           defaultMessage="Login failed. Please check your credentials."
         />
-      </Alert>
+      </Callout>
     )}
 
     <Field
@@ -122,7 +122,7 @@ const RegistrationForm = ({
       }
     />
 
-    {error && <Alert variant="danger">{error}</Alert>}
+    {error && <Callout variant="danger">{error}</Callout>}
   </FormBox>
 );
 

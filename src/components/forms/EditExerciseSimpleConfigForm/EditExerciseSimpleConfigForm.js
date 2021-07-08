@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
@@ -174,9 +173,9 @@ class EditExerciseSimpleConfigForm extends Component {
           }>
           <div>
             {submitFailed && (
-              <Alert variant="danger">
+              <Callout variant="danger">
                 <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-              </Alert>
+              </Callout>
             )}
 
             {exerciseTests

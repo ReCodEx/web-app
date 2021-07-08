@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row, Alert } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,7 @@ import EditAssignmentForm, {
 } from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import Icon, { ResultsIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -151,7 +152,7 @@ class EditAssignment extends Component {
               )}
 
               {!assignment.exerciseId && assignment.permissionHints.update && (
-                <Alert variant="warning">
+                <Callout variant="warning">
                   <h3 className="no-margin ">
                     <Icon icon="ghost" gapRight />
                     <FormattedMessage
@@ -165,7 +166,7 @@ class EditAssignment extends Component {
                       defaultMessage="The assignment may no longer be synchronized with the exercise and no more assignments of this exercise may be created."
                     />
                   </p>
-                </Alert>
+                </Callout>
               )}
 
               <Box

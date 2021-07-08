@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Alert, Container, Row, Col, Form } from 'react-bootstrap';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
@@ -272,9 +272,9 @@ class EditAssignmentForm extends Component {
     ) : (
       <>
         {submitFailed && (
-          <Alert variant="danger">
+          <Callout variant="danger">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Alert>
+          </Callout>
         )}
 
         {groupsAccessor && (
@@ -651,9 +651,9 @@ class EditAssignmentForm extends Component {
           </>
         )}
 
-        {error && <Alert variant="danger">{error}</Alert>}
+        {error && <Callout variant="danger">{error}</Callout>}
 
-        {warning && !error && <Alert variant="warning">{warning}</Alert>}
+        {warning && !error && <Callout variant="warning">{warning}</Callout>}
 
         <div className="text-center">
           <SubmitButton

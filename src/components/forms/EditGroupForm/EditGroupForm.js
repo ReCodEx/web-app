@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { Alert, Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
+
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
@@ -79,9 +81,9 @@ const EditGroupForm = ({
     isOpen={isOpen}
     unlimitedheight>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-      </Alert>
+      </Callout>
     )}
 
     <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="group" />
@@ -218,7 +220,7 @@ const EditGroupForm = ({
       </Row>
     </Container>
 
-    {error && dirty && <Alert variant="danger">{error}</Alert>}
+    {error && dirty && <Callout variant="danger">{error}</Callout>}
   </FormBox>
 );
 

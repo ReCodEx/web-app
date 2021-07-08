@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Alert, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import EditEnvironmentList from './EditEnvironmentList';
 import SubmitButton from '../SubmitButton';
 import Box from '../../widgets/Box';
+import Callout from '../../widgets/Callout';
 import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { RefreshIcon } from '../../icons';
@@ -109,12 +110,12 @@ class EditEnvironmentSimpleForm extends Component {
             <hr />
 
             {submitFailed && (
-              <Alert variant="danger">
+              <Callout variant="danger">
                 <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-              </Alert>
+              </Callout>
             )}
 
-            {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Callout variant="danger">{error}</Callout>}
 
             <div className="text-center">
               {dirty && (

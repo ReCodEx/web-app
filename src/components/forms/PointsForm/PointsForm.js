@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm } from 'redux-form';
-import { Alert, Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
+
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-
 import { NumericTextField } from '../Fields';
 
 const PointsForm = ({
@@ -43,9 +44,9 @@ const PointsForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="app.pointsForm.failed" defaultMessage="Cannot save the bonus points." />
-      </Alert>
+      </Callout>
     )}
 
     <Container fluid>
@@ -83,7 +84,7 @@ const PointsForm = ({
       </Row>
     </Container>
 
-    {warning && <Alert variant="warning">{warning}</Alert>}
+    {warning && <Callout variant="warning">{warning}</Callout>}
   </FormBox>
 );
 

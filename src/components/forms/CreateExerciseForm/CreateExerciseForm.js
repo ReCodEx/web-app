@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
 
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -69,10 +69,10 @@ class CreateExerciseForm extends Component {
           </table>
 
           {submitFailed && (
-            <Alert variant="danger">
+            <Callout variant="danger">
               <WarningIcon gapRight />
               <FormattedMessage id="generic.creationFailed" defaultMessage="Creation failed. Please try again later." />
-            </Alert>
+            </Callout>
           )}
         </>
       </FormBox>

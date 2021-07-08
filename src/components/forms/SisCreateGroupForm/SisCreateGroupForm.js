@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Alert, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -70,12 +70,12 @@ class SisCreateGroupForm extends Component {
           />
 
           {submitFailed && (
-            <Alert variant="danger">
+            <Callout variant="danger">
               <FormattedMessage
                 id="app.sisCreateGroupForm.failed"
                 defaultMessage="Creating group failed. Please try again later."
               />
-            </Alert>
+            </Callout>
           )}
 
           {warning && <Callout variant="warning">{warning}</Callout>}

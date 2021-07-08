@@ -202,9 +202,8 @@ class EditExerciseLimits extends Component {
             {Boolean(exercise.hardwareGroups && exercise.hardwareGroups.length > 1) && (
               <Row>
                 <Col sm={12}>
-                  <div className="alert alert-danger">
+                  <Callout variant="danger">
                     <h4>
-                      <i className="icon fa fa-ban" />{' '}
                       <FormattedMessage
                         id="app.editExerciseLimits.multiHwGroupsTitle"
                         defaultMessage="Multiple hardware groups detected"
@@ -216,7 +215,7 @@ class EditExerciseLimits extends Component {
                         defaultMessage="The exercise uses complex configuration of multiple hardware groups. Editting the limits using this form may simplify this configuration. Proceed at your own risk."
                       />
                     </p>
-                  </div>
+                  </Callout>
                 </Col>
               </Row>
             )}

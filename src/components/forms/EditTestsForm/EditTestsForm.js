@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Modal, Table, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Modal, Table, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import EditTestsTest from './EditTestsTest';
@@ -141,9 +141,9 @@ class EditTestsForm extends Component {
         }>
         <>
           {submitFailed && (
-            <Alert variant="danger">
+            <Callout variant="danger">
               <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-            </Alert>
+            </Callout>
           )}
 
           <Container fluid className="no-padding">

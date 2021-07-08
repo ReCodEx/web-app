@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Alert, Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { CheckboxField, NumericTextField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
@@ -64,9 +65,9 @@ const EditShadowAssignmentForm = ({
         </div>
       }>
       {submitFailed && (
-        <Alert variant="danger">
+        <Callout variant="danger">
           <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-        </Alert>
+        </Callout>
       )}
 
       <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="shadowAssignment" />
@@ -126,7 +127,7 @@ const EditShadowAssignmentForm = ({
         </Row>
       </Container>
 
-      {error && <Alert variant="danger">{error}</Alert>}
+      {error && <Callout variant="danger">{error}</Callout>}
     </FormBox>
   </div>
 );

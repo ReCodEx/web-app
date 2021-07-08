@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { SelectField, CheckboxField, NumericTextField } from '../Fields';
 
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
@@ -81,9 +81,9 @@ const EditExerciseForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-      </Alert>
+      </Callout>
     )}
 
     <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="exercise" />
@@ -204,7 +204,7 @@ const EditExerciseForm = ({
       }
     />
 
-    {error && dirty && <Alert variant="danger">{error}</Alert>}
+    {error && dirty && <Callout variant="danger">{error}</Callout>}
   </FormBox>
 );
 

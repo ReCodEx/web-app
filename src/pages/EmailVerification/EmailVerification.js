@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { Row, Col } from 'react-bootstrap';
 
-import { Row, Col, Alert } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
+import Callout from '../../components/widgets/Callout';
 import PageContent from '../../components/layout/PageContent';
 import ResendVerificationEmailContainer from '../../containers/ResendVerificationEmailContainer';
 
@@ -78,7 +79,7 @@ class EmailVerification extends Component {
           <Col sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }}>
             {canUseDOM && !token && !decodedToken && (
               <div>
-                <Alert variant="warning">
+                <Callout variant="warning">
                   <strong>
                     <FormattedMessage
                       id="app.emailVerification.tokenExpired"
@@ -89,7 +90,7 @@ class EmailVerification extends Component {
                     id="app.emailVerification.requestAnotherLink"
                     defaultMessage="Please request (another) link with a unique token."
                   />
-                </Alert>
+                </Callout>
                 {userId !== null && (
                   <p className="text-center">
                     <ResendVerificationEmailContainer size="sm" userId={userId} />

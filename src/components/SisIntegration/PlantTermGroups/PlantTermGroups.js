@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Table, Alert } from 'react-bootstrap';
+import { Modal, Table } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -148,12 +148,12 @@ const PlantTermGroups = ({
         />
 
         {submitFailed && (
-          <Alert variant="danger">
+          <Callout variant="danger">
             <FormattedMessage
               id="app.sisCreateGroupForm.failed"
               defaultMessage="Creating group failed. Please try again later."
             />
-          </Alert>
+          </Callout>
         )}
 
         {error && <Callout variant="warning">{error}</Callout>}

@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Alert } from 'react-bootstrap';
 
 import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables';
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
 import { compareVariablesForEquality } from '../../../helpers/exercise/environments';
 import { safeGet, safeSet } from '../../../helpers/common';
@@ -128,30 +128,30 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         {!selectedRuntimeId && (
-          <Alert variant="warning" className="em-margin-top">
+          <Callout variant="warning" className="em-margin-top">
             <FormattedMessage
               id="app.editEnvironmentConfig.noRuntimeSelected"
               defaultMessage="There must be a runtime environment selected before you can proceed with exercise configuration."
             />
-          </Alert>
+          </Callout>
         )}
 
         {submitFailed && (
-          <Alert variant="danger" className="em-margin-top">
+          <Callout variant="danger" className="em-margin-top">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Alert>
+          </Callout>
         )}
 
         {error && (
-          <Alert variant="danger" className="em-margin-top">
+          <Callout variant="danger" className="em-margin-top">
             {error}
-          </Alert>
+          </Callout>
         )}
 
         {warning && (
-          <Alert variant="warning" className="em-margin-top">
+          <Callout variant="warning" className="em-margin-top">
             {warning}
-          </Alert>
+          </Callout>
         )}
       </FormBox>
     );

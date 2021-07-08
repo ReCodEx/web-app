@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, change } from 'redux-form';
-import { Alert } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 import FormBox from '../../widgets/FormBox';
@@ -50,9 +49,9 @@ const EditUserProfileForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-      </Alert>
+      </Callout>
     )}
 
     <Field

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, LanguageSelectField, SelectField } from '../Fields';
@@ -64,9 +64,9 @@ const EditUserSettingsForm = ({
       </div>
     }>
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage id="app.editUserSettings.failed" defaultMessage="Cannot save profile settings." />
-      </Alert>
+      </Callout>
     )}
 
     <Field

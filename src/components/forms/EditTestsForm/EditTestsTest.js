@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Alert } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { formValues } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
 import EditTestsTestRow from './EditTestsTestRow';
+import Callout from '../../widgets/Callout';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
 import { safeGet } from '../../../helpers/common';
 import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
@@ -54,12 +55,12 @@ const EditTestsTest = ({ fields, calculator, testValues, usedTests, readOnly = f
           </tbody>
         </Table>
       ) : (
-        <Alert variant="warning">
+        <Callout variant="warning">
           <FormattedMessage
             id="app.editTestsTest.noTests"
             defaultMessage="There are no tests yet. It is highly recommended to set up the tests first since most of the remaining configurations depends on them."
           />
-        </Alert>
+        </Callout>
       )}
     </div>
   );

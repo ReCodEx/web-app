@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Alert } from 'react-bootstrap';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
 
 import { SelectField } from '../Fields';
@@ -61,12 +61,12 @@ const EditHardwareGroupForm = ({
     </p>
 
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage
           id="app.editHardwareGroupForm.failed"
           defaultMessage="Cannot change the hardware group of the exercise."
         />
-      </Alert>
+      </Callout>
     )}
 
     <Field

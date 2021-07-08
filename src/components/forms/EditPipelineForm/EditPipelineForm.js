@@ -4,10 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { reduxForm, Field, touch, formValueSelector } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import { Alert, Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import { TextField, MarkdownTextAreaField, PipelineField, PipelineVariablesField } from '../Fields';
 
+import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import { validatePipeline } from '../../../redux/modules/pipelines';
@@ -71,9 +72,9 @@ class EditPipelineForm extends Component {
           </div>
         }>
         {submitFailed && (
-          <Alert variant="danger">
+          <Callout variant="danger">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Alert>
+          </Callout>
         )}
 
         <Container fluid>

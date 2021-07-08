@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Form, FormGroup, Alert, Container, Row, Col } from 'react-bootstrap';
+import { Form, FormGroup, Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
 import Button from '../../widgets/TheButton';
+import Callout from '../../widgets/Callout';
 import Icon, { RefreshIcon, DeleteIcon } from '../../icons';
 
 export const getPointsFormInitialValues = (userPoints, awardeeId) => {
@@ -48,12 +49,12 @@ const EditShadowAssignmentPointsForm = ({
 }) => (
   <Form method="POST">
     {submitFailed && (
-      <Alert variant="danger">
+      <Callout variant="danger">
         <FormattedMessage
           id="app.editShadowAssignmentPointsForm.failed"
           defaultMessage="Cannot save the shadow assignment points."
         />
-      </Alert>
+      </Callout>
     )}
 
     <Container fluid>
@@ -110,7 +111,7 @@ const EditShadowAssignmentPointsForm = ({
 
     <hr />
 
-    {warning && <Alert variant="warning">{warning}</Alert>}
+    {warning && <Callout variant="warning">{warning}</Callout>}
 
     <div className="text-center">
       {dirty && (
