@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { CheckboxField } from '../Fields';
 import Icon, { InfoIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
@@ -69,24 +69,26 @@ const EditEnvironmentList = ({
       <Row>
         <Col>
           <div className="text-center">
-            {Boolean(selectAllRuntimesHandler) && (
-              <Button onClick={selectAllRuntimesHandler} variant="primary" size="sm">
-                <Icon icon={['far', 'check-square']} gapRight />
-                <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
-              </Button>
-            )}
-            {Boolean(clearAllRuntimesHandler) && (
-              <Button onClick={clearAllRuntimesHandler} variant="primary" size="sm">
-                <Icon icon={['far', 'square']} gapRight />
-                <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
-              </Button>
-            )}
-            {Boolean(invertRuntimeSelectionHandler) && (
-              <Button onClick={invertRuntimeSelectionHandler} variant="primary" size="sm">
-                <Icon icon="yin-yang" gapRight />
-                <FormattedMessage id="generic.invertSelection" defaultMessage="Invert Selection" />
-              </Button>
-            )}
+            <TheButtonGroup>
+              {Boolean(selectAllRuntimesHandler) && (
+                <Button onClick={selectAllRuntimesHandler} variant="primary" size="sm">
+                  <Icon icon={['far', 'check-square']} gapRight />
+                  <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
+                </Button>
+              )}
+              {Boolean(clearAllRuntimesHandler) && (
+                <Button onClick={clearAllRuntimesHandler} variant="primary" size="sm">
+                  <Icon icon={['far', 'square']} gapRight />
+                  <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
+                </Button>
+              )}
+              {Boolean(invertRuntimeSelectionHandler) && (
+                <Button onClick={invertRuntimeSelectionHandler} variant="primary" size="sm">
+                  <Icon icon="yin-yang" gapRight />
+                  <FormattedMessage id="generic.invertSelection" defaultMessage="Invert Selection" />
+                </Button>
+              )}
+            </TheButtonGroup>
           </div>
         </Col>
       </Row>

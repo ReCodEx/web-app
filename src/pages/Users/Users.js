@@ -9,7 +9,7 @@ import { defaultMemoize } from 'reselect';
 
 import App from '../../containers/App';
 import { SettingsIcon, TransferIcon, BanIcon, UserIcon } from '../../components/icons';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import Page from '../../components/layout/Page';
@@ -99,7 +99,7 @@ class Users extends Component {
     } = this.props;
     return (
       isSuperAdmin && (
-        <div>
+        <TheButtonGroup>
           {privateData && privateData.isAllowed && (
             <Button
               size="xs"
@@ -125,7 +125,7 @@ class Users extends Component {
           <AllowUserButtonContainer id={id} size="xs" />
 
           <DeleteUserButtonContainer id={id} size="xs" resourceless={true} onDeleted={reload} />
-        </div>
+        </TheButtonGroup>
       )
     );
   });

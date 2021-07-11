@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import GroupTree from '../../components/Groups/GroupTree';
 import withLinks from '../../helpers/withLinks';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
@@ -85,7 +85,7 @@ class Archive extends Component {
     } = this.props;
 
     return (
-      <span>
+      <TheButtonGroup>
         <Button
           variant="outline-secondary"
           size="xs"
@@ -113,7 +113,7 @@ class Archive extends Component {
           </Button>
         </Link>
         <ArchiveGroupButtonContainer id={groupId} size="xs" shortLabels onChange={() => loadAsync(instanceId)} />
-      </span>
+      </TheButtonGroup>
     );
   };
 

@@ -19,7 +19,7 @@ import ArchiveTermGroups from '../../components/SisIntegration/ArchiveTermGroups
 import EditTerm from '../../components/SisIntegration/EditTerm';
 import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 
 import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
@@ -261,7 +261,7 @@ class SisIntegration extends Component {
                                 <TermsList
                                   terms={sisTerms}
                                   createActions={(id, data) => (
-                                    <div>
+                                    <TheButtonGroup>
                                       {Date.now() <= data.advertiseUntil * 1000 && (
                                         <Button
                                           size="xs"
@@ -302,7 +302,7 @@ class SisIntegration extends Component {
                                           <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                                         </Button>
                                       </Confirm>
-                                    </div>
+                                    </TheButtonGroup>
                                   )}
                                 />
                               </Box>

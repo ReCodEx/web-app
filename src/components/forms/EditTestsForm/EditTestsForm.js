@@ -11,7 +11,7 @@ import ScoreConfigUniversalExpression from '../../scoreConfig/ScoreConfigUnivers
 import SubmitButton from '../SubmitButton';
 import StandaloneRadioField from '../Fields/StandaloneRadioField';
 import Box from '../../widgets/Box';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 import Icon, { AddIcon, CloseIcon, RefreshIcon, WarningIcon } from '../../icons';
@@ -159,66 +159,66 @@ class EditTestsForm extends Component {
 
                 {!readOnly && (
                   <div className="text-center">
-                    {formValues && formValues.tests.length < 99 && (
-                      <Button
-                        className="em-margin-right"
-                        onClick={() =>
-                          change('tests', [
-                            ...formValues.tests,
-                            {
-                              id: this.getUniqueId(),
-                              name: 'Test ' + (formValues.tests.length + 1).toString().padStart(2, '0'),
-                              weight: '100',
-                            },
-                          ])
+                    <TheButtonGroup>
+                      {formValues && formValues.tests.length < 99 && (
+                        <Button
+                          onClick={() =>
+                            change('tests', [
+                              ...formValues.tests,
+                              {
+                                id: this.getUniqueId(),
+                                name: 'Test ' + (formValues.tests.length + 1).toString().padStart(2, '0'),
+                                weight: '100',
+                              },
+                            ])
+                          }
+                          variant="primary">
+                          <AddIcon gapRight />
+                          <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
+                        </Button>
+                      )}
+
+                      {(dirty || (this.getAst() && this.getAst().canUndo())) && !submitting && (
+                        <Button type="reset" onClick={this.reset} variant="danger">
+                          <RefreshIcon gapRight />
+                          <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                        </Button>
+                      )}
+
+                      <SubmitButton
+                        id="editTests"
+                        invalid={invalid || (this.getAst() && !this.getAst().isValid())}
+                        submitting={submitting}
+                        hasSucceeded={submitSucceeded}
+                        dirty={dirty}
+                        hasFailed={submitFailed}
+                        handleSubmit={handleSubmit}
+                        messages={{
+                          submit: <FormattedMessage id="app.editTestsForm.submit" defaultMessage="Save Tests" />,
+                          submitting: (
+                            <FormattedMessage id="app.editTestsForm.submitting" defaultMessage="Saving Tests..." />
+                          ),
+                          success: <FormattedMessage id="app.editTestsForm.success" defaultMessage="Tests Saved." />,
+                        }}
+                      />
+
+                      <OptionalTooltipWrapper
+                        tooltip={
+                          <FormattedMessage
+                            id="app.editTestsForm.changeCalculatorDisabledTooltip"
+                            defaultMessage="The scoring algorithm may be changed only when there are no unsaved modifications in this form."
+                          />
                         }
-                        variant="primary">
-                        <AddIcon gapRight />
-                        <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
-                      </Button>
-                    )}
-
-                    {(dirty || (this.getAst() && this.getAst().canUndo())) && !submitting && (
-                      <Button type="reset" onClick={this.reset} variant="danger">
-                        <RefreshIcon gapRight />
-                        <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                      </Button>
-                    )}
-
-                    <SubmitButton
-                      id="editTests"
-                      invalid={invalid || (this.getAst() && !this.getAst().isValid())}
-                      submitting={submitting}
-                      hasSucceeded={submitSucceeded}
-                      dirty={dirty}
-                      hasFailed={submitFailed}
-                      handleSubmit={handleSubmit}
-                      messages={{
-                        submit: <FormattedMessage id="app.editTestsForm.submit" defaultMessage="Save Tests" />,
-                        submitting: (
-                          <FormattedMessage id="app.editTestsForm.submitting" defaultMessage="Saving Tests..." />
-                        ),
-                        success: <FormattedMessage id="app.editTestsForm.success" defaultMessage="Tests Saved." />,
-                      }}
-                    />
-
-                    <OptionalTooltipWrapper
-                      tooltip={
-                        <FormattedMessage
-                          id="app.editTestsForm.changeCalculatorDisabledTooltip"
-                          defaultMessage="The scoring algorithm may be changed only when there are no unsaved modifications in this form."
-                        />
-                      }
-                      hide={!dirty}>
-                      <Button
-                        onClick={this.openDialog}
-                        variant={dirty ? 'secondary' : 'primary'}
-                        className="em-margin-left"
-                        disabled={dirty}>
-                        <Icon icon="calculator" gapRight />
-                        <FormattedMessage id="app.editTestsForm.changeCalculator" defaultMessage="Scoring Algorithm" />
-                      </Button>
-                    </OptionalTooltipWrapper>
+                        hide={!dirty}>
+                        <Button onClick={this.openDialog} variant={dirty ? 'secondary' : 'primary'} disabled={dirty}>
+                          <Icon icon="calculator" gapRight />
+                          <FormattedMessage
+                            id="app.editTestsForm.changeCalculator"
+                            defaultMessage="Scoring Algorithm"
+                          />
+                        </Button>
+                      </OptionalTooltipWrapper>
+                    </TheButtonGroup>
 
                     <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
                       <Modal.Header closeButton>
@@ -280,38 +280,40 @@ class EditTestsForm extends Component {
                       </Modal.Body>
                       <Modal.Footer>
                         <div className="text-center">
-                          <SubmitButton
-                            id="editTests"
-                            disabled={formValues && formValues.calculator === calculator}
-                            submitting={submitting}
-                            hasSucceeded={submitSucceeded}
-                            handleSubmit={handleSubmit}
-                            onSubmit={this.closeDialog}
-                            messages={{
-                              submit: (
-                                <FormattedMessage
-                                  id="app.editTestsForm.changeCalculator.submit"
-                                  defaultMessage="Set Algorithm"
-                                />
-                              ),
-                              submitting: (
-                                <FormattedMessage
-                                  id="app.editTestsForm.changeCalculator.submitting"
-                                  defaultMessage="Setting Algorithm..."
-                                />
-                              ),
-                              success: (
-                                <FormattedMessage
-                                  id="app.editTestsForm.changeCalculator.success"
-                                  defaultMessage="Algorithm Set."
-                                />
-                              ),
-                            }}
-                          />
-                          <Button onClick={this.closeDialog} variant="outline-secondary">
-                            <CloseIcon gapRight />
-                            <FormattedMessage id="generic.close" defaultMessage="Close" />
-                          </Button>
+                          <TheButtonGroup>
+                            <SubmitButton
+                              id="editTests"
+                              disabled={formValues && formValues.calculator === calculator}
+                              submitting={submitting}
+                              hasSucceeded={submitSucceeded}
+                              handleSubmit={handleSubmit}
+                              onSubmit={this.closeDialog}
+                              messages={{
+                                submit: (
+                                  <FormattedMessage
+                                    id="app.editTestsForm.changeCalculator.submit"
+                                    defaultMessage="Set Algorithm"
+                                  />
+                                ),
+                                submitting: (
+                                  <FormattedMessage
+                                    id="app.editTestsForm.changeCalculator.submitting"
+                                    defaultMessage="Setting Algorithm..."
+                                  />
+                                ),
+                                success: (
+                                  <FormattedMessage
+                                    id="app.editTestsForm.changeCalculator.success"
+                                    defaultMessage="Algorithm Set."
+                                  />
+                                ),
+                              }}
+                            />
+                            <Button onClick={this.closeDialog} variant="outline-secondary">
+                              <CloseIcon gapRight />
+                              <FormattedMessage id="generic.close" defaultMessage="Close" />
+                            </Button>
+                          </TheButtonGroup>
                         </div>
                       </Modal.Footer>
                     </Modal>

@@ -7,7 +7,7 @@ import { Table, Accordion, Card, OverlayTrigger, Tooltip, Popover } from 'react-
 import { Link } from 'react-router-dom';
 
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import UsersNameContainer from '../UsersNameContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -328,91 +328,96 @@ class SisSupervisorGroupsContainer extends Component {
                                                                 ))}
                                                               </td>
                                                               <td className="text-right">
-                                                                {hasPermissions(group, 'update') && (
-                                                                  <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
-                                                                    <Button variant="warning" size="xs">
-                                                                      <EditIcon gapRight />
-                                                                      <FormattedMessage
-                                                                        id="app.editGroup.title"
-                                                                        defaultMessage="Edit Group"
-                                                                      />
-                                                                    </Button>
-                                                                  </Link>
-                                                                )}
+                                                                <TheButtonGroup>
+                                                                  {hasPermissions(group, 'update') && (
+                                                                    <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
+                                                                      <Button variant="warning" size="xs">
+                                                                        <EditIcon gapRight />
+                                                                        <FormattedMessage
+                                                                          id="app.editGroup.title"
+                                                                          defaultMessage="Edit Group"
+                                                                        />
+                                                                      </Button>
+                                                                    </Link>
+                                                                  )}
 
-                                                                <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                                                  <Button variant="primary" size="xs">
-                                                                    <GroupIcon gapRight />
-                                                                    <FormattedMessage
-                                                                      id="app.group.info"
-                                                                      defaultMessage="Group Info"
-                                                                    />
-                                                                  </Button>
-                                                                </Link>
-
-                                                                {hasPermissions(group, 'viewDetail') && (
-                                                                  <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                                                  <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                                                     <Button variant="primary" size="xs">
-                                                                      <AssignmentsIcon gapRight />
+                                                                      <GroupIcon gapRight />
                                                                       <FormattedMessage
-                                                                        id="app.group.assignments"
-                                                                        defaultMessage="Assignments"
+                                                                        id="app.group.info"
+                                                                        defaultMessage="Group Info"
                                                                       />
                                                                     </Button>
                                                                   </Link>
-                                                                )}
 
-                                                                <Confirm
-                                                                  id={`${course.course.code}:${group.id}`}
-                                                                  onConfirmed={() =>
-                                                                    this.unbindGroup(
-                                                                      course.course.code,
-                                                                      group.id,
-                                                                      currentUserId,
-                                                                      term.year,
-                                                                      term.term
-                                                                    )
-                                                                  }
-                                                                  question={
-                                                                    <FormattedMessage
-                                                                      id="app.group.unbind.confirmQuestion"
-                                                                      defaultMessage="Do you really wish to unbind the group? The group will linger on, but it will be detached from the SIS so the students will not see it."
-                                                                    />
-                                                                  }
-                                                                  disabled={this.isUnbindPending(
-                                                                    course.course.code,
-                                                                    group.id
-                                                                  )}>
-                                                                  <Button
-                                                                    variant="danger"
-                                                                    size="xs"
+                                                                  {hasPermissions(group, 'viewDetail') && (
+                                                                    <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                                                      <Button variant="primary" size="xs">
+                                                                        <AssignmentsIcon gapRight />
+                                                                        <FormattedMessage
+                                                                          id="app.group.assignments"
+                                                                          defaultMessage="Assignments"
+                                                                        />
+                                                                      </Button>
+                                                                    </Link>
+                                                                  )}
+
+                                                                  <Confirm
+                                                                    id={`${course.course.code}:${group.id}`}
+                                                                    onConfirmed={() =>
+                                                                      this.unbindGroup(
+                                                                        course.course.code,
+                                                                        group.id,
+                                                                        currentUserId,
+                                                                        term.year,
+                                                                        term.term
+                                                                      )
+                                                                    }
+                                                                    question={
+                                                                      <FormattedMessage
+                                                                        id="app.group.unbind.confirmQuestion"
+                                                                        defaultMessage="Do you really wish to unbind the group? The group will linger on, but it will be detached from the SIS so the students will not see it."
+                                                                      />
+                                                                    }
                                                                     disabled={this.isUnbindPending(
                                                                       course.course.code,
                                                                       group.id
                                                                     )}>
-                                                                    {this.isUnbindPending(
-                                                                      course.course.code,
-                                                                      group.id
-                                                                    ) ? (
-                                                                      <LoadingIcon gapRight />
-                                                                    ) : (
-                                                                      <Icon icon={['far', 'hand-scissors']} gapRight />
-                                                                    )}
-                                                                    <FormattedMessage
-                                                                      id="app.group.unbind"
-                                                                      defaultMessage="Unbind"
-                                                                    />
-                                                                  </Button>
-                                                                </Confirm>
-
-                                                                {hasPermissions(group, 'remove') &&
-                                                                  group.parentGroupId !== null &&
-                                                                  group.childGroups.length === 0 && (
-                                                                    <DeleteGroupButtonContainer
-                                                                      id={group.id}
+                                                                    <Button
+                                                                      variant="danger"
                                                                       size="xs"
-                                                                    />
-                                                                  )}
+                                                                      disabled={this.isUnbindPending(
+                                                                        course.course.code,
+                                                                        group.id
+                                                                      )}>
+                                                                      {this.isUnbindPending(
+                                                                        course.course.code,
+                                                                        group.id
+                                                                      ) ? (
+                                                                        <LoadingIcon gapRight />
+                                                                      ) : (
+                                                                        <Icon
+                                                                          icon={['far', 'hand-scissors']}
+                                                                          gapRight
+                                                                        />
+                                                                      )}
+                                                                      <FormattedMessage
+                                                                        id="app.group.unbind"
+                                                                        defaultMessage="Unbind"
+                                                                      />
+                                                                    </Button>
+                                                                  </Confirm>
+
+                                                                  {hasPermissions(group, 'remove') &&
+                                                                    group.parentGroupId !== null &&
+                                                                    group.childGroups.length === 0 && (
+                                                                      <DeleteGroupButtonContainer
+                                                                        id={group.id}
+                                                                        size="xs"
+                                                                      />
+                                                                    )}
+                                                                </TheButtonGroup>
                                                               </td>
                                                             </tr>
                                                           ) : null
@@ -435,28 +440,30 @@ class SisSupervisorGroupsContainer extends Component {
                                               <ResourceRenderer resource={sisPossibleParents.get(course.course.code)}>
                                                 {possibleParents => (
                                                   <div className="text-center">
-                                                    <Button
-                                                      variant="success"
-                                                      className="em-margin-right"
-                                                      onClick={() =>
-                                                        this.openCreateDialog(possibleParents, course, term)
-                                                      }>
-                                                      <AddIcon gapRight />
-                                                      <FormattedMessage
-                                                        id="app.sisSupervisor.createGroupButton"
-                                                        defaultMessage="Create New Group"
-                                                      />
-                                                    </Button>
+                                                    <TheButtonGroup>
+                                                      <Button
+                                                        variant="success"
+                                                        className="em-margin-right"
+                                                        onClick={() =>
+                                                          this.openCreateDialog(possibleParents, course, term)
+                                                        }>
+                                                        <AddIcon gapRight />
+                                                        <FormattedMessage
+                                                          id="app.sisSupervisor.createGroupButton"
+                                                          defaultMessage="Create New Group"
+                                                        />
+                                                      </Button>
 
-                                                    <Button
-                                                      variant="success"
-                                                      onClick={() => this.openBindDialog(course, term)}>
-                                                      <BindIcon gapRight />
-                                                      <FormattedMessage
-                                                        id="app.sisSupervisor.bindGroupButton"
-                                                        defaultMessage="Bind Existing Group"
-                                                      />
-                                                    </Button>
+                                                      <Button
+                                                        variant="success"
+                                                        onClick={() => this.openBindDialog(course, term)}>
+                                                        <BindIcon gapRight />
+                                                        <FormattedMessage
+                                                          id="app.sisSupervisor.bindGroupButton"
+                                                          defaultMessage="Bind Existing Group"
+                                                        />
+                                                      </Button>
+                                                    </TheButtonGroup>
                                                   </div>
                                                 )}
                                               </ResourceRenderer>

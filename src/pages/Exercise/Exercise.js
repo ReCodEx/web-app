@@ -6,7 +6,7 @@ import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
@@ -219,28 +219,30 @@ class Exercise extends Component {
                                 runtimeEnvironments={runtimes}
                                 renderButtons={(solutionId, permissionHints) => (
                                   <div>
-                                    <Link to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
-                                      <Button size="xs">
-                                        <SendIcon gapRight />
-                                        <FormattedMessage id="generic.detail" defaultMessage="Detail" />
-                                      </Button>
-                                    </Link>
-                                    {permissionHints && permissionHints.delete !== false && (
-                                      <Confirm
-                                        id={solutionId}
-                                        onConfirmed={() => deleteReferenceSolution(solutionId)}
-                                        question={
-                                          <FormattedMessage
-                                            id="app.exercise.referenceSolution.deleteConfirm"
-                                            defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
-                                          />
-                                        }>
-                                        <Button size="xs" variant="danger">
-                                          <DeleteIcon gapRight />
-                                          <FormattedMessage id="generic.delete" defaultMessage="Delete" />
+                                    <TheButtonGroup>
+                                      <Link to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
+                                        <Button size="xs">
+                                          <SendIcon gapRight />
+                                          <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                                         </Button>
-                                      </Confirm>
-                                    )}
+                                      </Link>
+                                      {permissionHints && permissionHints.delete !== false && (
+                                        <Confirm
+                                          id={solutionId}
+                                          onConfirmed={() => deleteReferenceSolution(solutionId)}
+                                          question={
+                                            <FormattedMessage
+                                              id="app.exercise.referenceSolution.deleteConfirm"
+                                              defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
+                                            />
+                                          }>
+                                          <Button size="xs" variant="danger">
+                                            <DeleteIcon gapRight />
+                                            <FormattedMessage id="generic.delete" defaultMessage="Delete" />
+                                          </Button>
+                                        </Confirm>
+                                      )}
+                                    </TheButtonGroup>
                                   </div>
                                 )}
                               />

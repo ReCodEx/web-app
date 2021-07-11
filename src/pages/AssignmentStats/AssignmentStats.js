@@ -24,7 +24,7 @@ import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/L
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import DateTime from '../../components/widgets/DateTime';
 import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -151,7 +151,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
     new SortableTableColumnDescriptor('actionButtons', '', {
       className: 'text-right valign-middle text-nowrap',
       cellRenderer: solution => (
-        <>
+        <TheButtonGroup>
           {solution.permissionHints && solution.permissionHints.viewDetail && (
             <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
               <Button size="xs" variant="secondary">
@@ -169,7 +169,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
           {solution.permissionHints && solution.permissionHints.delete && (
             <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} size="xs" />
           )}
-        </>
+        </TheButtonGroup>
       ),
     }),
   ];
@@ -327,26 +327,28 @@ class AssignmentStats extends Component {
             <Row>
               <Col md={12} lg={7}>
                 <p>
-                  <Link to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                    <Button variant="warning">
-                      <EditIcon gapRight />
-                      <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                  <TheButtonGroup>
+                    <Link to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                      <Button variant="warning">
+                        <EditIcon gapRight />
+                        <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                      </Button>
+                    </Link>
+                    <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
+                      <Button variant="primary">
+                        <DownloadIcon gapRight />
+                        <FormattedMessage
+                          id="app.assignment.downloadBestSolutionsArchive"
+                          defaultMessage="Download Bests"
+                        />
+                      </Button>
+                    </a>
+                    <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
+                    <Button variant="info" onClick={this.openDialog}>
+                      <ChatIcon gapRight />
+                      <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
                     </Button>
-                  </Link>
-                  <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
-                    <Button variant="primary">
-                      <DownloadIcon gapRight />
-                      <FormattedMessage
-                        id="app.assignment.downloadBestSolutionsArchive"
-                        defaultMessage="Download Bests"
-                      />
-                    </Button>
-                  </a>
-                  <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
-                  <Button variant="info" onClick={this.openDialog}>
-                    <ChatIcon gapRight />
-                    <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
-                  </Button>
+                  </TheButtonGroup>
                 </p>
 
                 <Modal show={this.state.assignmentDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">

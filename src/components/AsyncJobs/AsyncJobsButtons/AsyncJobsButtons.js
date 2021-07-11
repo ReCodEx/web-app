@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { ButtonGroup } from 'react-bootstrap';
 
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { LoadingIcon, RefreshIcon, WarningIcon } from '../../icons';
 
 const AsyncJobsButtons = ({ refresh, pingAction, pingStatus = null }) => {
   return (
     <div className="em-margin-bottom em-margin-right">
-      <ButtonGroup>
+      <TheButtonGroup>
         <Button onClick={refresh} variant="primary">
           <RefreshIcon gapRight />
           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
@@ -30,7 +29,7 @@ const AsyncJobsButtons = ({ refresh, pingAction, pingStatus = null }) => {
           )}
           <FormattedMessage id="app.asyncJobs.ping" defaultMessage="Ping Worker" />
         </Button>
-      </ButtonGroup>
+      </TheButtonGroup>
     </div>
   );
 };

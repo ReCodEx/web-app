@@ -11,7 +11,7 @@ import EditShadowAssignmentPointsForm, {
 } from '../../forms/EditShadowAssignmentPointsForm';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
 import Icon, { EditIcon, DeleteIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users';
@@ -108,32 +108,34 @@ class ShadowAssignmentPointsTable extends Component {
                       </td>
                     ) : (
                       <td className="shrink-col text-nowrap text-right">
-                        {permissionHints.updatePoints && (
-                          <Button variant="warning" onClick={() => this.openDialog(student.id, pointsId)} size="xs">
-                            <EditIcon gapRight />
-                            <FormattedMessage
-                              id="app.shadowAssignmentPointsTable.updatePointsButton"
-                              defaultMessage="Edit"
-                            />
-                          </Button>
-                        )}
-
-                        {permissionHints.removePoints && (
-                          <Confirm
-                            id={`remove-${pointsId}`}
-                            onConfirmed={() => this.removePoints(pointsId, student.id)}
-                            question={
+                        <TheButtonGroup>
+                          {permissionHints.updatePoints && (
+                            <Button variant="warning" onClick={() => this.openDialog(student.id, pointsId)} size="xs">
+                              <EditIcon gapRight />
                               <FormattedMessage
-                                id="app.shadowAssignmentPointsTable.removePointsButtonConfirmation"
-                                defaultMessage="Do you really wish to remove awarded points?"
+                                id="app.shadowAssignmentPointsTable.updatePointsButton"
+                                defaultMessage="Edit"
                               />
-                            }>
-                            <Button variant="danger" size="xs">
-                              <DeleteIcon gapRight />
-                              <FormattedMessage id="generic.remove" defaultMessage="Remove" />
                             </Button>
-                          </Confirm>
-                        )}
+                          )}
+
+                          {permissionHints.removePoints && (
+                            <Confirm
+                              id={`remove-${pointsId}`}
+                              onConfirmed={() => this.removePoints(pointsId, student.id)}
+                              question={
+                                <FormattedMessage
+                                  id="app.shadowAssignmentPointsTable.removePointsButtonConfirmation"
+                                  defaultMessage="Do you really wish to remove awarded points?"
+                                />
+                              }>
+                              <Button variant="danger" size="xs">
+                                <DeleteIcon gapRight />
+                                <FormattedMessage id="generic.remove" defaultMessage="Remove" />
+                              </Button>
+                            </Confirm>
+                          )}
+                        </TheButtonGroup>
                       </td>
                     )}
                   </tr>

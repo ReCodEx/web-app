@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { ButtonGroup } from 'react-bootstrap';
 
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { LoadingIcon, RefreshIcon, WarningIcon } from '../../icons';
 
 const BrokerButtons = ({
@@ -16,61 +15,59 @@ const BrokerButtons = ({
 }) => {
   const pending = freezeActionStatus === resourceStatus.PENDING || unfreezeActionStatus === resourceStatus.PENDING;
   return (
-    <div className="em-margin-bottom em-margin-right">
-      <ButtonGroup>
-        <Button onClick={refreshBrokerStats} variant="primary">
-          <RefreshIcon gapRight />
-          <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
-        </Button>
+    <TheButtonGroup className="em-margin-bottom em-margin-right">
+      <Button onClick={refreshBrokerStats} variant="primary">
+        <RefreshIcon gapRight />
+        <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
+      </Button>
 
-        <Button
-          variant="danger"
-          onClick={freezeBroker}
-          disabled={pending}
-          confirmId="freeze-broker"
-          confirm={
-            pending ? null : (
-              <FormattedMessage
-                id="app.broker.confirmFreeze"
-                defaultMessage="Are you sure you want to freeze broker? Broker will not longer accept evaluation requests!"
-              />
-            )
-          }>
-          {freezeActionStatus === resourceStatus.PENDING ? (
-            <LoadingIcon gapRight />
-          ) : freezeActionStatus === resourceStatus.FAILED ? (
-            <WarningIcon gapRight />
-          ) : (
-            <Icon icon={['far', 'hand-paper']} gapRight />
-          )}
-          <FormattedMessage id="app.broker.freeze" defaultMessage="Freeze" />
-        </Button>
+      <Button
+        variant="danger"
+        onClick={freezeBroker}
+        disabled={pending}
+        confirmId="freeze-broker"
+        confirm={
+          pending ? null : (
+            <FormattedMessage
+              id="app.broker.confirmFreeze"
+              defaultMessage="Are you sure you want to freeze broker? Broker will not longer accept evaluation requests!"
+            />
+          )
+        }>
+        {freezeActionStatus === resourceStatus.PENDING ? (
+          <LoadingIcon gapRight />
+        ) : freezeActionStatus === resourceStatus.FAILED ? (
+          <WarningIcon gapRight />
+        ) : (
+          <Icon icon={['far', 'hand-paper']} gapRight />
+        )}
+        <FormattedMessage id="app.broker.freeze" defaultMessage="Freeze" />
+      </Button>
 
-        <Button
-          variant="success"
-          onClick={unfreezeBroker}
-          disabled={pending}
-          confirmId="unfreeze-broker"
-          confirm={
-            pending ? null : (
-              <FormattedMessage
-                id="app.broker.confirmUnfreeze"
-                defaultMessage="Are you sure you want to unfreeze broker?"
-              />
-            )
-          }>
-          {unfreezeActionStatus === resourceStatus.PENDING ? (
-            <LoadingIcon gapRight />
-          ) : unfreezeActionStatus === resourceStatus.FAILED ? (
-            <WarningIcon gapRight />
-          ) : (
-            <Icon icon="sun" gapRight />
-          )}
+      <Button
+        variant="success"
+        onClick={unfreezeBroker}
+        disabled={pending}
+        confirmId="unfreeze-broker"
+        confirm={
+          pending ? null : (
+            <FormattedMessage
+              id="app.broker.confirmUnfreeze"
+              defaultMessage="Are you sure you want to unfreeze broker?"
+            />
+          )
+        }>
+        {unfreezeActionStatus === resourceStatus.PENDING ? (
+          <LoadingIcon gapRight />
+        ) : unfreezeActionStatus === resourceStatus.FAILED ? (
+          <WarningIcon gapRight />
+        ) : (
+          <Icon icon="sun" gapRight />
+        )}
 
-          <FormattedMessage id="app.broker.unfreeze" defaultMessage="Unfreeze" />
-        </Button>
-      </ButtonGroup>
-    </div>
+        <FormattedMessage id="app.broker.unfreeze" defaultMessage="Unfreeze" />
+      </Button>
+    </TheButtonGroup>
   );
 };
 

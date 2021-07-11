@@ -7,7 +7,7 @@ import moment from 'moment';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { RefreshIcon, DeleteIcon } from '../../icons';
 
@@ -114,36 +114,38 @@ const EditShadowAssignmentPointsForm = ({
     {warning && <Callout variant="warning">{warning}</Callout>}
 
     <div className="text-center">
-      {dirty && (
-        <Button type="reset" onClick={reset} variant={'danger'}>
-          <RefreshIcon gapRight />
-          <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-        </Button>
-      )}
-      <SubmitButton
-        id="shadow-assignment-points"
-        handleSubmit={handleSubmit}
-        submitting={submitting}
-        dirty={dirty}
-        hasSucceeded={submitSucceeded}
-        hasFailed={submitFailed}
-        invalid={invalid}
-        messages={{
-          submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-          submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-          success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-        }}
-      />
+      <TheButtonGroup>
+        {dirty && (
+          <Button type="reset" onClick={reset} variant={'danger'}>
+            <RefreshIcon gapRight />
+            <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+          </Button>
+        )}
+        <SubmitButton
+          id="shadow-assignment-points"
+          handleSubmit={handleSubmit}
+          submitting={submitting}
+          dirty={dirty}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
+          invalid={invalid}
+          messages={{
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+          }}
+        />
 
-      {onRemovePoints && (
-        <Button onClick={onRemovePoints} variant="danger" className="em-margin-left">
-          <DeleteIcon gapRight />
-          <FormattedMessage
-            id="app.editShadowAssignmentPointsForm.removePoints"
-            defaultMessage="Remove Points Record"
-          />
-        </Button>
-      )}
+        {onRemovePoints && (
+          <Button onClick={onRemovePoints} variant="danger" className="em-margin-left">
+            <DeleteIcon gapRight />
+            <FormattedMessage
+              id="app.editShadowAssignmentPointsForm.removePoints"
+              defaultMessage="Remove Points Record"
+            />
+          </Button>
+        )}
+      </TheButtonGroup>
     </div>
   </Form>
 );

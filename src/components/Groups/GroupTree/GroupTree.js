@@ -4,7 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { TreeView, TreeViewItem } from '../../widgets/TreeView';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import GroupsName from '../GroupsName';
@@ -34,7 +34,7 @@ class GroupTree extends Component {
     return buttonsCreator ? (
       buttonsCreator(groupId, isRoot, permissionHints)
     ) : (
-      <span>
+      <TheButtonGroup>
         {permissionHints && permissionHints.update && (
           <OverlayTrigger
             placement="bottom"
@@ -80,7 +80,7 @@ class GroupTree extends Component {
             </Link>
           </OverlayTrigger>
         )}
-      </span>
+      </TheButtonGroup>
     );
   };
 

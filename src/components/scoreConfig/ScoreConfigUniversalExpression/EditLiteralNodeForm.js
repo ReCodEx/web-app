@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Form, FormGroup, FormControl } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { CloseIcon, SendIcon } from '../../icons';
 import { AstNode, AstNodeValue } from '../../../helpers/exercise/scoreAst';
 
@@ -107,14 +107,16 @@ class EditLiteralNodeForm extends Component {
         <hr />
 
         <div className="text-center">
-          <Button onClick={this.save} variant="success" disabled={!this.dirty() || !this.valid()}>
-            <SendIcon gapRight />
-            <FormattedMessage id="generic.save" defaultMessage="Save" />
-          </Button>
-          <Button onClick={close} variant="outline-secondary">
-            <CloseIcon gapRight />
-            <FormattedMessage id="generic.close" defaultMessage="Close" />
-          </Button>
+          <TheButtonGroup>
+            <Button onClick={this.save} variant="success" disabled={!this.dirty() || !this.valid()}>
+              <SendIcon gapRight />
+              <FormattedMessage id="generic.save" defaultMessage="Save" />
+            </Button>
+            <Button onClick={close} variant="outline-secondary">
+              <CloseIcon gapRight />
+              <FormattedMessage id="generic.close" defaultMessage="Close" />
+            </Button>
+          </TheButtonGroup>
         </div>
       </>
     );

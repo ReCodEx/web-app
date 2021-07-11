@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import Icon, { GroupIcon, AssignmentsIcon } from '../../icons';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { identity } from '../../../helpers/common';
@@ -43,18 +43,20 @@ const AssignmentFormMultiassignSuccess = ({
               </td>
               <td>{getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}</td>
               <td className="text-right">
-                <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-                  <Button size="xs" variant="primary">
-                    <GroupIcon gapRight />
-                    <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-                  </Button>
-                </Link>
-                <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                  <Button size="xs" variant="primary">
-                    <AssignmentsIcon gapRight />
-                    <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
-                  </Button>
-                </Link>
+                <TheButtonGroup>
+                  <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
+                    <Button size="xs" variant="primary">
+                      <GroupIcon gapRight />
+                      <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                    </Button>
+                  </Link>
+                  <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                    <Button size="xs" variant="primary">
+                      <AssignmentsIcon gapRight />
+                      <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+                    </Button>
+                  </Link>
+                </TheButtonGroup>
               </td>
             </tr>
           ))}

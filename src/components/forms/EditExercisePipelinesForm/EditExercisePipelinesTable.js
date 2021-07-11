@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Table, FormControl, FormLabel } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import PipelinesListItem from '../../Pipelines/PipelinesListItem';
 import { AddIcon, DeleteIcon, TransferIcon } from '../../icons';
 import { EMPTY_FNC } from '../../../helpers/common';
@@ -14,7 +14,7 @@ class EditExercisePipelinesTable extends Component {
   createActions = idx => () => {
     const { fields } = this.props;
     return (
-      <>
+      <TheButtonGroup>
         {idx > 0 && (
           <Button
             onClick={() => fields.swap(idx - 1, idx)}
@@ -27,7 +27,7 @@ class EditExercisePipelinesTable extends Component {
         <Button onClick={() => fields.remove(idx)} variant="danger" size="xs">
           <DeleteIcon />
         </Button>
-      </>
+      </TheButtonGroup>
     );
   };
 

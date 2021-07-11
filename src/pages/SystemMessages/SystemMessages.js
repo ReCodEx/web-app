@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages';
@@ -121,7 +121,7 @@ class SystemMessages extends Component {
                   <MessagesList
                     systemMessages={systemMessages}
                     renderActions={message => (
-                      <>
+                      <TheButtonGroup>
                         <Button
                           size="xs"
                           variant="warning"
@@ -140,7 +140,7 @@ class SystemMessages extends Component {
                           size="xs"
                           locale={locale /* Hack to force re-rendering when locale changes */}
                         />
-                      </>
+                      </TheButtonGroup>
                     )}
                   />
                   <hr className="no-margin" />
