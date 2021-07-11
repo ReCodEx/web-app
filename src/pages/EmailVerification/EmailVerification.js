@@ -66,7 +66,7 @@ class EmailVerification extends Component {
         }
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — ReCodEx Code Examiner" />,
+            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />,
             link: HOME_URI,
             iconName: 'home',
           },

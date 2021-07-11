@@ -10,7 +10,7 @@ const AttachmentFilesTableHeaderRow = () => (
       <FormattedMessage id="app.attachmentFilesTable.url" defaultMessage="URL" />
     </th>
     <th>
-      <FormattedMessage id="app.uploadFiles.fileSize" defaultMessage="File Size" />
+      <FormattedMessage id="generic.size" defaultMessage="Size" />
     </th>
     <th>
       <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />
