@@ -76,7 +76,7 @@ class Registration extends Component {
         description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCodEx today" />}
         breadcrumbs={[
           {
-            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — ReCodEx Code Examiner" />,
+            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />,
             link: HOME_URI,
             iconName: 'home',
           },

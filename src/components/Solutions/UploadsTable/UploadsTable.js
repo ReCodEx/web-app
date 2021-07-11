@@ -42,7 +42,7 @@ const UploadsTable = ({
           <FormattedMessage id="app.uploadFiles.fileName" defaultMessage="File Name" />
         </th>
         <th className="text-nowrap">
-          <FormattedMessage id="app.uploadFiles.fileSize" defaultMessage="Size" />
+          <FormattedMessage id="generic.size" defaultMessage="Size" />
         </th>
         <th />
       </tr>
