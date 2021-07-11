@@ -58,13 +58,11 @@ module.exports = {
   plugins: [
     extractCss,
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: `'${process.env.NODE_ENV}'`,
-        REDUX_DEV_SERVER_PORT: `'${process.env.REDUX_DEV_SERVER_PORT}'`,
-        LOGGER_MIDDLEWARE_VERBOSE: `'${process.env.LOGGER_MIDDLEWARE_VERBOSE}'`,
-        LOGGER_MIDDLEWARE_EXCEPTIONS: `'${process.env.LOGGER_MIDDLEWARE_EXCEPTIONS}'`,
-        VERSION: JSON.stringify(gitRevisionPlugin.version()),
-      },
+      'process.env.LOGGER_MIDDLEWARE_VERBOSE': JSON.stringify(process.env.LOGGER_MIDDLEWARE_VERBOSE),
+      'process.env.LOGGER_MIDDLEWARE_EXCEPTIONS': JSON.stringify(process.env.LOGGER_MIDDLEWARE_EXCEPTIONS),
+      'process.env.VERSION': JSON.stringify(gitRevisionPlugin.version()),
+      'process.env.REDUX_DEV_SERVER_PORT': JSON.stringify(process.env.REDUX_DEV_SERVER_PORT),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',

@@ -32,7 +32,7 @@ const extractCss = new MiniCssExtractPlugin({
 module.exports = {
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
-    filename: 'bundle-[hash].js',
+    filename: 'bundle-[contenthash].js',
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/',
   },
@@ -76,12 +76,10 @@ module.exports = {
   plugins: [
     extractCss,
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: `'${process.env.NODE_ENV}'`,
-        LOGGER_MIDDLEWARE_VERBOSE: `'${process.env.LOGGER_MIDDLEWARE_VERBOSE}'`,
-        LOGGER_MIDDLEWARE_EXCEPTIONS: `'${process.env.LOGGER_MIDDLEWARE_EXCEPTIONS}'`,
-        VERSION: getVersion(),
-      },
+      'process.env.LOGGER_MIDDLEWARE_VERBOSE': JSON.stringify(process.env.LOGGER_MIDDLEWARE_VERBOSE),
+      'process.env.LOGGER_MIDDLEWARE_EXCEPTIONS': JSON.stringify(process.env.LOGGER_MIDDLEWARE_EXCEPTIONS),
+      'process.env.VERSION': getVersion(),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
   ],
 };
