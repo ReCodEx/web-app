@@ -12,7 +12,7 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -121,44 +121,52 @@ class Solution extends Component {
               {((solution.permissionHints && solution.permissionHints.setFlag) ||
                 (assignment.permissionHints && assignment.permissionHints.resubmitSubmissions)) && (
                 <p>
-                  {solution.permissionHints && solution.permissionHints.setFlag && (
-                    <>
-                      <AcceptSolutionContainer id={solution.id} locale={locale} />
-                      <ReviewSolutionContainer id={solution.id} locale={locale} />
-                    </>
-                  )}
+                  <TheButtonGroup>
+                    {solution.permissionHints && solution.permissionHints.setFlag && (
+                      <>
+                        <AcceptSolutionContainer id={solution.id} locale={locale} />
+                        <ReviewSolutionContainer id={solution.id} locale={locale} />
+                      </>
+                    )}
 
-                  {assignment.permissionHints &&
-                  assignment.permissionHints.resubmitSubmissions &&
-                  assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) ? (
-                    <>
-                      <ResubmitSolutionContainer
-                        id={solution.id}
-                        assignmentId={assignment.id}
-                        isDebug={false}
-                        userId={solution.solution.userId}
-                        locale={locale}
-                      />
-
-                      {solution.runtimeEnvironmentId ===
-                      ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
-                        <Button disabled={true}>
-                          <FormattedMessage
-                            id="app.solution.dotnetResubmitTemporaryDisabled"
-                            defaultMessage="Debug Resubmit Temporary Disabled"
+                    {assignment.permissionHints &&
+                      assignment.permissionHints.resubmitSubmissions &&
+                      assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
+                        <>
+                          <ResubmitSolutionContainer
+                            id={solution.id}
+                            assignmentId={assignment.id}
+                            isDebug={false}
+                            userId={solution.solution.userId}
+                            locale={locale}
                           />
-                        </Button>
-                      ) : (
-                        <ResubmitSolutionContainer
-                          id={solution.id}
-                          assignmentId={assignment.id}
-                          isDebug={true}
-                          userId={solution.solution.userId}
-                          locale={locale}
-                        />
+
+                          {solution.runtimeEnvironmentId ===
+                          ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
+                            <Button disabled={true}>
+                              <FormattedMessage
+                                id="app.solution.dotnetResubmitTemporaryDisabled"
+                                defaultMessage="Debug Resubmit Temporary Disabled"
+                              />
+                            </Button>
+                          ) : (
+                            <ResubmitSolutionContainer
+                              id={solution.id}
+                              assignmentId={assignment.id}
+                              isDebug={true}
+                              userId={solution.solution.userId}
+                              locale={locale}
+                            />
+                          )}
+                        </>
                       )}
-                    </>
-                  ) : (
+                  </TheButtonGroup>
+
+                  {!(
+                    assignment.permissionHints &&
+                    assignment.permissionHints.resubmitSubmissions &&
+                    assignmentHasRuntime(assignment, solution.runtimeEnvironmentId)
+                  ) && (
                     <span>
                       <WarningIcon largeGapLeft gapRight className="text-warning" />
                       <FormattedMessage

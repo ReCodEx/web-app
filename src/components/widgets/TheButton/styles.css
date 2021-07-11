@@ -1,0 +1,30 @@
+.theButtonGroup {
+  display: inline-block;
+  width: auto;
+  border-radius: .25rem;
+}
+
+.theButtonGroup *.btn {
+  box-shadow: none !important;
+}
+
+.theButtonGroup > .btn:nth-last-child(n+2) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.theButtonGroup > *:nth-last-child(n+2) .btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.theButtonGroup > .btn:nth-child(n+2) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.theButtonGroup > *:nth-child(n+2) .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+

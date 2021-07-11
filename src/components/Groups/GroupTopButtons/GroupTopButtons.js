@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 import { GroupIcon, EditIcon, AssignmentsIcon, MailIcon } from '../../icons';
 import { identity, hasPermissions } from '../../../helpers/common';
@@ -30,34 +30,36 @@ const GroupTopButtons = ({
 
   return (
     <p>
-      {canEdit && (
-        <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
-          <Button variant="warning">
-            <EditIcon gapRight />
-            <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
-          </Button>
-        </Link>
-      )}
+      <TheButtonGroup>
+        {canEdit && (
+          <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
+            <Button variant="warning">
+              <EditIcon gapRight />
+              <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
+            </Button>
+          </Link>
+        )}
 
-      <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-        <Button variant="primary">
-          <GroupIcon gapRight />
-          <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-        </Button>
-      </Link>
-
-      {canSeeDetail && (
-        <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+        <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
           <Button variant="primary">
-            <AssignmentsIcon gapRight />
-            <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+            <GroupIcon gapRight />
+            <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
           </Button>
         </Link>
-      )}
 
-      {canLeaveJoin && !group.organizational && (
-        <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} size={null} redirectAfterLeave />
-      )}
+        {canSeeDetail && (
+          <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+            <Button variant="primary">
+              <AssignmentsIcon gapRight />
+              <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+            </Button>
+          </Link>
+        )}
+
+        {canLeaveJoin && !group.organizational && (
+          <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} size={null} redirectAfterLeave />
+        )}
+      </TheButtonGroup>
 
       {studentEmails && (
         <a href={`mailto:?bcc=${studentEmails}`} className="float-right">

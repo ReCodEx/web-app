@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, FormattedRelativeTime } from 'react-intl';
-import { Table, ButtonGroup, ProgressBar, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table, ProgressBar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Icon, { CloseIcon, DeleteIcon, LoadingIcon, SuccessIcon, UploadIcon, WarningIcon } from '../../icons';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
 const estimateCompletionTime = defaultMemoize(({ totalSize, uploadedSize, startedAt, updatedAt }) => {
   if (!totalSize) {
@@ -131,7 +131,7 @@ const UploadsTable = ({
               <td className="text-monospace full-width">{failed.file.name}</td>
               <td className="text-nowrap valign-middle">{prettyPrintBytes(failed.file.size)}</td>
               <td className="text-center valign-middle text-nowrap">
-                <ButtonGroup>
+                <TheButtonGroup>
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
@@ -155,7 +155,7 @@ const UploadsTable = ({
                       <DeleteIcon smallGapLeft smallGapRight />
                     </Button>
                   </OverlayTrigger>
-                </ButtonGroup>
+                </TheButtonGroup>
               </td>
             </tr>
           ))}

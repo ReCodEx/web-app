@@ -7,6 +7,7 @@ import Confirm from '../../forms/Confirm';
 const TheButtonInternal = ({ className, onClick = null, variant, noShadow = false, ...props }) => (
   <Button
     className={classnames({
+      'text-nowrap': true,
       'elevation-2': !noShadow,
       [`bg-gradient-${variant}`]: !variant.startsWith('outline-'),
       [className]: className.length > 0,

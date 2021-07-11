@@ -16,7 +16,7 @@ import {
 } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import { LocalIcon, TransferIcon, BanIcon, RefreshIcon } from '../../components/icons';
 import { UserRoleIcon } from '../../components/helpers/usersRoles';
@@ -107,21 +107,23 @@ class EditUser extends Component {
           <div>
             {data && (
               <p>
-                {!data.privateData.isLocal && (
-                  <Button variant="warning" onClick={makeLocalLogin}>
-                    <LocalIcon gapRight />
-                    <FormattedMessage id="app.editUser.makeLocal" defaultMessage="Create local account" />
-                  </Button>
-                )}
+                <TheButtonGroup>
+                  {!data.privateData.isLocal && (
+                    <Button variant="warning" onClick={makeLocalLogin}>
+                      <LocalIcon gapRight />
+                      <FormattedMessage id="app.editUser.makeLocal" defaultMessage="Create local account" />
+                    </Button>
+                  )}
 
-                {isSuperAdmin && data.id !== loggedUserId && data.privateData.isAllowed && (
-                  <Button variant="primary" onClick={() => takeOver(data.id)}>
-                    <TransferIcon gapRight />
-                    <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
-                  </Button>
-                )}
+                  {isSuperAdmin && data.id !== loggedUserId && data.privateData.isAllowed && (
+                    <Button variant="primary" onClick={() => takeOver(data.id)}>
+                      <TransferIcon gapRight />
+                      <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
+                    </Button>
+                  )}
 
-                {isSuperAdmin && data.id !== loggedUserId && <AllowUserButtonContainer id={data.id} />}
+                  {isSuperAdmin && data.id !== loggedUserId && <AllowUserButtonContainer id={data.id} />}
+                </TheButtonGroup>
               </p>
             )}
 

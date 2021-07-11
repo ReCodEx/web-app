@@ -7,7 +7,7 @@ import { Field, reduxForm } from 'redux-form';
 import { SimpleCheckboxField } from '../../forms/Fields';
 import SubmitButton from '../../forms/SubmitButton';
 import InsetPanel from '../../widgets/InsetPanel';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { CloseIcon } from '../../icons';
 
@@ -79,34 +79,38 @@ class ArchiveTermGroups extends Component {
         </Modal.Body>
         <Modal.Footer>
           <div className="text-center">
-            {groups.length > 0 && (
-              <>
-                <Button variant="primary" onClick={this.checkAllGroups}>
-                  <Icon icon={['far', 'check-square']} gapRight />
-                  <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
-                </Button>
+            <TheButtonGroup>
+              {groups.length > 0 && (
+                <>
+                  <Button variant="primary" onClick={this.checkAllGroups}>
+                    <Icon icon={['far', 'check-square']} gapRight />
+                    <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
+                  </Button>
 
-                <SubmitButton
-                  id="archive-sis-term"
-                  handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
-                  submitting={submitting}
-                  dirty={dirty}
-                  hasSucceeded={submitSucceeded}
-                  hasFailed={submitFailed}
-                  disabled={invalid}
-                  messages={{
-                    submit: <FormattedMessage id="app.archiveSisTerm.archiveGroups" defaultMessage="Archive Groups" />,
-                    submitting: <FormattedMessage id="app.archiveSisTerm.archiving" defaultMessage="Archiving..." />,
-                    success: <FormattedMessage id="app.archiveSisTerm.archived" defaultMessage="Archived" />,
-                  }}
-                />
-              </>
-            )}
+                  <SubmitButton
+                    id="archive-sis-term"
+                    handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
+                    submitting={submitting}
+                    dirty={dirty}
+                    hasSucceeded={submitSucceeded}
+                    hasFailed={submitFailed}
+                    disabled={invalid}
+                    messages={{
+                      submit: (
+                        <FormattedMessage id="app.archiveSisTerm.archiveGroups" defaultMessage="Archive Groups" />
+                      ),
+                      submitting: <FormattedMessage id="app.archiveSisTerm.archiving" defaultMessage="Archiving..." />,
+                      success: <FormattedMessage id="app.archiveSisTerm.archived" defaultMessage="Archived" />,
+                    }}
+                  />
+                </>
+              )}
 
-            <Button variant="outline-secondary" onClick={onClose}>
-              <CloseIcon gapRight />
-              <FormattedMessage id="generic.close" defaultMessage="Close" />
-            </Button>
+              <Button variant="outline-secondary" onClick={onClose}>
+                <CloseIcon gapRight />
+                <FormattedMessage id="generic.close" defaultMessage="Close" />
+              </Button>
+            </TheButtonGroup>
           </div>
         </Modal.Footer>
       </Modal>

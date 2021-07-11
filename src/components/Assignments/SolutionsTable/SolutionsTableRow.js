@@ -14,7 +14,7 @@ import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer
 import { SearchIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
 import withLinks from '../../../helpers/withLinks';
 import SolutionTableRowIcons from './SolutionTableRowIcons';
@@ -121,36 +121,38 @@ const SolutionsTableRow = ({
             'text-nowrap': !splitOnTwoLines,
           })}
           rowSpan={splitOnTwoLines ? 2 : 1}>
-          {permissionHints && permissionHints.viewDetail && (
-            <OptionalTooltipWrapper
-              tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-              hide={!compact}
-              tooltipId={`detail-${id}`}>
-              <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
-                <Button size="xs" variant="secondary">
-                  <SearchIcon gapRight={!compact} />
-                  {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-                </Button>
-              </Link>
-            </OptionalTooltipWrapper>
-          )}
+          <TheButtonGroup>
+            {permissionHints && permissionHints.viewDetail && (
+              <OptionalTooltipWrapper
+                tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                hide={!compact}
+                tooltipId={`detail-${id}`}>
+                <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
+                  <Button size="xs" variant="secondary">
+                    <SearchIcon gapRight={!compact} />
+                    {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                  </Button>
+                </Link>
+              </OptionalTooltipWrapper>
+            )}
 
-          {permissionHints && permissionHints.setFlag && (
-            <>
-              <AcceptSolutionContainer
-                id={id}
-                locale={locale}
-                captionAsTooltip={compact}
-                shortLabel={!compact}
-                size="xs"
-              />
-              <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
-            </>
-          )}
+            {permissionHints && permissionHints.setFlag && (
+              <>
+                <AcceptSolutionContainer
+                  id={id}
+                  locale={locale}
+                  captionAsTooltip={compact}
+                  shortLabel={!compact}
+                  size="xs"
+                />
+                <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
+              </>
+            )}
 
-          {permissionHints && permissionHints.delete && (
-            <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
-          )}
+            {permissionHints && permissionHints.delete && (
+              <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
+            )}
+          </TheButtonGroup>
         </td>
       </tr>
 

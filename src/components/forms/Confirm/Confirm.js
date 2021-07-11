@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Popover, Overlay, ButtonGroup } from 'react-bootstrap';
+import { Popover, Overlay } from 'react-bootstrap';
 import { SuccessIcon, CloseIcon } from '../../icons';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
 const wrapperSpanStyle = { display: 'inline-block', position: 'relative' };
 
@@ -55,14 +55,14 @@ class Confirm extends Component {
         <Popover id={id}>
           <Popover.Title>{question}</Popover.Title>
           <Popover.Content className="text-center">
-            <ButtonGroup size="sm">
+            <TheButtonGroup size="sm">
               <Button onClick={this.confirm} variant="success">
                 {yes}
               </Button>
               <Button onClick={this.dismiss} variant="danger">
                 {no}
               </Button>
-            </ButtonGroup>
+            </TheButtonGroup>
           </Popover.Content>
         </Popover>
       </Overlay>

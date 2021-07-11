@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SendIcon } from '../../icons';
@@ -100,14 +100,16 @@ class EditFunctionNodeForm extends Component {
         <hr />
 
         <div className="text-center">
-          <Button onClick={this.save} variant="success" disabled={!this.dirty()}>
-            <SendIcon gapRight />
-            <FormattedMessage id="generic.save" defaultMessage="Save" />
-          </Button>
-          <Button onClick={close} variant="outline-secondary">
-            <CloseIcon gapRight />
-            <FormattedMessage id="generic.close" defaultMessage="Close" />
-          </Button>
+          <TheButtonGroup>
+            <Button onClick={this.save} variant="success" disabled={!this.dirty()}>
+              <SendIcon gapRight />
+              <FormattedMessage id="generic.save" defaultMessage="Save" />
+            </Button>
+            <Button onClick={close} variant="outline-secondary">
+              <CloseIcon gapRight />
+              <FormattedMessage id="generic.close" defaultMessage="Close" />
+            </Button>
+          </TheButtonGroup>
         </div>
       </>
     );

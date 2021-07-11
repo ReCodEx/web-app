@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
+import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { ChatIcon, EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisibleAssignmentIcon } from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
-import Button from '../../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
@@ -103,59 +103,61 @@ const AssignmentTableRow = ({
     <td className="text-center text-nowrap shrink-col">{allowSecondDeadline ? maxPointsBeforeSecondDeadline : ''}</td>
 
     <td className="text-right text-nowrap valign-middle">
-      {discussionOpen &&
-        (isAdmin ? (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`discussion-${id}`}>
-                <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
-              </Tooltip>
-            }>
+      <TheButtonGroup>
+        {discussionOpen &&
+          (isAdmin ? (
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`discussion-${id}`}>
+                  <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
+                </Tooltip>
+              }>
+              <Button size="xs" variant="info" onClick={discussionOpen}>
+                <ChatIcon smallGapLeft smallGapRight />
+              </Button>
+            </OverlayTrigger>
+          ) : (
             <Button size="xs" variant="info" onClick={discussionOpen}>
-              <ChatIcon smallGapLeft smallGapRight />
+              <ChatIcon gapRight />
+              <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
             </Button>
-          </OverlayTrigger>
-        ) : (
-          <Button size="xs" variant="info" onClick={discussionOpen}>
-            <ChatIcon gapRight />
-            <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
-          </Button>
-        ))}
+          ))}
 
-      {isAdmin && (
-        <>
-          <Link to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`results-${id}`}>
-                  <FormattedMessage id="generic.results" defaultMessage="Results" />
-                </Tooltip>
-              }>
-              <Button size="xs" variant="primary">
-                <ResultsIcon smallGapLeft smallGapRight />
-              </Button>
-            </OverlayTrigger>
-          </Link>
+        {isAdmin && (
+          <>
+            <Link to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`results-${id}`}>
+                    <FormattedMessage id="generic.results" defaultMessage="Results" />
+                  </Tooltip>
+                }>
+                <Button size="xs" variant="primary">
+                  <ResultsIcon smallGapLeft smallGapRight />
+                </Button>
+              </OverlayTrigger>
+            </Link>
 
-          <Link to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`edit-${id}`}>
-                  <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                </Tooltip>
-              }>
-              <Button size="xs" variant="warning">
-                <EditIcon smallGapLeft smallGapRight />
-              </Button>
-            </OverlayTrigger>
-          </Link>
+            <Link to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`edit-${id}`}>
+                    <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                  </Tooltip>
+                }>
+                <Button size="xs" variant="warning">
+                  <EditIcon smallGapLeft smallGapRight />
+                </Button>
+              </OverlayTrigger>
+            </Link>
 
-          <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />
-        </>
-      )}
+            <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />
+          </>
+        )}
+      </TheButtonGroup>
     </td>
   </tr>
 );

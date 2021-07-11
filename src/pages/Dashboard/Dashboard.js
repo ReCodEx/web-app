@@ -4,9 +4,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import Button from '../../components/widgets/TheButton';
 import { Link } from 'react-router-dom';
 
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
@@ -201,21 +201,23 @@ class Dashboard extends Component {
                                       isOpen
                                       footer={
                                         <p className="text-center">
-                                          <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                            <Button size="sm">
-                                              <GroupIcon gapRight />
-                                              <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-                                            </Button>
-                                          </Link>
-                                          <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                            <Button size="sm">
-                                              <AssignmentsIcon gapRight />
-                                              <FormattedMessage
-                                                id="app.group.assignments"
-                                                defaultMessage="Assignments"
-                                              />
-                                            </Button>
-                                          </Link>
+                                          <TheButtonGroup>
+                                            <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
+                                              <Button size="sm">
+                                                <GroupIcon gapRight />
+                                                <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                                              </Button>
+                                            </Link>
+                                            <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                              <Button size="sm">
+                                                <AssignmentsIcon gapRight />
+                                                <FormattedMessage
+                                                  id="app.group.assignments"
+                                                  defaultMessage="Assignments"
+                                                />
+                                              </Button>
+                                            </Link>
+                                          </TheButtonGroup>
                                         </p>
                                       }
                                       unlimitedHeight>
@@ -264,21 +266,23 @@ class Dashboard extends Component {
                                       isOpen
                                       footer={
                                         <p className="text-center">
-                                          <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                            <Button size="sm">
-                                              <InfoIcon gapRight />
-                                              <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-                                            </Button>
-                                          </Link>
-                                          <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                            <Button size="sm">
-                                              <GroupIcon gapRight />
-                                              <FormattedMessage
-                                                id="app.group.assignments"
-                                                defaultMessage="Assignments"
-                                              />
-                                            </Button>
-                                          </Link>
+                                          <TheButtonGroup>
+                                            <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
+                                              <Button size="sm">
+                                                <InfoIcon gapRight />
+                                                <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                                              </Button>
+                                            </Link>
+                                            <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                              <Button size="sm">
+                                                <GroupIcon gapRight />
+                                                <FormattedMessage
+                                                  id="app.group.assignments"
+                                                  defaultMessage="Assignments"
+                                                />
+                                              </Button>
+                                            </Link>
+                                          </TheButtonGroup>
                                         </p>
                                       }>
                                       <StudentsListContainer groupId={group.id} />

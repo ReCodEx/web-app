@@ -12,7 +12,7 @@ import PageContent from '../../components/layout/PageContent';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import Box from '../../components/widgets/Box';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import InsetPanel from '../../components/widgets/InsetPanel';
 import { MailIcon, LinkIcon, SignInIcon } from '../../components/icons';
 
@@ -107,26 +107,37 @@ class Registration extends Component {
                     }
                     footer={
                       <div className="text-center">
-                        <Link to={LOGIN_URI}>
-                          <Button variant="primary">
-                            <SignInIcon gapRight />
-                            <FormattedMessage id="app.registration.external.gotoSignin" defaultMessage="Sign-in Page" />
-                          </Button>
-                        </Link>
+                        <TheButtonGroup>
+                          <Link to={LOGIN_URI}>
+                            <Button variant="primary">
+                              <SignInIcon gapRight />
+                              <FormattedMessage
+                                id="app.registration.external.gotoSignin"
+                                defaultMessage="Sign-in Page"
+                              />
+                            </Button>
+                          </Link>
 
-                        <a href={EXTERNAL_AUTH_HELPDESK_URL} className="em-margin-left">
-                          {EXTERNAL_AUTH_HELPDESK_URL.startsWith('mailto:') ? (
-                            <Button variant="primary">
-                              <MailIcon gapRight />
-                              <FormattedMessage id="app.registration.external.mail" defaultMessage="Contact Support" />
-                            </Button>
-                          ) : (
-                            <Button variant="primary">
-                              <LinkIcon gapRight />
-                              <FormattedMessage id="app.registration.external.link" defaultMessage="Visit Help Page" />
-                            </Button>
-                          )}
-                        </a>
+                          <a href={EXTERNAL_AUTH_HELPDESK_URL} className="em-margin-left">
+                            {EXTERNAL_AUTH_HELPDESK_URL.startsWith('mailto:') ? (
+                              <Button variant="primary">
+                                <MailIcon gapRight />
+                                <FormattedMessage
+                                  id="app.registration.external.mail"
+                                  defaultMessage="Contact Support"
+                                />
+                              </Button>
+                            ) : (
+                              <Button variant="primary">
+                                <LinkIcon gapRight />
+                                <FormattedMessage
+                                  id="app.registration.external.link"
+                                  defaultMessage="Visit Help Page"
+                                />
+                              </Button>
+                            )}
+                          </a>
+                        </TheButtonGroup>
                       </div>
                     }>
                     <InsetPanel>

@@ -8,7 +8,7 @@ import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables';
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
 import { compareVariablesForEquality } from '../../../helpers/exercise/environments';
@@ -50,32 +50,34 @@ class EditEnvironmentConfigForm extends Component {
         type={submitSucceeded ? 'success' : undefined}
         footer={
           <div className="text-center">
-            {dirty && (
-              <Button type="reset" onClick={reset} variant="danger">
-                <RefreshIcon gapRight />
-                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-              </Button>
-            )}
+            <TheButtonGroup>
+              {dirty && (
+                <Button type="reset" onClick={reset} variant="danger">
+                  <RefreshIcon gapRight />
+                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                </Button>
+              )}
 
-            <SubmitButton
-              id="editRuntimeConfig"
-              invalid={invalid}
-              submitting={submitting}
-              hasSucceeded={submitSucceeded}
-              dirty={dirty}
-              hasFailed={submitFailed}
-              handleSubmit={handleSubmit}
-            />
+              <SubmitButton
+                id="editRuntimeConfig"
+                invalid={invalid}
+                submitting={submitting}
+                hasSucceeded={submitSucceeded}
+                dirty={dirty}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+              />
 
-            {Boolean(selectedRuntimeId) && !hasDefaultVariables && (
-              <Button onClick={this.setDefaultVariables} variant="primary">
-                <RefreshIcon gapRight />
-                <FormattedMessage
-                  id="app.editEnvironmentConfig.setDefaultVariables"
-                  defaultMessage="Set Default Variables"
-                />
-              </Button>
-            )}
+              {Boolean(selectedRuntimeId) && !hasDefaultVariables && (
+                <Button onClick={this.setDefaultVariables} variant="primary">
+                  <RefreshIcon gapRight />
+                  <FormattedMessage
+                    id="app.editEnvironmentConfig.setDefaultVariables"
+                    defaultMessage="Set Default Variables"
+                  />
+                </Button>
+              )}
+            </TheButtonGroup>
           </div>
         }>
         {possibleVariables && (

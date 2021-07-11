@@ -7,7 +7,7 @@ import { defaultMemoize } from 'reselect';
 
 import { SelectField, DatetimeField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
@@ -106,26 +106,28 @@ const EditSystemMessageForm = ({
     </Modal.Body>
     <Modal.Footer>
       <div className="text-center">
-        <SubmitButton
-          id="editSystemMessage"
-          invalid={invalid}
-          submitting={submitting}
-          dirty={dirty}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          handleSubmit={handleSubmit}
-          messages={{
-            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-            validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
-          }}
-        />
+        <TheButtonGroup>
+          <SubmitButton
+            id="editSystemMessage"
+            invalid={invalid}
+            submitting={submitting}
+            dirty={dirty}
+            hasSucceeded={submitSucceeded}
+            hasFailed={submitFailed}
+            handleSubmit={handleSubmit}
+            messages={{
+              submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+              success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+              validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
+            }}
+          />
 
-        <Button variant="outline-secondary" onClick={onClose}>
-          <CloseIcon gapRight />
-          <FormattedMessage id="generic.close" defaultMessage="Close" />
-        </Button>
+          <Button variant="outline-secondary" onClick={onClose}>
+            <CloseIcon gapRight />
+            <FormattedMessage id="generic.close" defaultMessage="Close" />
+          </Button>
+        </TheButtonGroup>
       </div>
     </Modal.Footer>
   </Modal>

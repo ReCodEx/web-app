@@ -9,7 +9,7 @@ import { withRouter } from 'react-router';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { WarningIcon } from '../../icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
@@ -69,17 +69,19 @@ class ForkExerciseForm extends Component {
                     </p>
                   </td>
                   <td className="text-right">
-                    <Button variant="primary" onClick={this.viewForkedExercise}>
-                      <FormattedMessage
-                        id="app.forkExerciseForm.showForkedExerciseButton"
-                        defaultMessage="Show the Forked Exercise"
-                      />
-                    </Button>
-                    {resetId && (
-                      <Button onClick={resetId}>
-                        <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
+                    <TheButtonGroup>
+                      <Button variant="primary" onClick={this.viewForkedExercise}>
+                        <FormattedMessage
+                          id="app.forkExerciseForm.showForkedExerciseButton"
+                          defaultMessage="Show the Forked Exercise"
+                        />
                       </Button>
-                    )}
+                      {resetId && (
+                        <Button onClick={resetId}>
+                          <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
+                        </Button>
+                      )}
+                    </TheButtonGroup>
                   </td>
                 </tr>
               </tbody>

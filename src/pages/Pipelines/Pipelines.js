@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import Button from '../../components/widgets/TheButton';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import App from '../../containers/App';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
@@ -119,7 +119,7 @@ class Pipelines extends Component {
                 })}
                 createActions={id =>
                   isAuthorOfPipeline(id) && (
-                    <div>
+                    <TheButtonGroup>
                       <Link to={PIPELINE_EDIT_URI_FACTORY(id)}>
                         <Button size="xs" variant="warning">
                           <EditIcon gapRight />
@@ -127,7 +127,7 @@ class Pipelines extends Component {
                         </Button>
                       </Link>
                       <DeletePipelineButtonContainer id={id} size="xs" resourceless={true} onDeleted={() => reload()} />
-                    </div>
+                    </TheButtonGroup>
                   )
                 }
               />
