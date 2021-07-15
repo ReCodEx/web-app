@@ -6,6 +6,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
+import { SaveIcon } from '../../icons';
 import { CheckboxField, NumericTextField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
@@ -56,6 +57,7 @@ const EditShadowAssignmentForm = ({
             hasFailed={submitFailed}
             handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
             asyncValidating={asyncValidating}
+            defaultIcon={<SaveIcon gapRight />}
             messages={{
               submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
               submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

@@ -5,6 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
+import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 import { SelectField, NumericTextField } from '../Fields';
 
@@ -43,6 +44,7 @@ const AddSisTermForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
+          defaultIcon={<SaveIcon gapRight />}
           messages={{
             submit: <FormattedMessage id="app.addSisTermForm.submit" defaultMessage="Save new term" />,
             submitting: <FormattedMessage id="app.addSisTermForm.processing" defaultMessage="Saving..." />,

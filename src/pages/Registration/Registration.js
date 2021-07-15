@@ -118,9 +118,9 @@ class Registration extends Component {
                             </Button>
                           </Link>
 
-                          <a href={EXTERNAL_AUTH_HELPDESK_URL} className="em-margin-left">
+                          <a href={EXTERNAL_AUTH_HELPDESK_URL}>
                             {EXTERNAL_AUTH_HELPDESK_URL.startsWith('mailto:') ? (
-                              <Button variant="primary">
+                              <Button variant="warning">
                                 <MailIcon gapRight />
                                 <FormattedMessage
                                   id="app.registration.external.mail"

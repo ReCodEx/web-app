@@ -58,6 +58,7 @@ export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
 export const ReviewedIcon = props => <Icon {...props} icon="stamp" />;
+export const SaveIcon = props => <Icon {...props} icon={['far', 'save']} />;
 export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const SendIcon = props => <Icon {...props} icon={['far', 'paper-plane']} />;
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
@@ -104,6 +105,7 @@ export const VisibleIcon = ({ visible = true, ...props }) =>
   );
 export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
 export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;
+export const ZipIcon = props => <Icon {...props} icon={['far', 'file-archive']} />;
 
 ExpandCollapseIcon.propTypes = {
   isOpen: PropTypes.bool,

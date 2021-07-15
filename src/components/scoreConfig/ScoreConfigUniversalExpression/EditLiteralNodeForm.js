@@ -5,7 +5,7 @@ import { Form, FormGroup, FormControl } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
-import { CloseIcon, SendIcon } from '../../icons';
+import { CloseIcon, SaveIcon } from '../../icons';
 import { AstNode, AstNodeValue } from '../../../helpers/exercise/scoreAst';
 
 import formStyles from '../../forms/Fields/commonStyles.less';
@@ -109,7 +109,7 @@ class EditLiteralNodeForm extends Component {
         <div className="text-center">
           <TheButtonGroup>
             <Button onClick={this.save} variant="success" disabled={!this.dirty() || !this.valid()}>
-              <SendIcon gapRight />
+              <SaveIcon gapRight />
               <FormattedMessage id="generic.save" defaultMessage="Save" />
             </Button>
             <Button onClick={close} variant="outline-secondary">

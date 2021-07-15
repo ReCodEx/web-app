@@ -6,6 +6,7 @@ import { defaultMemoize } from 'reselect';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
+import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, LanguageSelectField, SelectField } from '../Fields';
 import { isStudentRole, isSupervisorRole } from '../../helpers/usersRoles';
@@ -55,6 +56,7 @@ const EditUserSettingsForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           dirty={anyTouched}
+          defaultIcon={<SaveIcon gapRight />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

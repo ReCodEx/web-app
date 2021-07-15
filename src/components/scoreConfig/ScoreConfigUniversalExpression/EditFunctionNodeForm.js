@@ -8,7 +8,7 @@ import StandaloneRadioField from '../../forms/StandaloneRadioInput';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
-import { CloseIcon, SendIcon } from '../../icons';
+import { CloseIcon, SaveIcon } from '../../icons';
 import { AST_FUNCTION_CLASSES, KNOWN_AST_CLASSES, AstNode } from '../../../helpers/exercise/scoreAst';
 
 class EditFunctionNodeForm extends Component {
@@ -102,7 +102,7 @@ class EditFunctionNodeForm extends Component {
         <div className="text-center">
           <TheButtonGroup>
             <Button onClick={this.save} variant="success" disabled={!this.dirty()}>
-              <SendIcon gapRight />
+              <SaveIcon gapRight />
               <FormattedMessage id="generic.save" defaultMessage="Save" />
             </Button>
             <Button onClick={close} variant="outline-secondary">

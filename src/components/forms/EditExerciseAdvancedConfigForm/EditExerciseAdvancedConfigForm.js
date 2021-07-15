@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { RefreshIcon } from '../../icons';
+import { RefreshIcon, SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
 import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest';
@@ -68,6 +68,7 @@ class EditExerciseAdvancedConfigForm extends Component {
                 hasSucceeded={submitSucceeded}
                 hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
+                defaultIcon={<SaveIcon gapRight />}
                 messages={SUBMIT_BUTTON_MESSAGES}
               />
             </div>
