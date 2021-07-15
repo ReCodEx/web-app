@@ -10,7 +10,7 @@ import Page from '../../components/layout/Page';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Button from '../../components/widgets/TheButton';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 
 import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
@@ -121,25 +121,31 @@ class ReferenceSolution extends Component {
                         />
                       </Callout>
                     ) : (
-                      <p>
-                        <ResubmitReferenceSolutionContainer id={referenceSolution.id} isDebug={false} locale={locale} />
-
-                        {referenceSolution.runtimeEnvironmentId ===
-                        ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
-                          <Button disabled={true}>
-                            <FormattedMessage
-                              id="app.solution.dotnetResubmitTemporaryDisabled"
-                              defaultMessage="Debug Resubmit Temporary Disabled"
-                            />
-                          </Button>
-                        ) : (
+                      <div className="mb-3">
+                        <TheButtonGroup>
                           <ResubmitReferenceSolutionContainer
                             id={referenceSolution.id}
-                            isDebug={true}
+                            isDebug={false}
                             locale={locale}
                           />
-                        )}
-                      </p>
+
+                          {referenceSolution.runtimeEnvironmentId ===
+                          ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
+                            <Button disabled={true}>
+                              <FormattedMessage
+                                id="app.solution.dotnetResubmitTemporaryDisabled"
+                                defaultMessage="Debug Resubmit Temporary Disabled"
+                              />
+                            </Button>
+                          ) : (
+                            <ResubmitReferenceSolutionContainer
+                              id={referenceSolution.id}
+                              isDebug={true}
+                              locale={locale}
+                            />
+                          )}
+                        </TheButtonGroup>
+                      </div>
                     )}
                   </>
                 )}

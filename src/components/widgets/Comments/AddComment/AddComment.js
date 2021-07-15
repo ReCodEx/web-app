@@ -91,7 +91,8 @@ class AddComment extends Component {
                 type="submit"
                 variant={isPrivate ? 'success' : 'primary'}
                 disabled={text.length === 0 || !addComment}
-                onClick={this.addComment}>
+                onClick={this.addComment}
+                noShadow>
                 <FormattedMessage id="app.comments.addComment" defaultMessage="Send" />
               </Button>
             </InputGroup.Append>

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import TheButton from '../../widgets/TheButton';
+import Button from '../../widgets/TheButton';
 import SelectField from './SelectField';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
@@ -20,87 +20,96 @@ const ExpandingSelectField = ({
     {fields.length > 0 && (
       <>
         {Boolean(label) && <FormLabel>{label}</FormLabel>}
-        <table>
-          <tbody>
-            {fields.map((field, index) => (
-              <tr key={index}>
-                <td width="100%" className="valign-top">
-                  <Field
-                    name={field}
-                    component={SelectField}
-                    label={''}
-                    addEmptyOption
-                    disabled={readOnly}
-                    {...props}
-                  />
-                </td>
+        {fields.map((field, index) => (
+          <Field
+            key={index}
+            name={field}
+            component={SelectField}
+            label={''}
+            addEmptyOption
+            disabled={readOnly}
+            groupClassName="mb-1"
+            append={
+              readOnly ? null : (
+                <>
+                  {index < fields.length - 1 ? (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id={Date.now()}>
+                          <FormattedMessage
+                            id="app.expandingTextField.tooltip.moveDown"
+                            defaultMessage="Swap with item below."
+                          />
+                        </Tooltip>
+                      }>
+                      <Button onClick={() => fields.swap(index, index + 1)} size="xs" noShadow>
+                        <Icon icon="long-arrow-alt-down" fixedWidth />
+                      </Button>
+                    </OverlayTrigger>
+                  ) : (
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id={Date.now()}>
+                          <FormattedMessage
+                            id="app.expandingTextField.tooltip.add"
+                            defaultMessage="Append a new item."
+                          />
+                        </Tooltip>
+                      }>
+                      <Button onClick={() => fields.push('')} size="xs" noShadow>
+                        <AddIcon fixedWidth />
+                      </Button>
+                    </OverlayTrigger>
+                  )}
 
-                {!readOnly && (
-                  <>
-                    <td className="valign-top">
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={
-                          <Tooltip id={Date.now()}>
-                            <FormattedMessage
-                              id="app.expandingTextField.tooltip.addAbove"
-                              defaultMessage="Insert new item right above."
-                            />
-                          </Tooltip>
-                        }>
-                        <TheButton onClick={() => fields.insert(index, '')}>
-                          <AddIcon size="xs" />
-                          <Icon icon="level-up-alt" />
-                        </TheButton>
-                      </OverlayTrigger>
-                    </td>
-                    <td className="valign-top">
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={
-                          <Tooltip id={Date.now()}>
-                            <FormattedMessage
-                              id="app.expandingTextField.tooltip.remove"
-                              defaultMessage="Remove this item from the list."
-                            />
-                          </Tooltip>
-                        }>
-                        <TheButton onClick={() => fields.remove(index)}>
-                          <CloseIcon />
-                        </TheButton>
-                      </OverlayTrigger>
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id={Date.now()}>
+                        <FormattedMessage
+                          id="app.expandingTextField.tooltip.remove"
+                          defaultMessage="Remove this item from the list."
+                        />
+                      </Tooltip>
+                    }>
+                    <Button onClick={() => fields.remove(index)} size="xs" noShadow>
+                      <CloseIcon fixedWidth />
+                    </Button>
+                  </OverlayTrigger>
+                </>
+              )
+            }
+            {...props}
+          />
+        ))}
       </>
     )}
-    <div style={{ textAlign: 'center' }}>
-      {fields.length === 0 && (
-        <span style={{ paddingRight: '2em' }}>
+
+    {fields.length === 0 && (
+      <div className="text-muted small">
+        <span className="pr-3">
           {noItems || (
             <FormattedMessage id="app.expandingTextField.noItems" defaultMessage="There are no items yet..." />
           )}
         </span>
-      )}
 
-      {!readOnly && (
-        <OverlayTrigger
-          placement="right"
-          overlay={
-            <Tooltip id={Date.now()}>
-              <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
-            </Tooltip>
-          }>
-          <TheButton onClick={() => fields.push('')}>
-            <AddIcon />
-          </TheButton>
-        </OverlayTrigger>
-      )}
-    </div>
+        {!readOnly && (
+          <OverlayTrigger
+            placement="right"
+            overlay={
+              <Tooltip id={Date.now()}>
+                <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
+              </Tooltip>
+            }>
+            <Button onClick={() => fields.push('')} size="xs">
+              <AddIcon />
+            </Button>
+          </OverlayTrigger>
+        )}
+      </div>
+    )}
   </div>
 );
 

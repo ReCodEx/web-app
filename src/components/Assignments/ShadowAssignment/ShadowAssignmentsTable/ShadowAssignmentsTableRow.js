@@ -8,7 +8,7 @@ import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { EditIcon, MaybeBonusAssignmentIcon, VisibleIcon, WarningIcon } from '../../../icons';
 import DeleteShadowAssignmentButtonContainer from '../../../../containers/DeleteShadowAssignmentButtonContainer';
-import Button from '../../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
 import { safeGet } from '../../../../helpers/common';
 
@@ -65,16 +65,18 @@ const ShadowAssignmentsTableRow = ({
     {!isAdmin && <td>{getUserPointsNote(points, userId)}</td>}
 
     <td className="text-right shrink-col text-nowrap">
-      {permissionHints.update && (
-        <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
-          <Button size="xs" variant="warning">
-            <EditIcon gapRight />
-            <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-          </Button>
-        </Link>
-      )}
+      <TheButtonGroup>
+        {permissionHints.update && (
+          <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+            <Button size="xs" variant="warning">
+              <EditIcon gapRight />
+              <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+            </Button>
+          </Link>
+        )}
 
-      {permissionHints.remove && <DeleteShadowAssignmentButtonContainer id={id} size="xs" />}
+        {permissionHints.remove && <DeleteShadowAssignmentButtonContainer id={id} size="xs" />}
+      </TheButtonGroup>
     </td>
   </tr>
 );

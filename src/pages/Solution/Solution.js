@@ -120,7 +120,7 @@ class Solution extends Component {
               <HierarchyLineContainer groupId={assignment.groupId} />
               {((solution.permissionHints && solution.permissionHints.setFlag) ||
                 (assignment.permissionHints && assignment.permissionHints.resubmitSubmissions)) && (
-                <p>
+                <div className="mb-3">
                   <TheButtonGroup>
                     {solution.permissionHints && solution.permissionHints.setFlag && (
                       <>
@@ -175,7 +175,7 @@ class Solution extends Component {
                       />
                     </span>
                   )}
-                </p>
+                </div>
               )}
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
                 {runtimes => (

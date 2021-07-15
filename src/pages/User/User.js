@@ -120,7 +120,7 @@ class User extends Component {
               <UsersNameContainer userId={user.id} large noLink showEmail="full" showExternalIdentifiers />
             </p>
 
-            <p>
+            <div className="mb-3">
               <TheButtonGroup>
                 {(isAdmin || userId === loggedInUserId) && (
                   <Link to={EDIT_USER_URI_FACTORY(userId)}>
@@ -139,7 +139,7 @@ class User extends Component {
                   </Button>
                 )}
               </TheButtonGroup>
-            </p>
+            </div>
 
             {(commonGroups.length > 0 || isAdmin) && (
               <div>
@@ -169,7 +169,7 @@ class User extends Component {
                               isOpen
                               unlimitedHeight
                               footer={
-                                <p className="text-center">
+                                <div className="mb-3 text-center">
                                   <TheButtonGroup>
                                     <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                       <Button size="sm">
@@ -185,7 +185,7 @@ class User extends Component {
                                       </Button>
                                     </Link>
                                   </TheButtonGroup>
-                                </p>
+                                </div>
                               }>
                               <AssignmentsTable
                                 userId={user.id}

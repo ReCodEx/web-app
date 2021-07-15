@@ -20,43 +20,37 @@ const AddExerciseTagForm = ({
   updatePending = false,
 }) => (
   <Form>
-    <table>
-      <tbody>
-        <tr>
-          <td className="full-width valign-top">
-            <datalist id="knownExerciseTags">
-              {tags.map(tag => (
-                <option key={tag}>{tag}</option>
-              ))}
-            </datalist>
-            <Field
-              name="tag"
-              component={TextField}
-              ignoreDirty
-              groupClassName="full-width"
-              list="knownExerciseTags"
-              maxLength={16}
-            />
-          </td>
-          <td className="valign-top">
-            <SubmitButton
-              id="addExerciseTag"
-              disabled={invalid || updatePending}
-              submitting={submitting}
-              hasSucceeded={submitSucceeded}
-              hasFailed={submitFailed}
-              handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
-              defaultIcon={updatePending ? <LoadingIcon gapRight /> : <AddIcon gapRight />}
-              messages={{
-                submit: <FormattedMessage id="app.addExerciseTagForm.submit" defaultMessage="Add Tag" />,
-                submitting: <FormattedMessage id="app.addExerciseTagForm.submitting" defaultMessage="Adding..." />,
-                success: <FormattedMessage id="app.addExerciseTagForm.success" defaultMessage="Tag Added" />,
-              }}
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <datalist id="knownExerciseTags">
+      {tags.map(tag => (
+        <option key={tag}>{tag}</option>
+      ))}
+    </datalist>
+
+    <Field
+      name="tag"
+      component={TextField}
+      ignoreDirty
+      groupClassName="full-width"
+      list="knownExerciseTags"
+      maxLength={16}
+      append={
+        <SubmitButton
+          id="addExerciseTag"
+          disabled={invalid || updatePending}
+          submitting={submitting}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
+          handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
+          defaultIcon={updatePending ? <LoadingIcon gapRight /> : <AddIcon gapRight />}
+          noShadow
+          messages={{
+            submit: <FormattedMessage id="app.addExerciseTagForm.submit" defaultMessage="Add Tag" />,
+            submitting: <FormattedMessage id="app.addExerciseTagForm.submitting" defaultMessage="Adding..." />,
+            success: <FormattedMessage id="app.addExerciseTagForm.success" defaultMessage="Tag Added" />,
+          }}
+        />
+      }
+    />
   </Form>
 );
 

@@ -219,9 +219,9 @@ class Exercise extends Component {
                                 runtimeEnvironments={runtimes}
                                 renderButtons={(solutionId, permissionHints) => (
                                   <div>
-                                    <TheButtonGroup>
+                                    <TheButtonGroup vertical>
                                       <Link to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
-                                        <Button size="xs">
+                                        <Button size="xs" variant="secondary">
                                           <SendIcon gapRight />
                                           <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                                         </Button>

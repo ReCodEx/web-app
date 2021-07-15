@@ -23,7 +23,7 @@ import { TextField, SelectField, TagsSelectorField } from '../Fields';
 import { identity, safeGet } from '../../../helpers/common';
 import { ExpandCollapseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 
 const RTE_PREFIX = 'runtimeEnvironments.';
@@ -145,24 +145,24 @@ class FilterExercisesListForm extends Component {
                           <FormattedMessage id="app.filterExercisesListForm.author" defaultMessage="Author" />:
                         </span>
                       }
-                      associatedButton={
-                        <div className="text-nowrap">
-                          <Button onClick={() => change('author', null)}>
+                      append={
+                        <>
+                          <Button onClick={() => change('author', null)} noShadow>
                             <FormattedMessage id="app.filterExercisesListForm.allButton" defaultMessage="All" />
                           </Button>
                           {authors.find(author => author.id === loggedUserId) && (
-                            <Button onClick={() => change('author', loggedUserId)}>
+                            <Button onClick={() => change('author', loggedUserId)} noShadow>
                               <FormattedMessage id="app.filterExercisesListForm.mineButton" defaultMessage="Mine" />
                             </Button>
                           )}
-                        </div>
+                        </>
                       }
                     />
                   </Col>
 
                   {!this.isOpen() && (
                     <Col sm={12} md={2}>
-                      <div className="text-right" style={{ marginTop: '25px' }}>
+                      <div className="text-right" style={{ marginTop: '2rem' }}>
                         <SubmitButton
                           id="setFilters"
                           handleSubmit={handleSubmit}
@@ -244,37 +244,39 @@ class FilterExercisesListForm extends Component {
 
                 <Row>
                   <Col lg={12}>
-                    <p className="text-center">
-                      {this.isOpen() && (
-                        <SubmitButton
-                          id="setFilters"
-                          handleSubmit={handleSubmit}
-                          hasSucceeded={submitSucceeded}
-                          hasFailed={submitFailed}
-                          invalid={invalid}
-                          disabled={onSubmit === null}
-                          messages={{
-                            submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
-                            success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
-                          }}
-                        />
-                      )}
-
-                      <span className="small clickable em-padding-horizontal" onClick={this.toggleOpen}>
-                        <ExpandCollapseIcon isOpen={this.isOpen()} gapRight />
-                        {this.isOpen() ? (
-                          <FormattedMessage
-                            id="app.filterExercisesListForm.hideAdvancedFilters"
-                            defaultMessage="Hide advanced filters..."
+                    <div className="mb-3 text-center">
+                      {this.isOpen() ? (
+                        <TheButtonGroup>
+                          <SubmitButton
+                            id="setFilters"
+                            handleSubmit={handleSubmit}
+                            hasSucceeded={submitSucceeded}
+                            hasFailed={submitFailed}
+                            invalid={invalid}
+                            disabled={onSubmit === null}
+                            messages={{
+                              submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                              success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
+                            }}
                           />
-                        ) : (
+                          <Button onClick={this.toggleOpen} variant="secondary">
+                            <ExpandCollapseIcon isOpen={this.isOpen()} gapRight />
+                            <FormattedMessage
+                              id="app.filterExercisesListForm.hideAdvancedFilters"
+                              defaultMessage="Hide advanced filters..."
+                            />
+                          </Button>
+                        </TheButtonGroup>
+                      ) : (
+                        <span className="small clickable em-padding-horizontal" onClick={this.toggleOpen}>
+                          <ExpandCollapseIcon isOpen={this.isOpen()} gapRight />
                           <FormattedMessage
                             id="app.filterExercisesListForm.showAllFilters"
                             defaultMessage="Show all filters..."
                           />
-                        )}
-                      </span>
-                    </p>
+                        </span>
+                      )}
+                    </div>
                   </Col>
                 </Row>
               </Container>

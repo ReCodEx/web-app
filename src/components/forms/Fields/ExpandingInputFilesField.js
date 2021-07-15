@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import TheButton from '../../widgets/TheButton';
+import Button from '../../widgets/TheButton';
 import SelectField from './SelectField';
 import TextField from './TextField';
 import { AddIcon, CloseIcon } from '../../icons';
@@ -54,8 +54,10 @@ const ExpandingInputFilesField = ({
                   validate={validate}
                   onChange={handleSelectChange(fields.get(index), `${field}.name`, change)}
                   disabled={readOnly}
+                  groupClassName="mb-1"
                 />
               </td>
+
               <td className="valign-top">
                 <Field
                   name={`${field}.name`}
@@ -64,34 +66,36 @@ const ExpandingInputFilesField = ({
                   validate={validate}
                   maxLength={64}
                   disabled={readOnly}
+                  groupClassName="mb-1"
+                  append={
+                    readOnly ? null : (
+                      <OverlayTrigger
+                        placement="top"
+                        overlay={
+                          <Tooltip id={Date.now()}>
+                            <FormattedMessage
+                              id="app.expandingInputFilesField.tooltip.remove"
+                              defaultMessage="Remove this file."
+                            />
+                          </Tooltip>
+                        }>
+                        <Button onClick={() => fields.remove(index)} size="xs" noShadow>
+                          <CloseIcon fixedWidth />
+                        </Button>
+                      </OverlayTrigger>
+                    )
+                  }
                 />
               </td>
-              {!readOnly && (
-                <td className="valign-top">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id={Date.now()}>
-                        <FormattedMessage
-                          id="app.expandingInputFilesField.tooltip.remove"
-                          defaultMessage="Remove this file."
-                        />
-                      </Tooltip>
-                    }>
-                    <TheButton onClick={() => fields.remove(index)}>
-                      <CloseIcon />
-                    </TheButton>
-                  </OverlayTrigger>
-                </td>
-              )}
             </tr>
           ))}
         </tbody>
       </table>
     )}
-    <div className="text-center">
+
+    <div className={fields.length === 0 ? 'text-muted small' : 'text-center'}>
       {fields.length === 0 && (
-        <span style={{ paddingRight: '2em' }}>
+        <span className="pr-3">
           {noItems || (
             <FormattedMessage id="app.expandingInputFilesField.noFiles" defaultMessage="There are no files yet..." />
           )}
@@ -105,9 +109,9 @@ const ExpandingInputFilesField = ({
               <FormattedMessage id="app.expandingInputFilesField.tooltip.add" defaultMessage="Add another file." />
             </Tooltip>
           }>
-          <TheButton onClick={() => fields.push(EMPTY_VALUE)}>
+          <Button onClick={() => fields.push(EMPTY_VALUE)} size="xs">
             <AddIcon />
-          </TheButton>
+          </Button>
         </OverlayTrigger>
       )}
     </div>

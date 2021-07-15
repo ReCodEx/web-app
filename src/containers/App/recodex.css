@@ -294,6 +294,10 @@ table.table tbody:first-child tr:first-child th {
   transform: translate(-50%, -50%);
 }
 
+select.form-control.is-invalid, .was-validated select.form-control:invalid { /* selectbox needs to have the error icon moved */
+  background-position-x: right 1.2rem;
+}
+
 /*
  * ACE Editor Overrides
  */

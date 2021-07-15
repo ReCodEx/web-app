@@ -65,7 +65,7 @@ const DeleteButton = ({
   question = (
     <FormattedMessage
       id="app.deleteButton.confirm"
-      defaultMessage="Are you sure you want to delete the resource? This cannot be undone."
+      defaultMessage="Are you sure you want to delete this item? The operation cannot be undone."
     />
   ),
   ...props

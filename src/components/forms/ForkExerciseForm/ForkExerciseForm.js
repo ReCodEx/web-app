@@ -53,71 +53,70 @@ class ForkExerciseForm extends Component {
       intl: { locale, formatMessage },
     } = this.props;
 
-    switch (forkStatus) {
-      case forkStatuses.FULFILLED:
-        return (
-          <Callout variant="success">
-            <table className="full-width">
-              <tbody>
-                <tr>
-                  <td className="valign-middle">
-                    <p>
-                      <FormattedMessage
-                        id="app.forkExerciseForm.successMessage"
-                        defaultMessage="A copy of the exercise was successfully created in the designated group."
-                      />
-                    </p>
-                  </td>
-                  <td className="text-right">
-                    <TheButtonGroup>
-                      <Button variant="primary" onClick={this.viewForkedExercise}>
-                        <FormattedMessage
-                          id="app.forkExerciseForm.showForkedExerciseButton"
-                          defaultMessage="Show the Forked Exercise"
-                        />
-                      </Button>
-                      {resetId && (
-                        <Button onClick={resetId}>
-                          <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
-                        </Button>
-                      )}
-                    </TheButtonGroup>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </Callout>
-        );
-
-      default:
-        return (
-          <div>
-            {submitFailed && (
-              <Callout variant="danger">
-                <WarningIcon gapRight />
-                <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-              </Callout>
-            )}
-            <Form inline className="forkForm">
-              <ResourceRenderer resource={groups.toArray()} returnAsArray>
-                {groups => (
-                  <>
-                    <Field
-                      name={'groupId'}
-                      component={SelectField}
-                      label={''}
-                      ignoreDirty
-                      addEmptyOption={true}
-                      emptyOptionCaption={formatMessage(messages.emptyOption)}
-                      options={groups
-                        .filter(group => hasPermissions(group, 'createExercise'))
-                        .map(group => ({
-                          key: group.id,
-                          name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
-                        }))
-                        .sort((a, b) => a.name.localeCompare(b.name, locale))}
+    if (forkStatus === forkStatuses.FULFILLED) {
+      return (
+        <Callout variant="success">
+          <table className="full-width">
+            <tbody>
+              <tr>
+                <td className="valign-middle">
+                  <p>
+                    <FormattedMessage
+                      id="app.forkExerciseForm.successMessage"
+                      defaultMessage="A copy of the exercise was successfully created in the designated group."
                     />
+                  </p>
+                </td>
+                <td className="text-right">
+                  <TheButtonGroup>
+                    <Button variant="primary" onClick={this.viewForkedExercise}>
+                      <FormattedMessage
+                        id="app.forkExerciseForm.showForkedExerciseButton"
+                        defaultMessage="Show the Forked Exercise"
+                      />
+                    </Button>
+                    {resetId && (
+                      <Button onClick={resetId}>
+                        <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
+                      </Button>
+                    )}
+                  </TheButtonGroup>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Callout>
+      );
+    }
 
+    return (
+      <div>
+        {submitFailed && (
+          <Callout variant="danger">
+            <WarningIcon gapRight />
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
+          </Callout>
+        )}
+        <Form className="forkForm">
+          <ResourceRenderer resource={groups.toArray()} returnAsArray>
+            {groups => (
+              <>
+                <Field
+                  name={'groupId'}
+                  component={SelectField}
+                  label={''}
+                  ignoreDirty
+                  addEmptyOption={true}
+                  emptyOptionCaption={formatMessage(messages.emptyOption)}
+                  groupClassName="full-width"
+                  options={groups
+                    .filter(group => hasPermissions(group, 'createExercise'))
+                    .map(group => ({
+                      key: group.id,
+                      name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
+                    }))
+                    .sort((a, b) => a.name.localeCompare(b.name, locale))}
+                  append={
                     <SubmitButton
                       id="forkExercise"
                       disabled={invalid}
@@ -126,6 +125,7 @@ class ForkExerciseForm extends Component {
                       hasFailed={submitFailed}
                       handleSubmit={handleSubmit}
                       defaultIcon={<Icon icon="code-branch" gapRight />}
+                      noShadow
                       confirmQuestion={
                         <FormattedMessage
                           id="app.forkExerciseForm.confirmSubmit"
@@ -142,13 +142,14 @@ class ForkExerciseForm extends Component {
                         ),
                       }}
                     />
-                  </>
-                )}
-              </ResourceRenderer>
-            </Form>
-          </div>
-        );
-    }
+                  }
+                />
+              </>
+            )}
+          </ResourceRenderer>
+        </Form>
+      </div>
+    );
   }
 }
 

@@ -143,7 +143,7 @@ class Assignment extends Component {
                   </p>
                 )}
                 {(isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)) && ( // includes superadmin
-                  <p>
+                  <div className="mb-3">
                     <TheButtonGroup>
                       <Link to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                         <Button variant="warning">
@@ -158,7 +158,7 @@ class Assignment extends Component {
                         </Button>
                       </Link>
                     </TheButtonGroup>
-                  </p>
+                  </div>
                 )}
               </Col>
             </Row>

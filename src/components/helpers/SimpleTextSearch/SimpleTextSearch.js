@@ -35,7 +35,8 @@ class SimpleTextSearch extends Component {
                   e.preventDefault();
                   onSubmit(this.state.query);
                 }}
-                disabled={isLoading}>
+                disabled={isLoading}
+                noShadow>
                 {isLoading && <LoadingIcon />}
                 {hasFailed && <WarningIcon />}
                 {!isLoading && !hasFailed && <SearchIcon />}

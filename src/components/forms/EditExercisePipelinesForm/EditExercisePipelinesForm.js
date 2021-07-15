@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import FormBox from '../../widgets/FormBox';
 import EditExercisePipelinesTable from './EditExercisePipelinesTable';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { RefreshIcon } from '../../icons';
 import { createIndex } from '../../../helpers/common';
@@ -34,24 +34,24 @@ class EditExercisePipelinesForm extends Component {
         noPadding
         footer={
           <div className="text-center">
-            {dirty && (
-              <span>
-                <Button type="reset" onClick={reset} variant={'danger'}>
+            <TheButtonGroup>
+              {dirty && (
+                <Button type="reset" onClick={reset} variant="danger">
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
-              </span>
-            )}
+              )}
 
-            <SubmitButton
-              id="editExercisePipelines"
-              invalid={invalid}
-              submitting={submitting}
-              hasSucceeded={submitSucceeded}
-              dirty={dirty}
-              hasFailed={submitFailed}
-              handleSubmit={handleSubmit}
-            />
+              <SubmitButton
+                id="editExercisePipelines"
+                invalid={invalid}
+                submitting={submitting}
+                hasSucceeded={submitSucceeded}
+                dirty={dirty}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+              />
+            </TheButtonGroup>
           </div>
         }>
         <FieldArray name="pipelines" component={EditExercisePipelinesTable} pipelines={pipelines} readOnly={readOnly} />
