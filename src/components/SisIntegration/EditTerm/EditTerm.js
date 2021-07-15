@@ -7,7 +7,7 @@ import { Field, reduxForm } from 'redux-form';
 import DatetimeField from '../../forms/Fields/DatetimeField';
 import SubmitButton from '../../forms/SubmitButton';
 import Button from '../../widgets/TheButton';
-import { CloseIcon } from '../../icons';
+import { CloseIcon, SaveIcon } from '../../icons';
 
 const EditTerm = ({
   isOpen,
@@ -61,6 +61,7 @@ const EditTerm = ({
         hasSucceeded={submitSucceeded}
         hasFailed={submitFailed}
         invalid={invalid}
+        defaultIcon={<SaveIcon gapRight />}
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
           submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

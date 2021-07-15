@@ -10,7 +10,7 @@ import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { InfoIcon, RefreshIcon } from '../../icons';
+import { InfoIcon, SaveIcon, RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId, identity } from '../../../helpers/common';
 import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';
 
@@ -62,6 +62,7 @@ class EditLimitsForm extends Component {
                   hasSucceeded={submitSucceeded}
                   hasFailed={submitFailed}
                   handleSubmit={handleSubmit}
+                  defaultIcon={<SaveIcon gapRight />}
                   messages={{
                     submit: <FormattedMessage id="app.editLimitsForm.submit" defaultMessage="Save Limits" />,
                     submitting: (

@@ -11,7 +11,7 @@ import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import DeleteButton from '../../buttons/DeleteButton';
 import SubmitButton from '../../forms/SubmitButton';
-import { CloseIcon } from '../../../components/icons';
+import { CloseIcon, SaveIcon } from '../../../components/icons';
 
 import { fetchBoxTypes } from '../../../redux/modules/boxes';
 import { getBoxTypes } from '../../../redux/selectors/boxes';
@@ -116,6 +116,7 @@ class BoxForm extends Component {
               hasSuceeded={submitSucceeded}
               asyncValidating={asyncValidating}
               reset={reset}
+              defaultIcon={<SaveIcon gapRight />}
               messages={{
                 success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
                 submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,

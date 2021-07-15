@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
-import { CloseIcon, SendIcon } from '../../icons';
+import { CloseIcon, SaveIcon } from '../../icons';
 import { AstNode, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
 
 import formStyles from '../../forms/Fields/commonStyles.less';
@@ -107,7 +107,7 @@ class EditTestNodeForm extends Component {
         <div className="text-center">
           <TheButtonGroup>
             <Button onClick={this.save} variant="success" disabled={tests.length === 0 || !this.dirty()}>
-              <SendIcon gapRight />
+              <SaveIcon gapRight />
               <FormattedMessage id="generic.save" defaultMessage="Save" />
             </Button>
             <Button onClick={close} variant="outline-secondary">

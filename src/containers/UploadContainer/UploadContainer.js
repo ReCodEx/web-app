@@ -137,6 +137,7 @@ class UploadContainer extends Component {
 
   render = () => {
     const {
+      existingFiles,
       uploadedFiles,
       uploadingFiles,
       failedFiles,
@@ -149,6 +150,7 @@ class UploadContainer extends Component {
 
     return (
       <Upload
+        existingFiles={existingFiles}
         uploadingFiles={uploadingFiles}
         uploadedFiles={uploadedFiles}
         failedFiles={failedFiles}
@@ -166,6 +168,7 @@ class UploadContainer extends Component {
 
 UploadContainer.propTypes = {
   id: PropTypes.string.isRequired,
+  existingFiles: PropTypes.instanceOf(Set),
   onChange: PropTypes.func,
   init: PropTypes.func.isRequired,
   uploadedFiles: PropTypes.array,

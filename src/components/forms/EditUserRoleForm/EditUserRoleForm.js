@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import { knownRoles, roleLabels, roleDescriptions, UserRoleIcon } from '../../helpers/usersRoles';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
+import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 import StandaloneRadioField from '../Fields/StandaloneRadioField';
 
@@ -33,6 +34,7 @@ const EditUserRoleForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
+          defaultIcon={<SaveIcon gapRight />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

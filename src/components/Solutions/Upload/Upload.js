@@ -17,6 +17,7 @@ const dropZoneStyles = {
 };
 
 const Upload = ({
+  existingFiles,
   uploadingFiles,
   uploadedFiles,
   failedFiles,
@@ -33,7 +34,7 @@ const Upload = ({
       {({ getRootProps, getInputProps }) => (
         <div {...getRootProps()} style={dropZoneStyles}>
           <input {...getInputProps()} />
-          <div className="my-3">
+          <div className="mt-4">
             <Button variant="primary">
               <UploadIcon gapRight />
               <FormattedMessage id="app.uploadFiles.addFileButton" defaultMessage="Select File(s) for Upload" />
@@ -48,6 +49,7 @@ const Upload = ({
 
     {(uploadingFiles.length > 0 || uploadedFiles.length > 0 || failedFiles.length > 0 || removedFiles.length > 0) && (
       <UploadsTable
+        existingFiles={existingFiles}
         uploadingFiles={uploadingFiles}
         uploadedFiles={uploadedFiles}
         failedFiles={failedFiles}
@@ -63,6 +65,7 @@ const Upload = ({
 );
 
 Upload.propTypes = {
+  existingFiles: PropTypes.instanceOf(Set),
   uploadingFiles: PropTypes.array.isRequired,
   uploadedFiles: PropTypes.array.isRequired,
   failedFiles: PropTypes.array.isRequired,

@@ -51,7 +51,8 @@ FilesTableContainer.propTypes = {
   fetchFilesStatus: PropTypes.string,
   newFiles: PropTypes.array,
   canSubmit: PropTypes.bool,
-  addFiles: PropTypes.func,
+  resetUploads: PropTypes.func.isRequired,
+  addFiles: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -61,6 +62,7 @@ export default connect(
     canSubmit: allFilesUploadedSelector(state, uploadId),
   }),
   (dispatch, { uploadId, addFiles }) => ({
+    resetUploads: () => dispatch(reset(uploadId)),
     addFiles: files => addFiles(files).then(dispatch(reset(uploadId))),
   })
 )(FilesTableContainer);

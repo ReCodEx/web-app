@@ -8,7 +8,7 @@ import { defaultMemoize } from 'reselect';
 import FormBox from '../../widgets/FormBox';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { RefreshIcon } from '../../icons';
+import { RefreshIcon, SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
@@ -165,6 +165,7 @@ class EditExerciseSimpleConfigForm extends Component {
                     hasSucceeded={submitSucceeded}
                     hasFailed={submitFailed}
                     handleSubmit={handleSubmit}
+                    defaultIcon={<SaveIcon gapRight />}
                     messages={SUBMIT_BUTTON_MESSAGES}
                   />
                 </TheButtonGroup>

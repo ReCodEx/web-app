@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { defaultMemoize } from 'reselect';
 
 import { Table } from 'react-bootstrap';
-import Button from '../../widgets/TheButton';
-import Icon, { SendIcon, DownloadIcon } from '../../icons';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
+import Icon, { CloseIcon, SaveIcon, ZipIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
+
+const indexFileNames = defaultMemoize(files => new Set(files.map(file => file.name)));
 
 const FilesTable = ({
   description = null,
@@ -14,6 +17,7 @@ const FilesTable = ({
   usedFiles,
   canSubmit,
   newFiles,
+  resetUploads,
   addFiles,
   removeFile,
   downloadFile,
@@ -26,14 +30,20 @@ const FilesTable = ({
 }) => (
   <div>
     {description && <p>{description}</p>}
-    {!viewOnly && <UploadContainer id={uploadId} />}
+    {!viewOnly && <UploadContainer id={uploadId} existingFiles={indexFileNames(files)} />}
     {!viewOnly && newFiles && newFiles.length > 0 && (
-      <p className="text-center">
-        <Button variant="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
-          <SendIcon gapRight />
-          <FormattedMessage id="app.filesTable.saveUploadedFilesButton" defaultMessage="Save Uploaded Files" />
-        </Button>
-      </p>
+      <div className="text-center mb-3">
+        <TheButtonGroup>
+          <Button variant="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
+            <SaveIcon gapRight />
+            <FormattedMessage id="app.filesTable.saveUploadedFilesButton" defaultMessage="Save Uploaded Files" />
+          </Button>
+          <Button variant="danger" onClick={resetUploads}>
+            <CloseIcon gapRight />
+            <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
+          </Button>
+        </TheButtonGroup>
+      </div>
     )}
 
     <div>
@@ -69,8 +79,8 @@ const FilesTable = ({
       {downloadArchive && files.length > 1 && (
         <div className="text-center">
           <Button variant="primary" onClick={downloadArchive}>
-            <DownloadIcon gapRight />
-            <FormattedMessage id="app.filesTable.downloadArchive" defaultMessage="Download All" />
+            <ZipIcon gapRight />
+            <FormattedMessage id="app.filesTable.downloadArchive" defaultMessage="Download all as ZIP archive" />
           </Button>
         </div>
       )}
@@ -85,7 +95,8 @@ FilesTable.propTypes = {
   usedFiles: PropTypes.instanceOf(Set),
   canSubmit: PropTypes.bool,
   newFiles: PropTypes.array,
-  addFiles: PropTypes.func,
+  resetUploads: PropTypes.func.isRequired,
+  addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func,
   downloadFile: PropTypes.func,
   HeaderComponent: PropTypes.func.isRequired,

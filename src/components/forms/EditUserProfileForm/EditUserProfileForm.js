@@ -7,6 +7,7 @@ import isEmail from 'validator/lib/isEmail';
 import FormBox from '../../widgets/FormBox';
 import Callout from '../../widgets/Callout';
 import SubmitButton from '../SubmitButton';
+import { SaveIcon } from '../../icons';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
 
@@ -40,6 +41,7 @@ const EditUserProfileForm = ({
           hasFailed={submitFailed}
           asyncValidating={asyncValidating}
           tabIndex={9}
+          defaultIcon={<SaveIcon gapRight />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
