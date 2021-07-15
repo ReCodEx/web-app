@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Confirm from '../../forms/Confirm';
 import Box from '../../widgets/Box';
@@ -13,14 +13,18 @@ const deleteButton = (id, onDelete, confirmation = null) =>
   confirmation ? (
     <Confirm id={id} onConfirmed={() => onDelete(id)} question={confirmation}>
       <Button variant="danger" size="xs">
-        <DeleteIcon gapRight />
-        <FormattedMessage id="generic.delete" defaultMessage="Delete" />
+        <DeleteIcon fixedWidth />
+        <span className="d-none d-xl-inline pl-1">
+          <FormattedMessage id="generic.delete" defaultMessage="Delete" />
+        </span>
       </Button>
     </Confirm>
   ) : (
     <Button variant="danger" size="xs" onClick={() => onDelete(id)}>
-      <DeleteIcon gapRight />
-      <FormattedMessage id="generic.delete" defaultMessage="Delete" />
+      <DeleteIcon fixedWidth />
+      <span className="d-none d-xl-inline pl-1">
+        <FormattedMessage id="generic.delete" defaultMessage="Delete" />
+      </span>
     </Button>
   );
 
@@ -55,17 +59,21 @@ const SubmissionEvaluations = ({
         evaluations={evaluations}
         selectedRowId={activeSubmissionId}
         renderButtons={(id, idx) => (
-          <td className="text-right">
+          <td className="text-right text-nowrap">
             {id === activeSubmissionId ? (
               <Button variant="success" size="xs" disabled>
-                <Icon icon={['far', 'eye']} gapRight />
-                <FormattedMessage id="app.submissionEvaluation.visible" defaultMessage="Visible" />
+                <Icon icon={['far', 'eye']} fixedWidth />
+                <span className="d-none d-xl-inline pl-1">
+                  <FormattedMessage id="app.submissionEvaluation.visible" defaultMessage="Visible" />
+                </span>
               </Button>
             ) : (
-              <>
+              <TheButtonGroup>
                 <Button variant="primary" size="xs" onClick={() => onSelect(id)}>
-                  <Icon icon={['far', 'eye']} gapRight />
-                  <FormattedMessage id="app.submissionEvaluation.show" defaultMessage="Show" />
+                  <Icon icon={['far', 'eye']} fixedWidth />
+                  <span className="d-none d-xl-inline pl-1">
+                    <FormattedMessage id="app.submissionEvaluation.show" defaultMessage="Show" />
+                  </span>
                 </Button>
                 {onDelete &&
                   deleteButton(
@@ -78,7 +86,7 @@ const SubmissionEvaluations = ({
                       />
                     )
                   )}
-              </>
+              </TheButtonGroup>
             )}
           </td>
         )}

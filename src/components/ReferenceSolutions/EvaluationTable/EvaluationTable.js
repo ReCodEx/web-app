@@ -37,7 +37,9 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
         .map((e, idx) => (
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
             <td>
-              <AssignmentStatusIcon id={e.id} status={e.evaluationStatus} accepted={false} />
+              <span className="d-none d-xl-inline">
+                <AssignmentStatusIcon id={e.id} status={e.evaluationStatus} accepted={false} />
+              </span>
               {e.isDebug && (
                 <OverlayTrigger
                   placement="bottom"

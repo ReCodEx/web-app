@@ -84,6 +84,7 @@ class SubmitButton extends Component {
       defaultIcon = null,
       disabled = false,
       confirmQuestion = '',
+      noShadow = false,
       messages = {},
     } = this.props;
     const { saved: hasSucceeded } = this.state;
@@ -97,7 +98,8 @@ class SubmitButton extends Component {
         <Button
           type="submit"
           variant={hasSucceeded ? 'success' : hasFailed ? 'danger' : invalid ? 'warning' : 'success'}
-          disabled={invalid || asyncValidating !== false || submitting || disabled}>
+          disabled={invalid || asyncValidating !== false || submitting || disabled}
+          noShadow={noShadow}>
           {!noIcons && icons[buttonState]}
           {formattedMessages[buttonState]}
         </Button>
@@ -126,6 +128,7 @@ SubmitButton.propTypes = {
     validating: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   }),
   confirmQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  noShadow: PropTypes.bool,
 };
 
 export default SubmitButton;

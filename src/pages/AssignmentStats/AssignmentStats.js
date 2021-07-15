@@ -326,7 +326,7 @@ class AssignmentStats extends Component {
 
             <Row>
               <Col md={12} lg={7}>
-                <p>
+                <div className="mb-3">
                   <TheButtonGroup>
                     <Link to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
                       <Button variant="warning">
@@ -349,7 +349,7 @@ class AssignmentStats extends Component {
                       <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
                     </Button>
                   </TheButtonGroup>
-                </p>
+                </div>
 
                 <Modal show={this.state.assignmentDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
                   <CommentThreadContainer

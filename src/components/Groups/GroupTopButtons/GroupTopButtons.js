@@ -29,7 +29,7 @@ const GroupTopButtons = ({
   const canSeeDetail = hasPermissions(group, 'viewDetail');
 
   return (
-    <p>
+    <div className="mb-3">
       <TheButtonGroup>
         {canEdit && (
           <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
@@ -69,7 +69,7 @@ const GroupTopButtons = ({
           </Button>
         </a>
       )}
-    </p>
+    </div>
   );
 };
 

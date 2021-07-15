@@ -2,29 +2,45 @@
   display: inline-block;
   width: auto;
   border-radius: .25rem;
+  position: relative;
 }
 
 .theButtonGroup *.btn {
   box-shadow: none !important;
 }
 
-.theButtonGroup > .btn:nth-last-child(n+2) {
+/* horizontal layout */
+.theButtonGroup:not(.vertical) > .btn:nth-last-child(n+2),
+.theButtonGroup:not(.vertical) > *:nth-last-child(n+2) .btn
+{
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.theButtonGroup > *:nth-last-child(n+2) .btn {
-  border-top-right-radius: 0;
+.theButtonGroup:not(.vertical) > .btn:nth-child(n+2),
+.theButtonGroup:not(.vertical) > *:nth-child(n+2) .btn
+{
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* vertical layout */
+.theButtonGroup.vertical .btn {
+  display: block;
+  width: 100%;
+}
+
+.theButtonGroup.vertical > .btn:nth-last-child(n+2),
+.theButtonGroup.vertical > *:nth-last-child(n+2) .btn
+{
+  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.theButtonGroup > .btn:nth-child(n+2) {
+.theButtonGroup.vertical > .btn:nth-child(n+2),
+.theButtonGroup.vertical > *:nth-child(n+2) .btn
+{
   border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.theButtonGroup > *:nth-child(n+2) .btn {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
 }
 

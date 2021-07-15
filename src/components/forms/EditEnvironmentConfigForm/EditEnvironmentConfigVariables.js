@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import TheButton from '../../widgets/TheButton';
+import Button from '../../widgets/TheButton';
 import TextField from '../Fields/TextField';
 import SelectField from '../Fields/SelectField';
 import { AddIcon, CloseIcon } from '../../icons';
@@ -36,7 +36,7 @@ const VARIABLE_TYPES_OPTIONS = [
 const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
   <div>
     {fields.length > 0 && (
-      <table>
+      <table className="full-width">
         <thead>
           <tr>
             <th width="40%">
@@ -54,7 +54,6 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                 <FormattedMessage id="app.editEnvironmentConfig.variableType" defaultMessage="Type" />:
               </FormLabel>
             </th>
-            <th />
           </tr>
         </thead>
         <tbody>
@@ -67,6 +66,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                   label={''}
                   maxLength={64}
                   list="editEnvironmentConfigVariablesNames"
+                  groupClassName="mb-1"
                 />
               </td>
               <td className="valign-top">
@@ -76,35 +76,43 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                   label={''}
                   validate={validateWildcard}
                   maxLength={64}
+                  groupClassName="mb-1"
                 />
               </td>
               <td className="valign-top">
-                <Field name={`${field}.type`} component={SelectField} label={''} options={VARIABLE_TYPES_OPTIONS} />
-              </td>
-              <td className="valign-top">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip id={Date.now()}>
-                      <FormattedMessage
-                        id="app.editEnvironmentConfig.tooltip.remove"
-                        defaultMessage="Remove this variable."
-                      />
-                    </Tooltip>
-                  }>
-                  <TheButton onClick={() => fields.remove(index)}>
-                    <CloseIcon />
-                  </TheButton>
-                </OverlayTrigger>
+                <Field
+                  name={`${field}.type`}
+                  component={SelectField}
+                  label={''}
+                  options={VARIABLE_TYPES_OPTIONS}
+                  groupClassName="mb-1"
+                  append={
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={
+                        <Tooltip id={Date.now()}>
+                          <FormattedMessage
+                            id="app.editEnvironmentConfig.tooltip.remove"
+                            defaultMessage="Remove this variable."
+                          />
+                        </Tooltip>
+                      }>
+                      <Button onClick={() => fields.remove(index)} size="xs" noShadow>
+                        <CloseIcon fixedWidth />
+                      </Button>
+                    </OverlayTrigger>
+                  }
+                />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     )}
+
     <div className="text-center">
       {fields.length === 0 && (
-        <span style={{ paddingRight: '2em' }}>
+        <span className="pr-3">
           {noItems || (
             <FormattedMessage
               id="app.editEnvironmentConfig.noVariables"
@@ -120,9 +128,9 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
             <FormattedMessage id="app.editEnvironmentConfig.tooltip.add" defaultMessage="Add another variable." />
           </Tooltip>
         }>
-        <TheButton onClick={() => fields.push(EMPTY_VALUE)}>
+        <Button onClick={() => fields.push(EMPTY_VALUE)} size="sm">
           <AddIcon />
-        </TheButton>
+        </Button>
       </OverlayTrigger>
     </div>
   </div>

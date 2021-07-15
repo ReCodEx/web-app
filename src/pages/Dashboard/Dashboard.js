@@ -200,7 +200,7 @@ class Dashboard extends Component {
                                       noPadding
                                       isOpen
                                       footer={
-                                        <p className="text-center">
+                                        <div className="mb-3 text-center">
                                           <TheButtonGroup>
                                             <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                               <Button size="sm">
@@ -218,7 +218,7 @@ class Dashboard extends Component {
                                               </Button>
                                             </Link>
                                           </TheButtonGroup>
-                                        </p>
+                                        </div>
                                       }
                                       unlimitedHeight>
                                       <AssignmentsTable
@@ -265,7 +265,7 @@ class Dashboard extends Component {
                                       noPadding
                                       isOpen
                                       footer={
-                                        <p className="text-center">
+                                        <div className="mb-3 text-center">
                                           <TheButtonGroup>
                                             <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                               <Button size="sm">
@@ -283,7 +283,7 @@ class Dashboard extends Component {
                                               </Button>
                                             </Link>
                                           </TheButtonGroup>
-                                        </p>
+                                        </div>
                                       }>
                                       <StudentsListContainer groupId={group.id} />
                                     </Box>

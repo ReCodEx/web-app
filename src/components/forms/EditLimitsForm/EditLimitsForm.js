@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { EditLimitsField, CheckboxField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import FormBox from '../../widgets/FormBox';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId, identity } from '../../../helpers/common';
@@ -47,29 +47,31 @@ class EditLimitsForm extends Component {
         footer={
           !readOnly ? (
             <div className="text-center">
-              {dirty && (
-                <span>
-                  <Button type="reset" onClick={reset} variant={'danger'}>
+              <TheButtonGroup>
+                {dirty && (
+                  <Button type="reset" onClick={reset} variant="danger">
                     <RefreshIcon gapRight />
                     <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>
-                </span>
-              )}
-              <SubmitButton
-                id="editLimits"
-                invalid={invalid}
-                submitting={submitting}
-                dirty={dirty}
-                hasSucceeded={submitSucceeded}
-                hasFailed={submitFailed}
-                handleSubmit={handleSubmit}
-                messages={{
-                  submit: <FormattedMessage id="app.editLimitsForm.submit" defaultMessage="Save Limits" />,
-                  submitting: <FormattedMessage id="app.editLimitsForm.submitting" defaultMessage="Saving Limits..." />,
-                  success: <FormattedMessage id="app.editLimitsForm.success" defaultMessage="Limits Saved" />,
-                  validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
-                }}
-              />
+                )}
+                <SubmitButton
+                  id="editLimits"
+                  invalid={invalid}
+                  submitting={submitting}
+                  dirty={dirty}
+                  hasSucceeded={submitSucceeded}
+                  hasFailed={submitFailed}
+                  handleSubmit={handleSubmit}
+                  messages={{
+                    submit: <FormattedMessage id="app.editLimitsForm.submit" defaultMessage="Save Limits" />,
+                    submitting: (
+                      <FormattedMessage id="app.editLimitsForm.submitting" defaultMessage="Saving Limits..." />
+                    ),
+                    success: <FormattedMessage id="app.editLimitsForm.success" defaultMessage="Limits Saved" />,
+                    validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
+                  }}
+                />
+              </TheButtonGroup>
             </div>
           ) : null
         }>

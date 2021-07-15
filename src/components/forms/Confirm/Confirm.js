@@ -1,86 +1,76 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Popover, Overlay } from 'react-bootstrap';
 import { SuccessIcon, CloseIcon } from '../../icons';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
-const wrapperSpanStyle = { display: 'inline-block', position: 'relative' };
+const Confirm = ({
+  id,
+  children,
+  disabled,
+  question,
+  yes = (
+    <span>
+      <SuccessIcon gapRight />
+      <FormattedMessage id="app.confirm.yes" defaultMessage="Yes" />
+    </span>
+  ),
+  no = (
+    <span>
+      <CloseIcon gapRight />
+      <FormattedMessage id="app.confirm.no" defaultMessage="No" />
+    </span>
+  ),
+  placement = 'bottom',
+  onConfirmed,
+}) => {
+  const [showTarget, setShowTarget] = useState(null);
 
-class Confirm extends Component {
-  state = { showPopup: false };
-
-  askForConfirmation = ev => {
-    const { disabled = false, onConfirmed } = this.props;
-    ev.preventDefault();
-    if (disabled === false) {
-      this.setState({ showPopup: true, target: ev.target });
-    } else {
-      onConfirmed();
-    }
-  };
-
-  dismiss = ev => {
-    ev.preventDefault();
-    this.setState({ showPopup: false });
-  };
-
-  confirm = ev => {
-    this.dismiss(event);
-    this.props.onConfirmed();
-  };
-
-  renderQuestion() {
-    const {
-      question,
-      id,
-      yes = (
-        <span>
-          <SuccessIcon gapRight />
-          <FormattedMessage id="app.confirm.yes" defaultMessage="Yes" />
-        </span>
-      ),
-      no = (
-        <span>
-          <CloseIcon gapRight />
-          <FormattedMessage id="app.confirm.no" defaultMessage="No" />
-        </span>
-      ),
-      placement = 'bottom',
-    } = this.props;
-    const { target, showPopup } = this.state;
-
-    return (
-      <Overlay show={showPopup} target={target} placement={placement}>
+  return disabled ? (
+    React.cloneElement(children, {
+      onClick: ev => {
+        ev.preventDefault();
+        onConfirmed();
+      },
+    })
+  ) : (
+    <>
+      {React.cloneElement(children, {
+        onClick: ev => {
+          ev.preventDefault();
+          setShowTarget(ev.target);
+        },
+      })}
+      <Overlay target={showTarget} placement={placement} show={showTarget !== null}>
         <Popover id={id}>
           <Popover.Title>{question}</Popover.Title>
           <Popover.Content className="text-center">
-            <TheButtonGroup size="sm">
-              <Button onClick={this.confirm} variant="success">
+            <TheButtonGroup>
+              <Button
+                onClick={() => {
+                  setShowTarget(null);
+                  onConfirmed();
+                }}
+                size="sm"
+                variant="success">
                 {yes}
               </Button>
-              <Button onClick={this.dismiss} variant="danger">
+              <Button
+                onClick={() => {
+                  setShowTarget(null);
+                }}
+                size="sm"
+                variant="danger">
                 {no}
               </Button>
             </TheButtonGroup>
           </Popover.Content>
         </Popover>
       </Overlay>
-    );
-  }
-
-  render() {
-    const { children, className = '' } = this.props;
-    return (
-      <span style={wrapperSpanStyle} className={className}>
-        {React.cloneElement(children, {
-          onClick: this.askForConfirmation,
-        })}
-        {this.renderQuestion()}
-      </span>
-    );
-  }
-}
+    </>
+  );
+};
 
 const stringOrFormattedMessage = PropTypes.oneOfType([PropTypes.string, PropTypes.element]);
 

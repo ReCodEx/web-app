@@ -5,7 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
 
@@ -28,28 +28,28 @@ const EditHardwareGroupForm = ({
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        {dirty && !submitting && !submitSucceeded && (
-          <span>
+        <TheButtonGroup>
+          {dirty && !submitting && !submitSucceeded && (
             <Button type="reset" onClick={reset} variant="danger">
               <RefreshIcon gapRight />
               <FormattedMessage id="generic.reset" defaultMessage="Reset" />
             </Button>
-          </span>
-        )}
-        <SubmitButton
-          id="edit-hardware-groups"
-          handleSubmit={handleSubmit}
-          submitting={submitting}
-          dirty={dirty}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          invalid={invalid}
-          messages={{
-            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-          }}
-        />
+          )}
+          <SubmitButton
+            id="edit-hardware-groups"
+            handleSubmit={handleSubmit}
+            submitting={submitting}
+            dirty={dirty}
+            hasSucceeded={submitSucceeded}
+            hasFailed={submitFailed}
+            invalid={invalid}
+            messages={{
+              submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+              success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+            }}
+          />
+        </TheButtonGroup>
       </div>
     }>
     <p className="text-muted text-justify small">

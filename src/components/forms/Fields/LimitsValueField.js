@@ -6,14 +6,10 @@ import { TextField } from '../Fields';
 import styles from './EditLimitsField.less';
 
 const LimitsValueField = ({ input, prettyPrint, ...props }) => (
-  <tr>
-    <td width="100%" rowSpan="2">
-      <TextField {...props} input={input} />
-    </td>
-    <td className={styles.buttonsCol}>
-      <b>{prettyPrint(input.value)}</b>
-    </td>
-  </tr>
+  <span className={styles.limitsFieldWrapper}>
+    <TextField {...props} input={input} />
+    <b className={`${styles.limitsValue} text-muted`}>{prettyPrint(input.value)}</b>
+  </span>
 );
 
 LimitsValueField.propTypes = {

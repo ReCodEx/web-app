@@ -23,6 +23,17 @@ const EditExerciseSimpleConfigTestInputs = ({
       <FormattedMessage id="app.editExerciseSimpleConfigTests.inputTitle" defaultMessage="Input" />
     </h4>
 
+    {showStdinFile && (
+      <Field
+        name={`${test}.stdin-file`}
+        component={SelectField}
+        options={supplementaryFiles}
+        addEmptyOption={true}
+        disabled={readOnly}
+        label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Std. input:" />}
+      />
+    )}
+
     {showInputFiles && (
       <FieldArray
         name={`${test}.input-files`}
@@ -36,17 +47,6 @@ const EditExerciseSimpleConfigTestInputs = ({
         rightLabel={
           <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesRename" defaultMessage="Rename as:" />
         }
-      />
-    )}
-
-    {showStdinFile && (
-      <Field
-        name={`${test}.stdin-file`}
-        component={SelectField}
-        options={supplementaryFiles}
-        addEmptyOption={true}
-        disabled={readOnly}
-        label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Std. input:" />}
       />
     )}
 

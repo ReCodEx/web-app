@@ -6,7 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
@@ -149,25 +149,25 @@ class EditExerciseSimpleConfigForm extends Component {
           footer={
             !readOnly ? (
               <div className="text-center">
-                {dirty && (
-                  <span>
+                <TheButtonGroup>
+                  {dirty && (
                     <Button type="reset" onClick={reset} variant="danger">
                       <RefreshIcon gapRight />
                       <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                     </Button>
-                  </span>
-                )}
+                  )}
 
-                <SubmitButton
-                  id="editExerciseSimpleConfig"
-                  invalid={invalid}
-                  submitting={submitting}
-                  dirty={dirty}
-                  hasSucceeded={submitSucceeded}
-                  hasFailed={submitFailed}
-                  handleSubmit={handleSubmit}
-                  messages={SUBMIT_BUTTON_MESSAGES}
-                />
+                  <SubmitButton
+                    id="editExerciseSimpleConfig"
+                    invalid={invalid}
+                    submitting={submitting}
+                    dirty={dirty}
+                    hasSucceeded={submitSucceeded}
+                    hasFailed={submitFailed}
+                    handleSubmit={handleSubmit}
+                    messages={SUBMIT_BUTTON_MESSAGES}
+                  />
+                </TheButtonGroup>
               </div>
             ) : null
           }>

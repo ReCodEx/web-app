@@ -106,7 +106,7 @@ class EditUser extends Component {
         {data => (
           <div>
             {data && (
-              <p>
+              <div className="mb-3">
                 <TheButtonGroup>
                   {!data.privateData.isLocal && (
                     <Button variant="warning" onClick={makeLocalLogin}>
@@ -124,7 +124,7 @@ class EditUser extends Component {
 
                   {isSuperAdmin && data.id !== loggedUserId && <AllowUserButtonContainer id={data.id} />}
                 </TheButtonGroup>
-              </p>
+              </div>
             )}
 
             {data && data.id === loggedUserId && !data.isVerified && (
