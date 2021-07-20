@@ -15,7 +15,6 @@ const AssignmentFormGroupsList = ({ groups, groupsAccessor, isOpen, toggleOpenSt
         key={group.id}
         name={`groups.id${group.id}`}
         component={CheckboxField}
-        onOff
         label={getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
       />
     ))}

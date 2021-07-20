@@ -1,0 +1,33 @@
+.nice-checkbox-container {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.nice-checkbox-container > label {
+  margin: 0;
+  padding: 0.15rem 0.2rem;
+  line-height: 1;
+}
+
+.nice-checkbox-container input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.nice-checkbox-container .nice-checkbox-checkmark {
+  font-size: 125%;
+  position: relative;
+  top: 0em;
+}
+
+.nice-checkbox-container input:focus ~ .nice-checkbox-checkmark > * {
+  box-shadow: #fe9 0 0 0.4em 0.1em;
+}
+
+.nice-checkbox-container label.nice-checkbox-label {
+  vertical-align: top;
+  margin: 0.1rem 0.5rem;
+}

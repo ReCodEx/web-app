@@ -219,43 +219,42 @@ class ExerciseAssignments extends Component {
                   )}
 
                   {!exercise.isLocked && exercise.hasReferenceSolutions && (
-                    <Box
-                      title={formatMessage(messages.groupsBoxTitle)}
-                      description={
-                        <Callout variant="info">
-                          <FormattedMessage
-                            id="app.exercise.assignToGroup"
-                            defaultMessage="You can assign this exercise to multiple groups you supervise. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times and this form does not track existing assignments."
-                          />
-                        </Callout>
-                      }
-                      unlimitedHeight>
+                    <Box title={formatMessage(messages.groupsBoxTitle)} unlimitedHeight>
                       <ResourceRenderer resource={assignableGroups.toArray()} returnAsArray>
                         {assignableGroups => (
                           <ResourceRenderer resource={assignments.toList()} returnAsArray>
                             {assignments => (
-                              <EditAssignmentForm
-                                form="multiAssign"
-                                userId={userId}
-                                initialValues={this.multiAssignFormInitialValues(
-                                  assignableGroups,
-                                  exercise.runtimeEnvironments,
-                                  exercise.solutionFilesLimit,
-                                  exercise.solutionSizeLimit
-                                )}
-                                onSubmit={this.assignExercise}
-                                groups={assignableGroups}
-                                groupsAccessor={groupsAccessor}
-                                alreadyAssignedGroups={getAssignmentsGroups(assignments)}
-                                runtimeEnvironments={exercise.runtimeEnvironments}
-                                firstDeadline={firstDeadline}
-                                allowSecondDeadline={allowSecondDeadline}
-                                visibility={visibility}
-                                assignmentIsPublic={false}
-                                submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
-                                defaultIcon={<SaveIcon gapRight />}
-                                mergeJudgeLogs={exercise.mergeJudgeLogs}
-                              />
+                              <>
+                                <Callout variant="info">
+                                  <FormattedMessage
+                                    id="app.exercise.assignToGroup"
+                                    defaultMessage="Here, you can assign this exercise simultaneously to multiple groups under your supervision. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times in a group, so beware accidental repetitive assignment."
+                                  />
+                                </Callout>
+
+                                <EditAssignmentForm
+                                  form="multiAssign"
+                                  userId={userId}
+                                  initialValues={this.multiAssignFormInitialValues(
+                                    assignableGroups,
+                                    exercise.runtimeEnvironments,
+                                    exercise.solutionFilesLimit,
+                                    exercise.solutionSizeLimit
+                                  )}
+                                  onSubmit={this.assignExercise}
+                                  groups={assignableGroups}
+                                  groupsAccessor={groupsAccessor}
+                                  alreadyAssignedGroups={getAssignmentsGroups(assignments)}
+                                  runtimeEnvironments={exercise.runtimeEnvironments}
+                                  firstDeadline={firstDeadline}
+                                  allowSecondDeadline={allowSecondDeadline}
+                                  visibility={visibility}
+                                  assignmentIsPublic={false}
+                                  submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
+                                  defaultIcon={<SaveIcon gapRight />}
+                                  mergeJudgeLogs={exercise.mergeJudgeLogs}
+                                />
+                              </>
                             )}
                           </ResourceRenderer>
                         )}

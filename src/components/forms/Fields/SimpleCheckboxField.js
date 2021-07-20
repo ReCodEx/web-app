@@ -1,48 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, FormCheck, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import classnames from 'classnames';
-import Icon, { WarningIcon } from '../../icons';
+import { FormGroup } from 'react-bootstrap';
+import NiceCheckbox from '../NiceCheckbox';
 
 const SimpleCheckboxField = ({ input, meta: { dirty, error, warning }, ignoreDirty = false, ...props }) => {
   return (
     <FormGroup controlId={input.name} className="no-margin">
-      <FormCheck
-        type="checkbox"
+      <NiceCheckbox
         {...props}
         {...input}
+        error={error}
+        warning={warning}
         checked={Boolean(input.value)}
-        className="simple-checkbox-container">
-        <label
-          className={classnames({
-            'form-check-label': true,
-            'text-danger': error,
-            'text-warninig': !error && warning,
-          })}>
-          <input
-            type="checkbox"
-            name={input.name}
-            value={input.value}
-            checked={input.value}
-            onChange={input.onChange}
-          />
-          <span className="checkmark">
-            {input.value ? <Icon icon={['far', 'check-square']} /> : <Icon icon={['far', 'square']} />}
-
-            {Boolean(error || warning) && (
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={input.name} className="wider-tooltip">
-                    {error || warning}
-                  </Tooltip>
-                }>
-                <WarningIcon gapLeft className={error ? 'text-danger' : 'text-warning'} />
-              </OverlayTrigger>
-            )}
-          </span>
-        </label>
-      </FormCheck>
+        dirty={dirty && !ignoreDirty}
+      />
     </FormGroup>
   );
 };

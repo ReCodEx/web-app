@@ -596,7 +596,7 @@
   "app.evaluationTable.score": "Skóre:",
   "app.exercise.addReferenceSolutionDetailed": "Referenční řešení můžete vytvořit na hlavní stránce úlohy.",
   "app.exercise.assignButton": "Zadat",
-  "app.exercise.assignToGroup": "Úloha může být zadána do více skupin, kde jste vedoucím. Taktéž je možné zadat úlohu individuálně v jednotlivých skupinách. Vezměte prosím na vědomí, že úloha může být zadána v jedné skupině vícekrát a tento formulář neposkytuje přehled již existujících zadání.",
+  "app.exercise.assignToGroup": "Zde můžete zadat úlohu najednou do více skupin, ve kterých jste vedoucím. Úlohu je také možné zadat individuálně na stránkách jednotlivých skupin. Vezměte prosím na vědomí, že úloha může být zadána v jedné skupině vícekrát, a proto je vhodné se ujistit, že vícenásobné zadání není způsobeno omylem.",
   "app.exercise.assignments": "Zadání ve skupinách",
   "app.exercise.attach": "Připojit",
   "app.exercise.breadcrumbTitle": "Úloha {name}",
