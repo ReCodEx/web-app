@@ -1,4 +1,45 @@
+.react-toggle {
+  transform: scale(0.8);
+}
 
 .react-toggle--checked .react-toggle-track {
-  background-color: #00a65a;
+  background-color: var(--success);
+}
+
+.text-warning .react-toggle .react-toggle-thumb:not(:hover) {
+  border-color: var(--warning);
+}
+
+.text-warning .react-toggle--checked .react-toggle-track {
+  background-color: var(--warning);
+}
+
+.text-danger .react-toggle .react-toggle-thumb:not(:hover) {
+  border-color: var(--danger);
+}
+
+.text-danger .react-toggle--checked .react-toggle-track {
+  background-color: var(--danger);
+}
+
+.onOffCheckboxLabel {
+  cursor: pointer;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.onOffCheckboxLabelDisabled {
+  cursor: not-allowed;
+  color: gray;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.onOffCheckboxLabelText {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0.15rem 0.2rem;
+  line-height: 1.2;
+  white-space: normal;
+  width: calc(100% - 40px);
 }

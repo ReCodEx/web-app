@@ -28,7 +28,6 @@ const EditEnvironmentList = ({
             <Field
               name={`${namePrefix}${environment.id}`}
               component={CheckboxField}
-              onOff
               label={
                 <span>
                   {environment.longName}

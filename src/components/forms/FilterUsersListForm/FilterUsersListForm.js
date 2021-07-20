@@ -46,7 +46,7 @@ const FilterUsersListForm = ({
           <Col sm={9} md={10}>
             {knownRoles.map(role => (
               <span key={`${role}-${locale}`} className="text-nowrap float-left em-padding-right">
-                <Field name={`roles.${role}`} component={CheckboxField} onOff label={roleLabelsPlural[role]} />
+                <Field name={`roles.${role}`} component={CheckboxField} label={roleLabelsPlural[role]} />
               </span>
             ))}
           </Col>

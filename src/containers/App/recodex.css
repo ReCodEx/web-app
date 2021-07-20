@@ -393,36 +393,3 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
   background: #eee;
 }
 
-/******************************************************************************/
-
-/*
- * Standalone checkbox
- */
-
-.simple-checkbox-container {
-  margin: 0;
-  padding: 0;
-}
-
-.simple-checkbox-container label {
-  margin: 0;
-  padding: 0 0.2em;
-}
-
-.simple-checkbox-container input[type="checkbox"] {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.simple-checkbox-container .checkmark {
-  font-size: 125%;
-  position: relative;
-  top: -0.1em;
-}
-
-.simple-checkbox-container input:focus ~ .checkmark > * {
-  box-shadow: #fe9 0 0 0.4em 0.1em;
-}

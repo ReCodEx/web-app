@@ -1133,8 +1133,8 @@ export class Ast {
         .map(([key]) => key);
       if (duplicates.length > 0) throw new Error(`Duplicate IDs found: ${duplicates.join(', ')}`);
     } catch (e) {
-      console.error('Consistency check failed.');
-      console.error(e);
+      console.error('Consistency check failed.'); // eslint-disable-line no-console
+      console.error(e); // eslint-disable-line no-console
     }
   }
 
