@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { Form, FormGroup, FormCheck } from 'react-bootstrap';
 import classnames from 'classnames';
 
-const RadioField = ({ input, meta: { error, warning }, options }) => (
+const RadioField = ({ input, meta: { error, warning, dirty }, ignoreDirty = false, options }) => (
   <FormGroup controlId={input.name}>
     {options.map(({ key, name }, idx) => (
       <FormCheck type="radio" className="radio-container" key={`radio${idx}-${key}`}>
         <label
           className={classnames({
             'form-check-label': true,
-            'text-danger': error,
-            'text-warninig': !error && warning,
+            'text-danger': error && input.value === key,
+            'text-warninig': !error && warning && input.value === key,
+            'text-success': dirty && !ignoreDirty && input.value === key,
           })}>
           <input type="radio" name={input.name} value={key} checked={input.value === key} onChange={input.onChange} />
           {name}
@@ -37,6 +38,7 @@ RadioField.propTypes = {
     warning: PropTypes.any,
   }).isRequired,
   options: PropTypes.array.isRequired,
+  ignoreDirty: PropTypes.bool,
 };
 
 export default RadioField;

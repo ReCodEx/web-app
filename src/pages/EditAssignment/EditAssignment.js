@@ -84,8 +84,7 @@ class EditAssignment extends Component {
       history: { replace },
       assignment,
       userId,
-      firstDeadline,
-      allowSecondDeadline,
+      deadlines,
       exerciseSync,
       runtimeEnvironments,
       visibility,
@@ -188,8 +187,7 @@ class EditAssignment extends Component {
                       editTexts
                       initialValues={assignment ? prepareEditFormInitialValues(assignment) : {}}
                       onSubmit={this.editAssignmentSubmitHandler}
-                      firstDeadline={firstDeadline}
-                      allowSecondDeadline={allowSecondDeadline}
+                      deadlines={deadlines}
                       runtimeEnvironments={envs}
                       visibility={visibility}
                       assignmentIsPublic={
@@ -248,8 +246,7 @@ EditAssignment.propTypes = {
   userId: PropTypes.string.isRequired,
   runtimeEnvironments: ImmutablePropTypes.map,
   editAssignment: PropTypes.func.isRequired,
-  firstDeadline: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  deadlines: PropTypes.string,
   visibility: PropTypes.string,
   allowVisibleFrom: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
@@ -274,8 +271,7 @@ export default withLinks(
         assignment,
         userId: loggedInUserIdSelector(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        firstDeadline: editAssignmentFormSelector(state, 'firstDeadline'),
-        allowSecondDeadline: editAssignmentFormSelector(state, 'allowSecondDeadline'),
+        deadlines: editAssignmentFormSelector(state, 'deadlines'),
         visibility: editAssignmentFormSelector(state, 'visibility'),
         allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
       };

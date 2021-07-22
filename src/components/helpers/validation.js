@@ -14,9 +14,7 @@ export const isNonNegativeInteger = n =>
 /*
  * Deadline Validators
  */
-export const deadlineFutureLimit = moment()
-  .endOf('year')
-  .add(1, 'year');
+export const deadlineFutureLimit = moment().endOf('year').add(1, 'year');
 
 const messages = defineMessages({
   emptyDeadline: {
@@ -44,6 +42,7 @@ const messages = defineMessages({
  * @param errors Errors object where error messages will be stored.
  * @param deadline A deadline value to be tested.
  * @param deadlineErrorKey The key for errors object under which the error message will be stored (if any).
+ * @return {Boolean} true if the validation was successful (makes it easy to integrate in larger validation routines)
  */
 export const validateDeadline = (
   errors,
@@ -54,13 +53,18 @@ export const validateDeadline = (
 ) => {
   if (!deadline) {
     errors[deadlineErrorKey] = formatMessage(messages.emptyDeadline);
+    return false;
   } else if (!moment.isMoment(deadline)) {
     errors[deadlineErrorKey] = formatMessage(messages.invalidDateTime);
+    return false;
   } else if (futureLimit && futureLimit.isSameOrBefore(deadline)) {
     errors[deadlineErrorKey] = formatMessage(messages.deadlineInFarFuture, {
       futureLimit,
     });
+    return false;
   }
+
+  return true;
 };
 
 /**
@@ -71,6 +75,7 @@ export const validateDeadline = (
  * @param allowSecondDeadline Whether the second deadline is allowed (and tested).
  * @param firstDeadlineErrorKey The key for errors object under which the error message of the first deadline will be stored (if any).
  * @param secondDeadlineErrorKey The key for errors object under which the error message of the second deadline will be stored (if any).
+ * @return {Boolean} true if the validation was successful (makes it easy to integrate in larger validation routines)
  */
 export const validateTwoDeadlines = (
   errors,
@@ -81,20 +86,22 @@ export const validateTwoDeadlines = (
   firstDeadlineErrorKey = 'firstDeadline',
   secondDeadlineErrorKey = 'secondDeadline'
 ) => {
-  validateDeadline(errors, formatMessage, firstDeadline, firstDeadlineErrorKey);
+  if (!validateDeadline(errors, formatMessage, firstDeadline, firstDeadlineErrorKey)) {
+    return false;
+  }
 
   if (allowSecondDeadline) {
-    validateDeadline(errors, formatMessage, secondDeadline, secondDeadlineErrorKey);
+    if (!validateDeadline(errors, formatMessage, secondDeadline, secondDeadlineErrorKey)) {
+      return false;
+    }
 
-    if (
-      !errors[firstDeadlineErrorKey] &&
-      !errors[secondDeadlineErrorKey] && // no errors so far
-      !firstDeadline.isSameOrBefore(secondDeadline) &&
-      !firstDeadline.isSameOrBefore(secondDeadline, 'hour')
-    ) {
+    if (firstDeadline.isSameOrAfter(secondDeadline, 'minute')) {
       errors[secondDeadlineErrorKey] = formatMessage(messages.secondDeadlineBeforeFirstDeadline, {
         firstDeadline,
       });
+      return false;
     }
   }
+
+  return true;
 };
