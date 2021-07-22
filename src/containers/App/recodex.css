@@ -326,7 +326,8 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
  .radio-container {
   display: block;
   position: relative;
-  padding-left: 35px;
+  padding-left: 30px;
+  margin: 2px 0;
 }
 
 /* Remove default label margin and paddings */
@@ -348,7 +349,7 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
 /* Create a custom radio button */
 .radiomark {
   position: absolute;
-  top: 0;
+  top: 2px;
   left: 0;
   height: 20px;
   width: 20px;
@@ -359,16 +360,17 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
 /* On mouse-over, add a grey background color */
 .radio-container label:hover input ~ .radiomark {
   background-color: #ccc;
+  box-shadow: #fe9 0 0 0.4em 0.1em;
 }
 
 /* When the radio button is checked, add a green background */
 .radio-container label input:checked ~ .radiomark {
-  background-color: #00a65a;
+  background-color: var(--success);
 }
 
 /* On mouse-over, when the radio button is checked, add a darker green background */
 .radio-container label:hover input:checked ~ .radiomark {
-  background-color: #008d4c;
+  box-shadow: #fe9 0 0 0.4em 0.1em;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */

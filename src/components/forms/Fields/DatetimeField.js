@@ -61,6 +61,7 @@ class DatetimeField extends Component {
             }),
           }}
         />
+
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         {!error && warning && <Form.Text className="text-warning">{warning}</Form.Text>}
       </FormGroup>

@@ -1,6 +1,7 @@
 .nice-checkbox-container {
   margin: 0 !important;
   padding: 0 !important;
+  white-space: nowrap;
 }
 
 .nice-checkbox-container > label {
@@ -30,4 +31,5 @@
 .nice-checkbox-container label.nice-checkbox-label {
   vertical-align: top;
   margin: 0.1rem 0.5rem;
+  white-space: normal;
 }

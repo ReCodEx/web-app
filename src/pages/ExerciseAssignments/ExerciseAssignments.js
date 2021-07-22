@@ -116,8 +116,7 @@ class ExerciseAssignments extends Component {
       assignmentEnvironmentsSelector,
       assignableGroups,
       groupsAccessor,
-      firstDeadline,
-      allowSecondDeadline,
+      deadlines,
       visibility,
       links: { EXERCISE_URI_FACTORY },
       intl: { formatMessage, locale },
@@ -246,8 +245,7 @@ class ExerciseAssignments extends Component {
                                   groupsAccessor={groupsAccessor}
                                   alreadyAssignedGroups={getAssignmentsGroups(assignments)}
                                   runtimeEnvironments={exercise.runtimeEnvironments}
-                                  firstDeadline={firstDeadline}
-                                  allowSecondDeadline={allowSecondDeadline}
+                                  deadlines={deadlines}
                                   visibility={visibility}
                                   assignmentIsPublic={false}
                                   submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
@@ -283,8 +281,7 @@ ExerciseAssignments.propTypes = {
   assignmentEnvironmentsSelector: PropTypes.func,
   assignableGroups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]),
-  allowSecondDeadline: PropTypes.bool,
+  deadlines: PropTypes.string,
   visibility: PropTypes.string,
   links: PropTypes.object,
   intl: PropTypes.object.isRequired,
@@ -313,8 +310,7 @@ export default withLinks(
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         assignableGroups: groupsUserCanAssignToSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
-        firstDeadline: multiAssignFormSelector(state, 'firstDeadline'),
-        allowSecondDeadline: multiAssignFormSelector(state, 'allowSecondDeadline'),
+        deadlines: multiAssignFormSelector(state, 'deadlines'),
         visibility: multiAssignFormSelector(state, 'visibility'),
       };
     },

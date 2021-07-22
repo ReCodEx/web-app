@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, Field, FieldArray } from 'redux-form';
+import { reduxForm, Field, FieldArray, formValues } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Container, Row, Col, Form } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { defaultMemoize } from 'reselect';
 
@@ -12,6 +12,7 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import AssignmentFormGroupsList from './AssignmentFormGroupsList';
 import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess';
+import InterpolationDialog from './InterpolationDialog';
 import Explanation from '../../widgets/Explanation';
 import Callout from '../../widgets/Callout';
 import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation';
@@ -30,6 +31,11 @@ const localizedTextDefaults = {
   studentHint: '',
 };
 
+const sanitizeInputNumber = (value, defValue) => {
+  const intValue = Number.parseInt(value);
+  return Number.isNaN(intValue) ? defValue : intValue;
+};
+
 /**
  * Create initial values for the form. It expects one object as input argument.
  * If the object is assignment object, it correctly prepares editting form.
@@ -40,12 +46,13 @@ export const prepareInitialValues = defaultMemoize(
     groups = null,
     localizedTexts = null,
     firstDeadline,
-    maxPointsBeforeFirstDeadline = '10',
+    maxPointsBeforeFirstDeadline = 10,
     allowSecondDeadline = false,
     secondDeadline,
-    maxPointsBeforeSecondDeadline = '5',
-    submissionsCountLimit = '50',
-    pointsPercentualThreshold = '0',
+    maxPointsBeforeSecondDeadline = 5,
+    maxPointsDeadlineInterpolation = false,
+    submissionsCountLimit = 50,
+    pointsPercentualThreshold = 0,
     solutionFilesLimit = null,
     solutionSizeLimit = null,
     canViewLimitRatios = true,
@@ -60,16 +67,15 @@ export const prepareInitialValues = defaultMemoize(
     groups,
     localizedTexts: localizedTexts && getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
     firstDeadline: firstDeadline !== undefined ? moment.unix(firstDeadline) : moment().add(2, 'weeks').endOf('day'),
-    maxPointsBeforeFirstDeadline,
-    allowSecondDeadline,
+    maxPointsBeforeFirstDeadline: sanitizeInputNumber(maxPointsBeforeFirstDeadline, 10),
     secondDeadline: secondDeadline
       ? moment.unix(secondDeadline)
       : firstDeadline !== undefined
       ? moment.unix(firstDeadline).add(2, 'weeks')
       : moment().add(4, 'weeks').endOf('day'),
-    maxPointsBeforeSecondDeadline,
-    submissionsCountLimit,
-    pointsPercentualThreshold,
+    maxPointsBeforeSecondDeadline: sanitizeInputNumber(maxPointsBeforeSecondDeadline, 5),
+    submissionsCountLimit: sanitizeInputNumber(submissionsCountLimit, 50),
+    pointsPercentualThreshold: sanitizeInputNumber(pointsPercentualThreshold, 0),
     solutionFilesLimit,
     solutionSizeLimit: solutionSizeLimit && Math.ceil(solutionSizeLimit / 1024), // B -> KiB
     canViewLimitRatios,
@@ -90,6 +96,7 @@ export const prepareInitialValues = defaultMemoize(
     visibility: isPublic ? (visibleFrom ? 'visibleFrom' : 'visible') : 'hidden',
     visibleFrom: visibleFrom ? moment.unix(visibleFrom) : moment().endOf('day'),
     sendNotification: true,
+    deadlines: allowSecondDeadline ? (maxPointsDeadlineInterpolation ? 'interpolated' : 'dual') : 'single',
   })
 );
 
@@ -98,7 +105,6 @@ const transformSubmittedData = ({
   localizedTexts = null,
   firstDeadline,
   maxPointsBeforeFirstDeadline,
-  allowSecondDeadline,
   secondDeadline,
   maxPointsBeforeSecondDeadline,
   submissionsCountLimit,
@@ -113,15 +119,18 @@ const transformSubmittedData = ({
   visibility,
   visibleFrom,
   sendNotification,
+  deadlines,
 }) => {
   const disabledRuntimeEnvironmentIds = enabledRuntime
     ? Object.keys(enabledRuntime).filter(key => enabledRuntime[key] === false)
     : [];
 
+  const allowSecondDeadline = deadlines !== 'single';
   const res = {
     firstDeadline: moment(firstDeadline).unix(),
     maxPointsBeforeFirstDeadline,
     allowSecondDeadline,
+    maxPointsDeadlineInterpolation: deadlines === 'interpolated',
     submissionsCountLimit: Number(submissionsCountLimit),
     pointsPercentualThreshold,
     solutionFilesLimit,
@@ -152,6 +161,54 @@ const transformSubmittedData = ({
   }
   return res;
 };
+
+const DEADLINE_OPTIONS = [
+  {
+    key: 'single',
+    name: (
+      <>
+        <FormattedMessage id="app.editAssignmentForm.deadlines.single" defaultMessage="Single deadline" />
+        <Explanation id="deadlinesSingle">
+          <FormattedMessage
+            id="app.editAssignmentForm.deadlines.single.explanation"
+            defaultMessage="The assignment has only one deadline. Solutions submitted before the deadline are awarded up to given max. points, solutions submitted after the deadline are granted no points."
+          />
+        </Explanation>
+      </>
+    ),
+  },
+  {
+    key: 'dual',
+    name: (
+      <>
+        <FormattedMessage id="app.editAssignmentForm.deadlines.dual" defaultMessage="Dual deadlines" />
+        <Explanation id="deadlinesDual">
+          <FormattedMessage
+            id="app.editAssignmentForm.deadlines.dual.explanation"
+            defaultMessage="The assignment has two deadlines and two max. points limits. Solutions submitted before the first deadline are awarded points up to the first limit, solutions between the two deadlines are awarded points up to the second limit. No points are granted for solutions after the second deadline."
+          />
+        </Explanation>
+      </>
+    ),
+  },
+  {
+    key: 'interpolated',
+    name: (
+      <>
+        <FormattedMessage
+          id="app.editAssignmentForm.deadlines.interpolated"
+          defaultMessage="Dual deadlines interpolated"
+        />
+        <Explanation id="deadlinesInterpolation">
+          <FormattedMessage
+            id="app.editAssignmentForm.deadlines.single.interpolated"
+            defaultMessage="The assignment has two deadlines and two max. points limits. Solutions submitted before the first deadline are awarded points up to the first limit. The points limit for the solutions between the two deadlines is computed by linear interpolation between the two point limits. No points are granted for solutions after the second deadline."
+          />
+        </Explanation>
+      </>
+    ),
+  },
+];
 
 const VISIBILITY_STATES = [
   {
@@ -220,6 +277,11 @@ class EditAssignmentForm extends Component {
     this.props.reset();
   };
 
+  handleInterpolationDialogSubmit = ({ secondDeadlineUnix, maxPointsBeforeSecondDeadline }) => {
+    this.props.change('secondDeadline', moment.unix(secondDeadlineUnix));
+    this.props.change('maxPointsBeforeSecondDeadline', maxPointsBeforeSecondDeadline);
+  };
+
   /**
    * Wraps the onSubmit callback passed from the parent component.
    * (note that submitHandler in which this function is used is redux-form internal routine to handle submits)
@@ -252,8 +314,7 @@ class EditAssignmentForm extends Component {
       invalid,
       error,
       warning,
-      firstDeadline,
-      allowSecondDeadline,
+      deadlines,
       runtimeEnvironments,
       visibility,
       assignmentIsPublic,
@@ -261,6 +322,13 @@ class EditAssignmentForm extends Component {
       mergeJudgeLogs,
       intl: { locale },
     } = this.props;
+
+    const InterpolationDialogWithValues = formValues({
+      firstDeadline: 'firstDeadline',
+      secondDeadline: 'secondDeadline',
+      maxPointsBeforeFirstDeadline: 'maxPointsBeforeFirstDeadline',
+      maxPointsBeforeSecondDeadline: 'maxPointsBeforeSecondDeadline',
+    })(InterpolationDialog);
 
     return groups && groupsAccessor && this.state.assignedToGroups !== null ? (
       <AssignmentFormMultiassignSuccess
@@ -297,83 +365,144 @@ class EditAssignmentForm extends Component {
 
         <Container fluid>
           <Row>
-            <Col md={6}>
-              <Field
-                name="firstDeadline"
-                component={DatetimeField}
-                label={<FormattedMessage id="app.editAssignmentForm.firstDeadline" defaultMessage="First deadline:" />}
-              />
+            <Col md={6} lg={5} xl={4}>
+              <Field name="deadlines" component={RadioField} options={DEADLINE_OPTIONS} />
             </Col>
-            <Col md={6}>
-              <NumericTextField
-                name="maxPointsBeforeFirstDeadline"
-                validateMin={0}
-                validateMax={10000}
-                maxLength={5}
-                label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.maxPointsBeforeFirstDeadline"
-                    defaultMessage="Maximum amount of points (before the deadline):"
-                  />
-                }
-              />
-            </Col>
-          </Row>
 
-          <Row>
-            <Col lg={12}>
-              <Field
-                name="allowSecondDeadline"
-                component={CheckboxField}
-                onOff
-                label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.allowSecondDeadline"
-                    defaultMessage="Allow second deadline"
+            <Col md={6} lg={7} xl={8}>
+              <Row>
+                <Col sm={6}>
+                  <Field
+                    name="firstDeadline"
+                    component={DatetimeField}
+                    label={
+                      deadlines === 'single' ? (
+                        <>
+                          <FormattedMessage id="app.editAssignmentForm.onlyDeadline" defaultMessage="Deadline:" />
+                          <Explanation id="onlyDeadlineExplanation">
+                            <FormattedMessage
+                              id="app.editAssignmentForm.onlyDeadlineExplanation"
+                              defaultMessage="Students are expected to submit the solution before this deadline to receive any points. Solutions submitted after the deadline are still evaluated, but they receive no points."
+                            />
+                          </Explanation>
+                        </>
+                      ) : (
+                        <>
+                          <FormattedMessage
+                            id="app.editAssignmentForm.firstDeadline"
+                            defaultMessage="First deadline:"
+                          />
+                          <Explanation id="firstDeadlineExplanation">
+                            <FormattedMessage
+                              id="app.editAssignmentForm.firstDeadlineExplanation"
+                              defaultMessage="Students are expected to submit the solution before this deadline to receive full points. Solutions submitted after the first deadline receive lower amount of points."
+                            />
+                          </Explanation>
+                        </>
+                      )
+                    }
                   />
-                }
-              />
-            </Col>
-          </Row>
+                </Col>
+                <Col sm={6}>
+                  <NumericTextField
+                    name="maxPointsBeforeFirstDeadline"
+                    validateMin={0}
+                    validateMax={10000}
+                    maxLength={5}
+                    label={
+                      <>
+                        {deadlines === 'single' ? (
+                          <FormattedMessage id="app.editAssignmentForm.maxPoints" defaultMessage="Points limit:" />
+                        ) : (
+                          <FormattedMessage
+                            id="app.editAssignmentForm.maxPointsBeforeDeadline"
+                            defaultMessage="Points limit ({deadline}):"
+                            values={{ deadline: 1 }}
+                          />
+                        )}
+                        <Explanation id="maxPointsExplanation">
+                          <FormattedMessage
+                            id="app.editAssignmentForm.maxPointsExplanation"
+                            defaultMessage="Maximal amount of points received for 100% correct solution submitted before the deadline."
+                          />
+                        </Explanation>
+                      </>
+                    }
+                  />
+                </Col>
 
-          {allowSecondDeadline && (
-            <Row>
-              <Col md={6}>
-                <Field
-                  name="secondDeadline"
-                  disabled={!firstDeadline || allowSecondDeadline !== true}
-                  isValidDate={date => date.isSameOrAfter(firstDeadline)}
-                  component={DatetimeField}
-                  label={
-                    <FormattedMessage id="app.editAssignmentForm.secondDeadline" defaultMessage="Second deadline:" />
-                  }
-                />
-                {!firstDeadline && (
-                  <Form.Text>
-                    <FormattedMessage
-                      id="app.editAssignmentForm.chooseFirstDeadlineBeforeSecondDeadline"
-                      defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
-                    />
-                  </Form.Text>
+                {deadlines !== 'single' && (
+                  <>
+                    <Col sm={6}>
+                      <Field
+                        name="secondDeadline"
+                        disabled={deadlines === 'single'}
+                        component={DatetimeField}
+                        label={
+                          <>
+                            <FormattedMessage
+                              id="app.editAssignmentForm.secondDeadline"
+                              defaultMessage="Second deadline:"
+                            />
+                            <Explanation id="secondDeadlineExplanation">
+                              <FormattedMessage
+                                id="app.editAssignmentForm.secondDeadlineExplanation"
+                                defaultMessage="Second deadline is for late solutions which are still awarded some points. Solutions submitted after the second deadline are granted no poionts."
+                              />
+                            </Explanation>
+                          </>
+                        }
+                      />
+                    </Col>
+                    <Col sm={6}>
+                      <NumericTextField
+                        name="maxPointsBeforeSecondDeadline"
+                        disabled={deadlines === 'single'}
+                        validateMin={0}
+                        validateMax={10000}
+                        maxLength={5}
+                        append={
+                          deadlines === 'interpolated' ? (
+                            <InterpolationDialogWithValues onSubmit={this.handleInterpolationDialogSubmit} />
+                          ) : null
+                        }
+                        label={
+                          deadlines === 'dual' ? (
+                            <>
+                              <FormattedMessage
+                                id="app.editAssignmentForm.maxPointsBeforeDeadline"
+                                defaultMessage="Points limit ({deadline}):"
+                                values={{ deadline: 2 }}
+                              />
+                              <Explanation id="maxPointsSecondDeadlineExplanation">
+                                <FormattedMessage
+                                  id="app.editAssignmentForm.maxPointsSecondDeadlineExplanation"
+                                  defaultMessage="Maximal amount of points received for 100% correct solution submitted after the first, but before the second deadline."
+                                />
+                              </Explanation>
+                            </>
+                          ) : (
+                            <>
+                              <FormattedMessage
+                                id="app.editAssignmentForm.maxPointsInterpolationLimit"
+                                defaultMessage="Interpolate points to:"
+                              />
+                              <Explanation id="maxPointsInterpolationLimitExplanation">
+                                <FormattedMessage
+                                  id="app.editAssignmentForm.maxPointsInterpolationLimitExplanation"
+                                  defaultMessage="The actual points limit between the first and the second deadline is interpolated linearly from the first points limit to this limit."
+                                />
+                              </Explanation>
+                            </>
+                          )
+                        }
+                      />
+                    </Col>
+                  </>
                 )}
-              </Col>
-              <Col md={6}>
-                <NumericTextField
-                  name="maxPointsBeforeSecondDeadline"
-                  disabled={allowSecondDeadline !== true}
-                  validateMin={0}
-                  validateMax={10000}
-                  maxLength={5}
-                  label={
-                    <FormattedMessage
-                      id="app.editAssignmentForm.maxPointsBeforeSecondDeadline"
-                      defaultMessage="Maximum amount of points (before the second deadline):"
-                    />
-                  }
-                />
-              </Col>
-            </Row>
-          )}
+              </Row>
+            </Col>
+          </Row>
         </Container>
 
         <hr />
@@ -386,10 +515,18 @@ class EditAssignmentForm extends Component {
                 validateMax={100}
                 maxLength={3}
                 label={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.submissionsCountLimit"
-                    defaultMessage="Submissions count limit:"
-                  />
+                  <>
+                    <FormattedMessage
+                      id="app.editAssignmentForm.submissionsCountLimit"
+                      defaultMessage="Submissions count limit:"
+                    />
+                    <Explanation id="submissionsCountLimitExplanation">
+                      <FormattedMessage
+                        id="app.editAssignmentForm.submissionsCountLimitExplanation"
+                        defaultMessage="Maximal number of solutions a student may have at any given time. A student is not able to submit more solutions once the limit is reached. However, the supervisor may delete existing solutions to increase the number of submission attempts individually."
+                      />
+                    </Explanation>
+                  </>
                 }
               />
             </Col>
@@ -400,7 +537,7 @@ class EditAssignmentForm extends Component {
                 validateMax={100}
                 maxLength={3}
                 label={
-                  <span>
+                  <>
                     <FormattedMessage
                       id="app.editAssignmentForm.pointsPercentualThreshold"
                       defaultMessage="Minimal required correctness [%]:"
@@ -411,7 +548,7 @@ class EditAssignmentForm extends Component {
                         defaultMessage="Minimal solution correctness (expressed in percents) that is required for regular scoring. Solutions below this threshold always gets zero points."
                       />
                     </Explanation>
-                  </span>
+                  </>
                 }
               />
             </Col>
@@ -577,16 +714,14 @@ class EditAssignmentForm extends Component {
             defaultMessage="Enabled Runtime Environments"
           />
         </h4>
-        <br />
 
         <Container fluid>
           <Row>
             {assignment.runtimeEnvironmentIds.map((item, i) => (
-              <Col key={i} sm={6}>
+              <Col key={i} sm={6} lg={4} xl={3}>
                 <Field
                   name={`enabledRuntime.${item}`}
                   component={CheckboxField}
-                  onOff
                   label={
                     runtimeEnvironments && Array.isArray(runtimeEnvironments) && runtimeEnvironments.length > 0
                       ? runtimeEnvironments.find(env => env.id === item).longName
@@ -692,8 +827,8 @@ EditAssignmentForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
   reset: PropTypes.func.isRequired,
-  firstDeadline: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]), // object == moment.js instance
-  allowSecondDeadline: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  change: PropTypes.func.isRequired,
+  deadlines: PropTypes.string,
   runtimeEnvironments: PropTypes.array,
   visibility: PropTypes.string,
   assignmentIsPublic: PropTypes.bool,
@@ -708,11 +843,11 @@ const validate = (
     localizedTexts,
     firstDeadline,
     secondDeadline,
-    allowSecondDeadline,
     runtimeEnvironmentIds,
     enabledRuntime,
     visibility,
     visibleFrom,
+    deadlines,
   },
   { groupsAccessor, editTexts = false, intl: { formatMessage } }
 ) => {
@@ -755,7 +890,7 @@ const validate = (
     });
   }
 
-  validateTwoDeadlines(errors, formatMessage, firstDeadline, secondDeadline, allowSecondDeadline);
+  validateTwoDeadlines(errors, formatMessage, firstDeadline, secondDeadline, deadlines !== 'single');
 
   const formEnabledRuntimes = (runtimeEnvironmentIds || []).filter(key => enabledRuntime[key]);
   if (formEnabledRuntimes.length === 0) {
@@ -774,8 +909,40 @@ const validate = (
   return errors;
 };
 
-const warn = ({ groups, canViewJudgeStdout, canViewJudgeStderr }, { groupsAccessor, alreadyAssignedGroups = [] }) => {
+const warn = (
+  {
+    firstDeadline,
+    deadlines,
+    maxPointsBeforeFirstDeadline,
+    maxPointsBeforeSecondDeadline,
+    groups,
+    canViewJudgeStdout,
+    canViewJudgeStderr,
+  },
+  { groupsAccessor, intl: { formatMessage }, alreadyAssignedGroups = [] }
+) => {
   const warnings = {};
+
+  if (deadlines !== 'single' && !validateDeadline({}, formatMessage, firstDeadline, 'firstDeadline', null))
+    warnings.secondDeadline = (
+      <FormattedMessage
+        id="app.editAssignmentForm.warnings.chooseFirstDeadlineBeforeSecondDeadline"
+        defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
+      />
+    );
+
+  if (
+    deadlines !== 'single' &&
+    Number.isInteger(maxPointsBeforeSecondDeadline) &&
+    maxPointsBeforeFirstDeadline === maxPointsBeforeSecondDeadline
+  ) {
+    warnings.maxPointsBeforeSecondDeadline = (
+      <FormattedMessage
+        id="app.editAssignmentForm.warnings.pointsAreTheSame"
+        defaultMessage="Both points limits are the same, so there is no need for dual-deadline setup."
+      />
+    );
+  }
 
   if (canViewJudgeStdout) {
     warnings.canViewJudgeStdout = (
