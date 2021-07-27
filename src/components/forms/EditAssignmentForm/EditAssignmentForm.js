@@ -23,6 +23,7 @@ import {
   transformLocalizedTextsFormData,
 } from '../../../helpers/localizedData';
 import { safeGet, safeSet, EMPTY_ARRAY } from '../../../helpers/common';
+import DeadlinesGraphDialog from './DeadlinesGraphDialog';
 
 const localizedTextDefaults = {
   name: '',
@@ -323,11 +324,20 @@ class EditAssignmentForm extends Component {
       intl: { locale },
     } = this.props;
 
+    const DeadlinesGraphDialogWithValues = formValues({
+      firstDeadline: 'firstDeadline',
+      secondDeadline: 'secondDeadline',
+      maxPointsBeforeFirstDeadline: 'maxPointsBeforeFirstDeadline',
+      maxPointsBeforeSecondDeadline: 'maxPointsBeforeSecondDeadline',
+      deadlines: 'deadlines',
+    })(DeadlinesGraphDialog);
+
     const InterpolationDialogWithValues = formValues({
       firstDeadline: 'firstDeadline',
       secondDeadline: 'secondDeadline',
       maxPointsBeforeFirstDeadline: 'maxPointsBeforeFirstDeadline',
       maxPointsBeforeSecondDeadline: 'maxPointsBeforeSecondDeadline',
+      deadlines: 'deadlines',
     })(InterpolationDialog);
 
     return groups && groupsAccessor && this.state.assignedToGroups !== null ? (
@@ -366,7 +376,14 @@ class EditAssignmentForm extends Component {
         <Container fluid>
           <Row>
             <Col md={6} lg={5} xl={4}>
-              <Field name="deadlines" component={RadioField} options={DEADLINE_OPTIONS} />
+              <Row>
+                <Col xs={6} md={12}>
+                  <Field name="deadlines" component={RadioField} options={DEADLINE_OPTIONS} />
+                </Col>
+                <Col xs={6} md={12}>
+                  <DeadlinesGraphDialogWithValues />
+                </Col>
+              </Row>
             </Col>
 
             <Col md={6} lg={7} xl={8}>
