@@ -940,25 +940,44 @@ const warn = (
 ) => {
   const warnings = {};
 
-  if (deadlines !== 'single' && !validateDeadline({}, formatMessage, firstDeadline, 'firstDeadline', null))
+  if (deadlines !== 'single' && !validateDeadline({}, formatMessage, firstDeadline, 'firstDeadline', null)) {
     warnings.secondDeadline = (
       <FormattedMessage
         id="app.editAssignmentForm.warnings.chooseFirstDeadlineBeforeSecondDeadline"
         defaultMessage="You must select the date of the first deadline before selecting the date of the second deadline."
       />
     );
+  }
 
-  if (
-    deadlines !== 'single' &&
-    Number.isInteger(maxPointsBeforeSecondDeadline) &&
-    maxPointsBeforeFirstDeadline === maxPointsBeforeSecondDeadline
-  ) {
-    warnings.maxPointsBeforeSecondDeadline = (
-      <FormattedMessage
-        id="app.editAssignmentForm.warnings.pointsAreTheSame"
-        defaultMessage="Both points limits are the same, so there is no need for dual-deadline setup."
-      />
-    );
+  if (deadlines !== 'single' && Number.isInteger(maxPointsBeforeSecondDeadline)) {
+    if (maxPointsBeforeFirstDeadline === maxPointsBeforeSecondDeadline) {
+      warnings.maxPointsBeforeSecondDeadline = (
+        <FormattedMessage
+          id="app.editAssignmentForm.warnings.pointsAreTheSame"
+          defaultMessage="Both points limits are the same, so there is no need for dual-deadline setup."
+        />
+      );
+    } else if (maxPointsBeforeFirstDeadline < maxPointsBeforeSecondDeadline) {
+      warnings.maxPointsBeforeSecondDeadline = (
+        <FormattedMessage
+          id="app.editAssignmentForm.warnings.secondLimitIsGreaterThanFirstLimit"
+          defaultMessage="The limit is greater than the first limit which is quite unusal."
+        />
+      );
+    } else if (maxPointsBeforeSecondDeadline === 0) {
+      warnings.maxPointsBeforeSecondDeadline =
+        deadlines === 'dual' ? (
+          <FormattedMessage
+            id="app.editAssignmentForm.warnings.secondLimitIsZero"
+            defaultMessage="The limit is zero, so there is no need for dual-deadline setup."
+          />
+        ) : (
+          <FormattedMessage
+            id="app.editAssignmentForm.warnings.interpolationGoesToZero"
+            defaultMessage="The limit will reach zero before the second deadline (see the graph for details)."
+          />
+        );
+    }
   }
 
   if (canViewJudgeStdout) {
