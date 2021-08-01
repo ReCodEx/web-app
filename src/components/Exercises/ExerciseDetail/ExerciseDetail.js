@@ -16,6 +16,7 @@ import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import Version from '../../widgets/Version/Version';
+import Explanation from '../../widgets/Explanation';
 import { getTagStyle } from '../../../helpers/exercise/tags';
 
 const ExerciseDetail = ({
@@ -33,14 +34,15 @@ const ExerciseDetail = ({
   isLocked,
   solutionFilesLimit,
   solutionSizeLimit,
+  className = '',
   locale,
   links: { EXERCISE_URI_FACTORY },
 }) => (
-  <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding>
+  <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding className={className}>
     <Table responsive size="sm">
       <tbody>
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <UserIcon />
           </td>
           <th>
@@ -52,7 +54,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <Icon icon={['far', 'file-alt']} />
           </td>
           <th className="text-nowrap">
@@ -72,7 +74,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <Icon icon="graduation-cap" />
           </td>
           <th className="text-nowrap">
@@ -84,7 +86,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <CodeIcon />
           </td>
           <th className="text-nowrap">
@@ -96,7 +98,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <TagIcon />
           </td>
           <th className="text-nowrap">
@@ -112,7 +114,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <Icon icon={['far', 'clock']} />
           </td>
           <th className="text-nowrap">
@@ -124,7 +126,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <Icon icon={['far', 'copy']} />
           </td>
           <th>
@@ -136,7 +138,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <VisibleIcon />
           </td>
           <th className="text-nowrap">
@@ -148,7 +150,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <Icon icon="unlock-alt" />
           </td>
           <th className="text-nowrap">
@@ -160,36 +162,41 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
             <Icon icon={['far', 'folder-open']} />
           </td>
           <th>
-            <FormattedMessage
-              id="app.assignment.solutionFilesLimit"
-              defaultMessage="Maximal number of files in a solution"
-            />
-            :
+            <FormattedMessage id="app.assignment.solutionFilesLimit" defaultMessage="Solution file restrictions" />:
+            <Explanation id="solutionFilesLimit">
+              <FormattedMessage
+                id="app.assignment.solutionFilesLimitExplanation"
+                defaultMessage="The restrictions may limit maximal number of submitted files and their total size."
+              />
+            </Explanation>
           </th>
-          <td>{solutionFilesLimit === null ? '-' : solutionFilesLimit}</td>
-        </tr>
-
-        <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="weight" />
+          <td>
+            {solutionFilesLimit !== null && (
+              <FormattedMessage
+                id="app.assignment.solutionFilesLimitCount"
+                defaultMessage="{count} {count, plural, one {file} other {files}}"
+                values={{ count: solutionFilesLimit }}
+              />
+            )}
+            {solutionFilesLimit !== null && solutionSizeLimit !== null && ', '}
+            {solutionSizeLimit !== null && (
+              <FormattedMessage
+                id="app.assignment.solutionFilesLimitSize"
+                defaultMessage="{size} KiB {count, plural, one {} other {total}}"
+                values={{ size: Math.ceil(solutionSizeLimit / 1024), count: solutionFilesLimit || 0 }}
+              />
+            )}
+            {solutionFilesLimit === null && solutionSizeLimit === null && '-'}
           </td>
-          <th>
-            <FormattedMessage
-              id="app.assignment.solutionSizeLimit"
-              defaultMessage="Maximal total size of submitted solution"
-            />
-            :
-          </th>
-          <td>{solutionSizeLimit === null ? '-' : `${Math.ceil(solutionSizeLimit / 1024)} KiB`}</td>
         </tr>
 
         {forkedFrom && (
           <tr>
-            <td className="text-center shrink-col em-padding-left em-padding-right">
+            <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
               <Icon icon="code-branch" />
             </td>
             <th className="text-nowrap">
@@ -233,6 +240,7 @@ ExerciseDetail.propTypes = {
   isLocked: PropTypes.bool.isRequired,
   solutionFilesLimit: PropTypes.number,
   solutionSizeLimit: PropTypes.number,
+  className: PropTypes.string,
   locale: PropTypes.string.isRequired,
   links: PropTypes.object,
 };

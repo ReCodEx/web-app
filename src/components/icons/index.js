@@ -26,6 +26,7 @@ export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CodeIcon = props => <Icon {...props} icon="code" />;
 export const ChatIcon = props => <Icon {...props} icon={['far', 'comments']} />;
 export const CopyIcon = props => <Icon {...props} icon={['far', 'clipboard']} />;
+export const DeadlineIcon = props => <Icon {...props} icon="hourglass-half" />;
 export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props => <Icon {...props} icon="cloud-download-alt" />;
 export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
@@ -73,8 +74,12 @@ export const SortedIcon = ({ active = true, descending = false, ...props }) => (
   />
 );
 export const SuccessIcon = props => <Icon {...props} icon="check" />;
-export const SuccessOrFailureIcon = ({ success = false, ...props }) =>
-  success ? <SuccessIcon {...props} /> : <FailureIcon {...props} />;
+export const SuccessOrFailureIcon = ({ success = false, colors = true, ...props }) =>
+  success ? (
+    <SuccessIcon className={colors ? 'text-success' : ''} {...props} />
+  ) : (
+    <FailureIcon className={colors ? 'text-danger' : ''} {...props} />
+  );
 export const SuperadminIcon = props => <Icon {...props} icon="chess-queen" />;
 export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props => <Icon {...props} icon="chalkboard-teacher" />;
@@ -127,6 +132,7 @@ SortedIcon.propTypes = {
 
 SuccessOrFailureIcon.propTypes = {
   success: PropTypes.bool,
+  colors: PropTypes.bool,
 };
 
 TypedMessageIcon.propTypes = {

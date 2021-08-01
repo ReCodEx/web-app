@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const GridLine = ({ x = null, y = null, width, height, isMarker = false, strokeWidth = isMarker ? 0.3 : 0.1 }) => {
+const GridLine = ({
+  x = null,
+  y = null,
+  width,
+  height,
+  isMarker = false,
+  strokeWidth = isMarker ? 0.3 : 0.1,
+  markerColor = 'orange',
+}) => {
   const strokeGradient = x === null ? 'gridlineHorizontal' : 'gridlineVertical';
-  const boundingBoxCoordinates = { x1: 0, y1: -10, x2: width, y2: height + 10 };
+  const boundingBoxCoordinates = { x1: 0, y1: isMarker ? -2 : -10, x2: width, y2: height + 7 };
   // the +- 0.001 is actually a hack to create non-zero bounding box, which is necessary for the gradients to work
   const lineCoordinates =
     x === null
@@ -13,7 +21,7 @@ const GridLine = ({ x = null, y = null, width, height, isMarker = false, strokeW
     <line
       {...boundingBoxCoordinates}
       {...lineCoordinates}
-      stroke={`url(#${strokeGradient})`}
+      stroke={isMarker ? markerColor : `url(#${strokeGradient})`}
       strokeWidth={strokeWidth}
       strokeDasharray="1"
       strokeLinecap="round"
@@ -28,6 +36,7 @@ GridLine.propTypes = {
   height: PropTypes.number.isRequired,
   strokeWidth: PropTypes.number,
   isMarker: PropTypes.bool,
+  markerColor: PropTypes.string,
 };
 
 export default GridLine;

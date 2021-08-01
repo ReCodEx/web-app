@@ -74,10 +74,6 @@ class Assignment extends Component {
     }
   }
 
-  isAfter = unixTime => {
-    return unixTime * 1000 < Date.now();
-  };
-
   render() {
     const {
       assignment,
@@ -185,24 +181,31 @@ class Assignment extends Component {
               </Callout>
             )}
 
-            <Row>
-              <Col lg={6}>
-                {assignment.localizedTexts.length > 0 && (
-                  <div>
-                    <LocalizedTexts locales={assignment.localizedTexts} />
-                  </div>
-                )}
-              </Col>
-              <ResourceRenderer resource={[canSubmit, ...runtimeEnvironments]}>
-                {(canSubmitObj, ...runtimes) => (
-                  <Col lg={6}>
+            <ResourceRenderer resource={[canSubmit, ...runtimeEnvironments]}>
+              {(canSubmitObj, ...runtimes) => (
+                <Row>
+                  <Col xl={6}>
                     <AssignmentDetails
                       {...assignment}
-                      isAfterFirstDeadline={this.isAfter(assignment.firstDeadline)}
-                      isAfterSecondDeadline={this.isAfter(assignment.secondDeadline)}
                       canSubmit={canSubmitObj}
                       runtimeEnvironments={runtimes}
                       isStudent={isStudentOf(assignment.groupId)}
+                      className="d-flex d-xl-none"
+                    />
+
+                    {assignment.localizedTexts.length > 0 && (
+                      <div>
+                        <LocalizedTexts locales={assignment.localizedTexts} />
+                      </div>
+                    )}
+                  </Col>
+                  <Col xl={6}>
+                    <AssignmentDetails
+                      {...assignment}
+                      canSubmit={canSubmitObj}
+                      runtimeEnvironments={runtimes}
+                      isStudent={isStudentOf(assignment.groupId)}
+                      className="d-none d-xl-flex"
                     />
 
                     {isStudentOf(assignment.groupId) && (
@@ -263,9 +266,9 @@ class Assignment extends Component {
                       }
                     />
                   </Col>
-                )}
-              </ResourceRenderer>
-            </Row>
+                </Row>
+              )}
+            </ResourceRenderer>
           </div>
         )}
       </Page>
