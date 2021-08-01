@@ -15,7 +15,7 @@ const DeadlinesGraphDialog = ({ deadlines, ...props }) => {
   return (
     <>
       <Button variant="primary" onClick={() => setOpen(true)} disabled={!valid} size="sm" className="mt-2">
-        <Icon icon="chart-line" gapRight />
+        <Icon icon={['far', 'chart-bar']} gapRight />
         <FormattedMessage id="app.editAssignmentForm.deadlinesGraphDialog.button" defaultMessage="Deadlines Graph" />
       </Button>
 
@@ -27,7 +27,7 @@ const DeadlinesGraphDialog = ({ deadlines, ...props }) => {
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage
-              id="app.editAssignmentForm.deadlinesGraphDialog.title"
+              id="app.assignment.deadlinesGraphDialog.title"
               defaultMessage="Visualization of points limits and corresponding deadlines"
             />
           </Modal.Title>

@@ -94,7 +94,7 @@ export const computeMaxPointsIntervals = ({
  * @param {Array} lines produced by computeMaxPointsIntervals
  * @param {number} firstDeadline unix timestamp
  * @param {number} secondDeadline unix timestamp
- * @param {number|null} marker unix timestamp of current time marker (if present)
+ * @param {object|null} marker x coordinate is unix timestamp of current time marker (if present)
  * @returns {Array} of objects for the grid landmarks
  */
 export const normalizeTimestamps = (lines, firstDeadline, secondDeadline, marker = null) => {
@@ -113,19 +113,28 @@ export const normalizeTimestamps = (lines, firstDeadline, secondDeadline, marker
     line.x2 = line.x2 && (line.x2 - fromTs) / tsSpan;
   });
 
-  if (marker !== null) {
-    timestampsSet.add(marker); // make sure the marker grid line is always there
+  if (marker !== null && marker.x !== undefined) {
+    marker.originalX = marker.x;
+    marker.x = Math.max(fromTs + tsSpan / 20, Math.min(fromTs + (tsSpan * 19) / 20, marker.x));
+    timestampsSet.add(marker.x); // make sure the marker grid line is always there
   }
 
   const landmarks = [];
-  timestampsSet.forEach(x =>
+  timestampsSet.forEach(x => {
+    const isMarker = marker !== null && x === marker.x;
+    const captionTs = (isMarker ? marker.originalX : x) * 1000;
     landmarks.push({
       x: (x - fromTs) / tsSpan,
-      caption: <FormattedDate value={x * 1000} />,
-      caption2: <FormattedTime value={x * 1000} format="24hour" />,
-      isMarker: x === marker,
-    })
-  );
+      caption: <FormattedDate value={captionTs} />,
+      caption2: <FormattedTime value={captionTs} format="24hour" />,
+      isMarker,
+    });
+  });
+
+  if (marker !== null && marker.x !== undefined) {
+    marker.x = (marker.x - fromTs) / tsSpan;
+  }
+
   return landmarks;
 };
 
@@ -133,7 +142,7 @@ export const normalizeTimestamps = (lines, firstDeadline, secondDeadline, marker
  * Normalize y (points) values of the lines segments and yield landmarks array for the grid.
  * @param {Array} lines produced by computeMaxPointsIntervals
  * @param {number} maxPoints maximal value on the points scale
- * @param {number|null} marker points corresponding to current time marker (if present)
+ * @param {object|null} marker y coordinate is points value (if present)
  * @returns {Array} of objects for the grid landmarks
  */
 export const normalizePointsCoordinates = (lines, maxPoints, marker = null) => {
@@ -150,11 +159,52 @@ export const normalizePointsCoordinates = (lines, maxPoints, marker = null) => {
     }
   });
 
-  if (marker !== null) {
-    pointsSet.add(marker); // make sure the marker grid line is always there
+  if (marker !== null && marker.y !== undefined) {
+    pointsSet.add(marker.y); // make sure the marker grid line is always there
   }
 
   const landmarks = [];
-  pointsSet.forEach(y => landmarks.push({ y: y / maxPoints, caption: y, isMarker: y === marker }));
+  pointsSet.forEach(y => landmarks.push({ y: y / maxPoints, caption: y, isMarker: marker !== null && y === marker.y }));
+
+  if (marker !== null && marker.x !== undefined) {
+    marker.y = marker.y / maxPoints;
+  }
   return landmarks;
+};
+
+/**
+ * This is actually a copy of the algorithm that determines the max points for submitted solution in core API module.
+ * @param {number} time unix timestamp of requested time
+ * @param {object} with assignments properties related to deadlines and points
+ * @returns the points limit that is valid at given time
+ */
+export const getPointsAtTime = (
+  time,
+  {
+    firstDeadline,
+    secondDeadline,
+    maxPointsBeforeFirstDeadline,
+    maxPointsBeforeSecondDeadline = 0,
+    allowSecondDeadline = false,
+    maxPointsDeadlineInterpolation = false,
+  }
+) => {
+  if (time < firstDeadline) {
+    return maxPointsBeforeFirstDeadline;
+  }
+
+  if (allowSecondDeadline && time < secondDeadline) {
+    if (maxPointsDeadlineInterpolation) {
+      const deltaPoints = maxPointsBeforeFirstDeadline - maxPointsBeforeSecondDeadline;
+      const sign = Math.sign(deltaPoints);
+
+      // linear interpolation: how many points are subtracted from first max at $ts time
+      const sub = sign * Math.ceil(((time - firstDeadline) * Math.abs(deltaPoints)) / (secondDeadline - firstDeadline));
+      return maxPointsBeforeFirstDeadline - sub;
+    } else {
+      return maxPointsBeforeSecondDeadline;
+    }
+  }
+
+  return 0;
 };
