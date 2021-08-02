@@ -5,6 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
+import AssignmentMaxPoints from '../AssignmentMaxPoints';
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { ChatIcon, EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisibleAssignmentIcon } from '../../../icons';
@@ -25,6 +26,7 @@ const AssignmentTableRow = ({
     maxPointsBeforeFirstDeadline,
     secondDeadline,
     maxPointsBeforeSecondDeadline,
+    maxPointsDeadlineInterpolation,
     isBonus,
     isPublic,
     visibleFrom,
@@ -37,6 +39,7 @@ const AssignmentTableRow = ({
   isAdmin,
   showNames = true,
   showGroups = false,
+  showSecondDeadline = true,
   groupsAccessor = null,
   discussionOpen,
   intl: { locale },
@@ -96,11 +99,21 @@ const AssignmentTableRow = ({
     <td className="text-nowrap">
       <DateTime unixts={firstDeadline} isDeadline />
     </td>
-    <td className="text-center text-nowrap shrink-col">{maxPointsBeforeFirstDeadline}</td>
-    <td className="text-nowrap">
-      <DateTime unixts={allowSecondDeadline ? secondDeadline : null} isDeadline />
+
+    {showSecondDeadline && (
+      <td className="text-nowrap">
+        <DateTime unixts={allowSecondDeadline ? secondDeadline : null} isDeadline />
+      </td>
+    )}
+
+    <td className="text-center text-nowrap shrink-col">
+      <AssignmentMaxPoints
+        allowSecondDeadline={allowSecondDeadline}
+        maxPointsDeadlineInterpolation={maxPointsDeadlineInterpolation}
+        maxPointsBeforeFirstDeadline={maxPointsBeforeFirstDeadline}
+        maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
+      />
     </td>
-    <td className="text-center text-nowrap shrink-col">{allowSecondDeadline ? maxPointsBeforeSecondDeadline : ''}</td>
 
     <td className="text-right text-nowrap valign-middle">
       <TheButtonGroup>
@@ -172,6 +185,7 @@ AssignmentTableRow.propTypes = {
     maxPointsBeforeFirstDeadline: PropTypes.number,
     secondDeadline: PropTypes.number,
     maxPointsBeforeSecondDeadline: PropTypes.number,
+    maxPointsDeadlineInterpolation: PropTypes.bool,
     isBonus: PropTypes.bool,
     isPublic: PropTypes.bool,
     visibleFrom: PropTypes.number,
@@ -184,6 +198,7 @@ AssignmentTableRow.propTypes = {
   isAdmin: PropTypes.bool,
   showNames: PropTypes.bool,
   showGroups: PropTypes.bool,
+  showSecondDeadline: PropTypes.bool,
   groupsAccessor: PropTypes.func,
   discussionOpen: PropTypes.func,
   links: PropTypes.object,

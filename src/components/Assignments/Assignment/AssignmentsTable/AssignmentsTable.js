@@ -36,6 +36,10 @@ class AssignmentsTable extends Component {
       groupsAccessor = null,
       intl: { locale },
     } = this.props;
+
+    const assignmentsPreprocessed = assignments.filter(isReady).map(getJsData).sort(compareAssignmentsReverted);
+    const showSecondDeadline = assignmentsPreprocessed.some(assignment => assignment && assignment.secondDeadline);
+
     return (
       <>
         <Table hover>
@@ -72,13 +76,11 @@ class AssignmentsTable extends Component {
                   <FormattedMessage id="app.assignments.deadline" defaultMessage="Deadline" />
                 </th>
 
-                <th className="text-nowrap shrink-col">
-                  <FormattedMessage id="app.assignments.maxPointsShort" defaultMessage="Max. points" />
-                </th>
-
-                <th className="text-nowrap shrink-col">
-                  <FormattedMessage id="app.assignments.secondDeadline" defaultMessage="Second deadline" />
-                </th>
+                {showSecondDeadline && (
+                  <th className="text-nowrap shrink-col">
+                    <FormattedMessage id="app.assignments.secondDeadline" defaultMessage="Second deadline" />
+                  </th>
+                )}
 
                 <th className="text-nowrap shrink-col">
                   <FormattedMessage id="app.assignments.maxPointsShort" defaultMessage="Max. points" />
@@ -91,32 +93,27 @@ class AssignmentsTable extends Component {
           <tbody>
             {assignments.size === 0 && <NoAssignmentTableRow />}
 
-            {assignments.some(isLoading) && (
-              <LoadingAssignmentTableRow colSpan={5 + (assignmentEnvironmentsSelector ? 1 : 0)} />
-            )}
+            {assignments.some(isLoading) && <LoadingAssignmentTableRow colSpan={10} />}
 
-            {assignments
-              .filter(isReady)
-              .map(getJsData)
-              .sort(compareAssignmentsReverted)
-              .map(assignment => (
-                <AssignmentTableRow
-                  key={assignment.id}
-                  item={assignment}
-                  runtimeEnvironments={assignmentEnvironmentsSelector && assignmentEnvironmentsSelector(assignment.id)}
-                  userId={userId}
-                  status={fetchAssignmentStatus(statuses, assignment.id)}
-                  locale={locale}
-                  stats={
-                    Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null
-                  }
-                  isAdmin={isAdmin}
-                  showNames={showNames}
-                  showGroups={showGroups}
-                  groupsAccessor={groupsAccessor}
-                  discussionOpen={() => this.openDialog(assignment)}
-                />
-              ))}
+            {assignmentsPreprocessed.map(assignment => (
+              <AssignmentTableRow
+                key={assignment.id}
+                item={assignment}
+                runtimeEnvironments={assignmentEnvironmentsSelector && assignmentEnvironmentsSelector(assignment.id)}
+                userId={userId}
+                status={fetchAssignmentStatus(statuses, assignment.id)}
+                locale={locale}
+                stats={
+                  Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null
+                }
+                isAdmin={isAdmin}
+                showNames={showNames}
+                showGroups={showGroups}
+                showSecondDeadline={showSecondDeadline}
+                groupsAccessor={groupsAccessor}
+                discussionOpen={() => this.openDialog(assignment)}
+              />
+            ))}
           </tbody>
         </Table>
 
