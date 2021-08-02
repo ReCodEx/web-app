@@ -19,6 +19,7 @@ const FakeAvatar = ({ size = 45, borderWidth = 2, light = false, children, small
       borderRadius: Math.floor(getSize(size, borderWidth, small) / 2),
       fontSize: Math.floor(Math.max(10, getSize(size, borderWidth, small) / 2)),
       fontWeight: 'bolder',
+      boxShadow: '1px 1px 2px #999',
     }}
     className={altClassName}>
     {children}
