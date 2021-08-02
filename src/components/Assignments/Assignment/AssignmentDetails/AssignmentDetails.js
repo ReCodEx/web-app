@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Table, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import { Table, Modal } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 import Icon, {
@@ -18,6 +18,7 @@ import DateTime from '../../../widgets/DateTime';
 import Explanation from '../../../widgets/Explanation';
 import Button from '../../../widgets/TheButton';
 import AssignmentDeadlinesGraph from '../AssignmentDeadlinesGraph';
+import AssignmentMaxPoints from '../AssignmentMaxPoints';
 import { getPointsAtTime } from '../AssignmentDeadlinesGraph/helpers';
 
 const AssignmentDetails = ({
@@ -182,71 +183,13 @@ const AssignmentDetails = ({
               )}
             </th>
             <td>
-              {allowSecondDeadline && (
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id="firstDeadlineIconTooltip">
-                      <FormattedMessage
-                        id="app.assignment.maxPointsFirstTooltip"
-                        defaultMessage="Points awarded before the first deadline"
-                      />
-                    </Tooltip>
-                  }>
-                  <Icon icon="thermometer-full" smallGapRight className="text-muted" />
-                </OverlayTrigger>
-              )}
-
-              {maxPointsBeforeFirstDeadline}
-
-              {allowSecondDeadline && (
-                <>
-                  {maxPointsDeadlineInterpolation ? (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="interpolationIconTooltip">
-                          <FormattedMessage
-                            id="app.assignment.maxPointsInterpolationTooltip"
-                            defaultMessage="Points between the deadlines are linearly changing towards the second limit"
-                          />
-                        </Tooltip>
-                      }>
-                      <Icon
-                        icon="long-arrow-alt-right"
-                        gapLeft
-                        gapRight
-                        className="text-primary"
-                        transform={{ rotate: 42 }}
-                      />
-                    </OverlayTrigger>
-                  ) : (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="secondDeadlineIconTooltip">
-                          <FormattedMessage
-                            id="app.assignment.maxPointsSecondTooltip"
-                            defaultMessage="Points awarded between the deadlines"
-                          />
-                        </Tooltip>
-                      }>
-                      <Icon icon="thermometer-half" largeGapLeft smallGapRight className="text-muted" />
-                    </OverlayTrigger>
-                  )}
-                  {maxPointsBeforeSecondDeadline}
-                </>
-              )}
-
-              {(allowSecondDeadline || currentPointsLimit !== maxPointsBeforeFirstDeadline) && (
-                <small className="text-muted ml-3">
-                  <FormattedMessage
-                    id="app.assignment.currentMaxPointsNote"
-                    defaultMessage="({currentPointsLimit} at the moment)"
-                    values={{ currentPointsLimit }}
-                  />
-                </small>
-              )}
+              <AssignmentMaxPoints
+                allowSecondDeadline={allowSecondDeadline}
+                maxPointsDeadlineInterpolation={maxPointsDeadlineInterpolation}
+                maxPointsBeforeFirstDeadline={maxPointsBeforeFirstDeadline}
+                maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
+                currentPointsLimit={currentPointsLimit}
+              />
             </td>
           </tr>
 

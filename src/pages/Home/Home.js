@@ -67,37 +67,31 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
         <>
           <ResourceRenderer resource={instance} bulkyLoading>
             {instance => (
-              <>
-                <h2 className="mb-3">
-                  <FormattedMessage id="app.homepage.instance.title" defaultMessage="Institution" />
-                </h2>
+              <Row>
+                <Col xs={false} sm="auto">
+                  <h3>
+                    <GroupIcon gapLeft gapRight fixedWidth className="text-muted" />
+                  </h3>
+                </Col>
+                <Col xs={12} sm>
+                  <h3>{getLocalizedName(instance.rootGroup, locale)}</h3>
+                  <Markdown source={getLocalizedDescription(instance.rootGroup, locale)} />
 
-                <Row>
-                  <Col xs={false} sm="auto">
-                    <h3>
-                      <GroupIcon gapLeft gapRight fixedWidth className="text-muted" />
-                    </h3>
-                  </Col>
-                  <Col xs={12} sm>
-                    <h3>{getLocalizedName(instance.rootGroup, locale)}</h3>
-                    <Markdown source={getLocalizedDescription(instance.rootGroup, locale)} />
-
-                    <p>
-                      <FormattedMessage id="app.homepage.instance.administrator" defaultMessage="Administrator:" />{' '}
-                      <strong>
-                        <UsersNameContainer userId={instance.adminId} isSimple />,
-                      </strong>
-                      <a href={EXTERNAL_AUTH_HELPDESK_URL} className="ml-3">
-                        <MailIcon gapRight />
-                        <FormattedMessage
-                          id="app.homepage.instance.techSupport"
-                          defaultMessage="Technical support contact"
-                        />
-                      </a>
-                    </p>
-                  </Col>
-                </Row>
-              </>
+                  <p>
+                    <FormattedMessage id="app.homepage.instance.administrator" defaultMessage="Administrator:" />{' '}
+                    <strong>
+                      <UsersNameContainer userId={instance.adminId} isSimple />,
+                    </strong>
+                    <a href={EXTERNAL_AUTH_HELPDESK_URL} className="ml-3">
+                      <MailIcon gapRight />
+                      <FormattedMessage
+                        id="app.homepage.instance.techSupport"
+                        defaultMessage="Technical support contact"
+                      />
+                    </a>
+                  </p>
+                </Col>
+              </Row>
             )}
           </ResourceRenderer>
 
