@@ -248,6 +248,11 @@ class SolutionDetail extends Component {
                 bonusPoints={bonusPoints}
                 scoredPoints={safeGet(lastSubmission, ['evaluation', 'points'])}
                 maxPoints={maxPoints}
+                maxPointsEver={
+                  assignment.allowSecondDeadline
+                    ? Math.max(assignment.maxPointsBeforeFirstDeadline, assignment.maxPointsBeforeSecondDeadline)
+                    : assignment.maxPointsBeforeFirstDeadline
+                }
               />
             )}
 
