@@ -19,6 +19,7 @@ const PointsForm = ({
   warning,
   scoredPoints = null,
   maxPoints,
+  maxPointsEver,
 }) => (
   <FormBox
     title={<FormattedMessage id="app.pointsForm.title" defaultMessage="Awarded Points" />}
@@ -53,11 +54,19 @@ const PointsForm = ({
       <Row>
         <Col sm={12}>
           <p>
-            <b>
+            <strong className="mr-2">
               <FormattedMessage id="app.pointsForm.scoredPoints" defaultMessage="Scored points from last evaluation" />:
-            </b>
-            &nbsp;&nbsp;
+            </strong>
             {scoredPoints !== null ? scoredPoints : '-'} / {maxPoints}
+            {maxPointsEver !== maxPoints && (
+              <small className="ml-3 text-muted">
+                <FormattedMessage
+                  id="app.pointsForm.maxPointsEver"
+                  defaultMessage="(max. points limit regardless deadlines is {maxPointsEver})"
+                  values={{ maxPointsEver }}
+                />
+              </small>
+            )}
           </p>
         </Col>
       </Row>
@@ -99,17 +108,18 @@ PointsForm.propTypes = {
   warning: PropTypes.any,
   scoredPoints: PropTypes.number,
   maxPoints: PropTypes.number.isRequired,
+  maxPointsEver: PropTypes.number.isRequired,
 };
 
-const warn = ({ overriddenPoints }, { maxPoints }) => {
+const warn = ({ overriddenPoints }, { maxPointsEver }) => {
   const warnings = {};
   if (typeof overriddenPoints === 'number') {
-    if (overriddenPoints < 0 || overriddenPoints > maxPoints) {
-      warnings._warning = (
+    if (overriddenPoints < 0 || overriddenPoints > maxPointsEver) {
+      warnings.overriddenPoints = (
         <FormattedMessage
           id="app.pointsForm.validation.overrideOutOfRange"
-          defaultMessage="Points override is out of regular range. Regular score for this assignment is between 0 and {maxPoints}."
-          values={{ maxPoints }}
+          defaultMessage="Points override is out of regular range. Regular score for this assignment is between 0 and {maxPointsEver}."
+          values={{ maxPointsEver }}
         />
       );
     }
