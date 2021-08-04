@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 
 import AssignmentDeadlinesGraph from '../../Assignments/Assignment/AssignmentDeadlinesGraph';
-import Icon from '../../icons';
+import { PointsGraphIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
 import { deadlinesAndPontsAreValid } from './deadlineHelpers';
 
@@ -15,7 +15,7 @@ const DeadlinesGraphDialog = ({ deadlines, ...props }) => {
   return (
     <>
       <Button variant="primary" onClick={() => setOpen(true)} disabled={!valid} size="sm" className="mt-2">
-        <Icon icon={['far', 'chart-bar']} gapRight />
+        <PointsGraphIcon gapRight />
         <FormattedMessage id="app.editAssignmentForm.deadlinesGraphDialog.button" defaultMessage="Deadlines Graph" />
       </Button>
 
@@ -38,6 +38,7 @@ const DeadlinesGraphDialog = ({ deadlines, ...props }) => {
             <AssignmentDeadlinesGraph
               allowSecondDeadline={deadlines !== 'single'}
               maxPointsDeadlineInterpolation={deadlines === 'interpolated'}
+              viewportAspectRatio={deadlines === 'single' ? 1 / 3 : 1 / 2}
               {...props}
             />
           )}

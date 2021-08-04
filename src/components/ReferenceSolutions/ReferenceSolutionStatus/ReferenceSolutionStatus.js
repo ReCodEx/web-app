@@ -18,10 +18,10 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
     noPadding={true}
     collapsable={true}
     isOpen={true}>
-    <Table>
+    <Table responsive size="sm" className="mb-1">
       <tbody>
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted shrink-col px-2">
             <CodeIcon />
           </td>
           <th>
@@ -31,7 +31,7 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
         </tr>
 
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted shrink-col px-2">
             <EditIcon />
           </td>
           <th>
@@ -41,7 +41,7 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
         </tr>
 
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted shrink-col px-2">
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
@@ -53,7 +53,7 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
         </tr>
 
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted shrink-col px-2">
             <Icon icon="user" />
           </td>
           <th>
@@ -66,7 +66,7 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
 
         {Boolean(submittedBy) && submittedBy !== userId && (
           <tr>
-            <td className="text-center">
+            <td className="text-center text-muted shrink-col px-2">
               <Icon icon="user" />
             </td>
             <th className="text-nowrap">
@@ -80,11 +80,11 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
 
         {Boolean(environment) && Boolean(environment.name) && (
           <tr>
-            <td className="text-center">
+            <td className="text-center text-muted shrink-col px-2">
               <CodeIcon />
             </td>
             <th className="text-nowrap">
-              <FormattedMessage id="app.solution.environment" defaultMessage="Target language:" />
+              <FormattedMessage id="app.solution.environment" defaultMessage="Used language:" />
             </th>
             <td>
               <EnvironmentsListItem runtimeEnvironment={environment} longNames={true} />

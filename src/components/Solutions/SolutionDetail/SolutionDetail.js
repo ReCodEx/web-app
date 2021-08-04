@@ -93,9 +93,10 @@ class SolutionDetail extends Component {
     return (
       <div>
         <Row>
-          <Col md={6} sm={12}>
+          <Col xl={6}>
             <SolutionStatus
               id={id}
+              evaluation={evaluation}
               evaluationStatus={safeGet(lastSubmission, ['evaluationStatus'], 'missing-submission')}
               submittedAt={createdAt}
               userId={userId}
@@ -106,6 +107,7 @@ class SolutionDetail extends Component {
               reviewed={reviewed}
               assignment={assignment}
               actualPoints={actualPoints}
+              overriddenPoints={overriddenPoints}
               maxPoints={maxPoints}
               bonusPoints={bonusPoints}
               environment={
@@ -115,6 +117,109 @@ class SolutionDetail extends Component {
               }
               otherSolutions={otherSolutions}
             />
+          </Col>
+          <Col xl={6}>
+            {!evaluation && !failure && refreshSolutionEvaluations && (
+              <Callout variant="warning">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td width="100%" className="em-padding-right">
+                        <FormattedMessage
+                          id="app.submissionEvaluation.noEvaluationYet"
+                          defaultMessage="The evaluation is not available yet. Click the refresh button for an update."
+                        />
+                      </td>
+                      <td>
+                        <Button onClick={refreshSolutionEvaluations} variant="primary">
+                          <RefreshIcon gapRight />
+                          <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
+                        </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </Callout>
+            )}
+
+            {failure && (
+              <>
+                <Callout variant="danger" icon={<EvaluationFailedIcon />}>
+                  <h4>
+                    <FormattedMessage
+                      id="app.submissionEvaluation.evaluationFailedHeading"
+                      defaultMessage="The evaluation has failed!"
+                    />
+                  </h4>
+
+                  {typeof failure === 'object' ? (
+                    <p>
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailedMessage"
+                        defaultMessage="Backend message"
+                      />
+                      : <em>{failure.description}</em>
+                    </p>
+                  ) : (
+                    <p>
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailedInternalError"
+                        defaultMessage="Internal backend error."
+                      />
+                    </p>
+                  )}
+                </Callout>
+
+                {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
+                  <Callout variant="success" icon="fire-extinguisher">
+                    <span className="small float-right">
+                      (<DateTime unixts={failure.resolvedAt} />)
+                    </span>
+                    <h4>
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailureResolved"
+                        defaultMessage="The failure has been resolved by admin!"
+                      />
+                    </h4>
+                    <p>
+                      <FormattedMessage
+                        id="app.submissionEvaluation.evaluationFailureResolvedNote"
+                        defaultMessage="Resolution note"
+                      />
+                      : <em>{failure.resolutionNote}</em>
+                    </p>
+                  </Callout>
+                )}
+              </>
+            )}
+
+            {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (
+              <Callout variant="warning">
+                <FormattedMessage
+                  id="app.evaluationDetail.notActualEvaluation"
+                  defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom."
+                />
+              </Callout>
+            )}
+
+            {evaluation && (
+              <EvaluationDetail
+                evaluation={evaluation}
+                submittedAt={createdAt}
+                maxPoints={maxPoints}
+                isCorrect={isCorrect}
+                accepted={accepted}
+                evaluationStatus={evaluationStatus}
+                isDebug={isDebug}
+                viewResumbissions={permissionHints.viewResubmissions}
+                showScoreDetail={this.openScoreDialog}
+              />
+            )}
+          </Col>
+        </Row>
+
+        <Row>
+          <Col xl={6}>
             <Row>
               {files
                 .sort((a, b) => a.name.localeCompare(b.name, 'en'))
@@ -150,104 +255,7 @@ class SolutionDetail extends Component {
           </Col>
 
           {evaluations && (
-            <Col md={6} sm={12}>
-              {!evaluation && !failure && refreshSolutionEvaluations && (
-                <Callout variant="warning">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td width="100%" className="em-padding-right">
-                          <FormattedMessage
-                            id="app.submissionEvaluation.noEvaluationYet"
-                            defaultMessage="The evaluation is not available yet. Click the refresh button for an update."
-                          />
-                        </td>
-                        <td>
-                          <Button onClick={refreshSolutionEvaluations} variant="primary">
-                            <RefreshIcon gapRight />
-                            <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
-                          </Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Callout>
-              )}
-
-              {failure && (
-                <>
-                  <Callout variant="danger" icon={<EvaluationFailedIcon />}>
-                    <h4>
-                      <FormattedMessage
-                        id="app.submissionEvaluation.evaluationFailedHeading"
-                        defaultMessage="The evaluation has failed!"
-                      />
-                    </h4>
-
-                    {typeof failure === 'object' ? (
-                      <p>
-                        <FormattedMessage
-                          id="app.submissionEvaluation.evaluationFailedMessage"
-                          defaultMessage="Backend message"
-                        />
-                        : <em>{failure.description}</em>
-                      </p>
-                    ) : (
-                      <p>
-                        <FormattedMessage
-                          id="app.submissionEvaluation.evaluationFailedInternalError"
-                          defaultMessage="Internal backend error."
-                        />
-                      </p>
-                    )}
-                  </Callout>
-
-                  {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
-                    <Callout variant="success" icon="fire-extinguisher">
-                      <span className="small float-right">
-                        (<DateTime unixts={failure.resolvedAt} />)
-                      </span>
-                      <h4>
-                        <FormattedMessage
-                          id="app.submissionEvaluation.evaluationFailureResolved"
-                          defaultMessage="The failure has been resolved by admin!"
-                        />
-                      </h4>
-                      <p>
-                        <FormattedMessage
-                          id="app.submissionEvaluation.evaluationFailureResolvedNote"
-                          defaultMessage="Resolution note"
-                        />
-                        : <em>{failure.resolutionNote}</em>
-                      </p>
-                    </Callout>
-                  )}
-                </>
-              )}
-
-              {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (
-                <Callout variant="warning">
-                  <FormattedMessage
-                    id="app.evaluationDetail.notActualEvaluation"
-                    defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom."
-                  />
-                </Callout>
-              )}
-
-              {evaluation && (
-                <EvaluationDetail
-                  evaluation={evaluation}
-                  submittedAt={createdAt}
-                  maxPoints={maxPoints}
-                  isCorrect={isCorrect}
-                  accepted={accepted}
-                  evaluationStatus={evaluationStatus}
-                  isDebug={isDebug}
-                  viewResumbissions={permissionHints.viewResubmissions}
-                  showScoreDetail={this.openScoreDialog}
-                />
-              )}
-
+            <Col xl={6}>
               {evaluation && <CompilationLogs initiationOutputs={evaluation.initiationOutputs} />}
 
               {evaluation && (
@@ -291,7 +299,6 @@ class SolutionDetail extends Component {
             </Col>
           )}
         </Row>
-
         <SourceCodeViewerContainer
           solutionId={id}
           show={openFileId !== null}
@@ -301,7 +308,6 @@ class SolutionDetail extends Component {
           onHide={this.hideFile}
           submittedBy={userId}
         />
-
         {activeSubmissionId && scoreConfigSelector && (
           <ScoreConfigInfoDialog
             show={scoreDialogOpened}

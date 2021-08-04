@@ -33,15 +33,18 @@ const AssignmentDeadlinesGraph = ({
   color = '#448',
   markerColor = 'orange',
   gridLineColor = '#aaa',
+  viewportWidth = null,
+  viewportAspectRatio = 1 / 2,
 }) => {
-  const width = getAppropriateWidth({
-    allowSecondDeadline,
-    maxPointsDeadlineInterpolation,
-    maxPointsBeforeFirstDeadline,
-    maxPointsBeforeSecondDeadline,
-  });
-  const height = width / 2;
-  //  const margin = height / 100;
+  const width =
+    viewportWidth ||
+    getAppropriateWidth({
+      allowSecondDeadline,
+      maxPointsDeadlineInterpolation,
+      maxPointsBeforeFirstDeadline,
+      maxPointsBeforeSecondDeadline,
+    });
+  const height = width * viewportAspectRatio;
 
   // normalize deadlines (as unix timestamps)
   firstDeadline = firstDeadline && moment.isMoment(firstDeadline) ? firstDeadline.unix() : firstDeadline;
@@ -185,6 +188,8 @@ AssignmentDeadlinesGraph.propTypes = {
   gridLineColor: PropTypes.string,
   markerTime: PropTypes.number,
   markerPoints: PropTypes.number,
+  viewportWidth: PropTypes.number,
+  viewportAspectRatio: PropTypes.number,
 };
 
 export default AssignmentDeadlinesGraph;
