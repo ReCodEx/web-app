@@ -35,12 +35,12 @@ export const ErrorIcon = props => <Icon {...props} icon="exclamation-circle" />;
 export const EvaluationFailedIcon = props => <Icon {...props} icon="bomb" />;
 export const ExerciseIcon = props => <Icon {...props} icon="puzzle-piece" />;
 export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
-  isOpen ? <Icon icon={['far', 'minus-square']} gapRight /> : <Icon icon={['far', 'plus-square']} gapRight />;
-export const FailureIcon = props => (
-  <strong className="text-danger">
-    <Icon {...props} icon="times" />
-  </strong>
-);
+  isOpen ? (
+    <Icon icon={['far', 'minus-square']} gapRight {...props} />
+  ) : (
+    <Icon icon={['far', 'plus-square']} gapRight {...props} />
+  );
+export const FailureIcon = props => <Icon className="text-danger" {...props} icon="times" />;
 export const GroupIcon = ({ organizational = false, archived = false, ...props }) => (
   <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'} />
 );
@@ -54,6 +54,11 @@ export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
 export { NeedFixingIcon };
 export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
+export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-muted" {...props} />;
+export const PointsGraphIcon = props => <Icon icon={['far', 'chart-bar']} {...props} />;
+export const PointsInterpolationIcon = props => (
+  <Icon icon="long-arrow-alt-right" className="text-muted" transform={{ rotate: 33 }} {...props} />
+);
 export const RedoIcon = props => <Icon {...props} icon="redo-alt" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
@@ -73,7 +78,7 @@ export const SortedIcon = ({ active = true, descending = false, ...props }) => (
     {...props}
   />
 );
-export const SuccessIcon = props => <Icon {...props} icon="check" />;
+export const SuccessIcon = props => <Icon className="text-success" {...props} icon="check" />;
 export const SuccessOrFailureIcon = ({ success = false, colors = true, ...props }) =>
   success ? (
     <SuccessIcon className={colors ? 'text-success' : ''} {...props} />

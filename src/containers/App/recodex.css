@@ -255,6 +255,10 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
 /*
  * Bootstrap Enhancements
  */
+code {
+  color: #063;
+}
+
 .wider-tooltip {
   width: 300px;
 }

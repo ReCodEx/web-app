@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from '../../../icons';
+import { PointsInterpolationIcon, PointsDecreasedIcon } from '../../../icons';
 
 const AssignmentMaxPoints = ({
   allowSecondDeadline,
@@ -50,9 +50,9 @@ const AssignmentMaxPoints = ({
         }>
         <span>
           {maxPointsDeadlineInterpolation ? (
-            <Icon icon="long-arrow-alt-right" gapLeft smallGapRight className="text-muted" transform={{ rotate: 33 }} />
+            <PointsInterpolationIcon gapLeft smallGapRight />
           ) : (
-            <Icon icon="level-down-alt" gapLeft smallGapRight className="text-muted" />
+            <PointsDecreasedIcon gapLeft smallGapRight />
           )}
           {maxPointsBeforeSecondDeadline}
         </span>

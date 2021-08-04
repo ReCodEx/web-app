@@ -7,6 +7,7 @@ import { Table } from 'react-bootstrap';
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
+import Explanation from '../../widgets/Explanation';
 import Icon, { SuccessOrFailureIcon, BugIcon } from '../../icons';
 
 const EvaluationDetail = ({
@@ -26,14 +27,20 @@ const EvaluationDetail = ({
     noPadding={true}
     collapsable={true}
     isOpen={true}>
-    <Table>
+    <Table responsive size="sm" className="mb-1">
       <tbody>
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted shrink-col px-2">
             <Icon icon={['far', 'clock']} />
           </td>
           <th className="text-nowrap">
             <FormattedMessage id="app.evaluationDetail.evaluatedAt" defaultMessage="Evaluated at:" />
+            <Explanation id="evaluatedAt">
+              <FormattedMessage
+                id="app.evaluationDetail.explanations.evaluatedAt"
+                defaultMessage="Time when the evaluation has concluded. It may differ from the time of submission if the evaluation took long of if the solution was re-evaluated."
+              />
+            </Explanation>
           </th>
           <td>
             <DateTime unixts={evaluation.evaluatedAt} showRelative showSeconds />
@@ -41,11 +48,17 @@ const EvaluationDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted shrink-col px-2">
             <Icon icon="cogs" />
           </td>
           <th className="text-nowrap">
             <FormattedMessage id="app.evaluationDetail.buildSucceeded" defaultMessage="Build succeeded:" />
+            <Explanation id="buildSucceeded">
+              <FormattedMessage
+                id="app.evaluationDetail.explanations.buildSucceeded"
+                defaultMessage="Whether the compilation of the solution succeeded. If the compilation fails, the solution is not executed."
+              />
+            </Explanation>
           </th>
           <td>
             <SuccessOrFailureIcon success={!evaluation.initFailed} />
@@ -53,11 +66,17 @@ const EvaluationDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center">
+          <td className="text-center text-muted shrink-col px-2">
             <Icon icon="percent" />
           </td>
           <th className="text-nowrap">
             <FormattedMessage id="app.evaluationDetail.isCorrect" defaultMessage="Correctness" />:
+            <Explanation id="correctness">
+              <FormattedMessage
+                id="app.evaluationDetail.explanations.correctness"
+                defaultMessage="Overall correctness of the solution. There are multiple options how the correcntess of solution is computed from the test results. Use the explanation link to see how the correctness was computed."
+              />
+            </Explanation>
           </th>
           <td
             className={classnames({
@@ -68,9 +87,11 @@ const EvaluationDetail = ({
               <FormattedNumber style="percent" value={evaluation.score} />
             </b>
             {showScoreDetail && (
-              <span className="float-right clickable text-primary" onClick={showScoreDetail}>
-                <FormattedMessage id="app.evaluationDetail.explainCorrectness" defaultMessage="explain" />
-                <Icon icon="calculator" gapLeft gapRight />
+              <span className="float-right clickable text-primary mx-2" onClick={showScoreDetail}>
+                <small>
+                  <FormattedMessage id="generic.explain" defaultMessage="explain" />
+                </small>
+                <Icon icon="calculator" gapLeft />
               </span>
             )}
           </td>
@@ -78,11 +99,17 @@ const EvaluationDetail = ({
 
         {!referenceSolution && maxPoints !== null && (
           <tr>
-            <td className="text-center">
+            <td className="text-center text-muted shrink-col px-2">
               <Icon icon={['far', 'star']} />
             </td>
             <th className="text-nowrap">
               <FormattedMessage id="app.evaluationDetail.scoredPoints" defaultMessage="Scored points" />:
+              <Explanation id="scoredPoints">
+                <FormattedMessage
+                  id="app.evaluationDetail.explanations.scoredPoints"
+                  defaultMessage="Points scored for this evaluation by ReCodEx. This may differ from the final score since the teacher may choose to override the points."
+                />
+              </Explanation>
             </th>
             <td
               className={classnames({
@@ -98,7 +125,7 @@ const EvaluationDetail = ({
 
         {!referenceSolution && (
           <tr>
-            <td className="text-center">
+            <td className="text-center text-muted shrink-col px-2">
               <b>
                 <AssignmentStatusIcon id={String(submittedAt)} status={evaluationStatus} accepted={accepted} />
               </b>
@@ -145,11 +172,17 @@ const EvaluationDetail = ({
 
         {viewResumbissions && (
           <tr>
-            <td className="text-center">
+            <td className="text-center text-muted shrink-col px-2">
               <BugIcon />
             </td>
             <th className="text-nowrap">
               <FormattedMessage id="app.evaluationDetail.isDebug" defaultMessage="Debug Mode" />:
+              <Explanation id="isDebug">
+                <FormattedMessage
+                  id="app.evaluationDetail.explanations.isDebug"
+                  defaultMessage="In debugging mode, the detailed evaluation logs retain also the outputs of the executed solution which may be quite large."
+                />
+              </Explanation>
             </th>
             <td>
               <SuccessOrFailureIcon success={isDebug} />
