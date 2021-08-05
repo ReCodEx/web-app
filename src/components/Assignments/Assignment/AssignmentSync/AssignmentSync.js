@@ -66,14 +66,25 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
         <Callout variant="warning">
           <h4>
             <FormattedMessage
-              id="app.assignment.syncRequired"
-              defaultMessage="The exercise data are newer than assignment data. Exercise was updated {exerciseUpdated}, but the assignment was last updated {assignmentUpdated}!"
+              id="app.assignment.syncRequiredTitle"
+              defaultMessage="The exercise data are newer than assignment data"
               values={{
                 exerciseUpdated: <DateTime unixts={syncInfo.updatedAt.exercise} emptyPlaceholder="??" />,
                 assignmentUpdated: <DateTime unixts={syncInfo.updatedAt.assignment} emptyPlaceholder="??" />,
               }}
             />
           </h4>
+          <p>
+            <FormattedMessage
+              id="app.assignment.syncRequired"
+              defaultMessage="Exercise was updated <strong>{exerciseUpdated}</strong>, but the assignment was last updated <strong>{assignmentUpdated}</strong>!"
+              values={{
+                exerciseUpdated: <DateTime unixts={syncInfo.updatedAt.exercise} emptyPlaceholder="??" />,
+                assignmentUpdated: <DateTime unixts={syncInfo.updatedAt.assignment} emptyPlaceholder="??" />,
+                strong: contents => <strong>{contents}</strong>,
+              }}
+            />
+          </p>
           <div>
             <FormattedMessage
               id="app.assignment.syncDescription"
