@@ -78,8 +78,8 @@ const AssignmentDeadlinesGraph = ({
     allowSecondDeadline,
     maxPointsDeadlineInterpolation,
   });
-  const landmarksX = normalizeTimestamps(lines, firstDeadline, secondDeadline, marker); // todo marker
-  const landmarksY = normalizePointsCoordinates(lines, maxPoints, marker); // todo marker
+  const landmarksX = normalizeTimestamps(lines, firstDeadline, secondDeadline, marker);
+  const landmarksY = normalizePointsCoordinates(lines, maxPoints, marker);
 
   normalizeMarkerCoordinates(marker, width, height);
 

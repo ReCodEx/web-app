@@ -8,7 +8,7 @@ import prettyMs from 'pretty-ms';
 import Button from '../../widgets/TheButton';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import exitCodeMapping from '../../helpers/exitCodeMapping';
-import Icon from '../../icons';
+import Icon, { SuccessOrFailureIcon, SuccessIcon, FailureIcon } from '../../icons';
 
 import styles from './TestResultsTable.less';
 
@@ -21,7 +21,7 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) => (
       'text-success': isOK,
       'text-danger': !isOK,
     })}>
-    <Icon icon={isOK ? 'check' : 'times'} gapRight />
+    <SuccessOrFailureIcon success={isOK} smallGapRight />
     <small>
       {hasValue(value) && '('}
       {(ratio || ratio === 0) && (
@@ -41,7 +41,7 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
       <tbody>
         {showCpu && (
           <tr>
-            <td className="text-muted">
+            <td className="text-muted p-0">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -52,17 +52,17 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
                     />
                   </Tooltip>
                 }>
-                <Icon icon="microchip" style={{ marginRight: '10px' }} />
+                <Icon icon="microchip" gapRight />
               </OverlayTrigger>
             </td>
-            <td className="text-left">
+            <td className="text-left p-0 text-nowrap">
               {tickOrCrossAndRatioOrValue(cpuTimeExceeded === false, cpuTimeRatio, cpuTime, prettyMs, 1000)}
             </td>
           </tr>
         )}
         {showWall && (
           <tr>
-            <td className="text-muted">
+            <td className="text-muted p-0">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -73,10 +73,10 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
                     />
                   </Tooltip>
                 }>
-                <Icon icon={['far', 'clock']} style={{ marginRight: '10px' }} />
+                <Icon icon={['far', 'clock']} gapRight />
               </OverlayTrigger>
             </td>
-            <td className="text-left">
+            <td className="text-left p-0 text-nowrap">
               {tickOrCrossAndRatioOrValue(wallTimeExceeded === false, wallTimeRatio, wallTime, prettyMs, 1000)}
             </td>
           </tr>
@@ -162,7 +162,7 @@ class TestResultsTable extends Component {
           </b>
         </td>
 
-        <td className="text-center">
+        <td className="text-center text-nowrap">
           {tickOrCrossAndRatioOrValue(memoryExceeded === false, memoryRatio, memory, prettyPrintBytes, 1024)}
         </td>
         <td className="text-center">
@@ -221,7 +221,7 @@ class TestResultsTable extends Component {
     } = this.props;
     return (
       <tr key={`${testName}-log`}>
-        <td colSpan={7}>
+        <td colSpan={7} className={styles.logWrapper}>
           <table className={styles.logWrapper}>
             <tbody>
               {judgeLogStdout && showJudgeLogStdout && (
@@ -301,11 +301,11 @@ class TestResultsTable extends Component {
       showLogButton && results.reduce((out, { testName }) => out && !this.isLogOpen(testName), true);
 
     return (
-      <Table responsive style={{}}>
+      <Table responsive>
         <thead>
           <tr>
             <th />
-            <th className="text-center">
+            <th className="text-center text-nowrap text-muted">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -317,11 +317,12 @@ class TestResultsTable extends Component {
                   </Tooltip>
                 }>
                 <span>
-                  <Icon icon="check" />/<Icon icon="times" />
+                  <SuccessIcon smallGapRight className="text-muted" />/
+                  <FailureIcon smallGapLeft className="text-muted" />
                 </span>
               </OverlayTrigger>
             </th>
-            <th className="text-center">
+            <th className="text-center text-nowrap text-muted">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -335,7 +336,7 @@ class TestResultsTable extends Component {
                 <Icon icon="balance-scale" />
               </OverlayTrigger>
             </th>
-            <th className="text-center">
+            <th className="text-center text-nowrap text-muted">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -352,7 +353,7 @@ class TestResultsTable extends Component {
                 </span>
               </OverlayTrigger>
             </th>
-            <th className="text-center">
+            <th className="text-center text-nowrap text-muted">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -369,7 +370,7 @@ class TestResultsTable extends Component {
                 </span>
               </OverlayTrigger>
             </th>
-            <th className="text-center">
+            <th className="text-center text-nowrap text-muted">
               <OverlayTrigger
                 placement="top"
                 overlay={

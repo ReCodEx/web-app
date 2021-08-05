@@ -190,9 +190,7 @@ class SolutionStatus extends Component {
                   </Explanation>
                 </th>
                 <td>
-                  <DateTime unixts={submittedAt} showRelative />
-
-                  <span className="float-right mx-2">
+                  <span className="mr-2">
                     <OverlayTrigger
                       placement="bottom"
                       overlay={
@@ -227,6 +225,8 @@ class SolutionStatus extends Component {
                       </span>
                     </OverlayTrigger>
                   </span>
+
+                  <DateTime unixts={submittedAt} showRelative />
                 </td>
               </tr>
 
