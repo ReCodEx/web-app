@@ -41,6 +41,7 @@ const SolutionsTableRow = ({
   permissionHints = null,
   noteMaxlen = null,
   compact = false,
+  selected = false,
   links: { SOLUTION_DETAIL_URI_FACTORY },
   intl: { locale },
 }) => {
@@ -58,7 +59,7 @@ const SolutionsTableRow = ({
 
   return (
     <tbody>
-      <tr>
+      <tr className={selected ? 'table-active' : ''}>
         <td
           rowSpan={splitOnTwoLines ? 2 : 1}
           className={classnames({
@@ -128,7 +129,7 @@ const SolutionsTableRow = ({
                 hide={!compact}
                 tooltipId={`detail-${id}`}>
                 <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
-                  <Button size="xs" variant="secondary">
+                  <Button size="xs" variant="secondary" disabled={selected}>
                     <SearchIcon gapRight={!compact} />
                     {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
                   </Button>
@@ -197,6 +198,7 @@ SolutionsTableRow.propTypes = {
   permissionHints: PropTypes.object,
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool.isRequired,
+  selected: PropTypes.bool,
   links: PropTypes.object,
   intl: PropTypes.object,
 };

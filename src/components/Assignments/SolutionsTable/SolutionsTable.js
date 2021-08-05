@@ -17,6 +17,7 @@ const SolutionsTable = ({
   runtimeEnvironments,
   noteMaxlen = null,
   compact = false,
+  selected = null,
 }) => (
   <Table responsive className={styles.solutionsTable}>
     <thead>
@@ -82,6 +83,7 @@ const SolutionsTable = ({
             groupId={groupId}
             noteMaxlen={noteMaxlen}
             compact={compact}
+            selected={id === selected}
             {...data}
           />
         );
@@ -97,6 +99,7 @@ SolutionsTable.propTypes = {
   runtimeEnvironments: PropTypes.array,
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool,
+  selected: PropTypes.string,
 };
 
 export default SolutionsTable;
