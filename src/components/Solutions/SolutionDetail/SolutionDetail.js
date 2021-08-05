@@ -110,6 +110,8 @@ class SolutionDetail extends Component {
               overriddenPoints={overriddenPoints}
               maxPoints={maxPoints}
               bonusPoints={bonusPoints}
+              runtimeEnvironmentId={runtimeEnvironmentId}
+              runtimeEnvironments={runtimeEnvironments}
               environment={
                 runtimeEnvironments &&
                 runtimeEnvironmentId &&

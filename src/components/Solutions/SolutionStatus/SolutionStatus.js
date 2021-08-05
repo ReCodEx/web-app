@@ -30,6 +30,7 @@ import Icon, {
   WarningIcon,
 } from '../../icons';
 import AssignmentDeadlinesGraph from '../../Assignments/Assignment/AssignmentDeadlinesGraph';
+import SolutionsTable from '../../Assignments/SolutionsTable';
 
 const getEditNoteFormInitialValues = defaultMemoize(note => ({ note }));
 
@@ -40,18 +41,23 @@ const getImportantSolutions = defaultMemoize((solutions, selectedSolutionId) => 
   const best = solutions.find(s => s.isBestSolution && s.id !== selectedSolutionId) || null;
   let lastReviewed = solutions.filter(s => s.reviewed).shift();
   lastReviewed = lastReviewed && lastReviewed.id !== selectedSolutionId ? lastReviewed : null;
-  let last = solutions.shift();
-  last = last && last.id !== selectedSolutionId ? last : null;
-  return { selectedIdx, accepted, best, lastReviewed, last };
+  return { selectedIdx, accepted, best, lastReviewed };
 });
 
 class SolutionStatus extends Component {
-  state = { editDialogOpen: false, explainDialogOpen: false };
+  state = { editDialogOpen: false, explainDialogOpen: false, otherSolutionsDialogOpen: false };
 
-  openEditDialog = () => this.setState({ editDialogOpen: true, explainDialogOpen: false });
-  openExplainDialog = () => this.setState({ editDialogOpen: false, explainDialogOpen: true });
+  openEditDialog = () =>
+    this.setState({ editDialogOpen: true, explainDialogOpen: false, otherSolutionsDialogOpen: false });
+
+  openExplainDialog = () =>
+    this.setState({ editDialogOpen: false, explainDialogOpen: true, otherSolutionsDialogOpen: false });
+
+  openOtherSolutionsDialog = () =>
+    this.setState({ editDialogOpen: false, explainDialogOpen: false, otherSolutionsDialogOpen: true });
+
   closeDialog = () => {
-    this.setState({ editDialogOpen: false, explainDialogOpen: false });
+    this.setState({ editDialogOpen: false, explainDialogOpen: false, otherSolutionsDialogOpen: false });
     return Promise.resolve();
   };
 
@@ -66,6 +72,7 @@ class SolutionStatus extends Component {
       otherSolutions,
       assignment: {
         id: assignmentId,
+        groupId,
         firstDeadline,
         allowSecondDeadline,
         secondDeadline,
@@ -82,7 +89,8 @@ class SolutionStatus extends Component {
       note,
       accepted,
       reviewed,
-      environment,
+      runtimeEnvironmentId,
+      runtimeEnvironments,
       maxPoints,
       bonusPoints,
       actualPoints,
@@ -92,6 +100,8 @@ class SolutionStatus extends Component {
     } = this.props;
 
     const important = getImportantSolutions(otherSolutions, id);
+    const environment =
+      runtimeEnvironments && runtimeEnvironmentId && runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId);
 
     return (
       <>
@@ -347,30 +357,12 @@ class SolutionStatus extends Component {
                     }}
                   />
 
-                  {important.last && (!important.accepted || important.accepted.id !== important.last.id) && (
-                    <span className="small float-right mx-2">
-                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.last.id)}>
-                        <FormattedMessage id="app.solution.lastSolution" defaultMessage="last" />
-                        <LinkIcon gapLeft />
-                      </Link>
-                    </span>
-                  )}
-
-                  {!important.accepted && important.best && (
-                    <span className="small float-right mx-2">
-                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.best.id)}>
-                        <FormattedMessage id="app.solution.best" defaultMessage="best" />
-                        <LinkIcon gapLeft />
-                      </Link>
-                    </span>
-                  )}
-
-                  {important.accepted && (
-                    <span className="small float-right mx-2">
-                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.accepted.id)}>
-                        <FormattedMessage id="app.solution.accepted" defaultMessage="accepted" />
-                        <LinkIcon gapLeft />
-                      </Link>
+                  {otherSolutions && otherSolutions.size > 1 && (
+                    <span
+                      className="small float-right clickable text-primary mx-2"
+                      onClick={this.openOtherSolutionsDialog}>
+                      <FormattedMessage id="app.solution.allSolutions" defaultMessage="all solutions" />
+                      <Icon icon="list-ul" gapLeft />
                     </span>
                   )}
                 </td>
@@ -501,6 +493,27 @@ class SolutionStatus extends Component {
             </Modal.Body>
           </Modal>
         )}
+
+        <Modal show={this.state.otherSolutionsDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <FormattedMessage
+                id="app.solution.otherSolutionsTitle"
+                defaultMessage="All Solutions of The Assignment"
+              />
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <SolutionsTable
+              solutions={otherSolutions}
+              assignmentId={assignmentId}
+              groupId={groupId}
+              runtimeEnvironments={runtimeEnvironments}
+              noteMaxlen={32}
+              selected={id}
+            />
+          </Modal.Body>
+        </Modal>
       </>
     );
   }
@@ -511,6 +524,7 @@ SolutionStatus.propTypes = {
   otherSolutions: ImmutablePropTypes.list.isRequired,
   assignment: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    groupId: PropTypes.string.isRequired,
     firstDeadline: PropTypes.number.isRequired,
     allowSecondDeadline: PropTypes.bool.isRequired,
     secondDeadline: PropTypes.number,
@@ -527,7 +541,8 @@ SolutionStatus.propTypes = {
   note: PropTypes.string,
   accepted: PropTypes.bool.isRequired,
   reviewed: PropTypes.bool.isRequired,
-  environment: PropTypes.object,
+  runtimeEnvironmentId: PropTypes.string,
+  runtimeEnvironments: PropTypes.array,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,
   actualPoints: PropTypes.number,
