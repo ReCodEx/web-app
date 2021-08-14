@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 
 import ShadowAssignmentPointsTable from '../../components/Assignments/ShadowAssignmentPointsTable';
 
-import { fetchStudents } from '../../redux/modules/users';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups';
+import { fetchByIds } from '../../redux/modules/users';
+import { safeGet } from '../../helpers/common';
 import { setShadowAssignmentPoints, removeShadowAssignmentPoints } from '../../redux/modules/shadowAssignments';
 import { studentsOfGroupSelector } from '../../redux/selectors/users';
 
@@ -49,7 +51,10 @@ export default connect(
     students: studentsOfGroupSelector(state, groupId),
   }),
   (dispatch, { groupId, id }) => ({
-    loadAsync: () => dispatch(fetchStudents(groupId)),
+    loadAsync: () =>
+      dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
+        dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+      ),
     setPoints: ({ awardeeId, pointsId, points, note, awardedAt }) =>
       dispatch(setShadowAssignmentPoints(groupId, id, awardeeId, pointsId, points, note, awardedAt)),
     removePoints: (pointsId, awardeeId) => dispatch(removeShadowAssignmentPoints(groupId, id, awardeeId, pointsId)),

@@ -8,7 +8,7 @@ import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
 import { createGroup, fetchGroupIfNeeded, fetchAllGroups } from '../../redux/modules/groups';
-import { fetchSupervisors, fetchUser } from '../../redux/modules/users';
+import { fetchByIds, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import {
   isSupervisorOf,
@@ -41,7 +41,7 @@ class GroupInfo extends Component {
       .then(res => res.value)
       .then(group =>
         Promise.all([
-          dispatch(fetchSupervisors(groupId)),
+          dispatch(fetchByIds(safeGet(group, ['privateData', 'supervisors'], []))),
           group.archived ? dispatch(fetchAllGroups({ archived: true })) : null,
         ])
       );
@@ -58,7 +58,8 @@ class GroupInfo extends Component {
       const newData = this.props.group.toJS().data.privateData;
       const prevData = prevProps.group.toJS().data.privateData;
       if (safeGet(prevData, ['supervisors', 'length'], -1) !== safeGet(newData, ['supervisors', 'length'], -1)) {
-        this.props.refetchSupervisors();
+        const groupJs = this.props.group.toJS();
+        this.props.refetchSupervisors(safeGet(groupJs, ['data', 'privateData', 'supervisors'], []));
       }
     }
   }
@@ -293,7 +294,7 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
         })
       ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
-  refetchSupervisors: () => dispatch(fetchSupervisors(params.groupId)),
+  refetchSupervisors: ids => dispatch(fetchByIds(ids)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo));

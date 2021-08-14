@@ -22,7 +22,7 @@ import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupStats, fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
-import { fetchStudents } from '../../redux/modules/users';
+import { fetchByIds } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import {
   fetchShadowAssignmentsForGroup,
@@ -61,7 +61,7 @@ import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
 import { isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles';
-import { EMPTY_LIST, hasPermissions, hasOneOfPermissions } from '../../helpers/common';
+import { EMPTY_LIST, hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupDetail extends Component {
@@ -76,7 +76,9 @@ class GroupDetail extends Component {
                 dispatch(fetchShadowAssignmentsForGroup(groupId)),
               ])
             : Promise.resolve(),
-          hasPermissions(group, 'viewStudents') ? dispatch(fetchStudents(groupId)) : Promise.resolve(),
+          hasPermissions(group, 'viewStudents')
+            ? dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+            : Promise.resolve(),
           dispatch(fetchGroupStats(groupId)),
         ])
       ),
