@@ -19,6 +19,10 @@ export const additionalActionTypes = {
   VALIDATE_REGISTRATION_DATA_PENDING: 'recodex/users/VALIDATE_REGISTRATION_DATA_PENDING',
   VALIDATE_REGISTRATION_DATA_FULFILLED: 'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
   VALIDATE_REGISTRATION_DATA_REJECTED: 'recodex/users/VALIDATE_REGISTRATION_DATA_REJECTED',
+  FETCH_BY_IDS: 'recodex/users/FETCH_BY_IDS',
+  FETCH_BY_IDS_PENDING: 'recodex/users/FETCH_BY_IDS_PENDING',
+  FETCH_BY_IDS_FULFILLED: 'recodex/users/FETCH_BY_IDS_FULFILLED',
+  FETCH_BY_IDS_REJECTED: 'recodex/users/FETCH_BY_IDS_REJECTED',
   CREATE_LOCAL_LOGIN: 'recodex/users/CREATE_LOCAL_LOGIN',
   CREATE_LOCAL_LOGIN_PENDING: 'recodex/users/CREATE_LOCAL_LOGIN_PENDING',
   CREATE_LOCAL_LOGIN_FULFILLED: 'recodex/users/CREATE_LOCAL_LOGIN_FULFILLED',
@@ -60,14 +64,13 @@ export const updateSettings = (id, body) => actions.updateResource(id, body, `/u
 export const updateUiData = (id, uiData) => actions.updateResource(id, { uiData }, `/users/${id}/ui-data`);
 export const deleteUser = actions.removeResource;
 
-export const fetchSupervisors = groupId =>
-  actions.fetchMany({
-    endpoint: `/groups/${groupId}/supervisors`,
-  });
-
-export const fetchStudents = groupId =>
-  actions.fetchMany({
-    endpoint: `/groups/${groupId}/students`,
+export const fetchByIds = ids =>
+  createApiAction({
+    type: additionalActionTypes.FETCH_BY_IDS,
+    endpoint: '/users/list',
+    method: 'POST',
+    meta: { ids },
+    body: { ids },
   });
 
 export const makeLocalLogin = id =>
@@ -106,6 +109,40 @@ const reducer = handleActions(
         ['resources', id, 'data'],
         fromJS(payload.user && typeof payload.user === 'object' ? payload.user : payload)
       ),
+
+    [additionalActionTypes.FETCH_BY_IDS_PENDING]: (state, { meta: { ids } }) =>
+      state.update('resources', users => {
+        ids.forEach(id => {
+          if (!users.has(id)) {
+            users = users.set(id, createRecord());
+          }
+        });
+        return users;
+      }),
+
+    [additionalActionTypes.FETCH_BY_IDS_FULFILLED]: (state, { payload, meta: { ids } }) =>
+      state.update('resources', users => {
+        payload.forEach(user => {
+          users = users.set(user.id, createRecord({ state: resourceStatus.FULFILLED, data: user }));
+        });
+        // in case some of the users were not returned in payload
+        ids.forEach(id => {
+          if (users.has(id) && users.getIn([id, 'data'], null) === null) {
+            users = users.delete(id);
+          }
+        });
+        return users;
+      }),
+
+    [additionalActionTypes.FETCH_BY_IDS_REJECTED]: (state, { meta: { ids } }) =>
+      state.update('resources', users => {
+        ids.forEach(id => {
+          if (users.has(id) && users.getIn([id, 'data'], null) === null) {
+            users = users.delete(id);
+          }
+        });
+        return users;
+      }),
 
     [emailVerificationActionTypes.EMAIL_VERIFICATION_FULFILLED]: (state, { meta: { userId } }) =>
       state.hasIn(['resources', userId])

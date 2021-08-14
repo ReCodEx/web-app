@@ -33,7 +33,7 @@ import { createUserNameComparator } from '../../components/helpers/users';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
 
-import { fetchStudents } from '../../redux/modules/users';
+import { fetchByIds } from '../../redux/modules/users';
 import { fetchAssignmentIfNeeded, downloadBestSolutionsArchive } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
@@ -224,7 +224,9 @@ class AssignmentStats extends Component {
       dispatch(fetchAssignmentIfNeeded(assignmentId))
         .then(res => res.value)
         .then(assignment =>
-          Promise.all([dispatch(fetchGroupIfNeeded(assignment.groupId)), dispatch(fetchStudents(assignment.groupId))])
+          dispatch(fetchGroupIfNeeded(assignment.groupId)).then(({ value: group }) =>
+            dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+          )
         ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchAssignmentSolutions(assignmentId)),
