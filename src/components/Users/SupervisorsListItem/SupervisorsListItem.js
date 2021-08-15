@@ -6,7 +6,6 @@ import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveS
 import MakeGroupAdminButton from '../../Groups/MakeGroupAdminButton';
 import RemoveGroupAdminButton from '../../Groups/RemoveGroupAdminButton';
 import { addAdmin, removeAdmin } from '../../../redux/modules/groups';
-import { adminsOfGroup } from '../../../redux/selectors/groups';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Icon, { UserIcon } from '../../icons';
 
@@ -56,9 +55,7 @@ SupervisorsListItem.propTypes = {
   primaryAdminsIds: PropTypes.array.isRequired,
 };
 
-const mapStateToProps = (state, { groupId }) => ({
-  groupAdmins: adminsOfGroup(groupId)(state),
-});
+const mapStateToProps = (state, { groupId }) => ({});
 
 const mapDispatchToProps = {
   addAdmin,

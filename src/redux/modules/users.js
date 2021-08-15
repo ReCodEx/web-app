@@ -4,8 +4,6 @@ import { fromJS } from 'immutable';
 import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
-import { additionalActionTypes as groupsActionTypes } from './groups';
-import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes';
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
 import { actionTypes as paginationActionTypes } from './pagination';
 import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';
@@ -150,96 +148,6 @@ const reducer = handleActions(
             userData === null ? null : userData.set('isVerified', true)
           )
         : state,
-
-    [groupsActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
-        list.push(groupId)
-      );
-    },
-
-    [groupsActionTypes.JOIN_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
-        list.filter(id => id !== groupId)
-      );
-    },
-
-    [groupsActionTypes.LEAVE_GROUP_PENDING]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
-        list.filter(id => id !== groupId)
-      );
-    },
-
-    [groupsActionTypes.LEAVE_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'studentOf'], list =>
-        list.push(groupId)
-      );
-    },
-
-    [groupsActionTypes.MAKE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
-        list.push(groupId)
-      );
-    },
-
-    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (state, { meta: { userId }, payload }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
-        list.push(payload.id)
-      );
-    },
-
-    [groupsActionTypes.MAKE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
-        list.filter(id => id !== groupId)
-      );
-    },
-
-    [groupsActionTypes.REMOVE_SUPERVISOR_PENDING]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
-        list.filter(id => id !== groupId)
-      );
-    },
-
-    [groupsActionTypes.REMOVE_SUPERVISOR_REJECTED]: (state, { meta: { groupId, userId } }) => {
-      if (!state.getIn(['resources', userId])) {
-        return state;
-      }
-
-      return state.updateIn(['resources', userId, 'data', 'privateData', 'groups', 'supervisorOf'], list =>
-        list.push(groupId)
-      );
-    },
 
     [additionalActionTypes.CREATE_LOCAL_LOGIN_PENDING]: (state, { meta: { id } }) =>
       state.setIn(['resources', id, 'data', 'privateData', 'isLocal'], true),

@@ -4,7 +4,7 @@ import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY } from '../../helpers/common';
 import { fetchAllGroupsEndpoint } from '../modules/groups';
 import { getAssignments } from './assignments';
 import { getShadowAssignments } from './shadowAssignments';
-import { isReady, getJsData } from '../helpers/resourceManager';
+import { isReady } from '../helpers/resourceManager';
 
 /**
  * Select groups part of the state
@@ -20,9 +20,6 @@ export const notArchivedGroupsSelector = state =>
     .filter(isReady)
     .filter(group => group.getIn(['data', 'archived']) === false);
 
-export const filterNonOrganizationalActiveGroups = groups =>
-  groups.filter(group => !group.getIn(['data', 'organizational'], false) && !group.getIn(['data', 'archived'], false));
-
 export const groupSelector = createSelector([groupsSelector, getParam], (groups, id) => groups.get(id));
 
 export const groupSelectorCreator = id => createSelector(groupsSelector, groups => groups.get(id));
@@ -35,39 +32,6 @@ export const groupDataAccessorSelector = createSelector(
   groupsSelector,
   groups => groupId => groups.getIn([groupId, 'data'], EMPTY_MAP)
 );
-
-export const studentOfSelector = userId =>
-  createSelector(groupsSelector, groups =>
-    groups
-      .filter(isReady)
-      .map(getJsData)
-      .filter(group => group.privateData && group.privateData.students.indexOf(userId) >= 0)
-  );
-
-export const supervisorOfSelector = userId =>
-  createSelector(groupsSelector, groups =>
-    groups
-      .filter(isReady)
-      .map(getJsData)
-      .filter(group => group.privateData && group.privateData.supervisors.indexOf(userId) >= 0)
-  );
-
-export const adminOfSelector = userId =>
-  createSelector(groupsSelector, groups =>
-    groups
-      .filter(isReady)
-      .map(getJsData)
-      .filter(group => group.privateData && group.privateData.admins.indexOf(userId) >= 0)
-  );
-
-const usersOfGroup = (type, groupId) =>
-  createSelector(groupSelectorCreator(groupId), group =>
-    group && isReady(group) ? group.getIn(['data', 'privateData', type], EMPTY_LIST) : EMPTY_LIST
-  );
-
-export const studentsOfGroup = groupId => usersOfGroup('students', groupId);
-export const supervisorsOfGroup = groupId => usersOfGroup('supervisors', groupId);
-export const adminsOfGroup = groupId => usersOfGroup('admins', groupId);
 
 export const groupsAssignmentsSelector = createSelector(
   [groupsSelector, getAssignments, getParam],

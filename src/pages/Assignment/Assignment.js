@@ -28,8 +28,12 @@ import {
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isStudentOf, isSupervisorOf, isAdminOf } from '../../redux/selectors/users';
 import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
+import {
+  loggedUserIsStudentOfSelector,
+  loggedUserIsSupervisorOfSelector,
+  loggedUserIsAdminOfSelector,
+} from '../../redux/selectors/usersGroups';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -318,9 +322,9 @@ export default withLinks(
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
         userId,
         loggedInUserId,
-        isStudentOf: groupId => isStudentOf(loggedInUserId, groupId)(state),
-        isSupervisorOf: groupId => isSupervisorOf(loggedInUserId, groupId)(state),
-        isAdminOf: groupId => isAdminOf(loggedInUserId, groupId)(state),
+        isStudentOf: loggedUserIsStudentOfSelector(state),
+        isSupervisorOf: loggedUserIsSupervisorOfSelector(state),
+        isAdminOf: loggedUserIsAdminOfSelector(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
         solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
         fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),

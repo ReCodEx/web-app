@@ -26,7 +26,7 @@ import { exerciseSelector } from '../../redux/selectors/exercises';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { groupDataAccessorSelector } from '../../redux/selectors/groups';
-import { groupsUserCanAssignToSelector } from '../../redux/selectors/usersGroups';
+import { loggedUserCanAssignToGroupsSelector } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector, getExerciseAssignments } from '../../redux/selectors/assignments';
 
 import { getLocalizedName } from '../../helpers/localizedData';
@@ -308,7 +308,7 @@ export default withLinks(
         exercise: exerciseSelector(exerciseId)(state),
         assignments: getExerciseAssignments(state, exerciseId),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-        assignableGroups: groupsUserCanAssignToSelector(state),
+        assignableGroups: loggedUserCanAssignToGroupsSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         deadlines: multiAssignFormSelector(state, 'deadlines'),
         visibility: multiAssignFormSelector(state, 'visibility'),

@@ -5,7 +5,7 @@ import { injectIntl } from 'react-intl';
 
 import { makeSupervisor, removeSupervisor } from '../../redux/modules/groups';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { isSupervisorOf } from '../../redux/selectors/users';
+import { isSupervisorOfSelector } from '../../redux/selectors/usersGroups';
 
 import MakeSupervisorButton from '../../components/Groups/MakeSupervisorButton';
 import RemoveSupervisorButton from '../../components/Groups/RemoveSupervisorButton';
@@ -42,7 +42,7 @@ MakeRemoveSupervisorButtonContainer.propTypes = {
 };
 
 const mapStateToProps = (state, { groupId, userId }) => ({
-  isSupervisor: isSupervisorOf(userId, groupId)(state),
+  isSupervisor: isSupervisorOfSelector(state, userId, groupId),
 });
 
 const mapDispatchToProps = {

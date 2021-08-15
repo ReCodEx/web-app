@@ -39,7 +39,8 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
 import { usersSelector } from '../../redux/selectors/users';
-import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
+import { groupSelector } from '../../redux/selectors/groups';
+import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
 import {
   getAssignment,
   assignmentEnvironmentsSelector,
@@ -494,7 +495,7 @@ export default withLinks(
       }
     ) => {
       const assignment = getAssignment(state)(assignmentId);
-      const getStudentsIds = groupId => studentsOfGroup(groupId)(state);
+      const getStudentsIds = groupId => studentsIdsOfGroup(groupId)(state);
       const readyUsers = usersSelector(state).toArray().filter(isReady);
 
       return {

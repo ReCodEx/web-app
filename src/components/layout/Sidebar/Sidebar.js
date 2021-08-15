@@ -9,16 +9,13 @@ import { Link } from 'react-router-dom';
 
 import Admin from './Admin';
 import UserPanelContainer from '../../../containers/UserPanelContainer';
-import MenuGroup from '../../widgets/Sidebar/MenuGroup';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
 import { LoadingIcon } from '../../icons';
-import { isReady, getJsData, getId } from '../../../redux/helpers/resourceManager';
-import { getLocalizedResourceName } from '../../../helpers/localizedData';
+import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles';
 import withLinks from '../../../helpers/withLinks';
 import { getExternalIdForCAS } from '../../../helpers/cas';
-import { EMPTY_OBJ } from '../../../helpers/common';
 import { getConfigVar } from '../../../helpers/config';
 
 import styles from './sidebar.less';
@@ -55,20 +52,9 @@ const Sidebar = ({
   intl: { locale },
 }) => {
   const user = getUserData(loggedInUser);
-  const createLink = item => GROUP_DETAIL_URI_FACTORY(getId(item));
-  const studentOfItems =
-    studentOf &&
-    studentOf.size > 0 &&
-    studentOf
-      .toList()
-      .sort((a, b) => getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale));
-  const supervisorOfItems =
-    supervisorOf &&
-    supervisorOf.size > 0 &&
-    supervisorOf
-      .toList()
-      .sort((a, b) => getLocalizedResourceName(a, locale).localeCompare(getLocalizedResourceName(b, locale), locale));
-  const currentLink = pathname + search;
+  // The following two might get handy yet
+  // const createLink = item => GROUP_DETAIL_URI_FACTORY(getId(item));
+  // const currentLink = pathname + search;
 
   return (
     <aside className={classnames(['main-sidebar', `sidebar-dark-${SKIN}`, 'elevation-4', styles.mainSidebar])}>
@@ -137,32 +123,6 @@ const Sidebar = ({
                       link={INSTANCE_URI_FACTORY(id)}
                     />
                   ))}
-
-              {studentOfItems && (
-                <MenuGroup
-                  title={<FormattedMessage id="app.sidebar.menu.memberOfGroups" defaultMessage="Member of Groups" />}
-                  items={studentOfItems}
-                  notifications={EMPTY_OBJ}
-                  icon={'user-circle'}
-                  currentPath={currentUrl}
-                  createLink={createLink}
-                  isActive={studentOfItems.find(item => createLink(item) === currentLink) !== undefined}
-                />
-              )}
-
-              {isSupervisorRole(effectiveRole) && supervisorOfItems && (
-                <MenuGroup
-                  title={
-                    <FormattedMessage id="app.sidebar.menu.supervisorOfGroups" defaultMessage="Supervisor of Groups" />
-                  }
-                  notifications={EMPTY_OBJ}
-                  items={supervisorOfItems}
-                  icon="graduation-cap"
-                  currentPath={currentUrl}
-                  createLink={createLink}
-                  isActive={supervisorOfItems.find(item => createLink(item) === currentLink) !== undefined}
-                />
-              )}
 
               {isSupervisorRole(effectiveRole) && (
                 <MenuItem

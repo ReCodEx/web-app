@@ -27,7 +27,7 @@ import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/gr
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
-import { loggedInSupervisorOfSelector } from '../../redux/selectors/usersGroups';
+import { loggedUserSupervisorOfGroupsSelector } from '../../redux/selectors/usersGroups';
 
 import {
   getLocalizedTextsInitialValues,
@@ -381,7 +381,7 @@ const mapStateToProps = state => {
     effectiveRole: getLoggedInUserEffectiveRole(state),
     fetchStatus: fetchManyStatus(state),
     sisTerms: readySisTermsSelector(state),
-    supervisorOfGroups: loggedInSupervisorOfSelector(state),
+    supervisorOfGroups: loggedUserSupervisorOfGroupsSelector(state),
     allGroups: notArchivedGroupsSelector(state),
   };
 };

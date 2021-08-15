@@ -35,20 +35,19 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  isSupervisorOf,
-  isAdminOf,
-  studentsOfGroupSelector,
-  isStudentOf,
-  loggedInUserSelector,
-  getLoggedInUserEffectiveRole,
-} from '../../redux/selectors/users';
+import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import {
   groupSelector,
   groupsSelector,
   groupsAssignmentsSelector,
   groupsShadowAssignmentsSelector,
 } from '../../redux/selectors/groups';
+import {
+  studentsOfGroupSelector,
+  loggedUserIsStudentOfSelector,
+  loggedUserIsSupervisorOfSelector,
+  loggedUserIsAdminOfSelector,
+} from '../../redux/selectors/usersGroups';
 import { getStatusesForLoggedUser, createGroupsStatsSelector } from '../../redux/selectors/stats';
 import { assignmentEnvironmentsSelector, getUserSolutionsSortedData } from '../../redux/selectors/assignments';
 import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
@@ -60,7 +59,7 @@ import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
-import { isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles';
+import { isSuperadminRole, isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles';
 import { EMPTY_LIST, hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
@@ -324,14 +323,11 @@ class GroupDetail extends Component {
                                           <ResultsTable
                                             users={students}
                                             loggedUser={loggedUser}
+                                            isSuperadmin={isSuperadminRole(effectiveRole)}
                                             assignments={assignments}
                                             shadowAssignments={shadowAssignments}
                                             stats={groupStats}
-                                            publicStats={data && data.privateData && data.privateData.publicStats}
-                                            isAdmin={isGroupAdmin}
-                                            isSupervisor={isGroupSupervisor}
-                                            groupName={getLocalizedName(data, locale)}
-                                            groupId={data.id}
+                                            group={data}
                                             runtimeEnvironments={runtimes}
                                             userSolutionsSelector={userSolutionsSelector}
                                             userSolutionsStatusSelector={userSolutionsStatusSelector}
@@ -339,11 +335,11 @@ class GroupDetail extends Component {
                                             fetchUsersSolutions={fetchUsersSolutions}
                                             setShadowPoints={setShadowPoints}
                                             removeShadowPoints={removeShadowPoints}
-                                            renderActions={id => {
-                                              return data.archived ? null : (
+                                            renderActions={id =>
+                                              data.archived ? null : (
                                                 <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
-                                              );
-                                            }}
+                                              )
+                                            }
                                           />
                                         )}
                                       </ResourceRenderer>
@@ -477,9 +473,9 @@ const mapStateToProps = (
     statuses: getStatusesForLoggedUser(state, groupId),
     stats: createGroupsStatsSelector(groupId)(state),
     students: studentsOfGroupSelector(state, groupId),
-    isGroupSupervisor: isSupervisorOf(userId, groupId)(state),
-    isGroupAdmin: isAdminOf(userId, groupId)(state),
-    isGroupStudent: isStudentOf(userId, groupId)(state),
+    isGroupSupervisor: loggedUserIsSupervisorOfSelector(state)(groupId),
+    isGroupAdmin: loggedUserIsAdminOfSelector(state)(groupId),
+    isGroupStudent: loggedUserIsStudentOfSelector(state)(groupId),
     userSolutionsSelector: getUserSolutionsSortedData(state),
     userSolutionsStatusSelector: fetchManyUserSolutionsStatus(state),
     runtimeEnvironments: runtimeEnvironmentsSelector(state),

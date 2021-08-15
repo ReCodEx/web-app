@@ -101,7 +101,7 @@ export const fetchUploadFileDigest = id =>
     endpoint: `/uploaded-files/${id}/digest`,
   });
 
-// testing functions TODO fix
+// testing function
 export const testAddFile = createAction(
   actionTypes.START_UPLOAD_PENDING,
   () => {},

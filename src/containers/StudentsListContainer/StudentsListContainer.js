@@ -7,7 +7,8 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import StudentsList from '../../components/Users/StudentsList';
 
 import { readyUsersDataSelector } from '../../redux/selectors/users';
-import { groupSelector, studentsOfGroup } from '../../redux/selectors/groups';
+import { groupSelector } from '../../redux/selectors/groups';
+import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchByIds } from '../../redux/modules/users';
@@ -50,7 +51,7 @@ StudentsListContainer.propTypes = {
 export default connect(
   (state, { groupId }) => {
     const group = groupSelector(state, groupId);
-    const studentsIds = studentsOfGroup(groupId)(state);
+    const studentsIds = studentsIdsOfGroup(groupId)(state);
     const readyUsers = readyUsersDataSelector(state);
     const students = readyUsers.filter(user => studentsIds.includes(user.id));
 

@@ -74,7 +74,7 @@ class UploadContainer extends Component {
         const uploadSize = Math.min(chunkSize, partialFile.totalSize - partialFile.uploadedSize);
 
         const startTime = Date.now();
-        const chunkUploadResult = await uploadFileChunk(partialFile.id, file, partialFile.uploadedSize, uploadSize); // TODO - better way to set chunk size
+        const chunkUploadResult = await uploadFileChunk(partialFile.id, file, partialFile.uploadedSize, uploadSize);
         const endTime = Date.now();
 
         partialFile = chunkUploadResult.value;
