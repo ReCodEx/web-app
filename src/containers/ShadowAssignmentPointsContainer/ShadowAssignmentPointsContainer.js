@@ -8,7 +8,7 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchByIds } from '../../redux/modules/users';
 import { safeGet } from '../../helpers/common';
 import { setShadowAssignmentPoints, removeShadowAssignmentPoints } from '../../redux/modules/shadowAssignments';
-import { studentsOfGroupSelector } from '../../redux/selectors/users';
+import { studentsOfGroupSelector } from '../../redux/selectors/usersGroups';
 
 class ShadowAssignmentPointsContainer extends Component {
   componentDidMount = () => this.props.loadAsync();

@@ -29,20 +29,15 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { statisticsSelector } from '../../redux/selectors/stats';
 import {
   loggedInStudentOfGroupsAssignmentsSelector,
-  loggedInSupervisorOfSelector,
-  loggedInStudentOfSelector,
+  loggedUserSupervisorOfGroupsSelector,
+  loggedUserStudentOfGroupsSelector,
 } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon, GroupIcon, LoadingIcon, AssignmentsIcon } from '../../components/icons';
-import { getJsData } from '../../redux/helpers/resourceManager';
+import { InfoIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
-import { EMPTY_OBJ, safeGet } from '../../helpers/common';
-
-const studentOfCount = user => safeGet(user, ['privateData', 'groups', 'studentOf', 'length'], 0);
-
-const supervisorOfCount = user => safeGet(user, ['privateData', 'groups', 'supervisorOf', 'length'], 0);
+import { EMPTY_OBJ } from '../../helpers/common';
 
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
@@ -66,21 +61,21 @@ class Dashboard extends Component {
    */
   static loadAsync = (params, dispatch, { userId }) =>
     Promise.all([
+      dispatch(fetchUserIfNeeded(userId)),
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchAllGroups()).then(() =>
-        dispatch((dispatch, getState) =>
-          dispatch(fetchUserIfNeeded(userId)).then(() => {
-            const state = getState();
-            const user = getJsData(getUser(userId)(state));
-            const groups = user.privateData.groups.studentOf.concat(user.privateData.groups.supervisorOf);
-            return Promise.all(
-              groups.map(groupId =>
-                Promise.all([dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupStatsIfNeeded(groupId))])
-              )
-            );
-          })
-        )
-      ),
+      dispatch(fetchAllGroups()).then(({ value: groups }) => {
+        const interestingGroups = groups.filter(
+          group =>
+            (group.privateData && group.privateData.students && group.privateData.students.includes(userId)) ||
+            (group.privateData && group.privateData.supervisors && group.privateData.supervisors.includes(userId)) ||
+            (group.primaryAdminsIds && group.primaryAdminsIds.includes(userId))
+        );
+        return Promise.all(
+          interestingGroups.map(({ id }) =>
+            Promise.all([dispatch(fetchAssignmentsForGroup(id)), dispatch(fetchGroupStatsIfNeeded(id))])
+          )
+        );
+      }),
     ]);
 
   usersStatistics(statistics) {
@@ -120,7 +115,7 @@ class Dashboard extends Component {
               <UsersNameContainer userId={user.id} large noLink />
             </p>
 
-            {student && studentOfCount(user) === 0 && (
+            {student && studentOf.size === 0 && (
               <Row>
                 <Col sm={12}>
                   <Callout variant="success">
@@ -139,7 +134,7 @@ class Dashboard extends Component {
               </Row>
             )}
 
-            {supervisor && supervisorOfCount(user) === 0 && (
+            {supervisor && supervisorOf.size === 0 && (
               <Row>
                 <Col sm={12}>
                   <Callout variant="success">
@@ -156,12 +151,6 @@ class Dashboard extends Component {
                   </Callout>
                 </Col>
               </Row>
-            )}
-
-            {(studentOf.size !== studentOfCount(user) || supervisorOf.size !== supervisorOfCount(user)) && (
-              <div className="text-center">
-                <LoadingIcon size="2x" />
-              </div>
             )}
 
             {studentOf.size > 0 && (
@@ -332,8 +321,8 @@ export default withLinks(
         supervisor: isSupervisor(userId)(state),
         superadmin: isLoggedAsSuperAdmin(state),
         user: getUser(userId)(state),
-        studentOf: loggedInStudentOfSelector(state),
-        supervisorOf: loggedInSupervisorOfSelector(state),
+        studentOf: loggedUserStudentOfGroupsSelector(state),
+        supervisorOf: loggedUserSupervisorOfGroupsSelector(state),
         groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         statistics: statisticsSelector(state),

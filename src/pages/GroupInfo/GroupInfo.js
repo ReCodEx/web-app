@@ -10,14 +10,14 @@ import { Row, Col } from 'react-bootstrap';
 import { createGroup, fetchGroupIfNeeded, fetchAllGroups } from '../../redux/modules/groups';
 import { fetchByIds, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import {
-  isSupervisorOf,
-  isAdminOf,
-  isLoggedAsSuperAdmin,
-  supervisorsOfGroupSelector,
-  isStudentOf,
-} from '../../redux/selectors/users';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
+import {
+  supervisorsOfGroupSelector,
+  loggedUserIsStudentOfSelector,
+  loggedUserIsSupervisorOfSelector,
+  loggedUserIsAdminOfSelector,
+} from '../../redux/selectors/usersGroups';
 
 import Page from '../../components/layout/Page';
 import GroupInfoTable, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
@@ -107,6 +107,8 @@ class GroupInfo extends Component {
       intl: { locale },
     } = this.props;
 
+    const isAdminOrSuperadmin = isAdmin || isSuperAdmin;
+
     return (
       <Page
         resource={group}
@@ -148,13 +150,13 @@ class GroupInfo extends Component {
                   <GroupInfoTable
                     group={data}
                     supervisors={supervisors}
-                    isAdmin={isAdmin || isSuperAdmin}
+                    isAdmin={isAdminOrSuperadmin}
                     groups={groups}
                     locale={locale}
                   />
                 )}
 
-                {hasPermissions(data, 'viewSupervisors') && (
+                {hasPermissions(data, 'viewMembers') && (
                   <Box
                     noPadding
                     collapsable
@@ -177,14 +179,14 @@ class GroupInfo extends Component {
                     <SupervisorsList
                       groupId={data.id}
                       users={supervisors}
-                      isAdmin={isAdmin && hasPermissions(data, 'setAdmin') && !data.archived}
+                      isAdmin={isAdminOrSuperadmin && !data.archived}
                       primaryAdminsIds={data.primaryAdminsIds}
                       isLoaded={supervisors.length === data.privateData.supervisors.length}
                     />
                   </Box>
                 )}
 
-                {hasPermissions(data, 'setAdmin') && !data.archived && (
+                {isAdminOrSuperadmin && !data.archived && (
                   <Box
                     title={
                       <FormattedMessage id="app.group.adminsView.addSupervisor" defaultMessage="Add Supervisor" />
@@ -270,10 +272,10 @@ const mapStateToProps = (
     userId,
     groups: groupsSelector(state),
     supervisors: supervisorsOfGroupSelector(state, groupId),
-    isSupervisor: isSupervisorOf(userId, groupId)(state),
-    isAdmin: isAdminOf(userId, groupId)(state),
+    isSupervisor: loggedUserIsSupervisorOfSelector(state)(groupId),
+    isAdmin: loggedUserIsAdminOfSelector(state)(groupId),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
-    isStudent: isStudentOf(userId, groupId)(state),
+    isStudent: loggedUserIsStudentOfSelector(state)(groupId),
     hasThreshold: addSubgroupFormSelector(state, 'hasThreshold'),
   };
 };

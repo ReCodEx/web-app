@@ -7,7 +7,7 @@ import { joinGroup, leaveGroup, fetchGroup } from '../../redux/modules/groups';
 import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isStudentOf } from '../../redux/selectors/users';
+import { isStudentOfSelector } from '../../redux/selectors/usersGroups';
 
 import JoinGroupButton from '../../components/buttons/JoinGroupButton';
 import LeaveGroupButton from '../../components/buttons/LeaveGroupButton';
@@ -86,7 +86,7 @@ LeaveJoinGroupButtonContainer.propTypes = {
 };
 
 const mapStateToProps = (state, { userId, groupId }) => ({
-  isStudent: isStudentOf(userId, groupId)(state),
+  isStudent: isStudentOfSelector(state, userId, groupId),
   currentUserId: loggedInUserIdSelector(state),
 });
 

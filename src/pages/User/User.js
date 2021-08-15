@@ -25,16 +25,16 @@ import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { takeOver } from '../../redux/modules/auth';
 
-import { getUser, studentOfGroupsIdsSelector, isStudent, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { getUser, isStudent, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
+import { groupSelector, groupsAssignmentsSelector } from '../../redux/selectors/groups';
 import {
-  groupSelector,
-  groupsAssignmentsSelector,
+  userStudentOfGroupIdsSelector,
   studentOfSelector,
   supervisorOfSelector,
   adminOfSelector,
-} from '../../redux/selectors/groups';
+} from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
 import { InfoIcon, EditIcon, TransferIcon, AssignmentsIcon, GroupIcon } from '../../components/icons';
@@ -317,7 +317,7 @@ export default withLinks(
         student: isStudent(userId)(state),
         user: getUser(userId)(state),
         isAdmin: isSuperadmin,
-        studentOfGroupsIds: studentOfGroupsIdsSelector(userId)(state).toArray(),
+        studentOfGroupsIds: userStudentOfGroupIdsSelector(state, userId),
         groupAssignments: groupId => groupsAssignmentsSelector(state, groupId),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),

@@ -80,7 +80,6 @@ const prepareFetchGroupsParams = params => {
     search: null,
     archived: false,
     onlyArchived: false,
-    archivedAgeLimit: null,
   };
   const res = { ancestors: true };
   if (params) {

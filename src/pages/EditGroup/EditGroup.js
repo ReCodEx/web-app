@@ -26,7 +26,7 @@ import {
   groupDataAccessorSelector,
 } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
-import { isSupervisorOf, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import {
   getLocalizedName,
   getLocalizedTextsInitialValues,
@@ -281,20 +281,16 @@ export default withLinks(
           params: { groupId },
         },
       }
-    ) => {
-      const userId = loggedInUserIdSelector(state);
-      return {
-        group: groupSelector(state, groupId),
-        groups: notArchivedGroupsSelector(state),
-        groupsAccessor: groupDataAccessorSelector(state),
-        userId,
-        isStudentOf: groupId => isSupervisorOf(userId, groupId)(state),
-        hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
-        canViewParentDetail: canViewParentDetailSelector(state, groupId),
-        instanceId: selectedInstanceId(state),
-      };
-    },
+    ) => ({
+      group: groupSelector(state, groupId),
+      groups: notArchivedGroupsSelector(state),
+      groupsAccessor: groupDataAccessorSelector(state),
+      userId: loggedInUserIdSelector(state),
+      hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
+      isSuperAdmin: isLoggedAsSuperAdmin(state),
+      canViewParentDetail: canViewParentDetailSelector(state, groupId),
+      instanceId: selectedInstanceId(state),
+    }),
     (
       dispatch,
       {
