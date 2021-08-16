@@ -54,6 +54,7 @@ export { LockIcon };
 export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
 export { NeedFixingIcon };
 export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} />;
+export const ObserverIcon = props => <Icon {...props} icon="binoculars" />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-muted" {...props} />;
 export const PointsGraphIcon = props => <Icon icon={['far', 'chart-bar']} {...props} />;

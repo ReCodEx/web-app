@@ -403,7 +403,10 @@ class GroupDetail extends Component {
                     <ExercisesListContainer
                       id={`exercises-group-${data.id}`}
                       rootGroup={data.id}
-                      showAssignButton={!data.organizational && !data.archived}
+                      showAssignButton={
+                        !data.organizational && !data.archived && hasPermissions(data, 'createShadowAssignment')
+                        // yes, shadow assignment permission does not actually cut it, but its close
+                      }
                     />
                   </Box>
                 </Col>

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { AdminIcon, SupervisorIcon, UserIcon, LoadingIcon } from '../../icons';
+import Icon, { AdminIcon, ObserverIcon, SupervisorIcon, UserIcon, LoadingIcon } from '../../icons';
 
 const SupervisorsListItem = ({
   showButtons,
@@ -14,6 +14,7 @@ const SupervisorsListItem = ({
   type = null,
   addAdmin = null,
   addSupervisor = null,
+  addObserver = null,
   removeMember = null,
   pendingMembership = false,
 }) => {
@@ -62,16 +63,36 @@ const SupervisorsListItem = ({
             }>
             <SupervisorIcon />
           </OverlayTrigger>
+        ) : type === 'observer' ? (
+          <OverlayTrigger
+            placement="right"
+            overlay={
+              <Popover id={`icon-${id}`}>
+                {
+                  <Popover.Title>
+                    <FormattedMessage id="app.membersList.observerPopover.title" defaultMessage="Observer" />
+                  </Popover.Title>
+                }
+                <Popover.Content className="small text-muted">
+                  <FormattedMessage
+                    id="app.membersList.observerPopover.description"
+                    defaultMessage="An observer has complete read-only access to the group and its assets."
+                  />
+                </Popover.Content>
+              </Popover>
+            }>
+            <ObserverIcon />
+          </OverlayTrigger>
         ) : (
           <UserIcon />
         )}
       </td>
-      <td className="shrink-col text-nowrap">
+      <td className="text-nowrap">
         <UsersNameContainer userId={id} />
       </td>
 
       {showButtons && (
-        <td className="text-right">
+        <td className="text-nowrap text-right">
           <TheButtonGroup>
             {addAdmin && (
               <OverlayTrigger
@@ -101,6 +122,24 @@ const SupervisorsListItem = ({
                   variant="warning"
                   disabled={pendingMembership}>
                   <SupervisorIcon smallGapRight smallGapLeft fixedWidth />
+                </Button>
+              </OverlayTrigger>
+            )}
+
+            {addObserver && (
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`observerButtonTooltip-${id}`}>
+                    <FormattedMessage id="app.membersList.changeToObserver" defaultMessage="Change to observer" />
+                  </Tooltip>
+                }>
+                <Button
+                  size="xs"
+                  onClick={() => addObserver(groupId, id)}
+                  variant="warning"
+                  disabled={pendingMembership}>
+                  <ObserverIcon smallGapRight smallGapLeft fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
@@ -136,6 +175,7 @@ SupervisorsListItem.propTypes = {
   type: PropTypes.string,
   addAdmin: PropTypes.func,
   addSupervisor: PropTypes.func,
+  addObserver: PropTypes.func,
   removeMember: PropTypes.func,
   pendingMembership: PropTypes.bool,
 };
