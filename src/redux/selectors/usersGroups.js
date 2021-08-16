@@ -43,7 +43,14 @@ export const isStudentOfSelector = defaultMemoize((state, userId, groupId) =>
   studentsIdsOfGroup(groupId)(state).includes(userId)
 );
 
-// FROM USER
+export const primaryAdminsOfGroupSelector = createSelector(
+  [readyUsersDataSelector, getParam, getState],
+  (users, groupId, state) => {
+    const adminsIds = primaryAdminsIdsOfGroup(groupId)(state);
+    const adminsIndex = new Set(adminsIds);
+    return users.filter(user => adminsIndex.has(user.id));
+  }
+);
 
 export const supervisorsOfGroupSelector = createSelector(
   [readyUsersDataSelector, getParam, getState],
@@ -87,6 +94,10 @@ export const adminOfSelector = userId =>
       .map(getJsData)
       .filter(group => group.privateData && group.privateData.admins.includes(userId))
   );
+
+export const pendingMembershipsSelector = createSelector([groupsSelector, getParam], (groups, groupId) =>
+  groups.getIn([groupId, 'pending-membership'], EMPTY_LIST)
+);
 
 /*
  * Optimized selectors for logged-in user

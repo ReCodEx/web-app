@@ -38,22 +38,14 @@ export const additionalActionTypes = {
   LEAVE_GROUP_PENDING: 'recodex/groups/LEAVE_GROUP_PENDING',
   LEAVE_GROUP_FULFILLED: 'recodex/groups/LEAVE_GROUP_FULFILLED',
   LEAVE_GROUP_REJECTED: 'recodex/groups/LEAVE_GROUP_REJECTED',
-  MAKE_SUPERVISOR: 'recodex/groups/MAKE_SUPERVISOR',
-  MAKE_SUPERVISOR_PENDING: 'recodex/groups/MAKE_SUPERVISOR_PENDING',
-  MAKE_SUPERVISOR_FULFILLED: 'recodex/groups/MAKE_SUPERVISOR_FULFILLED',
-  MAKE_SUPERVISOR_REJECTED: 'recodex/groups/MAKE_SUPERVISOR_REJECTED',
-  REMOVE_SUPERVISOR: 'recodex/groups/REMOVE_SUPERVISOR',
-  REMOVE_SUPERVISOR_PENDING: 'recodex/groups/REMOVE_SUPERVISOR_PENDING',
-  REMOVE_SUPERVISOR_FULFILLED: 'recodex/groups/REMOVE_SUPERVISOR_FULFILLED',
-  REMOVE_SUPERVISOR_REJECTED: 'recodex/groups/REMOVE_SUPERVISOR_REJECTED',
-  ADD_ADMIN: 'recodex/groups/ADD_ADMIN',
-  ADD_ADMIN_PENDING: 'recodex/groups/ADD_ADMIN_PENDING',
-  ADD_ADMIN_FULFILLED: 'recodex/groups/ADD_ADMIN_FULFILLED',
-  ADD_ADMIN_REJECTED: 'recodex/groups/ADD_ADMIN_REJECTED',
-  REMOVE_ADMIN: 'recodex/groups/REMOVE_ADMIN',
-  REMOVE_ADMIN_PENDING: 'recodex/groups/REMOVE_ADMIN_PENDING',
-  REMOVE_ADMIN_FULFILLED: 'recodex/groups/REMOVE_ADMIN_FULFILLED',
-  REMOVE_ADMIN_REJECTED: 'recodex/groups/REMOVE_ADMIN_REJECTED',
+  ADD_MEMBER: 'recodex/groups/ADD_MEMBER',
+  ADD_MEMBER_PENDING: 'recodex/groups/ADD_MEMBER_PENDING',
+  ADD_MEMBER_FULFILLED: 'recodex/groups/ADD_MEMBER_FULFILLED',
+  ADD_MEMBER_REJECTED: 'recodex/groups/ADD_MEMBER_REJECTED',
+  REMOVE_MEMBER: 'recodex/groups/REMOVE_MEMBER',
+  REMOVE_MEMBER_PENDING: 'recodex/groups/REMOVE_MEMBER_PENDING',
+  REMOVE_MEMBER_FULFILLED: 'recodex/groups/REMOVE_MEMBER_FULFILLED',
+  REMOVE_MEMBER_REJECTED: 'recodex/groups/REMOVE_MEMBER_REJECTED',
   SET_ORGANIZATIONAL: 'recodex/groups/SET_ORGANIZATIONAL',
   SET_ORGANIZATIONAL_PENDING: 'recodex/groups/SET_ORGANIZATIONAL_PENDING',
   SET_ORGANIZATIONAL_FULFILLED: 'recodex/groups/SET_ORGANIZATIONAL_FULFILLED',
@@ -139,46 +131,31 @@ export const leaveGroup = (groupId, userId) => dispatch =>
     })
   ).catch(() => dispatch(addNotification('Cannot leave group.', false))); // @todo: Make translatable
 
-export const makeSupervisor = (groupId, userId) => dispatch =>
+// add member of any type except student
+const addMember = type => (groupId, userId) => dispatch =>
   dispatch(
     createApiAction({
-      type: additionalActionTypes.MAKE_SUPERVISOR,
-      endpoint: `/groups/${groupId}/supervisors/${userId}`,
+      type: additionalActionTypes.ADD_MEMBER,
+      endpoint: `/groups/${groupId}/members/${userId}`,
       method: 'POST',
-      meta: { groupId, userId },
+      meta: { groupId, userId, type },
+      body: { type },
     })
-  ).catch(() => dispatch(addNotification('Cannot make this person supervisor of the group.', false))); // @todo: Make translatable
+  ).catch(() => dispatch(addNotification(`Cannot make this person ${type} of the group.`, false))); // @todo: Make translatable
 
-export const removeSupervisor = (groupId, userId) => dispatch =>
+export const addSupervisor = addMember('supervisor');
+export const addAdmin = addMember('admin');
+
+// remove member of any type except student
+export const removeMember = (groupId, userId) => dispatch =>
   dispatch(
     createApiAction({
-      type: additionalActionTypes.REMOVE_SUPERVISOR,
-      endpoint: `/groups/${groupId}/supervisors/${userId}`,
+      type: additionalActionTypes.REMOVE_MEMBER,
+      endpoint: `/groups/${groupId}/members/${userId}`,
       method: 'DELETE',
       meta: { groupId, userId },
     })
-  ).catch(() => dispatch(addNotification('Cannot remove supervisor.', false))); // @todo: Make translatable
-
-export const addAdmin = (groupId, userId) => dispatch =>
-  dispatch(
-    createApiAction({
-      type: additionalActionTypes.ADD_ADMIN,
-      endpoint: `/groups/${groupId}/admin`,
-      method: 'POST',
-      meta: { groupId, userId },
-      body: { userId },
-    })
-  ).catch(() => dispatch(addNotification('Cannot make this person admin of the group.', false))); // @todo: Make translatable
-
-export const removeAdmin = (groupId, userId) => dispatch =>
-  dispatch(
-    createApiAction({
-      type: additionalActionTypes.REMOVE_ADMIN,
-      endpoint: `/groups/${groupId}/admin/${userId}`,
-      method: 'DELETE',
-      meta: { groupId, userId },
-    })
-  ).catch(() => dispatch(addNotification('Cannot remove this person from admins of the group.', false))); // @todo: Make translatable
+  ).catch(() => dispatch(addNotification('Cannot remove group member.', false))); // @todo: Make translatable
 
 export const setOrganizational = (groupId, organizational) =>
   createApiAction({
@@ -257,33 +234,35 @@ const reducer = handleActions(
         students.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.MAKE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
-      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.ADD_MEMBER_PENDING]: (state, { meta: { groupId, userId } }) =>
+      state.hasIn(['resources', groupId, 'pending-membership'])
+        ? state.updateIn(['resources', groupId, 'pending-membership'], memberships => memberships.push(userId))
+        : state.setIn(['resources', groupId, 'pending-membership'], fromJS([userId])),
 
-    [additionalActionTypes.REMOVE_SUPERVISOR_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
-      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
-
-    [additionalActionTypes.ADD_ADMIN_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
-      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins =>
-        admins.filter(id => id !== userId).concat([userId])
+    [additionalActionTypes.ADD_MEMBER_REJECTED]: (state, { meta: { groupId, userId } }) =>
+      state.updateIn(['resources', groupId, 'pending-membership'], memberships =>
+        memberships.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.ADD_ADMIN_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
-      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins => admins.filter(id => id !== userId)),
+    [additionalActionTypes.ADD_MEMBER_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+      state
+        .setIn(['resources', groupId, 'data'], fromJS(payload))
+        .updateIn(['resources', groupId, 'pending-membership'], memberships => memberships.filter(id => id !== userId)),
 
-    [additionalActionTypes.ADD_ADMIN_FULFILLED]: (state, { payload, meta: { groupId } }) =>
-      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.REMOVE_MEMBER_PENDING]: (state, { meta: { groupId, userId } }) =>
+      state.hasIn(['resources', groupId, 'pending-membership'])
+        ? state.updateIn(['resources', groupId, 'pending-membership'], memberships => memberships.push(userId))
+        : state.setIn(['resources', groupId, 'pending-membership'], fromJS([userId])),
 
-    [additionalActionTypes.REMOVE_ADMIN_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
-      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins => admins.filter(id => id !== userId)),
-
-    [additionalActionTypes.REMOVE_ADMIN_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
-      state.updateIn(['resources', groupId, 'data', 'primaryAdminsIds'], admins =>
-        admins.filter(id => id !== userId).concat([userId])
+    [additionalActionTypes.REMOVE_MEMBER_REJECTED]: (state, { meta: { groupId, userId } }) =>
+      state.updateIn(['resources', groupId, 'pending-membership'], memberships =>
+        memberships.filter(id => id !== userId)
       ),
 
-    [additionalActionTypes.REMOVE_ADMIN_FULFILLED]: (state, { payload, meta: { groupId } }) =>
-      state.setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.REMOVE_MEMBER_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+      state
+        .setIn(['resources', groupId, 'data'], fromJS(payload))
+        .updateIn(['resources', groupId, 'pending-membership'], memberships => memberships.filter(id => id !== userId)),
 
     [additionalActionTypes.SET_ORGANIZATIONAL_PENDING]: (state, { payload, meta: { groupId } }) =>
       state.setIn(['resources', groupId, 'pending-organizational'], true),
