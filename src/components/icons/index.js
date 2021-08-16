@@ -11,6 +11,7 @@ const defaultMessageIcon = ['far', 'envelope'];
 
 export const AbortIcon = props => <Icon {...props} icon="car-crash" />;
 export const AddIcon = props => <Icon {...props} icon="plus-circle" />;
+export const AdminIcon = props => <Icon {...props} icon="crown" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
 export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
   <Icon {...props} icon={archived ? 'dolly' : 'archive'} />

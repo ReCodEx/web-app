@@ -1,43 +1,128 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
-import MakeRemoveSupervisorButtonContainer from '../../../containers/MakeRemoveSupervisorButtonContainer';
-import MakeGroupAdminButton from '../../Groups/MakeGroupAdminButton';
-import RemoveGroupAdminButton from '../../Groups/RemoveGroupAdminButton';
-import { addAdmin, removeAdmin } from '../../../redux/modules/groups';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { UserIcon } from '../../icons';
+import Icon, { AdminIcon, SupervisorIcon, UserIcon, LoadingIcon } from '../../icons';
 
 const SupervisorsListItem = ({
-  isAdmin,
+  showButtons,
   id,
-  fullName,
-  avatarUrl,
   groupId,
-  addAdmin,
-  removeAdmin,
-  primaryAdminsIds,
+  type = null,
+  addAdmin = null,
+  addSupervisor = null,
+  removeMember = null,
+  pendingMembership = false,
 }) => {
-  const isGroupAdmin = primaryAdminsIds.includes(id);
   return (
     <tr>
-      <td className="shrink-col">
-        {isGroupAdmin ? <Icon icon="user-secret" gapRight gapLeft /> : <UserIcon gapRight gapLeft />}
+      <td className="shrink-col text-center">
+        {pendingMembership ? (
+          <LoadingIcon />
+        ) : type === 'admin' ? (
+          <OverlayTrigger
+            placement="right"
+            overlay={
+              <Popover id={`icon-${id}`}>
+                {
+                  <Popover.Title>
+                    <FormattedMessage id="app.membersList.adminPopover.title" defaultMessage="Administrator" />
+                  </Popover.Title>
+                }
+                <Popover.Content className="small text-muted">
+                  <FormattedMessage
+                    id="app.membersList.adminPopover.description"
+                    defaultMessage="An administrator can do almost anything with the group and all its assets including managing other members. Administrators are also displayed in group listings. Administrator privileges are passed down to all sub-groups transitively."
+                  />
+                </Popover.Content>
+              </Popover>
+            }>
+            <AdminIcon />
+          </OverlayTrigger>
+        ) : type === 'supervisor' ? (
+          <OverlayTrigger
+            placement="right"
+            overlay={
+              <Popover id={`icon-${id}`}>
+                {
+                  <Popover.Title>
+                    <FormattedMessage id="app.membersList.supervisorPopover.title" defaultMessage="Supervisor" />
+                  </Popover.Title>
+                }
+                <Popover.Content className="small text-muted">
+                  <FormattedMessage
+                    id="app.membersList.supervisorPopover.description"
+                    defaultMessage="A supervisor is slightly less potent than administrator. The privileges encompass everything related to students and assignments; however, suppervisor cannot manage other members."
+                  />
+                </Popover.Content>
+              </Popover>
+            }>
+            <SupervisorIcon />
+          </OverlayTrigger>
+        ) : (
+          <UserIcon />
+        )}
       </td>
       <td className="shrink-col text-nowrap">
         <UsersNameContainer userId={id} />
       </td>
-      {isAdmin && (
+
+      {showButtons && (
         <td className="text-right">
-          {isGroupAdmin ? (
-            <RemoveGroupAdminButton onClick={() => removeAdmin(groupId, id)} size="xs" />
-          ) : (
-            <>
-              <MakeRemoveSupervisorButtonContainer userId={id} groupId={groupId} />
-              <MakeGroupAdminButton onClick={() => addAdmin(groupId, id)} size="xs" />
-            </>
-          )}
+          <TheButtonGroup>
+            {addAdmin && (
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`adminButtonTooltip-${id}`}>
+                    <FormattedMessage id="app.membersList.changeToAdmin" defaultMessage="Change to administrator" />
+                  </Tooltip>
+                }>
+                <Button size="xs" onClick={() => addAdmin(groupId, id)} variant="warning" disabled={pendingMembership}>
+                  <AdminIcon smallGapRight smallGapLeft fixedWidth />
+                </Button>
+              </OverlayTrigger>
+            )}
+
+            {addSupervisor && (
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`supervisorButtonTooltip-${id}`}>
+                    <FormattedMessage id="app.membersList.changeToSupervisor" defaultMessage="Change to supervisor" />
+                  </Tooltip>
+                }>
+                <Button
+                  size="xs"
+                  onClick={() => addSupervisor(groupId, id)}
+                  variant="warning"
+                  disabled={pendingMembership}>
+                  <SupervisorIcon smallGapRight smallGapLeft fixedWidth />
+                </Button>
+              </OverlayTrigger>
+            )}
+
+            {removeMember && (
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`removeButtonTooltip-${id}`}>
+                    <FormattedMessage id="app.membersList.removeMember" defaultMessage="Remove from group" />
+                  </Tooltip>
+                }>
+                <Button
+                  size="xs"
+                  onClick={() => removeMember(groupId, id)}
+                  variant="danger"
+                  disabled={pendingMembership}>
+                  <Icon icon="user-slash" smallGapRight smallGapLeft fixedWidth />
+                </Button>
+              </OverlayTrigger>
+            )}
+          </TheButtonGroup>
         </td>
       )}
     </tr>
@@ -46,20 +131,13 @@ const SupervisorsListItem = ({
 
 SupervisorsListItem.propTypes = {
   id: PropTypes.string.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
+  showButtons: PropTypes.bool.isRequired,
   groupId: PropTypes.string.isRequired,
-  fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string,
-  addAdmin: PropTypes.func.isRequired,
-  removeAdmin: PropTypes.func.isRequired,
-  primaryAdminsIds: PropTypes.array.isRequired,
+  type: PropTypes.string,
+  addAdmin: PropTypes.func,
+  addSupervisor: PropTypes.func,
+  removeMember: PropTypes.func,
+  pendingMembership: PropTypes.bool,
 };
 
-const mapStateToProps = (state, { groupId }) => ({});
-
-const mapDispatchToProps = {
-  addAdmin,
-  removeAdmin,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SupervisorsListItem);
+export default SupervisorsListItem;

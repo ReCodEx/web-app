@@ -4,19 +4,28 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { List } from 'immutable';
 import { Row, Col } from 'react-bootstrap';
 
-import { createGroup, fetchGroupIfNeeded, fetchAllGroups } from '../../redux/modules/groups';
+import {
+  createGroup,
+  fetchGroupIfNeeded,
+  fetchAllGroups,
+  addAdmin,
+  addSupervisor,
+  removeMember,
+} from '../../redux/modules/groups';
 import { fetchByIds, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
 import {
+  primaryAdminsOfGroupSelector,
   supervisorsOfGroupSelector,
+  studentsOfGroupSelector,
   loggedUserIsStudentOfSelector,
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
+  pendingMembershipsSelector,
 } from '../../redux/selectors/usersGroups';
 
 import Page from '../../components/layout/Page';
@@ -97,13 +106,19 @@ class GroupInfo extends Component {
       group,
       userId,
       groups,
-      supervisors = List(),
+      primaryAdmins = [],
+      supervisors = [],
+      students = [],
       isAdmin,
       isSuperAdmin,
       isSupervisor,
       isStudent,
       addSubgroup,
       hasThreshold,
+      pendingMemberships,
+      addAdmin,
+      addSupervisor,
+      removeMember,
       intl: { locale },
     } = this.props;
 
@@ -178,10 +193,17 @@ class GroupInfo extends Component {
                     }>
                     <SupervisorsList
                       groupId={data.id}
-                      users={supervisors}
-                      isAdmin={isAdminOrSuperadmin && !data.archived}
-                      primaryAdminsIds={data.primaryAdminsIds}
-                      isLoaded={supervisors.length === data.privateData.supervisors.length}
+                      primaryAdmins={primaryAdmins}
+                      supervisors={supervisors}
+                      showButtons={isAdminOrSuperadmin && !data.archived}
+                      isLoaded={
+                        supervisors.length === data.privateData.supervisors.length &&
+                        primaryAdmins.length === data.primaryAdminsIds.length
+                      }
+                      addAdmin={addAdmin}
+                      addSupervisor={addSupervisor}
+                      removeMember={removeMember}
+                      pendingMemberships={pendingMemberships}
                     />
                   </Box>
                 )}
@@ -191,7 +213,16 @@ class GroupInfo extends Component {
                     title={
                       <FormattedMessage id="app.group.adminsView.addSupervisor" defaultMessage="Add Supervisor" />
                     }>
-                    <AddSupervisor instanceId={data.privateData.instanceId} groupId={data.id} />
+                    <AddSupervisor
+                      instanceId={data.privateData.instanceId}
+                      groupId={data.id}
+                      primaryAdmins={primaryAdmins}
+                      supervisors={supervisors}
+                      students={students}
+                      addAdmin={addAdmin}
+                      addSupervisor={addSupervisor}
+                      pendingMemberships={pendingMemberships}
+                    />
                   </Box>
                 )}
               </Col>
@@ -241,7 +272,9 @@ GroupInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
+  primaryAdmins: PropTypes.array,
   supervisors: PropTypes.array,
+  students: PropTypes.array,
   groups: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
@@ -250,8 +283,12 @@ GroupInfo.propTypes = {
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
   refetchSupervisors: PropTypes.func.isRequired,
-  links: PropTypes.object,
+  addAdmin: PropTypes.func.isRequired,
+  addSupervisor: PropTypes.func.isRequired,
+  removeMember: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
+  pendingMemberships: ImmutablePropTypes.list,
+  links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
@@ -271,12 +308,15 @@ const mapStateToProps = (
     group: groupSelector(state, groupId),
     userId,
     groups: groupsSelector(state),
+    primaryAdmins: primaryAdminsOfGroupSelector(state, groupId),
     supervisors: supervisorsOfGroupSelector(state, groupId),
+    students: studentsOfGroupSelector(state, groupId),
     isSupervisor: loggedUserIsSupervisorOfSelector(state)(groupId),
     isAdmin: loggedUserIsAdminOfSelector(state)(groupId),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     isStudent: loggedUserIsStudentOfSelector(state)(groupId),
     hasThreshold: addSubgroupFormSelector(state, 'hasThreshold'),
+    pendingMemberships: pendingMembershipsSelector(state, groupId),
   };
 };
 
@@ -297,6 +337,9 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
       ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
   refetchSupervisors: ids => dispatch(fetchByIds(ids)),
+  addAdmin: (userId, groupId) => dispatch(addAdmin(userId, groupId)),
+  addSupervisor: (userId, groupId) => dispatch(addSupervisor(userId, groupId)),
+  removeMember: (userId, groupId) => dispatch(removeMember(userId, groupId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo));
