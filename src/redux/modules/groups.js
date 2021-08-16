@@ -143,8 +143,9 @@ const addMember = type => (groupId, userId) => dispatch =>
     })
   ).catch(() => dispatch(addNotification(`Cannot make this person ${type} of the group.`, false))); // @todo: Make translatable
 
-export const addSupervisor = addMember('supervisor');
 export const addAdmin = addMember('admin');
+export const addSupervisor = addMember('supervisor');
+export const addObserver = addMember('observer');
 
 // remove member of any type except student
 export const removeMember = (groupId, userId) => dispatch =>

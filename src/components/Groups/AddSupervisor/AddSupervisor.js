@@ -8,13 +8,18 @@ import { defaultMemoize } from 'reselect';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import AddUserContainer from '../../../containers/AddUserContainer';
 import { knownRoles, isSupervisorRole } from '../../helpers/usersRoles';
-import { AdminIcon, SupervisorIcon, LoadingIcon } from '../../icons';
+import { AdminIcon, ObserverIcon, SupervisorIcon, LoadingIcon } from '../../icons';
 
 const ROLES_FILTER = knownRoles.filter(isSupervisorRole);
 
 const buildMembersIndex = defaultMemoize(
-  (primaryAdmins, supervisors, students) =>
-    new Set([...primaryAdmins.map(u => u.id), ...supervisors.map(u => u.id), ...students.map(u => u.id)])
+  (primaryAdmins, supervisors, observers, studentsIds) =>
+    new Set([
+      ...primaryAdmins.map(u => u.id),
+      ...supervisors.map(u => u.id),
+      ...observers.map(u => u.id),
+      ...studentsIds,
+    ])
 );
 
 const AddSupervisor = ({
@@ -22,12 +27,14 @@ const AddSupervisor = ({
   instanceId,
   primaryAdmins,
   supervisors,
-  students,
+  observers,
+  studentsIds,
   addAdmin = null,
   addSupervisor = null,
+  addObserver = null,
   pendingMemberships,
 }) => {
-  const membersIndex = buildMembersIndex(primaryAdmins, supervisors, students);
+  const membersIndex = buildMembersIndex(primaryAdmins, supervisors, observers, studentsIds);
   return (
     <AddUserContainer
       instanceId={instanceId}
@@ -89,6 +96,31 @@ const AddSupervisor = ({
                 </Button>
               </OverlayTrigger>
             )}
+
+            {addObserver && (
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`observerButtonTooltip-${id}`}>
+                    {isMember ? (
+                      <FormattedMessage
+                        id="app.membersList.alreadyMember"
+                        defaultMessage="Selected user is already a member of the group"
+                      />
+                    ) : (
+                      <FormattedMessage id="app.membersList.addAsObserver" defaultMessage="Add as observer" />
+                    )}
+                  </Tooltip>
+                }>
+                <Button
+                  size="xs"
+                  onClick={() => addObserver(groupId, id)}
+                  disabled={isMember}
+                  variant={isMember ? 'secondary' : 'success'}>
+                  <ObserverIcon smallGapRight smallGapLeft fixedWidth />
+                </Button>
+              </OverlayTrigger>
+            )}
           </TheButtonGroup>
         );
       }}
@@ -101,9 +133,11 @@ AddSupervisor.propTypes = {
   groupId: PropTypes.string.isRequired,
   primaryAdmins: PropTypes.array.isRequired,
   supervisors: PropTypes.array.isRequired,
-  students: PropTypes.array.isRequired,
+  observers: PropTypes.array.isRequired,
+  studentsIds: PropTypes.array.isRequired,
   addAdmin: PropTypes.func,
   addSupervisor: PropTypes.func,
+  addObserver: PropTypes.func,
   pendingMemberships: ImmutablePropTypes.list,
 };
 

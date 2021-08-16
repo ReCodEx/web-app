@@ -12,6 +12,7 @@ import {
   fetchAllGroups,
   addAdmin,
   addSupervisor,
+  addObserver,
   removeMember,
 } from '../../redux/modules/groups';
 import { fetchByIds, fetchUser } from '../../redux/modules/users';
@@ -21,7 +22,8 @@ import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
 import {
   primaryAdminsOfGroupSelector,
   supervisorsOfGroupSelector,
-  studentsOfGroupSelector,
+  observersOfGroupSelector,
+  studentsIdsOfGroup,
   loggedUserIsStudentOfSelector,
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
@@ -50,7 +52,9 @@ class GroupInfo extends Component {
       .then(res => res.value)
       .then(group =>
         Promise.all([
+          dispatch(fetchByIds(safeGet(group, ['primaryAdminsIds'], []))),
           dispatch(fetchByIds(safeGet(group, ['privateData', 'supervisors'], []))),
+          dispatch(fetchByIds(safeGet(group, ['privateData', 'observers'], []))),
           group.archived ? dispatch(fetchAllGroups({ archived: true })) : null,
         ])
       );
@@ -66,9 +70,15 @@ class GroupInfo extends Component {
     if (isReady(this.props.group) && isReady(prevProps.group)) {
       const newData = this.props.group.toJS().data.privateData;
       const prevData = prevProps.group.toJS().data.privateData;
+      const groupJs = this.props.group.toJS();
+      if (safeGet(prevData, ['primaryAdmins', 'length'], -1) !== safeGet(newData, ['primaryAdmins', 'length'], -1)) {
+        this.props.refetchUsers(safeGet(groupJs, ['data', 'primaryAdminsIds'], []));
+      }
       if (safeGet(prevData, ['supervisors', 'length'], -1) !== safeGet(newData, ['supervisors', 'length'], -1)) {
-        const groupJs = this.props.group.toJS();
-        this.props.refetchSupervisors(safeGet(groupJs, ['data', 'privateData', 'supervisors'], []));
+        this.props.refetchUsers(safeGet(groupJs, ['data', 'privateData', 'supervisors'], []));
+      }
+      if (safeGet(prevData, ['observers', 'length'], -1) !== safeGet(newData, ['observers', 'length'], -1)) {
+        this.props.refetchUsers(safeGet(groupJs, ['data', 'privateData', 'observers'], []));
       }
     }
   }
@@ -108,7 +118,8 @@ class GroupInfo extends Component {
       groups,
       primaryAdmins = [],
       supervisors = [],
-      students = [],
+      observers = [],
+      studentsIds = [],
       isAdmin,
       isSuperAdmin,
       isSupervisor,
@@ -118,6 +129,7 @@ class GroupInfo extends Component {
       pendingMemberships,
       addAdmin,
       addSupervisor,
+      addObserver,
       removeMember,
       intl: { locale },
     } = this.props;
@@ -195,6 +207,7 @@ class GroupInfo extends Component {
                       groupId={data.id}
                       primaryAdmins={primaryAdmins}
                       supervisors={supervisors}
+                      observers={observers}
                       showButtons={isAdminOrSuperadmin && !data.archived}
                       isLoaded={
                         supervisors.length === data.privateData.supervisors.length &&
@@ -203,6 +216,7 @@ class GroupInfo extends Component {
                       addAdmin={addAdmin}
                       addSupervisor={addSupervisor}
                       removeMember={removeMember}
+                      addObserver={addObserver}
                       pendingMemberships={pendingMemberships}
                     />
                   </Box>
@@ -218,9 +232,11 @@ class GroupInfo extends Component {
                       groupId={data.id}
                       primaryAdmins={primaryAdmins}
                       supervisors={supervisors}
-                      students={students}
+                      observers={observers}
+                      studentsIds={studentsIds}
                       addAdmin={addAdmin}
                       addSupervisor={addSupervisor}
+                      addObserver={addObserver}
                       pendingMemberships={pendingMemberships}
                     />
                   </Box>
@@ -274,7 +290,8 @@ GroupInfo.propTypes = {
   instance: ImmutablePropTypes.map,
   primaryAdmins: PropTypes.array,
   supervisors: PropTypes.array,
-  students: PropTypes.array,
+  observers: PropTypes.array,
+  studentsIds: PropTypes.array,
   groups: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
   isSupervisor: PropTypes.bool,
@@ -282,9 +299,10 @@ GroupInfo.propTypes = {
   isStudent: PropTypes.bool,
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
-  refetchSupervisors: PropTypes.func.isRequired,
+  refetchUsers: PropTypes.func.isRequired,
   addAdmin: PropTypes.func.isRequired,
   addSupervisor: PropTypes.func.isRequired,
+  addObserver: PropTypes.func.isRequired,
   removeMember: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
   pendingMemberships: ImmutablePropTypes.list,
@@ -310,7 +328,8 @@ const mapStateToProps = (
     groups: groupsSelector(state),
     primaryAdmins: primaryAdminsOfGroupSelector(state, groupId),
     supervisors: supervisorsOfGroupSelector(state, groupId),
-    students: studentsOfGroupSelector(state, groupId),
+    observers: observersOfGroupSelector(state, groupId),
+    studentsIds: studentsIdsOfGroup(groupId)(state),
     isSupervisor: loggedUserIsSupervisorOfSelector(state)(groupId),
     isAdmin: loggedUserIsAdminOfSelector(state)(groupId),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
@@ -336,9 +355,10 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
         })
       ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
   loadAsync: () => GroupInfo.loadAsync(params, dispatch),
-  refetchSupervisors: ids => dispatch(fetchByIds(ids)),
+  refetchUsers: ids => dispatch(fetchByIds(ids)),
   addAdmin: (userId, groupId) => dispatch(addAdmin(userId, groupId)),
   addSupervisor: (userId, groupId) => dispatch(addSupervisor(userId, groupId)),
+  addObserver: (userId, groupId) => dispatch(addObserver(userId, groupId)),
   removeMember: (userId, groupId) => dispatch(removeMember(userId, groupId)),
 });
 

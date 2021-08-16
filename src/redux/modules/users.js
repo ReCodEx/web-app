@@ -62,14 +62,18 @@ export const updateSettings = (id, body) => actions.updateResource(id, body, `/u
 export const updateUiData = (id, uiData) => actions.updateResource(id, { uiData }, `/users/${id}/ui-data`);
 export const deleteUser = actions.removeResource;
 
-export const fetchByIds = ids =>
-  createApiAction({
-    type: additionalActionTypes.FETCH_BY_IDS,
-    endpoint: '/users/list',
-    method: 'POST',
-    meta: { ids },
-    body: { ids },
-  });
+export const fetchByIds = ids => (dispatch, getState) =>
+  ids && ids.length > 0
+    ? dispatch(
+        createApiAction({
+          type: additionalActionTypes.FETCH_BY_IDS,
+          endpoint: '/users/list',
+          method: 'POST',
+          meta: { ids },
+          body: { ids },
+        })
+      )
+    : Promise.resolve({ value: [] }); // optimization, no ids => no actual call
 
 export const makeLocalLogin = id =>
   createApiAction({

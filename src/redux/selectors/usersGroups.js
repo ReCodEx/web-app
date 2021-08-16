@@ -19,6 +19,7 @@ const usersIdsOfGroup = (type, groupId) =>
 
 export const studentsIdsOfGroup = groupId => usersIdsOfGroup('students', groupId);
 export const supervisorsIdsOfGroup = groupId => usersIdsOfGroup('supervisors', groupId);
+export const observersIdsOfGroup = groupId => usersIdsOfGroup('observers', groupId);
 export const adminsIdsOfGroup = groupId => usersIdsOfGroup('admins', groupId);
 export const primaryAdminsIdsOfGroup = groupId =>
   createSelector(groupSelectorCreator(groupId), group =>
@@ -58,6 +59,15 @@ export const supervisorsOfGroupSelector = createSelector(
     const supervisorsIds = supervisorsIdsOfGroup(groupId)(state);
     const supervisorsIndex = new Set(supervisorsIds);
     return users.filter(user => supervisorsIndex.has(user.id));
+  }
+);
+
+export const observersOfGroupSelector = createSelector(
+  [readyUsersDataSelector, getParam, getState],
+  (users, groupId, state) => {
+    const observersIds = observersIdsOfGroup(groupId)(state);
+    const observersIndex = new Set(observersIds);
+    return users.filter(user => observersIndex.has(user.id));
   }
 );
 
