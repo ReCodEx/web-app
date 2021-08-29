@@ -53,7 +53,7 @@ import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
-import { safeGet, identity, arrayToObject, toPlainAscii } from '../../helpers/common';
+import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
 const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, locale, links) => {
   const { SOLUTION_DETAIL_URI_FACTORY } = links;
@@ -332,22 +332,31 @@ class AssignmentStats extends Component {
               <Col md={12} lg={7}>
                 <div className="mb-3">
                   <TheButtonGroup>
-                    <Link to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                      <Button variant="warning">
-                        <EditIcon gapRight />
-                        <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                      </Button>
-                    </Link>
-                    <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
-                      <Button variant="primary">
-                        <DownloadIcon gapRight />
-                        <FormattedMessage
-                          id="app.assignment.downloadBestSolutionsArchive"
-                          defaultMessage="Download Bests"
-                        />
-                      </Button>
-                    </a>
-                    <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
+                    {hasPermissions(assignment, 'update') && (
+                      <Link to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
+                        <Button variant="warning">
+                          <EditIcon gapRight />
+                          <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                        </Button>
+                      </Link>
+                    )}
+
+                    {hasPermissions(assignment, 'viewAssignmentSolutions') && (
+                      <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
+                        <Button variant="primary">
+                          <DownloadIcon gapRight />
+                          <FormattedMessage
+                            id="app.assignment.downloadBestSolutionsArchive"
+                            defaultMessage="Download Bests"
+                          />
+                        </Button>
+                      </a>
+                    )}
+
+                    {hasPermissions(assignment, 'resubmitSubmissions') && (
+                      <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
+                    )}
+
                     <Button variant="info" onClick={this.openDialog}>
                       <ChatIcon gapRight />
                       <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />

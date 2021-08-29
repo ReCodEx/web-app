@@ -31,6 +31,7 @@ const AssignmentTableRow = ({
     isPublic,
     visibleFrom,
     accepted,
+    permissionHints,
   },
   runtimeEnvironments = null,
   status,
@@ -53,7 +54,7 @@ const AssignmentTableRow = ({
 }) => (
   <tr>
     <td className="text-nowrap shrink-col">
-      {isAdmin ? (
+      {permissionHints.update || permissionHints.viewAssignmentSolutions ? (
         <MaybeVisibleAssignmentIcon id={id} isPublic={isPublic} visibleFrom={visibleFrom} />
       ) : (
         <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
@@ -118,7 +119,7 @@ const AssignmentTableRow = ({
     <td className="text-right text-nowrap valign-middle">
       <TheButtonGroup>
         {discussionOpen &&
-          (isAdmin ? (
+          (permissionHints.viewAssignmentSolutions || permissionHints.update || permissionHints.remove ? (
             <OverlayTrigger
               placement="bottom"
               overlay={
@@ -137,39 +138,39 @@ const AssignmentTableRow = ({
             </Button>
           ))}
 
-        {isAdmin && (
-          <>
-            <Link to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={`results-${id}`}>
-                    <FormattedMessage id="generic.results" defaultMessage="Results" />
-                  </Tooltip>
-                }>
-                <Button size="xs" variant="primary">
-                  <ResultsIcon smallGapLeft smallGapRight />
-                </Button>
-              </OverlayTrigger>
-            </Link>
-
-            <Link to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={`edit-${id}`}>
-                    <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                  </Tooltip>
-                }>
-                <Button size="xs" variant="warning">
-                  <EditIcon smallGapLeft smallGapRight />
-                </Button>
-              </OverlayTrigger>
-            </Link>
-
-            <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />
-          </>
+        {permissionHints.viewAssignmentSolutions && (
+          <Link to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`results-${id}`}>
+                  <FormattedMessage id="generic.results" defaultMessage="Results" />
+                </Tooltip>
+              }>
+              <Button size="xs" variant="primary">
+                <ResultsIcon smallGapLeft smallGapRight />
+              </Button>
+            </OverlayTrigger>
+          </Link>
         )}
+
+        {permissionHints.update && (
+          <Link to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`edit-${id}`}>
+                  <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                </Tooltip>
+              }>
+              <Button size="xs" variant="warning">
+                <EditIcon smallGapLeft smallGapRight />
+              </Button>
+            </OverlayTrigger>
+          </Link>
+        )}
+
+        {permissionHints.remove && <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />}
       </TheButtonGroup>
     </td>
   </tr>
@@ -190,6 +191,7 @@ AssignmentTableRow.propTypes = {
     isPublic: PropTypes.bool,
     visibleFrom: PropTypes.number,
     accepted: PropTypes.bool,
+    permissionHints: PropTypes.object,
   }).isRequired,
   runtimeEnvironments: PropTypes.array,
   status: PropTypes.string,
