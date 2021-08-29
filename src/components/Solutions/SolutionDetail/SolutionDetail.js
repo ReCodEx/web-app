@@ -53,7 +53,9 @@ class SolutionDetail extends Component {
       solution: {
         id,
         note = '',
-        solution: { createdAt, userId, files },
+        createdAt,
+        authorId,
+        files = [] /* TODO */,
         maxPoints,
         overriddenPoints,
         bonusPoints,
@@ -99,7 +101,7 @@ class SolutionDetail extends Component {
               evaluation={evaluation}
               evaluationStatus={safeGet(lastSubmission, ['evaluationStatus'], 'missing-submission')}
               submittedAt={createdAt}
-              userId={userId}
+              userId={authorId}
               submittedBy={submittedBy}
               note={note}
               editNote={editNote}
@@ -313,7 +315,7 @@ class SolutionDetail extends Component {
           files={files}
           openAnotherFile={this.openFile}
           onHide={this.hideFile}
-          submittedBy={userId}
+          submittedBy={authorId}
         />
         {activeSubmissionId && scoreConfigSelector && (
           <ScoreConfigInfoDialog
@@ -334,11 +336,9 @@ SolutionDetail.propTypes = {
     id: PropTypes.string.isRequired,
     note: PropTypes.string,
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
-    solution: PropTypes.shape({
-      createdAt: PropTypes.number.isRequired,
-      userId: PropTypes.string.isRequired,
-      files: PropTypes.array,
-    }).isRequired,
+    createdAt: PropTypes.number.isRequired,
+    authorId: PropTypes.string.isRequired,
+    files: PropTypes.array,
     maxPoints: PropTypes.number.isRequired,
     bonusPoints: PropTypes.number.isRequired,
     overriddenPoints: PropTypes.number,

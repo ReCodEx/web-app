@@ -60,8 +60,8 @@ export const getUserSolutionsSortedData = createSelector([getSolutions, getAssig
       .map(id => solutions.get(id))
       .filter(a => a)
       .sort((a, b) => {
-        const aTimestamp = a.getIn(['data', 'solution', 'createdAt']);
-        const bTimestamp = b.getIn(['data', 'solution', 'createdAt']);
+        const aTimestamp = a.getIn(['data', 'createdAt']);
+        const bTimestamp = b.getIn(['data', 'createdAt']);
         return bTimestamp - aTimestamp;
       })
       .map(getJsData)

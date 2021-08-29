@@ -47,7 +47,7 @@ class Solution extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchSolutionIfNeeded(solutionId))
         .then(res => res.value)
-        .then(solution => dispatch(fetchUsersSolutions(solution.solution.userId, assignmentId))),
+        .then(solution => dispatch(fetchUsersSolutions(solution.authorId, assignmentId))),
       dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
     ]);
@@ -137,7 +137,7 @@ class Solution extends Component {
                             id={solution.id}
                             assignmentId={assignment.id}
                             isDebug={false}
-                            userId={solution.solution.userId}
+                            userId={solution.authorId}
                             locale={locale}
                           />
 
@@ -154,7 +154,7 @@ class Solution extends Component {
                               id={solution.id}
                               assignmentId={assignment.id}
                               isDebug={true}
-                              userId={solution.solution.userId}
+                              userId={solution.authorId}
                               locale={locale}
                             />
                           )}
@@ -183,7 +183,7 @@ class Solution extends Component {
                     {() => (
                       <SolutionDetail
                         solution={solution}
-                        otherSolutions={userSolutionsSelector(solution.solution.userId, assignment.id)}
+                        otherSolutions={userSolutionsSelector(solution.authorId, assignment.id)}
                         assignment={assignment}
                         evaluations={evaluations}
                         runtimeEnvironments={runtimes}
