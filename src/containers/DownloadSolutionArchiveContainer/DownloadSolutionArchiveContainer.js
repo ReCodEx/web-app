@@ -7,9 +7,9 @@ import { connect } from 'react-redux';
 import { downloadSolutionArchive } from '../../redux/modules/submissionEvaluations';
 import { downloadSolutionArchive as downloadRefSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';
 import { getUser } from '../../redux/selectors/users';
-import SolutionArchiveInfoBox from '../../components/Solutions/SolutionArchiveInfoBox';
 import Button from '../../components/widgets/TheButton';
 import Icon from '../../components/icons';
+import OptionalTooltipWrapper from '../../components/widgets/OptionalTooltipWrapper';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { toPlainAscii } from '../../helpers/common';
 
@@ -19,49 +19,50 @@ const solutionArchiveFileName = (solutionId, user) => {
 };
 
 const DownloadSolutionArchiveContainer = ({
-  solutionId,
   downloadSolutionArchive,
   downloadRefSolutionArchive,
   isReference = false,
-  simpleButton = false,
+  iconOnly = false,
   variant = 'primary',
   size = null,
-  submittedByUser,
+  authorUser,
 }) => (
-  <ResourceRenderer resource={submittedByUser}>
-    {user =>
-      simpleButton ? (
+  <ResourceRenderer resource={authorUser}>
+    {user => (
+      <OptionalTooltipWrapper
+        tooltip={
+          <FormattedMessage id="app.solutionArchiveInfoBox.description" defaultMessage="All files in a ZIP archive" />
+        }
+        hide={!iconOnly}
+        tooltipId="solution-archive">
         <Button
           onClick={isReference ? downloadRefSolutionArchive(user) : downloadSolutionArchive(user)}
           variant={variant}
           size={size}>
-          <Icon icon={['far', 'file-archive']} gapRight />
-          <FormattedMessage id="app.solutionArchiveInfoBox.description" defaultMessage="All files in a ZIP archive" />
+          <Icon icon={['far', 'file-archive']} gapRight={!iconOnly} fixedWidth={iconOnly} />
+          {!iconOnly && (
+            <FormattedMessage id="app.solutionArchiveInfoBox.description" defaultMessage="All files in a ZIP archive" />
+          )}
         </Button>
-      ) : (
-        <a href="#" onClick={isReference ? downloadRefSolutionArchive(user) : downloadSolutionArchive(user)}>
-          <SolutionArchiveInfoBox id={solutionId} />
-        </a>
-      )
-    }
+      </OptionalTooltipWrapper>
+    )}
   </ResourceRenderer>
 );
 
 DownloadSolutionArchiveContainer.propTypes = {
-  solutionId: PropTypes.string.isRequired,
-  submittedBy: PropTypes.string.isRequired,
+  authorId: PropTypes.string.isRequired,
   isReference: PropTypes.bool,
-  simpleButton: PropTypes.bool,
+  iconOnly: PropTypes.bool,
   variant: PropTypes.string,
   size: PropTypes.string,
-  submittedByUser: ImmutablePropTypes.map,
+  authorUser: ImmutablePropTypes.map,
   downloadSolutionArchive: PropTypes.func.isRequired,
   downloadRefSolutionArchive: PropTypes.func.isRequired,
 };
 
 export default connect(
-  (state, { submittedBy }) => ({
-    submittedByUser: getUser(submittedBy)(state),
+  (state, { authorId }) => ({
+    authorUser: getUser(authorId)(state),
   }),
   (dispatch, { solutionId }) => ({
     downloadSolutionArchive: user => e => {
