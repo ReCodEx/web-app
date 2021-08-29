@@ -5,17 +5,16 @@ import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 import SolutionStatus from '../SolutionStatus';
-import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import TestResults from '../TestResults';
 import PointsContainer from '../../../containers/PointsContainer';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
-import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 import SubmissionEvaluations from '../SubmissionEvaluations';
 import { ScoreConfigInfoDialog } from '../../scoreConfig/ScoreConfigInfo';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
+import SolutionFiles from '../SolutionFiles';
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
 import { RefreshIcon, EvaluationFailedIcon } from '../../icons';
@@ -55,7 +54,6 @@ class SolutionDetail extends Component {
         note = '',
         createdAt,
         authorId,
-        files = [] /* TODO */,
         maxPoints,
         overriddenPoints,
         bonusPoints,
@@ -66,6 +64,8 @@ class SolutionDetail extends Component {
         lastSubmission,
         permissionHints = EMPTY_OBJ,
       },
+      files,
+      download,
       otherSolutions,
       assignment,
       evaluations,
@@ -224,27 +224,14 @@ class SolutionDetail extends Component {
 
         <Row>
           <Col xl={6}>
-            <Row>
-              {files
-                .sort((a, b) => a.name.localeCompare(b.name, 'en'))
-                .map(file => (
-                  <Col lg={6} md={12} key={file.id}>
-                    <a
-                      href="#"
-                      onClick={e => {
-                        e.preventDefault();
-                        this.openFile(file.id);
-                      }}>
-                      <SourceCodeInfoBox {...file} />
-                    </a>
-                  </Col>
-                ))}
-              {files.length > 0 && (
-                <Col lg={6} md={12}>
-                  <DownloadSolutionArchiveContainer solutionId={id} submittedBy={submittedBy} />
-                </Col>
-              )}
-            </Row>
+            <SolutionFiles
+              solutionId={id}
+              files={files}
+              authorId={authorId}
+              openFile={this.openFile}
+              download={download}
+            />
+
             {permissionHints.setBonusPoints && (
               <PointsContainer
                 submissionId={id}
@@ -338,7 +325,6 @@ SolutionDetail.propTypes = {
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
     createdAt: PropTypes.number.isRequired,
     authorId: PropTypes.string.isRequired,
-    files: PropTypes.array,
     maxPoints: PropTypes.number.isRequired,
     bonusPoints: PropTypes.number.isRequired,
     overriddenPoints: PropTypes.number,
@@ -348,6 +334,8 @@ SolutionDetail.propTypes = {
     runtimeEnvironmentId: PropTypes.string,
     permissionHints: PropTypes.object,
   }).isRequired,
+  files: ImmutablePropTypes.map,
+  download: PropTypes.func,
   otherSolutions: ImmutablePropTypes.list.isRequired,
   assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,

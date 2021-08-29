@@ -37,10 +37,10 @@ class SourceCodeViewerContainer extends Component {
       show,
       onHide,
       download,
+      solutionId,
       file,
       files,
       content,
-      solutionId,
       openAnotherFile,
       isReference = false,
       submittedBy = null,
@@ -67,39 +67,44 @@ class SourceCodeViewerContainer extends Component {
         {(file, content) => (
           <Modal show={show} onHide={onHide} dialogClassName={styles.modal} size="xl">
             <Modal.Header closeButton>
-              <DropdownButton
-                size="sm"
-                className="elevation-2 text-monospace"
-                title={file.name}
-                variant="outline-secondary">
-                {files
-                  .sort((a, b) => a.name.localeCompare(b.name, 'en'))
-                  .map(f => (
-                    <Dropdown.Item
-                      key={f.id}
-                      href="#"
-                      selected={f.id === file.id}
-                      onClick={() => openAnotherFile(f.id)}>
-                      {f.name}
-                    </Dropdown.Item>
-                  ))}
-              </DropdownButton>
+              <ResourceRenderer resource={files}>
+                {files => (
+                  <>
+                    <DropdownButton
+                      size="sm"
+                      className="elevation-2 text-monospace"
+                      title={file.name}
+                      variant="outline-secondary">
+                      {files
+                        .sort((a, b) => a.name.localeCompare(b.name, 'en'))
+                        .map(f => (
+                          <Dropdown.Item
+                            key={f.id}
+                            href="#"
+                            selected={f.id === file.id}
+                            onClick={() => openAnotherFile(f.id)}>
+                            {f.name}
+                          </Dropdown.Item>
+                        ))}
+                    </DropdownButton>
 
-              <Button size="sm" className="mx-2 " onClick={() => download(file.id)}>
-                <DownloadIcon gapRight />
-                <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
-              </Button>
+                    <Button size="sm" className="mx-2 " onClick={() => download(file.id)}>
+                      <DownloadIcon gapRight />
+                      <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
+                    </Button>
 
-              {files.length > 0 && (
-                <DownloadSolutionArchiveContainer
-                  solutionId={solutionId}
-                  simpleButton
-                  size="sm"
-                  variant="outline-secondary"
-                  isReference={isReference}
-                  submittedBy={submittedBy}
-                />
-              )}
+                    {files.length > 0 && (
+                      <DownloadSolutionArchiveContainer
+                        solutionId={solutionId}
+                        size="sm"
+                        variant="outline-secondary"
+                        isReference={isReference}
+                        authorId={submittedBy}
+                      />
+                    )}
+                  </>
+                )}
+              </ResourceRenderer>
 
               {submittedBy && (
                 <span className="pt-1 px-4">
@@ -143,7 +148,7 @@ class SourceCodeViewerContainer extends Component {
 SourceCodeViewerContainer.propTypes = {
   solutionId: PropTypes.string.isRequired,
   fileId: PropTypes.string,
-  files: PropTypes.array.isRequired,
+  files: ImmutablePropTypes.map,
   show: PropTypes.bool,
   isReference: PropTypes.bool,
   onHide: PropTypes.func.isRequired,

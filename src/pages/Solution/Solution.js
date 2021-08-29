@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
@@ -17,12 +18,15 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSolution, fetchSolutionIfNeeded, fetchUsersSolutions, setNote } from '../../redux/modules/solutions';
+import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
+import { download } from '../../redux/modules/files';
 import {
   fetchSubmissionEvaluationsForSolution,
   deleteSubmissionEvaluation,
 } from '../../redux/modules/submissionEvaluations';
 import { fetchAssignmentSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
 import { getSolution } from '../../redux/selectors/solutions';
+import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
 import {
   getAssignment,
   assignmentEnvironmentsSelector,
@@ -50,6 +54,7 @@ class Solution extends Component {
         .then(solution => dispatch(fetchUsersSolutions(solution.authorId, assignmentId))),
       dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
+      dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId)),
     ]);
 
   componentDidMount = () => this.props.loadAsync();
@@ -64,6 +69,8 @@ class Solution extends Component {
     const {
       assignment,
       solution,
+      files,
+      download,
       userSolutionsSelector,
       match: {
         params: { assignmentId },
@@ -183,6 +190,8 @@ class Solution extends Component {
                     {() => (
                       <SolutionDetail
                         solution={solution}
+                        files={files}
+                        download={download}
                         otherSolutions={userSolutionsSelector(solution.authorId, assignment.id)}
                         assignment={assignment}
                         evaluations={evaluations}
@@ -216,6 +225,7 @@ Solution.propTypes = {
   assignment: PropTypes.object,
   children: PropTypes.element,
   solution: PropTypes.object,
+  files: ImmutablePropTypes.map,
   userSolutionsSelector: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   fetchScoreConfigIfNeeded: PropTypes.func.isRequired,
@@ -226,6 +236,7 @@ Solution.propTypes = {
   editNote: PropTypes.func.isRequired,
   deleteEvaluation: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
+  download: PropTypes.func.isRequired,
   intl: PropTypes.object,
 };
 
@@ -239,6 +250,7 @@ export default connect(
     }
   ) => ({
     solution: getSolution(solutionId)(state),
+    files: getSolutionFiles(state, solutionId),
     userSolutionsSelector: getUserSolutionsSortedData(state),
     assignment: getAssignment(state)(assignmentId),
     evaluations: evaluationsForSubmissionSelector(solutionId)(state),
@@ -259,5 +271,6 @@ export default connect(
       dispatch(deleteSubmissionEvaluation(params.solutionId, evaluationId)).then(() =>
         dispatch(fetchSolutionIfNeeded(params.solutionId))
       ),
+    download: id => dispatch(download(id)),
   })
 )(injectIntl(Solution));

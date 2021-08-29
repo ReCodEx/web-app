@@ -14,6 +14,8 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 
 import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
+import { fetchReferenceSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
+import { download } from '../../redux/modules/files';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { fetchReferenceSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
 import {
@@ -22,6 +24,7 @@ import {
 } from '../../redux/modules/referenceSolutionEvaluations';
 
 import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
+import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
 import { getExercise } from '../../redux/selectors/exercises';
 import { referenceSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 import {
@@ -50,6 +53,7 @@ class ReferenceSolution extends Component {
       dispatch(fetchReferenceSolutionIfNeeded(referenceSolutionId)),
       dispatch(fetchExerciseIfNeeded(exerciseId)),
       dispatch(fetchReferenceSolutionEvaluationsForSolution(referenceSolutionId)),
+      dispatch(fetchReferenceSolutionFilesIfNeeded(referenceSolutionId)),
     ]);
 
   componentDidMount = () => this.props.loadAsync();
@@ -63,6 +67,8 @@ class ReferenceSolution extends Component {
   render() {
     const {
       referenceSolution,
+      files,
+      download,
       exercise,
       match: {
         params: { exerciseId },
@@ -154,6 +160,8 @@ class ReferenceSolution extends Component {
                   {() => (
                     <ReferenceSolutionDetail
                       solution={referenceSolution}
+                      files={files}
+                      download={download}
                       evaluations={evaluations}
                       exercise={exercise}
                       deleteEvaluation={deleteEvaluation}
@@ -184,9 +192,11 @@ ReferenceSolution.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   fetchScoreConfigIfNeeded: PropTypes.func.isRequired,
   referenceSolution: ImmutablePropTypes.map,
+  files: ImmutablePropTypes.map,
   exercise: ImmutablePropTypes.map,
   refreshSolutionEvaluations: PropTypes.func,
   deleteEvaluation: PropTypes.func.isRequired,
+  download: PropTypes.func.isRequired,
   fetchStatus: PropTypes.string,
   scoreConfigSelector: PropTypes.func,
   evaluations: ImmutablePropTypes.map,
@@ -206,6 +216,7 @@ export default withLinks(
         }
       ) => ({
         referenceSolution: getReferenceSolution(referenceSolutionId)(state),
+        files: getSolutionFiles(state, referenceSolutionId),
         exercise: getExercise(exerciseId)(state),
         evaluations: evaluationsForReferenceSolutionSelector(referenceSolutionId)(state),
         fetchStatus: fetchManyStatus(referenceSolutionId)(state),
@@ -220,6 +231,7 @@ export default withLinks(
         },
         deleteEvaluation: evaluationId =>
           dispatch(deleteReferenceSolutionEvaluation(params.referenceSolutionId, evaluationId)),
+        download: id => dispatch(download(id)),
       })
     )(ReferenceSolution)
   )

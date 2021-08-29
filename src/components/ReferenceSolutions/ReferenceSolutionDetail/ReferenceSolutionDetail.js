@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
+import SolutionFiles from '../../Solutions/SolutionFiles';
 import EvaluationDetail from '../../Solutions/EvaluationDetail';
 import TestResults from '../../Solutions/TestResults';
 import DownloadResultArchiveContainer from '../../../containers/DownloadResultArchiveContainer';
-import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import CommentThreadContainer from '../../../containers/CommentThreadContainer';
 import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerContainer';
 import SubmissionEvaluations from '../../Solutions/SubmissionEvaluations';
@@ -14,7 +15,6 @@ import { ScoreConfigInfoDialog } from '../../scoreConfig/ScoreConfigInfo';
 import CompilationLogs from '../../Solutions/CompilationLogs';
 import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
 
-import SourceCodeInfoBox from '../../widgets/SourceCodeInfoBox';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import DateTime from '../../widgets/DateTime';
@@ -56,15 +56,9 @@ class ReferenceSolutionDetail extends Component {
 
   render() {
     const {
-      solution: {
-        id,
-        description,
-        runtimeEnvironmentId,
-        createdAt,
-        authorId,
-        files = [] /* TODO */,
-        permissionHints = EMPTY_OBJ,
-      },
+      solution: { id, description, runtimeEnvironmentId, createdAt, authorId, permissionHints = EMPTY_OBJ },
+      files,
+      download,
       exercise,
       evaluations,
       deleteEvaluation = null,
@@ -83,8 +77,6 @@ class ReferenceSolutionDetail extends Component {
         evaluationsJS[activeSubmissionId].data;
     } else evaluationStatus = 'missing-submission';
 
-    const filesSize = files.reduce((acc, { size }) => acc + size, 0);
-
     if (evaluationStatus === 'evaluation-failed' && !failure) {
       failure = true;
     }
@@ -96,7 +88,7 @@ class ReferenceSolutionDetail extends Component {
             <ReferenceSolutionStatus
               description={description}
               submittedAt={createdAt}
-              userId={authorId}
+              authorId={authorId}
               submittedBy={submittedBy}
               exerciseId={exercise.id}
               environment={
@@ -106,47 +98,14 @@ class ReferenceSolutionDetail extends Component {
               }
             />
 
-            {exercise.solutionFilesLimit !== null && files.length > exercise.solutionFilesLimit && (
-              <Callout variant="warning">
-                <FormattedMessage
-                  id="app.referenceSolutionDetail.solutionFilesLimitExceeded"
-                  defaultMessage="The total number of submitted files exceeds the default solution files limit ({limit})."
-                  values={{ limit: exercise.solutionFilesLimit }}
-                />
-              </Callout>
-            )}
-
-            {exercise.solutionSizeLimit !== null && filesSize > exercise.solutionSizeLimit && (
-              <Callout variant="warning">
-                <FormattedMessage
-                  id="app.referenceSolutionDetail.solutionSizeLimitExceeded"
-                  defaultMessage="The total size of all submitted files exceeds the default solution size limit ({limit} KiB)."
-                  values={{ limit: Math.ceil(exercise.solutionSizeLimit / 1024) }}
-                />
-              </Callout>
-            )}
-
-            <Row>
-              {files
-                .sort((a, b) => a.name.localeCompare(b.name, 'en'))
-                .map(file => (
-                  <Col lg={6} md={12} key={file.id}>
-                    <a
-                      href="#"
-                      onClick={e => {
-                        e.preventDefault();
-                        this.openFile(file.id);
-                      }}>
-                      <SourceCodeInfoBox {...file} />
-                    </a>
-                  </Col>
-                ))}
-              {files.length > 0 && (
-                <Col lg={6} md={12}>
-                  <DownloadSolutionArchiveContainer solutionId={id} submittedBy={submittedBy} isReference={true} />
-                </Col>
-              )}
-            </Row>
+            <SolutionFiles
+              solutionId={id}
+              files={files}
+              authorId={authorId}
+              isReference={true}
+              openFile={this.openFile}
+              download={download}
+            />
 
             <CommentThreadContainer threadId={id} />
           </Col>
@@ -323,10 +282,11 @@ ReferenceSolutionDetail.propTypes = {
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
     createdAt: PropTypes.number.isRequired,
     authorId: PropTypes.string.isRequired,
-    files: PropTypes.array,
     submissions: PropTypes.array.isRequired,
     permissionHints: PropTypes.object,
   }).isRequired,
+  files: ImmutablePropTypes.map,
+  download: PropTypes.func,
   exercise: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
   deleteEvaluation: PropTypes.func,
