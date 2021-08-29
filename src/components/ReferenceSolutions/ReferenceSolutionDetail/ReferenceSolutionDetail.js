@@ -60,7 +60,9 @@ class ReferenceSolutionDetail extends Component {
         id,
         description,
         runtimeEnvironmentId,
-        solution: { createdAt, userId, files },
+        createdAt,
+        authorId,
+        files = [] /* TODO */,
         permissionHints = EMPTY_OBJ,
       },
       exercise,
@@ -94,7 +96,7 @@ class ReferenceSolutionDetail extends Component {
             <ReferenceSolutionStatus
               description={description}
               submittedAt={createdAt}
-              userId={userId}
+              userId={authorId}
               submittedBy={submittedBy}
               exerciseId={exercise.id}
               environment={
@@ -295,7 +297,7 @@ class ReferenceSolutionDetail extends Component {
           fileId={openFileId}
           isReference={true}
           onHide={this.hideFile}
-          submittedBy={userId}
+          submittedBy={authorId}
         />
 
         {activeSubmissionId && scoreConfigSelector && (
@@ -319,11 +321,9 @@ ReferenceSolutionDetail.propTypes = {
     runtimeEnvironmentId: PropTypes.string,
     note: PropTypes.string,
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
-    solution: PropTypes.shape({
-      createdAt: PropTypes.number.isRequired,
-      userId: PropTypes.string.isRequired,
-      files: PropTypes.array,
-    }).isRequired,
+    createdAt: PropTypes.number.isRequired,
+    authorId: PropTypes.string.isRequired,
+    files: PropTypes.array,
     submissions: PropTypes.array.isRequired,
     permissionHints: PropTypes.object,
   }).isRequired,

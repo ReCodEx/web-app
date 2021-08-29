@@ -119,11 +119,11 @@ const reducer = handleActions(
         return state;
       }
 
-      if (!state.hasIn(['solutions', solution.exerciseAssignmentId, solution.solution.userId])) {
-        state = state.setIn(['solutions', solution.exerciseAssignmentId, solution.solution.userId], List());
+      if (!state.hasIn(['solutions', solution.exerciseAssignmentId, solution.authorId])) {
+        state = state.setIn(['solutions', solution.exerciseAssignmentId, solution.authorId], List());
       }
 
-      return state.updateIn(['solutions', solution.exerciseAssignmentId, solution.solution.userId], solutions =>
+      return state.updateIn(['solutions', solution.exerciseAssignmentId, solution.authorId], solutions =>
         solutions.push(solution.id)
       );
     },
@@ -133,11 +133,11 @@ const reducer = handleActions(
 
     [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: (state, { payload, meta: { assignmentId } }) => {
       payload.forEach(function (solution) {
-        if (!state.hasIn(['solutions', assignmentId, solution.solution.userId])) {
-          state = state.setIn(['solutions', assignmentId, solution.solution.userId], List());
+        if (!state.hasIn(['solutions', assignmentId, solution.authorId])) {
+          state = state.setIn(['solutions', assignmentId, solution.authorId], List());
         }
 
-        state = state.updateIn(['solutions', assignmentId, solution.solution.userId], solutions => {
+        state = state.updateIn(['solutions', assignmentId, solution.authorId], solutions => {
           if (!solutions.includes(solution.id)) {
             return solutions.push(solution.id);
           }

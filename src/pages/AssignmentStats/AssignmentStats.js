@@ -183,13 +183,15 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
   return assigmentSolutions
     .toArray()
     .map(getJsData)
-    .filter(solution => solution && solution.solution && usersIndex[solution.solution.userId])
+    .filter(solution => solution && usersIndex[solution.authorId])
     .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
     .map(
       ({
         id,
         lastSubmission,
         solution,
+        authorId,
+        createdAt,
         runtimeEnvironmentId,
         note,
         maxPoints,
@@ -204,11 +206,10 @@ const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvir
         const statusEvaluated =
           lastSubmission &&
           (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
-        const userId = solution && solution.userId;
         return {
           icon: { id, commentsStats, lastSubmission, accepted, reviewed, isBestSolution },
-          user: usersIndex[userId],
-          date: solution && solution.createdAt,
+          user: usersIndex[authorId],
+          date: createdAt,
           validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
           points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
           runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),

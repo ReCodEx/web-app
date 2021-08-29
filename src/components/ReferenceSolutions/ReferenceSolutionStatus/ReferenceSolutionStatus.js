@@ -10,7 +10,7 @@ import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import Icon, { EditIcon, CodeIcon } from '../../icons';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 
-const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy, exerciseId, environment }) => (
+const ReferenceSolutionStatus = ({ description, authorId, submittedAt, submittedBy, exerciseId, environment }) => (
   <Box
     title={
       <FormattedMessage id="app.referenceSolutionDetail.title.details" defaultMessage="Reference Solution Detail" />
@@ -60,11 +60,11 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
-            <UsersNameContainer userId={userId} />
+            <UsersNameContainer userId={authorId} />
           </td>
         </tr>
 
-        {Boolean(submittedBy) && submittedBy !== userId && (
+        {Boolean(submittedBy) && submittedBy !== authorId && (
           <tr>
             <td className="text-center text-muted shrink-col px-2">
               <Icon icon="user" />
@@ -98,7 +98,7 @@ const ReferenceSolutionStatus = ({ description, userId, submittedAt, submittedBy
 
 ReferenceSolutionStatus.propTypes = {
   description: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
+  authorId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string.isRequired,
   submittedAt: PropTypes.number.isRequired,
   exerciseId: PropTypes.string.isRequired,

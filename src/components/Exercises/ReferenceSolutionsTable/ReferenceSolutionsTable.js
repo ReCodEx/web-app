@@ -29,7 +29,7 @@ const ReferenceSolutionsTable = ({
       </tr>
     </thead>
     {referenceSolutions
-      .sort((a, b) => a.solution.createdAt - b.solution.createdAt)
+      .sort((a, b) => a.createdAt - b.createdAt)
       .map(solution => (
         <ReferenceSolutionsTableRow
           key={solution.id}

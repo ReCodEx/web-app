@@ -12,7 +12,8 @@ const ReferenceSolutionsTableRow = ({
   description,
   runtimeEnvironmentId,
   permissionHints = null,
-  solution: { userId, createdAt },
+  authorId,
+  createdAt,
   runtimeEnvironments,
   renderButtons,
 }) => {
@@ -41,7 +42,7 @@ const ReferenceSolutionsTableRow = ({
         </td>
         <td className="text-nowrap">{rte ? <EnvironmentsListItem runtimeEnvironment={rte} longNames /> : '-'}</td>
         <td className="text-nowrap">
-          <UsersNameContainer userId={userId} isSimple />
+          <UsersNameContainer userId={authorId} isSimple />
         </td>
       </tr>
     </tbody>
@@ -52,10 +53,8 @@ ReferenceSolutionsTableRow.propTypes = {
   id: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   runtimeEnvironmentId: PropTypes.string.isRequired,
-  solution: PropTypes.shape({
-    userId: PropTypes.string.isRequired,
-    createdAt: PropTypes.number.isRequired,
-  }),
+  authorId: PropTypes.string.isRequired,
+  createdAt: PropTypes.number.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
   permissionHints: PropTypes.object,
   renderButtons: PropTypes.func.isRequired,
