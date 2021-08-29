@@ -260,7 +260,9 @@ class ResultsTable extends Component {
                 (assignment.maxPointsBeforeSecondDeadline ? ` / ${assignment.maxPointsBeforeSecondDeadline}` : ''),
               headerSuffixClassName: styles.maxPointsRow,
               cellRenderer: assignmentCellRendererCreator(assignments, locale),
-              onClick: (userId, assignmentId) => this.openDialogAssignment(userId, assignmentId),
+              onClick: hasPermissions(assignment, 'viewAssignmentSolutions')
+                ? (userId, assignmentId) => this.openDialogAssignment(userId, assignmentId)
+                : null,
             }
           )
         )
@@ -421,61 +423,59 @@ class ResultsTable extends Component {
           </div>
         )}
 
-        {(isAdmin || isSupervisor) && (
-          <Modal
-            show={Boolean(this.state.dialogOpen && this.state.dialogUserId)}
-            backdrop="static"
-            onHide={this.closeDialog}
-            size="xl">
-            <Modal.Header closeButton>
-              <Modal.Title>
-                <LocalizedExerciseName entity={this.getDialogAssignment() || this.getDialogShadowAssignment()} />
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {this.state.dialogClosing ? (
-                <div className="text-center">
-                  <LoadingIcon />
-                </div>
-              ) : (
-                <>
-                  <UsersNameContainer userId={this.state.dialogUserId} showEmail="icon" large />
-                  <hr />
+        <Modal
+          show={Boolean(this.state.dialogOpen && this.state.dialogUserId)}
+          backdrop="static"
+          onHide={this.closeDialog}
+          size="xl">
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <LocalizedExerciseName entity={this.getDialogAssignment() || this.getDialogShadowAssignment()} />
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {this.state.dialogClosing ? (
+              <div className="text-center">
+                <LoadingIcon />
+              </div>
+            ) : (
+              <>
+                <UsersNameContainer userId={this.state.dialogUserId} showEmail="icon" large />
+                <hr />
 
-                  {this.state.dialogAssignmentId && (
-                    <FetchManyResourceRenderer
-                      fetchManyStatus={userSolutionsStatusSelector(
-                        this.state.dialogUserId,
-                        this.state.dialogAssignmentId
-                      )}
-                      loading={<LoadingSolutionsTable />}
-                      failed={<FailedLoadingSolutionsTable />}>
-                      {() => (
-                        <SolutionsTable
-                          solutions={userSolutionsSelector(this.state.dialogUserId, this.state.dialogAssignmentId)}
-                          assignmentId={this.state.dialogAssignmentId}
-                          groupId={group.id}
-                          runtimeEnvironments={runtimeEnvironments}
-                          noteMaxlen={64}
-                          compact
-                        />
-                      )}
-                    </FetchManyResourceRenderer>
-                  )}
+                {this.state.dialogAssignmentId && (
+                  <FetchManyResourceRenderer
+                    fetchManyStatus={userSolutionsStatusSelector(
+                      this.state.dialogUserId,
+                      this.state.dialogAssignmentId
+                    )}
+                    loading={<LoadingSolutionsTable />}
+                    failed={<FailedLoadingSolutionsTable />}>
+                    {() => (
+                      <SolutionsTable
+                        solutions={userSolutionsSelector(this.state.dialogUserId, this.state.dialogAssignmentId)}
+                        assignmentId={this.state.dialogAssignmentId}
+                        groupId={group.id}
+                        runtimeEnvironments={runtimeEnvironments}
+                        noteMaxlen={64}
+                        compact
+                      />
+                    )}
+                  </FetchManyResourceRenderer>
+                )}
 
-                  {this.state.dialogShadowId && (
-                    <EditShadowAssignmentPointsForm
-                      initialValues={getPointsFormInitialValues(this.getDialogPoints(), this.state.dialogUserId)}
-                      onSubmit={this.submitPointsForm}
-                      maxPoints={this.getDialogShadowAssignment().maxPoints}
-                      onRemovePoints={this.removeShadowPoints}
-                    />
-                  )}
-                </>
-              )}
-            </Modal.Body>
-          </Modal>
-        )}
+                {this.state.dialogShadowId && (
+                  <EditShadowAssignmentPointsForm
+                    initialValues={getPointsFormInitialValues(this.getDialogPoints(), this.state.dialogUserId)}
+                    onSubmit={this.submitPointsForm}
+                    maxPoints={this.getDialogShadowAssignment().maxPoints}
+                    onRemovePoints={this.removeShadowPoints}
+                  />
+                )}
+              </>
+            )}
+          </Modal.Body>
+        </Modal>
       </>
     );
   }
