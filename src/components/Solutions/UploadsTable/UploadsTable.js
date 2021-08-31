@@ -108,7 +108,7 @@ const UploadsTable = ({
                           />
                         </Tooltip>
                       }>
-                      <LoadingIcon gapRight fixedWidtht />
+                      <LoadingIcon gapRight fixedWidth />
                     </OverlayTrigger>
                   )}
                 </td>

@@ -1441,6 +1441,7 @@
   "app.solutionArchiveInfoBox.description": "Všechny soubory v ZIPu",
   "app.solutionFiles.countLimitExceeded": "Celkový počet souborů řešení překročil výchozí limit ({limit}).",
   "app.solutionFiles.downloadButton": "Stáhnout soubor",
+  "app.solutionFiles.entryPoint": "Vstupní bod (zaváděcí soubor aplikace)",
   "app.solutionFiles.noFiles": "Nebyly odevzdány žádné soubory.",
   "app.solutionFiles.openButton": "Otevřít náhled v okně",
   "app.solutionFiles.sizeLimitExceeded": "Celková velikost všech odevzdaných souborů překročila výchozí limit ({limit} KiB).",

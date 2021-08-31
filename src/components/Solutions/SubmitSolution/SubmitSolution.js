@@ -268,11 +268,14 @@ class SubmitSolution extends Component {
                   hasEntryPoint(presubmitVariables, selectedEnvironment)
               ) && (
                 <FormGroup>
-                  <FormLabel>{formatMessage(commonMessages.entryPoint)}</FormLabel>
+                  <FormLabel className={selectedEntryPoint ? '' : 'text-danger'}>
+                    {formatMessage(commonMessages.entryPoint)}
+                  </FormLabel>
                   <FormControl
                     onChange={e => changeEntryPoint(e.target.value)}
                     as="select"
                     defaultValue={selectedEntryPoint}>
+                    <option value="">...</option>
                     {attachedFiles
                       .map(item => item.name)
                       .sort()

@@ -25,16 +25,23 @@ import DateTime from '../../widgets/DateTime';
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
 class SolutionDetail extends Component {
-  state = { openFileId: null, activeSubmissionId: null, scoreDialogOpened: false };
+  state = {
+    openFileId: null,
+    openFileName: '',
+    openZipEntry: null,
+    activeSubmissionId: null,
+    scoreDialogOpened: false,
+  };
 
   setActiveSubmission = id => {
     this.props.fetchScoreConfigIfNeeded && this.props.fetchScoreConfigIfNeeded(id);
     this.setState({ activeSubmissionId: id });
   };
 
-  openFile = id => this.setState({ openFileId: id });
+  openFile = (openFileId, openFileName, openZipEntry = null) =>
+    this.setState({ openFileId, openFileName, openZipEntry });
 
-  hideFile = () => this.setState({ openFileId: null });
+  hideFile = () => this.setState({ openFileId: null, openFileName: '', openZipEntry: null });
 
   openScoreDialog = () => {
     const activeSubmissionId =
@@ -77,7 +84,7 @@ class SolutionDetail extends Component {
       canResubmit = false,
     } = this.props;
 
-    const { openFileId, scoreDialogOpened } = this.state;
+    const { openFileId, openFileName, openZipEntry, scoreDialogOpened } = this.state;
     const activeSubmissionId = this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
     const evaluationsJS = evaluations.toJS();
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
@@ -299,6 +306,8 @@ class SolutionDetail extends Component {
           solutionId={id}
           show={openFileId !== null}
           fileId={openFileId}
+          fileName={openFileName}
+          zipEntry={openZipEntry}
           files={files}
           openAnotherFile={this.openFile}
           onHide={this.hideFile}

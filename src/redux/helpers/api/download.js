@@ -4,7 +4,7 @@ import { addNotification } from '../../modules/notifications';
 const trivialFileNameSelector = (id, _) => id;
 
 export const downloadHelper =
-  ({ fetch, endpoint, actionType, fileNameSelector = trivialFileNameSelector, contentType }) =>
+  ({ fetch = null, endpoint, actionType, fileNameSelector = trivialFileNameSelector, contentType }) =>
   (id, fileName = null) =>
   (dispatch, getState) => {
     let initial;
@@ -19,7 +19,7 @@ export const downloadHelper =
           createApiAction({
             type: actionType,
             method: 'GET',
-            endpoint: endpoint(id),
+            endpoint: endpoint instanceof Function ? endpoint(id) : endpoint,
             doNotProcess: true, // the response is not (does not have to be) a JSON
           })
         )
