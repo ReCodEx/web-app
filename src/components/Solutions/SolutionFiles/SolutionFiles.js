@@ -13,7 +13,24 @@ import Box from '../../widgets/Box';
 import Icon, { CodeFileIcon, DownloadIcon, ZipIcon } from '../../icons';
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 
-const preprocessFiles = defaultMemoize(files => files.sort((a, b) => a.name.localeCompare(b.name, 'en')));
+const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
+
+const preprocessZipEntries = ({ zipEntries, ...file }) => {
+  if (zipEntries) {
+    file.zipEntries = zipEntries
+      .filter(({ name, size }) => !name.endsWith('/') || size !== 0)
+      .map(({ name, size }) => ({ name, size, id: `${file.id}/${name}`, parentId: file.id }))
+      .sort(nameComparator);
+  }
+  return file;
+};
+
+const preprocessFiles = defaultMemoize(files =>
+  files
+    .sort(nameComparator)
+    .map(preprocessZipEntries)
+    .reduce((acc, file) => [...acc, file, ...(file.zipEntries || [])], [])
+);
 
 const SolutionFiles = ({
   solutionId,
@@ -66,17 +83,45 @@ const SolutionFiles = ({
                   <tbody>
                     {preprocessFiles(files).map(file => (
                       <tr key={file.id}>
+                        {file.parentId && (
+                          <td className="text-nowrap shrink-col text-muted pr-0">
+                            <Icon icon="level-up-alt" className="fa-rotate-90" gapLeft />
+                          </td>
+                        )}
                         <td className="text-nowrap shrink-col text-muted">
-                          {file.name.toLowerCase().endsWith('.zip') ? <ZipIcon /> : <CodeFileIcon />}
+                          {file.isEntryPoint ? (
+                            <OverlayTrigger
+                              placement="bottom"
+                              overlay={
+                                <Tooltip id={`entrypoint-${file.id}`}>
+                                  <FormattedMessage
+                                    id="app.solutionFiles.entryPoint"
+                                    defaultMessage="Execution entry point (bootstrap)"
+                                  />
+                                </Tooltip>
+                              }>
+                              <Icon icon="sign-in-alt" className="text-success" />
+                            </OverlayTrigger>
+                          ) : file.name.toLowerCase().endsWith('.zip') ? (
+                            <ZipIcon />
+                          ) : (
+                            <CodeFileIcon />
+                          )}
                         </td>
-                        <td onClick={() => openFile(file.id)}>
-                          <code>{file.name}</code>
+
+                        <td className="full-width" colSpan={file.parentId ? 1 : 2}>
+                          <code
+                            className={
+                              file.parentId ? 'text-muted small' : file.isEntryPoint ? 'text-success text-bold' : ''
+                            }>
+                            {file.name}
+                          </code>
                         </td>
-                        <td className="small">{prettyPrintBytes(file.size)}</td>
+                        <td className="small text-nowrap">{prettyPrintBytes(file.size)}</td>
 
                         <td className="text-nowrap shrink-col text-right">
                           <TheButtonGroup>
-                            {Boolean(openFile) && (
+                            {Boolean(openFile) && !file.name.toLowerCase().endsWith('.zip') && (
                               <OverlayTrigger
                                 placement="bottom"
                                 overlay={
@@ -87,7 +132,12 @@ const SolutionFiles = ({
                                     />
                                   </Tooltip>
                                 }>
-                                <Button onClick={() => openFile(file.id)} size="xs" variant="secondary">
+                                <Button
+                                  onClick={() =>
+                                    openFile(file.parentId || file.id, file.name, file.parentId ? file.name : null)
+                                  }
+                                  size="xs"
+                                  variant="secondary">
                                   <Icon icon="book-open" fixedWidth />
                                 </Button>
                               </OverlayTrigger>
@@ -104,7 +154,10 @@ const SolutionFiles = ({
                                     />
                                   </Tooltip>
                                 }>
-                                <Button onClick={() => download(file.id)} size="xs" variant="primary">
+                                <Button
+                                  onClick={() => download(file.parentId || file.id, file.parentId ? file.name : null)}
+                                  size="xs"
+                                  variant="primary">
                                   <DownloadIcon fixedWidth />
                                 </Button>
                               </OverlayTrigger>
@@ -116,7 +169,7 @@ const SolutionFiles = ({
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td />
+                      <td colSpan={2} />
                       <td className="small text-muted">
                         <em>
                           <FormattedMessage id="app.solutionFiles.total" defaultMessage="Total:" />

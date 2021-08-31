@@ -231,7 +231,7 @@ export default withLinks(
         },
         deleteEvaluation: evaluationId =>
           dispatch(deleteReferenceSolutionEvaluation(params.referenceSolutionId, evaluationId)),
-        download: id => dispatch(download(id)),
+        download: (id, entry = null) => dispatch(download(id, entry)),
       })
     )(ReferenceSolution)
   )

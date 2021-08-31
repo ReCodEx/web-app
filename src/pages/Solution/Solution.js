@@ -271,6 +271,6 @@ export default connect(
       dispatch(deleteSubmissionEvaluation(params.solutionId, evaluationId)).then(() =>
         dispatch(fetchSolutionIfNeeded(params.solutionId))
       ),
-    download: id => dispatch(download(id)),
+    download: (id, entry = null) => dispatch(download(id, entry)),
   })
 )(injectIntl(Solution));

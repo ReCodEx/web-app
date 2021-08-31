@@ -32,16 +32,23 @@ const getLastSubmissionId = evaluations => {
 };
 
 class ReferenceSolutionDetail extends Component {
-  state = { openFileId: null, activeSubmissionId: null, scoreDialogOpened: false };
+  state = {
+    openFileId: null,
+    openFileName: '',
+    openZipEntry: null,
+    activeSubmissionId: null,
+    scoreDialogOpened: false,
+  };
 
   setActiveSubmission = id => {
     this.props.fetchScoreConfigIfNeeded && this.props.fetchScoreConfigIfNeeded(id);
     this.setState({ activeSubmissionId: id });
   };
 
-  openFile = id => this.setState({ openFileId: id });
+  openFile = (openFileId, openFileName, openZipEntry = null) =>
+    this.setState({ openFileId, openFileName, openZipEntry });
 
-  hideFile = () => this.setState({ openFileId: null });
+  hideFile = () => this.setState({ openFileId: null, openFileName: '', openZipEntry: null });
 
   openScoreDialog = () => {
     const evaluationsJS = this.props.evaluations && this.props.evaluations.toJS();
@@ -67,7 +74,7 @@ class ReferenceSolutionDetail extends Component {
       scoreConfigSelector = null,
       canResubmit = false,
     } = this.props;
-    const { openFileId, scoreDialogOpened } = this.state;
+    const { openFileId, openFileName, openZipEntry, scoreDialogOpened } = this.state;
     const evaluationsJS = evaluations && evaluations.toJS();
     const activeSubmissionId = evaluationsJS && (this.state.activeSubmissionId || getLastSubmissionId(evaluationsJS));
 
@@ -254,6 +261,8 @@ class ReferenceSolutionDetail extends Component {
           openAnotherFile={this.openFile}
           show={openFileId !== null}
           fileId={openFileId}
+          fileName={openFileName}
+          zipEntry={openZipEntry}
           isReference={true}
           onHide={this.hideFile}
           submittedBy={authorId}

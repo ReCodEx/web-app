@@ -4,19 +4,40 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Dropdown, DropdownButton, Modal } from 'react-bootstrap';
+import { defaultMemoize } from 'reselect';
 
 import Button from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import { DownloadIcon, LoadingIcon } from '../../components/icons';
-import { fetchFileIfNeeded, download } from '../../redux/modules/files';
+import { download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
-import { getFile, getFilesContent } from '../../redux/selectors/files';
+import { getFilesContent } from '../../redux/selectors/files';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 import DownloadSolutionArchiveContainer from '../DownloadSolutionArchiveContainer';
 import UsersNameContainer from '../UsersNameContainer';
 
 import styles from './sourceCode.less';
+
+const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
+
+const preprocessZipEntries = ({ zipEntries, ...file }) => {
+  if (zipEntries) {
+    file.zipEntries = zipEntries
+      .filter(({ name, size }) => !name.endsWith('/') || size !== 0)
+      .map(({ name, size }) => ({ name, size, id: `${file.id}/${name}`, parentId: file.id }))
+      .sort(nameComparator);
+  }
+  return file;
+};
+
+const preprocessFiles = defaultMemoize(files =>
+  files
+    .sort(nameComparator)
+    .map(preprocessZipEntries)
+    .reduce((acc, file) => [...acc, file, ...(file.zipEntries || [])], [])
+    .filter(file => !file.name.toLowerCase().endsWith('.zip'))
+);
 
 class SourceCodeViewerContainer extends Component {
   componentDidMount() {
@@ -27,7 +48,10 @@ class SourceCodeViewerContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.fileId !== prevProps.fileId && this.props.fileId !== null) {
+    if (
+      this.props.fileId !== null &&
+      (this.props.fileId !== prevProps.fileId || this.props.zipEntry !== prevProps.zipEntry)
+    ) {
       this.props.loadAsync();
     }
   }
@@ -38,7 +62,9 @@ class SourceCodeViewerContainer extends Component {
       onHide,
       download,
       solutionId,
-      file,
+      fileId,
+      fileName = '',
+      zipEntry,
       files,
       content,
       openAnotherFile,
@@ -63,8 +89,8 @@ class SourceCodeViewerContainer extends Component {
             </Modal.Body>
           </Modal>
         }
-        resource={[file, content]}>
-        {(file, content) => (
+        resource={content}>
+        {content => (
           <Modal show={show} onHide={onHide} dialogClassName={styles.modal} size="xl">
             <Modal.Header closeButton>
               <ResourceRenderer resource={files}>
@@ -73,22 +99,20 @@ class SourceCodeViewerContainer extends Component {
                     <DropdownButton
                       size="sm"
                       className="elevation-2 text-monospace"
-                      title={file.name}
+                      title={fileName}
                       variant="outline-secondary">
-                      {files
-                        .sort((a, b) => a.name.localeCompare(b.name, 'en'))
-                        .map(f => (
-                          <Dropdown.Item
-                            key={f.id}
-                            href="#"
-                            selected={f.id === file.id}
-                            onClick={() => openAnotherFile(f.id)}>
-                            {f.name}
-                          </Dropdown.Item>
-                        ))}
+                      {preprocessFiles(files).map(f => (
+                        <Dropdown.Item
+                          key={`${f.id}/${f.name}`}
+                          href="#"
+                          selected={f.id === fileId || (f.parentId === fileId && f.name === fileName)}
+                          onClick={() => openAnotherFile(f.parentId || f.id, f.name, f.parentId ? f.name : null)}>
+                          {f.name}
+                        </Dropdown.Item>
+                      ))}
                     </DropdownButton>
 
-                    <Button size="sm" className="mx-2 " onClick={() => download(file.id)}>
+                    <Button size="sm" className="mx-2 " onClick={() => download(fileId, zipEntry)}>
                       <DownloadIcon gapRight />
                       <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
                     </Button>
@@ -135,7 +159,7 @@ class SourceCodeViewerContainer extends Component {
                 </Callout>
               )}
               <div>
-                <SourceCodeViewer content={content.content} name={file.name} />
+                <SourceCodeViewer content={content.content} name={fileName} />
               </div>
             </Modal.Body>
           </Modal>
@@ -148,28 +172,25 @@ class SourceCodeViewerContainer extends Component {
 SourceCodeViewerContainer.propTypes = {
   solutionId: PropTypes.string.isRequired,
   fileId: PropTypes.string,
+  fileName: PropTypes.string,
+  zipEntry: PropTypes.string,
   files: ImmutablePropTypes.map,
   show: PropTypes.bool,
   isReference: PropTypes.bool,
   onHide: PropTypes.func.isRequired,
   openAnotherFile: PropTypes.func.isRequired,
   submittedBy: PropTypes.string,
-  file: ImmutablePropTypes.map,
   content: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
 };
 
 export default connect(
-  (state, { fileId }) => ({
-    file: fileId && getFile(fileId)(state),
-    content: getFilesContent(fileId)(state),
+  (state, { fileId, zipEntry = null }) => ({
+    content: getFilesContent(fileId, zipEntry)(state),
   }),
-  (dispatch, { fileId }) => ({
-    loadAsync: () =>
-      fileId
-        ? Promise.all([dispatch(fetchFileIfNeeded(fileId)), dispatch(fetchContentIfNeeded(fileId))])
-        : Promise.resolve(),
-    download: id => dispatch(download(id)),
+  (dispatch, { fileId, zipEntry = null }) => ({
+    loadAsync: () => (fileId ? dispatch(fetchContentIfNeeded(fileId, zipEntry)) : Promise.resolve()),
+    download: (id, entry = null) => dispatch(download(id, entry)),
   })
 )(SourceCodeViewerContainer);

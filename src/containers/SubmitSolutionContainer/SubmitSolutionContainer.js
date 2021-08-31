@@ -81,6 +81,12 @@ class SubmitSolutionContainer extends Component {
     return entryPoint || defaultEntryPoint;
   };
 
+  needsToSelectEntryPoint = () => {
+    const { uploadedFiles, presubmitVariables } = this.props;
+    const { selectedEnvironment, entryPoint } = this.state;
+    return hasEntryPoint(presubmitVariables, selectedEnvironment) && !entryPoint && uploadedFiles.length > 1;
+  };
+
   submit = () => {
     const { uploadedFiles, note, submitSolution } = this.props;
     const { selectedEnvironment } = this.state;
@@ -167,7 +173,12 @@ class SubmitSolutionContainer extends Component {
         <SubmitSolution
           userId={userId}
           isOpen={isOpen}
-          canSubmit={canSubmit && Boolean(presubmitEnvironments) && presubmitEnvironments.length > 0}
+          canSubmit={
+            canSubmit &&
+            Boolean(presubmitEnvironments) &&
+            presubmitEnvironments.length > 0 &&
+            !this.needsToSelectEntryPoint()
+          }
           isValidating={isValidating}
           isSending={isSending}
           hasFailed={hasFailed}

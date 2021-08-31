@@ -1441,6 +1441,7 @@
   "app.solutionArchiveInfoBox.description": "All files in a ZIP archive",
   "app.solutionFiles.countLimitExceeded": "The total number of submitted files exceeds the default solution files limit ({limit}).",
   "app.solutionFiles.downloadButton": "Download file",
+  "app.solutionFiles.entryPoint": "Execution entry point (bootstrap)",
   "app.solutionFiles.noFiles": "No files were submitted.",
   "app.solutionFiles.openButton": "Open preview in dialog",
   "app.solutionFiles.sizeLimitExceeded": "The total size of all submitted files exceeds the default solution size limit ({limit} KiB).",
