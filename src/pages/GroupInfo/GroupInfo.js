@@ -32,7 +32,6 @@ import {
 
 import Page from '../../components/layout/Page';
 import GroupInfoTable, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
-import HierarchyLine from '../../components/Groups/HierarchyLine';
 import SupervisorsList from '../../components/Users/SupervisorsList';
 import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
@@ -148,8 +147,6 @@ class GroupInfo extends Component {
         failed={<FailedGroupDetail />}>
         {data => (
           <div>
-            <HierarchyLine groupId={data.id} parentGroupsIds={data.parentGroupsIds} />
-
             <GroupTopButtons
               group={data}
               userId={userId}

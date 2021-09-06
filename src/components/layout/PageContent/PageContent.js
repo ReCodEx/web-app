@@ -22,7 +22,7 @@ const getMessage = (item, formatMessage) =>
  */
 const PageContent = ({ intl: { formatMessage }, title = '', description = '', breadcrumbs = [], children }) => (
   <div className="content-wrapper">
-    <Helmet title={getMessage(title, formatMessage)} description={getMessage(description, formatMessage)} />
+    <Helmet title={getMessage(title, formatMessage)} />
     <div className="content-header">
       <Container fluid>
         <Row className="mb-2">

@@ -24,6 +24,8 @@ const Layout = ({
   currentUrl,
   availableLangs,
   onCloseSidebar,
+  relatedGroupId,
+  memberGroups,
 }) => (
   <div
     className={classnames({
@@ -44,6 +46,8 @@ const Layout = ({
       currentLang={lang}
       setLang={setLang}
       currentUrl={currentUrl}
+      relatedGroupId={relatedGroupId}
+      memberGroups={memberGroups}
     />
     <SidebarContainer
       isCollapsed={sidebarIsCollapsed}
@@ -71,6 +75,8 @@ Layout.propTypes = {
   setLang: PropTypes.func.isRequired,
   currentUrl: PropTypes.string,
   availableLangs: PropTypes.array,
+  relatedGroupId: PropTypes.string,
+  memberGroups: PropTypes.object.isRequired,
 };
 
 export default Layout;

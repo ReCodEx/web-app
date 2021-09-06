@@ -88,7 +88,7 @@ const ExercisesListItem = ({
         {groupsIds.length > 0 ? (
           groupsIds.map((groupId, i) => (
             <div key={i}>
-              <GroupsNameContainer groupId={groupId} />
+              <GroupsNameContainer groupId={groupId} translations links />
             </div>
           ))
         ) : (

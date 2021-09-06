@@ -46,6 +46,8 @@ import ServerManagement from './ServerManagement';
 
 import { LOGIN_URI_PREFIX, createLoginLinkWithRedirect } from '../redux/helpers/api/tools';
 import { API_BASE, URL_PATH_PREFIX } from '../helpers/config';
+import { getAssignment } from '../redux/selectors/assignments';
+import { getShadowAssignment } from '../redux/selectors/shadowAssignments';
 
 /**
  * Helper function for creating internal route declarations.
@@ -77,8 +79,8 @@ const routesDescriptors = [
   r('app/assignment/:assignmentId/edit', EditAssignment, 'ASSIGNMENT_EDIT_URI_FACTORY', true),
   r('app/assignment/:assignmentId/stats', AssignmentStats, 'ASSIGNMENT_STATS_URI_FACTORY', true),
   r('app/assignment/:assignmentId/solution/:solutionId', Solution, 'SOLUTION_DETAIL_URI_FACTORY', true),
-  r('app/shadow-assignment/:assignmentId', ShadowAssignment, 'SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY', true),
-  r('app/shadow-assignment/:assignmentId/edit', EditShadowAssignment, 'SHADOW_ASSIGNMENT_EDIT_URI_FACTORY', true),
+  r('app/shadow-assignment/:shadowId', ShadowAssignment, 'SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY', true),
+  r('app/shadow-assignment/:shadowId/edit', EditShadowAssignment, 'SHADOW_ASSIGNMENT_EDIT_URI_FACTORY', true),
   r('app/exercises', Exercises, 'EXERCISES_URI', true),
   r('app/exercises/:exerciseId', Exercise, 'EXERCISE_URI_FACTORY', true),
   r('app/exercises/:exerciseId/edit', EditExercise, 'EXERCISE_EDIT_URI_FACTORY', true),
@@ -176,6 +178,56 @@ export const pathHasCustomLoadGroups = defaultMemoize(urlPath => {
   const component = unwrap(routeObj.route.component);
   return Boolean(component && component.customLoadGroups);
 });
+
+/**
+ * A specialized function that uses combination of route decoding and redux selectors
+ * to get groupId associated with current url path.
+ * 1) If the component class has static member customRelatedGroupSelector, it is used as selector.
+ *    (state and matched URL params are passed to it)
+ * 2) if groupId is present in URL parameters, it is returned.
+ * 3) If assignmentId or shadowId is present in URL, we select corresponding object from redux and
+ *    get groupId from it.
+ * @param {Object} state redux
+ * @param {string} urlPath location + search URL part
+ * @returns {string|null} groupId of null if no group is related
+ */
+export const pathRelatedGroupSelector = (state, urlPath) => {
+  const routeObj = routesDescriptors.find(({ route }) => matchPath(urlPath, route) !== null);
+  if (!routeObj) {
+    return null;
+  }
+  const matchRes = matchPath(urlPath, routeObj.route);
+  const component = unwrap(routeObj.route.component);
+  if (component && component.customRelatedGroupSelector) {
+    // completely custom selector given by the page component
+    return component.customRelatedGroupSelector(state, matchRes.params);
+  }
+
+  // lets use default rules to extract group ID from path parameters
+  if (matchRes.params) {
+    if (matchRes.params.groupId) {
+      return matchRes.params.groupId;
+    }
+
+    if (matchRes.params.assignmentId) {
+      const assignment = getAssignment(state)(matchRes.params.assignmentId);
+      const groupId = assignment && assignment.getIn(['data', 'groupId']);
+      if (groupId) {
+        return groupId;
+      }
+    }
+
+    if (matchRes.params.shadowId) {
+      const shadow = getShadowAssignment(state)(matchRes.params.shadowId);
+      const groupId = shadow && shadow.getIn(['data', 'groupId']);
+      if (groupId) {
+        return groupId;
+      }
+    }
+  }
+
+  return null;
+};
 
 /*
  * Links

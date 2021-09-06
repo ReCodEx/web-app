@@ -18,6 +18,12 @@
   font-weight: bold !important;
 }
 
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+}
+
 /*
  * Margin Configurations
  */
