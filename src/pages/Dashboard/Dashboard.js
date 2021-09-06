@@ -249,7 +249,7 @@ class Dashboard extends Component {
                                 <ResourceRenderer resource={statistics.get(group.id)}>
                                   {statistics => (
                                     <Box
-                                      title={<GroupsName {...group} noLink />}
+                                      title={<GroupsName {...group} translations />}
                                       collapsable
                                       noPadding
                                       isOpen

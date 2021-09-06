@@ -12,7 +12,6 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
-import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import ShadowAssignmentPointsContainer from '../../containers/ShadowAssignmentPointsContainer';
 import ShadowAssignmentDetail from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetail';
 import ShadowAssignmentPointsDetail from '../../components/Assignments/ShadowAssignmentPointsDetail';
@@ -28,12 +27,12 @@ const findPoints = defaultMemoize((points, loggedUserId) => {
 });
 
 class ShadowAssignment extends Component {
-  static loadAsync = ({ assignmentId }, dispatch) => dispatch(fetchShadowAssignmentIfNeeded(assignmentId));
+  static loadAsync = ({ shadowId }, dispatch) => dispatch(fetchShadowAssignmentIfNeeded(shadowId));
 
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.assignmentId !== prevProps.match.params.assignmentId) {
+    if (this.props.match.params.shadowId !== prevProps.match.params.shadowId) {
       this.props.loadAsync();
     }
   }
@@ -69,7 +68,6 @@ class ShadowAssignment extends Component {
           <div>
             <Row>
               <Col xs={12}>
-                <HierarchyLineContainer groupId={shadowAssignment.groupId} />
                 {hasPermissions(shadowAssignment, 'update') && (
                   <p>
                     <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id)}>
@@ -119,7 +117,7 @@ class ShadowAssignment extends Component {
 ShadowAssignment.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      assignmentId: PropTypes.string.isRequired,
+      shadowId: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
   shadowAssignment: PropTypes.object,
@@ -136,12 +134,12 @@ export default withLinks(
       state,
       {
         match: {
-          params: { assignmentId },
+          params: { shadowId },
         },
       }
     ) => {
       return {
-        shadowAssignment: getShadowAssignment(state)(assignmentId),
+        shadowAssignment: getShadowAssignment(state)(shadowId),
         loggedUserId: loggedInUserIdSelector(state),
       };
     },
@@ -149,11 +147,11 @@ export default withLinks(
       dispatch,
       {
         match: {
-          params: { assignmentId },
+          params: { shadowId },
         },
       }
     ) => ({
-      loadAsync: () => ShadowAssignment.loadAsync({ assignmentId }, dispatch),
+      loadAsync: () => ShadowAssignment.loadAsync({ shadowId }, dispatch),
     })
   )(injectIntl(ShadowAssignment))
 );

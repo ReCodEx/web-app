@@ -1,0 +1,23 @@
+.memberGroupsDropdownContainer {
+  position: relative;
+  width: 100%;
+}
+
+.memberGroupsDropdownToggle {
+  position: absolute !important;
+  width: 100%;
+  right: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+  cursor: pointer;
+}
+
+.memberGroupsDropdownContainer .dropdown-item {
+  font-size: 90%;
+}
+
+.memberGroupsDropdownContainer .dropdown-item a {
+  color: inherit;
+  background-color: inherit;
+}

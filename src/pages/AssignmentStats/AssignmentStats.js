@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
-import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
@@ -326,8 +325,6 @@ class AssignmentStats extends Component {
         ]}>
         {assignment => (
           <div>
-            <HierarchyLineContainer groupId={assignment.groupId} />
-
             <Row>
               <Col md={12} lg={7}>
                 <div className="mb-3">

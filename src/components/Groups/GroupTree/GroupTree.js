@@ -152,7 +152,7 @@ class GroupTree extends Component {
         {level !== 0 || onAncestralPath ? (
           <TreeViewItem
             title={conditionalEmphasize(
-              <GroupsName id={groupId} name={name} localizedTexts={localizedTexts} noLink />,
+              <GroupsName id={groupId} name={name} localizedTexts={localizedTexts} translations />,
               currentGroupId === groupId
             )}
             id={groupId}

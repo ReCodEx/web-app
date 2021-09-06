@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -11,7 +10,6 @@ import Page from '../../components/layout/Page';
 import EditShadowAssignmentForm from '../../components/forms/EditShadowAssignmentForm';
 import DeleteShadowAssignmentButtonContainer from '../../containers/DeleteShadowAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
-import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 
 import {
@@ -34,7 +32,7 @@ class EditShadowAssignment extends Component {
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.assignmentId !== prevProps.match.params.assignmentId) {
+    if (this.props.match.params.shadowId !== prevProps.match.params.shadowId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -44,7 +42,7 @@ class EditShadowAssignment extends Component {
     }
   }
 
-  static loadAsync = ({ assignmentId }, dispatch) => dispatch(fetchShadowAssignment(assignmentId));
+  static loadAsync = ({ shadowId }, dispatch) => dispatch(fetchShadowAssignment(shadowId));
 
   getInitialValues = defaultMemoize(({ localizedTexts, isPublic, isBonus, maxPoints }) => ({
     sendNotification: true,
@@ -89,7 +87,7 @@ class EditShadowAssignment extends Component {
       shadowAssignment,
       isPublic,
       match: {
-        params: { assignmentId },
+        params: { shadowId },
       },
       history: { replace },
       links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
@@ -109,7 +107,7 @@ class EditShadowAssignment extends Component {
           {
             text: <FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />,
             iconName: 'user-secret',
-            link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
+            link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowId),
           },
           {
             text: <FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Edit Shadow Assignment" />,
@@ -119,12 +117,6 @@ class EditShadowAssignment extends Component {
         {shadowAssignment =>
           shadowAssignment && (
             <>
-              <Row>
-                <Col xs={12}>
-                  <HierarchyLineContainer groupId={shadowAssignment.groupId} />
-                </Col>
-              </Row>
-
               <EditShadowAssignmentForm
                 initialValues={shadowAssignment ? this.getInitialValues(shadowAssignment) : {}}
                 onSubmit={this.editShadowAssignmentSubmitHandler}
@@ -149,7 +141,7 @@ class EditShadowAssignment extends Component {
                     </p>
                     <p className="text-center">
                       <DeleteShadowAssignmentButtonContainer
-                        id={assignmentId}
+                        id={shadowId}
                         onDeleted={() => replace(GROUP_DETAIL_URI_FACTORY(this.groupId))}
                       />
                     </p>
@@ -173,7 +165,7 @@ EditShadowAssignment.propTypes = {
   reset: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      assignmentId: PropTypes.string.isRequired,
+      shadowId: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
   shadowAssignment: ImmutablePropTypes.map,
@@ -190,11 +182,11 @@ export default connect(
     state,
     {
       match: {
-        params: { assignmentId },
+        params: { shadowId },
       },
     }
   ) => {
-    const shadowAssignment = getShadowAssignment(state)(assignmentId);
+    const shadowAssignment = getShadowAssignment(state)(shadowId);
     return {
       shadowAssignment,
       isPublic: editAssignmentFormSelector(state, 'isPublic'),
@@ -204,15 +196,15 @@ export default connect(
     dispatch,
     {
       match: {
-        params: { assignmentId },
+        params: { shadowId },
       },
     }
   ) => ({
     reset: () => dispatch(reset('editShadowAssignment')),
-    loadAsync: () => EditShadowAssignment.loadAsync({ assignmentId }, dispatch),
+    loadAsync: () => EditShadowAssignment.loadAsync({ shadowId }, dispatch),
     editShadowAssignment: data => {
-      return dispatch(editShadowAssignment(assignmentId, data));
+      return dispatch(editShadowAssignment(shadowId, data));
     },
-    validateShadowAssignment: version => dispatch(validateShadowAssignment(assignmentId, version)),
+    validateShadowAssignment: version => dispatch(validateShadowAssignment(shadowId, version)),
   })
 )(withLinks(EditShadowAssignment));

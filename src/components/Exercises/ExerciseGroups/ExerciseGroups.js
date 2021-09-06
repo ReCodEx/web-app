@@ -81,7 +81,7 @@ class ExerciseGroups extends Component {
                     <GroupIcon className="text-muted" />
                   </td>
                   <td>
-                    <GroupsNameContainer groupId={groupId} />
+                    <GroupsNameContainer groupId={groupId} fullName translations links admins />
                   </td>
                   <td className="text-right">{showButtons && this.detachButton(groupId)}</td>
                 </tr>

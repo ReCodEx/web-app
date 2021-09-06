@@ -9,24 +9,23 @@ const GroupsName = ({
   localizedTexts,
   organizational = false,
   isPublic = false,
-  noLink,
+  asLink = false,
+  translations,
   links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
 }) => (
-  <span>
-    {noLink ? (
-      <span>
-        <LocalizedGroupName entity={{ localizedTexts }} />
-      </span>
-    ) : (
+  <>
+    {asLink ? (
       <Link
         to={
           // this is inacurate, but public groups are visible to students who cannot see detail until they join
           organizational || isPublic ? GROUP_INFO_URI_FACTORY(id) : GROUP_DETAIL_URI_FACTORY(id)
         }>
-        <LocalizedGroupName entity={{ localizedTexts }} />
+        <LocalizedGroupName entity={{ localizedTexts }} translations={translations} />
       </Link>
+    ) : (
+      <LocalizedGroupName entity={{ localizedTexts }} translations={translations} />
     )}
-  </span>
+  </>
 );
 
 GroupsName.propTypes = {
@@ -34,7 +33,8 @@ GroupsName.propTypes = {
   localizedTexts: PropTypes.array.isRequired,
   organizational: PropTypes.bool,
   isPublic: PropTypes.bool,
-  noLink: PropTypes.bool,
+  asLink: PropTypes.bool,
+  translations: PropTypes.bool,
   links: PropTypes.object,
 };
 

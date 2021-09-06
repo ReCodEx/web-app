@@ -5,17 +5,18 @@ import { IntlProvider } from 'react-intl';
 import moment from 'moment';
 import { canUseDOM } from 'exenv';
 
-import Layout from '../../components/layout/Layout';
-import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app';
 import { setLang } from '../../redux/modules/app';
 import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
+import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { isLoggedIn } from '../../redux/selectors/auth';
 import { getLoggedInUserSettings } from '../../redux/selectors/users';
+import { groupsLoggedUserIsMemberSelector } from '../../redux/selectors/groups';
+
+import Layout from '../../components/layout/Layout';
 import { messages } from '../../locales';
 import { UserSettingsContext, LinksContext, UrlContext } from '../../helpers/contexts';
-
-import { buildRoutes, getLinks } from '../../pages/routes';
+import { buildRoutes, getLinks, pathRelatedGroupSelector } from '../../pages/routes';
 
 import 'admin-lte/dist/css/adminlte.min.css';
 import 'admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css';
@@ -97,6 +98,8 @@ class LayoutContainer extends Component {
       pendingFetchOperations,
       userSettings,
       setLang,
+      relatedGroupId,
+      memberGroups,
     } = this.props;
 
     moment.locale(lang);
@@ -117,7 +120,9 @@ class LayoutContainer extends Component {
                 setLang={setLang}
                 availableLangs={Object.keys(messages)}
                 currentUrl={pathname}
-                pendingFetchOperations={pendingFetchOperations}>
+                pendingFetchOperations={pendingFetchOperations}
+                relatedGroupId={relatedGroupId}
+                memberGroups={memberGroups}>
                 {buildRoutes(pathname + search, isLoggedIn)}
               </Layout>
             </UrlContext.Provider>
@@ -149,16 +154,20 @@ LayoutContainer.propTypes = {
     hash: PropTypes.string.isRequired,
   }).isRequired,
   userSettings: PropTypes.object,
+  relatedGroupId: PropTypes.string,
+  memberGroups: PropTypes.object.isRequired,
 };
 
 export default connect(
-  state => ({
+  (state, { location: { pathname, search } }) => ({
     lang: getLang(state),
     isLoggedIn: isLoggedIn(state),
     sidebarIsCollapsed: isCollapsed(state),
     sidebarIsOpen: isVisible(state),
     pendingFetchOperations: anyPendingFetchOperations(state),
     userSettings: getLoggedInUserSettings(state),
+    relatedGroupId: pathRelatedGroupSelector(state, pathname + search),
+    memberGroups: groupsLoggedUserIsMemberSelector(state),
   }),
   dispatch => ({
     toggleVisibility: () => dispatch(toggleVisibility()),

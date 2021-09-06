@@ -149,7 +149,7 @@ class User extends Component {
                       loading={
                         <Row>
                           <Col lg={4}>
-                            <LoadingInfoBox title={<GroupsName {...group} noLink />} />
+                            <LoadingInfoBox title={<GroupsName {...group} translations />} />
                           </Col>
                         </Row>
                       }
@@ -163,7 +163,7 @@ class User extends Component {
                           </Col>
                           <Col lg={8}>
                             <Box
-                              title={<GroupsName {...group} noLink />}
+                              title={<GroupsName {...group} translations />}
                               collapsable
                               noPadding
                               isOpen

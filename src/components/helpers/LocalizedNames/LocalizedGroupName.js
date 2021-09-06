@@ -6,12 +6,12 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from '../../icons';
 import { getLocalizedName, getOtherLocalizedNames } from '../../../helpers/localizedData';
 
-const LocalizedGroupName = ({ entity, intl: { locale } }) => {
+const LocalizedGroupName = ({ entity, translations = false, intl: { locale } }) => {
   const otherNames = getOtherLocalizedNames(entity, locale);
   return (
-    <span>
+    <>
       {getLocalizedName(entity, locale)}
-      {otherNames.length > 0 && (
+      {translations && otherNames.length > 0 && (
         <span className="small">
           <OverlayTrigger
             placement="right"
@@ -28,12 +28,13 @@ const LocalizedGroupName = ({ entity, intl: { locale } }) => {
           </OverlayTrigger>
         </span>
       )}
-    </span>
+    </>
   );
 };
 
 LocalizedGroupName.propTypes = {
   entity: PropTypes.object,
+  translations: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 

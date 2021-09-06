@@ -24,6 +24,8 @@ const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) => (
                   localizedTexts={localizedTexts}
                   organizational={organizational}
                   isPublic={isPublic}
+                  translations
+                  asLink
                 />
               </td>
               <td className="text-right">{renderButtons(id)}</td>

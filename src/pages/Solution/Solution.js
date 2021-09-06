@@ -11,7 +11,6 @@ import SolutionDetail, { FailedSubmissionDetail } from '../../components/Solutio
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
-import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 
@@ -124,7 +123,6 @@ class Solution extends Component {
         <ResourceRenderer failed={<FailedSubmissionDetail />} resource={[solution, assignment]}>
           {(solution, assignment) => (
             <div>
-              <HierarchyLineContainer groupId={assignment.groupId} />
               {((solution.permissionHints && solution.permissionHints.setFlag) ||
                 (assignment.permissionHints && assignment.permissionHints.resubmitSubmissions)) && (
                 <div className="mb-3">

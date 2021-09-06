@@ -39,7 +39,6 @@ import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import UsersNameContainer from '../../containers/UsersNameContainer';
-import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import AssignmentDetails from '../../components/Assignments/Assignment/AssignmentDetails';
 import Icon, { EditIcon, ResultsIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
@@ -136,7 +135,6 @@ class Assignment extends Component {
           <div>
             <Row>
               <Col xs={12}>
-                <HierarchyLineContainer groupId={assignment.groupId} />
                 {userId && userId !== loggedInUserId && (
                   <p>
                     <UsersNameContainer userId={userId} />

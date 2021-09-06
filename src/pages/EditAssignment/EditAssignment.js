@@ -15,7 +15,6 @@ import EditAssignmentForm, {
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import HierarchyLineContainer from '../../containers/HierarchyLineContainer';
 import Icon, { ResultsIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
@@ -129,7 +128,6 @@ class EditAssignment extends Component {
             <>
               <Row>
                 <Col xs={12}>
-                  <HierarchyLineContainer groupId={assignment.groupId} />
                   {assignment.permissionHints.viewDetail && (
                     <p>
                       <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>

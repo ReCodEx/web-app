@@ -11,7 +11,6 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
-import HierarchyLine from '../../components/Groups/HierarchyLine';
 import { AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
@@ -198,8 +197,6 @@ class GroupDetail extends Component {
         failed={<FailedGroupDetail />}>
         {data => (
           <div>
-            <HierarchyLine groupId={data.id} parentGroupsIds={data.parentGroupsIds} />
-
             <GroupTopButtons
               group={data}
               userId={userId}
