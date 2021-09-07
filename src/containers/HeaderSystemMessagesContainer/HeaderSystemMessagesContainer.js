@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 
-import HeaderSystemMessagesDropdown from '../../components/widgets/HeaderSystemMessagesDropdown';
+import HeaderSystemMessagesDropdown from '../../components/layout/HeaderSystemMessagesDropdown';
 import { readyActiveSystemMessagesSelector, fetchManyUserStatus } from '../../redux/selectors/systemMessages';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 import { updateUiData } from '../../redux/modules/users';
