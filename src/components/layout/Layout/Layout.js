@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import classnames from 'classnames';
 
-import Header from '../../widgets/Header';
-import Footer from '../../widgets/Footer';
+import Header from '../Header';
+import Footer from '../Footer';
 
 import SidebarContainer from '../../../containers/SidebarContainer';
 import { getConfigVar } from '../../../helpers/config';

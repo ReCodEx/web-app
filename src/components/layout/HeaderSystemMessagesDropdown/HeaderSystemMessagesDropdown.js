@@ -5,11 +5,11 @@ import { Badge, Table, Dropdown } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Icon, { TypedMessageIcon } from '../../icons';
-import Markdown from '../Markdown';
+import Markdown from '../../widgets/Markdown';
+import DateTime from '../../widgets/DateTime';
 import { getLocalizedText } from '../../../helpers/localizedData';
 
 import styles from '../Header/Header.less';
-import DateTime from '../DateTime';
 
 const preventClickPropagation = ev => ev.stopPropagation();
 
