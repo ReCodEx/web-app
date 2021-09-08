@@ -286,10 +286,9 @@ class EditExerciseConfig extends Component {
       supplementaryFiles,
       supplementaryFilesStatus,
       intl: { locale },
-      links: {
-        EXERCISE_URI_FACTORY,
-        // PIPELINE_EDIT_URI_FACTORY
-      },
+      // links: {
+      // PIPELINE_EDIT_URI_FACTORY
+      // },
     } = this.props;
 
     return (
@@ -301,29 +300,7 @@ class EditExerciseConfig extends Component {
             id="app.editExerciseConfig.description"
             defaultMessage="Change exercise tests configuration"
           />
-        }
-        breadcrumbs={[
-          {
-            resource: exercise,
-            breadcrumb: ({ name, localizedTexts }) => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.breadcrumbTitle"
-                  defaultMessage="Exercise {name}"
-                  values={{
-                    name: getLocalizedName({ name, localizedTexts }, locale),
-                  }}
-                />
-              ),
-              iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId),
-            }),
-          },
-          {
-            text: <FormattedMessage id="app.editExerciseConfig.title" defaultMessage="Edit tests configuration" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        }>
         {(exercise, tests) => (
           <div>
             <ExerciseNavigation

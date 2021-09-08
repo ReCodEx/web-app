@@ -60,7 +60,7 @@ class Pipeline extends Component {
 
   render() {
     const {
-      links: { PIPELINES_URI, PIPELINE_EDIT_URI_FACTORY },
+      links: { PIPELINE_EDIT_URI_FACTORY },
       pipeline,
       isAuthorOfPipeline,
       // forkPipeline,
@@ -72,18 +72,7 @@ class Pipeline extends Component {
       <Page
         resource={pipeline}
         title={pipeline => pipeline.name}
-        description={<FormattedMessage id="app.pipeline.description" defaultMessage="Pipeline overview" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.pipelines.title" defaultMessage="Pipeline list" />,
-            iconName: 'random',
-            link: PIPELINES_URI,
-          },
-          {
-            text: <FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline" />,
-            iconName: 'random',
-          },
-        ]}>
+        description={<FormattedMessage id="app.pipeline.description" defaultMessage="Pipeline overview" />}>
         {pipeline => (
           <div>
             <div>

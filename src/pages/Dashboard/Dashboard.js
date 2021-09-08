@@ -102,13 +102,7 @@ class Dashboard extends Component {
         title={<FormattedMessage id="app.dashboard.title" defaultMessage="Dashboard" />}
         description={
           <FormattedMessage id="app.user.description" defaultMessage="Complete progress of the user in all groups." />
-        }
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.user.title" defaultMessage="User's profile" />,
-            iconName: 'user',
-          },
-        ]}>
+        }>
         {user => (
           <div>
             <p>

@@ -72,13 +72,7 @@ class Pipelines extends Component {
         title={<FormattedMessage id="app.pipelines.title" defaultMessage="Pipeline list" />}
         description={
           <FormattedMessage id="app.pipelines.description" defaultMessage="List and modify available pipelines." />
-        }
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.pipelines.title" defaultMessage="Pipeline list" />,
-            iconName: 'random',
-          },
-        ]}>
+        }>
         <Box
           title={<FormattedMessage id="app.pipelines.listTitle" defaultMessage="Pipelines" />}
           footer={

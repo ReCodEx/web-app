@@ -39,7 +39,6 @@ import { limitsSelector } from '../../redux/selectors/limits';
 import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
-import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
 import { fetchExerciseTestsIfNeeded } from '../../redux/modules/exerciseTests';
 import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
@@ -135,10 +134,6 @@ class EditExerciseLimits extends Component {
 
   render() {
     const {
-      links: { EXERCISE_URI_FACTORY },
-      match: {
-        params: { exerciseId },
-      },
       exercise,
       exerciseTests,
       limits,
@@ -161,29 +156,7 @@ class EditExerciseLimits extends Component {
             id="app.editExerciseLimits.description"
             defaultMessage="Change exercise tests execution limits"
           />
-        }
-        breadcrumbs={[
-          {
-            resource: exercise,
-            breadcrumb: ({ name, localizedTexts }) => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.breadcrumbTitle"
-                  defaultMessage="Exercise {name}"
-                  values={{
-                    name: getLocalizedName({ name, localizedTexts }, locale),
-                  }}
-                />
-              ),
-              iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId),
-            }),
-          },
-          {
-            text: <FormattedMessage id="app.editExerciseLimits.title" defaultMessage="Edit tests limits" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        }>
         {(exercise, tests, limits) => (
           <div>
             <ExerciseNavigation
@@ -349,7 +322,6 @@ EditExerciseLimits.propTypes = {
   cloneAll: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   invalidateExercise: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
@@ -380,44 +352,42 @@ const cloneAllWrapper = defaultMemoize(
 const editLimitsFormSelector = formValueSelector('editLimits');
 const editHardwareGroupFormSelector = formValueSelector('editHardwareGroup');
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => {
-      return {
-        exercise: getExercise(exerciseId)(state),
-        userId: loggedInUserIdSelector(state),
-        limits: limitsSelector(state, exerciseId),
-        exerciseTests: exerciseTestsSelector(exerciseId)(state),
-        hardwareGroups: hardwareGroupsSelector(state),
-        preciseTime: editLimitsFormSelector(state, 'preciseTime'),
-        targetHardwareGroup: editHardwareGroupFormSelector(state, 'hardwareGroup'),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
-      };
-    },
-    (
-      dispatch,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => ({
-      loadAsync: () => EditExerciseLimits.loadAsync({ exerciseId }, dispatch),
-      setExerciseHardwareGroups: hwGroups => dispatch(setExerciseHardwareGroups(exerciseId, hwGroups)),
-      setExerciseLimits: limits => dispatch(setExerciseLimits(exerciseId, { limits })),
-      cloneVertically: cloneVerticallyWrapper(dispatch),
-      cloneHorizontally: cloneHorizontallyWrapper(dispatch),
-      cloneAll: cloneAllWrapper(dispatch),
-      fetchExerciseLimits: envId => dispatch(fetchExerciseLimits(exerciseId, envId)),
-      reloadExercise: () => dispatch(fetchExercise(exerciseId)),
-      invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
-    })
-  )(injectIntl(withRouter(EditExerciseLimits)))
-);
+export default connect(
+  (
+    state,
+    {
+      match: {
+        params: { exerciseId },
+      },
+    }
+  ) => {
+    return {
+      exercise: getExercise(exerciseId)(state),
+      userId: loggedInUserIdSelector(state),
+      limits: limitsSelector(state, exerciseId),
+      exerciseTests: exerciseTestsSelector(exerciseId)(state),
+      hardwareGroups: hardwareGroupsSelector(state),
+      preciseTime: editLimitsFormSelector(state, 'preciseTime'),
+      targetHardwareGroup: editHardwareGroupFormSelector(state, 'hardwareGroup'),
+      isSuperAdmin: isLoggedAsSuperAdmin(state),
+    };
+  },
+  (
+    dispatch,
+    {
+      match: {
+        params: { exerciseId },
+      },
+    }
+  ) => ({
+    loadAsync: () => EditExerciseLimits.loadAsync({ exerciseId }, dispatch),
+    setExerciseHardwareGroups: hwGroups => dispatch(setExerciseHardwareGroups(exerciseId, hwGroups)),
+    setExerciseLimits: limits => dispatch(setExerciseLimits(exerciseId, { limits })),
+    cloneVertically: cloneVerticallyWrapper(dispatch),
+    cloneHorizontally: cloneHorizontallyWrapper(dispatch),
+    cloneAll: cloneAllWrapper(dispatch),
+    fetchExerciseLimits: envId => dispatch(fetchExerciseLimits(exerciseId, envId)),
+    reloadExercise: () => dispatch(fetchExercise(exerciseId)),
+    invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
+  })
+)(injectIntl(withRouter(EditExerciseLimits)));

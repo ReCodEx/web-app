@@ -91,37 +91,7 @@ class Solution extends Component {
       <Page
         resource={assignment}
         title={assignment => getLocalizedName(assignment, locale)}
-        description={<FormattedMessage id="app.submission.evaluation.title" defaultMessage="Solution evaluation" />}
-        breadcrumbs={[
-          {
-            resource: assignment,
-            iconName: 'tasks',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
-              link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
-            }),
-          },
-          {
-            resource: assignment,
-            iconName: 'puzzle-piece',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-              link: ({ EXERCISE_URI_FACTORY }) =>
-                assignment.permissionHints && assignment.permissionHints.viewDescription // not ideal, but closest we can get with permissions
-                  ? EXERCISE_URI_FACTORY(assignment.exerciseId)
-                  : '#',
-            }),
-          },
-          {
-            text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
-            iconName: 'hourglass-start',
-            link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
-          },
-          {
-            text: <FormattedMessage id="app.solution.title" defaultMessage="The Solution" />,
-            iconName: 'user',
-          },
-        ]}>
+        description={<FormattedMessage id="app.submission.evaluation.title" defaultMessage="Solution evaluation" />}>
         <ResourceRenderer failed={<FailedSubmissionDetail />} resource={[solution, assignment]}>
           {(solution, assignment) => (
             <div>

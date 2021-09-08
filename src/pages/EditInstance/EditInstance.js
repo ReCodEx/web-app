@@ -11,8 +11,6 @@ import EditInstanceForm from '../../components/forms/EditInstanceForm';
 import { fetchInstanceIfNeeded, editInstance } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
 
-import withLinks from '../../helpers/withLinks';
-
 class EditInstance extends Component {
   static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
 
@@ -31,31 +29,13 @@ class EditInstance extends Component {
   });
 
   render() {
-    const {
-      match: {
-        params: { instanceId },
-      },
-      links: { INSTANCE_URI_FACTORY },
-      instance,
-      editInstance,
-    } = this.props;
+    const { instance, editInstance } = this.props;
 
     return (
       <Page
         resource={instance}
         title={instance => instance.name}
-        description={<FormattedMessage id="app.editInstance.description" defaultMessage="Change instance settings" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.instance.title" defaultMessage="Instance" />,
-            iconName: 'university',
-            link: INSTANCE_URI_FACTORY(instanceId),
-          },
-          {
-            text: <FormattedMessage id="app.editInstance.title" defaultMessage="Edit instance" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        description={<FormattedMessage id="app.editInstance.description" defaultMessage="Change instance settings" />}>
         {instance => <EditInstanceForm initialValues={this.getInitialValues(instance)} onSubmit={editInstance} />}
       </Page>
     );
@@ -63,7 +43,6 @@ class EditInstance extends Component {
 }
 
 EditInstance.propTypes = {
-  links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   match: PropTypes.shape({
@@ -75,29 +54,27 @@ EditInstance.propTypes = {
   editInstance: PropTypes.func.isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { instanceId },
-        },
-      }
-    ) => ({
-      instance: instanceSelector(state, instanceId),
-    }),
-    (
-      dispatch,
-      {
-        match: {
-          params: { instanceId },
-        },
-      }
-    ) => ({
-      reset: () => dispatch(reset('editInstance')),
-      loadAsync: () => EditInstance.loadAsync({ instanceId }, dispatch),
-      editInstance: data => dispatch(editInstance(instanceId, data)),
-    })
-  )(EditInstance)
-);
+export default connect(
+  (
+    state,
+    {
+      match: {
+        params: { instanceId },
+      },
+    }
+  ) => ({
+    instance: instanceSelector(state, instanceId),
+  }),
+  (
+    dispatch,
+    {
+      match: {
+        params: { instanceId },
+      },
+    }
+  ) => ({
+    reset: () => dispatch(reset('editInstance')),
+    loadAsync: () => EditInstance.loadAsync({ instanceId }, dispatch),
+    editInstance: data => dispatch(editInstance(instanceId, data)),
+  })
+)(EditInstance);

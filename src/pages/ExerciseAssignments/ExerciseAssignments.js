@@ -31,7 +31,6 @@ import { assignmentEnvironmentsSelector, getExerciseAssignments } from '../../re
 
 import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
 
 const messages = defineMessages({
   groupsBoxTitle: {
@@ -118,11 +117,7 @@ class ExerciseAssignments extends Component {
       groupsAccessor,
       deadlines,
       visibility,
-      links: { EXERCISE_URI_FACTORY },
       intl: { formatMessage, locale },
-      match: {
-        params: { exerciseId },
-      },
     } = this.props;
 
     return (
@@ -131,29 +126,7 @@ class ExerciseAssignments extends Component {
         resource={exercise}
         description={
           <FormattedMessage id="app.exerciseAssignments.description" defaultMessage="Exercise Assignments" />
-        }
-        breadcrumbs={[
-          {
-            resource: exercise,
-            breadcrumb: exercise => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.breadcrumbTitle"
-                  defaultMessage="Exercise {name}"
-                  values={{
-                    name: exercise ? getLocalizedName(exercise, locale) : '',
-                  }}
-                />
-              ),
-              iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId),
-            }),
-          },
-          {
-            text: <FormattedMessage id="app.exerciseAssignments.description" defaultMessage="Exercise Assignments" />,
-            iconName: 'tasks',
-          },
-        ]}>
+        }>
         {exercise => (
           <div>
             <ExerciseNavigation
@@ -285,7 +258,6 @@ ExerciseAssignments.propTypes = {
   groupsAccessor: PropTypes.func.isRequired,
   deadlines: PropTypes.string,
   visibility: PropTypes.string,
-  links: PropTypes.object,
   intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
@@ -294,39 +266,37 @@ ExerciseAssignments.propTypes = {
 
 const multiAssignFormSelector = formValueSelector('multiAssign');
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => {
-      const userId = loggedInUserIdSelector(state);
-      return {
-        userId,
-        exercise: exerciseSelector(exerciseId)(state),
-        assignments: getExerciseAssignments(state, exerciseId),
-        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-        assignableGroups: loggedUserCanAssignToGroupsSelector(state),
-        groupsAccessor: groupDataAccessorSelector(state),
-        deadlines: multiAssignFormSelector(state, 'deadlines'),
-        visibility: multiAssignFormSelector(state, 'visibility'),
-      };
-    },
-    (
-      dispatch,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => ({
-      loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
-      assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
-      editAssignment: (id, body) => dispatch(editAssignment(id, body)),
-    })
-  )(injectIntl(ExerciseAssignments))
-);
+export default connect(
+  (
+    state,
+    {
+      match: {
+        params: { exerciseId },
+      },
+    }
+  ) => {
+    const userId = loggedInUserIdSelector(state);
+    return {
+      userId,
+      exercise: exerciseSelector(exerciseId)(state),
+      assignments: getExerciseAssignments(state, exerciseId),
+      assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
+      assignableGroups: loggedUserCanAssignToGroupsSelector(state),
+      groupsAccessor: groupDataAccessorSelector(state),
+      deadlines: multiAssignFormSelector(state, 'deadlines'),
+      visibility: multiAssignFormSelector(state, 'visibility'),
+    };
+  },
+  (
+    dispatch,
+    {
+      match: {
+        params: { exerciseId },
+      },
+    }
+  ) => ({
+    loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
+    assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+    editAssignment: (id, body) => dispatch(editAssignment(id, body)),
+  })
+)(injectIntl(ExerciseAssignments));

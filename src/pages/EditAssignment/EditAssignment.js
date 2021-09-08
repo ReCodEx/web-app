@@ -71,7 +71,7 @@ class EditAssignment extends Component {
 
   render() {
     const {
-      links: { ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, EXERCISE_URI_FACTORY },
+      links: { GROUP_DETAIL_URI_FACTORY },
       match: {
         params: { assignmentId },
       },
@@ -93,31 +93,7 @@ class EditAssignment extends Component {
             id="app.editAssignment.description"
             defaultMessage="Change assignment settings and limits"
           />
-        }
-        breadcrumbs={[
-          assignment && assignment.getIn(['data', 'exerciseId'])
-            ? {
-                resource: assignment,
-                iconName: 'puzzle-piece',
-                breadcrumb: assignment => ({
-                  text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-                  link: EXERCISE_URI_FACTORY(assignment && assignment.exerciseId),
-                }),
-              }
-            : {
-                text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-                iconName: 'ghost',
-              },
-          {
-            text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
-            iconName: 'hourglass-start',
-            link: ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
-          },
-          {
-            text: <FormattedMessage id="app.editAssignment.title" defaultMessage="Edit assignment settings" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        }>
         {assignment =>
           assignment && (
             <>

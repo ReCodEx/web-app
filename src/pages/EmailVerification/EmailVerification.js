@@ -16,8 +16,6 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { verificationStatusSelector } from '../../redux/selectors/emailVerification';
 import { LoadingIcon, SuccessIcon, FailureIcon } from '../../components/icons';
 
-import withLinks from '../../helpers/withLinks';
-
 /**
  * Component for changing old password for a new one for a user with a specific
  * token provided in the URL - user goes to this page using a link from an email.
@@ -51,11 +49,7 @@ class EmailVerification extends Component {
   };
 
   render() {
-    const {
-      userId,
-      links: { HOME_URI },
-      getVerificationStatus,
-    } = this.props;
+    const { userId, getVerificationStatus } = this.props;
     const { decodedToken, token } = this.state;
 
     return (
@@ -63,18 +57,7 @@ class EmailVerification extends Component {
         title={<FormattedMessage id="app.emailVerification.title" defaultMessage="Email verification" />}
         description={
           <FormattedMessage id="app.emailVerification.description" defaultMessage="Your email will be verified." />
-        }
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />,
-            link: HOME_URI,
-            iconName: 'home',
-          },
-          {
-            text: <FormattedMessage id="app.emailVerification.title" defaultMessage="Email verification" />,
-            iconName: 'tick',
-          },
-        ]}>
+        }>
         <Row>
           <Col sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }}>
             {canUseDOM && !token && !decodedToken && (
@@ -148,17 +131,14 @@ EmailVerification.propTypes = {
   getVerificationStatus: PropTypes.func.isRequired,
   userId: PropTypes.string,
   verifyEmail: PropTypes.func.isRequired,
-  links: PropTypes.object,
 };
 
-export default withLinks(
-  connect(
-    state => ({
-      userId: loggedInUserIdSelector(state),
-      getVerificationStatus: userId => verificationStatusSelector(userId)(state),
-    }),
-    dispatch => ({
-      verifyEmail: (userId, token) => dispatch(verifyEmail(userId, token)),
-    })
-  )(EmailVerification)
-);
+export default connect(
+  state => ({
+    userId: loggedInUserIdSelector(state),
+    getVerificationStatus: userId => verificationStatusSelector(userId)(state),
+  }),
+  dispatch => ({
+    verifyEmail: (userId, token) => dispatch(verifyEmail(userId, token)),
+  })
+)(EmailVerification);

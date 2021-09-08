@@ -98,37 +98,7 @@ class Assignment extends Component {
       <Page
         resource={assignment}
         title={assignment => getLocalizedName(assignment, locale)}
-        description={<FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />}
-        breadcrumbs={[
-          {
-            resource: assignment,
-            iconName: 'tasks',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
-              link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
-            }),
-          },
-          assignment && assignment.getIn(['data', 'exerciseId'])
-            ? {
-                resource: assignment,
-                iconName: 'puzzle-piece',
-                breadcrumb: assignment => ({
-                  text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-                  link: ({ EXERCISE_URI_FACTORY }) =>
-                    isAdminOf(assignment.groupId) || isSupervisorOf(assignment.groupId)
-                      ? EXERCISE_URI_FACTORY(assignment.exerciseId)
-                      : '#',
-                }),
-              }
-            : {
-                text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-                iconName: 'ghost',
-              },
-          {
-            text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
-            iconName: 'hourglass-start',
-          },
-        ]}>
+        description={<FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />}>
         {assignment => (
           <div>
             <AssignmentNavigation

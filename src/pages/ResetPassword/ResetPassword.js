@@ -27,18 +27,7 @@ const ResetPassword = ({ resetPassword, isReseting, hasFailed, hasSucceeded, lin
         id="app.resetPassword.description"
         defaultMessage="Change your password if you have forgotten your old one."
       />
-    }
-    breadcrumbs={[
-      {
-        text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />,
-        link: HOME_URI,
-        iconName: 'home',
-      },
-      {
-        text: <FormattedMessage id="app.resetPassword.title" defaultMessage="Reset password" />,
-        iconName: 'key',
-      },
-    ]}>
+    }>
     <Row>
       <Col md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }}>
         <ResetPasswordForm

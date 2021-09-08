@@ -45,21 +45,7 @@ class ShadowAssignment extends Component {
       <Page
         resource={shadowAssignment}
         title={shadowAssignment => getLocalizedName(shadowAssignment, locale)}
-        description={<FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />}
-        breadcrumbs={[
-          {
-            resource: shadowAssignment,
-            iconName: 'tasks',
-            breadcrumb: shadowAssignment => ({
-              text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
-              link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(shadowAssignment.groupId),
-            }),
-          },
-          {
-            text: <FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />,
-            iconName: 'hourglass-start',
-          },
-        ]}>
+        description={<FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />}>
         {shadowAssignment => (
           <div>
             <ShadowAssignmentNavigation

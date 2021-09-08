@@ -35,10 +35,7 @@ class EditPipeline extends Component {
 
   render() {
     const {
-      links: { PIPELINES_URI, PIPELINE_URI_FACTORY },
-      match: {
-        params: { pipelineId },
-      },
+      links: { PIPELINES_URI },
       history: { replace },
       pipeline,
       boxTypes,
@@ -50,18 +47,7 @@ class EditPipeline extends Component {
       <Page
         resource={pipeline}
         title={pipeline => pipeline.name}
-        description={<FormattedMessage id="app.editPipeline.description" defaultMessage="Change pipeline settings" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline" />,
-            iconName: 'random',
-            link: PIPELINE_URI_FACTORY(pipelineId),
-          },
-          {
-            text: <FormattedMessage id="app.editPipeline.title" defaultMessage="Edit pipeline" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        description={<FormattedMessage id="app.editPipeline.description" defaultMessage="Change pipeline settings" />}>
         {({ pipeline: { boxes, variables }, ...data }) => (
           <div>
             <Row>

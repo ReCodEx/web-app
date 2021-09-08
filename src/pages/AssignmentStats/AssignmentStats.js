@@ -286,44 +286,7 @@ class AssignmentStats extends Component {
         title={assignment => getLocalizedName(assignment, locale)}
         description={
           <FormattedMessage id="app.assignmentStats.title" defaultMessage="All submissions of the assignment" />
-        }
-        breadcrumbs={[
-          {
-            resource: assignment,
-            iconName: 'tasks',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
-              link: ({ GROUP_DETAIL_URI_FACTORY }) => GROUP_DETAIL_URI_FACTORY(assignment.groupId),
-            }),
-          },
-          assignment && assignment.getIn(['data', 'exerciseId'])
-            ? {
-                resource: assignment,
-                iconName: 'puzzle-piece',
-                breadcrumb: assignment => ({
-                  text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-                  link: ({ EXERCISE_URI_FACTORY }) => EXERCISE_URI_FACTORY(assignment.exerciseId),
-                }),
-              }
-            : {
-                text: <FormattedMessage id="app.exercise.title" defaultMessage="Exercise" />,
-                iconName: 'ghost',
-              },
-          {
-            resource: assignment,
-            iconName: 'hourglass-start',
-            breadcrumb: assignment => ({
-              text: <FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />,
-              link: ({ ASSIGNMENT_DETAIL_URI_FACTORY }) => ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id),
-            }),
-          },
-          {
-            text: (
-              <FormattedMessage id="app.assignmentStats.title" defaultMessage="All submissions of the assignment" />
-            ),
-            iconName: 'chart-line',
-          },
-        ]}>
+        }>
         {assignment => (
           <div>
             <AssignmentNavigation

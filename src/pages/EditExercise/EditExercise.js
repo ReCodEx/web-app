@@ -88,10 +88,7 @@ class EditExercise extends Component {
 
   render() {
     const {
-      links: { EXERCISES_URI, EXERCISE_URI_FACTORY },
-      match: {
-        params: { exerciseId },
-      },
+      links: { EXERCISES_URI },
       history: { replace },
       exercise,
       intl: { locale },
@@ -101,29 +98,7 @@ class EditExercise extends Component {
       <Page
         resource={exercise}
         title={exercise => getLocalizedName(exercise, locale)}
-        description={<FormattedMessage id="app.editExercise.description" defaultMessage="Change exercise settings" />}
-        breadcrumbs={[
-          {
-            resource: exercise,
-            breadcrumb: exercise => ({
-              text: (
-                <FormattedMessage
-                  id="app.exercise.breadcrumbTitle"
-                  defaultMessage="Exercise {name}"
-                  values={{
-                    name: exercise ? getLocalizedName(exercise, locale) : '',
-                  }}
-                />
-              ),
-              iconName: 'puzzle-piece',
-              link: EXERCISE_URI_FACTORY(exerciseId),
-            }),
-          },
-          {
-            text: <FormattedMessage id="app.editExercise.title" defaultMessage="Edit exercise" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        description={<FormattedMessage id="app.editExercise.description" defaultMessage="Change exercise settings" />}>
         {exercise =>
           exercise && (
             <div>

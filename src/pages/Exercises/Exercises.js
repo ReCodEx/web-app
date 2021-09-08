@@ -56,13 +56,7 @@ class Exercises extends Component {
     return (
       <PageContent
         title={<FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />}
-        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />,
-            iconName: 'puzzle-piece',
-          },
-        ]}>
+        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}>
         <>
           <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
             <ExercisesListContainer id="exercises-all" showGroups />
