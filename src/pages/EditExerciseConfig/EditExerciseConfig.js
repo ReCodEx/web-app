@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import { ExerciseNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
@@ -17,7 +18,6 @@ import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSim
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
 // import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
-import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
 import { InfoIcon } from '../../components/icons';
@@ -326,6 +326,14 @@ class EditExerciseConfig extends Component {
         ]}>
         {(exercise, tests) => (
           <div>
+            <ExerciseNavigation
+              exerciseId={exercise.id}
+              canEdit={hasPermissions(exercise, 'update')}
+              canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+              canViewLimits={hasPermissions(exercise, 'viewLimits')}
+              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
+            />
+
             <ResourceRenderer resource={pipelines.toArray()} returnAsArray={true}>
               {(
                 pipelines // pipelines are returned as a whole array (so they can be cached properly)
@@ -338,12 +346,6 @@ class EditExerciseConfig extends Component {
                       </Col>
                     </Row>
                   )}
-
-                  <Row>
-                    <Col sm={12}>
-                      <ExerciseButtons {...exercise} />
-                    </Col>
-                  </Row>
 
                   {hasPermissions(exercise, 'update') && isEmpoweredSupervisorRole(effectiveRole) && (
                     <table className="em-margin-vertical">

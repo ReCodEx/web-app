@@ -8,6 +8,7 @@ import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import { GroupNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import EditGroupForm, { EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT } from '../../components/forms/EditGroupForm';
 import RelocateGroupForm, { getPossibleParentsOfGroup } from '../../components/forms/RelocateGroupForm';
@@ -106,6 +107,12 @@ class EditGroup extends Component {
         ]}>
         {group => (
           <div>
+            <GroupNavigation
+              groupId={group.id}
+              canEdit={hasPermissions(group, 'update')}
+              canViewDetail={hasPermissions(group, 'viewDetail')}
+            />
+
             {!hasPermissions(group, 'update') && (
               <Row>
                 <Col sm={12}>

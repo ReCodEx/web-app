@@ -14,7 +14,8 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import Page from '../../components/layout/Page';
-import { ChatIcon, EditIcon, DownloadIcon, SearchIcon } from '../../components/icons';
+import { AssignmentNavigation } from '../../components/layout/Navigation';
+import { ChatIcon, DownloadIcon, SearchIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import UsersName from '../../components/Users/UsersName';
 import Points from '../../components/Assignments/SolutionsTable/Points';
@@ -325,19 +326,19 @@ class AssignmentStats extends Component {
         ]}>
         {assignment => (
           <div>
+            <AssignmentNavigation
+              assignmentId={assignment.id}
+              groupId={assignment.groupId}
+              exerciseId={assignment.exerciseId}
+              canEdit={hasPermissions(assignment, 'update')}
+              canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
+              canViewExercise={true}
+            />
+
             <Row>
               <Col md={12} lg={7}>
                 <div className="mb-3">
                   <TheButtonGroup>
-                    {hasPermissions(assignment, 'update') && (
-                      <Link to={links.ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                        <Button variant="warning">
-                          <EditIcon gapRight />
-                          <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                        </Button>
-                      </Link>
-                    )}
-
                     {hasPermissions(assignment, 'viewAssignmentSolutions') && (
                       <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
                         <Button variant="primary">
@@ -378,7 +379,7 @@ class AssignmentStats extends Component {
                 </Modal>
               </Col>
 
-              <Col md={12} lg={5} className="text-right text-nowrap">
+              <Col md={12} lg={5} className="text-right text-nowrap pt-2">
                 <OnOffCheckbox
                   checked={this.state.groupByUsersCheckbox}
                   disabled={this.state.onlyBestSolutionsCheckbox}

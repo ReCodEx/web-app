@@ -119,6 +119,7 @@ const loggedUserMemberOfGroupsSelector = type =>
   );
 
 export const loggedUserStudentOfGroupsSelector = loggedUserMemberOfGroupsSelector('students');
+export const loggedUserObserverOfGroupsSelector = loggedUserMemberOfGroupsSelector('observers');
 export const loggedUserSupervisorOfGroupsSelector = loggedUserMemberOfGroupsSelector('supervisors');
 export const loggedUserAdminOfGroupsSelector = loggedUserMemberOfGroupsSelector('admins');
 
@@ -130,6 +131,7 @@ const loggedUserIsMemberOfSelector = type =>
   });
 
 export const loggedUserIsStudentOfSelector = loggedUserIsMemberOfSelector('students');
+export const loggedUserIsObserverOfSelector = loggedUserIsMemberOfSelector('observers');
 export const loggedUserIsSupervisorOfSelector = loggedUserIsMemberOfSelector('supervisors');
 export const loggedUserIsAdminOfSelector = loggedUserIsMemberOfSelector('admins');
 

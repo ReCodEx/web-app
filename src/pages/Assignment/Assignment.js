@@ -4,9 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
-import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 
@@ -31,16 +29,17 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
 import {
   loggedUserIsStudentOfSelector,
+  loggedUserIsObserverOfSelector,
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
 } from '../../redux/selectors/usersGroups';
 
 import Page from '../../components/layout/Page';
+import { AssignmentNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import UsersNameContainer from '../../containers/UsersNameContainer';
 import AssignmentDetails from '../../components/Assignments/Assignment/AssignmentDetails';
-import Icon, { EditIcon, ResultsIcon } from '../../components/icons';
+import Icon from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
@@ -48,7 +47,6 @@ import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
-import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
 import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
@@ -85,6 +83,7 @@ class Assignment extends Component {
       loggedInUserId,
       init,
       isStudentOf,
+      isObserverOf,
       isSupervisorOf,
       isAdminOf,
       canSubmit,
@@ -92,7 +91,6 @@ class Assignment extends Component {
       exerciseSync,
       solutions,
       fetchManyStatus,
-      links: { ASSIGNMENT_EDIT_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY },
       intl: { locale },
     } = this.props;
 
@@ -133,39 +131,23 @@ class Assignment extends Component {
         ]}>
         {assignment => (
           <div>
-            <Row>
-              <Col xs={12}>
-                {userId && userId !== loggedInUserId && (
-                  <p>
-                    <UsersNameContainer userId={userId} />
-                  </p>
-                )}
-                {(isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)) && ( // includes superadmin
-                  <div className="mb-3">
-                    <TheButtonGroup>
-                      <Link to={ASSIGNMENT_EDIT_URI_FACTORY(assignment.id)}>
-                        <Button variant="warning">
-                          <EditIcon gapRight />
-                          <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                        </Button>
-                      </Link>
-                      <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
-                        <Button variant="primary">
-                          <ResultsIcon gapRight />
-                          <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
-                        </Button>
-                      </Link>
-                    </TheButtonGroup>
-                  </div>
-                )}
-              </Col>
-            </Row>
+            <AssignmentNavigation
+              assignmentId={assignment.id}
+              userId={userId}
+              groupId={assignment.groupId}
+              exerciseId={assignment.exerciseId}
+              canEdit={hasPermissions(assignment, 'update')}
+              canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
+              canViewExercise={
+                isObserverOf(assignment.groupId) || isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)
+              }
+            />
 
-            {assignment.exerciseId && assignment.permissionHints.update && (
+            {assignment.exerciseId && hasPermissions(assignment, 'update') && (
               <AssignmentSync syncInfo={assignment.exerciseSynchronizationInfo} exerciseSync={exerciseSync} />
             )}
 
-            {!assignment.exerciseId && assignment.permissionHints.update && (
+            {!assignment.exerciseId && hasPermissions(assignment, 'update') && (
               <Callout variant="warning">
                 <h3 className="no-margin ">
                   <Icon icon="ghost" gapRight />
@@ -288,6 +270,7 @@ Assignment.propTypes = {
     }).isRequired,
   }).isRequired,
   isStudentOf: PropTypes.func.isRequired,
+  isObserverOf: PropTypes.func.isRequired,
   isSupervisorOf: PropTypes.func.isRequired,
   isAdminOf: PropTypes.func.isRequired,
   assignment: PropTypes.object,
@@ -295,7 +278,6 @@ Assignment.propTypes = {
   submitting: PropTypes.bool.isRequired,
   init: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
   exerciseSync: PropTypes.func.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
@@ -303,42 +285,41 @@ Assignment.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { assignmentId, userId = null },
-        },
-      }
-    ) => {
-      const loggedInUserId = loggedInUserIdSelector(state);
-      return {
-        assignment: getAssignment(state)(assignmentId),
-        submitting: isSubmitting(state),
-        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
-        userId,
-        loggedInUserId,
-        isStudentOf: loggedUserIsStudentOfSelector(state),
-        isSupervisorOf: loggedUserIsSupervisorOfSelector(state),
-        isAdminOf: loggedUserIsAdminOfSelector(state),
-        canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
-        fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
-      };
-    },
-    (
-      dispatch,
-      {
-        match: {
-          params: { assignmentId },
-        },
-      }
-    ) => ({
-      init: userId => () => dispatch(init(userId, assignmentId)),
-      loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
-      exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
-    })
-  )(injectIntl(Assignment))
-);
+export default connect(
+  (
+    state,
+    {
+      match: {
+        params: { assignmentId, userId = null },
+      },
+    }
+  ) => {
+    const loggedInUserId = loggedInUserIdSelector(state);
+    return {
+      assignment: getAssignment(state)(assignmentId),
+      submitting: isSubmitting(state),
+      runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+      userId,
+      loggedInUserId,
+      isStudentOf: loggedUserIsStudentOfSelector(state),
+      isObserverOf: loggedUserIsObserverOfSelector(state),
+      isSupervisorOf: loggedUserIsSupervisorOfSelector(state),
+      isAdminOf: loggedUserIsAdminOfSelector(state),
+      canSubmit: canSubmitSolution(assignmentId)(state),
+      solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
+      fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
+    };
+  },
+  (
+    dispatch,
+    {
+      match: {
+        params: { assignmentId },
+      },
+    }
+  ) => ({
+    init: userId => () => dispatch(init(userId, assignmentId)),
+    loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
+    exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+  })
+)(injectIntl(Assignment));

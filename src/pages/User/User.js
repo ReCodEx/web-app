@@ -8,12 +8,13 @@ import { Link } from 'react-router-dom';
 import { Set } from 'immutable';
 
 import Page from '../../components/layout/Page';
+import { UserNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import UsersNameContainer from '../../containers/UsersNameContainer';
+import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
 import GroupsName from '../../components/Groups/GroupsName';
@@ -37,7 +38,7 @@ import {
 } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon, EditIcon, TransferIcon, AssignmentsIcon, GroupIcon } from '../../components/icons';
+import { InfoIcon, TransferIcon, AssignmentsIcon, GroupIcon } from '../../components/icons';
 import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
@@ -98,7 +99,7 @@ class User extends Component {
       groupStatistics,
       usersStatistics,
       takeOver,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY, EDIT_USER_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY },
     } = this.props;
 
     return (
@@ -116,30 +117,22 @@ class User extends Component {
         ]}>
         {user => (
           <div>
-            <p>
-              <UsersNameContainer userId={user.id} large noLink showEmail="full" showExternalIdentifiers />
-            </p>
+            <UserNavigation userId={userId} canViewDetail canEdit={isAdmin || userId === loggedInUserId} />
 
-            <div className="mb-3">
-              <TheButtonGroup>
-                {(isAdmin || userId === loggedInUserId) && (
-                  <Link to={EDIT_USER_URI_FACTORY(userId)}>
-                    <Button variant="warning" size="sm">
-                      <EditIcon />
-                      &nbsp;
-                      <FormattedMessage id="app.editUser.title" defaultMessage="Edit user's profile" />
+            {isAdmin && userId !== loggedInUserId && (
+              <div className="mb-3">
+                <TheButtonGroup>
+                  {user.privateData.isAllowed && (
+                    <Button variant="primary" onClick={() => takeOver(userId)}>
+                      <TransferIcon gapRight />
+                      <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
                     </Button>
-                  </Link>
-                )}
+                  )}
 
-                {isAdmin && userId !== loggedInUserId && user.privateData.isAllowed && (
-                  <Button size="sm" variant="primary" onClick={() => takeOver(userId)}>
-                    <TransferIcon gapRight />
-                    <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
-                  </Button>
-                )}
-              </TheButtonGroup>
-            </div>
+                  <AllowUserButtonContainer id={userId} />
+                </TheButtonGroup>
+              </div>
+            )}
 
             {(commonGroups.length > 0 || isAdmin) && (
               <div>

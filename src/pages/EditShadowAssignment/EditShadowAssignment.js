@@ -7,6 +7,7 @@ import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import { ShadowAssignmentNavigation } from '../../components/layout/Navigation';
 import EditShadowAssignmentForm from '../../components/forms/EditShadowAssignmentForm';
 import DeleteShadowAssignmentButtonContainer from '../../containers/DeleteShadowAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
@@ -20,6 +21,7 @@ import {
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 
+import { hasPermissions } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
 const localizedTextDefaults = {
@@ -117,6 +119,12 @@ class EditShadowAssignment extends Component {
         {shadowAssignment =>
           shadowAssignment && (
             <>
+              <ShadowAssignmentNavigation
+                shadowId={shadowAssignment.id}
+                groupId={shadowAssignment.groupId}
+                canEdit={hasPermissions(shadowAssignment, 'update')}
+              />
+
               <EditShadowAssignmentForm
                 initialValues={shadowAssignment ? this.getInitialValues(shadowAssignment) : {}}
                 onSubmit={this.editShadowAssignmentSubmitHandler}

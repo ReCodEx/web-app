@@ -6,6 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import { AssignmentSolutionNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SolutionDetail, { FailedSubmissionDetail } from '../../components/Solutions/SolutionDetail';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
@@ -36,6 +37,7 @@ import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/e
 
 import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
 import { getLocalizedName } from '../../helpers/localizedData';
+import { hasPermissions } from '../../helpers/common';
 import { WarningIcon } from '../../components/icons';
 
 const assignmentHasRuntime = defaultMemoize(
@@ -123,19 +125,32 @@ class Solution extends Component {
         <ResourceRenderer failed={<FailedSubmissionDetail />} resource={[solution, assignment]}>
           {(solution, assignment) => (
             <div>
-              {((solution.permissionHints && solution.permissionHints.setFlag) ||
-                (assignment.permissionHints && assignment.permissionHints.resubmitSubmissions)) && (
+              <AssignmentSolutionNavigation
+                solutionId={solution.id}
+                assignmentId={assignmentId}
+                exerciseId={assignment.exerciseId}
+                userId={solution.authorId}
+                groupId={assignment.groupId}
+                canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
+                canViewExercise={
+                  hasPermissions(
+                    assignment,
+                    'viewAssignmentSolutions'
+                  ) /* this is not the actual permission, but close enough */
+                }
+              />
+
+              {(hasPermissions(solution, 'setFlag') || hasPermissions(assignment, 'resubmitSubmissions')) && (
                 <div className="mb-3">
                   <TheButtonGroup>
-                    {solution.permissionHints && solution.permissionHints.setFlag && (
+                    {hasPermissions(solution, 'setFlag') && (
                       <>
                         <AcceptSolutionContainer id={solution.id} locale={locale} />
                         <ReviewSolutionContainer id={solution.id} locale={locale} />
                       </>
                     )}
 
-                    {assignment.permissionHints &&
-                      assignment.permissionHints.resubmitSubmissions &&
+                    {hasPermissions(assignment, 'resubmitSubmissions') &&
                       assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
                         <>
                           <ResubmitSolutionContainer
@@ -168,8 +183,7 @@ class Solution extends Component {
                   </TheButtonGroup>
 
                   {!(
-                    assignment.permissionHints &&
-                    assignment.permissionHints.resubmitSubmissions &&
+                    hasPermissions(assignment, 'resubmitSubmissions') &&
                     assignmentHasRuntime(assignment, solution.runtimeEnvironmentId)
                   ) && (
                     <span>
@@ -196,10 +210,10 @@ class Solution extends Component {
                         runtimeEnvironments={runtimes}
                         deleteEvaluation={deleteEvaluation}
                         refreshSolutionEvaluations={refreshSolutionEvaluations}
-                        editNote={solution.permissionHints && solution.permissionHints.update ? editNote : null}
+                        editNote={hasPermissions(solution, 'update') ? editNote : null}
                         scoreConfigSelector={scoreConfigSelector}
                         fetchScoreConfigIfNeeded={fetchScoreConfigIfNeeded}
-                        canResubmit={assignment.permissionHints && assignment.permissionHints.resubmitSubmissions}
+                        canResubmit={hasPermissions(assignment, 'resubmitSubmissions')}
                       />
                     )}
                   </FetchManyResourceRenderer>

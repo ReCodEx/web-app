@@ -8,12 +8,12 @@ import { reset } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import { ExerciseNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
 import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
-import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 
 import { fetchExerciseIfNeeded, editExercise, fetchTags } from '../../redux/modules/exercises';
@@ -27,6 +27,7 @@ import {
   getLocalizedTextsInitialValues,
   transformLocalizedTextsFormData,
 } from '../../helpers/localizedData';
+import { hasPermissions } from '../../helpers/common';
 
 const localizedTextDefaults = {
   name: '',
@@ -126,6 +127,14 @@ class EditExercise extends Component {
         {exercise =>
           exercise && (
             <div>
+              <ExerciseNavigation
+                exerciseId={exercise.id}
+                canEdit={hasPermissions(exercise, 'update')}
+                canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+                canViewLimits={hasPermissions(exercise, 'viewLimits')}
+                canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
+              />
+
               {exerciseCalloutsAreVisible(exercise) && (
                 <Row>
                   <Col sm={12}>
@@ -134,11 +143,6 @@ class EditExercise extends Component {
                 </Row>
               )}
 
-              <Row>
-                <Col sm={12}>
-                  <ExerciseButtons {...exercise} />
-                </Col>
-              </Row>
               <Row>
                 <Col lg={6}>
                   <EditExerciseForm

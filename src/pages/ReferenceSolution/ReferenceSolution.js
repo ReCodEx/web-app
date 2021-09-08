@@ -7,6 +7,7 @@ import { defaultMemoize } from 'reselect';
 
 import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
 import Page from '../../components/layout/Page';
+import { ReferenceSolutionNavigation } from '../../components/layout/Navigation';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -110,6 +111,16 @@ class ReferenceSolution extends Component {
           <ResourceRenderer resource={exercise}>
             {exercise => (
               <>
+                <ReferenceSolutionNavigation
+                  solutionId={referenceSolution.id}
+                  exerciseId={exercise.id}
+                  userId={referenceSolution.authorId}
+                  canEdit={hasPermissions(exercise, 'update')}
+                  canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+                  canViewLimits={hasPermissions(exercise, 'viewLimits')}
+                  canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
+                />
+
                 {hasPermissions(referenceSolution, 'evaluate') && (
                   <>
                     {exercise.isBroken ? (

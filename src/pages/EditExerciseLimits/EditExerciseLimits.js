@@ -9,11 +9,11 @@ import { defaultMemoize } from 'reselect';
 import { formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
+import { ExerciseNavigation } from '../../components/layout/Navigation';
 import HardwareGroupMetadata from '../../components/Exercises/HardwareGroupMetadata';
 import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm';
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
-import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Icon from '../../components/icons';
 import Callout from '../../components/widgets/Callout';
@@ -51,6 +51,7 @@ import {
   validateLimitsConstraints,
   saturateLimitsConstraints,
 } from '../../helpers/exercise/limits';
+import { hasPermissions } from '../../helpers/common';
 
 class EditExerciseLimits extends Component {
   componentDidMount = () => this.props.loadAsync();
@@ -185,6 +186,14 @@ class EditExerciseLimits extends Component {
         ]}>
         {(exercise, tests, limits) => (
           <div>
+            <ExerciseNavigation
+              exerciseId={exercise.id}
+              canEdit={hasPermissions(exercise, 'update')}
+              canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+              canViewLimits={hasPermissions(exercise, 'viewLimits')}
+              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
+            />
+
             {exerciseCalloutsAreVisible(exercise) && (
               <Row>
                 <Col sm={12}>
@@ -192,12 +201,6 @@ class EditExerciseLimits extends Component {
                 </Col>
               </Row>
             )}
-
-            <Row>
-              <Col sm={12}>
-                <ExerciseButtons {...exercise} />
-              </Col>
-            </Row>
 
             {Boolean(exercise.hardwareGroups && exercise.hardwareGroups.length > 1) && (
               <Row>

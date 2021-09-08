@@ -8,12 +8,12 @@ import { formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import { ExerciseNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { LockIcon, CheckRequiredIcon, SaveIcon } from '../../components/icons';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
-import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import EditAssignmentForm, {
   prepareInitialValues as prepareEditFormInitialValues,
@@ -156,6 +156,14 @@ class ExerciseAssignments extends Component {
         ]}>
         {exercise => (
           <div>
+            <ExerciseNavigation
+              exerciseId={exercise.id}
+              canEdit={hasPermissions(exercise, 'update')}
+              canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+              canViewLimits={hasPermissions(exercise, 'viewLimits')}
+              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
+            />
+
             {exerciseCalloutsAreVisible(exercise) && (
               <Row>
                 <Col sm={12}>
@@ -163,12 +171,6 @@ class ExerciseAssignments extends Component {
                 </Col>
               </Row>
             )}
-
-            <Row>
-              <Col sm={12}>
-                <ExerciseButtons {...exercise} />
-              </Col>
-            </Row>
 
             {hasPermissions(exercise, 'viewAssignments') && (
               <Row>
