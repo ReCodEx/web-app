@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
-import Breadcrumbs from '../../widgets/Breadcrumbs';
 
 const getMessage = (item, formatMessage) =>
   !item
@@ -16,11 +15,11 @@ const getMessage = (item, formatMessage) =>
 
 /**
  * Holds the main content of a page with the common structure for
- * all pages - the title, description, breadcrumbs, content.
+ * all pages - the title, description, content.
  * The component passes the title and description to the Helmet library
  * which reflects these into the <head> section of the HTML document.
  */
-const PageContent = ({ intl: { formatMessage }, title = '', description = '', breadcrumbs = [], children }) => (
+const PageContent = ({ intl: { formatMessage }, title = '', description = '', children }) => (
   <div className="content-wrapper">
     <Helmet title={getMessage(title, formatMessage)} />
     <div className="content-header">
@@ -32,7 +31,6 @@ const PageContent = ({ intl: { formatMessage }, title = '', description = '', br
               <small className="halfem-margin-left">{description}</small>
             </h1>
           </Col>
-          <Col sm={6}>{breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}</Col>
         </Row>
       </Container>
     </div>
@@ -45,7 +43,6 @@ const PageContent = ({ intl: { formatMessage }, title = '', description = '', br
 PageContent.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  breadcrumbs: PropTypes.array,
   children: PropTypes.element,
   intl: PropTypes.object.isRequired,
 };

@@ -63,7 +63,7 @@ class Registration extends Component {
     const {
       instances,
       createAccount,
-      links: { HOME_URI, LOGIN_URI },
+      links: { LOGIN_URI },
       intl: { locale },
     } = this.props;
 
@@ -73,18 +73,7 @@ class Registration extends Component {
     return (
       <PageContent
         title={<FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCodEx account" />}
-        description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCodEx today" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />,
-            link: HOME_URI,
-            iconName: 'home',
-          },
-          {
-            text: <FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCodEx account" />,
-            iconName: 'user-plus',
-          },
-        ]}>
+        description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCodEx today" />}>
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
           {instances => (
             <Row>

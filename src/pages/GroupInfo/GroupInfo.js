@@ -83,34 +83,6 @@ class GroupInfo extends Component {
     }
   }
 
-  getBreadcrumbs = () => {
-    const {
-      group,
-      intl: { locale },
-    } = this.props;
-    const breadcrumbs = [
-      {
-        resource: group,
-        iconName: 'university',
-        breadcrumb: data => ({
-          link:
-            data && data.privateData
-              ? ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.privateData.instanceId)
-              : undefined,
-          text: 'Instance',
-        }),
-      },
-      {
-        resource: group,
-        iconName: 'users',
-        breadcrumb: data => ({
-          text: getLocalizedName(data, locale),
-        }),
-      },
-    ];
-    return breadcrumbs;
-  };
-
   render() {
     const {
       group,
@@ -143,7 +115,6 @@ class GroupInfo extends Component {
         description={
           <FormattedMessage id="app.groupInfo.pageDescription" defaultMessage="Group details and metadata" />
         }
-        breadcrumbs={this.getBreadcrumbs()}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
         {data => (

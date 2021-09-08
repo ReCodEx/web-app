@@ -59,13 +59,7 @@ class SubmissionFailures extends Component {
                 id="app.submissionFailures.description"
                 defaultMessage="Browse all submission failures"
               />
-            }
-            breadcrumbs={[
-              {
-                text: <FormattedMessage id="app.submissionFailures.title" defaultMessage="Submission Failures" />,
-                iconName: 'bomb',
-              },
-            ]}>
+            }>
             <Box
               title={<FormattedMessage id="app.submissionFailures.listTitle" defaultMessage="Submission Failures" />}
               unlimitedHeight

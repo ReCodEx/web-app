@@ -73,13 +73,7 @@ class Instance extends Component {
       <Page
         resource={instance}
         title={instance => getLocalizedName(instance.rootGroup, locale)}
-        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />,
-            iconName: 'info-circle',
-          },
-        ]}>
+        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}>
         {data => (
           <div>
             {isSuperAdmin && (

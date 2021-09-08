@@ -66,15 +66,12 @@ class EditGroup extends Component {
 
   render() {
     const {
-      match: {
-        params: { groupId },
-      },
       history: { replace },
       group,
       groups,
       groupsAccessor,
       isSuperAdmin,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, INSTANCE_URI_FACTORY },
       editGroup,
       relocateGroup,
       hasThreshold,
@@ -88,23 +85,7 @@ class EditGroup extends Component {
       <Page
         resource={group}
         title={group => getLocalizedName(group, locale)}
-        description={<FormattedMessage id="app.editGroup.description" defaultMessage="Change group settings" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.group.info" defaultMessage="Group Info" />,
-            iconName: 'users',
-            link: GROUP_INFO_URI_FACTORY(groupId),
-          },
-          {
-            text: <FormattedMessage id="app.group.assignmentsLong" defaultMessage="Group Assignments" />,
-            iconName: 'tasks',
-            link: GROUP_DETAIL_URI_FACTORY(groupId),
-          },
-          {
-            text: <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        description={<FormattedMessage id="app.editGroup.description" defaultMessage="Change group settings" />}>
         {group => (
           <div>
             <GroupNavigation

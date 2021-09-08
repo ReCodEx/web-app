@@ -208,13 +208,7 @@ class SisIntegration extends Component {
             id="app.sisIntegration.description"
             defaultMessage="Integration with Charles University student information system"
           />
-        }
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.sisIntegration.title" defaultMessage="UK SIS Integration" />,
-            iconName: 'id-badge',
-          },
-        ]}>
+        }>
         {user => {
           const externalId = getExternalIdForCAS(user);
 

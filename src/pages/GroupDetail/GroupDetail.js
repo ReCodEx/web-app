@@ -104,35 +104,6 @@ class GroupDetail extends Component {
     }
   }
 
-  getBreadcrumbs = () => {
-    const {
-      group,
-      intl: { locale },
-    } = this.props;
-    const breadcrumbs = [
-      {
-        resource: group,
-        iconName: 'university',
-        breadcrumb: data =>
-          data &&
-          data.privateData && {
-            link: ({ INSTANCE_URI_FACTORY }) => INSTANCE_URI_FACTORY(data.privateData.instanceId),
-            text: 'Instance',
-          },
-      },
-      {
-        resource: group,
-        iconName: 'users',
-        breadcrumb: data =>
-          data &&
-          data.privateData && {
-            text: getLocalizedName(data, locale),
-          },
-      },
-    ];
-    return breadcrumbs;
-  };
-
   createShadowAssignment = () => {
     const {
       createShadowAssignment,
@@ -192,7 +163,6 @@ class GroupDetail extends Component {
             defaultMessage="Group assignments and student results"
           />
         }
-        breadcrumbs={this.getBreadcrumbs()}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
         {data => {

@@ -128,13 +128,7 @@ class Archive extends Component {
       <Page
         resource={instance}
         title={<FormattedMessage id="app.archive.title" defaultMessage="Archive" />}
-        description={<FormattedMessage id="app.archive.description" defaultMessage="List of archived groups." />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.archive.title" defaultMessage="Archive" />,
-            iconName: 'archive',
-          },
-        ]}>
+        description={<FormattedMessage id="app.archive.description" defaultMessage="List of archived groups." />}>
         {data => (
           <Box
             title={<FormattedMessage id="app.archive.archivedGroups" defaultMessage="All Groups Including Archived" />}

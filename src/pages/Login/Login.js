@@ -93,7 +93,7 @@ class Login extends Component {
       match: {
         params: { redirect = null },
       },
-      links: { HOME_URI, RESET_PASSWORD_URI },
+      links: { RESET_PASSWORD_URI },
       intl: { locale },
     } = this.props;
 
@@ -102,18 +102,7 @@ class Login extends Component {
     return (
       <PageContent
         title={<FormattedMessage id="app.login.title" defaultMessage="Sign in" />}
-        description={<FormattedMessage id="app.login.description" defaultMessage="Please fill your credentials" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />,
-            link: HOME_URI,
-            iconName: 'home',
-          },
-          {
-            text: <FormattedMessage id="app.login.title" defaultMessage="Sign in" />,
-            iconName: 'sign-in-alt',
-          },
-        ]}>
+        description={<FormattedMessage id="app.login.description" defaultMessage="Please fill your credentials" />}>
         <>
           {redirect && (
             <Row>

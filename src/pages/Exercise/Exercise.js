@@ -109,7 +109,7 @@ class Exercise extends Component {
       detachingGroupId,
       attachExerciseToGroup,
       detachExerciseFromGroup,
-      links: { EXERCISES_URI, EXERCISE_REFERENCE_SOLUTION_URI_FACTORY },
+      links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY },
     } = this.props;
 
     const { forkId } = this.state;
@@ -118,18 +118,7 @@ class Exercise extends Component {
       <Page
         title={exercise => getLocalizedName(exercise, locale)}
         resource={exercise}
-        description={<FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />,
-            iconName: 'puzzle-piece',
-            link: EXERCISES_URI,
-          },
-          {
-            text: <FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />,
-            iconName: ['far', 'lightbulb'],
-          },
-        ]}>
+        description={<FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />}>
         {exercise => (
           <div>
             <ExerciseNavigation

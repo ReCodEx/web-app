@@ -88,13 +88,7 @@ class ChangePassword extends Component {
   }
 
   render() {
-    const {
-      links: { HOME_URI },
-      changePassword,
-      isChanging,
-      hasFailed,
-      hasSucceeded,
-    } = this.props;
+    const { changePassword, isChanging, hasFailed, hasSucceeded } = this.props;
     const { decodedToken, token } = this.state;
 
     return (
@@ -105,18 +99,7 @@ class ChangePassword extends Component {
             id="app.changePassword.description"
             defaultMessage="You can change your forgotten password in this form"
           />
-        }
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />,
-            link: HOME_URI,
-            iconName: 'home',
-          },
-          {
-            text: <FormattedMessage id="app.changePassword.title" defaultMessage="Change forgotten password" />,
-            iconName: 'shield-alt',
-          },
-        ]}>
+        }>
         <Row>
           <Col md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }}>
             {!token && !decodedToken && (

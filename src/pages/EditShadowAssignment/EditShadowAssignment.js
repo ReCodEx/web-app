@@ -92,7 +92,7 @@ class EditShadowAssignment extends Component {
         params: { shadowId },
       },
       history: { replace },
-      links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
     return (
@@ -104,18 +104,7 @@ class EditShadowAssignment extends Component {
             id="app.editShadowAssignment.description"
             defaultMessage="Change shadow assignment settings"
           />
-        }
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />,
-            iconName: 'user-secret',
-            link: SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowId),
-          },
-          {
-            text: <FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Edit Shadow Assignment" />,
-            iconName: ['far', 'edit'],
-          },
-        ]}>
+        }>
         {shadowAssignment =>
           shadowAssignment && (
             <>

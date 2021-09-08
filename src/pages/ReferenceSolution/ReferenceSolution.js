@@ -35,7 +35,6 @@ import {
 
 import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
 import { hasPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
 
 const messages = defineMessages({
   title: {
@@ -71,9 +70,6 @@ class ReferenceSolution extends Component {
       files,
       download,
       exercise,
-      match: {
-        params: { exerciseId },
-      },
       fetchStatus,
       evaluations,
       refreshSolutionEvaluations,
@@ -81,32 +77,13 @@ class ReferenceSolution extends Component {
       scoreConfigSelector,
       fetchScoreConfigIfNeeded,
       intl: { formatMessage, locale },
-      links: { EXERCISES_URI, EXERCISE_URI_FACTORY },
     } = this.props;
 
     return (
       <Page
         title={formatMessage(messages.title)}
         resource={referenceSolution}
-        description={<FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />}
-        breadcrumbs={[
-          {
-            text: <FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />,
-            iconName: 'puzzle-piece',
-            link: EXERCISES_URI,
-          },
-          {
-            text: <FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />,
-            iconName: ['far', 'lightbulb'],
-            link: EXERCISE_URI_FACTORY(exerciseId),
-          },
-          {
-            text: (
-              <FormattedMessage id="app.exercise.referenceSolutionDetail" defaultMessage="Reference Solution Detail" />
-            ),
-            iconName: ['far', 'gem'],
-          },
-        ]}>
+        description={<FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />}>
         {referenceSolution => (
           <ResourceRenderer resource={exercise}>
             {exercise => (
@@ -212,38 +189,35 @@ ReferenceSolution.propTypes = {
   scoreConfigSelector: PropTypes.func,
   evaluations: ImmutablePropTypes.map,
   intl: PropTypes.object.isRequired,
-  links: PropTypes.object.isRequired,
 };
 
-export default withLinks(
-  injectIntl(
-    connect(
-      (
-        state,
-        {
-          match: {
-            params: { exerciseId, referenceSolutionId },
-          },
-        }
-      ) => ({
-        referenceSolution: getReferenceSolution(referenceSolutionId)(state),
-        files: getSolutionFiles(state, referenceSolutionId),
-        exercise: getExercise(exerciseId)(state),
-        evaluations: evaluationsForReferenceSolutionSelector(referenceSolutionId)(state),
-        fetchStatus: fetchManyStatus(referenceSolutionId)(state),
-        scoreConfigSelector: referenceSubmissionScoreConfigSelector(state),
-      }),
-      (dispatch, { match: { params } }) => ({
-        loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
-        fetchScoreConfigIfNeeded: submissionId => dispatch(fetchReferenceSubmissionScoreConfigIfNeeded(submissionId)),
-        refreshSolutionEvaluations: () => {
-          dispatch(fetchReferenceSolution(params.referenceSolutionId));
-          dispatch(fetchReferenceSolutionEvaluationsForSolution(params.referenceSolutionId));
+export default injectIntl(
+  connect(
+    (
+      state,
+      {
+        match: {
+          params: { exerciseId, referenceSolutionId },
         },
-        deleteEvaluation: evaluationId =>
-          dispatch(deleteReferenceSolutionEvaluation(params.referenceSolutionId, evaluationId)),
-        download: (id, entry = null) => dispatch(download(id, entry)),
-      })
-    )(ReferenceSolution)
-  )
+      }
+    ) => ({
+      referenceSolution: getReferenceSolution(referenceSolutionId)(state),
+      files: getSolutionFiles(state, referenceSolutionId),
+      exercise: getExercise(exerciseId)(state),
+      evaluations: evaluationsForReferenceSolutionSelector(referenceSolutionId)(state),
+      fetchStatus: fetchManyStatus(referenceSolutionId)(state),
+      scoreConfigSelector: referenceSubmissionScoreConfigSelector(state),
+    }),
+    (dispatch, { match: { params } }) => ({
+      loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
+      fetchScoreConfigIfNeeded: submissionId => dispatch(fetchReferenceSubmissionScoreConfigIfNeeded(submissionId)),
+      refreshSolutionEvaluations: () => {
+        dispatch(fetchReferenceSolution(params.referenceSolutionId));
+        dispatch(fetchReferenceSolutionEvaluationsForSolution(params.referenceSolutionId));
+      },
+      deleteEvaluation: evaluationId =>
+        dispatch(deleteReferenceSolutionEvaluation(params.referenceSolutionId, evaluationId)),
+      download: (id, entry = null) => dispatch(download(id, entry)),
+    })
+  )(ReferenceSolution)
 );

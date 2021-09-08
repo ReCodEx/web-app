@@ -106,13 +106,7 @@ class SystemMessages extends Component {
                 id="app.systemMessages.description"
                 defaultMessage="Browse and manage all system messages"
               />
-            }
-            breadcrumbs={[
-              {
-                text: <FormattedMessage id="app.systemMessages.title" defaultMessage="System Messages" />,
-                iconName: 'envelope',
-              },
-            ]}>
+            }>
             <>
               <Box
                 title={<FormattedMessage id="app.systemMessages.listTitle" defaultMessage="System Messages" />}
