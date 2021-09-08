@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
+import { ExerciseNavigation } from '../../components/layout/Navigation';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
@@ -18,7 +19,6 @@ import Box from '../../components/widgets/Box';
 import { SendIcon, DeleteIcon } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
-import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 
 import { isSubmitting } from '../../redux/selectors/submission';
@@ -132,6 +132,14 @@ class Exercise extends Component {
         ]}>
         {exercise => (
           <div>
+            <ExerciseNavigation
+              exerciseId={exercise.id}
+              canEdit={hasPermissions(exercise, 'update')}
+              canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+              canViewLimits={hasPermissions(exercise, 'viewLimits')}
+              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
+            />
+
             {exerciseCalloutsAreVisible(exercise) && (
               <Row>
                 <Col sm={12}>
@@ -140,11 +148,6 @@ class Exercise extends Component {
               </Row>
             )}
 
-            <Row>
-              <Col sm={12}>
-                <ExerciseButtons {...exercise} />
-              </Col>
-            </Row>
             {hasPermissions(exercise, 'fork') && (
               <Row>
                 <Col sm={12} className="em-margin-bottom">
@@ -160,6 +163,7 @@ class Exercise extends Component {
                 </Col>
               </Row>
             )}
+
             <Row>
               <Col xl={6}>
                 <ExerciseDetail {...exercise} forkedFrom={forkedFrom} locale={locale} className="d-flex d-xl-none" />

@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
 import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
+import { UserRoleIcon } from '../../helpers/usersRoles';
 import NotVerified from './NotVerified';
 import Icon, { MailIcon, BanIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
@@ -30,6 +31,7 @@ const UsersName = ({
   privateData = null,
   showEmail = null,
   showExternalIdentifiers = false,
+  showRoleIcon = false,
   links: { USER_URI_FACTORY },
   currentUserId,
 }) => {
@@ -62,6 +64,16 @@ const UsersName = ({
         )}
 
         {noLink ? <span>{fullName}</span> : <Link to={USER_URI_FACTORY(id)}>{fullName}</Link>}
+
+        {showRoleIcon && (
+          <UserRoleIcon
+            role={privateData.role}
+            showTooltip
+            tooltipId={'user-role'}
+            gapLeft
+            className="text-muted half-opaque"
+          />
+        )}
 
         {showExternalIdentifiers && externalIds && Object.keys(externalIds).length > 0 && (
           <OverlayTrigger
@@ -127,6 +139,7 @@ UsersName.propTypes = {
   noAvatar: PropTypes.bool,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
+  showRoleIcon: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
   links: PropTypes.object,
 };

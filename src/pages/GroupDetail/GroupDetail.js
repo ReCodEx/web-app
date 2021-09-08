@@ -8,6 +8,7 @@ import { Row, Col } from 'react-bootstrap';
 
 import App from '../../containers/App';
 import Page from '../../components/layout/Page';
+import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
@@ -56,7 +57,6 @@ import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
-import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 
 import { isSuperadminRole, isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles';
 import { EMPTY_LIST, hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
@@ -195,222 +195,252 @@ class GroupDetail extends Component {
         breadcrumbs={this.getBreadcrumbs()}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
-        {data => (
-          <div>
-            <GroupTopButtons
-              group={data}
-              userId={userId}
-              canLeaveJoin={
-                !isGroupAdmin && !isGroupSupervisor && (data.public || (isGroupStudent && !data.privateData.detaining))
-              }
-              students={students}
-            />
-            {!hasOneOfPermissions(data, 'viewAssignments', 'viewExercises') && (
-              <Row>
-                <Col sm={12}>
-                  <Callout variant="warning" className="larger" icon={<BanIcon />}>
-                    <FormattedMessage
-                      id="generic.accessDenied"
-                      defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
-                    />
-                  </Callout>
-                </Col>
-              </Row>
-            )}
+        {data => {
+          const canLeaveGroup =
+            !isGroupAdmin &&
+            !isGroupSupervisor &&
+            (data.public || (isGroupStudent && !data.privateData.detaining)) &&
+            !data.organizational;
 
-            {data.organizational && (
-              <Row>
-                <Col lg={12}>
-                  <Callout variant="info">
-                    <FormattedMessage
-                      id="app.group.organizationalExplain"
-                      defaultMessage="This group is organizational, so it cannot have any students nor assignments. However, it may have attached exercises which can be assigned in sub-groups."
-                    />
-                  </Callout>
-                </Col>
-              </Row>
-            )}
+          const studentEmails =
+            !data.organizational &&
+            hasPermissions(data, 'viewStudents', 'sendEmail') &&
+            students &&
+            students
+              .map(s => s.privateData && s.privateData.email)
+              .filter(s => s)
+              .map(encodeURIComponent)
+              .join(',');
 
-            <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />
+          return (
+            <div>
+              <GroupNavigation
+                groupId={data.id}
+                canEdit={hasPermissions(data, 'update')}
+                canViewDetail={hasPermissions(data, 'viewDetail')}
+                emails={studentEmails || null}
+              />
 
-            {!data.organizational && hasPermissions(data, 'viewAssignments') && (
-              <>
+              {canLeaveGroup && (
+                <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} size={null} redirectAfterLeave />
+              )}
+
+              {!hasOneOfPermissions(data, 'viewAssignments', 'viewExercises') && (
                 <Row>
-                  <Col lg={12}>
-                    <Box
-                      title={<FormattedMessage id="app.groupDetail.assignments" defaultMessage="Assignments" />}
-                      noPadding
-                      unlimitedHeight>
-                      <ResourceRenderer resource={stats} bulkyLoading>
-                        {groupStats => (
-                          <AssignmentsTable
-                            assignments={assignments}
-                            assignmentEnvironmentsSelector={assignmentEnvironmentsSelector}
-                            statuses={statuses}
-                            stats={groupStats.find(item => item.userId === userId)}
-                            userId={isGroupAdmin || isGroupSupervisor ? null : userId}
-                            isAdmin={isGroupAdmin || isGroupSupervisor}
-                          />
-                        )}
-                      </ResourceRenderer>
-                    </Box>
+                  <Col sm={12}>
+                    <Callout variant="warning" className="larger" icon={<BanIcon />}>
+                      <FormattedMessage
+                        id="generic.accessDenied"
+                        defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                      />
+                    </Callout>
                   </Col>
                 </Row>
+              )}
 
+              {data.organizational && (
+                <Row>
+                  <Col lg={12}>
+                    <Callout variant="info">
+                      <FormattedMessage
+                        id="app.group.organizationalExplain"
+                        defaultMessage="This group is organizational, so it cannot have any students nor assignments. However, it may have attached exercises which can be assigned in sub-groups."
+                      />
+                    </Callout>
+                  </Col>
+                </Row>
+              )}
+
+              <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />
+
+              {!data.organizational && hasPermissions(data, 'viewAssignments') && (
+                <>
+                  <Row>
+                    <Col lg={12}>
+                      <Box
+                        title={<FormattedMessage id="app.groupDetail.assignments" defaultMessage="Assignments" />}
+                        noPadding
+                        unlimitedHeight>
+                        <ResourceRenderer resource={stats} bulkyLoading>
+                          {groupStats => (
+                            <AssignmentsTable
+                              assignments={assignments}
+                              assignmentEnvironmentsSelector={assignmentEnvironmentsSelector}
+                              statuses={statuses}
+                              stats={groupStats.find(item => item.userId === userId)}
+                              userId={isGroupAdmin || isGroupSupervisor ? null : userId}
+                              isAdmin={isGroupAdmin || isGroupSupervisor}
+                            />
+                          )}
+                        </ResourceRenderer>
+                      </Box>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col lg={12}>
+                      <Box
+                        title={
+                          <FormattedMessage
+                            id="app.groupDetail.shadowAssignments"
+                            defaultMessage="Shadow Assignments"
+                          />
+                        }
+                        noPadding
+                        unlimitedHeight
+                        collapsable
+                        isOpen={shadowAssignments && shadowAssignments.size > 0}
+                        footer={
+                          hasPermissions(data, 'createShadowAssignment') ? (
+                            <div className="text-center">
+                              <Button onClick={this.createShadowAssignment} variant="success">
+                                <AddIcon gapRight />
+                                <FormattedMessage
+                                  id="app.groupDetail.newShadowAssignment"
+                                  defaultMessage="New Shadow Assignment"
+                                />
+                              </Button>
+                            </div>
+                          ) : null
+                        }>
+                        <ShadowAssignmentsTable
+                          shadowAssignments={shadowAssignments}
+                          isAdmin={isGroupAdmin || isGroupSupervisor}
+                          userId={userId}
+                        />
+                      </Box>
+                    </Col>
+                  </Row>
+                </>
+              )}
+
+              <ResourceRenderer resource={loggedUser}>
+                {loggedUser => (
+                  <>
+                    {!data.organizational && hasPermissions(data, 'viewAssignments', 'viewStudents') && (
+                      <Row>
+                        <Col lg={12}>
+                          <Box
+                            title={
+                              <FormattedMessage
+                                id="app.groupDetail.studentsResultsTable"
+                                defaultMessage="Students and Their Results"
+                              />
+                            }
+                            unlimitedHeight
+                            noPadding>
+                            <ResourceRenderer resource={stats} bulkyLoading>
+                              {groupStats => (
+                                <ResourceRenderer resource={assignments} returnAsArray bulkyLoading>
+                                  {assignments => (
+                                    <ResourceRenderer resource={shadowAssignments} returnAsArray bulkyLoading>
+                                      {shadowAssignments => (
+                                        <ResourceRenderer
+                                          resource={runtimeEnvironments.toArray()}
+                                          returnAsArray
+                                          bulkyLoading>
+                                          {runtimes => (
+                                            <ResultsTable
+                                              users={students}
+                                              loggedUser={loggedUser}
+                                              isSuperadmin={isSuperadminRole(effectiveRole)}
+                                              assignments={assignments}
+                                              shadowAssignments={shadowAssignments}
+                                              stats={groupStats}
+                                              group={data}
+                                              runtimeEnvironments={runtimes}
+                                              userSolutionsSelector={userSolutionsSelector}
+                                              userSolutionsStatusSelector={userSolutionsStatusSelector}
+                                              fetchGroupStatsIfNeeded={fetchGroupStatsIfNeeded}
+                                              fetchUsersSolutions={fetchUsersSolutions}
+                                              setShadowPoints={setShadowPoints}
+                                              removeShadowPoints={removeShadowPoints}
+                                              renderActions={id =>
+                                                data.archived ? null : (
+                                                  <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
+                                                )
+                                              }
+                                            />
+                                          )}
+                                        </ResourceRenderer>
+                                      )}
+                                    </ResourceRenderer>
+                                  )}
+                                </ResourceRenderer>
+                              )}
+                            </ResourceRenderer>
+                          </Box>
+                        </Col>
+                      </Row>
+                    )}
+
+                    {
+                      // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
+                      (isGroupSupervisor || isGroupAdmin) &&
+                        !data.organizational &&
+                        !data.archived &&
+                        isSupervisorRole(effectiveRole) &&
+                        !isStudentRole(effectiveRole) && (
+                          <Row>
+                            <Col sm={6}>
+                              <Box
+                                title={
+                                  <FormattedMessage
+                                    id="app.group.spervisorsView.addStudent"
+                                    defaultMessage="Add Student"
+                                  />
+                                }
+                                isOpen>
+                                <AddStudent instanceId={data.privateData.instanceId} groupId={data.id} />
+                              </Box>
+                            </Col>
+                          </Row>
+                        )
+                    }
+                  </>
+                )}
+              </ResourceRenderer>
+
+              {hasPermissions(data, 'viewExercises') && (
                 <Row>
                   <Col lg={12}>
                     <Box
                       title={
-                        <FormattedMessage id="app.groupDetail.shadowAssignments" defaultMessage="Shadow Assignments" />
+                        <FormattedMessage
+                          id="app.group.spervisorsView.groupExercises"
+                          defaultMessage="Group Exercises"
+                        />
                       }
-                      noPadding
-                      unlimitedHeight
-                      collapsable
-                      isOpen={shadowAssignments && shadowAssignments.size > 0}
                       footer={
-                        hasPermissions(data, 'createShadowAssignment') ? (
+                        hasPermissions(data, 'createExercise') && !data.archived ? (
                           <div className="text-center">
-                            <Button onClick={this.createShadowAssignment} variant="success">
+                            <Button variant="success" onClick={this.createGroupExercise}>
                               <AddIcon gapRight />
                               <FormattedMessage
-                                id="app.groupDetail.newShadowAssignment"
-                                defaultMessage="New Shadow Assignment"
+                                id="app.group.createExercise"
+                                defaultMessage="Create Exercise in Group"
                               />
                             </Button>
                           </div>
-                        ) : null
-                      }>
-                      <ShadowAssignmentsTable
-                        shadowAssignments={shadowAssignments}
-                        isAdmin={isGroupAdmin || isGroupSupervisor}
-                        userId={userId}
+                        ) : undefined
+                      }
+                      isOpen
+                      unlimitedHeight>
+                      <ExercisesListContainer
+                        id={`exercises-group-${data.id}`}
+                        rootGroup={data.id}
+                        showAssignButton={
+                          !data.organizational && !data.archived && hasPermissions(data, 'createShadowAssignment')
+                          // yes, shadow assignment permission does not actually cut it, but its close
+                        }
                       />
                     </Box>
                   </Col>
                 </Row>
-              </>
-            )}
-
-            <ResourceRenderer resource={loggedUser}>
-              {loggedUser => (
-                <>
-                  {!data.organizational && hasPermissions(data, 'viewAssignments', 'viewStudents') && (
-                    <Row>
-                      <Col lg={12}>
-                        <Box
-                          title={
-                            <FormattedMessage
-                              id="app.groupDetail.studentsResultsTable"
-                              defaultMessage="Students and Their Results"
-                            />
-                          }
-                          unlimitedHeight
-                          noPadding>
-                          <ResourceRenderer resource={stats} bulkyLoading>
-                            {groupStats => (
-                              <ResourceRenderer resource={assignments} returnAsArray bulkyLoading>
-                                {assignments => (
-                                  <ResourceRenderer resource={shadowAssignments} returnAsArray bulkyLoading>
-                                    {shadowAssignments => (
-                                      <ResourceRenderer
-                                        resource={runtimeEnvironments.toArray()}
-                                        returnAsArray
-                                        bulkyLoading>
-                                        {runtimes => (
-                                          <ResultsTable
-                                            users={students}
-                                            loggedUser={loggedUser}
-                                            isSuperadmin={isSuperadminRole(effectiveRole)}
-                                            assignments={assignments}
-                                            shadowAssignments={shadowAssignments}
-                                            stats={groupStats}
-                                            group={data}
-                                            runtimeEnvironments={runtimes}
-                                            userSolutionsSelector={userSolutionsSelector}
-                                            userSolutionsStatusSelector={userSolutionsStatusSelector}
-                                            fetchGroupStatsIfNeeded={fetchGroupStatsIfNeeded}
-                                            fetchUsersSolutions={fetchUsersSolutions}
-                                            setShadowPoints={setShadowPoints}
-                                            removeShadowPoints={removeShadowPoints}
-                                            renderActions={id =>
-                                              data.archived ? null : (
-                                                <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
-                                              )
-                                            }
-                                          />
-                                        )}
-                                      </ResourceRenderer>
-                                    )}
-                                  </ResourceRenderer>
-                                )}
-                              </ResourceRenderer>
-                            )}
-                          </ResourceRenderer>
-                        </Box>
-                      </Col>
-                    </Row>
-                  )}
-
-                  {
-                    // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
-                    (isGroupSupervisor || isGroupAdmin) &&
-                      !data.organizational &&
-                      !data.archived &&
-                      isSupervisorRole(effectiveRole) &&
-                      !isStudentRole(effectiveRole) && (
-                        <Row>
-                          <Col sm={6}>
-                            <Box
-                              title={
-                                <FormattedMessage
-                                  id="app.group.spervisorsView.addStudent"
-                                  defaultMessage="Add Student"
-                                />
-                              }
-                              isOpen>
-                              <AddStudent instanceId={data.privateData.instanceId} groupId={data.id} />
-                            </Box>
-                          </Col>
-                        </Row>
-                      )
-                  }
-                </>
               )}
-            </ResourceRenderer>
-
-            {hasPermissions(data, 'viewExercises') && (
-              <Row>
-                <Col lg={12}>
-                  <Box
-                    title={
-                      <FormattedMessage id="app.group.spervisorsView.groupExercises" defaultMessage="Group Exercises" />
-                    }
-                    footer={
-                      hasPermissions(data, 'createExercise') && !data.archived ? (
-                        <div className="text-center">
-                          <Button variant="success" onClick={this.createGroupExercise}>
-                            <AddIcon gapRight />
-                            <FormattedMessage id="app.group.createExercise" defaultMessage="Create Exercise in Group" />
-                          </Button>
-                        </div>
-                      ) : undefined
-                    }
-                    isOpen
-                    unlimitedHeight>
-                    <ExercisesListContainer
-                      id={`exercises-group-${data.id}`}
-                      rootGroup={data.id}
-                      showAssignButton={
-                        !data.organizational && !data.archived && hasPermissions(data, 'createShadowAssignment')
-                        // yes, shadow assignment permission does not actually cut it, but its close
-                      }
-                    />
-                  </Box>
-                </Col>
-              </Row>
-            )}
-          </div>
-        )}
+            </div>
+          );
+        }}
       </Page>
     );
   }

@@ -4,21 +4,18 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
-import { Link } from 'react-router-dom';
 
 import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
-import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
+import { ShadowAssignmentNavigation } from '../../components/layout/Navigation';
 import ShadowAssignmentPointsContainer from '../../containers/ShadowAssignmentPointsContainer';
 import ShadowAssignmentDetail from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetail';
 import ShadowAssignmentPointsDetail from '../../components/Assignments/ShadowAssignmentPointsDetail';
-import { EditIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 
-import withLinks from '../../helpers/withLinks';
 import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions, EMPTY_OBJ } from '../../helpers/common';
 
@@ -41,7 +38,6 @@ class ShadowAssignment extends Component {
     const {
       shadowAssignment,
       loggedUserId,
-      links: { SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
       intl: { locale },
     } = this.props;
 
@@ -66,23 +62,11 @@ class ShadowAssignment extends Component {
         ]}>
         {shadowAssignment => (
           <div>
-            <Row>
-              <Col xs={12}>
-                {hasPermissions(shadowAssignment, 'update') && (
-                  <p>
-                    <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id)}>
-                      <Button variant="warning">
-                        <EditIcon gapRight />
-                        <FormattedMessage
-                          id="app.shadowAssignment.editSettings"
-                          defaultMessage="Edit Shadow Assignment Settings"
-                        />
-                      </Button>
-                    </Link>
-                  </p>
-                )}
-              </Col>
-            </Row>
+            <ShadowAssignmentNavigation
+              shadowId={shadowAssignment.id}
+              groupId={shadowAssignment.groupId}
+              canEdit={hasPermissions(shadowAssignment, 'update')}
+            />
 
             <Row>
               <Col lg={6}>
@@ -124,34 +108,31 @@ ShadowAssignment.propTypes = {
   loggedUserId: PropTypes.string,
   group: PropTypes.func,
   loadAsync: PropTypes.func.isRequired,
-  links: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { shadowId },
-        },
-      }
-    ) => {
-      return {
-        shadowAssignment: getShadowAssignment(state)(shadowId),
-        loggedUserId: loggedInUserIdSelector(state),
-      };
-    },
-    (
-      dispatch,
-      {
-        match: {
-          params: { shadowId },
-        },
-      }
-    ) => ({
-      loadAsync: () => ShadowAssignment.loadAsync({ shadowId }, dispatch),
-    })
-  )(injectIntl(ShadowAssignment))
-);
+export default connect(
+  (
+    state,
+    {
+      match: {
+        params: { shadowId },
+      },
+    }
+  ) => {
+    return {
+      shadowAssignment: getShadowAssignment(state)(shadowId),
+      loggedUserId: loggedInUserIdSelector(state),
+    };
+  },
+  (
+    dispatch,
+    {
+      match: {
+        params: { shadowId },
+      },
+    }
+  ) => ({
+    loadAsync: () => ShadowAssignment.loadAsync({ shadowId }, dispatch),
+  })
+)(injectIntl(ShadowAssignment));

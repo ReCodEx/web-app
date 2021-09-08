@@ -63,6 +63,7 @@ export const PointsInterpolationIcon = props => (
   <Icon icon="long-arrow-alt-right" className="text-muted" transform={{ rotate: 33 }} {...props} />
 );
 export const RedoIcon = props => <Icon {...props} icon="redo-alt" />;
+export const ReferenceSolutionIcon = props => <Icon {...props} icon="book" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
@@ -73,6 +74,7 @@ export const SendIcon = props => <Icon {...props} icon={['far', 'paper-plane']} 
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
 export const ShadowAssignmentIcon = props => <Icon {...props} icon="user-secret" />;
 export const SignInIcon = props => <Icon {...props} icon="sign-in-alt" />;
+export const SolutionResultsIcon = props => <Icon {...props} icon="envelope-open-text" />;
 export const SortedIcon = ({ active = true, descending = false, ...props }) => (
   <Icon
     icon={!active || !descending ? 'sort-alpha-down' : 'sort-alpha-up'}
@@ -93,7 +95,7 @@ export const SupervisorIcon = props => <Icon {...props} icon="user-graduate" />;
 export const SupervisorStudentIcon = props => <Icon {...props} icon="chalkboard-teacher" />;
 export const SwapIcon = props => <Icon {...props} icon="sync" />;
 export const TagIcon = props => <Icon {...props} icon="tag" />;
-export const TestsIcon = props => <Icon {...props} icon="tasks" />;
+export const TestsIcon = props => <Icon {...props} icon="cogs" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 
 const messageIconTypes = {

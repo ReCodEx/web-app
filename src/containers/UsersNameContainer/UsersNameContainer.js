@@ -30,6 +30,7 @@ class UsersNameContainer extends Component {
       isSimple = false,
       showEmail = null,
       showExternalIdentifiers = false,
+      showRoleIcon = false,
     } = this.props;
     const size = large ? 45 : 20;
     return (
@@ -52,6 +53,7 @@ class UsersNameContainer extends Component {
               currentUserId={currentUser.id}
               showEmail={showEmail}
               showExternalIdentifiers={showExternalIdentifiers}
+              showRoleIcon={showRoleIcon}
             />
           )
         }
@@ -70,6 +72,7 @@ UsersNameContainer.propTypes = {
   isSimple: PropTypes.bool,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
+  showRoleIcon: PropTypes.bool,
   loadUserIfNeeded: PropTypes.func.isRequired,
 };
 

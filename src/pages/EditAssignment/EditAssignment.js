@@ -5,17 +5,16 @@ import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
-import { Link } from 'react-router-dom';
 
-import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
+import { AssignmentNavigation } from '../../components/layout/Navigation';
 import EditAssignmentForm, {
   prepareInitialValues as prepareEditFormInitialValues,
 } from '../../components/forms/EditAssignmentForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import Icon, { ResultsIcon } from '../../components/icons';
+import Icon from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
@@ -27,6 +26,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
+import { hasPermissions } from '../../helpers/common';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -71,12 +71,7 @@ class EditAssignment extends Component {
 
   render() {
     const {
-      links: {
-        ASSIGNMENT_DETAIL_URI_FACTORY,
-        GROUP_DETAIL_URI_FACTORY,
-        ASSIGNMENT_STATS_URI_FACTORY,
-        EXERCISE_URI_FACTORY,
-      },
+      links: { ASSIGNMENT_DETAIL_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, EXERCISE_URI_FACTORY },
       match: {
         params: { assignmentId },
       },
@@ -126,29 +121,30 @@ class EditAssignment extends Component {
         {assignment =>
           assignment && (
             <>
-              <Row>
-                <Col xs={12}>
-                  {assignment.permissionHints.viewDetail && (
-                    <p>
-                      <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
-                        <Button variant="primary">
-                          <ResultsIcon gapRight />
-                          <FormattedMessage id="app.assignment.viewResults" defaultMessage="Student Results" />
-                        </Button>
-                      </Link>
-                      {assignment.permissionHints.resubmitSolutions && (
-                        <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
-                      )}
-                    </p>
-                  )}
-                </Col>
-              </Row>
+              <AssignmentNavigation
+                assignmentId={assignment.id}
+                groupId={assignment.groupId}
+                exerciseId={assignment.exerciseId}
+                canEdit={hasPermissions(assignment, 'update')}
+                canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
+                canViewExercise={true}
+              />
 
-              {assignment.exerciseId && assignment.permissionHints.update && (
+              {hasPermissions(assignment, 'resubmitSolutions') && (
+                <Row>
+                  <Col xs={12}>
+                    <div className="mb-3">
+                      <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
+                    </div>
+                  </Col>
+                </Row>
+              )}
+
+              {assignment.exerciseId && hasPermissions(assignment, 'update') && (
                 <AssignmentSync syncInfo={assignment.exerciseSynchronizationInfo} exerciseSync={exerciseSync} />
               )}
 
-              {!assignment.exerciseId && assignment.permissionHints.update && (
+              {!assignment.exerciseId && hasPermissions(assignment, 'update') && (
                 <Callout variant="warning">
                   <h3 className="no-margin ">
                     <Icon icon="ghost" gapRight />

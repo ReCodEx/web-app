@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import ExercisesName, { LoadingExercisesName } from '../../components/Exercises/ExercisesName';
+import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
+import { LoadingIcon, ExercisePrefixIcons } from '../../components/icons';
+import withLinks from '../../helpers/withLinks';
 
 class ExercisesNameContainer extends Component {
   componentDidMount() {
@@ -28,11 +31,37 @@ class ExercisesNameContainer extends Component {
     const {
       exercise,
       noLink,
-      intl: { locale },
+      links: { EXERCISE_URI_FACTORY },
     } = this.props;
     return (
-      <ResourceRenderer resource={exercise} loading={<LoadingExercisesName />}>
-        {exercise => <ExercisesName {...exercise} noLink={noLink} locale={locale} />}
+      <ResourceRenderer
+        resource={exercise}
+        loading={
+          <>
+            <LoadingIcon gapRight />
+            <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
+          </>
+        }>
+        {({ id, name, localizedTexts, isPublic, isLocked, isBroken, hasReferenceSolutions }) => (
+          <>
+            <ExercisePrefixIcons
+              id={id}
+              isPublic={isPublic}
+              isLocked={isLocked}
+              isBroken={isBroken}
+              hasReferenceSolutions={hasReferenceSolutions}
+            />
+            {noLink ? (
+              <span>
+                <LocalizedExerciseName entity={{ name, localizedTexts }} />
+              </span>
+            ) : (
+              <Link to={EXERCISE_URI_FACTORY(id)}>
+                <LocalizedExerciseName entity={{ name, localizedTexts }} />
+              </Link>
+            )}
+          </>
+        )}
       </ResourceRenderer>
     );
   }
@@ -40,12 +69,12 @@ class ExercisesNameContainer extends Component {
 
 ExercisesNameContainer.propTypes = {
   exerciseId: PropTypes.string.isRequired,
-  exercise: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
+  exercise: ImmutablePropTypes.map,
+  links: PropTypes.object.isRequired,
 };
 
-export default injectIntl(
+export default withLinks(
   connect(
     (state, { exerciseId }) => ({
       exercise: exerciseSelector(exerciseId)(state),

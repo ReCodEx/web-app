@@ -31,8 +31,10 @@ import {
 } from '../../redux/selectors/usersGroups';
 
 import Page from '../../components/layout/Page';
+import { GroupNavigation } from '../../components/layout/Navigation';
 import GroupInfoTable, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
 import SupervisorsList from '../../components/Users/SupervisorsList';
+import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
@@ -40,7 +42,6 @@ import Callout from '../../components/widgets/Callout';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
-import GroupTopButtons from '../../components/Groups/GroupTopButtons/GroupTopButtons';
 import { BanIcon } from '../../components/icons';
 import { hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
@@ -147,11 +148,18 @@ class GroupInfo extends Component {
         failed={<FailedGroupDetail />}>
         {data => (
           <div>
-            <GroupTopButtons
-              group={data}
-              userId={userId}
-              canLeaveJoin={!isAdmin && !isSupervisor && (data.public || isStudent)}
+            <GroupNavigation
+              groupId={data.id}
+              canEdit={hasPermissions(data, 'update')}
+              canViewDetail={hasPermissions(data, 'viewDetail')}
             />
+
+            {!isAdmin &&
+              !isSupervisor &&
+              (data.public || (isStudent && !data.privateData.detaining)) &&
+              !data.organizational && (
+                <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} size={null} redirectAfterLeave />
+              )}
 
             <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />
 

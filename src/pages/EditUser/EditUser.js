@@ -16,10 +16,11 @@ import {
 } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
+import { UserNavigation } from '../../components/layout/Navigation';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import { LocalIcon, TransferIcon, BanIcon, RefreshIcon } from '../../components/icons';
-import { UserRoleIcon } from '../../components/helpers/usersRoles';
+import { UserRoleIcon, isStudentRole } from '../../components/helpers/usersRoles';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import ResendVerificationEmail from '../../containers/ResendVerificationEmailContainer';
 
@@ -104,8 +105,16 @@ class EditUser extends Component {
           },
         ]}>
         {data => (
-          <div>
+          <>
             {data && (
+              <UserNavigation
+                userId={data.id}
+                canViewDetail={isStudentRole(data.privateData.role)}
+                canEdit={isSuperAdmin || data.id === loggedUserId}
+              />
+            )}
+
+            {data && (!data.privateData.isLocal || (isSuperAdmin && data.id !== loggedUserId)) && (
               <div className="mb-3">
                 <TheButtonGroup>
                   {!data.privateData.isLocal && (
@@ -219,7 +228,7 @@ class EditUser extends Component {
                 </Col>
               </Row>
             )}
-          </div>
+          </>
         )}
       </Page>
     );
