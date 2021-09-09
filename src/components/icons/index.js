@@ -13,6 +13,7 @@ export const AbortIcon = props => <Icon {...props} icon="car-crash" />;
 export const AddIcon = props => <Icon {...props} icon="plus-circle" />;
 export const AdminIcon = props => <Icon {...props} icon="crown" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
+export const ArchiveIcon = props => <Icon {...props} icon="archive" />;
 export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
   <Icon {...props} icon={archived ? 'dolly' : 'archive'} />
 );
@@ -28,10 +29,16 @@ export const CodeFileIcon = props => <Icon {...props} icon={['far', 'file-code']
 export const CodeIcon = props => <Icon {...props} icon="code" />;
 export const CopyIcon = props => <Icon {...props} icon={['far', 'clipboard']} />;
 export const ChatIcon = props => <Icon {...props} icon={['far', 'comments']} />;
+export const DashboardIcon = props => <Icon {...props} icon="tachometer-alt" />;
 export const DeadlineIcon = props => <Icon {...props} icon="hourglass-half" />;
 export const DeleteIcon = props => <Icon {...props} icon="trash" />;
 export const DownloadIcon = props => <Icon {...props} icon="cloud-download-alt" />;
 export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
+export const EditAssignmentIcon = EditIcon;
+export const EditExerciseIcon = EditIcon;
+export const EditGroupIcon = props => <Icon {...props} icon="users-cog" />;
+export const EditShadowAssignmentIcon = EditIcon;
+export const EditUserIcon = props => <Icon {...props} icon="user-edit" />;
 export const EmpoweredSupervisorIcon = props => <Icon {...props} icon="user-ninja" />;
 export const ErrorIcon = props => <Icon {...props} icon="exclamation-circle" />;
 export const EvaluationFailedIcon = props => <Icon {...props} icon="bomb" />;
@@ -43,10 +50,13 @@ export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
     <Icon icon={['far', 'plus-square']} gapRight {...props} />
   );
 export const FailureIcon = props => <Icon className="text-danger" {...props} icon="times" />;
+export const FaqIcon = props => <Icon {...props} icon={['far', 'question-circle']} />;
 export const GroupIcon = ({ organizational = false, archived = false, ...props }) => (
   <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'} />
 );
+export const HomeIcon = props => <Icon {...props} icon="home" />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
+export const InstanceIcon = props => <Icon {...props} icon="university" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
 export const LinkIcon = props => <Icon {...props} icon="share-square" />;
 export const LoadingIcon = props => <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
@@ -70,6 +80,7 @@ export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
 export const ReviewedIcon = props => <Icon {...props} icon="stamp" />;
 export const SaveIcon = props => <Icon {...props} icon={['far', 'save']} />;
 export const SearchIcon = props => <Icon {...props} icon="search" />;
+export const ServerIcon = props => <Icon {...props} icon="server" />;
 export const SendIcon = props => <Icon {...props} icon={['far', 'paper-plane']} />;
 export const SettingsIcon = props => <Icon {...props} icon="cog" />;
 export const ShadowAssignmentIcon = props => <Icon {...props} icon="user-secret" />;

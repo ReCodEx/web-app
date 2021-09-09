@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
@@ -39,7 +39,7 @@ import { AssignmentNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import AssignmentDetails from '../../components/Assignments/Assignment/AssignmentDetails';
-import Icon from '../../components/icons';
+import Icon, { AssignmentIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
@@ -47,7 +47,6 @@ import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
-import { getLocalizedName } from '../../helpers/localizedData';
 import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 import { hasPermissions } from '../../helpers/common';
@@ -91,14 +90,13 @@ class Assignment extends Component {
       exerciseSync,
       solutions,
       fetchManyStatus,
-      intl: { locale },
     } = this.props;
 
     return (
       <Page
         resource={assignment}
-        title={assignment => getLocalizedName(assignment, locale)}
-        description={<FormattedMessage id="app.assignment.title" defaultMessage="Exercise Assignment" />}>
+        icon={<AssignmentIcon />}
+        title={<FormattedMessage id="app.assignment.title" defaultMessage="Assignment Detail" />}>
         {assignment => (
           <div>
             <AssignmentNavigation
@@ -252,7 +250,6 @@ Assignment.propTypes = {
   exerciseSync: PropTypes.func.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
   fetchManyStatus: PropTypes.string,
-  intl: PropTypes.object.isRequired,
 };
 
 export default connect(
@@ -292,4 +289,4 @@ export default connect(
     loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
     exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
   })
-)(injectIntl(Assignment));
+)(Assignment);

@@ -149,9 +149,9 @@ class Users extends Component {
 
     return (
       <Page
-        title={<FormattedMessage id="app.users.title" defaultMessage="User list" />}
-        resource={user}
-        description={<FormattedMessage id="app.users.description" defaultMessage="Browse all ReCodEx users." />}>
+        icon="user-friends"
+        title={<FormattedMessage id="app.users.title" defaultMessage="List of All Users" />}
+        resource={user}>
         {user => (
           <div>
             {(!isSupervisorRole(effectiveRole) || isStudentRole(effectiveRole)) && (

@@ -36,9 +36,8 @@ import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/s
 import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 
 import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
-import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
-import { WarningIcon } from '../../components/icons';
+import { SolutionResultsIcon, WarningIcon } from '../../components/icons';
 
 const assignmentHasRuntime = defaultMemoize(
   (assignment, runtimeId) =>
@@ -90,8 +89,8 @@ class Solution extends Component {
     return (
       <Page
         resource={assignment}
-        title={assignment => getLocalizedName(assignment, locale)}
-        description={<FormattedMessage id="app.submission.evaluation.title" defaultMessage="Solution evaluation" />}>
+        icon={<SolutionResultsIcon />}
+        title={<FormattedMessage id="app.submission.evaluation.title" defaultMessage="Solution Detail" />}>
         <ResourceRenderer failed={<FailedSubmissionDetail />} resource={[solution, assignment]}>
           {(solution, assignment) => (
             <div>

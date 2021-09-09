@@ -72,8 +72,8 @@ class Registration extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id="app.registration.title" defaultMessage="Create a new ReCodEx account" />}
-        description={<FormattedMessage id="app.registration.description" defaultMessage="Start using ReCodEx today" />}>
+        icon="user-plus"
+        title={<FormattedMessage id="app.registration.title" defaultMessage="Create a New ReCodEx Account" />}>
         <ResourceRenderer resource={instances.toArray()} returnAsArray>
           {instances => (
             <Row>

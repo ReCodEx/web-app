@@ -8,11 +8,11 @@ import { Link } from 'react-router-dom';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
+import { UserNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { LoadingInfoBox } from '../../components/widgets/InfoBox';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import UsersNameContainer from '../../containers/UsersNameContainer';
 import StudentsListContainer from '../../containers/StudentsListContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import UsersStats from '../../components/Users/UsersStats';
@@ -34,7 +34,7 @@ import {
 } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
+import { DashboardIcon, InfoIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { EMPTY_OBJ } from '../../helpers/common';
@@ -99,15 +99,11 @@ class Dashboard extends Component {
     return (
       <Page
         resource={user}
-        title={<FormattedMessage id="app.dashboard.title" defaultMessage="Dashboard" />}
-        description={
-          <FormattedMessage id="app.user.description" defaultMessage="Complete progress of the user in all groups." />
-        }>
+        icon={<DashboardIcon />}
+        title={<FormattedMessage id="app.dashboard.title" defaultMessage="Dashboard — a Complete Overview" />}>
         {user => (
           <div>
-            <p>
-              <UsersNameContainer userId={user.id} large noLink />
-            </p>
+            <UserNavigation userId={user.id} canEdit isLoggedInUser />
 
             {student && studentOf.size === 0 && (
               <Row>

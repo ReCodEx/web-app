@@ -20,14 +20,7 @@ import withLinks from '../../helpers/withLinks';
  * This component enables the user to request reseting password for his/her email address.
  */
 const ResetPassword = ({ resetPassword, isReseting, hasFailed, hasSucceeded, links: { HOME_URI } }) => (
-  <PageContent
-    title={<FormattedMessage id="app.resetPassword.title" defaultMessage="Reset password" />}
-    description={
-      <FormattedMessage
-        id="app.resetPassword.description"
-        defaultMessage="Change your password if you have forgotten your old one."
-      />
-    }>
+  <PageContent title={<FormattedMessage id="app.resetPassword.title" defaultMessage="Reset Password" />}>
     <Row>
       <Col md={{ span: 6, offset: 3 }} sm={{ span: 8, offset: 2 }}>
         <ResetPasswordForm

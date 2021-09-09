@@ -14,7 +14,7 @@ import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
 import { verifyEmail } from '../../redux/modules/emailVerification';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { verificationStatusSelector } from '../../redux/selectors/emailVerification';
-import { LoadingIcon, SuccessIcon, FailureIcon } from '../../components/icons';
+import { LoadingIcon, SuccessIcon, FailureIcon, MailIcon } from '../../components/icons';
 
 /**
  * Component for changing old password for a new one for a user with a specific
@@ -54,10 +54,8 @@ class EmailVerification extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id="app.emailVerification.title" defaultMessage="Email verification" />}
-        description={
-          <FormattedMessage id="app.emailVerification.description" defaultMessage="Your email will be verified." />
-        }>
+        icon={<MailIcon />}
+        title={<FormattedMessage id="app.emailVerification.title" defaultMessage="Email Verification" />}>
         <Row>
           <Col sm={{ span: 8, offset: 2 }} md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }}>
             {canUseDOM && !token && !decodedToken && (

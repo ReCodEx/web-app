@@ -40,7 +40,7 @@ const EditShadowAssignmentForm = ({
             }}
           />
         ) : (
-          <FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Edit Shadow Assignment" />
+          <FormattedMessage id="app.editShadowAssignment.titleShort" defaultMessage="Edit Shadow Assignment" />
         )
       }
       successful={submitSucceeded}

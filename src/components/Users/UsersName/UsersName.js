@@ -9,7 +9,6 @@ import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer
 import { UserRoleIcon } from '../../helpers/usersRoles';
 import NotVerified from './NotVerified';
 import Icon, { MailIcon, BanIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
 
 import styles from './usersName.less';
 
@@ -26,13 +25,12 @@ const UsersName = ({
   size = null,
   large = false,
   isVerified,
-  noLink = false,
+  link = null,
   noAvatar = false,
   privateData = null,
   showEmail = null,
   showExternalIdentifiers = false,
   showRoleIcon = false,
-  links: { USER_URI_FACTORY },
   currentUserId,
 }) => {
   if (size === null) {
@@ -63,7 +61,7 @@ const UsersName = ({
           </OverlayTrigger>
         )}
 
-        {noLink ? <span>{fullName}</span> : <Link to={USER_URI_FACTORY(id)}>{fullName}</Link>}
+        {link ? <Link to={link}>{fullName}</Link> : <span>{fullName}</span>}
 
         {showRoleIcon && (
           <UserRoleIcon
@@ -135,13 +133,12 @@ UsersName.propTypes = {
   privateData: PropTypes.object,
   size: PropTypes.number,
   large: PropTypes.bool,
-  noLink: PropTypes.bool,
+  link: PropTypes.string,
   noAvatar: PropTypes.bool,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
   showRoleIcon: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
-  links: PropTypes.object,
 };
 
-export default withLinks(UsersName);
+export default UsersName;

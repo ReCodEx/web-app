@@ -19,8 +19,8 @@ import Page from '../../components/layout/Page';
 import { UserNavigation } from '../../components/layout/Navigation';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
-import { LocalIcon, TransferIcon, BanIcon, RefreshIcon } from '../../components/icons';
-import { UserRoleIcon, isStudentRole } from '../../components/helpers/usersRoles';
+import { LocalIcon, TransferIcon, EditUserIcon, RefreshIcon } from '../../components/icons';
+import { isStudentRole } from '../../components/helpers/usersRoles';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import ResendVerificationEmail from '../../containers/ResendVerificationEmailContainer';
 
@@ -30,7 +30,6 @@ import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
 import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
 import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { safeGet } from '../../helpers/common';
 
 const prepareUserSettingsInitialValues = defaultMemoize(({ defaultPage, ...settings }) => ({
   defaultPage: defaultPage || '',
@@ -78,18 +77,8 @@ class EditUser extends Component {
     return (
       <Page
         resource={user}
-        title={user => (
-          <span>
-            {!safeGet(user, ['privateData', 'isAllowed']) && <BanIcon gapRight />}
-
-            {safeGet(user, ['privateData', 'role']) && (
-              <UserRoleIcon role={user.privateData.role} showTooltip tooltipId={'user-role'} gapRight />
-            )}
-
-            {user.fullName}
-          </span>
-        )}
-        description={<FormattedMessage id="app.editUser.description" defaultMessage="Edit user's profile" />}>
+        icon={<EditUserIcon />}
+        title={<FormattedMessage id="app.editUser.title" defaultMessage="Edit User's Profile" />}>
         {data => (
           <>
             {data && (
@@ -97,6 +86,7 @@ class EditUser extends Component {
                 userId={data.id}
                 canViewDetail={isStudentRole(data.privateData.role)}
                 canEdit={isSuperAdmin || data.id === loggedUserId}
+                isLoggedInUser={data.id === loggedUserId}
               />
             )}
 

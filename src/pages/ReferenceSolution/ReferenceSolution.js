@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defaultMemoize } from 'reselect';
 
@@ -13,6 +13,7 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
+import { ReferenceSolutionIcon } from '../../components/icons';
 
 import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
 import { fetchReferenceSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
@@ -35,13 +36,6 @@ import {
 
 import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
 import { hasPermissions } from '../../helpers/common';
-
-const messages = defineMessages({
-  title: {
-    id: 'app.exercise.referenceSolutionTitle',
-    defaultMessage: 'Reference Solution Overview',
-  },
-});
 
 const exerciseHasRuntime = defaultMemoize(
   (exercise, runtimeId) => exercise.runtimeEnvironments.find(({ id }) => id === runtimeId) !== undefined
@@ -76,14 +70,14 @@ class ReferenceSolution extends Component {
       deleteEvaluation,
       scoreConfigSelector,
       fetchScoreConfigIfNeeded,
-      intl: { formatMessage, locale },
+      intl: { locale },
     } = this.props;
 
     return (
       <Page
-        title={formatMessage(messages.title)}
-        resource={referenceSolution}
-        description={<FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />}>
+        icon={<ReferenceSolutionIcon />}
+        title={<FormattedMessage id="app.referenceSolution.title" defaultMessage="Reference Solution Detail" />}
+        resource={referenceSolution}>
         {referenceSolution => (
           <ResourceRenderer resource={exercise}>
             {exercise => (

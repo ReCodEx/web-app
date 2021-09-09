@@ -10,6 +10,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import EditPipelineForm from '../../components/forms/EditPipelineForm';
+import { EditIcon } from '../../components/icons';
 import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 
@@ -46,8 +47,8 @@ class EditPipeline extends Component {
     return (
       <Page
         resource={pipeline}
-        title={pipeline => pipeline.name}
-        description={<FormattedMessage id="app.editPipeline.description" defaultMessage="Change pipeline settings" />}>
+        icon={<EditIcon />}
+        title={<FormattedMessage id="app.editPipeline.title" defaultMessage="Change Pipeline Settings and Contents" />}>
         {({ pipeline: { boxes, variables }, ...data }) => (
           <div>
             <Row>

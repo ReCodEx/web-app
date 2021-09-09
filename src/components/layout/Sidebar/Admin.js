@@ -20,7 +20,7 @@ const Admin = ({
       link={ADMIN_INSTANCES_URI}
     />
     <MenuItem
-      icon="users"
+      icon="user-friends"
       title={<FormattedMessage id="app.sidebar.menu.admin.users" defaultMessage="Users" />}
       currentPath={currentUrl}
       link={USERS_URI}

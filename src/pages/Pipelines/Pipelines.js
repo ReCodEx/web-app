@@ -14,7 +14,7 @@ import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
 import { canEditPipeline } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { AddIcon, EditIcon } from '../../components/icons';
+import { AddIcon, EditIcon, PipelineIcon } from '../../components/icons';
 import { create as createPipeline } from '../../redux/modules/pipelines';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
 
@@ -69,10 +69,8 @@ class Pipelines extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id="app.pipelines.title" defaultMessage="Pipeline list" />}
-        description={
-          <FormattedMessage id="app.pipelines.description" defaultMessage="List and modify available pipelines." />
-        }>
+        icon={<PipelineIcon />}
+        title={<FormattedMessage id="app.pipelines.title" defaultMessage="List of All Pipelines" />}>
         <Box
           title={<FormattedMessage id="app.pipelines.listTitle" defaultMessage="Pipelines" />}
           footer={

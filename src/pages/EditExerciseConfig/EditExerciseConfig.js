@@ -20,7 +20,7 @@ import EditExercisePipelinesForm from '../../components/forms/EditExercisePipeli
 // import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
-import { InfoIcon } from '../../components/icons';
+import { InfoIcon, TestsIcon } from '../../components/icons';
 import Callout from '../../components/widgets/Callout';
 
 import { fetchExercise, fetchExerciseIfNeeded, editExercise, invalidateExercise } from '../../redux/modules/exercises';
@@ -51,7 +51,6 @@ import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
 */
 
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/localizedData';
 import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
 import {
   fetchExerciseEnvironmentConfig,
@@ -285,7 +284,6 @@ class EditExerciseConfig extends Component {
       pipelinesVariables,
       supplementaryFiles,
       supplementaryFilesStatus,
-      intl: { locale },
       // links: {
       // PIPELINE_EDIT_URI_FACTORY
       // },
@@ -294,12 +292,9 @@ class EditExerciseConfig extends Component {
     return (
       <Page
         resource={[exercise, exerciseTests]}
-        title={exercise => getLocalizedName(exercise, locale)}
-        description={
-          <FormattedMessage
-            id="app.editExerciseConfig.description"
-            defaultMessage="Change exercise tests configuration"
-          />
+        icon={<TestsIcon />}
+        title={
+          <FormattedMessage id="app.editExerciseConfig.title" defaultMessage="Change Exercise Tests Configuration" />
         }>
         {(exercise, tests) => (
           <div>

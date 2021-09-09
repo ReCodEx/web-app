@@ -15,6 +15,7 @@ import ShadowAssignmentPointsContainer from '../../containers/ShadowAssignmentPo
 import ShadowAssignmentDetail from '../../components/Assignments/ShadowAssignment/ShadowAssignmentDetail';
 import ShadowAssignmentPointsDetail from '../../components/Assignments/ShadowAssignmentPointsDetail';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
+import { ShadowAssignmentIcon } from '../../components/icons';
 
 import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions, EMPTY_OBJ } from '../../helpers/common';
@@ -44,8 +45,9 @@ class ShadowAssignment extends Component {
     return (
       <Page
         resource={shadowAssignment}
-        title={shadowAssignment => getLocalizedName(shadowAssignment, locale)}
-        description={<FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment" />}>
+        icon={<ShadowAssignmentIcon />}
+        windowTitle={shadowAssignment => getLocalizedName(shadowAssignment, locale)}
+        title={<FormattedMessage id="app.shadowAssignment.title" defaultMessage="Shadow Assignment Detail" />}>
         {shadowAssignment => (
           <div>
             <ShadowAssignmentNavigation

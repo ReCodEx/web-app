@@ -15,7 +15,7 @@ import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
-import { ChatIcon, DownloadIcon, SearchIcon } from '../../components/icons';
+import { ChatIcon, DownloadIcon, SearchIcon, ResultsIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import UsersName from '../../components/Users/UsersName';
 import Points from '../../components/Assignments/SolutionsTable/Points';
@@ -51,7 +51,6 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchManyAssignmentSolutionsStatus } from '../../redux/selectors/solutions';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
-import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
@@ -283,10 +282,8 @@ class AssignmentStats extends Component {
     return (
       <Page
         resource={assignment}
-        title={assignment => getLocalizedName(assignment, locale)}
-        description={
-          <FormattedMessage id="app.assignmentStats.title" defaultMessage="All submissions of the assignment" />
-        }>
+        icon={<ResultsIcon />}
+        title={<FormattedMessage id="app.assignmentStats.title" defaultMessage="All Submissions of The Assignment" />}>
         {assignment => (
           <div>
             <AssignmentNavigation

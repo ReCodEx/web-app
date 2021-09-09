@@ -100,9 +100,7 @@ class Login extends Component {
     const external = EXTERNAL_AUTH_URL && EXTERNAL_AUTH_SERVICE_ID;
 
     return (
-      <PageContent
-        title={<FormattedMessage id="app.login.title" defaultMessage="Sign in" />}
-        description={<FormattedMessage id="app.login.description" defaultMessage="Please fill your credentials" />}>
+      <PageContent icon="sign-in-alt" title={<FormattedMessage id="app.login.title" defaultMessage="Sign In" />}>
         <>
           {redirect && (
             <Row>

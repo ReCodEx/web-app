@@ -202,13 +202,7 @@ class SisIntegration extends Component {
     return (
       <Page
         resource={loggedInUser}
-        title={<FormattedMessage id="app.sisIntegration.title" defaultMessage="UK SIS Integration" />}
-        description={
-          <FormattedMessage
-            id="app.sisIntegration.description"
-            defaultMessage="Integration with Charles University student information system"
-          />
-        }>
+        title={<FormattedMessage id="app.sisIntegration.title" defaultMessage="UK SIS Integration" />}>
         {user => {
           const externalId = getExternalIdForCAS(user);
 

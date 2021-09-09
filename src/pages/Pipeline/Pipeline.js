@@ -10,7 +10,7 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/TheButton';
 import InsetPanel from '../../components/widgets/InsetPanel';
-import { EditIcon } from '../../components/icons';
+import { EditIcon, PipelineIcon } from '../../components/icons';
 // import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
 
 import { fetchPipelineIfNeeded, forkPipeline } from '../../redux/modules/pipelines';
@@ -71,8 +71,9 @@ class Pipeline extends Component {
     return (
       <Page
         resource={pipeline}
-        title={pipeline => pipeline.name}
-        description={<FormattedMessage id="app.pipeline.description" defaultMessage="Pipeline overview" />}>
+        icon={<PipelineIcon />}
+        titleWindow={pipeline => pipeline.name}
+        title={<FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline Detail" />}>
         {pipeline => (
           <div>
             <div>

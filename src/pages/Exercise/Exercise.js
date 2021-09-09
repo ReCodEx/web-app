@@ -16,7 +16,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ReferenceSolutionsTable from '../../components/Exercises/ReferenceSolutionsTable';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
-import { SendIcon, DeleteIcon } from '../../components/icons';
+import { ExerciseIcon, SendIcon, DeleteIcon } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
@@ -46,7 +46,6 @@ import { instanceSelector } from '../../redux/selectors/instances';
 import { notArchivedGroupsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
 
 import withLinks from '../../helpers/withLinks';
-import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
 
 const messages = defineMessages({
@@ -116,9 +115,9 @@ class Exercise extends Component {
 
     return (
       <Page
-        title={exercise => getLocalizedName(exercise, locale)}
-        resource={exercise}
-        description={<FormattedMessage id="app.exercise.overview" defaultMessage="Exercise overview" />}>
+        icon={<ExerciseIcon />}
+        title={<FormattedMessage id="app.exercise.title" defaultMessage="Exercise Detail" />}
+        resource={exercise}>
         {exercise => (
           <div>
             <ExerciseNavigation

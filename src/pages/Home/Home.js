@@ -10,8 +10,9 @@ import UsersNameContainer from '../../containers/UsersNameContainer';
 import Icon, {
   AssignmentIcon,
   CodeIcon,
-  GroupIcon,
   ExerciseIcon,
+  GroupIcon,
+  HomeIcon,
   MailIcon,
   ShadowAssignmentIcon,
 } from '../../components/icons';
@@ -31,8 +32,9 @@ const BASIC_HTML = {
 const EXTERNAL_AUTH_HELPDESK_URL = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
 
 const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
-  <PageContent title={<FormattedMessage id="app.homepage.title" defaultMessage="ReCodEx — Code Examiner" />}>
+  <PageContent icon={<HomeIcon />} title={<FormattedMessage id="app.homepage.title" defaultMessage="Home Page" />}>
     <div>
+      <hr />
       <Row>
         <Col lg={12} xl={6}>
           <Image src={`${URL_PATH_PREFIX}/public/logo.png`} className="text-center m-5" />
