@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
@@ -15,6 +15,7 @@ import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTable
 import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
+import { EditExerciseIcon } from '../../components/icons';
 
 import { fetchExerciseIfNeeded, editExercise, fetchTags } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
@@ -22,11 +23,7 @@ import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
 import withLinks from '../../helpers/withLinks';
-import {
-  getLocalizedName,
-  getLocalizedTextsInitialValues,
-  transformLocalizedTextsFormData,
-} from '../../helpers/localizedData';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
 
 const localizedTextDefaults = {
@@ -91,14 +88,13 @@ class EditExercise extends Component {
       links: { EXERCISES_URI },
       history: { replace },
       exercise,
-      intl: { locale },
     } = this.props;
 
     return (
       <Page
         resource={exercise}
-        title={exercise => getLocalizedName(exercise, locale)}
-        description={<FormattedMessage id="app.editExercise.description" defaultMessage="Change exercise settings" />}>
+        icon={<EditExerciseIcon />}
+        title={<FormattedMessage id="app.editExercise.title" defaultMessage="Change Basic Exercise Settings" />}>
         {exercise =>
           exercise && (
             <div>
@@ -179,7 +175,6 @@ EditExercise.propTypes = {
     }).isRequired,
   }).isRequired,
   links: PropTypes.object.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default withLinks(
@@ -210,5 +205,5 @@ export default withLinks(
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
     })
-  )(injectIntl(EditExercise))
+  )(EditExercise)
 );

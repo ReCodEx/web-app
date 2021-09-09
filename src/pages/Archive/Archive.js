@@ -13,7 +13,7 @@ import withLinks from '../../helpers/withLinks';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
 import { getLocalizedName } from '../../helpers/localizedData';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
-import { GroupIcon, SuccessOrFailureIcon, AssignmentsIcon } from '../../components/icons';
+import { ArchiveIcon, GroupIcon, SuccessOrFailureIcon, AssignmentsIcon } from '../../components/icons';
 
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchInstancesIfNeeded } from '../../redux/modules/instances';
@@ -127,11 +127,16 @@ class Archive extends Component {
     return (
       <Page
         resource={instance}
-        title={<FormattedMessage id="app.archive.title" defaultMessage="Archive" />}
-        description={<FormattedMessage id="app.archive.description" defaultMessage="List of archived groups." />}>
+        icon={<ArchiveIcon />}
+        title={<FormattedMessage id="app.archive.title" defaultMessage="List of Old Archived Groups" />}>
         {data => (
           <Box
-            title={<FormattedMessage id="app.archive.archivedGroups" defaultMessage="All Groups Including Archived" />}
+            title={
+              <FormattedMessage
+                id="app.archive.archivedGroups"
+                defaultMessage="All Groups Including The Archived Ones"
+              />
+            }
             unlimitedHeight>
             <>
               <FilterArchiveGroupsForm

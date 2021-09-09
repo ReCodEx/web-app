@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm'
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Icon from '../../components/icons';
+import Icon, { LimitsIcon } from '../../components/icons';
 import Callout from '../../components/widgets/Callout';
 
 import {
@@ -39,7 +39,6 @@ import { limitsSelector } from '../../redux/selectors/limits';
 import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
-import { getLocalizedName } from '../../helpers/localizedData';
 import { fetchExerciseTestsIfNeeded } from '../../redux/modules/exerciseTests';
 import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
 
@@ -144,18 +143,14 @@ class EditExerciseLimits extends Component {
       cloneHorizontally,
       cloneVertically,
       cloneAll,
-      intl: { locale },
     } = this.props;
 
     return (
       <Page
         resource={[exercise, exerciseTests, limits]}
-        title={exercise => getLocalizedName(exercise, locale)}
-        description={
-          <FormattedMessage
-            id="app.editExerciseLimits.description"
-            defaultMessage="Change exercise tests execution limits"
-          />
+        icon={<LimitsIcon />}
+        title={
+          <FormattedMessage id="app.editExerciseLimits.title" defaultMessage="Change Exercise Tests Execution Limits" />
         }>
         {(exercise, tests, limits) => (
           <div>
@@ -322,7 +317,6 @@ EditExerciseLimits.propTypes = {
   cloneAll: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   invalidateExercise: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
@@ -390,4 +384,4 @@ export default connect(
     reloadExercise: () => dispatch(fetchExercise(exerciseId)),
     invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
   })
-)(injectIntl(withRouter(EditExerciseLimits)));
+)(withRouter(EditExerciseLimits));

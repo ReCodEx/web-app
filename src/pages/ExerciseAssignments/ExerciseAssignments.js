@@ -12,7 +12,7 @@ import { ExerciseNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import { LockIcon, CheckRequiredIcon, SaveIcon } from '../../components/icons';
+import { AssignmentsIcon, LockIcon, CheckRequiredIcon, SaveIcon } from '../../components/icons';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import EditAssignmentForm, {
@@ -29,7 +29,6 @@ import { groupDataAccessorSelector } from '../../redux/selectors/groups';
 import { loggedUserCanAssignToGroupsSelector } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector, getExerciseAssignments } from '../../redux/selectors/assignments';
 
-import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
 
 const messages = defineMessages({
@@ -117,16 +116,16 @@ class ExerciseAssignments extends Component {
       groupsAccessor,
       deadlines,
       visibility,
-      intl: { formatMessage, locale },
+      intl: { formatMessage },
     } = this.props;
 
     return (
       <Page
-        title={exercise => getLocalizedName(exercise, locale)}
-        resource={exercise}
-        description={
-          <FormattedMessage id="app.exerciseAssignments.description" defaultMessage="Exercise Assignments" />
-        }>
+        icon={<AssignmentsIcon />}
+        title={
+          <FormattedMessage id="app.exerciseAssignments.title" defaultMessage="Group Assignments of The Exercise" />
+        }
+        resource={exercise}>
         {exercise => (
           <div>
             <ExerciseNavigation
@@ -150,10 +149,7 @@ class ExerciseAssignments extends Component {
                 <Col lg={12}>
                   <Box
                     title={
-                      <FormattedMessage
-                        id="app.exerciseAssignments.description"
-                        defaultMessage="Exercise Assignments"
-                      />
+                      <FormattedMessage id="app.exerciseAssignments.titleShort" defaultMessage="Exercise Assignments" />
                     }
                     noPadding
                     unlimitedHeight>

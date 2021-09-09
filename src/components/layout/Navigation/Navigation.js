@@ -126,7 +126,6 @@ const Navigation = ({
             <UsersNameContainer
               userId={userId}
               large={onlyUser}
-              noLink
               showEmail={onlyUser ? 'full' : 'icon'}
               showExternalIdentifiers
               showRoleIcon={onlyUser}

@@ -17,7 +17,7 @@ import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonCont
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import { BanIcon, InfoIcon } from '../../components/icons';
+import { BanIcon, InfoIcon, EditGroupIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, editGroup, relocateGroup } from '../../redux/modules/groups';
 import {
@@ -28,11 +28,7 @@ import {
 } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import {
-  getLocalizedName,
-  getLocalizedTextsInitialValues,
-  transformLocalizedTextsFormData,
-} from '../../helpers/localizedData';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
@@ -84,8 +80,8 @@ class EditGroup extends Component {
     return (
       <Page
         resource={group}
-        title={group => getLocalizedName(group, locale)}
-        description={<FormattedMessage id="app.editGroup.description" defaultMessage="Change group settings" />}>
+        icon={<EditGroupIcon />}
+        title={<FormattedMessage id="app.editGroup.title" defaultMessage="Change Group Settings" />}>
         {group => (
           <div>
             <GroupNavigation

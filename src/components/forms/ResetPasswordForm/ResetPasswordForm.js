@@ -12,7 +12,7 @@ import { EmailField } from '../Fields';
 
 const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSucceeded = false, invalid }) => (
   <FormBox
-    title={<FormattedMessage id="app.resetPassword.title" defaultMessage="Reset password" />}
+    title={<FormattedMessage id="app.resetPassword.title" defaultMessage="Reset Password" />}
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">

@@ -9,7 +9,7 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages';
 import { fetchManyStatus, readySystemMessagesSelector } from '../../redux/selectors/systemMessages';
 import Box from '../../components/widgets/Box/Box';
-import { AddIcon, EditIcon } from '../../components/icons';
+import { AddIcon, EditIcon, LoadingIcon, WarningIcon } from '../../components/icons';
 import EditSystemMessageForm from '../../components/forms/EditSystemMessageForm/EditSystemMessageForm';
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import moment from 'moment';
@@ -73,40 +73,25 @@ class SystemMessages extends Component {
         fetchManyStatus={fetchStatus}
         loading={
           <PageContent
+            icon={<LoadingIcon />}
             title={<FormattedMessage id="app.systemMessages.loading" defaultMessage="Loading all system messages..." />}
-            description={
-              <FormattedMessage
-                id="app.systemMessages.loadingDescription"
-                defaultMessage="Please wait while we are getting the list of all system messages ready."
-              />
-            }
           />
         }
         failed={
           <PageContent
+            icon={<WarningIcon />}
             title={
               <FormattedMessage
                 id="app.systemMessages.failed"
                 defaultMessage="Cannot load the list of system messages"
               />
             }
-            description={
-              <FormattedMessage
-                id="app.systemMessages.failedDescription"
-                defaultMessage="We are sorry for the inconvenience, please try again later."
-              />
-            }
           />
         }>
         {() => (
           <PageContent
-            title={<FormattedMessage id="app.systemMessages.title" defaultMessage="System Messages" />}
-            description={
-              <FormattedMessage
-                id="app.systemMessages.description"
-                defaultMessage="Browse and manage all system messages"
-              />
-            }>
+            icon="envelope"
+            title={<FormattedMessage id="app.systemMessages.title" defaultMessage="System Messages" />}>
             <>
               <Box
                 title={<FormattedMessage id="app.systemMessages.listTitle" defaultMessage="System Messages" />}

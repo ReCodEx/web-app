@@ -7,7 +7,8 @@ import { LoadingIcon, WarningIcon } from '../../icons';
 
 const Page = ({
   title = '',
-  description = '',
+  windowTitle = null,
+  icon = null,
   resource,
   loadingTitle = (
     <span>
@@ -53,8 +54,9 @@ const Page = ({
     {(...resources) => (
       <PageContent
         {...props}
+        icon={typeof icon === 'function' ? icon(...resources) : icon}
         title={typeof title === 'function' ? title(...resources) : title}
-        description={typeof description === 'function' ? description(...resources) : description}>
+        windowTitle={typeof windowTitle === 'function' ? windowTitle(...resources) : windowTitle}>
         {typeof children === 'function' ? children(...resources) : children}
       </PageContent>
     )}
@@ -75,7 +77,8 @@ Page.propTypes = {
   failedTitle: stringOrFormattedMessage,
   failedDescription: stringOrFormattedMessage,
   title: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]),
-  description: PropTypes.oneOfType([PropTypes.func, stringOrFormattedMessage]),
+  windowTitle: PropTypes.oneOfType([PropTypes.func, PropTypes.string, PropTypes.element]),
+  icon: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.string]),
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
 };
 

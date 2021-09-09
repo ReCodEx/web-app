@@ -334,7 +334,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                       <Button variant="warning" size="xs">
                                                                         <EditIcon gapRight />
                                                                         <FormattedMessage
-                                                                          id="app.editGroup.title"
+                                                                          id="app.editGroup.titleShort"
                                                                           defaultMessage="Edit Group"
                                                                         />
                                                                       </Button>

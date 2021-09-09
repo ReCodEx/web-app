@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 
@@ -10,6 +9,7 @@ import EditInstanceForm from '../../components/forms/EditInstanceForm';
 
 import { fetchInstanceIfNeeded, editInstance } from '../../redux/modules/instances';
 import { instanceSelector } from '../../redux/selectors/instances';
+import { EditIcon } from '../../components/icons';
 
 class EditInstance extends Component {
   static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
@@ -32,10 +32,7 @@ class EditInstance extends Component {
     const { instance, editInstance } = this.props;
 
     return (
-      <Page
-        resource={instance}
-        title={instance => instance.name}
-        description={<FormattedMessage id="app.editInstance.description" defaultMessage="Change instance settings" />}>
+      <Page resource={instance} icon={<EditIcon />} title={instance => instance.name}>
         {instance => <EditInstanceForm initialValues={this.getInitialValues(instance)} onSubmit={editInstance} />}
       </Page>
     );

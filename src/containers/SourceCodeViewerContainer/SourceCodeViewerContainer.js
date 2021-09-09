@@ -132,7 +132,7 @@ class SourceCodeViewerContainer extends Component {
 
               {submittedBy && (
                 <span className="pt-1 px-4">
-                  <UsersNameContainer userId={submittedBy} showEmail="icon" noLink />
+                  <UsersNameContainer userId={submittedBy} showEmail="icon" />
                 </span>
               )}
             </Modal.Header>

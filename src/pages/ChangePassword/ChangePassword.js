@@ -93,7 +93,7 @@ class ChangePassword extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id="app.changePassword.title" defaultMessage="Change forgotten password" />}
+        title={<FormattedMessage id="app.changePassword.title" defaultMessage="Change Forgotten Password" />}
         description={
           <FormattedMessage
             id="app.changePassword.description"

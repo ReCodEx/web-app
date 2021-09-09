@@ -67,7 +67,7 @@ const Sidebar = ({
           />
           <span className="brand-text">
             {pendingFetchOperations && (
-              <span style={{ position: 'absolute', right: '1em' }}>
+              <span className={styles.mainLoadingIcon}>
                 <LoadingIcon gapRight />
               </span>
             )}
@@ -160,7 +160,7 @@ const Sidebar = ({
 
               <MenuItem
                 title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
-                icon="blind"
+                icon={['far', 'question-circle']}
                 link={FAQ_URL}
                 currentPath={currentUrl}
               />

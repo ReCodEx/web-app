@@ -40,7 +40,7 @@ class GroupTree extends Component {
             placement="bottom"
             overlay={
               <Tooltip id={`info-${groupId}`}>
-                <FormattedMessage id="app.editGroup.title" defaultMessage="Edit Group" />
+                <FormattedMessage id="app.editGroup.titleShort" defaultMessage="Edit Group" />
               </Tooltip>
             }>
             <Link to={GROUP_EDIT_URI_FACTORY(groupId)}>

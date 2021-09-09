@@ -12,6 +12,7 @@ import EditShadowAssignmentForm from '../../components/forms/EditShadowAssignmen
 import DeleteShadowAssignmentButtonContainer from '../../containers/DeleteShadowAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
+import { EditShadowAssignmentIcon } from '../../components/icons';
 
 import {
   fetchShadowAssignment,
@@ -98,12 +99,9 @@ class EditShadowAssignment extends Component {
     return (
       <Page
         resource={shadowAssignment}
-        title={<FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Edit Shadow Assignment" />}
-        description={
-          <FormattedMessage
-            id="app.editShadowAssignment.description"
-            defaultMessage="Change shadow assignment settings"
-          />
+        icon={<EditShadowAssignmentIcon />}
+        title={
+          <FormattedMessage id="app.editShadowAssignment.title" defaultMessage="Change Shadow Assignment Settings" />
         }>
         {shadowAssignment =>
           shadowAssignment && (

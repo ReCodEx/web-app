@@ -44,7 +44,7 @@ class UserPanel extends Component {
     return (
       <>
         <div className="user-panel mt-2 pb-2 mb-2">
-          <div className="text-center">
+          <div className="text-center text-light">
             {small ? (
               <AvatarContainer
                 avatarUrl={user.avatarUrl}

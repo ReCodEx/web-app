@@ -42,7 +42,7 @@ import Callout from '../../components/widgets/Callout';
 import GroupTree from '../../components/Groups/GroupTree/GroupTree';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
-import { BanIcon } from '../../components/icons';
+import { BanIcon, GroupIcon } from '../../components/icons';
 import { hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
@@ -111,10 +111,8 @@ class GroupInfo extends Component {
     return (
       <Page
         resource={group}
-        title={group => getLocalizedName(group, locale)}
-        description={
-          <FormattedMessage id="app.groupInfo.pageDescription" defaultMessage="Group details and metadata" />
-        }
+        icon={group => <GroupIcon organizational={group && group.organizational} archived={group && group.archived} />}
+        title={<FormattedMessage id="app.groupInfo.title" defaultMessage="Group Details and Metadata" />}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
         {data => (

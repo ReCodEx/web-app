@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import Markdown from '../../components/widgets/Markdown';
+import { FaqIcon } from '../../components/icons';
 
 const FAQ_MD_URI = 'https://raw.githubusercontent.com/wiki/ReCodEx/wiki/FAQ.md';
 
@@ -20,8 +21,9 @@ class FAQ extends Component {
   render() {
     return (
       <PageContent
-        title={<FormattedMessage id="app.faq.title" defaultMessage="FAQ" />}
-        description={<FormattedMessage id="app.faq.description" defaultMessage="ReCodEx FAQ" />}>
+        icon={<FaqIcon />}
+        title={<FormattedMessage id="app.faq.title" defaultMessage="Frequently Asked Questions" />}>
+        <hr />
         <Markdown source={this.state.faqText} />
       </PageContent>
     );

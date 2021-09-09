@@ -11,6 +11,7 @@ import FailuresList from '../../components/SubmissionFailures/FailuresList/Failu
 import Box from '../../components/widgets/Box/Box';
 import ResolveFailure from '../../components/SubmissionFailures/ResolveFailure/ResolveFailure';
 import Button from '../../components/widgets/TheButton';
+import { EvaluationFailedIcon, LoadingIcon, WarningIcon } from '../../components/icons';
 
 class SubmissionFailures extends Component {
   state = { isOpen: false, activeId: null };
@@ -27,19 +28,15 @@ class SubmissionFailures extends Component {
         fetchManyStatus={fetchStatus}
         loading={
           <PageContent
+            icon={<LoadingIcon />}
             title={
               <FormattedMessage id="app.submissionFailures.loading" defaultMessage="Loading list of failures..." />
-            }
-            description={
-              <FormattedMessage
-                id="app.submissionFailures.loadingDescription"
-                defaultMessage="Please wait while we are getting the list of failures ready."
-              />
             }
           />
         }
         failed={
           <PageContent
+            icon={<WarningIcon />}
             title={
               <FormattedMessage id="app.submissionFailures.failed" defaultMessage="Cannot load the list of failures" />
             }
@@ -53,15 +50,12 @@ class SubmissionFailures extends Component {
         }>
         {() => (
           <PageContent
-            title={<FormattedMessage id="app.submissionFailures.title" defaultMessage="Submission Failures" />}
-            description={
-              <FormattedMessage
-                id="app.submissionFailures.description"
-                defaultMessage="Browse all submission failures"
-              />
-            }>
+            icon={<EvaluationFailedIcon />}
+            title={<FormattedMessage id="app.submissionFailures.title" defaultMessage="Submission Failures" />}>
             <Box
-              title={<FormattedMessage id="app.submissionFailures.listTitle" defaultMessage="Submission Failures" />}
+              title={
+                <FormattedMessage id="app.submissionFailures.listTitle" defaultMessage="List of submission failures" />
+              }
               unlimitedHeight
               noPadding>
               <div>

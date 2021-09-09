@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import Button from '../../components/widgets/TheButton';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
 import App from '../../containers/App';
@@ -12,7 +12,7 @@ import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
-import { AddIcon, BanIcon } from '../../components/icons';
+import { AssignmentsIcon, AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -53,7 +53,6 @@ import { assignmentEnvironmentsSelector, getUserSolutionsSortedData } from '../.
 import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 
-import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
@@ -150,19 +149,13 @@ class GroupDetail extends Component {
       fetchUsersSolutions,
       setShadowPoints,
       removeShadowPoints,
-      intl: { locale },
     } = this.props;
 
     return (
       <Page
         resource={group}
-        title={group => getLocalizedName(group, locale)}
-        description={
-          <FormattedMessage
-            id="app.groupDetail.pageDescription"
-            defaultMessage="Group assignments and student results"
-          />
-        }
+        icon={<AssignmentsIcon />}
+        title={<FormattedMessage id="app.groupDetail.title" defaultMessage="Group Assignments and Student Results" />}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
         {data => {
@@ -448,7 +441,6 @@ GroupDetail.propTypes = {
   setShadowPoints: PropTypes.func.isRequired,
   removeShadowPoints: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.object,
 };
 
 const mapStateToProps = (
@@ -494,4 +486,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     dispatch(removeShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId)),
 });
 
-export default withLinks(connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupDetail)));
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupDetail));

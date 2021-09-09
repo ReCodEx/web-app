@@ -12,6 +12,7 @@ import ExercisesListContainer from '../../containers/ExercisesListContainer';
 import CreateExerciseForm from '../../components/forms/CreateExerciseForm';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { ExerciseIcon } from '../../components/icons';
 import { create as createExercise } from '../../redux/modules/exercises';
 import { notArchivedGroupsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
 
@@ -55,8 +56,8 @@ class Exercises extends Component {
 
     return (
       <PageContent
-        title={<FormattedMessage id="app.exercises.title" defaultMessage="Exercises List" />}
-        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}>
+        icon={<ExerciseIcon />}
+        title={<FormattedMessage id="app.exercises.title" defaultMessage="List of All Exercises" />}>
         <>
           <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
             <ExercisesListContainer id="exercises-all" showGroups />

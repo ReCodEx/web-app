@@ -11,7 +11,7 @@ import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons';
 import StatsList from '../../components/Broker/StatsList/StatsList';
 import AsyncJobsButtons from '../../components/AsyncJobs/AsyncJobsButtons';
 import AsyncJobsList from '../../components/AsyncJobs/AsyncJobsList';
-import { BanIcon } from '../../components/icons';
+import { BanIcon, ServerIcon } from '../../components/icons';
 import Callout from '../../components/widgets/Callout';
 
 import { fetchBrokerStats, freezeBroker, unfreezeBroker } from '../../redux/modules/broker';
@@ -44,52 +44,53 @@ class Broker extends Component {
     return (
       <Page
         resource={user}
-        title={<FormattedMessage id="app.serverManagement.title" defaultMessage="Server Management" />}
-        description={
-          <FormattedMessage id="app.serverManagement.description" defaultMessage="Management of backend services" />
-        }>
-        {user =>
-          isSuperAdmin ? (
-            <Row>
-              <Col lg={6}>
-                <h3>
-                  <FormattedMessage id="app.asyncJobs.title" defaultMessage="Core Background Jobs" />
-                </h3>
-                <AsyncJobsButtons refresh={refreshAsyncJobs} pingAction={ping} pingStatus={pingStatus} />
-                <ResourceRenderer resource={asyncJobs.toArray()} returnAsArray>
-                  {asyncJobs => <AsyncJobsList asyncJobs={asyncJobs} abort={abort} />}
-                </ResourceRenderer>
-              </Col>
+        icon={<ServerIcon />}
+        title={<FormattedMessage id="app.serverManagement.title" defaultMessage="Management of Backend Services" />}>
+        {user => (
+          <>
+            <hr />
+            {isSuperAdmin ? (
+              <Row>
+                <Col lg={6}>
+                  <h4>
+                    <FormattedMessage id="app.asyncJobs.title" defaultMessage="Core Background Jobs" />
+                  </h4>
+                  <AsyncJobsButtons refresh={refreshAsyncJobs} pingAction={ping} pingStatus={pingStatus} />
+                  <ResourceRenderer resource={asyncJobs.toArray()} returnAsArray>
+                    {asyncJobs => <AsyncJobsList asyncJobs={asyncJobs} abort={abort} />}
+                  </ResourceRenderer>
+                </Col>
 
-              <Col lg={6}>
-                <h3>
-                  <FormattedMessage id="app.broker.title" defaultMessage="ZeroMQ Broker" />
-                </h3>
-                <BrokerButtons
-                  refreshBrokerStats={refreshBrokerStats}
-                  freezeBroker={freezeBroker}
-                  unfreezeBroker={unfreezeBroker}
-                  freezeActionStatus={freezeActionStatus}
-                  unfreezeActionStatus={unfreezeActionStatus}
-                />
-                <ResourceRenderer resource={brokerStats}>
-                  {brokerStats => <StatsList stats={brokerStats} />}
-                </ResourceRenderer>
-              </Col>
-            </Row>
-          ) : (
-            <Row>
-              <Col sm={12}>
-                <Callout variant="warning" className="larger" icon={<BanIcon />}>
-                  <FormattedMessage
-                    id="generic.accessDenied"
-                    defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                <Col lg={6}>
+                  <h4>
+                    <FormattedMessage id="app.broker.title" defaultMessage="ZeroMQ Broker" />
+                  </h4>
+                  <BrokerButtons
+                    refreshBrokerStats={refreshBrokerStats}
+                    freezeBroker={freezeBroker}
+                    unfreezeBroker={unfreezeBroker}
+                    freezeActionStatus={freezeActionStatus}
+                    unfreezeActionStatus={unfreezeActionStatus}
                   />
-                </Callout>
-              </Col>
-            </Row>
-          )
-        }
+                  <ResourceRenderer resource={brokerStats}>
+                    {brokerStats => <StatsList stats={brokerStats} />}
+                  </ResourceRenderer>
+                </Col>
+              </Row>
+            ) : (
+              <Row>
+                <Col sm={12}>
+                  <Callout variant="warning" className="larger" icon={<BanIcon />}>
+                    <FormattedMessage
+                      id="generic.accessDenied"
+                      defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                    />
+                  </Callout>
+                </Col>
+              </Row>
+            )}
+          </>
+        )}
       </Page>
     );
   }

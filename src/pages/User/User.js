@@ -38,7 +38,7 @@ import {
 } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
-import { InfoIcon, TransferIcon, AssignmentsIcon, GroupIcon } from '../../components/icons';
+import { InfoIcon, TransferIcon, AssignmentsIcon, GroupIcon, UserIcon } from '../../components/icons';
 import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
@@ -105,10 +105,8 @@ class User extends Component {
     return (
       <Page
         resource={user}
-        title={<FormattedMessage id="app.user.title" defaultMessage="User's profile" />}
-        description={
-          <FormattedMessage id="app.user.description" defaultMessage="Complete progress of the user in all groups." />
-        }>
+        icon={<UserIcon />}
+        title={<FormattedMessage id="app.user.title" defaultMessage="User's profile" />}>
         {user => (
           <div>
             <UserNavigation userId={userId} canViewDetail canEdit={isAdmin || userId === loggedInUserId} />

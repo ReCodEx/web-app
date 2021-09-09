@@ -15,7 +15,7 @@ import Page from '../../components/layout/Page';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
-import { EditIcon } from '../../components/icons';
+import { EditIcon, InstanceIcon } from '../../components/icons';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 
 import { fetchUser } from '../../redux/modules/users';
@@ -72,8 +72,15 @@ class Instance extends Component {
     return (
       <Page
         resource={instance}
-        title={instance => getLocalizedName(instance.rootGroup, locale)}
-        description={<FormattedMessage id="app.instance.description" defaultMessage="Instance overview" />}>
+        icon={<InstanceIcon />}
+        title={instance => (
+          <FormattedMessage
+            id="app.instance.title"
+            defaultMessage="{name}: Instance Overview and Groups List"
+            values={{ name: getLocalizedName(instance.rootGroup, locale) }}
+          />
+        )}
+        windowTitle={instance => getLocalizedName(instance.rootGroup, locale)}>
         {data => (
           <div>
             {isSuperAdmin && (

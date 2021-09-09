@@ -46,7 +46,7 @@ const PipelineDetail = ({
             <Icon icon={['far', 'file-alt']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage id="app.pipeline.description" defaultMessage="Pipeline overview" />
+            <FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline Detail" />
           </th>
           <td>
             <Markdown source={description} />
