@@ -1014,6 +1014,7 @@
   "app.memberGroups.asObserver": "Groups you observe",
   "app.memberGroups.asStudent": "Groups you are member of",
   "app.memberGroups.asSupervisor": "Groups you supervise",
+  "app.memberGroups.noGroups": "there are no groups associated with you",
   "app.membersList.addAsAdmin": "Add as administrator",
   "app.membersList.addAsObserver": "Add as observer",
   "app.membersList.addAsSupervisor": "Add as supervisor",
