@@ -66,6 +66,20 @@ const MemberGroupsDropdown = ({ groupId = null, memberGroups }) => (
         title={<FormattedMessage id="app.memberGroups.asObserver" defaultMessage="Groups you observe" />}
         icon={<ObserverIcon gapRight />}
       />
+
+      {(!memberGroups.admin || memberGroups.admin.length === 0) &&
+        (!memberGroups.supervisor || memberGroups.supervisor.length === 0) &&
+        (!memberGroups.student || memberGroups.student.length === 0) &&
+        (!memberGroups.observer || memberGroups.observer.length === 0) && (
+          <Dropdown.Item as="span" bsPrefix="dropdown-item">
+            <em className="text-center text-muted">
+              <FormattedMessage
+                id="app.memberGroups.noGroups"
+                defaultMessage="there are no groups associated with you"
+              />
+            </em>
+          </Dropdown.Item>
+        )}
     </Dropdown.Menu>
   </Dropdown>
 );
