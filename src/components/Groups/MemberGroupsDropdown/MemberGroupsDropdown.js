@@ -15,11 +15,10 @@ const DropdownFragment = withLinks(
     groups &&
     groups.length > 0 && (
       <>
-        <Dropdown.Header bsPrefix="dropdown-header text-left">
+        <Dropdown.Header bsPrefix="dropdown-header">
           {icon}
           {title}:
         </Dropdown.Header>
-        <Dropdown.Divider />
 
         {groups.map(id => (
           <Dropdown.Item key={id} as="span" active={groupId === id} bsPrefix="dropdown-item">

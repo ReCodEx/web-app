@@ -21,3 +21,24 @@
   color: inherit;
   background-color: inherit;
 }
+
+.memberGroupsDropdownContainer .dropdown-menu {
+  padding-top: 0;
+  max-height: calc(98vh - 50px);
+  min-height: 100px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.memberGroupsDropdownContainer .dropdown-header {
+  text-align: left;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  background-color: #ddd;
+}
+
+.memberGroupsDropdownContainer .dropdown-header:first-of-type {
+  padding-top: 0.3rem;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;  
+}
