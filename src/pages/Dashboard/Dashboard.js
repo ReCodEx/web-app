@@ -11,12 +11,10 @@ import Page from '../../components/layout/Page';
 import { UserNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import { LoadingInfoBox } from '../../components/widgets/InfoBox';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import StudentsListContainer from '../../containers/StudentsListContainer';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
-import UsersStats from '../../components/Users/UsersStats';
-import GroupsName from '../../components/Groups/GroupsName';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import GroupsNameContainer from '../../containers/GroupsNameContainer';
 
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -27,27 +25,19 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { statisticsSelector } from '../../redux/selectors/stats';
-import {
-  loggedInStudentOfGroupsAssignmentsSelector,
-  loggedUserSupervisorOfGroupsSelector,
-  loggedUserStudentOfGroupsSelector,
-} from '../../redux/selectors/usersGroups';
+import { loggedInStudentOfGroupsAssignmentsSelector } from '../../redux/selectors/usersGroups';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
+import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 
-import { DashboardIcon, InfoIcon, GroupIcon, AssignmentsIcon } from '../../components/icons';
-import { getLocalizedName } from '../../helpers/localizedData';
+import { DashboardIcon, InfoIcon, GroupIcon, AssignmentsIcon, SupervisorIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
-import { EMPTY_OBJ } from '../../helpers/common';
+import { EMPTY_OBJ, safeGet } from '../../helpers/common';
 
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
 
   componentDidUpdate(prevProps) {
-    if (
-      this.props.userId !== prevProps.userId ||
-      this.props.supervisorOf.size < prevProps.supervisorOf.size ||
-      this.props.studentOf.size < prevProps.studentOf.size
-    ) {
+    if (this.props.userId !== prevProps.userId) {
       this.props.loadAsync(this.props.userId);
     }
   }
@@ -86,14 +76,13 @@ class Dashboard extends Component {
     const {
       user,
       student,
-      studentOf,
       supervisor,
-      supervisorOf,
       groupAssignments,
       assignmentEnvironmentsSelector,
       statistics,
+      memberGroups,
+      fetchManyGroupsStatus,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
-      intl: { locale },
     } = this.props;
 
     return (
@@ -105,178 +94,147 @@ class Dashboard extends Component {
           <div>
             <UserNavigation userId={user.id} canEdit isLoggedInUser />
 
-            {student && studentOf.size === 0 && (
-              <Row>
-                <Col sm={12}>
-                  <Callout variant="success">
-                    <h4>
-                      <InfoIcon gapRight />
-                      <FormattedMessage id="app.dashboard.studentNoGroupsTitle" defaultMessage="No Group Memberships" />
-                    </h4>
-                    <p>
-                      <FormattedMessage
-                        id="app.dashboard.studentNoGroups"
-                        defaultMessage="You are not a member of any group yet. A group supervisor may add you into his/her group, or you can use other mechanisms (like the dialog on the SIS integration page) to join some groups that apply to you."
-                      />
-                    </p>
-                  </Callout>
-                </Col>
-              </Row>
-            )}
+            <FetchManyResourceRenderer fetchManyStatus={fetchManyGroupsStatus}>
+              {() => (
+                <>
+                  {student && (
+                    <>
+                      {!memberGroups.student || memberGroups.student.length === 0 ? (
+                        <Row>
+                          <Col sm={12}>
+                            <Callout variant="success">
+                              <h4>
+                                <InfoIcon gapRight />
+                                <FormattedMessage
+                                  id="app.dashboard.studentNoGroupsTitle"
+                                  defaultMessage="No Group Memberships"
+                                />
+                              </h4>
+                              <p>
+                                <FormattedMessage
+                                  id="app.dashboard.studentNoGroups"
+                                  defaultMessage="You are not a member of any group yet. A group supervisor may add you into his/her group, or you can use other mechanisms (like the dialog on the SIS integration page) to join some groups that apply to you."
+                                />
+                              </p>
+                            </Callout>
+                          </Col>
+                        </Row>
+                      ) : (
+                        <div>
+                          <h3 className="mt-4 mb-3">
+                            <GroupIcon gapRight className="text-muted" />
+                            <FormattedMessage id="app.dashboard.memberOf" defaultMessage="Groups you are a member of" />
+                          </h3>
 
-            {supervisor && supervisorOf.size === 0 && (
-              <Row>
-                <Col sm={12}>
-                  <Callout variant="success">
-                    <h4>
-                      <InfoIcon gapRight />
-                      <FormattedMessage id="app.dashboard.supervisorNoGroupsTitle" defaultMessage="No Groups" />
-                    </h4>
-                    <p>
-                      <FormattedMessage
-                        id="app.dashboard.supervisorNoGroups"
-                        defaultMessage="You are currently not supervising any groups. An administrator may create a group for you or you can use other mechanisms (like the dialog on the SIS integration page) to create groups for your students."
-                      />
-                    </p>
-                  </Callout>
-                </Col>
-              </Row>
-            )}
-
-            {studentOf.size > 0 && (
-              <ResourceRenderer resource={studentOf.toArray()} returnAsArray={true}>
-                {groups => (
-                  <div>
-                    <h2 className="page-heading">
-                      <FormattedMessage id="app.dashboard.memberOf" defaultMessage="Groups you are a member of" />
-                    </h2>
-
-                    {groups
-                      .sort((a, b) => getLocalizedName(a, locale).localeCompare(getLocalizedName(b, locale), locale))
-                      .map(group => (
-                        <div key={group.id}>
-                          {
-                            <ResourceRenderer
-                              loading={
-                                <Row>
-                                  <Col lg={4}>
-                                    <LoadingInfoBox title={getLocalizedName(group, locale)} />
-                                  </Col>
-                                </Row>
-                              }
-                              resource={statistics.get(group.id)}>
-                              {statistics => (
-                                <Row>
-                                  <Col lg={4}>
-                                    <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                      <UsersStats {...group} stats={this.usersStatistics(statistics)} />
+                          {memberGroups.student.map(groupId => (
+                            <Box
+                              key={groupId}
+                              title={<GroupsNameContainer groupId={groupId} fullName admins />}
+                              collapsable
+                              noPadding
+                              isOpen
+                              footer={
+                                <div className="mb-2 text-center">
+                                  <TheButtonGroup>
+                                    <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
+                                      <Button size="sm">
+                                        <GroupIcon gapRight />
+                                        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                                      </Button>
                                     </Link>
-                                  </Col>
-                                  <Col lg={8}>
-                                    <Box
-                                      title={getLocalizedName(group, locale)}
-                                      collapsable
-                                      noPadding
-                                      isOpen
-                                      footer={
-                                        <div className="mb-3 text-center">
-                                          <TheButtonGroup>
-                                            <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                              <Button size="sm">
-                                                <GroupIcon gapRight />
-                                                <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-                                              </Button>
-                                            </Link>
-                                            <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                              <Button size="sm">
-                                                <AssignmentsIcon gapRight />
-                                                <FormattedMessage
-                                                  id="app.group.assignments"
-                                                  defaultMessage="Assignments"
-                                                />
-                                              </Button>
-                                            </Link>
-                                          </TheButtonGroup>
-                                        </div>
-                                      }
-                                      unlimitedHeight>
-                                      <AssignmentsTable
-                                        userId={user.id}
-                                        assignments={groupAssignments.get(group.id)}
-                                        assignmentEnvironmentsSelector={assignmentEnvironmentsSelector}
-                                        statuses={this.usersStatistics(statistics).assignments}
-                                      />
-                                    </Box>
-                                  </Col>
-                                </Row>
-                              )}
-                            </ResourceRenderer>
-                          }
-                        </div>
-                      ))}
-                  </div>
-                )}
-              </ResourceRenderer>
-            )}
-
-            {supervisorOf.size > 0 && (
-              <Row>
-                <Col sm={12}>
-                  <h2 className="page-heading">
-                    <FormattedMessage id="app.dashboard.supervisorOf" defaultMessage="Groups you supervise" />
-                  </h2>
-
-                  <ResourceRenderer resource={supervisorOf.toArray()} returnAsArray={true}>
-                    {groups => (
-                      <div>
-                        {groups
-                          .sort((a, b) =>
-                            getLocalizedName(a, locale).localeCompare(getLocalizedName(b, locale), locale)
-                          )
-                          .map(group => (
-                            <Row key={group.id}>
-                              <Col lg={12}>
-                                <ResourceRenderer resource={statistics.get(group.id)}>
-                                  {statistics => (
-                                    <Box
-                                      title={<GroupsName {...group} translations />}
-                                      collapsable
-                                      noPadding
-                                      isOpen
-                                      footer={
-                                        <div className="mb-3 text-center">
-                                          <TheButtonGroup>
-                                            <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                              <Button size="sm">
-                                                <InfoIcon gapRight />
-                                                <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-                                              </Button>
-                                            </Link>
-                                            <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                              <Button size="sm">
-                                                <GroupIcon gapRight />
-                                                <FormattedMessage
-                                                  id="app.group.assignments"
-                                                  defaultMessage="Assignments"
-                                                />
-                                              </Button>
-                                            </Link>
-                                          </TheButtonGroup>
-                                        </div>
-                                      }>
-                                      <StudentsListContainer groupId={group.id} />
-                                    </Box>
-                                  )}
-                                </ResourceRenderer>
-                              </Col>
-                            </Row>
+                                    <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+                                      <Button size="sm">
+                                        <AssignmentsIcon gapRight />
+                                        <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+                                      </Button>
+                                    </Link>
+                                  </TheButtonGroup>
+                                </div>
+                              }
+                              unlimitedHeight>
+                              <AssignmentsTable
+                                userId={user.id}
+                                assignments={groupAssignments.get(groupId)}
+                                assignmentEnvironmentsSelector={assignmentEnvironmentsSelector}
+                                statuses={this.usersStatistics(statistics).assignments}
+                                onlyCurrent
+                              />
+                            </Box>
                           ))}
-                      </div>
-                    )}
-                  </ResourceRenderer>
-                </Col>
-              </Row>
-            )}
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {supervisor && !student && (
+                    <>
+                      {safeGet(memberGroups, ['supervisor', 'length']) + safeGet(memberGroups, ['admin', 'length']) ===
+                      0 ? (
+                        <Row>
+                          <Col sm={12}>
+                            <Callout variant="success">
+                              <h4>
+                                <InfoIcon gapRight />
+                                <FormattedMessage
+                                  id="app.dashboard.supervisorNoGroupsTitle"
+                                  defaultMessage="No Groups"
+                                />
+                              </h4>
+                              <p>
+                                <FormattedMessage
+                                  id="app.dashboard.supervisorNoGroups"
+                                  defaultMessage="You are currently not supervising any groups. An administrator may create a group for you or you can use other mechanisms (like the dialog on the SIS integration page) to create groups for your students."
+                                />
+                              </p>
+                            </Callout>
+                          </Col>
+                        </Row>
+                      ) : (
+                        <div>
+                          <h3 className="mt-4 mb-3">
+                            <SupervisorIcon gapRight className="text-muted" />
+                            <FormattedMessage
+                              id="app.dashboard.supervisorOf"
+                              defaultMessage="Groups managed by you (as admin or supervisor)"
+                            />
+                          </h3>
+
+                          {[...memberGroups.admin, ...memberGroups.supervisor].map(groupId => (
+                            <Box
+                              key={groupId}
+                              title={<GroupsNameContainer groupId={groupId} fullName admins />}
+                              collapsable
+                              noPadding
+                              isOpen
+                              footer={
+                                <div className="mb-2 text-center">
+                                  <TheButtonGroup>
+                                    <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
+                                      <Button size="sm">
+                                        <GroupIcon gapRight />
+                                        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                                      </Button>
+                                    </Link>
+                                    <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+                                      <Button size="sm">
+                                        <AssignmentsIcon gapRight />
+                                        <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+                                      </Button>
+                                    </Link>
+                                  </TheButtonGroup>
+                                </div>
+                              }
+                              unlimitedHeight>
+                              <StudentsListContainer groupId={groupId} />
+                            </Box>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </FetchManyResourceRenderer>
           </div>
         )}
       </Page>
@@ -288,15 +246,15 @@ Dashboard.propTypes = {
   user: ImmutablePropTypes.map,
   commonGroups: PropTypes.array,
   student: PropTypes.bool,
-  studentOf: ImmutablePropTypes.map,
   supervisor: PropTypes.bool,
-  supervisorOf: ImmutablePropTypes.map,
   superadmin: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
   userId: PropTypes.string,
   groupAssignments: ImmutablePropTypes.map,
   assignmentEnvironmentsSelector: PropTypes.func,
   statistics: ImmutablePropTypes.map,
+  memberGroups: PropTypes.object.isRequired,
+  fetchManyGroupsStatus: PropTypes.string,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
@@ -311,11 +269,11 @@ export default withLinks(
         supervisor: isSupervisor(userId)(state),
         superadmin: isLoggedAsSuperAdmin(state),
         user: getUser(userId)(state),
-        studentOf: loggedUserStudentOfGroupsSelector(state),
-        supervisorOf: loggedUserSupervisorOfGroupsSelector(state),
         groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         statistics: statisticsSelector(state),
+        memberGroups: groupsLoggedUserIsMemberSelector(state),
+        fetchManyGroupsStatus: fetchManyGroupsStatus(state),
       };
     },
     (dispatch, { match: { params } }) => ({

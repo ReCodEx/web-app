@@ -11,7 +11,7 @@ import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { isLoggedIn } from '../../redux/selectors/auth';
 import { getLoggedInUserSettings } from '../../redux/selectors/users';
-import { groupsLoggedUserIsMemberSelector } from '../../redux/selectors/groups';
+import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 
 import Layout from '../../components/layout/Layout';
 import { messages } from '../../locales';
@@ -100,6 +100,7 @@ class LayoutContainer extends Component {
       setLang,
       relatedGroupId,
       memberGroups,
+      fetchManyGroupsStatus,
     } = this.props;
 
     moment.locale(lang);
@@ -122,7 +123,8 @@ class LayoutContainer extends Component {
                 currentUrl={pathname}
                 pendingFetchOperations={pendingFetchOperations}
                 relatedGroupId={relatedGroupId}
-                memberGroups={memberGroups}>
+                memberGroups={memberGroups}
+                fetchManyGroupsStatus={fetchManyGroupsStatus}>
                 {buildRoutes(pathname + search, isLoggedIn)}
               </Layout>
             </UrlContext.Provider>
@@ -156,6 +158,7 @@ LayoutContainer.propTypes = {
   userSettings: PropTypes.object,
   relatedGroupId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
+  fetchManyGroupsStatus: PropTypes.string,
 };
 
 export default connect(
@@ -168,6 +171,7 @@ export default connect(
     userSettings: getLoggedInUserSettings(state),
     relatedGroupId: pathRelatedGroupSelector(state, pathname + search),
     memberGroups: groupsLoggedUserIsMemberSelector(state),
+    fetchManyGroupsStatus: fetchManyGroupsStatus(state),
   }),
   dispatch => ({
     toggleVisibility: () => dispatch(toggleVisibility()),
