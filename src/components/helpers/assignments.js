@@ -32,3 +32,8 @@ export const compareAssignmentsReverted = (a, b) => -compareAssignments(a, b);
 export const compareShadowAssignments = (a, b) => {
   return a.createdAt - b.createdAt;
 };
+
+export const isBeforeDeadline = assignment => {
+  const now = Date.now() / 1000;
+  return assignment.firstDeadline > now || (assignment.secondDeadline && assignment.secondDeadline > now);
+};

@@ -26,6 +26,7 @@ const Layout = ({
   onCloseSidebar,
   relatedGroupId,
   memberGroups,
+  fetchManyGroupsStatus,
 }) => (
   <div
     className={classnames({
@@ -48,6 +49,7 @@ const Layout = ({
       currentUrl={currentUrl}
       relatedGroupId={relatedGroupId}
       memberGroups={memberGroups}
+      fetchManyGroupsStatus={fetchManyGroupsStatus}
     />
     <SidebarContainer
       isCollapsed={sidebarIsCollapsed}
@@ -77,6 +79,7 @@ Layout.propTypes = {
   availableLangs: PropTypes.array,
   relatedGroupId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
+  fetchManyGroupsStatus: PropTypes.string,
 };
 
 export default Layout;

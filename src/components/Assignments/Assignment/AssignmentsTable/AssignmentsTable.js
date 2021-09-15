@@ -7,7 +7,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
 import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
 import CommentThreadContainer from '../../../../containers/CommentThreadContainer';
-import { compareAssignmentsReverted } from '../../../helpers/assignments';
+import { compareAssignmentsReverted, isBeforeDeadline } from '../../../helpers/assignments';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 
@@ -18,10 +18,20 @@ const fetchAssignmentStatus = (statuses, assignmentId) => {
 };
 
 class AssignmentsTable extends Component {
-  state = { dialogAssignment: null };
+  state = { dialogAssignment: null, showAll: null };
 
   openDialog = (dialogAssignment = null) => this.setState({ dialogAssignment });
   closeDialog = () => this.setState({ dialogAssignment: null });
+
+  showAllAssignments = ev => {
+    this.setState({ showAll: true });
+    ev.preventDefault();
+  };
+
+  hideOldAssignments = ev => {
+    this.setState({ showAll: false });
+    ev.preventDefault();
+  };
 
   render() {
     const {
@@ -34,16 +44,25 @@ class AssignmentsTable extends Component {
       showNames = true,
       showGroups = false,
       groupsAccessor = null,
+      onlyCurrent = false,
       intl: { locale },
     } = this.props;
+    const someAssignmentsAreLoading = assignments.some(isLoading);
+    const assignmentsPreprocessedAll = assignments
+      .toArray()
+      .filter(isReady)
+      .map(getJsData)
+      .sort(compareAssignmentsReverted);
+    const assignmentsPreprocessedCurrent = onlyCurrent ? assignmentsPreprocessedAll.filter(isBeforeDeadline) : null;
+    const assignmentsPreprocessed =
+      onlyCurrent && !this.state.showAll ? assignmentsPreprocessedCurrent : assignmentsPreprocessedAll;
 
-    const assignmentsPreprocessed = assignments.filter(isReady).map(getJsData).sort(compareAssignmentsReverted);
     const showSecondDeadline = assignmentsPreprocessed.some(assignment => assignment && assignment.secondDeadline);
 
     return (
       <>
         <Table hover>
-          {assignments.size > 0 && (
+          {assignmentsPreprocessed.length > 0 && (
             <thead>
               <tr>
                 <th className="shrink-col" />
@@ -91,30 +110,71 @@ class AssignmentsTable extends Component {
             </thead>
           )}
           <tbody>
-            {assignments.size === 0 && <NoAssignmentTableRow />}
+            {someAssignmentsAreLoading ? (
+              <LoadingAssignmentTableRow colSpan={10} />
+            ) : (
+              assignmentsPreprocessedAll.length === 0 && <NoAssignmentTableRow />
+            )}
 
-            {assignments.some(isLoading) && <LoadingAssignmentTableRow colSpan={10} />}
-
-            {assignmentsPreprocessed.map(assignment => (
-              <AssignmentTableRow
-                key={assignment.id}
-                item={assignment}
-                runtimeEnvironments={assignmentEnvironmentsSelector && assignmentEnvironmentsSelector(assignment.id)}
-                userId={userId}
-                status={fetchAssignmentStatus(statuses, assignment.id)}
-                locale={locale}
-                stats={
-                  Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null
-                }
-                isAdmin={isAdmin}
-                showNames={showNames}
-                showGroups={showGroups}
-                showSecondDeadline={showSecondDeadline}
-                groupsAccessor={groupsAccessor}
-                discussionOpen={() => this.openDialog(assignment)}
-              />
-            ))}
+            {!someAssignmentsAreLoading &&
+              assignmentsPreprocessed.map(assignment => (
+                <AssignmentTableRow
+                  key={assignment.id}
+                  item={assignment}
+                  runtimeEnvironments={assignmentEnvironmentsSelector && assignmentEnvironmentsSelector(assignment.id)}
+                  userId={userId}
+                  status={fetchAssignmentStatus(statuses, assignment.id)}
+                  locale={locale}
+                  stats={
+                    Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null
+                  }
+                  isAdmin={isAdmin}
+                  showNames={showNames}
+                  showGroups={showGroups}
+                  showSecondDeadline={showSecondDeadline}
+                  groupsAccessor={groupsAccessor}
+                  discussionOpen={() => this.openDialog(assignment)}
+                />
+              ))}
           </tbody>
+
+          {!someAssignmentsAreLoading &&
+            onlyCurrent &&
+            assignmentsPreprocessedAll.length !== assignmentsPreprocessedCurrent.length && (
+              <tfoot>
+                <tr>
+                  <td colSpan={10} className="small text-muted text-center">
+                    {this.state.showAll ? (
+                      <FormattedMessage
+                        id="app.assignments.hidePastAssignments"
+                        defaultMessage="Total {count} {count, plural, one {assignment} other {assignments}} {count, plural, one {has} other {have}} pass the deadline. <a>Hide old assignments.</a>"
+                        values={{
+                          count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
+                          a: content => (
+                            <a href="" onClick={this.hideOldAssignments}>
+                              {content}
+                            </a>
+                          ),
+                        }}
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id="app.assignments.showHiddenPastAssignments"
+                        defaultMessage="There are {count} hidden {count, plural, one {assignment} other {assignments}} which {count, plural, one {has} other {have}} pass the deadline. <a>Show all.</a>"
+                        values={{
+                          count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
+                          a: content => (
+                            <a href="" onClick={this.showAllAssignments}>
+                              {content}
+                            </a>
+                          ),
+                        }}
+                      />
+                    )}
+                  </td>
+                </tr>
+              </tfoot>
+            )}
         </Table>
 
         <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="xl">
@@ -148,6 +208,7 @@ AssignmentsTable.propTypes = {
   showNames: PropTypes.bool,
   showGroups: PropTypes.bool,
   groupsAccessor: PropTypes.func,
+  onlyCurrent: PropTypes.bool,
   intl: PropTypes.object.isRequired,
 };
 

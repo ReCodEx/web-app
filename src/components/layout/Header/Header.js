@@ -6,7 +6,8 @@ import HeaderSystemMessagesContainer from '../../../containers/HeaderSystemMessa
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
 import MemberGroupsDropdown from '../../Groups/MemberGroupsDropdown';
 import ClientOnly from '../../helpers/ClientOnly';
-import Icon from '../../icons';
+import FetchManyResourceRenderer from '../../helpers/FetchManyResourceRenderer';
+import Icon, { GroupIcon, LoadingIcon, WarningIcon } from '../../icons';
 import { getConfigVar } from '../../../helpers/config';
 
 const SKIN = getConfigVar('SKIN') || 'green';
@@ -23,7 +24,15 @@ class Header extends Component {
   };
 
   render() {
-    const { isLoggedIn, availableLangs = [], currentLang, setLang, relatedGroupId, memberGroups } = this.props;
+    const {
+      isLoggedIn,
+      availableLangs = [],
+      currentLang,
+      setLang,
+      relatedGroupId,
+      memberGroups,
+      fetchManyGroupsStatus,
+    } = this.props;
 
     return (
       <nav className={`main-header navbar navbar-expand navbar-dark navbar-${SKIN} elevation-2`}>
@@ -35,7 +44,22 @@ class Header extends Component {
               </a>
             </li>
             <li className="nav-item memberGroupsDropdownContainer">
-              <MemberGroupsDropdown groupId={relatedGroupId} memberGroups={memberGroups} />
+              <FetchManyResourceRenderer
+                fetchManyStatus={fetchManyGroupsStatus}
+                loading={
+                  <span className="nav-link">
+                    <GroupIcon gapRight />
+                    <LoadingIcon />
+                  </span>
+                }
+                failed={
+                  <span className="nav-link">
+                    <GroupIcon gapRight />
+                    <WarningIcon />
+                  </span>
+                }>
+                {() => <MemberGroupsDropdown groupId={relatedGroupId} memberGroups={memberGroups} />}
+              </FetchManyResourceRenderer>
             </li>
           </ul>
         </ClientOnly>
@@ -60,6 +84,7 @@ Header.propTypes = {
   currentUrl: PropTypes.string,
   relatedGroupId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
+  fetchManyGroupsStatus: PropTypes.string,
 };
 
 export default Header;
