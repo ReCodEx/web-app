@@ -43,24 +43,26 @@ class Header extends Component {
                 <Icon icon="bars" />
               </a>
             </li>
-            <li className="nav-item memberGroupsDropdownContainer">
-              <FetchManyResourceRenderer
-                fetchManyStatus={fetchManyGroupsStatus}
-                loading={
-                  <span className="nav-link">
-                    <GroupIcon gapRight />
-                    <LoadingIcon />
-                  </span>
-                }
-                failed={
-                  <span className="nav-link">
-                    <GroupIcon gapRight />
-                    <WarningIcon />
-                  </span>
-                }>
-                {() => <MemberGroupsDropdown groupId={relatedGroupId} memberGroups={memberGroups} />}
-              </FetchManyResourceRenderer>
-            </li>
+            {fetchManyGroupsStatus && (
+              <li className="nav-item memberGroupsDropdownContainer">
+                <FetchManyResourceRenderer
+                  fetchManyStatus={fetchManyGroupsStatus}
+                  loading={
+                    <span className="nav-link">
+                      <GroupIcon gapRight />
+                      <LoadingIcon />
+                    </span>
+                  }
+                  failed={
+                    <span className="nav-link">
+                      <GroupIcon gapRight />
+                      <WarningIcon />
+                    </span>
+                  }>
+                  {() => <MemberGroupsDropdown groupId={relatedGroupId} memberGroups={memberGroups} />}
+                </FetchManyResourceRenderer>
+              </li>
+            )}
           </ul>
         </ClientOnly>
 
