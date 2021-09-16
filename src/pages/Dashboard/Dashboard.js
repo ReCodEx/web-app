@@ -122,7 +122,7 @@ class Dashboard extends Component {
                       ) : (
                         <div>
                           <h3 className="mt-4 mb-3">
-                            <GroupIcon gapRight className="text-muted" />
+                            <GroupIcon gapLeft gapRight className="text-muted" />
                             <FormattedMessage id="app.dashboard.memberOf" defaultMessage="Groups you are a member of" />
                           </h3>
 
@@ -192,7 +192,7 @@ class Dashboard extends Component {
                       ) : (
                         <div>
                           <h3 className="mt-4 mb-3">
-                            <SupervisorIcon gapRight className="text-muted" />
+                            <SupervisorIcon gapLeft gapRight className="text-muted" />
                             <FormattedMessage
                               id="app.dashboard.supervisorOf"
                               defaultMessage="Groups managed by you (as admin or supervisor)"
