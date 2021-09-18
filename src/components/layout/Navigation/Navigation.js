@@ -50,6 +50,7 @@ const Navigation = ({
   assignmentId = null,
   shadowId = null,
   userId = null,
+  emphasizeUser = false,
   links,
   secondaryLinks,
   location,
@@ -62,6 +63,18 @@ const Navigation = ({
     <Card className="elevation-2">
       <Card.Header>
         <Card.Title className={styles.title}>
+          {userId && emphasizeUser && (
+            <div className="mb-3">
+              <UsersNameContainer
+                userId={userId}
+                large={onlyUser}
+                showEmail={onlyUser ? 'full' : 'icon'}
+                showExternalIdentifiers
+                showRoleIcon={onlyUser}
+              />
+            </div>
+          )}
+
           {groupId && (
             <span>
               <OverlayTrigger
@@ -122,7 +135,7 @@ const Navigation = ({
             </span>
           )}
 
-          {userId && (
+          {userId && !emphasizeUser && (
             <UsersNameContainer
               userId={userId}
               large={onlyUser}
@@ -155,6 +168,7 @@ Navigation.propTypes = {
   assignmentId: PropTypes.string,
   shadowId: PropTypes.string,
   userId: PropTypes.string,
+  emphasizeUser: PropTypes.bool,
   links: PropTypes.array,
   secondaryLinks: PropTypes.array,
   location: PropTypes.shape({
