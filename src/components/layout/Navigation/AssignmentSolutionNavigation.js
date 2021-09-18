@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Navigation from './Navigation';
 import withLinks from '../../../helpers/withLinks';
-import { AssignmentIcon, ExerciseIcon, ResultsIcon, SolutionResultsIcon } from '../../icons';
+import { AssignmentIcon, ExerciseIcon, ResultsIcon, SolutionResultsIcon, UserIcon } from '../../icons';
 import { createGroupLinks } from './linkCreators';
 
 const AssignmentSolutionNavigation = ({
@@ -25,6 +25,11 @@ const AssignmentSolutionNavigation = ({
         caption: <FormattedMessage id="app.navigation.solution" defaultMessage="Solution" />,
         link: links.SOLUTION_DETAIL_URI_FACTORY(assignmentId, solutionId),
         icon: <SolutionResultsIcon gapRight />,
+      },
+      {
+        caption: <FormattedMessage id="app.navigation.userSolution" defaultMessage="User Solutions" />,
+        link: links.GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, userId),
+        icon: <UserIcon gapRight />,
       },
       canViewSolutions && {
         caption: <FormattedMessage id="app.navigation.allSolutions" defaultMessage="All Solutions" />,

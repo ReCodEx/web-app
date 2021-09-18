@@ -99,6 +99,29 @@ export const resubmitAllSolutions = assignmentId =>
  * Reducer
  */
 
+const solutionsFulfilledReducer = (state, { payload: solutions }) => {
+  // sort out the solutions IDs in a organized structure first
+  const organizedIds = {};
+  solutions.forEach(solution => {
+    if (!organizedIds[solution.assignmentId]) {
+      organizedIds[solution.assignmentId] = {};
+    }
+    if (!organizedIds[solution.assignmentId][solution.authorId]) {
+      organizedIds[solution.assignmentId][solution.authorId] = [];
+    }
+    organizedIds[solution.assignmentId][solution.authorId].push(solution.id);
+  });
+
+  // use the orgnaized structure to update the state
+  Object.keys(organizedIds).forEach(assignmentId => {
+    Object.keys(organizedIds[assignmentId]).forEach(authorId => {
+      state = state.setIn(['solutions', assignmentId, authorId], fromJS(organizedIds[assignmentId][authorId]));
+    });
+  });
+
+  return state;
+};
+
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [additionalActionTypes.SYNC_ASSIGNMENT_FULFILLED]: (state, { payload, meta: { assignmentId } }) =>
@@ -119,11 +142,11 @@ const reducer = handleActions(
         return state;
       }
 
-      if (!state.hasIn(['solutions', solution.exerciseAssignmentId, solution.authorId])) {
-        state = state.setIn(['solutions', solution.exerciseAssignmentId, solution.authorId], List());
+      if (!state.hasIn(['solutions', solution.assignmentId, solution.authorId])) {
+        state = state.setIn(['solutions', solution.assignmentId, solution.authorId], List());
       }
 
-      return state.updateIn(['solutions', solution.exerciseAssignmentId, solution.authorId], solutions =>
+      return state.updateIn(['solutions', solution.assignmentId, solution.authorId], solutions =>
         solutions.push(solution.id)
       );
     },
@@ -131,22 +154,9 @@ const reducer = handleActions(
     [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
       state.setIn(['solutions', assignmentId, userId], fromJS(payload.map(solution => solution.id))),
 
-    [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: (state, { payload, meta: { assignmentId } }) => {
-      payload.forEach(function (solution) {
-        if (!state.hasIn(['solutions', assignmentId, solution.authorId])) {
-          state = state.setIn(['solutions', assignmentId, solution.authorId], List());
-        }
+    [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: solutionsFulfilledReducer,
 
-        state = state.updateIn(['solutions', assignmentId, solution.authorId], solutions => {
-          if (!solutions.includes(solution.id)) {
-            return solutions.push(solution.id);
-          }
-          return solutions;
-        });
-      });
-
-      return state;
-    },
+    [solutionsActionTypes.LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED]: solutionsFulfilledReducer,
 
     [additionalActionTypes.RESUBMIT_ALL_PENDING]: (state, { meta: { assignmentId } }) =>
       state.setIn(['resources', assignmentId, 'resubmit-all', 'fetchPending'], true),

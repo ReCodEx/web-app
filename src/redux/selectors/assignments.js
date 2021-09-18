@@ -24,16 +24,17 @@ export const assignmentEnvironmentsSelector = createSelector(
     const assignment = assignmentSelector(id);
     const envIds = assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
     const disabledEnvIds = assignment && assignment.getIn(['data', 'disabledRuntimeEnvironmentIds']);
+
     return envIds && disabledEnvIds && envSelector
       ? envIds
           .toArray()
-          .filter(env => disabledEnvIds.toArray().indexOf(env) < 0)
+          .filter(env => !disabledEnvIds.toArray().includes(env))
           .map(envSelector)
       : null;
   }
 );
 
-export const getAssigmentSolutions = createSelector(
+export const getAssignmentSolutions = createSelector(
   [getSolutions, getAssignments, getParam],
   (solutions, assignments, assignmentId) =>
     assignments

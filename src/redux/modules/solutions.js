@@ -34,6 +34,10 @@ export const additionalActionTypes = {
   LOAD_ASSIGNMENT_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_PENDING',
   LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED',
   LOAD_ASSIGNMENT_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_REJECTED',
+  LOAD_GROUP_STUDENTS_SOLUTIONS: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS',
+  LOAD_GROUP_STUDENTS_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS_PENDING',
+  LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED',
+  LOAD_GROUP_STUDENTS_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS_REJECTED',
   SET_NOTE: 'recodex/solutions/SET_NOTE',
   SET_NOTE_PENDING: 'recodex/solutions/SET_NOTE_PENDING',
   SET_NOTE_FULFILLED: 'recodex/solutions/SET_NOTE_FULFILLED',
@@ -94,6 +98,9 @@ export const fetchManyAssignmentSolutionsEndpoint = assignmentId => `/exercise-a
 export const fetchManyUserSolutionsEndpoint = (userId, assignmentId) =>
   `/exercise-assignments/${assignmentId}/users/${userId}/solutions`;
 
+export const fetchManyGroupStudentsSolutionsEndpoint = (groupId, userId) =>
+  `/groups/${groupId}/students/${userId}/solutions`;
+
 export const fetchAssignmentSolutions = assignmentId =>
   actions.fetchMany({
     type: additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS,
@@ -109,6 +116,16 @@ export const fetchUsersSolutions = (userId, assignmentId) =>
     endpoint: fetchManyUserSolutionsEndpoint(userId, assignmentId),
     meta: {
       assignmentId,
+      userId,
+    },
+  });
+
+export const fetchGroupStudentsSolutions = (groupId, userId) =>
+  actions.fetchMany({
+    type: additionalActionTypes.LOAD_GROUP_STUDENTS_SOLUTIONS,
+    endpoint: fetchManyGroupStudentsSolutionsEndpoint(groupId, userId),
+    meta: {
+      groupId,
       userId,
     },
   });
@@ -137,6 +154,10 @@ const reducer = handleActions(
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_PENDING]: reduceActions[actionTypes.FETCH_MANY_PENDING],
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: reduceActions[actionTypes.FETCH_MANY_FULFILLED],
     [additionalActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_REJECTED]: reduceActions[actionTypes.FETCH_MANY_REJECTED],
+
+    [additionalActionTypes.LOAD_GROUP_STUDENTS_SOLUTIONS_PENDING]: reduceActions[actionTypes.FETCH_MANY_PENDING],
+    [additionalActionTypes.LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED]: reduceActions[actionTypes.FETCH_MANY_FULFILLED],
+    [additionalActionTypes.LOAD_GROUP_STUDENTS_SOLUTIONS_REJECTED]: reduceActions[actionTypes.FETCH_MANY_REJECTED],
 
     [additionalActionTypes.SET_NOTE_FULFILLED]: (state, { payload }) =>
       state.setIn(
@@ -170,7 +191,7 @@ const reducer = handleActions(
 
       if (flag === 'accepted') {
         // Accepted flag requires special treatement
-        const assignmentId = state.getIn(['resources', id, 'data', 'exerciseAssignmentId']);
+        const assignmentId = state.getIn(['resources', id, 'data', 'assignmentId']);
 
         if (value) {
           // Accepted solution needs to be updated
@@ -185,7 +206,7 @@ const reducer = handleActions(
               // All other solutions from the same assignment by the same author needs to be updated
               .update('resources', resources =>
                 resources.map((item, itemId) => {
-                  const aId = item.getIn(['data', 'exerciseAssignmentId']);
+                  const aId = item.getIn(['data', 'assignmentId']);
                   const uId = item.getIn(['data', 'solution', 'userId']);
                   return itemId === id || aId !== assignmentId || uId !== userId
                     ? item // no modification (either it is accepted solution, or it is solution from another assignment/by another user)

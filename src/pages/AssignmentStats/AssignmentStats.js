@@ -15,7 +15,7 @@ import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
-import { ChatIcon, DownloadIcon, SearchIcon, ResultsIcon } from '../../components/icons';
+import { ChatIcon, DownloadIcon, SearchIcon, ResultsIcon, UserIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import UsersName from '../../components/Users/UsersName';
 import Points from '../../components/Assignments/SolutionsTable/Points';
@@ -45,7 +45,7 @@ import {
   getAssignment,
   assignmentEnvironmentsSelector,
   getUserSolutionsSortedData,
-  getAssigmentSolutions,
+  getAssignmentSolutions,
 } from '../../redux/selectors/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchManyAssignmentSolutionsStatus } from '../../redux/selectors/solutions';
@@ -177,47 +177,48 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
   return columns;
 });
 
-const prepareTableData = defaultMemoize((assigmentSolutions, users, runtimeEnvironments, onlyBestSolutionsCheckbox) => {
-  const usersIndex = arrayToObject(users);
-  return assigmentSolutions
-    .toArray()
-    .map(getJsData)
-    .filter(solution => solution && usersIndex[solution.authorId])
-    .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
-    .map(
-      ({
-        id,
-        lastSubmission,
-        solution,
-        authorId,
-        createdAt,
-        runtimeEnvironmentId,
-        note,
-        maxPoints,
-        bonusPoints,
-        actualPoints,
-        accepted,
-        reviewed,
-        isBestSolution,
-        commentsStats,
-        permissionHints,
-      }) => {
-        const statusEvaluated =
-          lastSubmission &&
-          (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
-        return {
-          icon: { id, commentsStats, lastSubmission, accepted, reviewed, isBestSolution },
-          user: usersIndex[authorId],
-          date: createdAt,
-          validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
-          points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
-          runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),
+const prepareTableData = defaultMemoize(
+  (assignmentSolutions, users, runtimeEnvironments, onlyBestSolutionsCheckbox) => {
+    const usersIndex = arrayToObject(users);
+    return assignmentSolutions
+      .toArray()
+      .map(getJsData)
+      .filter(solution => solution && usersIndex[solution.authorId])
+      .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
+      .map(
+        ({
+          id,
+          lastSubmission,
+          authorId,
+          createdAt,
+          runtimeEnvironmentId,
           note,
-          actionButtons: { id, permissionHints },
-        };
-      }
-    );
-});
+          maxPoints,
+          bonusPoints,
+          actualPoints,
+          accepted,
+          reviewed,
+          isBestSolution,
+          commentsStats,
+          permissionHints,
+        }) => {
+          const statusEvaluated =
+            lastSubmission &&
+            (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
+          return {
+            icon: { id, commentsStats, lastSubmission, accepted, reviewed, isBestSolution },
+            user: usersIndex[authorId],
+            date: createdAt,
+            validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
+            points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
+            runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),
+            note,
+            actionButtons: { id, permissionHints },
+          };
+        }
+      );
+  }
+);
 
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
@@ -272,7 +273,7 @@ class AssignmentStats extends Component {
       getGroup,
       getUserSolutions,
       runtimeEnvironments,
-      assigmentSolutions,
+      assignmentSolutions,
       downloadBestSolutionsArchive,
       fetchManyStatus,
       intl: { locale },
@@ -381,7 +382,27 @@ class AssignmentStats extends Component {
                           .map(user => (
                             <Row key={user.id}>
                               <Col sm={12}>
-                                <Box title={user.fullName} collapsable isOpen noPadding unlimitedHeight>
+                                <Box
+                                  title={
+                                    <>
+                                      <UserIcon gapRight className="text-muted" />
+                                      {user.fullName}
+                                      <small className="ml-3 text-nowrap">
+                                        (
+                                        <Link to={links.GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id)}>
+                                          <FormattedMessage
+                                            id="app.assignmentStats.allUserSolutions"
+                                            defaultMessage="all user solutions"
+                                          />
+                                        </Link>
+                                        )
+                                      </small>
+                                    </>
+                                  }
+                                  collapsable
+                                  isOpen
+                                  noPadding
+                                  unlimitedHeight>
                                   <SolutionsTable
                                     solutions={getUserSolutions(user.id)}
                                     assignmentId={assignmentId}
@@ -409,7 +430,7 @@ class AssignmentStats extends Component {
                           columns={prepareTableColumnDescriptors(loggedUserId, assignmentId, group.id, locale, links)}
                           defaultOrder="date"
                           data={prepareTableData(
-                            assigmentSolutions,
+                            assignmentSolutions,
                             getStudents(group.id),
                             runtimes,
                             this.state.onlyBestSolutionsCheckbox
@@ -444,7 +465,7 @@ AssignmentStats.propTypes = {
   getGroup: PropTypes.func.isRequired,
   getUserSolutions: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array,
-  assigmentSolutions: ImmutablePropTypes.list,
+  assignmentSolutions: ImmutablePropTypes.list,
   loadAsync: PropTypes.func.isRequired,
   downloadBestSolutionsArchive: PropTypes.func.isRequired,
   fetchManyStatus: PropTypes.string,
@@ -473,7 +494,7 @@ export default withLinks(
         getStudentsIds,
         getStudents: groupId => readyUsers.filter(user => getStudentsIds(groupId).includes(getId(user))).map(getJsData),
         getUserSolutions: userId => getUserSolutionsSortedData(state)(userId, assignmentId),
-        assigmentSolutions: getAssigmentSolutions(state, assignmentId),
+        assignmentSolutions: getAssignmentSolutions(state, assignmentId),
         getGroup: id => groupSelector(state, id),
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
         fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),

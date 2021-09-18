@@ -135,9 +135,9 @@ class ExercisesListContainer extends Component {
       history: { push },
       links: { ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
-    assignExercise(exerciseId).then(({ value: assigment }) => {
+    assignExercise(exerciseId).then(({ value: assignment }) => {
       App.ignoreNextLocationChange();
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assigment.id));
+      push(ASSIGNMENT_EDIT_URI_FACTORY(assignment.id));
     });
   };
 

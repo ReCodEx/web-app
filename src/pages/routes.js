@@ -15,6 +15,7 @@ import EditExerciseConfig from './EditExerciseConfig';
 import EditExerciseLimits from './EditExerciseLimits';
 import GroupDetail from './GroupDetail';
 import GroupInfo from './GroupInfo';
+import GroupUserSolutions from './GroupUserSolutions';
 import EditGroup from './EditGroup';
 import Instance from './Instance';
 import Instances from './Instances';
@@ -99,6 +100,7 @@ const routesDescriptors = [
   r('app/group/:groupId/edit', EditGroup, 'GROUP_EDIT_URI_FACTORY', true),
   r('app/group/:groupId/info', GroupInfo, 'GROUP_INFO_URI_FACTORY', true),
   r('app/group/:groupId/detail', GroupDetail, 'GROUP_DETAIL_URI_FACTORY', true),
+  r('app/group/:groupId/user/:userId', GroupUserSolutions, 'GROUP_USER_SOLUTIONS_URI_FACTORY', true),
   r('app/instance/:instanceId', Instance, 'INSTANCE_URI_FACTORY', true),
   r('app/users', Users, 'USERS_URI', true),
   r('app/user/:userId', User, 'USER_URI_FACTORY', true),
