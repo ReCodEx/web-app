@@ -16,9 +16,10 @@ import Confirm from '../../forms/Confirm';
 import Icon, { EditIcon, DeleteIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users';
 import { arrayToObject, safeGet } from '../../../helpers/common';
+import withLinks from '../../../helpers/withLinks';
 
 class ShadowAssignmentPointsTable extends Component {
-  state = { dialogStudentId: null, dialogAssignmentId: null };
+  state = { dialogStudentId: null, dialogPointsId: null };
 
   openDialog = (studentId, pointsId = null) =>
     this.setState({
@@ -44,11 +45,13 @@ class ShadowAssignmentPointsTable extends Component {
 
   render() {
     const {
+      groupId,
       students,
       points,
       permissionHints,
       maxPoints,
       intl: { locale },
+      links: { GROUP_USER_SOLUTIONS_URI_FACTORY },
     } = this.props;
     const studentPoints = arrayToObject(points, ({ awardeeId }) => awardeeId);
     const nameComparator = createUserNameComparator(locale);
@@ -89,7 +92,11 @@ class ShadowAssignmentPointsTable extends Component {
                 return (
                   <tr key={student.id}>
                     <td className="text-nowrap">
-                      <UsersNameContainer userId={student.id} showEmail="icon" />
+                      <UsersNameContainer
+                        userId={student.id}
+                        showEmail="icon"
+                        link={GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, student.id)}
+                      />
                     </td>
                     <td className="text-center text-nowrap">{points !== null ? points : <span>&mdash;</span>}</td>
                     <td>{awardedAt && <DateTime unixts={awardedAt} showRelative />}</td>
@@ -172,6 +179,7 @@ class ShadowAssignmentPointsTable extends Component {
 }
 
 ShadowAssignmentPointsTable.propTypes = {
+  groupId: PropTypes.string.isRequired,
   students: PropTypes.array.isRequired,
   points: PropTypes.array.isRequired,
   permissionHints: PropTypes.object.isRequired,
@@ -179,6 +187,7 @@ ShadowAssignmentPointsTable.propTypes = {
   setPoints: PropTypes.func.isRequired,
   removePoints: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
+  links: PropTypes.object,
 };
 
-export default injectIntl(ShadowAssignmentPointsTable);
+export default withLinks(injectIntl(ShadowAssignmentPointsTable));

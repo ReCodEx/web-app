@@ -2,12 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
-import UsersNameContainer from '../../../containers/UsersNameContainer';
 
-const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) => (
+import UsersNameContainer from '../../../containers/UsersNameContainer';
+import withLinks from '../../../helpers/withLinks';
+
+const StudentsListItem = ({
+  id,
+  groupId = null,
+  stats,
+  renderActions,
+  links: { GROUP_USER_SOLUTIONS_URI_FACTORY },
+}) => (
   <tr>
     <td>
-      <UsersNameContainer userId={id} />
+      <UsersNameContainer userId={id} link={groupId && GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, id)} />
     </td>
     <td width={150}>
       {stats && (
@@ -33,8 +41,7 @@ const StudentsListItem = ({ id, fullName, avatarUrl, stats, renderActions }) => 
 
 StudentsListItem.propTypes = {
   id: PropTypes.string.isRequired,
-  fullName: PropTypes.string.isRequired,
-  avatarUrl: PropTypes.string,
+  groupId: PropTypes.string,
   stats: PropTypes.shape({
     points: PropTypes.shape({
       total: PropTypes.number.isRequired,
@@ -44,6 +51,7 @@ StudentsListItem.propTypes = {
     passesLimit: PropTypes.bool,
   }),
   renderActions: PropTypes.func,
+  links: PropTypes.object,
 };
 
-export default StudentsListItem;
+export default withLinks(StudentsListItem);

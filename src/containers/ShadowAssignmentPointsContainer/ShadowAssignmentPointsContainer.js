@@ -20,9 +20,10 @@ class ShadowAssignmentPointsContainer extends Component {
   }
 
   render() {
-    const { students, points, maxPoints, permissionHints, setPoints, removePoints } = this.props;
+    const { groupId, students, points, maxPoints, permissionHints, setPoints, removePoints } = this.props;
     return (
       <ShadowAssignmentPointsTable
+        groupId={groupId}
         students={students}
         points={points}
         maxPoints={maxPoints}

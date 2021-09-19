@@ -208,7 +208,12 @@ class ResultsTable extends Component {
     (assignments, shadowAssignments, loggedUser, locale, isAdminOrSupervisor) => {
       const {
         group,
-        links: { ASSIGNMENT_STATS_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY },
+        links: {
+          ASSIGNMENT_STATS_URI_FACTORY,
+          ASSIGNMENT_DETAIL_URI_FACTORY,
+          SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
+          GROUP_USER_SOLUTIONS_URI_FACTORY,
+        },
       } = this.props;
 
       const nameComparator = createUserNameComparator(locale);
@@ -226,7 +231,15 @@ class ResultsTable extends Component {
             className: 'text-left',
             comparator: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
             cellRenderer: user =>
-              user && <UsersName {...user} currentUserId={loggedUser.id} showEmail="icon" showExternalIdentifiers />,
+              user && (
+                <UsersName
+                  {...user}
+                  currentUserId={loggedUser.id}
+                  showEmail="icon"
+                  showExternalIdentifiers
+                  link={GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id)}
+                />
+              ),
           }
         ),
       ];

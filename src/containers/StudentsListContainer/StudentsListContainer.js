@@ -24,7 +24,7 @@ class StudentsListContainer extends Component {
   }
 
   render() {
-    const { group, students, stats, ...props } = this.props;
+    const { groupId, group, students, stats, ...props } = this.props;
     return (
       <ResourceRenderer resource={group}>
         {group => (
@@ -33,6 +33,7 @@ class StudentsListContainer extends Component {
             users={students}
             isLoaded={students.length === group.privateData.students.length}
             stats={stats}
+            groupId={groupId}
           />
         )}
       </ResourceRenderer>
