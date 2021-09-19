@@ -44,6 +44,7 @@ import { runtimeEnvironmentSelector, fetchRuntimeEnvironmentsStatus } from '../.
 import { getJsData } from '../../redux/helpers/resourceManager';
 import { compareAssignmentsReverted } from '../../components/helpers/assignments';
 
+import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, hasPermissions } from '../../helpers/common';
@@ -245,6 +246,8 @@ const prepareTableData = defaultMemoize(
   }
 );
 
+const localStorageStateKey = 'GroupUserSolutions.state';
+
 class GroupUserSolutions extends Component {
   static loadAsync = ({ groupId, userId }, dispatch) =>
     Promise.all([
@@ -263,10 +266,19 @@ class GroupUserSolutions extends Component {
   state = { groupByAssignmentsCheckbox: true, onlyBestSolutionsCheckbox: false };
 
   checkboxClickHandler = ev => {
-    this.setState({ [ev.target.name]: !this.state[ev.target.name] });
+    this.setState({ [ev.target.name]: !this.state[ev.target.name] }, () => {
+      // callback after the state is updated
+      storageSetItem(localStorageStateKey, {
+        groupByAssignmentsCheckbox: this.state.groupByAssignmentsCheckbox,
+        onlyBestSolutionsCheckbox: this.state.onlyBestSolutionsCheckbox,
+      });
+    });
   };
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount = () => {
+    this.props.loadAsync();
+    this.setState(storageGetItem(localStorageStateKey, null));
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.groupId !== prevProps.groupId || this.props.userId !== prevProps.userId) {
@@ -309,27 +321,25 @@ class GroupUserSolutions extends Component {
 
             <div className="text-right text-nowrap py-2">
               <OnOffCheckbox
+                className="text-left mr-3"
                 checked={this.state.groupByAssignmentsCheckbox}
                 disabled={this.state.onlyBestSolutionsCheckbox}
                 name="groupByAssignmentsCheckbox"
                 onChange={this.checkboxClickHandler}>
-                <span className="em-padding-right">
-                  <FormattedMessage
-                    id="app.groupUserSolutions.groupByAssignmentsCheckbox"
-                    defaultMessage="Group by assignments"
-                  />
-                </span>
+                <FormattedMessage
+                  id="app.groupUserSolutions.groupByAssignmentsCheckbox"
+                  defaultMessage="Group by assignments"
+                />
               </OnOffCheckbox>
               <OnOffCheckbox
+                className="text-left mr-3"
                 checked={this.state.onlyBestSolutionsCheckbox}
                 name="onlyBestSolutionsCheckbox"
                 onChange={this.checkboxClickHandler}>
-                <span className="em-padding-right">
-                  <FormattedMessage
-                    id="app.groupUserSolutions.onlyBestSolutionsCheckbox"
-                    defaultMessage="Best solutions only"
-                  />
-                </span>
+                <FormattedMessage
+                  id="app.groupUserSolutions.onlyBestSolutionsCheckbox"
+                  defaultMessage="Best solutions only"
+                />
               </OnOffCheckbox>
             </div>
 

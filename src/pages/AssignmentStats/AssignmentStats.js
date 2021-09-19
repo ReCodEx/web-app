@@ -51,6 +51,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { fetchManyAssignmentSolutionsStatus } from '../../redux/selectors/solutions';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
+import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
@@ -228,6 +229,8 @@ const prepareTableData = defaultMemoize(
   }
 );
 
+const localStorageStateKey = 'AssignmentStats.state';
+
 class AssignmentStats extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
@@ -245,13 +248,22 @@ class AssignmentStats extends Component {
   state = { groupByUsersCheckbox: true, onlyBestSolutionsCheckbox: false, assignmentDialogOpen: false };
 
   checkboxClickHandler = ev => {
-    this.setState({ [ev.target.name]: !this.state[ev.target.name] });
+    this.setState({ [ev.target.name]: !this.state[ev.target.name] }, () => {
+      // callback after the state is updated
+      storageSetItem(localStorageStateKey, {
+        groupByUsersCheckbox: this.state.groupByUsersCheckbox,
+        onlyBestSolutionsCheckbox: this.state.onlyBestSolutionsCheckbox,
+      });
+    });
   };
 
   openDialog = () => this.setState({ assignmentDialogOpen: true });
   closeDialog = () => this.setState({ assignmentDialogOpen: false });
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount = () => {
+    this.props.loadAsync();
+    this.setState(storageGetItem(localStorageStateKey, null));
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.assignmentId !== prevProps.assignmentId) {
@@ -350,24 +362,22 @@ class AssignmentStats extends Component {
 
               <Col md={12} lg={5} className="text-right text-nowrap pt-2">
                 <OnOffCheckbox
+                  className="text-left mr-3"
                   checked={this.state.groupByUsersCheckbox}
                   disabled={this.state.onlyBestSolutionsCheckbox}
                   name="groupByUsersCheckbox"
                   onChange={this.checkboxClickHandler}>
-                  <span className="em-padding-right">
-                    <FormattedMessage id="app.assignmentStats.groupByUsersCheckbox" defaultMessage="Group by users" />
-                  </span>
+                  <FormattedMessage id="app.assignmentStats.groupByUsersCheckbox" defaultMessage="Group by users" />
                 </OnOffCheckbox>
                 <OnOffCheckbox
+                  className="text-left mr-3"
                   checked={this.state.onlyBestSolutionsCheckbox}
                   name="onlyBestSolutionsCheckbox"
                   onChange={this.checkboxClickHandler}>
-                  <span className="em-padding-right">
-                    <FormattedMessage
-                      id="app.assignmentStats.onlyBestSolutionsCheckbox"
-                      defaultMessage="Best solutions only"
-                    />
-                  </span>
+                  <FormattedMessage
+                    id="app.assignmentStats.onlyBestSolutionsCheckbox"
+                    defaultMessage="Best solutions only"
+                  />
                 </OnOffCheckbox>
               </Col>
             </Row>
