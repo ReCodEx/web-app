@@ -26,6 +26,7 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
           currentUserId={loggedUserId}
           showEmail={emailColumn ? null : 'full'}
           showExternalIdentifiers
+          link
         />
       </td>
 

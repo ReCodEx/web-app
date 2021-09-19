@@ -60,7 +60,7 @@ const ReferenceSolutionStatus = ({ description, authorId, submittedAt, submitted
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
-            <UsersNameContainer userId={authorId} />
+            <UsersNameContainer userId={authorId} link />
           </td>
         </tr>
 
@@ -73,7 +73,7 @@ const ReferenceSolutionStatus = ({ description, authorId, submittedAt, submitted
               <FormattedMessage id="generic.reevaluatedBy" defaultMessage="Re-evaluated by" />:
             </th>
             <td>
-              <UsersNameContainer userId={submittedBy} showEmail="icon" />
+              <UsersNameContainer userId={submittedBy} showEmail="icon" link />
             </td>
           </tr>
         )}

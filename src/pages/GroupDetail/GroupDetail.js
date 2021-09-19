@@ -185,7 +185,9 @@ class GroupDetail extends Component {
               />
 
               {canLeaveGroup && (
-                <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} size={null} redirectAfterLeave />
+                <div className="my-3">
+                  <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} size={null} redirectAfterLeave />
+                </div>
               )}
 
               {!hasOneOfPermissions(data, 'viewAssignments', 'viewExercises') && (

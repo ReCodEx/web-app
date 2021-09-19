@@ -152,8 +152,8 @@ class EditUser extends Component {
                   initialValues={{
                     firstName: data.name.firstName,
                     lastName: data.name.lastName,
-                    degreesBeforeName: data.name.degreesBeforeName,
-                    degreesAfterName: data.name.degreesAfterName,
+                    titlesBeforeName: data.name.titlesBeforeName,
+                    titlesAfterName: data.name.titlesAfterName,
                     email: data.privateData.email,
                     passwordStrength: null,
                     gravatarUrlEnabled: data.avatarUrl !== null,

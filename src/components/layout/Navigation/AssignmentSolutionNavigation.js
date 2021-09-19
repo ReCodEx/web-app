@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Navigation from './Navigation';
 import withLinks from '../../../helpers/withLinks';
-import { AssignmentIcon, ExerciseIcon, ResultsIcon, SolutionResultsIcon, UserIcon } from '../../icons';
+import { AssignmentIcon, ExerciseIcon, ResultsIcon, SolutionResultsIcon, UserIcon, UserProfileIcon } from '../../icons';
 import { createGroupLinks } from './linkCreators';
 
 const AssignmentSolutionNavigation = ({
@@ -15,6 +15,7 @@ const AssignmentSolutionNavigation = ({
   groupId,
   canViewSolutions = false,
   canViewExercise = false,
+  canViewUserProfile = false,
   links,
 }) => (
   <Navigation
@@ -49,6 +50,13 @@ const AssignmentSolutionNavigation = ({
         },
       ...createGroupLinks(links, groupId, true) /* true = detail, no edit */,
     ]}
+    secondaryLinks={[
+      canViewUserProfile && {
+        caption: <FormattedMessage id="app.navigation.userProfile" defaultMessage="User's Profile" />,
+        link: links.USER_URI_FACTORY(userId),
+        icon: <UserProfileIcon gapRight />,
+      },
+    ]}
   />
 );
 
@@ -60,6 +68,7 @@ AssignmentSolutionNavigation.propTypes = {
   groupId: PropTypes.string.isRequired,
   canViewSolutions: PropTypes.bool,
   canViewExercise: PropTypes.bool,
+  canViewUserProfile: PropTypes.bool,
   links: PropTypes.object.isRequired,
 };
 

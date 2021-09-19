@@ -24,7 +24,7 @@ class UsersNameContainer extends Component {
     const {
       user,
       large = false,
-      link = null,
+      link = false,
       noAvatar = false,
       currentUser,
       isSimple = false,
@@ -49,7 +49,7 @@ class UsersNameContainer extends Component {
               noAvatar={noAvatar}
               large={large}
               size={size}
-              link={typeof link === 'function' ? link(user.id) : link}
+              link={link}
               currentUserId={currentUser.id}
               showEmail={showEmail}
               showExternalIdentifiers={showExternalIdentifiers}
@@ -67,7 +67,7 @@ UsersNameContainer.propTypes = {
   currentUser: PropTypes.object,
   large: PropTypes.bool,
   user: ImmutablePropTypes.map,
-  link: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  link: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.bool]),
   noAvatar: PropTypes.bool,
   isSimple: PropTypes.bool,
   showEmail: PropTypes.string,

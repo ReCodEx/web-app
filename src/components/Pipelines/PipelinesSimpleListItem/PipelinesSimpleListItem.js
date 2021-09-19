@@ -13,7 +13,7 @@ const PipelinesSimpleListItem = ({ id, name, author, createActions, links: { PIP
       </strong>
     </td>
     <td>
-      <UsersNameContainer userId={author} />
+      <UsersNameContainer userId={author} link />
     </td>
     {createActions && <td>{createActions(id)}</td>}
   </tr>

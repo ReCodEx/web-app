@@ -127,7 +127,9 @@ class GroupInfo extends Component {
               !isSupervisor &&
               (data.public || (isStudent && !data.privateData.detaining)) &&
               !data.organizational && (
-                <LeaveJoinGroupButtonContainer userId={userId} groupId={group.id} size={null} redirectAfterLeave />
+                <div className="my-3">
+                  <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} size={null} redirectAfterLeave />
+                </div>
               )}
 
             <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />

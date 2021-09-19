@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Navigation from './Navigation';
 import withLinks from '../../../helpers/withLinks';
 import { createGroupLinks } from './linkCreators';
-import { MailIcon, UserIcon } from '../../icons';
+import { MailIcon, UserIcon, UserProfileIcon } from '../../icons';
 
 const GroupNavigation = ({ groupId, userId = null, canViewDetail = false, canEdit = false, emails = null, links }) => (
   <Navigation
@@ -26,6 +26,12 @@ const GroupNavigation = ({ groupId, userId = null, canViewDetail = false, canEdi
         href: `mailto:?bcc=${emails}`,
         icon: <MailIcon gapRight />,
       },
+      userId &&
+        canEdit && {
+          caption: <FormattedMessage id="app.navigation.userProfile" defaultMessage="User's Profile" />,
+          link: links.USER_URI_FACTORY(userId),
+          icon: <UserProfileIcon gapRight />,
+        },
     ]}
   />
 );

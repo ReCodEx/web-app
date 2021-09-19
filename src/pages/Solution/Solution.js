@@ -107,6 +107,7 @@ class Solution extends Component {
                     'viewAssignmentSolutions'
                   ) /* this is not the actual permission, but close enough */
                 }
+                canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               />
 
               {(hasPermissions(solution, 'setFlag') || hasPermissions(assignment, 'resubmitSubmissions')) && (
