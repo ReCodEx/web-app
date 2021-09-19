@@ -70,7 +70,7 @@ const ExercisesListItem = ({
     </td>
 
     <td>
-      <UsersNameContainer userId={authorId} />
+      <UsersNameContainer userId={authorId} link />
     </td>
 
     <td className="small">{runtimeEnvironments && <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}</td>

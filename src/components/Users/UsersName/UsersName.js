@@ -9,6 +9,7 @@ import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer
 import { UserRoleIcon } from '../../helpers/usersRoles';
 import NotVerified from './NotVerified';
 import Icon, { MailIcon, BanIcon } from '../../icons';
+import withLinks from '../../../helpers/withLinks';
 
 import styles from './usersName.less';
 
@@ -16,6 +17,13 @@ const userNameStyle = defaultMemoize((size, large) => ({
   lineHeight: `${size}px`,
   fontSize: large ? size / 2 : 'inherit',
 }));
+
+/**
+ * Link may be a function (link factory), string (actual link value), or bool (true indicate default link to user page).
+ * @returns {String} the actual resolved link
+ */
+const resolveLink = (link, id, USER_URI_FACTORY) =>
+  typeof link === 'function' ? link(id) : link === true ? USER_URI_FACTORY(id) : link;
 
 const UsersName = ({
   id,
@@ -25,13 +33,14 @@ const UsersName = ({
   size = null,
   large = false,
   isVerified,
-  link = null,
+  link = false,
   noAvatar = false,
   privateData = null,
   showEmail = null,
   showExternalIdentifiers = false,
   showRoleIcon = false,
   currentUserId,
+  links: { USER_URI_FACTORY },
 }) => {
   if (size === null) {
     size = large ? 45 : 20;
@@ -61,9 +70,9 @@ const UsersName = ({
           </OverlayTrigger>
         )}
 
-        {link ? <Link to={link}>{fullName}</Link> : <span>{fullName}</span>}
+        {link ? <Link to={resolveLink(link, id, USER_URI_FACTORY)}>{fullName}</Link> : <span>{fullName}</span>}
 
-        {showRoleIcon && (
+        {showRoleIcon && privateData && (
           <UserRoleIcon
             role={privateData.role}
             showTooltip
@@ -133,12 +142,13 @@ UsersName.propTypes = {
   privateData: PropTypes.object,
   size: PropTypes.number,
   large: PropTypes.bool,
-  link: PropTypes.string,
+  link: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.bool]),
   noAvatar: PropTypes.bool,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
   showRoleIcon: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
+  links: PropTypes.object,
 };
 
-export default UsersName;
+export default withLinks(UsersName);

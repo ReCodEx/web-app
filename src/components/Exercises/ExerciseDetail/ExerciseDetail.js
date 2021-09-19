@@ -49,7 +49,7 @@ const ExerciseDetail = ({
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
-            <UsersNameContainer userId={authorId} showEmail="icon" />
+            <UsersNameContainer userId={authorId} showEmail="icon" link />
           </td>
         </tr>
 

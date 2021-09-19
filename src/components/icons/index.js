@@ -123,6 +123,7 @@ export const UndoIcon = props => <Icon {...props} icon="undo-alt" />;
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
+export const UserProfileIcon = props => <Icon {...props} icon={['far', 'address-card']} />;
 export const VisibleIcon = ({ visible = true, ...props }) =>
   visible ? (
     <Icon {...props} icon={['far', 'eye']} />

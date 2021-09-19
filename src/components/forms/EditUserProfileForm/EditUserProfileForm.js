@@ -57,11 +57,11 @@ const EditUserProfileForm = ({
     )}
 
     <Field
-      name="degreesBeforeName"
+      name="titlesBeforeName"
       component={TextField}
       maxLength={42}
       required
-      label={<FormattedMessage id="app.editUserProfile.degreesBeforeName" defaultMessage="Prefix Title:" />}
+      label={<FormattedMessage id="app.editUserProfile.titlesBeforeName" defaultMessage="Prefix Title:" />}
     />
 
     <Field
@@ -83,11 +83,11 @@ const EditUserProfileForm = ({
     />
 
     <Field
-      name="degreesAfterName"
+      name="titlesAfterName"
       component={TextField}
       maxLength={42}
       required
-      label={<FormattedMessage id="app.editUserProfile.degreesAfterName" defaultMessage="Suffix Title:" />}
+      label={<FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />}
     />
 
     <Field

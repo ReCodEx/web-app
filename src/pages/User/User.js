@@ -3,44 +3,100 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Row, Col } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { Set } from 'immutable';
 
 import Page from '../../components/layout/Page';
 import { UserNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
-import { LoadingInfoBox } from '../../components/widgets/InfoBox';
-import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
-import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
-import UsersStats from '../../components/Users/UsersStats';
-import GroupsName from '../../components/Groups/GroupsName';
+import GroupsNameContainer from '../../containers/GroupsNameContainer';
+import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import DateTime from '../../components/widgets/DateTime';
 
-import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { takeOver } from '../../redux/modules/auth';
 
-import { getUser, isStudent, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
-import { createGroupsStatsSelector } from '../../redux/selectors/stats';
-import { groupSelector, groupsAssignmentsSelector } from '../../redux/selectors/groups';
-import {
-  userStudentOfGroupIdsSelector,
-  studentOfSelector,
-  supervisorOfSelector,
-  adminOfSelector,
-} from '../../redux/selectors/usersGroups';
-import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
+import { getUser, isLoggedAsSuperAdmin, isStudent } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { groupsUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 
-import { InfoIcon, TransferIcon, AssignmentsIcon, GroupIcon, UserIcon } from '../../components/icons';
-import { safeGet } from '../../helpers/common';
+import Icon, {
+  AssignmentsIcon,
+  GroupIcon,
+  MailIcon,
+  ObserverIcon,
+  ResultsIcon,
+  SignInIcon,
+  SuccessIcon,
+  SuperadminIcon,
+  SupervisorIcon,
+  TransferIcon,
+  UserIcon,
+  UserProfileIcon,
+  WarningIcon,
+} from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
+
+const MemberGroupsBox = withLinks(
+  ({
+    title,
+    groups,
+    userId,
+    isStudent = false,
+    links: { GROUP_USER_SOLUTIONS_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+  }) => (
+    <Box title={title} collapsable noPadding isOpen unlimitedHeight>
+      <Table hover className="mb-1">
+        <tbody>
+          {groups.map(groupId => (
+            <tr key={groupId}>
+              <td className="full-width">
+                <GroupsNameContainer groupId={groupId} fullName translations links admins />
+              </td>
+              <td className="text-nowrap">
+                <TheButtonGroup>
+                  {isStudent && (
+                    <Link to={GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, userId)}>
+                      <Button size="xs" variant="primary">
+                        <ResultsIcon gapRight />
+                        <FormattedMessage id="app.groupUserSolutions.userSolutions" defaultMessage="User Solutions" />
+                      </Button>
+                    </Link>
+                  )}
+
+                  <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
+                    <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
+                      <GroupIcon gapRight />
+                      <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                    </Button>
+                  </Link>
+
+                  <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+                    <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
+                      <AssignmentsIcon gapRight />
+                      <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+                    </Button>
+                  </Link>
+                </TheButtonGroup>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </Box>
+  )
+);
+
+MemberGroupsBox.propTypes = {
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  groups: PropTypes.array.isRequired,
+  userId: PropTypes.string.isRequired,
+  isStudent: PropTypes.bool,
+  links: PropTypes.object,
+};
 
 class User extends Component {
   componentDidMount = () => this.props.loadAsync();
@@ -54,64 +110,21 @@ class User extends Component {
     }
   }
 
-  static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
-
-  /**
-   * A fairly complicated load method - uses redux thunk
-   * to load the groups and necessary data for the intersection
-   * of user's groups of which the current user is a supervisor.
-   */
-  static loadAsync = ({ userId }, dispatch) =>
-    Promise.all([
-      dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchAllGroups()).then(() =>
-        dispatch(fetchUserIfNeeded(userId)).then(({ value: user }) => {
-          const studentOf = safeGet(user, ['privateData', 'groups', 'studentOf'], []);
-          const supervisorOf = safeGet(user, ['privateData', 'groups', 'supervisorOf'], []);
-          return dispatch((dispatch, getState) =>
-            Promise.all(
-              [...studentOf, ...supervisorOf]
-                .filter(groupId => {
-                  // TODO this should be done better using security endpoint (unfortunatelly, permission hints are insuficient)
-                  const group = groupSelector(getState(), groupId);
-                  return group && group.getIn(['data', 'permissionHints', 'viewAssignments']);
-                })
-                .map(groupId =>
-                  Promise.all([dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupStatsIfNeeded(groupId))])
-                )
-            )
-          );
-        })
-      ),
-    ]);
+  static loadAsync = ({ userId }, dispatch) => dispatch(fetchUserIfNeeded(userId));
 
   render() {
-    const {
-      userId,
-      user,
-      student,
-      isAdmin,
-      studentOfGroupsIds,
-      commonGroups,
-      loggedInUserId,
-      groupAssignments,
-      assignmentEnvironmentsSelector,
-      groupStatistics,
-      usersStatistics,
-      takeOver,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, INSTANCE_URI_FACTORY },
-    } = this.props;
+    const { userId, loggedInUserId, user, isSuperAdmin, memberGroups, fetchManyGroupsStatus, takeOver } = this.props;
 
     return (
       <Page
         resource={user}
-        icon={<UserIcon />}
+        icon={<UserProfileIcon />}
         title={<FormattedMessage id="app.user.title" defaultMessage="User's profile" />}>
         {user => (
           <div>
-            <UserNavigation userId={userId} canViewDetail canEdit={isAdmin || userId === loggedInUserId} />
+            <UserNavigation userId={userId} canViewDetail canEdit={isSuperAdmin || userId === loggedInUserId} />
 
-            {isAdmin && userId !== loggedInUserId && (
+            {isSuperAdmin && userId !== loggedInUserId && (
               <div className="mb-3">
                 <TheButtonGroup>
                   {user.privateData.isAllowed && (
@@ -126,110 +139,213 @@ class User extends Component {
               </div>
             )}
 
-            {(commonGroups.length > 0 || isAdmin) && (
-              <div>
-                {commonGroups.map(group => (
-                  <div key={group.id}>
-                    <ResourceRenderer
-                      loading={
-                        <Row>
-                          <Col lg={4}>
-                            <LoadingInfoBox title={<GroupsName {...group} translations />} />
-                          </Col>
-                        </Row>
+            {(isSuperAdmin || userId === loggedInUserId) && (
+              <Box
+                title={<FormattedMessage id="app.user.profileOverview" defaultMessage="Profile overview" />}
+                noPadding
+                unlimitedHeight>
+                <Table className="mb-1">
+                  <tbody>
+                    <tr>
+                      <td className="text-nowrap text-muted text-center pl-4">
+                        <Icon icon="user-graduate" />
+                      </td>
+                      <td className="text-nowrap text-bold">
+                        <FormattedMessage id="app.editUserProfile.titlesBeforeName" defaultMessage="Prefix Title:" />
+                      </td>
+                      <td className="full-width">{user.name.titlesBeforeName}</td>
+                    </tr>
+
+                    <tr>
+                      <td className="text-nowrap text-muted text-center pl-4">
+                        <Icon icon="user-tag" />
+                      </td>
+                      <td className="text-nowrap text-bold">
+                        <FormattedMessage id="app.editUserProfile.firstName" defaultMessage="Given Name:" />
+                      </td>
+                      <td className="full-width">{user.name.firstName}</td>
+                    </tr>
+
+                    <tr>
+                      <td className="text-nowrap text-muted text-center pl-4">
+                        <Icon icon="user-tag" />
+                      </td>
+                      <td className="text-nowrap text-bold">
+                        <FormattedMessage id="app.editUserProfile.lastName" defaultMessage="Surname:" />
+                      </td>
+                      <td className="full-width">{user.name.lastName}</td>
+                    </tr>
+
+                    <tr>
+                      <td className="text-nowrap text-muted text-center pl-4">
+                        <Icon icon="user-graduate" />
+                      </td>
+                      <td className="text-nowrap text-bold">
+                        <FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />
+                      </td>
+                      <td className="full-width">{user.name.titlesAfterName}</td>
+                    </tr>
+
+                    <tr>
+                      <td className="text-nowrap text-muted text-center pl-4">
+                        <MailIcon />
+                      </td>
+                      <td className="text-nowrap text-bold">
+                        <FormattedMessage id="app.changePasswordForm.email" defaultMessage="Email:" />
+                      </td>
+                      <td className="full-width">
+                        <a href={`mailto:${user.privateData.email}`}>{user.privateData.email}</a>
+                        {user.isVerified ? (
+                          <SuccessIcon largeGapLeft />
+                        ) : (
+                          <WarningIcon className="text-warning" largeGapLeft />
+                        )}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="text-nowrap text-muted text-center pl-4">
+                        <Icon icon="baby" />
+                      </td>
+                      <td className="text-nowrap text-bold">
+                        <FormattedMessage id="app.user.accountCreatedAt" defaultMessage="Account Created At:" />
+                      </td>
+                      <td className="full-width">
+                        <DateTime unixts={user.privateData.createdAt} showRelative />
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td className="text-nowrap text-muted text-center pl-4">
+                        <SignInIcon />
+                      </td>
+                      <td className="text-nowrap text-bold">
+                        <FormattedMessage id="app.user.lastAuthenticationAt" defaultMessage="Last Authentication At:" />
+                      </td>
+                      <td className="full-width">
+                        <DateTime unixts={user.privateData.lastAuthenticationAt} showRelative />
+                      </td>
+                    </tr>
+
+                    {user.privateData.externalIds && (
+                      <tr>
+                        <td className="text-nowrap text-muted text-center pl-4">
+                          <Icon icon={['far', 'id-card']} />
+                        </td>
+                        <td className="text-nowrap text-bold">
+                          <FormattedMessage
+                            id="app.user.externalIds"
+                            defaultMessage="Associated External Identifiers:"
+                          />
+                        </td>
+                        <td className="full-width">
+                          {Object.keys(user.privateData.externalIds)
+                            .sort()
+                            .map(provider => (
+                              <div key={provider}>
+                                <em className="mr-2">{provider}:</em>
+                                <code>{user.privateData.externalIds[provider]}</code>
+                              </div>
+                            ))}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
+              </Box>
+            )}
+
+            <FetchManyResourceRenderer fetchManyStatus={fetchManyGroupsStatus}>
+              {() => (
+                <>
+                  {(!memberGroups.student || memberGroups.student.length === 0) &&
+                    (!memberGroups.admin || memberGroups.admin.length === 0) &&
+                    (!memberGroups.supervisor || memberGroups.supervisor.length === 0) &&
+                    (!memberGroups.observer || memberGroups.observer.length === 0) && (
+                      <Callout variant="info">
+                        <h4>
+                          <FormattedMessage id="app.user.noGroupsVisible" defaultMessage="No group relationships" />
+                        </h4>
+                        {userId !== loggedInUserId ? (
+                          <FormattedMessage
+                            id="app.user.noGroupsVisibleDetail"
+                            defaultMessage="The selected user has no relationship with any active group that you have the permissions to read."
+                          />
+                        ) : isStudent ? (
+                          <FormattedMessage
+                            id="app.user.noGroupsVisibleDetailSelfStudent"
+                            defaultMessage="You are not a member of any groups. You need to join a group first or ask group supervisor to make you a member."
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.user.noGroupsVisibleDetailSelfTeacher"
+                            defaultMessage="You are not supervising nor observing any groups."
+                          />
+                        )}
+                      </Callout>
+                    )}
+
+                  {memberGroups.student && memberGroups.student.length > 0 && (
+                    <MemberGroupsBox
+                      title={
+                        <>
+                          <UserIcon gapRight className="text-muted" />
+                          <FormattedMessage
+                            id="app.user.studentOfGroups"
+                            defaultMessage="Groups the user is student of"
+                          />
+                        </>
                       }
-                      resource={groupStatistics(group.id)}>
-                      {statistics => (
-                        <Row>
-                          <Col lg={4}>
-                            <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                              <UsersStats {...group} stats={usersStatistics(statistics)} />
-                            </Link>
-                          </Col>
-                          <Col lg={8}>
-                            <Box
-                              title={<GroupsName {...group} translations />}
-                              collapsable
-                              noPadding
-                              isOpen
-                              unlimitedHeight
-                              footer={
-                                <div className="mb-3 text-center">
-                                  <TheButtonGroup>
-                                    <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-                                      <Button size="sm">
-                                        <GroupIcon gapRight />
-                                        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-                                      </Button>
-                                    </Link>
+                      groups={memberGroups.student}
+                      userId={userId}
+                      isStudent
+                    />
+                  )}
 
-                                    <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
-                                      <Button size="sm">
-                                        <AssignmentsIcon gapRight />
-                                        <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
-                                      </Button>
-                                    </Link>
-                                  </TheButtonGroup>
-                                </div>
-                              }>
-                              <AssignmentsTable
-                                userId={user.id}
-                                assignments={groupAssignments(group.id)}
-                                assignmentEnvironmentsSelector={assignmentEnvironmentsSelector}
-                                statuses={usersStatistics(statistics).assignments}
-                              />
-                            </Box>
-                          </Col>
-                        </Row>
-                      )}
-                    </ResourceRenderer>
-                  </div>
-                ))}
-              </div>
-            )}
+                  {memberGroups.admin && memberGroups.admin.length > 0 && (
+                    <MemberGroupsBox
+                      title={
+                        <>
+                          <SuperadminIcon gapRight className="text-muted" />
+                          <FormattedMessage id="app.user.adminOfGroups" defaultMessage="Groups the user administrate" />
+                        </>
+                      }
+                      groups={memberGroups.admin}
+                      userId={userId}
+                    />
+                  )}
 
-            {commonGroups.length === 0 && !isAdmin && user.id !== loggedInUserId && (
-              <Callout variant="warning" icon={<InfoIcon />}>
-                <h4>
-                  <FormattedMessage
-                    id="app.user.nothingInCommon.title"
-                    defaultMessage="{name} is not one of your students"
-                    values={{ name: user.fullName }}
-                  />
-                </h4>
-                <FormattedMessage
-                  id="app.user.noCommonGroups"
-                  defaultMessage="You are not a supervisor of any group of which is {name} a member and so you don't see any of his results."
-                  values={{ name: user.fullName }}
-                />
-              </Callout>
-            )}
+                  {memberGroups.supervisor && memberGroups.supervisor.length > 0 && (
+                    <MemberGroupsBox
+                      title={
+                        <>
+                          <SupervisorIcon gapRight className="text-muted" />
+                          <FormattedMessage
+                            id="app.user.supervisorOfGroups"
+                            defaultMessage="Groups the user supervise"
+                          />
+                        </>
+                      }
+                      groups={memberGroups.supervisor}
+                      userId={userId}
+                    />
+                  )}
 
-            {student && studentOfGroupsIds.length === 0 && user.id === loggedInUserId && (
-              <Row>
-                <Col sm={12}>
-                  <Callout variant="success" icon={<InfoIcon />}>
-                    <h4>
-                      <FormattedMessage id="app.user.welcomeTitle" defaultMessage="Welcome to ReCodEx" />
-                    </h4>
-                    <p>
-                      <FormattedMessage
-                        id="app.user.newAccount"
-                        defaultMessage="Your account is ready, but you are not a member of any group yet. You should see the list of all the available groups and join some of them."
-                        values={{ name: user.fullName }}
-                      />
-                    </p>
-                    <p className="text-center">
-                      <Link to={INSTANCE_URI_FACTORY(user.instanceId)}>
-                        <Button variant="success">
-                          <FormattedMessage id="app.user.examineGroupsInstance" defaultMessage="Find your groups" />
-                        </Button>
-                      </Link>
-                    </p>
-                  </Callout>
-                </Col>
-              </Row>
-            )}
+                  {memberGroups.observer && memberGroups.observer.length > 0 && (
+                    <MemberGroupsBox
+                      title={
+                        <>
+                          <ObserverIcon gapRight className="text-muted" />
+                          <FormattedMessage id="app.user.observerOfGroups" defaultMessage="Groups the user observe" />
+                        </>
+                      }
+                      groups={memberGroups.observer}
+                      userId={userId}
+                    />
+                  )}
+                </>
+              )}
+            </FetchManyResourceRenderer>
           </div>
         )}
       </Page>
@@ -239,80 +355,36 @@ class User extends Component {
 
 User.propTypes = {
   userId: PropTypes.string,
-  instanceId: PropTypes.string,
+  loggedInUserId: PropTypes.string,
   user: ImmutablePropTypes.map,
-  commonGroups: PropTypes.array,
-  isAdmin: PropTypes.bool,
-  studentOfGroupsIds: PropTypes.array,
+  isSuperAdmin: PropTypes.bool,
+  isStudent: PropTypes.bool,
+  memberGroups: PropTypes.object.isRequired,
+  fetchManyGroupsStatus: PropTypes.string,
   match: PropTypes.shape({ params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
-  student: PropTypes.bool,
-  loggedInUserId: PropTypes.string,
-  groupAssignments: PropTypes.func.isRequired,
-  assignmentEnvironmentsSelector: PropTypes.func,
-  groupStatistics: PropTypes.func.isRequired,
-  usersStatistics: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
-  links: PropTypes.object,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { userId },
-        },
-      }
-    ) => {
-      const loggedInUserId = loggedInUserIdSelector(state);
-      const isSuperadmin = isLoggedAsSuperAdmin(state);
-
-      const studentOfArray = studentOfSelector(userId)(state).toList().toArray();
-      const studentOf = new Set(
-        studentOfSelector(userId)(state)
-          .toList()
-          .toJS()
-          .map(group => group.id)
-      );
-      const supervisorOf = new Set(
-        supervisorOfSelector(loggedInUserId)(state)
-          .toList()
-          .toJS()
-          .map(group => group.id)
-      );
-      const adminOf = new Set(
-        adminOfSelector(loggedInUserId)(state)
-          .toList()
-          .toJS()
-          .map(group => group.id)
-      );
-
-      const otherUserGroupsIds = studentOf.intersect(supervisorOf.union(adminOf)).toArray();
-      const commonGroups =
-        userId === loggedInUserId || isSuperadmin
-          ? studentOfArray
-          : studentOfArray.filter(group => otherUserGroupsIds.indexOf(group.id) >= 0);
-
-      return {
-        userId,
-        loggedInUserId,
-        instanceId: selectedInstanceId(state),
-        student: isStudent(userId)(state),
-        user: getUser(userId)(state),
-        isAdmin: isSuperadmin,
-        studentOfGroupsIds: userStudentOfGroupIdsSelector(state, userId),
-        groupAssignments: groupId => groupsAssignmentsSelector(state, groupId),
-        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-        groupStatistics: groupId => createGroupsStatsSelector(groupId)(state),
-        usersStatistics: statistics => statistics.find(stat => stat.userId === userId) || {},
-        commonGroups,
-      };
-    },
-    (dispatch, { match: { params } }) => ({
-      loadAsync: () => User.loadAsync(params, dispatch),
-      takeOver: userId => dispatch(takeOver(userId)),
-    })
-  )(User)
-);
+export default connect(
+  (
+    state,
+    {
+      match: {
+        params: { userId },
+      },
+    }
+  ) => ({
+    userId,
+    loggedInUserId: loggedInUserIdSelector(state),
+    user: getUser(userId)(state),
+    isSuperAdmin: isLoggedAsSuperAdmin(state),
+    isStudent: isStudent(userId)(state),
+    memberGroups: groupsUserIsMemberSelector(state, userId),
+    fetchManyGroupsStatus: fetchManyGroupsStatus(state),
+  }),
+  (dispatch, { match: { params } }) => ({
+    loadAsync: () => User.loadAsync(params, dispatch),
+    takeOver: userId => dispatch(takeOver(userId)),
+  })
+)(User);

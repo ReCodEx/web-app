@@ -82,61 +82,68 @@ export const fetchManyGroupsStatus = createSelector(getGroups, state =>
 );
 
 /**
- * Computes inverted group index for logged-in user.
+ * Computes inverted group index for given user user.
  * @returns {Object} containing 'admin', 'supervisor', 'observer', and 'student' keys;
  *                   each key holds a list of grouIds to which the logged user belongs (given the membership type)
  */
+const groupsUserIsMember = (groups, userId, lang) => {
+  // get group names for sorting comparator
+  const groupNames = {};
+  groups.forEach(group => {
+    groupNames[group.getIn(['data', 'id'])] = getLocalizedResourceName(group, lang);
+  });
+
+  const groupFullNames = {};
+  groups.forEach(group => {
+    const groupId = group.getIn(['data', 'id']);
+    const names = group
+      .getIn(['data', 'parentGroupsIds'])
+      .toArray()
+      .filter((_, idx) => idx > 0)
+      .map(id => groupNames[id] || '');
+    names.push(groupNames[groupId] || '');
+    groupFullNames[groupId] = names.join('~/~');
+  });
+
+  // create sorting comparator
+  const groupComparator = (a, b) => groupFullNames[a].localeCompare(groupFullNames[b], lang);
+
+  // prepare categories of memberships
+  const membershipDescriptor = {
+    admin: ['primaryAdminsIds'],
+    supervisor: ['privateData', 'supervisors'],
+    observer: ['privateData', 'observers'],
+    student: ['privateData', 'students'],
+  };
+
+  // traverse groups and filter out those the user is member of (categorized)
+  const result = objectMap(membershipDescriptor, () => []); // all values are empty arrays
+  const all = new Set();
+  groups
+    .map(group => group.get('data'))
+    .filter(group => group.get('organizational') === false)
+    .forEach(group => {
+      Object.keys(membershipDescriptor).forEach(key => {
+        const list = group.getIn(membershipDescriptor[key], EMPTY_LIST);
+        if (list.includes(userId)) {
+          result[key].push(group.get('id')); // user is present on membership list => add the group to result segment
+          all.add(group.get('id'));
+        }
+      });
+    });
+
+  // finalize, sort
+  result.all = Array.from(all);
+  Object.keys(result).forEach(key => result[key].sort(groupComparator));
+  return result;
+};
+
 export const groupsLoggedUserIsMemberSelector = createSelector(
   [notArchivedGroupsSelector, loggedInUserIdSelector, getLang],
-  (groups, userId, lang) => {
-    // get group names for sorting comparator
-    const groupNames = {};
-    groups.forEach(group => {
-      groupNames[group.getIn(['data', 'id'])] = getLocalizedResourceName(group, lang);
-    });
+  groupsUserIsMember
+);
 
-    const groupFullNames = {};
-    groups.forEach(group => {
-      const groupId = group.getIn(['data', 'id']);
-      const names = group
-        .getIn(['data', 'parentGroupsIds'])
-        .toArray()
-        .filter((_, idx) => idx > 0)
-        .map(id => groupNames[id] || '');
-      names.push(groupNames[groupId] || '');
-      groupFullNames[groupId] = names.join('~/~');
-    });
-
-    // create sorting comparator
-    const groupComparator = (a, b) => groupFullNames[a].localeCompare(groupFullNames[b], lang);
-
-    // prepare categories of memberships
-    const membershipDescriptor = {
-      admin: ['primaryAdminsIds'],
-      supervisor: ['privateData', 'supervisors'],
-      observer: ['privateData', 'observers'],
-      student: ['privateData', 'students'],
-    };
-
-    // traverse groups and filter out those the user is member of (categorized)
-    const result = objectMap(membershipDescriptor, () => []); // all values are empty arrays
-    const all = new Set();
-    groups
-      .map(group => group.get('data'))
-      .filter(group => group.get('organizational') === false)
-      .forEach(group => {
-        Object.keys(membershipDescriptor).forEach(key => {
-          const list = group.getIn(membershipDescriptor[key], EMPTY_LIST);
-          if (list.includes(userId)) {
-            result[key].push(group.get('id')); // user is present on membership list => add the group to result segment
-            all.add(group.get('id'));
-          }
-        });
-      });
-
-    // finalize, sort
-    result.all = Array.from(all);
-    Object.keys(result).forEach(key => result[key].sort(groupComparator));
-    return result;
-  }
+export const groupsUserIsMemberSelector = createSelector(
+  [notArchivedGroupsSelector, getParam, getLang],
+  groupsUserIsMember
 );

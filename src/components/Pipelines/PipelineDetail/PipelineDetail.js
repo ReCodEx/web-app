@@ -36,7 +36,7 @@ const PipelineDetail = ({
               <FormattedMessage id="generic.author" defaultMessage="Author" />:
             </th>
             <td>
-              <UsersNameContainer userId={author} />
+              <UsersNameContainer userId={author} link />
             </td>
           </tr>
         )}
