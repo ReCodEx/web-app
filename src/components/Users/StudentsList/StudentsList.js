@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import StudentsListItem, { LoadingStudentsListItem } from '../StudentsListItem';
 
-const StudentsList = ({ users = [], isLoaded = true, stats, renderActions, ...rest }) => (
+const StudentsList = ({ users = [], isLoaded = true, stats, renderActions, groupId = null, ...rest }) => (
   <Table hover>
     <tbody>
       {users.map((user, i) => (
@@ -15,6 +15,7 @@ const StudentsList = ({ users = [], isLoaded = true, stats, renderActions, ...re
           {...user}
           renderActions={renderActions}
           stats={isReady(stats) ? getJsData(stats).find(item => item.userId === user.id) : null}
+          groupId={groupId}
         />
       ))}
 
@@ -36,6 +37,7 @@ StudentsList.propTypes = {
   isLoaded: PropTypes.bool,
   stats: PropTypes.object,
   renderActions: PropTypes.func,
+  groupId: PropTypes.string,
 };
 
 export default StudentsList;

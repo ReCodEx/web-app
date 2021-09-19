@@ -55,7 +55,7 @@ import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
 const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, locale, links) => {
-  const { SOLUTION_DETAIL_URI_FACTORY } = links;
+  const { SOLUTION_DETAIL_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
   const columns = [
@@ -89,7 +89,15 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
       className: 'text-left',
       comparator: ({ user: u1, date: d1 }, { user: u2, date: d2 }) => nameComparator(u1, u2) || d2 - d1, // dates are implicitly in reversed order
       cellRenderer: user =>
-        user && <UsersName {...user} currentUserId={loggedUserId} showEmail="icon" showExternalIdentifiers />,
+        user && (
+          <UsersName
+            {...user}
+            currentUserId={loggedUserId}
+            showEmail="icon"
+            showExternalIdentifiers
+            link={GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, user.id)}
+          />
+        ),
     }),
 
     new SortableTableColumnDescriptor(
