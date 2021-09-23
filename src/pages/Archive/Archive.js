@@ -77,7 +77,7 @@ class Archive extends Component {
     this.props.loadAsync(this.props.instanceId);
   }
 
-  buttonsCreator = (groupId, isRoot) => {
+  buttonsCreator = (groupId, isRoot, permissionHints, archived, directlyArchived) => {
     const {
       instanceId,
       loadAsync,
@@ -112,7 +112,9 @@ class Archive extends Component {
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
         </Link>
-        <ArchiveGroupButtonContainer id={groupId} size="xs" shortLabels onChange={() => loadAsync(instanceId)} />
+        {permissionHints.archive && (!archived || directlyArchived) && (
+          <ArchiveGroupButtonContainer id={groupId} size="xs" shortLabels onChange={() => loadAsync(instanceId)} />
+        )}
       </TheButtonGroup>
     );
   };

@@ -107,23 +107,25 @@ class EditGroup extends Component {
 
             {hasPermissions(group, 'update') && (
               <>
-                <Row>
-                  <Col lg={3}>
-                    <p>
-                      <OrganizationalGroupButtonContainer id={group.id} locale={locale} />
-                    </p>
-                  </Col>
-                  <Col lg={9}>
-                    <p className="small text-muted" style={{ padding: '0.75em' }}>
-                      <InfoIcon gapRight />
-                      <FormattedMessage
-                        id="app.editGroup.organizationalExplain"
-                        defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
-                      />
-                    </p>
-                  </Col>
-                </Row>
-                {group.permissionHints.archive && (
+                {!group.archived && (
+                  <Row>
+                    <Col lg={3}>
+                      <p>
+                        <OrganizationalGroupButtonContainer id={group.id} locale={locale} />
+                      </p>
+                    </Col>
+                    <Col lg={9}>
+                      <p className="small text-muted" style={{ padding: '0.75em' }}>
+                        <InfoIcon gapRight />
+                        <FormattedMessage
+                          id="app.editGroup.organizationalExplain"
+                          defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                        />
+                      </p>
+                    </Col>
+                  </Row>
+                )}
+                {hasPermissions(group, 'archive') && (!group.archived || group.directlyArchived) && (
                   <Row>
                     <Col lg={3}>
                       <p>
