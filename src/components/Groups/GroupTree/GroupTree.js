@@ -26,13 +26,13 @@ class GroupTree extends Component {
     </TreeView>
   );
 
-  renderButtons = (groupId, permissionHints, isRoot) => {
+  renderButtons = (groupId, permissionHints, isRoot, archived, directlyArchived) => {
     const {
       buttonsCreator = null,
       links: { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
     } = this.props;
     return buttonsCreator ? (
-      buttonsCreator(groupId, isRoot, permissionHints)
+      buttonsCreator(groupId, isRoot, permissionHints, archived, directlyArchived)
     ) : (
       <TheButtonGroup>
         {permissionHints && permissionHints.update && (
@@ -136,6 +136,7 @@ class GroupTree extends Component {
       primaryAdminsIds,
       organizational,
       archived,
+      directlyArchived,
       public: isPublic,
       permissionHints,
     } = getJsData(group);
@@ -166,7 +167,7 @@ class GroupTree extends Component {
             actions={
               (currentGroupId !== groupId || forceRootButtons) && permissionHints.viewDetail
                 ? // this is inacurate, but public groups are visible to students who cannot see detail until they join
-                  this.renderButtons(groupId, permissionHints, currentGroupId === groupId)
+                  this.renderButtons(groupId, permissionHints, currentGroupId === groupId, archived, directlyArchived)
                 : undefined
             }>
             {onAncestralPath
