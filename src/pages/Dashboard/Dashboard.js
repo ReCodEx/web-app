@@ -129,7 +129,7 @@ class Dashboard extends Component {
                           {memberGroups.student.map(groupId => (
                             <Box
                               key={groupId}
-                              title={<GroupsNameContainer groupId={groupId} fullName admins />}
+                              title={<GroupsNameContainer groupId={groupId} fullName admins ancestorLinks />}
                               collapsable
                               noPadding
                               isOpen
@@ -202,7 +202,7 @@ class Dashboard extends Component {
                           {[...memberGroups.admin, ...memberGroups.supervisor].map(groupId => (
                             <Box
                               key={groupId}
-                              title={<GroupsNameContainer groupId={groupId} fullName admins />}
+                              title={<GroupsNameContainer groupId={groupId} fullName admins ancestorLinks />}
                               collapsable
                               noPadding
                               isOpen

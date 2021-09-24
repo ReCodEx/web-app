@@ -30,6 +30,7 @@ class GroupsNameContainer extends Component {
       fullName = false,
       translations = false,
       links = false,
+      ancestorLinks = false,
       admins = false,
       separator = <Icon icon="link" className="small half-opaque" largeGapLeft largeGapRight />,
     } = this.props;
@@ -60,7 +61,7 @@ class GroupsNameContainer extends Component {
                         <GroupsName
                           {...parent}
                           translations={translations}
-                          asLink={links && hasPermissions(parent, 'viewDetail')}
+                          asLink={(links || ancestorLinks) && hasPermissions(parent, 'viewDetail')}
                         />
                       )}
                     </ResourceRenderer>
@@ -70,7 +71,7 @@ class GroupsNameContainer extends Component {
 
             <GroupsName {...group} translations={translations} asLink={links && hasPermissions(group, 'viewDetail')} />
 
-            {admins && (
+            {admins && group.primaryAdminsIds.length > 0 && (
               <small className="half-opaque ml-3">
                 (
                 {group.primaryAdminsIds.map(id => (
@@ -93,6 +94,7 @@ GroupsNameContainer.propTypes = {
   fullName: PropTypes.bool,
   translations: PropTypes.bool,
   links: PropTypes.bool,
+  ancestorLinks: PropTypes.bool,
   admins: PropTypes.bool,
   separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   group: ImmutablePropTypes.map,
