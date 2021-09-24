@@ -86,7 +86,7 @@ const Navigation = ({
                 }>
                 <GroupIcon gapRight className="text-muted" />
               </OverlayTrigger>
-              <GroupsNameContainer groupId={groupId} fullName translations admins />
+              <GroupsNameContainer groupId={groupId} fullName translations admins ancestorLinks />
             </span>
           )}
 
