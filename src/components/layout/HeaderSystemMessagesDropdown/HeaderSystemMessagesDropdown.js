@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Badge, Table, Dropdown } from 'react-bootstrap';
+import { Table, Dropdown } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Icon, { TypedMessageIcon } from '../../icons';
@@ -24,11 +24,7 @@ const HeaderSystemMessagesDropdown = ({
     <Dropdown.Toggle as="a" id="dropdown-header-system-messages" bsPrefix="nav-link">
       <Icon icon={['far', 'envelope']} />
       {systemMessages.length > 0 && (
-        <span className={styles.iconBadgeWrapper}>
-          <Badge variant="warning" pill>
-            {systemMessages.length}
-          </Badge>
-        </span>
+        <span className={`${styles.iconBadgeWrapper} badge-pill badge-warning`}>{systemMessages.length}</span>
       )}
     </Dropdown.Toggle>
 

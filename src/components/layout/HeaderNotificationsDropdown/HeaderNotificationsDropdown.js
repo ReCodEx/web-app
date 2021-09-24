@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Badge, Dropdown } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 
 import Icon from '../../icons';
 import HeaderNotification from '../HeaderNotification';
@@ -25,11 +25,10 @@ const HeaderNotificationsDropdown = ({
       ) : (
         <Icon icon={['fas', 'bell']} className="faa-shake animated" />
       )}
+
       {newNotifications.size > 0 && (
-        <span className={styles.iconBadgeWrapper}>
-          <Badge variant="warning" pill>
-            {newNotifications.reduce((acc, n) => acc + n.count, 0)}
-          </Badge>
+        <span className={`${styles.iconBadgeWrapper} badge-pill badge-warning`}>
+          {newNotifications.reduce((acc, n) => acc + n.count, 0)}
         </span>
       )}
     </Dropdown.Toggle>
