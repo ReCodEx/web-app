@@ -85,6 +85,11 @@ class Dashboard extends Component {
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
+    const memberGroupsAdminOrSupervisor = [
+      ...safeGet(memberGroups, 'admin', []),
+      ...safeGet(memberGroups, 'supervisor', []),
+    ];
+
     return (
       <Page
         resource={user}
@@ -129,7 +134,7 @@ class Dashboard extends Component {
                           {memberGroups.student.map(groupId => (
                             <Box
                               key={groupId}
-                              title={<GroupsNameContainer groupId={groupId} fullName admins ancestorLinks />}
+                              title={<GroupsNameContainer groupId={groupId} fullName admins links />}
                               collapsable
                               noPadding
                               isOpen
@@ -166,10 +171,9 @@ class Dashboard extends Component {
                     </>
                   )}
 
-                  {supervisor && !student && (
+                  {supervisor && (!student || memberGroupsAdminOrSupervisor.length > 0) && (
                     <>
-                      {safeGet(memberGroups, ['supervisor', 'length']) + safeGet(memberGroups, ['admin', 'length']) ===
-                      0 ? (
+                      {memberGroupsAdminOrSupervisor.length === 0 ? (
                         <Row>
                           <Col sm={12}>
                             <Callout variant="success">
@@ -199,10 +203,10 @@ class Dashboard extends Component {
                             />
                           </h3>
 
-                          {[...memberGroups.admin, ...memberGroups.supervisor].map(groupId => (
+                          {memberGroupsAdminOrSupervisor.map(groupId => (
                             <Box
                               key={groupId}
-                              title={<GroupsNameContainer groupId={groupId} fullName admins ancestorLinks />}
+                              title={<GroupsNameContainer groupId={groupId} fullName admins links />}
                               collapsable
                               noPadding
                               isOpen

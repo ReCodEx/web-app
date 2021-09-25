@@ -204,139 +204,139 @@ class ResultsTable extends Component {
     }
   };
 
-  prepareColumnDescriptors = defaultMemoize(
-    (assignments, shadowAssignments, loggedUser, locale, isAdminOrSupervisor) => {
-      const {
-        group,
-        links: {
-          ASSIGNMENT_STATS_URI_FACTORY,
-          ASSIGNMENT_DETAIL_URI_FACTORY,
-          SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
-          GROUP_USER_SOLUTIONS_URI_FACTORY,
-        },
-      } = this.props;
+  prepareColumnDescriptors = defaultMemoize((assignments, shadowAssignments, loggedUser, locale, isTeacher) => {
+    const {
+      group,
+      links: {
+        ASSIGNMENT_STATS_URI_FACTORY,
+        ASSIGNMENT_DETAIL_URI_FACTORY,
+        SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
+        GROUP_USER_SOLUTIONS_URI_FACTORY,
+      },
+    } = this.props;
 
-      const nameComparator = createUserNameComparator(locale);
+    const nameComparator = createUserNameComparator(locale);
 
-      /*
-       * User Name (First Column)
-       */
-      const columns = [
-        new SortableTableColumnDescriptor(
-          'user',
-          <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />,
-          {
-            headerSuffix: <FormattedMessage id="app.groupResultsTable.maxPointsRow" defaultMessage="Max points:" />,
-            headerSuffixClassName: styles.maxPointsRow,
-            className: 'text-left',
-            comparator: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
-            cellRenderer: user =>
-              user && (
-                <UsersName
-                  {...user}
-                  currentUserId={loggedUser.id}
-                  showEmail="icon"
-                  showExternalIdentifiers
-                  link={GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id)}
-                />
-              ),
-          }
-        ),
-      ];
+    /*
+     * User Name (First Column)
+     */
+    const columns = [
+      new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />, {
+        headerSuffix: <FormattedMessage id="app.groupResultsTable.maxPointsRow" defaultMessage="Max points:" />,
+        headerSuffixClassName: styles.maxPointsRow,
+        className: 'text-left',
+        comparator: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
+        cellRenderer: user =>
+          user && (
+            <UsersName
+              {...user}
+              currentUserId={loggedUser.id}
+              showEmail="icon"
+              showExternalIdentifiers
+              link={
+                isTeacher || user.id === loggedUser.id ? GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id) : false
+              }
+            />
+          ),
+      }),
+    ];
 
-      /*
-       * Assignments
-       */
-      assignments.sort(compareAssignments).forEach(assignment =>
-        columns.push(
-          new SortableTableColumnDescriptor(
-            assignment.id,
-            (
-              <div className={styles.verticalText}>
-                <div>
-                  <Link
-                    to={
-                      isAdminOrSupervisor
-                        ? ASSIGNMENT_STATS_URI_FACTORY(assignment.id)
-                        : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
-                    }>
-                    <LocalizedExerciseName entity={assignment} />
-                  </Link>
-                </div>
-              </div>
-            ),
-            {
-              headerClassName: 'text-center',
-              className: 'text-center clickable',
-              headerSuffix:
-                assignment.maxPointsBeforeFirstDeadline +
-                (assignment.maxPointsBeforeSecondDeadline ? ` / ${assignment.maxPointsBeforeSecondDeadline}` : ''),
-              headerSuffixClassName: styles.maxPointsRow,
-              cellRenderer: assignmentCellRendererCreator(assignments, locale),
-              onClick: hasPermissions(assignment, 'viewAssignmentSolutions')
-                ? (userId, assignmentId) => this.openDialogAssignment(userId, assignmentId)
-                : null,
-            }
-          )
-        )
-      );
-
-      /*
-       * Shadow Assignments
-       */
-      shadowAssignments.sort(compareShadowAssignments).forEach(shadowAssignment =>
-        columns.push(
-          new SortableTableColumnDescriptor(
-            shadowAssignment.id,
-            (
-              <div className={styles.verticalText}>
-                <div>
-                  <Link to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowAssignment.id)}>
-                    <LocalizedExerciseName entity={shadowAssignment} />
-                  </Link>
-                </div>
-              </div>
-            ),
-            {
-              className: 'text-center clickable',
-              headerSuffix: shadowAssignment.maxPoints,
-              headerSuffixClassName: styles.maxPointsRow,
-              cellRenderer: shadowAssignmentCellRendererCreator(shadowAssignments, locale),
-              onClick: (userId, shadowId) => this.openDialogShadowAssignment(userId, shadowId),
-            }
-          )
-        )
-      );
-
-      /*
-       * Total points and optionally buttons
-       */
+    /*
+     * Assignments
+     */
+    assignments.sort(compareAssignments).forEach(assignment =>
       columns.push(
         new SortableTableColumnDescriptor(
-          'total',
-          <FormattedMessage id="app.resultsTable.total" defaultMessage="Total" />,
+          assignment.id,
+          (
+            <div className={styles.verticalText}>
+              <div>
+                <Link
+                  to={
+                    isTeacher
+                      ? ASSIGNMENT_STATS_URI_FACTORY(assignment.id)
+                      : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
+                  }>
+                  <LocalizedExerciseName entity={assignment} />
+                </Link>
+              </div>
+            </div>
+          ),
           {
+            headerClassName: 'text-center',
             className: 'text-center',
+            headerSuffix:
+              assignment.maxPointsBeforeFirstDeadline +
+              (assignment.maxPointsBeforeSecondDeadline ? ` / ${assignment.maxPointsBeforeSecondDeadline}` : ''),
             headerSuffixClassName: styles.maxPointsRow,
-            comparator: ({ total: t1, user: u1 }, { total: t2, user: u2 }) =>
-              (Number(t2 && t2.gained) || -1) - (Number(t1 && t1.gained) || -1) || nameComparator(u1, u2),
-            cellRenderer: points => <strong>{points ? `${points.gained}/${points.total}` : '-/-'}</strong>,
+            cellRenderer: assignmentCellRendererCreator(assignments, locale),
+            isClickable: hasPermissions(assignment, 'viewAssignmentSolutions')
+              ? true
+              : (userId, _) => userId === loggedUser.id,
+            onClick: hasPermissions(assignment, 'viewAssignmentSolutions')
+              ? (userId, assignmentId) => this.openDialogAssignment(userId, assignmentId)
+              : (userId, assignmentId) => userId === loggedUser.id && this.openDialogAssignment(userId, assignmentId),
           }
         )
-      );
+      )
+    );
 
-      if (hasPermissions(group, 'update')) {
-        columns.push(
-          new SortableTableColumnDescriptor('buttons', '', {
+    /*
+     * Shadow Assignments
+     */
+    shadowAssignments.sort(compareShadowAssignments).forEach(shadowAssignment =>
+      columns.push(
+        new SortableTableColumnDescriptor(
+          shadowAssignment.id,
+          (
+            <div className={styles.verticalText}>
+              <div>
+                <Link to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowAssignment.id)}>
+                  <LocalizedExerciseName entity={shadowAssignment} />
+                </Link>
+              </div>
+            </div>
+          ),
+          {
+            className: 'text-center',
+            headerSuffix: shadowAssignment.maxPoints,
             headerSuffixClassName: styles.maxPointsRow,
-            className: 'text-right',
-          })
-        );
-      }
+            cellRenderer: shadowAssignmentCellRendererCreator(shadowAssignments, locale),
+            isClickable: true,
+            onClick: (userId, shadowId) => this.openDialogShadowAssignment(userId, shadowId),
+          }
+        )
+      )
+    );
 
-      return columns;
+    /*
+     * Total points and optionally buttons
+     */
+    columns.push(
+      new SortableTableColumnDescriptor(
+        'total',
+        <FormattedMessage id="app.resultsTable.total" defaultMessage="Total" />,
+        {
+          className: 'text-center',
+          headerSuffixClassName: styles.maxPointsRow,
+          comparator: ({ total: t1, user: u1 }, { total: t2, user: u2 }) =>
+            (Number(t2 && t2.gained) || -1) - (Number(t1 && t1.gained) || -1) || nameComparator(u1, u2),
+          cellRenderer: points => <strong>{points ? `${points.gained}/${points.total}` : '-/-'}</strong>,
+        }
+      )
+    );
+
+    if (hasPermissions(group, 'update')) {
+      columns.push(
+        new SortableTableColumnDescriptor('buttons', '', {
+          headerSuffixClassName: styles.maxPointsRow,
+          className: 'text-right',
+        })
+      );
     }
-  );
+
+    return columns;
+  });
 
   // Re-format the data, so they can be rendered by the SortableTable ...
   prepareData = defaultMemoize((assignments, shadowAssignments, users, stats, showButtons) => {
@@ -388,6 +388,7 @@ class ResultsTable extends Component {
 
     const isAdmin = isSuperadmin || (group.privateData && group.privateData.admins.includes(loggedUser.id));
     const isSupervisor = group.privateData && group.privateData.supervisors.includes(loggedUser.id);
+    const isObserver = group.privateData && group.privateData.observers.includes(loggedUser.id);
     const groupName = getLocalizedName(group, locale);
 
     return (
@@ -399,7 +400,7 @@ class ResultsTable extends Component {
             shadowAssignments,
             loggedUser,
             locale,
-            isAdmin || isSupervisor
+            isAdmin || isSupervisor || isObserver
           )}
           defaultOrder="user"
           data={this.prepareData(assignments, shadowAssignments, users, stats)}
@@ -412,7 +413,7 @@ class ResultsTable extends Component {
             </div>
           }
         />
-        {(isAdmin || isSupervisor) && (
+        {(isAdmin || isSupervisor || isObserver) && (
           <div className="text-center">
             <Button
               variant="primary"
@@ -453,7 +454,7 @@ class ResultsTable extends Component {
               </div>
             ) : (
               <>
-                <UsersNameContainer userId={this.state.dialogUserId} showEmail="icon" large />
+                <UsersNameContainer userId={this.state.dialogUserId} showEmail="icon" showExternalIdentifiers large />
                 <hr />
 
                 {this.state.dialogAssignmentId && (

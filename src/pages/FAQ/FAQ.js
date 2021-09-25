@@ -23,8 +23,10 @@ class FAQ extends Component {
       <PageContent
         icon={<FaqIcon />}
         title={<FormattedMessage id="app.faq.title" defaultMessage="Frequently Asked Questions" />}>
-        <hr />
-        <Markdown source={this.state.faqText} />
+        <>
+          <hr />
+          <Markdown source={this.state.faqText} />
+        </>
       </PageContent>
     );
   }

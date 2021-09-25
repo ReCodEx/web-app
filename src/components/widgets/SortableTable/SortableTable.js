@@ -14,11 +14,20 @@ class SortableTable extends Component {
   // Default row rendering fucntion (if the user does not provide custom function)
   defaultRowRenderer = (row, idx, columns) => (
     <tr key={row.id || idx}>
-      {columns.map(({ id: colId, cellRenderer, style, className, onClick = null }) => (
-        <td key={colId} style={style} className={className} onClick={onClick && (() => onClick(row.id, colId))}>
-          {cellRenderer(row[colId], idx, colId, row)}
-        </td>
-      ))}
+      {columns.map(({ id: colId, cellRenderer, style, className, onClick, isClickable }) => {
+        if (typeof isClickable === 'function') {
+          isClickable = isClickable(row.id, colId);
+        }
+        return (
+          <td
+            key={colId}
+            style={style}
+            className={`${className} ${isClickable ? 'clickable' : ''}`}
+            onClick={onClick && isClickable ? () => onClick(row.id, colId) : null}>
+            {cellRenderer(row[colId], idx, colId, row)}
+          </td>
+        );
+      })}
     </tr>
   );
 
