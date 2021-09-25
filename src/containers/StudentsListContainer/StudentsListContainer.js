@@ -12,6 +12,8 @@ import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
 import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchByIds } from '../../redux/modules/users';
+import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
+
 import { safeGet } from '../../helpers/common';
 
 class StudentsListContainer extends Component {
@@ -64,8 +66,11 @@ export default connect(
   },
   (dispatch, { groupId }) => ({
     loadAsync: () =>
-      dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
-        dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
-      ),
+      Promise.all([
+        dispatch(fetchGroupStatsIfNeeded(groupId)),
+        dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
+          dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+        ),
+      ]),
   })
 )(StudentsListContainer);
