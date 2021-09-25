@@ -12,26 +12,23 @@ import { UserNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import StudentsListContainer from '../../containers/StudentsListContainer';
-import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import GroupsNameContainer from '../../containers/GroupsNameContainer';
+import AssignmentsTableContainer from '../../containers/AssignmentsTableContainer';
 
-import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { statisticsSelector } from '../../redux/selectors/stats';
-import { loggedInStudentOfGroupsAssignmentsSelector } from '../../redux/selectors/usersGroups';
-import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 
 import { DashboardIcon, InfoIcon, GroupIcon, AssignmentsIcon, SupervisorIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
-import { EMPTY_OBJ, safeGet } from '../../helpers/common';
+import { safeGet } from '../../helpers/common';
+
+const INITIAL_LOADING_THRESHOLD = 3; // if there are more groups, the boxes will be collapsed and data loaded on demand
 
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
@@ -53,33 +50,14 @@ class Dashboard extends Component {
     Promise.all([
       dispatch(fetchUserIfNeeded(userId)),
       dispatch(fetchRuntimeEnvironments()),
-      dispatch(fetchAllGroups()).then(({ value: groups }) => {
-        const interestingGroups = groups.filter(
-          group =>
-            (group.privateData && group.privateData.students && group.privateData.students.includes(userId)) ||
-            (group.privateData && group.privateData.supervisors && group.privateData.supervisors.includes(userId)) ||
-            (group.primaryAdminsIds && group.primaryAdminsIds.includes(userId))
-        );
-        return Promise.all(
-          interestingGroups.map(({ id }) =>
-            Promise.all([dispatch(fetchAssignmentsForGroup(id)), dispatch(fetchGroupStatsIfNeeded(id))])
-          )
-        );
-      }),
+      dispatch(fetchAllGroups()),
     ]);
-
-  usersStatistics(statistics) {
-    return statistics.find(stat => stat.userId === this.props.userId) || EMPTY_OBJ;
-  }
 
   render() {
     const {
       user,
       student,
       supervisor,
-      groupAssignments,
-      assignmentEnvironmentsSelector,
-      statistics,
       memberGroups,
       fetchManyGroupsStatus,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
@@ -137,7 +115,7 @@ class Dashboard extends Component {
                               title={<GroupsNameContainer groupId={groupId} fullName admins links />}
                               collapsable
                               noPadding
-                              isOpen
+                              isOpen={memberGroups.student.length <= INITIAL_LOADING_THRESHOLD}
                               footer={
                                 <div className="mb-2 text-center">
                                   <TheButtonGroup>
@@ -157,13 +135,7 @@ class Dashboard extends Component {
                                 </div>
                               }
                               unlimitedHeight>
-                              <AssignmentsTable
-                                userId={user.id}
-                                assignments={groupAssignments.get(groupId)}
-                                assignmentEnvironmentsSelector={assignmentEnvironmentsSelector}
-                                statuses={this.usersStatistics(statistics).assignments}
-                                onlyCurrent
-                              />
+                              <AssignmentsTableContainer userId={user.id} groupId={groupId} onlyCurrent />
                             </Box>
                           ))}
                         </div>
@@ -209,7 +181,7 @@ class Dashboard extends Component {
                               title={<GroupsNameContainer groupId={groupId} fullName admins links />}
                               collapsable
                               noPadding
-                              isOpen
+                              isOpen={memberGroupsAdminOrSupervisor.length <= INITIAL_LOADING_THRESHOLD}
                               footer={
                                 <div className="mb-2 text-center">
                                   <TheButtonGroup>
@@ -254,9 +226,6 @@ Dashboard.propTypes = {
   superadmin: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
   userId: PropTypes.string,
-  groupAssignments: ImmutablePropTypes.map,
-  assignmentEnvironmentsSelector: PropTypes.func,
-  statistics: ImmutablePropTypes.map,
   memberGroups: PropTypes.object.isRequired,
   fetchManyGroupsStatus: PropTypes.string,
   links: PropTypes.object,
@@ -273,9 +242,6 @@ export default withLinks(
         supervisor: isSupervisor(userId)(state),
         superadmin: isLoggedAsSuperAdmin(state),
         user: getUser(userId)(state),
-        groupAssignments: loggedInStudentOfGroupsAssignmentsSelector(state),
-        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-        statistics: statisticsSelector(state),
         memberGroups: groupsLoggedUserIsMemberSelector(state),
         fetchManyGroupsStatus: fetchManyGroupsStatus(state),
       };

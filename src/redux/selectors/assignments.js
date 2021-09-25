@@ -12,10 +12,8 @@ const getParam = (state, id) => id;
 
 export const getAssignment = createSelector(getAssignmentResources, assignments => id => assignments.get(id));
 
-export const getExerciseAssignments = createSelector(
-  [getAssignmentResources, (state, exerciseId) => exerciseId],
-  (assignments, exerciseId) =>
-    assignments.filter(assignment => isReady(assignment) && assignment.getIn(['data', 'exerciseId']) === exerciseId)
+export const getExerciseAssignments = createSelector([getAssignmentResources, getParam], (assignments, exerciseId) =>
+  assignments.filter(assignment => isReady(assignment) && assignment.getIn(['data', 'exerciseId']) === exerciseId)
 );
 
 export const assignmentEnvironmentsSelector = createSelector(

@@ -1,11 +1,9 @@
 import { createSelector, defaultMemoize } from 'reselect';
-import { Map } from 'immutable';
 
 import { EMPTY_MAP, EMPTY_LIST } from '../../helpers/common';
 import { readyUsersDataSelector, isLoggedAsSuperAdmin } from './users';
 import { groupsSelector, groupSelectorCreator } from './groups';
 import { loggedInUserIdSelector } from './auth';
-import { getAssignments } from './assignments';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
 const getState = state => state;
@@ -167,21 +165,4 @@ const groupsUserCanEditSelector = createSelector(
 export const loggedUserCanAssignToGroupsSelector = createSelector(
   groupsUserCanEditSelector,
   filterNonOrganizationalActiveGroups
-);
-
-// Dashboard specific selector (TODO - replace when dashboard is updated)
-export const loggedInStudentOfGroupsAssignmentsSelector = createSelector(
-  [loggedUserStudentOfGroupsSelector, getAssignments],
-  (studentOf, assignments) =>
-    studentOf
-      ? studentOf.reduce((result, group) => {
-          const groupAssignments =
-            group && assignments && isReady(group)
-              ? group
-                  .getIn(['data', 'privateData', 'assignments'], EMPTY_LIST)
-                  .map(assignmentId => assignments.getIn(['resources', assignmentId]))
-              : EMPTY_LIST;
-          return result.set(group.getIn(['data', 'id']), groupAssignments);
-        }, Map())
-      : EMPTY_MAP
 );
