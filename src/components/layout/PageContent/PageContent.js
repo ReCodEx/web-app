@@ -22,7 +22,7 @@ const getMessage = (item, formatMessage) =>
  * which reflects these into the <head> section of the HTML document.
  */
 const PageContent = ({ intl: { formatMessage }, title = '', windowTitle = null, icon = null, children }) => (
-  <div className="content-wrapper">
+  <div className="content-wrapper pb-1">
     <Helmet title={getMessage(windowTitle || title, formatMessage)} />
     {(title || icon) && (
       <div className="content-header">
