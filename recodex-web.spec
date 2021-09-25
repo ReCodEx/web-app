@@ -1,7 +1,7 @@
 %define name recodex-web
 %define short_name web-app
-%define version 1.26.0
-%define unmangled_version a6c2708e3783a450371615d711f74244ae774c48
+%define version 2.0.0
+%define unmangled_version f4a1f9160c1ad3abaf5d01c8c1a8d85943128f3f
 %define release 1
 
 Summary: ReCodEx web-app component
@@ -83,4 +83,5 @@ exit 0
 %attr(-,root,root) /lib/systemd/system/recodex-web.service
 
 %changelog
+
 
