@@ -14,11 +14,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/web-app
-BuildRequires: systemd, nodejs >= 12.18.0
+BuildRequires: systemd, nodejs >= 14.15, npm >= 6.14
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-Requires: nodejs
+Requires: nodejs >= 14.15
 
 #Source0: %{name}-%{unmangled_version}.tar.gz
 Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
