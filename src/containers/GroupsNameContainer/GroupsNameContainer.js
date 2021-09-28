@@ -108,6 +108,9 @@ export default connect(
     groupAccessor: groupAccessorSelector(state),
   }),
   dispatch => ({
-    loadAsync: groupId => dispatch(fetchGroupIfNeeded(groupId)),
+    loadAsync: groupId =>
+      dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
+        Promise.all(group && group.archived ? group.parentGroupsIds.map(id => dispatch(fetchGroupIfNeeded(id))) : [])
+      ),
   })
 )(GroupsNameContainer);

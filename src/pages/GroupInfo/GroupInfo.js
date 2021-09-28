@@ -55,7 +55,6 @@ class GroupInfo extends Component {
           dispatch(fetchByIds(safeGet(group, ['primaryAdminsIds'], []))),
           dispatch(fetchByIds(safeGet(group, ['privateData', 'supervisors'], []))),
           dispatch(fetchByIds(safeGet(group, ['privateData', 'observers'], []))),
-          group.archived ? dispatch(fetchAllGroups({ archived: true })) : null,
         ])
       );
 

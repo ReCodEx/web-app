@@ -253,12 +253,11 @@ class GroupUserSolutions extends Component {
     Promise.all([
       dispatch(fetchUserIfNeeded(userId)),
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
-        hasPermissions(group, 'viewAssignments')
-          ? Promise.all([
-              dispatch(fetchAssignmentsForGroup(groupId)),
-              dispatch(fetchGroupStudentsSolutions(groupId, userId)),
-            ])
-          : Promise.resolve()
+        Promise.all(
+          hasPermissions(group, 'viewAssignments')
+            ? [dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupStudentsSolutions(groupId, userId))]
+            : []
+        )
       ),
       dispatch(fetchRuntimeEnvironments()),
     ]);
