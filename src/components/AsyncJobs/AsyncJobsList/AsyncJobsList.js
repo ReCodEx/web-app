@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import Confirm from '../../forms/Confirm';
-import { AbortIcon, AssignmentIcon } from '../../icons';
+import Icon, { AbortIcon, AssignmentIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 const formatArgs = args =>
@@ -20,9 +20,10 @@ const formatArgs = args =>
 const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI_FACTORY } }) => (
   <Box title={<FormattedMessage id="app.asyncJobs.list.title" defaultMessage="Recent Jobs" />} noPadding>
     {asyncJobs && asyncJobs.length > 0 ? (
-      <Table responsive size="sm" hover>
+      <Table responsive size="sm" hover className="mb-1">
         <thead>
           <tr>
+            <th />
             <th>
               <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />
             </th>
@@ -50,22 +51,36 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
             .sort((a, b) => b.createdAt - a.createdAt)
             .map(job => (
               <tr key={job.id} className={job.finishedAt ? 'text-muted' : ''}>
-                <td className="small text-nowrap">
-                  <DateTime unixts={job.createdAt} />
+                <td className="small valign-baseline text-muted text-center px-2">
+                  {job.finishedAt ? (
+                    <Icon icon="box" />
+                  ) : job.startedAt ? (
+                    <Icon icon="running" className="text-danger" />
+                  ) : job.scheduledAt ? (
+                    <Icon icon={['far', 'clock']} className="text-warning" />
+                  ) : (
+                    <Icon icon="child" className="text-success" />
+                  )}
                 </td>
-                <td className="small text-nowrap">
+                <td className="small text-nowrap valign-baseline">
+                  <DateTime unixts={job.createdAt} showDate={false} showSeconds showOverlay />
+                </td>
+                <td className="small text-nowrap valign-baseline">
                   <DateTime unixts={job.scheduledAt} emptyPlaceholder="-" />
                 </td>
-                <td className="small text-nowrap">
+                <td className="small text-nowrap valign-baseline">
                   {job.startedAt ? (
                     <OverlayTrigger
+                      placement="bottom"
                       overlay={
                         <Popover id={`start-${job.id}`}>
                           <Popover.Title>
                             <FormattedMessage id="app.asyncJobs.list.processInfo" defaultMessage="Processing info" />
                           </Popover.Title>
-                          <Popover.Content className="small">
-                            <FormattedMessage id="app.asyncJobs.list.worker" defaultMessage="Worker" />:
+                          <Popover.Content>
+                            <DateTime unixts={job.startedAt} showSeconds showRelative />
+                            <br />
+                            <FormattedMessage id="app.asyncJobs.list.worker" defaultMessage="Worker" />:{' '}
                             <code>{job.workerId}</code>
                             <br />
                             <FormattedMessage id="app.asyncJobs.list.retries" defaultMessage="Retries" />: {job.retries}
@@ -74,7 +89,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                       }>
                       {
                         <span>
-                          <DateTime unixts={job.startedAt} />
+                          <DateTime unixts={job.startedAt} showDate={false} showSeconds />
                         </span>
                       }
                     </OverlayTrigger>
@@ -82,10 +97,10 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                     '-'
                   )}
                 </td>
-                <td className="small text-nowrap">
-                  <DateTime unixts={job.finishedAt} emptyPlaceholder="-" />
+                <td className="small text-nowrap valign-baseline">
+                  <DateTime unixts={job.finishedAt} emptyPlaceholder="-" showDate={false} showSeconds showOverlay />
                 </td>
-                <td>
+                <td className="valign-baseline">
                   {job.arguments && Object.keys(job.arguments).length > 0 ? (
                     <OverlayTrigger
                       overlay={
@@ -104,7 +119,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                     <code>{job.command}</code>
                   )}
                 </td>
-                <td className="small text-nowrap">{job.error}</td>
+                <td className="small text-nowrap valign-baseline">{job.error}</td>
                 <td>
                   {job.associatedAssignment && (
                     <OverlayTrigger
