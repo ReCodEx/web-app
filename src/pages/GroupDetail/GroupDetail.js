@@ -38,7 +38,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import {
   groupSelector,
-  groupsSelector,
+  groupDataAccessorSelector,
   groupsAssignmentsSelector,
   groupsShadowAssignmentsSelector,
 } from '../../redux/selectors/groups';
@@ -130,6 +130,7 @@ class GroupDetail extends Component {
   render() {
     const {
       group,
+      groupsAccessor,
       students,
       loggedUser,
       effectiveRole,
@@ -149,6 +150,7 @@ class GroupDetail extends Component {
       fetchUsersSolutions,
       setShadowPoints,
       removeShadowPoints,
+      links: { GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
     return (
@@ -216,7 +218,11 @@ class GroupDetail extends Component {
                 </Row>
               )}
 
-              <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />
+              <GroupArchivedWarning
+                {...data}
+                groupsDataAccessor={groupsAccessor}
+                linkFactory={GROUP_DETAIL_URI_FACTORY}
+              />
 
               {!data.organizational && hasPermissions(data, 'viewAssignments') && (
                 <>
@@ -421,12 +427,12 @@ GroupDetail.propTypes = {
   loggedUser: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
   group: ImmutablePropTypes.map,
+  groupsAccessor: PropTypes.func.isRequired,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
   assignments: ImmutablePropTypes.list,
   shadowAssignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
-  groups: ImmutablePropTypes.map,
   isGroupAdmin: PropTypes.bool,
   isGroupSupervisor: PropTypes.bool,
   isGroupStudent: PropTypes.bool,
@@ -457,10 +463,10 @@ const mapStateToProps = (
 
   return {
     group: groupSelector(state, groupId),
+    groupsAccessor: groupDataAccessorSelector(state),
     userId,
     loggedUser: loggedInUserSelector(state),
     effectiveRole: getLoggedInUserEffectiveRole(state),
-    groups: groupsSelector(state),
     assignments: groupsAssignmentsSelector(state, groupId),
     shadowAssignments: groupsShadowAssignmentsSelector(state, groupId),
     assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),

@@ -18,7 +18,7 @@ import {
 import { fetchByIds, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import { groupSelector, groupsSelector } from '../../redux/selectors/groups';
+import { groupSelector, groupDataAccessorSelector, groupsSelector } from '../../redux/selectors/groups';
 import {
   primaryAdminsOfGroupSelector,
   supervisorsOfGroupSelector,
@@ -45,6 +45,8 @@ import AddSupervisor from '../../components/Groups/AddSupervisor';
 import { BanIcon, GroupIcon } from '../../components/icons';
 import { hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+
+import withLinks from '../../helpers/withLinks';
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
@@ -87,6 +89,7 @@ class GroupInfo extends Component {
       group,
       userId,
       groups,
+      groupsAccessor,
       primaryAdmins = [],
       supervisors = [],
       observers = [],
@@ -102,6 +105,7 @@ class GroupInfo extends Component {
       addSupervisor,
       addObserver,
       removeMember,
+      links: { GROUP_INFO_URI_FACTORY },
       intl: { locale },
     } = this.props;
 
@@ -131,7 +135,7 @@ class GroupInfo extends Component {
                 </div>
               )}
 
-            <GroupArchivedWarning archived={data.archived} directlyArchived={data.directlyArchived} />
+            <GroupArchivedWarning {...data} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_INFO_URI_FACTORY} />
 
             {!hasPermissions(data, 'viewDetail') && (
               <Row>
@@ -262,6 +266,7 @@ GroupInfo.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
+  groupsAccessor: PropTypes.func.isRequired,
   instance: ImmutablePropTypes.map,
   primaryAdmins: PropTypes.array,
   supervisors: PropTypes.array,
@@ -301,6 +306,7 @@ const mapStateToProps = (
     group: groupSelector(state, groupId),
     userId,
     groups: groupsSelector(state),
+    groupsAccessor: groupDataAccessorSelector(state),
     primaryAdmins: primaryAdminsOfGroupSelector(state, groupId),
     supervisors: supervisorsOfGroupSelector(state, groupId),
     observers: observersOfGroupSelector(state, groupId),
@@ -337,4 +343,4 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   removeMember: (userId, groupId) => dispatch(removeMember(userId, groupId)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo));
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo)));
