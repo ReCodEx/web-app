@@ -65,7 +65,7 @@ const EditLimitsField = ({
                 <>
                   {testsCount > 1 && (
                     <OverlayTrigger
-                      placement="bottom"
+                      placement="top"
                       overlay={
                         <Tooltip id={`tooltip.${id}.memory.vertical`}>
                           <FormattedMessage
@@ -83,52 +83,44 @@ const EditLimitsField = ({
                     <Confirm
                       id={`confirm.${id}.memory.horizontal`}
                       onConfirmed={cloneHorizontally('memory')}
+                      tooltip={
+                        <FormattedMessage
+                          id="app.editLimitsField.tooltip.cloneHorizontal"
+                          defaultMessage="Copy this value horizontally to all environments of the test."
+                        />
+                      }
+                      tooltipPlacement="top"
                       question={
                         <FormattedMessage
                           id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
                           defaultMessage="Do you really want to use these limits for all runtime environments of this test? Please note, that individual environments have different performance characteristics."
                         />
                       }>
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`tooltip.${id}.memory.horizontal`}>
-                            <FormattedMessage
-                              id="app.editLimitsField.tooltip.cloneHorizontal"
-                              defaultMessage="Copy this value horizontally to all environments of the test."
-                            />
-                          </Tooltip>
-                        }>
-                        <Button size="xs" noShadow>
-                          <Icon icon="arrows-alt-h" fixedWidth />
-                        </Button>
-                      </OverlayTrigger>
+                      <Button size="xs" noShadow>
+                        <Icon icon="arrows-alt-h" fixedWidth />
+                      </Button>
                     </Confirm>
                   )}
                   {testsCount > 1 && environmentsCount > 1 && (
                     <Confirm
                       id={`confirm.${id}.memory.all`}
                       onConfirmed={cloneAll('memory')}
+                      tooltip={
+                        <FormattedMessage
+                          id="app.editLimitsField.tooltip.cloneAll"
+                          defaultMessage="Copy this value to all tests in all environments."
+                        />
+                      }
+                      tooltipPlacement="top"
                       question={
                         <FormattedMessage
                           id="app.EditLimitsForm.cloneAll.yesNoQuestion"
                           defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Please note, that individual environments have different performance characteristics."
                         />
                       }>
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`tooltip.${id}.memory.all`}>
-                            <FormattedMessage
-                              id="app.editLimitsField.tooltip.cloneAll"
-                              defaultMessage="Copy this value to all tests in all environments."
-                            />
-                          </Tooltip>
-                        }>
-                        <Button size="xs" noShadow>
-                          <Icon icon="arrows-alt" fixedWidth />
-                        </Button>
-                      </OverlayTrigger>
+                      <Button size="xs" noShadow>
+                        <Icon icon="arrows-alt" fixedWidth />
+                      </Button>
                     </Confirm>
                   )}
                 </>
@@ -151,7 +143,7 @@ const EditLimitsField = ({
                 <>
                   {testsCount > 1 && (
                     <OverlayTrigger
-                      placement="bottom"
+                      placement="top"
                       overlay={
                         <Tooltip id={`tooltip.${id}.time.vertical`}>
                           <FormattedMessage
@@ -169,52 +161,44 @@ const EditLimitsField = ({
                     <Confirm
                       id={`confirm.${id}.time.horizontal`}
                       onConfirmed={cloneHorizontally('time')}
+                      tooltip={
+                        <FormattedMessage
+                          id="app.editLimitsField.tooltip.cloneHorizontal"
+                          defaultMessage="Copy this value horizontally to all environments of the test."
+                        />
+                      }
+                      tooltipPlacement="top"
                       question={
                         <FormattedMessage
                           id="app.EditLimitsForm.cloneHorizontal.yesNoQuestion"
                           defaultMessage="Do you really want to use these limits for all runtime environments of this test? Please note, that individual environments have different performance characteristics."
                         />
                       }>
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`tooltip.${id}.time.horizontal`}>
-                            <FormattedMessage
-                              id="app.editLimitsField.tooltip.cloneHorizontal"
-                              defaultMessage="Copy this value horizontally to all environments of the test."
-                            />
-                          </Tooltip>
-                        }>
-                        <Button size="xs" noShadow>
-                          <Icon icon="arrows-alt-h" fixedWidth />
-                        </Button>
-                      </OverlayTrigger>
+                      <Button size="xs" noShadow>
+                        <Icon icon="arrows-alt-h" fixedWidth />
+                      </Button>
                     </Confirm>
                   )}
                   {testsCount > 1 && environmentsCount > 1 && (
                     <Confirm
                       id={`confirm.${id}.time.all`}
                       onConfirmed={cloneAll('time')}
+                      tooltip={
+                        <FormattedMessage
+                          id="app.editLimitsField.tooltip.cloneAll"
+                          defaultMessage="Copy this value to all tests in all environments."
+                        />
+                      }
+                      tooltipPlacement="top"
                       question={
                         <FormattedMessage
                           id="app.EditLimitsForm.cloneAll.yesNoQuestion"
                           defaultMessage="Do you really want to use these limits for all the tests of all runtime environments? Please note, that individual environments have different performance characteristics."
                         />
                       }>
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`tooltip.${id}.time.all`}>
-                            <FormattedMessage
-                              id="app.editLimitsField.tooltip.cloneAll"
-                              defaultMessage="Copy this value to all tests in all environments."
-                            />
-                          </Tooltip>
-                        }>
-                        <Button size="xs" noShadow>
-                          <Icon icon="arrows-alt" fixedWidth />
-                        </Button>
-                      </OverlayTrigger>
+                      <Button size="xs" noShadow>
+                        <Icon icon="arrows-alt" fixedWidth />
+                      </Button>
                     </Confirm>
                   )}
                 </>
