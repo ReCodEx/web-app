@@ -71,9 +71,9 @@ class HeaderNotification extends Component {
                   <DeleteIcon className="fa text-red" smallGapRight fixedWidth />
                 </span>
               ) : successful ? (
-                <SuccessIcon smallGapRight fixedWidth />
+                <SuccessIcon className="text-success" smallGapRight fixedWidth />
               ) : (
-                <WarningIcon smallGapRight fixedWidth />
+                <WarningIcon className="text-warning" smallGapRight fixedWidth />
               )}
             </span>
             <span className="fa">

@@ -88,7 +88,7 @@ class EmailVerification extends Component {
                 <div>
                   {getVerificationStatus(decodedToken.sub) === 'FULFILLED' && (
                     <p>
-                      <SuccessIcon gapRight />
+                      <SuccessIcon className="text-success" gapRight />
                       <FormattedMessage
                         id="app.emailVerification.verified"
                         defaultMessage="The email address has been verified."

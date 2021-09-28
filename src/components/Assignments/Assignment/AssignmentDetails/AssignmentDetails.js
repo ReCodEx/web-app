@@ -204,7 +204,7 @@ const AssignmentDetails = ({
                   <FormattedMessage id="app.assignment.isBonus" defaultMessage="Bonus assignment" />:
                 </th>
                 <td>
-                  <SuccessIcon />
+                  <SuccessIcon className="text-success" />
                 </td>
               </tr>
             )}

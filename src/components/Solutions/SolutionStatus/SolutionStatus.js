@@ -216,7 +216,7 @@ class SolutionStatus extends Component {
                       <span>
                         <DeadlineIcon className="text-muted" gapRight />
                         {submittedAt < firstDeadline ? (
-                          <SuccessIcon />
+                          <SuccessIcon className="text-success" />
                         ) : allowSecondDeadline && submittedAt < secondDeadline ? (
                           <Icon icon="yin-yang" className="text-warning" />
                         ) : (
@@ -405,7 +405,7 @@ class SolutionStatus extends Component {
                     <>
                       {pointsPercentualThreshold > 0 && (
                         <p className="larger">
-                          <SuccessIcon largeGapRight fixedWidth />
+                          <SuccessIcon className="text-success" largeGapRight fixedWidth />
                           <FormattedMessage
                             id="app.solution.pointsExplainDialog.correctnessAboveThreshold"
                             defaultMessage="The solution correctness is above threshold."

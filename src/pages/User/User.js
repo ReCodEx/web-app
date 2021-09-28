@@ -196,7 +196,7 @@ class User extends Component {
                       <td className="full-width">
                         <a href={`mailto:${user.privateData.email}`}>{user.privateData.email}</a>
                         {user.isVerified ? (
-                          <SuccessIcon largeGapLeft />
+                          <SuccessIcon className="text-success" largeGapLeft />
                         ) : (
                           <WarningIcon className="text-warning" largeGapLeft />
                         )}
