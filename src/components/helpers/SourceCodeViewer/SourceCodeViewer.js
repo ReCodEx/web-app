@@ -18,6 +18,7 @@ const SourceCodeViewer = ({ name, content = '' }) =>
           name="source-code-viewer"
           width="100%"
           height="100%"
+          fontSize={16}
           editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
         />
       )}
