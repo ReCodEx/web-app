@@ -178,6 +178,10 @@ th.shrink-col {
   vertical-align: bottom !important;
 }
 
+.valign-baseline {
+  vertical-align: baseline !important;
+}
+
 /*
  * Opacity, transparency, ...
  */

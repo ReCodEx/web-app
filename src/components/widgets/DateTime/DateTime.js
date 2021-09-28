@@ -128,6 +128,7 @@ DateTime.propTypes = {
   emptyPlaceholder: PropTypes.string,
   showDate: PropTypes.bool,
   showTime: PropTypes.bool,
+  showSeconds: PropTypes.bool,
   showRelative: PropTypes.bool,
   showOverlay: PropTypes.bool,
   overlayTooltipId: PropTypes.string,
