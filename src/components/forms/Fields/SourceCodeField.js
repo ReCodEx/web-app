@@ -41,6 +41,7 @@ const SourceCodeField = ({
               minLines={5}
               maxLines={20}
               readOnly={readOnly}
+              fontSize={16}
               onBlur={
                 () => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
               }

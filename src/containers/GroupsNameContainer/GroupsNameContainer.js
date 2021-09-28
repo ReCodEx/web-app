@@ -74,11 +74,11 @@ class GroupsNameContainer extends Component {
             {admins && group.primaryAdminsIds.length > 0 && (
               <small className="half-opaque ml-3">
                 (
-                {group.primaryAdminsIds.map(id => (
-                  <em key={id}>
-                    <UsersNameContainer userId={id} isSimple />
-                  </em>
-                ))}
+                <em>
+                  {group.primaryAdminsIds.map(id => (
+                    <UsersNameContainer key={id} userId={id} isSimple />
+                  ))}
+                </em>
                 )
               </small>
             )}
