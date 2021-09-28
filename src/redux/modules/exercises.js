@@ -54,6 +54,7 @@ export const additionalActionTypes = {
 export const loadExercise = actions.pushResource;
 export const fetchExercisesIfNeeded = actions.fetchIfNeeded;
 export const fetchExercise = actions.fetchResource;
+export const reloadExercise = (id, meta = {}) => actions.fetchResource(id, { allowReload: true, ...meta });
 export const fetchExerciseIfNeeded = actions.fetchOneIfNeeded;
 export const invalidateExercise = actions.invalidate;
 

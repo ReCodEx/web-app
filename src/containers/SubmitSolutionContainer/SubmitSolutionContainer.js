@@ -243,6 +243,7 @@ SubmitSolutionContainer.propTypes = {
   presubmitSizeLimitOK: PropTypes.bool,
   progressObserverId: PropTypes.string,
   submitSolution: PropTypes.func.isRequired,
+  afterEvaluationStarts: PropTypes.func,
   presubmitSolution: PropTypes.func.isRequired,
   uploadedFiles: PropTypes.array,
   removedFiles: PropTypes.array,
@@ -275,11 +276,13 @@ export default withLinks(
         progressObserverId: getProgressObserverId(state),
       };
     },
-    (dispatch, { id, userId, onSubmit, onReset, presubmitValidation }) => ({
+    (dispatch, { id, userId, onSubmit, afterEvaluationStarts = null, onReset, presubmitValidation }) => ({
       changeNote: note => dispatch(changeNote(note)),
       cancel: () => dispatch(cancel()),
       submitSolution: (note, files, runtimeEnvironmentId = null, entryPoint = null, progressObserverId = null) =>
-        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint, progressObserverId)),
+        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint, progressObserverId)).then(
+          afterEvaluationStarts
+        ),
       presubmitSolution: files => dispatch(presubmitValidation(id, files)),
       reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
       afterEvaluationFinishes: () => Promise.all([dispatch(fetchUsersSolutions(userId, id)), dispatch(canSubmit(id))]),

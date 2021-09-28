@@ -24,6 +24,7 @@ import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import { isSubmitting } from '../../redux/selectors/submission';
 import {
   fetchExerciseIfNeeded,
+  reloadExercise,
   forkExercise,
   attachExerciseToGroup,
   detachExerciseFromGroup,
@@ -103,6 +104,7 @@ class Exercise extends Component {
       deleteReferenceSolution,
       groups,
       groupsAccessor,
+      reload,
       forkExercise,
       attachingGroupId,
       detachingGroupId,
@@ -254,6 +256,7 @@ class Exercise extends Component {
                           id={exercise.id}
                           onSubmit={submitReferenceSolution}
                           presubmitValidation={presubmitReferenceSolution}
+                          afterEvaluationStarts={reload}
                           onReset={init}
                           isOpen={submitting}
                           solutionFilesLimit={exercise.solutionFilesLimit}
@@ -281,21 +284,22 @@ Exercise.propTypes = {
       exerciseId: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  loadAsync: PropTypes.func.isRequired,
   exercise: ImmutablePropTypes.map,
   forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   referenceSolutions: ImmutablePropTypes.map,
   intl: PropTypes.object.isRequired,
   submitting: PropTypes.bool,
-  initCreateReferenceSolution: PropTypes.func.isRequired,
   links: PropTypes.object,
-  deleteReferenceSolution: PropTypes.func.isRequired,
-  forkExercise: PropTypes.func.isRequired,
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   attachingGroupId: PropTypes.string,
   detachingGroupId: PropTypes.string,
+  loadAsync: PropTypes.func.isRequired,
+  reload: PropTypes.func.isRequired,
+  initCreateReferenceSolution: PropTypes.func.isRequired,
+  deleteReferenceSolution: PropTypes.func.isRequired,
+  forkExercise: PropTypes.func.isRequired,
   attachExerciseToGroup: PropTypes.func.isRequired,
   detachExerciseFromGroup: PropTypes.func.isRequired,
 };
@@ -335,8 +339,10 @@ export default withLinks(
       }
     ) => ({
       loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
+      reload: () => dispatch(reloadExercise(exerciseId)),
       initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
-      deleteReferenceSolution: solutionId => dispatch(deleteReferenceSolution(solutionId)),
+      deleteReferenceSolution: solutionId =>
+        dispatch(deleteReferenceSolution(solutionId)).then(() => dispatch(reloadExercise(exerciseId))),
       forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),
       attachExerciseToGroup: groupId => dispatch(attachExerciseToGroup(exerciseId, groupId)),
       detachExerciseFromGroup: groupId => dispatch(detachExerciseFromGroup(exerciseId, groupId)),
