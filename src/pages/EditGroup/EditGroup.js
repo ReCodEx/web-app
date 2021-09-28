@@ -17,6 +17,7 @@ import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonCont
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 import { BanIcon, InfoIcon, EditGroupIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, editGroup, relocateGroup } from '../../redux/modules/groups';
@@ -32,7 +33,6 @@ import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from 
 
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
-import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 const canRelocate = group => hasPermissions(group, 'relocate') && !group.archived;
 
@@ -67,13 +67,13 @@ class EditGroup extends Component {
       groups,
       groupsAccessor,
       isSuperAdmin,
-      links: { GROUP_INFO_URI_FACTORY, INSTANCE_URI_FACTORY },
       editGroup,
       relocateGroup,
       hasThreshold,
       canViewParentDetail,
       instanceId,
       reload,
+      links: { GROUP_INFO_URI_FACTORY, INSTANCE_URI_FACTORY, GROUP_EDIT_URI_FACTORY },
       intl: { locale },
     } = this.props;
 
@@ -103,7 +103,7 @@ class EditGroup extends Component {
               </Row>
             )}
 
-            <GroupArchivedWarning archived={group.archived} directlyArchived={group.directlyArchived} />
+            <GroupArchivedWarning {...group} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_EDIT_URI_FACTORY} />
 
             {hasPermissions(group, 'update') && (
               <>

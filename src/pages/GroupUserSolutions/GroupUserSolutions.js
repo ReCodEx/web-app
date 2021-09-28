@@ -26,13 +26,14 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchGroupStudentsSolutions } from '../../redux/modules/solutions';
-import { groupSelector, groupsAssignmentsSelector } from '../../redux/selectors/groups';
+import { groupSelector, groupsAssignmentsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
 import {
   assignmentEnvironmentsSelector,
   getUserSolutions,
@@ -291,6 +292,7 @@ class GroupUserSolutions extends Component {
       groupId,
       userId,
       group,
+      groupsAccessor,
       assignments,
       assignmentEnvironmentsSelector,
       getAssignmentSolutions,
@@ -316,6 +318,12 @@ class GroupUserSolutions extends Component {
               userId={userId}
               canEdit={hasPermissions(group, 'update')}
               canViewDetail={hasPermissions(group, 'viewDetail')}
+            />
+
+            <GroupArchivedWarning
+              {...group}
+              groupsDataAccessor={groupsAccessor}
+              linkFactory={links.GROUP_EDIT_URI_FACTORY}
             />
 
             <div className="text-right text-nowrap py-2">
@@ -436,6 +444,7 @@ GroupUserSolutions.propTypes = {
   groupId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
+  groupsAccessor: PropTypes.func.isRequired,
   assignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
   fetchSolutionsStatus: PropTypes.string,
@@ -462,15 +471,14 @@ export default withLinks(
         groupId,
         userId,
         group: groupSelector(state, groupId),
+        groupsAccessor: groupDataAccessorSelector(state),
         assignments: groupsAssignmentsSelector(state, groupId),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
         fetchSolutionsStatus: fetchManyGroupStudentsSolutionsStatus(state)(groupId, userId),
         fetchRuntimesStatus: fetchRuntimeEnvironmentsStatus(state),
-
         getAssignmentSolutions: assignmentId => getUserSolutions(state)(userId, assignmentId),
         getAssignmentSolutionsSorted: assignmentId => getUserSolutionsSortedData(state)(userId, assignmentId),
         getRuntime: runtimeEnvironmentSelector(state),
-
         loggedUserId: loggedInUserIdSelector(state),
       };
     },
