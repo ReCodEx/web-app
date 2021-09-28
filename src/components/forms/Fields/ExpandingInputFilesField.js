@@ -11,11 +11,6 @@ import { AddIcon, CloseIcon } from '../../icons';
 
 const EMPTY_VALUE = { file: '', name: '' };
 
-const validate = value =>
-  !value || value.trim() === '' ? (
-    <FormattedMessage id="app.expandingInputFilesField.validateEmpty" defaultMessage="This value must not be empty." />
-  ) : undefined;
-
 const handleSelectChange = (oldValue, fieldName, change) => e => {
   if (oldValue.file === oldValue.name || (!oldValue.file && !oldValue.name)) {
     change(fieldName, e.target.value);
@@ -51,7 +46,6 @@ const ExpandingInputFilesField = ({
                   label={''}
                   options={options}
                   addEmptyOption={true}
-                  validate={validate}
                   onChange={handleSelectChange(fields.get(index), `${field}.name`, change)}
                   disabled={readOnly}
                   groupClassName="mb-1"
@@ -63,7 +57,6 @@ const ExpandingInputFilesField = ({
                   name={`${field}.name`}
                   component={TextField}
                   label={''}
-                  validate={validate}
                   maxLength={64}
                   disabled={readOnly}
                   groupClassName="mb-1"

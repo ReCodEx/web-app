@@ -37,7 +37,7 @@ const supplementaryFilesOptions = defaultMemoize((files, locale) =>
     }))
 );
 
-const supplementaryFilesNamesIndex = defaultMemoize(
+const createFilesNamesIndex = defaultMemoize(
   files => files && new Set(deepReduce(files, [null, 'name']).filter(name => name))
 );
 
@@ -75,6 +75,53 @@ const validateFileExists = (data, errors, path, existingFiles) => {
       );
     }
   }
+};
+
+const validateFileEntryNotEmpty = (data, errors, path, emptyError) => {
+  const name = safeGet(data, path);
+  if (!name || name.trim() === '') {
+    safeSet(errors, path, emptyError);
+  }
+};
+
+const validateFileList = (data, errors, path, pairs, existingFiles, emptyError, duplicateError) => {
+  const files = safeGet(data, path);
+  if (!files || files.length === 0) {
+    return;
+  }
+
+  // check empty names
+  files.forEach((_, idx) => {
+    if (pairs) {
+      validateFileEntryNotEmpty(data, errors, [...path, idx, 'file'], emptyError);
+      validateFileEntryNotEmpty(data, errors, [...path, idx, 'name'], emptyError);
+    } else {
+      validateFileEntryNotEmpty(data, errors, [...path, idx], emptyError);
+    }
+  });
+
+  if (files.length > 1) {
+    // check for duplicit names/entries
+    const nameIndex = createIndex(
+      files.map(entry => (pairs ? ((entry && entry.name) || '').trim() : (entry || '').trim())).filter(name => name)
+    );
+
+    for (const name in nameIndex) {
+      const indices = nameIndex[name];
+      if (indices.length > 1) {
+        // add error to all indices on a list
+        indices.forEach(idx => safeSet(errors, [...path, idx, ...(pairs ? ['name'] : [])], duplicateError));
+      }
+    }
+  }
+
+  // validate files existence
+  files.forEach((_, idx) => {
+    if (!safeGet(errors, [...path, idx])) {
+      // only if there are no other errors
+      validateFileExists(data, errors, [...path, idx], existingFiles);
+    }
+  });
 };
 
 class EditExerciseSimpleConfigForm extends Component {
@@ -238,97 +285,68 @@ EditExerciseSimpleConfigForm.propTypes = {
 
 const validate = (formData, { exercise, supplementaryFiles }) => {
   const errors = {};
-  const existingFiles = supplementaryFilesNamesIndex(supplementaryFiles);
+  const existingFiles = createFilesNamesIndex(supplementaryFiles);
 
   for (const testKey in formData.config) {
     const test = formData.config[testKey];
 
-    // Check the input file names for duplicities
-    if (test['input-files'] && test['input-files'].length > 1) {
-      const nameIndex = createIndex(test['input-files'].map(({ name }) => name && name.trim()).filter(name => name));
+    validateFileList(
+      formData,
+      errors,
+      ['config', testKey, 'input-files'],
+      true, // (file, name) pairs
+      existingFiles,
+      <FormattedMessage
+        id="app.expandingInputFilesField.validateEmpty"
+        defaultMessage="This value must not be empty."
+      />,
+      <FormattedMessage
+        id="app.editExerciseConfigForm.validation.duplicateFileName"
+        defaultMessage="Duplicate name detected."
+      />
+    );
 
-      // Traverse the index and place an error to all duplicates ...
-      for (const name in nameIndex) {
-        const indices = nameIndex[name];
-        if (indices.length > 1) {
-          indices.forEach(idx =>
-            safeSet(
-              errors,
-              ['config', testKey, 'input-files', idx, 'name'],
-              <FormattedMessage
-                id="app.editExerciseConfigForm.validation.duplicateFileName"
-                defaultMessage="Duplicate name detected."
-              />
-            )
-          );
-        }
-      }
-    }
-
-    // Check the names of extra files for duplicites ...
     for (const envId in test['extra-files']) {
-      const extraFiles = test['extra-files'][envId];
-      if (extraFiles && extraFiles.length > 1) {
-        const nameIndex = createIndex(extraFiles.map(({ name }) => name && name.trim()).filter(name => name));
+      validateFileList(
+        formData,
+        errors,
+        ['config', testKey, 'extra-files', envId],
+        true, // (file, name) pairs
+        existingFiles,
+        <FormattedMessage
+          id="app.expandingInputFilesField.validateEmpty"
+          defaultMessage="This value must not be empty."
+        />,
+        <FormattedMessage
+          id="app.editExerciseConfigForm.validation.duplicateFileName"
+          defaultMessage="Duplicate name detected."
+        />
+      );
 
-        // Traverse the index and place an error to all duplicates ...
-        for (const name in nameIndex) {
-          const indices = nameIndex[name];
-          if (indices.length > 1) {
-            indices.forEach(idx => {
-              safeSet(
-                errors,
-                ['config', testKey, 'extra-files', envId, idx, 'name'],
-                <FormattedMessage
-                  id="app.editExerciseConfigForm.validation.duplicateFileName"
-                  defaultMessage="Duplicate name detected."
-                />
-              );
-            });
-          }
-        }
+      if (test['entry-point'][envId]) {
+        const extraFilesIndex = createFilesNamesIndex(test['extra-files'][envId]);
+        validateFileExists(formData, errors, ['config', testKey, 'entry-point', envId], extraFilesIndex);
       }
-
-      validateFileExists(formData, errors, ['config', testKey, 'extra-files', envId], existingFiles);
-      validateFileExists(formData, errors, ['config', testKey, 'entry-point', envId], existingFiles);
     }
 
     // Special test for Java JAR files only !!!
     const jarFiles = safeGet(test, ['jar-files', ENV_JAVA_ID]);
     if (jarFiles) {
-      jarFiles.forEach(
-        (file, idx) =>
-          file.trim() === '' &&
-          safeSet(
-            errors,
-            ['config', testKey, 'jar-files', ENV_JAVA_ID, idx],
-            <FormattedMessage
-              id="app.editExerciseConfigForm.validation.noFileSelected"
-              defaultMessage="Please select a file."
-            />
-          )
+      validateFileList(
+        formData,
+        errors,
+        ['config', testKey, 'jar-files', ENV_JAVA_ID],
+        false, // simple list (only file names)
+        existingFiles,
+        <FormattedMessage
+          id="app.editExerciseConfigForm.validation.noFileSelected"
+          defaultMessage="Please select a file."
+        />,
+        <FormattedMessage
+          id="app.editExerciseConfigForm.validation.duplicateFile"
+          defaultMessage="Duplicate file detected."
+        />
       );
-    }
-
-    if (jarFiles && jarFiles.length > 1) {
-      const nameIndex = createIndex(jarFiles.map(name => name && name.trim()).filter(name => name));
-
-      // Traverse the index and place an error to all duplicates ...
-      for (const name in nameIndex) {
-        const indices = nameIndex[name];
-        if (indices.length > 1) {
-          indices.forEach(idx => {
-            safeSet(
-              errors,
-              ['config', testKey, 'jar-files', ENV_JAVA_ID, idx],
-              <FormattedMessage
-                id="app.editExerciseConfigForm.validation.duplicateFile"
-                defaultMessage="Duplicate file detected."
-              />
-            );
-          });
-        }
-      }
     }
 
     // Special case -- Prolog only

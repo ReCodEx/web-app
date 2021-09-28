@@ -1,5 +1,5 @@
 import { defaultMemoize } from 'reselect';
-import { safeGet, encodeNumId, identity, deepReduce, EMPTY_ARRAY } from '../common';
+import { safeGet, encodeNumId, identity, deepReduce, objectMap, EMPTY_ARRAY } from '../common';
 import {
   ENV_DATA_ONLY_ID,
   ENV_JAVA_ID,
@@ -301,6 +301,9 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
   new Variable('entry-point', 'file')
     .individualEnvs()
     .setPipelineFilter('hasEntryPoint')
+    .setInitialPostprocess(({ 'entry-point': entryPoint }) => ({
+      'entry-point': objectMap(entryPoint, val => (val === '$entry-point' ? '' : val)),
+    }))
     .setTransformPostprocess(value => value || '$entry-point')
     .forCompilationAndExecution(),
 ];
