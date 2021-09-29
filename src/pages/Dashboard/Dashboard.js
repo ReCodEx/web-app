@@ -15,6 +15,7 @@ import StudentsListContainer from '../../containers/StudentsListContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import GroupsNameContainer from '../../containers/GroupsNameContainer';
 import AssignmentsTableContainer from '../../containers/AssignmentsTableContainer';
+import ShadowAssignmentsTableContainer from '../../containers/ShadowAssignmentsTableContainer';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchAllGroups } from '../../redux/modules/groups';
@@ -135,7 +136,10 @@ class Dashboard extends Component {
                                 </div>
                               }
                               unlimitedHeight>
-                              <AssignmentsTableContainer userId={user.id} groupId={groupId} onlyCurrent />
+                              <>
+                                <AssignmentsTableContainer userId={user.id} groupId={groupId} onlyCurrent hideEmpty />
+                                <ShadowAssignmentsTableContainer userId={user.id} groupId={groupId} hideEmpty />
+                              </>
                             </Box>
                           ))}
                         </div>

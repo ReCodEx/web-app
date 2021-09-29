@@ -1,0 +1,2 @@
+import ShadowAssignmentsTableContainer from './ShadowAssignmentsTableContainer';
+export default ShadowAssignmentsTableContainer;

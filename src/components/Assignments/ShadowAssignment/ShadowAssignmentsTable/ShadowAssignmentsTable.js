@@ -23,7 +23,7 @@ const ShadowAssignmentsTable = ({
         <tr>
           <th className="shrink-col" />
           <th>
-            <FormattedMessage id="generic.name" defaultMessage="Name" />
+            <FormattedMessage id="app.assignments.name" defaultMessage="Assignment name" />
           </th>
           <th>
             <FormattedMessage id="generic.created" defaultMessage="Created" />

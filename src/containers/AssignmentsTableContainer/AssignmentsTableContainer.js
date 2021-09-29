@@ -33,8 +33,15 @@ class AssignmentsTableContainer extends Component {
   }
 
   render() {
-    const { userId = null, assignments, assignmentEnvironmentsSelector, stats, onlyCurrent } = this.props;
-    return (
+    const {
+      userId = null,
+      assignments,
+      assignmentEnvironmentsSelector,
+      stats,
+      onlyCurrent = false,
+      hideEmpty = false,
+    } = this.props;
+    return hideEmpty && assignments.size === 0 ? null : (
       <ResourceRenderer
         resource={stats}
         loading={
@@ -65,6 +72,7 @@ AssignmentsTableContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
   userId: PropTypes.string,
   onlyCurrent: PropTypes.bool,
+  hideEmpty: PropTypes.bool,
   assignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
   stats: ImmutablePropTypes.map,
@@ -72,7 +80,7 @@ AssignmentsTableContainer.propTypes = {
 };
 
 export default connect(
-  (state, { groupId, userId = null }) => ({
+  (state, { groupId }) => ({
     assignments: groupsAssignmentsSelector(state, groupId),
     assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
     stats: createGroupsStatsSelector(groupId)(state),
