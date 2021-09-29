@@ -48,7 +48,7 @@ import { compareAssignmentsReverted } from '../../components/helpers/assignments
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
-import { safeGet, identity, hasPermissions } from '../../helpers/common';
+import { safeGet, identity, hasPermissions, hasOneOfPermissions } from '../../helpers/common';
 
 /**
  * Sorts all assignments and create a numerical index, so the solutions can be sorted faster
@@ -316,7 +316,7 @@ class GroupUserSolutions extends Component {
             <GroupNavigation
               groupId={groupId}
               userId={userId}
-              canEdit={hasPermissions(group, 'update')}
+              canEdit={hasOneOfPermissions(group, 'update', 'archive', 'remove', 'relocate')}
               canViewDetail={hasPermissions(group, 'viewDetail')}
             />
 

@@ -32,7 +32,7 @@ import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 
 import withLinks from '../../helpers/withLinks';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions, hasOneOfPermissions } from '../../helpers/common';
 
 const canRelocate = group => hasPermissions(group, 'relocate') && !group.archived;
 
@@ -86,11 +86,11 @@ class EditGroup extends Component {
           <div>
             <GroupNavigation
               groupId={group.id}
-              canEdit={hasPermissions(group, 'update')}
+              canEdit={hasOneOfPermissions(group, 'update', 'archive', 'remove', 'relocate')}
               canViewDetail={hasPermissions(group, 'viewDetail')}
             />
 
-            {!hasPermissions(group, 'update') && (
+            {!hasOneOfPermissions(group, 'update', 'archive', 'remove', 'relocate') && (
               <Row>
                 <Col sm={12}>
                   <Callout variant="warning" className="larger" icon={<BanIcon />}>

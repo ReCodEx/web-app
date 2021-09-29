@@ -43,7 +43,7 @@ import GroupTree from '../../components/Groups/GroupTree/GroupTree';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 import { BanIcon, GroupIcon } from '../../components/icons';
-import { hasPermissions, safeGet } from '../../helpers/common';
+import { hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 import withLinks from '../../helpers/withLinks';
@@ -122,7 +122,7 @@ class GroupInfo extends Component {
           <div>
             <GroupNavigation
               groupId={data.id}
-              canEdit={hasPermissions(data, 'update')}
+              canEdit={hasOneOfPermissions(data, 'update', 'archive', 'remove', 'relocate')}
               canViewDetail={hasPermissions(data, 'viewDetail')}
             />
 

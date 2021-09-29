@@ -148,9 +148,8 @@ class Dashboard extends Component {
                       {memberGroupsAdminOrSupervisor.length === 0 ? (
                         <Row>
                           <Col sm={12}>
-                            <Callout variant="success">
+                            <Callout variant="info">
                               <h4>
-                                <InfoIcon gapRight />
                                 <FormattedMessage
                                   id="app.dashboard.supervisorNoGroupsTitle"
                                   defaultMessage="No Groups"
