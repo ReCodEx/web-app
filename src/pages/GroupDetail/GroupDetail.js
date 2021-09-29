@@ -181,7 +181,7 @@ class GroupDetail extends Component {
             <div>
               <GroupNavigation
                 groupId={data.id}
-                canEdit={hasPermissions(data, 'update')}
+                canEdit={hasOneOfPermissions(data, 'update', 'archive', 'remove', 'relocate')}
                 canViewDetail={hasPermissions(data, 'viewDetail')}
                 emails={studentEmails || null}
               />
