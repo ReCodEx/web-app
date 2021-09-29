@@ -18,6 +18,7 @@ const md = require('markdown-it')({
 
 const Markdown = ({ source }) => (
   <div
+    className="recodex-markdown-container"
     dangerouslySetInnerHTML={{
       __html: md.render(source),
     }}

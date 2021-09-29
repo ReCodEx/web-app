@@ -222,6 +222,12 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
   content: ", ";
 }
 
+.recodex-markdown-container pre {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: rgba(128, 128, 128, 0.1);
+}
+
 
 /*
  * AdminLTE Boxes
