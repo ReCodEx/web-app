@@ -5,7 +5,7 @@ import { Table, Modal } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
-import AssignmentTableRow, { NoAssignmentTableRow, LoadingAssignmentTableRow } from '../AssignmentTableRow';
+import AssignmentTableRow, { LoadingAssignmentTableRow } from '../AssignmentTableRow';
 import CommentThreadContainer from '../../../../containers/CommentThreadContainer';
 import { compareAssignmentsReverted, isBeforeDeadline } from '../../../helpers/assignments';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
@@ -113,7 +113,23 @@ class AssignmentsTable extends Component {
             {someAssignmentsAreLoading ? (
               <LoadingAssignmentTableRow colSpan={10} />
             ) : (
-              assignmentsPreprocessedAll.length === 0 && <NoAssignmentTableRow />
+              assignmentsPreprocessedAll.length === 0 && (
+                <tr>
+                  <td className="text-center">
+                    {showGroups ? (
+                      <FormattedMessage
+                        id="app.assignmentsTable.noAssignmentsInAnyGroup"
+                        defaultMessage="This exercise has no assigments in any of the groups you can see."
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id="app.assignmentsTable.noAssignments"
+                        defaultMessage="There are no assignments yet."
+                      />
+                    )}
+                  </td>
+                </tr>
+              )
             )}
 
             {!someAssignmentsAreLoading &&
