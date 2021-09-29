@@ -57,21 +57,21 @@ describe('Solutions', () => {
       const id = 'abcde123';
       const id2 = `__${id}`;
       const id3 = `__${id2}`;
-      const userId = 'userID';
+      const authorId = 'userID';
       const assignmentId = 'assignmentId';
       const pendingState = fromJS({
         resources: {
           [id]: {
             status: 'FULFILLED',
-            data: { id, accepted: false, isBestSolution: false, assignmentId, solution: { userId } },
+            data: { id, accepted: false, isBestSolution: false, assignmentId, authorId },
           },
           [id2]: {
             status: 'FULFILLED',
-            data: { id: id2, accepted: true, isBestSolution: true, assignmentId, solution: { userId } },
+            data: { id: id2, accepted: true, isBestSolution: true, assignmentId, authorId },
           },
           [id3]: {
             status: 'FULFILLED',
-            data: { id: id3, accepted: true, isBestSolution: false, assignmentId, solution: { userId } },
+            data: { id: id3, accepted: true, isBestSolution: false, assignmentId, authorId },
           },
         },
       });
