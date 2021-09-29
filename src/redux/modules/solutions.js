@@ -192,27 +192,27 @@ const reducer = handleActions(
       if (flag === 'accepted') {
         // Accepted flag requires special treatement
         const assignmentId = state.getIn(['resources', id, 'data', 'assignmentId']);
-
         if (value) {
           // Accepted solution needs to be updated
-          const userId = state.getIn(['resources', id, 'data', 'solution', 'userId']);
+          const userId = state.getIn(['resources', id, 'data', 'authorId']);
           state = state.updateIn(
             ['resources', id, 'data'],
             data => data.set('isBestSolution', true) // accepted also becomes best solution
           );
 
-          if (assignmentId && userId)
+          if (assignmentId && userId) {
             state = state
               // All other solutions from the same assignment by the same author needs to be updated
               .update('resources', resources =>
                 resources.map((item, itemId) => {
                   const aId = item.getIn(['data', 'assignmentId']);
-                  const uId = item.getIn(['data', 'solution', 'userId']);
+                  const uId = item.getIn(['data', 'authorId']);
                   return itemId === id || aId !== assignmentId || uId !== userId
                     ? item // no modification (either it is accepted solution, or it is solution from another assignment/by another user)
                     : item.update('data', data => data.set('accepted', false).set('isBestSolution', false)); // no other solution can be accepted nor best
                 })
               );
+          }
         } else {
           // Unaccepted -> best solution flag may change to another solution...
           const assignmentStats = assignments.find(a => a.id === assignmentId);
