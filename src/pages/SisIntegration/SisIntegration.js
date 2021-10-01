@@ -27,7 +27,7 @@ import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/gr
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
-import { loggedUserSupervisorOfGroupsSelector } from '../../redux/selectors/usersGroups';
+import { loggedUserAdminOfGroupsSelector } from '../../redux/selectors/usersGroups';
 
 import {
   getLocalizedTextsInitialValues,
@@ -188,16 +188,8 @@ class SisIntegration extends Component {
   }
 
   render() {
-    const {
-      loggedInUser,
-      effectiveRole,
-      fetchStatus,
-      supervisorOfGroups,
-      allGroups,
-      createNewTerm,
-      deleteTerm,
-      sisTerms,
-    } = this.props;
+    const { loggedInUser, effectiveRole, fetchStatus, adminOfGroups, allGroups, createNewTerm, deleteTerm, sisTerms } =
+      this.props;
 
     return (
       <Page
@@ -217,7 +209,7 @@ class SisIntegration extends Component {
               </Callout>
 
               <ResourceRenderer
-                resource={isSuperadminRole(effectiveRole) ? allGroups.toArray() : supervisorOfGroups.toArray()}
+                resource={isSuperadminRole(effectiveRole) ? allGroups.toArray() : adminOfGroups.toArray()}
                 returnAsArray={true}>
                 {groups => (
                   <>
@@ -351,7 +343,7 @@ SisIntegration.propTypes = {
   effectiveRole: PropTypes.string,
   fetchStatus: PropTypes.string,
   sisTerms: PropTypes.array.isRequired,
-  supervisorOfGroups: ImmutablePropTypes.map,
+  adminOfGroups: ImmutablePropTypes.map,
   allGroups: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   createNewTerm: PropTypes.func,
@@ -369,7 +361,7 @@ const mapStateToProps = state => {
     effectiveRole: getLoggedInUserEffectiveRole(state),
     fetchStatus: fetchManyStatus(state),
     sisTerms: readySisTermsSelector(state),
-    supervisorOfGroups: loggedUserSupervisorOfGroupsSelector(state),
+    adminOfGroups: loggedUserAdminOfGroupsSelector(state),
     allGroups: notArchivedGroupsSelector(state),
   };
 };

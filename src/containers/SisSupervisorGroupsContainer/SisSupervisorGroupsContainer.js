@@ -39,6 +39,8 @@ import { unique, arrayToObject, hasPermissions, safeGet } from '../../helpers/co
 
 const filterGroupsForBinding = (groups, alreadyBoundGroups) => {
   const bound = arrayToObject(alreadyBoundGroups);
+  console.log(groups);
+  console.log(bound);
   return groups.filter(group => !bound[group.id] && !group.organizational && !group.archived);
 };
 
@@ -443,7 +445,6 @@ class SisSupervisorGroupsContainer extends Component {
                                                     <TheButtonGroup>
                                                       <Button
                                                         variant="success"
-                                                        className="em-margin-right"
                                                         onClick={() =>
                                                           this.openCreateDialog(possibleParents, course, term)
                                                         }>
