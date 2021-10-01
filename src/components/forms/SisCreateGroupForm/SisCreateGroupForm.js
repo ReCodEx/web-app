@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
@@ -83,28 +83,30 @@ class SisCreateGroupForm extends Component {
 
         <Modal.Footer>
           <div className="text-center">
-            <SubmitButton
-              id="sisCreateGroup"
-              invalid={invalid}
-              submitting={submitting}
-              dirty={dirty}
-              hasSucceeded={submitSucceeded}
-              hasFailed={submitFailed}
-              handleSubmit={handleSubmit}
-              disabled={Boolean(warning)}
-              messages={{
-                submit: <FormattedMessage id="app.sisCreateGroupForm.submit" defaultMessage="Create" />,
-                submitting: <FormattedMessage id="app.sisCreateGroupForm.submitting" defaultMessage="Creating..." />,
-                success: (
-                  <FormattedMessage id="app.sisCreateGroupForm.success" defaultMessage="The group was created." />
-                ),
-              }}
-            />
+            <TheButtonGroup>
+              <SubmitButton
+                id="sisCreateGroup"
+                invalid={invalid}
+                submitting={submitting}
+                dirty={dirty}
+                hasSucceeded={submitSucceeded}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+                disabled={Boolean(warning)}
+                messages={{
+                  submit: <FormattedMessage id="app.sisCreateGroupForm.submit" defaultMessage="Create" />,
+                  submitting: <FormattedMessage id="app.sisCreateGroupForm.submitting" defaultMessage="Creating..." />,
+                  success: (
+                    <FormattedMessage id="app.sisCreateGroupForm.success" defaultMessage="The group was created." />
+                  ),
+                }}
+              />
 
-            <Button variant="outline-secondary" onClick={onClose}>
-              <CloseIcon gapRight />
-              <FormattedMessage id="generic.close" defaultMessage="Close" />
-            </Button>
+              <Button variant="outline-secondary" onClick={onClose}>
+                <CloseIcon gapRight />
+                <FormattedMessage id="generic.close" defaultMessage="Close" />
+              </Button>
+            </TheButtonGroup>
           </div>
         </Modal.Footer>
       </Modal>

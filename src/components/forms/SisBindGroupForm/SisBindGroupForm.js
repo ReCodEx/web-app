@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
@@ -79,26 +79,28 @@ const SisBindGroupForm = ({
 
     <Modal.Footer>
       <div className="text-center">
-        <SubmitButton
-          id="sisBindGroup"
-          invalid={invalid}
-          submitting={submitting}
-          dirty={dirty}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          handleSubmit={handleSubmit}
-          disabled={Boolean(warning)}
-          messages={{
-            submit: <FormattedMessage id="app.sisBindGroupForm.submit" defaultMessage="Bind" />,
-            submitting: <FormattedMessage id="app.sisBindGroupForm.submitting" defaultMessage="Binding..." />,
-            success: <FormattedMessage id="app.sisBindGroupForm.success" defaultMessage="The group was bound." />,
-          }}
-        />
+        <TheButtonGroup>
+          <SubmitButton
+            id="sisBindGroup"
+            invalid={invalid}
+            submitting={submitting}
+            dirty={dirty}
+            hasSucceeded={submitSucceeded}
+            hasFailed={submitFailed}
+            handleSubmit={handleSubmit}
+            disabled={Boolean(warning)}
+            messages={{
+              submit: <FormattedMessage id="app.sisBindGroupForm.submit" defaultMessage="Bind" />,
+              submitting: <FormattedMessage id="app.sisBindGroupForm.submitting" defaultMessage="Binding..." />,
+              success: <FormattedMessage id="app.sisBindGroupForm.success" defaultMessage="The group was bound." />,
+            }}
+          />
 
-        <Button variant="outline-secondary" onClick={onClose}>
-          <CloseIcon gapRight />
-          <FormattedMessage id="generic.close" defaultMessage="Close" />
-        </Button>
+          <Button variant="outline-secondary" onClick={onClose}>
+            <CloseIcon gapRight />
+            <FormattedMessage id="generic.close" defaultMessage="Close" />
+          </Button>
+        </TheButtonGroup>
       </div>
     </Modal.Footer>
   </Modal>
