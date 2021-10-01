@@ -39,8 +39,6 @@ import { unique, arrayToObject, hasPermissions, safeGet } from '../../helpers/co
 
 const filterGroupsForBinding = (groups, alreadyBoundGroups) => {
   const bound = arrayToObject(alreadyBoundGroups);
-  console.log(groups);
-  console.log(bound);
   return groups.filter(group => !bound[group.id] && !group.organizational && !group.archived);
 };
 
