@@ -23,7 +23,6 @@ import { fetchAssignment, editAssignment, syncWithExercise, validateAssignment }
 import { getAssignment } from '../../redux/selectors/assignments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 import { hasPermissions } from '../../helpers/common';
@@ -37,10 +36,6 @@ class EditAssignment extends Component {
     if (this.props.match.params.assignmentId !== prevProps.match.params.assignmentId) {
       this.props.reset();
       this.props.loadAsync();
-    }
-
-    if (isReady(this.props.assignment)) {
-      this.groupId = getJsData(this.props.assignment).groupId;
     }
   }
 
@@ -181,7 +176,7 @@ class EditAssignment extends Component {
                     <p className="text-center">
                       <DeleteAssignmentButtonContainer
                         id={assignmentId}
-                        onDeleted={() => replace(GROUP_DETAIL_URI_FACTORY(this.groupId))}
+                        onDeleted={() => replace(GROUP_DETAIL_URI_FACTORY(assignment.groupId))}
                       />
                     </p>
                   </div>
