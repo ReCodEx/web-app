@@ -556,7 +556,7 @@
   "app.editUserProfile.emptyLocalPassword": "Lokální účet nemá nastavené heslo.",
   "app.editUserProfile.emptyLocalPasswordExplain": "Nebudete se moci přihlásit do ReCodExu pomocí lokálního účtu, dokud si nenastavíte heslo.",
   "app.editUserProfile.firstName": "Jméno:",
-  "app.editUserProfile.gravatarEnabled": "Použít avatara ze služby Gravatar.",
+  "app.editUserProfile.gravatarEnabled": "Použít avatara ze služby Gravatar",
   "app.editUserProfile.lastName": "Příjmení:",
   "app.editUserProfile.passwordInstructions": "Pokud nechcete změnit heslo, nechte tato pole prázná",
   "app.editUserProfile.passwordTitle": "Změna hesla",

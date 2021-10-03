@@ -105,7 +105,7 @@ const EditUserProfileForm = ({
       label={
         <FormattedMessage
           id="app.editUserProfile.gravatarEnabled"
-          defaultMessage="Use Gravatar service for own avatar."
+          defaultMessage="Use Gravatar service for own avatar"
         />
       }
     />

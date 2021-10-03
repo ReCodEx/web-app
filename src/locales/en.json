@@ -556,7 +556,7 @@
   "app.editUserProfile.emptyLocalPassword": "Local account does not have a password.",
   "app.editUserProfile.emptyLocalPasswordExplain": "You may not sign in to ReCodEx using local account until you set the password.",
   "app.editUserProfile.firstName": "Given Name:",
-  "app.editUserProfile.gravatarEnabled": "Use Gravatar service for own avatar.",
+  "app.editUserProfile.gravatarEnabled": "Use Gravatar service for own avatar",
   "app.editUserProfile.lastName": "Surname:",
   "app.editUserProfile.passwordInstructions": "If you do not want to change your password leave these inputs blank.",
   "app.editUserProfile.passwordTitle": "Change your password",
