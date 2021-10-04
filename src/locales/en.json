@@ -585,6 +585,7 @@
   "app.editUserSettings.defaultPage.dashboard": "Dashboard",
   "app.editUserSettings.defaultPage.home": "Home page (about)",
   "app.editUserSettings.defaultPage.instance": "Instance overview",
+  "app.editUserSettings.emailStillNotVerifiedTitle": "Your email address is not verified, so no notifications will be sent regardless your personal settings.",
   "app.editUserSettings.emailsTitle": "Email Notifications",
   "app.editUserSettings.failed": "Cannot save profile settings.",
   "app.editUserSettings.newAssignmentEmails": "New exercise assigned",

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
@@ -17,12 +17,11 @@ import {
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import Page from '../../components/layout/Page';
 import { UserNavigation } from '../../components/layout/Navigation';
+import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
-import Callout from '../../components/widgets/Callout';
-import { LocalIcon, TransferIcon, EditUserIcon, RefreshIcon } from '../../components/icons';
+import { LocalIcon, TransferIcon, EditUserIcon } from '../../components/icons';
 import { isStudentRole } from '../../components/helpers/usersRoles';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
-import ResendVerificationEmail from '../../containers/ResendVerificationEmailContainer';
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
@@ -72,7 +71,6 @@ class EditUser extends Component {
       lastToken,
       takeOver,
       refreshUser,
-      intl: { locale },
     } = this.props;
     return (
       <Page
@@ -113,36 +111,7 @@ class EditUser extends Component {
             )}
 
             {data && data.id === loggedUserId && !data.isVerified && (
-              <Callout variant="warning">
-                <h3>
-                  <FormattedMessage
-                    id="app.editUser.emailStillNotVerifiedTitle"
-                    defaultMessage="Email Address Is Not Verified"
-                  />
-                </h3>
-                <p>
-                  <FormattedMessage
-                    id="app.editUser.emailStillNotVerified"
-                    defaultMessage="Your email addres has not been verified yet. ReCodEx needs to rely on vaild addresses since many notifications are sent via email. You may send yourself a validation email using the button below and then use a link from that email to verify its acceptance. Please validate your address as soon as possible."
-                  />
-                </p>
-                <p>
-                  <FormattedMessage
-                    id="app.editUser.isEmailAlreadyVefiried"
-                    defaultMessage="If you have just verified your email and still see the message, please refresh the page."
-                  />
-                </p>
-                <p className="em-margin-vertical">
-                  <ResendVerificationEmail
-                    userId={data.id}
-                    locale={locale /* a hack that enforce component refresh on locale change */}
-                  />
-                  <Button variant="outline-secondary" onClick={refreshUser}>
-                    <RefreshIcon gapRight />
-                    <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
-                  </Button>
-                </p>
-              </Callout>
+              <NotVerifiedEmailCallout userId={data.id} refreshUser={refreshUser} />
             )}
 
             <Row>
@@ -225,7 +194,6 @@ EditUser.propTypes = {
   generateToken: PropTypes.func.isRequired,
   setRole: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
 export default connect(
@@ -265,4 +233,4 @@ export default connect(
     setRole: role => dispatch(setRole(userId, role)),
     takeOver: userId => dispatch(takeOver(userId)),
   })
-)(injectIntl(EditUser));
+)(EditUser);

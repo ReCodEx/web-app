@@ -21,9 +21,11 @@ import Box from '../../components/widgets/Box/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
+import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 
 import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
 import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/groups';
+import { fetchUser } from '../../redux/modules/users';
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms';
 import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
@@ -188,8 +190,17 @@ class SisIntegration extends Component {
   }
 
   render() {
-    const { loggedInUser, effectiveRole, fetchStatus, adminOfGroups, allGroups, createNewTerm, deleteTerm, sisTerms } =
-      this.props;
+    const {
+      loggedInUser,
+      effectiveRole,
+      fetchStatus,
+      adminOfGroups,
+      allGroups,
+      createNewTerm,
+      deleteTerm,
+      sisTerms,
+      refreshUser,
+    } = this.props;
 
     return (
       <Page
@@ -200,6 +211,10 @@ class SisIntegration extends Component {
 
           return externalId ? (
             <>
+              {user && !user.isVerified && (
+                <NotVerifiedEmailCallout userId={user.id} refreshUser={() => refreshUser(user.id)} />
+              )}
+
               <Callout variant="info" icon={<UserIcon />}>
                 <FormattedMessage
                   id="app.sisIntegration.identityInfo"
@@ -352,6 +367,7 @@ SisIntegration.propTypes = {
   addSubgroup: PropTypes.func,
   setArchived: PropTypes.func,
   refreshGroups: PropTypes.func,
+  refreshUser: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
 };
 
@@ -390,6 +406,7 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     ).then(),
   setArchived: groupId => dispatch(setArchived(groupId, true)),
   refreshGroups: () => dispatch(fetchAllGroups()),
+  refreshUser: userId => dispatch(fetchUser(userId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SisIntegration));

@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import { UserNavigation } from '../../components/layout/Navigation';
+import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import StudentsListContainer from '../../containers/StudentsListContainer';
@@ -17,7 +18,7 @@ import GroupsNameContainer from '../../containers/GroupsNameContainer';
 import AssignmentsTableContainer from '../../containers/AssignmentsTableContainer';
 import ShadowAssignmentsTableContainer from '../../containers/ShadowAssignmentsTableContainer';
 
-import { fetchUserIfNeeded } from '../../redux/modules/users';
+import { fetchUserIfNeeded, fetchUser } from '../../redux/modules/users';
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
@@ -61,6 +62,7 @@ class Dashboard extends Component {
       supervisor,
       memberGroups,
       fetchManyGroupsStatus,
+      refreshUser,
       links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
@@ -77,6 +79,10 @@ class Dashboard extends Component {
         {user => (
           <div>
             <UserNavigation userId={user.id} canEdit isLoggedInUser />
+
+            {user && !user.isVerified && (
+              <NotVerifiedEmailCallout userId={user.id} refreshUser={() => refreshUser(user.id)} />
+            )}
 
             <FetchManyResourceRenderer fetchManyStatus={fetchManyGroupsStatus}>
               {() => (
@@ -228,6 +234,7 @@ Dashboard.propTypes = {
   supervisor: PropTypes.bool,
   superadmin: PropTypes.bool,
   loadAsync: PropTypes.func.isRequired,
+  refreshUser: PropTypes.func.isRequired,
   userId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
   fetchManyGroupsStatus: PropTypes.string,
@@ -251,6 +258,7 @@ export default withLinks(
     },
     (dispatch, { match: { params } }) => ({
       loadAsync: userId => Dashboard.loadAsync(params, dispatch, { userId }),
+      refreshUser: userId => dispatch(fetchUser(userId)),
     })
   )(injectIntl(Dashboard))
 );
