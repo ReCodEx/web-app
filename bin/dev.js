@@ -35,14 +35,16 @@ app.get('*', (req, res) => {
   });
 });
 
-var server = new WebpackDevServer(webpack(config), {
-  contentBase: path.join(__dirname, '..', 'public'),
+const server = new WebpackDevServer(webpack(config), {
+  static: {
+    directory: path.join(__dirname, '..', 'public'),
+  },
   hot: true,
-  quiet: false,
-  noInfo: false,
-  publicPath: '/',
   port: WEBPACK_DEV_SERVER_PORT,
-  stats: { colors: true },
+  devMiddleware: {
+    stats: { colors: true },
+    publicPath: '/',
+  },
 });
 
 server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
