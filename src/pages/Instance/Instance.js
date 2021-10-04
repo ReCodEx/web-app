@@ -17,6 +17,8 @@ import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import { EditIcon, InstanceIcon } from '../../components/icons';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 
 import { fetchUser } from '../../redux/modules/users';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
@@ -24,7 +26,7 @@ import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/insta
 import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
 import { notArchivedGroupsSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { isLoggedAsSuperAdmin, getUser } from '../../redux/selectors/users';
 import { transformLocalizedTextsFormData, getLocalizedName } from '../../helpers/localizedData';
 import { resourceStatus } from '../../redux/helpers/resourceManager';
 
@@ -58,6 +60,8 @@ class Instance extends Component {
         params: { instanceId },
       },
       userId,
+      user,
+      refreshUser,
       instance,
       groups,
       fetchGroupsStatus,
@@ -83,6 +87,13 @@ class Instance extends Component {
         windowTitle={instance => getLocalizedName(instance.rootGroup, locale)}>
         {data => (
           <div>
+            <ResourceRenderer resource={user} hiddenUntilReady>
+              {user =>
+                user &&
+                !user.isVerified && <NotVerifiedEmailCallout userId={userId} refreshUser={() => refreshUser(userId)} />
+              }
+            </ResourceRenderer>
+
             {isSuperAdmin && (
               <Row>
                 <Col sm={12} md={6}>
@@ -163,12 +174,14 @@ class Instance extends Component {
 
 Instance.propTypes = {
   loadAsync: PropTypes.func.isRequired,
+  refreshUser: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       instanceId: PropTypes.string.isRequired,
     }),
   }).isRequired,
   userId: PropTypes.string.isRequired,
+  user: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
   fetchGroupsStatus: PropTypes.string,
@@ -195,6 +208,7 @@ export default withLinks(
       const userId = loggedInUserIdSelector(state);
       return {
         userId,
+        user: getUser(userId)(state),
         instance: instanceSelector(state, instanceId),
         groups: notArchivedGroupsSelector(state),
         fetchGroupsStatus: fetchManyGroupsStatus(state),
@@ -225,6 +239,7 @@ export default withLinks(
             })
           ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
       loadAsync: fetchGroupsStatus => Instance.loadAsync({ instanceId, fetchGroupsStatus }, dispatch),
+      refreshUser: userId => dispatch(fetchUser(userId)),
     })
   )(injectIntl(Instance))
 );

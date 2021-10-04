@@ -53,7 +53,7 @@ class UserPanel extends Component {
                 size={small ? 32 : 42}
               />
             ) : (
-              <UserName currentUserId={''} {...user} isVerified />
+              <UserName currentUserId={user.id} {...user} />
             )}
           </div>
 

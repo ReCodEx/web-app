@@ -133,6 +133,15 @@ const EditUserSettingsForm = ({
       <FormattedMessage id="app.editUserSettings.emailsTitle" defaultMessage="Email Notifications" />:
     </h4>
 
+    {!user.isVerified && (
+      <Callout variant="warning">
+        <FormattedMessage
+          id="app.editUserSettings.emailStillNotVerifiedTitle"
+          defaultMessage="Your email address is not verified, so no notifications will be sent regardless your personal settings."
+        />
+      </Callout>
+    )}
+
     {isStudentRole(user.privateData.role) && (
       <>
         <Field
