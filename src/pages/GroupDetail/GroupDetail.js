@@ -347,26 +347,27 @@ class GroupDetail extends Component {
 
                     {
                       // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
-                      (isGroupSupervisor || isGroupAdmin) &&
-                        !data.organizational &&
-                        !data.archived &&
-                        isSupervisorRole(effectiveRole) &&
-                        !isStudentRole(effectiveRole) && (
-                          <Row>
-                            <Col sm={6}>
-                              <Box
-                                title={
-                                  <FormattedMessage
-                                    id="app.group.spervisorsView.addStudent"
-                                    defaultMessage="Add Student"
-                                  />
-                                }
-                                isOpen>
-                                <AddStudent instanceId={data.privateData.instanceId} groupId={data.id} />
-                              </Box>
-                            </Col>
-                          </Row>
-                        )
+                      (isSuperadminRole(effectiveRole) ||
+                        ((isGroupSupervisor || isGroupAdmin) &&
+                          !data.organizational &&
+                          !data.archived &&
+                          isSupervisorRole(effectiveRole) &&
+                          !isStudentRole(effectiveRole))) && (
+                        <Row>
+                          <Col sm={6}>
+                            <Box
+                              title={
+                                <FormattedMessage
+                                  id="app.group.spervisorsView.addStudent"
+                                  defaultMessage="Add Student"
+                                />
+                              }
+                              isOpen>
+                              <AddStudent instanceId={data.privateData.instanceId} groupId={data.id} />
+                            </Box>
+                          </Col>
+                        </Row>
+                      )
                     }
                   </>
                 )}
