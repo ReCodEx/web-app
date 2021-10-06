@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { Form, FormGroup, Container, Row, Col } from 'react-bootstrap';
+import { Form, Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
+import { defaultMemoize } from 'reselect';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
@@ -11,7 +12,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { RefreshIcon, DeleteIcon, SaveIcon } from '../../icons';
 
-export const getPointsFormInitialValues = (userPoints, awardeeId) => {
+export const getPointsFormInitialValues = defaultMemoize((userPoints, awardeeId) => {
   return userPoints
     ? {
         pointsId: userPoints.id,
@@ -27,7 +28,7 @@ export const getPointsFormInitialValues = (userPoints, awardeeId) => {
         awardedAt: moment().startOf('minute'),
         note: '',
       };
-};
+});
 
 export const transformPointsFormSubmitData = ({ pointsId = null, awardedAt, ...formData }) => ({
   pointsId,
@@ -69,34 +70,21 @@ const EditShadowAssignmentPointsForm = ({
           />
         </Col>
         <Col md={12} lg={7}>
-          <table className="full-width">
-            <tbody>
-              <tr>
-                <td>
-                  <Field
-                    name="awardedAt"
-                    component={DatetimeField}
-                    label={
-                      <FormattedMessage
-                        id="app.editShadowAssignmentPointsForm.awardedAt"
-                        defaultMessage="Awarded at:"
-                      />
-                    }
-                  />
-                </td>
-                <td className="valign-bottom shrink-col">
-                  <FormGroup>
-                    <Button onClick={() => change('awardedAt', moment().startOf('minute'))}>
-                      <Icon icon="history" gapRight />
-                      <FormattedMessage id="app.editShadowAssignmentPointsForm.setNow" defaultMessage="Now" />
-                    </Button>
-                  </FormGroup>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <Field
+            name="awardedAt"
+            component={DatetimeField}
+            ignoreDirty
+            label={<FormattedMessage id="app.editShadowAssignmentPointsForm.awardedAt" defaultMessage="Awarded at:" />}
+            append={
+              <Button variant="primary" noShadow onClick={() => change('awardedAt', moment().startOf('minute'))}>
+                <Icon icon="history" gapRight />
+                <FormattedMessage id="app.editShadowAssignmentPointsForm.setNow" defaultMessage="Now" />
+              </Button>
+            }
+          />
         </Col>
       </Row>
+
       <Row>
         <Col sm={12}>
           <Field

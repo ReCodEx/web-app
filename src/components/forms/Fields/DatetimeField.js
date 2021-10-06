@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
-import { Form, FormGroup, FormLabel } from 'react-bootstrap';
+import { Form, FormGroup, FormLabel, InputGroup } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import withLinks from '../../../helpers/withLinks';
@@ -34,6 +34,8 @@ class DatetimeField extends Component {
       onlyDate = false,
       label = null,
       ignoreDirty = false,
+      append = null,
+      prepend = null,
       ...props
     } = this.props;
 
@@ -44,23 +46,27 @@ class DatetimeField extends Component {
         {Boolean(label) && (
           <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
         )}
-        <Datetime
-          {...input}
-          {...props}
-          locale={lang}
-          timeFormat={onlyDate ? false : 'H:mm'}
-          onFocus={() => this.onFocus()}
-          inputProps={{
-            disabled,
-            className: classnames({
-              'form-control': true,
-              [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-              [styles.active]: active,
-              'border-danger': error,
-              'border-warning': !error && warning,
-            }),
-          }}
-        />
+        <InputGroup>
+          <Datetime
+            {...input}
+            {...props}
+            locale={lang}
+            timeFormat={onlyDate ? false : 'H:mm'}
+            onFocus={() => this.onFocus()}
+            inputProps={{
+              disabled,
+              className: classnames({
+                'form-control': true,
+                [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+                [styles.active]: active,
+                'border-danger': error,
+                'border-warning': !error && warning,
+              }),
+            }}
+          />
+          {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
+          {append && <InputGroup.Append>{append}</InputGroup.Append>}
+        </InputGroup>
 
         {error && <Form.Text className="text-danger">{error}</Form.Text>}
         {!error && warning && <Form.Text className="text-warning">{warning}</Form.Text>}
@@ -87,6 +93,8 @@ DatetimeField.propTypes = {
   disabled: PropTypes.bool,
   ignoreDirty: PropTypes.bool,
   onlyDate: PropTypes.bool,
+  append: PropTypes.element,
+  prepend: PropTypes.element,
 };
 
 export default withLinks(DatetimeField);
