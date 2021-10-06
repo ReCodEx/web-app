@@ -230,8 +230,14 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
 
 
 /*
- * AdminLTE Boxes
+ * AdminLTE Enhancements and Overrides
  */
+
+/* fixing Datetime form input for input group appends and prepends */
+.input-group > .rdt {
+  flex: 1 1 auto;
+}
+
 @keyframes card-target {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 240, 96, 0);
