@@ -4,7 +4,7 @@ const computeMap = (groups, filter) => {
   const res = {};
   groups.filter(filter).forEach((group, id) => {
     res[id] = true;
-    group.getIn(['data', 'parentGroupsIds'], []).forEach(parentId => {
+    (group.getIn(['data', 'parentGroupsIds'], []) || []).forEach(parentId => {
       res[parentId] = true;
     });
   });

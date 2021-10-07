@@ -69,7 +69,7 @@ export default connect(
       Promise.all([
         dispatch(fetchGroupStatsIfNeeded(groupId)),
         dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
-          dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+          dispatch(fetchByIds(safeGet(group, ['privateData', 'students']) || []))
         ),
       ]),
   })

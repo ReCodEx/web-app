@@ -74,7 +74,7 @@ class GroupDetail extends Component {
               ])
             : Promise.resolve(),
           hasPermissions(group, 'viewStudents')
-            ? dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+            ? dispatch(fetchByIds(safeGet(group, ['privateData', 'students']) || []))
             : Promise.resolve(),
           dispatch(fetchGroupStats(groupId)),
         ])

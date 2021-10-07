@@ -238,7 +238,7 @@ class AssignmentStats extends Component {
         .then(res => res.value)
         .then(assignment =>
           dispatch(fetchGroupIfNeeded(assignment.groupId)).then(({ value: group }) =>
-            dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+            dispatch(fetchByIds(safeGet(group, ['privateData', 'students']) || []))
           )
         ),
       dispatch(fetchRuntimeEnvironments()),

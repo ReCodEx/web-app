@@ -54,9 +54,9 @@ class GroupInfo extends Component {
       .then(res => res.value)
       .then(group =>
         Promise.all([
-          dispatch(fetchByIds(safeGet(group, ['primaryAdminsIds'], []))),
-          dispatch(fetchByIds(safeGet(group, ['privateData', 'supervisors'], []))),
-          dispatch(fetchByIds(safeGet(group, ['privateData', 'observers'], []))),
+          dispatch(fetchByIds(safeGet(group, ['primaryAdminsIds']) || [])),
+          dispatch(fetchByIds(safeGet(group, ['privateData', 'supervisors']) || [])),
+          dispatch(fetchByIds(safeGet(group, ['privateData', 'observers']) || [])),
         ])
       );
 
@@ -73,13 +73,13 @@ class GroupInfo extends Component {
       const prevData = prevProps.group.toJS().data.privateData;
       const groupJs = this.props.group.toJS();
       if (safeGet(prevData, ['primaryAdmins', 'length'], -1) !== safeGet(newData, ['primaryAdmins', 'length'], -1)) {
-        this.props.refetchUsers(safeGet(groupJs, ['data', 'primaryAdminsIds'], []));
+        this.props.refetchUsers(safeGet(groupJs, ['data', 'primaryAdminsIds']) || []);
       }
       if (safeGet(prevData, ['supervisors', 'length'], -1) !== safeGet(newData, ['supervisors', 'length'], -1)) {
-        this.props.refetchUsers(safeGet(groupJs, ['data', 'privateData', 'supervisors'], []));
+        this.props.refetchUsers(safeGet(groupJs, ['data', 'privateData', 'supervisors']) || []);
       }
       if (safeGet(prevData, ['observers', 'length'], -1) !== safeGet(newData, ['observers', 'length'], -1)) {
-        this.props.refetchUsers(safeGet(groupJs, ['data', 'privateData', 'observers'], []));
+        this.props.refetchUsers(safeGet(groupJs, ['data', 'privateData', 'observers']) || []);
       }
     }
   }

@@ -282,8 +282,10 @@ class SisSupervisorGroupsContainer extends Component {
                                                                   groupsAccessor,
                                                                   locale
                                                                 )}
-                                                                {safeGet(group, ['privateData', 'bindings', 'sis'], [])
-                                                                  .length > 1 && (
+                                                                {(
+                                                                  safeGet(group, ['privateData', 'bindings', 'sis']) ||
+                                                                  []
+                                                                ).length > 1 && (
                                                                   <OverlayTrigger
                                                                     placement="right"
                                                                     overlay={

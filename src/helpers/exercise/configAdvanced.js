@@ -7,7 +7,7 @@ import { safeGet, arrayToObject, encodeNumId, encodeId } from '../common';
  */
 export const getPipelines = defaultMemoize(config =>
   // There should be only one environment and all tests have the same pipelines (hence we take first and first)
-  safeGet(config, [0, 'tests', 0, 'pipelines'], []).map(({ name }) => name)
+  (safeGet(config, [0, 'tests', 0, 'pipelines']) || []).map(({ name }) => name)
 );
 
 /**

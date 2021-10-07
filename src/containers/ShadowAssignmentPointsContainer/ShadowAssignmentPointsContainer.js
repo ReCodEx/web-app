@@ -54,7 +54,7 @@ export default connect(
   (dispatch, { groupId, id }) => ({
     loadAsync: () =>
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
-        dispatch(fetchByIds(safeGet(group, ['privateData', 'students'], [])))
+        dispatch(fetchByIds(safeGet(group, ['privateData', 'students']) || []))
       ),
     setPoints: ({ awardeeId, pointsId, points, note, awardedAt }) =>
       dispatch(setShadowAssignmentPoints(groupId, id, awardeeId, pointsId, points, note, awardedAt)),

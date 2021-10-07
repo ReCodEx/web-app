@@ -87,7 +87,7 @@ export const getFirstEnvironmentId = environmentConfigs =>
  */
 export const getEnvironmentInitValues = environmentConfigs => {
   const environmentId = getFirstEnvironmentId(environmentConfigs);
-  const variables = safeGet(environmentConfigs, [0, 'variablesTable'], []);
+  const variables = safeGet(environmentConfigs, [0, 'variablesTable']) || [];
   return { environmentId, variables };
 };
 
