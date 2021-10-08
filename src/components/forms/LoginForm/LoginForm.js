@@ -16,7 +16,12 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
-        <Button type="submit" variant="success" onClick={handleSubmit} disabled={invalid || submitting || hasSucceeded}>
+        <Button
+          type="submit"
+          variant="success"
+          onClick={handleSubmit}
+          disabled={invalid || submitting || hasSucceeded}
+          tabIndex={3}>
           {!submitting ? (
             hasSucceeded ? (
               <span>
@@ -45,6 +50,7 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
       required
       component={EmailField}
       ignoreDirty
+      tabIndex={1}
       label={<FormattedMessage id="app.loginForm.email" defaultMessage="E-mail address:" />}
     />
     <Field
@@ -52,6 +58,7 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
       required
       component={PasswordField}
       ignoreDirty
+      tabIndex={2}
       label={<FormattedMessage id="app.loginForm.password" defaultMessage="Password:" />}
     />
   </FormBox>
