@@ -152,17 +152,15 @@ const reducer = handleActions(
     [actionTypes.PROCESSING_FINISHED]: (state, { payload }) => state.set('status', submissionStatus.FINISHED),
 
     // wait until all the files are uploaded successfully:
-    [uploadActionTypes.UPLOAD_PENDING]: (state, { payload, meta: { fileName } }) =>
-      state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.UPLOAD_PENDING]: state => state.set('status', submissionStatus.CREATING),
 
-    [uploadActionTypes.REMOVE_FILE]: (state, { payload }) => state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.REMOVE_FILE]: state => state.set('status', submissionStatus.CREATING),
 
-    [uploadActionTypes.RETURN_FILE]: (state, { payload }) => state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.RETURN_FILE]: state => state.set('status', submissionStatus.CREATING),
 
-    [uploadActionTypes.REMOVE_FAILED_FILE]: (state, { payload }) => state.set('status', submissionStatus.CREATING),
+    [uploadActionTypes.REMOVE_FAILED_FILE]: state => state.set('status', submissionStatus.CREATING),
 
-    [uploadActionTypes.UPLOAD_REJECTED]: (state, { meta: { fileName } }) =>
-      state.set('status', submissionStatus.FAILED),
+    [uploadActionTypes.UPLOAD_REJECTED]: state => state.set('status', submissionStatus.FAILED),
 
     // Presubmit check operations
     [actionTypes.PRESUBMIT_RESET]: state => state.set('presubmit', null).set('status', submissionStatus.CREATING),

@@ -42,6 +42,8 @@
   "app.allowUserButton.confirmAllow": "The user may have been disabled for a reason. Do you really wish to enable the account?",
   "app.allowUserButton.confirmDisallow": "If you disable the account, the user will not be able to perform any operation nor access any data. Do you wish to disable it?",
   "app.apiErrorCodes.400-001": "The user has multiple e-mail addresses and multiple matching accounts already exist. Accounts cannot be associated due to ambiguity.",
+  "app.apiErrorCodes.400-003": "Uploaded file name contains invalid characters.",
+  "app.apiErrorCodes.400-004": "Uploaded file size does not meet server limitations.",
   "app.apiErrorCodes.400-101": "The credentials are not valid.",
   "app.apiErrorCodes.400-104": "User was correctly authenticated, but there is no corresponding account in ReCodEx.",
   "app.apiErrorCodes.400-105": "Attempt to register a new user failed since external authenticator did not provide a role. The external user identity may not have required attributes.",

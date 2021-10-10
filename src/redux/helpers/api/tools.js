@@ -208,6 +208,12 @@ const processResponse = (call, dispatch) =>
       if (isStatusOKWithBody(res.status)) {
         return res.json();
       }
+
+      const contentType = res.headers.get('content-type');
+      if (contentType.includes('json')) {
+        return res.json().then(json => Promise.reject(json.error || json));
+      }
+
       return Promise.reject(res);
     })
     .then(({ success = true, error = null, payload = {} }) => {
