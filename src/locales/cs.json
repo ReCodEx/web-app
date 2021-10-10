@@ -42,6 +42,8 @@
   "app.allowUserButton.confirmAllow": "Uživatel mohl být zablokován z dobrého důvodu. Opravdu si přejete povolit účet?",
   "app.allowUserButton.confirmDisallow": "Pokud zakážete tento uživatelský účet, uživatel nebude moci provést žádnou operaci ani vidět žádná data. Opravdu si přejete účet zakázat?",
   "app.apiErrorCodes.400-001": "Uživatel má více registrovaných e-malových adres, které odpovídají více než jednomu existujícímu účtu. Asociace účtů není možná z důvodu nejednoznačnosti.",
+  "app.apiErrorCodes.400-003": "Název nahrávaného souboru obsahuje nepovolené znaky.",
+  "app.apiErrorCodes.400-004": "Nahrávaný soubor nesplňuje omezení serveru na velikost.",
   "app.apiErrorCodes.400-101": "Nesprávné přihlašovací údaje.",
   "app.apiErrorCodes.400-104": "Uživatel byl korektně ověřen, ale nemá žádný odpovídající účet v ReCodExu.",
   "app.apiErrorCodes.400-105": "Pokus o zavedení nového účtu selhal, protože externí autentizační služba nedodala uživatelskou roli. Externí uživatelská identita pravděpodobně nemá potřebné atributy.",

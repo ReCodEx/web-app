@@ -125,7 +125,7 @@ describe('Uploading', () => {
         expect(failedFiles.first()).to.equal(
           fromJS({
             file,
-            errorMessage: 'the msg',
+            error: { message: 'the msg' },
           })
         );
       });

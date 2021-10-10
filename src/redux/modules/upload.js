@@ -148,26 +148,18 @@ const reducer = handleActions(
       state.setIn([containerId, 'uploading', file.name, 'partialFile'], fromJS(payload)),
 
     [actionTypes.START_UPLOAD_REJECTED]: (state, { payload, meta: { containerId, file } }) =>
-      state.removeIn([containerId, 'uploading', file.name]).setIn(
-        [containerId, 'failed', file.name],
-        fromJS({
-          file,
-          errorMessage: payload && payload.message,
-        })
-      ),
+      state
+        .removeIn([containerId, 'uploading', file.name])
+        .setIn([containerId, 'failed', file.name], fromJS({ file, error: payload })),
 
     // upload next chunk
     [actionTypes.UPLOAD_CHUNK_FULFILLED]: (state, { payload, meta: { containerId, file } }) =>
       state.setIn([containerId, 'uploading', file.name, 'partialFile'], fromJS(payload)),
 
     [actionTypes.UPLOAD_CHUNK_REJECTED]: (state, { payload, meta: { containerId, file } }) =>
-      state.removeIn([containerId, 'uploading', file.name]).setIn(
-        [containerId, 'failed', file.name],
-        fromJS({
-          file,
-          errorMessage: payload && payload.message,
-        })
-      ),
+      state
+        .removeIn([containerId, 'uploading', file.name])
+        .setIn([containerId, 'failed', file.name], fromJS({ file, error: payload })),
 
     // complete upload (make the server assemble all the chunks)
     [actionTypes.COMPLETE_UPLOAD_PENDING]: (state, { meta: { containerId, file } }) =>
@@ -177,13 +169,9 @@ const reducer = handleActions(
       state.setIn([containerId, 'uploading', file.name, 'uploadedFile'], fromJS(payload)),
 
     [actionTypes.COMPLETE_UPLOAD_REJECTED]: (state, { payload, meta: { containerId, file } }) =>
-      state.removeIn([containerId, 'uploading', file.name]).setIn(
-        [containerId, 'failed', file.name],
-        fromJS({
-          file,
-          errorMessage: payload && payload.message,
-        })
-      ),
+      state
+        .removeIn([containerId, 'uploading', file.name])
+        .setIn([containerId, 'failed', file.name], fromJS({ file, error: payload })),
 
     // cancel upload (remove already uploaded chunks)
     [actionTypes.CANCEL_UPLOAD_PENDING]: (state, { meta: { containerId, file } }) =>
@@ -195,7 +183,7 @@ const reducer = handleActions(
             [containerId, 'failed', file.name],
             fromJS({
               file,
-              errorMessage: failWithError,
+              error: { message: failWithError },
             })
           )
         : state
@@ -207,7 +195,7 @@ const reducer = handleActions(
             [containerId, 'failed', file.name],
             fromJS({
               file,
-              errorMessage: failWithError,
+              error: { message: failWithError },
             })
           )
         : state
@@ -231,7 +219,7 @@ const reducer = handleActions(
           [containerId, 'failed', file.name],
           fromJS({
             file,
-            errorMessage: message,
+            error: { message },
           })
         ),
 

@@ -7,6 +7,14 @@ const apiErrorCodes = defineMessages({
     defaultMessage:
       'The user has multiple e-mail addresses and multiple matching accounts already exist. Accounts cannot be associated due to ambiguity.',
   },
+  '400-003': {
+    id: 'app.apiErrorCodes.400-003',
+    defaultMessage: 'Uploaded file name contains invalid characters.',
+  },
+  '400-004': {
+    id: 'app.apiErrorCodes.400-004',
+    defaultMessage: 'Uploaded file size does not meet server limitations.',
+  },
   '400-101': { id: 'app.apiErrorCodes.400-101', defaultMessage: 'The credentials are not valid.' },
   '400-104': {
     id: 'app.apiErrorCodes.400-104',
@@ -38,16 +46,17 @@ const apiErrorCodes = defineMessages({
 
 export const hasErrorMessage = error => Boolean(error && error.code && apiErrorCodes[error.code]);
 
-export const getErrorMessage = formatMessage => error => {
-  const code = error && error.code;
-  const parameters = (error && error.parameters) || {};
-  if (code && apiErrorCodes[code]) {
-    return formatMessage(apiErrorCodes[code], parameters);
-  } else {
-    return (
-      (error && error.message) || (
-        <FormattedMessage id="app.apiErrorCodes.unknown" defaultMessage="Unknown API error." />
-      )
-    );
-  }
-};
+export const getErrorMessage =
+  formatMessage =>
+  (
+    error,
+    fallbackMessage = <FormattedMessage id="app.apiErrorCodes.unknown" defaultMessage="Unknown API error." />
+  ) => {
+    const code = error && error.code;
+    const parameters = (error && error.parameters) || {};
+    if (code && apiErrorCodes[code]) {
+      return formatMessage(apiErrorCodes[code], parameters);
+    } else {
+      return (error && error.message) || fallbackMessage;
+    }
+  };

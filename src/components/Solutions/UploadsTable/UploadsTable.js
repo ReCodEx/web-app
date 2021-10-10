@@ -8,6 +8,8 @@ import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Icon, { CloseIcon, DeleteIcon, LoadingIcon, SuccessIcon, UploadIcon, WarningIcon } from '../../icons';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
+import HighlightedText from '../../widgets/HighlightedText';
+import { getErrorMessage } from '../../../locales/apiErrorMessages';
 
 const estimateCompletionTime = defaultMemoize(({ totalSize, uploadedSize, startedAt, updatedAt }) => {
   if (!totalSize) {
@@ -34,7 +36,7 @@ const UploadsTable = ({
   doRestoreRemovedFile,
   doRemoveFailedFile,
   doRetryUploadFile,
-  intl: { locale },
+  intl: { locale, formatMessage },
 }) => (
   <InsetPanel className="px-2 py-0 mb-2">
     <Table responsive size="sm" className="mb-1">
@@ -180,17 +182,33 @@ const UploadsTable = ({
                     placement="bottom"
                     overlay={
                       <Tooltip id={`failedIco-${failed.file.name}`}>
-                        <FormattedMessage
-                          id="app.uploadFiles.failedIconTooltip"
-                          defaultMessage="The file upload has failed!"
-                        />
+                        {failed.error ? (
+                          getErrorMessage(formatMessage)(
+                            failed.error,
+                            <FormattedMessage
+                              id="app.uploadFiles.failedIconTooltip"
+                              defaultMessage="The file upload has failed!"
+                            />
+                          )
+                        ) : (
+                          <FormattedMessage
+                            id="app.uploadFiles.failedIconTooltip"
+                            defaultMessage="The file upload has failed!"
+                          />
+                        )}
                       </Tooltip>
                     }>
                     <WarningIcon className="text-danger" gapRight fixedWidth />
                   </OverlayTrigger>
                 </td>
                 <td className="text-monospace full-width text-danger">
-                  <strong>{failed.file.name}</strong>
+                  <strong>
+                    {failed.error && failed.error.code === '400-003' ? (
+                      <HighlightedText regex="[^a-zA-Z0-9\- _\.()\[\]!]+">{failed.file.name}</HighlightedText>
+                    ) : (
+                      failed.file.name
+                    )}
+                  </strong>
                 </td>
                 <td className="text-nowrap valign-middle">{prettyPrintBytes(failed.file.size)}</td>
                 <td className="text-center valign-middle text-nowrap">

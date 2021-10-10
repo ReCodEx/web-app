@@ -218,19 +218,19 @@ const reducer = handleActions(
       );
     },
 
-    [additionalActionTypes.JOIN_GROUP_PENDING]: (state, { payload, meta: { groupId, userId } }) =>
+    [additionalActionTypes.JOIN_GROUP_PENDING]: (state, { meta: { groupId, userId } }) =>
       state.hasIn(['resources', groupId, 'data', 'privateData', 'students'])
         ? state.updateIn(['resources', groupId, 'data', 'privateData', 'students'], students => students.push(userId))
         : state,
 
-    [additionalActionTypes.JOIN_GROUP_REJECTED]: (state, { payload, meta: { groupId, userId } }) =>
+    [additionalActionTypes.JOIN_GROUP_REJECTED]: (state, { meta: { groupId, userId } }) =>
       state.hasIn(['resources', groupId, 'data', 'privateData', 'students'])
         ? state.updateIn(['resources', groupId, 'data', 'privateData', 'students'], students =>
             students.filter(id => id !== userId)
           )
         : state,
 
-    [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (state, { payload, meta: { groupId, userId } }) =>
+    [additionalActionTypes.LEAVE_GROUP_FULFILLED]: (state, { meta: { groupId, userId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'students'], students =>
         students.filter(id => id !== userId)
       ),
@@ -265,7 +265,7 @@ const reducer = handleActions(
         .setIn(['resources', groupId, 'data'], fromJS(payload))
         .updateIn(['resources', groupId, 'pending-membership'], memberships => memberships.filter(id => id !== userId)),
 
-    [additionalActionTypes.SET_ORGANIZATIONAL_PENDING]: (state, { payload, meta: { groupId } }) =>
+    [additionalActionTypes.SET_ORGANIZATIONAL_PENDING]: (state, { meta: { groupId } }) =>
       state.setIn(['resources', groupId, 'pending-organizational'], true),
 
     [additionalActionTypes.SET_ORGANIZATIONAL_FULFILLED]: (state, { payload, meta: { groupId } }) =>
@@ -273,16 +273,16 @@ const reducer = handleActions(
         .deleteIn(['resources', groupId, 'pending-organizational'])
         .setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.SET_ORGANIZATIONAL_REJECTED]: (state, { payload, meta: { groupId } }) =>
+    [additionalActionTypes.SET_ORGANIZATIONAL_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-organizational']),
 
-    [additionalActionTypes.SET_ARCHIVED_PENDING]: (state, { payload, meta: { groupId } }) =>
+    [additionalActionTypes.SET_ARCHIVED_PENDING]: (state, { meta: { groupId } }) =>
       state.setIn(['resources', groupId, 'pending-archived'], true),
 
     [additionalActionTypes.SET_ARCHIVED_FULFILLED]: (state, { payload, meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-archived']).setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.SET_ARCHIVED_REJECTED]: (state, { payload, meta: { groupId } }) =>
+    [additionalActionTypes.SET_ARCHIVED_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-archived']),
 
     [additionalActionTypes.RELOCATE_FULFILLED]: (state, { payload }) =>
