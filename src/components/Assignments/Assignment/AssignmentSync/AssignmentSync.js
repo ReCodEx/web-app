@@ -88,7 +88,7 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
           <div>
             <FormattedMessage
               id="app.assignment.syncDescription"
-              defaultMessage="The exercise corresponding to this assignment was updated in the following categories:"
+              defaultMessage="The following sections were updated:"
             />
             <ul>{messages}</ul>
           </div>

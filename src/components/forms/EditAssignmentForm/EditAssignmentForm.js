@@ -795,7 +795,7 @@ class EditAssignmentForm extends Component {
             <Callout variant="info" icon={<WarningIcon />}>
               <FormattedMessage
                 id="app.editAssignmentForm.localized.assignmentSyncInfo"
-                defaultMessage="Please note that the localized texts are overwritten by actual data from the exercise when exercise update is invoked."
+                defaultMessage="Please note that the localized texts (name and complete description) are overwritten by the most recent data from the exercise when update of the assignment is invoked (if the exercise has been modified after the assignment). The only exception is the hint for students which is associated only with the assignment."
               />
             </Callout>
 
