@@ -128,11 +128,15 @@ const AssignmentDetails = ({
                         defaultMessage="Solutions submitted before the first deadline are considered to be on time and graded with full points. Submissions made between the deadlines are considered to be late but still worth some points. Submissions made after the second deadline are evaluated, but awarded no points. Open the graph to see in detail how the deadlines affect the awarded points."
                       />
                     </Explanation>
-                    <br />
-                    <Button variant="primary" onClick={() => setOpen(true)} size="xs" noShadow>
-                      <PointsGraphIcon gapRight />
-                      <FormattedMessage id="app.assignment.deadlinesGraphButton" defaultMessage="Show Graph" />
-                    </Button>
+                    {(maxPointsBeforeFirstDeadline !== 0 || maxPointsBeforeSecondDeadline !== 0) && (
+                      <>
+                        <br />
+                        <Button variant="primary" onClick={() => setOpen(true)} size="xs" noShadow>
+                          <PointsGraphIcon gapRight />
+                          <FormattedMessage id="app.assignment.deadlinesGraphButton" defaultMessage="Show Graph" />
+                        </Button>
+                      </>
+                    )}
                   </>
                 ) : (
                   <>
@@ -303,7 +307,7 @@ const AssignmentDetails = ({
           </tbody>
         </Table>
 
-        {allowSecondDeadline && (
+        {(maxPointsBeforeFirstDeadline !== 0 || (allowSecondDeadline && maxPointsBeforeSecondDeadline !== 0)) && (
           <Modal show={open} backdrop="static" onHide={() => setOpen(false)} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
