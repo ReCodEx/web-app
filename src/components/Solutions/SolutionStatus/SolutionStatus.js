@@ -458,38 +458,42 @@ class SolutionStatus extends Component {
                 </p>
               )}
 
-              <hr />
+              {(maxPointsBeforeFirstDeadline !== 0 || (allowSecondDeadline && maxPointsBeforeSecondDeadline !== 0)) && (
+                <>
+                  <hr />
 
-              <div className="text-muted mb-1">
-                <FormattedMessage
-                  id="app.assignment.deadlinesGraphDialog.title"
-                  defaultMessage="Visualization of points limits and corresponding deadlines"
-                />
-                {(overriddenPoints !== null || evaluation.score * 100 < pointsPercentualThreshold) && (
-                  <>
-                    {' '}
+                  <div className="text-muted mb-1">
                     <FormattedMessage
-                      id="app.solution.pointsExplainDialog.deadlinesGraphNotUsedSuffix"
-                      defaultMessage="(but it was not used in the scoring process of this solution)"
+                      id="app.assignment.deadlinesGraphDialog.title"
+                      defaultMessage="Visualization of points limits and corresponding deadlines"
                     />
-                  </>
-                )}
-                :
-              </div>
+                    {(overriddenPoints !== null || evaluation.score * 100 < pointsPercentualThreshold) && (
+                      <>
+                        {' '}
+                        <FormattedMessage
+                          id="app.solution.pointsExplainDialog.deadlinesGraphNotUsedSuffix"
+                          defaultMessage="(but it was not used in the scoring process of this solution)"
+                        />
+                      </>
+                    )}
+                    :
+                  </div>
 
-              <div className={allowSecondDeadline ? 'mt-1' : 'two-third-width my-5 mx-auto'}>
-                <AssignmentDeadlinesGraph
-                  firstDeadline={firstDeadline}
-                  secondDeadline={secondDeadline}
-                  maxPointsBeforeFirstDeadline={maxPointsBeforeFirstDeadline}
-                  maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
-                  allowSecondDeadline={allowSecondDeadline}
-                  maxPointsDeadlineInterpolation={maxPointsDeadlineInterpolation}
-                  markerTime={submittedAt}
-                  markerPoints={maxPoints}
-                  viewportAspectRatio={2 / 5}
-                />
-              </div>
+                  <div className={allowSecondDeadline ? 'mt-1' : 'two-third-width my-5 mx-auto'}>
+                    <AssignmentDeadlinesGraph
+                      firstDeadline={firstDeadline}
+                      secondDeadline={secondDeadline}
+                      maxPointsBeforeFirstDeadline={maxPointsBeforeFirstDeadline}
+                      maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
+                      allowSecondDeadline={allowSecondDeadline}
+                      maxPointsDeadlineInterpolation={maxPointsDeadlineInterpolation}
+                      markerTime={submittedAt}
+                      markerPoints={maxPoints}
+                      viewportAspectRatio={2 / 5}
+                    />
+                  </div>
+                </>
+              )}
             </Modal.Body>
           </Modal>
         )}

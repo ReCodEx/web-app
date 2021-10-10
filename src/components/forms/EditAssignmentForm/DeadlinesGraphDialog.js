@@ -8,19 +8,27 @@ import { PointsGraphIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
 import { deadlinesAndPontsAreValid } from './deadlineHelpers';
 
-const DeadlinesGraphDialog = ({ deadlines, ...props }) => {
+const DeadlinesGraphDialog = ({ deadlines, maxPointsBeforeFirstDeadline, maxPointsBeforeSecondDeadline, ...props }) => {
   const [open, setOpen] = useState(false);
-  const valid = deadlinesAndPontsAreValid({ deadlines, ...props });
+  const valid = deadlinesAndPontsAreValid({
+    deadlines,
+    maxPointsBeforeFirstDeadline,
+    maxPointsBeforeSecondDeadline,
+    ...props,
+  });
+  const trivial = maxPointsBeforeFirstDeadline === 0 && (deadlines === 'single' || maxPointsBeforeSecondDeadline === 0);
 
   return (
     <>
-      <Button variant="primary" onClick={() => setOpen(true)} disabled={!valid} size="sm" className="mt-2">
-        <PointsGraphIcon gapRight />
-        <FormattedMessage id="app.editAssignmentForm.deadlinesGraphDialog.button" defaultMessage="Deadlines Graph" />
-      </Button>
+      {!trivial && (
+        <Button variant="primary" onClick={() => setOpen(true)} disabled={!valid} size="sm" className="mt-2">
+          <PointsGraphIcon gapRight />
+          <FormattedMessage id="app.editAssignmentForm.deadlinesGraphDialog.button" defaultMessage="Deadlines Graph" />
+        </Button>
+      )}
 
       <Modal
-        show={open && valid}
+        show={open && valid && !trivial}
         backdrop="static"
         onHide={() => setOpen(false)}
         size={deadlines === 'single' ? 'lg' : 'xl'}>
@@ -39,6 +47,8 @@ const DeadlinesGraphDialog = ({ deadlines, ...props }) => {
               allowSecondDeadline={deadlines !== 'single'}
               maxPointsDeadlineInterpolation={deadlines === 'interpolated'}
               viewportAspectRatio={deadlines === 'single' ? 1 / 3 : 1 / 2}
+              maxPointsBeforeFirstDeadline={maxPointsBeforeFirstDeadline}
+              maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
               {...props}
             />
           )}
