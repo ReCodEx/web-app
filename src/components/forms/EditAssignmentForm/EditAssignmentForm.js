@@ -761,30 +761,40 @@ class EditAssignmentForm extends Component {
               <Field name="visibility" component={RadioField} options={VISIBILITY_STATES} />
             </Col>
 
-            {visibility === 'visibleFrom' && (
-              <Col md={8}>
+            <Col md={8}>
+              {visibility === 'visibleFrom' && (
                 <Field
                   name="visibleFrom"
                   component={DatetimeField}
                   label={<FormattedMessage id="app.editAssignmentForm.visibleFrom" defaultMessage="Publish date:" />}
                 />
-              </Col>
-            )}
-            {visibility === 'visible' && !assignmentIsPublic && (
-              <Col md={6}>
+              )}
+
+              {visibility !== 'hidden' && (!assignmentIsPublic || visibility === 'visibleFrom') && (
                 <Field
                   name="sendNotification"
                   component={CheckboxField}
                   onOff
                   label={
-                    <FormattedMessage
-                      id="app.editAssignmentForm.sendNotification"
-                      defaultMessage="Send e-mail notification to students about new assignment"
-                    />
+                    <>
+                      <FormattedMessage
+                        id="app.editAssignmentForm.sendNotification"
+                        defaultMessage="Send e-mail notification to students about new assignment"
+                      />
+
+                      {visibility === 'visibleFrom' && (
+                        <Explanation id="sendNotificationInFutureExplain">
+                          <FormattedMessage
+                            id="app.editAssignmentForm.sendNotificationInFutureExplain"
+                            defaultMessage="The e-mail will be sent right after the assignment will actually become visible to students."
+                          />
+                        </Explanation>
+                      )}
+                    </>
                   }
                 />
-              </Col>
-            )}
+              )}
+            </Col>
           </Row>
         </Container>
 
