@@ -281,6 +281,7 @@
   "app.editAssignmentForm.secondDeadline": "Second deadline:",
   "app.editAssignmentForm.secondDeadlineExplanation": "Second deadline is for late solutions which are still awarded some points. Solutions submitted after the second deadline are granted no poionts.",
   "app.editAssignmentForm.sendNotification": "Send e-mail notification to students about new assignment",
+  "app.editAssignmentForm.sendNotificationInFutureExplain": "The e-mail will be sent right after the assignment will actually become visible to students.",
   "app.editAssignmentForm.submissionsCountLimit": "Submissions count limit:",
   "app.editAssignmentForm.submissionsCountLimitExplanation": "Maximal number of solutions a student may have at any given time. A student is not able to submit more solutions once the limit is reached. However, the supervisor may delete existing solutions to increase the number of submission attempts individually.",
   "app.editAssignmentForm.title": "Edit Assignment — {name}",

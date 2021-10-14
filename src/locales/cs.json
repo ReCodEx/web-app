@@ -281,6 +281,7 @@
   "app.editAssignmentForm.secondDeadline": "Druhý termín:",
   "app.editAssignmentForm.secondDeadlineExplanation": "Druhý termín pro pozdější odevzdání, za které studenti ještě dostanou alespoň nejaké body. Řešení odevzdaná po druhém termínu již žádné body nedostanou.",
   "app.editAssignmentForm.sendNotification": "Poslat studentům e-mailem oznámení o nové zadané úloze",
+  "app.editAssignmentForm.sendNotificationInFutureExplain": "E-mail bude odeslán až v okamžiku, kdy bude zadaná úloha skutečně viditelná studentům.",
   "app.editAssignmentForm.submissionsCountLimit": "Počet pokusů odevzdání:",
   "app.editAssignmentForm.submissionsCountLimitExplanation": "Maximální počet řešení, která může mít student v jednom okamžiku na seznamu odevzdaných. Student nemůže odevzdat další řešení, jakmile je tento limit naplněn, ale vyučující může uložená řešení smazat a tím umožnit odevzdání nových řešení.",
   "app.editAssignmentForm.title": "Upravit zadání — {name}",

@@ -34,7 +34,7 @@ export const fetchAsyncJob = actions.fetchResource;
 export const fetchAsyncJobIfNeeded = actions.fetchOneIfNeeded;
 
 export const fetchAllJobs = (includeScheduled = true, ageThreshold = 3600) => {
-  const query = { includeScheduled: includeScheduled ? 0 : 1 };
+  const query = { includeScheduled: includeScheduled ? 1 : 0 };
   if (ageThreshold) {
     query.ageThreshold = ageThreshold;
   }
