@@ -17,7 +17,7 @@ const CheckboxField = ({
   /* eslint-disable no-unneeded-ternary */
   return (
     <FormGroup
-      className={error ? 'text-danger' : warning ? 'text-warning' : dirty && !ignoreDirty ? 'text-success' : undefined}
+      className={error ? 'text-danger' : warning ? 'text-warning' : dirty && !ignoreDirty ? 'text-primary' : undefined}
       controlId={input.name}>
       <Component
         {...props}
