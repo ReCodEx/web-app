@@ -6,11 +6,13 @@ import { FormattedMessage } from 'react-intl';
 
 import EditTestsTestRow from './EditTestsTestRow';
 import Callout from '../../widgets/Callout';
+import Button from '../../widgets/TheButton';
+import { AddIcon } from '../../icons';
 import { prettyPrintPercent } from '../../helpers/stringFormatters';
 import { safeGet } from '../../../helpers/common';
 import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
 
-const EditTestsTest = ({ fields, calculator, testValues, usedTests, readOnly = false }) => {
+const EditTestsTest = ({ fields, calculator, testValues, usedTests, addNewTest, readOnly = false }) => {
   const weightSum = Math.max(
     1, // make sure the sum is not zero (it is used in division)
     calculator === WEIGHTED_ID
@@ -37,7 +39,16 @@ const EditTestsTest = ({ fields, calculator, testValues, usedTests, readOnly = f
                   <FormattedMessage id="app.editTestsTest.pointsPercentage" defaultMessage="Points Percentage:" />
                 </th>
               )}
-              {!readOnly && <th />}
+              {!readOnly && addNewTest && (
+                <th className="valign-middle text-right">
+                  {fields.length < 99 && (
+                    <Button onClick={addNewTest} variant="primary" size="xs">
+                      <AddIcon gapRight />
+                      <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
+                    </Button>
+                  )}
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -72,6 +83,7 @@ EditTestsTest.propTypes = {
   calculator: PropTypes.string,
   testValues: PropTypes.array,
   usedTests: PropTypes.object,
+  addNewTest: PropTypes.func,
 };
 
 export default formValues({
