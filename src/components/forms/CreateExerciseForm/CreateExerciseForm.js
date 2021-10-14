@@ -35,38 +35,31 @@ class CreateExerciseForm extends Component {
         title={<FormattedMessage id="app.createExerciseForm.title" defaultMessage="Create New Exercise" />}
         type={submitSucceeded ? 'success' : undefined}>
         <>
-          <table>
-            <tbody>
-              <tr>
-                <td className="valign-top full-width">
-                  <Field
-                    name="groupId"
-                    component={SelectField}
-                    label=""
-                    ignoreDirty
-                    addEmptyOption
-                    emptyOptionCaption={formatMessage(messages.emptyOption)}
-                    options={groups}
-                  />
-                </td>
-                <td className="valign-top">
-                  <SubmitButton
-                    id="createExercise"
-                    disabled={invalid}
-                    submitting={submitting}
-                    hasSucceeded={submitSucceeded}
-                    hasFailed={submitFailed}
-                    handleSubmit={handleSubmit}
-                    messages={{
-                      submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
-                      submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
-                      success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
-                    }}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <Field
+            name="groupId"
+            component={SelectField}
+            label=""
+            ignoreDirty
+            addEmptyOption
+            emptyOptionCaption={formatMessage(messages.emptyOption)}
+            options={groups}
+            append={
+              <SubmitButton
+                id="createExercise"
+                disabled={invalid}
+                submitting={submitting}
+                hasSucceeded={submitSucceeded}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+                noShadow
+                messages={{
+                  submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
+                  submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
+                  success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
+                }}
+              />
+            }
+          />
 
           {submitFailed && (
             <Callout variant="danger">
