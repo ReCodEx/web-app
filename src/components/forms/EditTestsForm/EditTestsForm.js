@@ -14,7 +14,7 @@ import Box from '../../widgets/Box';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
-import Icon, { AddIcon, CloseIcon, SaveIcon, RefreshIcon, WarningIcon } from '../../icons';
+import Icon, { CloseIcon, SaveIcon, RefreshIcon, WarningIcon } from '../../icons';
 import {
   UNIFORM_ID,
   WEIGHTED_ID,
@@ -99,6 +99,18 @@ class EditTestsForm extends Component {
     this.props.registerExtraData && this.props.registerExtraData(this.getAst().getRoot());
   };
 
+  addNewTest = () => {
+    const { change, formValues } = this.props;
+    change('tests', [
+      ...formValues.tests,
+      {
+        id: this.getUniqueId(),
+        name: 'Test ' + (formValues.tests.length + 1).toString().padStart(2, '0'),
+        weight: '100',
+      },
+    ]);
+  };
+
   render() {
     const {
       calculator = UNIFORM_ID,
@@ -106,7 +118,6 @@ class EditTestsForm extends Component {
       dirty,
       submitting,
       handleSubmit,
-      change,
       submitFailed,
       submitSucceeded,
       invalid,
@@ -155,29 +166,12 @@ class EditTestsForm extends Component {
                   readOnly={readOnly}
                   usedTests={this.getUsedTests()}
                   calculator={calculator}
+                  addNewTest={this.addNewTest}
                 />
 
                 {!readOnly && (
                   <div className="text-center">
                     <TheButtonGroup>
-                      {formValues && formValues.tests.length < 99 && (
-                        <Button
-                          onClick={() =>
-                            change('tests', [
-                              ...formValues.tests,
-                              {
-                                id: this.getUniqueId(),
-                                name: 'Test ' + (formValues.tests.length + 1).toString().padStart(2, '0'),
-                                weight: '100',
-                              },
-                            ])
-                          }
-                          variant="primary">
-                          <AddIcon gapRight />
-                          <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
-                        </Button>
-                      )}
-
                       {(dirty || (this.getAst() && this.getAst().canUndo())) && !submitting && (
                         <Button type="reset" onClick={this.reset} variant="danger">
                           <RefreshIcon gapRight />
