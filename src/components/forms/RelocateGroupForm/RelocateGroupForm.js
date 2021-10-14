@@ -7,7 +7,8 @@ import { defaultMemoize } from 'reselect';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import Icon, { WarningIcon } from '../../icons';
+import Icon, { RefreshIcon, WarningIcon } from '../../icons';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { hasPermissions } from '../../../helpers/common';
@@ -22,8 +23,10 @@ const RelocateGroupForm = ({
   submitFailed,
   submitSucceeded,
   invalid,
+  dirty = false,
   groups,
   groupsAccessor,
+  reset,
   intl: { locale },
 }) => (
   <div>
@@ -47,20 +50,28 @@ const RelocateGroupForm = ({
       />
 
       <div className="text-center">
-        <SubmitButton
-          id="relocateGroup"
-          disabled={invalid}
-          submitting={submitting}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          handleSubmit={handleSubmit}
-          defaultIcon={<Icon icon="people-carry" gapRight />}
-          messages={{
-            submit: <FormattedMessage id="app.relocateGroupForm.submit" defaultMessage="Relocate" />,
-            submitting: <FormattedMessage id="app.relocateGroupForm.submitting" defaultMessage="Relocating..." />,
-            success: <FormattedMessage id="app.relocateGroupForm.success" defaultMessage="Group Relocated" />,
-          }}
-        />
+        <TheButtonGroup>
+          {dirty && (
+            <Button type="reset" onClick={reset} variant="danger">
+              <RefreshIcon gapRight />
+              <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+            </Button>
+          )}
+          <SubmitButton
+            id="relocateGroup"
+            disabled={invalid || !dirty}
+            submitting={submitting}
+            hasSucceeded={submitSucceeded}
+            hasFailed={submitFailed}
+            handleSubmit={handleSubmit}
+            defaultIcon={<Icon icon="people-carry" gapRight />}
+            messages={{
+              submit: <FormattedMessage id="app.relocateGroupForm.submit" defaultMessage="Relocate" />,
+              submitting: <FormattedMessage id="app.relocateGroupForm.submitting" defaultMessage="Relocating..." />,
+              success: <FormattedMessage id="app.relocateGroupForm.success" defaultMessage="Group Relocated" />,
+            }}
+          />
+        </TheButtonGroup>
       </div>
     </Form>
   </div>
@@ -75,10 +86,12 @@ RelocateGroupForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
+  dirty: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   links: PropTypes.object,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,
+  reset: PropTypes.func,
   intl: PropTypes.object,
 };
 

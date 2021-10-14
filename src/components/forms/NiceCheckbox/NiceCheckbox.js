@@ -37,7 +37,7 @@ const NiceCheckbox = ({
     : warning
     ? 'text-warning'
     : dirty
-    ? 'text-success'
+    ? 'text-primary'
     : !checked
     ? 'text-muted'
     : undefined;

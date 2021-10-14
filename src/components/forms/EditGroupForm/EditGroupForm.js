@@ -5,9 +5,11 @@ import { reduxForm, Field, FieldArray } from 'redux-form';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Callout from '../../widgets/Callout';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
+import { RefreshIcon } from '../../icons';
 
 import { TextField, CheckboxField, NumericTextField } from '../Fields';
 import { getLocalizedTextsInitialValues, validateLocalizedTextsFormData } from '../../../helpers/localizedData';
@@ -56,26 +58,36 @@ const EditGroupForm = ({
     }
     type={submitSucceeded ? 'success' : undefined}
     footer={
-      <div className="text-center">
-        <SubmitButton
-          id="editGroup"
-          handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
-          submitting={submitting}
-          dirty={dirty}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          invalid={invalid}
-          messages={{
-            submit: createNew ? (
-              <FormattedMessage id="app.editGroupForm.createGroup" defaultMessage="Create Group" />
-            ) : (
-              <FormattedMessage id="app.editGroupForm.saveGroup" defaultMessage="Save Group" />
-            ),
-            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-          }}
-        />
-      </div>
+      !createNew || dirty ? (
+        <div className="text-center">
+          <TheButtonGroup>
+            {dirty && (
+              <Button type="reset" onClick={reset} variant="danger">
+                <RefreshIcon gapRight />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+              </Button>
+            )}
+            <SubmitButton
+              id="editGroup"
+              handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
+              submitting={submitting}
+              dirty={dirty}
+              hasSucceeded={submitSucceeded}
+              hasFailed={submitFailed}
+              invalid={invalid}
+              messages={{
+                submit: createNew ? (
+                  <FormattedMessage id="app.editGroupForm.createGroup" defaultMessage="Create Group" />
+                ) : (
+                  <FormattedMessage id="app.editGroupForm.saveGroup" defaultMessage="Save Group" />
+                ),
+                submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+                success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+              }}
+            />
+          </TheButtonGroup>
+        </div>
+      ) : null
     }
     collapsable={collapsable}
     isOpen={isOpen}
