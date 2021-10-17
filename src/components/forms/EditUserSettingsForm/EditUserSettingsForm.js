@@ -1,37 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { defaultMemoize } from 'reselect';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
-import { CheckboxField, LanguageSelectField, SelectField } from '../Fields';
+import { CheckboxField, LanguageSelectField } from '../Fields';
 import { isStudentRole, isSupervisorRole } from '../../helpers/usersRoles';
-
-const defaultPagesCaptions = defineMessages({
-  dashboard: {
-    id: 'app.editUserSettings.defaultPage.dashboard',
-    defaultMessage: 'Dashboard',
-  },
-  home: {
-    id: 'app.editUserSettings.defaultPage.home',
-    defaultMessage: 'Home page (about)',
-  },
-  instance: {
-    id: 'app.editUserSettings.defaultPage.instance',
-    defaultMessage: 'Instance overview',
-  },
-});
-
-const getDefaultPages = defaultMemoize(formatMessage =>
-  Object.keys(defaultPagesCaptions).map(key => ({
-    key,
-    name: formatMessage(defaultPagesCaptions[key]),
-  }))
-);
 
 const EditUserSettingsForm = ({
   user,
@@ -39,12 +16,11 @@ const EditUserSettingsForm = ({
   handleSubmit,
   submitFailed = false,
   submitSucceeded = false,
-  anyTouched,
+  dirty,
   invalid,
-  intl: { formatMessage },
 }) => (
   <FormBox
-    title={<FormattedMessage id="app.editUserSettings.title" defaultMessage="Edit settings" />}
+    title={<FormattedMessage id="app.editUserSettings.title" defaultMessage="User Settings" />}
     type={submitSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
@@ -55,7 +31,7 @@ const EditUserSettingsForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          dirty={anyTouched}
+          dirty={dirty}
           defaultIcon={<SaveIcon gapRight />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
@@ -72,66 +48,16 @@ const EditUserSettingsForm = ({
     )}
 
     <Field
-      name="vimMode"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage id="app.editUserSettings.vimMode" defaultMessage="Use Vim mode in source code editors." />
-      }
-    />
-
-    <Field
-      name="darkTheme"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.editUserSettings.darkTheme"
-          defaultMessage="Use a dark theme for the source code viewers and editors."
-        />
-      }
-    />
-
-    <Field
-      name="openedSidebar"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage id="app.editUserSettings.openedSidebar" defaultMessage="Sidebar is unfolded by default." />
-      }
-    />
-
-    <Field
-      name="useGravatar"
-      component={CheckboxField}
-      onOff
-      label={
-        <FormattedMessage
-          id="app.editUserSettings.useGravatar"
-          defaultMessage="Use Gravatar service for fetching user avatars."
-        />
-      }
-    />
-
-    <Field
       name="defaultLanguage"
       component={LanguageSelectField}
       label={<FormattedMessage id="app.editUserSettings.defaultLanguage" defaultMessage="Default language:" />}
     />
 
-    <Field
-      name="defaultPage"
-      component={SelectField}
-      options={getDefaultPages(formatMessage)}
-      addEmptyOption={true}
-      label={<FormattedMessage id="app.editUserSettings.defaultPage" defaultMessage="Default page (after login):" />}
-    />
-
     <hr />
 
-    <h4>
-      <FormattedMessage id="app.editUserSettings.emailsTitle" defaultMessage="Email Notifications" />:
-    </h4>
+    <h5 className="mb-3">
+      <FormattedMessage id="app.editUserSettings.emailsTitle" defaultMessage="Send E-mail Notifications" />:
+    </h5>
 
     {!user.isVerified && (
       <Callout variant="warning">
@@ -249,15 +175,12 @@ EditUserSettingsForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   invalid: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(
-  reduxForm({
-    form: 'edit-user-settings',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-  })(EditUserSettingsForm)
-);
+export default reduxForm({
+  form: 'edit-user-settings',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+})(EditUserSettingsForm);

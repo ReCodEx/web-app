@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
-import { UserSettingsContext } from '../../../helpers/contexts';
+import { UserUIDataContext } from '../../../helpers/contexts';
 import { getAceModeFromExtension } from '../../helpers/ace';
 
 const AceEditor = canUseDOM ? require('react-ace').default : null;
 
 const SourceCodeViewer = ({ name, content = '' }) =>
   canUseDOM ? (
-    <UserSettingsContext.Consumer>
-      {({ vimMode = false, darkTheme = false }) => (
+    <UserUIDataContext.Consumer>
+      {({ vimMode = false, darkTheme = true }) => (
         <AceEditor
           value={content}
           mode={getAceModeFromExtension(name.split('.').pop())}
@@ -22,7 +22,7 @@ const SourceCodeViewer = ({ name, content = '' }) =>
           editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
         />
       )}
-    </UserSettingsContext.Consumer>
+    </UserUIDataContext.Consumer>
   ) : (
     <></>
   );

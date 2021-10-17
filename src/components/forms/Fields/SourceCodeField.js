@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, FormGroup, FormLabel } from 'react-bootstrap';
 import { canUseDOM } from 'exenv';
 
-import { UserSettingsContext } from '../../../helpers/contexts';
+import { UserUIDataContext } from '../../../helpers/contexts';
 
 // load the ACE editor only when rendering in the browser
 import { getAceModeFromExtension } from '../../helpers/ace';
@@ -26,8 +26,8 @@ const SourceCodeField = ({
     )}
     {canUseDOM && (
       <div className={readOnly ? 'noselection' : ''}>
-        <UserSettingsContext.Consumer>
-          {({ vimMode = false, darkTheme = false }) => (
+        <UserUIDataContext.Consumer>
+          {({ vimMode = false, darkTheme = true }) => (
             <AceEditor
               {...props}
               {...input}
@@ -43,7 +43,7 @@ const SourceCodeField = ({
               readOnly={readOnly}
               fontSize={16}
               onBlur={
-                () => input.onBlur() // this is a hack that will ensure blur call witout distorting the contents
+                () => input.onBlur() // this is a hack that will ensure blur call without distorting the contents
               }
               editorProps={{
                 $blockScrolling: Infinity,
@@ -51,7 +51,7 @@ const SourceCodeField = ({
               }}
             />
           )}
-        </UserSettingsContext.Consumer>
+        </UserUIDataContext.Consumer>
       </div>
     )}
     {error && <Form.Text className="text-danger"> {error} </Form.Text>}

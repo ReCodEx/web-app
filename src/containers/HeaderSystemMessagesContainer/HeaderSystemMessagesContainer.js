@@ -7,7 +7,7 @@ import { defaultMemoize } from 'reselect';
 import HeaderSystemMessagesDropdown from '../../components/layout/HeaderSystemMessagesDropdown';
 import { readyActiveSystemMessagesSelector, fetchManyUserStatus } from '../../redux/selectors/systemMessages';
 import { loggedInUserSelector } from '../../redux/selectors/users';
-import { updateUiData } from '../../redux/modules/users';
+import { updateUIData } from '../../redux/modules/users';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
@@ -20,11 +20,11 @@ const getVisibleSystemMessages = defaultMemoize((systemMessages, user) => {
 
 class HeaderSystemMessagesContainer extends Component {
   updateUiDataSystemMessagesAccepted = systemMessagesAccepted => {
-    const { loggedInUser, updateUiData } = this.props;
+    const { loggedInUser, updateUIData } = this.props;
     if (isReady(loggedInUser)) {
       const user = getJsData(loggedInUser);
       const uiData = safeGet(user, ['privateData', 'uiData'], {});
-      updateUiData(user.id, { ...uiData, systemMessagesAccepted });
+      updateUIData(user.id, { ...uiData, systemMessagesAccepted });
     }
   };
 
@@ -67,7 +67,7 @@ HeaderSystemMessagesContainer.propTypes = {
   systemMessages: PropTypes.array.isRequired,
   fetchStatus: PropTypes.string,
   loggedInUser: ImmutablePropTypes.map,
-  updateUiData: PropTypes.func.isRequired,
+  updateUIData: PropTypes.func.isRequired,
   locale: PropTypes.string.isRequired,
 };
 
@@ -78,6 +78,6 @@ export default connect(
     loggedInUser: loggedInUserSelector(state),
   }),
   dispatch => ({
-    updateUiData: (userId, uiData) => dispatch(updateUiData(userId, uiData)),
+    updateUIData: (userId, uiData) => dispatch(updateUIData(userId, uiData)),
   })
 )(HeaderSystemMessagesContainer);

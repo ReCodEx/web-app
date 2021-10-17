@@ -11,6 +11,7 @@ import {
   fetchUserIfNeeded,
   updateProfile,
   updateSettings,
+  updateUIData,
   makeLocalLogin,
   setRole,
 } from '../../redux/modules/users';
@@ -25,15 +26,21 @@ import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer'
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
+import EditUserUIDataForm from '../../components/forms/EditUserUIDataForm';
 import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
 import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
 import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth';
 
-const prepareUserSettingsInitialValues = defaultMemoize(({ defaultPage, ...settings }) => ({
-  defaultPage: defaultPage || '',
-  ...settings,
-}));
+const prepareUserUIDataInitialValues = defaultMemoize(
+  ({ darkTheme = true, vimMode = false, openedSidebar = true, useGravatar = true, defaultPage = null }) => ({
+    darkTheme,
+    vimMode,
+    openedSidebar,
+    useGravatar,
+    defaultPage: defaultPage || '',
+  })
+);
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) => dispatch(fetchUserIfNeeded(userId));
@@ -65,6 +72,7 @@ class EditUser extends Component {
       user,
       loggedUserId,
       updateSettings,
+      updateUIData,
       makeLocalLogin,
       isSuperAdmin,
       generateToken,
@@ -134,12 +142,19 @@ class EditUser extends Component {
                 />
               </Col>
 
-              {data.privateData.settings && (
+              {data.id === loggedUserId && (
                 <Col lg={6}>
-                  <EditUserSettingsForm
-                    onSubmit={updateSettings}
-                    user={data}
-                    initialValues={prepareUserSettingsInitialValues(data.privateData.settings)}
+                  {data.privateData.settings && (
+                    <EditUserSettingsForm
+                      onSubmit={updateSettings}
+                      user={data}
+                      initialValues={data.privateData.settings}
+                    />
+                  )}
+
+                  <EditUserUIDataForm
+                    onSubmit={updateUIData}
+                    initialValues={prepareUserUIDataInitialValues(data.privateData.uiData)}
                   />
                 </Col>
               )}
@@ -190,6 +205,7 @@ EditUser.propTypes = {
   refreshUser: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
   updateSettings: PropTypes.func.isRequired,
+  updateUIData: PropTypes.func.isRequired,
   makeLocalLogin: PropTypes.func.isRequired,
   generateToken: PropTypes.func.isRequired,
   setRole: PropTypes.func.isRequired,
@@ -221,6 +237,7 @@ export default connect(
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     refreshUser: () => dispatch(fetchUser(userId)),
     updateSettings: data => dispatch(updateSettings(userId, data)),
+    updateUIData: data => dispatch(updateUIData(userId, data, false)),
     updateProfile: data => dispatch(updateProfile(userId, data)),
     makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
     generateToken: formData =>

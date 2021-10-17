@@ -36,10 +36,12 @@ const getVisibleArchiveGroupsMap = (groups, showAll, search, locale, rootGroup) 
   // first mark all possibly visible
   groupArray.forEach(groupObj => {
     const group = getJsData(groupObj);
-    const rootGroupIncludes =
-      rootGroup === null ? true : group.parentGroupsIds.includes(rootGroup) || rootGroup === group.id;
-    if (showAll || group.archived) {
-      result[group.id] = rootGroupIncludes;
+    if (group) {
+      const rootGroupIncludes =
+        rootGroup === null ? true : group.parentGroupsIds.includes(rootGroup) || rootGroup === group.id;
+      if (showAll || group.archived) {
+        result[group.id] = rootGroupIncludes;
+      }
     }
   });
 
