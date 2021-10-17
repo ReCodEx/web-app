@@ -8,7 +8,7 @@ import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
-import { CheckboxField, SelectField } from '../Fields';
+import { CheckboxField, SelectField, NumericTextField } from '../Fields';
 
 const defaultPagesCaptions = defineMessages({
   dashboard: {
@@ -31,6 +31,10 @@ const getDefaultPages = defaultMemoize(formatMessage =>
     name: formatMessage(defaultPagesCaptions[key]),
   }))
 );
+
+export const EDITOR_FONT_SIZE_MIN = 5;
+export const EDITOR_FONT_SIZE_MAX = 50;
+export const EDITOR_FONT_SIZE_DEFAULT = 16;
 
 const EditUserUIDataForm = ({
   submitting,
@@ -94,6 +98,14 @@ const EditUserUIDataForm = ({
           defaultMessage="Use Gravatar service for fetching user avatars"
         />
       }
+    />
+
+    <NumericTextField
+      name="editorFontSize"
+      maxLength={2}
+      validateMin={EDITOR_FONT_SIZE_MIN}
+      validateMax={EDITOR_FONT_SIZE_MAX}
+      label={<FormattedMessage id="app.editUserUIData.editorFontSize" defaultMessage="Code editor font size:" />}
     />
 
     <Field
