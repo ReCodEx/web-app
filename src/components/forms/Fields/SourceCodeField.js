@@ -27,7 +27,7 @@ const SourceCodeField = ({
     {canUseDOM && (
       <div className={readOnly ? 'noselection' : ''}>
         <UserUIDataContext.Consumer>
-          {({ vimMode = false, darkTheme = true }) => (
+          {({ vimMode = false, darkTheme = true, editorFontSize = 16 }) => (
             <AceEditor
               {...props}
               {...input}
@@ -41,7 +41,7 @@ const SourceCodeField = ({
               minLines={5}
               maxLines={20}
               readOnly={readOnly}
-              fontSize={16}
+              fontSize={editorFontSize}
               onBlur={
                 () => input.onBlur() // this is a hack that will ensure blur call without distorting the contents
               }

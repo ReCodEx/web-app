@@ -9,7 +9,7 @@ const AceEditor = canUseDOM ? require('react-ace').default : null;
 const SourceCodeViewer = ({ name, content = '' }) =>
   canUseDOM ? (
     <UserUIDataContext.Consumer>
-      {({ vimMode = false, darkTheme = true }) => (
+      {({ vimMode = false, darkTheme = true, editorFontSize = 16 }) => (
         <AceEditor
           value={content}
           mode={getAceModeFromExtension(name.split('.').pop())}
@@ -18,7 +18,7 @@ const SourceCodeViewer = ({ name, content = '' }) =>
           name="source-code-viewer"
           width="100%"
           height="100%"
-          fontSize={16}
+          fontSize={editorFontSize}
           editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
         />
       )}

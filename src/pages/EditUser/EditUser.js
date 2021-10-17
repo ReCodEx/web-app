@@ -26,19 +26,39 @@ import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer'
 
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
-import EditUserUIDataForm from '../../components/forms/EditUserUIDataForm';
+import EditUserUIDataForm, {
+  EDITOR_FONT_SIZE_MIN,
+  EDITOR_FONT_SIZE_MAX,
+  EDITOR_FONT_SIZE_DEFAULT,
+} from '../../components/forms/EditUserUIDataForm';
 import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
 import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
 import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth';
 
+const prepareNumber = (number, min, max, defaultValue) => {
+  number = Number(number);
+  if (isNaN(number)) {
+    return defaultValue;
+  }
+  return Math.max(Math.min(number, max), min);
+};
+
 const prepareUserUIDataInitialValues = defaultMemoize(
-  ({ darkTheme = true, vimMode = false, openedSidebar = true, useGravatar = true, defaultPage = null }) => ({
+  ({
+    darkTheme = true,
+    vimMode = false,
+    openedSidebar = true,
+    useGravatar = true,
+    defaultPage = null,
+    editorFontSize = EDITOR_FONT_SIZE_DEFAULT,
+  }) => ({
     darkTheme,
     vimMode,
     openedSidebar,
     useGravatar,
     defaultPage: defaultPage || '',
+    editorFontSize: prepareNumber(editorFontSize, EDITOR_FONT_SIZE_MIN, EDITOR_FONT_SIZE_MAX, EDITOR_FONT_SIZE_DEFAULT),
   })
 );
 
@@ -237,7 +257,22 @@ export default connect(
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     refreshUser: () => dispatch(fetchUser(userId)),
     updateSettings: data => dispatch(updateSettings(userId, data)),
-    updateUIData: data => dispatch(updateUIData(userId, data, false)),
+    updateUIData: ({ editorFontSize, ...data }) =>
+      dispatch(
+        updateUIData(
+          userId,
+          {
+            editorFontSize: prepareNumber(
+              editorFontSize,
+              EDITOR_FONT_SIZE_MIN,
+              EDITOR_FONT_SIZE_MAX,
+              EDITOR_FONT_SIZE_DEFAULT
+            ),
+            ...data,
+          },
+          false
+        )
+      ),
     updateProfile: data => dispatch(updateProfile(userId, data)),
     makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
     generateToken: formData =>
