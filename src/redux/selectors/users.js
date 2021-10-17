@@ -51,14 +51,20 @@ const userSettingsSelector = user => {
   const settings = isReady(user) && user.getIn(['data', 'privateData', 'settings']);
   return settings ? settings.toJS() : EMPTY_OBJ;
 };
+const userUIDataSelector = user => {
+  const settings = isReady(user) && user.getIn(['data', 'privateData', 'uiData']);
+  return settings ? settings.toJS() : EMPTY_OBJ;
+};
 
 export const getUserSettings = userId => createSelector(getUser(userId), userSettingsSelector);
+export const getUserUIData = userId => createSelector(getUser(userId), userUIDataSelector);
 
 export const loggedInUserSelector = createSelector([usersSelector, loggedInUserIdSelector], (users, id) =>
   id && users ? users.get(id) : null
 );
 
 export const getLoggedInUserSettings = createSelector(loggedInUserSelector, userSettingsSelector);
+export const getLoggedInUserUiData = createSelector(loggedInUserSelector, userUIDataSelector);
 
 export const getLoggedInUserEffectiveRole = createSelector(
   [loggedInUserSelector, accessTokenSelector],

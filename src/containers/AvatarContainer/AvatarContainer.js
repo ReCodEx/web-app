@@ -13,7 +13,7 @@ const AvatarContainer = ({ currentUser, avatarUrl, fullName, firstName, size = 4
     failed={<FailedAvatar size={size} />}
     resource={currentUser}>
     {currentUser =>
-      safeGet(currentUser, ['privateData', 'settings', 'useGravatar'], false) && avatarUrl !== null ? (
+      safeGet(currentUser, ['privateData', 'uiData', 'useGravatar'], true) && avatarUrl !== null ? (
         <Avatar size={size} src={avatarUrl} title={fullName} {...props} />
       ) : (
         <FakeAvatar size={size} {...props}>

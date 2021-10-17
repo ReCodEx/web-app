@@ -56,7 +56,7 @@ class Login extends Component {
         dashboard: DASHBOARD_URI,
         instance: instanceId && INSTANCE_URI_FACTORY(instanceId),
       };
-      const defaultPage = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'settings', 'defaultPage']);
+      const defaultPage = loggedInUser && loggedInUser.getIn(['data', 'privateData', 'uiData', 'defaultPage']);
       url =
         defaultPage && defaultPages[defaultPage]
           ? defaultPages[defaultPage]

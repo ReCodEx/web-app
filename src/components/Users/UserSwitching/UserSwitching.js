@@ -28,7 +28,7 @@ const UserSwitching = ({ users = [], currentUser, loginAs, removeUser }) => (
                   key={id}
                   title={fullName}
                   firstName={firstName}
-                  useGravatar={safeGet(activeUser, ['privateData', 'settings', 'useGravatar'], false)}
+                  useGravatar={safeGet(activeUser, ['privateData', 'uiData', 'useGravatar'], true)}
                   onClick={() => loginAs(id)}
                   onRemove={() => removeUser(id)}
                 />

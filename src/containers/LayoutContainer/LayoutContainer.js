@@ -10,12 +10,12 @@ import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modu
 import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app';
 import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
 import { isLoggedIn } from '../../redux/selectors/auth';
-import { getLoggedInUserSettings } from '../../redux/selectors/users';
+import { getLoggedInUserSettings, getLoggedInUserUiData } from '../../redux/selectors/users';
 import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 
 import Layout from '../../components/layout/Layout';
 import { messages } from '../../locales';
-import { UserSettingsContext, LinksContext, UrlContext } from '../../helpers/contexts';
+import { UserUIDataContext, LinksContext, UrlContext } from '../../helpers/contexts';
 import { buildRoutes, getLinks, pathRelatedGroupSelector } from '../../pages/routes';
 
 import 'admin-lte/dist/css/adminlte.min.css';
@@ -47,9 +47,9 @@ class LayoutContainer extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      (prevProps.userSettings.openedSidebar === undefined && this.props.userSettings.openedSidebar !== undefined) ||
-      (prevProps.userSettings.openedSidebar !== undefined &&
-        prevProps.userSettings.openedSidebar !== this.props.userSettings.openedSidebar)
+      (prevProps.userUIData.openedSidebar === undefined && this.props.userUIData.openedSidebar !== undefined) ||
+      (prevProps.userUIData.openedSidebar !== undefined &&
+        prevProps.userUIData.openedSidebar !== this.props.userUIData.openedSidebar)
     ) {
       this.resizeSidebarToDefault(this.props);
     }
@@ -59,14 +59,14 @@ class LayoutContainer extends Component {
     }
   }
 
-  resizeSidebarToDefault({ collapse, unroll, userSettings }) {
+  resizeSidebarToDefault({ collapse, unroll, userUIData }) {
     // open or hide the sidebar based on user's settings
-    const shouldBeOpen = this.getDefaultOpenedSidebar(userSettings);
+    const shouldBeOpen = this.getDefaultOpenedSidebar(userUIData);
     shouldBeOpen ? unroll() : collapse();
   }
 
-  getDefaultOpenedSidebar = userSettings =>
-    userSettings && typeof userSettings.openedSidebar !== 'undefined' ? userSettings.openedSidebar : true;
+  getDefaultOpenedSidebar = userUIData =>
+    userUIData && typeof userUIData.openedSidebar !== 'undefined' ? userUIData.openedSidebar : true;
 
   maybeHideSidebar = e => {
     const { sidebarIsOpen, toggleVisibility } = this.props;
@@ -96,7 +96,7 @@ class LayoutContainer extends Component {
       toggleSize,
       toggleVisibility,
       pendingFetchOperations,
-      userSettings,
+      userUIData,
       setLang,
       relatedGroupId,
       memberGroups,
@@ -107,7 +107,7 @@ class LayoutContainer extends Component {
 
     return (
       <IntlProvider locale={lang} messages={this.getMessages(lang)} formats={ADDITIONAL_INTL_FORMATS}>
-        <UserSettingsContext.Provider value={userSettings}>
+        <UserUIDataContext.Provider value={userUIData}>
           <LinksContext.Provider value={getLinks()}>
             <UrlContext.Provider value={{ lang }}>
               <Layout
@@ -129,7 +129,7 @@ class LayoutContainer extends Component {
               </Layout>
             </UrlContext.Provider>
           </LinksContext.Provider>
-        </UserSettingsContext.Provider>
+        </UserUIDataContext.Provider>
       </IntlProvider>
     );
   }
@@ -156,6 +156,7 @@ LayoutContainer.propTypes = {
     hash: PropTypes.string.isRequired,
   }).isRequired,
   userSettings: PropTypes.object,
+  userUIData: PropTypes.object,
   relatedGroupId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
   fetchManyGroupsStatus: PropTypes.string,
@@ -169,6 +170,7 @@ export default connect(
     sidebarIsOpen: isVisible(state),
     pendingFetchOperations: anyPendingFetchOperations(state),
     userSettings: getLoggedInUserSettings(state),
+    userUIData: getLoggedInUserUiData(state),
     relatedGroupId: pathRelatedGroupSelector(state, pathname + search),
     memberGroups: groupsLoggedUserIsMemberSelector(state),
     fetchManyGroupsStatus: fetchManyGroupsStatus(state),
