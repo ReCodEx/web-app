@@ -65,7 +65,7 @@ const prepareCachedAssignmentsComparator = (assignments, locale) => {
 };
 
 const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, locale, links) => {
-  const { SOLUTION_DETAIL_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY } = links;
+  const { SOLUTION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY } = links;
 
   const assignmentsComparator = prepareCachedAssignmentsComparator(assignments, locale);
 
@@ -106,9 +106,15 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
         cellRenderer: assignment =>
           assignment && (
             <small className="text-nowrap">
-              <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
-                <LocalizedExerciseName entity={{ name: '??', localizedTexts: assignment.localizedTexts }} />
-              </Link>
+              {hasPermissions(assignment, 'viewAssignmentSolutions') ? (
+                <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                  <LocalizedExerciseName entity={{ name: '??', localizedTexts: assignment.localizedTexts }} />
+                </Link>
+              ) : (
+                <Link to={ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)}>
+                  <LocalizedExerciseName entity={{ name: '??', localizedTexts: assignment.localizedTexts }} />
+                </Link>
+              )}
             </small>
           ),
       }
@@ -368,14 +374,24 @@ class GroupUserSolutions extends Component {
                                         <LocalizedExerciseName
                                           entity={{ name: '??', localizedTexts: assignment.localizedTexts }}
                                         />
+
                                         <small className="ml-3 text-nowrap">
                                           (
-                                          <Link to={links.ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
-                                            <FormattedMessage
-                                              id="app.groupUserSolutions.allAssignmentSolutions"
-                                              defaultMessage="all assignment solutions"
-                                            />
-                                          </Link>
+                                          {hasPermissions(assignment, 'viewAssignmentSolutions') ? (
+                                            <Link to={links.ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                                              <FormattedMessage
+                                                id="app.groupUserSolutions.allAssignmentSolutions"
+                                                defaultMessage="all assignment solutions"
+                                              />
+                                            </Link>
+                                          ) : (
+                                            <Link to={links.ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)}>
+                                              <FormattedMessage
+                                                id="app.groupUserSolutions.assignmentDetail"
+                                                defaultMessage="assignment detail"
+                                              />
+                                            </Link>
+                                          )}
                                           )
                                         </small>
                                       </>

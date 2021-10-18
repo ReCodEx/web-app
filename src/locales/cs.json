@@ -596,6 +596,7 @@
   "app.editUserUIData.defaultPage.dashboard": "Přehled",
   "app.editUserUIData.defaultPage.home": "Domovská stránka (o ReCodExu)",
   "app.editUserUIData.defaultPage.instance": "Detail instance",
+  "app.editUserUIData.editorFontSize": "Velikost fontu v textovém editoru:",
   "app.editUserUIData.failed": "Nebylo možné uložit nastavení vzhledu.",
   "app.editUserUIData.openedSidebar": "Postraní panel je ve výchozím stavu rozbalený",
   "app.editUserUIData.title": "Nastavení vzhledu",

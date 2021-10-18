@@ -596,6 +596,7 @@
   "app.editUserUIData.defaultPage.dashboard": "Dashboard",
   "app.editUserUIData.defaultPage.home": "Home page (about)",
   "app.editUserUIData.defaultPage.instance": "Instance overview",
+  "app.editUserUIData.editorFontSize": "Code editor font size:",
   "app.editUserUIData.failed": "Cannot save visual settings of the user.",
   "app.editUserUIData.openedSidebar": "Sidebar is unfolded by default",
   "app.editUserUIData.title": "Visual Settings",
