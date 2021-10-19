@@ -19,8 +19,11 @@ const ReferenceSolutionsTable = ({
         <th>
           <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />
         </th>
-        <th>
+        <th className="text-nowrap text-center shrink-col">
           <FormattedMessage id="generic.runtimeShortest" defaultMessage="Runtime" />
+        </th>
+        <th className="text-nowrap text-center shrink-col">
+          <FormattedMessage id="generic.correctness" defaultMessage="Correctness" />
         </th>
         <th>
           <FormattedMessage id="generic.author" defaultMessage="Author" />

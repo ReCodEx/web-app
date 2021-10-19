@@ -15,7 +15,7 @@ import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
-import { ChatIcon, DownloadIcon, SearchIcon, ResultsIcon, UserIcon } from '../../components/icons';
+import { ChatIcon, DownloadIcon, DetailIcon, ResultsIcon, UserIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import UsersName from '../../components/Users/UsersName';
 import Points from '../../components/Assignments/SolutionsTable/Points';
@@ -164,7 +164,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
           {solution.permissionHints && solution.permissionHints.viewDetail && (
             <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
               <Button size="xs" variant="secondary">
-                <SearchIcon gapRight />
+                <DetailIcon gapRight />
                 <FormattedMessage id="generic.detail" defaultMessage="Detail" />
               </Button>
             </Link>

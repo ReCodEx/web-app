@@ -32,6 +32,7 @@ export const ChatIcon = props => <Icon {...props} icon={['far', 'comments']} />;
 export const DashboardIcon = props => <Icon {...props} icon="tachometer-alt" />;
 export const DeadlineIcon = props => <Icon {...props} icon="hourglass-half" />;
 export const DeleteIcon = props => <Icon {...props} icon="trash" />;
+export const DetailIcon = props => <Icon {...props} icon="search" />;
 export const DownloadIcon = props => <Icon {...props} icon="cloud-download-alt" />;
 export const EditIcon = props => <Icon {...props} icon={['far', 'edit']} />;
 export const EditAssignmentIcon = EditIcon;
