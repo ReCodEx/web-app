@@ -16,7 +16,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ReferenceSolutionsTable from '../../components/Exercises/ReferenceSolutionsTable';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
-import { ExerciseIcon, SendIcon, DeleteIcon } from '../../components/icons';
+import { ExerciseIcon, DetailIcon, DeleteIcon } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
@@ -217,7 +217,7 @@ class Exercise extends Component {
                                     <TheButtonGroup vertical>
                                       <Link to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
                                         <Button size="xs" variant="secondary">
-                                          <SendIcon gapRight />
+                                          <DetailIcon gapRight />
                                           <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                                         </Button>
                                       </Link>

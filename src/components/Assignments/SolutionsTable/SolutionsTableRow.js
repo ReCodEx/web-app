@@ -11,7 +11,7 @@ import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionBut
 import AcceptSolutionContainer from '../../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer';
 
-import { SearchIcon } from '../../icons';
+import { DetailIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
@@ -130,7 +130,7 @@ const SolutionsTableRow = ({
                 tooltipId={`detail-${id}`}>
                 <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
                   <Button size="xs" variant="secondary" disabled={selected}>
-                    <SearchIcon gapRight={!compact} />
+                    <DetailIcon gapRight={!compact} />
                     {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
                   </Button>
                 </Link>

@@ -13,7 +13,7 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
-import { AssignmentIcon, SearchIcon, UserIcon } from '../../components/icons';
+import { AssignmentIcon, DetailIcon, UserIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import Points from '../../components/Assignments/SolutionsTable/Points';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
@@ -183,7 +183,7 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
           {solution.permissionHints && solution.permissionHints.viewDetail && (
             <Link to={SOLUTION_DETAIL_URI_FACTORY(solution.assignmentId, solution.id)}>
               <Button size="xs" variant="secondary">
-                <SearchIcon gapRight />
+                <DetailIcon gapRight />
                 <FormattedMessage id="generic.detail" defaultMessage="Detail" />
               </Button>
             </Link>
