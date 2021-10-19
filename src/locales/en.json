@@ -934,6 +934,7 @@
   "app.groupTree.treeViewLeaf.organizationalTooltip": "The group is organizational (it does not have any students or assignments)",
   "app.groupTree.treeViewLeaf.publicTooltip": "The group is public",
   "app.groupUserSolutions.allAssignmentSolutions": "all assignment solutions",
+  "app.groupUserSolutions.assignmentDetail": "assignment detail",
   "app.groupUserSolutions.groupByAssignmentsCheckbox": "Group by assignments",
   "app.groupUserSolutions.noSolutions": "The user has not submitted any solutions yet.",
   "app.groupUserSolutions.onlyBestSolutionsCheckbox": "Best solutions only",

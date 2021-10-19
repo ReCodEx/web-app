@@ -934,6 +934,7 @@
   "app.groupTree.treeViewLeaf.organizationalTooltip": "Skupina je organizační (nemá žádné studenty ani zadané úlohy)",
   "app.groupTree.treeViewLeaf.publicTooltip": "Skupina je veřejná",
   "app.groupUserSolutions.allAssignmentSolutions": "všechna řešení úlohy",
+  "app.groupUserSolutions.assignmentDetail": "zadaná úloha",
   "app.groupUserSolutions.groupByAssignmentsCheckbox": "Seskupit podle úloh",
   "app.groupUserSolutions.noSolutions": "Uživatel zatím neodevzdal žádná řešení.",
   "app.groupUserSolutions.onlyBestSolutionsCheckbox": "Pouze nejlepší řešení",
