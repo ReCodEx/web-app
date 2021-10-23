@@ -1,16 +1,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { defaultMemoize } from 'reselect';
+import moment from 'moment';
 
 import ShadowAssignmentPointsTable from '../../components/Assignments/ShadowAssignmentPointsTable';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchByIds } from '../../redux/modules/users';
-import { safeGet } from '../../helpers/common';
 import { setShadowAssignmentPoints, removeShadowAssignmentPoints } from '../../redux/modules/shadowAssignments';
 import { studentsOfGroupSelector } from '../../redux/selectors/usersGroups';
+import { safeGet, arrayToObject } from '../../helpers/common';
+
+const prepareInitialValues = defaultMemoize((students, maxPoints) => ({
+  points: maxPoints,
+  note: '',
+  students: Object.fromEntries(students.map(({ id }) => [id, false])),
+}));
 
 class ShadowAssignmentPointsContainer extends Component {
+  multiAssignSubmit = data => {
+    const pointsId = null;
+    const awardedAt = moment().startOf('minute').unix();
+    const studentPoints = arrayToObject(this.props.points, ({ awardeeId }) => awardeeId);
+    const { note, points, students } = data;
+    return Promise.all(
+      this.props.students
+        .filter(({ id }) => safeGet(studentPoints, [id, 'points'], null) === null && students[id])
+        .map(({ id }) =>
+          this.props.setPoints({
+            awardeeId: id, // only the student ID changes among setPoint calls
+            pointsId,
+            points,
+            note,
+            awardedAt,
+          })
+        )
+    );
+  };
+
   componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
@@ -30,6 +58,8 @@ class ShadowAssignmentPointsContainer extends Component {
         permissionHints={permissionHints}
         setPoints={setPoints}
         removePoints={removePoints}
+        initialValues={prepareInitialValues(students, maxPoints)}
+        onSubmit={this.multiAssignSubmit}
       />
     );
   }

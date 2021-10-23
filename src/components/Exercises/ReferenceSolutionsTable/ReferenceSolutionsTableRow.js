@@ -66,7 +66,7 @@ const ReferenceSolutionsTableRow = ({
                 <Tooltip id="failure">
                   {lastSubmission.failure.description || (
                     <FormattedMessage
-                      id="app.referenceSolutionTable.stillEvaluating"
+                      id="app.referenceSolutionTable.evaluationFailed"
                       defaultMessage="Last evaluation failed"
                     />
                   )}
