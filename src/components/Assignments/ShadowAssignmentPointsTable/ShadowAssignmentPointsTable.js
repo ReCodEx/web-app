@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
-import { Table, Modal } from 'react-bootstrap';
+import { Field, reduxForm } from 'redux-form';
+import { Container, Row, Col, Table, Modal } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import EditShadowAssignmentPointsForm, {
@@ -10,16 +10,23 @@ import EditShadowAssignmentPointsForm, {
   transformPointsFormSubmitData,
 } from '../../forms/EditShadowAssignmentPointsForm';
 import Box from '../../widgets/Box';
+import Callout from '../../widgets/Callout';
+import { TextField, NumericTextField, SimpleCheckboxField } from '../../forms/Fields';
+import SubmitButton from '../../forms/SubmitButton';
 import DateTime from '../../widgets/DateTime';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
-import Icon, { EditIcon, DeleteIcon } from '../../icons';
+import Icon, { BanIcon, EditIcon, DeleteIcon, SaveIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users';
 import { arrayToObject, safeGet } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
 
 class ShadowAssignmentPointsTable extends Component {
-  state = { dialogStudentId: null, dialogPointsId: null };
+  state = { dialogStudentId: null, dialogPointsId: null, multiAwardMode: false };
+
+  toggleMultiAwardMode = () => {
+    this.setState({ multiAwardMode: !this.state.multiAwardMode });
+  };
 
   openDialog = (studentId, pointsId = null) =>
     this.setState({
@@ -50,6 +57,14 @@ class ShadowAssignmentPointsTable extends Component {
       points,
       permissionHints,
       maxPoints,
+      submitting,
+      handleSubmit,
+      onSubmit,
+      dirty,
+      submitFailed = false,
+      submitSucceeded = false,
+      invalid,
+      warning,
       intl: { locale },
       links: { GROUP_USER_SOLUTIONS_URI_FACTORY },
     } = this.props;
@@ -61,14 +76,82 @@ class ShadowAssignmentPointsTable extends Component {
         title={
           <FormattedMessage id="app.shadowAssignmentPointsTable.title" defaultMessage="Shadow Assignment Points" />
         }
-        collapsable
         isOpen
         noPadding
-        unlimitedHeight>
+        unlimitedHeight
+        footer={
+          permissionHints.createPoints ? (
+            this.state.multiAwardMode ? (
+              <>
+                <Container fluid>
+                  <Row>
+                    <Col>
+                      <NumericTextField
+                        name="points"
+                        maxLength={6}
+                        validateMin={-10000}
+                        validateMax={10000}
+                        label={
+                          <FormattedMessage id="app.editShadowAssignmentPointsForm.points" defaultMessage="Points:" />
+                        }
+                      />
+                    </Col>
+
+                    <Col lg={9}>
+                      <Field
+                        name="note"
+                        component={TextField}
+                        maxLength={1024}
+                        label={<FormattedMessage id="app.editShadowAssignmentPointsForm.note" defaultMessage="Note:" />}
+                      />
+                    </Col>
+                  </Row>
+                </Container>
+
+                {warning && <Callout variant="warning">{warning}</Callout>}
+
+                <div className="text-center text-nowrap mb-1">
+                  <TheButtonGroup>
+                    <SubmitButton
+                      id="multi-assign-form"
+                      handleSubmit={handleSubmit(data => onSubmit(data).then(this.toggleMultiAwardMode))}
+                      submitting={submitting}
+                      dirty={dirty}
+                      hasSucceeded={submitSucceeded}
+                      hasFailed={submitFailed}
+                      invalid={invalid}
+                      defaultIcon={<SaveIcon gapRight />}
+                      messages={{
+                        submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+                        submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+                        success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+                      }}
+                    />
+                    <Button variant="danger" onClick={this.toggleMultiAwardMode}>
+                      <BanIcon gapRight />
+                      <FormattedMessage id="generic.cancel" defaultMessage="Cancel" />
+                    </Button>
+                  </TheButtonGroup>
+                </div>
+              </>
+            ) : (
+              <div className="text-center">
+                <Button variant="primary" onClick={this.toggleMultiAwardMode}>
+                  <Icon gapRight icon={['far', 'check-square']} />
+                  <FormattedMessage
+                    id="app.shadowAssignmentPointsTable.multiAwardButton"
+                    defaultMessage="Award Points Collectively"
+                  />
+                </Button>
+              </div>
+            )
+          ) : null
+        }>
         <>
-          <Table responsive hover>
+          <Table responsive hover className="mb-1">
             <thead>
               <tr>
+                {this.state.multiAwardMode && <th />}
                 <th>
                   <FormattedMessage id="app.shadowAssignmentPointsTable.user" defaultMessage="User" />
                 </th>
@@ -91,6 +174,13 @@ class ShadowAssignmentPointsTable extends Component {
                 const awardedAt = safeGet(studentPoints, [student.id, 'awardedAt'], null);
                 return (
                   <tr key={student.id}>
+                    {this.state.multiAwardMode && (
+                      <td className="shrink-col">
+                        {points === null && permissionHints.createPoints && (
+                          <Field name={`students.${student.id}`} component={SimpleCheckboxField} />
+                        )}
+                      </td>
+                    )}
                     <td className="text-nowrap">
                       <UsersNameContainer
                         userId={student.id}
@@ -101,9 +191,9 @@ class ShadowAssignmentPointsTable extends Component {
                     <td className="text-center text-nowrap">{points !== null ? points : <span>&mdash;</span>}</td>
                     <td>{awardedAt && <DateTime unixts={awardedAt} showRelative />}</td>
                     <td>{safeGet(studentPoints, [student.id, 'note'], null)}</td>
-                    {points === null ? (
-                      <td className="shrink-col text-nowrap text-right">
-                        {permissionHints.createPoints && (
+                    <td className="shrink-col text-nowrap text-right">
+                      {points === null ? (
+                        permissionHints.createPoints && (
                           <Button variant="success" onClick={() => this.openDialog(student.id)} size="xs">
                             <Icon gapRight icon={['far', 'star']} />
                             <FormattedMessage
@@ -111,10 +201,8 @@ class ShadowAssignmentPointsTable extends Component {
                               defaultMessage="Award Points"
                             />
                           </Button>
-                        )}
-                      </td>
-                    ) : (
-                      <td className="shrink-col text-nowrap text-right">
+                        )
+                      ) : (
                         <TheButtonGroup>
                           {permissionHints.updatePoints && (
                             <Button variant="warning" onClick={() => this.openDialog(student.id, pointsId)} size="xs">
@@ -143,8 +231,8 @@ class ShadowAssignmentPointsTable extends Component {
                             </Confirm>
                           )}
                         </TheButtonGroup>
-                      </td>
-                    )}
+                      )}
+                    </td>
                   </tr>
                 );
               })}
@@ -187,8 +275,41 @@ ShadowAssignmentPointsTable.propTypes = {
   maxPoints: PropTypes.number.isRequired,
   setPoints: PropTypes.func.isRequired,
   removePoints: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  submitFailed: PropTypes.bool,
+  dirty: PropTypes.bool,
+  submitSucceeded: PropTypes.bool,
+  submitting: PropTypes.bool,
+  invalid: PropTypes.bool,
+  warning: PropTypes.any,
   intl: PropTypes.object.isRequired,
   links: PropTypes.object,
 };
 
-export default withLinks(injectIntl(ShadowAssignmentPointsTable));
+const warn = ({ points }, { maxPoints }) => {
+  const warnings = {};
+
+  if (maxPoints > 0) {
+    if (points > maxPoints || points < 0) {
+      warnings._warning = (
+        <FormattedMessage
+          id="app.editShadowAssignmentPointsForm.validation.pointsOutOfRange"
+          defaultMessage="Points are out of regular range. Regular score for this assignment is between 0 and {maxPoints}."
+          values={{ maxPoints }}
+        />
+      );
+    }
+  }
+
+  return warnings;
+};
+
+export default withLinks(
+  reduxForm({
+    form: 'multi-assign-form',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+    warn,
+  })(injectIntl(ShadowAssignmentPointsTable))
+);
