@@ -79,12 +79,10 @@ class Login extends Component {
     } = this.props;
     return login(credentials)
       .then(this.redirectAfterLogin)
-      .catch(e =>
+      .catch(error => {
         // Translate fetch response error into form error message...
-        e.json().then(body => {
-          throw new SubmissionError({ _error: getErrorMessage(formatMessage)(body && body.error) });
-        })
-      );
+        throw new SubmissionError({ _error: getErrorMessage(formatMessage)(error) });
+      });
   };
 
   render() {
