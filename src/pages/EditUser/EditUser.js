@@ -75,11 +75,9 @@ class EditUser extends Component {
 
   updateProfile(data, changeNames) {
     const { updateProfile } = this.props;
-    if (!changeNames) {
-      delete data.firstName;
-      delete data.lastName;
-    }
-    return updateProfile(data);
+    const { titlesBeforeName, firstName, lastName, titlesAfterName, ...restData } = data;
+    const transformedData = changeNames ? data : restData;
+    return updateProfile(transformedData);
   }
 
   setRole = ({ role }) => {

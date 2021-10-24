@@ -556,6 +556,7 @@
   "app.editUser.isEmailAlreadyVefiried": "Pokud jste právě ověřili vaši adresu a stále vidíte tuto hlášku, prosím občerstvěte stránku.",
   "app.editUser.makeLocal": "Vytvořit lokální účet",
   "app.editUser.title": "Upravit uživatelský profil",
+  "app.editUserProfile.disabledNameExplanation": "Položky související se jménem není možné měnit, protože tento účet je spravován externí autoritou.",
   "app.editUserProfile.emptyLocalPassword": "Lokální účet nemá nastavené heslo.",
   "app.editUserProfile.emptyLocalPasswordExplain": "Nebudete se moci přihlásit do ReCodExu pomocí lokálního účtu, dokud si nenastavíte heslo.",
   "app.editUserProfile.firstName": "Jméno:",
