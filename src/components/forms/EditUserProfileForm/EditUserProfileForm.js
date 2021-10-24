@@ -7,6 +7,7 @@ import isEmail from 'validator/lib/isEmail';
 import FormBox from '../../widgets/FormBox';
 import Callout from '../../widgets/Callout';
 import SubmitButton from '../SubmitButton';
+import Explanation from '../../widgets/Explanation';
 import { SaveIcon } from '../../icons';
 import { validateRegistrationData } from '../../../redux/modules/users';
 import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
@@ -61,7 +62,20 @@ const EditUserProfileForm = ({
       component={TextField}
       maxLength={42}
       required
-      label={<FormattedMessage id="app.editUserProfile.titlesBeforeName" defaultMessage="Prefix Title:" />}
+      disabled={disabledNameChange}
+      label={
+        <>
+          <FormattedMessage id="app.editUserProfile.titlesBeforeName" defaultMessage="Prefix Title:" />
+          {disabledNameChange && (
+            <Explanation id="titles-before-disabled">
+              <FormattedMessage
+                id="app.editUserProfile.disabledNameExplanation"
+                defaultMessage="The name-related fields are disabled since this account was created and is managed by an external provider."
+              />
+            </Explanation>
+          )}
+        </>
+      }
     />
 
     <Field
@@ -70,7 +84,19 @@ const EditUserProfileForm = ({
       maxLength={100}
       required
       disabled={disabledNameChange}
-      label={<FormattedMessage id="app.editUserProfile.firstName" defaultMessage="Given Name:" />}
+      label={
+        <>
+          <FormattedMessage id="app.editUserProfile.firstName" defaultMessage="Given Name:" />
+          {disabledNameChange && (
+            <Explanation id="titles-before-disabled">
+              <FormattedMessage
+                id="app.editUserProfile.disabledNameExplanation"
+                defaultMessage="The name-related fields are disabled since this account was created and is managed by an external provider."
+              />
+            </Explanation>
+          )}
+        </>
+      }
     />
 
     <Field
@@ -79,7 +105,19 @@ const EditUserProfileForm = ({
       maxLength={255}
       required
       disabled={disabledNameChange}
-      label={<FormattedMessage id="app.editUserProfile.lastName" defaultMessage="Surname:" />}
+      label={
+        <>
+          <FormattedMessage id="app.editUserProfile.lastName" defaultMessage="Surname:" />
+          {disabledNameChange && (
+            <Explanation id="titles-before-disabled">
+              <FormattedMessage
+                id="app.editUserProfile.disabledNameExplanation"
+                defaultMessage="The name-related fields are disabled since this account was created and is managed by an external provider."
+              />
+            </Explanation>
+          )}
+        </>
+      }
     />
 
     <Field
@@ -87,7 +125,20 @@ const EditUserProfileForm = ({
       component={TextField}
       maxLength={42}
       required
-      label={<FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />}
+      disabled={disabledNameChange}
+      label={
+        <>
+          <FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />
+          {disabledNameChange && (
+            <Explanation id="titles-before-disabled">
+              <FormattedMessage
+                id="app.editUserProfile.disabledNameExplanation"
+                defaultMessage="The name-related fields are disabled since this account was created and is managed by an external provider."
+              />
+            </Explanation>
+          )}
+        </>
+      }
     />
 
     <Field

@@ -556,6 +556,7 @@
   "app.editUser.isEmailAlreadyVefiried": "If you have just verified your email and still see the message, please refresh the page.",
   "app.editUser.makeLocal": "Create local account",
   "app.editUser.title": "Edit User's Profile",
+  "app.editUserProfile.disabledNameExplanation": "The name-related fields are disabled since this account was created and is managed by an external provider.",
   "app.editUserProfile.emptyLocalPassword": "Local account does not have a password.",
   "app.editUserProfile.emptyLocalPasswordExplain": "You may not sign in to ReCodEx using local account until you set the password.",
   "app.editUserProfile.firstName": "Given Name:",
