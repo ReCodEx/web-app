@@ -46,7 +46,7 @@ const transformAndSetFilterData = defaultMemoize(
       if (rootGroup) {
         data.groupsIds = [rootGroup];
       }
-      if (tags.length > 0) {
+      if (tags && tags.length > 0) {
         data.tags = tags;
       }
 

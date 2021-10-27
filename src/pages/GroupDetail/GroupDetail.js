@@ -399,6 +399,7 @@ class GroupDetail extends Component {
                       isOpen
                       unlimitedHeight>
                       <ExercisesListContainer
+                        key={data.id /* this will force component reload if group is switched */}
                         id={`exercises-group-${data.id}`}
                         rootGroup={data.id}
                         showAssignButton={
