@@ -6,10 +6,9 @@ import { formValueSelector } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
-import GroupTree from '../../components/Groups/GroupTree';
+import GroupsTreeContainer from '../../containers/GroupsTreeContainer';
 import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
 import LicencesTableContainer from '../../containers/LicencesTableContainer';
@@ -20,37 +19,34 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 
-import { fetchUser } from '../../redux/modules/users';
+import { fetchUser, fetchByIds } from '../../redux/modules/users';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
 import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances';
 import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
-import { notArchivedGroupsSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
+import { fetchManyGroupsStatus, getGroupsAdmins } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin, getUser } from '../../redux/selectors/users';
 import { transformLocalizedTextsFormData, getLocalizedName } from '../../helpers/localizedData';
-import { resourceStatus } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../helpers/withLinks';
 import InstanceInfoTable from '../../components/Instances/InstanceDetail/InstanceInfoTable';
 
-const anyGroupVisible = defaultMemoize(groups =>
-  Boolean(groups.size > 0 && groups.find(group => group.getIn(['data', 'permissionHints', 'viewDetail'])))
-);
-
 class Instance extends Component {
-  static loadAsync = ({ instanceId, fetchGroupsStatus = null }, dispatch) => {
-    const promises = [dispatch(fetchInstanceIfNeeded(instanceId))];
-    if (fetchGroupsStatus === resourceStatus.FAILED) {
-      promises.push(dispatch(fetchAllGroups()));
-    }
-    return Promise.all(promises);
-  };
+  static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
 
-  componentDidMount = () => this.props.loadAsync(this.props.fetchGroupsStatus);
+  static loadAsync = ({ instanceId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchInstanceIfNeeded(instanceId)),
+      dispatch(fetchAllGroups({ archived: true })).then(({ value: groups }) =>
+        dispatch(fetchByIds(getGroupsAdmins(groups)))
+      ),
+    ]);
+
+  componentDidMount = () => this.props.loadAsync();
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.instanceId !== prevProps.match.params.instanceId) {
-      this.props.loadAsync(this.props.fetchGroupsStatus);
+      this.props.loadAsync();
     }
   }
 
@@ -63,7 +59,6 @@ class Instance extends Component {
       user,
       refreshUser,
       instance,
-      groups,
       fetchGroupsStatus,
       createGroup,
       isAdmin,
@@ -128,16 +123,7 @@ class Instance extends Component {
                   <div>
                     {data.rootGroupId !== null && (
                       <FetchManyResourceRenderer fetchManyStatus={fetchGroupsStatus}>
-                        {() =>
-                          anyGroupVisible(groups) ? (
-                            <GroupTree id={data.rootGroupId} isAdmin={isSuperAdmin || isAdmin} groups={groups} />
-                          ) : (
-                            <FormattedMessage
-                              id="app.instance.groups.noGroups"
-                              defaultMessage="There are no groups in this ReCodEx instance currently visible to you."
-                            />
-                          )
-                        }
+                        {() => <GroupsTreeContainer />}
                       </FetchManyResourceRenderer>
                     )}
 
@@ -183,7 +169,6 @@ Instance.propTypes = {
   userId: PropTypes.string.isRequired,
   user: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
-  groups: ImmutablePropTypes.map,
   fetchGroupsStatus: PropTypes.string,
   createGroup: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool.isRequired,
@@ -210,7 +195,6 @@ export default withLinks(
         userId,
         user: getUser(userId)(state),
         instance: instanceSelector(state, instanceId),
-        groups: notArchivedGroupsSelector(state),
         fetchGroupsStatus: fetchManyGroupsStatus(state),
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
@@ -238,7 +222,7 @@ export default withLinks(
               instanceId,
             })
           ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
-      loadAsync: fetchGroupsStatus => Instance.loadAsync({ instanceId, fetchGroupsStatus }, dispatch),
+      loadAsync: () => Instance.loadAsync({ instanceId }, dispatch),
       refreshUser: userId => dispatch(fetchUser(userId)),
     })
   )(injectIntl(Instance))

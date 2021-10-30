@@ -944,6 +944,7 @@
   "app.groups.joinGroupButton": "Join group",
   "app.groups.leaveGroupButton": "Leave group",
   "app.groups.removeFromGroup": "Remove from group",
+  "app.groupsTree.noGroups": "There are no groups currently visible to you.",
   "app.hardwareGroupMetadata.cpuTimeOverlay": "Precise (CPU) time limit constraints",
   "app.hardwareGroupMetadata.description": "Internal Description:",
   "app.hardwareGroupMetadata.id": "Internal Identifier:",

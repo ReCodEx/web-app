@@ -1,0 +1,17 @@
+ul.groupTree.nav.flex-column > * {
+  border-bottom: 0 !important;
+}
+
+ul.groupTree.nav.flex-column ul.groupTree.nav.flex-column > * {
+  padding-left: 1.5rem;
+}
+
+ul.groupTree.nav.flex-column > li > span {
+  display: block;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+ul.groupTree.nav.flex-column > li > span:hover {
+  background-color: rgba(0,0,0,.075);
+}
