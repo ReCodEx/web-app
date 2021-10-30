@@ -944,6 +944,7 @@
   "app.groups.joinGroupButton": "Stát se členem",
   "app.groups.leaveGroupButton": "Opustit skupinu",
   "app.groups.removeFromGroup": "Odebrat ze skupiny",
+  "app.groupsTree.noGroups": "Nejsou zde žádné skupiny, na které by stačilo vaše oprávnění.",
   "app.hardwareGroupMetadata.cpuTimeOverlay": "Omezení přesného (CPU) časového limitu",
   "app.hardwareGroupMetadata.description": "Interní popis:",
   "app.hardwareGroupMetadata.id": "Interní identifikátor:",

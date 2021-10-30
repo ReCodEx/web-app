@@ -72,6 +72,13 @@ export const encodeNumId = id => {
  */
 
 /**
+ * Check whether given value is a regular object, but not array nor null.
+ * @param {*} obj value to be tested
+ * @returns {boolean}
+ */
+export const isRegularObject = obj => typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
+
+/**
  * Check whether given object is an empty object {}.
  * @param {*} obj
  */

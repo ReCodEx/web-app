@@ -34,6 +34,8 @@ import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnviro
 import { fetchReferenceSolutions, deleteReferenceSolution } from '../../redux/modules/referenceSolutions';
 import { init, submitReferenceSolution, presubmitReferenceSolution } from '../../redux/modules/submission';
 import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
+import { fetchAllGroups } from '../../redux/modules/groups';
+import { fetchByIds } from '../../redux/modules/users';
 import {
   exerciseSelector,
   exerciseForkedFromSelector,
@@ -42,9 +44,8 @@ import {
 } from '../../redux/selectors/exercises';
 import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
 
-import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
-import { instanceSelector } from '../../redux/selectors/instances';
-import { notArchivedGroupsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { notArchivedGroupsSelector, groupDataAccessorSelector, getGroupsAdmins } from '../../redux/selectors/groups';
 
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
@@ -63,10 +64,15 @@ export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
 class Exercise extends Component {
   state = { forkId: Math.random().toString() };
 
+  static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
+
   static loadAsync = ({ exerciseId }, dispatch, { userId }) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
         ({ value: data }) => data && data.forkedFrom && dispatch(fetchExerciseIfNeeded(data.forkedFrom))
+      ),
+      dispatch(fetchAllGroups({ archived: true })).then(({ value: groups }) =>
+        dispatch(fetchByIds(getGroupsAdmins(groups)))
       ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
@@ -93,7 +99,6 @@ class Exercise extends Component {
   render() {
     const {
       userId,
-      instance,
       exercise,
       forkedFrom,
       runtimeEnvironments,
@@ -162,20 +167,14 @@ class Exercise extends Component {
               <Col xl={6}>
                 <ExerciseDetail {...exercise} forkedFrom={forkedFrom} locale={locale} className="d-none d-xl-flex" />
 
-                <ResourceRenderer resource={instance}>
-                  {instance => (
-                    <ExerciseGroups
-                      showButtons={hasPermissions(exercise, 'update')}
-                      groupsIds={exercise.groupsIds}
-                      rootGroupId={instance.rootGroupId}
-                      attachingGroupId={attachingGroupId}
-                      detachingGroupId={detachingGroupId}
-                      attachExerciseToGroup={attachExerciseToGroup}
-                      detachExerciseFromGroup={detachExerciseFromGroup}
-                      groups={groups}
-                    />
-                  )}
-                </ResourceRenderer>
+                <ExerciseGroups
+                  showButtons={hasPermissions(exercise, 'update')}
+                  groupsIds={exercise.groupsIds}
+                  attachingGroupId={attachingGroupId}
+                  detachingGroupId={detachingGroupId}
+                  attachExerciseToGroup={attachExerciseToGroup}
+                  detachExerciseFromGroup={detachExerciseFromGroup}
+                />
 
                 <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
                   {runtimes => (
@@ -278,7 +277,6 @@ class Exercise extends Component {
 
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
-  instance: ImmutablePropTypes.map,
   match: PropTypes.shape({
     params: PropTypes.shape({
       exerciseId: PropTypes.string.isRequired,
@@ -315,10 +313,8 @@ export default withLinks(
       }
     ) => {
       const userId = loggedInUserIdSelector(state);
-      const instanceId = selectedInstanceId(state);
       return {
         userId,
-        instance: instanceSelector(state, instanceId),
         exercise: exerciseSelector(exerciseId)(state),
         forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),

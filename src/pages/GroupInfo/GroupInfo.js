@@ -39,7 +39,7 @@ import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import GroupTree from '../../components/Groups/GroupTree/GroupTree';
+import GroupsTreeContainer from '../../containers/GroupsTreeContainer';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 import { BanIcon, GroupIcon } from '../../components/icons';
@@ -227,16 +227,11 @@ class GroupInfo extends Component {
                     title={<FormattedMessage id="app.groupDetail.subgroups" defaultMessage="Subgroups Hierarchy" />}
                     unlimitedHeight
                     extraPadding>
-                    <GroupTree
-                      id={data.id}
-                      currentGroupId={data.id}
-                      deletable={false}
-                      isAdmin={isAdmin}
-                      isPublic={data.public}
-                      isOpen
-                      groups={groups}
-                      level={1}
-                      ancestralPath={data.parentGroupsIds.slice(1)}
+                    <GroupsTreeContainer
+                      selectedGroupId={data.id}
+                      showArchived={data.archived}
+                      isExpanded
+                      autoloadAuthors
                     />
                   </Box>
                 )}

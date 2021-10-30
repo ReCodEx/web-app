@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table, Modal } from 'react-bootstrap';
 
@@ -8,7 +7,7 @@ import Box from '../../widgets/Box';
 import Icon, { GroupIcon, LoadingIcon } from '../../icons';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import Button from '../../widgets/TheButton';
-import GroupTree from '../../Groups/GroupTree';
+import GroupsTreeContainer from '../../../containers/GroupsTreeContainer';
 import { arrayToObject, identity } from '../../../helpers/common';
 
 class ExerciseGroups extends Component {
@@ -52,12 +51,12 @@ class ExerciseGroups extends Component {
     );
   };
 
-  buttonsCreator = attachedGroupsIds => groupId => {
-    return <span>{attachedGroupsIds[groupId] ? this.detachButton(groupId) : this.attachButton(groupId)}</span>;
+  buttonsCreator = attachedGroupsIds => group => {
+    return <span>{attachedGroupsIds[group.id] ? this.detachButton(group.id) : this.attachButton(group.id)}</span>;
   };
 
   render() {
-    const { groupsIds = [], rootGroupId, groups, showButtons = false } = this.props;
+    const { groupsIds = [], showButtons = false } = this.props;
     return (
       <Box
         title={<FormattedMessage id="app.exercise.groups" defaultMessage="Groups of Residence" />}
@@ -100,9 +99,7 @@ class ExerciseGroups extends Component {
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <GroupTree
-                  id={rootGroupId}
-                  groups={groups}
+                <GroupsTreeContainer
                   onlyEditable
                   buttonsCreator={this.buttonsCreator(arrayToObject(groupsIds, identity, () => true))}
                 />
@@ -122,8 +119,6 @@ ExerciseGroups.propTypes = {
   detachingGroupId: PropTypes.string,
   attachExerciseToGroup: PropTypes.func.isRequired,
   detachExerciseFromGroup: PropTypes.func.isRequired,
-  rootGroupId: PropTypes.string.isRequired,
-  groups: ImmutablePropTypes.map,
 };
 
 export default ExerciseGroups;

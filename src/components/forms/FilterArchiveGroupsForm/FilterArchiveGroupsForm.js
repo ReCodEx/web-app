@@ -39,7 +39,7 @@ const FilterArchiveGroupsForm = ({
               }
             />
           </Col>
-          <Col sm={12} md={6} style={{ marginTop: '28px' }}>
+          <Col sm={12} md={6} className="align-self-end">
             <Field
               name="showAll"
               component={CheckboxField}
@@ -55,21 +55,19 @@ const FilterArchiveGroupsForm = ({
               }
             />
           </Col>
-          <Col sm={12} md={2}>
-            <div className="text-right" style={{ marginTop: '25px' }}>
-              <SubmitButton
-                id="setFilters"
-                handleSubmit={handleSubmit}
-                hasSucceeded={submitSucceeded}
-                hasFailed={submitFailed}
-                invalid={invalid}
-                dirty={dirty}
-                messages={{
-                  submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
-                  success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
-                }}
-              />
-            </div>
+          <Col sm={12} md={2} className="text-right align-self-center">
+            <SubmitButton
+              id="setFilters"
+              handleSubmit={handleSubmit}
+              hasSucceeded={submitSucceeded}
+              hasFailed={submitFailed}
+              invalid={invalid}
+              dirty={dirty}
+              messages={{
+                submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
+              }}
+            />
           </Col>
         </Row>
       </Container>

@@ -147,3 +147,14 @@ export const groupsUserIsMemberSelector = createSelector(
   [notArchivedGroupsSelector, getParam, getLang],
   groupsUserIsMember
 );
+
+/**
+ * Helper selector-related function that extracts unique admin IDs form given groups
+ * @param {Array} groups as JS objects
+ * @returns {String[]} unique user IDs
+ */
+export const getGroupsAdmins = groups => {
+  const ids = new Set(); // set ensures each id is represented once
+  groups.forEach(group => group && group.primaryAdminsIds && group.primaryAdminsIds.forEach(id => ids.add(id)));
+  return Array.from(ids);
+};
