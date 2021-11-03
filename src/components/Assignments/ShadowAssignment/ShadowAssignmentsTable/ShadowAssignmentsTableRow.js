@@ -21,7 +21,7 @@ const getUserPointsNote = defaultMemoize((points, userId) =>
 );
 
 const ShadowAssignmentsTableRow = ({
-  item: { id, localizedTexts, createdAt, isBonus, isPublic, maxPoints, points, permissionHints },
+  item: { id, localizedTexts, createdAt, deadline, isBonus, isPublic, maxPoints, points, permissionHints },
   userId,
   isAdmin,
   links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
@@ -48,6 +48,10 @@ const ShadowAssignmentsTableRow = ({
 
     <td className="text-nowrap">
       <DateTime unixts={createdAt} />
+    </td>
+
+    <td className="text-nowrap">
+      <DateTime unixts={deadline} isDeadline />
     </td>
 
     <td className="text-center">
@@ -86,6 +90,7 @@ ShadowAssignmentsTableRow.propTypes = {
     id: PropTypes.string,
     localizedTexts: PropTypes.array,
     createdAt: PropTypes.number,
+    deadline: PropTypes.number,
     isBonus: PropTypes.bool,
     isPublic: PropTypes.bool,
     maxPoints: PropTypes.number,

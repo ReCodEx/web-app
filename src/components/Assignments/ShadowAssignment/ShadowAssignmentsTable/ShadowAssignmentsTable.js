@@ -28,6 +28,9 @@ const ShadowAssignmentsTable = ({
           <th>
             <FormattedMessage id="generic.created" defaultMessage="Created" />
           </th>
+          <th>
+            <FormattedMessage id="app.assignments.deadline" defaultMessage="Deadline" />
+          </th>
 
           <th className="text-center text-nowrap">
             {!isAdmin ? (
@@ -61,7 +64,7 @@ const ShadowAssignmentsTable = ({
 
       {shadowAssignments.some(isLoading) && (
         <tr>
-          <td className="text-center em-padding" colSpan={isAdmin ? 4 : 3}>
+          <td className="text-center em-padding" colSpan={isAdmin ? 5 : 4}>
             <LoadingIcon gapRight />
             <FormattedMessage id="app.shadowAssignmentsTable.loading" defaultMessage="Loading shadow assignments..." />
           </td>

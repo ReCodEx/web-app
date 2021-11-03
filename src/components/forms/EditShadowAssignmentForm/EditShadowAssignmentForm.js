@@ -7,9 +7,10 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { SaveIcon } from '../../icons';
-import { CheckboxField, NumericTextField } from '../Fields';
+import { CheckboxField, NumericTextField, DatetimeField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
+import Explanation from '../../widgets/Explanation';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
 import { safeGet } from '../../../helpers/common';
@@ -74,17 +75,50 @@ const EditShadowAssignmentForm = ({
 
       <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="shadowAssignment" />
 
-      <NumericTextField
-        name="maxPoints"
-        validateMin={0}
-        validateMax={10000}
-        maxLength={5}
-        label={
-          <FormattedMessage id="app.editShadowAssignmentForm.maxPoints" defaultMessage="Maximal amount of points:" />
-        }
-      />
-
       <Container fluid>
+        <Row>
+          <Col sm={6}>
+            <Field
+              name="deadline"
+              component={DatetimeField}
+              label={
+                <>
+                  <FormattedMessage id="app.assignment.deadline" defaultMessage="Deadline" />:
+                  <Explanation id="deadlineExplanation">
+                    <FormattedMessage
+                      id="app.editShadowAssignmentForm.deadlineExplanation"
+                      defaultMessage="The deadline has only informative value for the students. It will not affect the assigned points as the points are awarded manually by the supervisor. If you do not wish to set a deadline, leave this field empty."
+                    />
+                  </Explanation>
+                </>
+              }
+            />
+          </Col>
+
+          <Col sm={6}>
+            <NumericTextField
+              name="maxPoints"
+              validateMin={0}
+              validateMax={10000}
+              maxLength={5}
+              label={
+                <>
+                  <FormattedMessage
+                    id="app.editShadowAssignmentForm.maxPoints"
+                    defaultMessage="Maximal amount of points:"
+                  />
+                  <Explanation id="pointsExplanation">
+                    <FormattedMessage
+                      id="app.editShadowAssignmentForm.pointsExplanation"
+                      defaultMessage="The maximal amount of points has only informative value for the students. The supervisor may choose to exceed this limit when awarding points."
+                    />
+                  </Explanation>
+                </>
+              }
+            />
+          </Col>
+        </Row>
+
         <Row>
           <Col sm={6}>
             <Field
