@@ -91,6 +91,7 @@ class ShadowAssignmentPointsTable extends Component {
                         maxLength={6}
                         validateMin={-10000}
                         validateMax={10000}
+                        ignoreDirty
                         label={
                           <FormattedMessage id="app.editShadowAssignmentPointsForm.points" defaultMessage="Points:" />
                         }
@@ -102,13 +103,20 @@ class ShadowAssignmentPointsTable extends Component {
                         name="note"
                         component={TextField}
                         maxLength={1024}
+                        ignoreDirty
                         label={<FormattedMessage id="app.editShadowAssignmentPointsForm.note" defaultMessage="Note:" />}
                       />
                     </Col>
                   </Row>
-                </Container>
 
-                {warning && <Callout variant="warning">{warning}</Callout>}
+                  {warning && (
+                    <Row>
+                      <Col xl={12}>
+                        <Callout variant="warning">{warning}</Callout>
+                      </Col>
+                    </Row>
+                  )}
+                </Container>
 
                 <div className="text-center text-nowrap mb-1">
                   <TheButtonGroup>

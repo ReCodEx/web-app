@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import { defaultMemoize } from 'reselect';
+import moment from 'moment';
 
 import Page from '../../components/layout/Page';
 import { ShadowAssignmentNavigation } from '../../components/layout/Navigation';
@@ -25,7 +26,7 @@ import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { hasPermissions } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
-const localizedTextDefaults = {
+const LOCALIZED_TEXT_DEFAULTS = {
   name: '',
   text: '',
   link: '',
@@ -47,12 +48,13 @@ class EditShadowAssignment extends Component {
 
   static loadAsync = ({ shadowId }, dispatch) => dispatch(fetchShadowAssignment(shadowId));
 
-  getInitialValues = defaultMemoize(({ localizedTexts, isPublic, isBonus, maxPoints }) => ({
+  getInitialValues = defaultMemoize(({ localizedTexts, isPublic, isBonus, maxPoints, deadline }) => ({
     sendNotification: true,
     isPublic,
     isBonus,
     maxPoints,
-    localizedTexts: getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
+    deadline: deadline ? moment.unix(deadline) : null,
+    localizedTexts: getLocalizedTextsInitialValues(localizedTexts, LOCALIZED_TEXT_DEFAULTS),
   }));
 
   editShadowAssignmentSubmitHandler = formData => {
@@ -76,9 +78,10 @@ class EditShadowAssignment extends Component {
       })
       .then(() => {
         // prepare the data and submit them
-        const { localizedTexts, ...data } = formData;
+        const { localizedTexts, deadline, ...data } = formData;
         return editShadowAssignment({
           ...data,
+          deadline: deadline ? moment(deadline).unix() : null,
           localizedTexts: transformLocalizedTextsFormData(formData.localizedTexts),
           version,
         });
@@ -197,9 +200,7 @@ export default connect(
   ) => ({
     reset: () => dispatch(reset('editShadowAssignment')),
     loadAsync: () => EditShadowAssignment.loadAsync({ shadowId }, dispatch),
-    editShadowAssignment: data => {
-      return dispatch(editShadowAssignment(shadowId, data));
-    },
+    editShadowAssignment: data => dispatch(editShadowAssignment(shadowId, data)),
     validateShadowAssignment: version => dispatch(validateShadowAssignment(shadowId, version)),
   })
 )(withLinks(EditShadowAssignment));

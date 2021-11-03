@@ -2,12 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import Icon, { BonusIcon, VisibleIcon, SuccessOrFailureIcon } from '../../../icons';
+
+import Icon, { BonusIcon, VisibleIcon, SuccessOrFailureIcon, DeadlineIcon } from '../../../icons';
 import Box from '../../../widgets/Box';
+import Explanation from '../../../widgets/Explanation';
 import DateTime from '../../../widgets/DateTime';
 import Version from '../../../widgets/Version/Version';
 
-const ShadowAssignmentDetail = ({ maxPoints, isBonus, isPublic, createdAt, updatedAt, version, permissionHints }) => (
+const ShadowAssignmentDetail = ({
+  maxPoints,
+  isBonus,
+  isPublic,
+  createdAt,
+  deadline,
+  updatedAt,
+  version,
+  permissionHints,
+}) => (
   <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding>
     <Table responsive size="sm">
       <tbody>
@@ -17,6 +28,12 @@ const ShadowAssignmentDetail = ({ maxPoints, isBonus, isPublic, createdAt, updat
           </td>
           <th>
             <FormattedMessage id="app.shadowAssignment.maxPoints" defaultMessage="Points limit" />:
+            <Explanation id="pointsExplanation">
+              <FormattedMessage
+                id="app.editShadowAssignmentForm.pointsExplanation"
+                defaultMessage="The maximal amount of points has only informative value for the students. The supervisor may choose to exceed this limit when awarding points."
+              />
+            </Explanation>
           </th>
           <td>
             <FormattedNumber value={maxPoints} />
@@ -32,6 +49,24 @@ const ShadowAssignmentDetail = ({ maxPoints, isBonus, isPublic, createdAt, updat
           </th>
           <td>
             <DateTime unixts={createdAt} />
+          </td>
+        </tr>
+
+        <tr>
+          <td className="text-center text-muted shrink-col px-2">
+            <DeadlineIcon />
+          </td>
+          <th>
+            <FormattedMessage id="app.assignment.deadline" defaultMessage="Deadline" />:
+            <Explanation id="deadlineExplanation">
+              <FormattedMessage
+                id="app.shadowAssignment.deadlineExplanation"
+                defaultMessage="The deadline has only informative value for the students. The points are awarded manually, so the supervisor ultimately decides whether a deadline was breached or not."
+              />
+            </Explanation>
+          </th>
+          <td>
+            <DateTime unixts={deadline} isDeadline />
           </td>
         </tr>
 
@@ -82,6 +117,7 @@ ShadowAssignmentDetail.propTypes = {
   isBonus: PropTypes.bool,
   isPublic: PropTypes.bool,
   createdAt: PropTypes.number.isRequired,
+  deadline: PropTypes.number,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
   permissionHints: PropTypes.object,

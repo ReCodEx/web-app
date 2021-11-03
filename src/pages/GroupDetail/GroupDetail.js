@@ -240,7 +240,7 @@ class GroupDetail extends Component {
                               statuses={statuses}
                               stats={groupStats.find(item => item.userId === userId)}
                               userId={isGroupAdmin || isGroupSupervisor ? null : userId}
-                              isAdmin={isGroupAdmin || isGroupSupervisor}
+                              isAdmin={isGroupAdmin || isGroupSupervisor || isSuperadminRole(effectiveRole)}
                             />
                           )}
                         </ResourceRenderer>
@@ -276,7 +276,7 @@ class GroupDetail extends Component {
                         }>
                         <ShadowAssignmentsTable
                           shadowAssignments={shadowAssignments}
-                          isAdmin={isGroupAdmin || isGroupSupervisor}
+                          isAdmin={isGroupAdmin || isGroupSupervisor || isSuperadminRole(effectiveRole)}
                           userId={userId}
                         />
                       </Box>
