@@ -163,7 +163,7 @@ class AssignmentsTable extends Component {
                     {this.state.showAll ? (
                       <FormattedMessage
                         id="app.assignments.hidePastAssignments"
-                        defaultMessage="Total {count} {count, plural, one {assignment} other {assignments}} of which the {count, plural, one {deadline has} other {deadlines have}} passed. <a>Hide old assignments.</a>"
+                        defaultMessage="Total {count} {count, plural, one {assignment} other {assignments}} {count, plural, one {is past its} other {are past their}} deadline. <a>Hide old assignments.</a>"
                         values={{
                           count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
                           a: content => (
@@ -176,7 +176,7 @@ class AssignmentsTable extends Component {
                     ) : (
                       <FormattedMessage
                         id="app.assignments.showHiddenPastAssignments"
-                        defaultMessage="There {count, plural, one {is} other {are}} {count} hidden {count, plural, one {assignment} other {assignments}} of which the {count, plural, one {deadline has} other {deadlines have}} passed. <a>Show all.</a>"
+                        defaultMessage="There are {count} hidden {count, plural, one {assignment} other {assignments}} which {count, plural, one {is past its} other {are past their}} deadline. <a>Show all.</a>"
                         values={{
                           count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
                           a: content => (
