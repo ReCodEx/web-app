@@ -349,12 +349,6 @@ class EditAssignmentForm extends Component {
       />
     ) : (
       <>
-        {submitFailed && (
-          <Callout variant="danger">
-            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Callout>
-        )}
-
         {groupsAccessor && (
           <AssignmentFormGroupsList
             groups={
@@ -830,6 +824,13 @@ class EditAssignmentForm extends Component {
             defaultIcon={<SaveIcon gapRight />}
             messages={submitButtonMessages}
           />
+
+          {submitFailed && (
+            <span className="ml-4 text-danger">
+              <WarningIcon gapRight />
+              <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
+            </span>
+          )}
         </div>
       </>
     );
