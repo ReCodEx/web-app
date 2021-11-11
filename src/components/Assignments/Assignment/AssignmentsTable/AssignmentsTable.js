@@ -176,7 +176,7 @@ class AssignmentsTable extends Component {
                     ) : (
                       <FormattedMessage
                         id="app.assignments.showHiddenPastAssignments"
-                        defaultMessage="There are {count} hidden {count, plural, one {assignment} other {assignments}} which {count, plural, one {is past its} other {are past their}} deadline. <a>Show all.</a>"
+                        defaultMessage="There {count, plural, one {is} other {are}} {count} hidden {count, plural, one {assignment} other {assignments}} which {count, plural, one {is past its} other {are past their}} deadline. <a>Show all.</a>"
                         values={{
                           count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
                           a: content => (
