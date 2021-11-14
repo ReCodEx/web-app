@@ -167,7 +167,7 @@ class ExerciseAssignments extends Component {
               </Row>
             )}
 
-            {!exercise.isBroken && hasPermissions(exercise, 'viewDetail') && (
+            {!exercise.isBroken && hasPermissions(exercise, 'assign') && (
               <Row>
                 <Col sm={12}>
                   {exercise.isLocked && (
