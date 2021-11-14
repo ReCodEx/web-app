@@ -123,7 +123,7 @@ const ExercisesListItem = ({
 
     <td className="text-right text-nowrap">
       <TheButtonGroup>
-        {showAssignButton && assignExercise && (
+        {showAssignButton && assignExercise && permissionHints.assign && (
           <AssignExerciseButton
             id={id}
             isLocked={isLocked}

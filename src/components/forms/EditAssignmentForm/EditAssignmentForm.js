@@ -22,7 +22,7 @@ import {
   validateLocalizedTextsFormData,
   transformLocalizedTextsFormData,
 } from '../../../helpers/localizedData';
-import { safeGet, safeSet, EMPTY_ARRAY } from '../../../helpers/common';
+import { safeGet, safeSet, EMPTY_ARRAY, hasPermissions } from '../../../helpers/common';
 import DeadlinesGraphDialog from './DeadlinesGraphDialog';
 
 const localizedTextDefaults = {
@@ -245,7 +245,7 @@ const SUBMIT_BUTTON_MESSAGES_DEFAULT = {
 const getAllGroups = defaultMemoize((groups, groupsAccessor, locale) =>
   groups && groupsAccessor
     ? groups
-        .filter(g => !g.organizational && !g.archived)
+        .filter(g => !g.organizational && !g.archived && hasPermissions(g, 'assignExercise'))
         .sort((a, b) =>
           getGroupCanonicalLocalizedName(a, groupsAccessor, locale).localeCompare(
             getGroupCanonicalLocalizedName(b, groupsAccessor, locale),
