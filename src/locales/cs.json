@@ -1040,7 +1040,7 @@
   "app.membersList.addAsAdmin": "Přidat jako administrátora",
   "app.membersList.addAsObserver": "Přidat jako pozorovatele",
   "app.membersList.addAsSupervisor": "Přidat jako vedoucího",
-  "app.membersList.adminPopover.description": "Administrátor má práva dělat téměř cokoli se skupinou a souvisejícími entitami včetně správy ostatních vecoucích. Administrátoři se také zobrazují ve výpisech skupin. Administrátorská oprávnění se navíc tranzitivně dědí na všechny podskupiny.",
+  "app.membersList.adminPopover.description": "Administrátor má práva dělat téměř cokoli se skupinou a souvisejícími entitami včetně správy ostatních vedoucích. Administrátoři se také zobrazují ve výpisech skupin. Administrátorská oprávnění se navíc tranzitivně dědí na všechny podskupiny.",
   "app.membersList.adminPopover.title": "Administrátor",
   "app.membersList.alreadyMember": "Tento uživatel je již členem skupiny",
   "app.membersList.changeToAdmin": "Změnit na administrátora",
