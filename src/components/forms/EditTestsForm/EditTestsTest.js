@@ -22,35 +22,35 @@ const EditTestsTest = ({ fields, calculator, testValues, usedTests, addNewTest, 
 
   return (
     <div>
-      {fields.length > 0 ? (
-        <Table>
-          <thead>
-            <tr>
+      <Table>
+        <thead>
+          <tr>
+            <th>
+              <FormattedMessage id="app.editTestsTest.name" defaultMessage="Test name:" />
+            </th>
+            {calculator === WEIGHTED_ID && (
               <th>
-                <FormattedMessage id="app.editTestsTest.name" defaultMessage="Test name:" />
+                <FormattedMessage id="app.editTestsTest.weight" defaultMessage="Test weight:" />
               </th>
-              {calculator === WEIGHTED_ID && (
-                <th>
-                  <FormattedMessage id="app.editTestsTest.weight" defaultMessage="Test weight:" />
-                </th>
-              )}
-              {calculator !== UNIVERSAL_ID && (
-                <th>
-                  <FormattedMessage id="app.editTestsTest.pointsPercentage" defaultMessage="Points Percentage:" />
-                </th>
-              )}
-              {!readOnly && addNewTest && (
-                <th className="valign-middle text-right">
-                  {fields.length < 99 && (
-                    <Button onClick={addNewTest} variant="primary" size="xs">
-                      <AddIcon gapRight />
-                      <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
-                    </Button>
-                  )}
-                </th>
-              )}
-            </tr>
-          </thead>
+            )}
+            {calculator !== UNIVERSAL_ID && (
+              <th>
+                <FormattedMessage id="app.editTestsTest.pointsPercentage" defaultMessage="Points Percentage:" />
+              </th>
+            )}
+            {!readOnly && addNewTest && (
+              <th className="valign-middle text-right">
+                {fields.length < 99 && (
+                  <Button onClick={addNewTest} variant="primary" size="xs">
+                    <AddIcon gapRight />
+                    <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
+                  </Button>
+                )}
+              </th>
+            )}
+          </tr>
+        </thead>
+        {fields.length > 0 ? (
           <tbody>
             {fields.map((test, index) => (
               <EditTestsTestRow
@@ -64,15 +64,21 @@ const EditTestsTest = ({ fields, calculator, testValues, usedTests, addNewTest, 
               />
             ))}
           </tbody>
-        </Table>
-      ) : (
-        <Callout variant="warning">
-          <FormattedMessage
-            id="app.editTestsTest.noTests"
-            defaultMessage="There are no tests yet. It is highly recommended to set up the tests first since most of the remaining configurations depends on them."
-          />
-        </Callout>
-      )}
+        ) : (
+          <tbody>
+            <tr>
+              <td colSpan={4} className="px-0 pb-0">
+                <Callout variant="warning">
+                  <FormattedMessage
+                    id="app.editTestsTest.noTests"
+                    defaultMessage="There are no tests yet. It is highly recommended to set up the tests first since most of the remaining configurations depends on them."
+                  />
+                </Callout>
+              </td>
+            </tr>
+          </tbody>
+        )}
+      </Table>
     </div>
   );
 };
