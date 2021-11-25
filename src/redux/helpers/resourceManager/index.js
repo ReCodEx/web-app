@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import { createApiAction } from '../../middleware/apiMiddleware';
 
-import actionTypesFactory from './actionTypesFactory';
+import actionTypesFactory, { createActionsWithPostfixes } from './actionTypesFactory';
 import actionCreatorsFactory from './actionCreatorsFactory';
 import reducerFactory, { initialState } from './reducerFactory';
 import createRecord, { getData, getJsData, getId } from './recordFactory';
@@ -43,6 +43,7 @@ export {
   getId,
   defaultNeedsRefetching,
   createRecord,
+  createActionsWithPostfixes,
 };
 
 /**

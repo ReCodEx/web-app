@@ -1,6 +1,11 @@
 import { handleActions } from 'redux-actions';
 import { Map, List } from 'immutable';
-import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus,
+  createActionsWithPostfixes,
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles';
@@ -13,10 +18,8 @@ const { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
   VALIDATE_PIPELINE: 'recodex/pipelines/VALIDATE_PIPELINE',
-  FORK_PIPELINE: 'recodex/pipelines/FORK_PIPELINE',
-  FORK_PIPELINE_PENDING: 'recodex/pipelines/FORK_PIPELINE_PENDING',
-  FORK_PIPELINE_REJECTED: 'recodex/pipelines/FORK_PIPELINE_REJECTED',
-  FORK_PIPELINE_FULFILLED: 'recodex/pipelines/FORK_PIPELINE_FULFILLED',
+  ...createActionsWithPostfixes('FORK_PIPELINE', 'recodex/pipelines'),
+  ...createActionsWithPostfixes('SET_ENVIRONMENTS', 'recodex/pipelines'),
 };
 
 export const fetchPipeline = actions.fetchResource;
@@ -70,6 +73,14 @@ export const validatePipeline = (id, version) =>
     body: { version },
   });
 
+export const setPipelineRuntimeEnvironments = (id, environments) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ENVIRONMENTS,
+    endpoint: `/pipelines/${id}/runtime-environments`,
+    method: 'POST',
+    body: { environments },
+  });
+
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [pipelineFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { pipelineId } }) =>
@@ -94,6 +105,17 @@ const reducer = handleActions(
         status: forkStatuses.FULFILLED,
         pipelineId,
       }),
+
+    [additionalActionTypes.SET_ENVIRONMENTS_FULFILLED]: (state, { payload }) =>
+      state.setIn(
+        ['resources', payload.id],
+        createRecord({
+          data: payload,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now(),
+        })
+      ),
 
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
     [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (state, { payload: { items }, meta: { endpoint } }) =>
