@@ -11,7 +11,7 @@ import VariablesTable from '../../components/Pipelines/VariablesTable';
 import VariableForm, { newVariableInitialData } from '../../components/Pipelines/VariableForm';
 import BoxForm, { newBoxInitialData } from '../../components/Pipelines/BoxForm';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
-import Icon, { SaveIcon } from '../../components/icons';
+import Icon, { RefreshIcon, SaveIcon } from '../../components/icons';
 
 import { fetchSupplementaryFilesForPipeline } from '../../redux/modules/pipelineFiles';
 
@@ -54,6 +54,33 @@ const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
       .catch(errors => reject(errors))
   );
 */
+const _getSelectedBoxVariables = (selectedBox, boxes) => {
+  const box = selectedBox && boxes.find(b => b.name === selectedBox);
+  return (
+    box && [...Object.values(box.portsIn), ...Object.values(box.portsOut)].map(({ value }) => value).filter(identity)
+  );
+};
+
+const _getSelectedVariableBoxes = (selectedVariable, boxes) =>
+  selectedVariable &&
+  boxes
+    .filter(
+      ({ portsIn, portsOut }) =>
+        Object.values(portsIn).find(p => p.value === selectedVariable) ||
+        Object.values(portsOut).find(p => p.value === selectedVariable)
+    )
+    .map(({ name }) => name);
+
+const STATE_DEFAULTS = {
+  boxFormOpen: false, // whether dialog is visible
+  boxEditName: null, // if dialog is used for editing, name of the editted box
+  variableFormOpen: false, // analogical to boxForm...
+  variableEditName: null,
+  selectedBox: null,
+  selectedBoxVariables: null, // vars associated with selected box
+  selectedVariable: null,
+  selectedVariableBoxes: null, // boxes associated with selected var
+};
 
 class PipelineEditContainer extends Component {
   state = {
@@ -61,14 +88,7 @@ class PipelineEditContainer extends Component {
     version: null,
     boxes: null,
     variables: null,
-    boxFormOpen: false,
-    boxEditName: null,
-    variableFormOpen: false,
-    variableEditName: null,
-    selectedBox: null,
-    selectedBoxVariables: null, // vars associated with selected box
-    selectedVariable: null,
-    selectedVariableBoxes: null, // boxes associated with selected var
+    ...STATE_DEFAULTS,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -78,14 +98,7 @@ class PipelineEditContainer extends Component {
         version: nextProps.pipeline.version,
         boxes: nextProps.pipeline.pipeline.boxes,
         variables: nextProps.pipeline.pipeline.variables,
-        boxFormOpen: false, // whether dialog is visible
-        boxEditName: null, // if dialog is used for editing, name of the editted box
-        variableFormOpen: false, // analogical to boxForm...
-        variableEditName: null,
-        selectedBox: null,
-        selectedBoxVariables: null,
-        selectedVariable: null,
-        selectedVariableBoxes: null,
+        ...STATE_DEFAULTS,
       };
     }
 
@@ -96,6 +109,15 @@ class PipelineEditContainer extends Component {
 
     return null;
   }
+
+  reset = () => {
+    this.setState({
+      version: this.props.pipeline.version,
+      boxes: this.props.pipeline.pipeline.boxes,
+      variables: this.props.pipeline.pipeline.variables,
+      ...STATE_DEFAULTS,
+    });
+  };
 
   /*
    * Dialog handling
@@ -162,13 +184,9 @@ class PipelineEditContainer extends Component {
       this.selectVariable(); // unselect variable, so the box holds primary selection
     }
 
-    const box = selectedBox && this.state.boxes.find(b => b.name === selectedBox);
-    const selectedBoxVariables =
-      box && [...Object.values(box.portsIn), ...Object.values(box.portsOut)].map(({ value }) => value).filter(identity);
-
     this.setState({
       selectedBox,
-      selectedBoxVariables,
+      selectedBoxVariables: _getSelectedBoxVariables(selectedBox, this.state.boxes),
     });
   };
 
@@ -181,19 +199,9 @@ class PipelineEditContainer extends Component {
       this.selectBox(); // unselect box, so the variable holds primary selection
     }
 
-    const selectedVariableBoxes =
-      selectedVariable &&
-      this.state.boxes
-        .filter(
-          ({ portsIn, portsOut }) =>
-            Object.values(portsIn).find(p => p.value === selectedVariable) ||
-            Object.values(portsOut).find(p => p.value === selectedVariable)
-        )
-        .map(({ name }) => name);
-
     this.setState({
       selectedVariable,
-      selectedVariableBoxes,
+      selectedVariableBoxes: _getSelectedVariableBoxes(selectedVariable, this.state.boxes),
     });
   };
 
@@ -201,7 +209,12 @@ class PipelineEditContainer extends Component {
    * Methods that modify the pipeline
    */
 
-  transformState = (transformBoxes, transformVariables = null) => {
+  transformState = (
+    transformBoxes,
+    transformVariables = null,
+    selectedBox = this.state.selectedBox,
+    selectedVariable = this.state.selectedVariable
+  ) => {
     const stateUpdate = {};
 
     const boxes = transformBoxes && transformBoxes(this.state.boxes, this.state.variables);
@@ -212,6 +225,21 @@ class PipelineEditContainer extends Component {
     const variables = transformVariables && transformVariables(this.state.variables, this.state.boxes);
     if (variables && !deepCompare(variables, this.state.variables)) {
       stateUpdate.variables = variables;
+    }
+
+    // update (recompute) selections if necessary
+    if (
+      Object.keys(stateUpdate).length > 0 ||
+      selectedBox !== this.state.selectedBox ||
+      selectedVariable !== this.state.selectedVariable
+    ) {
+      stateUpdate.selectedBox = selectedBox;
+      stateUpdate.selectedBoxVariables = _getSelectedBoxVariables(selectedBox, stateUpdate.boxes || this.state.boxes);
+      stateUpdate.selectedVariable = selectedVariable;
+      stateUpdate.selectedVariableBoxes = _getSelectedVariableBoxes(
+        selectedVariable,
+        stateUpdate.boxes || this.state.boxes
+      );
     }
 
     if (Object.keys(stateUpdate).length > 0) {
@@ -232,8 +260,11 @@ class PipelineEditContainer extends Component {
     const newBox = {
       name,
       type,
-      portsIn: objectMap(boxType.portsIn, (port, name) => ({ ...port, value: portsIn[encodeId(name)].trim() })),
-      portsOut: objectMap(boxType.portsOut, (port, name) => ({ ...port, value: portsOut[encodeId(name)].trim() })),
+      portsIn: objectMap(boxType.portsIn, (port, name) => ({ ...port, value: (portsIn[encodeId(name)] || '').trim() })),
+      portsOut: objectMap(boxType.portsOut, (port, name) => ({
+        ...port,
+        value: (portsOut[encodeId(name)] || '').trim(),
+      })),
     };
 
     // extract all assigned variables, find which of them do not exist yet, and prepare their new objects
@@ -245,7 +276,8 @@ class PipelineEditContainer extends Component {
       // replace old box with new one
       this.transformState(
         boxes => boxes.map(box => (box.name === oldBoxName ? newBox : box)),
-        newVariables.length > 0 ? variables => [...variables, ...newVariables] : null
+        newVariables.length > 0 ? variables => [...variables, ...newVariables] : null,
+        this.state.selectedBox === oldBoxName ? newBox.name : this.state.selectedBox // update box selection
       );
     } else {
       this.transformState(
@@ -283,7 +315,9 @@ class PipelineEditContainer extends Component {
               ...rest,
             };
           }),
-        variables => variables.map(variable => (variable.name === oldVarName ? newVariable : variable))
+        variables => variables.map(variable => (variable.name === oldVarName ? newVariable : variable)),
+        this.state.selectedBox,
+        this.state.selectedVariable === oldVarName ? newVariable.name : this.state.selectedVariable // update selection
       );
     } else {
       this.transformState(null, variables => [...variables, newVariable]);
@@ -291,7 +325,11 @@ class PipelineEditContainer extends Component {
   };
 
   removeBox = name => {
-    this.transformState(boxes => boxes.filter(box => box.name !== name));
+    this.transformState(
+      boxes => boxes.filter(box => box.name !== name),
+      null,
+      this.state.selectedBox === name ? null : this.state.selectedBox // clear selection if box remmoved
+    );
   };
 
   removeVariable = name => {
@@ -306,7 +344,9 @@ class PipelineEditContainer extends Component {
             ...rest,
           };
         }),
-      variables => variables.filter(variable => variable.name !== name)
+      variables => variables.filter(variable => variable.name !== name),
+      this.state.selectedBox,
+      this.state.selectedVariable === name ? null : this.state.selectedVariable // clear selection if var removed
     );
   };
 
@@ -338,26 +378,24 @@ class PipelineEditContainer extends Component {
     }
 
     const variable = variableName && this.state.variables.find(v => v.name === variableName);
-    if (variableName && !variable) {
-      // variable needs to be created first
-      this.transformState(null, variables => [
-        ...variables,
-        { name: variableName, type: port.type, value: isArrayType(port.type) ? [] : '' },
-      ]);
-    } else if (variable && variable.type !== port.type) {
-      return;
+    if (variable && variable.type !== port.type) {
+      return; // type check to avoid creating invalid affiliations
     }
 
-    this.transformState(boxes =>
-      boxes.map(
-        b =>
-          b.name === boxName
-            ? {
-                ...b, // clone the box and replace corresponding port
-                [portsKey]: { ...b[portsKey], [portName]: { ...b[portsKey][portName], value: variableName || '' } },
-              }
-            : b // other boxes are just passed through
-      )
+    this.transformState(
+      boxes =>
+        boxes.map(
+          b =>
+            b.name === boxName
+              ? {
+                  ...b, // clone the box and replace corresponding port
+                  [portsKey]: { ...b[portsKey], [portName]: { ...b[portsKey][portName], value: variableName || '' } },
+                }
+              : b // other boxes are just passed through
+        ),
+      variableName && !variable // create the variable if it does not exist
+        ? variables => [...variables, { name: variableName, type: port.type, value: isArrayType(port.type) ? [] : '' }]
+        : null
     );
   };
 
@@ -378,6 +416,11 @@ class PipelineEditContainer extends Component {
               <Button variant="primary" onClick={() => this.openVariableForm()}>
                 <Icon icon="dollar-sign" gapRight />
                 <FormattedMessage id="app.pipelineEditContainer.addVariableButton" defaultMessage="Add Variable" />
+              </Button>
+
+              <Button variant="danger" onClick={this.reset}>
+                <RefreshIcon gapRight />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>
               <Button variant="success">
                 <SaveIcon gapRight />

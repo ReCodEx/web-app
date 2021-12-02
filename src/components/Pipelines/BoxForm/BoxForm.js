@@ -298,7 +298,7 @@ const validate = (
       });
 
     Object.keys(boxType.portsOut).forEach(portName => {
-      const varName = portsOut[encodeId(portName)].trim();
+      const varName = (portsOut[encodeId(portName)] || '').trim();
       if (utilizations[varName] > 1) {
         safeSet(
           errors,
