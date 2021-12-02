@@ -36,7 +36,7 @@ class BoxForm extends Component {
   render() {
     const {
       show,
-      editting = null,
+      editing = null,
       boxTypes,
       variables,
       selectedType,
@@ -55,11 +55,11 @@ class BoxForm extends Component {
       <Modal show={show} onHide={onHide} keyboard size="xl">
         <Modal.Header closeButton>
           <h5>
-            {editting ? (
+            {editing ? (
               <FormattedMessage
                 id="app.pipelines.boxForm.titleEditting"
-                defaultMessage="Editting Box <strong>{editting}</strong>"
-                values={{ editting, strong: content => <strong className="ml-1">{content}</strong> }}
+                defaultMessage="Editting Box <strong>{editing}</strong>"
+                values={{ editing, strong: content => <strong className="ml-1">{content}</strong> }}
               />
             ) : (
               <FormattedMessage id="app.pipelines.boxForm.titleNew" defaultMessage="Add New Box" />
@@ -174,7 +174,7 @@ class BoxForm extends Component {
         <Modal.Footer>
           <div className="text-center">
             <TheButtonGroup>
-              {(dirty || editting) && (
+              {(dirty || editing) && (
                 <SubmitButton
                   id="boxForm"
                   handleSubmit={() => {
@@ -214,7 +214,7 @@ class BoxForm extends Component {
 
 BoxForm.propTypes = {
   show: PropTypes.bool,
-  editting: PropTypes.string,
+  editing: PropTypes.string,
   boxTypes: PropTypes.object.isRequired,
   boxes: PropTypes.array.isRequired,
   variables: PropTypes.array.isRequired,
@@ -233,10 +233,10 @@ BoxForm.propTypes = {
 
 const validate = (
   { name, type, portsIn = {}, portsOut = {} },
-  { boxes, boxTypes, variables, variablesUtilization, editting, dirty }
+  { boxes, boxTypes, variables, variablesUtilization, editing, dirty }
 ) => {
   const errors = {};
-  if (!dirty && !editting) {
+  if (!dirty && !editing) {
     return errors;
   }
 
@@ -244,7 +244,7 @@ const validate = (
     errors.name = <FormattedMessage id="app.pipelines.boxForm.emptyName" defaultMessage="Box name cannot be empty." />;
   }
 
-  if (name && name.trim() !== editting && boxes && boxes.find(v => v.name === name.trim())) {
+  if (name && name.trim() !== editing && boxes && boxes.find(v => v.name === name.trim())) {
     errors.name = (
       <FormattedMessage
         id="app.pipelines.boxForm.duplicitName"
@@ -292,7 +292,7 @@ const validate = (
         if (!utilizations[varName]) {
           utilizations[varName] =
             variablesUtilization[varName].portsOut.length - // number of boxes, where the var is used in output
-            variablesUtilization[varName].portsOut.filter(box => box.name === editting).length; // -1 if this box is on the list
+            variablesUtilization[varName].portsOut.filter(box => box.name === editing).length; // -1 if this box is on the list
         }
         ++utilizations[varName]; // increment utilization since this one variable will be present
       });
@@ -315,9 +315,9 @@ const validate = (
   return errors;
 };
 
-const warn = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, variables, editting, dirty }) => {
+const warn = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, variables, editing, dirty }) => {
   const warnings = {};
-  if (!dirty && !editting) {
+  if (!dirty && !editing) {
     return warnings;
   }
 

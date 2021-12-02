@@ -30,7 +30,7 @@ class VariableForm extends Component {
   render() {
     const {
       show,
-      editting = null,
+      editing = null,
       isExternal = false,
       selectedType = null,
       handleSubmit,
@@ -49,11 +49,11 @@ class VariableForm extends Component {
       <Modal show={show} onHide={onHide} keyboard size="lg">
         <Modal.Header closeButton>
           <h5>
-            {editting ? (
+            {editing ? (
               <FormattedMessage
                 id="app.pipelines.variableForm.titleEditting"
-                defaultMessage="Editting Variable <strong>{editting}</strong>"
-                values={{ editting, strong: content => <strong className="ml-1">{content}</strong> }}
+                defaultMessage="Editting Variable <strong>{editing}</strong>"
+                values={{ editing, strong: content => <strong className="ml-1">{content}</strong> }}
               />
             ) : (
               <FormattedMessage id="app.pipelines.variableForm.titleNew" defaultMessage="Add New Variable" />
@@ -129,7 +129,7 @@ class VariableForm extends Component {
 
         <Modal.Footer>
           <TheButtonGroup>
-            {(dirty || editting) && (
+            {(dirty || editing) && (
               <SubmitButton
                 id="variableForm"
                 handleSubmit={() => {
@@ -169,7 +169,7 @@ class VariableForm extends Component {
 VariableForm.propTypes = {
   variables: PropTypes.array.isRequired,
   show: PropTypes.bool,
-  editting: PropTypes.string,
+  editing: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   isExternal: PropTypes.bool,
@@ -182,9 +182,9 @@ VariableForm.propTypes = {
   submitting: PropTypes.bool,
 };
 
-const validate = ({ name, type, external, value }, { variables, editting, dirty }) => {
+const validate = ({ name, type, external, value }, { variables, editing, dirty }) => {
   const errors = {};
-  if (!dirty && !editting) {
+  if (!dirty && !editing) {
     return errors;
   }
 
@@ -194,7 +194,7 @@ const validate = ({ name, type, external, value }, { variables, editting, dirty 
     );
   }
 
-  if (name && name.trim() !== editting && variables && variables.find(v => v.name === name.trim())) {
+  if (name && name.trim() !== editing && variables && variables.find(v => v.name === name.trim())) {
     errors.name = (
       <FormattedMessage
         id="app.pipelines.variableForm.duplicitName"

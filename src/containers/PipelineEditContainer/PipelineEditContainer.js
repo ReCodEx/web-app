@@ -79,7 +79,7 @@ class PipelineEditContainer extends Component {
         boxes: nextProps.pipeline.pipeline.boxes,
         variables: nextProps.pipeline.pipeline.variables,
         boxFormOpen: false, // whether dialog is visible
-        boxEditName: null, // if dialog is used for editting, name of the editted box
+        boxEditName: null, // if dialog is used for editing, name of the editted box
         variableFormOpen: false, // analogical to boxForm...
         variableEditName: null,
         selectedBox: null,
@@ -430,7 +430,7 @@ class PipelineEditContainer extends Component {
 
           <BoxForm
             show={this.state.boxFormOpen}
-            editting={this.state.boxEditName}
+            editing={this.state.boxEditName}
             boxTypes={boxTypes}
             variables={this.state.variables}
             variablesUtilization={utilization}
@@ -443,7 +443,7 @@ class PipelineEditContainer extends Component {
           <VariableForm
             variables={this.state.variables}
             show={this.state.variableFormOpen}
-            editting={this.state.variableEditName}
+            editing={this.state.variableEditName}
             onSubmit={this.submitVariableForm}
             onHide={this.closeForms}
             initialValues={this.getVariableFormInitialData()}

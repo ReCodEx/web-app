@@ -1,5 +1,5 @@
 /*
- * Functions related to pipeline editting and visualization.
+ * Functions related to pipeline editing and visualization.
  */
 
 import { defaultMemoize } from 'reselect';

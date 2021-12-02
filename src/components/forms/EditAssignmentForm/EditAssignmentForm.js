@@ -39,7 +39,7 @@ const sanitizeInputNumber = (value, defValue) => {
 
 /**
  * Create initial values for the form. It expects one object as input argument.
- * If the object is assignment object, it correctly prepares editting form.
+ * If the object is assignment object, it correctly prepares editing form.
  * If the object holds `groups` property, it prepares multi-assign form.
  */
 export const prepareInitialValues = defaultMemoize(

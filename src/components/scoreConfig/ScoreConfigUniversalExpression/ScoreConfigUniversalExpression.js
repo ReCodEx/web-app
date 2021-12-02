@@ -359,7 +359,7 @@ class ScoreConfigUniversalExpression extends Component {
                 <li>
                   <FormattedMessage
                     id="app.scoreConfigExpression.help.li3"
-                    defaultMessage="Double click: opens editting dialog for given node"
+                    defaultMessage="Double click: opens editing dialog for given node"
                   />
                 </li>
                 <li>
