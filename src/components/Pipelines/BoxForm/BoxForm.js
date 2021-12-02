@@ -1,135 +1,211 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-
+import { Modal, Table, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
+import { defaultMemoize } from 'reselect';
 
-import { TextField, SelectField, PortsField } from '../../forms/Fields';
-import { Modal } from 'react-bootstrap';
-import Button from '../../widgets/TheButton';
-import Callout from '../../widgets/Callout';
-import DeleteButton from '../../buttons/DeleteButton';
+import { TextField, SelectField } from '../../forms/Fields';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import SubmitButton from '../../forms/SubmitButton';
-import { CloseIcon, SaveIcon } from '../../../components/icons';
+import { CloseIcon, SaveIcon, RefreshIcon, InputIcon, OutputIcon } from '../../../components/icons';
+import { encodeId, safeSet } from '../../../helpers/common';
 
-import { fetchBoxTypes } from '../../../redux/modules/boxes';
-import { getBoxTypes } from '../../../redux/selectors/boxes';
-import { getVariablesTypes } from '../../../helpers/boxes';
+export const newBoxInitialData = { name: '', type: '', portsIn: {}, portsOut: {} };
+
+const prepareBoxTypeOptions = defaultMemoize(boxTypes =>
+  Object.values(boxTypes)
+    .map(({ name, type }) => ({ key: type, name: `${name} (${type})` }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'en'))
+);
+
+const getSortedPorts = ports =>
+  ports &&
+  Object.keys(ports)
+    .sort()
+    .map(name => ({ name, ...ports[name] }));
+
+const preparePortsOfSelectedBoxType = defaultMemoize(boxType => {
+  const portsIn = (boxType && getSortedPorts(boxType.portsIn)) || [];
+  const portsOut = (boxType && getSortedPorts(boxType.portsOut)) || [];
+  return { portsIn, portsOut };
+});
 
 class BoxForm extends Component {
-  componentDidMount = () => this.loadBoxTypes();
-
-  loadBoxTypes() {
-    const { fetchBoxTypes } = this.props;
-    fetchBoxTypes();
-  }
-
   render() {
     const {
       show,
+      editting = null,
       boxTypes,
+      variables,
       selectedType,
-      title,
       handleSubmit,
       submitSucceeded = false,
-      submitFailed = false,
-      anyTouched = false,
-      asyncValidating = false,
       invalid = false,
+      dirty = false,
       submitting = false,
       reset,
       onHide,
-      onDelete,
     } = this.props;
 
-    const currentBoxType = boxTypes.find(box => box.type === selectedType);
-    const getPortsArray = ports => Object.keys(ports).map(port => ({ name: port, ...ports[port] }));
+    const { portsIn, portsOut } = preparePortsOfSelectedBoxType(selectedType && boxTypes[selectedType]);
 
     return (
-      <Modal show={show} onHide={onHide} keyboard size="lg">
-        <Modal.Header closeButton>{title}</Modal.Header>
-        <Modal.Body>
-          {submitFailed && (
-            <Callout variant="danger">
+      <Modal show={show} onHide={onHide} keyboard size="xl">
+        <Modal.Header closeButton>
+          <h5>
+            {editting ? (
               <FormattedMessage
-                id="app.pipelineEditor.BoxForm.failed"
-                defaultMessage="We are sorry but we weren't able to save the box."
+                id="app.pipelines.boxForm.titleEditting"
+                defaultMessage="Editting Box <strong>{editting}</strong>"
+                values={{ editting, strong: content => <strong className="ml-1">{content}</strong> }}
               />
-            </Callout>
-          )}
+            ) : (
+              <FormattedMessage id="app.pipelines.boxForm.titleNew" defaultMessage="Add New Box" />
+            )}
+          </h5>
+        </Modal.Header>
 
-          <Field
-            name="name"
-            tabIndex={1}
-            component={TextField}
-            maxLength={255}
-            required
-            label={
-              <span>
-                <FormattedMessage id="generic.name" defaultMessage="Name" />:
-              </span>
-            }
-          />
+        <Modal.Body>
+          <datalist id="boxFormVariableNamesDatalist">
+            {variables.map(({ name }) => (
+              <option key={name}>{name}</option>
+            ))}
+          </datalist>
+          <Container fluid>
+            <Row>
+              <Col lg={6}>
+                <Field
+                  name="name"
+                  tabIndex={1}
+                  component={TextField}
+                  maxLength={255}
+                  label={
+                    <span>
+                      <FormattedMessage id="generic.name" defaultMessage="Name" />:
+                    </span>
+                  }
+                />
+              </Col>
 
-          <Field
-            name="type"
-            tabIndex={2}
-            component={SelectField}
-            options={[{ key: '', name: '...' }, ...boxTypes.map(({ name, type }) => ({ key: type, name }))]}
-            required
-            label={<FormattedMessage id="app.pipelineEditor.BoxForm.type" defaultMessage="Type:" />}
-          />
+              <Col lg={6}>
+                <Field
+                  name="type"
+                  tabIndex={2}
+                  component={SelectField}
+                  options={prepareBoxTypeOptions(boxTypes)}
+                  addEmptyOption
+                  label={<FormattedMessage id="app.pipelines.boxForm.type" defaultMessage="Type:" />}
+                />
+              </Col>
+            </Row>
 
-          {currentBoxType && (
-            <Field
-              name="portsIn"
-              prefix="portsIn"
-              component={PortsField}
-              ports={getPortsArray(currentBoxType.portsIn)}
-              label={<FormattedMessage id="app.pipelineEditor.BoxForm.portsIn" defaultMessage="Inputs:" />}
-            />
-          )}
+            {((portsIn && portsIn.length > 0) || (portsOut && portsOut.length > 0)) && <hr />}
 
-          {currentBoxType && (
-            <Field
-              name="portsOut"
-              prefix="portsOut"
-              component={PortsField}
-              ports={getPortsArray(currentBoxType.portsOut)}
-              label={<FormattedMessage id="app.pipelineEditor.BoxForm.portsOut" defaultMessage="Outputs:" />}
-            />
-          )}
+            <Row>
+              {portsIn && portsIn.length > 0 && (
+                <Col xl={portsOut && portsOut.length > 0 ? 6 : 12}>
+                  <h5>
+                    <InputIcon gapRight className="text-muted" />
+                    <FormattedMessage id="app.pipelines.boxForm.inputPorts" defaultMessage="Input ports" />
+                  </h5>
+                  <Table borderless size="sm">
+                    <tbody>
+                      {portsIn.map(port => (
+                        <tr key={port.name}>
+                          <td className="text-nowrap pr-4 valign-middle">
+                            <strong>{port.name}</strong>
+                          </td>
+                          <td className="text-nowrap pr-4 valign-middle">
+                            <code>{port.type}</code>
+                          </td>
+                          <td className="full-width valign-middle">
+                            <Field
+                              name={`portsIn.${encodeId(port.name)}`}
+                              component={TextField}
+                              maxLength={255}
+                              groupClassName="mb-0"
+                              list="boxFormVariableNamesDatalist"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Col>
+              )}
+
+              {portsOut && portsOut.length > 0 && (
+                <Col xl={portsIn && portsIn.length > 0 ? 6 : 12}>
+                  <h5>
+                    <OutputIcon gapRight className="text-muted" />
+                    <FormattedMessage id="app.pipelines.boxForm.outputPorts" defaultMessage="Output ports" />
+                  </h5>
+                  <Table size="sm">
+                    <tbody>
+                      {portsOut.map(port => (
+                        <tr key={port.name}>
+                          <td className="text-nowrap pr-4 valign-middle">
+                            <strong>{port.name}</strong>
+                          </td>
+                          <td className="text-nowrap pr-4 valign-middle">
+                            <code>{port.type}</code>
+                          </td>
+                          <td className="full-width valign-middle">
+                            <Field
+                              name={`portsOut.${encodeId(port.name)}`}
+                              component={TextField}
+                              maxLength={255}
+                              groupClassName="mb-0"
+                              list="boxFormVariableNamesDatalist"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Col>
+              )}
+            </Row>
+          </Container>
         </Modal.Body>
+
         <Modal.Footer>
-          <p className="text-center">
-            <SubmitButton
-              id="updateBox"
-              handleSubmit={data => {
-                handleSubmit();
-                return Promise.resolve();
-              }}
-              submitting={submitting}
-              invalid={invalid}
-              dirty={anyTouched}
-              hasFailed={submitFailed}
-              hasSuceeded={submitSucceeded}
-              asyncValidating={asyncValidating}
-              reset={reset}
-              defaultIcon={<SaveIcon gapRight />}
-              messages={{
-                success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-                submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-                submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-              }}
-            />
-            <Button onClick={onHide}>
-              <CloseIcon gapRight />
-              <FormattedMessage id="generic.close" defaultMessage="Close" />
-            </Button>
-            <span style={{ display: 'inline-block', width: '5px' }} />
-            <DeleteButton id="delete-box" resourceless deleteAction={onDelete} small={false} />
-          </p>
+          <div className="text-center">
+            <TheButtonGroup>
+              {(dirty || editting) && (
+                <SubmitButton
+                  id="boxForm"
+                  handleSubmit={() => {
+                    handleSubmit();
+                    return Promise.resolve();
+                  }}
+                  submitting={submitting}
+                  invalid={invalid}
+                  dirty={dirty}
+                  hasSuceeded={submitSucceeded}
+                  reset={reset}
+                  defaultIcon={<SaveIcon gapRight />}
+                  messages={{
+                    success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+                    submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+                    submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+                  }}
+                />
+              )}
+              {dirty && (
+                <Button variant="danger" onClick={reset}>
+                  <RefreshIcon gapRight />
+                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                </Button>
+              )}
+              <Button variant="secondary" onClick={onHide}>
+                <CloseIcon gapRight />
+                <FormattedMessage id="generic.close" defaultMessage="Close" />
+              </Button>
+            </TheButtonGroup>
+          </div>
         </Modal.Footer>
       </Modal>
     );
@@ -138,120 +214,157 @@ class BoxForm extends Component {
 
 BoxForm.propTypes = {
   show: PropTypes.bool,
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  selectedType: PropTypes.string,
-  boxTypes: PropTypes.array.isRequired,
+  editting: PropTypes.string,
+  boxTypes: PropTypes.object.isRequired,
+  boxes: PropTypes.array.isRequired,
+  variables: PropTypes.array.isRequired,
+  variablesUtilization: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onHide: PropTypes.func.isRequired,
+  selectedType: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
-  anyTouched: PropTypes.bool,
-  asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
-  existingBoxes: PropTypes.array.isRequired,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
-  fetchBoxTypes: PropTypes.func.isRequired,
-  onHide: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 };
 
-const validate = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, existingBoxes }) => {
+const validate = (
+  { name, type, portsIn = {}, portsOut = {} },
+  { boxes, boxTypes, variables, variablesUtilization, editting, dirty }
+) => {
   const errors = {};
-
-  if (!name || name.length === 0) {
-    errors.name = <FormattedMessage id="app.pipelineEditor.BoxForm.emptyName" defaultMessage="Name cannot be empty." />;
+  if (!dirty && !editting) {
+    return errors;
   }
 
-  if (!type) {
+  if (!name || name.trim() === '') {
+    errors.name = <FormattedMessage id="app.pipelines.boxForm.emptyName" defaultMessage="Box name cannot be empty." />;
+  }
+
+  if (name && name.trim() !== editting && boxes && boxes.find(v => v.name === name.trim())) {
+    errors.name = (
+      <FormattedMessage
+        id="app.pipelines.boxForm.duplicitName"
+        defaultMessage="This name is already taken by another box."
+      />
+    );
+  }
+
+  const boxType = type && boxTypes[type];
+  if (!boxType) {
     errors.type = (
-      <FormattedMessage id="app.pipelineEditor.BoxForm.missingType" defaultMessage="You must select some type." />
+      <FormattedMessage id="app.pipelines.boxForm.missingType" defaultMessage="You must select type of the box." />
     );
   } else {
-    const boxType = boxTypes.find(box => box.type === type);
-    if (boxType) {
-      const portsInNames = Object.keys(boxType.portsIn);
-      const portsOutNames = Object.keys(boxType.portsOut);
-      const portsInErrors = {};
-
-      const existingVariablesTypes = getVariablesTypes(
-        boxTypes,
-        existingBoxes.filter(box => box.name !== name && box.type !== type)
-      );
-
-      for (const portName of portsInNames) {
-        if (portsIn[portName] && portsIn[portName].length > 0) {
-          const intendedVariableName = portsIn[portName].value;
-          const portType = boxType.portsIn[portName].type;
-          const existingVariableType = existingVariablesTypes[intendedVariableName];
-          if (existingVariableType && existingVariableType.type !== portType) {
-            portsInErrors[portName] = {
-              value: (
-                <FormattedMessage
-                  id="app.pipelineEditor.BoxForm.conflictingPortType"
-                  defaultMessage="You cannot set this variable to the port - the type of this port is <code>{portType}</code>, but the variable <code>{variable}</code> is already associated with port of type <code>{variableType}</code> (e.g., in box <code>{exampleBox}</code>)."
-                  values={{
-                    variable: intendedVariableName,
-                    portType,
-                    variableType: existingVariableType.type,
-                    exampleBox: existingVariableType.examplePort,
-                    code: text => <code>{text}</code>,
-                  }}
-                />
-              ),
-            };
-          }
+    // Check that associated variables match the prescribed port types
+    const formDataPorts = { portsIn, portsOut };
+    Object.keys(formDataPorts).forEach(ports =>
+      Object.keys(boxType[ports]).forEach(portName => {
+        const variableName = (formDataPorts[ports][encodeId(portName)] || '').trim();
+        const variable = variableName && variables.find(v => v.name === variableName);
+        if (variable && boxType[ports][portName].type !== variable.type) {
+          safeSet(
+            errors,
+            [ports, encodeId(portName)],
+            <FormattedMessage
+              id="app.pipelines.boxesTable.wrongVariableType"
+              defaultMessage="Associated variable is of <code>{type}</code>, but <code>{descType}</code> type is required."
+              values={{
+                type: variable.type,
+                descType: boxType[ports][portName].type,
+                code: content => <code>{content}</code>,
+              }}
+            />
+          );
         }
-      }
+      })
+    );
 
-      // check that the variable in a certain port has the correct port
-      if (Object.keys(portsInErrors).length > 0) {
-        errors.portsIn = portsInErrors;
-      }
-
-      const portsOutErrors = {};
-
-      // check that one box does not have the same var as input and output
-      for (const portIn of portsInNames) {
-        for (const portOut of portsOutNames) {
-          if (portsIn[portIn] && portsOut[portOut] && portsIn[portIn].value === portsOut[portOut].value) {
-            portsOutErrors[portOut] = {
-              value: (
-                <FormattedMessage
-                  id="app.pipelineEditor.BoxForm.loop"
-                  defaultMessage="Box can't use its own output as its input."
-                />
-              ),
-            };
-          }
+    // Check that variables are not associated with too many output ports
+    const utilizations = {};
+    Object.keys(boxType.portsOut)
+      .map(portName => (portsOut[encodeId(portName)] || '').trim())
+      .filter(varName => varName && variablesUtilization[varName])
+      .forEach(varName => {
+        if (!utilizations[varName]) {
+          utilizations[varName] =
+            variablesUtilization[varName].portsOut.length - // number of boxes, where the var is used in output
+            variablesUtilization[varName].portsOut.filter(box => box.name === editting).length; // -1 if this box is on the list
         }
-      }
+        ++utilizations[varName]; // increment utilization since this one variable will be present
+      });
 
-      if (Object.keys(portsOutErrors).length > 0) {
-        errors.portsOut = portsOutErrors;
+    Object.keys(boxType.portsOut).forEach(portName => {
+      const varName = portsOut[encodeId(portName)].trim();
+      if (utilizations[varName] > 1) {
+        safeSet(
+          errors,
+          ['portsOut', encodeId(portName)],
+          <FormattedMessage
+            id="app.pipelines.boxForm.variableUsedInMultipleOutputs"
+            defaultMessage="This variable is being used in multiple output ports."
+          />
+        );
       }
-    }
+    });
   }
 
   return errors;
 };
 
+const warn = ({ name, type, portsIn = {}, portsOut = {} }, { boxTypes, variables, editting, dirty }) => {
+  const warnings = {};
+  if (!dirty && !editting) {
+    return warnings;
+  }
+
+  if (name && !name.trim().match(/^[-a-zA-Z0-9_]+$/)) {
+    warnings.name = (
+      <FormattedMessage
+        id="app.pipelines.variableForm.warningNameChars"
+        defaultMessage="It is recommended to use safe chars only for identifiers (letters, numbers, dash, and underscore)."
+      />
+    );
+  }
+
+  const boxType = type && boxTypes[type];
+  if (boxType) {
+    // Check that associated variables match the prescribed port types
+    const formDataPorts = { portsIn, portsOut };
+    Object.keys(formDataPorts).forEach(ports =>
+      Object.keys(boxType[ports]).forEach(portName => {
+        const variableName = (formDataPorts[ports][encodeId(portName)] || '').trim();
+        const variable = variableName && variables.find(v => v.name === variableName);
+        if (variableName && !variable) {
+          safeSet(
+            warnings,
+            [ports, encodeId(portName)],
+            <FormattedMessage
+              id="app.pipelines.boxForm.variableNotExistYet"
+              defaultMessage="Selected variable does not exist yet and will be created."
+            />
+          );
+        }
+      })
+    );
+  }
+
+  return warnings;
+};
+
 const mapStateToProps = state => ({
-  boxTypes: getBoxTypes(state),
-  existingBoxes: formValueSelector('editPipeline')(state, 'pipeline.boxes'),
   selectedType: formValueSelector('boxForm')(state, 'type'),
 });
 
-const mapDispatchToProps = dispatch => ({
-  fetchBoxTypes: () => dispatch(fetchBoxTypes()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(
+export default connect(mapStateToProps)(
   reduxForm({
     form: 'boxForm',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
     validate,
+    warn,
   })(BoxForm)
 );

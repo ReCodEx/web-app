@@ -57,6 +57,7 @@ export const GroupIcon = ({ organizational = false, archived = false, ...props }
 );
 export const HomeIcon = props => <Icon {...props} icon="home" />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
+export const InputIcon = props => <Icon {...props} icon="sign-in-alt" />;
 export const InstanceIcon = props => <Icon {...props} icon="university" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
 export const LinkIcon = props => <Icon {...props} icon="share-square" />;
@@ -67,6 +68,7 @@ export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
 export { NeedFixingIcon };
 export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} />;
 export const ObserverIcon = props => <Icon {...props} icon="binoculars" />;
+export const OutputIcon = props => <Icon {...props} icon="sign-out-alt" />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-muted" {...props} />;
 export const PointsGraphIcon = props => <Icon icon={['far', 'chart-bar']} {...props} />;
@@ -120,6 +122,7 @@ export const TypedMessageIcon = ({ type, ...props }) => (
   <Icon {...props} icon={messageIconTypes[type] || defaultMessageIcon} />
 );
 
+export const UnbindIcon = props => <Icon {...props} icon={['far', 'hand-scissors']} />;
 export const UndoIcon = props => <Icon {...props} icon="undo-alt" />;
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;

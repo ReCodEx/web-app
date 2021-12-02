@@ -105,31 +105,29 @@ const EditSystemMessageForm = ({
       {error && dirty && <Callout variant="danger">{error}</Callout>}
     </Modal.Body>
     <Modal.Footer>
-      <div className="text-center">
-        <TheButtonGroup>
-          <SubmitButton
-            id="editSystemMessage"
-            invalid={invalid}
-            submitting={submitting}
-            dirty={dirty}
-            hasSucceeded={submitSucceeded}
-            hasFailed={submitFailed}
-            handleSubmit={handleSubmit}
-            defaultIcon={<SaveIcon gapRight />}
-            messages={{
-              submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-              success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-              validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
-            }}
-          />
+      <TheButtonGroup>
+        <SubmitButton
+          id="editSystemMessage"
+          invalid={invalid}
+          submitting={submitting}
+          dirty={dirty}
+          hasSucceeded={submitSucceeded}
+          hasFailed={submitFailed}
+          handleSubmit={handleSubmit}
+          defaultIcon={<SaveIcon gapRight />}
+          messages={{
+            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+            validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
+          }}
+        />
 
-          <Button variant="outline-secondary" onClick={onClose}>
-            <CloseIcon gapRight />
-            <FormattedMessage id="generic.close" defaultMessage="Close" />
-          </Button>
-        </TheButtonGroup>
-      </div>
+        <Button variant="secondary" onClick={onClose}>
+          <CloseIcon gapRight />
+          <FormattedMessage id="generic.close" defaultMessage="Close" />
+        </Button>
+      </TheButtonGroup>
     </Modal.Footer>
   </Modal>
 );

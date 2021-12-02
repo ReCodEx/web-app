@@ -16,7 +16,15 @@ import SisBindGroupForm from '../../components/forms/SisBindGroupForm';
 import Confirm from '../../components/forms/Confirm';
 import CourseLabel, { getLocalizedData } from '../../components/SisIntegration/CourseLabel';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
-import Icon, { AddIcon, BindIcon, EditIcon, GroupIcon, AssignmentsIcon, LoadingIcon } from '../../components/icons';
+import Icon, {
+  AddIcon,
+  BindIcon,
+  UnbindIcon,
+  EditIcon,
+  GroupIcon,
+  AssignmentsIcon,
+  LoadingIcon,
+} from '../../components/icons';
 
 import { fetchAllGroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
@@ -399,10 +407,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                       ) ? (
                                                                         <LoadingIcon gapRight />
                                                                       ) : (
-                                                                        <Icon
-                                                                          icon={['far', 'hand-scissors']}
-                                                                          gapRight
-                                                                        />
+                                                                        <UnbindIcon gapRight />
                                                                       )}
                                                                       <FormattedMessage
                                                                         id="app.group.unbind"

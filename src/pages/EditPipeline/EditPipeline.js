@@ -15,9 +15,11 @@ import EditPipelineEnvironmentsForm from '../../components/forms/EditPipelineEnv
 import { EditIcon } from '../../components/icons';
 import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
+import PipelineEditContainer from '../../containers/PipelineEditContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { fetchPipelineIfNeeded, editPipeline, setPipelineRuntimeEnvironments } from '../../redux/modules/pipelines';
+import { fetchBoxTypes } from '../../redux/modules/boxes';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { getPipeline } from '../../redux/selectors/pipelines';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
@@ -55,7 +57,11 @@ class EditPipeline extends Component {
   }
 
   static loadAsync = ({ pipelineId }, dispatch) =>
-    Promise.all([dispatch(fetchPipelineIfNeeded(pipelineId)), dispatch(fetchRuntimeEnvironments())]);
+    Promise.all([
+      dispatch(fetchPipelineIfNeeded(pipelineId)),
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch(fetchBoxTypes()),
+    ]);
 
   // save pipeline metadata (not the structure)
   savePipeline = ({
@@ -107,7 +113,7 @@ class EditPipeline extends Component {
         resource={pipeline}
         icon={<EditIcon />}
         title={<FormattedMessage id="app.editPipeline.title" defaultMessage="Change Pipeline Settings and Contents" />}>
-        {({ pipeline: { boxes, variables }, ...data }) => (
+        {pipeline => (
           <div>
             <Row>
               <Col lg={12}>
@@ -130,7 +136,7 @@ class EditPipeline extends Component {
                 <Row>
                   <Col lg={12}>
                     <EditPipelineForm
-                      initialValues={perpareInitialPipelineData(data)}
+                      initialValues={perpareInitialPipelineData(pipeline)}
                       onSubmit={this.savePipeline}
                       isSuperadmin={isSuperadmin}
                     />
@@ -144,20 +150,26 @@ class EditPipeline extends Component {
 
             <Row>
               <Col lg={6}>
-                <PipelineFilesTableContainer pipeline={data} />
+                <PipelineFilesTableContainer pipeline={pipeline} />
               </Col>
               <Col lg={6}>
                 {isSuperadmin && (
                   <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray>
                     {environments => (
                       <EditPipelineEnvironmentsForm
-                        initialValues={perpareInitialEnvironmentsData(data.runtimeEnvironmentIds, environments)}
+                        initialValues={perpareInitialEnvironmentsData(pipeline.runtimeEnvironmentIds, environments)}
                         onSubmit={this.saveEnvironments}
                         runtimeEnvironments={environments}
                       />
                     )}
                   </ResourceRenderer>
                 )}
+              </Col>
+            </Row>
+
+            <Row>
+              <Col lg={12}>
+                <PipelineEditContainer pipeline={pipeline} />
               </Col>
             </Row>
 
@@ -174,7 +186,7 @@ class EditPipeline extends Component {
                       />
                     </p>
                     <p className="text-center">
-                      <DeletePipelineButtonContainer id={data.id} onDeleted={() => replace(PIPELINES_URI)} />
+                      <DeletePipelineButtonContainer id={pipeline.id} onDeleted={() => replace(PIPELINES_URI)} />
                     </p>
                   </div>
                 </Box>

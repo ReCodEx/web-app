@@ -1,3 +1,8 @@
+/*
+ * DEPRECATED - all relevant stuff moved to pipelines.js
+ * TODO DELETE
+ */
+
 export const isArrayType = type => type.indexOf('[]') > 0;
 
 export const getVariablesTypes = (boxTypes, boxes) => {

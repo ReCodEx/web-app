@@ -1,3 +1,8 @@
+/*
+ * DEPRECATED - all relevant stuff moved to pipelines.js
+ * TODO DELETE
+ */
+
 import Viz from 'viz.js';
 const { Module, render } = require('viz.js/lite.render.js');
 

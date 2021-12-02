@@ -8,7 +8,7 @@ import factory, { initialState } from '../helpers/resourceManager';
 const resourceName = 'boxes';
 const { actions, reduceActions } = factory({
   resourceName,
-  idFieldName: 'name',
+  idFieldName: 'type',
   apiEndpointFactory: (name = '') => `/pipelines/boxes/${name}`,
 });
 

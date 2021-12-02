@@ -114,6 +114,7 @@
   "app.instancesTable.admin",
   "app.passwordStrength.ok",
   "app.passwordStrength.unknown",
+  "app.pipelines.boxesTable.port",
   "app.randomMessages.error",
   "app.randomMessages.last",
   "app.randomMessages.m1",
