@@ -184,7 +184,7 @@ class ScoreConfigUniversalExpression extends Component {
               placement="left"
               overlay={
                 <Tooltip id="undo">
-                  <FormattedMessage id="app.scoreConfigExpression.undo" defaultMessage="Undo" />
+                  <FormattedMessage id="generic.undo" defaultMessage="Undo" />
                 </Tooltip>
               }>
               <UndoIcon
@@ -206,7 +206,7 @@ class ScoreConfigUniversalExpression extends Component {
               placement="left"
               overlay={
                 <Tooltip id="redo">
-                  <FormattedMessage id="app.scoreConfigExpression.redo" defaultMessage="Redo" />
+                  <FormattedMessage id="generic.redo" defaultMessage="Redo" />
                 </Tooltip>
               }>
               <RedoIcon

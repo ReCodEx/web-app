@@ -60,7 +60,7 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
       </td>
 
       <td className="small">
-        <code className={port.isMissing ? 'text-danger' : ''}>{port.name}</code>
+        <code className={classnames({ 'text-danger': port.isMissing })}>{port.name}</code>
         {!port.isMissing && !port.prescribedType && (
           <OverlayTrigger
             placement="bottom"
@@ -78,7 +78,7 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
       </td>
 
       <td className="small">
-        <code className={port.isMissing ? 'text-danger' : ''}>{port.type}</code>
+        <code className={classnames({ 'text-danger': port.isMissing })}>{port.type}</code>
         {!port.isMissing && port.prescribedType && port.prescribedType !== port.type && (
           <OverlayTrigger
             placement="bottom"
@@ -100,7 +100,7 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
         )}
       </td>
 
-      <td className={port.isMissing ? 'text-danger' : ''}>
+      <td className={classnames({ 'text-danger': port.isMissing })}>
         {port.isMissing ? (
           <em>
             <small>
@@ -236,7 +236,14 @@ const BoxesTableRow = ({
         [styles.secondarySelection]: secondarySelections && secondarySelections[box.name],
       })}>
       <tr>
-        <td rowSpan={ports.length + 1}>{box.name}</td>
+        <td
+          rowSpan={ports.length + 1}
+          className={classnames({
+            'text-bold': primarySelection === box.name,
+            'text-italic': secondarySelections && secondarySelections[box.name],
+          })}>
+          {box.name}
+        </td>
         <td rowSpan={ports.length + 1}>
           <OverlayTrigger
             placement="bottom"

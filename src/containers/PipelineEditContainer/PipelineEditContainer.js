@@ -11,7 +11,7 @@ import VariablesTable from '../../components/Pipelines/VariablesTable';
 import VariableForm, { newVariableInitialData } from '../../components/Pipelines/VariableForm';
 import BoxForm, { newBoxInitialData } from '../../components/Pipelines/BoxForm';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
-import Icon, { RefreshIcon, SaveIcon } from '../../components/icons';
+import Icon, { RefreshIcon, SaveIcon, UndoIcon, RedoIcon } from '../../components/icons';
 
 import { fetchSupplementaryFilesForPipeline } from '../../redux/modules/pipelineFiles';
 
@@ -25,7 +25,9 @@ import {
   getVariablesTypes,
 } from '../../helpers/pipelines';
 import { getBoxTypes } from '../../redux/selectors/boxes';
-import { objectMap, encodeId, deepCompare, identity } from '../../helpers/common';
+import { objectMap, arrayToObject, encodeId, deepCompare, identity } from '../../helpers/common';
+
+import styles from '../../components/Pipelines/styles.less';
 
 // TODO
 
@@ -88,6 +90,8 @@ class PipelineEditContainer extends Component {
     version: null,
     boxes: null,
     variables: null,
+    history: [],
+    future: [],
     ...STATE_DEFAULTS,
   };
 
@@ -98,6 +102,8 @@ class PipelineEditContainer extends Component {
         version: nextProps.pipeline.version,
         boxes: nextProps.pipeline.pipeline.boxes,
         variables: nextProps.pipeline.pipeline.variables,
+        history: [],
+        future: [],
         ...STATE_DEFAULTS,
       };
     }
@@ -110,11 +116,55 @@ class PipelineEditContainer extends Component {
     return null;
   }
 
+  undo = () => {
+    if (this.state.history.length === 0) {
+      return;
+    }
+
+    const [restore, ...history] = this.state.history;
+    const snapshot = arrayToObject(Object.keys(restore), identity, key => this.state[key]);
+
+    this.setState({
+      ...restore,
+      history,
+      future: [snapshot, ...this.state.future],
+      selectedBoxVariables: _getSelectedBoxVariables(this.state.selectedBox, restore.boxes || this.state.boxes),
+      selectedVariableBoxes: _getSelectedVariableBoxes(this.state.selectedVariable, restore.boxes || this.state.boxes),
+    });
+  };
+
+  redo = () => {
+    if (this.state.future.length === 0) {
+      return;
+    }
+
+    const [restore, ...future] = this.state.future;
+    const snapshot = arrayToObject(Object.keys(restore), identity, key => this.state[key]);
+
+    this.setState({
+      ...restore,
+      history: [snapshot, ...this.state.history],
+      future,
+      selectedBoxVariables: _getSelectedBoxVariables(this.state.selectedBox, restore.boxes || this.state.boxes),
+      selectedVariableBoxes: _getSelectedVariableBoxes(this.state.selectedVariable, restore.boxes || this.state.boxes),
+    });
+  };
+
   reset = () => {
+    const [, ...future] = [
+      {
+        boxes: this.state.boxes,
+        variables: this.state.variables,
+      },
+      ...this.state.history,
+    ].reverse();
+
     this.setState({
       version: this.props.pipeline.version,
       boxes: this.props.pipeline.pipeline.boxes,
       variables: this.props.pipeline.pipeline.variables,
+      history: [],
+      future,
       ...STATE_DEFAULTS,
     });
   };
@@ -216,23 +266,28 @@ class PipelineEditContainer extends Component {
     selectedVariable = this.state.selectedVariable
   ) => {
     const stateUpdate = {};
+    const snapshot = {};
 
     const boxes = transformBoxes && transformBoxes(this.state.boxes, this.state.variables);
     if (boxes && !deepCompare(boxes, this.state.boxes)) {
+      snapshot.boxes = this.state.boxes;
       stateUpdate.boxes = boxes;
     }
 
     const variables = transformVariables && transformVariables(this.state.variables, this.state.boxes);
     if (variables && !deepCompare(variables, this.state.variables)) {
+      snapshot.variables = this.state.variables;
       stateUpdate.variables = variables;
     }
 
+    const pipelineChanged = Object.keys(stateUpdate).length > 0;
+    if (pipelineChanged) {
+      stateUpdate.history = [snapshot, ...this.state.history];
+      stateUpdate.future = [];
+    }
+
     // update (recompute) selections if necessary
-    if (
-      Object.keys(stateUpdate).length > 0 ||
-      selectedBox !== this.state.selectedBox ||
-      selectedVariable !== this.state.selectedVariable
-    ) {
+    if (pipelineChanged || selectedBox !== this.state.selectedBox || selectedVariable !== this.state.selectedVariable) {
       stateUpdate.selectedBox = selectedBox;
       stateUpdate.selectedBoxVariables = _getSelectedBoxVariables(selectedBox, stateUpdate.boxes || this.state.boxes);
       stateUpdate.selectedVariable = selectedVariable;
@@ -407,8 +462,23 @@ class PipelineEditContainer extends Component {
         title={<FormattedMessage id="app.pipelineEditContainer.title" defaultMessage="Edit Pipeline Structure" />}
         unlimitedHeight
         footer={
-          <div className="text-center">
-            <TheButtonGroup>
+          <div className="text-center" style={{ marginBottom: '-0.75rem' }}>
+            <TheButtonGroup className={styles.mainButtonGroup}>
+              <Button variant="primary" onClick={this.undo} disabled={this.state.history.length === 0}>
+                <UndoIcon gapRight />
+                <FormattedMessage id="generic.undo" defaultMessage="Undo" />
+              </Button>
+              <Button variant="primary" onClick={this.redo} disabled={this.state.future.length === 0}>
+                <RedoIcon gapRight />
+                <FormattedMessage id="generic.redo" defaultMessage="Redo" />
+              </Button>
+              <Button variant="danger" onClick={this.reset} disabled={this.state.history.length === 0}>
+                <RefreshIcon gapRight />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+              </Button>
+            </TheButtonGroup>
+
+            <TheButtonGroup className={styles.mainButtonGroup}>
               <Button variant="primary" onClick={() => this.openBoxForm()}>
                 <Icon icon="box" gapRight />
                 <FormattedMessage id="app.pipelineEditContainer.addBoxButton" defaultMessage="Add Box" />
@@ -417,11 +487,9 @@ class PipelineEditContainer extends Component {
                 <Icon icon="dollar-sign" gapRight />
                 <FormattedMessage id="app.pipelineEditContainer.addVariableButton" defaultMessage="Add Variable" />
               </Button>
+            </TheButtonGroup>
 
-              <Button variant="danger" onClick={this.reset}>
-                <RefreshIcon gapRight />
-                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-              </Button>
+            <TheButtonGroup className={styles.mainButtonGroup}>
               <Button variant="success">
                 <SaveIcon gapRight />
                 <FormattedMessage id="generic.save" defaultMessage="Save" />

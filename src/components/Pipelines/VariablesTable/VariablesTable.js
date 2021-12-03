@@ -117,7 +117,8 @@ const VariablesTable = ({
                 <td
                   className={classnames({
                     'text-danger': portsOut > 1,
-                    'text-bold': secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
+                    'text-bold': primarySelection === variable.name,
+                    'text-italic': secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
                   })}>
                   {variable.name}
                 </td>
