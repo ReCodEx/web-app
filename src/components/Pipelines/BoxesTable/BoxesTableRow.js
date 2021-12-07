@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { AddIcon, BindIcon, UnbindIcon, InputIcon, OutputIcon, RemoveIcon, WarningIcon } from '../../icons';
 import { getVariablesTypes } from '../../../helpers/pipelines';
+import { getBoxTypeDescription } from '../comments';
 import styles from '../styles.less';
 
 /**
@@ -248,17 +249,20 @@ const BoxesTableRow = ({
           <OverlayTrigger
             placement="bottom"
             overlay={
-              <Tooltip id={`util-${box.type}`}>
-                {boxTypes[box.type] ? (
-                  boxTypes[box.type].name
-                ) : (
-                  <FormattedMessage id="app.pipelines.boxesTable.unknownType" defaultMessage="Unknown box type!" />
-                )}
-              </Tooltip>
+              <Popover id={`util-${box.type}`}>
+                <Popover.Title>
+                  {boxTypes[box.type] ? (
+                    boxTypes[box.type].name
+                  ) : (
+                    <FormattedMessage id="app.pipelines.boxesTable.unknownType" defaultMessage="Unknown box type!" />
+                  )}
+                </Popover.Title>
+                <Popover.Content>{getBoxTypeDescription(box.type)}</Popover.Content>
+              </Popover>
             }>
             <code className="small">
               {box.type}
-              {!boxTypes[box.type] && <WarningIcon className="text-warning" gapLeft />}
+              {!boxTypes[box.type] && <WarningIcon className="text-danger" gapLeft />}
             </code>
           </OverlayTrigger>
         </td>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Modal, Table, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
@@ -8,11 +8,23 @@ import { defaultMemoize } from 'reselect';
 
 import { TextField, SelectField } from '../../forms/Fields';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
+import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../../forms/SubmitButton';
 import { CloseIcon, SaveIcon, RefreshIcon, InputIcon, OutputIcon } from '../../../components/icons';
 import { encodeId, safeSet } from '../../../helpers/common';
+import { getBoxTypeDescription } from '../comments';
 
 export const newBoxInitialData = { name: '', type: '', portsIn: {}, portsOut: {} };
+
+const suggestedBoxName = defaultMemoize((boxType, boxes) => {
+  const names = new Set(boxes.map(({ name }) => name));
+  const prefix = boxType || 'box';
+  let suffix = 1;
+  while (names.has(`${prefix}${suffix}`)) {
+    suffix = suffix + 1;
+  }
+  return `${prefix}${suffix}`;
+});
 
 const prepareBoxTypeOptions = defaultMemoize(boxTypes =>
   Object.values(boxTypes)
@@ -32,11 +44,19 @@ const preparePortsOfSelectedBoxType = defaultMemoize(boxType => {
   return { portsIn, portsOut };
 });
 
+const messages = defineMessages({
+  varPlaceholder: {
+    id: 'app.pipelines.boxForm.portVariablePlaceholder',
+    defaultMessage: 'associated variable',
+  },
+});
+
 class BoxForm extends Component {
   render() {
     const {
       show,
       editing = null,
+      boxes,
       boxTypes,
       variables,
       selectedType,
@@ -47,6 +67,7 @@ class BoxForm extends Component {
       submitting = false,
       reset,
       onHide,
+      intl: { formatMessage },
     } = this.props;
 
     const { portsIn, portsOut } = preparePortsOfSelectedBoxType(selectedType && boxTypes[selectedType]);
@@ -73,6 +94,12 @@ class BoxForm extends Component {
               <option key={name}>{name}</option>
             ))}
           </datalist>
+
+          <datalist id="boxNameDatalist">
+            {selectedType && <option>{suggestedBoxName(selectedType, boxes)}</option>}
+            {editing && <option>{editing}</option>}
+          </datalist>
+
           <Container fluid>
             <Row>
               <Col lg={6}>
@@ -81,6 +108,8 @@ class BoxForm extends Component {
                   tabIndex={1}
                   component={TextField}
                   maxLength={255}
+                  list="boxNameDatalist"
+                  placeholder={suggestedBoxName(selectedType, boxes)}
                   label={
                     <span>
                       <FormattedMessage id="generic.name" defaultMessage="Name" />:
@@ -100,6 +129,14 @@ class BoxForm extends Component {
                 />
               </Col>
             </Row>
+
+            {selectedType && getBoxTypeDescription(selectedType) && (
+              <Row>
+                <Col xl={12}>
+                  <InsetPanel>{getBoxTypeDescription(selectedType)}</InsetPanel>
+                </Col>
+              </Row>
+            )}
 
             {((portsIn && portsIn.length > 0) || (portsOut && portsOut.length > 0)) && <hr />}
 
@@ -123,6 +160,7 @@ class BoxForm extends Component {
                           <td className="full-width valign-middle">
                             <Field
                               name={`portsIn.${encodeId(port.name)}`}
+                              placeholder={formatMessage(messages.varPlaceholder)}
                               component={TextField}
                               maxLength={255}
                               groupClassName="mb-0"
@@ -155,6 +193,7 @@ class BoxForm extends Component {
                           <td className="full-width valign-middle">
                             <Field
                               name={`portsOut.${encodeId(port.name)}`}
+                              placeholder={formatMessage(messages.varPlaceholder)}
                               component={TextField}
                               maxLength={255}
                               groupClassName="mb-0"
@@ -229,6 +268,7 @@ BoxForm.propTypes = {
   invalid: PropTypes.bool,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
+  intl: PropTypes.object,
 };
 
 const validate = (
@@ -366,5 +406,5 @@ export default connect(mapStateToProps)(
     keepDirtyOnReinitialize: false,
     validate,
     warn,
-  })(BoxForm)
+  })(injectIntl(BoxForm))
 );

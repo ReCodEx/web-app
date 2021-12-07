@@ -29,7 +29,6 @@ const prepareButtonsIndices = (activePage, items, maxButtons) => {
   return buttons;
 };
 
-// Inset panel replaces old <Well> component from bootstrap 3
 const PaginationButtons = ({
   prev = false,
   next = false,
