@@ -11,9 +11,8 @@ import VariablesTable from '../../components/Pipelines/VariablesTable';
 import VariableForm, { newVariableInitialData } from '../../components/Pipelines/VariableForm';
 import BoxForm, { newBoxInitialData } from '../../components/Pipelines/BoxForm';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
+import Callout from '../../components/widgets/Callout';
 import Icon, { RefreshIcon, SaveIcon, UndoIcon, RedoIcon } from '../../components/icons';
-
-import { fetchSupplementaryFilesForPipeline } from '../../redux/modules/pipelineFiles';
 
 import {
   getVariablesUtilization,
@@ -23,12 +22,18 @@ import {
   getReferenceIdentifier,
   makeExternalReference,
   getVariablesTypes,
+  validatePipeline,
 } from '../../helpers/pipelines';
 import { getBoxTypes } from '../../redux/selectors/boxes';
 import { objectMap, arrayToObject, encodeId, deepCompare, identity } from '../../helpers/common';
 
 import styles from '../../components/Pipelines/styles.less';
 
+const getFormattedErrorAsKey = element => {
+  const values = element.props.values ? { ...element.props.values } : {};
+  delete values.code;
+  return `${element.props.id}-${Object.values(values).join('_')}`;
+};
 // TODO
 
 /*
@@ -90,6 +95,8 @@ class PipelineEditContainer extends Component {
     version: null,
     boxes: null,
     variables: null,
+    boxTypes: null,
+    errors: [],
     history: [],
     future: [],
     ...STATE_DEFAULTS,
@@ -97,14 +104,29 @@ class PipelineEditContainer extends Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.pipelineId !== nextProps.pipeline.id) {
+      // pipeline was changed whilst component was kept mounted => complete reload
       return {
         pipelineId: nextProps.pipeline.id,
         version: nextProps.pipeline.version,
         boxes: nextProps.pipeline.pipeline.boxes,
         variables: nextProps.pipeline.pipeline.variables,
+        boxTypes: nextProps.boxTypes,
+        errors: validatePipeline(
+          nextProps.pipeline.pipeline.boxes,
+          nextProps.pipeline.pipeline.variables,
+          nextProps.boxTypes
+        ),
         history: [],
         future: [],
         ...STATE_DEFAULTS,
+      };
+    }
+
+    if (prevState.boxTypes !== nextProps.boxTypes) {
+      // boxTypes changed (probably get loaded) -> revalidate
+      return {
+        boxTypes: nextProps.boxTypes,
+        errors: validatePipeline(prevState.boxes, prevState.variables, nextProps.boxTypes),
       };
     }
 
@@ -126,6 +148,11 @@ class PipelineEditContainer extends Component {
 
     this.setState({
       ...restore,
+      errors: validatePipeline(
+        restore.boxes || this.state.boxes,
+        restore.variables || this.state.variables,
+        this.props.boxTypes
+      ),
       history,
       future: [snapshot, ...this.state.future],
       selectedBoxVariables: _getSelectedBoxVariables(this.state.selectedBox, restore.boxes || this.state.boxes),
@@ -143,6 +170,11 @@ class PipelineEditContainer extends Component {
 
     this.setState({
       ...restore,
+      errors: validatePipeline(
+        restore.boxes || this.state.boxes,
+        restore.variables || this.state.variables,
+        this.props.boxTypes
+      ),
       history: [snapshot, ...this.state.history],
       future,
       selectedBoxVariables: _getSelectedBoxVariables(this.state.selectedBox, restore.boxes || this.state.boxes),
@@ -163,6 +195,11 @@ class PipelineEditContainer extends Component {
       version: this.props.pipeline.version,
       boxes: this.props.pipeline.pipeline.boxes,
       variables: this.props.pipeline.pipeline.variables,
+      errors: validatePipeline(
+        this.props.pipeline.pipeline.boxes,
+        this.props.pipeline.pipeline.variables,
+        this.props.boxTypes
+      ),
       history: [],
       future,
       ...STATE_DEFAULTS,
@@ -284,6 +321,11 @@ class PipelineEditContainer extends Component {
     if (pipelineChanged) {
       stateUpdate.history = [snapshot, ...this.state.history];
       stateUpdate.future = [];
+      stateUpdate.errors = validatePipeline(
+        stateUpdate.boxes || this.state.boxes,
+        stateUpdate.variables || this.state.variables,
+        this.props.boxTypes
+      );
     }
 
     // update (recompute) selections if necessary
@@ -461,6 +503,7 @@ class PipelineEditContainer extends Component {
       <Box
         title={<FormattedMessage id="app.pipelineEditContainer.title" defaultMessage="Edit Pipeline Structure" />}
         unlimitedHeight
+        type={this.state.errors && this.state.errors.length > 0 ? 'danger' : 'light'}
         footer={
           <div className="text-center" style={{ marginBottom: '-0.75rem' }}>
             <TheButtonGroup className={styles.mainButtonGroup}>
@@ -490,7 +533,7 @@ class PipelineEditContainer extends Component {
             </TheButtonGroup>
 
             <TheButtonGroup className={styles.mainButtonGroup}>
-              <Button variant="success">
+              <Button variant="success" disabled={this.state.errors && this.state.errors.length > 0}>
                 <SaveIcon gapRight />
                 <FormattedMessage id="generic.save" defaultMessage="Save" />
               </Button>
@@ -537,6 +580,27 @@ class PipelineEditContainer extends Component {
                 )}
               </Col>
             </Row>
+
+            {this.state.errors && this.state.errors.length > 0 && (
+              <Row>
+                <Col xl={12}>
+                  <Callout variant="danger">
+                    <h5>
+                      <FormattedMessage
+                        id="app.pipelineEditContainer.errorsCalloutTitle"
+                        defaultMessage="The following errors were found in the pipeline"
+                      />
+                      :
+                    </h5>
+                    <ul>
+                      {this.state.errors.map(error => (
+                        <li key={getFormattedErrorAsKey(error)}>{error}</li>
+                      ))}
+                    </ul>
+                  </Callout>
+                </Col>
+              </Row>
+            )}
           </Container>
 
           <BoxForm
@@ -579,12 +643,12 @@ PipelineEditContainer.propTypes = {
 };
 
 export default connect(
-  (state, { pipeline }) => {
+  state => {
     return {
       boxTypes: getBoxTypes(state),
     };
   },
   (dispatch, { pipeline }) => ({
-    loadFiles: () => dispatch(fetchSupplementaryFilesForPipeline(pipeline.id)),
+    //
   })
 )(PipelineEditContainer);

@@ -11,7 +11,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import SubmitButton from '../../forms/SubmitButton';
 import { CloseIcon, SaveIcon, RefreshIcon } from '../../../components/icons';
-import { isArrayType } from '../../../helpers/pipelines';
+import { KNOWN_DATA_TYPES, isArrayType } from '../../../helpers/pipelines';
 
 export const newVariableInitialData = {
   name: '',
@@ -21,10 +21,7 @@ export const newVariableInitialData = {
   external: false,
 };
 
-const variableTypeOptions = ['file', 'remote-file', 'string']
-  .reduce((acc, type) => [...acc, type, type + '[]'], [])
-  .sort()
-  .map(type => ({ key: type, name: type }));
+const variableTypeOptions = KNOWN_DATA_TYPES.map(type => ({ key: type, name: type }));
 
 class VariableForm extends Component {
   render() {
