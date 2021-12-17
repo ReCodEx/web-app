@@ -332,7 +332,7 @@ const validate = (
         if (!utilizations[varName]) {
           utilizations[varName] =
             variablesUtilization[varName].portsOut.length - // number of boxes, where the var is used in output
-            variablesUtilization[varName].portsOut.filter(box => box.name === editing).length; // -1 if this box is on the list
+            variablesUtilization[varName].portsOut.filter(({ box }) => box.name === editing).length; // -1 if this box is on the list
         }
         ++utilizations[varName]; // increment utilization since this one variable will be present
       });

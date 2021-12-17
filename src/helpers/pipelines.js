@@ -74,19 +74,20 @@ export const coerceVariableValue = variable => {
  * Get info about variables utilization from boxes specification (where the variables are used)
  * @param {Object[]} boxes part of the pipeline specification
  * @return {Object} keys are variable names, values are objects holding { portsIn, portsOut } values,
- *                  both are arrays of boxes where the variable is present
+ *                  both are arrays of objects { box, port } where the variable is present
  */
 export const getVariablesUtilization = defaultMemoize(boxes => {
   const utils = {};
   boxes.forEach(box =>
     ['portsIn', 'portsOut'].forEach(ports =>
-      Object.values(box[ports])
-        .filter(({ value }) => value)
-        .forEach(({ value }) => {
+      Object.keys(box[ports])
+        .filter(port => box[ports][port])
+        .forEach(port => {
+          const { value } = box[ports][port];
           if (!utils[value]) {
             utils[value] = { portsIn: [], portsOut: [] };
           }
-          utils[value][ports].push(box);
+          utils[value][ports].push({ box, port });
         })
     )
   );

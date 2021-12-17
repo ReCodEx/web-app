@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
+import PipelineGraph from '../../components/Pipelines/PipelineGraph';
 import BoxesTable from '../../components/Pipelines/BoxesTable';
 import VariablesTable from '../../components/Pipelines/VariablesTable';
 import VariableForm, { newVariableInitialData } from '../../components/Pipelines/VariableForm';
@@ -100,6 +101,8 @@ class PipelineEditContainer extends Component {
     history: [],
     future: [],
     ...STATE_DEFAULTS,
+    showTable: true,
+    showGraph: false,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -496,6 +499,10 @@ class PipelineEditContainer extends Component {
     );
   };
 
+  showAsTable = () => this.setState({ showTable: true, showGraph: false });
+  showAsGraph = () => this.setState({ showTable: false, showGraph: true });
+  showTableAndGraph = () => this.setState({ showTable: true, showGraph: true });
+
   render() {
     const { boxTypes } = this.props;
     const utilization = getVariablesUtilization(this.state.boxes);
@@ -504,6 +511,64 @@ class PipelineEditContainer extends Component {
         title={<FormattedMessage id="app.pipelineEditContainer.title" defaultMessage="Edit Pipeline Structure" />}
         unlimitedHeight
         type={this.state.errors && this.state.errors.length > 0 ? 'danger' : 'light'}
+        customIcons={
+          <>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="pipelineTable">
+                  <FormattedMessage id="app.pipelineEditContainer.showAsTableIcon" defaultMessage="Show as table" />
+                </Tooltip>
+              }>
+              <Icon
+                icon="th-list"
+                size="lg"
+                className="valign-middle text-primary"
+                timid={!this.state.showTable || this.state.showGraph}
+                largeGapRight
+                onClick={this.showAsTable}
+              />
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="pipelineGraph">
+                  <FormattedMessage
+                    id="app.pipelineEditContainer.showAsGraphIcon"
+                    defaultMessage="Show as visual diagram"
+                  />
+                </Tooltip>
+              }>
+              <Icon
+                icon="project-diagram"
+                size="lg"
+                className="valign-middle text-primary"
+                timid={this.state.showTable || !this.state.showGraph}
+                largeGapRight
+                onClick={this.showAsGraph}
+              />
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id="pipelineBoth">
+                  <FormattedMessage
+                    id="app.pipelineEditContainer.showAsBothIcon"
+                    defaultMessage="Show both data table and diagram"
+                  />
+                </Tooltip>
+              }>
+              <Icon
+                icon="columns"
+                size="lg"
+                className="valign-middle text-primary"
+                timid={!this.state.showTable || !this.state.showGraph}
+                largeGapRight
+                onClick={this.showTableAndGraph}
+              />
+            </OverlayTrigger>
+          </>
+        }
         footer={
           <div className="text-center" style={{ marginBottom: '-0.75rem' }}>
             <TheButtonGroup className={styles.mainButtonGroup}>
@@ -542,44 +607,65 @@ class PipelineEditContainer extends Component {
         }>
         <>
           <Container fluid>
-            <Row>
-              <Col xl={6} lg={12}>
-                <h4>
-                  <FormattedMessage id="app.pipelineEditContainer.boxesTitle" defaultMessage="Boxes" />
-                </h4>
-                {this.state.boxes && (
-                  <BoxesTable
+            {this.state.showTable && (
+              <Row>
+                <Col xl={6} lg={12}>
+                  <h4>
+                    <FormattedMessage id="app.pipelineEditContainer.boxesTitle" defaultMessage="Boxes" />
+                  </h4>
+                  {this.state.boxes && (
+                    <BoxesTable
+                      boxes={this.state.boxes}
+                      boxTypes={boxTypes}
+                      variables={this.state.variables}
+                      primarySelection={this.state.selectedBox}
+                      secondarySelections={this.state.selectedVariableBoxes}
+                      selectedVariable={this.state.selectedVariable}
+                      selectBox={this.selectBox}
+                      editBox={this.openBoxForm}
+                      removeBox={this.removeBox}
+                      assignVariable={this.assignVariable}
+                    />
+                  )}
+                </Col>
+
+                <Col xl={6} lg={12}>
+                  <h4>
+                    <FormattedMessage id="app.pipelineEditContainer.variablesTitle" defaultMessage="Variables" />
+                  </h4>
+                  {this.state.variables && (
+                    <VariablesTable
+                      variables={this.state.variables}
+                      utilization={utilization}
+                      primarySelection={this.state.selectedVariable}
+                      secondarySelections={this.state.selectedBoxVariables}
+                      selectVariable={this.selectVariable}
+                      editVariable={this.openVariableForm}
+                      removeVariable={this.removeVariable}
+                    />
+                  )}
+                </Col>
+              </Row>
+            )}
+
+            {this.state.showGraph && (
+              <Row>
+                <Col xl={12}>
+                  <PipelineGraph
                     boxes={this.state.boxes}
                     boxTypes={boxTypes}
                     variables={this.state.variables}
-                    primarySelection={this.state.selectedBox}
-                    secondarySelections={this.state.selectedVariableBoxes}
+                    utilization={utilization}
+                    selectedBox={this.state.selectedBox}
                     selectedVariable={this.state.selectedVariable}
                     selectBox={this.selectBox}
                     editBox={this.openBoxForm}
-                    removeBox={this.removeBox}
-                    assignVariable={this.assignVariable}
-                  />
-                )}
-              </Col>
-
-              <Col xl={6} lg={12}>
-                <h4>
-                  <FormattedMessage id="app.pipelineEditContainer.variablesTitle" defaultMessage="Variables" />
-                </h4>
-                {this.state.variables && (
-                  <VariablesTable
-                    variables={this.state.variables}
-                    utilization={utilization}
-                    primarySelection={this.state.selectedVariable}
-                    secondarySelections={this.state.selectedBoxVariables}
                     selectVariable={this.selectVariable}
                     editVariable={this.openVariableForm}
-                    removeVariable={this.removeVariable}
                   />
-                )}
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            )}
 
             {this.state.errors && this.state.errors.length > 0 && (
               <Row>
