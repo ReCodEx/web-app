@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/TheButton';
-import InsetPanel from '../../components/widgets/InsetPanel';
 import { EditIcon, PipelineIcon } from '../../components/icons';
 // import ForkPipelineForm from '../../components/forms/ForkPipelineForm';
 
@@ -18,45 +17,34 @@ import { getPipeline, pipelineEnvironmentsSelector } from '../../redux/selectors
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { canEditPipeline } from '../../redux/selectors/users';
 
-import { createGraphFromNodes } from '../../helpers/pipelineGraph';
+import { getVariablesUtilization } from '../../helpers/pipelines';
 import withLinks from '../../helpers/withLinks';
 import PipelineDetail from '../../components/Pipelines/PipelineDetail';
-import PipelineVisualisation from '../../components/Pipelines/PipelineVisualisation';
+import PipelineGraph from '../../components/Pipelines/PipelineGraph';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 class Pipeline extends Component {
   state = {
-    graph: { dependencies: [], nodes: [] },
     forkId: null,
   };
 
+  static loadAsync = ({ pipelineId }, dispatch) =>
+    Promise.all([dispatch(fetchPipelineIfNeeded(pipelineId)), dispatch(fetchRuntimeEnvironments())]);
+
   componentDidMount() {
-    this.props.loadAsync(val => this.setState(val));
+    this.props.loadAsync();
     this.reset();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.pipelineId !== prevProps.match.params.pipelineId) {
-      this.props.loadAsync(val => this.setState(val));
+      this.props.loadAsync();
       this.reset();
     }
   }
 
   reset = () => this.setState({ forkId: Math.random().toString() });
-
-  static loadAsync = ({ pipelineId }, dispatch, { setState = null }) =>
-    Promise.all([
-      dispatch(fetchPipelineIfNeeded(pipelineId))
-        .then(res => res.value)
-        .then(pipeline => {
-          const graph = createGraphFromNodes(pipeline.pipeline.boxes);
-          if (setState) {
-            setState({ graph });
-          }
-        }),
-      dispatch(fetchRuntimeEnvironments()),
-    ]);
 
   render() {
     const {
@@ -66,7 +54,6 @@ class Pipeline extends Component {
       // forkPipeline,
       runtimeEnvironments,
     } = this.props;
-    const { graph } = this.state;
 
     return (
       <Page
@@ -81,8 +68,7 @@ class Pipeline extends Component {
                 {isAuthorOfPipeline(pipeline.id) && (
                   <Link to={PIPELINE_EDIT_URI_FACTORY(pipeline.id)}>
                     <Button variant="warning" size="sm">
-                      <EditIcon />
-                      &nbsp;
+                      <EditIcon gapRight />
                       <FormattedMessage id="app.pipeline.editSettings" defaultMessage="Edit pipeline" />
                     </Button>
                   </Link>
@@ -108,11 +94,12 @@ class Pipeline extends Component {
               <Col lg={12}>
                 <Box
                   title={<FormattedMessage id="app.pipeline.visualization" defaultMessage="Visualization" />}
-                  noPadding
                   unlimitedHeight>
-                  <InsetPanel className="pipeline">
-                    {graph.nodes.length > 0 && <PipelineVisualisation graph={graph} />}
-                  </InsetPanel>
+                  <PipelineGraph
+                    boxes={pipeline.pipeline.boxes}
+                    variables={pipeline.pipeline.variables}
+                    utilization={getVariablesUtilization(pipeline.pipeline.boxes)}
+                  />
                 </Box>
               </Col>
             </Row>
@@ -164,7 +151,7 @@ export default withLinks(
         },
       }
     ) => ({
-      loadAsync: setState => Pipeline.loadAsync({ pipelineId }, dispatch, { setState }),
+      loadAsync: () => Pipeline.loadAsync({ pipelineId }, dispatch),
       forkPipeline: (forkId, data) => dispatch(forkPipeline(pipelineId, forkId, data)),
     })
   )(Pipeline)

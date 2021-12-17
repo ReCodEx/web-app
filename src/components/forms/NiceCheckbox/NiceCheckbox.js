@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormLabel, FormCheck, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormCheck, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Icon, { WarningIcon } from '../../icons';
@@ -61,10 +61,10 @@ const NiceCheckbox = ({
           {!children && warningIcon}
         </span>
         {Boolean(children) && (
-          <FormLabel className="nice-checkbox-label">
+          <span className="nice-checkbox-label">
             {children}
             {warningIcon}
-          </FormLabel>
+          </span>
         )}
       </label>
     </FormCheck>

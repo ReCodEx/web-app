@@ -653,7 +653,6 @@ class PipelineEditContainer extends Component {
                 <Col xl={12}>
                   <PipelineGraph
                     boxes={this.state.boxes}
-                    boxTypes={boxTypes}
                     variables={this.state.variables}
                     utilization={utilization}
                     selectedBox={this.state.selectedBox}

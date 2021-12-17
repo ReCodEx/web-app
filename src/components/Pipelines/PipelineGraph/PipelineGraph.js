@@ -76,7 +76,7 @@ const technicalBoxLabels = {
   'file-to-array': '{ <in> file | <out> [file] }',
   'string-to-array': '{ <in> str | <out> [str] }',
   'file-name': '{ <in> file | <out> str }',
-  'file-names': '{ <in> [files] | <out> [strs] }',
+  'files-names': '{ <in> [files] | <out> [strs] }',
 };
 
 /**
@@ -242,7 +242,6 @@ const preprocessClickEvent = (ev, boxIds, variableIds) => {
 
 const PipelineGraph = ({
   boxes,
-  boxTypes,
   variables,
   utilization,
   selectedBox = null,
@@ -269,7 +268,7 @@ const PipelineGraph = ({
       setBoxIds(boxIds);
       setVariableIds(variableIds);
       startRenderingToSvg(dot).then(result => setSvg(result));
-    }, [boxes, boxTypes, variables, utilization, selectedBox, selectedVariable]);
+    }, [boxes, variables, utilization, selectedBox, selectedVariable]);
 
     return (
       <InsetPanel className="m-0 p-0">
@@ -305,7 +304,6 @@ const PipelineGraph = ({
 
 PipelineGraph.propTypes = {
   boxes: PropTypes.array.isRequired,
-  boxTypes: PropTypes.object.isRequired,
   variables: PropTypes.array.isRequired,
   utilization: PropTypes.object.isRequired,
   selectedBox: PropTypes.string,
