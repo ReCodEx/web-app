@@ -13,7 +13,7 @@ import VariableForm, { newVariableInitialData } from '../../components/Pipelines
 import BoxForm, { newBoxInitialData } from '../../components/Pipelines/BoxForm';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
-import Icon, { RefreshIcon, SaveIcon, UndoIcon, RedoIcon } from '../../components/icons';
+import Icon, { RefreshIcon, SaveIcon, SuccessIcon, UndoIcon, RedoIcon } from '../../components/icons';
 
 import {
   getVariablesUtilization,
@@ -23,12 +23,14 @@ import {
   getReferenceIdentifier,
   makeExternalReference,
   getVariablesTypes,
+  checkPipelineStructure,
   validatePipeline,
 } from '../../helpers/pipelines';
 import { getBoxTypes } from '../../redux/selectors/boxes';
 import { objectMap, arrayToObject, encodeId, deepCompare, identity } from '../../helpers/common';
 
 import styles from '../../components/Pipelines/styles.less';
+import InsetPanel from '../../components/widgets/InsetPanel';
 
 const getFormattedErrorAsKey = element => {
   const values = element.props.values ? { ...element.props.values } : {};
@@ -108,17 +110,16 @@ class PipelineEditContainer extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.pipelineId !== nextProps.pipeline.id) {
       // pipeline was changed whilst component was kept mounted => complete reload
+      const pipeline = checkPipelineStructure(nextProps.pipeline.pipeline);
+      const pipelineStructureCoerced = pipeline !== nextProps.pipeline.pipeline;
       return {
         pipelineId: nextProps.pipeline.id,
         version: nextProps.pipeline.version,
-        boxes: nextProps.pipeline.pipeline.boxes,
-        variables: nextProps.pipeline.pipeline.variables,
+        boxes: pipeline.boxes,
+        variables: pipeline.variables,
         boxTypes: nextProps.boxTypes,
-        errors: validatePipeline(
-          nextProps.pipeline.pipeline.boxes,
-          nextProps.pipeline.pipeline.variables,
-          nextProps.boxTypes
-        ),
+        pipelineStructureCoerced,
+        errors: validatePipeline(pipeline.boxes, pipeline.variables, nextProps.boxTypes),
         history: [],
         future: [],
         ...STATE_DEFAULTS,
@@ -504,7 +505,7 @@ class PipelineEditContainer extends Component {
   showTableAndGraph = () => this.setState({ showTable: true, showGraph: true });
 
   render() {
-    const { boxTypes } = this.props;
+    const { boxTypes, pipeline } = this.props;
     const utilization = getVariablesUtilization(this.state.boxes);
     return (
       <Box
@@ -512,181 +513,241 @@ class PipelineEditContainer extends Component {
         unlimitedHeight
         type={this.state.errors && this.state.errors.length > 0 ? 'danger' : 'light'}
         customIcons={
-          <>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="pipelineTable">
-                  <FormattedMessage id="app.pipelineEditContainer.showAsTableIcon" defaultMessage="Show as table" />
-                </Tooltip>
-              }>
-              <Icon
-                icon="th-list"
-                size="lg"
-                className="valign-middle text-primary"
-                timid={!this.state.showTable || this.state.showGraph}
-                largeGapRight
-                onClick={this.showAsTable}
-              />
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="pipelineGraph">
-                  <FormattedMessage
-                    id="app.pipelineEditContainer.showAsGraphIcon"
-                    defaultMessage="Show as visual diagram"
-                  />
-                </Tooltip>
-              }>
-              <Icon
-                icon="project-diagram"
-                size="lg"
-                className="valign-middle text-primary"
-                timid={this.state.showTable || !this.state.showGraph}
-                largeGapRight
-                onClick={this.showAsGraph}
-              />
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="pipelineBoth">
-                  <FormattedMessage
-                    id="app.pipelineEditContainer.showAsBothIcon"
-                    defaultMessage="Show both data table and diagram"
-                  />
-                </Tooltip>
-              }>
-              <Icon
-                icon="columns"
-                size="lg"
-                className="valign-middle text-primary"
-                timid={!this.state.showTable || !this.state.showGraph}
-                largeGapRight
-                onClick={this.showTableAndGraph}
-              />
-            </OverlayTrigger>
-          </>
+          !this.state.pipelineStructureCoerced ? (
+            <>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="pipelineTable">
+                    <FormattedMessage id="app.pipelineEditContainer.showAsTableIcon" defaultMessage="Show as table" />
+                  </Tooltip>
+                }>
+                <Icon
+                  icon="th-list"
+                  size="lg"
+                  className="valign-middle text-primary"
+                  timid={!this.state.showTable || this.state.showGraph}
+                  largeGapRight
+                  onClick={this.showAsTable}
+                />
+              </OverlayTrigger>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="pipelineGraph">
+                    <FormattedMessage
+                      id="app.pipelineEditContainer.showAsGraphIcon"
+                      defaultMessage="Show as visual diagram"
+                    />
+                  </Tooltip>
+                }>
+                <Icon
+                  icon="project-diagram"
+                  size="lg"
+                  className="valign-middle text-primary"
+                  timid={this.state.showTable || !this.state.showGraph}
+                  largeGapRight
+                  onClick={this.showAsGraph}
+                />
+              </OverlayTrigger>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="pipelineBoth">
+                    <FormattedMessage
+                      id="app.pipelineEditContainer.showAsBothIcon"
+                      defaultMessage="Show both data table and diagram"
+                    />
+                  </Tooltip>
+                }>
+                <Icon
+                  icon="columns"
+                  size="lg"
+                  className="valign-middle text-primary"
+                  timid={!this.state.showTable || !this.state.showGraph}
+                  largeGapRight
+                  onClick={this.showTableAndGraph}
+                />
+              </OverlayTrigger>
+            </>
+          ) : null
         }
         footer={
-          <div className="text-center" style={{ marginBottom: '-0.75rem' }}>
-            <TheButtonGroup className={styles.mainButtonGroup}>
-              <Button variant="primary" onClick={this.undo} disabled={this.state.history.length === 0}>
-                <UndoIcon gapRight />
-                <FormattedMessage id="generic.undo" defaultMessage="Undo" />
+          this.state.pipelineStructureCoerced ? (
+            <div className="text-center">
+              <Button variant="warning" onClick={() => this.setState({ pipelineStructureCoerced: false })}>
+                <SuccessIcon gapRight />
+                <FormattedMessage id="generic.accept" defaultMessage="Accept" />
               </Button>
-              <Button variant="primary" onClick={this.redo} disabled={this.state.future.length === 0}>
-                <RedoIcon gapRight />
-                <FormattedMessage id="generic.redo" defaultMessage="Redo" />
-              </Button>
-              <Button variant="danger" onClick={this.reset} disabled={this.state.history.length === 0}>
-                <RefreshIcon gapRight />
-                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-              </Button>
-            </TheButtonGroup>
+            </div>
+          ) : (
+            <div className="text-center" style={{ marginBottom: '-0.75rem' }}>
+              <TheButtonGroup className={styles.mainButtonGroup}>
+                <Button variant="primary" onClick={this.undo} disabled={this.state.history.length === 0}>
+                  <UndoIcon gapRight />
+                  <FormattedMessage id="generic.undo" defaultMessage="Undo" />
+                </Button>
+                <Button variant="primary" onClick={this.redo} disabled={this.state.future.length === 0}>
+                  <RedoIcon gapRight />
+                  <FormattedMessage id="generic.redo" defaultMessage="Redo" />
+                </Button>
+                <Button variant="danger" onClick={this.reset} disabled={this.state.history.length === 0}>
+                  <RefreshIcon gapRight />
+                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                </Button>
+              </TheButtonGroup>
 
-            <TheButtonGroup className={styles.mainButtonGroup}>
-              <Button variant="primary" onClick={() => this.openBoxForm()}>
-                <Icon icon="box" gapRight />
-                <FormattedMessage id="app.pipelineEditContainer.addBoxButton" defaultMessage="Add Box" />
-              </Button>
-              <Button variant="primary" onClick={() => this.openVariableForm()}>
-                <Icon icon="dollar-sign" gapRight />
-                <FormattedMessage id="app.pipelineEditContainer.addVariableButton" defaultMessage="Add Variable" />
-              </Button>
-            </TheButtonGroup>
+              <TheButtonGroup className={styles.mainButtonGroup}>
+                <Button variant="primary" onClick={() => this.openBoxForm()}>
+                  <Icon icon="box" gapRight />
+                  <FormattedMessage id="app.pipelineEditContainer.addBoxButton" defaultMessage="Add Box" />
+                </Button>
+                <Button variant="primary" onClick={() => this.openVariableForm()}>
+                  <Icon icon="dollar-sign" gapRight />
+                  <FormattedMessage id="app.pipelineEditContainer.addVariableButton" defaultMessage="Add Variable" />
+                </Button>
+              </TheButtonGroup>
 
-            <TheButtonGroup className={styles.mainButtonGroup}>
-              <Button variant="success" disabled={this.state.errors && this.state.errors.length > 0}>
-                <SaveIcon gapRight />
-                <FormattedMessage id="generic.save" defaultMessage="Save" />
-              </Button>
-            </TheButtonGroup>
-          </div>
+              <TheButtonGroup className={styles.mainButtonGroup}>
+                <Button variant="success" disabled={this.state.errors && this.state.errors.length > 0}>
+                  <SaveIcon gapRight />
+                  <FormattedMessage id="generic.save" defaultMessage="Save" />
+                </Button>
+              </TheButtonGroup>
+            </div>
+          )
         }>
         <>
-          <Container fluid>
-            {this.state.showTable && (
-              <Row>
-                <Col xl={6} lg={12}>
-                  <h4>
-                    <FormattedMessage id="app.pipelineEditContainer.boxesTitle" defaultMessage="Boxes" />
-                  </h4>
-                  {this.state.boxes && (
-                    <BoxesTable
+          {this.state.pipelineStructureCoerced ? (
+            <>
+              <Callout variant="danger">
+                <h4>
+                  <FormattedMessage
+                    id="app.pipelineEditContainer.structureCoercedWarningTitle"
+                    defaultMessage="The pipeline structure was broken"
+                  />
+                </h4>
+                <p>
+                  <FormattedMessage
+                    id="app.pipelineEditContainer.structureCoercedWarning"
+                    defaultMessage="The pipeline structure was not upholding the prescribed schema and had to be fixed. Some information may have been lost. The original and the fixed pipeline structure is serialized below."
+                  />
+                </p>
+              </Callout>
+              <Container fluid>
+                <Row>
+                  <Col lg={6}>
+                    <InsetPanel className="p-1">
+                      <strong>
+                        <FormattedMessage
+                          id="app.pipelineEditContainer.structureCoercedOriginal"
+                          defaultMessage="Original"
+                        />
+                        :
+                      </strong>
+                      <pre className="m-0 p-0 small">{JSON.stringify(pipeline.pipeline, undefined, 4)}</pre>
+                    </InsetPanel>
+                  </Col>
+                  <Col lg={6}>
+                    <InsetPanel className="p-1">
+                      <strong>
+                        <FormattedMessage
+                          id="app.pipelineEditContainer.structureCoercedFixed"
+                          defaultMessage="Fixed structure"
+                        />
+                        :
+                      </strong>
+                      <pre className="m-0 p-0 small">
+                        {JSON.stringify({ boxes: this.state.boxes, variables: this.state.variables }, undefined, 4)}
+                      </pre>
+                    </InsetPanel>
+                  </Col>
+                </Row>
+              </Container>
+            </>
+          ) : (
+            <Container fluid>
+              {this.state.showTable && (
+                <Row>
+                  <Col xl={6} lg={12}>
+                    <h4>
+                      <FormattedMessage id="app.pipelineEditContainer.boxesTitle" defaultMessage="Boxes" />
+                    </h4>
+                    {this.state.boxes && (
+                      <BoxesTable
+                        boxes={this.state.boxes}
+                        boxTypes={boxTypes}
+                        variables={this.state.variables}
+                        primarySelection={this.state.selectedBox}
+                        secondarySelections={this.state.selectedVariableBoxes}
+                        selectedVariable={this.state.selectedVariable}
+                        selectBox={this.selectBox}
+                        editBox={this.openBoxForm}
+                        removeBox={this.removeBox}
+                        assignVariable={this.assignVariable}
+                      />
+                    )}
+                  </Col>
+
+                  <Col xl={6} lg={12}>
+                    <h4>
+                      <FormattedMessage id="app.pipelineEditContainer.variablesTitle" defaultMessage="Variables" />
+                    </h4>
+                    {this.state.variables && (
+                      <VariablesTable
+                        variables={this.state.variables}
+                        utilization={utilization}
+                        primarySelection={this.state.selectedVariable}
+                        secondarySelections={this.state.selectedBoxVariables}
+                        selectVariable={this.selectVariable}
+                        editVariable={this.openVariableForm}
+                        removeVariable={this.removeVariable}
+                      />
+                    )}
+                  </Col>
+                </Row>
+              )}
+
+              {this.state.showGraph && (
+                <Row>
+                  <Col xl={12}>
+                    <PipelineGraph
                       boxes={this.state.boxes}
-                      boxTypes={boxTypes}
                       variables={this.state.variables}
-                      primarySelection={this.state.selectedBox}
-                      secondarySelections={this.state.selectedVariableBoxes}
+                      utilization={utilization}
+                      selectedBox={this.state.selectedBox}
                       selectedVariable={this.state.selectedVariable}
                       selectBox={this.selectBox}
                       editBox={this.openBoxForm}
-                      removeBox={this.removeBox}
-                      assignVariable={this.assignVariable}
-                    />
-                  )}
-                </Col>
-
-                <Col xl={6} lg={12}>
-                  <h4>
-                    <FormattedMessage id="app.pipelineEditContainer.variablesTitle" defaultMessage="Variables" />
-                  </h4>
-                  {this.state.variables && (
-                    <VariablesTable
-                      variables={this.state.variables}
-                      utilization={utilization}
-                      primarySelection={this.state.selectedVariable}
-                      secondarySelections={this.state.selectedBoxVariables}
                       selectVariable={this.selectVariable}
                       editVariable={this.openVariableForm}
-                      removeVariable={this.removeVariable}
                     />
-                  )}
-                </Col>
-              </Row>
-            )}
+                  </Col>
+                </Row>
+              )}
 
-            {this.state.showGraph && (
-              <Row>
-                <Col xl={12}>
-                  <PipelineGraph
-                    boxes={this.state.boxes}
-                    variables={this.state.variables}
-                    utilization={utilization}
-                    selectedBox={this.state.selectedBox}
-                    selectedVariable={this.state.selectedVariable}
-                    selectBox={this.selectBox}
-                    editBox={this.openBoxForm}
-                    selectVariable={this.selectVariable}
-                    editVariable={this.openVariableForm}
-                  />
-                </Col>
-              </Row>
-            )}
-
-            {this.state.errors && this.state.errors.length > 0 && (
-              <Row>
-                <Col xl={12}>
-                  <Callout variant="danger">
-                    <h5>
-                      <FormattedMessage
-                        id="app.pipelineEditContainer.errorsCalloutTitle"
-                        defaultMessage="The following errors were found in the pipeline"
-                      />
-                      :
-                    </h5>
-                    <ul>
-                      {this.state.errors.map(error => (
-                        <li key={getFormattedErrorAsKey(error)}>{error}</li>
-                      ))}
-                    </ul>
-                  </Callout>
-                </Col>
-              </Row>
-            )}
-          </Container>
+              {this.state.errors && this.state.errors.length > 0 && (
+                <Row>
+                  <Col xl={12}>
+                    <Callout variant="danger">
+                      <h5>
+                        <FormattedMessage
+                          id="app.pipelineEditContainer.errorsCalloutTitle"
+                          defaultMessage="The following errors were found in the pipeline"
+                        />
+                        :
+                      </h5>
+                      <ul>
+                        {this.state.errors.map(error => (
+                          <li key={getFormattedErrorAsKey(error)}>{error}</li>
+                        ))}
+                      </ul>
+                    </Callout>
+                  </Col>
+                </Row>
+              )}
+            </Container>
+          )}
 
           <BoxForm
             show={this.state.boxFormOpen}

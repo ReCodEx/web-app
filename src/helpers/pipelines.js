@@ -4,7 +4,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
-import { arrayToObject, identity } from './common';
+import { arrayToObject, identity, objectFilter } from './common';
 
 export const KNOWN_DATA_TYPES = ['file', 'remote-file', 'string']
   .reduce((acc, type) => [...acc, type, type + '[]'], [])
@@ -106,6 +106,61 @@ export const getVariablesTypes = defaultMemoize(variables =>
     ({ type }) => type
   )
 );
+
+/*
+ * Structural checks
+ */
+
+const isPortStructureOk = port => {
+  return port && typeof port === 'object' && typeof port.type === 'string' && typeof port.value === 'string';
+};
+
+const checkBoxStructure = box => {
+  if (!box || typeof box !== 'object' || typeof box.name !== 'string' || typeof box.type !== 'string') {
+    return null;
+  }
+  const portsIn = box.portsIn && typeof box.portsIn === 'object' && objectFilter(box.portsIn, isPortStructureOk);
+  const portsOut = box.portsOut && typeof box.portsOut === 'object' && objectFilter(box.portsOut, isPortStructureOk);
+
+  if (
+    !portsIn ||
+    !portsOut ||
+    Object.keys(portsIn).length !== Object.keys(box.portsIn).length ||
+    Object.keys(portsOut).length !== Object.keys(box.portsOut).length
+  ) {
+    return { ...box, portsIn: portsIn || {}, portsOut: portsOut || {} };
+  } else {
+    return box; // input object returned => everything was fine
+  }
+};
+
+const checkVariableStructure = variable => {
+  return variable &&
+    typeof variable === 'object' &&
+    typeof variable.name === 'string' &&
+    typeof variable.type === 'string'
+    ? variable // input object returned => everything was fine
+    : null;
+};
+
+const _cmpArrays = (a1, a2) =>
+  Array.isArray(a1) && Array.isArray(a2) && a1.length === a2.length && a1.every((val, idx) => val === a2[idx]);
+
+/**
+ * Make sure a pipeline structure is ok. If not, a fix is attempted.
+ * @param {Object} pipeline the pipeline structure to be verified
+ * @returns {Object} the input pipeline object if it passes the checks, a newly constructed obejct with corrections otherwise
+ */
+export const checkPipelineStructure = pipeline => {
+  const boxes = (Array.isArray(pipeline.boxes) ? pipeline.boxes : []).map(checkBoxStructure).filter(identity);
+  const variables = (Array.isArray(pipeline.variables) ? pipeline.variables : [])
+    .map(checkVariableStructure)
+    .filter(identity);
+
+  return !_cmpArrays(boxes, pipeline.boxes) || !_cmpArrays(variables, pipeline.variables)
+    ? { ...pipeline, boxes, variables }
+    : pipeline;
+};
 
 /*
  * Validation

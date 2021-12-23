@@ -139,6 +139,20 @@ export const objectFind = (obj, predicate) =>
 const idSelector = obj => obj.id;
 
 /**
+ * Similar to array.filter, but applied on an object.
+ * @param {Object} obj to be filtered
+ * @param {Function} predicate called on every entry, returns true should the entry remain
+ * @returns {Object} clone of obj with entries filtered out
+ */
+export const objectFilter = (obj, predicate) => {
+  const res = {};
+  Object.keys(obj)
+    .filter(key => predicate(obj[key], key))
+    .forEach(key => (res[key] = obj[key]));
+  return res;
+};
+
+/**
  * Convert array into object. Values of the array remain the values of the object.
  * Keys are computed from values using indexer function
  * (by default, the indexer assumes the values are objects and attempts to fetch "id" property).
