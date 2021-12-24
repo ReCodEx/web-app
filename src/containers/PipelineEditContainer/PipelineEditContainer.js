@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
@@ -13,7 +13,15 @@ import VariableForm, { newVariableInitialData } from '../../components/Pipelines
 import BoxForm, { newBoxInitialData } from '../../components/Pipelines/BoxForm';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
-import Icon, { RefreshIcon, SaveIcon, SuccessIcon, UndoIcon, RedoIcon } from '../../components/icons';
+import Icon, {
+  RefreshIcon,
+  SaveIcon,
+  DownloadIcon,
+  UploadIcon,
+  SuccessIcon,
+  UndoIcon,
+  RedoIcon,
+} from '../../components/icons';
 
 import {
   getVariablesUtilization,
@@ -28,6 +36,7 @@ import {
 } from '../../helpers/pipelines';
 import { getBoxTypes } from '../../redux/selectors/boxes';
 import { objectMap, arrayToObject, encodeId, deepCompare, identity } from '../../helpers/common';
+import { downloadString } from '../../redux/helpers/api/download';
 
 import styles from '../../components/Pipelines/styles.less';
 import InsetPanel from '../../components/widgets/InsetPanel';
@@ -92,6 +101,21 @@ const STATE_DEFAULTS = {
   selectedVariableBoxes: null, // boxes associated with selected var
 };
 
+const importErrorMessages = defineMessages({
+  exception: {
+    id: 'app.pipelineEditContainer.importError.exception',
+    defaultMessage: 'Import of file {name} failed: {error}',
+  },
+  parser: {
+    id: 'app.pipelineEditContainer.importError.parser',
+    defaultMessage: 'Parsing of JSON file {name} failed: {error}',
+  },
+  structure: {
+    id: 'app.pipelineEditContainer.importError.structure',
+    defaultMessage: 'Pipeline in file {name} has invalid structure!',
+  },
+});
+
 class PipelineEditContainer extends Component {
   state = {
     pipelineId: null,
@@ -140,6 +164,11 @@ class PipelineEditContainer extends Component {
     }
 
     return null;
+  }
+
+  constructor(props) {
+    super(props);
+    this.inputFileRef = React.createRef();
   }
 
   undo = () => {
@@ -500,6 +529,65 @@ class PipelineEditContainer extends Component {
     );
   };
 
+  /**
+   * Read a JSON file in hidden file-input, parse it, and load it as the pipeline (if it checks out).
+   */
+  import = () => {
+    const {
+      intl: { formatMessage },
+    } = this.props;
+    const files = this.inputFileRef.current.files;
+    if (files.length === 1) {
+      files[0].text().then(
+        content => {
+          try {
+            const pipeline = JSON.parse(content);
+            const fixedPipeline = checkPipelineStructure(pipeline);
+            if (fixedPipeline === pipeline) {
+              this.setState({
+                boxes: fixedPipeline.boxes,
+                variables: fixedPipeline.variables,
+                history: [{ boxes: this.state.boxes, variables: this.state.variables }, ...this.state.history],
+                future: [],
+                errors: validatePipeline(fixedPipeline.boxes, fixedPipeline.variables, this.props.boxTypes),
+                selectedBox: null,
+                selectedBoxVariables: null,
+                selectedVariable: null,
+                selectedVariableBoxes: null,
+              });
+            } else {
+              const msg = formatMessage(importErrorMessages.structure, { name: files[0].name });
+              window.alert(msg); // eslint-disable-line no-alert
+            }
+          } catch (e) {
+            const msg = formatMessage(importErrorMessages.parser, { name: files[0].name, error: e.message });
+            window.alert(msg); // eslint-disable-line no-alert
+          }
+        },
+        error => {
+          const msg = formatMessage(importErrorMessages.exception, { name: files[0].name, error });
+          window.alert(msg); // eslint-disable-line no-alert
+        }
+      );
+    }
+  };
+
+  /**
+   * Serialize the pipeline in JSON string and offer it to be downloaded as a file.
+   */
+  export = () => {
+    downloadString(
+      'pipeline.json',
+      JSON.stringify(
+        { ...this.props.pipeline.pipeline, boxes: this.state.boxes, variables: this.state.variables },
+        undefined,
+        4
+      ),
+      'text/json',
+      false
+    );
+  };
+
   showAsTable = () => this.setState({ showTable: true, showGraph: false });
   showAsGraph = () => this.setState({ showTable: false, showGraph: true });
   showTableAndGraph = () => this.setState({ showTable: true, showGraph: true });
@@ -609,6 +697,16 @@ class PipelineEditContainer extends Component {
               </TheButtonGroup>
 
               <TheButtonGroup className={styles.mainButtonGroup}>
+                <Button variant="primary" onClick={() => this.inputFileRef.current.click()}>
+                  <UploadIcon gapRight />
+                  <FormattedMessage id="generic.import" defaultMessage="Import" />
+                </Button>
+                <input type="file" ref={this.inputFileRef} className="d-none" onChange={this.import} />
+
+                <Button variant="primary" onClick={this.export}>
+                  <DownloadIcon gapRight />
+                  <FormattedMessage id="generic.export" defaultMessage="Export" />
+                </Button>
                 <Button variant="success" disabled={this.state.errors && this.state.errors.length > 0}>
                   <SaveIcon gapRight />
                   <FormattedMessage id="generic.save" defaultMessage="Save" />
@@ -658,7 +756,11 @@ class PipelineEditContainer extends Component {
                         :
                       </strong>
                       <pre className="m-0 p-0 small">
-                        {JSON.stringify({ boxes: this.state.boxes, variables: this.state.variables }, undefined, 4)}
+                        {JSON.stringify(
+                          { ...pipeline.pipeline, boxes: this.state.boxes, variables: this.state.variables },
+                          undefined,
+                          4
+                        )}
                       </pre>
                     </InsetPanel>
                   </Col>
@@ -786,6 +888,7 @@ PipelineEditContainer.propTypes = {
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   boxTypes: PropTypes.object.isRequired,
+  intl: PropTypes.object,
 };
 
 export default connect(
@@ -797,4 +900,4 @@ export default connect(
   (dispatch, { pipeline }) => ({
     //
   })
-)(PipelineEditContainer);
+)(injectIntl(PipelineEditContainer));
