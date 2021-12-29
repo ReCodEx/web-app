@@ -8,6 +8,7 @@ import { reset } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
+import { PipelineNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import EditPipelineForm from '../../components/forms/EditPipelineForm';
@@ -26,7 +27,7 @@ import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnviro
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
 import withLinks from '../../helpers/withLinks';
-import { arrayToObject } from '../../helpers/common';
+import { arrayToObject, hasPermissions } from '../../helpers/common';
 
 // convert pipeline data into initial structure for pipeline edit metadata form
 const perpareInitialPipelineData = ({ name, description, version, parameters, author }) => ({
@@ -114,7 +115,13 @@ class EditPipeline extends Component {
         icon={<EditIcon />}
         title={<FormattedMessage id="app.editPipeline.title" defaultMessage="Change Pipeline Settings and Contents" />}>
         {pipeline => (
-          <div>
+          <>
+            <PipelineNavigation
+              pipelineId={pipeline.id}
+              canViewDetail={hasPermissions(pipeline, 'viewDetail')}
+              canEdit={hasPermissions(pipeline, 'update')}
+            />
+
             <Row>
               <Col lg={12}>
                 <Callout variant="warning">
@@ -192,7 +199,7 @@ class EditPipeline extends Component {
                 </Box>
               </Col>
             </Row>
-          </div>
+          </>
         )}
       </Page>
     );

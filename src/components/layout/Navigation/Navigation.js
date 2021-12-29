@@ -10,7 +10,8 @@ import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import ShadowAssignmentNameContainer from '../../../containers/ShadowAssignmentNameContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import { AssignmentIcon, ExerciseIcon, GroupIcon, ShadowAssignmentIcon } from '../../icons';
+import PipelineNameContainer from '../../../containers/PipelineNameContainer';
+import { AssignmentIcon, ExerciseIcon, GroupIcon, PipelineIcon, ShadowAssignmentIcon } from '../../icons';
 
 import styles from './Navigation.less';
 
@@ -49,6 +50,7 @@ const Navigation = ({
   exerciseId = null,
   assignmentId = null,
   shadowId = null,
+  pipelineId = null,
   userId = null,
   emphasizeUser = false,
   links,
@@ -135,6 +137,21 @@ const Navigation = ({
             </span>
           )}
 
+          {pipelineId && (
+            <span>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="pipelineIconTooltip">
+                    <FormattedMessage id="app.navigation.pipeline" defaultMessage="Pipeline" />
+                  </Tooltip>
+                }>
+                <PipelineIcon gapRight className="text-muted" />
+              </OverlayTrigger>
+              <PipelineNameContainer pipelineId={pipelineId} noLink />
+            </span>
+          )}
+
           {userId && !emphasizeUser && (
             <UsersNameContainer
               userId={userId}
@@ -167,6 +184,7 @@ Navigation.propTypes = {
   exerciseId: PropTypes.string,
   assignmentId: PropTypes.string,
   shadowId: PropTypes.string,
+  pipelineId: PropTypes.string,
   userId: PropTypes.string,
   emphasizeUser: PropTypes.bool,
   links: PropTypes.array,

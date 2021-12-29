@@ -112,6 +112,7 @@
   "app.homepage.githubLink",
   "app.homepage.title",
   "app.instancesTable.admin",
+  "app.navigation.pipeline",
   "app.passwordStrength.ok",
   "app.passwordStrength.unknown",
   "app.pipelines.boxesTable.port",
