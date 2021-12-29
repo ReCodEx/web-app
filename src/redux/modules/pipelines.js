@@ -24,6 +24,7 @@ export const additionalActionTypes = {
 
 export const fetchPipeline = actions.fetchResource;
 export const fetchPipelineIfNeeded = actions.fetchOneIfNeeded;
+export const reloadPipeline = (id, meta = {}) => actions.fetchResource(id, { allowReload: true, ...meta });
 
 export const fetchManyEndpoint = '/pipelines';
 

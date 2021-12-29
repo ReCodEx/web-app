@@ -28,12 +28,13 @@ const VariablesTable = ({
   selectVariable = null,
   editVariable = null,
   removeVariable = null,
+  pending = false,
   intl: { locale },
 }) => {
   const secondarySelectionsIndexed = secondarySelections && prepareSelectionIndex(secondarySelections);
 
   return (
-    <Table hover={variables.length > 0} size="sm">
+    <Table hover={variables.length > 0 && !pending} className={pending ? 'half-opaque' : ''} size="sm">
       <thead>
         <tr>
           {utilization && <th />}
@@ -58,10 +59,10 @@ const VariablesTable = ({
             return (
               <tr
                 key={`${variable.name}-${portsIn}-${portsOut}`}
-                onClick={selectVariable ? () => selectVariable(variable.name) : null}
-                onDoubleClick={editVariable ? () => editVariable(variable.name) : null}
+                onClick={selectVariable && !pending ? () => selectVariable(variable.name) : null}
+                onDoubleClick={editVariable && !pending ? () => editVariable(variable.name) : null}
                 className={classnames({
-                  clickable: selectVariable || editVariable,
+                  clickable: (selectVariable || editVariable) && !pending,
                   [styles.primarySelection]: primarySelection === variable.name,
                   [styles.secondarySelection]: secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
                 })}>
@@ -158,7 +159,9 @@ const VariablesTable = ({
                       timid
                       onClick={ev => {
                         ev.stopPropagation();
-                        removeVariable(variable.name);
+                        if (!pending) {
+                          removeVariable(variable.name);
+                        }
                       }}
                     />
                   </td>
@@ -192,6 +195,7 @@ VariablesTable.propTypes = {
   selectVariable: PropTypes.func,
   editVariable: PropTypes.func,
   removeVariable: PropTypes.func,
+  pending: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 

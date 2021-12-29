@@ -4,7 +4,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
-import { arrayToObject, identity, objectFilter } from './common';
+import { arrayToObject, identity, objectFilter, deepCompare } from './common';
 
 export const KNOWN_DATA_TYPES = ['file', 'remote-file', 'string']
   .reduce((acc, type) => [...acc, type, type + '[]'], [])
@@ -106,6 +106,22 @@ export const getVariablesTypes = defaultMemoize(variables =>
     ({ type }) => type
   )
 );
+
+const nameTypeComparator = (a, b) =>
+  (a.name || '').localeCompare(b.name || '') || (a.type || '').localeCompare(b.type || '');
+
+export const comparePipelineEntities = (entities1, entities2) => {
+  if (!Array.isArray(entities1) || !Array.isArray(entities2)) {
+    return deepCompare(entities1, entities2, true);
+  }
+  if (entities1.length !== entities2.length) {
+    return false;
+  }
+
+  const sorted1 = [...entities1].sort(nameTypeComparator);
+  const sorted2 = [...entities2].sort(nameTypeComparator);
+  return deepCompare(sorted1, sorted2, true);
+};
 
 /*
  * Structural checks

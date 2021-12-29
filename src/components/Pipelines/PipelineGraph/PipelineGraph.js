@@ -250,6 +250,7 @@ const PipelineGraph = ({
   editBox = null,
   selectVariable = null,
   editVariable = null,
+  pending = false,
 }) => {
   if (canUseDOM) {
     const [svg, setSvg] = useState(null);
@@ -271,7 +272,7 @@ const PipelineGraph = ({
     }, [boxes, variables, utilization, selectedBox, selectedVariable]);
 
     return (
-      <InsetPanel className="m-0 p-0">
+      <InsetPanel className={`m-0 p-0 ${pending ? 'half-opaque' : ''}`}>
         {canUseDOM && svg ? (
           <div
             className={styles.pipelineGraph}
@@ -280,14 +281,18 @@ const PipelineGraph = ({
             }}
             onContextMenu={ev => {
               ev.preventDefault();
-              const { box, variable } = preprocessClickEvent(ev, boxIds, variableIds);
-              box && selectBox && selectBox(box);
-              variable && selectVariable && selectVariable(variable);
+              if (!pending) {
+                const { box, variable } = preprocessClickEvent(ev, boxIds, variableIds);
+                box && selectBox && selectBox(box);
+                variable && selectVariable && selectVariable(variable);
+              }
             }}
             onClick={ev => {
-              const { box, variable } = preprocessClickEvent(ev, boxIds, variableIds);
-              box && editBox && editBox(box);
-              variable && editVariable && editVariable(variable);
+              if (!pending) {
+                const { box, variable } = preprocessClickEvent(ev, boxIds, variableIds);
+                box && editBox && editBox(box);
+                variable && editVariable && editVariable(variable);
+              }
             }}
           />
         ) : (
@@ -312,6 +317,7 @@ PipelineGraph.propTypes = {
   editBox: PropTypes.func,
   selectVariable: PropTypes.func,
   editVariable: PropTypes.func,
+  pending: PropTypes.bool,
 };
 
 export default PipelineGraph;

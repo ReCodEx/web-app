@@ -203,23 +203,34 @@ export const getFirstItemInOrder = (arr, comarator = _defaultComparator) => {
  * the items/properties are compared recursively.
  * @param {*} a
  * @param {*} b
+ * @param {boolean} emptyObjectArrayEquals if true, {} and [] are treated as equal
  * @returns {boolean} true if the values are matching
  */
-export const deepCompare = (a, b) => {
-  if (typeof a !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
+export const deepCompare = (a, b, emptyObjectArrayEquals = false) => {
+  if (typeof a !== typeof b) {
     return false;
   }
-  if (typeof a !== 'object') {
+
+  if (typeof a !== 'object' || a === null || b === null) {
     return a === b; // compare scalars
+  } else if (emptyObjectArrayEquals && Object.keys(a).length === 0 && Object.keys(b).length === 0) {
+    return true; // special case, empty objects are compared regardless of their prototype
   }
+
+  if (Array.isArray(a) !== Array.isArray(b)) {
+    return false;
+  }
+
   if (Array.isArray(a)) {
     // compare arrays
-    return a.length === b.length ? a.every((val, idx) => deepCompare(val, b[idx])) : false;
+    return a.length === b.length ? a.every((val, idx) => deepCompare(val, b[idx], emptyObjectArrayEquals)) : false;
   } else {
     // compare objects
     const aKeys = Object.keys(a);
     const bKeys = new Set(Object.keys(b));
-    return aKeys.length === bKeys.size ? aKeys.every(key => bKeys.has(key) && deepCompare(a[key], b[key])) : false;
+    return aKeys.length === bKeys.size
+      ? aKeys.every(key => bKeys.has(key) && deepCompare(a[key], b[key], emptyObjectArrayEquals))
+      : false;
   }
 };
 

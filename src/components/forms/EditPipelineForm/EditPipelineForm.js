@@ -6,7 +6,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
 import { SaveIcon } from '../../icons';
-import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
@@ -45,12 +44,6 @@ class EditPipelineForm extends Component {
             />
           </div>
         }>
-        {submitFailed && (
-          <Callout variant="danger">
-            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Callout>
-        )}
-
         <Container fluid>
           <Row>
             <Col lg={12}>

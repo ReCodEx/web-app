@@ -12,6 +12,7 @@ import VariablesTable from '../../components/Pipelines/VariablesTable';
 import VariableForm, { newVariableInitialData } from '../../components/Pipelines/VariableForm';
 import BoxForm, { newBoxInitialData } from '../../components/Pipelines/BoxForm';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
+import SubmitButton from '../../components/forms/SubmitButton';
 import Callout from '../../components/widgets/Callout';
 import Icon, {
   RefreshIcon,
@@ -31,11 +32,13 @@ import {
   getReferenceIdentifier,
   makeExternalReference,
   getVariablesTypes,
+  comparePipelineEntities,
   checkPipelineStructure,
   validatePipeline,
 } from '../../helpers/pipelines';
+import { editPipeline, reloadPipeline } from '../../redux/modules/pipelines';
 import { getBoxTypes } from '../../redux/selectors/boxes';
-import { objectMap, arrayToObject, encodeId, deepCompare, identity } from '../../helpers/common';
+import { objectMap, arrayToObject, encodeId, identity } from '../../helpers/common';
 import { downloadString } from '../../redux/helpers/api/download';
 
 import styles from '../../components/Pipelines/styles.less';
@@ -46,33 +49,7 @@ const getFormattedErrorAsKey = element => {
   delete values.code;
   return `${element.props.id}-${Object.values(values).join('_')}`;
 };
-// TODO
 
-/*
-const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
-  new Promise((resolve, reject) =>
-    dispatch(validatePipeline(id, version))
-      .then(res => res.value)
-      .then(({ versionIsUpToDate }) => {
-        const errors = {};
-        if (versionIsUpToDate === false) {
-          errors.name = (
-            <FormattedMessage
-              id="app.editPipelineForm.validation.versionDiffers"
-              defaultMessage="Somebody has changed the pipeline while you have been editing it. Please reload the page and apply your changes once more."
-            />
-          );
-          dispatch(touch('editPipeline', 'name'));
-        }
-
-        if (Object.keys(errors).length > 0) {
-          throw errors;
-        }
-      })
-      .then(resolve())
-      .catch(errors => reject(errors))
-  );
-*/
 const _getSelectedBoxVariables = (selectedBox, boxes) => {
   const box = selectedBox && boxes.find(b => b.name === selectedBox);
   return (
@@ -129,6 +106,8 @@ class PipelineEditContainer extends Component {
     ...STATE_DEFAULTS,
     showTable: true,
     showGraph: false,
+    submitting: false,
+    submitError: null,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -139,7 +118,9 @@ class PipelineEditContainer extends Component {
       return {
         pipelineId: nextProps.pipeline.id,
         version: nextProps.pipeline.version,
+        originalBoxes: nextProps.pipeline.pipeline.boxes,
         boxes: pipeline.boxes,
+        originalVariables: nextProps.pipeline.pipeline.variables,
         variables: pipeline.variables,
         boxTypes: nextProps.boxTypes,
         pipelineStructureCoerced,
@@ -147,23 +128,34 @@ class PipelineEditContainer extends Component {
         history: [],
         future: [],
         ...STATE_DEFAULTS,
+        submitting: false,
+        submitError: null,
       };
     }
+
+    const updates = {};
 
     if (prevState.boxTypes !== nextProps.boxTypes) {
       // boxTypes changed (probably get loaded) -> revalidate
-      return {
-        boxTypes: nextProps.boxTypes,
-        errors: validatePipeline(prevState.boxes, prevState.variables, nextProps.boxTypes),
-      };
+      updates.boxTypes = nextProps.boxTypes;
+      updates.errors = validatePipeline(prevState.boxes, prevState.variables, nextProps.boxTypes);
     }
 
     if (prevState.version < nextProps.pipeline.version) {
-      // TODO -- deal with mergin issues
-      return { version: nextProps.pipeline.version };
+      const { boxes, variables } = nextProps.pipeline.pipeline;
+      if (
+        (comparePipelineEntities(prevState.originalBoxes, boxes) || comparePipelineEntities(prevState.boxes, boxes)) &&
+        (comparePipelineEntities(prevState.originalVariables, variables) ||
+          comparePipelineEntities(prevState.variables, variables))
+      ) {
+        // if version changed, but the structure remained the same => just silently update the version
+        updates.version = nextProps.pipeline.version;
+        updates.originalBoxes = nextProps.pipeline.pipeline.boxes;
+        updates.originalVariables = nextProps.pipeline.pipeline.variables;
+      }
     }
 
-    return null;
+    return Object.keys(updates).length > 0 ? updates : null;
   }
 
   constructor(props) {
@@ -339,13 +331,13 @@ class PipelineEditContainer extends Component {
     const snapshot = {};
 
     const boxes = transformBoxes && transformBoxes(this.state.boxes, this.state.variables);
-    if (boxes && !deepCompare(boxes, this.state.boxes)) {
+    if (boxes && !comparePipelineEntities(boxes, this.state.boxes)) {
       snapshot.boxes = this.state.boxes;
       stateUpdate.boxes = boxes;
     }
 
     const variables = transformVariables && transformVariables(this.state.variables, this.state.boxes);
-    if (variables && !deepCompare(variables, this.state.variables)) {
+    if (variables && !comparePipelineEntities(variables, this.state.variables)) {
       snapshot.variables = this.state.variables;
       stateUpdate.variables = variables;
     }
@@ -588,9 +580,73 @@ class PipelineEditContainer extends Component {
     );
   };
 
+  /**
+   * Accept new version of the base pipeline silently, keeping current work-in-progress.
+   */
+  acknowledgeNewVersion = () => {
+    this.setState({
+      version: this.props.pipeline.version,
+      originalBoxes: this.props.pipeline.pipeline.boxes,
+      orignalVariables: this.props.pipeline.pipeline.variables,
+    });
+  };
+
+  /**
+   * Load new version of pipeline structure (push it as a new state).
+   */
+  reload = () => {
+    const pipeline = checkPipelineStructure(this.props.pipeline.pipeline);
+    const pipelineStructureCoerced = pipeline !== this.props.pipeline.pipeline;
+    this.setState({
+      version: this.props.pipeline.version,
+      originalBoxes: this.props.pipeline.pipeline.boxes,
+      boxes: pipeline.boxes,
+      orignalVariables: this.props.pipeline.pipeline.variables,
+      variables: pipeline.variables,
+      pipelineStructureCoerced,
+      history: [{ boxes: this.state.boxes, variables: this.state.variables }, ...this.state.history],
+      future: [],
+      errors: validatePipeline(pipeline.boxes, pipeline.variables, this.props.boxTypes),
+      selectedBox: null,
+      selectedBoxVariables: null,
+      selectedVariable: null,
+      selectedVariableBoxes: null,
+    });
+  };
+
   showAsTable = () => this.setState({ showTable: true, showGraph: false });
   showAsGraph = () => this.setState({ showTable: false, showGraph: true });
   showTableAndGraph = () => this.setState({ showTable: true, showGraph: true });
+
+  /**
+   * Save the pipeline.
+   */
+  save = () => {
+    const { editPipeline } = this.props;
+    this.setState({ submitting: true, submitError: null });
+    return editPipeline({
+      ...this.props.pipeline.pipeline,
+      boxes: this.state.boxes,
+      variables: this.state.variables,
+    }).then(
+      res => {
+        this.setState({ submitting: false });
+        return res;
+      },
+      err => {
+        if (err.code === '400-010') {
+          // special code dedicated to version mismatchs
+          return this.props.reloadPipeline().then(() => {
+            this.setState({ submitting: false });
+            throw err;
+          });
+        } else {
+          this.setState({ submitting: false, submitError: err });
+        }
+        throw err;
+      }
+    );
+  };
 
   render() {
     const { boxTypes, pipeline } = this.props;
@@ -671,51 +727,101 @@ class PipelineEditContainer extends Component {
           ) : (
             <div className="text-center" style={{ marginBottom: '-0.75rem' }}>
               <TheButtonGroup className={styles.mainButtonGroup}>
-                <Button variant="primary" onClick={this.undo} disabled={this.state.history.length === 0}>
+                <Button
+                  variant="primary"
+                  onClick={this.undo}
+                  disabled={this.state.submitting || this.state.history.length === 0}>
                   <UndoIcon gapRight />
                   <FormattedMessage id="generic.undo" defaultMessage="Undo" />
                 </Button>
-                <Button variant="primary" onClick={this.redo} disabled={this.state.future.length === 0}>
+                <Button
+                  variant="primary"
+                  onClick={this.redo}
+                  disabled={this.state.submitting || this.state.future.length === 0}>
                   <RedoIcon gapRight />
                   <FormattedMessage id="generic.redo" defaultMessage="Redo" />
                 </Button>
-                <Button variant="danger" onClick={this.reset} disabled={this.state.history.length === 0}>
+                <Button
+                  variant="danger"
+                  onClick={this.reset}
+                  disabled={this.state.submitting || this.state.history.length === 0}>
                   <RefreshIcon gapRight />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
               </TheButtonGroup>
 
               <TheButtonGroup className={styles.mainButtonGroup}>
-                <Button variant="primary" onClick={() => this.openBoxForm()}>
+                <Button variant="primary" onClick={() => this.openBoxForm()} disabled={this.state.submitting}>
                   <Icon icon="box" gapRight />
                   <FormattedMessage id="app.pipelineEditContainer.addBoxButton" defaultMessage="Add Box" />
                 </Button>
-                <Button variant="primary" onClick={() => this.openVariableForm()}>
+                <Button variant="primary" onClick={() => this.openVariableForm()} disabled={this.state.submitting}>
                   <Icon icon="dollar-sign" gapRight />
                   <FormattedMessage id="app.pipelineEditContainer.addVariableButton" defaultMessage="Add Variable" />
                 </Button>
               </TheButtonGroup>
 
               <TheButtonGroup className={styles.mainButtonGroup}>
-                <Button variant="primary" onClick={() => this.inputFileRef.current.click()}>
+                <Button
+                  variant="primary"
+                  onClick={() => this.inputFileRef.current.click()}
+                  disabled={this.state.submitting}>
                   <UploadIcon gapRight />
                   <FormattedMessage id="generic.import" defaultMessage="Import" />
                 </Button>
                 <input type="file" ref={this.inputFileRef} className="d-none" onChange={this.import} />
 
-                <Button variant="primary" onClick={this.export}>
+                <Button variant="primary" onClick={this.export} disabled={this.state.submitting}>
                   <DownloadIcon gapRight />
                   <FormattedMessage id="generic.export" defaultMessage="Export" />
                 </Button>
-                <Button variant="success" disabled={this.state.errors && this.state.errors.length > 0}>
-                  <SaveIcon gapRight />
-                  <FormattedMessage id="generic.save" defaultMessage="Save" />
-                </Button>
+                <SubmitButton
+                  id="pipelineEditContainer"
+                  handleSubmit={this.save}
+                  submitting={this.state.submitting}
+                  hasFailed={this.state.submitError !== null}
+                  invalid={this.state.version < pipeline.version || (this.state.errors && this.state.errors.length > 0)}
+                  defaultIcon={<SaveIcon gapRight />}
+                  messages={{
+                    success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+                    submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+                    submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+                    invalid: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+                  }}
+                />
               </TheButtonGroup>
             </div>
           )
         }>
         <>
+          {this.state.version < pipeline.version && (
+            <Callout variant="warning">
+              <h4>
+                <FormattedMessage
+                  id="app.pipelineEditContainer.versionChangedTitle"
+                  defaultMessage="The pipeline was updated"
+                />
+              </h4>
+              <p>
+                <FormattedMessage
+                  id="app.pipelineEditContainer.versionChanged"
+                  defaultMessage="The pipeline structure was updated whilst you were editing it. If you load the new pipeline, it will be pushed as a new state in editor (you can use undo button to revert it)."
+                />
+              </p>
+
+              <TheButtonGroup>
+                <Button variant="primary" onClick={this.acknowledgeNewVersion} disabled={this.state.submitting}>
+                  <Icon icon={['far', 'meh']} gapRight />
+                  <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
+                </Button>
+                <Button variant="success" onClick={this.reload} disabled={this.state.submitting}>
+                  <UploadIcon gapRight />
+                  <FormattedMessage id="generic.load" defaultMessage="Load" />
+                </Button>
+              </TheButtonGroup>
+            </Callout>
+          )}
+
           {this.state.pipelineStructureCoerced ? (
             <>
               <Callout variant="danger">
@@ -787,6 +893,7 @@ class PipelineEditContainer extends Component {
                         editBox={this.openBoxForm}
                         removeBox={this.removeBox}
                         assignVariable={this.assignVariable}
+                        pending={this.state.submitting || this.state.version < pipeline.version}
                       />
                     )}
                   </Col>
@@ -804,6 +911,7 @@ class PipelineEditContainer extends Component {
                         selectVariable={this.selectVariable}
                         editVariable={this.openVariableForm}
                         removeVariable={this.removeVariable}
+                        pending={this.state.submitting || this.state.version < pipeline.version}
                       />
                     )}
                   </Col>
@@ -823,6 +931,7 @@ class PipelineEditContainer extends Component {
                       editBox={this.openBoxForm}
                       selectVariable={this.selectVariable}
                       editVariable={this.openVariableForm}
+                      pending={this.state.submitting || this.state.version < pipeline.version}
                     />
                   </Col>
                 </Row>
@@ -888,6 +997,8 @@ PipelineEditContainer.propTypes = {
   }).isRequired,
   supplementaryFiles: ImmutablePropTypes.map,
   boxTypes: PropTypes.object.isRequired,
+  editPipeline: PropTypes.func.isRequired,
+  reloadPipeline: PropTypes.func.isRequired,
   intl: PropTypes.object,
 };
 
@@ -898,6 +1009,16 @@ export default connect(
     };
   },
   (dispatch, { pipeline }) => ({
-    //
+    editPipeline: pipelineStructure =>
+      dispatch(
+        editPipeline(pipeline.id, {
+          name: pipeline.name,
+          description: pipeline.description,
+          version: pipeline.version,
+          global: pipeline.author === null,
+          pipeline: pipelineStructure,
+        })
+      ),
+    reloadPipeline: () => dispatch(reloadPipeline(pipeline.id)),
   })
 )(injectIntl(PipelineEditContainer));

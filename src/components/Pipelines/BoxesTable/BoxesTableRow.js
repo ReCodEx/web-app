@@ -219,6 +219,7 @@ const BoxesTableRow = ({
   editBox = null,
   removeBox = null,
   assignVariable = null,
+  pending = false,
 }) => {
   const [firstPort, ...ports] = [
     ...transformPorts(box, 'portsIn', boxTypes),
@@ -229,10 +230,10 @@ const BoxesTableRow = ({
 
   return (
     <tbody
-      onClick={selectBox ? () => selectBox(box.name) : null}
-      onDoubleClick={editBox ? () => editBox(box.name) : null}
+      onClick={selectBox && !pending ? () => selectBox(box.name) : null}
+      onDoubleClick={editBox && !pending ? () => editBox(box.name) : null}
       className={classnames({
-        clickable: editBox || selectBox,
+        clickable: (editBox || selectBox) && !pending,
         [styles.primarySelection]: primarySelection === box.name,
         [styles.secondarySelection]: secondarySelections && secondarySelections[box.name],
       })}>
@@ -282,7 +283,9 @@ const BoxesTableRow = ({
               timid
               onClick={ev => {
                 ev.stopPropagation();
-                removeBox(box.name);
+                if (!pending) {
+                  removeBox(box.name);
+                }
               }}
             />
           </td>
@@ -314,6 +317,7 @@ BoxesTableRow.propTypes = {
   editBox: PropTypes.func,
   removeBox: PropTypes.func,
   assignVariable: PropTypes.func,
+  pending: PropTypes.bool,
 };
 
 export default BoxesTableRow;

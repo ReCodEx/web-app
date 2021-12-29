@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
+import classnames from 'classnames';
 
 import BoxesTableRow from './BoxesTableRow';
 import { arrayToObject } from '../../../helpers/common';
@@ -23,13 +24,19 @@ const BoxesTable = ({
   secondarySelections = null,
   selectedVariable = null,
   removeBox = null,
+  pending = false,
   intl: { locale },
   ...rowProps
 }) => {
   const selectionIndex = secondarySelections && prepareSelectionIndex(secondarySelections);
   const variable = selectedVariable && variables && variables.find(v => v.name === selectedVariable);
   return (
-    <Table className={boxes.length > 0 ? 'tbody-hover' : ''} size="sm">
+    <Table
+      className={classnames({
+        'half-opaque': pending,
+        'tbody-hover': boxes.length > 0 && !pending,
+      })}
+      size="sm">
       <thead>
         <tr>
           <th>
@@ -62,6 +69,7 @@ const BoxesTable = ({
             selectedVariable={variable}
             secondarySelections={selectionIndex}
             removeBox={removeBox}
+            pending={pending}
             {...rowProps}
           />
         ))}
@@ -90,6 +98,7 @@ BoxesTable.propTypes = {
   removeBox: PropTypes.func,
   secondarySelections: PropTypes.array,
   selectedVariable: PropTypes.string,
+  pending: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
