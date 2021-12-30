@@ -4,13 +4,13 @@ import { FormattedMessage } from 'react-intl';
 
 import Navigation from './Navigation';
 import withLinks from '../../../helpers/withLinks';
-import { PipelineIcon, EditIcon } from '../../icons';
+import { PipelineIcon, PipelineStructureIcon, EditIcon } from '../../icons';
 
 const PipelineNavigation = ({
   pipelineId,
   canViewDetail = false,
   canEdit = false,
-  links: { PIPELINE_URI_FACTORY, PIPELINE_EDIT_URI_FACTORY },
+  links: { PIPELINE_URI_FACTORY, PIPELINE_EDIT_URI_FACTORY, PIPELINE_EDIT_STRUCT_URI_FACTORY },
 }) => (
   <Navigation
     pipelineId={pipelineId}
@@ -24,6 +24,11 @@ const PipelineNavigation = ({
         caption: <FormattedMessage id="app.navigation.edit" defaultMessage="Edit" />,
         link: PIPELINE_EDIT_URI_FACTORY(pipelineId),
         icon: <EditIcon gapRight />,
+      },
+      canEdit && {
+        caption: <FormattedMessage id="app.navigation.pipelineStructure" defaultMessage="Structure" />,
+        link: PIPELINE_EDIT_STRUCT_URI_FACTORY(pipelineId),
+        icon: <PipelineStructureIcon gapRight />,
       },
     ]}
   />

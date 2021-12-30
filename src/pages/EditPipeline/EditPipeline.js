@@ -14,9 +14,7 @@ import Callout from '../../components/widgets/Callout';
 import EditPipelineForm from '../../components/forms/EditPipelineForm';
 import EditPipelineEnvironmentsForm from '../../components/forms/EditPipelineEnvironmentsForm';
 import { EditIcon } from '../../components/icons';
-import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
-import PipelineEditContainer from '../../containers/PipelineEditContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { fetchPipelineIfNeeded, editPipeline, setPipelineRuntimeEnvironments } from '../../redux/modules/pipelines';
@@ -113,7 +111,7 @@ class EditPipeline extends Component {
       <Page
         resource={pipeline}
         icon={<EditIcon />}
-        title={<FormattedMessage id="app.editPipeline.title" defaultMessage="Change Pipeline Settings and Contents" />}>
+        title={<FormattedMessage id="app.editPipeline.title" defaultMessage="Update Pipeline Settings" />}>
         {pipeline => (
           <>
             <PipelineNavigation
@@ -139,25 +137,12 @@ class EditPipeline extends Component {
             </Row>
 
             <Row>
-              <Col lg={12}>
-                <Row>
-                  <Col lg={12}>
-                    <EditPipelineForm
-                      initialValues={perpareInitialPipelineData(pipeline)}
-                      onSubmit={this.savePipeline}
-                      isSuperadmin={isSuperadmin}
-                    />
-                  </Col>
-                </Row>
-              </Col>
               <Col lg={6}>
-                <div />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col lg={6}>
-                <PipelineFilesTableContainer pipeline={pipeline} />
+                <EditPipelineForm
+                  initialValues={perpareInitialPipelineData(pipeline)}
+                  onSubmit={this.savePipeline}
+                  isSuperadmin={isSuperadmin}
+                />
               </Col>
               <Col lg={6}>
                 {isSuperadmin && (
@@ -171,12 +156,6 @@ class EditPipeline extends Component {
                     )}
                   </ResourceRenderer>
                 )}
-              </Col>
-            </Row>
-
-            <Row>
-              <Col lg={12}>
-                <PipelineEditContainer pipeline={pipeline} />
               </Col>
             </Row>
 

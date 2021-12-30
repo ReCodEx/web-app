@@ -70,6 +70,7 @@ export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} 
 export const ObserverIcon = props => <Icon {...props} icon="binoculars" />;
 export const OutputIcon = props => <Icon {...props} icon="sign-out-alt" />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
+export const PipelineStructureIcon = props => <Icon {...props} icon="sitemap" />;
 export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-muted" {...props} />;
 export const PointsGraphIcon = props => <Icon icon={['far', 'chart-bar']} {...props} />;
 export const PointsInterpolationIcon = props => (

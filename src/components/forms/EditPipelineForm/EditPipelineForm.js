@@ -90,7 +90,7 @@ class EditPipelineForm extends Component {
               <hr className="mt-0" />
 
               <Row>
-                <Col xl={4} lg={6} md={12}>
+                <Col xl={6} lg={12}>
                   <Field
                     name="parameters.isCompilationPipeline"
                     component={CheckboxField}
@@ -100,7 +100,7 @@ class EditPipelineForm extends Component {
                     }
                   />
                 </Col>
-                <Col xl={4} lg={6} md={12}>
+                <Col xl={6} lg={12}>
                   <Field
                     name="parameters.isExecutionPipeline"
                     component={CheckboxField}
@@ -110,7 +110,7 @@ class EditPipelineForm extends Component {
                     }
                   />
                 </Col>
-                <Col xl={4} lg={6} md={12}>
+                <Col xl={6} lg={12}>
                   <Field
                     name="parameters.judgeOnlyPipeline"
                     component={CheckboxField}
@@ -118,7 +118,7 @@ class EditPipelineForm extends Component {
                     label={<FormattedMessage id="app.editPipelineForm.judgeOnlyPipeline" defaultMessage="Judge-Only" />}
                   />
                 </Col>
-                <Col xl={4} lg={6} md={12}>
+                <Col xl={6} lg={12}>
                   <Field
                     name="parameters.producesStdout"
                     component={CheckboxField}
@@ -128,7 +128,7 @@ class EditPipelineForm extends Component {
                     }
                   />
                 </Col>
-                <Col xl={4} lg={6} md={12}>
+                <Col xl={6} lg={12}>
                   <Field
                     name="parameters.producesFiles"
                     component={CheckboxField}
@@ -141,7 +141,7 @@ class EditPipelineForm extends Component {
                     }
                   />
                 </Col>
-                <Col xl={4} lg={6} md={12}>
+                <Col xl={6} lg={12}>
                   <Field
                     name="parameters.hasEntryPoint"
                     component={CheckboxField}
@@ -151,7 +151,7 @@ class EditPipelineForm extends Component {
                     }
                   />
                 </Col>
-                <Col xl={4} lg={6} md={12}>
+                <Col xl={6} lg={12}>
                   <Field
                     name="parameters.hasExtraFiles"
                     component={CheckboxField}
