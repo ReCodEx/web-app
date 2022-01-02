@@ -811,7 +811,7 @@ class PipelineEditContainer extends Component {
 
               <TheButtonGroup>
                 <Button variant="primary" onClick={this.acknowledgeNewVersion} disabled={this.state.submitting}>
-                  <Icon icon={['far', 'meh']} gapRight />
+                  <Icon icon={['far', 'smile']} gapRight />
                   <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
                 </Button>
                 <Button variant="success" onClick={this.reload} disabled={this.state.submitting}>

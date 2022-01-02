@@ -52,6 +52,7 @@ export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
   );
 export const FailureIcon = props => <Icon className="text-danger" {...props} icon="times" />;
 export const FaqIcon = props => <Icon {...props} icon={['far', 'question-circle']} />;
+export const ForkIcon = props => <Icon {...props} icon="code-branch" />;
 export const GroupIcon = ({ organizational = false, archived = false, ...props }) => (
   <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'} />
 );

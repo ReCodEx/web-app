@@ -11,7 +11,7 @@ import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import Icon, { WarningIcon } from '../../icons';
+import { WarningIcon, ForkIcon } from '../../icons';
 import { forkStatuses } from '../../../redux/modules/exercises';
 import { getFork } from '../../../redux/selectors/exercises';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -124,7 +124,7 @@ class ForkExerciseForm extends Component {
                       hasSucceeded={submitSucceeded}
                       hasFailed={submitFailed}
                       handleSubmit={handleSubmit}
-                      defaultIcon={<Icon icon="code-branch" gapRight />}
+                      defaultIcon={<ForkIcon gapRight />}
                       noShadow
                       confirmQuestion={
                         <FormattedMessage
