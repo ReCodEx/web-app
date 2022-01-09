@@ -17,7 +17,6 @@ import EditExerciseAdvancedConfigForm from '../../components/forms/EditExerciseA
 import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
-// import PipelinesSimpleList from '../../components/Pipelines/PipelinesSimpleList';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
 import { InfoIcon, TestsIcon } from '../../components/icons';
@@ -41,14 +40,6 @@ import {
   fetchSupplementaryFilesForExerciseStatus,
 } from '../../redux/selectors/supplementaryFiles';
 import { isLoadingState } from '../../redux/helpers/resourceManager/status';
-
-/*
-import {
-  deletePipeline,
-  fetchExercisePipelines
-} from '../../redux/modules/pipelines';
-import { exercisePipelinesSelector } from '../../redux/selectors/pipelines';
-*/
 
 import withLinks from '../../helpers/withLinks';
 import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
@@ -279,14 +270,10 @@ class EditExerciseConfig extends Component {
       exerciseScoreConfig,
       exerciseTests,
       pipelines,
-      // exercisePipelines,
       environmentsWithEntryPoints,
       pipelinesVariables,
       supplementaryFiles,
       supplementaryFilesStatus,
-      // links: {
-      // PIPELINE_EDIT_URI_FACTORY
-      // },
     } = this.props;
 
     return (
@@ -482,81 +469,6 @@ class EditExerciseConfig extends Component {
                                 </p>
                               </Callout>
                             )}
-
-                            {/* exercise.configurationType !== 'simpleExerciseConfig' &&
-                  <Box
-                    title={
-                      <FormattedMessage
-                        id="app.exercise.exercisePipelines"
-                        defaultMessage="Exercise Pipelines"
-                      />
-                    }
-                    footer={
-                      <p className="text-center">
-                        <Button
-                          variant="success"
-                          size="sm"
-                          onClick={this.createExercisePipeline}
-                        >
-                          <AddIcon gapRight />
-                          <FormattedMessage
-                            id="app.exercise.createPipeline"
-                            defaultMessage="Add exercise pipeline"
-                          />
-                        </Button>
-                      </p>
-                    }
-                    isOpen
-                  >
-                    <ResourceRenderer
-                      resource={exercisePipelines.toArray()}
-                      returnAsArray={true}
-                    >
-                      {pipelines =>
-                        <PipelinesSimpleList
-                          pipelines={pipelines}
-                          createActions={pipelineId =>
-                            <div>
-                              <Link
-                                to={PIPELINE_EDIT_URI_FACTORY(pipelineId)}
-                              >
-                                <Button
-                                  size="xs"
-                                  variant="warning"
-                                >
-                                  <EditIcon gapRight />
-                                  <FormattedMessage
-                                    id="generic.edit"
-                                    defaultMessage="Edit"
-                                  />
-                                </Button>
-                              </Link>
-                              <Confirm
-                                id={pipelineId}
-                                onConfirmed={() => deletePipeline(pipelineId)}
-                                question={
-                                  <FormattedMessage
-                                    id="app.pipeline.deleteConfirm"
-                                    defaultMessage="Are you sure you want to delete the pipeline? This cannot be undone."
-                                  />
-                                }
-                              >
-                                <Button
-                                  size="xs"
-                                  variant="danger"
-                                >
-                                  <DeleteIcon gapRight />
-                                  <FormattedMessage
-                                    id="generic.delete"
-                                    defaultMessage="Delete"
-                                  />
-                                </Button>
-                              </Confirm>
-                            </div>}
-                        />}
-                    </ResourceRenderer>
-                  </Box>
-                */}
                           </Col>
                         </Row>
                       )}
@@ -724,7 +636,6 @@ export default withLinks(
         exerciseScoreConfig: exerciseScoreConfigSelector(state, exerciseId),
         exerciseTests: exerciseTestsSelector(exerciseId)(state),
         pipelines: pipelinesSelector(state),
-        //        exercisePipelines: exercisePipelinesSelector(exerciseId)(state),
         environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
         pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state),
         supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),

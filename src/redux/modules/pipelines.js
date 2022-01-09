@@ -89,27 +89,6 @@ const reducer = handleActions(
     [pipelineFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { pipelineId } }) =>
       state.hasIn(['resources', pipelineId]) ? updateFiles(state, pipelineId, files, 'supplementaryFilesIds') : state,
 
-    /*
-      [additionalActionTypes.FORK_PIPELINE_PENDING]: (state, { meta: { id, forkId } }) =>
-      state.updateIn(['resources', id], pipeline => {
-        if (!pipeline.has('forks')) {
-          pipeline = pipeline.set('forks', new Map());
-        }
-
-        return pipeline.update('forks', forks => forks.set(forkId, { status: forkStatuses.PENDING }));
-      }),
-
-    [additionalActionTypes.FORK_PIPELINE_REJECTED]: (state, { meta: { id, forkId } }) =>
-      state.setIn(['resources', id, 'forks', forkId], {
-        status: forkStatuses.REJECTED,
-      }),
-
-    [additionalActionTypes.FORK_PIPELINE_FULFILLED]: (state, { payload: { id: pipelineId }, meta: { id, forkId } }) =>
-      state.setIn(['resources', id, 'forks', forkId], {
-        status: forkStatuses.FULFILLED,
-        pipelineId,
-      }),
-*/
     [additionalActionTypes.SET_ENVIRONMENTS_FULFILLED]: (state, { payload }) =>
       state.setIn(
         ['resources', payload.id],

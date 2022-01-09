@@ -77,7 +77,6 @@ class Exercise extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
       dispatch(fetchHardwareGroups()),
-      //      dispatch(fetchExercisePipelines(exerciseId)), // TODO - awaiting modification (many-to-many relation with exercises)
     ]);
 
   componentDidMount() {
