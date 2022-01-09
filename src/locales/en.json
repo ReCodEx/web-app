@@ -1137,7 +1137,7 @@
   "app.pipelineEditContainer.versionChanged": "The pipeline structure was updated whilst you were editing it. If you load the new pipeline, it will be pushed as a new state in editor (you can use undo button to revert it).",
   "app.pipelineEditContainer.versionChangedTitle": "The pipeline was updated",
   "app.pipelineExercisessList.collapse": "Collapse the list and show only short preview.",
-  "app.pipelineExercisessList.empty": "There are no exercises using this pipelines at the moment.",
+  "app.pipelineExercisessList.empty": "There are no exercises using this pipeline at the moment.",
   "app.pipelineExercisessList.expand": "Expand the list and show all {count} exercises.",
   "app.pipelineExercisessList.totalCount": "Total exercises: {count}",
   "app.pipelineFilesTable.description": "Supplementary files are files which can be referenced as remote file in pipeline configuration.",

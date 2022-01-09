@@ -140,7 +140,7 @@ class Pipeline extends Component {
                   />
                 </p>
                 <TheButtonGroup>
-                  <Button variant="success" onClick={this.acknowledgeFork}>
+                  <Button variant="success" onClick={() => this.acknowledgeFork()}>
                     <Icon icon={['far', 'smile']} gapRight />
                     <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
                   </Button>

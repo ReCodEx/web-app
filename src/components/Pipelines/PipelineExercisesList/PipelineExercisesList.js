@@ -62,28 +62,30 @@ const PipelineExercisesList = ({
     fullView || pipelineExercises.size < COLLAPSE_LIMIT ? 1000000 : PREVIEW_SIZE
   );
   return (
-    <Table hover className="mb-1" size="xs">
-      <thead>
-        <tr>
-          <th className="pl-4">
-            <FormattedMessage id="generic.name" defaultMessage="Name" />
-          </th>
-          <th>
-            <FormattedMessage id="generic.author" defaultMessage="Author" />
-          </th>
-          <th className="shrink-col text-nowrap">
-            {pipelineExercises.size > 5 && (
-              <small className="text-muted">
-                <FormattedMessage
-                  id="app.pipelineExercisessList.totalCount"
-                  defaultMessage="Total exercises: {count}"
-                  values={{ count: pipelineExercises.size }}
-                />
-              </small>
-            )}
-          </th>
-        </tr>
-      </thead>
+    <Table hover={pipelineExercises.size > 0} className="mb-1" size="xs">
+      {pipelineExercises.size > 0 && (
+        <thead>
+          <tr>
+            <th className="pl-4">
+              <FormattedMessage id="generic.name" defaultMessage="Name" />
+            </th>
+            <th>
+              <FormattedMessage id="generic.author" defaultMessage="Author" />
+            </th>
+            <th className="shrink-col text-nowrap">
+              {pipelineExercises.size > 5 && (
+                <small className="text-muted">
+                  <FormattedMessage
+                    id="app.pipelineExercisessList.totalCount"
+                    defaultMessage="Total exercises: {count}"
+                    values={{ count: pipelineExercises.size }}
+                  />
+                </small>
+              )}
+            </th>
+          </tr>
+        </thead>
+      )}
 
       <tbody>
         {exercises.map(exercise => (
@@ -133,12 +135,12 @@ const PipelineExercisesList = ({
           </tr>
         ))}
 
-        {exercises.length === 0 && (
+        {pipelineExercises.size === 0 && (
           <tr>
-            <td className="text-center" colSpan={3}>
+            <td className="text-center text-muted" colSpan={3}>
               <FormattedMessage
                 id="app.pipelineExercisessList.empty"
-                defaultMessage="There are no exercises using this pipelines at the moment."
+                defaultMessage="There are no exercises using this pipeline at the moment."
               />
             </td>
           </tr>

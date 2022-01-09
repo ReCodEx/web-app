@@ -81,7 +81,7 @@ export const getVariablesUtilization = defaultMemoize(boxes => {
   boxes.forEach(box =>
     ['portsIn', 'portsOut'].forEach(ports =>
       Object.keys(box[ports])
-        .filter(port => box[ports][port])
+        .filter(port => box[ports][port] && box[ports][port].value)
         .forEach(port => {
           const { value } = box[ports][port];
           if (!utils[value]) {

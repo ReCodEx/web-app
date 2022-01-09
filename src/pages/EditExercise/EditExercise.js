@@ -101,7 +101,7 @@ class EditExercise extends Component {
               <ExerciseNavigation
                 exerciseId={exercise.id}
                 canEdit={hasPermissions(exercise, 'update')}
-                canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+                canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
                 canViewLimits={hasPermissions(exercise, 'viewLimits')}
                 canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
               />

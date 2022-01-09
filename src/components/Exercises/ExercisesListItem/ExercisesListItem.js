@@ -147,7 +147,7 @@ const ExercisesListItem = ({
             </OverlayTrigger>
           </Link>
         )}
-        {permissionHints.viewPipelines && permissionHints.viewScoreConfig && (
+        {permissionHints.viewConfig && permissionHints.viewScoreConfig && (
           <Link to={EXERCISE_EDIT_CONFIG_URI_FACTORY(id)}>
             <OverlayTrigger
               placement="bottom"

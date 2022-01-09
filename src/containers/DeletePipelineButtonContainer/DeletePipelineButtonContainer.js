@@ -28,8 +28,10 @@ export default connect(
   }),
   (dispatch, { id, onDeleted }) => ({
     deletePipeline: () => {
-      onDeleted && onDeleted();
-      return dispatch(deletePipeline(id));
+      return dispatch(deletePipeline(id)).then(res => {
+        onDeleted && onDeleted();
+        return res;
+      });
     },
   })
 )(DeletePipelineButtonContainer);

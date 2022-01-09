@@ -87,7 +87,7 @@ class ReferenceSolution extends Component {
                   exerciseId={exercise.id}
                   userId={referenceSolution.authorId}
                   canEdit={hasPermissions(exercise, 'update')}
-                  canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+                  canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
                   canViewLimits={hasPermissions(exercise, 'viewLimits')}
                   canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
                 />
