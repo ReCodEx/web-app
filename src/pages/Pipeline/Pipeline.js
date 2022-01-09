@@ -15,15 +15,17 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Confirm from '../../components/forms/Confirm';
 import Callout from '../../components/widgets/Callout';
 
-import { fetchPipelineIfNeeded, forkPipeline } from '../../redux/modules/pipelines';
-import { getPipeline, pipelineEnvironmentsSelector } from '../../redux/selectors/pipelines';
+import { fetchPipelineIfNeeded, fetchPipelineExercises, forkPipeline } from '../../redux/modules/pipelines';
+import { fetchByIds } from '../../redux/modules/users';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { getPipeline, getPipelineExercises, pipelineEnvironmentsSelector } from '../../redux/selectors/pipelines';
 
 import { getVariablesUtilization } from '../../helpers/pipelines';
 import PipelineDetail from '../../components/Pipelines/PipelineDetail';
 import PipelineGraph from '../../components/Pipelines/PipelineGraph';
+import PipelineExercisesList from '../../components/Pipelines/PipelineExercisesList';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions, identity } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 
 class Pipeline extends Component {
@@ -32,7 +34,15 @@ class Pipeline extends Component {
   };
 
   static loadAsync = ({ pipelineId }, dispatch) =>
-    Promise.all([dispatch(fetchPipelineIfNeeded(pipelineId)), dispatch(fetchRuntimeEnvironments())]);
+    Promise.all([
+      dispatch(fetchPipelineIfNeeded(pipelineId))
+        .then(() => dispatch(fetchPipelineExercises(pipelineId)))
+        .then(({ value: exercises }) => {
+          const ids = new Set(exercises.map(exercise => exercise && exercise.authorId).filter(identity));
+          return dispatch(fetchByIds(Array.from(ids)));
+        }),
+      dispatch(fetchRuntimeEnvironments()),
+    ]);
 
   componentDidMount() {
     this.props.loadAsync();
@@ -81,6 +91,7 @@ class Pipeline extends Component {
         params: { pipelineId },
       },
       pipeline,
+      pipelineExercises,
       runtimeEnvironments,
     } = this.props;
 
@@ -149,6 +160,7 @@ class Pipeline extends Component {
                   </Col>
                 )}
               </ResourceRenderer>
+
               <Col lg={12}>
                 <Box
                   title={<FormattedMessage id="app.pipeline.visualization" defaultMessage="Visualization" />}
@@ -158,6 +170,17 @@ class Pipeline extends Component {
                     variables={pipeline.pipeline.variables}
                     utilization={getVariablesUtilization(pipeline.pipeline.boxes)}
                   />
+                </Box>
+              </Col>
+
+              <Col lg={12}>
+                <Box
+                  title={
+                    <FormattedMessage id="app.pipeline.associatedExercises" defaultMessage="Associated exercises" />
+                  }
+                  unlimitedHeight
+                  noPadding>
+                  <PipelineExercisesList pipelineExercises={pipelineExercises} />
                 </Box>
               </Col>
             </Row>
@@ -179,6 +202,7 @@ Pipeline.propTypes = {
     replace: PropTypes.func.isRequired,
   }),
   pipeline: ImmutablePropTypes.map,
+  pipelineExercises: PropTypes.any,
   runtimeEnvironments: PropTypes.array,
   loadAsync: PropTypes.func.isRequired,
   forkPipeline: PropTypes.func.isRequired,
@@ -197,6 +221,7 @@ export default withLinks(
     ) => {
       return {
         pipeline: getPipeline(pipelineId)(state),
+        pipelineExercises: getPipelineExercises(state, pipelineId),
         runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state),
       };
     },

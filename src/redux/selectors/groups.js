@@ -12,7 +12,7 @@ import { getLocalizedResourceName } from '../../helpers/localizedData';
 /**
  * Select groups part of the state
  */
-const getParam = (state, id) => id;
+const getParam = (_, id) => id;
 
 const getGroups = state => state.groups;
 export const groupsSelector = state => state.groups.get('resources');

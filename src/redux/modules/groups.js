@@ -26,10 +26,6 @@ const { actions, actionTypes, reduceActions } = factory({ resourceName });
 export { actionTypes };
 
 export const additionalActionTypes = {
-  LOAD_USERS_GROUPS: 'recodex/groups/LOAD_USERS_GROUPS',
-  LOAD_USERS_GROUPS_PENDING: 'recodex/groups/LOAD_USERS_GROUPS_PENDING',
-  LOAD_USERS_GROUPS_FULFILLED: 'recodex/groups/LOAD_USERS_GROUPS_FULFILLED',
-  LOAD_USERS_GROUPS_REJECTED: 'recodex/groups/LOAD_USERS_GROUPS_REJECTED',
   JOIN_GROUP: 'recodex/groups/JOIN_GROUP',
   JOIN_GROUP_PENDING: 'recodex/groups/JOIN_GROUP_PENDING',
   JOIN_GROUP_FULFILLED: 'recodex/groups/JOIN_GROUP_FULFILLED',
@@ -290,14 +286,6 @@ const reducer = handleActions(
         (state, data) => state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
         state
       ),
-
-    [additionalActionTypes.LOAD_USERS_GROUPS_FULFILLED]: (state, { payload, ...rest }) => {
-      const groups = [...payload.supervisor, ...payload.student];
-      return reduceActions[actionTypes.FETCH_MANY_FULFILLED](state, {
-        ...rest,
-        payload: groups,
-      });
-    },
 
     [assignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: assignmentId, groupId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'assignments'], assignments =>
