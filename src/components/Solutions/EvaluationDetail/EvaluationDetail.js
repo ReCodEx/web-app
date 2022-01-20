@@ -84,7 +84,7 @@ const EvaluationDetail = ({
               'text-success': isCorrect,
             })}>
             <b>
-              <FormattedNumber style="percent" value={evaluation.score} />
+              <FormattedNumber style="percent" maximumFractionDigits={3} value={evaluation.score} />
             </b>
             {showScoreDetail && (
               <span className="float-right clickable text-primary mx-2" onClick={showScoreDetail}>
