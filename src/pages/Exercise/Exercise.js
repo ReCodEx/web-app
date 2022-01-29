@@ -77,7 +77,6 @@ class Exercise extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchReferenceSolutions(exerciseId)),
       dispatch(fetchHardwareGroups()),
-      //      dispatch(fetchExercisePipelines(exerciseId)), // TODO - awaiting modification (many-to-many relation with exercises)
     ]);
 
   componentDidMount() {
@@ -130,7 +129,7 @@ class Exercise extends Component {
             <ExerciseNavigation
               exerciseId={exercise.id}
               canEdit={hasPermissions(exercise, 'update')}
-              canViewTests={hasPermissions(exercise, 'viewPipelines', 'viewScoreConfig')}
+              canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
               canViewLimits={hasPermissions(exercise, 'viewLimits')}
               canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
             />

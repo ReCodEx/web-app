@@ -1,6 +1,11 @@
 import { handleActions } from 'redux-actions';
-import { Map, List } from 'immutable';
-import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
+import { List, fromJS } from 'immutable';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus,
+  createActionsWithPostfixes,
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles';
@@ -13,14 +18,14 @@ const { actions, reduceActions } = factory({ resourceName });
 
 export const additionalActionTypes = {
   VALIDATE_PIPELINE: 'recodex/pipelines/VALIDATE_PIPELINE',
-  FORK_PIPELINE: 'recodex/pipelines/FORK_PIPELINE',
-  FORK_PIPELINE_PENDING: 'recodex/pipelines/FORK_PIPELINE_PENDING',
-  FORK_PIPELINE_REJECTED: 'recodex/pipelines/FORK_PIPELINE_REJECTED',
-  FORK_PIPELINE_FULFILLED: 'recodex/pipelines/FORK_PIPELINE_FULFILLED',
+  ...createActionsWithPostfixes('FORK_PIPELINE', 'recodex/pipelines'),
+  ...createActionsWithPostfixes('SET_ENVIRONMENTS', 'recodex/pipelines'),
+  ...createActionsWithPostfixes('FETCH_PIPELINE_EXERCISES', 'recodex/pipelines'),
 };
 
 export const fetchPipeline = actions.fetchResource;
 export const fetchPipelineIfNeeded = actions.fetchOneIfNeeded;
+export const reloadPipeline = (id, meta = {}) => actions.fetchResource(id, { allowReload: true, ...meta });
 
 export const fetchManyEndpoint = '/pipelines';
 
@@ -31,13 +36,6 @@ export const fetchPipelines = () =>
     0, // limit = 0 means all
     true // force reload
   );
-
-/* TODO - awaiting modification (many-to-many relation with exercises)
-export const fetchExercisePipelines = exerciseId =>
-  actions.fetchMany({
-    endpoint: `/exercises/${exerciseId}/pipelines`
-  });
-*/
 
 export const forkStatuses = {
   PENDING: 'PENDING',
@@ -70,30 +68,37 @@ export const validatePipeline = (id, version) =>
     body: { version },
   });
 
+export const setPipelineRuntimeEnvironments = (id, environments) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ENVIRONMENTS,
+    endpoint: `/pipelines/${id}/runtime-environments`,
+    method: 'POST',
+    body: { environments },
+  });
+
+export const fetchPipelineExercises = id =>
+  createApiAction({
+    type: additionalActionTypes.FETCH_PIPELINE_EXERCISES,
+    method: 'GET',
+    endpoint: `/pipelines/${id}/exercises`,
+    meta: { id },
+  });
+
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [pipelineFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { pipelineId } }) =>
       state.hasIn(['resources', pipelineId]) ? updateFiles(state, pipelineId, files, 'supplementaryFilesIds') : state,
 
-    [additionalActionTypes.FORK_PIPELINE_PENDING]: (state, { meta: { id, forkId } }) =>
-      state.updateIn(['resources', id, 'data'], pipeline => {
-        if (!pipeline.has('forks')) {
-          pipeline = pipeline.set('forks', new Map());
-        }
-
-        return pipeline.update('forks', forks => forks.set(forkId, { status: forkStatuses.PENDING }));
-      }),
-
-    [additionalActionTypes.FORK_PIPELINE_REJECTED]: (state, { meta: { id, forkId } }) =>
-      state.setIn(['resources', id, 'data', 'forks', forkId], {
-        status: forkStatuses.REJECTED,
-      }),
-
-    [additionalActionTypes.FORK_PIPELINE_FULFILLED]: (state, { payload: { id: pipelineId }, meta: { id, forkId } }) =>
-      state.setIn(['resources', id, 'data', 'forks', forkId], {
-        status: forkStatuses.FULFILLED,
-        pipelineId,
-      }),
+    [additionalActionTypes.SET_ENVIRONMENTS_FULFILLED]: (state, { payload }) =>
+      state.setIn(
+        ['resources', payload.id],
+        createRecord({
+          data: payload,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now(),
+        })
+      ),
 
     // Pagination result needs to store entity data here whilst indices are stored in pagination module
     [paginationActionTypes.FETCH_PAGINATED_FULFILLED]: (state, { payload: { items }, meta: { endpoint } }) =>
@@ -113,6 +118,15 @@ const reducer = handleActions(
             )
           )
         : state,
+
+    [additionalActionTypes.FETCH_PIPELINE_EXERCISES_PENDING]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'exercises'], resourceStatus.PENDING),
+
+    [additionalActionTypes.FETCH_PIPELINE_EXERCISES_FULFILLED]: (state, { payload, meta: { id } }) =>
+      state.setIn(['resources', id, 'exercises'], fromJS(payload)),
+
+    [additionalActionTypes.FETCH_PIPELINE_EXERCISES_REJECTED]: (state, { meta: { id } }) =>
+      state.setIn(['resources', id, 'exercises'], resourceStatus.REJECTED),
   }),
   initialState
 );

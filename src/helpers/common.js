@@ -139,6 +139,20 @@ export const objectFind = (obj, predicate) =>
 const idSelector = obj => obj.id;
 
 /**
+ * Similar to array.filter, but applied on an object.
+ * @param {Object} obj to be filtered
+ * @param {Function} predicate called on every entry, returns true should the entry remain
+ * @returns {Object} clone of obj with entries filtered out
+ */
+export const objectFilter = (obj, predicate) => {
+  const res = {};
+  Object.keys(obj)
+    .filter(key => predicate(obj[key], key))
+    .forEach(key => (res[key] = obj[key]));
+  return res;
+};
+
+/**
  * Convert array into object. Values of the array remain the values of the object.
  * Keys are computed from values using indexer function
  * (by default, the indexer assumes the values are objects and attempts to fetch "id" property).
@@ -189,23 +203,34 @@ export const getFirstItemInOrder = (arr, comarator = _defaultComparator) => {
  * the items/properties are compared recursively.
  * @param {*} a
  * @param {*} b
+ * @param {boolean} emptyObjectArrayEquals if true, {} and [] are treated as equal
  * @returns {boolean} true if the values are matching
  */
-export const deepCompare = (a, b) => {
-  if (typeof a !== typeof b || Array.isArray(a) !== Array.isArray(b)) {
+export const deepCompare = (a, b, emptyObjectArrayEquals = false) => {
+  if (typeof a !== typeof b) {
     return false;
   }
-  if (typeof a !== 'object') {
+
+  if (typeof a !== 'object' || a === null || b === null) {
     return a === b; // compare scalars
+  } else if (emptyObjectArrayEquals && Object.keys(a).length === 0 && Object.keys(b).length === 0) {
+    return true; // special case, empty objects are compared regardless of their prototype
   }
+
+  if (Array.isArray(a) !== Array.isArray(b)) {
+    return false;
+  }
+
   if (Array.isArray(a)) {
     // compare arrays
-    return a.length === b.length ? a.every((val, idx) => deepCompare(val, b[idx])) : false;
+    return a.length === b.length ? a.every((val, idx) => deepCompare(val, b[idx], emptyObjectArrayEquals)) : false;
   } else {
     // compare objects
     const aKeys = Object.keys(a);
     const bKeys = new Set(Object.keys(b));
-    return aKeys.length === bKeys.size ? aKeys.every(key => bKeys.has(key) && deepCompare(a[key], b[key])) : false;
+    return aKeys.length === bKeys.size
+      ? aKeys.every(key => bKeys.has(key) && deepCompare(a[key], b[key], emptyObjectArrayEquals))
+      : false;
   }
 };
 

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
 import Button from '../../widgets/TheButton';
 import { SendIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
 import Confirm from '../Confirm';
+import { getErrorMessage } from '../../../locales/apiErrorMessages';
 
 const getIcons = defaultMemoize(defaultIcon => ({
   submit: defaultIcon || <SendIcon gapRight />,
@@ -33,7 +35,7 @@ const getMessages = defaultMemoize(messages => {
 });
 
 class SubmitButton extends Component {
-  state = { saved: false };
+  state = { saved: false, lastError: null };
 
   componentWillUnmount() {
     this.unmounted = true;
@@ -46,22 +48,32 @@ class SubmitButton extends Component {
 
   submit = () => {
     const { handleSubmit, onSubmit = null } = this.props;
+
+    // reset button internal state
+    this.setState({ saved: false, lastError: null });
+
     onSubmit && onSubmit();
-    return handleSubmit().then(res => {
-      if (!this.unmounted) {
-        this.setState({ saved: true });
-        this.resetAfterSomeTime = setTimeout(this.reset, 2000);
-      } else {
-        const { reset } = this.props;
-        reset && reset(); // the redux form must be still reset
+
+    return handleSubmit().then(
+      res => {
+        if (!this.unmounted) {
+          this.setState({ saved: true });
+          this.resetAfterSomeTime = setTimeout(this.reset, 2000);
+        } else {
+          const { reset } = this.props;
+          reset && reset(); // the redux form must be still reset
+        }
+        return res;
+      },
+      lastError => {
+        this.setState({ lastError });
       }
-      return res;
-    });
+    );
   };
 
   reset = () => {
     const { reset } = this.props;
-    this.setState({ saved: false });
+    this.setState({ saved: false, lastError: null });
     reset && reset();
   };
 
@@ -74,32 +86,68 @@ class SubmitButton extends Component {
     return 'submit';
   };
 
+  getButtonVariant() {
+    const { submitting, hasFailed, invalid } = this.props;
+    return hasFailed && !submitting
+      ? 'danger'
+      : this.state.saved || submitting
+      ? 'success'
+      : invalid
+      ? 'warning'
+      : 'success';
+  }
+
+  isButtonDisabled() {
+    const { submitting, invalid, asyncValidating = false, disabled = false } = this.props;
+    return invalid || asyncValidating !== false || submitting || disabled;
+  }
+
   render() {
     const {
-      submitting,
+      id,
       hasFailed,
-      invalid,
-      asyncValidating = false,
+      confirmQuestion = '',
       noIcons = false,
       defaultIcon = null,
-      disabled = false,
-      confirmQuestion = '',
       noShadow = false,
       messages = {},
+      intl: { formatMessage },
     } = this.props;
-    const { saved: hasSucceeded } = this.state;
 
     const buttonState = this.getButtonState();
     const icons = getIcons(defaultIcon);
     const formattedMessages = getMessages(messages);
 
-    return (
-      <Confirm id="confirm-submit" onConfirmed={this.submit} question={confirmQuestion} disabled={!confirmQuestion}>
+    return hasFailed && this.state.lastError ? (
+      <OverlayTrigger
+        placement="top"
+        overlay={
+          <Popover id={`error-popover-${id}`}>
+            <Popover.Title className="bg-danger">
+              <FormattedMessage id="app.submitButton.lastError.title" defaultMessage="An error occured" />
+            </Popover.Title>
+            <Popover.Content className="text-center">
+              {getErrorMessage(formatMessage)(this.state.lastError)}
+            </Popover.Content>
+          </Popover>
+        }>
         <Button
           type="submit"
-          variant={hasSucceeded ? 'success' : hasFailed ? 'danger' : invalid ? 'warning' : 'success'}
-          disabled={invalid || asyncValidating !== false || submitting || disabled}
-          noShadow={noShadow}>
+          variant={this.getButtonVariant()}
+          disabled={this.isButtonDisabled()}
+          noShadow={noShadow}
+          onClick={this.submit}>
+          {!noIcons && icons[buttonState]}
+          {formattedMessages[buttonState]}
+        </Button>
+      </OverlayTrigger>
+    ) : (
+      <Confirm
+        id={`confirm-submit-${id}`}
+        onConfirmed={this.submit}
+        question={confirmQuestion}
+        disabled={!confirmQuestion}>
+        <Button type="submit" variant={this.getButtonVariant()} disabled={this.isButtonDisabled()} noShadow={noShadow}>
           {!noIcons && icons[buttonState]}
           {formattedMessages[buttonState]}
         </Button>
@@ -112,7 +160,6 @@ SubmitButton.propTypes = {
   id: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool,
-  hasSucceeded: PropTypes.bool,
   hasFailed: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   noIcons: PropTypes.bool,
@@ -129,6 +176,7 @@ SubmitButton.propTypes = {
   }),
   confirmQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   noShadow: PropTypes.bool,
+  intl: PropTypes.object,
 };
 
-export default SubmitButton;
+export default injectIntl(SubmitButton);

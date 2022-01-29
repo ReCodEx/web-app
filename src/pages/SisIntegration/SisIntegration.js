@@ -160,7 +160,7 @@ class SisIntegration extends Component {
     });
   };
 
-  // editting semester parameters
+  // editing semester parameters
   openEditDialog = (openEdit, data) => {
     const editInitialValues = {
       beginning: data.beginning * 1000,

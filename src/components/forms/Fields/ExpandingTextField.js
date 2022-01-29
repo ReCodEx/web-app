@@ -9,7 +9,7 @@ import TextField from './TextField';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
 const ExpandingTextField = ({
-  fields,
+  fields = [],
   meta: { active, dirty, error, warning },
   label = null,
   noItems = null,
@@ -109,7 +109,7 @@ const ExpandingTextField = ({
 );
 
 ExpandingTextField.propTypes = {
-  fields: PropTypes.object.isRequired,
+  fields: PropTypes.object,
   meta: PropTypes.shape({
     active: PropTypes.bool,
     dirty: PropTypes.bool,

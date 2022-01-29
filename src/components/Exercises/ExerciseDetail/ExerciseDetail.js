@@ -11,7 +11,7 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon, CodeIcon, TagIcon } from '../../icons';
+import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon, CodeIcon, TagIcon, ForkIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
@@ -197,7 +197,7 @@ const ExerciseDetail = ({
         {forkedFrom && (
           <tr>
             <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
-              <Icon icon="code-branch" />
+              <ForkIcon />
             </td>
             <th className="text-nowrap">
               <FormattedMessage id="app.exercise.forked" defaultMessage="Forked from" />:

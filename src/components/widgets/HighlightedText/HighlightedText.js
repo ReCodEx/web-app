@@ -31,7 +31,6 @@ const splitHighlightedTokens = (str, regex) => {
   return res;
 };
 
-// Inset panel replaces old <Well> component from bootstrap 3
 const HighlightedText = React.memo(({ children, regex }) => (
   <>
     {splitHighlightedTokens(children, regex).map((str, idx) =>

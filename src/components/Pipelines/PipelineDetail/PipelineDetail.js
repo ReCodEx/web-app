@@ -3,50 +3,63 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
+import PipelineNameContainer from '../../../containers/PipelineNameContainer';
 import Box from '../../widgets/Box';
 import Markdown from '../../widgets/Markdown';
 import DateTime from '../../widgets/DateTime';
+import Explanation from '../../widgets/Explanation';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
-import Icon, { UserIcon, CodeIcon } from '../../icons';
+import Icon, { UserIcon, CodeIcon, ForkIcon } from '../../icons';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import Version from '../../widgets/Version/Version';
 import ParametersList from '../ParametersList/ParametersList';
 
 const PipelineDetail = ({
   author,
-  exercisesIds,
-  name,
   description = '',
   createdAt,
   updatedAt,
   version,
   runtimeEnvironments,
   parameters,
+  forkedFrom = null,
 }) => (
-  <Box title={name} noPadding unlimitedHeight>
-    <Table responsive size="sm">
+  <Box
+    title={<FormattedMessage id="app.pipeline.properties" defaultMessage="Pipeline properties" />}
+    noPadding
+    unlimitedHeight>
+    <Table responsive size="sm" className="mb-1">
       <tbody>
-        {Boolean(author) && (
-          <tr>
-            <td className="text-center shrink-col em-padding-left em-padding-right">
-              <UserIcon />
-            </td>
-            <th>
-              <FormattedMessage id="generic.author" defaultMessage="Author" />:
-            </th>
-            <td>
+        <tr>
+          <td className="text-center shrink-col px-2 text-muted">
+            <UserIcon />
+          </td>
+          <th>
+            <FormattedMessage id="generic.author" defaultMessage="Author" />:
+          </th>
+          <td>
+            {author ? (
               <UsersNameContainer userId={author} link />
-            </td>
-          </tr>
-        )}
+            ) : (
+              <i className="text-muted">
+                ReCodEx
+                <Explanation id="no-author">
+                  <FormattedMessage
+                    id="app.pipeline.noAuthorExplanation"
+                    defaultMessage="This is a system pipeline. There is no explicit author."
+                  />
+                </Explanation>
+              </i>
+            )}
+          </td>
+        </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center shrink-col px-2 text-muted">
             <Icon icon={['far', 'file-alt']} />
           </td>
           <th className="text-nowrap">
-            <FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline Detail" />
+            <FormattedMessage id="app.pipeline.description" defaultMessage="Description" />:
           </th>
           <td>
             <Markdown source={description} />
@@ -54,29 +67,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
-            <Icon icon="puzzle-piece" />
-          </td>
-          <th>
-            <FormattedMessage id="app.pipeline.exercises" defaultMessage="Exercises:" />
-          </th>
-          <td>
-            {exercisesIds.length !== 0 ? (
-              exercisesIds.map(exerciseId => (
-                <div key={exerciseId}>
-                  <ExercisesNameContainer exerciseId={exerciseId} />
-                </div>
-              ))
-            ) : (
-              <i>
-                <FormattedMessage id="app.pipeline.publicExercise" defaultMessage="Public" />
-              </i>
-            )}
-          </td>
-        </tr>
-
-        <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center shrink-col px-2 text-muted">
             <CodeIcon />
           </td>
           <th className="text-nowrap">
@@ -88,7 +79,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center shrink-col px-2 text-muted">
             <Icon icon="stream" />
           </td>
           <th className="text-nowrap">
@@ -100,7 +91,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center shrink-col px-2 text-muted">
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
@@ -112,16 +103,30 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col em-padding-left em-padding-right">
+          <td className="text-center shrink-col px-2 text-muted">
             <Icon icon={['far', 'copy']} />
           </td>
           <th>
-            <FormattedMessage id="app.pipeline.version" defaultMessage="Version:" />
+            <FormattedMessage id="app.pipeline.version" defaultMessage="Version" />:
           </th>
           <td>
             <Version version={version} createdAt={createdAt} updatedAt={updatedAt} />
           </td>
         </tr>
+
+        {forkedFrom && (
+          <tr>
+            <td className="text-center shrink-col px-2 text-muted">
+              <ForkIcon />
+            </td>
+            <th>
+              <FormattedMessage id="app.pipeline.forkedFrom" defaultMessage="Forked from" />:
+            </th>
+            <td>
+              <PipelineNameContainer pipelineId={forkedFrom} />
+            </td>
+          </tr>
+        )}
       </tbody>
     </Table>
   </Box>
@@ -129,9 +134,8 @@ const PipelineDetail = ({
 
 PipelineDetail.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   author: PropTypes.string,
-  exercisesIds: PropTypes.array.isRequired,
+  forkedFrom: PropTypes.string,
   description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,

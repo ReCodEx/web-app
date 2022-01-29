@@ -18,6 +18,10 @@
   font-weight: bold !important;
 }
 
+.text-italic {
+  font-style: italic;
+}
+
 .ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -209,6 +213,10 @@ table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
   background-color: #eeeeee;
 }
 
+table.table.tbody-hover tbody:hover td {
+  background-color: #eeeeee;
+}
+
 .timid {
   opacity: 0.2;
   transition: opacity 0.5s ease;
@@ -297,6 +305,10 @@ code {
 
 .wider-tooltip>.tooltip-inner {
   max-width: 300px;
+}
+
+.tooltip-inner code {
+  color: #bfb;
 }
 
 .btn.active {

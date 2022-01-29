@@ -24,7 +24,7 @@ const EditEnvironmentList = ({
       {runtimeEnvironments
         .sort((a, b) => a.longName.localeCompare(b.longName, locale))
         .map(environment => (
-          <Col key={environment.id} xs={12} sm={6} md={fullWidth ? 4 : 6} lg={fullWidth ? 3 : 6}>
+          <Col key={environment.id} sm={12} md={fullWidth ? 6 : 12} lg={fullWidth ? 4 : 12} xl={fullWidth ? 3 : 6}>
             <Field
               name={`${namePrefix}${environment.id}`}
               component={CheckboxField}

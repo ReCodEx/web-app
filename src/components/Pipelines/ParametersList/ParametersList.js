@@ -48,7 +48,7 @@ const pipelineParameterMapping = parameter => {
 };
 
 const ParametersList = ({ parameters }) => (
-  <Table>
+  <Table className="my-0">
     <tbody>
       {Object.keys(parameters).map(parameterName => (
         <tr key={parameterName}>

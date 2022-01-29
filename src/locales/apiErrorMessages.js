@@ -15,6 +15,11 @@ const apiErrorCodes = defineMessages({
     id: 'app.apiErrorCodes.400-004',
     defaultMessage: 'Uploaded file size does not meet server limitations.',
   },
+  '400-010': {
+    id: 'app.apiErrorCodes.400-010',
+    defaultMessage:
+      'The data were modified by someone else while you were editing them (a newer version exist). The update was aborted to prevent accidental overwrite of recent modifications.',
+  },
   '400-101': { id: 'app.apiErrorCodes.400-101', defaultMessage: 'The credentials are not valid.' },
   '400-104': {
     id: 'app.apiErrorCodes.400-104',

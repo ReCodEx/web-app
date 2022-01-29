@@ -21,7 +21,7 @@ const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
     .map(test => ({ test, weight: weightsObj[test] }));
   const weightsSum = weights.reduce((acc, { weight }) => acc + weight, 0);
   const testsSum = results && weights.reduce((acc, { test, weight }) => acc + weight * results[test], 0);
-  const totalScore = weightsSum !== 0 ? Math.round((testsSum * 1000) / weightsSum) / 1000 : '?';
+  const totalScore = weightsSum !== 0 ? Math.round((testsSum * 100000) / weightsSum) / 100000 : '?';
 
   return (
     <div>

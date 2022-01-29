@@ -421,8 +421,21 @@ class SolutionStatus extends Component {
                       </p>
                       <p className="larger text-center">
                         <code>
-                          floor({maxPoints} &times; <FormattedNumber style="percent" value={evaluation.score} />) ={' '}
-                          <strong>{actualPoints}</strong>
+                          floor({maxPoints} &times;{' '}
+                          <FormattedNumber style="percent" maximumFractionDigits={3} value={evaluation.score} />
+                          <OverlayTrigger
+                            placement="bottom"
+                            overlay={
+                              <Tooltip id="pointsComputationEpsilon">
+                                <FormattedMessage
+                                  id="app.solution.pointsExplainDialog.epsilonExplain"
+                                  defaultMessage="The epsilon (1e-6) is added to compensate for rounding errors."
+                                />
+                              </Tooltip>
+                            }>
+                            <span>{' + '}&epsilon;</span>
+                          </OverlayTrigger>
+                          ) = <strong>{actualPoints}</strong>
                         </code>
                       </p>
                     </>

@@ -1,82 +1,49 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { connect } from 'react-redux';
-import { reduxForm, Field, touch, formValueSelector } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { TextField, MarkdownTextAreaField, PipelineField, PipelineVariablesField } from '../Fields';
-
-import Callout from '../../widgets/Callout';
+import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
+import { SaveIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
-import { validatePipeline } from '../../../redux/modules/pipelines';
-import { extractVariables } from '../../../helpers/boxes';
-import { fetchSupplementaryFilesForPipeline } from '../../../redux/modules/pipelineFiles';
-import { createGetPipelineFiles } from '../../../redux/selectors/pipelineFiles';
 
 class EditPipelineForm extends Component {
-  componentDidMount = () => this.props.loadAsync();
-
-  componentDidUpdate(prevProps) {
-    if (this.props.pipeline.id !== prevProps.pipeline.id) {
-      this.props.loadAsync();
-    }
-  }
-
   render() {
     const {
-      initialValues: pipeline,
-      anyTouched,
+      isSuperadmin = false,
+      dirty,
       submitting,
       handleSubmit,
       submitFailed,
       submitSucceeded,
-      variables = [],
       invalid,
-      asyncValidating,
-      supplementaryFiles,
     } = this.props;
     return (
       <FormBox
-        title={
-          <FormattedMessage
-            id="app.editPipelineForm.title"
-            defaultMessage="Edit pipeline {name}"
-            values={{ name: pipeline.name }}
-          />
-        }
+        title={<FormattedMessage id="app.editPipelineForm.title" defaultMessage="Pipeline Metadata" />}
         succeeded={submitSucceeded}
-        dirty={anyTouched}
+        dirty={dirty}
         footer={
           <div className="text-center">
             <SubmitButton
               id="editPipeline"
               invalid={invalid}
               submitting={submitting}
-              dirty={anyTouched}
+              dirty={dirty}
               hasSucceeded={submitSucceeded}
               hasFailed={submitFailed}
               handleSubmit={handleSubmit}
-              asyncValidating={asyncValidating}
+              defaultIcon={<SaveIcon gapRight />}
               messages={{
-                submit: <FormattedMessage id="app.editPipelineForm.submit" defaultMessage="Save changes" />,
-                submitting: (
-                  <FormattedMessage id="app.editPipelineForm.submitting" defaultMessage="Saving changes..." />
-                ),
-                success: <FormattedMessage id="app.editPipelineForm.success" defaultMessage="Settings were saved." />,
-                validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
+                submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+                submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+                success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
               }}
             />
           </div>
         }>
-        {submitFailed && (
-          <Callout variant="danger">
-            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-          </Callout>
-        )}
-
         <Container fluid>
           <Row>
             <Col lg={12}>
@@ -93,37 +60,110 @@ class EditPipelineForm extends Component {
                 label={
                   <FormattedMessage
                     id="app.editPipelineForm.description"
-                    defaultMessage="Description for supervisors:"
+                    defaultMessage="Detailed description (for exercise authors):"
                   />
                 }
               />
             </Col>
           </Row>
 
-          <Row>
-            <Col lg={12}>
-              <Field
-                name="pipeline.boxes"
-                component={PipelineField}
-                label={<FormattedMessage id="app.editPipelineFields.pipeline" defaultMessage="The pipeline:" />}
-              />
-            </Col>
+          {isSuperadmin && (
+            <>
+              <hr />
 
-            <Col lg={12}>
-              <Field
-                name="pipeline.variables"
-                component={PipelineVariablesField}
-                variables={variables}
-                label={
-                  <FormattedMessage
-                    id="app.editPipelineFields.pipelineVariables"
-                    defaultMessage="Pipeline variables:"
+              <Row>
+                <Col lg={12}>
+                  <Field
+                    name="global"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage
+                        id="app.editPipelineForm.global"
+                        defaultMessage="Global pipeline associated with particular runtime environments"
+                      />
+                    }
                   />
-                }
-                supplementaryFiles={supplementaryFiles}
-              />
-            </Col>
-          </Row>
+                </Col>
+              </Row>
+
+              <hr className="mt-0" />
+
+              <Row>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.isCompilationPipeline"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage id="app.editPipelineForm.isCompilationPipeline" defaultMessage="Compilation" />
+                    }
+                  />
+                </Col>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.isExecutionPipeline"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage id="app.editPipelineForm.isExecutionPipeline" defaultMessage="Execution" />
+                    }
+                  />
+                </Col>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.judgeOnlyPipeline"
+                    component={CheckboxField}
+                    onOff
+                    label={<FormattedMessage id="app.editPipelineForm.judgeOnlyPipeline" defaultMessage="Judge-Only" />}
+                  />
+                </Col>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.producesStdout"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage id="app.editPipelineForm.producesStdout" defaultMessage="Produces std. out" />
+                    }
+                  />
+                </Col>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.producesFiles"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage
+                        id="app.editPipelineForm.producesFiles"
+                        defaultMessage="Produces output files"
+                      />
+                    }
+                  />
+                </Col>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.hasEntryPoint"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage id="app.editPipelineForm.hasEntryPoint" defaultMessage="Has entry-point" />
+                    }
+                  />
+                </Col>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.hasExtraFiles"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage id="app.editPipelineForm.hasExtraFiles" defaultMessage="Has extra files" />
+                    }
+                  />
+                </Col>
+              </Row>
+            </>
+          )}
         </Container>
       </FormBox>
     );
@@ -131,19 +171,15 @@ class EditPipelineForm extends Component {
 }
 
 EditPipelineForm.propTypes = {
-  initialValues: PropTypes.object.isRequired,
+  isSuperadmin: PropTypes.bool,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
-  anyTouched: PropTypes.bool,
+  dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  variables: PropTypes.array,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
-  supplementaryFiles: ImmutablePropTypes.map,
-  loadAsync: PropTypes.func.isRequired,
-  pipeline: PropTypes.object,
 };
 
 const validate = ({ name, description }) => {
@@ -170,42 +206,9 @@ const validate = ({ name, description }) => {
   return errors;
 };
 
-const asyncValidate = (values, dispatch, { initialValues: { id, version } }) =>
-  new Promise((resolve, reject) =>
-    dispatch(validatePipeline(id, version))
-      .then(res => res.value)
-      .then(({ versionIsUpToDate }) => {
-        const errors = {};
-        if (versionIsUpToDate === false) {
-          errors.name = (
-            <FormattedMessage
-              id="app.editPipelineForm.validation.versionDiffers"
-              defaultMessage="Somebody has changed the pipeline while you have been editing it. Please reload the page and apply your changes once more."
-            />
-          );
-          dispatch(touch('editPipeline', 'name'));
-        }
-
-        if (Object.keys(errors).length > 0) {
-          throw errors;
-        }
-      })
-      .then(resolve())
-      .catch(errors => reject(errors))
-  );
-
-export default connect(
-  (state, { pipeline }) => ({
-    variables: extractVariables(formValueSelector('editPipeline')(state, 'pipeline.boxes')),
-    supplementaryFiles: createGetPipelineFiles(pipeline.supplementaryFilesIds)(state),
-  }),
-  (dispatch, { pipeline }) => ({
-    loadAsync: () => dispatch(fetchSupplementaryFilesForPipeline(pipeline.id)),
-  })
-)(
-  reduxForm({
-    form: 'editPipeline',
-    validate,
-    asyncValidate,
-  })(EditPipelineForm)
-);
+export default reduxForm({
+  form: 'editPipeline',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+  validate,
+})(EditPipelineForm);
