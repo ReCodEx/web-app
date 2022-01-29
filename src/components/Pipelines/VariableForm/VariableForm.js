@@ -39,9 +39,6 @@ class VariableForm extends Component {
       onHide,
     } = this.props;
 
-    // const currentBoxType = boxTypes.find(box => box.type === selectedType);
-    // const getPortsArray = ports => Object.keys(ports).map(port => ({ name: port, ...ports[port] }));
-
     return (
       <Modal show={show} onHide={onHide} keyboard size="lg">
         <Modal.Header closeButton>
