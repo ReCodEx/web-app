@@ -12,6 +12,7 @@ export const ENV_GO_ID = 'go';
 export const ENV_GROOVY_ID = 'groovy';
 export const ENV_HASKELL_ID = 'haskell';
 export const ENV_JAVA_ID = 'java';
+export const ENV_MAVEN_ID = 'java-maven';
 export const ENV_KOTLIN_ID = 'kotlin';
 export const ENV_NODEJS_ID = 'node-linux';
 export const ENV_PHP_ID = 'php-linux';
@@ -36,6 +37,7 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_GROOVY_ID,
   ENV_HASKELL_ID,
   ENV_JAVA_ID,
+  ENV_MAVEN_ID,
   ENV_KOTLIN_ID,
   ENV_NODEJS_ID,
   ENV_PHP_ID,
