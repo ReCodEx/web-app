@@ -10,7 +10,7 @@ import { BugIcon } from '../../icons';
 import './EvaluationTable.css';
 
 const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => (
-  <Table>
+  <Table className="mb-0">
     <thead>
       <tr>
         <th />
