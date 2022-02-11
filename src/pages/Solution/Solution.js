@@ -13,7 +13,7 @@ import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
+import { TheButtonGroup } from '../../components/widgets/TheButton';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -35,7 +35,6 @@ import {
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 
-import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
 import { hasPermissions } from '../../helpers/common';
 import { SolutionResultsIcon, WarningIcon } from '../../components/icons';
 
@@ -130,24 +129,13 @@ class Solution extends Component {
                             userId={solution.authorId}
                             locale={locale}
                           />
-
-                          {solution.runtimeEnvironmentId ===
-                          ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
-                            <Button disabled={true}>
-                              <FormattedMessage
-                                id="app.solution.dotnetResubmitTemporaryDisabled"
-                                defaultMessage="Debug Resubmit Temporary Disabled"
-                              />
-                            </Button>
-                          ) : (
-                            <ResubmitSolutionContainer
-                              id={solution.id}
-                              assignmentId={assignment.id}
-                              isDebug={true}
-                              userId={solution.authorId}
-                              locale={locale}
-                            />
-                          )}
+                          <ResubmitSolutionContainer
+                            id={solution.id}
+                            assignmentId={assignment.id}
+                            isDebug={true}
+                            userId={solution.authorId}
+                            locale={locale}
+                          />
                         </>
                       )}
                   </TheButtonGroup>

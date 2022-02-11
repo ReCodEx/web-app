@@ -11,7 +11,7 @@ import { ReferenceSolutionNavigation } from '../../components/layout/Navigation'
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
+import { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import { ReferenceSolutionIcon } from '../../components/icons';
 
@@ -34,7 +34,6 @@ import {
   fetchManyStatus,
 } from '../../redux/selectors/referenceSolutionEvaluations';
 
-import { ENV_CS_DOTNET_CORE_ID } from '../../helpers/exercise/environments';
 import { hasPermissions } from '../../helpers/common';
 
 const exerciseHasRuntime = defaultMemoize(
@@ -116,22 +115,11 @@ class ReferenceSolution extends Component {
                             isDebug={false}
                             locale={locale}
                           />
-
-                          {referenceSolution.runtimeEnvironmentId ===
-                          ENV_CS_DOTNET_CORE_ID /* temporary disable debug resubmits of .NET Core */ ? (
-                            <Button disabled={true}>
-                              <FormattedMessage
-                                id="app.solution.dotnetResubmitTemporaryDisabled"
-                                defaultMessage="Debug Resubmit Temporary Disabled"
-                              />
-                            </Button>
-                          ) : (
-                            <ResubmitReferenceSolutionContainer
-                              id={referenceSolution.id}
-                              isDebug={true}
-                              locale={locale}
-                            />
-                          )}
+                          <ResubmitReferenceSolutionContainer
+                            id={referenceSolution.id}
+                            isDebug={true}
+                            locale={locale}
+                          />
                         </TheButtonGroup>
                       </div>
                     )}

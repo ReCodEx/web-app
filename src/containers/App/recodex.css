@@ -296,7 +296,11 @@ a:focus {
  * Bootstrap Enhancements
  */
 code {
-  color: #063;
+  color: #072;
+}
+
+.recodex-markdown-container code {
+  white-space: pre-wrap;
 }
 
 .wider-tooltip {

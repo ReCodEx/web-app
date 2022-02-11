@@ -301,7 +301,7 @@ class TestResultsTable extends Component {
       showLogButton && results.reduce((out, { testName }) => out && !this.isLogOpen(testName), true);
 
     return (
-      <Table responsive>
+      <Table responsive className="mb-0">
         <thead>
           <tr>
             <th />
