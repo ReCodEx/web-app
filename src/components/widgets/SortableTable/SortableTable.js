@@ -13,7 +13,7 @@ class SortableTable extends Component {
 
   // Default row rendering fucntion (if the user does not provide custom function)
   defaultRowRenderer = (row, idx, columns) => (
-    <tr key={row.id || idx}>
+    <tr key={row.id || idx} className={row.selected ? 'selected' : ''}>
       {columns.map(({ id: colId, cellRenderer, style, className, onClick, isClickable }) => {
         if (typeof isClickable === 'function') {
           isClickable = isClickable(row.id, colId);
