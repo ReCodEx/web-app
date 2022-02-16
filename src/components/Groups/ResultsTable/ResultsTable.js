@@ -22,9 +22,10 @@ import { createUserNameComparator } from '../../helpers/users';
 import { compareAssignments, compareShadowAssignments } from '../../helpers/assignments';
 import { downloadString } from '../../../redux/helpers/api/download';
 import Button from '../../widgets/TheButton';
-import { DownloadIcon, LoadingIcon } from '../../icons';
+import Icon, { DownloadIcon, LoadingIcon } from '../../icons';
 import { safeGet, EMPTY_ARRAY, EMPTY_OBJ, hasPermissions } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
+import { storageGetItem, storageSetItem } from '../../../helpers/localStorage';
 
 import styles from './ResultsTable.less';
 import escapeString from '../../helpers/escapeString';
@@ -33,27 +34,31 @@ const assignmentCellRendererCreator = defaultMemoize((rawAssignments, locale) =>
   const assignments = {};
   rawAssignments.forEach(a => (assignments[a.id] = a));
   return (points, idx, key, row) => (
-    <OverlayTrigger
-      placement="bottom"
-      overlay={
-        <Tooltip id={`results-table-cell-${row.user.id}-${key}`}>
-          {row.user.name.firstName} {row.user.name.lastName}
-          {', '}
-          {assignments[key] && getLocalizedName(assignments[key], locale)}
-        </Tooltip>
-      }>
-      <span>
-        {points && Number.isInteger(points.gained) ? (
-          <span>
-            {points.gained}
-            {points.bonus > 0 && <span className={styles.bonusPoints}>+{points.bonus}</span>}
-            {points.bonus < 0 && <span className={styles.malusPoints}>{points.bonus}</span>}
-          </span>
-        ) : (
-          '-'
-        )}
-      </span>
-    </OverlayTrigger>
+    <>
+      <OverlayTrigger
+        placement="bottom"
+        overlay={
+          <Tooltip id={`results-table-cell-${row.user.id}-${key}`}>
+            {row.user.name.firstName} {row.user.name.lastName}
+            {', '}
+            {assignments[key] && getLocalizedName(assignments[key], locale)}
+          </Tooltip>
+        }>
+        <span>
+          {points && Number.isInteger(points.gained) ? (
+            <span>
+              {points.gained}
+              {points.bonus > 0 && <span className={styles.bonusPoints}>+{points.bonus}</span>}
+              {points.bonus < 0 && <span className={styles.malusPoints}>{points.bonus}</span>}
+            </span>
+          ) : (
+            '-'
+          )}
+        </span>
+      </OverlayTrigger>
+
+      {points && points.accepted && <Icon icon="check-circle" className={`text-green ${styles.accepted}`} />}
+    </>
   );
 });
 
@@ -126,6 +131,8 @@ const getCSVValues = (assignments, shadowAssignments, data, locale) => {
   return result.map(row => row.join(SEPARATOR)).join(NEWLINE);
 };
 
+const localStorageShowOnlyMeKey = 'ResultsTable.showOnlyMe';
+
 class ResultsTable extends Component {
   state = {
     dialogOpen: false,
@@ -133,6 +140,17 @@ class ResultsTable extends Component {
     dialogUserId: null,
     dialogAssignmentId: null,
     dialogShadowId: null,
+    showOnlyMe: false,
+  };
+
+  componentDidMount = () => {
+    this.setState({ showOnlyMe: storageGetItem(localStorageShowOnlyMeKey, false) });
+  };
+
+  toggleShowOnlyMe = () => {
+    const showOnlyMe = !this.state.showOnlyMe;
+    storageSetItem(localStorageShowOnlyMeKey, showOnlyMe);
+    this.setState({ showOnlyMe });
   };
 
   openDialogAssignment = (dialogUserId, dialogAssignmentId) => {
@@ -204,144 +222,180 @@ class ResultsTable extends Component {
     }
   };
 
-  prepareColumnDescriptors = defaultMemoize((assignments, shadowAssignments, loggedUser, locale, isTeacher) => {
-    const {
-      group,
-      links: {
-        ASSIGNMENT_STATS_URI_FACTORY,
-        ASSIGNMENT_DETAIL_URI_FACTORY,
-        SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
-        GROUP_USER_SOLUTIONS_URI_FACTORY,
-      },
-    } = this.props;
+  prepareColumnDescriptors = defaultMemoize(
+    (assignments, shadowAssignments, loggedUser, locale, isTeacher, showOnlyMe = false) => {
+      const {
+        group,
+        links: {
+          ASSIGNMENT_STATS_URI_FACTORY,
+          ASSIGNMENT_DETAIL_URI_FACTORY,
+          SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
+          GROUP_USER_SOLUTIONS_URI_FACTORY,
+        },
+      } = this.props;
 
-    const nameComparator = createUserNameComparator(locale);
+      const nameComparator = createUserNameComparator(locale);
 
-    /*
-     * User Name (First Column)
-     */
-    const columns = [
-      new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />, {
-        headerSuffix: <FormattedMessage id="app.groupResultsTable.maxPointsRow" defaultMessage="Max points:" />,
-        headerSuffixClassName: styles.maxPointsRow,
-        className: 'text-left',
-        comparator: ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
-        cellRenderer: user =>
-          user && (
-            <UsersName
-              {...user}
-              currentUserId={loggedUser.id}
-              showEmail="icon"
-              showExternalIdentifiers
-              link={
-                isTeacher || user.id === loggedUser.id ? GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id) : false
-              }
-            />
-          ),
-      }),
-    ];
-
-    /*
-     * Assignments
-     */
-    assignments.sort(compareAssignments).forEach(assignment =>
-      columns.push(
+      /*
+       * User Name (First Column)
+       */
+      const columns = [
         new SortableTableColumnDescriptor(
-          assignment.id,
-          (
-            <div className={styles.verticalText}>
-              <div>
-                <Link
-                  to={
-                    isTeacher
-                      ? ASSIGNMENT_STATS_URI_FACTORY(assignment.id)
-                      : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
-                  }>
-                  <LocalizedExerciseName entity={assignment} />
-                </Link>
-              </div>
-            </div>
-          ),
+          'user',
+          <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />,
           {
-            headerClassName: 'text-center',
-            className: 'text-center',
-            headerSuffix:
-              assignment.maxPointsBeforeFirstDeadline +
-              (assignment.maxPointsBeforeSecondDeadline ? ` / ${assignment.maxPointsBeforeSecondDeadline}` : ''),
+            headerSuffix: <FormattedMessage id="app.groupResultsTable.maxPointsRow" defaultMessage="Max points:" />,
             headerSuffixClassName: styles.maxPointsRow,
-            cellRenderer: assignmentCellRendererCreator(assignments, locale),
-            isClickable: hasPermissions(assignment, 'viewAssignmentSolutions')
-              ? true
-              : (userId, _) => userId === loggedUser.id,
-            onClick: hasPermissions(assignment, 'viewAssignmentSolutions')
-              ? (userId, assignmentId) => this.openDialogAssignment(userId, assignmentId)
-              : (userId, assignmentId) => userId === loggedUser.id && this.openDialogAssignment(userId, assignmentId),
+            className: 'text-left',
+            comparator: showOnlyMe ? null : ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
+            cellRenderer: user =>
+              user && (
+                <>
+                  <UsersName
+                    {...user}
+                    currentUserId={loggedUser.id}
+                    showEmail="icon"
+                    showExternalIdentifiers
+                    link={
+                      isTeacher || user.id === loggedUser.id
+                        ? GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id)
+                        : false
+                    }
+                  />
+                  {!isTeacher && user.id === loggedUser.id && hasPermissions(group, 'viewStats') && (
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={
+                        <Tooltip id="onlyShowMe">
+                          {showOnlyMe ? (
+                            <FormattedMessage
+                              id="app.resultsTable.cancelOnlyShowMe"
+                              defaultMessage="Show all students in the group"
+                            />
+                          ) : (
+                            <FormattedMessage
+                              id="app.resultsTable.onlyShowMe"
+                              defaultMessage="Hide everyone except for myself"
+                            />
+                          )}
+                        </Tooltip>
+                      }>
+                      <Icon
+                        icon={showOnlyMe ? 'users' : ['far', 'user-circle']}
+                        largeGapLeft
+                        className="text-success"
+                        onClick={this.toggleShowOnlyMe}
+                      />
+                    </OverlayTrigger>
+                  )}
+                </>
+              ),
           }
-        )
-      )
-    );
+        ),
+      ];
 
-    /*
-     * Shadow Assignments
-     */
-    shadowAssignments.sort(compareShadowAssignments).forEach(shadowAssignment =>
-      columns.push(
-        new SortableTableColumnDescriptor(
-          shadowAssignment.id,
-          (
-            <div className={styles.verticalText}>
-              <div>
-                <Link to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowAssignment.id)}>
-                  <LocalizedExerciseName entity={shadowAssignment} />
-                </Link>
+      /*
+       * Assignments
+       */
+      assignments.sort(compareAssignments).forEach(assignment =>
+        columns.push(
+          new SortableTableColumnDescriptor(
+            assignment.id,
+            (
+              <div className={styles.verticalText}>
+                <div>
+                  <Link
+                    to={
+                      isTeacher
+                        ? ASSIGNMENT_STATS_URI_FACTORY(assignment.id)
+                        : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
+                    }>
+                    <LocalizedExerciseName entity={assignment} />
+                  </Link>
+                </div>
               </div>
-            </div>
-          ),
-          {
-            className: 'text-center',
-            headerSuffix: shadowAssignment.maxPoints,
-            headerSuffixClassName: styles.maxPointsRow,
-            cellRenderer: shadowAssignmentCellRendererCreator(shadowAssignments, locale),
-            isClickable: true,
-            onClick: (userId, shadowId) => this.openDialogShadowAssignment(userId, shadowId),
-          }
+            ),
+            {
+              headerClassName: 'text-center',
+              className: `text-center ${styles.pointsCell}`,
+              headerSuffix:
+                assignment.maxPointsBeforeFirstDeadline +
+                (assignment.maxPointsBeforeSecondDeadline ? ` / ${assignment.maxPointsBeforeSecondDeadline}` : ''),
+              headerSuffixClassName: styles.maxPointsRow,
+              cellRenderer: assignmentCellRendererCreator(assignments, locale),
+              isClickable: hasPermissions(assignment, 'viewAssignmentSolutions')
+                ? true
+                : (userId, _) => userId === loggedUser.id,
+              onClick: hasPermissions(assignment, 'viewAssignmentSolutions')
+                ? (userId, assignmentId) => this.openDialogAssignment(userId, assignmentId)
+                : (userId, assignmentId) => userId === loggedUser.id && this.openDialogAssignment(userId, assignmentId),
+            }
+          )
         )
-      )
-    );
-
-    /*
-     * Total points and optionally buttons
-     */
-    columns.push(
-      new SortableTableColumnDescriptor(
-        'total',
-        <FormattedMessage id="app.resultsTable.total" defaultMessage="Total" />,
-        {
-          className: 'text-center',
-          headerSuffixClassName: styles.maxPointsRow,
-          comparator: ({ total: t1, user: u1 }, { total: t2, user: u2 }) =>
-            (Number(t2 && t2.gained) || -1) - (Number(t1 && t1.gained) || -1) || nameComparator(u1, u2),
-          cellRenderer: points => <strong>{points ? `${points.gained}/${points.total}` : '-/-'}</strong>,
-        }
-      )
-    );
-
-    if (hasPermissions(group, 'update')) {
-      columns.push(
-        new SortableTableColumnDescriptor('buttons', '', {
-          headerSuffixClassName: styles.maxPointsRow,
-          className: 'text-right',
-        })
       );
-    }
 
-    return columns;
-  });
+      /*
+       * Shadow Assignments
+       */
+      shadowAssignments.sort(compareShadowAssignments).forEach(shadowAssignment =>
+        columns.push(
+          new SortableTableColumnDescriptor(
+            shadowAssignment.id,
+            (
+              <div className={styles.verticalText}>
+                <div>
+                  <Link to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowAssignment.id)}>
+                    <LocalizedExerciseName entity={shadowAssignment} />
+                  </Link>
+                </div>
+              </div>
+            ),
+            {
+              className: 'text-center',
+              headerSuffix: shadowAssignment.maxPoints,
+              headerSuffixClassName: styles.maxPointsRow,
+              cellRenderer: shadowAssignmentCellRendererCreator(shadowAssignments, locale),
+              isClickable: true,
+              onClick: (userId, shadowId) => this.openDialogShadowAssignment(userId, shadowId),
+            }
+          )
+        )
+      );
+
+      /*
+       * Total points and optionally buttons
+       */
+      columns.push(
+        new SortableTableColumnDescriptor(
+          'total',
+          <FormattedMessage id="app.resultsTable.total" defaultMessage="Total" />,
+          {
+            className: 'text-center',
+            headerSuffixClassName: styles.maxPointsRow,
+            comparator: ({ total: t1, user: u1 }, { total: t2, user: u2 }) =>
+              (Number(t2 && t2.gained) || -1) - (Number(t1 && t1.gained) || -1) || nameComparator(u1, u2),
+            cellRenderer: points => <strong>{points ? `${points.gained}/${points.total}` : '-/-'}</strong>,
+          }
+        )
+      );
+
+      if (hasPermissions(group, 'update')) {
+        columns.push(
+          new SortableTableColumnDescriptor('buttons', '', {
+            headerSuffixClassName: styles.maxPointsRow,
+            className: 'text-right',
+          })
+        );
+      }
+
+      return columns;
+    }
+  );
 
   // Re-format the data, so they can be rendered by the SortableTable ...
-  prepareData = defaultMemoize((assignments, shadowAssignments, users, stats, showButtons) => {
+  prepareData = defaultMemoize((assignments, shadowAssignments, users, stats, showOnlyMe = false) => {
     const { loggedUser, renderActions, group } = this.props;
-    if (!hasPermissions(group, 'viewStats')) {
+    if (!hasPermissions(group, 'viewStats') || showOnlyMe) {
       users = users.filter(({ id }) => id === loggedUser.id);
     }
 
@@ -349,6 +403,7 @@ class ResultsTable extends Component {
       const userStats = stats.find(stat => stat.userId === user.id);
       const data = {
         id: user.id,
+        selected: !showOnlyMe && user.id === loggedUser.id,
         user: user,
         total: userStats && userStats.points,
         buttons: renderActions && hasPermissions(group, 'update') ? renderActions(user.id) : '',
@@ -356,7 +411,12 @@ class ResultsTable extends Component {
       };
 
       assignments.forEach(assignment => {
-        data[assignment.id] = safeGet(userStats, ['assignments', a => a.id === assignment.id, 'points'], EMPTY_OBJ);
+        const { points = undefined, accepted = false } = safeGet(
+          userStats,
+          ['assignments', a => a.id === assignment.id],
+          EMPTY_OBJ
+        );
+        data[assignment.id] = points ? { ...points, accepted } : EMPTY_OBJ;
       });
 
       shadowAssignments.forEach(shadowAssignment => {
@@ -400,10 +460,11 @@ class ResultsTable extends Component {
             shadowAssignments,
             loggedUser,
             locale,
-            isAdmin || isSupervisor || isObserver
+            isAdmin || isSupervisor || isObserver,
+            this.state.showOnlyMe
           )}
           defaultOrder="user"
-          data={this.prepareData(assignments, shadowAssignments, users, stats)}
+          data={this.prepareData(assignments, shadowAssignments, users, stats, this.state.showOnlyMe)}
           empty={
             <div className="text-center text-muted">
               <FormattedMessage
@@ -412,19 +473,20 @@ class ResultsTable extends Component {
               />
             </div>
           }
+          className="hover mb-0"
         />
         {(isAdmin || isSupervisor || isObserver) && (
           <div className="text-center">
             <Button
               variant="primary"
-              className={styles.downloadButton}
+              className="my-3"
               onClick={() =>
                 downloadString(
                   `${groupName}.csv`,
                   getCSVValues(
                     assignments,
                     shadowAssignments,
-                    this.prepareData(assignments, shadowAssignments, users, stats),
+                    this.prepareData(assignments, shadowAssignments, users, stats, this.state.showOnlyMe),
                     locale
                   ),
                   'text/csv;charset=utf-8',

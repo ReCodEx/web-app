@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
@@ -16,10 +17,11 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ReferenceSolutionsTable from '../../components/Exercises/ReferenceSolutionsTable';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
-import { ExerciseIcon, DetailIcon, DeleteIcon } from '../../components/icons';
+import { ExerciseIcon, DetailIcon, DeleteIcon, SendIcon, LinkIcon } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
-import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
+import ExerciseCallouts from '../../components/Exercises/ExerciseCallouts';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
+import Callout from '../../components/widgets/Callout';
 
 import { isSubmitting } from '../../redux/selectors/submission';
 import {
@@ -95,6 +97,17 @@ class Exercise extends Component {
     this.setState({ forkId: Math.random().toString() });
   };
 
+  createReferenceSolution = () => {
+    const { userId, initCreateReferenceSolution, history, location } = this.props;
+
+    const scrollPosition = window.scrollY;
+    window.location.hash = '';
+    history.replace(location.pathname + location.search);
+    window.setTimeout(() => window.scrollTo(0, scrollPosition), 0);
+
+    initCreateReferenceSolution(userId);
+  };
+
   render() {
     const {
       userId,
@@ -104,7 +117,6 @@ class Exercise extends Component {
       submitting,
       referenceSolutions,
       intl: { formatMessage, locale },
-      initCreateReferenceSolution,
       deleteReferenceSolution,
       groups,
       groupsAccessor,
@@ -114,7 +126,7 @@ class Exercise extends Component {
       detachingGroupId,
       attachExerciseToGroup,
       detachExerciseFromGroup,
-      links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY },
+      links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY, EXERCISE_ASSIGNMENTS_URI_FACTORY },
     } = this.props;
 
     const { forkId } = this.state;
@@ -134,29 +146,25 @@ class Exercise extends Component {
               canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
             />
 
-            {exerciseCalloutsAreVisible(exercise) && (
-              <Row>
-                <Col sm={12}>
-                  <ExerciseCallouts {...exercise} />
-                </Col>
-              </Row>
-            )}
+            <Row>
+              <Col sm={12}>
+                <ExerciseCallouts {...exercise} />
 
-            {hasPermissions(exercise, 'fork') && (
-              <Row>
-                <Col sm={12} className="em-margin-bottom">
-                  <ForkExerciseForm
-                    exerciseId={exercise.id}
-                    groups={groups}
-                    forkId={forkId}
-                    onSubmit={formData => forkExercise(forkId, formData)}
-                    resetId={this.reset}
-                    groupsAccessor={groupsAccessor}
-                    initialValues={FORK_EXERCISE_FORM_INITIAL_VALUES}
-                  />
-                </Col>
-              </Row>
-            )}
+                {!exercise.isLocked && !exercise.isBroken && exercise.hasReferenceSolutions && (
+                  <Callout variant="success" icon={<SendIcon />} className="text-muted">
+                    <p>
+                      <FormattedMessage
+                        id="app.exercise.exerciseReadyToAssign"
+                        defaultMessage="The exercise is ready to be assigned. You may do this directly on the assignments page of selected group, or assign it simultaneously to multiple groups using form on Assignments page."
+                      />
+                      <Link to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exercise.id)}>
+                        <LinkIcon gapLeft className="text-muted" />
+                      </Link>
+                    </p>
+                  </Callout>
+                )}
+              </Col>
+            </Row>
 
             <Row>
               <Col xl={6}>
@@ -186,7 +194,7 @@ class Exercise extends Component {
                           <div className="text-center">
                             <Button
                               variant={exercise.isBroken ? 'secondary' : 'success'}
-                              onClick={() => initCreateReferenceSolution(userId)}
+                              onClick={this.createReferenceSolution}
                               disabled={exercise.isBroken}>
                               {exercise.isBroken ? (
                                 <FormattedMessage
@@ -267,6 +275,25 @@ class Exercise extends Component {
                 </ResourceRenderer>
               </Col>
             </Row>
+
+            {hasPermissions(exercise, 'fork') && (
+              <>
+                <hr />
+                <Row>
+                  <Col sm={12}>
+                    <ForkExerciseForm
+                      exerciseId={exercise.id}
+                      groups={groups}
+                      forkId={forkId}
+                      onSubmit={formData => forkExercise(forkId, formData)}
+                      resetId={this.reset}
+                      groupsAccessor={groupsAccessor}
+                      initialValues={FORK_EXERCISE_FORM_INITIAL_VALUES}
+                    />
+                  </Col>
+                </Row>
+              </>
+            )}
           </div>
         )}
       </Page>
@@ -299,6 +326,15 @@ Exercise.propTypes = {
   forkExercise: PropTypes.func.isRequired,
   attachExerciseToGroup: PropTypes.func.isRequired,
   detachExerciseFromGroup: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+  }),
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
+    hash: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default withLinks(
@@ -342,5 +378,5 @@ export default withLinks(
       attachExerciseToGroup: groupId => dispatch(attachExerciseToGroup(exerciseId, groupId)),
       detachExerciseFromGroup: groupId => dispatch(detachExerciseFromGroup(exerciseId, groupId)),
     })
-  )(injectIntl(Exercise))
+  )(injectIntl(withRouter(Exercise)))
 );

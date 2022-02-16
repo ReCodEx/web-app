@@ -209,13 +209,31 @@ th.shrink-col {
   cursor: pointer;
 }
 
-table.table-hover td.clickable:hover, table.table-hover th.clickable:hover {
+table.table-hover td.clickable:hover,
+table.table-hover th.clickable:hover,
+table.table.tbody-hover tbody:hover td,
+table.table.tbody-hover tbody:hover th {
   background-color: #eeeeee;
 }
 
-table.table.tbody-hover tbody:hover td {
-  background-color: #eeeeee;
+table .selected td,
+table .selected th,
+table td.selected,
+table th.selected {
+  background-color: #bfb;
 }
+
+table.table-hover .selected td.clickable:hover,
+table.table-hover .selected th.clickable:hover,
+table.table-hover td.clickable.selected:hover,
+table.table-hover th.clickable.selected:hover,
+table.table.tbody-hover tbody:hover .selected td,
+table.table.tbody-hover tbody:hover .selected th, 
+table.table.tbody-hover tbody:hover td.selected,
+table.table.tbody-hover tbody:hover th.selected {
+  background-color: #b0ddb0;
+}
+
 
 .timid {
   opacity: 0.2;

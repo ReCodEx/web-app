@@ -17,7 +17,7 @@ const ShadowAssignmentsTable = ({
   isAdmin = false,
   intl: { locale },
 }) => (
-  <Table hover={shadowAssignments.size > 0}>
+  <Table hover={shadowAssignments.size > 0} className="mb-0">
     {shadowAssignments.size > 0 && (
       <thead>
         <tr>

@@ -103,8 +103,8 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
 LocalizedTexts.propTypes = {
   locales: PropTypes.arrayOf(
     PropTypes.shape({
-      locale: PropTypes.string.isRequried,
-      text: PropTypes.string.isRequried,
+      locale: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
     })
   ),
   noLocalesMessage: PropTypes.any,
