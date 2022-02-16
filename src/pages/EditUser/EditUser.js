@@ -172,7 +172,7 @@ class EditUser extends Component {
 
                   <EditUserUIDataForm
                     onSubmit={updateUIData}
-                    initialValues={prepareUserUIDataInitialValues(data.privateData.uiData)}
+                    initialValues={prepareUserUIDataInitialValues(data.privateData.uiData || {})}
                   />
                 </Col>
               )}
