@@ -479,7 +479,7 @@ class ResultsTable extends Component {
           <div className="text-center">
             <Button
               variant="primary"
-              className={styles.downloadButton}
+              className="my-3"
               onClick={() =>
                 downloadString(
                   `${groupName}.csv`,

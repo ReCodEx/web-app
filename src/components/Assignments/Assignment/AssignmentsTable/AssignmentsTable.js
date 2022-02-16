@@ -61,7 +61,7 @@ class AssignmentsTable extends Component {
 
     return (
       <>
-        <Table hover className="mb-1">
+        <Table hover className="mb-0">
           {assignmentsPreprocessed.length > 0 && (
             <thead>
               <tr>
