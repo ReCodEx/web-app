@@ -34,27 +34,31 @@ const assignmentCellRendererCreator = defaultMemoize((rawAssignments, locale) =>
   const assignments = {};
   rawAssignments.forEach(a => (assignments[a.id] = a));
   return (points, idx, key, row) => (
-    <OverlayTrigger
-      placement="bottom"
-      overlay={
-        <Tooltip id={`results-table-cell-${row.user.id}-${key}`}>
-          {row.user.name.firstName} {row.user.name.lastName}
-          {', '}
-          {assignments[key] && getLocalizedName(assignments[key], locale)}
-        </Tooltip>
-      }>
-      <span>
-        {points && Number.isInteger(points.gained) ? (
-          <span>
-            {points.gained}
-            {points.bonus > 0 && <span className={styles.bonusPoints}>+{points.bonus}</span>}
-            {points.bonus < 0 && <span className={styles.malusPoints}>{points.bonus}</span>}
-          </span>
-        ) : (
-          '-'
-        )}
-      </span>
-    </OverlayTrigger>
+    <>
+      <OverlayTrigger
+        placement="bottom"
+        overlay={
+          <Tooltip id={`results-table-cell-${row.user.id}-${key}`}>
+            {row.user.name.firstName} {row.user.name.lastName}
+            {', '}
+            {assignments[key] && getLocalizedName(assignments[key], locale)}
+          </Tooltip>
+        }>
+        <span>
+          {points && Number.isInteger(points.gained) ? (
+            <span>
+              {points.gained}
+              {points.bonus > 0 && <span className={styles.bonusPoints}>+{points.bonus}</span>}
+              {points.bonus < 0 && <span className={styles.malusPoints}>{points.bonus}</span>}
+            </span>
+          ) : (
+            '-'
+          )}
+        </span>
+      </OverlayTrigger>
+
+      {points && points.accepted && <Icon icon="check-circle" className={`text-green ${styles.accepted}`} />}
+    </>
   );
 });
 
@@ -313,7 +317,7 @@ class ResultsTable extends Component {
             ),
             {
               headerClassName: 'text-center',
-              className: 'text-center',
+              className: `text-center ${styles.pointsCell}`,
               headerSuffix:
                 assignment.maxPointsBeforeFirstDeadline +
                 (assignment.maxPointsBeforeSecondDeadline ? ` / ${assignment.maxPointsBeforeSecondDeadline}` : ''),
@@ -407,7 +411,12 @@ class ResultsTable extends Component {
       };
 
       assignments.forEach(assignment => {
-        data[assignment.id] = safeGet(userStats, ['assignments', a => a.id === assignment.id, 'points'], EMPTY_OBJ);
+        const { points = undefined, accepted = false } = safeGet(
+          userStats,
+          ['assignments', a => a.id === assignment.id],
+          EMPTY_OBJ
+        );
+        data[assignment.id] = points ? { ...points, accepted } : EMPTY_OBJ;
       });
 
       shadowAssignments.forEach(shadowAssignment => {
