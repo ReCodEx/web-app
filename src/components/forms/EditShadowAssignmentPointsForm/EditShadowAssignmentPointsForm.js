@@ -126,7 +126,7 @@ const EditShadowAssignmentPointsForm = ({
         />
 
         {onRemovePoints && (
-          <Button onClick={onRemovePoints} variant="danger" className="em-margin-left">
+          <Button onClick={onRemovePoints} variant="danger">
             <DeleteIcon gapRight />
             <FormattedMessage
               id="app.editShadowAssignmentPointsForm.removePoints"
