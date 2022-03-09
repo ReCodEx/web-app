@@ -5,7 +5,7 @@ import { arrayToObject } from '../../../helpers/common';
 import styles from './InsetPanel.less';
 
 // Inset panel replaces old <Well> component from bootstrap 3
-const InsetPanel = ({ children, className = '', size = '' }) => {
+const InsetPanel = ({ children, className = '', size = '', ...props }) => {
   const givenClasses = className
     .split(' ')
     .map(s => s.trim())
@@ -22,7 +22,8 @@ const InsetPanel = ({ children, className = '', size = '' }) => {
           cls => cls, // values become keys
           () => true // new values are 'trues'
         ),
-      })}>
+      })}
+      {...props}>
       {children}
     </div>
   );

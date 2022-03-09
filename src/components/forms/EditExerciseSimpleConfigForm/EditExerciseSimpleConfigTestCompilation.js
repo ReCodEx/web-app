@@ -224,13 +224,13 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
             )}
           </InsetPanel>
         ) : (
-          <div className="text-muted compilation-open" onClick={this.compilationOpen}>
+          <InsetPanel className="text-muted compilation-open" size="small" onClick={this.compilationOpen}>
             <ExpandCollapseIcon isOpen={false} gapRight />
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.compilationTitle"
               defaultMessage="Compilation/Execution"
             />
-          </div>
+          </InsetPanel>
         )}
       </>
     );
