@@ -337,7 +337,8 @@ class ResultsTable extends Component {
       /*
        * Shadow Assignments
        */
-      shadowAssignments.sort(compareShadowAssignments).forEach(shadowAssignment =>
+      shadowAssignments.sort(compareShadowAssignments).forEach(shadowAssignment => {
+        const isClickable = hasPermissions(shadowAssignment, 'createPoints', 'updatePoints', 'removePoints');
         columns.push(
           new SortableTableColumnDescriptor(
             shadowAssignment.id,
@@ -355,12 +356,12 @@ class ResultsTable extends Component {
               headerSuffix: shadowAssignment.maxPoints,
               headerSuffixClassName: styles.maxPointsRow,
               cellRenderer: shadowAssignmentCellRendererCreator(shadowAssignments, locale),
-              isClickable: true,
-              onClick: (userId, shadowId) => this.openDialogShadowAssignment(userId, shadowId),
+              isClickable,
+              onClick: isClickable ? (userId, shadowId) => this.openDialogShadowAssignment(userId, shadowId) : null,
             }
           )
-        )
-      );
+        );
+      });
 
       /*
        * Total points and optionally buttons
