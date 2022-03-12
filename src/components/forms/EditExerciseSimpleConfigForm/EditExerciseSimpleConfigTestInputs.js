@@ -47,6 +47,12 @@ const EditExerciseSimpleConfigTestInputs = ({
         rightLabel={
           <FormattedMessage id="app.editExerciseSimpleConfigTests.inputFilesRename" defaultMessage="Rename as:" />
         }
+        noItemsLabel={
+          <FormattedMessage
+            id="app.editExerciseSimpleConfigTests.inputFilesNoItemsLabel"
+            defaultMessage="Input files:"
+          />
+        }
       />
     )}
 

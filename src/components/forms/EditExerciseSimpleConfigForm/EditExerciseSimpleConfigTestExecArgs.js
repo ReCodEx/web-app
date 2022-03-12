@@ -18,7 +18,7 @@ const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors,
     <FieldArray
       name={`${test}.run-args`}
       component={ExpandingTextField}
-      maxLength={64}
+      maxLength={256}
       readOnly={readOnly}
       label={
         <>

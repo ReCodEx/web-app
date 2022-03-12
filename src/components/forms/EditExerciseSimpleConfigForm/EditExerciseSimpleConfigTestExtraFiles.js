@@ -34,6 +34,9 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
       rightLabel={
         <FormattedMessage id="app.editExerciseSimpleConfigTests.extraFilesRename" defaultMessage="Rename as:" />
       }
+      noItemsLabel={
+        <FormattedMessage id="app.editExerciseSimpleConfigTests.extraFilesNoItemsLabel" defaultMessage="Extra files:" />
+      }
       noItems={
         <FormattedMessage
           id="app.editExerciseSimpleConfigTests.noExtraFiles"
