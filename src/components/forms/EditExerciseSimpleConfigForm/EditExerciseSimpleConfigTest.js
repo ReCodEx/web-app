@@ -50,7 +50,7 @@ class EditExerciseSimpleConfigTest extends Component {
       environmentsWithEntryPoints,
       exercise,
       extraFiles,
-      jarFiles,
+      compilationInitiallyOpened,
       smartFill,
       supplementaryFiles,
       test,
@@ -100,7 +100,7 @@ class EditExerciseSimpleConfigTest extends Component {
             environmentsWithEntryPoints={environmentsWithEntryPoints}
             exercise={exercise}
             extraFiles={extraFiles}
-            jarFiles={jarFiles}
+            compilationInitiallyOpened={compilationInitiallyOpened}
             smartFillCompilation={smartFill ? smartFill.compilation : null}
             supplementaryFiles={supplementaryFiles}
             test={test}
@@ -222,7 +222,7 @@ EditExerciseSimpleConfigTest.propTypes = {
   exercise: PropTypes.object,
   exerciseTests: PropTypes.array,
   extraFiles: PropTypes.object,
-  jarFiles: PropTypes.object,
+  compilationInitiallyOpened: PropTypes.bool,
   smartFill: PropTypes.object,
   supplementaryFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,

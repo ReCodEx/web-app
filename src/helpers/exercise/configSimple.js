@@ -7,6 +7,8 @@ import {
   ENV_GROOVY_ID,
   ENV_SCALA_ID,
   ENV_HASKELL_ID,
+  ENV_C_GCC_ID,
+  ENV_CPP_GCC_ID,
 } from './environments';
 
 /**
@@ -298,6 +300,10 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
     .individualEnvs()
     .forCompilation()
     .setRuntimeFilter([ENV_JAVA_ID, ENV_KOTLIN_ID, ENV_GROOVY_ID, ENV_SCALA_ID]),
+  new Variable('compile-args', 'string[]', [])
+    .individualEnvs()
+    .forCompilation()
+    .setRuntimeFilter([ENV_C_GCC_ID, ENV_CPP_GCC_ID]),
   new Variable('entry-point', 'file')
     .individualEnvs()
     .setPipelineFilter('hasEntryPoint')

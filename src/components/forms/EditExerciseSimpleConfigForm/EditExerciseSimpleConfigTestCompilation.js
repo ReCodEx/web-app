@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import { EMPTY_ARRAY } from '../../../helpers/common';
 import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
-import Icon, { ExpandCollapseIcon } from '../../icons';
-import { SelectField, ExpandingInputFilesField, ExpandingSelectField } from '../Fields';
+import Icon, { ExpandCollapseIcon, WarningIcon } from '../../icons';
+import { SelectField, ExpandingInputFilesField, ExpandingSelectField, ExpandingTextField } from '../Fields';
 import Confirm from '../../forms/Confirm';
-import { ENV_JAVA_ID } from '../../../helpers/exercise/environments';
+import Explanation from '../../widgets/Explanation';
+import { ENV_JAVA_ID, ENV_C_GCC_ID, ENV_CPP_GCC_ID } from '../../../helpers/exercise/environments';
 
 class EditExerciseSimpleConfigTestCompilation extends Component {
   constructor(props) {
@@ -45,30 +46,6 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
       .sort((a, b) => a.name.localeCompare(b.name, intl.locale));
   };
 
-  hasCompilationExtraFiles() {
-    const { extraFiles, jarFiles } = this.props;
-    if (!extraFiles && !jarFiles) {
-      return false;
-    }
-
-    if (extraFiles) {
-      for (const files of Object.values(extraFiles)) {
-        if (files && files.length > 0) {
-          return true;
-        }
-      }
-    }
-
-    if (jarFiles) {
-      for (const files of Object.values(jarFiles)) {
-        if (files && files.length > 0) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   render() {
     const {
       change,
@@ -79,11 +56,11 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
       testErrors,
       intl,
       readOnly = false,
+      compilationInitiallyOpened = false,
     } = this.props;
     return (
       <>
-        {this.state.compilationOpen === true ||
-        (this.state.compilationOpen === null && this.hasCompilationExtraFiles()) ? (
+        {this.state.compilationOpen === true || (this.state.compilationOpen === null && compilationInitiallyOpened) ? (
           <InsetPanel>
             <h4 className="compilation-close" onClick={this.compilationClose}>
               <ExpandCollapseIcon isOpen={true} gapRight />
@@ -148,7 +125,60 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                    */
                                 }
 
-                                <Col lg={exercise.runtimeEnvironments.length === 1 && env.id === ENV_JAVA_ID ? 6 : 12}>
+                                {
+                                  (env.id === ENV_C_GCC_ID || env.id === ENV_CPP_GCC_ID) && (
+                                    /*
+                                     * A special case for C/C++ only !!!
+                                     */
+                                    <Col lg={exercise.runtimeEnvironments.length === 1 ? 6 : 12}>
+                                      <FieldArray
+                                        name={`${test}.compile-args.${env.id}`}
+                                        component={ExpandingTextField}
+                                        maxLength={1024}
+                                        readOnly={readOnly}
+                                        label={
+                                          <>
+                                            <FormattedMessage
+                                              id="app.editExerciseSimpleConfigTests.compilationArguments"
+                                              defaultMessage="Compilation arguments:"
+                                            />
+                                            <Explanation id={`${test}.compile-args-explanation.${env.id}`}>
+                                              <FormattedMessage
+                                                id="app.editExerciseSimpleConfigTests.compilationArgumentsExplanation"
+                                                defaultMessage="Please, place individual arguments into individual input boxes. Any whitespace inside the input box will be treated as a regular part of the argument value (not as a separator of arguments). These arguments will be appended after the default arguments set in the compilation pipeline."
+                                              />
+                                            </Explanation>
+
+                                            <OverlayTrigger
+                                              placement="right"
+                                              overlay={
+                                                <Tooltip id={`${test}.compile-args-warning.${env.id}`}>
+                                                  <FormattedMessage
+                                                    id="app.editExerciseSimpleConfigTests.compileArgsWarning"
+                                                    defaultMessage="Setting compilation arguments is potentially error-prone. Make sure you know how the pipelines and the workers are configured before adding any custom compilation arguments."
+                                                  />
+                                                </Tooltip>
+                                              }>
+                                              <WarningIcon className="text-warning" />
+                                            </OverlayTrigger>
+                                          </>
+                                        }
+                                      />
+                                      {exercise.runtimeEnvironments.length !== 1 && <hr />}
+                                    </Col>
+                                  )
+                                  /*
+                                   * End of special case.
+                                   */
+                                }
+
+                                <Col
+                                  lg={
+                                    exercise.runtimeEnvironments.length === 1 &&
+                                    (env.id === ENV_JAVA_ID || env.id === ENV_C_GCC_ID || env.id === ENV_CPP_GCC_ID)
+                                      ? 6
+                                      : 12
+                                  }>
                                   <FieldArray
                                     name={`${test}.extra-files.${env.id}`}
                                     component={ExpandingInputFilesField}
@@ -164,6 +194,12 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                       <FormattedMessage
                                         id="app.editExerciseSimpleConfigTests.extraFilesRename"
                                         defaultMessage="Rename as:"
+                                      />
+                                    }
+                                    noItemsLabel={
+                                      <FormattedMessage
+                                        id="app.editExerciseSimpleConfigTests.extraFilesNoItemsLabel"
+                                        defaultMessage="Extra files:"
                                       />
                                     }
                                     noItems={
@@ -243,7 +279,7 @@ EditExerciseSimpleConfigTestCompilation.propTypes = {
   supplementaryFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
   extraFiles: PropTypes.object,
-  jarFiles: PropTypes.object,
+  compilationInitiallyOpened: PropTypes.bool,
   useOutFile: PropTypes.bool,
   useCustomJudge: PropTypes.bool,
   environmentsWithEntryPoints: PropTypes.array.isRequired,

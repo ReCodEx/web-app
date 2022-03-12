@@ -346,6 +346,7 @@ export const exerciseConfigFormSmartFillAll = (formName, firstTestId, tests, fil
     'entry-point', // per env, part of compilation block
     'entry-point-string', // standalone, used for Haskell
     'jar-files',
+    'compile-args',
   ]);
 
 export const exerciseConfigFormSmartFillInput = (formName, firstTestId, tests, files) =>
@@ -369,7 +370,12 @@ export const exerciseConfigFormSmartFillJudge = (formName, firstTestId, tests, f
   ]);
 
 export const exerciseConfigFormSmartFillCompilation = (formName, firstTestId, tests, files) =>
-  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['extra-files', 'entry-point', 'jar-files']);
+  exerciseConfigFormSmartFill(formName, firstTestId, tests, files, [
+    'extra-files',
+    'entry-point',
+    'jar-files',
+    'compile-args',
+  ]);
 
 export const exerciseConfigFormSmartFillExtraFiles = (formName, firstTestId, tests, files) =>
   exerciseConfigFormSmartFill(formName, firstTestId, tests, files, ['extra-files']);
@@ -388,43 +394,39 @@ export const exerciseConfigFormSmartFillExtraFiles = (formName, firstTestId, tes
  *                                           If null, all pipelines are copied.
  * @param {string|string[]|null} variableName Name(s) of the variable(s) being copied. If null, all variables are copied.
  */
-export const advancedExerciseConfigFormFill = (
-  formName,
-  sourceTestId,
-  tests,
-  pipelineIdx = null,
-  variableName = null
-) => (dispatch, getState) => {
-  const formData = safeGet(getState(), ['form', formName, 'values', 'config']);
-  if (!formData) {
-    return Promise.resolve();
-  }
+export const advancedExerciseConfigFormFill =
+  (formName, sourceTestId, tests, pipelineIdx = null, variableName = null) =>
+  (dispatch, getState) => {
+    const formData = safeGet(getState(), ['form', formName, 'values', 'config']);
+    if (!formData) {
+      return Promise.resolve();
+    }
 
-  const sourceTestKey = encodeNumId(sourceTestId);
-  const pipelines =
-    pipelineIdx === null
-      ? range(0, safeGet(formData, [sourceTestKey], []).length) // all pipeline indices
-      : Array.isArray(pipelineIdx)
-      ? pipelineIdx
-      : [pipelineIdx];
+    const sourceTestKey = encodeNumId(sourceTestId);
+    const pipelines =
+      pipelineIdx === null
+        ? range(0, safeGet(formData, [sourceTestKey], []).length) // all pipeline indices
+        : Array.isArray(pipelineIdx)
+        ? pipelineIdx
+        : [pipelineIdx];
 
-  pipelines.forEach(idx => {
-    const variableValues = safeGet(formData, [sourceTestKey, idx], {});
-    const variableKeys =
-      variableName === null
-        ? Object.keys(variableValues) // all variable names
-        : (Array.isArray(variableName) ? variableName : [variableName]).map(name => encodeId(name));
+    pipelines.forEach(idx => {
+      const variableValues = safeGet(formData, [sourceTestKey, idx], {});
+      const variableKeys =
+        variableName === null
+          ? Object.keys(variableValues) // all variable names
+          : (Array.isArray(variableName) ? variableName : [variableName]).map(name => encodeId(name));
 
-    variableKeys.forEach(variableKey =>
-      tests
-        .map(({ id }) => encodeNumId(id))
-        .filter(key => key !== sourceTestKey)
-        .forEach(testKey =>
-          dispatch(change(formName, `config.${testKey}[${idx}].${variableKey}`, variableValues[variableKey]))
-        )
-    );
-  });
-};
+      variableKeys.forEach(variableKey =>
+        tests
+          .map(({ id }) => encodeNumId(id))
+          .filter(key => key !== sourceTestKey)
+          .forEach(testKey =>
+            dispatch(change(formName, `config.${testKey}[${idx}].${variableKey}`, variableValues[variableKey]))
+          )
+      );
+    });
+  };
 
 export const reducer = handleActions(reduceActions, initialState);
 export default reducer;

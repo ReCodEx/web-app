@@ -41,6 +41,23 @@ const createFilesNamesIndex = defaultMemoize(
   files => files && new Set(deepReduce(files, [null, 'name']).filter(name => name))
 );
 
+const someValuesHaveNozeroLength = (obj, ...keys) => {
+  if (!obj || typeof obj !== 'object') {
+    return false;
+  }
+
+  for (const key of keys) {
+    if (key in obj) {
+      for (const val of Object.values(obj[key])) {
+        if (val && val.length > 0) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+};
+
 /**
  * Make sure file(s) in form data (specified by given path) exist.
  * If not, proper form error message(s) is/are filled.
@@ -230,13 +247,19 @@ class EditExerciseSimpleConfigForm extends Component {
               .sort((a, b) => a.name.localeCompare(b.name, locale))
               .map((test, idx) => {
                 const testData = formValues && formValues.config && formValues.config[encodeNumId(test.id)];
+                const hasCompilationSetting = someValuesHaveNozeroLength(
+                  testData,
+                  'extra-files',
+                  'jar-files',
+                  'compile-args'
+                );
                 return (
                   <EditExerciseSimpleConfigTest
                     change={change}
                     environmentsWithEntryPoints={environmentsWithEntryPoints}
                     exercise={exercise}
                     extraFiles={testData && testData['extra-files']}
-                    jarFiles={testData && testData['jar-files']}
+                    compilationInitiallyOpened={hasCompilationSetting}
                     key={idx}
                     smartFill={
                       idx === 0 && exerciseTests.length > 1
