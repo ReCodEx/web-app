@@ -346,7 +346,7 @@ const validate = (formData, { exercise, supplementaryFiles }) => {
         />
       );
 
-      if (test['entry-point'][envId]) {
+      if (test['entry-point'] && test['entry-point'][envId]) {
         const extraFilesIndex = createFilesNamesIndex(test['extra-files'][envId]);
         validateFileExists(formData, errors, ['config', testKey, 'entry-point', envId], extraFilesIndex);
       }
@@ -434,7 +434,7 @@ const warn = formData => {
     );
 
     // check ambiguity of entry points and mark them in envEntryPointDefaults
-    for (const envId in test['entry-point']) {
+    for (const envId in test['entry-point'] || {}) {
       const entryPoint = test['entry-point'][envId];
       envEntryPointDefaults[envId] = warnEntryPointStateFunction(envEntryPointDefaults[envId], entryPoint === '');
     }
