@@ -56,7 +56,7 @@ const SupervisorsListItem = ({
                 <Popover.Content className="small text-muted">
                   <FormattedMessage
                     id="app.membersList.supervisorPopover.description"
-                    defaultMessage="A supervisor is slightly less potent than administrator. The privileges encompass everything related to students and assignments; however, suppervisor cannot manage other members."
+                    defaultMessage="A supervisor is slightly less potent than administrator. The privileges encompass everything related to students and assignments; however, suppervisor cannot manage other members. Unlike the admin, the supervisor privileges are tied to this group only (they are not inherited by the subgroups)."
                   />
                 </Popover.Content>
               </Popover>
@@ -76,7 +76,7 @@ const SupervisorsListItem = ({
                 <Popover.Content className="small text-muted">
                   <FormattedMessage
                     id="app.membersList.observerPopover.description"
-                    defaultMessage="An observer has complete read-only access to the group and its assets."
+                    defaultMessage="An observer has complete read-only access to the group and its assets. Unlike the admin, the observer privileges are tied to this group only (they are not inherited by the subgroups)."
                   />
                 </Popover.Content>
               </Popover>
