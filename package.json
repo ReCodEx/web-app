@@ -157,5 +157,6 @@
     "webpack-dev-middleware": "^5.0.0",
     "webpack-dev-server": "^4.3.0",
     "webpack-isomorphic-tools": "^4.0.0"
-  }
+  },
+  "packageManager": "yarn@3.2.1"
 }
