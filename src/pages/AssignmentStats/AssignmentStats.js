@@ -355,6 +355,12 @@ class AssignmentStats extends Component {
                         : <LocalizedExerciseName entity={{ name: '??', localizedTexts: assignment.localizedTexts }} />
                       </>
                     }
+                    additionalPublicSwitchNote={
+                      <FormattedMessage
+                        id="app.assignments.discussionModal.additionalSwitchNote"
+                        defaultMessage="(supervisors and students of this group)"
+                      />
+                    }
                     inModal
                   />
                 </Modal>

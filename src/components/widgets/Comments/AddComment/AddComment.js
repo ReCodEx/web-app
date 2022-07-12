@@ -68,6 +68,7 @@ class AddComment extends Component {
     const { text, isPrivate } = this.state;
     const {
       addComment,
+      additionalPublicSwitchNote = null,
       intl: { formatMessage },
     } = this.props;
 
@@ -106,26 +107,25 @@ class AddComment extends Component {
               disabled={!addComment}
               noShadow
               className="mr-2">
-              {isPrivate ? <Icon icon="lock" /> : <Icon icon="unlock-alt" />}
+              {isPrivate ? <Icon icon="eye-slash" /> : <Icon icon="eye" />}
             </Button>
-            {isPrivate && (
-              <FormattedMessage
-                id="app.comments.warnings.isPrivate"
-                defaultMessage="<strong>Only you will see this comment.</strong>"
-                values={{
-                  strong: text => <strong>{text}</strong>,
-                }}
-              />
-            )}
-            {!isPrivate && (
-              <FormattedMessage
-                id="app.comments.warnings.isPublic"
-                defaultMessage="<strong>Everyone on this page will see this comment.</strong>"
-                values={{
-                  strong: text => <strong>{text}</strong>,
-                }}
-              />
-            )}
+
+            <strong>
+              {isPrivate && (
+                <FormattedMessage
+                  id="app.comments.warnings.isPrivate"
+                  defaultMessage="This will be a private comment visible only to you."
+                />
+              )}
+              {!isPrivate && (
+                <FormattedMessage
+                  id="app.comments.warnings.isPublic"
+                  defaultMessage="This will be a public comment visible to everyone who can see this thread."
+                />
+              )}
+            </strong>
+
+            {!isPrivate && additionalPublicSwitchNote && <> {additionalPublicSwitchNote}</>}
           </Form.Text>
         </FormGroup>
       </Form>
@@ -135,6 +135,7 @@ class AddComment extends Component {
 
 AddComment.propTypes = {
   addComment: PropTypes.func,
+  additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   intl: PropTypes.object.isRequired,
 };
 

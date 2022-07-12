@@ -106,7 +106,7 @@ const EditExerciseForm = ({
       nullable
       label={
         <span>
-          <FormattedMessage id="app.editExerciseForm.solutionFilesLimit" defaultMessage="Soluition files limit:" />
+          <FormattedMessage id="app.editExerciseForm.solutionFilesLimit" defaultMessage="Solution files limit:" />
           <Explanation id="solutionFilesLimitExplanation">
             <FormattedMessage
               id="app.exercise.solutionFilesLimitExplanation"
@@ -134,7 +134,7 @@ const EditExerciseForm = ({
         <span>
           <FormattedMessage
             id="app.editExerciseForm.solutionSizeLimit"
-            defaultMessage="Soluition total size [KiB] limit:"
+            defaultMessage="Solution total size [KiB] limit:"
           />
           <Explanation id="solutionSizeLimitExplanation">
             <FormattedMessage

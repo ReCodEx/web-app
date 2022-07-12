@@ -114,7 +114,15 @@ class ReferenceSolutionDetail extends Component {
               download={download}
             />
 
-            <CommentThreadContainer threadId={id} />
+            <CommentThreadContainer
+              threadId={id}
+              additionalPublicSwitchNote={
+                <FormattedMessage
+                  id="app.referenceSolutionDetail.comments.additionalSwitchNote"
+                  defaultMessage="(teachers who can see this reference solution)"
+                />
+              }
+            />
           </Col>
 
           {evaluations && (

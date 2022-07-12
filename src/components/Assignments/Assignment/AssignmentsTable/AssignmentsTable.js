@@ -205,6 +205,12 @@ class AssignmentsTable extends Component {
                   />
                 </>
               }
+              additionalPublicSwitchNote={
+                <FormattedMessage
+                  id="app.assignments.discussionModal.additionalSwitchNote"
+                  defaultMessage="(supervisors and students of this group)"
+                />
+              }
               inModal
             />
           )}

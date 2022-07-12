@@ -9,6 +9,7 @@ import { RefreshIcon } from '../../../icons';
 
 const CommentThread = ({
   title = <FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />,
+  additionalPublicSwitchNote = null,
   comments = [],
   currentUserId,
   addComment,
@@ -21,7 +22,9 @@ const CommentThread = ({
   <CommentBox
     title={title}
     commentsCount={comments.length}
-    footer={addComment && <AddComment addComment={addComment} />}
+    footer={
+      addComment && <AddComment addComment={addComment} additionalPublicSwitchNote={additionalPublicSwitchNote} />
+    }
     inModal={inModal}>
     <div>
       {comments.map((comment, i) =>
@@ -32,6 +35,7 @@ const CommentThread = ({
             repost={repostComment}
             togglePrivacy={togglePrivacy}
             deleteComment={deleteComment}
+            additionalPublicSwitchNote={additionalPublicSwitchNote}
           />
         ) : (
           <SomebodyElsesComment {...comment} key={comment.id} />
@@ -64,6 +68,7 @@ const CommentThread = ({
 
 CommentThread.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   comments: PropTypes.array,
   currentUserId: PropTypes.string.isRequired,
   addComment: PropTypes.func,

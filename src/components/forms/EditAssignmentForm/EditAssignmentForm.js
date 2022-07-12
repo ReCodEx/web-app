@@ -577,7 +577,7 @@ class EditAssignmentForm extends Component {
                   <span>
                     <FormattedMessage
                       id="app.editExerciseForm.solutionFilesLimit"
-                      defaultMessage="Soluition files limit:"
+                      defaultMessage="Solution files limit:"
                     />
                     <Explanation id="solutionFilesLimitExplanation">
                       <FormattedMessage
@@ -600,7 +600,7 @@ class EditAssignmentForm extends Component {
                   <span>
                     <FormattedMessage
                       id="app.editExerciseForm.solutionSizeLimit"
-                      defaultMessage="Soluition total size [KiB] limit:"
+                      defaultMessage="Solution total size [KiB] limit:"
                     />
                     <Explanation id="solutionSizeLimitExplanation">
                       <FormattedMessage

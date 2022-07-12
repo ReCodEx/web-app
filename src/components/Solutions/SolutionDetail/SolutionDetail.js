@@ -254,7 +254,15 @@ class SolutionDetail extends Component {
               />
             )}
 
-            <CommentThreadContainer threadId={id} />
+            <CommentThreadContainer
+              threadId={id}
+              additionalPublicSwitchNote={
+                <FormattedMessage
+                  id="app.solutionDetail.comments.additionalSwitchNote"
+                  defaultMessage="(author of the solution and supervisors of this group)"
+                />
+              }
+            />
           </Col>
 
           {evaluations && (

@@ -38,6 +38,7 @@ class CommentThreadContainer extends Component {
   render() {
     const {
       title = <FormattedMessage id="app.comments.title" defaultMessage="Comments and Notes" />,
+      additionalPublicSwitchNote = null,
       thread,
       user,
       addComment,
@@ -53,6 +54,7 @@ class CommentThreadContainer extends Component {
         {(thread, user) => (
           <CommentThread
             title={title}
+            additionalPublicSwitchNote={additionalPublicSwitchNote}
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
             addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
@@ -71,6 +73,7 @@ class CommentThreadContainer extends Component {
 CommentThreadContainer.propTypes = {
   threadId: PropTypes.string.isRequired,
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   inModal: PropTypes.bool,
   thread: PropTypes.object,
   user: PropTypes.object,

@@ -216,6 +216,12 @@ class Assignment extends Component {
                           defaultMessage="Public Discussion"
                         />
                       }
+                      additionalPublicSwitchNote={
+                        <FormattedMessage
+                          id="app.assignments.discussionModal.additionalSwitchNote"
+                          defaultMessage="(supervisors and students of this group)"
+                        />
+                      }
                     />
                   </Col>
                 </Row>

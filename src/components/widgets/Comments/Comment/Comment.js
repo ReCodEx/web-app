@@ -26,6 +26,7 @@ const Comment = ({
   isToggling = false,
   togglePrivacy,
   deleteComment,
+  additionalPublicSwitchNote = null,
   links: { USER_URI_FACTORY },
 }) => (
   <div
@@ -63,7 +64,6 @@ const Comment = ({
             gapLeft
             className={classnames({ 'float-right': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
             onClick={() => deleteComment(id)}
-            timid
           />
         )}
         {isFromCurrentUser && togglePrivacy && (
@@ -77,19 +77,26 @@ const Comment = ({
                     defaultMessage="Only you can see this comment"
                   />
                 ) : (
-                  <FormattedMessage
-                    id="app.comments.everyoneCanSeeThisComment"
-                    defaultMessage="This comment is visible to everyone."
-                  />
+                  <>
+                    <FormattedMessage
+                      id="app.comments.everyoneCanSeeThisComment"
+                      defaultMessage="This comment is visible to everyone who can see this thread."
+                    />
+                    {additionalPublicSwitchNote && <> {additionalPublicSwitchNote}</>}
+                  </>
                 )}
               </Tooltip>
             }>
             <Icon
-              icon={isToggling ? 'circle-notch' : isPrivate ? 'lock' : 'unlock-alt'}
+              icon={isToggling ? 'circle-notch' : isPrivate ? 'eye-slash' : 'eye'}
               onClick={() => togglePrivacy(id)}
-              className={classnames({ 'float-right': true, [styles.iconButton]: true, [styles.iconButtonLock]: true })}
+              className={classnames({
+                'float-right': true,
+                [styles.iconButton]: true,
+                [styles.iconButtonLock]: !isPrivate,
+                [styles.iconButtonUnlock]: isPrivate,
+              })}
               spin={isToggling}
-              timid
             />
           </OverlayTrigger>
         )}
@@ -122,6 +129,7 @@ Comment.propTypes = {
   isToggling: PropTypes.bool,
   togglePrivacy: PropTypes.func,
   deleteComment: PropTypes.func,
+  additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   links: PropTypes.object,
 };
 
