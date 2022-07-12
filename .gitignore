@@ -21,3 +21,5 @@ package-lock.json
 /etc/env.json
 /bin/server.js.LICENSE.txt
 /yarn-error.log
+/.yarn/cache
+/.yarn/install-state.gz
