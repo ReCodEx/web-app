@@ -7,7 +7,7 @@
 
 ## Installation
 
-Web application requires [NodeJS](https://nodejs.org/en/) server as its runtime
+Web application requires [NodeJS](https://nodejs.org/en/) 18.x server as a runtime
 environment. This runtime is needed for executing JavaScript code on server and
 sending the pre-render parts of pages to clients, so the final rendering in
 browsers is a lot quicker and the page is accessible to search engines for
