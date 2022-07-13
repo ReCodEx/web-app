@@ -151,7 +151,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
           jwt: accessToken,
           accessToken: decodedToken,
           userId: getUserId(decodedToken),
-          instanceId: instanceId,
+          instanceId,
         })
       : fromJS({
           status: {},

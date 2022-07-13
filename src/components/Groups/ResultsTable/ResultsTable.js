@@ -405,7 +405,7 @@ class ResultsTable extends Component {
       const data = {
         id: user.id,
         selected: !showOnlyMe && user.id === loggedUser.id,
-        user: user,
+        user,
         total: userStats && userStats.points,
         buttons: renderActions && hasPermissions(group, 'update') ? renderActions(user.id) : '',
         // actually 'update' is not the right premission, but its sufficiently close :)
