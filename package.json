@@ -126,6 +126,7 @@
     "eslint-config-standard-react": "11.0.1",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "latest",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.1",

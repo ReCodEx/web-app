@@ -4,29 +4,31 @@ on: [push, pull_request]
 
 jobs:
   tests:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: ['14']
+        node-version: ['18']
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-        
-    - run: npm install
-    - run: npm test
+    - run: npm install -g yarn
+    - run: corepack enable
+    - run: yarn install
+    - run: yarn test
 
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        node-version: ['14']
+        node-version: ['18']
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-        
-    - run: npm install
-    - run: npm run lint
+    - run: npm install -g yarn
+    - run: corepack enable
+    - run: yarn install
+    - run: yarn lint

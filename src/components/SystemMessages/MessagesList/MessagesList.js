@@ -98,9 +98,7 @@ class MessagesList extends Component {
       <>
         <FilterSystemMessagesForm
           onSubmit={({ showAll }) => {
-            this.setState({
-              showAll: showAll,
-            });
+            this.setState({ showAll });
             return Promise.resolve();
           }}
           initialValues={{ showAll: this.state.showAll }}
