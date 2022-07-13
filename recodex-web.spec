@@ -1,8 +1,8 @@
 %define name recodex-web
 %define short_name web-app
 %define version 2.3.1
-%define unmangled_version 76366282b8c16d24f0900124aee44be81089be4f
-%define release 1
+%define unmangled_version 602f6ee9e46099a3145fca90d9acde3f7fd32b33
+%define release 2
 
 Summary: ReCodEx web-app component
 Name: %{name}
@@ -14,11 +14,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 Vendor: Petr Stefan <UNKNOWN>
 Url: https://github.com/ReCodEx/web-app
-BuildRequires: systemd, nodejs >= 14.15, npm >= 6.14
+BuildRequires: systemd, nodejs >= 18.5, yarn >= 1.22
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-Requires: nodejs >= 14.15
+Requires: nodejs >= 18.5
 
 #Source0: %{name}-%{unmangled_version}.tar.gz
 Source0: https://github.com/ReCodEx/%{short_name}/archive/%{unmangled_version}.tar.gz#/%{short_name}-%{unmangled_version}.tar.gz
@@ -34,15 +34,13 @@ Single page web application frontend for ReCodEx code examiner, an educational a
 %build
 rm -f .gitignore
 rm -rf node_modules
-npm i yarn
-mv ./node_modules ./yarn_modules
 cat <<__EOF > .env
 NODE_ENV=production
 VERSION=v%{version}
 __EOF
-./yarn_modules/yarn/bin/yarn install
-./yarn_modules/yarn/bin/yarn build
-./yarn_modules/yarn/bin/yarn deploy
+yarn install
+yarn build
+yarn deploy
 
 %install
 install -d  %{buildroot}/opt/%{name}
