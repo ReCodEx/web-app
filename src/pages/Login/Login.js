@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { reset, SubmissionError } from 'redux-form';
 import { Row, Col } from 'react-bootstrap';
+import { Buffer } from 'buffer';
 
 import PageContent from '../../components/layout/PageContent';
 import LoginForm from '../../components/forms/LoginForm';
@@ -49,7 +50,8 @@ class Login extends Component {
 
     let url = null;
     if (redirect) {
-      url = atob(decodeURIComponent(redirect));
+      url = Buffer.from(decodeURIComponent(redirect), 'base64').toString();
+      // url = atob(decodeURIComponent(redirect));
     } else {
       const defaultPages = {
         home: HOME_URI,
@@ -85,6 +87,13 @@ class Login extends Component {
       });
   };
 
+  componentDidMount() {
+    // if the user accidentally puts in an URL to login page with redirect...
+    if (this.props.isLoggedIn && this.props.match.params.redirect) {
+      this.redirectAfterLogin();
+    }
+  }
+
   render() {
     const {
       isLoggedIn,
@@ -100,20 +109,7 @@ class Login extends Component {
     return (
       <PageContent icon="sign-in-alt" title={<FormattedMessage id="app.login.title" defaultMessage="Sign In" />}>
         <>
-          {redirect && (
-            <Row>
-              <Col sm={12}>
-                <Callout variant="warning">
-                  <FormattedMessage
-                    id="app.login.loginIsRequired"
-                    defaultMessage="Target page is available for authorized users only. Please sign in first."
-                  />
-                </Callout>
-              </Col>
-            </Row>
-          )}
-
-          {isLoggedIn && (
+          {isLoggedIn ? (
             <Row>
               <Col sm={12}>
                 <Callout variant="success">
@@ -121,43 +117,56 @@ class Login extends Component {
                 </Callout>
               </Col>
             </Row>
-          )}
-
-          {!isLoggedIn && (
-            <Row>
-              <Col
-                lg={{ span: 4, offset: external ? 1 : 4 }}
-                md={{ span: 6, offset: external ? 0 : 3 }}
-                sm={{ span: 10, offset: 2 }}
-                xs={{ spna: 12, offset: 0 }}>
-                <LoginForm onSubmit={this.loginAndRedirect} />
-                <p className="text-center">
-                  <FormattedMessage
-                    id="app.login.cannotRememberPassword"
-                    defaultMessage="You cannot remember what your password was?"
-                  />{' '}
-                  <Link to={RESET_PASSWORD_URI}>
-                    <FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." />
-                  </Link>
-                </p>
-              </Col>
-
-              {external && (
-                <Col
-                  lg={{ span: 4, offset: 2 }}
-                  md={{ span: 6, offset: 0 }}
-                  sm={{ span: 10, offset: 2 }}
-                  xs={{ span: 12, offset: 0 }}>
-                  <ExternalLoginBox
-                    name={getConfigVarLocalized('EXTERNAL_AUTH_NAME', locale)}
-                    url={EXTERNAL_AUTH_URL}
-                    service={EXTERNAL_AUTH_SERVICE_ID}
-                    helpUrl={EXTERNAL_AUTH_HELPDESK_URL}
-                    afterLogin={this.redirectAfterLogin}
-                  />
-                </Col>
+          ) : (
+            <>
+              {redirect && (
+                <Row>
+                  <Col sm={12}>
+                    <Callout variant="warning">
+                      <FormattedMessage
+                        id="app.login.loginIsRequired"
+                        defaultMessage="Target page is available for authorized users only. Please sign in first."
+                      />
+                    </Callout>
+                  </Col>
+                </Row>
               )}
-            </Row>
+
+              <Row>
+                <Col
+                  lg={{ span: 4, offset: external ? 1 : 4 }}
+                  md={{ span: 6, offset: external ? 0 : 3 }}
+                  sm={{ span: 10, offset: 2 }}
+                  xs={{ spna: 12, offset: 0 }}>
+                  <LoginForm onSubmit={this.loginAndRedirect} />
+                  <p className="text-center">
+                    <FormattedMessage
+                      id="app.login.cannotRememberPassword"
+                      defaultMessage="You cannot remember what your password was?"
+                    />{' '}
+                    <Link to={RESET_PASSWORD_URI}>
+                      <FormattedMessage id="app.login.resetPassword" defaultMessage="Reset your password." />
+                    </Link>
+                  </p>
+                </Col>
+
+                {external && (
+                  <Col
+                    lg={{ span: 4, offset: 2 }}
+                    md={{ span: 6, offset: 0 }}
+                    sm={{ span: 10, offset: 2 }}
+                    xs={{ span: 12, offset: 0 }}>
+                    <ExternalLoginBox
+                      name={getConfigVarLocalized('EXTERNAL_AUTH_NAME', locale)}
+                      url={EXTERNAL_AUTH_URL}
+                      service={EXTERNAL_AUTH_SERVICE_ID}
+                      helpUrl={EXTERNAL_AUTH_HELPDESK_URL}
+                      afterLogin={this.redirectAfterLogin}
+                    />
+                  </Col>
+                )}
+              </Row>
+            </>
           )}
         </>
       </PageContent>

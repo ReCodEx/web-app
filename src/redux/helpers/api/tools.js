@@ -1,6 +1,7 @@
 import statusCode from 'statuscode';
 import { flatten } from 'flat';
 import { canUseDOM } from 'exenv';
+import { Buffer } from 'buffer';
 
 import { addNotification } from '../../modules/notifications';
 import { newPendingFetchOperation, completedFetchOperation } from '../../modules/app';
@@ -132,7 +133,8 @@ export const SESSION_EXPIRED_MESSAGE =
 export const LOGIN_URI_PREFIX = 'login';
 
 export const createLoginLinkWithRedirect = redirLocation => {
-  return `${URL_PATH_PREFIX}/${LOGIN_URI_PREFIX}/${encodeURIComponent(btoa(redirLocation))}`;
+  const redirBase64 = Buffer.from(redirLocation).toString('base64');
+  return `${URL_PATH_PREFIX}/${LOGIN_URI_PREFIX}/${encodeURIComponent(redirBase64)}`;
 };
 
 /**

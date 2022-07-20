@@ -30,6 +30,7 @@ import '@formatjs/intl-relativetimeformat/locale-data/en';
 import '@formatjs/intl-relativetimeformat/locale-data/cs';
 
 // Register global atob a btoa functions
+// TODO: These functions were removed from our code 20.7.2022, this polyfill will be removed in near future.
 global.Buffer = global.Buffer || require('buffer').Buffer;
 
 if (typeof btoa === 'undefined') {

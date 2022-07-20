@@ -1,4 +1,5 @@
 import { List, Map } from 'immutable';
+import { Buffer } from 'buffer';
 
 export const EMPTY_ARRAY = [];
 export const EMPTY_OBJ = {};
@@ -60,7 +61,7 @@ export const safeSet = (obj, path, value) => {
 export const toPlainAscii = str => str && str.normalize('NFD').replace(/[^-_a-zA-Z0-9.()[\] ]/g, '');
 
 export const encodeId = id => {
-  return 'BID' + btoa(id);
+  return 'BID' + Buffer.from(id).toString('base64');
 };
 
 export const encodeNumId = id => {
