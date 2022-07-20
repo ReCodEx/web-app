@@ -606,6 +606,7 @@
   "app.editUserSettings.submissionEvaluatedEmails": "Řešení vyhodnoceno (pokud trvalo delší dobu)",
   "app.editUserSettings.title": "Uživatelské nastavení",
   "app.editUserUIData.darkTheme": "Použít tmavý motiv pro editor zdrojového kódu",
+  "app.editUserUIData.dateFormatOverride": "Explicitní nastavení formátu data (pokud není formát nastaven, určí se podle aktuálního jazyka):",
   "app.editUserUIData.defaultPage": "Výchozí stránka (po přihlášení):",
   "app.editUserUIData.defaultPage.dashboard": "Přehled",
   "app.editUserUIData.defaultPage.home": "Domovská stránka (o ReCodExu)",

@@ -51,6 +51,7 @@ const prepareUserUIDataInitialValues = defaultMemoize(
     openedSidebar = true,
     useGravatar = true,
     defaultPage = null,
+    dateFormatOverride = null,
     editorFontSize = EDITOR_FONT_SIZE_DEFAULT,
   }) => ({
     darkTheme,
@@ -58,6 +59,7 @@ const prepareUserUIDataInitialValues = defaultMemoize(
     openedSidebar,
     useGravatar,
     defaultPage: defaultPage || '',
+    dateFormatOverride: dateFormatOverride || '',
     editorFontSize: prepareNumber(editorFontSize, EDITOR_FONT_SIZE_MIN, EDITOR_FONT_SIZE_MAX, EDITOR_FONT_SIZE_DEFAULT),
   })
 );

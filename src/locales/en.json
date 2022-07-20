@@ -606,6 +606,7 @@
   "app.editUserSettings.submissionEvaluatedEmails": "Submission evaluation (when taking a long time)",
   "app.editUserSettings.title": "User Settings",
   "app.editUserUIData.darkTheme": "Use a dark theme for the source code viewers and editors",
+  "app.editUserUIData.dateFormatOverride": "Date format override (if not set, date is formatted according to selected language):",
   "app.editUserUIData.defaultPage": "Default page (after login):",
   "app.editUserUIData.defaultPage.dashboard": "Dashboard",
   "app.editUserUIData.defaultPage.home": "Home page (about)",
