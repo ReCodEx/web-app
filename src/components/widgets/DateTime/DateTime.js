@@ -3,15 +3,22 @@ import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedDate, FormattedTime, FormattedRelativeTime } from 'react-intl';
 import classnames from 'classnames';
+import { defaultMemoize } from 'reselect';
 
 import Icon from '../../icons';
 import { EMPTY_OBJ } from '../../../helpers/common';
+import { UserUIDataContext } from '../../../helpers/contexts';
+import { knownLocales } from '../../../helpers/localizedData';
 
 import styles from './DateTime.less';
 
 const isAfter = unixTime => {
   return unixTime * 1000 < Date.now();
 };
+
+const getLocalizedIntlDateFormatter = defaultMemoize(locale =>
+  locale && knownLocales.includes(locale) ? new Intl.DateTimeFormat(locale) : null
+);
 
 const dateTime = ({
   unixts,
@@ -42,7 +49,16 @@ const dateTime = ({
         className={classnames({
           'text-nowrap': true,
         })}>
-        <FormattedDate value={unixts * 1000} />
+        <UserUIDataContext.Consumer>
+          {({ dateFormatOverride = null }) =>
+            getLocalizedIntlDateFormatter(dateFormatOverride) ? (
+              getLocalizedIntlDateFormatter(dateFormatOverride).format(unixts * 1000)
+            ) : (
+              <FormattedDate value={unixts * 1000} />
+            )
+          }
+        </UserUIDataContext.Consumer>
+
         {(showTime || showRelative) && <span className="px-1"> </span>}
       </span>
     )}

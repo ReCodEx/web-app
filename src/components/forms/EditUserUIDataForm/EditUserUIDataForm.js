@@ -32,6 +32,11 @@ const getDefaultPages = defaultMemoize(formatMessage =>
   }))
 );
 
+const dateFormatOverrideOptions = [
+  { key: 'cs', name: 'Český formát (d. m. yyyy)' },
+  { key: 'en', name: 'English format (m/d/yyyy)' },
+];
+
 export const EDITOR_FONT_SIZE_MIN = 5;
 export const EDITOR_FONT_SIZE_MAX = 50;
 export const EDITOR_FONT_SIZE_DEFAULT = 16;
@@ -82,6 +87,19 @@ const EditUserUIDataForm = ({
     />
 
     <Field
+      name="dateFormatOverride"
+      component={SelectField}
+      options={dateFormatOverrideOptions}
+      addEmptyOption={true}
+      label={
+        <FormattedMessage
+          id="app.editUserUIData.dateFormatOverride"
+          defaultMessage="Date format override (if not set, date is formatted according to selected language):"
+        />
+      }
+    />
+
+    <Field
       name="openedSidebar"
       component={CheckboxField}
       onOff
@@ -99,6 +117,8 @@ const EditUserUIDataForm = ({
         />
       }
     />
+
+    <hr />
 
     <NumericTextField
       name="editorFontSize"
