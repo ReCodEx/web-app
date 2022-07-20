@@ -1,6 +1,6 @@
 /* eslint no-console: "off" */
 import fs from 'fs';
-import { extract } from '@formatjs/cli';
+import { extract } from '@formatjs/cli-lib';
 import glob from 'glob';
 import 'colors';
 
