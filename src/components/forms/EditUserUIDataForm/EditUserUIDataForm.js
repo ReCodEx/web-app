@@ -100,6 +100,18 @@ const EditUserUIDataForm = ({
     />
 
     <Field
+      name="lastNameFirst"
+      component={CheckboxField}
+      onOff
+      label={
+        <FormattedMessage
+          id="app.editUserUIData.lastNameFirst"
+          defaultMessage="In listings, show last names of users first"
+        />
+      }
+    />
+
+    <Field
       name="openedSidebar"
       component={CheckboxField}
       onOff

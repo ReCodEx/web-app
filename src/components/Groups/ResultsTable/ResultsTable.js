@@ -256,6 +256,7 @@ class ResultsTable extends Component {
                     currentUserId={loggedUser.id}
                     showEmail="icon"
                     showExternalIdentifiers
+                    listItem
                     link={
                       isTeacher || user.id === loggedUser.id
                         ? GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id)

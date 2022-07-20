@@ -27,6 +27,7 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
           showEmail={emailColumn ? null : 'full'}
           showExternalIdentifiers
           link
+          listItem
         />
       </td>
 

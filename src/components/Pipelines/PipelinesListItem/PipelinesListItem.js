@@ -123,7 +123,7 @@ const PipelinesListItem = ({
       <Link to={PIPELINE_URI_FACTORY(id)}>{name}</Link>
     </td>
 
-    {showAuthor && <td>{author ? <UsersNameContainer userId={author} link /> : <i>ReCodEx</i>}</td>}
+    {showAuthor && <td>{author ? <UsersNameContainer userId={author} link listItem /> : <i>ReCodEx</i>}</td>}
 
     {showCreatedAt && (
       <td>

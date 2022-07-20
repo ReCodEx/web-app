@@ -15,7 +15,7 @@ const StudentsListItem = ({
 }) => (
   <tr>
     <td>
-      <UsersNameContainer userId={id} link={groupId && GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, id)} />
+      <UsersNameContainer userId={id} link={groupId && GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, id)} listItem />
     </td>
     <td width={150}>
       {stats && (

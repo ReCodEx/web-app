@@ -32,7 +32,7 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
               <Link to={INSTANCE_URI_FACTORY(id)}>{name}</Link>
             </td>
             <td>
-              <UsersNameContainer userId={adminId} />
+              <UsersNameContainer userId={adminId} listItem />
             </td>
             <td>
               <SuccessOrFailureIcon success={hasValidLicence} />

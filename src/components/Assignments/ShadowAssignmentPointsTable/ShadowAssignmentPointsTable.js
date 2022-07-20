@@ -194,6 +194,7 @@ class ShadowAssignmentPointsTable extends Component {
                         userId={student.id}
                         showEmail="icon"
                         link={GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, student.id)}
+                        listItem
                       />
                     </td>
                     <td className="text-center text-nowrap">{points !== null ? points : <span>&mdash;</span>}</td>

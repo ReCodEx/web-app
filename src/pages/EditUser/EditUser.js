@@ -48,6 +48,7 @@ const prepareUserUIDataInitialValues = defaultMemoize(
   ({
     darkTheme = true,
     vimMode = false,
+    lastNameFirst = true,
     openedSidebar = true,
     useGravatar = true,
     defaultPage = null,
@@ -56,6 +57,7 @@ const prepareUserUIDataInitialValues = defaultMemoize(
   }) => ({
     darkTheme,
     vimMode,
+    lastNameFirst,
     openedSidebar,
     useGravatar,
     defaultPage: defaultPage || '',
