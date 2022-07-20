@@ -47,7 +47,7 @@ const Comment = ({
           })}>
           <Link to={USER_URI_FACTORY(user.id)}>{user.name}</Link>
         </span>
-        {status === 'posted' && <Posted right={!right} postedAt={postedAt} />}
+        {status === 'posted' && <Posted id={id} right={!right} postedAt={postedAt} />}
         {status === 'failed' && <Failed right={!right} repost={() => repost && repost(id)} />}
         {status === 'pending' && <Posting right={!right} />}
       </div>

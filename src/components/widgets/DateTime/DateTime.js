@@ -5,6 +5,7 @@ import { FormattedDate, FormattedTime, FormattedRelativeTime } from 'react-intl'
 import classnames from 'classnames';
 
 import Icon from '../../icons';
+import { EMPTY_OBJ } from '../../../helpers/common';
 
 import styles from './DateTime.less';
 
@@ -40,28 +41,27 @@ const dateTime = ({
       <span
         className={classnames({
           'text-nowrap': true,
-          'halfem-margin-right': showTime || showRelative,
         })}>
         <FormattedDate value={unixts * 1000} />
+        {(showTime || showRelative) && <span className="px-1"> </span>}
       </span>
     )}
-    &#8203;
+
     {showTime && (
       <span
         className={classnames({
           'text-nowrap': true,
-          'halfem-margin-right': showRelative,
         })}>
         <FormattedTime value={unixts * 1000} format={showSeconds ? '24hourWithSeconds' : '24hour'} />
+        {showRelative && <span className="px-1"> </span>}
       </span>
     )}
-    &#8203;
+
     {showRelative && (
       <span
         className={classnames({
           'text-nowrap': true,
           [styles.trailingRelative]: showDate || showTime,
-          [styles.standaloneRelative]: !showDate && !showTime,
         })}>
         <FormattedRelativeTime value={unixts - Date.now() / 1000} numeric="auto" updateIntervalInSeconds={1000000} />
       </span>
@@ -76,6 +76,7 @@ const DateTime = ({
   showTime = true,
   showRelative = false,
   showOverlay = false,
+  overlayProps = EMPTY_OBJ,
   overlayTooltipId = 'datetime',
   customTooltip = null,
   ...props
@@ -96,6 +97,7 @@ const DateTime = ({
                 showSeconds: true,
                 isDeadline: false,
                 noWrap: false,
+                ...overlayProps,
               })}
           </Tooltip>
         }>
@@ -133,6 +135,7 @@ DateTime.propTypes = {
   showOverlay: PropTypes.bool,
   overlayTooltipId: PropTypes.string,
   customTooltip: PropTypes.any,
+  overlayProps: PropTypes.object,
 };
 
 export default DateTime;
