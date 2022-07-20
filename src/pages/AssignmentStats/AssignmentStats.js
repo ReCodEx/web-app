@@ -97,6 +97,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
             showEmail="icon"
             showExternalIdentifiers
             link={GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, user.id)}
+            listItem
           />
         ),
     }),

@@ -613,6 +613,7 @@
   "app.editUserUIData.defaultPage.instance": "Instance overview",
   "app.editUserUIData.editorFontSize": "Code editor font size:",
   "app.editUserUIData.failed": "Cannot save visual settings of the user.",
+  "app.editUserUIData.lastNameFirst": "In listings, show last names of users first",
   "app.editUserUIData.openedSidebar": "Sidebar is unfolded by default",
   "app.editUserUIData.title": "Visual Settings",
   "app.editUserUIData.useGravatar": "Use Gravatar service for fetching user avatars",

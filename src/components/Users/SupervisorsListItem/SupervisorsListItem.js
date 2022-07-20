@@ -88,7 +88,7 @@ const SupervisorsListItem = ({
         )}
       </td>
       <td className="text-nowrap">
-        <UsersNameContainer userId={id} link />
+        <UsersNameContainer userId={id} link listItem />
       </td>
 
       {showButtons && (

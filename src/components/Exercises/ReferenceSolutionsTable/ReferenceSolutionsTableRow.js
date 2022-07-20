@@ -81,7 +81,7 @@ const ReferenceSolutionsTableRow = ({
           )}
         </td>
         <td className="text-nowrap">
-          <UsersNameContainer userId={authorId} isSimple />
+          <UsersNameContainer userId={authorId} isSimple listItem />
         </td>
       </tr>
     </tbody>

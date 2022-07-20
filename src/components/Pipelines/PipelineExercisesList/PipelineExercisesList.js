@@ -97,6 +97,7 @@ const PipelineExercisesList = ({
                 showEmail="icon"
                 noAvatar={exercises.length > COLLAPSE_LIMIT}
                 noAutoload
+                listItem
               />
             </td>
             <td className="shrink-col text-nowrap">

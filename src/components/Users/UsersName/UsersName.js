@@ -7,6 +7,7 @@ import { defaultMemoize } from 'reselect';
 
 import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
 import { UserRoleIcon } from '../../helpers/usersRoles';
+import { UserUIDataContext } from '../../../helpers/contexts';
 import NotVerified from './NotVerified';
 import Icon, { MailIcon, BanIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
@@ -25,11 +26,25 @@ const userNameStyle = defaultMemoize((size, large) => ({
 const resolveLink = (link, id, USER_URI_FACTORY) =>
   typeof link === 'function' ? link(id) : link === true ? USER_URI_FACTORY(id) : link;
 
+const assembleName = ({ titlesBeforeName = '', firstName, lastName, titlesAfterName = '' }, lastNameFirst = false) => {
+  const fullName = lastNameFirst ? [lastName, ' ', firstName] : [firstName, ' ', lastName];
+  if (titlesBeforeName) {
+    if (lastNameFirst) {
+      fullName.push(', ', titlesBeforeName);
+    } else {
+      fullName.unshift(titlesBeforeName, ' ');
+    }
+  }
+  if (titlesAfterName) {
+    fullName.push(', ', titlesAfterName);
+  }
+  return fullName.join('');
+};
+
 const UsersName = ({
   id,
-  fullName,
   avatarUrl,
-  name: { firstName },
+  name,
   size = null,
   large = false,
   isVerified,
@@ -40,103 +55,117 @@ const UsersName = ({
   showExternalIdentifiers = false,
   showRoleIcon = false,
   currentUserId,
+  listItem = false,
   links: { USER_URI_FACTORY },
 }) => {
   if (size === null) {
     size = large ? 45 : 20;
   }
+
   const email = privateData && privateData.email && showEmail && encodeURIComponent(privateData.email);
   const externalIds = privateData && privateData.externalIds;
+
   return (
-    <span className={styles.wrapper}>
-      {(!privateData || privateData.isAllowed) && !noAvatar && (
-        <span className={styles.avatar}>
-          <AvatarContainer avatarUrl={avatarUrl} fullName={fullName} firstName={firstName} size={size} />
-        </span>
-      )}
-      <span style={userNameStyle(size, large)}>
-        {privateData && !privateData.isAllowed && (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`ban-${id}`}>
-                <FormattedMessage
-                  id="app.userName.userDeactivated"
-                  defaultMessage="The user account was deactivated. The user may not sign in."
+    <UserUIDataContext.Consumer>
+      {({ lastNameFirst = true }) => {
+        const fullName = assembleName(name, listItem && lastNameFirst);
+        return (
+          <span className={styles.wrapper}>
+            {(!privateData || privateData.isAllowed) && !noAvatar && (
+              <span className={styles.avatar}>
+                <AvatarContainer avatarUrl={avatarUrl} fullName={fullName} firstName={name.firstName} size={size} />
+              </span>
+            )}
+            <span style={userNameStyle(size, large)}>
+              {privateData && !privateData.isAllowed && (
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Tooltip id={`ban-${id}`}>
+                      <FormattedMessage
+                        id="app.userName.userDeactivated"
+                        defaultMessage="The user account was deactivated. The user may not sign in."
+                      />
+                    </Tooltip>
+                  }>
+                  <BanIcon gapRight />
+                </OverlayTrigger>
+              )}
+
+              {link ? <Link to={resolveLink(link, id, USER_URI_FACTORY)}>{fullName}</Link> : <span>{fullName}</span>}
+
+              {showRoleIcon && privateData && (
+                <UserRoleIcon
+                  role={privateData.role}
+                  showTooltip
+                  tooltipId={'user-role'}
+                  gapLeft
+                  className="text-muted half-opaque"
                 />
-              </Tooltip>
-            }>
-            <BanIcon gapRight />
-          </OverlayTrigger>
-        )}
+              )}
 
-        {link ? <Link to={resolveLink(link, id, USER_URI_FACTORY)}>{fullName}</Link> : <span>{fullName}</span>}
-
-        {showRoleIcon && privateData && (
-          <UserRoleIcon
-            role={privateData.role}
-            showTooltip
-            tooltipId={'user-role'}
-            gapLeft
-            className="text-muted half-opaque"
-          />
-        )}
-
-        {showExternalIdentifiers && externalIds && Object.keys(externalIds).length > 0 && (
-          <OverlayTrigger
-            placement="right"
-            overlay={
-              <Popover id={id}>
-                <Popover.Title>
-                  <FormattedMessage id="app.userName.externalIds" defaultMessage="External identifiers" />
-                </Popover.Title>
-                <Popover.Content>
-                  <table>
-                    <tbody>
-                      {Object.keys(externalIds).map(service => (
-                        <tr key={service}>
-                          <td className="em-padding-right">{service}:</td>
-                          <td>
-                            <strong>
-                              {Array.isArray(externalIds[service])
-                                ? externalIds[service].join(', ')
-                                : externalIds[service]}
-                            </strong>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Popover.Content>
-              </Popover>
-            }>
-            <Icon icon={['far', 'id-card']} gapLeft className="text-muted half-opaque" />
-          </OverlayTrigger>
-        )}
-        {privateData && privateData.email && showEmail === 'icon' && (
-          <a href={`mailto:${email}`}>
-            <MailIcon gapLeft />
-          </a>
-        )}
-        {privateData && privateData.email && showEmail === 'full' && (
-          <small className="em-padding-left">
-            {'('}
-            <a href={`mailto:${email}`}>{privateData.email}</a>
-            {')'}
-          </small>
-        )}
-        <span className={styles.notVerified}>
-          {!isVerified && <NotVerified userId={id} currentUserId={currentUserId} />}
-        </span>
-      </span>
-    </span>
+              {showExternalIdentifiers && externalIds && Object.keys(externalIds).length > 0 && (
+                <OverlayTrigger
+                  placement="right"
+                  overlay={
+                    <Popover id={id}>
+                      <Popover.Title>
+                        <FormattedMessage id="app.userName.externalIds" defaultMessage="External identifiers" />
+                      </Popover.Title>
+                      <Popover.Content>
+                        <table>
+                          <tbody>
+                            {Object.keys(externalIds).map(service => (
+                              <tr key={service}>
+                                <td className="em-padding-right">{service}:</td>
+                                <td>
+                                  <strong>
+                                    {Array.isArray(externalIds[service])
+                                      ? externalIds[service].join(', ')
+                                      : externalIds[service]}
+                                  </strong>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </Popover.Content>
+                    </Popover>
+                  }>
+                  <Icon icon={['far', 'id-card']} gapLeft className="text-muted half-opaque" />
+                </OverlayTrigger>
+              )}
+              {privateData && privateData.email && showEmail === 'icon' && (
+                <a href={`mailto:${email}`}>
+                  <MailIcon gapLeft />
+                </a>
+              )}
+              {privateData && privateData.email && showEmail === 'full' && (
+                <small className="em-padding-left">
+                  {'('}
+                  <a href={`mailto:${email}`}>{privateData.email}</a>
+                  {')'}
+                </small>
+              )}
+              <span className={styles.notVerified}>
+                {!isVerified && <NotVerified userId={id} currentUserId={currentUserId} />}
+              </span>
+            </span>
+          </span>
+        );
+      }}
+    </UserUIDataContext.Consumer>
   );
 };
 
 UsersName.propTypes = {
   id: PropTypes.string.isRequired,
-  fullName: PropTypes.string.isRequired,
-  name: PropTypes.shape({ firstName: PropTypes.string.isRequired }).isRequired,
+  name: PropTypes.shape({
+    titlesBeforeName: PropTypes.string,
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    titlesAfterName: PropTypes.string,
+  }).isRequired,
   avatarUrl: PropTypes.string,
   isVerified: PropTypes.bool.isRequired,
   privateData: PropTypes.object,
@@ -148,6 +177,7 @@ UsersName.propTypes = {
   showExternalIdentifiers: PropTypes.bool,
   showRoleIcon: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
+  listItem: PropTypes.bool,
   links: PropTypes.object,
 };
 
