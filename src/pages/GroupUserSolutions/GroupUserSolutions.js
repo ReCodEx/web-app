@@ -32,15 +32,18 @@ import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchGroupStudentsSolutions } from '../../redux/modules/solutions';
+import { fetchGroupStudentsSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
 import { groupSelector, groupsAssignmentsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
 import {
   assignmentEnvironmentsSelector,
   getUserSolutions,
   getUserSolutionsSortedData,
 } from '../../redux/selectors/assignments';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchManyGroupStudentsSolutionsStatus } from '../../redux/selectors/solutions';
+import {
+  fetchManyGroupStudentsSolutionsStatus,
+  isAssignmentSolversLoading,
+  getAssignmentSolverSelector,
+} from '../../redux/selectors/solutions';
 import { runtimeEnvironmentSelector, fetchRuntimeEnvironmentsStatus } from '../../redux/selectors/runtimeEnvironments';
 import { getJsData } from '../../redux/helpers/resourceManager';
 import { compareAssignmentsReverted } from '../../components/helpers/assignments';
@@ -262,7 +265,11 @@ class GroupUserSolutions extends Component {
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
         Promise.all(
           hasPermissions(group, 'viewAssignments')
-            ? [dispatch(fetchAssignmentsForGroup(groupId)), dispatch(fetchGroupStudentsSolutions(groupId, userId))]
+            ? [
+                dispatch(fetchAssignmentsForGroup(groupId)),
+                dispatch(fetchGroupStudentsSolutions(groupId, userId)),
+                dispatch(fetchAssignmentSolversIfNeeded({ groupId, userId })),
+              ]
             : []
         )
       ),
@@ -306,6 +313,8 @@ class GroupUserSolutions extends Component {
       getRuntime,
       fetchSolutionsStatus,
       fetchRuntimesStatus,
+      assignmentSolversLoading,
+      assignmentSolverSelector,
       intl: { locale },
       links,
     } = this.props;
@@ -406,6 +415,8 @@ class GroupUserSolutions extends Component {
                                       groupId={groupId}
                                       runtimeEnvironments={assignmentEnvironmentsSelector(assignment.id).map(getJsData)}
                                       noteMaxlen={160}
+                                      assignmentSolversLoading={assignmentSolversLoading}
+                                      assignmentSolver={assignmentSolverSelector(assignment.id, userId)}
                                     />
                                   </Box>
                                 </Col>
@@ -468,6 +479,8 @@ GroupUserSolutions.propTypes = {
   getAssignmentSolutions: PropTypes.func.isRequired,
   getAssignmentSolutionsSorted: PropTypes.func.isRequired,
   getRuntime: PropTypes.func,
+  assignmentSolversLoading: PropTypes.bool,
+  assignmentSolverSelector: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
@@ -495,7 +508,8 @@ export default withLinks(
         getAssignmentSolutions: assignmentId => getUserSolutions(state)(userId, assignmentId),
         getAssignmentSolutionsSorted: assignmentId => getUserSolutionsSortedData(state)(userId, assignmentId),
         getRuntime: runtimeEnvironmentSelector(state),
-        loggedUserId: loggedInUserIdSelector(state),
+        assignmentSolversLoading: isAssignmentSolversLoading(state),
+        assignmentSolverSelector: getAssignmentSolverSelector(state),
       };
     },
     (

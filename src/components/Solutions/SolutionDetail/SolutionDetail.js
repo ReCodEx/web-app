@@ -58,6 +58,7 @@ class SolutionDetail extends Component {
     const {
       solution: {
         id,
+        attemptIndex,
         note = '',
         createdAt,
         authorId,
@@ -82,6 +83,8 @@ class SolutionDetail extends Component {
       refreshSolutionEvaluations = null,
       scoreConfigSelector = null,
       canResubmit = false,
+      assignmentSolversLoading,
+      assignmentSolverSelector,
     } = this.props;
 
     const { openFileId, openFileName, openZipEntry, scoreDialogOpened } = this.state;
@@ -105,6 +108,7 @@ class SolutionDetail extends Component {
           <Col xl={6}>
             <SolutionStatus
               id={id}
+              attemptIndex={attemptIndex}
               evaluation={evaluation}
               evaluationStatus={safeGet(lastSubmission, ['evaluationStatus'], 'missing-submission')}
               submittedAt={createdAt}
@@ -127,6 +131,8 @@ class SolutionDetail extends Component {
                 runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
               }
               otherSolutions={otherSolutions}
+              assignmentSolversLoading={assignmentSolversLoading}
+              assignmentSolverSelector={assignmentSolverSelector}
             />
           </Col>
           <Col xl={6}>
@@ -338,6 +344,7 @@ class SolutionDetail extends Component {
 SolutionDetail.propTypes = {
   solution: PropTypes.shape({
     id: PropTypes.string.isRequired,
+    attemptIndex: PropTypes.number.isRequired,
     note: PropTypes.string,
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
     createdAt: PropTypes.number.isRequired,
@@ -354,6 +361,8 @@ SolutionDetail.propTypes = {
   files: ImmutablePropTypes.map,
   download: PropTypes.func,
   otherSolutions: ImmutablePropTypes.list.isRequired,
+  assignmentSolversLoading: PropTypes.bool,
+  assignmentSolverSelector: PropTypes.func.isRequired,
   assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,

@@ -17,7 +17,13 @@ import { TheButtonGroup } from '../../components/widgets/TheButton';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { fetchSolution, fetchSolutionIfNeeded, fetchUsersSolutions, setNote } from '../../redux/modules/solutions';
+import {
+  fetchSolution,
+  fetchSolutionIfNeeded,
+  fetchUsersSolutions,
+  setNote,
+  fetchAssignmentSolversIfNeeded,
+} from '../../redux/modules/solutions';
 import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
 import { download } from '../../redux/modules/files';
 import {
@@ -25,7 +31,7 @@ import {
   deleteSubmissionEvaluation,
 } from '../../redux/modules/submissionEvaluations';
 import { fetchAssignmentSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
-import { getSolution } from '../../redux/selectors/solutions';
+import { getSolution, isAssignmentSolversLoading, getAssignmentSolverSelector } from '../../redux/selectors/solutions';
 import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
 import {
   getAssignment,
@@ -50,7 +56,12 @@ class Solution extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchSolutionIfNeeded(solutionId))
         .then(res => res.value)
-        .then(solution => dispatch(fetchUsersSolutions(solution.authorId, assignmentId))),
+        .then(solution =>
+          Promise.all([
+            dispatch(fetchUsersSolutions(solution.authorId, assignmentId)),
+            dispatch(fetchAssignmentSolversIfNeeded({ assignmentId, userId: solution.authorId })),
+          ])
+        ),
       dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId)),
@@ -82,6 +93,8 @@ class Solution extends Component {
       refreshSolutionEvaluations,
       scoreConfigSelector,
       fetchScoreConfigIfNeeded,
+      assignmentSolversLoading,
+      assignmentSolverSelector,
       intl: { locale },
     } = this.props;
 
@@ -163,6 +176,8 @@ class Solution extends Component {
                         files={files}
                         download={download}
                         otherSolutions={userSolutionsSelector(solution.authorId, assignment.id)}
+                        assignmentSolversLoading={assignmentSolversLoading}
+                        assignmentSolverSelector={assignmentSolverSelector}
                         assignment={assignment}
                         evaluations={evaluations}
                         runtimeEnvironments={runtimes}
@@ -203,6 +218,8 @@ Solution.propTypes = {
   runtimeEnvironments: PropTypes.array,
   fetchStatus: PropTypes.string,
   scoreConfigSelector: PropTypes.func,
+  assignmentSolversLoading: PropTypes.bool,
+  assignmentSolverSelector: PropTypes.func.isRequired,
   editNote: PropTypes.func.isRequired,
   deleteEvaluation: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
@@ -227,6 +244,8 @@ export default connect(
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
     fetchStatus: fetchManyStatus(solutionId)(state),
     scoreConfigSelector: assignmentSubmissionScoreConfigSelector(state),
+    assignmentSolversLoading: isAssignmentSolversLoading(state),
+    assignmentSolverSelector: getAssignmentSolverSelector(state),
   }),
   (dispatch, { match: { params } }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),

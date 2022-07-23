@@ -27,6 +27,7 @@ import Icon, {
   FailureIcon,
   CodeIcon,
   LinkIcon,
+  LoadingIcon,
   WarningIcon,
 } from '../../icons';
 import AssignmentDeadlinesGraph from '../../Assignments/Assignment/AssignmentDeadlinesGraph';
@@ -69,6 +70,7 @@ class SolutionStatus extends Component {
   render() {
     const {
       id,
+      attemptIndex,
       otherSolutions,
       assignment: {
         id: assignmentId,
@@ -96,12 +98,17 @@ class SolutionStatus extends Component {
       actualPoints,
       overriddenPoints = null,
       editNote = null,
+      assignmentSolversLoading,
+      assignmentSolverSelector,
       links: { SOLUTION_DETAIL_URI_FACTORY },
     } = this.props;
 
     const important = getImportantSolutions(otherSolutions, id);
     const environment =
       runtimeEnvironments && runtimeEnvironmentId && runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId);
+
+    const assignmentSolver = assignmentSolverSelector && assignmentSolverSelector(assignmentId, userId);
+    const lastAttemptIndex = assignmentSolver && assignmentSolver.get('lastAttemptIndex');
 
     return (
       <>
@@ -162,7 +169,7 @@ class SolutionStatus extends Component {
                     {note.length > 0 ? (
                       note
                     ) : (
-                      <em className="text-muted">
+                      <em className="text-muted small">
                         <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
                       </em>
                     )}
@@ -348,14 +355,18 @@ class SolutionStatus extends Component {
                   <FormattedMessage id="app.solution.solutionAttempt" defaultMessage="Solution Attempt" />:
                 </th>
                 <td>
-                  <FormattedMessage
-                    id="app.solution.solutionAttemptValue"
-                    defaultMessage="{index} of {count}"
-                    values={{
-                      index: otherSolutions.size - important.selectedIdx,
-                      count: otherSolutions.size,
-                    }}
-                  />
+                  {!lastAttemptIndex ? (
+                    <LoadingIcon />
+                  ) : (
+                    <FormattedMessage
+                      id="app.solution.solutionAttemptValue"
+                      defaultMessage="{index} of {count}"
+                      values={{
+                        index: attemptIndex,
+                        count: lastAttemptIndex,
+                      }}
+                    />
+                  )}
 
                   {otherSolutions && otherSolutions.size > 1 && (
                     <span
@@ -528,6 +539,8 @@ class SolutionStatus extends Component {
               runtimeEnvironments={runtimeEnvironments}
               noteMaxlen={32}
               selected={id}
+              assignmentSolversLoading={assignmentSolversLoading}
+              assignmentSolver={assignmentSolver}
             />
           </Modal.Body>
         </Modal>
@@ -538,6 +551,7 @@ class SolutionStatus extends Component {
 
 SolutionStatus.propTypes = {
   id: PropTypes.string.isRequired,
+  attemptIndex: PropTypes.number.isRequired,
   otherSolutions: ImmutablePropTypes.list.isRequired,
   assignment: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -565,6 +579,8 @@ SolutionStatus.propTypes = {
   actualPoints: PropTypes.number,
   overriddenPoints: PropTypes.number,
   editNote: PropTypes.func,
+  assignmentSolversLoading: PropTypes.bool,
+  assignmentSolverSelector: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
 };
 

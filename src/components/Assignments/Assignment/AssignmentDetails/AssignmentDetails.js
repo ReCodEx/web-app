@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
@@ -34,6 +35,7 @@ const AssignmentDetails = ({
   maxPointsBeforeSecondDeadline,
   isBonus,
   runtimeEnvironments,
+  assignmentSolver = null,
   canSubmit,
   pointsPercentualThreshold,
   isPublic,
@@ -55,6 +57,8 @@ const AssignmentDetails = ({
     maxPointsBeforeFirstDeadline,
     maxPointsBeforeSecondDeadline,
   });
+
+  const lastAttemptIndex = assignmentSolver && assignmentSolver.get('lastAttemptIndex');
 
   return (
     <Box
@@ -249,7 +253,7 @@ const AssignmentDetails = ({
 
             <tr>
               <td className="text-center text-muted shrink-col px-2">
-                {isStudent && canSubmit.canSubmit ? <SendIcon /> : <Icon icon="ban" />}
+                {isStudent && canSubmit.canSubmit ? <SendIcon /> : <Icon icon="hashtag" />}
               </td>
               <th>
                 <FormattedMessage id="app.assignment.submissionsCountLimit" defaultMessage="Submission attempts" />:
@@ -263,8 +267,19 @@ const AssignmentDetails = ({
               <td>
                 {isStudent ? (
                   <>
-                    {canSubmit.submittedCount}
+                    {lastAttemptIndex || canSubmit.submittedCount}
                     {submissionsCountLimit !== null && ` / ${submissionsCountLimit}`}
+                    {lastAttemptIndex && lastAttemptIndex > canSubmit.submittedCount && (
+                      <small className="pl-2 text-muted">
+                        (
+                        <FormattedMessage
+                          id="app.assignment.submissionCountLimitIncreasedByDeletion"
+                          defaultMessage="+{count} {count, plural, one {attempt} other {attempts}} added by deleted solutions"
+                          values={{ count: lastAttemptIndex - canSubmit.submittedCount }}
+                        />
+                        )
+                      </small>
+                    )}
                   </>
                 ) : (
                   <>{submissionsCountLimit === null ? '-' : submissionsCountLimit}</>
@@ -274,7 +289,7 @@ const AssignmentDetails = ({
 
             <tr>
               <td className="text-center text-muted shrink-col px-2">
-                <Icon icon={['far', 'folder-open']} />
+                <Icon icon={['far', 'file-code']} />
               </td>
               <th>
                 <FormattedMessage id="app.assignment.solutionFilesLimit" defaultMessage="Solution file restrictions" />:
@@ -358,6 +373,7 @@ AssignmentDetails.propTypes = {
   permissionHints: PropTypes.object.isRequired,
   isStudent: PropTypes.bool.isRequired,
   className: PropTypes.string,
+  assignmentSolver: ImmutablePropTypes.map,
 };
 
 export default AssignmentDetails;
