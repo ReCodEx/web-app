@@ -33,16 +33,21 @@ const actionCreatorsFactory = ({
     value: getJsData(item),
   });
 
-  const fetchIfNeeded = (...ids) => (dispatch, getState) => Promise.all(ids.map(id => dispatch(fetchOneIfNeeded(id))));
+  const fetchIfNeeded =
+    (...ids) =>
+    (dispatch, getState) =>
+      Promise.all(ids.map(id => dispatch(fetchOneIfNeeded(id))));
 
-  const fetchOneIfNeeded = (id, meta = {}) => (dispatch, getState) => {
-    if (needsRefetching(getItem(id, getState))) {
-      archivedPromises[id] = dispatch(fetchResource(id, meta));
-    }
+  const fetchOneIfNeeded =
+    (id, meta = {}) =>
+    (dispatch, getState) => {
+      if (needsRefetching(getItem(id, getState))) {
+        archivedPromises[id] = dispatch(fetchResource(id, meta));
+      }
 
-    const item = getItem(id, getState);
-    return isLoading(item) ? archivedPromises[id] : Promise.resolve(fakeResult(item));
-  };
+      const item = getItem(id, getState);
+      return isLoading(item) ? archivedPromises[id] : Promise.resolve(fakeResult(item));
+    };
 
   const fetchResource = (id, meta = {}) =>
     createApiAction({
