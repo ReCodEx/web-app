@@ -239,6 +239,7 @@ class SolutionDetail extends Component {
           <Col xl={6}>
             <SolutionFiles
               solutionId={id}
+              attemptIndex={attemptIndex}
               files={files}
               authorId={authorId}
               openFile={this.openFile}

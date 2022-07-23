@@ -13,9 +13,14 @@ import OptionalTooltipWrapper from '../../components/widgets/OptionalTooltipWrap
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { toPlainAscii } from '../../helpers/common';
 
-const solutionArchiveFileName = (solutionId, user) => {
-  const name = toPlainAscii(`${user.name.lastName}-${user.name.firstName}`);
-  return `${name}_${solutionId}.zip`;
+const solutionArchiveFileName = (solutionId, user, index = null) => {
+  const components = [user.name.lastName, user.name.firstName];
+  if (index) {
+    components.push(String(index).padStart(3, '0'));
+  }
+  components.push(solutionId);
+  const name = toPlainAscii(components.join('_').replaceAll(' ', '-'));
+  return `${name}.zip`;
 };
 
 const DownloadSolutionArchiveContainer = ({
@@ -50,6 +55,8 @@ const DownloadSolutionArchiveContainer = ({
 );
 
 DownloadSolutionArchiveContainer.propTypes = {
+  solutionId: PropTypes.string.isRequired,
+  attemptIndex: PropTypes.number,
   authorId: PropTypes.string.isRequired,
   isReference: PropTypes.bool,
   iconOnly: PropTypes.bool,
@@ -64,10 +71,10 @@ export default connect(
   (state, { authorId }) => ({
     authorUser: getUser(authorId)(state),
   }),
-  (dispatch, { solutionId }) => ({
+  (dispatch, { solutionId, attemptIndex }) => ({
     downloadSolutionArchive: user => e => {
       e.preventDefault();
-      dispatch(downloadSolutionArchive(solutionId, solutionArchiveFileName(solutionId, user)));
+      dispatch(downloadSolutionArchive(solutionId, solutionArchiveFileName(solutionId, user, attemptIndex)));
     },
     downloadRefSolutionArchive: user => e => {
       e.preventDefault();
