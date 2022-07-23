@@ -34,6 +34,7 @@ const preprocessFiles = defaultMemoize(files =>
 
 const SolutionFiles = ({
   solutionId,
+  attemptIndex,
   files,
   authorId,
   isReference = false,
@@ -181,6 +182,7 @@ const SolutionFiles = ({
                       <td className="text-nowrap shrink-col text-right">
                         <DownloadSolutionArchiveContainer
                           solutionId={solutionId}
+                          attemptIndex={attemptIndex}
                           authorId={authorId}
                           isReference={isReference}
                           size="xs"
@@ -199,6 +201,7 @@ const SolutionFiles = ({
   );
 SolutionFiles.propTypes = {
   solutionId: PropTypes.string.isRequired,
+  attemptIndex: PropTypes.number,
   files: ImmutablePropTypes.map,
   authorId: PropTypes.string.isRequired,
   isReference: PropTypes.bool,
