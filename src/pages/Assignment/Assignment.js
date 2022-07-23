@@ -15,7 +15,11 @@ import {
   submitAssignmentSolution as submitSolution,
   presubmitAssignmentSolution as presubmitSolution,
 } from '../../redux/modules/submission';
-import { fetchUsersSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
+import {
+  fetchUsersSolutions,
+  fetchAssignmentSolvers,
+  fetchAssignmentSolversIfNeeded,
+} from '../../redux/modules/solutions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import {
@@ -78,6 +82,9 @@ class Assignment extends Component {
       this.props.loadAsync(this.props.userId || this.props.loggedInUserId);
     }
   }
+
+  reloadSolvers = () =>
+    this.props.reloadSolvers(this.props.match.params.assignmentId, this.props.userId || this.props.loggedInUserId);
 
   render() {
     const {
@@ -183,6 +190,7 @@ class Assignment extends Component {
                           id={assignment.id}
                           onSubmit={submitSolution}
                           presubmitValidation={presubmitSolution}
+                          afterEvaluationStarts={this.reloadSolvers}
                           onReset={init}
                           isOpen={submitting}
                           solutionFilesLimit={assignment.solutionFilesLimit}
@@ -269,6 +277,7 @@ Assignment.propTypes = {
   fetchManyStatus: PropTypes.string,
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func.isRequired,
+  reloadSolvers: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -309,5 +318,6 @@ export default connect(
     init: userId => () => dispatch(init(userId, assignmentId)),
     loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
     exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+    reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
   })
 )(Assignment);

@@ -1,4 +1,4 @@
-import { handleActions } from 'redux-actions';
+import { handleActions, createAction } from 'redux-actions';
 import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -58,6 +58,7 @@ export const additionalActionTypes = {
   LOAD_ASSIGNMENT_SOLVERS_PENDING: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_PENDING',
   LOAD_ASSIGNMENT_SOLVERS_FULFILLED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_FULFILLED',
   LOAD_ASSIGNMENT_SOLVERS_REJECTED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_REJECTED',
+  INVALIDATE_ASSIGNMENT_SOLVERS: 'recodex/solutions/INVALIDATE_ASSIGNMENT_SOLVERS',
 };
 
 export const fetchSolution = actions.fetchResource;
@@ -155,6 +156,8 @@ export const fetchAssignmentSolversIfNeeded =
       dispatch(fetchAssignmentSolvers({ assignmentId, groupId, userId }));
     }
   };
+
+export const invalidateAssignmentSolvers = createAction(additionalActionTypes.INVALIDATE_ASSIGNMENT_SOLVERS);
 
 /**
  * Reducer
@@ -270,6 +273,8 @@ const reducer = handleActions(
       });
       return state;
     },
+
+    [additionalActionTypes.INVALIDATE_ASSIGNMENT_SOLVERS]: state => state.delete('assignment-solvers-fetches'),
 
     [submissionEvaluationActionTypes.REMOVE_FULFILLED]: (state, { meta: { solutionId, id: evaluationId } }) => {
       if (!solutionId || !evaluationId) {
