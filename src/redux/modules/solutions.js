@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import factory, {
@@ -9,6 +10,8 @@ import factory, {
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
+import { getAssignmentSolversLastUpdate } from '../selectors/solutions';
+import { objectFilter } from '../../helpers/common';
 
 const resourceName = 'solutions';
 const needsRefetching = item =>
@@ -51,6 +54,10 @@ export const additionalActionTypes = {
   SET_FLAG_FULFILLED: 'recodex/solutions/SET_FLAG_FULFILLED',
   SET_FLAG_REJECTED: 'recodex/solutions/SET_FLAG_REJECTED',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE',
+  LOAD_ASSIGNMENT_SOLVERS: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS',
+  LOAD_ASSIGNMENT_SOLVERS_PENDING: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_PENDING',
+  LOAD_ASSIGNMENT_SOLVERS_FULFILLED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_FULFILLED',
+  LOAD_ASSIGNMENT_SOLVERS_REJECTED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_REJECTED',
 };
 
 export const fetchSolution = actions.fetchResource;
@@ -129,6 +136,25 @@ export const fetchGroupStudentsSolutions = (groupId, userId) =>
       userId,
     },
   });
+
+export const fetchAssignmentSolvers = ({ assignmentId = null, groupId = null, userId = null }) =>
+  createApiAction({
+    type: additionalActionTypes.LOAD_ASSIGNMENT_SOLVERS,
+    method: 'GET',
+    endpoint: '/assignment-solvers',
+    query: objectFilter({ assignmentId, groupId, userId }),
+    meta: { assignmentId, groupId, userId },
+  });
+
+export const fetchAssignmentSolversIfNeeded =
+  ({ assignmentId = null, groupId = null, userId = null }) =>
+  (dispatch, getState) => {
+    const lastUpdate = getAssignmentSolversLastUpdate(getState(), assignmentId, groupId, userId);
+    const threshold = 10 * 60 * 1000; // 10 minutes
+    if (!lastUpdate || Date.now() - lastUpdate > threshold) {
+      dispatch(fetchAssignmentSolvers({ assignmentId, groupId, userId }));
+    }
+  };
 
 /**
  * Reducer
@@ -223,6 +249,25 @@ const reducer = handleActions(
           }
         }
       }
+      return state;
+    },
+
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLVERS_PENDING]: state => state.set('assignment-solvers-loading', true),
+
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLVERS_REJECTED]: state => state.set('assignment-solvers-loading', false),
+
+    [additionalActionTypes.LOAD_ASSIGNMENT_SOLVERS_FULFILLED]: (
+      state,
+      { payload, meta: { assignmentId, groupId, userId } }
+    ) => {
+      state = state.set('assignment-solvers-loading', false);
+      state = state.setIn(['assignment-solvers-fetches', `${assignmentId}|${groupId}|${userId}`], Date.now());
+      payload.forEach(assignmentSolver => {
+        state = state.setIn(
+          ['assignment-solvers', assignmentSolver.assignmentId, assignmentSolver.solverId],
+          fromJS(assignmentSolver)
+        );
+      });
       return state;
     },
 

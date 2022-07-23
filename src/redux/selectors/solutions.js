@@ -34,3 +34,20 @@ export const fetchManyGroupStudentsSolutionsStatus = createSelector(
   solutions => (groupId, userId) =>
     solutions.getIn(['fetchManyStatus', fetchManyGroupStudentsSolutionsEndpoint(groupId, userId)])
 );
+
+// solvers
+
+export const getAssignmentSolversLastUpdate = (state, assignmentId, groupId, userId) =>
+  getSolutionsRaw(state).getIn(['assignment-solvers-fetches', `${assignmentId}|${groupId}|${userId}`]);
+
+export const isAssignmentSolversLoading = state => getSolutionsRaw(state).get('assignment-solvers-loading', false);
+
+export const getAssignmentSolver = (state, assignmentId, userId) =>
+  getSolutionsRaw(state).getIn(['assignment-solvers', assignmentId, userId]);
+
+const getAssignmentSolvers = state => getSolutionsRaw(state).get('assignment-solvers');
+
+export const getAssignmentSolverSelector = createSelector(
+  getAssignmentSolvers,
+  assignmentSolvers => (assignmentId, userId) => assignmentSolvers && assignmentSolvers.getIn([assignmentId, userId])
+);

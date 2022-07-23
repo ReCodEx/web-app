@@ -18,10 +18,13 @@ const SolutionsTable = ({
   noteMaxlen = null,
   compact = false,
   selected = null,
+  assignmentSolver = null,
+  assignmentSolversLoading = false,
 }) => (
   <Table responsive className={styles.solutionsTable}>
     <thead>
       <tr>
+        <th />
         <th />
         <th>
           <FormattedMessage id="app.solutionsTable.submissionDate" defaultMessage="Date of submission" />
@@ -41,12 +44,44 @@ const SolutionsTable = ({
           </th>
         )}
         <td className="text-right text-muted small">
-          {solutions.size > 5 && (
-            <FormattedMessage
-              id="app.solutionsTable.rowsCount"
-              defaultMessage="Total records: {count}"
-              values={{ count: solutions.size }}
-            />
+          {assignmentSolversLoading ? (
+            <LoadingIcon />
+          ) : (
+            <>
+              {assignmentSolver &&
+                (assignmentSolver.get('lastAttemptIndex') > 5 ||
+                  assignmentSolver.get('lastAttemptIndex') > solutions.size) && (
+                  <>
+                    {!compact && (
+                      <FormattedMessage
+                        id="app.solutionsTable.attemptsCount"
+                        defaultMessage="Solutions submitted: {count}"
+                        values={{ count: assignmentSolver.get('lastAttemptIndex') }}
+                      />
+                    )}
+
+                    {assignmentSolver.get('lastAttemptIndex') > solutions.size && (
+                      <span>
+                        {!compact && <>&nbsp;&nbsp;</>}(
+                        <FormattedMessage
+                          id="app.solutionsTable.attemptsDeleted"
+                          defaultMessage="{deleted} deleted"
+                          values={{ deleted: assignmentSolver.get('lastAttemptIndex') - solutions.size }}
+                        />
+                        )
+                      </span>
+                    )}
+                  </>
+                )}
+
+              {!compact && !assignmentSolver && solutions.size > 5 && (
+                <FormattedMessage
+                  id="app.solutionsTable.rowsCount"
+                  defaultMessage="Total records: {count}"
+                  values={{ count: solutions.size }}
+                />
+              )}
+            </>
           )}
         </td>
       </tr>
@@ -100,6 +135,8 @@ SolutionsTable.propTypes = {
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool,
   selected: PropTypes.string,
+  assignmentSolver: ImmutablePropTypes.map,
+  assignmentSolversLoading: PropTypes.bool,
 };
 
 export default SolutionsTable;

@@ -24,6 +24,7 @@ const showScoreAndPoints = status => status === 'done' || status === 'failed';
 
 const SolutionsTableRow = ({
   id,
+  attemptIndex,
   assignmentId,
   groupId,
   status = null,
@@ -60,6 +61,8 @@ const SolutionsTableRow = ({
   return (
     <tbody>
       <tr className={selected ? 'table-active' : ''}>
+        <td className="text-nowrap valign-middle text-bold">{attemptIndex}.</td>
+
         <td
           rowSpan={splitOnTwoLines ? 2 : 1}
           className={classnames({
@@ -174,6 +177,7 @@ const SolutionsTableRow = ({
 
 SolutionsTableRow.propTypes = {
   id: PropTypes.string.isRequired,
+  attemptIndex: PropTypes.number.isRequired,
   assignmentId: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
   status: PropTypes.string,

@@ -15,7 +15,7 @@ import {
   submitAssignmentSolution as submitSolution,
   presubmitAssignmentSolution as presubmitSolution,
 } from '../../redux/modules/submission';
-import { fetchUsersSolutions } from '../../redux/modules/solutions';
+import { fetchUsersSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import {
@@ -26,7 +26,11 @@ import {
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
+import {
+  fetchManyUserSolutionsStatus,
+  isAssignmentSolversLoading,
+  getAssignmentSolverSelector,
+} from '../../redux/selectors/solutions';
 import {
   loggedUserIsStudentOfSelector,
   loggedUserIsObserverOfSelector,
@@ -58,6 +62,7 @@ class Assignment extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(canSubmit(assignmentId)),
       dispatch(fetchUsersSolutions(userId, assignmentId)),
+      dispatch(fetchAssignmentSolversIfNeeded({ assignmentId, userId })),
     ]);
 
   componentDidMount() {
@@ -90,6 +95,8 @@ class Assignment extends Component {
       exerciseSync,
       solutions,
       fetchManyStatus,
+      assignmentSolversLoading,
+      assignmentSolverSelector,
     } = this.props;
 
     return (
@@ -141,6 +148,7 @@ class Assignment extends Component {
                       {...assignment}
                       canSubmit={canSubmitObj}
                       runtimeEnvironments={runtimes}
+                      assignmentSolver={assignmentSolverSelector(assignment.id, userId || loggedInUserId)}
                       isStudent={isStudentOf(assignment.groupId)}
                       className="d-flex d-xl-none"
                     />
@@ -156,6 +164,7 @@ class Assignment extends Component {
                       {...assignment}
                       canSubmit={canSubmitObj}
                       runtimeEnvironments={runtimes}
+                      assignmentSolver={assignmentSolverSelector(assignment.id, userId || loggedInUserId)}
                       isStudent={isStudentOf(assignment.groupId)}
                       className="d-none d-xl-flex"
                     />
@@ -202,6 +211,8 @@ class Assignment extends Component {
                               runtimeEnvironments={runtimes}
                               noteMaxlen={64}
                               compact
+                              assignmentSolversLoading={assignmentSolversLoading}
+                              assignmentSolver={assignmentSolverSelector(assignment.id, userId || loggedInUserId)}
                             />
                           )}
                         </FetchManyResourceRenderer>
@@ -256,6 +267,8 @@ Assignment.propTypes = {
   exerciseSync: PropTypes.func.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
   fetchManyStatus: PropTypes.string,
+  assignmentSolversLoading: PropTypes.bool,
+  assignmentSolverSelector: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -281,6 +294,8 @@ export default connect(
       canSubmit: canSubmitSolution(assignmentId)(state),
       solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
       fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
+      assignmentSolversLoading: isAssignmentSolversLoading(state),
+      assignmentSolverSelector: getAssignmentSolverSelector(state),
     };
   },
   (

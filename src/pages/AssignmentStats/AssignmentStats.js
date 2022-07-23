@@ -37,7 +37,7 @@ import { fetchByIds } from '../../redux/modules/users';
 import { fetchAssignmentIfNeeded, downloadBestSolutionsArchive } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchAssignmentSolutions } from '../../redux/modules/solutions';
+import { fetchAssignmentSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
 import { usersSelector } from '../../redux/selectors/users';
 import { groupSelector } from '../../redux/selectors/groups';
 import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
@@ -48,7 +48,11 @@ import {
   getAssignmentSolutions,
 } from '../../redux/selectors/assignments';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchManyAssignmentSolutionsStatus } from '../../redux/selectors/solutions';
+import {
+  fetchManyAssignmentSolutionsStatus,
+  isAssignmentSolversLoading,
+  getAssignmentSolverSelector,
+} from '../../redux/selectors/solutions';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
@@ -243,6 +247,7 @@ class AssignmentStats extends Component {
           )
         ),
       dispatch(fetchRuntimeEnvironments()),
+      dispatch(fetchAssignmentSolversIfNeeded({ assignmentId })),
       dispatch(fetchAssignmentSolutions(assignmentId)),
     ]);
 
@@ -297,6 +302,8 @@ class AssignmentStats extends Component {
       assignmentSolutions,
       downloadBestSolutionsArchive,
       fetchManyStatus,
+      assignmentSolversLoading,
+      assignmentSolverSelector,
       intl: { locale },
       links,
     } = this.props;
@@ -434,6 +441,8 @@ class AssignmentStats extends Component {
                                     groupId={assignment.groupId}
                                     runtimeEnvironments={runtimes}
                                     noteMaxlen={160}
+                                    assignmentSolversLoading={assignmentSolversLoading}
+                                    assignmentSolver={assignmentSolverSelector(assignmentId, user.id)}
                                   />
                                 </Box>
                               </Col>
@@ -494,6 +503,8 @@ AssignmentStats.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   downloadBestSolutionsArchive: PropTypes.func.isRequired,
   fetchManyStatus: PropTypes.string,
+  assignmentSolversLoading: PropTypes.bool,
+  assignmentSolverSelector: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
@@ -523,6 +534,8 @@ export default withLinks(
         getGroup: id => groupSelector(state, id),
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
         fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),
+        assignmentSolversLoading: isAssignmentSolversLoading(state),
+        assignmentSolverSelector: getAssignmentSolverSelector(state),
       };
     },
     (

@@ -145,7 +145,7 @@ const idSelector = obj => obj.id;
  * @param {Function} predicate called on every entry, returns true should the entry remain
  * @returns {Object} clone of obj with entries filtered out
  */
-export const objectFilter = (obj, predicate) => {
+export const objectFilter = (obj, predicate = val => Boolean(val)) => {
   const res = {};
   Object.keys(obj)
     .filter(key => predicate(obj[key], key))
