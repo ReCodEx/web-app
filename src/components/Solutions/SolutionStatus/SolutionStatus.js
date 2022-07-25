@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage, FormattedNumber, FormattedRelativeTime } from 'react-intl';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { defaultMemoize } from 'reselect';
@@ -233,7 +233,22 @@ class SolutionStatus extends Component {
                     </OverlayTrigger>
                   </span>
 
-                  <DateTime unixts={submittedAt} showRelative />
+                  <DateTime unixts={submittedAt} />
+
+                  {submittedAt > firstDeadline && (
+                    <>
+                      <span className="px-1"> </span>
+                      <small className="text-muted">
+                        (<FormattedMessage id="app.solution.deadlineWasShort" defaultMessage="deadline was" />{' '}
+                        <FormattedRelativeTime
+                          value={firstDeadline - submittedAt}
+                          numeric="auto"
+                          updateIntervalInSeconds={1000000}
+                        />
+                        )
+                      </small>
+                    </>
+                  )}
                 </td>
               </tr>
 

@@ -1546,6 +1546,7 @@
   "app.solution.allSolutions": "all solutions",
   "app.solution.anotherAcceptedWarning": "Another solution has been marked as accepted. Points of this solution are not taken into account.",
   "app.solution.anotherBestWarning": "Another solution is considered as the best (i.e., it has gained more points or it has the same points but it was submitted later).",
+  "app.solution.deadlineWasShort": "deadline was",
   "app.solution.editNoteModalTitle": "Edit Solution Note",
   "app.solution.emptyNote": "empty",
   "app.solution.environment": "Used language:",
