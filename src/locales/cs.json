@@ -1546,6 +1546,7 @@
   "app.solution.allSolutions": "všechna řešení",
   "app.solution.anotherAcceptedWarning": "Jiné řešení již bylo označeno jako akceptované. Body tohoto řešení nejsou bráný v potaz.",
   "app.solution.anotherBestWarning": "Jiné řešení je považováno za nejlepší (tzn. má více bodů nebo má stejně bodů a bylo odevzdáno později).",
+  "app.solution.deadlineWasShort": "termín byl",
   "app.solution.editNoteModalTitle": "Upravit poznámku řešení",
   "app.solution.emptyNote": "prázdná",
   "app.solution.environment": "Použitý jazyk:",
