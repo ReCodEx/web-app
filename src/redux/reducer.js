@@ -50,6 +50,7 @@ import submissionEvaluations from './modules/submissionEvaluations';
 import submissionFailures from './modules/submissionFailures';
 import supplementaryFiles from './modules/supplementaryFiles';
 import upload from './modules/upload';
+import userCalendars from './modules/userCalendars';
 import users from './modules/users';
 import userSwitching from './modules/userSwitching';
 import broker from './modules/broker';
@@ -107,6 +108,7 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   supplementaryFiles,
   systemMessages,
   upload,
+  userCalendars,
   users,
   userSwitching,
 });

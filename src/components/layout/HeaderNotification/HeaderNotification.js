@@ -78,7 +78,7 @@ class HeaderNotification extends Component {
             </span>
             <span className="fa">
               <span className={styles.copy} ref={copy => (this.copy = copy)}>
-                <CopyToClipboard text={msg} onCopy={() => this.onCopy()}>
+                <CopyToClipboard text={msg} onCopy={this.onCopy}>
                   <CopyIcon gapRight fixedWidth />
                 </CopyToClipboard>
               </span>

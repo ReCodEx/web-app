@@ -6,6 +6,26 @@ import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
+import Page from '../../components/layout/Page';
+import { UserNavigation } from '../../components/layout/Navigation';
+import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
+import { LocalIcon, TransferIcon, EditUserIcon } from '../../components/icons';
+import { isStudentRole } from '../../components/helpers/usersRoles';
+import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
+import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
+import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
+import EditUserUIDataForm, {
+  EDITOR_FONT_SIZE_MIN,
+  EDITOR_FONT_SIZE_MAX,
+  EDITOR_FONT_SIZE_DEFAULT,
+} from '../../components/forms/EditUserUIDataForm';
+import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
+import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
+import CalendarTokens from '../../components/Users/CalendarTokens';
+import Box from '../../components/widgets/Box';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+
 import {
   fetchUser,
   fetchUserIfNeeded,
@@ -16,25 +36,14 @@ import {
   setRole,
 } from '../../redux/modules/users';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import Page from '../../components/layout/Page';
-import { UserNavigation } from '../../components/layout/Navigation';
-import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
-import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
-import { LocalIcon, TransferIcon, EditUserIcon } from '../../components/icons';
-import { isStudentRole } from '../../components/helpers/usersRoles';
-import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
-
-import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
-import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
-import EditUserUIDataForm, {
-  EDITOR_FONT_SIZE_MIN,
-  EDITOR_FONT_SIZE_MAX,
-  EDITOR_FONT_SIZE_DEFAULT,
-} from '../../components/forms/EditUserUIDataForm';
-import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
-import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import { generateToken, takeOver } from '../../redux/modules/auth';
 import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth';
+import {
+  fetchUserCalendarsIfNeeded,
+  createUserCalendar,
+  setUserCalendarExpired,
+} from '../../redux/modules/userCalendars';
+import { getUserCalendars } from '../../redux/selectors/userCalendars';
 
 const prepareNumber = (number, min, max, defaultValue) => {
   number = Number(number);
@@ -66,8 +75,15 @@ const prepareUserUIDataInitialValues = defaultMemoize(
   })
 );
 
+const GENERATE_TOKEN_SCOPES = {
+  'read-all': true,
+  master: false,
+  refresh: false,
+};
+
 class EditUser extends Component {
-  static loadAsync = ({ userId }, dispatch) => dispatch(fetchUserIfNeeded(userId));
+  static loadAsync = ({ userId }, dispatch) =>
+    Promise.all([dispatch(fetchUserIfNeeded(userId)), dispatch(fetchUserCalendarsIfNeeded(userId))]);
 
   componentDidMount = () => this.props.loadAsync();
 
@@ -92,6 +108,7 @@ class EditUser extends Component {
   render() {
     const {
       user,
+      calendars,
       loggedUserId,
       updateSettings,
       updateUIData,
@@ -101,6 +118,8 @@ class EditUser extends Component {
       lastToken,
       takeOver,
       refreshUser,
+      createCalendar,
+      setCalendarExpired,
     } = this.props;
     return (
       <Page
@@ -193,22 +212,39 @@ class EditUser extends Component {
             </Row>
 
             {data && data.id && data.id === loggedUserId && (
-              <Row>
-                <Col lg={12}>
-                  <GenerateTokenForm
-                    onSubmit={generateToken}
-                    initialValues={{
-                      expiration: '604800', // one week (in string)
-                      scopes: {
-                        'read-all': true,
-                        master: false,
-                        refresh: false,
-                      },
-                    }}
-                    lastToken={lastToken}
-                  />
-                </Col>
-              </Row>
+              <>
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      title={<FormattedMessage id="app.editUser.icalTitle" defaultMessage="Deadlines Export to iCal" />}
+                      noPadding
+                      unlimitedHeight>
+                      <ResourceRenderer resource={calendars}>
+                        {calendars => (
+                          <CalendarTokens
+                            calendars={calendars}
+                            create={createCalendar}
+                            setExpired={setCalendarExpired}
+                          />
+                        )}
+                      </ResourceRenderer>
+                    </Box>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col lg={12}>
+                    <GenerateTokenForm
+                      onSubmit={generateToken}
+                      initialValues={{
+                        expiration: '604800', // one week (in string)
+                        scopes: GENERATE_TOKEN_SCOPES,
+                      }}
+                      lastToken={lastToken}
+                    />
+                  </Col>
+                </Row>
+              </>
             )}
           </>
         )}
@@ -220,6 +256,7 @@ class EditUser extends Component {
 EditUser.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired }).isRequired,
   user: ImmutablePropTypes.map,
+  calendars: ImmutablePropTypes.map,
   loggedUserId: PropTypes.string.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   lastToken: PropTypes.string,
@@ -232,6 +269,8 @@ EditUser.propTypes = {
   generateToken: PropTypes.func.isRequired,
   setRole: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
+  createCalendar: PropTypes.func.isRequired,
+  setCalendarExpired: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -247,6 +286,7 @@ export default connect(
     loggedUserId: loggedInUserIdSelector(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     lastToken: lastGeneratedToken(state),
+    calendars: getUserCalendars(userId)(state),
   }),
   (
     dispatch,
@@ -286,5 +326,7 @@ export default connect(
       ),
     setRole: role => dispatch(setRole(userId, role)),
     takeOver: userId => dispatch(takeOver(userId)),
+    createCalendar: () => dispatch(createUserCalendar(userId)),
+    setCalendarExpired: calendarId => dispatch(setUserCalendarExpired(userId, calendarId)),
   })
 )(EditUser);
