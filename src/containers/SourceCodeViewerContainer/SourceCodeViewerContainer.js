@@ -71,6 +71,7 @@ class SourceCodeViewerContainer extends Component {
       isReference = false,
       submittedBy = null,
     } = this.props;
+
     return (
       <ResourceRenderer
         loading={
@@ -139,7 +140,7 @@ class SourceCodeViewerContainer extends Component {
 
             <Modal.Body className={styles.modalBody}>
               {(content.malformedCharacters || content.tooLarge) && (
-                <Callout variant="warning">
+                <Callout variant="warning" className="m-2">
                   {content.malformedCharacters && (
                     <p>
                       <FormattedMessage
@@ -158,9 +159,13 @@ class SourceCodeViewerContainer extends Component {
                   )}
                 </Callout>
               )}
-              <div>
+
+              {content.malformedCharacters ? (
+                <pre className="border-top">{content.content}</pre>
+              ) : (
                 <SourceCodeViewer content={content.content} name={fileName} />
-              </div>
+              )}
+              <div className="border-top pt-1 bg-light rounded-bottom"></div>
             </Modal.Body>
           </Modal>
         )}

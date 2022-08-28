@@ -10,7 +10,36 @@
     "transform-object-assign",
     "transform-flow-strip-types",
     "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-transform-runtime"
+    "@babel/plugin-transform-runtime",
+    ["prismjs", {
+      "languages": [
+        "csharp",
+        "css",
+        "go",
+        "groovy",
+        "java",
+        "javascript",
+        "kotlin",
+        "markdown",
+        "pascal",
+        "php",
+        "python",
+        "rust",
+        "scala",
+        "typescript",
+        "bash",
+        "cpp",
+        "haskell",
+        "cshtml",
+        "arduino",
+        "prolog",
+        "bash",
+        "sql",
+        "bison"
+      ],
+      "theme": "default",
+      "css": true
+    }]
   ],
   "env": {
     "production": {

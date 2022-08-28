@@ -13,6 +13,7 @@
     min-height: 100%;
     display: flex;
     flex-direction: column;
+    margin-bottom: 1vmax;
 
     & > div:nth-child(2) {
       flex-grow: 1;
@@ -26,14 +27,11 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  padding: 0!important;
 
   & > *:last-child {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-
-    & > * {
-      flex-grow: 1;
-    }
+    flex-grow: 1;
   }
 }

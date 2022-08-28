@@ -1,28 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
-import { UserUIDataContext } from '../../../helpers/contexts';
-import { getAceModeFromExtension } from '../../helpers/ace';
+import { Prism as SyntaxHighlighter, createElement } from 'react-syntax-highlighter';
+import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import 'prismjs/themes/prism.css';
 
-const AceEditor = canUseDOM ? require('react-ace').default : null;
+import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting';
+
+import './SourceCodeViewer.css';
+
+const linesRenderer = ({ rows, stylesheet, useInlineStyles }) => {
+  return rows.map((node, i) => (
+    <React.Fragment key={`fragment-${i}`}>
+      {createElement({
+        node,
+        stylesheet,
+        useInlineStyles,
+        key: `code-segement${i}`,
+      })}
+    </React.Fragment>
+  ));
+};
+
+const linePropsGenerator = lineNumber => ({
+  'data-line': lineNumber,
+});
 
 const SourceCodeViewer = ({ name, content = '' }) =>
   canUseDOM ? (
-    <UserUIDataContext.Consumer>
-      {({ vimMode = false, darkTheme = true, editorFontSize = 16 }) => (
-        <AceEditor
-          value={content}
-          mode={getAceModeFromExtension(name.split('.').pop())}
-          keyboardHandler={vimMode ? 'vim' : undefined}
-          theme={darkTheme ? 'monokai' : 'github'}
-          name="source-code-viewer"
-          width="100%"
-          height="100%"
-          fontSize={editorFontSize}
-          editorProps={{ $blockScrolling: true, $autoScrollEditorIntoView: true }}
-        />
-      )}
-    </UserUIDataContext.Consumer>
+    <SyntaxHighlighter
+      language={getPrismModeFromExtension(name.split('.').pop())}
+      style={vs}
+      className="sourceCodeViewer"
+      showLineNumbers={true}
+      showInlineLineNumbers={true}
+      wrapLines={true}
+      wrapLongLines={false}
+      useInlineStyles={false}
+      lineProps={linePropsGenerator}
+      renderer={linesRenderer}>
+      {content}
+    </SyntaxHighlighter>
   ) : (
     <></>
   );
