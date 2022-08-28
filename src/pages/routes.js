@@ -41,6 +41,7 @@ import ServerManagement from './ServerManagement';
 import ShadowAssignment from './ShadowAssignment';
 import SisIntegration from './SisIntegration';
 import Solution from './Solution';
+import SolutionSourceCodes from './SolutionSourceCodes';
 import SubmissionFailures from './SubmissionFailures';
 import SystemMessages from './SystemMessages/SystemMessages';
 import User from './User';
@@ -81,6 +82,12 @@ const routesDescriptors = [
   r('app/assignment/:assignmentId/edit', EditAssignment, 'ASSIGNMENT_EDIT_URI_FACTORY', true),
   r('app/assignment/:assignmentId/stats', AssignmentStats, 'ASSIGNMENT_STATS_URI_FACTORY', true),
   r('app/assignment/:assignmentId/solution/:solutionId', Solution, 'SOLUTION_DETAIL_URI_FACTORY', true),
+  r(
+    'app/assignment/:assignmentId/solution/:solutionId/sources',
+    SolutionSourceCodes,
+    'SOLUTION_SOURCE_CODES_URI_FACTORY',
+    true
+  ),
   r('app/shadow-assignment/:shadowId', ShadowAssignment, 'SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY', true),
   r('app/shadow-assignment/:shadowId/edit', EditShadowAssignment, 'SHADOW_ASSIGNMENT_EDIT_URI_FACTORY', true),
   r('app/exercises', Exercises, 'EXERCISES_URI', true),

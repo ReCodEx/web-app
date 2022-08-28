@@ -8,3 +8,10 @@ const getContent = state => state.filesContent;
 
 export const getFilesContent = (id, entry = null) =>
   createSelector(getContent, files => files.getIn(['resources', id + (entry || '')]));
+
+export const getFilesContentSelector = createSelector(
+  getContent,
+  files =>
+    (id, entry = null) =>
+      files.getIn(['resources', id + (entry || '')])
+);

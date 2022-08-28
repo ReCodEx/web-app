@@ -51,12 +51,14 @@ const prismMapping = {
   h: 'cpp',
   hpp: 'cpp',
   hs: 'haskell',
-  html: 'cshtml',
+  html: 'markup',
   ino: 'arduino',
   pl: 'prolog',
   sh: 'bash',
   sql: 'sql',
+  svg: 'markup',
   y: 'bison',
+  xml: 'markup',
 };
 
 export const getAceModeFromExtension = createExtensionTranslator(aceMapping);

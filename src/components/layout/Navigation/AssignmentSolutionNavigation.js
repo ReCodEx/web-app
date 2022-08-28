@@ -4,7 +4,15 @@ import { FormattedMessage } from 'react-intl';
 
 import Navigation from './Navigation';
 import withLinks from '../../../helpers/withLinks';
-import { AssignmentIcon, ExerciseIcon, ResultsIcon, SolutionResultsIcon, UserIcon, UserProfileIcon } from '../../icons';
+import {
+  AssignmentIcon,
+  CodeFileIcon,
+  ExerciseIcon,
+  ResultsIcon,
+  SolutionResultsIcon,
+  UserIcon,
+  UserProfileIcon,
+} from '../../icons';
 import { createGroupLinks } from './linkCreators';
 
 const AssignmentSolutionNavigation = ({
@@ -13,6 +21,7 @@ const AssignmentSolutionNavigation = ({
   exerciseId = null,
   userId,
   groupId,
+  attemptIndex = null,
   canViewSolutions = false,
   canViewExercise = false,
   canViewUserProfile = false,
@@ -21,11 +30,17 @@ const AssignmentSolutionNavigation = ({
   <Navigation
     assignmentId={assignmentId}
     userId={userId}
+    titlePrefix={attemptIndex ? `#${attemptIndex}` : null}
     links={[
       {
         caption: <FormattedMessage id="app.navigation.solution" defaultMessage="Solution" />,
         link: links.SOLUTION_DETAIL_URI_FACTORY(assignmentId, solutionId),
         icon: <SolutionResultsIcon gapRight />,
+      },
+      {
+        caption: <FormattedMessage id="app.navigation.solutionFiles" defaultMessage="Submitted Files" />,
+        link: links.SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solutionId),
+        icon: <CodeFileIcon gapRight />,
       },
       {
         caption: <FormattedMessage id="app.navigation.userSolution" defaultMessage="User Solutions" />,
@@ -66,6 +81,7 @@ AssignmentSolutionNavigation.propTypes = {
   exerciseId: PropTypes.string,
   userId: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
+  attemptIndex: PropTypes.number,
   canViewSolutions: PropTypes.bool,
   canViewExercise: PropTypes.bool,
   canViewUserProfile: PropTypes.bool,
