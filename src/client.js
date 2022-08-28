@@ -54,6 +54,10 @@ Object.keys(KNOWN_ACE_WORKERS).forEach(key => {
   ace.config.setModuleUrl(`ace/mode/${key}`, `${ACE_CDN_PREFIX}${KNOWN_ACE_WORKERS[key]}.js`);
 });
 
+// set Prismjs to manual mode (if present)
+window.Prism = window.Prism || {};
+window.Prism.manual = true;
+
 // load the initial state form the server - if any
 let state;
 const ini = window.__INITIAL_STATE__;

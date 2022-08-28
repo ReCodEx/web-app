@@ -317,6 +317,7 @@ class SolutionDetail extends Component {
             </Col>
           )}
         </Row>
+
         <SourceCodeViewerContainer
           solutionId={id}
           show={openFileId !== null}

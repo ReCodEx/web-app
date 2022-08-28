@@ -1,0 +1,35 @@
+.sourceCodeViewer {
+  margin: 0;
+  padding: 0;
+
+}
+
+.sourceCodeViewer span[data-line] {
+  display: block;
+  line-height: 25px;
+}
+
+.sourceCodeViewer span[data-line] .linenumber {
+  margin-right: 0.25rem;
+  background-color: #e0e0e0;
+  text-align: right;
+  min-width: 5em!important;
+  text-shadow: none;
+  color: #666;
+}
+
+.sourceCodeViewer span[data-line]:hover, .sourceCodeViewer span[data-line]:hover * {
+  background-color: #f3f3f3;
+}
+
+.sourceCodeViewer span[data-line]:hover .linenumber {
+  background-color: #d0d0d0;
+}
+
+.sourceCodeViewer span[data-line-style="selected"] {
+  background-color: #ff9;
+}
+
+.sourceCodeViewer span[data-line-style="selected"] .linenumber {
+  background-color: yellow;
+}
