@@ -56,6 +56,8 @@ const Navigation = ({
   links,
   secondaryLinks,
   location,
+  titlePrefix = null,
+  titleSuffix = null,
 }) => {
   links = Array.isArray(links) ? links.filter(link => link) : [];
   secondaryLinks = Array.isArray(secondaryLinks) ? secondaryLinks.filter(link => link) : [];
@@ -76,6 +78,8 @@ const Navigation = ({
               />
             </div>
           )}
+
+          {titlePrefix && <span>{titlePrefix}</span>}
 
           {groupId && (
             <span>
@@ -161,6 +165,8 @@ const Navigation = ({
               showRoleIcon={onlyUser}
             />
           )}
+
+          {titleSuffix && <span>{titleSuffix}</span>}
         </Card.Title>
       </Card.Header>
 
@@ -193,6 +199,8 @@ Navigation.propTypes = {
     pathname: PropTypes.string.isRequired,
     search: PropTypes.string.isRequired,
   }).isRequired,
+  titlePrefix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  titleSuffix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
 export default withRouter(Navigation);

@@ -112,6 +112,7 @@ class Solution extends Component {
                 exerciseId={assignment.exerciseId}
                 userId={solution.authorId}
                 groupId={assignment.groupId}
+                attemptIndex={solution.attemptIndex}
                 canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
                 canViewExercise={
                   hasPermissions(
@@ -153,18 +154,16 @@ class Solution extends Component {
                       )}
                   </TheButtonGroup>
 
-                  {!(
-                    hasPermissions(assignment, 'resubmitSubmissions') &&
-                    assignmentHasRuntime(assignment, solution.runtimeEnvironmentId)
-                  ) && (
-                    <span>
-                      <WarningIcon largeGapLeft gapRight className="text-warning" />
-                      <FormattedMessage
-                        id="app.solution.environmentNotAllowedCannotResubmit"
-                        defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
-                      />
-                    </span>
-                  )}
+                  {hasPermissions(assignment, 'resubmitSubmissions') &&
+                    !assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
+                      <span>
+                        <WarningIcon largeGapLeft gapRight className="text-warning" />
+                        <FormattedMessage
+                          id="app.solution.environmentNotAllowedCannotResubmit"
+                          defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
+                        />
+                      </span>
+                    )}
                 </div>
               )}
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
