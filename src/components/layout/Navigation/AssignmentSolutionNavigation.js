@@ -25,12 +25,23 @@ const AssignmentSolutionNavigation = ({
   canViewSolutions = false,
   canViewExercise = false,
   canViewUserProfile = false,
+  titlePrefix = null,
+  titleSuffix = null,
   links,
 }) => (
   <Navigation
     assignmentId={assignmentId}
     userId={userId}
-    titlePrefix={attemptIndex ? `#${attemptIndex}` : null}
+    titlePrefix={
+      attemptIndex ? (
+        <>
+          {titlePrefix} <strong>#{attemptIndex}</strong>
+        </>
+      ) : (
+        titlePrefix
+      )
+    }
+    titleSuffix={titleSuffix}
     links={[
       {
         caption: <FormattedMessage id="app.navigation.solution" defaultMessage="Solution" />,
@@ -85,6 +96,8 @@ AssignmentSolutionNavigation.propTypes = {
   canViewSolutions: PropTypes.bool,
   canViewExercise: PropTypes.bool,
   canViewUserProfile: PropTypes.bool,
+  titlePrefix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  titleSuffix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   links: PropTypes.object.isRequired,
 };
 

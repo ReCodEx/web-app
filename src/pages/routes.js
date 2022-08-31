@@ -88,6 +88,12 @@ const routesDescriptors = [
     'SOLUTION_SOURCE_CODES_URI_FACTORY',
     true
   ),
+  r(
+    'app/assignment/:assignmentId/solution/:solutionId/diff/:secondSolutionId',
+    SolutionSourceCodes,
+    'SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY',
+    true
+  ),
   r('app/shadow-assignment/:shadowId', ShadowAssignment, 'SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY', true),
   r('app/shadow-assignment/:shadowId/edit', EditShadowAssignment, 'SHADOW_ASSIGNMENT_EDIT_URI_FACTORY', true),
   r('app/exercises', Exercises, 'EXERCISES_URI', true),

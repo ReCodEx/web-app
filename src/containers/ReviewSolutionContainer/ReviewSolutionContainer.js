@@ -27,8 +27,8 @@ ReviewSolutionContainer.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => ({
-  reviewed: isReviewed(id)(state),
-  reviewPending: isSetFlagPending(id, 'reviewed')(state),
+  reviewed: isReviewed(state, id),
+  reviewPending: isSetFlagPending(state, id, 'reviewed'),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
@@ -36,7 +36,4 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   unsetReviewed: () => dispatch(setSolutionFlag(id, 'reviewed', false)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ReviewSolutionContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewSolutionContainer);

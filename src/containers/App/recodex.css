@@ -386,6 +386,13 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
   transition: height 500ms;
 }
 
+/*
+ * React Diff Viewer fixes
+ */
+.diff-wrapper pre {
+  padding: 0;
+}
+
 /******************************************************************************/
 /* Radio Input Styling                                                        */
 /* Taken from W3Schools and adapted for our use case...                       */
