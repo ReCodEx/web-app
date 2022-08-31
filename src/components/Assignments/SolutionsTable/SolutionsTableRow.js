@@ -43,6 +43,8 @@ const SolutionsTableRow = ({
   noteMaxlen = null,
   compact = false,
   selected = false,
+  showActionButtons = true,
+  onSelect = null,
   links: { SOLUTION_DETAIL_URI_FACTORY },
   intl: { locale },
 }) => {
@@ -60,7 +62,9 @@ const SolutionsTableRow = ({
 
   return (
     <tbody>
-      <tr className={selected ? 'table-active' : ''}>
+      <tr
+        className={selected ? 'table-active' : onSelect ? 'clickable' : ''}
+        onClick={!selected && onSelect ? () => onSelect(id) : null}>
         <td className="text-nowrap valign-middle text-bold">{attemptIndex}.</td>
 
         <td
@@ -113,51 +117,53 @@ const SolutionsTableRow = ({
         </td>
 
         {!compact && (
-          <td className="small" width="100%">
+          <td className="small" width="100%" colSpan={showActionButtons ? 1 : 2}>
             {noteElement}
           </td>
         )}
 
-        <td
-          className={classnames({
-            'text-right': true,
-            'valign-middle': true,
-            'text-nowrap': !splitOnTwoLines,
-          })}
-          rowSpan={splitOnTwoLines ? 2 : 1}>
-          <TheButtonGroup>
-            {permissionHints && permissionHints.viewDetail && (
-              <OptionalTooltipWrapper
-                tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-                hide={!compact}
-                tooltipId={`detail-${id}`}>
-                <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
-                  <Button size="xs" variant="secondary" disabled={selected}>
-                    <DetailIcon gapRight={!compact} />
-                    {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-                  </Button>
-                </Link>
-              </OptionalTooltipWrapper>
-            )}
+        {showActionButtons && (
+          <td
+            className={classnames({
+              'text-right': true,
+              'valign-middle': true,
+              'text-nowrap': !splitOnTwoLines,
+            })}
+            rowSpan={splitOnTwoLines ? 2 : 1}>
+            <TheButtonGroup>
+              {permissionHints && permissionHints.viewDetail && (
+                <OptionalTooltipWrapper
+                  tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                  hide={!compact}
+                  tooltipId={`detail-${id}`}>
+                  <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
+                    <Button size="xs" variant="secondary" disabled={selected}>
+                      <DetailIcon gapRight={!compact} />
+                      {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                    </Button>
+                  </Link>
+                </OptionalTooltipWrapper>
+              )}
 
-            {permissionHints && permissionHints.setFlag && (
-              <>
-                <AcceptSolutionContainer
-                  id={id}
-                  locale={locale}
-                  captionAsTooltip={compact}
-                  shortLabel={!compact}
-                  size="xs"
-                />
-                <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
-              </>
-            )}
+              {permissionHints && permissionHints.setFlag && (
+                <>
+                  <AcceptSolutionContainer
+                    id={id}
+                    locale={locale}
+                    captionAsTooltip={compact}
+                    shortLabel={!compact}
+                    size="xs"
+                  />
+                  <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
+                </>
+              )}
 
-            {permissionHints && permissionHints.delete && (
-              <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
-            )}
-          </TheButtonGroup>
-        </td>
+              {permissionHints && permissionHints.delete && (
+                <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
+              )}
+            </TheButtonGroup>
+          </td>
+        )}
       </tr>
 
       {splitOnTwoLines && (
@@ -201,6 +207,8 @@ SolutionsTableRow.propTypes = {
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool.isRequired,
   selected: PropTypes.bool,
+  showActionButtons: PropTypes.bool,
+  onSelect: PropTypes.func,
   links: PropTypes.object,
   intl: PropTypes.object,
 };

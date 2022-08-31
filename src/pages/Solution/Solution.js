@@ -235,11 +235,11 @@ export default connect(
       },
     }
   ) => ({
-    solution: getSolution(solutionId)(state),
+    solution: getSolution(state, solutionId),
     files: getSolutionFiles(state, solutionId),
     userSolutionsSelector: getUserSolutionsSortedData(state),
     assignment: getAssignment(state)(assignmentId),
-    evaluations: evaluationsForSubmissionSelector(solutionId)(state),
+    evaluations: evaluationsForSubmissionSelector(state, solutionId),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
     fetchStatus: fetchManyStatus(solutionId)(state),
     scoreConfigSelector: assignmentSubmissionScoreConfigSelector(state),

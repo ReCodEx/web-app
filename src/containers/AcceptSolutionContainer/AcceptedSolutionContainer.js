@@ -21,8 +21,8 @@ AcceptSolutionContainer.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => ({
-  accepted: isAccepted(id)(state),
-  acceptPending: isSetFlagPending(id, 'accepted')(state),
+  accepted: isAccepted(state, id),
+  acceptPending: isSetFlagPending(state, id, 'accepted'),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
@@ -30,7 +30,4 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   unaccept: () => dispatch(setSolutionFlag(id, 'accepted', false)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AcceptSolutionContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AcceptSolutionContainer);

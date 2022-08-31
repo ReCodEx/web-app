@@ -20,7 +20,7 @@ DeleteSolutionButtonContainer.propTypes = {
 
 export default connect(
   (state, { id }) => ({
-    solution: getSolution(id)(state),
+    solution: getSolution(state, id),
   }),
   (dispatch, { id, groupId, onDeleted }) => ({
     deleteSolution: () => {
