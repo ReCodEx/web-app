@@ -11,7 +11,7 @@ import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionBut
 import AcceptSolutionContainer from '../../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer';
 
-import { DetailIcon } from '../../icons';
+import { DetailIcon, CodeFileIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
@@ -43,9 +43,10 @@ const SolutionsTableRow = ({
   noteMaxlen = null,
   compact = false,
   selected = false,
+  highlighted = false,
   showActionButtons = true,
   onSelect = null,
-  links: { SOLUTION_DETAIL_URI_FACTORY },
+  links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY },
   intl: { locale },
 }) => {
   const trimmedNote = note && note.trim();
@@ -63,7 +64,11 @@ const SolutionsTableRow = ({
   return (
     <tbody>
       <tr
-        className={selected ? 'table-active' : onSelect ? 'clickable' : ''}
+        className={classnames({
+          'table-primary': selected,
+          clickable: !selected && onSelect,
+          'table-warning': highlighted,
+        })}
         onClick={!selected && onSelect ? () => onSelect(id) : null}>
         <td className="text-nowrap valign-middle text-bold">{attemptIndex}.</td>
 
@@ -132,17 +137,31 @@ const SolutionsTableRow = ({
             rowSpan={splitOnTwoLines ? 2 : 1}>
             <TheButtonGroup>
               {permissionHints && permissionHints.viewDetail && (
-                <OptionalTooltipWrapper
-                  tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-                  hide={!compact}
-                  tooltipId={`detail-${id}`}>
-                  <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
-                    <Button size="xs" variant="secondary" disabled={selected}>
-                      <DetailIcon gapRight={!compact} />
-                      {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-                    </Button>
-                  </Link>
-                </OptionalTooltipWrapper>
+                <>
+                  <OptionalTooltipWrapper
+                    tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                    hide={!compact}
+                    tooltipId={`detail-${id}`}>
+                    <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
+                      <Button size="xs" variant="secondary" disabled={selected}>
+                        <DetailIcon gapRight={!compact} />
+                        {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                      </Button>
+                    </Link>
+                  </OptionalTooltipWrapper>
+
+                  <OptionalTooltipWrapper
+                    tooltip={<FormattedMessage id="app.navigation.solutionFiles" defaultMessage="Submitted Files" />}
+                    hide={!compact}
+                    tooltipId={`codes-${id}`}>
+                    <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
+                      <Button size="xs" variant="primary" disabled={selected}>
+                        <CodeFileIcon fixedWidth gapRight={!compact} />
+                        {!compact && <FormattedMessage id="generic.files" defaultMessage="Files" />}
+                      </Button>
+                    </Link>
+                  </OptionalTooltipWrapper>
+                </>
               )}
 
               {permissionHints && permissionHints.setFlag && (
@@ -207,6 +226,7 @@ SolutionsTableRow.propTypes = {
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool.isRequired,
   selected: PropTypes.bool,
+  highlighted: PropTypes.bool,
   showActionButtons: PropTypes.bool,
   onSelect: PropTypes.func,
   links: PropTypes.object,

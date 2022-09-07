@@ -68,6 +68,10 @@ export const encodeNumId = id => {
   return 'ID' + id;
 };
 
+export const getFileExtension = fileName => fileName.split('.').pop();
+
+export const getFileExtensionLC = fileName => getFileExtension(fileName).toLowerCase();
+
 /*
  * Array/Object Helpers
  */
