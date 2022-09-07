@@ -24,9 +24,13 @@ export const BindIcon = props => <Icon {...props} icon="link" />;
 export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
 export const BugIcon = props => <Icon {...props} icon="bug" />;
 export { CheckRequiredIcon };
+export const CircleIcon = ({ selected = false, ...props }) => (
+  <Icon {...props} icon={['far', selected ? 'circle-dot' : 'circle']} />
+);
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CodeFileIcon = props => <Icon {...props} icon={['far', 'file-code']} />;
 export const CodeIcon = props => <Icon {...props} icon="code" />;
+export const CodeCompareIcon = props => <Icon {...props} icon="code-compare" />;
 export const CopyIcon = props => <Icon {...props} icon={['far', 'clipboard']} />;
 export const ChatIcon = props => <Icon {...props} icon={['far', 'comments']} />;
 export const DashboardIcon = props => <Icon {...props} icon="tachometer-alt" />;
@@ -99,6 +103,7 @@ export const SortedIcon = ({ active = true, descending = false, ...props }) => (
     {...props}
   />
 );
+export const StopIcon = props => <Icon {...props} icon={['far', 'circle-stop']} />;
 export const SuccessIcon = props => <Icon {...props} icon="check" />;
 export const SuccessOrFailureIcon = ({ success = false, colors = true, ...props }) =>
   success ? (
@@ -139,6 +144,10 @@ export const VisibleIcon = ({ visible = true, ...props }) =>
 export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
 export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;
 export const ZipIcon = props => <Icon {...props} icon={['far', 'file-archive']} />;
+
+CircleIcon.propTypes = {
+  selected: PropTypes.bool,
+};
 
 ExpandCollapseIcon.propTypes = {
   isOpen: PropTypes.bool,

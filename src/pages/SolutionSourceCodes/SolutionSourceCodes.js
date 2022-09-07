@@ -3,23 +3,29 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Row, Col, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import { Row, Col, Modal, Tabs, Tab, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import { withRouter } from 'react-router';
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
-import Prism from 'prismjs';
 
 import Page from '../../components/layout/Page';
-import Box from '../../components/widgets/Box';
 import InsetPanel from '../../components/widgets/InsetPanel';
-import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 import { AssignmentSolutionNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
-import Icon, { DownloadIcon, LoadingIcon, SolutionResultsIcon, SwapIcon, WarningIcon } from '../../components/icons';
+import {
+  CircleIcon,
+  CodeCompareIcon,
+  RefreshIcon,
+  SolutionResultsIcon,
+  StopIcon,
+  SwapIcon,
+} from '../../components/icons';
 import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
 import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
+import SourceCodeBox from '../../components/Solutions/SourceCodeBox';
+import RecentlyVisited from '../../components/Solutions/RecentlyVisited';
+import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -37,13 +43,23 @@ import {
 import { getFilesContentSelector } from '../../redux/selectors/files';
 import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 
+import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage';
 import withLinks from '../../helpers/withLinks';
 import { isSupervisorRole } from '../../components/helpers/usersRoles';
-import { hasPermissions } from '../../helpers/common';
-import { getPrismModeFromExtension } from '../../components/helpers/syntaxHighlighting';
+import {
+  arrayToObject,
+  hasPermissions,
+  getFileExtensionLC,
+  isEmptyObject,
+  EMPTY_ARRAY,
+  EMPTY_OBJ,
+} from '../../helpers/common';
 
 const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
 
+/**
+ * Expand zip entries as regular files with adjusted parameters (name and ID are composed of the zip container and the entry itself).
+ */
 const preprocessZipEntries = ({ zipEntries, ...file }) => {
   if (zipEntries) {
     file.zipEntries = zipEntries
@@ -60,6 +76,9 @@ const preprocessZipEntries = ({ zipEntries, ...file }) => {
   return file;
 };
 
+/**
+ * Preprocess zip entries, consolidate, and sort by names.
+ */
 const preprocessFiles = defaultMemoize(files =>
   files
     .sort(nameComparator)
@@ -67,55 +86,121 @@ const preprocessFiles = defaultMemoize(files =>
     .reduce((acc, file) => [...acc, ...(file.zipEntries || [file])], [])
 );
 
-const associateFilesForDiff = defaultMemoize((files, secondFiles) => {
+/**
+ * @param {Array} files of the main solution
+ * @param {Array|null} secondFiles of the second solution to diffWith
+ * @param {Object} mapping explicit mappings as { firstId: secondId }
+ * @return {Array} copy of files array where file objects are augmented -- if a file is matched with a second file
+ *                 a `diffWith` entry is added into the file object
+ */
+const associateFilesForDiff = defaultMemoize((files, secondFiles, mapping = EMPTY_OBJ) => {
   if (!secondFiles) {
     return files;
   }
 
+  // create an index {name: file} and extensions index {ext: [ fileNames ]}
   const index = {};
+  const indexLC = {};
+  const extensionsIndex = {};
+  const usedSecondFiles = new Set(Object.values(mapping));
   secondFiles
-    .map(preprocessZipEntries)
-    .reduce((acc, file) => [...acc, ...(file.zipEntries || [file])], [])
+    .filter(file => !usedSecondFiles.has(file.id))
     .forEach(file => {
       index[file.name] = file;
+      const nameLC = file.name.toLowerCase();
+      indexLC[nameLC] = indexLC[nameLC] || [];
+      indexLC[nameLC].push(file.name);
+      const ext = getFileExtensionLC(file.name);
+      extensionsIndex[ext] = extensionsIndex[ext] || [];
+      extensionsIndex[ext].push(file.name);
     });
 
-  return files.map(file => (index[file.name] ? { ...file, diffWith: index[file.name] } : file));
+  // prepare a helper function that gets and removes file of given name from index
+  const getFile = name => {
+    const file = index[name] || null;
+    if (file) {
+      const nameLC = file.name.toLowerCase();
+      indexLC[nameLC] = indexLC[nameLC].filter(n => n !== name);
+      const ext = getFileExtensionLC(name);
+      extensionsIndex[ext] = extensionsIndex[ext].filter(n => n !== name);
+      delete index[name];
+    }
+    return file;
+  };
+
+  // four stage association -- 1. explicit mapping by IDs, 2. exact file name match, 3. lower-cased name match, 4. extensions match
+  // any ambiguity is treated as non-passable obstacle
+  return files
+    .map(file => {
+      // explicit mapping
+      const diffWith = mapping[file.id] && secondFiles.find(f => f.id === mapping[file.id]);
+      return diffWith ? { ...file, diffWith } : file;
+    })
+    .map(file => {
+      // exact file name match
+      const diffWith = !file.diffWith ? getFile(file.name) : null;
+      return diffWith ? { ...file, diffWith } : file;
+    })
+    .map(file => {
+      // lowercased file name match
+      if (!file.diffWith) {
+        const nameLC = file.name.toLowerCase();
+        if (indexLC[nameLC] && indexLC[nameLC].length === 1) {
+          const diffWith = getFile(indexLC[nameLC].pop());
+          return { ...file, diffWith };
+        }
+      }
+      return file;
+    })
+    .map(file => {
+      // file extension match
+      if (!file.diffWith) {
+        const ext = getFileExtensionLC(file.name);
+        if (extensionsIndex[ext] && extensionsIndex[ext].length === 1) {
+          const diffWith = getFile(extensionsIndex[ext].pop());
+          return { ...file, diffWith };
+        }
+      }
+      return file;
+    });
 });
+
+/**
+ * Helper that computes reverted mapping { secondId: firstId } from the result of associateFilesForDiff.
+ */
+const getRevertedMapping = defaultMemoize(files =>
+  arrayToObject(
+    files.filter(({ diffWith }) => Boolean(diffWith)),
+    ({ diffWith }) => diffWith.id
+  )
+);
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 
-const fileContentResource = (fileContentsSelector, file) => {
-  const res = fileContentsSelector(...fileNameAndEntry(file));
-  return file.diffWith ? [res, fileContentsSelector(...fileNameAndEntry(file.diffWith))] : res;
-};
+const wrapInArray = defaultMemoize(entry => [entry]);
 
-const diffViewHighlightSyntax = lang => str =>
-  str && (
-    <pre
-      style={{ display: 'inline' }}
-      dangerouslySetInnerHTML={{
-        __html: Prism.highlight(str, Prism.languages[lang] || Prism.languages.cpp),
-      }}
-    />
-  );
+const localStorageDiffMappingsKey = 'SolutionSourceCodes.diffMappings.';
 
 class SolutionSourceCodes extends Component {
-  state = { dialogOpen: false };
+  state = { diffDialogOpen: false, mappingDialogOpenFile: null, mappingDialogDiffWith: null, diffMappings: {} };
 
   static loadAsync = ({ solutionId, assignmentId, secondSolutionId }, dispatch) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
       secondSolutionId
-        ? dispatch(fetchSolutionIfNeeded(secondSolutionId)).then(res =>
-            res.value.assignmentId !== assignmentId
+        ? dispatch(fetchSolutionIfNeeded(secondSolutionId)).then(res => {
+            registerSolutionVisit(res.value);
+            return res.value.assignmentId !== assignmentId
               ? dispatch(fetchAssignmentIfNeeded(res.value.assignmentId))
-              : Promise.resolve()
-          )
+              : Promise.resolve();
+          })
         : Promise.resolve(),
       dispatch(fetchSolutionIfNeeded(solutionId))
         .then(res => res.value)
-        .then(solution => Promise.all([dispatch(fetchUsersSolutions(solution.authorId, assignmentId))])),
+        .then(solution => {
+          registerSolutionVisit(solution);
+          return Promise.all([dispatch(fetchUsersSolutions(solution.authorId, assignmentId))]);
+        }),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId))
         .then(res => preprocessFiles(res.value))
@@ -127,7 +212,26 @@ class SolutionSourceCodes extends Component {
         : Promise.resolve(),
     ]);
 
-  componentDidMount = () => this.props.loadAsync();
+  getDiffMappingsLocalStorageKey = () => {
+    const {
+      match: {
+        params: { solutionId, secondSolutionId },
+      },
+    } = this.props;
+
+    return secondSolutionId ? `${localStorageDiffMappingsKey}${solutionId}/${secondSolutionId}` : null;
+  };
+
+  componentDidMount = () => {
+    this.props.loadAsync();
+
+    const lsKey = this.getDiffMappingsLocalStorageKey();
+    if (lsKey) {
+      this.setState({
+        diffMappings: storageGetItem(lsKey, {}),
+      });
+    }
+  };
 
   componentDidUpdate(prevProps) {
     if (
@@ -135,15 +239,26 @@ class SolutionSourceCodes extends Component {
       this.props.match.params.secondSolutionId !== prevProps.match.params.secondSolutionId
     ) {
       this.props.loadAsync();
+
+      const lsKey = this.getDiffMappingsLocalStorageKey();
+      if (lsKey) {
+        this.setState({
+          diffMappings: storageGetItem(lsKey, {}),
+        });
+      }
     }
   }
 
-  openDialog = () => {
-    this.setState({ dialogOpen: true });
+  openDiffDialog = () => {
+    this.setState({ diffDialogOpen: true });
   };
 
-  closeDialog = () => {
-    this.setState({ dialogOpen: false });
+  openMappingDialog = (mappingDialogOpenFile, mappingDialogDiffWith) => {
+    this.setState({ mappingDialogOpenFile, mappingDialogDiffWith });
+  };
+
+  closeDialogs = () => {
+    this.setState({ diffDialogOpen: false, mappingDialogOpenFile: null, mappingDialogDiffWith: null });
   };
 
   selectDiffSolution = id => {
@@ -154,7 +269,7 @@ class SolutionSourceCodes extends Component {
       history: { replace },
       links: { SOLUTION_SOURCE_CODES_URI_FACTORY, SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY },
     } = this.props;
-    this.closeDialog();
+    this.closeDialogs();
     if (id !== secondSolutionId && (id || secondSolutionId))
       replace(
         id
@@ -176,6 +291,30 @@ class SolutionSourceCodes extends Component {
     const assignmentId = secondSolution && secondSolution.getIn(['data', 'assignmentId']);
     if (secondSolutionId && assignmentId && solutionId !== secondSolutionId) {
       replace(SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY(assignmentId, secondSolutionId, solutionId));
+    }
+  };
+
+  adjustDiffMapping = (firstId, secondId = null) => {
+    this.closeDialogs();
+    const diffMappings = Object.fromEntries(
+      Object.entries(this.state.diffMappings).filter(([key, value]) => key !== firstId && value !== secondId)
+    );
+    if (secondId) {
+      diffMappings[firstId] = secondId;
+    }
+    this.setState({ diffMappings });
+    const lsKey = this.getDiffMappingsLocalStorageKey();
+    if (lsKey) {
+      storageSetItem(lsKey, diffMappings);
+    }
+  };
+
+  resetDiffMappings = () => {
+    this.closeDialogs();
+    this.setState({ diffMappings: {} });
+    const lsKey = this.getDiffMappingsLocalStorageKey();
+    if (lsKey) {
+      storageRemoveItem(lsKey);
     }
   };
 
@@ -286,135 +425,151 @@ class SolutionSourceCodes extends Component {
                   )}
                 </Col>
 
-                {userSolutionsSelector(solution.authorId, assignmentId).size > 1 && (
-                  <Col sm="auto" className="mb-3">
-                    <TheButtonGroup>
-                      <Button variant="primary" onClick={this.openDialog}>
-                        <Icon icon="code-compare" gapRight />
-                        {diffMode ? (
-                          <FormattedMessage
-                            id="app.solutionSourceCodes.diffButtonChange"
-                            defaultMessage="Compare with another..."
-                          />
-                        ) : (
-                          <FormattedMessage id="app.solutionSourceCodes.diffButton" defaultMessage="Compare with..." />
-                        )}
-                      </Button>
-
-                      {diffMode && (
-                        <Button variant="danger" onClick={() => this.selectDiffSolution(null)}>
-                          <Icon icon={['far', 'circle-stop']} gapRight />
-                          <FormattedMessage
-                            id="app.solutionSourceCodes.cancelDiffButton"
-                            defaultMessage="Compare mode off"
-                          />
-                        </Button>
+                <Col sm="auto" className="mb-3">
+                  <TheButtonGroup>
+                    <Button variant="primary" onClick={this.openDiffDialog}>
+                      <CodeCompareIcon gapRight />
+                      {diffMode ? (
+                        <FormattedMessage
+                          id="app.solutionSourceCodes.diffButtonChange"
+                          defaultMessage="Compare with another..."
+                        />
+                      ) : (
+                        <FormattedMessage id="app.solutionSourceCodes.diffButton" defaultMessage="Compare with..." />
                       )}
-                    </TheButtonGroup>
-                  </Col>
-                )}
+                    </Button>
+
+                    {diffMode && (
+                      <Button variant="danger" onClick={() => this.selectDiffSolution(null)}>
+                        <StopIcon gapRight />
+                        <FormattedMessage
+                          id="app.solutionSourceCodes.cancelDiffButton"
+                          defaultMessage="Compare mode off"
+                        />
+                      </Button>
+                    )}
+                  </TheButtonGroup>
+                </Col>
               </Row>
             )}
 
             <ResourceRenderer resource={files} bulkyLoading>
-              {files => (
+              {filesRaw => (
                 <ResourceRenderer resource={secondFiles || []} bulkyLoading>
-                  {(secondFiles = null) =>
-                    associateFilesForDiff(preprocessFiles(files), secondFiles).map(file => (
-                      <ResourceRenderer
-                        key={file.id}
-                        resource={fileContentResource(fileContentsSelector, file)}
-                        loading={
-                          <Box
-                            key={`${file.id}-loading`}
-                            title={
-                              <>
-                                <LoadingIcon gapRight />
-                                <code>{file.name}</code>
-                              </>
-                            }
-                            noPadding
-                          />
-                        }>
-                        {(content, secondContent = null) => (
-                          <Box
+                  {(secondFilesRaw = null) => {
+                    const secondFiles = secondFilesRaw && preprocessFiles(secondFilesRaw);
+                    const files = associateFilesForDiff(
+                      preprocessFiles(filesRaw),
+                      secondFiles,
+                      this.state.diffMappings
+                    );
+                    const revertedIndex = files && secondFiles && getRevertedMapping(files);
+                    return (
+                      <>
+                        {files.map(file => (
+                          <SourceCodeBox
                             key={file.id}
-                            title={
-                              <>
-                                {content.malformedCharacters && (
-                                  <OverlayTrigger
-                                    placement="bottom"
-                                    overlay={
-                                      <Tooltip id={`${file.id}-malformed`}>
-                                        <FormattedMessage
-                                          id="app.solutionSourceCodes.malformedTooltip"
-                                          defaultMessage="The file is not a valid UTF-8 text file so it cannot be properly displayed as a source code."
-                                        />
-                                      </Tooltip>
-                                    }>
-                                    <WarningIcon className="text-danger" gapRight />
-                                  </OverlayTrigger>
-                                )}
+                            {...file}
+                            download={download}
+                            fileContentsSelector={fileContentsSelector}
+                            diffMode={diffMode}
+                            adjustDiffMapping={this.openMappingDialog}
+                          />
+                        ))}
 
-                                {content.tooLarge && (
-                                  <OverlayTrigger
-                                    placement="bottom"
-                                    overlay={
-                                      <Tooltip id={`${file.id}-tooLarge`}>
-                                        <FormattedMessage
-                                          id="app.solutionSourceCodes.tooLargeTooltip"
-                                          defaultMessage="The file is too large for code preview and it was cropped."
-                                        />
-                                      </Tooltip>
-                                    }>
-                                    <Icon icon="scissors" className="text-warning" gapRight />
-                                  </OverlayTrigger>
-                                )}
-
-                                <code>{file.name}</code>
-
-                                <DownloadIcon
-                                  gapLeft
-                                  timid
-                                  className="text-primary"
-                                  onClick={ev => {
-                                    ev.stopPropagation();
-                                    download(...fileNameAndEntry(file));
-                                  }}
+                        {diffMode && secondFiles && (
+                          <Modal
+                            show={this.state.mappingDialogOpenFile !== null}
+                            backdrop="static"
+                            onHide={this.closeDialogs}
+                            size="xl">
+                            <Modal.Header closeButton>
+                              <Modal.Title>
+                                <FormattedMessage
+                                  id="app.solutionSourceCodes.mappingModal.title"
+                                  defaultMessage="Adjust mapping of compared files"
                                 />
-                              </>
-                            }
-                            noPadding
-                            unlimitedHeight
-                            collapsable
-                            isOpen={!content.malformedCharacters}>
-                            {content.malformedCharacters ? (
-                              <pre>{content.content}</pre>
-                            ) : secondContent && !secondContent.malformedCharacters ? (
-                              <div className="diff-wrapper">
-                                <ReactDiffViewer
-                                  oldValue={content.content}
-                                  newValue={secondContent.content}
-                                  splitView={true}
-                                  renderContent={diffViewHighlightSyntax(
-                                    getPrismModeFromExtension(file.name.split('.').pop())
-                                  )}
-                                  compareMethod={DiffMethod.WORDS_WITH_SPACE}
+                              </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                              <h5 className="mb-3">
+                                <code className="mr-2">
+                                  {this.state.mappingDialogOpenFile && this.state.mappingDialogOpenFile.name}
+                                </code>{' '}
+                                <FormattedMessage
+                                  id="app.solutionSourceCodes.mappingModal.fileIsAssociatedWith"
+                                  defaultMessage="file (on the left) is associated with..."
                                 />
-                              </div>
-                            ) : (
-                              <SourceCodeViewer content={content.content} name={file.name} />
-                            )}
-                          </Box>
+                              </h5>
+
+                              <InsetPanel>
+                                {this.state.mappingDialogOpenFile && (
+                                  <FormattedMessage
+                                    id="app.solutionSourceCodes.mappingModal.explain"
+                                    defaultMessage="Select a file from second solution that will be compared with ''<code>{name}</code>'' file from the first solution. Note that changing a mapping between two files may affect how other files are mapped."
+                                    values={{
+                                      name: this.state.mappingDialogOpenFile.name,
+                                      code: content => <code>{content}</code>,
+                                    }}
+                                  />
+                                )}
+                              </InsetPanel>
+
+                              <Table hover>
+                                <tbody>
+                                  {secondFiles.map(file => {
+                                    const selected =
+                                      this.state.mappingDialogDiffWith &&
+                                      file.id === this.state.mappingDialogDiffWith.id;
+                                    return (
+                                      <tr
+                                        key={file.id}
+                                        className={selected ? 'table-primary' : ''}
+                                        onClick={
+                                          selected
+                                            ? null
+                                            : () => this.adjustDiffMapping(this.state.mappingDialogOpenFile.id, file.id)
+                                        }>
+                                        <td className="shrink-col">
+                                          <CircleIcon selected={selected} />
+                                        </td>
+                                        <td>{file.name}</td>
+                                        <td className="shrink-col text-muted text-nowrap small">
+                                          {revertedIndex && revertedIndex[file.id] && (
+                                            <>
+                                              <CodeCompareIcon gapRight />
+                                              {revertedIndex[file.id].name}
+                                            </>
+                                          )}
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </Table>
+
+                              {this.state.diffMappings && !isEmptyObject(this.state.diffMappings) && (
+                                <div className="text-center">
+                                  <Button variant="danger" onClick={this.resetDiffMappings}>
+                                    <RefreshIcon gapRight />
+                                    <FormattedMessage
+                                      id="app.solutionSourceCodes.mappingModal.resetButton"
+                                      defaultMessage="Reset mapping"
+                                    />
+                                  </Button>
+                                </div>
+                              )}
+                            </Modal.Body>
+                          </Modal>
                         )}
-                      </ResourceRenderer>
-                    ))
-                  }
+                      </>
+                    );
+                  }}
                 </ResourceRenderer>
               )}
             </ResourceRenderer>
 
-            <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+            <Modal show={this.state.diffDialogOpen} backdrop="static" onHide={this.closeDialogs} size="xl">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage
@@ -430,20 +585,46 @@ class SolutionSourceCodes extends Component {
                     defaultMessage="When second solution is selected for comparison from the table below, the differences of the corresponding files will be displayed in a two-column views. The current solution will be displayed on the left, the second solution on the right."
                   />
                 </InsetPanel>
-                <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
-                  {runtimes => (
-                    <SolutionsTable
-                      solutions={userSolutionsSelector(solution.authorId, assignmentId)}
-                      assignmentId={assignmentId}
-                      groupId={assignment.groupId}
-                      runtimeEnvironments={runtimes}
-                      noteMaxlen={32}
-                      selected={solution.id}
-                      showActionButtons={false}
+                <Tabs defaultActiveKey="user-solutions" id="solution-sources-modal-tabs">
+                  <Tab
+                    eventKey="user-solutions"
+                    title={
+                      <FormattedMessage
+                        id="app.solutionSourceCodes.diffModal.tabUserSolutions"
+                        defaultMessage="User solutions"
+                      />
+                    }>
+                    <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
+                      {runtimes => (
+                        <SolutionsTable
+                          solutions={userSolutionsSelector(solution.authorId, assignmentId)}
+                          assignmentId={assignmentId}
+                          groupId={assignment.groupId}
+                          runtimeEnvironments={runtimes}
+                          noteMaxlen={32}
+                          selected={solution.id}
+                          highlights={secondSolutionId ? wrapInArray(secondSolutionId) : EMPTY_ARRAY}
+                          showActionButtons={false}
+                          onSelect={this.selectDiffSolution}
+                        />
+                      )}
+                    </ResourceRenderer>
+                  </Tab>
+                  <Tab
+                    eventKey="recently-visited"
+                    title={
+                      <FormattedMessage
+                        id="app.solutionSourceCodes.diffModal.tabRecentSolutions"
+                        defaultMessage="Recently visited"
+                      />
+                    }>
+                    <RecentlyVisited
+                      selectedId={solutionId}
+                      secondSelectedId={secondSolutionId}
                       onSelect={this.selectDiffSolution}
                     />
-                  )}
-                </ResourceRenderer>
+                  </Tab>
+                </Tabs>
               </Modal.Body>
             </Modal>
           </div>

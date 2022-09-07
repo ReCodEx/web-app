@@ -41,6 +41,7 @@ import {
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 
+import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
 import { hasPermissions } from '../../helpers/common';
 import { SolutionResultsIcon, WarningIcon } from '../../components/icons';
 
@@ -56,12 +57,13 @@ class Solution extends Component {
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchSolutionIfNeeded(solutionId))
         .then(res => res.value)
-        .then(solution =>
-          Promise.all([
+        .then(solution => {
+          registerSolutionVisit(solution);
+          return Promise.all([
             dispatch(fetchUsersSolutions(solution.authorId, assignmentId)),
             dispatch(fetchAssignmentSolversIfNeeded({ assignmentId, userId: solution.authorId })),
-          ])
-        ),
+          ]);
+        }),
       dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId)),

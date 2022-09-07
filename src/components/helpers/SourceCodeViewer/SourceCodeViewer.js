@@ -6,6 +6,7 @@ import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'prismjs/themes/prism.css';
 
 import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting';
+import { getFileExtensionLC } from '../../../helpers/common';
 
 import './SourceCodeViewer.css';
 
@@ -29,7 +30,7 @@ const linePropsGenerator = lineNumber => ({
 const SourceCodeViewer = ({ name, content = '' }) =>
   canUseDOM ? (
     <SyntaxHighlighter
-      language={getPrismModeFromExtension(name.split('.').pop())}
+      language={getPrismModeFromExtension(getFileExtensionLC(name))}
       style={vs}
       className="sourceCodeViewer"
       showLineNumbers={true}
