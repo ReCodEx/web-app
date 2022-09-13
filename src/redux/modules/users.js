@@ -1,7 +1,12 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus,
+  createActionsWithPostfixes,
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as emailVerificationActionTypes } from './emailVerification';
@@ -13,26 +18,13 @@ import { actionTypes as authActionTypes } from './authTypes';
 import { arrayToObject } from '../../helpers/common';
 
 export const additionalActionTypes = {
-  VALIDATE_REGISTRATION_DATA: 'recodex/users/VALIDATE_REGISTRATION_DATA',
-  VALIDATE_REGISTRATION_DATA_PENDING: 'recodex/users/VALIDATE_REGISTRATION_DATA_PENDING',
-  VALIDATE_REGISTRATION_DATA_FULFILLED: 'recodex/users/VALIDATE_REGISTRATION_DATA_FULFILLED',
-  VALIDATE_REGISTRATION_DATA_REJECTED: 'recodex/users/VALIDATE_REGISTRATION_DATA_REJECTED',
-  FETCH_BY_IDS: 'recodex/users/FETCH_BY_IDS',
-  FETCH_BY_IDS_PENDING: 'recodex/users/FETCH_BY_IDS_PENDING',
-  FETCH_BY_IDS_FULFILLED: 'recodex/users/FETCH_BY_IDS_FULFILLED',
-  FETCH_BY_IDS_REJECTED: 'recodex/users/FETCH_BY_IDS_REJECTED',
-  CREATE_LOCAL_LOGIN: 'recodex/users/CREATE_LOCAL_LOGIN',
-  CREATE_LOCAL_LOGIN_PENDING: 'recodex/users/CREATE_LOCAL_LOGIN_PENDING',
-  CREATE_LOCAL_LOGIN_FULFILLED: 'recodex/users/CREATE_LOCAL_LOGIN_FULFILLED',
-  CREATE_LOCAL_LOGIN_REJECTED: 'recodex/users/CREATE_LOCAL_LOGIN_REJECTED',
-  SET_ROLE: 'recodex/users/SET_ROLE',
-  SET_ROLE_PENDING: 'recodex/users/SET_ROLE_PENDING',
-  SET_ROLE_FULFILLED: 'recodex/users/SET_ROLE_FULFILLED',
-  SET_ROLE_REJECTED: 'recodex/users/SET_ROLE_REJECTED',
-  SET_IS_ALLOWED: 'recodex/users/SET_IS_ALLOWED',
-  SET_IS_ALLOWED_PENDING: 'recodex/users/SET_IS_ALLOWED_PENDING',
-  SET_IS_ALLOWED_FULFILLED: 'recodex/users/SET_IS_ALLOWED_FULFILLED',
-  SET_IS_ALLOWED_REJECTED: 'recodex/users/SET_IS_ALLOWED_REJECTED',
+  // createActionsWithPostfixes generates all 4 constants for async operations
+  ...createActionsWithPostfixes('VALIDATE_REGISTRATION_DATA', 'recodex/users'),
+  ...createActionsWithPostfixes('FETCH_BY_IDS', 'recodex/users'),
+  ...createActionsWithPostfixes('CREATE_LOCAL_LOGIN', 'recodex/users'),
+  ...createActionsWithPostfixes('SET_ROLE', 'recodex/users'),
+  ...createActionsWithPostfixes('SET_IS_ALLOWED', 'recodex/users'),
+  ...createActionsWithPostfixes('INVITE_USER', 'recodex/users'),
 };
 
 const resourceName = 'users';
@@ -49,12 +41,12 @@ export const fetchManyEndpoint = '/users';
 export const loadUserData = actions.pushResource;
 export const fetchUser = actions.fetchResource;
 export const fetchUserIfNeeded = actions.fetchOneIfNeeded;
-export const validateRegistrationData = (email, password) =>
+export const validateRegistrationData = (email, password = null) =>
   createApiAction({
     type: additionalActionTypes.VALIDATE_REGISTRATION_DATA,
     endpoint: '/users/validate-registration-data',
     method: 'POST',
-    body: { email, password },
+    body: password === null ? { email } : { email, password },
   });
 
 export const updateProfile = actions.updateResource;
@@ -100,6 +92,14 @@ export const setIsAllowed = (id, isAllowed = true) =>
     method: 'POST',
     meta: { id, isAllowed },
     body: { isAllowed },
+  });
+
+export const inviteUser = body =>
+  createApiAction({
+    type: additionalActionTypes.INVITE_USER,
+    endpoint: '/users/invite',
+    method: 'POST',
+    body,
   });
 
 /**

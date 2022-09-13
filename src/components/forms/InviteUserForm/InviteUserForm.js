@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { reduxForm, Field, change } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
 import SubmitButton from '../SubmitButton';
 import Callout from '../../widgets/Callout';
 import { validateRegistrationData } from '../../../redux/modules/users';
-import { TextField, PasswordField, PasswordStrength } from '../Fields';
+import { TextField } from '../Fields';
 
-const CreateUserForm = ({
+const InviteUserForm = ({
   submitting,
   handleSubmit,
   onSubmit,
@@ -21,6 +21,25 @@ const CreateUserForm = ({
   reset,
 }) => (
   <div>
+    <Field
+      name="email"
+      component={TextField}
+      autoComplete="off"
+      maxLength={255}
+      ignoreDirty
+      label={<FormattedMessage id="app.inviteUserForm.emailAndLogin" defaultMessage="Email (and login name):" />}
+    />
+
+    <hr />
+
+    <Field
+      name="titlesBeforeName"
+      component={TextField}
+      maxLength={42}
+      required
+      label={<FormattedMessage id="app.editUserProfile.titlesBeforeName" defaultMessage="Prefix Title:" />}
+    />
+
     <Field
       name="firstName"
       component={TextField}
@@ -40,33 +59,11 @@ const CreateUserForm = ({
     />
 
     <Field
-      name="email"
+      name="titlesAfterName"
       component={TextField}
-      autoComplete="off"
-      maxLength={255}
-      ignoreDirty
-      label={<FormattedMessage id="app.changePasswordForm.email" defaultMessage="Email:" />}
-    />
-
-    <Field
-      name="password"
-      component={PasswordField}
-      autoComplete="off"
-      ignoreDirty
-      label={<FormattedMessage id="app.changePasswordForm.password" defaultMessage="New Password:" />}
-    />
-
-    <Field
-      name="passwordStrength"
-      component={PasswordStrength}
-      label={<FormattedMessage id="app.changePasswordForm.passwordStrength" defaultMessage="Password Strength:" />}
-    />
-
-    <Field
-      name="passwordConfirm"
-      component={PasswordField}
-      ignoreDirty
-      label={<FormattedMessage id="app.changePasswordForm.passwordCheck" defaultMessage="New Password (again):" />}
+      maxLength={42}
+      required
+      label={<FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />}
     />
 
     {submitFailed && (
@@ -77,7 +74,7 @@ const CreateUserForm = ({
 
     <div className="text-center">
       <SubmitButton
-        id="createUser"
+        id="inviteUser"
         handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
         submitting={submitting}
         dirty={dirty}
@@ -86,16 +83,16 @@ const CreateUserForm = ({
         hasFailed={submitFailed}
         asyncValidating={asyncValidating}
         messages={{
-          submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
-          submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
-          success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
+          submit: <FormattedMessage id="app.inviteUserForm.invite" defaultMessage="Invite" />,
+          submitting: <FormattedMessage id="app.inviteUserForm.inviting" defaultMessage="Inviting..." />,
+          success: <FormattedMessage id="app.inviteUserForm.invited" defaultMessage="Invited" />,
         }}
       />
     </div>
   </div>
 );
 
-CreateUserForm.propTypes = {
+InviteUserForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   asyncValidate: PropTypes.func.isRequired,
@@ -161,59 +158,23 @@ const validate = ({ firstName, lastName, email, password, passwordConfirm }) => 
     );
   }
 
-  if (!password) {
-    errors.password = (
-      <FormattedMessage
-        id="app.createUserForm.validation.emptyPassword"
-        defaultMessage="The password cannot be empty."
-      />
-    );
-  }
-
-  if (!passwordConfirm) {
-    errors.passwordConfirm = (
-      <FormattedMessage
-        id="app.createUserForm.validation.emptyPassword"
-        defaultMessage="The password cannot be empty."
-      />
-    );
-  }
-
-  if (password !== passwordConfirm) {
-    errors.passwordConfirm = (
-      <FormattedMessage
-        id="app.editUserProfile.validation.passwordsDontMatch"
-        defaultMessage="Passwords do not match."
-      />
-    );
-  }
-
   return errors;
 };
 
-const asyncValidate = ({ email, password = '' }, dispatch) => {
-  if (password === '') {
-    dispatch(change('create-user', 'passwordStrength', null));
-    return Promise.resolve();
-  }
-
+const asyncValidate = ({ email }, dispatch) => {
   return new Promise((resolve, reject) =>
-    dispatch(validateRegistrationData(email, password))
+    dispatch(validateRegistrationData(email))
       .then(res => res.value)
-      .then(({ usernameIsFree, passwordScore }) => {
-        const errors = {};
+      .then(({ usernameIsFree }) => {
         if (!usernameIsFree) {
-          errors.email = (
-            <FormattedMessage
-              id="app.createUserForm.validation.emailTaken"
-              defaultMessage="This email address is already taken by someone else."
-            />
-          );
-        }
-
-        dispatch(change('create-user', 'passwordStrength', passwordScore));
-
-        if (Object.keys(errors).length > 0) {
+          const errors = {
+            email: (
+              <FormattedMessage
+                id="app.createUserForm.validation.emailTaken"
+                defaultMessage="This email address is already taken by someone else."
+              />
+            ),
+          };
           throw errors;
         }
       })
@@ -223,10 +184,10 @@ const asyncValidate = ({ email, password = '' }, dispatch) => {
 };
 
 export default reduxForm({
-  form: 'create-user',
+  form: 'invite-user',
   validate,
   asyncValidate,
-  asyncBlurFields: ['email', 'password', 'passwordConfirm'],
+  asyncBlurFields: ['email'],
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-})(CreateUserForm);
+})(InviteUserForm);
