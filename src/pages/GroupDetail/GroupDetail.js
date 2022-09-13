@@ -22,7 +22,7 @@ import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupStats, fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
-import { fetchByIds } from '../../redux/modules/users';
+import { fetchByIds, inviteUser } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import {
   fetchShadowAssignmentsForGroup,
@@ -150,6 +150,7 @@ class GroupDetail extends Component {
       fetchUsersSolutions,
       setShadowPoints,
       removeShadowPoints,
+      inviteUser,
       links: { GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
@@ -363,7 +364,11 @@ class GroupDetail extends Component {
                                 />
                               }
                               isOpen>
-                              <AddStudent instanceId={data.privateData.instanceId} groupId={data.id} />
+                              <AddStudent
+                                instanceId={data.privateData.instanceId}
+                                groupId={data.id}
+                                inviteUser={hasPermissions(data, 'inviteStudents') ? inviteUser : null}
+                              />
                             </Box>
                           </Col>
                         </Row>
@@ -449,6 +454,7 @@ GroupDetail.propTypes = {
   fetchUsersSolutions: PropTypes.func.isRequired,
   setShadowPoints: PropTypes.func.isRequired,
   removeShadowPoints: PropTypes.func.isRequired,
+  inviteUser: PropTypes.func.isRequired,
   links: PropTypes.object,
 };
 
@@ -493,6 +499,7 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
     dispatch(setShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId, points, note, awardedAt)),
   removeShadowPoints: (shadowId, awardeeId, pointsId) =>
     dispatch(removeShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId)),
+  inviteUser: data => dispatch(inviteUser(data)),
 });
 
 export default withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupDetail));
