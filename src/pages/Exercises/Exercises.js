@@ -85,7 +85,6 @@ Exercises.propTypes = {
   }),
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  query: PropTypes.string,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
