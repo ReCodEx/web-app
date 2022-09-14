@@ -10,30 +10,53 @@ import FormBox from '../../widgets/FormBox';
 import { PasswordField, PasswordStrength } from '../Fields';
 import { validatePasswordStrength } from '../../../redux/modules/auth';
 
-const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSucceeded = false, invalid }) => (
+const ChangePasswordForm = ({
+  submitting,
+  handleSubmit,
+  hasFailed = false,
+  hasSucceeded = false,
+  invalid,
+  firstTime = false,
+}) => (
   <FormBox
-    title={<FormattedMessage id="app.changePasswordForm.title" defaultMessage="Change your ReCodEx password" />}
+    title={
+      firstTime ? (
+        <FormattedMessage id="app.changePasswordForm.titleFirstTime" defaultMessage="Set your ReCodEx password" />
+      ) : (
+        <FormattedMessage id="app.changePasswordForm.title" defaultMessage="Change your ReCodEx password" />
+      )
+    }
     type={hasSucceeded ? 'success' : undefined}
     footer={
       <div className="text-center">
         <Button type="submit" onClick={handleSubmit} variant="success" disabled={invalid || submitting || hasSucceeded}>
           {!submitting ? (
             hasSucceeded ? (
-              <span>
+              <>
                 <SuccessIcon gapRight />
-                <FormattedMessage
-                  id="app.changePasswordForm.success"
-                  defaultMessage="Your password has been changed."
-                />
-              </span>
+                {firstTime ? (
+                  <FormattedMessage
+                    id="app.changePasswordForm.successFirstTime"
+                    defaultMessage="Password has been set."
+                  />
+                ) : (
+                  <FormattedMessage id="app.changePasswordForm.success" defaultMessage="Password has been changed." />
+                )}
+              </>
+            ) : firstTime ? (
+              <FormattedMessage id="app.changePasswordForm.createPassword" defaultMessage="Create Password" />
             ) : (
               <FormattedMessage id="app.changePasswordForm.changePassword" defaultMessage="Change Password" />
             )
           ) : (
-            <span>
+            <>
               <LoadingIcon gapRight />
-              <FormattedMessage id="app.changePasswordForm.processing" defaultMessage="Changing..." />
-            </span>
+              {firstTime ? (
+                <FormattedMessage id="app.changePasswordForm.setting" defaultMessage="Setting..." />
+              ) : (
+                <FormattedMessage id="app.changePasswordForm.changning" defaultMessage="Changing..." />
+              )}
+            </>
           )}
         </Button>
       </div>
@@ -49,7 +72,7 @@ const ChangePasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSu
 
     {hasFailed && (
       <Callout variant="danger">
-        <FormattedMessage id="app.changePasswordForm.failed" defaultMessage="Changing password failed." />
+        <FormattedMessage id="app.changePasswordForm.failed" defaultMessage="Password update failed." />
       </Callout>
     )}
 
@@ -79,6 +102,7 @@ ChangePasswordForm.propTypes = {
   hasSucceeded: PropTypes.bool,
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
+  firstTime: PropTypes.bool,
 };
 
 const validate = ({ password, passwordCheck }) => {

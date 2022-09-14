@@ -10,6 +10,7 @@ import { NeedFixingIcon, ExercisePrefixIcons, LockIcon, CheckRequiredIcon } from
 const defaultMessageIcon = ['far', 'envelope'];
 
 export const AbortIcon = props => <Icon {...props} icon="car-crash" />;
+export const AcceptIcon = props => <Icon {...props} icon={['far', 'handshake']} />;
 export const AddIcon = props => <Icon {...props} icon="plus-circle" />;
 export const AdminIcon = props => <Icon {...props} icon="crown" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;

@@ -25,6 +25,7 @@ export const additionalActionTypes = {
   ...createActionsWithPostfixes('SET_ROLE', 'recodex/users'),
   ...createActionsWithPostfixes('SET_IS_ALLOWED', 'recodex/users'),
   ...createActionsWithPostfixes('INVITE_USER', 'recodex/users'),
+  ...createActionsWithPostfixes('ACCEPT_INVITATION', 'recodex/users'),
 };
 
 const resourceName = 'users';
@@ -100,6 +101,14 @@ export const inviteUser = body =>
     endpoint: '/users/invite',
     method: 'POST',
     body,
+  });
+
+export const acceptInvitation = (password, token) =>
+  createApiAction({
+    type: authActionTypes.LOGIN,
+    endpoint: '/users/accept-invitation',
+    method: 'POST',
+    body: { token, password, passwordConfirm: password },
   });
 
 /**
