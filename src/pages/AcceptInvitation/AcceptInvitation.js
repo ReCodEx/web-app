@@ -26,11 +26,11 @@ const AcceptInvitation = ({
 
   const rawToken = search.substring(1);
   const token = decode(rawToken);
-  const name = token.usr || [];
+  const name = (token && token.usr) || [];
   if (name[3]) {
     name[2] = name[2] + ','; // separator for suffix titles
   }
-  const isValid = isTokenValid(token);
+  const isValid = token && isTokenValid(token);
   return (
     <PageContent
       icon={<AcceptIcon />}
@@ -46,43 +46,52 @@ const AcceptInvitation = ({
         <h3>
           <FormattedMessage id="app.acceptInvitation.invitationDetails" defaultMessage="Invitation details" />
         </h3>
-        <Table bordered>
-          <tbody>
-            <tr>
-              <th className="shrink-col text-nowrap">
-                <FormattedMessage id="app.inviteUserForm.emailAndLogin" defaultMessage="Email (and login name):" />
-              </th>
-              <td>
-                <code>{token.eml}</code>
-              </td>
-            </tr>
+        {token ? (
+          <Table bordered>
+            <tbody>
+              <tr>
+                <th className="shrink-col text-nowrap">
+                  <FormattedMessage id="app.inviteUserForm.emailAndLogin" defaultMessage="Email (and login name):" />
+                </th>
+                <td>
+                  <code>{token.eml}</code>
+                </td>
+              </tr>
 
-            <tr>
-              <th className="shrink-col text-nowrap">
-                <FormattedMessage id="app.acceptInvitation.userName" defaultMessage="Invited person" />:
-              </th>
-              <td>{name.join(' ')}</td>
-            </tr>
+              <tr>
+                <th className="shrink-col text-nowrap">
+                  <FormattedMessage id="app.acceptInvitation.userName" defaultMessage="Invited person" />:
+                </th>
+                <td>{name.join(' ')}</td>
+              </tr>
 
-            <tr>
-              <th className="shrink-col text-nowrap">
-                <FormattedMessage id="app.acceptInvitation.invitationCreated" defaultMessage="Invitation created" />:
-              </th>
-              <td>
-                <DateTime unixts={token.iat} showRelative />
-              </td>
-            </tr>
+              <tr>
+                <th className="shrink-col text-nowrap">
+                  <FormattedMessage id="app.acceptInvitation.invitationCreated" defaultMessage="Invitation created" />:
+                </th>
+                <td>
+                  <DateTime unixts={token.iat} showRelative />
+                </td>
+              </tr>
 
-            <tr>
-              <th className="shrink-col text-nowrap">
-                <FormattedMessage id="app.acceptInvitation.expireAt" defaultMessage="Token will expire at" />:
-              </th>
-              <td>
-                <DateTime unixts={token.exp} showRelative isDeadline={!isValid} />
-              </td>
-            </tr>
-          </tbody>
-        </Table>
+              <tr>
+                <th className="shrink-col text-nowrap">
+                  <FormattedMessage id="app.acceptInvitation.expireAt" defaultMessage="Token will expire at" />:
+                </th>
+                <td>
+                  <DateTime unixts={token.exp} showRelative isDeadline={!isValid} />
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        ) : (
+          <Callout variant="danger">
+            <FormattedMessage
+              id="app.acceptInvitation.badInvalidToken"
+              defaultMessage="The invitation token cannot be decoded! The link you used was probably corrupted."
+            />
+          </Callout>
+        )}
 
         {isValid ? (
           <ChangePasswordForm
@@ -102,12 +111,14 @@ const AcceptInvitation = ({
             hasSucceeded={acceptOperation === true}
           />
         ) : (
-          <Callout variant="warning">
-            <FormattedMessage
-              id="app.acceptInvitation.invalidToken"
-              defaultMessage="The invitation token is not valid!"
-            />
-          </Callout>
+          token && (
+            <Callout variant="warning">
+              <FormattedMessage
+                id="app.acceptInvitation.invalidToken"
+                defaultMessage="The invitation token is not valid!"
+              />
+            </Callout>
+          )
         )}
       </>
     </PageContent>
