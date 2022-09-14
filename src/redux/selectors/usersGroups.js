@@ -145,24 +145,30 @@ export const loggedInSupervisorOfNonOrganizationalSelector = createSelector(
   filterNonOrganizationalActiveGroups
 );
 
-const groupsUserCanEditSelector = createSelector(
-  [loggedInUserIdSelector, groupsSelector, state => isLoggedAsSuperAdmin(state)],
-  (userId, groups, isSuperAdmin) => {
-    const readyGroups = groups.filter(isReady);
-    return isSuperAdmin
-      ? readyGroups
-      : readyGroups.filter(group => {
-          const groupData = getJsData(group);
-          return (
-            groupData.privateData &&
-            (groupData.privateData.supervisors.indexOf(userId) >= 0 ||
-              groupData.privateData.admins.indexOf(userId) >= 0)
-          );
-        });
-  }
-);
+const groupsUserCanEditSelector = strict =>
+  createSelector(
+    [loggedInUserIdSelector, groupsSelector, state => isLoggedAsSuperAdmin(state)],
+    (userId, groups, isSuperAdmin) => {
+      const readyGroups = groups.filter(isReady);
+      return isSuperAdmin && !strict
+        ? readyGroups
+        : readyGroups.filter(group => {
+            const groupData = getJsData(group);
+            return (
+              groupData.privateData &&
+              (groupData.privateData.supervisors.indexOf(userId) >= 0 ||
+                (strict ? groupData.primaryAdminsIds : groupData.privateData.admins).indexOf(userId) >= 0)
+            );
+          });
+    }
+  );
 
 export const loggedUserCanAssignToGroupsSelector = createSelector(
-  groupsUserCanEditSelector,
+  groupsUserCanEditSelector(false),
+  filterNonOrganizationalActiveGroups
+);
+
+export const loggedUserCanInviteToGroupsSelector = createSelector(
+  groupsUserCanEditSelector(true),
   filterNonOrganizationalActiveGroups
 );

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 
+import ResourceRenderer from '../../helpers/ResourceRenderer';
 import InviteUserForm from '../../forms/InviteUserForm';
 import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupButtonContainer';
 import AddUserContainer from '../../../containers/AddUserContainer';
@@ -11,29 +13,47 @@ import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon from '../../icons';
 
-const inviteUserInitialValues = {
+import { arrayToObject } from '../../../helpers/common';
+
+const prepareInviteUserInitialValues = defaultMemoize((groups, groupId) => ({
   titlesBeforeName: '',
   firstName: '',
   lastName: '',
   titlesAfterName: '',
   email: '',
-};
+  groups: arrayToObject(
+    groups,
+    group => `id${group.id}`,
+    group => group.id === groupId
+  ),
+}));
 
 const prepareInviteOnSubmitHandler = defaultMemoize(
   (inviteUser, setDialogOpen, instanceId) =>
-    ({ email, titlesBeforeName, firstName, lastName, titlesAfterName }) => {
+    ({ email, titlesBeforeName, firstName, lastName, titlesAfterName, groups }) => {
       email = email.trim();
       firstName = firstName.trim();
       lastName = lastName.trim();
       titlesBeforeName = titlesBeforeName.trim() || undefined;
       titlesAfterName = titlesAfterName.trim() || undefined;
-      return inviteUser({ email, titlesBeforeName, firstName, lastName, titlesAfterName, instanceId }).then(() =>
-        setDialogOpen(false)
-      );
+
+      const groupIds = Object.keys(groups)
+        .filter(key => groups[key])
+        .map(key => key.substring(2));
+
+      return inviteUser({
+        email,
+        titlesBeforeName,
+        firstName,
+        lastName,
+        titlesAfterName,
+        instanceId,
+        groups: groupIds,
+      }).then(() => setDialogOpen(false));
     }
 );
 
-const AddStudent = ({ groupId, instanceId, inviteUser = null }) => {
+const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, inviteUser = null }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   return (
     <>
@@ -65,14 +85,20 @@ const AddStudent = ({ groupId, instanceId, inviteUser = null }) => {
               <InsetPanel>
                 <FormattedMessage
                   id="app.addStudent.inviteDialog.explain"
-                  defaultMessage="An invitation will be sent to the user at given email address. The user will receive a link for registration as a local user. User profile details (name and email) must be filled in correctly, since the user will not be able to modify them."
+                  defaultMessage="An invitation will be sent to the user at given email address. The user will receive a link for registration as a local user. User profile details (name and email) must be filled in correctly, since the user will not be able to modify them. Optionally, you may select a list of groups to which the user will be assigned immediately after registration."
                 />
               </InsetPanel>
 
-              <InviteUserForm
-                onSubmit={prepareInviteOnSubmitHandler(inviteUser, setDialogOpen, instanceId)}
-                initialValues={inviteUserInitialValues}
-              />
+              <ResourceRenderer resource={groups.toArray()} returnAsArray>
+                {groups => (
+                  <InviteUserForm
+                    onSubmit={prepareInviteOnSubmitHandler(inviteUser, setDialogOpen, instanceId)}
+                    initialValues={prepareInviteUserInitialValues(groups, groupId)}
+                    groups={groups}
+                    groupsAccessor={groupsAccessor}
+                  />
+                )}
+              </ResourceRenderer>
             </Modal.Body>
           </Modal>
         </>
@@ -83,6 +109,8 @@ const AddStudent = ({ groupId, instanceId, inviteUser = null }) => {
 
 AddStudent.propTypes = {
   instanceId: PropTypes.string.isRequired,
+  groups: ImmutablePropTypes.map,
+  groupsAccessor: PropTypes.func.isRequired,
   groupId: PropTypes.string.isRequired,
   inviteUser: PropTypes.func,
 };

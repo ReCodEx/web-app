@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import isEmail from 'validator/lib/isEmail';
 
 import SubmitButton from '../SubmitButton';
 import Callout from '../../widgets/Callout';
 import { validateRegistrationData } from '../../../redux/modules/users';
-import { TextField } from '../Fields';
+import { TextField, CheckboxField } from '../Fields';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 
 const InviteUserForm = ({
+  groups,
+  groupsAccessor,
   submitting,
   handleSubmit,
   onSubmit,
@@ -19,6 +22,7 @@ const InviteUserForm = ({
   asyncValidating,
   invalid,
   reset,
+  intl: { locale },
 }) => (
   <div>
     <Field
@@ -66,6 +70,19 @@ const InviteUserForm = ({
       label={<FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />}
     />
 
+    <hr />
+
+    {groups.map(group => (
+      <Field
+        key={group.id}
+        name={`groups.id${group.id}`}
+        component={CheckboxField}
+        label={getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}
+      />
+    ))}
+
+    <hr />
+
     {submitFailed && (
       <Callout variant="danger">
         <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
@@ -93,6 +110,8 @@ const InviteUserForm = ({
 );
 
 InviteUserForm.propTypes = {
+  groups: PropTypes.array.isRequired,
+  groupsAccessor: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   asyncValidate: PropTypes.func.isRequired,
@@ -102,8 +121,8 @@ InviteUserForm.propTypes = {
   submitting: PropTypes.bool,
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
-  pristine: PropTypes.bool,
   reset: PropTypes.func,
+  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ firstName, lastName, email, password, passwordConfirm }) => {
@@ -190,4 +209,4 @@ export default reduxForm({
   asyncBlurFields: ['email'],
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
-})(InviteUserForm);
+})(injectIntl(InviteUserForm));

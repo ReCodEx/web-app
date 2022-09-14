@@ -47,6 +47,7 @@ import {
   loggedUserIsStudentOfSelector,
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
+  loggedUserCanInviteToGroupsSelector,
 } from '../../redux/selectors/usersGroups';
 import { getStatusesForLoggedUser, createGroupsStatsSelector } from '../../redux/selectors/stats';
 import { assignmentEnvironmentsSelector, getUserSolutionsSortedData } from '../../redux/selectors/assignments';
@@ -131,6 +132,7 @@ class GroupDetail extends Component {
     const {
       group,
       groupsAccessor,
+      invitableGroups,
       students,
       loggedUser,
       effectiveRole,
@@ -366,6 +368,8 @@ class GroupDetail extends Component {
                               isOpen>
                               <AddStudent
                                 instanceId={data.privateData.instanceId}
+                                groups={invitableGroups}
+                                groupsAccessor={groupsAccessor}
                                 groupId={data.id}
                                 inviteUser={hasPermissions(data, 'inviteStudents') ? inviteUser : null}
                               />
@@ -434,6 +438,7 @@ GroupDetail.propTypes = {
   effectiveRole: PropTypes.string,
   group: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
+  invitableGroups: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
   assignments: ImmutablePropTypes.list,
@@ -471,6 +476,7 @@ const mapStateToProps = (
   return {
     group: groupSelector(state, groupId),
     groupsAccessor: groupDataAccessorSelector(state),
+    invitableGroups: loggedUserCanInviteToGroupsSelector(state),
     userId,
     loggedUser: loggedInUserSelector(state),
     effectiveRole: getLoggedInUserEffectiveRole(state),
