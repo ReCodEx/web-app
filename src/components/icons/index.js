@@ -105,6 +105,7 @@ export const SortedIcon = ({ active = true, descending = false, ...props }) => (
   />
 );
 export const StopIcon = props => <Icon {...props} icon={['far', 'circle-stop']} />;
+export const StudentsIcon = props => <Icon {...props} icon="graduation-cap" />;
 export const SuccessIcon = props => <Icon {...props} icon="check" />;
 export const SuccessOrFailureIcon = ({ success = false, colors = true, ...props }) =>
   success ? (

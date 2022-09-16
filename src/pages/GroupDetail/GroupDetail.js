@@ -16,26 +16,18 @@ import { AssignmentsIcon, AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import AddStudent from '../../components/Groups/AddStudent';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchGroupStats, fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
-import { fetchByIds, inviteUser } from '../../redux/modules/users';
+import { fetchGroupStats } from '../../redux/modules/stats';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
-import {
-  fetchShadowAssignmentsForGroup,
-  createShadowAssignment,
-  setShadowAssignmentPoints,
-  removeShadowAssignmentPoints,
-} from '../../redux/modules/shadowAssignments';
+import { fetchShadowAssignmentsForGroup, createShadowAssignment } from '../../redux/modules/shadowAssignments';
 import { create as createExercise } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchUsersSolutions } from '../../redux/modules/solutions';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
+import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
 import {
   groupSelector,
   groupDataAccessorSelector,
@@ -47,19 +39,15 @@ import {
   loggedUserIsStudentOfSelector,
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
-  loggedUserCanInviteToGroupsSelector,
 } from '../../redux/selectors/usersGroups';
 import { getStatusesForLoggedUser, createGroupsStatsSelector } from '../../redux/selectors/stats';
-import { assignmentEnvironmentsSelector, getUserSolutionsSortedData } from '../../redux/selectors/assignments';
-import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
 
 import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
-import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 
-import { isSuperadminRole, isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles';
-import { EMPTY_LIST, hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
+import { isSuperadminRole } from '../../components/helpers/usersRoles';
+import { EMPTY_LIST, hasPermissions, hasOneOfPermissions } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupDetail extends Component {
@@ -73,9 +61,6 @@ class GroupDetail extends Component {
                 dispatch(fetchAssignmentsForGroup(groupId)),
                 dispatch(fetchShadowAssignmentsForGroup(groupId)),
               ])
-            : Promise.resolve(),
-          hasPermissions(group, 'viewStudents')
-            ? dispatch(fetchByIds(safeGet(group, ['privateData', 'students']) || []))
             : Promise.resolve(),
           dispatch(fetchGroupStats(groupId)),
         ])
@@ -132,9 +117,7 @@ class GroupDetail extends Component {
     const {
       group,
       groupsAccessor,
-      invitableGroups,
       students,
-      loggedUser,
       effectiveRole,
       assignments = EMPTY_LIST,
       shadowAssignments = EMPTY_LIST,
@@ -145,14 +128,6 @@ class GroupDetail extends Component {
       isGroupSupervisor,
       isGroupStudent,
       userId,
-      userSolutionsSelector,
-      userSolutionsStatusSelector,
-      runtimeEnvironments,
-      fetchGroupStatsIfNeeded,
-      fetchUsersSolutions,
-      setShadowPoints,
-      removeShadowPoints,
-      inviteUser,
       links: { GROUP_DETAIL_URI_FACTORY },
     } = this.props;
 
@@ -160,7 +135,7 @@ class GroupDetail extends Component {
       <Page
         resource={group}
         icon={<AssignmentsIcon />}
-        title={<FormattedMessage id="app.groupDetail.title" defaultMessage="Group Assignments and Student Results" />}
+        title={<FormattedMessage id="app.groupDetail.title" defaultMessage="Group Assignments" />}
         loading={<LoadingGroupDetail />}
         failed={<FailedGroupDetail />}>
         {data => {
@@ -251,136 +226,44 @@ class GroupDetail extends Component {
                     </Col>
                   </Row>
 
-                  <Row>
-                    <Col lg={12}>
-                      <Box
-                        title={
-                          <FormattedMessage
-                            id="app.groupDetail.shadowAssignments"
-                            defaultMessage="Shadow Assignments"
+                  {(!isGroupStudent || (shadowAssignments && shadowAssignments.size > 0)) && (
+                    <Row>
+                      <Col lg={12}>
+                        <Box
+                          title={
+                            <FormattedMessage
+                              id="app.groupDetail.shadowAssignments"
+                              defaultMessage="Shadow Assignments"
+                            />
+                          }
+                          noPadding
+                          unlimitedHeight
+                          collapsable
+                          isOpen={shadowAssignments && shadowAssignments.size > 0}
+                          footer={
+                            hasPermissions(data, 'createShadowAssignment') ? (
+                              <div className="text-center">
+                                <Button onClick={this.createShadowAssignment} variant="success">
+                                  <AddIcon gapRight />
+                                  <FormattedMessage
+                                    id="app.groupDetail.newShadowAssignment"
+                                    defaultMessage="New Shadow Assignment"
+                                  />
+                                </Button>
+                              </div>
+                            ) : null
+                          }>
+                          <ShadowAssignmentsTable
+                            shadowAssignments={shadowAssignments}
+                            isAdmin={isGroupAdmin || isGroupSupervisor || isSuperadminRole(effectiveRole)}
+                            userId={userId}
                           />
-                        }
-                        noPadding
-                        unlimitedHeight
-                        collapsable
-                        isOpen={shadowAssignments && shadowAssignments.size > 0}
-                        footer={
-                          hasPermissions(data, 'createShadowAssignment') ? (
-                            <div className="text-center">
-                              <Button onClick={this.createShadowAssignment} variant="success">
-                                <AddIcon gapRight />
-                                <FormattedMessage
-                                  id="app.groupDetail.newShadowAssignment"
-                                  defaultMessage="New Shadow Assignment"
-                                />
-                              </Button>
-                            </div>
-                          ) : null
-                        }>
-                        <ShadowAssignmentsTable
-                          shadowAssignments={shadowAssignments}
-                          isAdmin={isGroupAdmin || isGroupSupervisor || isSuperadminRole(effectiveRole)}
-                          userId={userId}
-                        />
-                      </Box>
-                    </Col>
-                  </Row>
+                        </Box>
+                      </Col>
+                    </Row>
+                  )}
                 </>
               )}
-
-              <ResourceRenderer resource={loggedUser}>
-                {loggedUser => (
-                  <>
-                    {!data.organizational && hasPermissions(data, 'viewAssignments', 'viewStudents') && (
-                      <Row>
-                        <Col lg={12}>
-                          <Box
-                            title={
-                              <FormattedMessage
-                                id="app.groupDetail.studentsResultsTable"
-                                defaultMessage="Students and Their Results"
-                              />
-                            }
-                            unlimitedHeight
-                            noPadding>
-                            <ResourceRenderer resource={stats} bulkyLoading>
-                              {groupStats => (
-                                <ResourceRenderer resource={assignments} returnAsArray bulkyLoading>
-                                  {assignments => (
-                                    <ResourceRenderer resource={shadowAssignments} returnAsArray bulkyLoading>
-                                      {shadowAssignments => (
-                                        <ResourceRenderer
-                                          resource={runtimeEnvironments.toArray()}
-                                          returnAsArray
-                                          bulkyLoading>
-                                          {runtimes => (
-                                            <ResultsTable
-                                              users={students}
-                                              loggedUser={loggedUser}
-                                              isSuperadmin={isSuperadminRole(effectiveRole)}
-                                              assignments={assignments}
-                                              shadowAssignments={shadowAssignments}
-                                              stats={groupStats}
-                                              group={data}
-                                              runtimeEnvironments={runtimes}
-                                              userSolutionsSelector={userSolutionsSelector}
-                                              userSolutionsStatusSelector={userSolutionsStatusSelector}
-                                              fetchGroupStatsIfNeeded={fetchGroupStatsIfNeeded}
-                                              fetchUsersSolutions={fetchUsersSolutions}
-                                              setShadowPoints={setShadowPoints}
-                                              removeShadowPoints={removeShadowPoints}
-                                              renderActions={id =>
-                                                data.archived ? null : (
-                                                  <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
-                                                )
-                                              }
-                                            />
-                                          )}
-                                        </ResourceRenderer>
-                                      )}
-                                    </ResourceRenderer>
-                                  )}
-                                </ResourceRenderer>
-                              )}
-                            </ResourceRenderer>
-                          </Box>
-                        </Col>
-                      </Row>
-                    )}
-
-                    {
-                      // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
-                      (isSuperadminRole(effectiveRole) ||
-                        ((isGroupSupervisor || isGroupAdmin) &&
-                          !data.organizational &&
-                          !data.archived &&
-                          isSupervisorRole(effectiveRole) &&
-                          !isStudentRole(effectiveRole))) && (
-                        <Row>
-                          <Col sm={6}>
-                            <Box
-                              title={
-                                <FormattedMessage
-                                  id="app.group.spervisorsView.addStudent"
-                                  defaultMessage="Add Student"
-                                />
-                              }
-                              isOpen>
-                              <AddStudent
-                                instanceId={data.privateData.instanceId}
-                                groups={invitableGroups}
-                                groupsAccessor={groupsAccessor}
-                                groupId={data.id}
-                                inviteUser={hasPermissions(data, 'inviteStudents') ? inviteUser : null}
-                              />
-                            </Box>
-                          </Col>
-                        </Row>
-                      )
-                    }
-                  </>
-                )}
-              </ResourceRenderer>
 
               {hasPermissions(data, 'viewExercises') && (
                 <Row>
@@ -389,7 +272,7 @@ class GroupDetail extends Component {
                       title={
                         <FormattedMessage
                           id="app.group.spervisorsView.groupExercises"
-                          defaultMessage="Group Exercises"
+                          defaultMessage="Exercises for Assignment in the Group"
                         />
                       }
                       footer={
@@ -434,11 +317,9 @@ GroupDetail.propTypes = {
   }),
   match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
-  loggedUser: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
   group: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  invitableGroups: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
   assignments: ImmutablePropTypes.list,
@@ -447,19 +328,12 @@ GroupDetail.propTypes = {
   isGroupAdmin: PropTypes.bool,
   isGroupSupervisor: PropTypes.bool,
   isGroupStudent: PropTypes.bool,
-  userSolutionsSelector: PropTypes.func.isRequired,
-  userSolutionsStatusSelector: PropTypes.func.isRequired,
   runtimeEnvironments: ImmutablePropTypes.map,
   loadAsync: PropTypes.func,
   stats: PropTypes.object,
   statuses: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   createShadowAssignment: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
-  fetchGroupStatsIfNeeded: PropTypes.func.isRequired,
-  fetchUsersSolutions: PropTypes.func.isRequired,
-  setShadowPoints: PropTypes.func.isRequired,
-  removeShadowPoints: PropTypes.func.isRequired,
-  inviteUser: PropTypes.func.isRequired,
   links: PropTypes.object,
 };
 
@@ -476,9 +350,7 @@ const mapStateToProps = (
   return {
     group: groupSelector(state, groupId),
     groupsAccessor: groupDataAccessorSelector(state),
-    invitableGroups: loggedUserCanInviteToGroupsSelector(state),
     userId,
-    loggedUser: loggedInUserSelector(state),
     effectiveRole: getLoggedInUserEffectiveRole(state),
     assignments: groupsAssignmentsSelector(state, groupId),
     shadowAssignments: groupsShadowAssignmentsSelector(state, groupId),
@@ -489,9 +361,6 @@ const mapStateToProps = (
     isGroupSupervisor: loggedUserIsSupervisorOfSelector(state)(groupId),
     isGroupAdmin: loggedUserIsAdminOfSelector(state)(groupId),
     isGroupStudent: loggedUserIsStudentOfSelector(state)(groupId),
-    userSolutionsSelector: getUserSolutionsSortedData(state),
-    userSolutionsStatusSelector: fetchManyUserSolutionsStatus(state),
-    runtimeEnvironments: runtimeEnvironmentsSelector(state),
   };
 };
 
@@ -499,13 +368,6 @@ const mapDispatchToProps = (dispatch, { match: { params } }) => ({
   loadAsync: () => GroupDetail.loadAsync(params, dispatch),
   createShadowAssignment: () => dispatch(createShadowAssignment(params.groupId)),
   createGroupExercise: () => dispatch(createExercise({ groupId: params.groupId })),
-  fetchGroupStatsIfNeeded: () => dispatch(fetchGroupStatsIfNeeded(params.groupId, { allowReload: true })),
-  fetchUsersSolutions: (userId, assignmentId) => dispatch(fetchUsersSolutions(userId, assignmentId)),
-  setShadowPoints: (shadowId, { awardeeId, pointsId, points, note, awardedAt }) =>
-    dispatch(setShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId, points, note, awardedAt)),
-  removeShadowPoints: (shadowId, awardeeId, pointsId) =>
-    dispatch(removeShadowAssignmentPoints(params.groupId, shadowId, awardeeId, pointsId)),
-  inviteUser: data => dispatch(inviteUser(data)),
 });
 
 export default withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupDetail));

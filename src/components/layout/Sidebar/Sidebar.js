@@ -42,7 +42,6 @@ const Sidebar = ({
     REGISTRATION_URI,
     DASHBOARD_URI,
     INSTANCE_URI_FACTORY,
-    GROUP_DETAIL_URI_FACTORY,
     EXERCISES_URI,
     PIPELINES_URI,
     ARCHIVE_URI,
@@ -52,8 +51,7 @@ const Sidebar = ({
   intl: { locale },
 }) => {
   const user = getUserData(loggedInUser);
-  // The following two might get handy yet
-  // const createLink = item => GROUP_DETAIL_URI_FACTORY(getId(item));
+  // The following might get handy yet
   // const currentLink = pathname + search;
 
   return (
