@@ -70,7 +70,7 @@ class Dashboard extends Component {
       memberGroups,
       fetchManyGroupsStatus,
       refreshUser,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
     } = this.props;
 
     const memberGroupsAdminOrSupervisor = [
@@ -139,7 +139,7 @@ class Dashboard extends Component {
                                         <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                       </Button>
                                     </Link>
-                                    <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+                                    <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
                                       <Button size="sm">
                                         <AssignmentsIcon gapRight />
                                         <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
@@ -207,7 +207,7 @@ class Dashboard extends Component {
                                         <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                       </Button>
                                     </Link>
-                                    <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+                                    <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
                                       <Button size="sm">
                                         <AssignmentsIcon gapRight />
                                         <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />

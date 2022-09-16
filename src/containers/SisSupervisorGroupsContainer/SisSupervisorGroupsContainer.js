@@ -161,7 +161,12 @@ class SisSupervisorGroupsContainer extends Component {
       sisPossibleParents,
       groupsAccessor,
       groupsResourcesAccessor,
-      links: { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
+      links: {
+        GROUP_EDIT_URI_FACTORY,
+        GROUP_INFO_URI_FACTORY,
+        GROUP_ASSIGNMENTS_URI_FACTORY,
+        GROUP_STUDENTS_URI_FACTORY,
+      },
       intl: { locale },
     } = this.props;
 
@@ -363,7 +368,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                   </Link>
 
                                                                   {hasPermissions(group, 'viewDetail') && (
-                                                                    <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                                                                    <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
                                                                       <Button variant="primary" size="xs">
                                                                         <AssignmentsIcon gapRight />
                                                                         <FormattedMessage

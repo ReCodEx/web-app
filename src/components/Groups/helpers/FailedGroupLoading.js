@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { WarningIcon } from '../../icons';
 
-const FailedGroupDetail = () => (
+const FailedGroupLoading = () => (
   <div>
     <p>
       <WarningIcon gapRight />
@@ -14,4 +14,4 @@ const FailedGroupDetail = () => (
   </div>
 );
 
-export default FailedGroupDetail;
+export default FailedGroupLoading;

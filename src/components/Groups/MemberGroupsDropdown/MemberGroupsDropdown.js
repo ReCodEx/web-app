@@ -11,7 +11,7 @@ import withLinks from '../../../helpers/withLinks';
 import './MemberGroupsDropdown.css';
 
 const DropdownFragment = withLinks(
-  ({ groupId, groups, title, icon, links: { GROUP_DETAIL_URI_FACTORY } }) =>
+  ({ groupId, groups, title, icon, links: { GROUP_ASSIGNMENTS_URI_FACTORY } }) =>
     groups &&
     groups.length > 0 && (
       <>
@@ -22,7 +22,7 @@ const DropdownFragment = withLinks(
 
         {groups.map(id => (
           <Dropdown.Item key={id} as="span" active={groupId === id} bsPrefix="dropdown-item">
-            <Link to={GROUP_DETAIL_URI_FACTORY(id)}>
+            <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(id)}>
               <GroupsNameContainer groupId={id} fullName admins />
             </Link>
           </Dropdown.Item>

@@ -11,7 +11,7 @@ import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
+import { LoadingGroupData, FailedGroupLoading } from '../../components/Groups/helpers';
 import { AssignmentsIcon, AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
@@ -50,7 +50,7 @@ import { isSuperadminRole } from '../../components/helpers/usersRoles';
 import { EMPTY_LIST, hasPermissions, hasOneOfPermissions } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
-class GroupDetail extends Component {
+class GroupAssignments extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
     Promise.all([
       dispatch(fetchRuntimeEnvironments()),
@@ -128,7 +128,7 @@ class GroupDetail extends Component {
       isGroupSupervisor,
       isGroupStudent,
       userId,
-      links: { GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_ASSIGNMENTS_URI_FACTORY },
     } = this.props;
 
     return (
@@ -136,8 +136,8 @@ class GroupDetail extends Component {
         resource={group}
         icon={<AssignmentsIcon />}
         title={<FormattedMessage id="app.groupDetail.title" defaultMessage="Group Assignments" />}
-        loading={<LoadingGroupDetail />}
-        failed={<FailedGroupDetail />}>
+        loading={<LoadingGroupData />}
+        failed={<FailedGroupLoading />}>
         {data => {
           const canLeaveGroup =
             !isGroupAdmin &&
@@ -199,7 +199,7 @@ class GroupDetail extends Component {
               <GroupArchivedWarning
                 {...data}
                 groupsDataAccessor={groupsAccessor}
-                linkFactory={GROUP_DETAIL_URI_FACTORY}
+                linkFactory={GROUP_ASSIGNMENTS_URI_FACTORY}
               />
 
               {!data.organizational && hasPermissions(data, 'viewAssignments') && (
@@ -310,7 +310,7 @@ class GroupDetail extends Component {
   }
 }
 
-GroupDetail.propTypes = {
+GroupAssignments.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
@@ -365,9 +365,9 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = (dispatch, { match: { params } }) => ({
-  loadAsync: () => GroupDetail.loadAsync(params, dispatch),
+  loadAsync: () => GroupAssignments.loadAsync(params, dispatch),
   createShadowAssignment: () => dispatch(createShadowAssignment(params.groupId)),
   createGroupExercise: () => dispatch(createExercise({ groupId: params.groupId })),
 });
 
-export default withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupDetail));
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupAssignments));

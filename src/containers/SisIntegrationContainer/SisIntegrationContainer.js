@@ -80,7 +80,7 @@ class SisIntegrationContainer extends Component {
       currentUserId,
       sisCoursesGroups,
       groupsAccessor,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY },
       intl: { locale },
     } = this.props;
     return (
@@ -153,7 +153,7 @@ class SisIntegrationContainer extends Component {
                                                                 // this is inacurate, but public groups are visible to students who cannot see detail until they join
                                                                 group.public
                                                                   ? GROUP_INFO_URI_FACTORY(group.id)
-                                                                  : GROUP_DETAIL_URI_FACTORY(group.id)
+                                                                  : GROUP_ASSIGNMENTS_URI_FACTORY(group.id)
                                                               }>
                                                               <Button variant="primary" size="xs">
                                                                 <AssignmentsIcon gapRight />

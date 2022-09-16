@@ -96,7 +96,7 @@ class EditShadowAssignment extends Component {
         params: { shadowId },
       },
       history: { replace },
-      links: { GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_ASSIGNMENTS_URI_FACTORY },
     } = this.props;
 
     return (
@@ -140,7 +140,7 @@ class EditShadowAssignment extends Component {
                     <p className="text-center">
                       <DeleteShadowAssignmentButtonContainer
                         id={shadowId}
-                        onDeleted={() => replace(GROUP_DETAIL_URI_FACTORY(this.groupId))}
+                        onDeleted={() => replace(GROUP_ASSIGNMENTS_URI_FACTORY(this.groupId))}
                       />
                     </p>
                   </div>

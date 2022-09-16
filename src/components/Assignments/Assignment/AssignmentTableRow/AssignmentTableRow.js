@@ -49,7 +49,7 @@ const AssignmentTableRow = ({
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY,
     ASSIGNMENT_STATS_URI_FACTORY,
-    GROUP_DETAIL_URI_FACTORY,
+    GROUP_ASSIGNMENTS_URI_FACTORY,
   },
 }) => (
   <tr>
@@ -72,7 +72,7 @@ const AssignmentTableRow = ({
 
     {showGroups && groupsAccessor && (
       <td>
-        <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+        <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
           {getGroupCanonicalLocalizedName(groupId, groupsAccessor, locale)}
         </Link>
       </td>

@@ -25,7 +25,7 @@ import Exercise from './Exercise';
 import ExerciseAssignments from './ExerciseAssignments';
 import Exercises from './Exercises';
 import FAQ from './FAQ';
-import GroupDetail from './GroupDetail';
+import GroupAssignments from './GroupAssignments';
 import GroupInfo from './GroupInfo';
 import GroupStudents from './GroupStudents';
 import GroupUserSolutions from './GroupUserSolutions';
@@ -117,7 +117,7 @@ const routesDescriptors = [
   r('app/pipelines/:pipelineId/edit-struct', EditPipelineStructure, 'PIPELINE_EDIT_STRUCT_URI_FACTORY', true),
   r('app/group/:groupId/edit', EditGroup, 'GROUP_EDIT_URI_FACTORY', true),
   r('app/group/:groupId/info', GroupInfo, 'GROUP_INFO_URI_FACTORY', true),
-  r('app/group/:groupId/detail', GroupDetail, 'GROUP_DETAIL_URI_FACTORY', true),
+  r('app/group/:groupId/detail', GroupAssignments, 'GROUP_ASSIGNMENTS_URI_FACTORY', true),
   r('app/group/:groupId/students', GroupStudents, 'GROUP_STUDENTS_URI_FACTORY', true),
   r('app/group/:groupId/user/:userId', GroupUserSolutions, 'GROUP_USER_SOLUTIONS_URI_FACTORY', true),
   r('app/instance/:instanceId', Instance, 'INSTANCE_URI_FACTORY', true),

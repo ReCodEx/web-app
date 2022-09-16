@@ -17,7 +17,7 @@ const AssignmentFormMultiassignSuccess = ({
   groupsAccessor,
   acknowledgeSuccess,
   intl: { locale },
-  links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+  links: { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY },
 }) => (
   <>
     <Callout variant="success">
@@ -50,7 +50,7 @@ const AssignmentFormMultiassignSuccess = ({
                       <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                     </Button>
                   </Link>
-                  <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+                  <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
                     <Button size="xs" variant="primary">
                       <AssignmentsIcon gapRight />
                       <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />

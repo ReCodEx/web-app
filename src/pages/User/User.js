@@ -50,7 +50,7 @@ const MemberGroupsBox = withLinks(
     links: {
       GROUP_USER_SOLUTIONS_URI_FACTORY,
       GROUP_INFO_URI_FACTORY,
-      GROUP_DETAIL_URI_FACTORY,
+      GROUP_ASSIGNMENTS_URI_FACTORY,
       GROUP_STUDENTS_URI_FACTORY,
     },
   }) => (
@@ -80,7 +80,7 @@ const MemberGroupsBox = withLinks(
                     </Button>
                   </Link>
 
-                  <Link to={GROUP_DETAIL_URI_FACTORY(groupId)}>
+                  <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
                     <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
                       <AssignmentsIcon gapRight />
                       <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />

@@ -954,7 +954,7 @@
   "app.groupDetail.externalId": "External identification of the group",
   "app.groupDetail.hasPublicStats": "Students can see progress of other students",
   "app.groupDetail.isPublic": "Everyone can see and join this group",
-  "app.groupDetail.loading": "Loading description of the group...",
+  "app.groupDetail.loading": "Loading group data...",
   "app.groupDetail.newShadowAssignment": "New Shadow Assignment",
   "app.groupDetail.noDescription": "The group has no description in any language.",
   "app.groupDetail.shadowAssignments": "Shadow Assignments",
