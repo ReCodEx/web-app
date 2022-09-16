@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { AssignmentsIcon, EditIcon, GroupIcon, ExerciseIcon, LimitsIcon, StudentsIcon, TestsIcon } from '../../icons';
 
 export const createGroupLinks = (
-  { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY, GROUP_EDIT_URI_FACTORY },
+  { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY, GROUP_EDIT_URI_FACTORY },
   groupId,
   canViewDetail = true,
   canEdit = false
@@ -15,7 +15,7 @@ export const createGroupLinks = (
   },
   canViewDetail && {
     caption: <FormattedMessage id="app.navigation.groupAssignments" defaultMessage="Group Assignments" />,
-    link: GROUP_DETAIL_URI_FACTORY(groupId),
+    link: GROUP_ASSIGNMENTS_URI_FACTORY(groupId),
     icon: <AssignmentsIcon gapRight />,
   },
   canViewDetail && {

@@ -66,7 +66,7 @@ class EditAssignment extends Component {
 
   render() {
     const {
-      links: { GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_ASSIGNMENTS_URI_FACTORY },
       match: {
         params: { assignmentId },
       },
@@ -176,7 +176,7 @@ class EditAssignment extends Component {
                     <p className="text-center">
                       <DeleteAssignmentButtonContainer
                         id={assignmentId}
-                        onDeleted={() => replace(GROUP_DETAIL_URI_FACTORY(assignment.groupId))}
+                        onDeleted={() => replace(GROUP_ASSIGNMENTS_URI_FACTORY(assignment.groupId))}
                       />
                     </p>
                   </div>

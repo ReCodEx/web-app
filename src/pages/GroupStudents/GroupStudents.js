@@ -9,7 +9,7 @@ import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
+import { LoadingGroupData, FailedGroupLoading } from '../../components/Groups/helpers';
 import { StudentsIcon, BanIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
@@ -128,8 +128,8 @@ class GroupStudents extends Component {
         resource={group}
         icon={<StudentsIcon />}
         title={<FormattedMessage id="app.groupStudents.title" defaultMessage="Group Students" />}
-        loading={<LoadingGroupDetail />}
-        failed={<FailedGroupDetail />}>
+        loading={<LoadingGroupData />}
+        failed={<FailedGroupLoading />}>
         {data => {
           const canLeaveGroup =
             !isGroupAdmin &&

@@ -32,7 +32,7 @@ import {
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
-import GroupInfoTable, { LoadingGroupDetail, FailedGroupDetail } from '../../components/Groups/GroupDetail';
+import GroupInfoTable, { LoadingGroupData, FailedGroupLoading } from '../../components/Groups/helpers';
 import SupervisorsList from '../../components/Users/SupervisorsList';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers/localizedData';
@@ -116,8 +116,8 @@ class GroupInfo extends Component {
         resource={group}
         icon={group => <GroupIcon organizational={group && group.organizational} archived={group && group.archived} />}
         title={<FormattedMessage id="app.groupInfo.title" defaultMessage="Group Details and Metadata" />}
-        loading={<LoadingGroupDetail />}
-        failed={<FailedGroupDetail />}>
+        loading={<LoadingGroupData />}
+        failed={<FailedGroupLoading />}>
         {data => (
           <div>
             <GroupNavigation

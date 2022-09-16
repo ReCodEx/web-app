@@ -56,7 +56,7 @@ class Archive extends Component {
   buttonsCreator = (
     group,
     selectedGroupId,
-    { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY }
+    { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY }
   ) => {
     const { instanceId, loadAsync } = this.props;
 
@@ -82,7 +82,7 @@ class Archive extends Component {
             <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
           </Button>
         </Link>
-        <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
+        <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
           <Button variant="primary" size="xs">
             <AssignmentsIcon gapRight />
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />

@@ -954,7 +954,7 @@
   "app.groupDetail.externalId": "Externí identifikace skupiny",
   "app.groupDetail.hasPublicStats": "Studenti smí vidět body ostatních studentů",
   "app.groupDetail.isPublic": "Tuto skupinu vidí každý (a může se do ní přihlásit)",
-  "app.groupDetail.loading": "Načítání popisu skupiny...",
+  "app.groupDetail.loading": "Načítání dat skupiny...",
   "app.groupDetail.newShadowAssignment": "Nová stínová úloha",
   "app.groupDetail.noDescription": "Skupina nemá žádný popis v žádném jazyce.",
   "app.groupDetail.shadowAssignments": "Stínové úlohy",
