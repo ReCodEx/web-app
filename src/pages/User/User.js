@@ -30,6 +30,7 @@ import Icon, {
   ObserverIcon,
   ResultsIcon,
   SignInIcon,
+  StudentsIcon,
   SuccessIcon,
   SuperadminIcon,
   SupervisorIcon,
@@ -46,7 +47,12 @@ const MemberGroupsBox = withLinks(
     groups,
     userId,
     isStudent = false,
-    links: { GROUP_USER_SOLUTIONS_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+    links: {
+      GROUP_USER_SOLUTIONS_URI_FACTORY,
+      GROUP_INFO_URI_FACTORY,
+      GROUP_DETAIL_URI_FACTORY,
+      GROUP_STUDENTS_URI_FACTORY,
+    },
   }) => (
     <Box title={title} collapsable noPadding isOpen unlimitedHeight>
       <Table hover className="mb-1">
@@ -78,6 +84,13 @@ const MemberGroupsBox = withLinks(
                     <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
                       <AssignmentsIcon gapRight />
                       <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+                    </Button>
+                  </Link>
+
+                  <Link to={GROUP_STUDENTS_URI_FACTORY(groupId)}>
+                    <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
+                      <StudentsIcon gapRight />
+                      <FormattedMessage id="app.group.students" defaultMessage="Students" />
                     </Button>
                   </Link>
                 </TheButtonGroup>

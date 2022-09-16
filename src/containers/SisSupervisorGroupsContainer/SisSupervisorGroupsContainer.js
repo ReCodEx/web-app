@@ -24,6 +24,7 @@ import Icon, {
   GroupIcon,
   AssignmentsIcon,
   LoadingIcon,
+  StudentsIcon,
 } from '../../components/icons';
 
 import { fetchAllGroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
@@ -160,7 +161,7 @@ class SisSupervisorGroupsContainer extends Component {
       sisPossibleParents,
       groupsAccessor,
       groupsResourcesAccessor,
-      links: { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
       intl: { locale },
     } = this.props;
 
@@ -372,6 +373,19 @@ class SisSupervisorGroupsContainer extends Component {
                                                                       </Button>
                                                                     </Link>
                                                                   )}
+
+                                                                  {!group.organizational &&
+                                                                    hasPermissions(group, 'viewAssignments') && (
+                                                                      <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
+                                                                        <Button variant="primary" size="xs">
+                                                                          <StudentsIcon gapRight />
+                                                                          <FormattedMessage
+                                                                            id="app.group.students"
+                                                                            defaultMessage="Students"
+                                                                          />
+                                                                        </Button>
+                                                                      </Link>
+                                                                    )}
 
                                                                   <Confirm
                                                                     id={`${course.course.code}:${group.id}`}

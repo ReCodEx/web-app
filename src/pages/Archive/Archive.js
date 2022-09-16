@@ -14,7 +14,7 @@ import withLinks from '../../helpers/withLinks';
 import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
 import { getLocalizedName } from '../../helpers/localizedData';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
-import { ArchiveIcon, GroupIcon, SuccessOrFailureIcon, AssignmentsIcon } from '../../components/icons';
+import { ArchiveIcon, GroupIcon, SuccessOrFailureIcon, AssignmentsIcon, StudentsIcon } from '../../components/icons';
 
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchInstancesIfNeeded } from '../../redux/modules/instances';
@@ -53,7 +53,11 @@ class Archive extends Component {
     this.props.loadAsync(this.props.instanceId);
   }
 
-  buttonsCreator = (group, selectedGroupId, { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }) => {
+  buttonsCreator = (
+    group,
+    selectedGroupId,
+    { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY }
+  ) => {
     const { instanceId, loadAsync } = this.props;
 
     return (
@@ -84,6 +88,14 @@ class Archive extends Component {
             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
           </Button>
         </Link>
+        {!group.organizational && (
+          <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
+            <Button variant="primary" size="xs">
+              <StudentsIcon gapRight />
+              <FormattedMessage id="app.group.students" defaultMessage="Students" />
+            </Button>
+          </Link>
+        )}
         {hasPermissions(group, 'archive') && (!group.archived || group.directlyArchived) && (
           <ArchiveGroupButtonContainer id={group.id} size="xs" shortLabels onChange={() => loadAsync(instanceId)} />
         )}

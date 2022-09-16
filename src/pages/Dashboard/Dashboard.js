@@ -26,7 +26,14 @@ import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../re
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
 
-import { DashboardIcon, InfoIcon, GroupIcon, AssignmentsIcon, SupervisorIcon } from '../../components/icons';
+import {
+  DashboardIcon,
+  InfoIcon,
+  GroupIcon,
+  AssignmentsIcon,
+  SupervisorIcon,
+  StudentsIcon,
+} from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
 import { safeGet } from '../../helpers/common';
 
@@ -63,7 +70,7 @@ class Dashboard extends Component {
       memberGroups,
       fetchManyGroupsStatus,
       refreshUser,
-      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY },
+      links: { GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
     } = this.props;
 
     const memberGroupsAdminOrSupervisor = [
@@ -204,6 +211,12 @@ class Dashboard extends Component {
                                       <Button size="sm">
                                         <AssignmentsIcon gapRight />
                                         <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+                                      </Button>
+                                    </Link>
+                                    <Link to={GROUP_STUDENTS_URI_FACTORY(groupId)}>
+                                      <Button size="sm">
+                                        <StudentsIcon gapRight />
+                                        <FormattedMessage id="app.group.students" defaultMessage="Students" />
                                       </Button>
                                     </Link>
                                   </TheButtonGroup>

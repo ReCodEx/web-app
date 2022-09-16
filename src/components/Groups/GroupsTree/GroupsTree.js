@@ -7,7 +7,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import GroupsTreeNode from './GroupsTreeNode';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
-import { GroupIcon, AssignmentsIcon, EditIcon } from '../../icons';
+import { GroupIcon, AssignmentsIcon, EditIcon, StudentsIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 import { hasPermissions } from '../../../helpers/common';
 
@@ -16,7 +16,7 @@ import './styles.css';
 const defaultButtonsCreator = (
   group,
   selectedGroupId,
-  { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY }
+  { GROUP_EDIT_URI_FACTORY, GROUP_INFO_URI_FACTORY, GROUP_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY }
 ) =>
   group.id !== selectedGroupId ? (
     <TheButtonGroup>
@@ -61,6 +61,22 @@ const defaultButtonsCreator = (
           <Link to={GROUP_DETAIL_URI_FACTORY(group.id)}>
             <Button variant="primary" size="xs">
               <AssignmentsIcon smallGapLeft smallGapRight />
+            </Button>
+          </Link>
+        </OverlayTrigger>
+      )}
+
+      {!group.organizational && hasPermissions(group, 'viewAssignments') && (
+        <OverlayTrigger
+          placement="bottom"
+          overlay={
+            <Tooltip id={`info-${group.id}`}>
+              <FormattedMessage id="app.group.students" defaultMessage="Students" />
+            </Tooltip>
+          }>
+          <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
+            <Button variant="primary" size="xs">
+              <StudentsIcon smallGapLeft smallGapRight />
             </Button>
           </Link>
         </OverlayTrigger>
