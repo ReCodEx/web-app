@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
-
 import { Form, FormGroup, FormLabel, InputGroup } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import withLinks from '../../../helpers/withLinks';
+import { UserUIDataContext } from '../../../helpers/contexts';
 
 import styles from './commonStyles.less';
 
@@ -39,31 +39,33 @@ class DatetimeField extends Component {
       ...props
     } = this.props;
 
-    const { lang } = this.context;
-
     return (
       <FormGroup controlId={input.name}>
         {Boolean(label) && (
           <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
         )}
         <InputGroup>
-          <Datetime
-            {...input}
-            {...props}
-            locale={lang}
-            timeFormat={onlyDate ? false : 'H:mm'}
-            onFocus={() => this.onFocus()}
-            inputProps={{
-              disabled,
-              className: classnames({
-                'form-control': true,
-                [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-                [styles.active]: active,
-                'border-danger': error,
-                'border-warning': !error && warning,
-              }),
-            }}
-          />
+          <UserUIDataContext.Consumer>
+            {({ dateFormatOverride = null }) => (
+              <Datetime
+                {...input}
+                {...props}
+                locale={dateFormatOverride}
+                timeFormat={onlyDate ? false : 'H:mm'}
+                onFocus={() => this.onFocus()}
+                inputProps={{
+                  disabled,
+                  className: classnames({
+                    'form-control': true,
+                    [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+                    [styles.active]: active,
+                    'border-danger': error,
+                    'border-warning': !error && warning,
+                  }),
+                }}
+              />
+            )}
+          </UserUIDataContext.Consumer>
           {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
           {append && <InputGroup.Append>{append}</InputGroup.Append>}
         </InputGroup>

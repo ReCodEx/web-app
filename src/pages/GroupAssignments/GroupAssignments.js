@@ -271,7 +271,7 @@ class GroupAssignments extends Component {
                     <Box
                       title={
                         <FormattedMessage
-                          id="app.group.spervisorsView.groupExercises"
+                          id="app.groupAssignments.groupExercises"
                           defaultMessage="Exercises for Assignment in the Group"
                         />
                       }

@@ -8,6 +8,10 @@ import factory, { initialState } from '../helpers/resourceManager';
 import createRecord from '../helpers/resourceManager/recordFactory';
 import { resourceStatus } from '../helpers/resourceManager/status';
 import { actionTypes as assignmentsActionTypes } from './assignments';
+import {
+  actionTypes as invitationsActionTypes,
+  additionalActionTypes as additionalInvitationsActionTypes,
+} from './groupInvitations';
 import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments';
 import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes';
 import { actionTypes as sisSubscribedCoursesActionTypes } from './sisSubscribedGroups';
@@ -382,6 +386,22 @@ const reducer = handleActions(
           )
         )
       ),
+
+    [invitationsActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
+      state.update('resources', oldGroups =>
+        oldGroups.merge(
+          new Map(
+            arrayToObject(
+              groups,
+              o => o.id,
+              data => createRecord({ state: resourceStatus.FULFILLED, data })
+            )
+          )
+        )
+      ),
+
+    [additionalInvitationsActionTypes.ACCEPT_INVITATION_FULFILLED]: (state, { payload: data }) =>
+      state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
   }),
   initialState
 );
