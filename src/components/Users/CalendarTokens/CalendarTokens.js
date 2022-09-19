@@ -99,10 +99,7 @@ class CalendarTokens extends Component {
                             placement="right"
                             overlay={
                               <Tooltip id={calendar.id}>
-                                <FormattedMessage
-                                  id="app.calendarTokens.copyToClipboard"
-                                  defaultMessage="Copy the URL into clipboard"
-                                />
+                                <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
                               </Tooltip>
                             }>
                             <CopyToClipboard

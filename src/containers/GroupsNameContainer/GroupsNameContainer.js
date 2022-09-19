@@ -14,12 +14,16 @@ import UsersNameContainer from '../UsersNameContainer';
 
 class GroupsNameContainer extends Component {
   componentDidMount() {
-    this.props.loadAsync(this.props.groupId);
+    if (!this.props.noLoadAsync) {
+      this.props.loadAsync(this.props.groupId);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.groupId !== prevProps.groupId) {
-      this.props.loadAsync(this.props.groupId);
+    if (!this.props.noLoadAsync) {
+      if (this.props.groupId !== prevProps.groupId || this.props.noLoadAsync !== prevProps.noLoadAsync) {
+        this.props.loadAsync(this.props.groupId);
+      }
     }
   }
 
@@ -97,6 +101,7 @@ GroupsNameContainer.propTypes = {
   ancestorLinks: PropTypes.bool,
   admins: PropTypes.bool,
   separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  noLoadAsync: PropTypes.bool,
   group: ImmutablePropTypes.map,
   groupAccessor: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,

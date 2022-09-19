@@ -3,6 +3,7 @@ import { matchPath, Switch, Route, Redirect } from 'react-router';
 import { defaultMemoize } from 'reselect';
 
 /* container components */
+import AcceptGroupInvitation from './AcceptGroupInvitation';
 import AcceptInvitation from './AcceptInvitation';
 import App from '../containers/App';
 import Archive from './Archive';
@@ -79,6 +80,7 @@ const routesDescriptors = [
   r('registration', Registration, 'REGISTRATION_URI', false), // false = only unauthorized
   r('forgotten-password', ResetPassword, 'RESET_PASSWORD_URI'),
   r('accept-invitation', AcceptInvitation, 'ACCEPT_INVITATION_URI'),
+  r('accept-group-invitation/:invitationId', AcceptGroupInvitation, 'ACCEPT_GROUP_INVITATION_URI_FACTORY', true),
   r('app', Dashboard, 'DASHBOARD_URI', true),
   r('app/assignment/:assignmentId', Assignment, 'ASSIGNMENT_DETAIL_URI_FACTORY', true),
   r('app/assignment/:assignmentId/user/:userId', Assignment, 'ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY', true),

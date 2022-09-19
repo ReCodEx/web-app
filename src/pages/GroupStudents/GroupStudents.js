@@ -14,6 +14,7 @@ import { StudentsIcon, BanIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
+import GroupInvitationsContainer from '../../containers/GroupInvitationsContainer';
 
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchGroupStats, fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
@@ -272,13 +273,10 @@ class GroupStudents extends Component {
                           isSupervisorRole(effectiveRole) &&
                           !isStudentRole(effectiveRole))) && (
                         <Row>
-                          <Col sm={6}>
+                          <Col xl={6}>
                             <Box
                               title={
-                                <FormattedMessage
-                                  id="app.group.spervisorsView.addStudent"
-                                  defaultMessage="Add Student"
-                                />
+                                <FormattedMessage id="app.groupStudents.addStudent" defaultMessage="Add Student" />
                               }
                               isOpen>
                               <AddStudent
@@ -287,6 +285,19 @@ class GroupStudents extends Component {
                                 groupsAccessor={groupsAccessor}
                                 groupId={data.id}
                                 inviteUser={hasPermissions(data, 'inviteStudents') ? inviteUser : null}
+                              />
+                            </Box>
+                          </Col>
+
+                          <Col xl={6}>
+                            <Box
+                              title={
+                                <FormattedMessage id="app.groupStudents.invitations" defaultMessage="Invitations" />
+                              }
+                              isOpen>
+                              <GroupInvitationsContainer
+                                groupId={data.id}
+                                actionButtons={hasPermissions(data, 'editInvitations')}
                               />
                             </Box>
                           </Col>
