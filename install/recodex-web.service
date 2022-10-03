@@ -16,6 +16,8 @@ User=recodex
 Group=recodex
 WorkingDirectory=/opt/recodex-web
 ExecStart=/usr/bin/node /opt/recodex-web/bin/server.js
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
