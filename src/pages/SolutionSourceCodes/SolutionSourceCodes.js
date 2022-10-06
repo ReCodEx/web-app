@@ -31,10 +31,12 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
 import { fetchSolutionIfNeeded, fetchUsersSolutions } from '../../redux/modules/solutions';
 import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
+import { fetchSolutionReviewIfNeeded } from '../../redux/modules/solutionReviews';
 import { download } from '../../redux/modules/files';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
 import { getSolution } from '../../redux/selectors/solutions';
 import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
+import { getSolutionReviewComments } from '../../redux/selectors/solutionReviews';
 import {
   getAssignment,
   getUserSolutionsSortedData,
@@ -201,6 +203,7 @@ class SolutionSourceCodes extends Component {
           registerSolutionVisit(solution);
           return Promise.all([dispatch(fetchUsersSolutions(solution.authorId, assignmentId))]);
         }),
+      dispatch(fetchSolutionReviewIfNeeded(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId))
         .then(res => preprocessFiles(res.value))
@@ -326,6 +329,7 @@ class SolutionSourceCodes extends Component {
       secondSolution,
       files,
       secondFiles,
+      reviewComments,
       fileContentsSelector,
       download,
       userSolutionsSelector,
@@ -453,120 +457,130 @@ class SolutionSourceCodes extends Component {
               </Row>
             )}
 
-            <ResourceRenderer resource={files} bulkyLoading>
-              {filesRaw => (
-                <ResourceRenderer resource={secondFiles || []} bulkyLoading>
-                  {(secondFilesRaw = null) => {
-                    const secondFiles = secondFilesRaw && preprocessFiles(secondFilesRaw);
-                    const files = associateFilesForDiff(
-                      preprocessFiles(filesRaw),
-                      secondFiles,
-                      this.state.diffMappings
-                    );
-                    const revertedIndex = files && secondFiles && getRevertedMapping(files);
-                    return (
-                      <>
-                        {files.map(file => (
-                          <SourceCodeBox
-                            key={file.id}
-                            {...file}
-                            download={download}
-                            fileContentsSelector={fileContentsSelector}
-                            diffMode={diffMode}
-                            adjustDiffMapping={this.openMappingDialog}
-                          />
-                        ))}
-
-                        {diffMode && secondFiles && (
-                          <Modal
-                            show={this.state.mappingDialogOpenFile !== null}
-                            backdrop="static"
-                            onHide={this.closeDialogs}
-                            size="xl">
-                            <Modal.Header closeButton>
-                              <Modal.Title>
-                                <FormattedMessage
-                                  id="app.solutionSourceCodes.mappingModal.title"
-                                  defaultMessage="Adjust mapping of compared files"
+            <ResourceRenderer resource={reviewComments} bulkyLoading>
+              {reviewCommentsRaw =>
+                console.log(reviewCommentsRaw) || (
+                  <ResourceRenderer resource={files} bulkyLoading>
+                    {filesRaw => (
+                      <ResourceRenderer resource={secondFiles || []} bulkyLoading>
+                        {(secondFilesRaw = null) => {
+                          const secondFiles = secondFilesRaw && preprocessFiles(secondFilesRaw);
+                          const files = associateFilesForDiff(
+                            preprocessFiles(filesRaw),
+                            secondFiles,
+                            this.state.diffMappings
+                          );
+                          const revertedIndex = files && secondFiles && getRevertedMapping(files);
+                          return (
+                            <>
+                              {files.map(file => (
+                                <SourceCodeBox
+                                  key={file.id}
+                                  {...file}
+                                  download={download}
+                                  fileContentsSelector={fileContentsSelector}
+                                  diffMode={diffMode}
+                                  adjustDiffMapping={this.openMappingDialog}
                                 />
-                              </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                              <h5 className="mb-3">
-                                <code className="mr-2">
-                                  {this.state.mappingDialogOpenFile && this.state.mappingDialogOpenFile.name}
-                                </code>{' '}
-                                <FormattedMessage
-                                  id="app.solutionSourceCodes.mappingModal.fileIsAssociatedWith"
-                                  defaultMessage="file (on the left) is associated with..."
-                                />
-                              </h5>
+                              ))}
 
-                              <InsetPanel>
-                                {this.state.mappingDialogOpenFile && (
-                                  <FormattedMessage
-                                    id="app.solutionSourceCodes.mappingModal.explain"
-                                    defaultMessage="Select a file from second solution that will be compared with ''<code>{name}</code>'' file from the first solution. Note that changing a mapping between two files may affect how other files are mapped."
-                                    values={{
-                                      name: this.state.mappingDialogOpenFile.name,
-                                      code: content => <code>{content}</code>,
-                                    }}
-                                  />
-                                )}
-                              </InsetPanel>
+                              {diffMode && secondFiles && (
+                                <Modal
+                                  show={this.state.mappingDialogOpenFile !== null}
+                                  backdrop="static"
+                                  onHide={this.closeDialogs}
+                                  size="xl">
+                                  <Modal.Header closeButton>
+                                    <Modal.Title>
+                                      <FormattedMessage
+                                        id="app.solutionSourceCodes.mappingModal.title"
+                                        defaultMessage="Adjust mapping of compared files"
+                                      />
+                                    </Modal.Title>
+                                  </Modal.Header>
+                                  <Modal.Body>
+                                    <h5 className="mb-3">
+                                      <code className="mr-2">
+                                        {this.state.mappingDialogOpenFile && this.state.mappingDialogOpenFile.name}
+                                      </code>{' '}
+                                      <FormattedMessage
+                                        id="app.solutionSourceCodes.mappingModal.fileIsAssociatedWith"
+                                        defaultMessage="file (on the left) is associated with..."
+                                      />
+                                    </h5>
 
-                              <Table hover>
-                                <tbody>
-                                  {secondFiles.map(file => {
-                                    const selected =
-                                      this.state.mappingDialogDiffWith &&
-                                      file.id === this.state.mappingDialogDiffWith.id;
-                                    return (
-                                      <tr
-                                        key={file.id}
-                                        className={selected ? 'table-primary' : ''}
-                                        onClick={
-                                          selected
-                                            ? null
-                                            : () => this.adjustDiffMapping(this.state.mappingDialogOpenFile.id, file.id)
-                                        }>
-                                        <td className="shrink-col">
-                                          <CircleIcon selected={selected} />
-                                        </td>
-                                        <td>{file.name}</td>
-                                        <td className="shrink-col text-muted text-nowrap small">
-                                          {revertedIndex && revertedIndex[file.id] && (
-                                            <>
-                                              <CodeCompareIcon gapRight />
-                                              {revertedIndex[file.id].name}
-                                            </>
-                                          )}
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
-                                </tbody>
-                              </Table>
+                                    <InsetPanel>
+                                      {this.state.mappingDialogOpenFile && (
+                                        <FormattedMessage
+                                          id="app.solutionSourceCodes.mappingModal.explain"
+                                          defaultMessage="Select a file from second solution that will be compared with ''<code>{name}</code>'' file from the first solution. Note that changing a mapping between two files may affect how other files are mapped."
+                                          values={{
+                                            name: this.state.mappingDialogOpenFile.name,
+                                            code: content => <code>{content}</code>,
+                                          }}
+                                        />
+                                      )}
+                                    </InsetPanel>
 
-                              {this.state.diffMappings && !isEmptyObject(this.state.diffMappings) && (
-                                <div className="text-center">
-                                  <Button variant="danger" onClick={this.resetDiffMappings}>
-                                    <RefreshIcon gapRight />
-                                    <FormattedMessage
-                                      id="app.solutionSourceCodes.mappingModal.resetButton"
-                                      defaultMessage="Reset mapping"
-                                    />
-                                  </Button>
-                                </div>
+                                    <Table hover>
+                                      <tbody>
+                                        {secondFiles.map(file => {
+                                          const selected =
+                                            this.state.mappingDialogDiffWith &&
+                                            file.id === this.state.mappingDialogDiffWith.id;
+                                          return (
+                                            <tr
+                                              key={file.id}
+                                              className={selected ? 'table-primary' : ''}
+                                              onClick={
+                                                selected
+                                                  ? null
+                                                  : () =>
+                                                      this.adjustDiffMapping(
+                                                        this.state.mappingDialogOpenFile.id,
+                                                        file.id
+                                                      )
+                                              }>
+                                              <td className="shrink-col">
+                                                <CircleIcon selected={selected} />
+                                              </td>
+                                              <td>{file.name}</td>
+                                              <td className="shrink-col text-muted text-nowrap small">
+                                                {revertedIndex && revertedIndex[file.id] && (
+                                                  <>
+                                                    <CodeCompareIcon gapRight />
+                                                    {revertedIndex[file.id].name}
+                                                  </>
+                                                )}
+                                              </td>
+                                            </tr>
+                                          );
+                                        })}
+                                      </tbody>
+                                    </Table>
+
+                                    {this.state.diffMappings && !isEmptyObject(this.state.diffMappings) && (
+                                      <div className="text-center">
+                                        <Button variant="danger" onClick={this.resetDiffMappings}>
+                                          <RefreshIcon gapRight />
+                                          <FormattedMessage
+                                            id="app.solutionSourceCodes.mappingModal.resetButton"
+                                            defaultMessage="Reset mapping"
+                                          />
+                                        </Button>
+                                      </div>
+                                    )}
+                                  </Modal.Body>
+                                </Modal>
                               )}
-                            </Modal.Body>
-                          </Modal>
-                        )}
-                      </>
-                    );
-                  }}
-                </ResourceRenderer>
-              )}
+                            </>
+                          );
+                        }}
+                      </ResourceRenderer>
+                    )}
+                  </ResourceRenderer>
+                )
+              }
             </ResourceRenderer>
 
             <Modal show={this.state.diffDialogOpen} backdrop="static" onHide={this.closeDialogs} size="xl">
@@ -650,6 +664,7 @@ SolutionSourceCodes.propTypes = {
   solution: ImmutablePropTypes.map,
   secondSolution: ImmutablePropTypes.map,
   files: ImmutablePropTypes.map,
+  reviewComments: ImmutablePropTypes.map,
   secondFiles: ImmutablePropTypes.map,
   fileContentsSelector: PropTypes.func.isRequired,
   userSolutionsSelector: PropTypes.func.isRequired,
@@ -680,6 +695,7 @@ export default withLinks(
         solution: getSolution(state, solutionId),
         secondSolution,
         files: getSolutionFiles(state, solutionId),
+        reviewComments: getSolutionReviewComments(state, solutionId),
         secondFiles:
           secondSolutionId && secondSolutionId !== solutionId ? getSolutionFiles(state, secondSolutionId) : null,
         fileContentsSelector: getFilesContentSelector(state),
