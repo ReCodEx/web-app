@@ -153,7 +153,7 @@ export const fetchAssignmentSolversIfNeeded =
     const lastUpdate = getAssignmentSolversLastUpdate(getState(), assignmentId, groupId, userId);
     const threshold = 10 * 60 * 1000; // 10 minutes
     if (!lastUpdate || Date.now() - lastUpdate > threshold) {
-      dispatch(fetchAssignmentSolvers({ assignmentId, groupId, userId }));
+      return dispatch(fetchAssignmentSolvers({ assignmentId, groupId, userId }));
     }
   };
 
