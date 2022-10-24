@@ -13,7 +13,7 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
-import { AssignmentIcon, DetailIcon, UserIcon } from '../../components/icons';
+import Icon, { AssignmentIcon, DetailIcon, LoadingIcon, UserIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import Points from '../../components/Assignments/SolutionsTable/Points';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
@@ -27,12 +27,14 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
 import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchGroupStudentsSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
+import { setSolutionReviewState } from '../../redux/modules/solutionReviews';
 import { groupSelector, groupsAssignmentsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
 import {
   assignmentEnvironmentsSelector,
@@ -257,6 +259,27 @@ const prepareTableData = defaultMemoize(
   }
 );
 
+const getPendingReviewSolutions = defaultMemoize((assignments, getAssignmentSolutions) =>
+  assignments
+    ? assignments
+        .toArray()
+        .map(getJsData)
+        .filter(identity)
+        .reduce(
+          (acc, assignment) => [
+            ...acc,
+            ...getAssignmentSolutions(assignment.id)
+              .toArray()
+              .map(getJsData)
+              .filter(
+                solution => solution && solution.review && solution.review.startedAt && !solution.review.closedAt
+              ),
+          ],
+          []
+        )
+    : []
+);
+
 const localStorageStateKey = 'GroupUserSolutions.state';
 
 class GroupUserSolutions extends Component {
@@ -277,7 +300,12 @@ class GroupUserSolutions extends Component {
       dispatch(fetchRuntimeEnvironments()),
     ]);
 
-  state = { groupByAssignmentsCheckbox: true, onlyBestSolutionsCheckbox: false };
+  state = {
+    groupByAssignmentsCheckbox: true,
+    onlyBestSolutionsCheckbox: false,
+    closingReviews: false,
+    closingReviewsFailed: false,
+  };
 
   checkboxClickHandler = ev => {
     this.setState({ [ev.target.name]: !this.state[ev.target.name] }, () => {
@@ -300,6 +328,14 @@ class GroupUserSolutions extends Component {
     }
   }
 
+  closeReviews = solutions => {
+    this.setState({ closingReviews: true, closingReviewsFailed: false });
+    return Promise.all(solutions.map(({ id }) => this.props.closeReview(id))).then(
+      () => this.setState({ closingReviews: false }),
+      () => this.setState({ closingReviews: false, closingReviewsFailed: true })
+    );
+  };
+
   // Re-format the data, so they can be rendered by the SortableTable ...
   render() {
     const {
@@ -319,6 +355,8 @@ class GroupUserSolutions extends Component {
       intl: { locale },
       links,
     } = this.props;
+
+    const pendingReviews = getPendingReviewSolutions(assignments, getAssignmentSolutions);
 
     return (
       <Page
@@ -341,6 +379,32 @@ class GroupUserSolutions extends Component {
               groupsDataAccessor={groupsAccessor}
               linkFactory={links.GROUP_EDIT_URI_FACTORY}
             />
+
+            {pendingReviews && pendingReviews.length > 0 && (
+              <Callout variant="warning">
+                <Row className="align-items-center">
+                  <Col className="pr-3 py-2">
+                    <FormattedMessage
+                      id="app.groupUserSolutions.pendingReviews"
+                      defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected user. Remember that the review comments are visible to the author after a review is closed."
+                      values={{ count: pendingReviews.length }}
+                    />
+                  </Col>
+                  <Col xl="auto">
+                    <Button
+                      variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
+                      onClick={() => this.closeReviews(pendingReviews)}
+                      disabled={this.state.closingReviews}>
+                      {this.state.closingReviews ? <LoadingIcon gapRight /> : <Icon icon="boxes-packing" gapRight />}
+                      <FormattedMessage
+                        id="app.reviewSolutionButtons.closePendingReviews"
+                        defaultMessage="Close pending reviews"
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              </Callout>
+            )}
 
             <div className="text-right text-nowrap py-2">
               <OnOffCheckbox
@@ -483,6 +547,7 @@ GroupUserSolutions.propTypes = {
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
+  closeReview: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
@@ -522,6 +587,7 @@ export default withLinks(
       }
     ) => ({
       loadAsync: () => GroupUserSolutions.loadAsync({ groupId, userId }, dispatch),
+      closeReview: id => dispatch(setSolutionReviewState(id, true)),
     })
   )(injectIntl(GroupUserSolutions))
 );
