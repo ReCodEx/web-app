@@ -26,10 +26,79 @@
   background-color: #d0d0d0;
 }
 
-.sourceCodeViewer span[data-line-style="selected"] {
+.sourceCodeViewer span[data-line-active] {
   background-color: #ff9;
 }
 
-.sourceCodeViewer span[data-line-style="selected"] .linenumber {
+.sourceCodeViewer span[data-line-active] .linenumber {
   background-color: yellow;
+}
+
+.sourceCodeViewer span[data-line-active]:hover, .sourceCodeViewer span[data-line-active]:hover * {
+  background-color: #e0e088;
+}
+
+.sourceCodeViewer span[data-line-active]:hover .linenumber {
+  background-color: #dd0;
+}
+
+.sourceCodeViewerComments {
+  background-color: #f7f7f7;
+  font-family: var(--font-family-sans-serif);
+  font-size: 127%;
+  padding: 0.2em;
+  white-space: initial;
+}
+
+.sourceCodeViewerComments > div {
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  border-radius: 0.2em;
+  padding: 0.5em;
+  position: relative;
+}
+
+.sourceCodeViewerComments > div.issue {
+  background-color: #fff4f4;
+}
+
+.sourceCodeViewerComments > div.commentForm {
+  background-color: #fffff0;
+}
+
+.sourceCodeViewerComments > div:nth-of-type(2) {
+  margin-top: 0.2em;
+}
+
+.sourceCodeViewerComments > div > .icon {
+  position: absolute;
+  top: 2.8em;
+  left: 0.5em;
+}
+
+.sourceCodeViewerComments .actions {
+  line-height: 20px;
+  margin-left: 1.5em;
+  vertical-align: middle;
+}
+
+
+/* Markdown overrides */
+
+.sourceCodeViewerComments > div > .recodex-markdown-container {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.5rem 0 28px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sourceCodeViewerComments > div.issue > .recodex-markdown-container {
+  border-top-color:#f9e0e0;
+}
+
+.sourceCodeViewerComments > div > .recodex-markdown-container p {
+  margin-bottom: 0.5rem;
+}
+
+.sourceCodeViewerComments > div > .recodex-markdown-container p:last-child {
+  margin-bottom: 0.2rem;
 }

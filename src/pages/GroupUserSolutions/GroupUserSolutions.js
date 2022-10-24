@@ -79,7 +79,8 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
         <SolutionTableRowIcons
           id={info.id}
           accepted={info.accepted}
-          reviewed={info.reviewed}
+          review={info.review}
+          isReviewer={info.permissionHints && info.permissionHints.review}
           isBestSolution={info.isBestSolution}
           status={info.lastSubmission ? info.lastSubmission.evaluationStatus : null}
           lastSubmission={info.lastSubmission}
@@ -192,10 +193,10 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
             </Link>
           )}
           {solution.permissionHints && solution.permissionHints.setFlag && (
-            <>
-              <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel size="xs" />
-              <ReviewSolutionContainer id={solution.id} locale={locale} size="xs" />
-            </>
+            <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel size="xs" />
+          )}
+          {solution.permissionHints && solution.permissionHints.review && (
+            <ReviewSolutionContainer id={solution.id} locale={locale} size="xs" />
           )}
           {solution.permissionHints && solution.permissionHints.delete && (
             <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} size="xs" />
@@ -228,7 +229,7 @@ const prepareTableData = defaultMemoize(
             bonusPoints,
             actualPoints,
             accepted,
-            reviewed,
+            review,
             isBestSolution,
             commentsStats,
             permissionHints,
@@ -239,7 +240,7 @@ const prepareTableData = defaultMemoize(
             const rte = getRuntime(runtimeEnvironmentId);
 
             res.push({
-              icon: { id, commentsStats, lastSubmission, accepted, reviewed, isBestSolution },
+              icon: { id, commentsStats, lastSubmission, accepted, review, permissionHints, isBestSolution },
               assignment,
               date: createdAt,
               validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,

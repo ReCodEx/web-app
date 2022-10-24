@@ -1,39 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import ReviewSolution from '../../components/buttons/ReviewSolution';
-import { setSolutionFlag } from '../../redux/modules/solutions';
-import { isReviewed, isSetFlagPending } from '../../redux/selectors/solutions';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-const ReviewSolutionContainer = ({ reviewed, reviewPending, setReviewed, unsetReviewed, ...props }) => {
+import { setSolutionReviewState, deleteSolutionReview } from '../../redux/modules/solutionReviews';
+import { getSolution } from '../../redux/selectors/solutions';
+import { isSolutionReviewUpdatePending } from '../../redux/selectors/solutionReviews';
+
+const ReviewSolutionContainer = ({ id, solution, updatePending, openReview, closeReview, deleteReview, ...props }) => {
   return (
-    <ReviewSolution
-      reviewed={reviewed}
-      reviewPending={reviewPending}
-      setReviewed={setReviewed}
-      unsetReviewed={unsetReviewed}
-      {...props}
-    />
+    <ResourceRenderer resource={solution}>
+      {solution => (
+        <ReviewSolution
+          {...props}
+          id={id}
+          assignmentId={solution.assignmentId}
+          review={solution.review}
+          updatePending={updatePending}
+          openReview={openReview}
+          closeReview={closeReview}
+          deleteReview={deleteReview}
+        />
+      )}
+    </ResourceRenderer>
   );
 };
 
 ReviewSolutionContainer.propTypes = {
   id: PropTypes.string.isRequired,
-  reviewed: PropTypes.bool.isRequired,
-  reviewPending: PropTypes.bool.isRequired,
-  setReviewed: PropTypes.func.isRequired,
-  unsetReviewed: PropTypes.func.isRequired,
+  solution: ImmutablePropTypes.map,
+  updatePending: PropTypes.bool,
+  openReview: PropTypes.func.isRequired,
+  closeReview: PropTypes.func.isRequired,
+  deleteReview: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
-  reviewed: isReviewed(state, id),
-  reviewPending: isSetFlagPending(state, id, 'reviewed'),
+  solution: getSolution(state, id),
+  updatePending: isSolutionReviewUpdatePending(state, id),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  setReviewed: () => dispatch(setSolutionFlag(id, 'reviewed', true)),
-  unsetReviewed: () => dispatch(setSolutionFlag(id, 'reviewed', false)),
+  openReview: () => dispatch(setSolutionReviewState(id, false)),
+  closeReview: () => dispatch(setSolutionReviewState(id, true)),
+  deleteReview: () => dispatch(deleteSolutionReview(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewSolutionContainer);

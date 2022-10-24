@@ -202,6 +202,10 @@ th.shrink-col {
   opacity: 0.8 !important;
 }
 
+.half-gray {
+  filter: grayscale(50%);
+}
+
 /*
  * Misc
  */
@@ -434,7 +438,7 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
   border-radius: 50%;
 }
 
-/* On mouse-over, add a grey background color */
+/* On mouse-over, add a gray background color */
 .radio-container label:hover input ~ .radiomark {
   background-color: #ccc;
   box-shadow: #fe9 0 0 0.4em 0.1em;

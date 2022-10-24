@@ -34,7 +34,7 @@ const AcceptSolution = ({
         size={size}
         onClick={accepted ? unaccept : accept}
         disabled={acceptPending}>
-        <Icon icon={accepted ? 'check-circle' : ['far', 'check-circle']} gapRight={!captionAsTooltip} />
+        <Icon icon={accepted ? ['far', 'circle-xmark'] : ['far', 'check-circle']} gapRight={!captionAsTooltip} />
         {!captionAsTooltip && label}
       </Button>
     </OptionalTooltipWrapper>

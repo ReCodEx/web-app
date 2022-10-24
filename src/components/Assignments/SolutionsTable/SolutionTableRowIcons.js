@@ -1,20 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import Icon from '../../icons';
+import SolutionReviewIcon from '../../Solutions/SolutionReviewIcon';
 import AssignmentStatusIcon, { getStatusDesc } from '../Assignment/AssignmentStatusIcon';
 import CommentsIcon from './CommentsIcon';
 
 const SolutionTableRowIcons = ({
   id,
   accepted,
-  reviewed,
+  review = null,
   isBestSolution,
   status,
   lastSubmission,
   commentsStats = null,
+  isReviewer = false,
 }) => (
   <>
     <AssignmentStatusIcon
@@ -24,20 +23,7 @@ const SolutionTableRowIcons = ({
       isBestSolution={isBestSolution}
     />
 
-    {reviewed && (
-      <OverlayTrigger
-        placement="right"
-        overlay={
-          <Tooltip id={`reviewed-${id}`}>
-            <FormattedMessage
-              id="app.solutionsTable.reviewedTooltip"
-              defaultMessage="The solution has been reviewed by the supervisor."
-            />
-          </Tooltip>
-        }>
-        <Icon icon="stamp" className="text-muted" gapLeft />
-      </OverlayTrigger>
-    )}
+    {review && <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={isReviewer} gapLeft />}
 
     <CommentsIcon id={id} commentsStats={commentsStats} gapLeft />
   </>
@@ -47,7 +33,11 @@ SolutionTableRowIcons.propTypes = {
   id: PropTypes.string.isRequired,
   commentsStats: PropTypes.object,
   accepted: PropTypes.bool.isRequired,
-  reviewed: PropTypes.bool.isRequired,
+  review: PropTypes.shape({
+    startedAt: PropTypes.number,
+    closedAt: PropTypes.number,
+    issues: PropTypes.number,
+  }),
   isBestSolution: PropTypes.bool.isRequired,
   status: PropTypes.string,
   lastSubmission: PropTypes.shape({
@@ -56,6 +46,7 @@ SolutionTableRowIcons.propTypes = {
       points: PropTypes.number.isRequired,
     }),
   }),
+  isReviewer: PropTypes.bool,
 };
 
 export default SolutionTableRowIcons;

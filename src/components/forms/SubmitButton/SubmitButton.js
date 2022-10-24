@@ -110,6 +110,7 @@ class SubmitButton extends Component {
       noIcons = false,
       defaultIcon = null,
       noShadow = false,
+      size,
       messages = {},
       intl: { formatMessage },
     } = this.props;
@@ -136,6 +137,7 @@ class SubmitButton extends Component {
           variant={this.getButtonVariant()}
           disabled={this.isButtonDisabled()}
           noShadow={noShadow}
+          size={size}
           onClick={this.submit}>
           {!noIcons && icons[buttonState]}
           {formattedMessages[buttonState]}
@@ -147,7 +149,12 @@ class SubmitButton extends Component {
         onConfirmed={this.submit}
         question={confirmQuestion}
         disabled={!confirmQuestion}>
-        <Button type="submit" variant={this.getButtonVariant()} disabled={this.isButtonDisabled()} noShadow={noShadow}>
+        <Button
+          type="submit"
+          variant={this.getButtonVariant()}
+          disabled={this.isButtonDisabled()}
+          noShadow={noShadow}
+          size={size}>
           {!noIcons && icons[buttonState]}
           {formattedMessages[buttonState]}
         </Button>
@@ -176,6 +183,7 @@ SubmitButton.propTypes = {
   }),
   confirmQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   noShadow: PropTypes.bool,
+  size: PropTypes.string,
   intl: PropTypes.object,
 };
 

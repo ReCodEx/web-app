@@ -85,7 +85,7 @@ class SourceCodeViewerContainer extends Component {
 
             <Modal.Body className={styles.modalBody}>
               <div>
-                <SourceCodeViewer content="" name="loading" />
+                <SourceCodeViewer content="" name="loading" solutionId={solutionId} />
               </div>
             </Modal.Body>
           </Modal>
@@ -163,7 +163,7 @@ class SourceCodeViewerContainer extends Component {
               {content.malformedCharacters ? (
                 <pre className="border-top">{content.content}</pre>
               ) : (
-                <SourceCodeViewer content={content.content} name={fileName} />
+                <SourceCodeViewer content={content.content} name={fileName} solutionId={solutionId} />
               )}
               <div className="border-top pt-1 bg-light rounded-bottom"></div>
             </Modal.Body>
