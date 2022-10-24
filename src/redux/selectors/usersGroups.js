@@ -133,6 +133,11 @@ export const loggedUserIsObserverOfSelector = loggedUserIsMemberOfSelector('obse
 export const loggedUserIsSupervisorOfSelector = loggedUserIsMemberOfSelector('supervisors');
 export const loggedUserIsAdminOfSelector = loggedUserIsMemberOfSelector('admins');
 
+export const loggedUserIsPrimaryAdminOfSelector = createSelector(
+  [loggedInUserIdSelector, groupsSelector],
+  (userId, groups) => groupId => groups.getIn([groupId, 'data', 'primaryAdminsIds'], EMPTY_LIST).includes(userId)
+);
+
 /*
  * Specialized selectors that we might want to replace/generalize in the future
  */

@@ -5,8 +5,8 @@ import {
   fetchManyGroupStudentsSolutionsEndpoint,
 } from '../modules/solutions';
 
-const getParam = (state, id) => id;
-const getParams = (state, ...params) => params;
+const getParam = (_, id) => id;
+const getParams = (_, ...params) => params;
 
 const getSolutionsRaw = state => state.solutions;
 export const getSolutions = state => getSolutionsRaw(state).get('resources');
@@ -14,10 +14,6 @@ export const getSolution = createSelector([getSolutions, getParam], (solutions, 
 
 export const isAccepted = createSelector([getSolutions, getParam], (solutions, id) =>
   solutions.getIn([id, 'data', 'accepted'], false)
-);
-
-export const isReviewed = createSelector([getSolutions, getParam], (solutions, id) =>
-  solutions.getIn([id, 'data', 'reviewed'], false)
 );
 
 export const isSetFlagPending = createSelector([getSolutions, getParams], (solutions, [id, flag]) =>

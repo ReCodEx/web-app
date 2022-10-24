@@ -87,7 +87,12 @@ export const ReferenceSolutionIcon = props => <Icon {...props} icon="book" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
-export const ReviewedIcon = props => <Icon {...props} icon="stamp" />;
+export const ReviewIcon = ({ review = null, ...props }) =>
+  review && review.closedAt ? (
+    <Icon {...props} icon={review.issues > 0 ? 'file-circle-exclamation' : 'file-circle-check'} />
+  ) : (
+    <Icon {...props} icon="microscope" />
+  );
 export const SaveIcon = props => <Icon {...props} icon={['far', 'save']} />;
 export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const ServerIcon = props => <Icon {...props} icon="server" />;
@@ -147,6 +152,10 @@ export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle"
 export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;
 export const ZipIcon = props => <Icon {...props} icon={['far', 'file-archive']} />;
 
+ArchiveGroupIcon.propTypes = {
+  archived: PropTypes.bool,
+};
+
 CircleIcon.propTypes = {
   selected: PropTypes.bool,
 };
@@ -160,8 +169,12 @@ GroupIcon.propTypes = {
   archived: PropTypes.bool,
 };
 
-ArchiveGroupIcon.propTypes = {
-  archived: PropTypes.bool,
+ReviewIcon.propTypes = {
+  review: PropTypes.shape({
+    startedAt: PropTypes.number,
+    closedAt: PropTypes.number,
+    issues: PropTypes.number,
+  }),
 };
 
 SortedIcon.propTypes = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
 import Prism from 'prismjs';
@@ -26,6 +26,7 @@ const diffViewHighlightSyntax = lang => str =>
 const SourceCodeBox = ({
   id,
   parentId = id,
+  solutionId,
   name,
   entryName = null,
   download = null,
@@ -33,7 +34,13 @@ const SourceCodeBox = ({
   diffMode = false,
   fileContentsSelector,
   adjustDiffMapping = null,
-  intl: { formatMessage },
+  reviewComments = null,
+  addComment = null,
+  updateComment = null,
+  removeComment = null,
+  authorView = false,
+  restrictCommentAuthor = null,
+  reviewClosed = false,
 }) => {
   const res = fileContentsSelector(parentId, entryName);
   return (
@@ -202,7 +209,18 @@ const SourceCodeBox = ({
               />
             </div>
           ) : (
-            <SourceCodeViewer content={content.content} name={name} />
+            <SourceCodeViewer
+              content={content.content}
+              name={name}
+              solutionId={solutionId}
+              authorView={authorView}
+              restrictCommentAuthor={restrictCommentAuthor}
+              comments={reviewComments}
+              addComment={addComment}
+              updateComment={updateComment}
+              removeComment={removeComment}
+              reviewClosed={reviewClosed}
+            />
           )}
         </Box>
       )}
@@ -213,6 +231,7 @@ const SourceCodeBox = ({
 SourceCodeBox.propTypes = {
   id: PropTypes.string.isRequired,
   parentId: PropTypes.string,
+  solutionId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   entryName: PropTypes.string,
   download: PropTypes.func,
@@ -220,7 +239,13 @@ SourceCodeBox.propTypes = {
   diffWith: PropTypes.object,
   diffMode: PropTypes.bool,
   adjustDiffMapping: PropTypes.func,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired,
+  reviewComments: PropTypes.array,
+  addComment: PropTypes.func,
+  updateComment: PropTypes.func,
+  removeComment: PropTypes.func,
+  authorView: PropTypes.bool,
+  restrictCommentAuthor: PropTypes.string,
+  reviewClosed: PropTypes.bool,
 };
 
-export default injectIntl(SourceCodeBox);
+export default SourceCodeBox;

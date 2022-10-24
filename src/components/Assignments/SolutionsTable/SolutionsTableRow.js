@@ -35,7 +35,7 @@ const SolutionsTableRow = ({
   actualPoints,
   createdAt,
   accepted = false,
-  reviewed = false,
+  review = null,
   isBestSolution = false,
   runtimeEnvironment = null,
   commentsStats = null,
@@ -62,15 +62,16 @@ const SolutionsTableRow = ({
   const splitOnTwoLines = hasNote && compact;
 
   return (
-    <tbody>
+    <tbody onClick={!selected && onSelect ? () => onSelect(id) : null}>
       <tr
         className={classnames({
           'table-primary': selected,
           clickable: !selected && onSelect,
           'table-warning': highlighted,
-        })}
-        onClick={!selected && onSelect ? () => onSelect(id) : null}>
-        <td className="text-nowrap valign-middle text-bold">{attemptIndex}.</td>
+        })}>
+        <td className="text-nowrap valign-middle text-bold" rowSpan={splitOnTwoLines ? 2 : 1}>
+          {attemptIndex}.
+        </td>
 
         <td
           rowSpan={splitOnTwoLines ? 2 : 1}
@@ -81,11 +82,12 @@ const SolutionsTableRow = ({
           <SolutionTableRowIcons
             id={id}
             accepted={accepted}
-            reviewed={reviewed}
+            review={review}
             isBestSolution={isBestSolution}
             status={status}
             lastSubmission={lastSubmission}
             commentsStats={commentsStats}
+            isReviewer={permissionHints && permissionHints.review}
           />
         </td>
 
@@ -128,13 +130,7 @@ const SolutionsTableRow = ({
         )}
 
         {showActionButtons && (
-          <td
-            className={classnames({
-              'text-right': true,
-              'valign-middle': true,
-              'text-nowrap': !splitOnTwoLines,
-            })}
-            rowSpan={splitOnTwoLines ? 2 : 1}>
+          <td className="text-right valign-middle text-nowrap" rowSpan={splitOnTwoLines ? 2 : 1}>
             <TheButtonGroup>
               {permissionHints && permissionHints.viewDetail && (
                 <>
@@ -165,16 +161,17 @@ const SolutionsTableRow = ({
               )}
 
               {permissionHints && permissionHints.setFlag && (
-                <>
-                  <AcceptSolutionContainer
-                    id={id}
-                    locale={locale}
-                    captionAsTooltip={compact}
-                    shortLabel={!compact}
-                    size="xs"
-                  />
-                  <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
-                </>
+                <AcceptSolutionContainer
+                  id={id}
+                  locale={locale}
+                  captionAsTooltip={compact}
+                  shortLabel={!compact}
+                  size="xs"
+                />
+              )}
+
+              {permissionHints && permissionHints.review && (
+                <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
               )}
 
               {permissionHints && permissionHints.delete && (
@@ -186,7 +183,12 @@ const SolutionsTableRow = ({
       </tr>
 
       {splitOnTwoLines && (
-        <tr>
+        <tr
+          className={classnames({
+            'table-primary': selected,
+            clickable: !selected && onSelect,
+            'table-warning': highlighted,
+          })}>
           <td colSpan={4} className={styles.noteRow}>
             <b>
               <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />:
@@ -218,7 +220,11 @@ SolutionsTableRow.propTypes = {
   }),
   createdAt: PropTypes.number.isRequired,
   accepted: PropTypes.bool,
-  reviewed: PropTypes.bool,
+  review: PropTypes.shape({
+    startedAt: PropTypes.number,
+    closedAt: PropTypes.number,
+    issues: PropTypes.number,
+  }),
   isBestSolution: PropTypes.bool,
   commentsStats: PropTypes.object,
   runtimeEnvironment: PropTypes.object,

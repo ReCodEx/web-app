@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
@@ -14,6 +15,7 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { TheButtonGroup } from '../../components/widgets/TheButton';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -125,49 +127,70 @@ class Solution extends Component {
                 canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               />
 
-              {(hasPermissions(solution, 'setFlag') || hasPermissions(assignment, 'resubmitSubmissions')) && (
-                <div className="mb-3">
-                  <TheButtonGroup>
+              {(hasPermissions(solution, 'setFlag') ||
+                hasPermissions(solution, 'review') ||
+                hasPermissions(assignment, 'resubmitSubmissions')) && (
+                <Row>
+                  <Col className="mb-3" xs={12} lg={true}>
                     {hasPermissions(solution, 'setFlag') && (
-                      <>
-                        <AcceptSolutionContainer id={solution.id} locale={locale} />
-                        <ReviewSolutionContainer id={solution.id} locale={locale} />
-                      </>
+                      <AcceptSolutionContainer id={solution.id} locale={locale} />
                     )}
+                    {hasPermissions(solution, 'review') && (
+                      <TheButtonGroup className="ml-2 text-nowrap">
+                        <ReviewSolutionContainer id={solution.id} locale={locale} />
+                      </TheButtonGroup>
+                    )}
+                  </Col>
+
+                  <Col xs={12} lg="auto" className="mb-3">
+                    <TheButtonGroup className="text-nowrap">
+                      {hasPermissions(assignment, 'resubmitSubmissions') &&
+                        assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
+                          <>
+                            <ResubmitSolutionContainer
+                              id={solution.id}
+                              assignmentId={assignment.id}
+                              isDebug={false}
+                              userId={solution.authorId}
+                              locale={locale}
+                            />
+                            <ResubmitSolutionContainer
+                              id={solution.id}
+                              assignmentId={assignment.id}
+                              isDebug={true}
+                              userId={solution.authorId}
+                              locale={locale}
+                            />
+                          </>
+                        )}
+                    </TheButtonGroup>
 
                     {hasPermissions(assignment, 'resubmitSubmissions') &&
-                      assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
-                        <>
-                          <ResubmitSolutionContainer
-                            id={solution.id}
-                            assignmentId={assignment.id}
-                            isDebug={false}
-                            userId={solution.authorId}
-                            locale={locale}
+                      !assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
+                        <span>
+                          <WarningIcon largeGapLeft gapRight className="text-warning" />
+                          <FormattedMessage
+                            id="app.solution.environmentNotAllowedCannotResubmit"
+                            defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
                           />
-                          <ResubmitSolutionContainer
-                            id={solution.id}
-                            assignmentId={assignment.id}
-                            isDebug={true}
-                            userId={solution.authorId}
-                            locale={locale}
-                          />
-                        </>
+                        </span>
                       )}
-                  </TheButtonGroup>
-
-                  {hasPermissions(assignment, 'resubmitSubmissions') &&
-                    !assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
-                      <span>
-                        <WarningIcon largeGapLeft gapRight className="text-warning" />
-                        <FormattedMessage
-                          id="app.solution.environmentNotAllowedCannotResubmit"
-                          defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
-                        />
-                      </span>
-                    )}
-                </div>
+                  </Col>
+                </Row>
               )}
+
+              {hasPermissions(solution, 'review') &&
+                solution.review &&
+                solution.review.startedAt &&
+                !solution.review.closedAt && (
+                  <Callout variant="info">
+                    <FormattedMessage
+                      id="app.solution.reviewPendingAbout"
+                      defaultMessage="The solution is currently under review. Please, do not forget to close the review when you are done since the author does not see the comments until the review is closed."
+                    />
+                  </Callout>
+                )}
+
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
                 {runtimes => (
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>

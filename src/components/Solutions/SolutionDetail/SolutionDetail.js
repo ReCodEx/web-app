@@ -67,7 +67,7 @@ class SolutionDetail extends Component {
         bonusPoints,
         actualPoints,
         accepted,
-        reviewed,
+        review = null,
         runtimeEnvironmentId,
         lastSubmission,
         permissionHints = EMPTY_OBJ,
@@ -117,7 +117,7 @@ class SolutionDetail extends Component {
               note={note}
               editNote={editNote}
               accepted={accepted}
-              reviewed={reviewed}
+              review={review}
               assignment={assignment}
               actualPoints={actualPoints}
               overriddenPoints={overriddenPoints}
@@ -356,7 +356,11 @@ SolutionDetail.propTypes = {
     overriddenPoints: PropTypes.number,
     actualPoints: PropTypes.number,
     accepted: PropTypes.bool.isRequired,
-    reviewed: PropTypes.bool.isRequired,
+    review: PropTypes.shape({
+      startedAt: PropTypes.number,
+      closedAt: PropTypes.number,
+      issues: PropTypes.number,
+    }),
     runtimeEnvironmentId: PropTypes.string,
     permissionHints: PropTypes.object,
   }).isRequired,

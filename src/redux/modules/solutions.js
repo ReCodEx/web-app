@@ -10,6 +10,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
+import { actionTypes as reviewsActionTypes } from './solutionReviews';
 import { getAssignmentSolversLastUpdate } from '../selectors/solutions';
 import { objectFilter } from '../../helpers/common';
 
@@ -291,6 +292,17 @@ const reducer = handleActions(
         ? newState.setIn(['resources', solutionId, 'didInvalidate'], true)
         : newState;
     },
+
+    [reviewsActionTypes.FETCH_FULFILLED]: (state, { meta: { id }, payload: { solution: data } }) =>
+      state.setIn(['resources', id], createRecord({ state: resourceStatus.FULFILLED, data })),
+
+    [reviewsActionTypes.UPDATE_FULFILLED]: (state, { meta: { id }, payload: { solution: data } }) =>
+      state.setIn(['resources', id], createRecord({ state: resourceStatus.FULFILLED, data })),
+
+    [reviewsActionTypes.REMOVE_FULFILLED]: (state, { meta: { id } }) =>
+      state.getIn(['resources', id, 'state']) === resourceStatus.FULFILLED
+        ? state.setIn(['resources', id, 'data', 'review'], null)
+        : state,
   }),
   initialState
 );

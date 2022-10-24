@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Table, Dropdown } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { TypedMessageIcon } from '../../icons';
+import { MailIcon, TypedMessageIcon } from '../../icons';
 import Markdown from '../../widgets/Markdown';
 import DateTime from '../../widgets/DateTime';
 import { getLocalizedText } from '../../../helpers/localizedData';
@@ -22,7 +22,7 @@ const HeaderSystemMessagesDropdown = ({
 }) => (
   <Dropdown as="li" alignRight navbar className="nav-item">
     <Dropdown.Toggle as="a" id="dropdown-header-system-messages" bsPrefix="nav-link">
-      <Icon icon={['far', 'envelope']} />
+      <MailIcon />
       {systemMessages.length > 0 && (
         <span className={`${styles.iconBadgeWrapper} badge-pill badge-warning`}>{systemMessages.length}</span>
       )}

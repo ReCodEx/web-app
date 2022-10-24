@@ -21,8 +21,7 @@ import Icon, {
   NoteIcon,
   UserIcon,
   SupervisorIcon,
-  ReviewedIcon,
-  SuccessOrFailureIcon,
+  ReviewIcon,
   SuccessIcon,
   FailureIcon,
   CodeIcon,
@@ -40,7 +39,7 @@ const getImportantSolutions = defaultMemoize((solutions, selectedSolutionId) => 
   const selectedIdx = solutions.findIndex(s => s.id === selectedSolutionId);
   const accepted = solutions.find(s => s.accepted && s.id !== selectedSolutionId) || null;
   const best = solutions.find(s => s.isBestSolution && s.id !== selectedSolutionId) || null;
-  let lastReviewed = solutions.filter(s => s.reviewed).shift();
+  let lastReviewed = solutions.filter(s => s.review && s.review.closedAt).shift();
   lastReviewed = lastReviewed && lastReviewed.id !== selectedSolutionId ? lastReviewed : null;
   return { selectedIdx, accepted, best, lastReviewed };
 });
@@ -90,7 +89,7 @@ class SolutionStatus extends Component {
       submittedBy,
       note,
       accepted,
-      reviewed,
+      review = null,
       runtimeEnvironmentId,
       runtimeEnvironments,
       maxPoints,
@@ -337,19 +336,45 @@ class SolutionStatus extends Component {
 
               <tr>
                 <td className="text-center text-muted shrink-col px-2">
-                  <ReviewedIcon />
+                  <ReviewIcon review={review} />
                 </td>
                 <th className="text-nowrap">
-                  <FormattedMessage id="app.solution.reviewed" defaultMessage="Reviewed" />:
-                  <Explanation id="reviewed">
+                  {review && review.closedAt ? (
+                    <>
+                      <FormattedMessage id="app.solution.reviewClosedAt" defaultMessage="Reviewed at" />:
+                    </>
+                  ) : (
+                    <>
+                      <FormattedMessage id="app.solution.reviewStartedAt" defaultMessage="Review started at" />:
+                    </>
+                  )}
+                  <Explanation id="reviews">
                     <FormattedMessage
-                      id="app.solution.explanations.reviewed"
-                      defaultMessage="A marker that indicates whether the teacher has personally reviewed the solution. It may help navigate through the history of solutions, especially when the students are expected to make revisions."
+                      id="app.solution.explanations.reviews"
+                      defaultMessage="Indicates last change in the review state. The review is started before the teacher can make any comments. When the review is closed, all comments become visible to the author. Review comments are visible at the submitted files page."
                     />
                   </Explanation>
                 </th>
                 <td>
-                  <SuccessOrFailureIcon success={reviewed} />
+                  {review && review.startedAt ? (
+                    <DateTime unixts={review.closedAt || review.startedAt} />
+                  ) : (
+                    <i className="text-muted">
+                      <FormattedMessage id="app.solution.reviewNotStartedYet" defaultMessage="not started yet" />
+                    </i>
+                  )}
+
+                  {review && review.issues > 0 && (
+                    <small className="text-muted">
+                      (
+                      <FormattedMessage
+                        id="app.solution.reviewIssuesCount"
+                        defaultMessage="{issues} {issues, plural, one {issue} other {issues}} to resolve"
+                        values={{ issues: review.issues }}
+                      />
+                      )
+                    </small>
+                  )}
 
                   {important.lastReviewed && (
                     <span className="small float-right mx-2">
@@ -556,6 +581,7 @@ class SolutionStatus extends Component {
               selected={id}
               assignmentSolversLoading={assignmentSolversLoading}
               assignmentSolver={assignmentSolver}
+              compact
             />
           </Modal.Body>
         </Modal>
@@ -586,7 +612,11 @@ SolutionStatus.propTypes = {
   submittedBy: PropTypes.string,
   note: PropTypes.string,
   accepted: PropTypes.bool.isRequired,
-  reviewed: PropTypes.bool.isRequired,
+  review: PropTypes.shape({
+    startedAt: PropTypes.number,
+    closedAt: PropTypes.number,
+    issues: PropTypes.number,
+  }),
   runtimeEnvironmentId: PropTypes.string,
   runtimeEnvironments: PropTypes.array,
   maxPoints: PropTypes.number.isRequired,

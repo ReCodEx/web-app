@@ -59,10 +59,10 @@ class MarkdownTextAreaField extends Component {
         </Row>
 
         {showPreview && (
-          <div>
-            <h4>
+          <div className="mt-3">
+            <h6>
               <FormattedMessage id="app.markdownTextArea.preview" defaultMessage="Preview:" />
-            </h4>
+            </h6>
             <div className={styles.preview}>
               {value.length === 0 && (
                 <p>
