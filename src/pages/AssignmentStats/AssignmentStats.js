@@ -15,7 +15,7 @@ import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
-import { ChatIcon, DownloadIcon, DetailIcon, ResultsIcon, UserIcon } from '../../components/icons';
+import Icon, { ChatIcon, DownloadIcon, DetailIcon, LoadingIcon, ResultsIcon, UserIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import UsersName from '../../components/Users/UsersName';
 import Points from '../../components/Assignments/SolutionsTable/Points';
@@ -32,12 +32,14 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { createUserNameComparator } from '../../components/helpers/users';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
+import Callout from '../../components/widgets/Callout';
 
 import { fetchByIds } from '../../redux/modules/users';
 import { fetchAssignmentIfNeeded, downloadBestSolutionsArchive } from '../../redux/modules/assignments';
 import { fetchGroupIfNeeded } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
+import { setSolutionReviewState } from '../../redux/modules/solutionReviews';
 import { usersSelector } from '../../redux/selectors/users';
 import { groupSelector } from '../../redux/selectors/groups';
 import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
@@ -235,6 +237,13 @@ const prepareTableData = defaultMemoize(
   }
 );
 
+const getPendingReviewSolutions = defaultMemoize(assignmentSolutions =>
+  assignmentSolutions
+    .toArray()
+    .map(getJsData)
+    .filter(solution => solution && solution.review && solution.review.startedAt && !solution.review.closedAt)
+);
+
 const localStorageStateKey = 'AssignmentStats.state';
 
 class AssignmentStats extends Component {
@@ -252,7 +261,13 @@ class AssignmentStats extends Component {
       dispatch(fetchAssignmentSolutions(assignmentId)),
     ]);
 
-  state = { groupByUsersCheckbox: true, onlyBestSolutionsCheckbox: false, assignmentDialogOpen: false };
+  state = {
+    groupByUsersCheckbox: true,
+    onlyBestSolutionsCheckbox: false,
+    assignmentDialogOpen: false,
+    closingReviews: false,
+    closingReviewsFailed: false,
+  };
 
   checkboxClickHandler = ev => {
     this.setState({ [ev.target.name]: !this.state[ev.target.name] }, () => {
@@ -290,6 +305,14 @@ class AssignmentStats extends Component {
     return `${safeName || assignmentId}.zip`;
   };
 
+  closeReviews = solutions => {
+    this.setState({ closingReviews: true, closingReviewsFailed: false });
+    return Promise.all(solutions.map(({ id }) => this.props.closeReview(id))).then(
+      () => this.setState({ closingReviews: false }),
+      () => this.setState({ closingReviews: false, closingReviewsFailed: true })
+    );
+  };
+
   // Re-format the data, so they can be rendered by the SortableTable ...
   render() {
     const {
@@ -309,6 +332,8 @@ class AssignmentStats extends Component {
       links,
     } = this.props;
 
+    const pendingReviews = getPendingReviewSolutions(assignmentSolutions);
+
     return (
       <Page
         resource={assignment}
@@ -324,6 +349,32 @@ class AssignmentStats extends Component {
               canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
               canViewExercise={true}
             />
+
+            {pendingReviews && pendingReviews.length > 0 && (
+              <Callout variant="warning">
+                <Row className="align-items-center">
+                  <Col className="pr-3 py-2">
+                    <FormattedMessage
+                      id="app.assignmentStats.pendingReviews"
+                      defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected assignment. Remember that the review comments are visible to the author after a review is closed."
+                      values={{ count: pendingReviews.length }}
+                    />
+                  </Col>
+                  <Col xl="auto">
+                    <Button
+                      variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
+                      onClick={() => this.closeReviews(pendingReviews)}
+                      disabled={this.state.closingReviews}>
+                      {this.state.closingReviews ? <LoadingIcon gapRight /> : <Icon icon="boxes-packing" gapRight />}
+                      <FormattedMessage
+                        id="app.reviewSolutionButtons.closePendingReviews"
+                        defaultMessage="Close pending reviews"
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              </Callout>
+            )}
 
             <Row>
               <Col md={12} lg={7}>
@@ -506,6 +557,7 @@ AssignmentStats.propTypes = {
   fetchManyStatus: PropTypes.string,
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func.isRequired,
+  closeReview: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
@@ -552,6 +604,7 @@ export default withLinks(
         ev.preventDefault();
         dispatch(downloadBestSolutionsArchive(assignmentId, name));
       },
+      closeReview: id => dispatch(setSolutionReviewState(id, true)),
     })
   )(injectIntl(AssignmentStats))
 );
