@@ -267,15 +267,28 @@ const AssignmentDetails = ({
               <td>
                 {isStudent ? (
                   <>
-                    {lastAttemptIndex || canSubmit.submittedCount}
+                    {lastAttemptIndex || canSubmit.total}
+                    {canSubmit.total > canSubmit.evaluated && (
+                      <span className="text-muted">
+                        {' '}
+                        {canSubmit.evaluated - canSubmit.total}
+                        <Explanation id="submissionsCountDecreased">
+                          <FormattedMessage
+                            id="app.assignment.submissionCounterDecreasedByNotEvaluated"
+                            defaultMessage="Failed and not evaluated submissions are not counted when restricting submission attempts."
+                            values={{ count: lastAttemptIndex - canSubmit.total }}
+                          />
+                        </Explanation>
+                      </span>
+                    )}
                     {submissionsCountLimit !== null && ` / ${submissionsCountLimit}`}
-                    {lastAttemptIndex && lastAttemptIndex > canSubmit.submittedCount && (
+                    {lastAttemptIndex && lastAttemptIndex > canSubmit.total && (
                       <small className="pl-2 text-muted">
                         (
                         <FormattedMessage
                           id="app.assignment.submissionCountLimitIncreasedByDeletion"
                           defaultMessage="+{count} {count, plural, one {attempt} other {attempts}} added by deleted solutions"
-                          values={{ count: lastAttemptIndex - canSubmit.submittedCount }}
+                          values={{ count: lastAttemptIndex - canSubmit.total }}
                         />
                         )
                       </small>

@@ -83,8 +83,11 @@ class Assignment extends Component {
     }
   }
 
-  reloadSolvers = () =>
-    this.props.reloadSolvers(this.props.match.params.assignmentId, this.props.userId || this.props.loggedInUserId);
+  reloadAfterSubmit = () =>
+    Promise.all([
+      this.props.reloadSolvers(this.props.match.params.assignmentId, this.props.userId || this.props.loggedInUserId),
+      this.props.reloadCanSubmit(),
+    ]);
 
   render() {
     const {
@@ -190,7 +193,7 @@ class Assignment extends Component {
                           id={assignment.id}
                           onSubmit={submitSolution}
                           presubmitValidation={presubmitSolution}
-                          afterEvaluationStarts={this.reloadSolvers}
+                          afterEvaluationStarts={this.reloadAfterSubmit}
                           onReset={init}
                           isOpen={submitting}
                           solutionFilesLimit={assignment.solutionFilesLimit}
@@ -277,6 +280,7 @@ Assignment.propTypes = {
   fetchManyStatus: PropTypes.string,
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func.isRequired,
+  reloadCanSubmit: PropTypes.func.isRequired,
   reloadSolvers: PropTypes.func.isRequired,
 };
 
@@ -318,6 +322,7 @@ export default connect(
     init: userId => () => dispatch(init(userId, assignmentId)),
     loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
     exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+    reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
     reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
   })
 )(Assignment);
