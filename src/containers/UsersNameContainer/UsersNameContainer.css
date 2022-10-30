@@ -2,7 +2,7 @@
   white-space: nowrap;
 }
 
-.simpleName:after {
+.simpleName::after {
   content: ', ';
 }
 
@@ -14,6 +14,6 @@
   margin-right: 3px;
 }
 
-.simpleName:last-of-type:after {
+.simpleName:last-of-type::after {
   content: '';
 }

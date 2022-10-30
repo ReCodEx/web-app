@@ -10,7 +10,10 @@ import factory, {
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
-import { actionTypes as reviewsActionTypes } from './solutionReviews';
+import {
+  actionTypes as reviewsActionTypes,
+  additionalActionTypes as additionalReviewsActionTypes,
+} from './solutionReviews';
 import { getAssignmentSolversLastUpdate } from '../selectors/solutions';
 import { objectFilter } from '../../helpers/common';
 
@@ -303,6 +306,17 @@ const reducer = handleActions(
       state.getIn(['resources', id, 'state']) === resourceStatus.FULFILLED
         ? state.setIn(['resources', id, 'data', 'review'], null)
         : state,
+
+    [additionalReviewsActionTypes.FETCH_OPEN_REVIEWS_FULFILLED]: (state, { payload: { solutions } }) =>
+      state.update('resources', resources =>
+        resources.withMutations(mutable =>
+          solutions.reduce(
+            (mutable, solution) =>
+              mutable.set(solution.id, createRecord({ state: resourceStatus.FULFILLED, data: solution })),
+            mutable
+          )
+        )
+      ),
   }),
   initialState
 );

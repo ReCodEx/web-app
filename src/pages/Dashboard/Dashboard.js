@@ -17,14 +17,25 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import GroupsNameContainer from '../../containers/GroupsNameContainer';
 import AssignmentsTableContainer from '../../containers/AssignmentsTableContainer';
 import ShadowAssignmentsTableContainer from '../../containers/ShadowAssignmentsTableContainer';
+import PendingReviewsList from '../../components/Solutions/PendingReviewsList';
 
-import { fetchUserIfNeeded, fetchUser } from '../../redux/modules/users';
+import { fetchUserIfNeeded, fetchUser, fetchByIds } from '../../redux/modules/users';
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import {
+  fetchPendingReviewsOfUser,
+  setSolutionReviewState,
+  removePendingReview,
+} from '../../redux/modules/solutionReviews';
 
 import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
+import {
+  getOpenReviewsSolutions,
+  getOpenReviewsSolutionsState,
+  isSolutionReviewUpdatePendingSelector,
+} from '../../redux/selectors/solutionReviews';
 
 import {
   DashboardIcon,
@@ -34,10 +45,17 @@ import {
   SupervisorIcon,
   StudentsIcon,
 } from '../../components/icons';
+import { isSupervisorRole } from '../../components/helpers/usersRoles';
 import withLinks from '../../helpers/withLinks';
 import { safeGet } from '../../helpers/common';
 
 const INITIAL_LOADING_THRESHOLD = 3; // if there are more groups, the boxes will be collapsed and data loaded on demand
+
+const getUniqueAuthors = solutions => {
+  const res = {};
+  solutions && solutions.forEach(solution => solution && solution.authorId && (res[solution.authorId] = true));
+  return Object.keys(res);
+};
 
 class Dashboard extends Component {
   componentDidMount = () => this.props.loadAsync(this.props.userId);
@@ -57,10 +75,20 @@ class Dashboard extends Component {
    */
   static loadAsync = (params, dispatch, { userId }) =>
     Promise.all([
-      dispatch(fetchUserIfNeeded(userId)),
+      dispatch(fetchUserIfNeeded(userId)).then(({ value: user }) =>
+        user && user.privateData && isSupervisorRole(user.privateData.role)
+          ? dispatch(fetchPendingReviewsOfUser(userId)).then(({ value }) =>
+              dispatch(fetchByIds(getUniqueAuthors(value.solutions)))
+            )
+          : Promise.resolve()
+      ),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(fetchAllGroups()),
     ]);
+
+  reloadOpenReviewSolutions = () => this.props.reloadOpenReviewSolutions(this.props.userId);
+
+  closeReview = params => this.props.closeReview({ userId: this.props.userId, ...params });
 
   render() {
     const {
@@ -70,6 +98,9 @@ class Dashboard extends Component {
       memberGroups,
       fetchManyGroupsStatus,
       refreshUser,
+      openReviewSolutions,
+      openReviewSolutionsState,
+      openReviewUpdating,
       links: { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
     } = this.props;
 
@@ -183,6 +214,14 @@ class Dashboard extends Component {
                         </Row>
                       ) : (
                         <div>
+                          <PendingReviewsList
+                            state={openReviewSolutionsState}
+                            solutions={openReviewSolutions}
+                            updatingSelector={openReviewUpdating}
+                            closeReview={this.closeReview}
+                            refresh={this.reloadOpenReviewSolutions}
+                          />
+
                           <h3 className="mt-4 mb-3">
                             <SupervisorIcon gapLeft gapRight className="text-muted" />
                             <FormattedMessage
@@ -251,6 +290,11 @@ Dashboard.propTypes = {
   userId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
   fetchManyGroupsStatus: PropTypes.string,
+  openReviewSolutions: PropTypes.object,
+  openReviewSolutionsState: PropTypes.string,
+  reloadOpenReviewSolutions: PropTypes.func.isRequired,
+  openReviewUpdating: PropTypes.func.isRequired,
+  closeReview: PropTypes.func.isRequired,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
@@ -267,11 +311,22 @@ export default withLinks(
         user: getUser(userId)(state),
         memberGroups: groupsLoggedUserIsMemberSelector(state),
         fetchManyGroupsStatus: fetchManyGroupsStatus(state),
+        openReviewSolutions: getOpenReviewsSolutions(state, userId),
+        openReviewSolutionsState: getOpenReviewsSolutionsState(state, userId),
+        openReviewUpdating: isSolutionReviewUpdatePendingSelector(state),
       };
     },
     (dispatch, { match: { params } }) => ({
       loadAsync: userId => Dashboard.loadAsync(params, dispatch, { userId }),
       refreshUser: userId => dispatch(fetchUser(userId)),
+      reloadOpenReviewSolutions: userId =>
+        dispatch(fetchPendingReviewsOfUser(userId)).then(({ value }) =>
+          dispatch(fetchByIds(getUniqueAuthors(value.solutions)))
+        ),
+      closeReview: ({ userId, groupId, assignmentId, solutionId }) =>
+        dispatch(setSolutionReviewState(solutionId, true)).then(() =>
+          dispatch(removePendingReview(userId, groupId, assignmentId, solutionId))
+        ),
     })
   )(injectIntl(Dashboard))
 );

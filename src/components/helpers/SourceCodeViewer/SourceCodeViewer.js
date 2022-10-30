@@ -48,12 +48,12 @@ class SourceCodeViewer extends React.Component {
   state = { activeLine: null, newComment: null, editComment: null, editInitialValues: null };
 
   lineClickHandler = ev => {
-    ev.stopPropagation();
-    window.getSelection()?.removeAllRanges();
-
     // opens new comment form if no other form is currently open
-    const lineNumber = parseInt(ev.target.dataset.line);
+    const target = ev.target.closest('*[data-line]');
+    const lineNumber = target && parseInt(target.dataset.line);
     if (lineNumber && !isNaN(lineNumber) && !this.state.activeLine) {
+      ev.stopPropagation();
+      window.getSelection()?.removeAllRanges();
       this.setState({ activeLine: lineNumber, newComment: lineNumber });
     }
   };
@@ -172,6 +172,8 @@ class SourceCodeViewer extends React.Component {
             key: `cseg${lineNumber}`,
           })}
 
+          <span className="scvAddButton" data-line={lineNumber} onClick={this.lineClickHandler}></span>
+
           {(comments[lineNumber] || (this.state.newComment && this.state.newComment === lineNumber)) && (
             <div className="sourceCodeViewerComments">
               {(comments[lineNumber] || []).map(comment =>
@@ -214,12 +216,12 @@ class SourceCodeViewer extends React.Component {
   });
 
   render() {
-    const { name, content = '' } = this.props;
+    const { name, content = '', addComment } = this.props;
     return canUseDOM ? (
       <SyntaxHighlighter
         language={getPrismModeFromExtension(getFileExtensionLC(name))}
         style={vs}
-        className="sourceCodeViewer"
+        className={addComment && !this.state.activeLine ? 'sourceCodeViewer addComment' : 'sourceCodeViewer'}
         showLineNumbers={true}
         showInlineLineNumbers={true}
         wrapLines={true}
