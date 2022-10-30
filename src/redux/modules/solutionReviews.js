@@ -1,4 +1,4 @@
-import { handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -25,6 +25,8 @@ export const additionalActionTypes = {
   ...createActionsWithPostfixes('ADD_COMMENT', 'recodex/solutionReviews'),
   ...createActionsWithPostfixes('UPDATE_COMMENT', 'recodex/solutionReviews'),
   ...createActionsWithPostfixes('REMOVE_COMMENT', 'recodex/solutionReviews'),
+  ...createActionsWithPostfixes('FETCH_OPEN_REVIEWS', 'recodex/solutionReviews'),
+  REMOVE_PENDING_REVIEW: 'recodex/solutionReviews/REMOVE_PENDING_REVIEW',
 };
 
 export const fetchSolutionReview = actions.fetchResource;
@@ -58,9 +60,43 @@ export const removeComment = (solutionId, id) =>
     meta: { solutionId, id },
   });
 
+export const fetchPendingReviewsOfUser = userId =>
+  createApiAction({
+    type: additionalActionTypes.FETCH_OPEN_REVIEWS,
+    endpoint: `/users/${userId}/pending-reviews`,
+    method: 'GET',
+    meta: { userId },
+  });
+
+export const removePendingReview = createAction(
+  additionalActionTypes.REMOVE_PENDING_REVIEW,
+  (userId, groupId, assignmentId, solutionId) => ({ userId, groupId, assignmentId, solutionId })
+);
+
 /**
  * Reducer
  */
+
+const createOpenReviewsIndex = ({ solutions, assignments }) => {
+  const agIndex = {};
+  const res = {};
+  assignments.forEach(assignment => {
+    if (assignment.groupId) {
+      res[assignment.groupId] = res[assignment.groupId] || {};
+      res[assignment.groupId][assignment.id] = res[assignment.groupId][assignment.id] || [];
+      agIndex[assignment.id] = assignment.groupId;
+    }
+  });
+
+  solutions.forEach(solution => {
+    const groupId = agIndex[solution.assignmentId];
+    if (groupId) {
+      res[groupId][solution.assignmentId].push(solution.id);
+    }
+  });
+
+  return res;
+};
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
@@ -97,6 +133,23 @@ const reducer = handleActions(
       ),
     [additionalActionTypes.REMOVE_COMMENT_FULFILLED]: (state, { meta: { solutionId, id } }) =>
       state.updateIn(['resources', solutionId, 'data'], comments => comments.filter(c => c.get('id') !== id)),
+
+    [additionalActionTypes.FETCH_OPEN_REVIEWS_PENDING]: (state, { meta: { userId } }) =>
+      state.setIn(['open-reviews', userId], resourceStatus.PENDING),
+
+    [additionalActionTypes.FETCH_OPEN_REVIEWS_REJECTED]: (state, { meta: { userId } }) =>
+      state.setIn(['open-reviews', userId], resourceStatus.FAILED),
+
+    [additionalActionTypes.FETCH_OPEN_REVIEWS_FULFILLED]: (state, { meta: { userId }, payload }) =>
+      state.setIn(['open-reviews', userId], fromJS(createOpenReviewsIndex(payload))),
+
+    [additionalActionTypes.REMOVE_PENDING_REVIEW]: (
+      state,
+      { payload: { userId, groupId, assignmentId, solutionId } }
+    ) =>
+      state.updateIn(['open-reviews', userId, groupId, assignmentId], solutions =>
+        solutions.filter(id => id !== solutionId)
+      ),
   }),
   initialState
 );

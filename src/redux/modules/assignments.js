@@ -8,6 +8,7 @@ import { arrayToObject } from '../../helpers/common';
 
 import { additionalActionTypes as solutionsActionTypes } from './solutions';
 import { actionTypes as submissionActionTypes } from './submission';
+import { additionalActionTypes as additionalReviewsActionTypes } from './solutionReviews';
 
 const resourceName = 'assignments';
 const { actions, actionTypes, reduceActions } = factory({
@@ -172,6 +173,17 @@ const reducer = handleActions(
           failed: failed.map(job => job.id),
           fetchPending: false,
         })
+      ),
+
+    [additionalReviewsActionTypes.FETCH_OPEN_REVIEWS_FULFILLED]: (state, { payload: { assignments } }) =>
+      state.update('resources', resources =>
+        resources.withMutations(mutable =>
+          assignments.reduce(
+            (mutable, assignment) =>
+              mutable.set(assignment.id, createRecord({ state: resourceStatus.FULFILLED, data: assignment })),
+            mutable
+          )
+        )
       ),
   }),
   initialState

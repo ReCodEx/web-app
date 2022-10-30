@@ -102,3 +102,37 @@
 .sourceCodeViewerComments > div > .recodex-markdown-container p:last-child {
   margin-bottom: 0.2rem;
 }
+
+.sourceCodeViewer .scvAddButton {
+  width: 0;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+  position:relative;
+}
+
+.sourceCodeViewer.addComment *:hover + .scvAddButton::before, .sourceCodeViewer.addComment .scvAddButton:hover::before {
+  content: '+';
+  font-size: 21px;
+  line-height: 18px;
+  text-align: center;
+  padding: 0;
+  width: 21px;
+  height: 21px;
+  color: #ddf;
+  background-color: #77c;
+  position: absolute;
+  top: -23px;
+  left: 3.2em;
+  border-radius: 5px;
+  text-shadow: none;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.sourceCodeViewer.addComment .scvAddButton:hover::before {
+  opacity: 1;
+}

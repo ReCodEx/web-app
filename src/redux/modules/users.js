@@ -56,7 +56,8 @@ export const updateUIData = (id, uiData, overwrite = false) =>
   actions.updateResource(id, { uiData, overwrite }, `/users/${id}/ui-data`);
 export const deleteUser = actions.removeResource;
 
-export const fetchByIds = ids => (dispatch, getState) =>
+// we need the async dispatch here so we can return a resolved promise for an empty array
+export const fetchByIds = ids => (dispatch, _) =>
   ids && ids.length > 0
     ? dispatch(
         createApiAction({
