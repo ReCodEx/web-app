@@ -23,8 +23,8 @@ const Comment = ({
   isPrivate = false,
   text,
   repost,
-  isToggling = false,
-  togglePrivacy,
+  isUpdating = false,
+  setPrivacy,
   deleteComment,
   additionalPublicSwitchNote = null,
   links: { USER_URI_FACTORY },
@@ -66,7 +66,7 @@ const Comment = ({
             onClick={() => deleteComment(id)}
           />
         )}
-        {isFromCurrentUser && togglePrivacy && (
+        {isFromCurrentUser && setPrivacy && (
           <OverlayTrigger
             placement="left"
             overlay={
@@ -88,15 +88,15 @@ const Comment = ({
               </Tooltip>
             }>
             <Icon
-              icon={isToggling ? 'circle-notch' : isPrivate ? 'eye-slash' : 'eye'}
-              onClick={() => togglePrivacy(id)}
+              icon={isUpdating ? 'circle-notch' : isPrivate ? 'eye-slash' : 'eye'}
+              onClick={() => setPrivacy(id, !isPrivate)}
               className={classnames({
                 'float-right': true,
                 [styles.iconButton]: true,
                 [styles.iconButtonLock]: !isPrivate,
                 [styles.iconButtonUnlock]: isPrivate,
               })}
-              spin={isToggling}
+              spin={isUpdating}
             />
           </OverlayTrigger>
         )}
@@ -126,8 +126,8 @@ Comment.propTypes = {
   text: PropTypes.string.isRequired,
   repost: PropTypes.func,
   isPrivate: PropTypes.bool,
-  isToggling: PropTypes.bool,
-  togglePrivacy: PropTypes.func,
+  isUpdating: PropTypes.bool,
+  setPrivacy: PropTypes.func,
   deleteComment: PropTypes.func,
   additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   links: PropTypes.object,

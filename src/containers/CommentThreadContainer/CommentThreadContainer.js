@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import {
   postComment,
   repostComment,
-  togglePrivacy,
+  setPrivacy,
   fetchThreadIfNeeded,
   updateThread,
   deleteComment,
@@ -43,7 +43,7 @@ class CommentThreadContainer extends Component {
       user,
       addComment,
       repostComment,
-      togglePrivacy,
+      setPrivacy,
       refresh,
       deleteComment,
       inModal = false,
@@ -58,7 +58,7 @@ class CommentThreadContainer extends Component {
             comments={thread.comments.sort((a, b) => a.postedAt - b.postedAt)}
             currentUserId={user.id}
             addComment={(text, isPrivate) => addComment(user, text, isPrivate)}
-            togglePrivacy={togglePrivacy}
+            setPrivacy={setPrivacy}
             repostComment={repostComment}
             refresh={refresh}
             deleteComment={deleteComment}
@@ -79,7 +79,7 @@ CommentThreadContainer.propTypes = {
   user: PropTypes.object,
   addComment: PropTypes.func.isRequired,
   repostComment: PropTypes.func,
-  togglePrivacy: PropTypes.func,
+  setPrivacy: PropTypes.func,
   refresh: PropTypes.func,
   deleteComment: PropTypes.func,
 };
@@ -92,7 +92,7 @@ export default connect(
   (dispatch, { threadId }) => ({
     addComment: (user, text, isPrivate) => dispatch(postComment(user, threadId, text, isPrivate)),
     repostComment: tmpId => dispatch(repostComment(threadId, tmpId)),
-    togglePrivacy: id => dispatch(togglePrivacy(threadId, id)),
+    setPrivacy: (id, isPrivate) => dispatch(setPrivacy(threadId, id, isPrivate)),
     loadThreadIfNeeded: () => dispatch(fetchThreadIfNeeded(threadId)),
     refresh: () => dispatch(updateThread(threadId)),
     deleteComment: id => dispatch(deleteComment(threadId, id)),

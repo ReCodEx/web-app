@@ -2,11 +2,15 @@ import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, { initialState, createActionsWithPostfixes } from '../helpers/resourceManager';
 import { commentsSelector } from '../selectors/comments';
 
 const resourceName = 'comments';
-const { actions, actionTypes: resourceActionTypes, reduceActions } = factory({
+const {
+  actions,
+  actionTypes: resourceActionTypes,
+  reduceActions,
+} = factory({
   resourceName,
   needsRefetching: () => true, // always look for newer comments
 });
@@ -18,18 +22,10 @@ const { actions, actionTypes: resourceActionTypes, reduceActions } = factory({
 export const actionTypes = {
   UPDATE: 'redux/comments/UPDATE',
   UPDATE_FULFILLED: 'redux/comments/UPDATE_FULFILLED',
-  POST_COMMENT: 'redux/comments/POST_COMMENT',
-  POST_COMMENT_PENDING: 'redux/comments/POST_COMMENT_PENDING',
-  POST_COMMENT_REJECTED: 'redux/comments/POST_COMMENT_REJECTED',
-  POST_COMMENT_FULFILLED: 'redux/comments/POST_COMMENT_FULFILLED',
-  TOGGLE_PRIVACY: 'redux/comment/TOGGLE_PRIVACY',
-  TOGGLE_PRIVACY_PENDING: 'redux/comment/TOGGLE_PRIVACY_PENDING',
-  TOGGLE_PRIVACY_FULFILLED: 'redux/comment/TOGGLE_PRIVACY_FULFILLED',
-  TOGGLE_PRIVACY_REJECTED: 'redux/comment/TOGGLE_PRIVACY_REJECTED',
-  DELETE_COMMENT: 'redux/comment/DELETE_COMMENT',
-  DELETE_COMMENT_PENDING: 'redux/comment/DELETE_COMMENT_PENDING',
-  DELETE_COMMENT_FULFILLED: 'redux/comment/DELETE_COMMENT_FULFILLED',
-  DELETE_COMMENT_REJECTED: 'redux/comment/DELETE_COMMENT_REJECTED',
+  ...createActionsWithPostfixes('POST_COMMENT'),
+  ...createActionsWithPostfixes('TOGGLE_PRIVACY'),
+  ...createActionsWithPostfixes('SET_PRIVACY'),
+  ...createActionsWithPostfixes('DELETE_COMMENT'),
 };
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;
@@ -46,7 +42,7 @@ export const postComment = (user, threadId, text, isPrivate) =>
     type: actionTypes.POST_COMMENT,
     endpoint: `/comments/${threadId}`,
     method: 'POST',
-    body: { text, isPrivate: isPrivate ? 'yes' : 'no' },
+    body: { text, isPrivate },
     meta: { threadId, user, tmpId: Math.random().toString() },
   });
 
@@ -61,12 +57,22 @@ export const repostComment = (threadId, tmpId) => (dispatch, getState) => {
   }
 };
 
+// DEPRECATED
 export const togglePrivacy = (threadId, commentId) =>
   createApiAction({
     type: actionTypes.TOGGLE_PRIVACY,
     endpoint: `/comments/${threadId}/comment/${commentId}/toggle`,
     method: 'POST',
     meta: { threadId, commentId },
+  });
+
+export const setPrivacy = (threadId, commentId, isPrivate) =>
+  createApiAction({
+    type: actionTypes.SET_PRIVACY,
+    endpoint: `/comments/${threadId}/comment/${commentId}/private`,
+    method: 'POST',
+    meta: { threadId, commentId },
+    body: { isPrivate },
   });
 
 export const deleteComment = (threadId, commentId) =>
@@ -94,7 +100,7 @@ const reducer = handleActions(
         status: 'pending',
         text,
         user: correctUserData,
-        isPrivate: isPrivate === 'yes',
+        isPrivate,
       });
       return state.updateIn(['resources', threadId, 'data', 'comments'], comments => comments.push(resource));
     },
@@ -126,6 +132,24 @@ const reducer = handleActions(
     [actionTypes.TOGGLE_PRIVACY_REJECTED]: (state, { payload, meta: { threadId, commentId } }) => {
       return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
         comments.map(comment => (comment.get('id') === commentId ? comment.set('isToggling', false) : comment))
+      );
+    },
+
+    [actionTypes.SET_PRIVACY_PENDING]: (state, { meta: { threadId, commentId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === commentId ? comment.set('isUpdating', true) : comment))
+      );
+    },
+
+    [actionTypes.SET_PRIVACY_FULFILLED]: (state, { payload, meta: { threadId, commentId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === commentId ? fromJS(payload) : comment))
+      );
+    },
+
+    [actionTypes.SET_PRIVACY_REJECTED]: (state, { meta: { threadId, commentId } }) => {
+      return state.updateIn(['resources', threadId, 'data', 'comments'], comments =>
+        comments.map(comment => (comment.get('id') === commentId ? comment.set('isUpdating', false) : comment))
       );
     },
 
