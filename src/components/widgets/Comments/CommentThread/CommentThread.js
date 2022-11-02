@@ -14,7 +14,7 @@ const CommentThread = ({
   currentUserId,
   addComment,
   repostComment,
-  togglePrivacy,
+  setPrivacy,
   refresh,
   deleteComment,
   inModal = false,
@@ -33,7 +33,7 @@ const CommentThread = ({
             {...comment}
             key={comment.id}
             repost={repostComment}
-            togglePrivacy={togglePrivacy}
+            setPrivacy={setPrivacy}
             deleteComment={deleteComment}
             additionalPublicSwitchNote={additionalPublicSwitchNote}
           />
@@ -73,7 +73,7 @@ CommentThread.propTypes = {
   currentUserId: PropTypes.string.isRequired,
   addComment: PropTypes.func,
   repostComment: PropTypes.func,
-  togglePrivacy: PropTypes.func,
+  setPrivacy: PropTypes.func,
   refresh: PropTypes.func,
   deleteComment: PropTypes.func,
   inModal: PropTypes.bool,
