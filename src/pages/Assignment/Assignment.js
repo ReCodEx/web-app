@@ -35,12 +35,7 @@ import {
   isAssignmentSolversLoading,
   getAssignmentSolverSelector,
 } from '../../redux/selectors/solutions';
-import {
-  loggedUserIsStudentOfSelector,
-  loggedUserIsObserverOfSelector,
-  loggedUserIsSupervisorOfSelector,
-  loggedUserIsAdminOfSelector,
-} from '../../redux/selectors/usersGroups';
+import { loggedUserIsStudentOfSelector } from '../../redux/selectors/usersGroups';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
@@ -97,9 +92,6 @@ class Assignment extends Component {
       loggedInUserId,
       init,
       isStudentOf,
-      isObserverOf,
-      isSupervisorOf,
-      isAdminOf,
       canSubmit,
       runtimeEnvironments,
       exerciseSync,
@@ -124,7 +116,10 @@ class Assignment extends Component {
               canEdit={hasPermissions(assignment, 'update')}
               canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
               canViewExercise={
-                isObserverOf(assignment.groupId) || isSupervisorOf(assignment.groupId) || isAdminOf(assignment.groupId)
+                hasPermissions(
+                  assignment,
+                  'viewAssignmentSolutions'
+                ) /* this is not the exact hint, but we do not have anything better now */
               }
             />
 
@@ -266,9 +261,6 @@ Assignment.propTypes = {
     }).isRequired,
   }).isRequired,
   isStudentOf: PropTypes.func.isRequired,
-  isObserverOf: PropTypes.func.isRequired,
-  isSupervisorOf: PropTypes.func.isRequired,
-  isAdminOf: PropTypes.func.isRequired,
   assignment: PropTypes.object,
   canSubmit: ImmutablePropTypes.map,
   submitting: PropTypes.bool.isRequired,
@@ -301,9 +293,6 @@ export default connect(
       userId,
       loggedInUserId,
       isStudentOf: loggedUserIsStudentOfSelector(state),
-      isObserverOf: loggedUserIsObserverOfSelector(state),
-      isSupervisorOf: loggedUserIsSupervisorOfSelector(state),
-      isAdminOf: loggedUserIsAdminOfSelector(state),
       canSubmit: canSubmitSolution(assignmentId)(state),
       solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
       fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
