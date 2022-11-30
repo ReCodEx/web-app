@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormCheck, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import Icon, { WarningIcon } from '../../icons';
+import { SquareIcon, WarningIcon } from '../../icons';
 import './NiceCheckbox.css';
 
 const NiceCheckbox = ({
@@ -52,12 +52,7 @@ const NiceCheckbox = ({
         })}>
         <input type="checkbox" name={name} value={value} checked={checked} onChange={onChange} />
         <span className="nice-checkbox-checkmark">
-          {checked ? (
-            <Icon icon={['far', 'check-square']} className={iconClass} />
-          ) : (
-            <Icon icon={['far', 'square']} className={iconClass} />
-          )}
-
+          <SquareIcon checked={checked} className={iconClass} />
           {!children && warningIcon}
         </span>
         {Boolean(children) && (

@@ -101,7 +101,7 @@ export const prepareInitialValues = defaultMemoize(
   })
 );
 
-const transformSubmittedData = ({
+export const transformSubmittedData = ({
   groups = null,
   localizedTexts = null,
   firstDeadline,

@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import AssignmentStatusIcon from '../AssignmentStatusIcon/AssignmentStatusIcon';
+import AssignmentSyncIcon from '../AssignmentSyncIcon';
+import AssignmentStatusIcon from '../AssignmentStatusIcon';
 import AssignmentMaxPoints from '../AssignmentMaxPoints';
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
@@ -12,6 +13,7 @@ import { ChatIcon, EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisible
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
 import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
+import NiceCheckbox from '../../../forms/NiceCheckbox';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
 import { getGroupCanonicalLocalizedName } from '../../../../helpers/localizedData';
@@ -32,6 +34,7 @@ const AssignmentTableRow = ({
     visibleFrom,
     accepted,
     permissionHints,
+    exerciseSynchronizationInfo,
   },
   runtimeEnvironments = null,
   status,
@@ -43,6 +46,8 @@ const AssignmentTableRow = ({
   showSecondDeadline = true,
   groupsAccessor = null,
   discussionOpen,
+  setSelected = null,
+  selected = false,
   intl: { locale },
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
@@ -53,6 +58,12 @@ const AssignmentTableRow = ({
   },
 }) => (
   <tr>
+    {setSelected && (
+      <td className="text-nowrap shrink-col">
+        <NiceCheckbox name={id} checked={selected} onChange={setSelected} />
+      </td>
+    )}
+
     <td className="text-nowrap shrink-col">
       {permissionHints.update || permissionHints.viewAssignmentSolutions ? (
         <MaybeVisibleAssignmentIcon id={id} isPublic={isPublic} visibleFrom={visibleFrom} />
@@ -60,6 +71,8 @@ const AssignmentTableRow = ({
         <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
       )}
       <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />
+
+      {exerciseSynchronizationInfo && <AssignmentSyncIcon id={id} syncInfo={exerciseSynchronizationInfo} gapLeft />}
     </td>
 
     {showNames && (
@@ -192,6 +205,7 @@ AssignmentTableRow.propTypes = {
     visibleFrom: PropTypes.number,
     accepted: PropTypes.bool,
     permissionHints: PropTypes.object,
+    exerciseSynchronizationInfo: PropTypes.object,
   }).isRequired,
   runtimeEnvironments: PropTypes.array,
   status: PropTypes.string,
@@ -201,6 +215,8 @@ AssignmentTableRow.propTypes = {
   showNames: PropTypes.bool,
   showGroups: PropTypes.bool,
   showSecondDeadline: PropTypes.bool,
+  setSelected: PropTypes.func,
+  selected: PropTypes.bool,
   groupsAccessor: PropTypes.func,
   discussionOpen: PropTypes.func,
   links: PropTypes.object,

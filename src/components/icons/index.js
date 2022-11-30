@@ -65,6 +65,7 @@ export const HomeIcon = props => <Icon {...props} icon="home" />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const InputIcon = props => <Icon {...props} icon="sign-in-alt" />;
 export const InstanceIcon = props => <Icon {...props} icon="university" />;
+export const InvertIcon = props => <Icon {...props} icon="yin-yang" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
 export const LinkIcon = props => <Icon {...props} icon="share-square" />;
 export const LoadingIcon = props => <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
@@ -108,6 +109,9 @@ export const SortedIcon = ({ active = true, descending = false, ...props }) => (
     className={active ? 'text-success' : 'text-primary'}
     {...props}
   />
+);
+export const SquareIcon = ({ checked = false, ...props }) => (
+  <Icon {...props} icon={checked ? ['far', 'check-square'] : ['far', 'square']} />
 );
 export const StopIcon = props => <Icon {...props} icon={['far', 'circle-stop']} />;
 export const StudentsIcon = props => <Icon {...props} icon="graduation-cap" />;
@@ -180,6 +184,10 @@ ReviewIcon.propTypes = {
 SortedIcon.propTypes = {
   active: PropTypes.bool,
   descending: PropTypes.bool,
+};
+
+SquareIcon.propTypes = {
+  checked: PropTypes.bool,
 };
 
 SuccessOrFailureIcon.propTypes = {

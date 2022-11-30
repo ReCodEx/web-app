@@ -16,7 +16,7 @@ import SubmitButton from '../../forms/SubmitButton';
 import DateTime from '../../widgets/DateTime';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
-import Icon, { BanIcon, EditIcon, DeleteIcon, SaveIcon } from '../../icons';
+import Icon, { BanIcon, EditIcon, DeleteIcon, SaveIcon, SquareIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users';
 import { arrayToObject, safeGet } from '../../../helpers/common';
 import withLinks from '../../../helpers/withLinks';
@@ -145,7 +145,7 @@ class ShadowAssignmentPointsTable extends Component {
             ) : (
               <div className="text-center">
                 <Button variant="primary" onClick={this.toggleMultiAwardMode}>
-                  <Icon gapRight icon={['far', 'check-square']} />
+                  <SquareIcon gapRight checked />
                   <FormattedMessage
                     id="app.shadowAssignmentPointsTable.multiAwardButton"
                     defaultMessage="Award Points Collectively"

@@ -9,7 +9,7 @@ import SubmitButton from '../../forms/SubmitButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import Icon, { CloseIcon } from '../../icons';
+import { CloseIcon, SquareIcon } from '../../icons';
 
 class ArchiveTermGroups extends Component {
   checkAllGroups = () => {
@@ -83,7 +83,7 @@ class ArchiveTermGroups extends Component {
               {groups.length > 0 && (
                 <>
                   <Button variant="primary" onClick={this.checkAllGroups}>
-                    <Icon icon={['far', 'check-square']} gapRight />
+                    <SquareIcon checked gapRight />
                     <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
                   </Button>
 

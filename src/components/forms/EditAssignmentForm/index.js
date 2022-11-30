@@ -1,3 +1,3 @@
-import EditAssignmentForm, { prepareInitialValues } from './EditAssignmentForm';
+import EditAssignmentForm, { prepareInitialValues, transformSubmittedData } from './EditAssignmentForm';
 export default EditAssignmentForm;
-export { prepareInitialValues };
+export { prepareInitialValues, transformSubmittedData };
