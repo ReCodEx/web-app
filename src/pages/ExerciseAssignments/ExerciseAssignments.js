@@ -21,7 +21,13 @@ import EditAssignmentForm, {
 
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { create as assignExercise, editAssignment, fetchExerciseAssignments } from '../../redux/modules/assignments';
+import {
+  create as assignExercise,
+  editAssignment,
+  deleteAssignment,
+  syncWithExercise,
+  fetchExerciseAssignments,
+} from '../../redux/modules/assignments';
 import { exerciseSelector } from '../../redux/selectors/exercises';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
@@ -116,6 +122,9 @@ class ExerciseAssignments extends Component {
       groupsAccessor,
       deadlines,
       visibility,
+      syncAssignment,
+      editAssignment,
+      deleteAssignment,
       intl: { formatMessage },
     } = this.props;
 
@@ -161,6 +170,9 @@ class ExerciseAssignments extends Component {
                       showNames={false}
                       groupsAccessor={groupsAccessor}
                       showGroups={true}
+                      syncAssignment={syncAssignment}
+                      editAssignment={editAssignment}
+                      deleteAssignment={deleteAssignment}
                     />
                   </Box>
                 </Col>
@@ -257,7 +269,9 @@ ExerciseAssignments.propTypes = {
   intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
+  syncAssignment: PropTypes.func.isRequired,
   editAssignment: PropTypes.func.isRequired,
+  deleteAssignment: PropTypes.func.isRequired,
 };
 
 const multiAssignFormSelector = formValueSelector('multiAssign');
@@ -293,6 +307,8 @@ export default connect(
   ) => ({
     loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
     assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+    syncAssignment: id => dispatch(syncWithExercise(id)),
     editAssignment: (id, body) => dispatch(editAssignment(id, body)),
+    deleteAssignment: id => dispatch(deleteAssignment(id)),
   })
 )(injectIntl(ExerciseAssignments));

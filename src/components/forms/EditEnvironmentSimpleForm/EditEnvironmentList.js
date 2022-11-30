@@ -6,7 +6,7 @@ import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { CheckboxField } from '../Fields';
-import Icon, { InfoIcon } from '../../icons';
+import Icon, { InfoIcon, InvertIcon, SquareIcon } from '../../icons';
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
 
 const EditEnvironmentList = ({
@@ -71,19 +71,19 @@ const EditEnvironmentList = ({
             <TheButtonGroup>
               {Boolean(selectAllRuntimesHandler) && (
                 <Button onClick={selectAllRuntimesHandler} variant="primary" size="sm">
-                  <Icon icon={['far', 'check-square']} gapRight />
+                  <SquareIcon checked gapRight />
                   <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
                 </Button>
               )}
               {Boolean(clearAllRuntimesHandler) && (
                 <Button onClick={clearAllRuntimesHandler} variant="primary" size="sm">
-                  <Icon icon={['far', 'square']} gapRight />
+                  <SquareIcon gapRight />
                   <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
                 </Button>
               )}
               {Boolean(invertRuntimeSelectionHandler) && (
                 <Button onClick={invertRuntimeSelectionHandler} variant="primary" size="sm">
-                  <Icon icon="yin-yang" gapRight />
+                  <InvertIcon gapRight />
                   <FormattedMessage id="generic.invertSelection" defaultMessage="Invert Selection" />
                 </Button>
               )}

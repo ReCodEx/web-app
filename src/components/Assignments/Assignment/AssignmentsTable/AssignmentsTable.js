@@ -3,13 +3,19 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { defaultMemoize } from 'reselect';
+import moment from 'moment';
 
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
 import AssignmentTableRow, { LoadingAssignmentTableRow } from '../AssignmentTableRow';
 import CommentThreadContainer from '../../../../containers/CommentThreadContainer';
+import Icon, { DeleteIcon, InvertIcon, LoadingIcon, RefreshIcon, SquareIcon, VisibleIcon } from '../../../icons';
+import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import { compareAssignmentsReverted, isBeforeDeadline } from '../../../helpers/assignments';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
+import { prepareInitialValues, transformSubmittedData } from '../../../forms/EditAssignmentForm';
+import { isUpToDate } from '../assignmentSyncHelper';
 
 const fetchAssignmentStatus = (statuses, assignmentId) => {
   const assignStatus =
@@ -18,7 +24,16 @@ const fetchAssignmentStatus = (statuses, assignmentId) => {
 };
 
 class AssignmentsTable extends Component {
-  state = { dialogAssignment: null, showAll: null };
+  state = {
+    dialogAssignment: null,
+    showAll: null,
+    selectedAssignments: {},
+    multiSync: false,
+    multiVisible: false,
+    multiHide: false,
+    multiDelete: false,
+    pendingAction: false,
+  };
 
   openDialog = (dialogAssignment = null) => this.setState({ dialogAssignment });
   closeDialog = () => this.setState({ dialogAssignment: null });
@@ -33,6 +48,123 @@ class AssignmentsTable extends Component {
     ev.preventDefault();
   };
 
+  updateSelectedAssignments = (selectedAssignments, assignments) => {
+    let multiSync = false;
+    let multiVisible = false;
+    let multiHide = false;
+    let multiDelete = false;
+    assignments
+      .filter(({ id }) => selectedAssignments[id])
+      .forEach(assignment => {
+        multiDelete = true;
+        multiSync =
+          multiSync ||
+          (assignment.exerciseSynchronizationInfo &&
+            !isUpToDate(assignment.exerciseSynchronizationInfo) &&
+            assignment.exerciseSynchronizationInfo.isSynchronizationPossible);
+        multiVisible =
+          multiVisible || !assignment.isPublic || (assignment.visibleFrom && assignment.visibleFrom > moment().unix());
+        multiHide =
+          multiHide || (assignment.isPublic && (assignment.visibleFrom || assignment.visibleFrom < moment().unix()));
+      });
+    Object.keys(selectedAssignments).forEach(id => {});
+    this.setState({ selectedAssignments, multiSync, multiVisible, multiHide, multiDelete });
+  };
+
+  selectAllAssignments = defaultMemoize(assignments => () => {
+    const selectedAssignments = {};
+    assignments.forEach(assignment => {
+      selectedAssignments[assignment.id] = true;
+    });
+    this.updateSelectedAssignments(selectedAssignments, assignments);
+  });
+
+  invertSelectedAssignments = defaultMemoize(assignments => () => {
+    const selectedAssignments = {};
+    assignments.forEach(assignment => {
+      selectedAssignments[assignment.id] = !this.state.selectedAssignments[assignment.id];
+    });
+    this.updateSelectedAssignments(selectedAssignments, assignments);
+  });
+
+  selectAssignmentClickHandler = defaultMemoize(assignments => ev => {
+    if (ev.target && ev.target.name) {
+      const id = ev.target.name;
+      const selectedAssignments = {};
+      assignments.forEach(assignment => {
+        selectedAssignments[assignment.id] = Boolean(this.state.selectedAssignments[assignment.id]);
+      });
+      if (selectedAssignments[id] !== undefined) {
+        selectedAssignments[id] = !selectedAssignments[id]; // flip the one...
+        this.updateSelectedAssignments(selectedAssignments, assignments);
+      }
+    }
+  });
+
+  syncSelectedAssignments = () => {
+    const { syncAssignment } = this.props;
+    const assignments = this.state.selectedAssignments;
+    this.setState({ pendingAction: 'sync' });
+    Promise.all(
+      Object.keys(assignments)
+        .filter(id => assignments[id])
+        .map(id => syncAssignment(id))
+    ).then(() => this.setState({ pendingAction: false, multiSync: false }));
+  };
+
+  visibleSelectedAssignments = assignments => {
+    const { editAssignment } = this.props;
+    const selectedAssignments = assignments.filter(assignment => this.state.selectedAssignments[assignment.id]);
+    this.setState({ pendingAction: 'visible' });
+    Promise.all(
+      selectedAssignments.map(assignment => {
+        const data = transformSubmittedData(prepareInitialValues(assignment));
+        data.isPublic = true;
+        delete data.visibleFrom;
+        data.version = assignment.version;
+        return editAssignment(assignment.id, data);
+      })
+    ).then(() =>
+      this.setState({ pendingAction: false, multiVisible: false, multiHide: selectedAssignments.length > 0 })
+    );
+  };
+
+  hideSelectedAssignments = assignments => {
+    const { editAssignment } = this.props;
+    const selectedAssignments = assignments.filter(assignment => this.state.selectedAssignments[assignment.id]);
+    this.setState({ pendingAction: 'hide' });
+    Promise.all(
+      selectedAssignments.map(assignment => {
+        const data = transformSubmittedData(prepareInitialValues(assignment));
+        data.isPublic = false;
+        delete data.visibleFrom;
+        data.version = assignment.version;
+        return editAssignment(assignment.id, data);
+      })
+    ).then(() =>
+      this.setState({ pendingAction: false, multiVisible: selectedAssignments.length > 0, multiHide: false })
+    );
+  };
+
+  deleteSelectedAssignments = () => {
+    const { deleteAssignment } = this.props;
+    const assignments = this.state.selectedAssignments;
+    this.setState({ pendingAction: 'delete' });
+    Promise.all(
+      Object.keys(assignments)
+        .filter(id => assignments[id])
+        .map(id => deleteAssignment(id))
+    ).then(() =>
+      this.setState({
+        pendingAction: false,
+        selectedAssignments: {},
+        multiSync: false,
+        multiVisible: false,
+        multiDelete: false,
+      })
+    );
+  };
+
   render() {
     const {
       assignments = EMPTY_LIST,
@@ -45,6 +177,9 @@ class AssignmentsTable extends Component {
       showGroups = false,
       groupsAccessor = null,
       onlyCurrent = false,
+      syncAssignment = null,
+      editAssignment = null,
+      deleteAssignment = null,
       intl: { locale },
     } = this.props;
     const someAssignmentsAreLoading = assignments.some(isLoading);
@@ -59,12 +194,14 @@ class AssignmentsTable extends Component {
 
     const showSecondDeadline = assignmentsPreprocessed.some(assignment => assignment && assignment.secondDeadline);
 
+    const multiActions = Boolean(syncAssignment || editAssignment || deleteAssignment);
     return (
       <>
         <Table hover className="mb-0">
           {assignmentsPreprocessed.length > 0 && (
             <thead>
               <tr>
+                {multiActions && <th className="shrink-col" />}
                 <th className="shrink-col" />
 
                 {showNames && (
@@ -150,6 +287,8 @@ class AssignmentsTable extends Component {
                   showSecondDeadline={showSecondDeadline}
                   groupsAccessor={groupsAccessor}
                   discussionOpen={() => this.openDialog(assignment)}
+                  setSelected={multiActions ? this.selectAssignmentClickHandler(assignmentsPreprocessedAll) : null}
+                  selected={Boolean(this.state.selectedAssignments[assignment.id])}
                 />
               ))}
           </tbody>
@@ -191,6 +330,93 @@ class AssignmentsTable extends Component {
                 </tr>
               </tfoot>
             )}
+
+          {multiActions && !someAssignmentsAreLoading && assignmentsPreprocessed.length > 0 && (
+            <tfoot>
+              <tr>
+                <td colSpan={10}>
+                  <Icon
+                    icon="arrow-turn-up"
+                    transform={{ rotate: 90 }}
+                    className="text-muted"
+                    largeGapLeft
+                    largeGapRight
+                  />
+
+                  <TheButtonGroup>
+                    <Button variant="primary" size="sm" onClick={this.selectAllAssignments(assignmentsPreprocessedAll)}>
+                      <SquareIcon checked gapRight />
+                      <FormattedMessage id="app.assignments.selectAll" defaultMessage="Select All" />
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={this.invertSelectedAssignments(assignmentsPreprocessedAll)}>
+                      <InvertIcon gapRight />
+                      <FormattedMessage id="app.assignments.invertSelection" defaultMessage="Invert" />
+                    </Button>
+                  </TheButtonGroup>
+
+                  <TheButtonGroup className="ml-4">
+                    {syncAssignment && (
+                      <Button
+                        variant="warning"
+                        size="sm"
+                        disabled={this.state.pendingAction || !this.state.multiSync}
+                        onClick={this.syncSelectedAssignments}>
+                        {this.state.pendingAction === 'sync' ? <LoadingIcon gapRight /> : <RefreshIcon gapRight />}
+                        <FormattedMessage id="app.assignments.syncAllButton" defaultMessage="Sync with Exercise" />
+                      </Button>
+                    )}
+
+                    {editAssignment && (
+                      <Button
+                        variant="success"
+                        size="sm"
+                        disabled={this.state.pendingAction || !this.state.multiVisible}
+                        onClick={() => this.visibleSelectedAssignments(assignmentsPreprocessedAll)}>
+                        {this.state.pendingAction === 'visible' ? <LoadingIcon gapRight /> : <VisibleIcon gapRight />}
+                        <FormattedMessage id="app.assignments.showAllButton" defaultMessage="Set Visible" />
+                      </Button>
+                    )}
+
+                    {editAssignment && (
+                      <Button
+                        variant="warning"
+                        size="sm"
+                        disabled={this.state.pendingAction || !this.state.multiHide}
+                        onClick={() => this.hideSelectedAssignments(assignmentsPreprocessedAll)}>
+                        {this.state.pendingAction === 'hide' ? (
+                          <LoadingIcon gapRight />
+                        ) : (
+                          <VisibleIcon visible={false} gapRight />
+                        )}
+                        <FormattedMessage id="app.assignments.hideAllButton" defaultMessage="Set Hidden" />
+                      </Button>
+                    )}
+
+                    {deleteAssignment && (
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        disabled={this.state.pendingAction || !this.state.multiDelete}
+                        confirmId="deleteAssignments"
+                        confirm={
+                          <FormattedMessage
+                            id="app.assignments.deleteAllButtonConfirm"
+                            defaultMessage="Do you really wish to remove all selected assignments?"
+                          />
+                        }
+                        onClick={this.deleteSelectedAssignments}>
+                        {this.state.pendingAction === 'delete' ? <LoadingIcon gapRight /> : <DeleteIcon gapRight />}
+                        <FormattedMessage id="app.assignments.deleteAllButton" defaultMessage="Delete" />
+                      </Button>
+                    )}
+                  </TheButtonGroup>
+                </td>
+              </tr>
+            </tfoot>
+          )}
         </Table>
 
         <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="xl">
@@ -231,6 +457,9 @@ AssignmentsTable.propTypes = {
   showGroups: PropTypes.bool,
   groupsAccessor: PropTypes.func,
   onlyCurrent: PropTypes.bool,
+  syncAssignment: PropTypes.func,
+  editAssignment: PropTypes.func,
+  deleteAssignment: PropTypes.func,
   intl: PropTypes.object.isRequired,
 };
 

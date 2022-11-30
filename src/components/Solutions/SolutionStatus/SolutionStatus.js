@@ -18,6 +18,7 @@ import withLinks from '../../../helpers/withLinks';
 import Icon, {
   DeadlineIcon,
   EditIcon,
+  InvertIcon,
   NoteIcon,
   UserIcon,
   SupervisorIcon,
@@ -224,7 +225,7 @@ class SolutionStatus extends Component {
                         {submittedAt < firstDeadline ? (
                           <SuccessIcon className="text-success" />
                         ) : allowSecondDeadline && submittedAt < secondDeadline ? (
-                          <Icon icon="yin-yang" className="text-warning" />
+                          <InvertIcon className="text-warning" />
                         ) : (
                           <FailureIcon />
                         )}

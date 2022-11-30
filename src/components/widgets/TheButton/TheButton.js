@@ -34,7 +34,7 @@ const TheButton = React.forwardRef(
     },
     ref
   ) =>
-    confirm ? (
+    confirm && onClick ? (
       <Confirm id={confirmId} onConfirmed={onClick} question={confirm}>
         <TheButtonInternal className={className} variant={variant} {...props} ref={ref} />
       </Confirm>
