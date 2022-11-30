@@ -11,11 +11,10 @@ import AssignmentTableRow, { LoadingAssignmentTableRow } from '../AssignmentTabl
 import CommentThreadContainer from '../../../../containers/CommentThreadContainer';
 import Icon, { DeleteIcon, InvertIcon, LoadingIcon, RefreshIcon, SquareIcon, VisibleIcon } from '../../../icons';
 import Button, { TheButtonGroup } from '../../../widgets/TheButton';
-import { compareAssignmentsReverted, isBeforeDeadline } from '../../../helpers/assignments';
+import { compareAssignmentsReverted, isBeforeDeadline, isUpToDate } from '../../../helpers/assignments';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 import { prepareInitialValues, transformSubmittedData } from '../../../forms/EditAssignmentForm';
-import { isUpToDate } from '../assignmentSyncHelper';
 
 const fetchAssignmentStatus = (statuses, assignmentId) => {
   const assignStatus =
