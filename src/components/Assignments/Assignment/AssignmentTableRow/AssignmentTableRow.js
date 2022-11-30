@@ -72,7 +72,9 @@ const AssignmentTableRow = ({
       )}
       <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />
 
-      {exerciseSynchronizationInfo && <AssignmentSyncIcon id={id} syncInfo={exerciseSynchronizationInfo} gapLeft />}
+      {(permissionHints.update || permissionHints.viewAssignmentSolutions) && exerciseSynchronizationInfo && (
+        <AssignmentSyncIcon id={id} syncInfo={exerciseSynchronizationInfo} gapLeft />
+      )}
     </td>
 
     {showNames && (

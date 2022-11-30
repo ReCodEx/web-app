@@ -6,7 +6,7 @@ import { Row, Col } from 'react-bootstrap';
 import Button from '../../../widgets/TheButton';
 import Callout from '../../../widgets/Callout';
 import DateTime from '../../../widgets/DateTime';
-import { getSyncMessages } from '../assignmentSyncHelper';
+import { getSyncMessages } from '../../../helpers/assignments';
 
 const AssignmentSync = ({ syncInfo, exerciseSync }) => {
   const messages = getSyncMessages(syncInfo);
