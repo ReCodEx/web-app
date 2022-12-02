@@ -11,7 +11,9 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { CodeCompareIcon, DownloadIcon, LoadingIcon, WarningIcon } from '../../icons';
 
 import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting';
-import { getFileExtensionLC } from '../../../helpers/common';
+import { getFileExtensionLC, simpleScalarMemoize } from '../../../helpers/common';
+
+const normalizeLineEndings = simpleScalarMemoize(content => content.replaceAll('\r', ''));
 
 const diffViewHighlightSyntax = lang => str =>
   str && (
@@ -201,8 +203,8 @@ const SourceCodeBox = ({
           ) : secondContent && !secondContent.malformedCharacters ? (
             <div className="diff-wrapper">
               <ReactDiffViewer
-                oldValue={content.content}
-                newValue={secondContent.content}
+                oldValue={normalizeLineEndings(content.content)}
+                newValue={normalizeLineEndings(secondContent.content)}
                 splitView={true}
                 renderContent={diffViewHighlightSyntax(getPrismModeFromExtension(getFileExtensionLC(name)))}
                 compareMethod={DiffMethod.WORDS_WITH_SPACE}
