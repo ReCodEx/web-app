@@ -47,7 +47,24 @@ const ReviewCommentForm = ({
               <FormattedMessage id="app.reviewCommentForm.labelEdit" defaultMessage="Modify existing commment:" />
             )}
           </FormLabel>
-          <Field name="text" component={MarkdownTextAreaField} validate={textValidator} />
+          <Field
+            name="text"
+            component={MarkdownTextAreaField}
+            validate={textValidator}
+            focus
+            commands={[
+              {
+                name: 'save',
+                bindKey: { win: 'Ctrl-enter', mac: 'Cmd-enter' },
+                exec: editor => {
+                  const button = editor.container.closest('.commentForm').querySelector('button[type=submit]');
+                  if (button) {
+                    button.click();
+                  }
+                },
+              },
+            ]}
+          />
           <hr />
         </Col>
       </Row>
