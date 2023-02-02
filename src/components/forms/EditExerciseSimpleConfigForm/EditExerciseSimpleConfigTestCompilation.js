@@ -12,7 +12,9 @@ import Icon, { ExpandCollapseIcon, WarningIcon } from '../../icons';
 import { SelectField, ExpandingInputFilesField, ExpandingSelectField, ExpandingTextField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import Explanation from '../../widgets/Explanation';
-import { ENV_JAVA_ID, ENV_C_GCC_ID, ENV_CPP_GCC_ID } from '../../../helpers/exercise/environments';
+import { ENV_ARDUINO_ID, ENV_JAVA_ID, ENV_C_GCC_ID, ENV_CPP_GCC_ID } from '../../../helpers/exercise/environments';
+
+const COMPILER_ARGS_ENVS = [ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID];
 
 class EditExerciseSimpleConfigTestCompilation extends Component {
   constructor(props) {
@@ -126,7 +128,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                 }
 
                                 {
-                                  (env.id === ENV_C_GCC_ID || env.id === ENV_CPP_GCC_ID) && (
+                                  COMPILER_ARGS_ENVS.includes(env.id) && (
                                     /*
                                      * A special case for C/C++ only !!!
                                      */
@@ -175,7 +177,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                 <Col
                                   lg={
                                     exercise.runtimeEnvironments.length === 1 &&
-                                    (env.id === ENV_JAVA_ID || env.id === ENV_C_GCC_ID || env.id === ENV_CPP_GCC_ID)
+                                    (env.id === ENV_JAVA_ID || COMPILER_ARGS_ENVS.includes(env.id))
                                       ? 6
                                       : 12
                                   }>
