@@ -1713,6 +1713,7 @@
   "app.solutionsTable.commentsIcon.last": "Poslední komentář: {last}",
   "app.solutionsTable.environment": "Cílový jazyk",
   "app.solutionsTable.failedLoading": "Nebylo možné načíst odevzdaná řešení.",
+  "app.solutionsTable.icons.suspectedPlagiarism": "Podezření na plagiátorství (byly nalezeny podobnosti s jinými řešeními)",
   "app.solutionsTable.loading": "Načítají se odezvdaná řešení...",
   "app.solutionsTable.noSolutionsFound": "Zatím nebyla odevzdána žádná řešení.",
   "app.solutionsTable.note": "Poznámka",

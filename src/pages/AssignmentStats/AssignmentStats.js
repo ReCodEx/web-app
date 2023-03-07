@@ -15,7 +15,15 @@ import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
-import Icon, { ChatIcon, DownloadIcon, DetailIcon, LoadingIcon, ResultsIcon, UserIcon } from '../../components/icons';
+import Icon, {
+  ChatIcon,
+  DownloadIcon,
+  DetailIcon,
+  CodeFileIcon,
+  LoadingIcon,
+  ResultsIcon,
+  UserIcon,
+} from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import UsersName from '../../components/Users/UsersName';
 import Points from '../../components/Assignments/SolutionsTable/Points';
@@ -62,7 +70,7 @@ import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
 const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, locale, links) => {
-  const { SOLUTION_DETAIL_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY } = links;
+  const { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
   const columns = [
@@ -78,6 +86,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
           status={info.lastSubmission ? info.lastSubmission.evaluationStatus : null}
           lastSubmission={info.lastSubmission}
           commentsStats={info.commentsStats}
+          plagiarism={Boolean(info.plagiarism)}
         />
       ),
     }),
@@ -170,12 +179,20 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
       cellRenderer: solution => (
         <TheButtonGroup>
           {solution.permissionHints && solution.permissionHints.viewDetail && (
-            <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
-              <Button size="xs" variant="secondary">
-                <DetailIcon gapRight />
-                <FormattedMessage id="generic.detail" defaultMessage="Detail" />
-              </Button>
-            </Link>
+            <>
+              <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
+                <Button size="xs" variant="secondary">
+                  <DetailIcon gapRight />
+                  <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+                </Button>
+              </Link>
+              <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
+                <Button size="xs" variant="primary">
+                  <CodeFileIcon fixedWidth gapRight />
+                  <FormattedMessage id="generic.files" defaultMessage="Files" />
+                </Button>
+              </Link>
+            </>
           )}
           {solution.permissionHints && solution.permissionHints.setFlag && (
             <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel size="xs" />
@@ -218,12 +235,13 @@ const prepareTableData = defaultMemoize(
           isBestSolution,
           commentsStats,
           permissionHints,
+          plagiarism = null,
         }) => {
           const statusEvaluated =
             lastSubmission &&
             (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
           return {
-            icon: { id, commentsStats, lastSubmission, accepted, review, permissionHints, isBestSolution },
+            icon: { id, commentsStats, lastSubmission, accepted, review, permissionHints, isBestSolution, plagiarism },
             user: usersIndex[authorId],
             date: createdAt,
             validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
