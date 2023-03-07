@@ -1713,6 +1713,7 @@
   "app.solutionsTable.commentsIcon.last": "Last Comment: {last}",
   "app.solutionsTable.environment": "Target language",
   "app.solutionsTable.failedLoading": "Could not load this submission.",
+  "app.solutionsTable.icons.suspectedPlagiarism": "Suspected plagiarism (similarities with other solutions were found)",
   "app.solutionsTable.loading": "Loading submitted solutions...",
   "app.solutionsTable.noSolutionsFound": "No solutions were submitted yet.",
   "app.solutionsTable.note": "Note",

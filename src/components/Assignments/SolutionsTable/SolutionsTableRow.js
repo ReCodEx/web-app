@@ -37,6 +37,7 @@ const SolutionsTableRow = ({
   accepted = false,
   review = null,
   isBestSolution = false,
+  plagiarism = null,
   runtimeEnvironment = null,
   commentsStats = null,
   permissionHints = null,
@@ -88,6 +89,7 @@ const SolutionsTableRow = ({
             lastSubmission={lastSubmission}
             commentsStats={commentsStats}
             isReviewer={permissionHints && permissionHints.review}
+            plagiarism={Boolean(plagiarism)}
           />
         </td>
 
@@ -227,6 +229,7 @@ SolutionsTableRow.propTypes = {
   }),
   isBestSolution: PropTypes.bool,
   commentsStats: PropTypes.object,
+  plagiarism: PropTypes.string,
   runtimeEnvironment: PropTypes.object,
   permissionHints: PropTypes.object,
   noteMaxlen: PropTypes.number,
