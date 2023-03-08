@@ -13,7 +13,7 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
-import Icon, { AssignmentIcon, DetailIcon, LoadingIcon, UserIcon } from '../../components/icons';
+import Icon, { AssignmentIcon, DetailIcon, CodeFileIcon, LoadingIcon, UserIcon } from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import Points from '../../components/Assignments/SolutionsTable/Points';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
@@ -70,7 +70,12 @@ const prepareCachedAssignmentsComparator = (assignments, locale) => {
 };
 
 const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, locale, links) => {
-  const { SOLUTION_DETAIL_URI_FACTORY, ASSIGNMENT_DETAIL_URI_FACTORY, ASSIGNMENT_STATS_URI_FACTORY } = links;
+  const {
+    SOLUTION_DETAIL_URI_FACTORY,
+    SOLUTION_SOURCE_CODES_URI_FACTORY,
+    ASSIGNMENT_DETAIL_URI_FACTORY,
+    ASSIGNMENT_STATS_URI_FACTORY,
+  } = links;
 
   const assignmentsComparator = prepareCachedAssignmentsComparator(assignments, locale);
 
@@ -87,6 +92,7 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
           status={info.lastSubmission ? info.lastSubmission.evaluationStatus : null}
           lastSubmission={info.lastSubmission}
           commentsStats={info.commentsStats}
+          plagiarism={Boolean(info.plagiarism)}
         />
       ),
     }),
@@ -192,6 +198,12 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
                 <DetailIcon gapRight />
                 <FormattedMessage id="generic.detail" defaultMessage="Detail" />
               </Button>
+              <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(solution.assignmentId, solution.id)}>
+                <Button size="xs" variant="primary">
+                  <CodeFileIcon fixedWidth gapRight />
+                  <FormattedMessage id="generic.files" defaultMessage="Files" />
+                </Button>
+              </Link>
             </Link>
           )}
           {solution.permissionHints && solution.permissionHints.setFlag && (
@@ -235,6 +247,7 @@ const prepareTableData = defaultMemoize(
             isBestSolution,
             commentsStats,
             permissionHints,
+            plagiarism = null,
           }) => {
             const statusEvaluated =
               lastSubmission &&
@@ -242,7 +255,16 @@ const prepareTableData = defaultMemoize(
             const rte = getRuntime(runtimeEnvironmentId);
 
             res.push({
-              icon: { id, commentsStats, lastSubmission, accepted, review, permissionHints, isBestSolution },
+              icon: {
+                id,
+                commentsStats,
+                lastSubmission,
+                accepted,
+                review,
+                permissionHints,
+                isBestSolution,
+                plagiarism,
+              },
               assignment,
               date: createdAt,
               validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
@@ -516,6 +538,7 @@ class GroupUserSolutions extends Component {
                                   />
                                 </div>
                               }
+                              className="mb-0"
                             />
                           </Box>
                         )

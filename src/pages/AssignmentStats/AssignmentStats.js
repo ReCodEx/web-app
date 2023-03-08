@@ -547,6 +547,7 @@ class AssignmentStats extends Component {
                               />
                             </div>
                           }
+                          className="mb-0"
                         />
                       </Box>
                     )
