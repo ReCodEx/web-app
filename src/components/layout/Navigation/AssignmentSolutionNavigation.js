@@ -8,6 +8,7 @@ import {
   AssignmentIcon,
   CodeFileIcon,
   ExerciseIcon,
+  PlagiarismIcon,
   ResultsIcon,
   SolutionResultsIcon,
   UserIcon,
@@ -27,6 +28,7 @@ const AssignmentSolutionNavigation = ({
   canViewUserProfile = false,
   titlePrefix = null,
   titleSuffix = null,
+  plagiarism = false,
   links,
 }) => (
   <Navigation
@@ -52,6 +54,11 @@ const AssignmentSolutionNavigation = ({
         caption: <FormattedMessage id="app.navigation.solutionFiles" defaultMessage="Submitted Files" />,
         link: links.SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solutionId),
         icon: <CodeFileIcon gapRight />,
+      },
+      plagiarism && {
+        caption: <FormattedMessage id="app.navigation.solutionPlagiarisms" defaultMessage="Similarities" />,
+        link: links.SOLUTION_PLAGIARISMS_URI_FACTORY(assignmentId, solutionId),
+        icon: <PlagiarismIcon gapRight />,
       },
       {
         caption: <FormattedMessage id="app.navigation.userSolution" defaultMessage="User Solutions" />,
@@ -98,6 +105,7 @@ AssignmentSolutionNavigation.propTypes = {
   canViewUserProfile: PropTypes.bool,
   titlePrefix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   titleSuffix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+  plagiarism: PropTypes.bool,
   links: PropTypes.object.isRequired,
 };
 

@@ -9,6 +9,7 @@ import {
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { getFilesContent } from '../selectors/files';
+import { urlQueryString } from '../../helpers/common';
 
 const actionTypes = {
   FETCH: 'recodex/filesContent/FETCH',
@@ -19,8 +20,10 @@ const actionTypes = {
 
 const archivedPromises = {};
 
+// The similarSolutionId is a ACL-check requirement if conent is fetched because a likely plagiarism is detected
+// (similarSolutionId is the ID of the source/main solution accessible by current user)
 export const fetchContentIfNeeded =
-  (id, entry = null) =>
+  (id, entry = null, similarSolutionId = null) =>
   (dispatch, getState) => {
     const key = id + (entry || '');
     const item = getFilesContent(id, entry)(getState());
@@ -29,7 +32,7 @@ export const fetchContentIfNeeded =
       archivedPromises[key] = dispatch(
         createApiAction({
           type: actionTypes.FETCH,
-          endpoint: `/uploaded-files/${id}/content` + (entry ? `?entry=${encodeURIComponent(entry)}` : ''),
+          endpoint: `/uploaded-files/${id}/content?` + urlQueryString({ entry, similarSolutionId }),
           method: 'GET',
           meta: { key },
         })

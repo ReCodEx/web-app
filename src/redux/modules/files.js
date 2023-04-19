@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions';
 import factory, { initialState, getJsData } from '../helpers/resourceManager';
 import { getFile } from '../selectors/files';
 import { downloadHelper } from '../helpers/api/download';
+import { urlQueryString } from '../../helpers/common';
 
 const resourceName = 'files';
 const { actions, reduceActions } = factory({
@@ -31,9 +32,9 @@ export const fetchFileIfNeeded = actions.fetchOneIfNeeded;
  * @param {string} fileId
  * @param {string|null} entry ZIP archive path (works only for zip uploaded files)
  */
-export const download = (fileId, entry = null) =>
+export const download = (fileId, entry = null, similarSolutionId = null) =>
   downloadHelper({
-    endpoint: `/uploaded-files/${fileId}/download` + (entry ? `?entry=${encodeURIComponent(entry)}` : ''),
+    endpoint: `/uploaded-files/${fileId}/download?` + urlQueryString({ entry, similarSolutionId }),
     fetch: entry ? null : fetchFileIfNeeded,
     actionType: actionTypes.DOWNLOAD,
     fileNameSelector: entry ? null : (id, state) => getJsData(getFile(id)(state)).name,
