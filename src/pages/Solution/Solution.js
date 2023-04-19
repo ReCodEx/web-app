@@ -45,7 +45,7 @@ import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/e
 
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
 import { hasPermissions } from '../../helpers/common';
-import { SolutionResultsIcon, WarningIcon } from '../../components/icons';
+import { PlagiarismIcon, SolutionResultsIcon, WarningIcon } from '../../components/icons';
 
 const assignmentHasRuntime = defaultMemoize(
   (assignment, runtimeId) =>
@@ -117,7 +117,7 @@ class Solution extends Component {
                 userId={solution.authorId}
                 groupId={assignment.groupId}
                 attemptIndex={solution.attemptIndex}
-                plagiarism={Boolean(solution.plagiarism)}
+                plagiarism={Boolean(solution.plagiarism) && hasPermissions(solution, 'viewDetectedPlagiarisms')}
                 canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
                 canViewExercise={
                   hasPermissions(
@@ -127,6 +127,15 @@ class Solution extends Component {
                 }
                 canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               />
+
+              {solution.plagiarism && hasPermissions(solution, 'viewDetectedPlagiarisms') && (
+                <Callout variant="warning" icon={<PlagiarismIcon />}>
+                  <FormattedMessage
+                    id="app.solution.suspectedPlagiarismWarning"
+                    defaultMessage="Similar solutions have been detected, the solution is suspected of being a plagiarism. Details can be found on 'Similarities' page."
+                  />
+                </Callout>
+              )}
 
               {(hasPermissions(solution, 'setFlag') ||
                 hasPermissions(solution, 'review') ||
