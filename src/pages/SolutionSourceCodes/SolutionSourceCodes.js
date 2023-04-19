@@ -255,6 +255,7 @@ class SolutionSourceCodes extends Component {
               userId={solution.authorId}
               groupId={assignment.groupId}
               attemptIndex={solution.attemptIndex}
+              plagiarism={Boolean(solution.plagiarism)}
               canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
               canViewExercise={
                 hasPermissions(
@@ -289,6 +290,7 @@ class SolutionSourceCodes extends Component {
                   userId={secondSolution.authorId}
                   groupId={secondAssignment.groupId}
                   attemptIndex={secondSolution.attemptIndex}
+                  plagiarism={Boolean(secondSolution.plagiarism)}
                   canViewSolutions={hasPermissions(secondAssignment, 'viewAssignmentSolutions')}
                   canViewExercise={
                     hasPermissions(

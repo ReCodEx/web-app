@@ -13,13 +13,13 @@ import './UsersNameContainer.css';
 
 class UsersNameContainer extends Component {
   componentDidMount = () => {
-    if (!this.props.noAutoload) {
+    if (this.props.userId && !this.props.noAutoload) {
       this.props.loadUserIfNeeded(this.props.userId);
     }
   };
 
   componentDidUpdate(prevProps) {
-    if (this.props.userId !== prevProps.userId && !this.props.noAutoload) {
+    if (this.props.userId && this.props.userId !== prevProps.userId && !this.props.noAutoload) {
       this.props.loadUserIfNeeded(this.props.userId);
     }
   }

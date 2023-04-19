@@ -32,6 +32,7 @@ import notifications from './modules/notifications';
 import pagination from './modules/pagination';
 import pipelines from './modules/pipelines';
 import pipelineFiles from './modules/pipelineFiles';
+import plagiarisms from './modules/plagiarisms';
 import referenceSolutions from './modules/referenceSolutions';
 import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations';
 import registration from './modules/registration';
@@ -91,6 +92,7 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   pagination,
   pipelines,
   pipelineFiles,
+  plagiarisms,
   referenceSolutions,
   referenceSolutionEvaluations,
   registration,

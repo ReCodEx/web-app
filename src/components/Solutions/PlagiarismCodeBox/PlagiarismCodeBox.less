@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  align-items: stretch;
+  overflow: auto;
+}
+
+.container > div {
+  margin: 0;
+  padding: 0;
+  flex-shrink: 1;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.container > div.fullWidth {
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.container > div.lines {
+  flex-grow: 0;
+  background-color: #e0e0e0;
+  overflow: visible;
+}
+
+.container > div.lines > pre {
+  color: #666;
+}
+
+.container > div:last-child {
+  border-left: 1px solid #ddd;
+}
+
+.container > div > pre {
+  flex-basis: content;
+  display: inline-block;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  margin: 0;
+}
+
+nav.fragmentSelectButtons {
+  height: 0;
+  overflow: visible;
+  position: sticky;
+  top: 0.25rem;
+  z-index: 1;
+}
+
+nav.fragmentSelectButtons > * {
+  position: absolute;
+  top: 3.5rem;
+  left: 0.25rem;
+  opacity: 0.75;
+}

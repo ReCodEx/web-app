@@ -30,6 +30,7 @@ const SourceCodeBox = ({
   parentId = id,
   solutionId,
   name,
+  titleSuffix = '',
   entryName = null,
   download = null,
   diffWith = null,
@@ -43,6 +44,8 @@ const SourceCodeBox = ({
   authorView = false,
   restrictCommentAuthor = null,
   reviewClosed = false,
+  collapsable = false,
+  isOpen = true,
 }) => {
   const res = fileContentsSelector(parentId, entryName);
   return (
@@ -67,6 +70,8 @@ const SourceCodeBox = ({
             </>
           }
           noPadding
+          collapsable={collapsable}
+          isOpen={isOpen}
         />
       }>
       {(content, secondContent = null) => (
@@ -248,6 +253,9 @@ SourceCodeBox.propTypes = {
   authorView: PropTypes.bool,
   restrictCommentAuthor: PropTypes.string,
   reviewClosed: PropTypes.bool,
+  collapsable: PropTypes.bool,
+  isOpen: PropTypes.bool,
+  titleSuffix: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
 };
 
 export default SourceCodeBox;

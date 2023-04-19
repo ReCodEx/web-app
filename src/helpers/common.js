@@ -72,6 +72,18 @@ export const getFileExtension = fileName => fileName.split('.').pop();
 
 export const getFileExtensionLC = fileName => getFileExtension(fileName).toLowerCase();
 
+export const urlQueryString = obj =>
+  Object.keys(obj)
+    .filter(name => obj[name])
+    .map(name => `${name}=${encodeURIComponent(obj[name])}`)
+    .join('&');
+
+/*
+ * Numeric stuff
+ */
+export const sum = (arr, mapper = identity) => arr.map(mapper).reduce((a, b) => a + b, 0);
+export const avg = (arr, mapper = identity) => (arr.length > 0 ? sum(arr, mapper) / arr.length : NaN);
+
 /*
  * Array/Object Helpers
  */

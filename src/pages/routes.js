@@ -44,6 +44,7 @@ import ServerManagement from './ServerManagement';
 import ShadowAssignment from './ShadowAssignment';
 import SisIntegration from './SisIntegration';
 import Solution from './Solution';
+import SolutionPlagiarisms from './SolutionPlagiarisms';
 import SolutionSourceCodes from './SolutionSourceCodes';
 import SubmissionFailures from './SubmissionFailures';
 import SystemMessages from './SystemMessages/SystemMessages';
@@ -97,6 +98,12 @@ const routesDescriptors = [
     'app/assignment/:assignmentId/solution/:solutionId/diff/:secondSolutionId',
     SolutionSourceCodes,
     'SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY',
+    true
+  ),
+  r(
+    'app/assignment/:assignmentId/solution/:solutionId/plagiarisms',
+    SolutionPlagiarisms,
+    'SOLUTION_PLAGIARISMS_URI_FACTORY',
     true
   ),
   r('app/shadow-assignment/:shadowId', ShadowAssignment, 'SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY', true),
