@@ -16,6 +16,7 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import {
   CircleIcon,
   CodeCompareIcon,
+  PlagiarismIcon,
   RefreshIcon,
   SolutionResultsIcon,
   StopIcon,
@@ -255,7 +256,7 @@ class SolutionSourceCodes extends Component {
               userId={solution.authorId}
               groupId={assignment.groupId}
               attemptIndex={solution.attemptIndex}
-              plagiarism={Boolean(solution.plagiarism)}
+              plagiarism={Boolean(solution.plagiarism) && hasPermissions(solution, 'viewDetectedPlagiarisms')}
               canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
               canViewExercise={
                 hasPermissions(
@@ -272,6 +273,7 @@ class SolutionSourceCodes extends Component {
                 ) : null
               }
             />
+
             {diffMode && (
               <>
                 <h4 className="text-muted text-center my-2">
@@ -290,7 +292,9 @@ class SolutionSourceCodes extends Component {
                   userId={secondSolution.authorId}
                   groupId={secondAssignment.groupId}
                   attemptIndex={secondSolution.attemptIndex}
-                  plagiarism={Boolean(secondSolution.plagiarism)}
+                  plagiarism={
+                    Boolean(secondSolution.plagiarism) && hasPermissions(secondSolution, 'viewDetectedPlagiarisms')
+                  }
                   canViewSolutions={hasPermissions(secondAssignment, 'viewAssignmentSolutions')}
                   canViewExercise={
                     hasPermissions(
@@ -310,6 +314,15 @@ class SolutionSourceCodes extends Component {
 
             {isSupervisorRole(effectiveRole) && (
               <>
+                {solution.plagiarism && hasPermissions(solution, 'viewDetectedPlagiarisms') && (
+                  <Callout variant="warning" icon={<PlagiarismIcon />}>
+                    <FormattedMessage
+                      id="app.solution.suspectedPlagiarismWarning"
+                      defaultMessage="Similar solutions have been detected, the solution is suspected of being a plagiarism. Details can be found on 'Similarities' page."
+                    />
+                  </Callout>
+                )}
+
                 <Row className="justify-content-sm-between">
                   <Col sm="auto" className="mb-3">
                     {!diffMode && (

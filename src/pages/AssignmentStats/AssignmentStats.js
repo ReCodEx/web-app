@@ -21,6 +21,7 @@ import Icon, {
   DetailIcon,
   CodeFileIcon,
   LoadingIcon,
+  PlagiarismIcon,
   ResultsIcon,
   UserIcon,
 } from '../../components/icons';
@@ -262,6 +263,13 @@ const getPendingReviewSolutions = defaultMemoize(assignmentSolutions =>
     .filter(solution => solution && solution.review && solution.review.startedAt && !solution.review.closedAt)
 );
 
+const getPlagiarisms = defaultMemoize(assignmentSolutions =>
+  assignmentSolutions
+    .toArray()
+    .map(getJsData)
+    .filter(solution => solution && solution.plagiarism)
+);
+
 const localStorageStateKey = 'AssignmentStats.state';
 
 class AssignmentStats extends Component {
@@ -351,6 +359,7 @@ class AssignmentStats extends Component {
     } = this.props;
 
     const pendingReviews = getPendingReviewSolutions(assignmentSolutions);
+    const plagiarisms = getPlagiarisms(assignmentSolutions);
 
     return (
       <Page
@@ -367,6 +376,16 @@ class AssignmentStats extends Component {
               canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
               canViewExercise={true}
             />
+
+            {plagiarisms && plagiarisms.length > 0 && (
+              <Callout variant="danger" icon={<PlagiarismIcon />}>
+                <FormattedMessage
+                  id="app.assignmentStats.plagiarismsDetected"
+                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} with detected similarities. Such solutions may be plagiarisms."
+                  values={{ count: plagiarisms.length }}
+                />
+              </Callout>
+            )}
 
             {pendingReviews && pendingReviews.length > 0 && (
               <Callout variant="warning">

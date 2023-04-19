@@ -175,7 +175,7 @@ class SolutionPlagiarisms extends Component {
                 userId={solution.authorId}
                 groupId={assignment.groupId}
                 attemptIndex={solution.attemptIndex}
-                plagiarism={Boolean(solution.plagiarism)}
+                plagiarism={Boolean(solution.plagiarism) && hasPermissions(solution, 'viewDetectedPlagiarisms')}
                 canViewSolutions={hasPermissions(assignment, 'viewAssignmentSolutions')}
                 canViewExercise={
                   hasPermissions(

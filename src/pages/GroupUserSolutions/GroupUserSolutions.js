@@ -13,7 +13,14 @@ import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
-import Icon, { AssignmentIcon, DetailIcon, CodeFileIcon, LoadingIcon, UserIcon } from '../../components/icons';
+import Icon, {
+  AssignmentIcon,
+  DetailIcon,
+  CodeFileIcon,
+  LoadingIcon,
+  PlagiarismIcon,
+  UserIcon,
+} from '../../components/icons';
 import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
 import Points from '../../components/Assignments/SolutionsTable/Points';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
@@ -302,6 +309,25 @@ const getPendingReviewSolutions = defaultMemoize((assignments, getAssignmentSolu
     : []
 );
 
+const getPlagiarisms = defaultMemoize((assignments, getAssignmentSolutions) =>
+  assignments
+    ? assignments
+        .toArray()
+        .map(getJsData)
+        .filter(identity)
+        .reduce(
+          (acc, assignment) => [
+            ...acc,
+            ...getAssignmentSolutions(assignment.id)
+              .toArray()
+              .map(getJsData)
+              .filter(solution => solution && solution.plagiarism),
+          ],
+          []
+        )
+    : []
+);
+
 const localStorageStateKey = 'GroupUserSolutions.state';
 
 class GroupUserSolutions extends Component {
@@ -379,6 +405,7 @@ class GroupUserSolutions extends Component {
     } = this.props;
 
     const pendingReviews = getPendingReviewSolutions(assignments, getAssignmentSolutions);
+    const plagiarisms = getPlagiarisms(assignments, getAssignmentSolutions);
 
     return (
       <Page
@@ -401,6 +428,16 @@ class GroupUserSolutions extends Component {
               groupsDataAccessor={groupsAccessor}
               linkFactory={links.GROUP_EDIT_URI_FACTORY}
             />
+
+            {plagiarisms && plagiarisms.length > 0 && (
+              <Callout variant="danger" icon={<PlagiarismIcon />}>
+                <FormattedMessage
+                  id="app.assignmentStats.plagiarismsDetected"
+                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} with detected similarities. Such solutions may be plagiarisms."
+                  values={{ count: plagiarisms.length }}
+                />
+              </Callout>
+            )}
 
             {pendingReviews && pendingReviews.length > 0 && (
               <Callout variant="warning">
