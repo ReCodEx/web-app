@@ -13,7 +13,7 @@ import Callout from '../../components/widgets/Callout';
 import { AssignmentSolutionNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import PlagiarismCodeBoxWithSelector from '../../components/Solutions/PlagiarismCodeBoxWithSelector';
-import { BanIcon, PlagiarismIcon, UserIcon } from '../../components/icons';
+import Icon, { BanIcon, PlagiarismIcon, UserIcon } from '../../components/icons';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
@@ -227,9 +227,14 @@ class SolutionPlagiarisms extends Component {
                             className={'clickable' + (plagiarismSource === selectedSource ? ' table-primary' : '')}
                             onClick={() => this.selectPlagiarismSource(plagiarismSource)}>
                             <td className="text-nowrap">
-                              <UsersNameContainer userId={plagiarismSource} noAvatar noAutoload />
+                              <Icon icon="person-dots-from-line" className="text-muted" />
                             </td>
                             <td className="text-nowrap">
+                              <strong>
+                                <UsersNameContainer userId={plagiarismSource} noAvatar noAutoload />
+                              </strong>
+                            </td>
+                            <td className="text-nowrap text-muted small">
                               <FormattedMessage
                                 id="app.solutionPlagiarisms.selectSourceTable.files"
                                 defaultMessage="{count} {count, plural, one {file} other {files}}"
@@ -238,19 +243,19 @@ class SolutionPlagiarisms extends Component {
                             </td>
 
                             {plagiarisms[plagiarismSource].length === 0 ? (
-                              <td colSpan={2} className="text-nowrap">
+                              <td colSpan={2} className="text-nowrap text-muted small">
                                 {plagiarisms[plagiarismSource][0].similarity * 100} %
                               </td>
                             ) : (
                               <>
-                                <td className="text-nowrap">
+                                <td className="text-nowrap text-muted small">
                                   <FormattedMessage
                                     id="app.solutionPlagiarisms.selectSourceTable.max"
                                     defaultMessage="max"
                                   />
-                                  : {Math.max(plagiarisms[plagiarismSource].map(p => p.similarity)) * 100} %
+                                  : {Math.max(...plagiarisms[plagiarismSource].map(p => p.similarity)) * 100} %
                                 </td>
-                                <td className="text-nowrap">
+                                <td className="text-nowrap text-muted small">
                                   <FormattedMessage
                                     id="app.solutionPlagiarisms.selectSourceTable.avg"
                                     defaultMessage="average"
