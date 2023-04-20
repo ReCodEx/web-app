@@ -8,7 +8,7 @@ import SourceCodeBox from '../SourceCodeBox';
 import DateTime from '../../widgets/DateTime';
 import Button from '../../widgets/TheButton';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
-import { CloseIcon } from '../../icons';
+import { CloseIcon, CodeFileIcon } from '../../icons';
 
 class PlagiarismCodeBoxWithSelector extends Component {
   state = { selectedFile: 0, dialogOpen: false };
@@ -62,6 +62,9 @@ class PlagiarismCodeBoxWithSelector extends Component {
                       key={file.id}
                       className={this.state.selectedFile === idx ? 'table-primary' : 'clickable'}
                       onClick={this.state.selectedFile !== idx ? () => this.selectFile(idx) : null}>
+                      <td className="text-nowrap shrink-col">
+                        <CodeFileIcon className="text-muted" gapLeft gapRight />
+                      </td>
                       <td>
                         <code>
                           {file.solutionFile.name}
