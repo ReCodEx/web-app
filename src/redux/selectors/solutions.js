@@ -53,3 +53,8 @@ export const getAssignmentSolverSelector = createSelector(
   getAssignmentSolvers,
   assignmentSolvers => (assignmentId, userId) => assignmentSolvers && assignmentSolvers.getIn([assignmentId, userId])
 );
+
+export const getOneAssignmentSolvers = createSelector(
+  [getAssignmentSolvers, getParam],
+  (assignmentSolvers, assignmentId) => assignmentSolvers && assignmentSolvers.get(assignmentId)
+);
