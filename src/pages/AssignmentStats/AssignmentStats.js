@@ -63,6 +63,7 @@ import {
   fetchManyAssignmentSolutionsStatus,
   isAssignmentSolversLoading,
   getAssignmentSolverSelector,
+  getOneAssignmentSolvers,
 } from '../../redux/selectors/solutions';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
@@ -70,7 +71,7 @@ import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
-const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, locale, links) => {
+const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, onlyBest, locale, links) => {
   const { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
@@ -102,6 +103,34 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
           createdAt && <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
       }
     ),
+
+    new SortableTableColumnDescriptor('attempt', '#', {
+      className: 'text-center',
+      cellRenderer: ({ attemptIndex, lastAttemptIndex }) => (
+        <small
+          className={
+            'text-nowrap' +
+            (onlyBest && lastAttemptIndex && lastAttemptIndex !== attemptIndex
+              ? ' text-bold text-warning'
+              : ' text-muted')
+          }>
+          {!lastAttemptIndex ? (
+            <LoadingIcon />
+          ) : onlyBest && lastAttemptIndex && lastAttemptIndex === attemptIndex ? (
+            attemptIndex
+          ) : (
+            <FormattedMessage
+              id="app.solution.solutionAttemptValue"
+              defaultMessage="{index} of {count}"
+              values={{
+                index: attemptIndex,
+                count: lastAttemptIndex,
+              }}
+            />
+          )}
+        </small>
+      ),
+    }),
 
     new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />, {
       className: 'text-left',
@@ -209,11 +238,12 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
     }),
   ];
 
-  return columns;
+  return columns.filter(c => c);
 });
 
 const prepareTableData = defaultMemoize(
-  (assignmentSolutions, users, runtimeEnvironments, onlyBestSolutionsCheckbox) => {
+  (assignmentSolutions, users, assignmentSolvers, runtimeEnvironments, onlyBestSolutionsCheckbox) => {
+    const solvers = (assignmentSolvers && assignmentSolvers.toJS()) || {};
     const usersIndex = arrayToObject(users);
     return assignmentSolutions
       .toArray()
@@ -226,6 +256,7 @@ const prepareTableData = defaultMemoize(
           lastSubmission,
           authorId,
           createdAt,
+          attemptIndex,
           runtimeEnvironmentId,
           note,
           maxPoints,
@@ -245,6 +276,7 @@ const prepareTableData = defaultMemoize(
             icon: { id, commentsStats, lastSubmission, accepted, review, permissionHints, isBestSolution, plagiarism },
             user: usersIndex[authorId],
             date: createdAt,
+            attempt: { attemptIndex, lastAttemptIndex: solvers[authorId] && solvers[authorId].lastAttemptIndex },
             validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
             points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
             runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),
@@ -354,6 +386,7 @@ class AssignmentStats extends Component {
       fetchManyStatus,
       assignmentSolversLoading,
       assignmentSolverSelector,
+      assignmentSolvers,
       intl: { locale },
       links,
     } = this.props;
@@ -550,11 +583,19 @@ class AssignmentStats extends Component {
                         noPadding>
                         <SortableTable
                           hover
-                          columns={prepareTableColumnDescriptors(loggedUserId, assignmentId, group.id, locale, links)}
+                          columns={prepareTableColumnDescriptors(
+                            loggedUserId,
+                            assignmentId,
+                            group.id,
+                            this.state.onlyBestSolutionsCheckbox,
+                            locale,
+                            links
+                          )}
                           defaultOrder="date"
                           data={prepareTableData(
                             assignmentSolutions,
                             getStudents(group.id),
+                            assignmentSolversLoading ? null : assignmentSolvers,
                             runtimes,
                             this.state.onlyBestSolutionsCheckbox
                           )}
@@ -595,6 +636,7 @@ AssignmentStats.propTypes = {
   fetchManyStatus: PropTypes.string,
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func.isRequired,
+  assignmentSolvers: ImmutablePropTypes.map,
   closeReview: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
@@ -627,6 +669,7 @@ export default withLinks(
         fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),
         assignmentSolversLoading: isAssignmentSolversLoading(state),
         assignmentSolverSelector: getAssignmentSolverSelector(state),
+        assignmentSolvers: getOneAssignmentSolvers(state, assignmentId),
       };
     },
     (
