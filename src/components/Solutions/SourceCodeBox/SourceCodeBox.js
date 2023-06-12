@@ -30,7 +30,6 @@ const SourceCodeBox = ({
   parentId = id,
   solutionId,
   name,
-  titleSuffix = '',
   entryName = null,
   download = null,
   diffWith = null,
@@ -255,7 +254,6 @@ SourceCodeBox.propTypes = {
   reviewClosed: PropTypes.bool,
   collapsable: PropTypes.bool,
   isOpen: PropTypes.bool,
-  titleSuffix: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
 };
 
 export default SourceCodeBox;

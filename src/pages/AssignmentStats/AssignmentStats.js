@@ -9,8 +9,7 @@ import { defaultMemoize } from 'reselect';
 
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
-import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
-import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
+import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import Page from '../../components/layout/Page';
@@ -224,12 +223,11 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
               </Link>
             </>
           )}
-          {solution.permissionHints && solution.permissionHints.setFlag && (
-            <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel size="xs" />
+
+          {solution.permissionHints && (solution.permissionHints.setFlag || solution.permissionHints.review) && (
+            <SolutionActionsContainer id={solution.id} showAllButtons dropdown />
           )}
-          {solution.permissionHints && solution.permissionHints.review && (
-            <ReviewSolutionContainer id={solution.id} locale={locale} size="xs" />
-          )}
+
           {solution.permissionHints && solution.permissionHints.delete && (
             <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} size="xs" />
           )}
