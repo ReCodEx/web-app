@@ -3,25 +3,35 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import ReviewSolution from '../../components/buttons/ReviewSolution';
+import SolutionActions from '../../components/Solutions/SolutionActions';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { setSolutionReviewState, deleteSolutionReview } from '../../redux/modules/solutionReviews';
-import { getSolution } from '../../redux/selectors/solutions';
+import { getSolution, isSetFlagPending } from '../../redux/selectors/solutions';
 import { isSolutionReviewUpdatePending } from '../../redux/selectors/solutionReviews';
+import { setSolutionFlag } from '../../redux/modules/solutions';
 
-const ReviewSolutionContainer = ({ id, solution, updatePending, openReview, closeReview, deleteReview, ...props }) => {
+const SolutionActionsContainer = ({
+  id,
+  solution,
+  updatePending,
+  setReviewState,
+  deleteReview,
+  acceptPending,
+  setAccepted,
+  ...props
+}) => {
   return (
     <ResourceRenderer resource={solution}>
       {solution => (
-        <ReviewSolution
+        <SolutionActions
           {...props}
           id={id}
-          assignmentId={solution.assignmentId}
-          review={solution.review}
+          solution={solution}
+          acceptPending={acceptPending}
           updatePending={updatePending}
-          openReview={openReview}
-          closeReview={closeReview}
+          setAccepted={setAccepted}
+          setReviewState={setReviewState}
           deleteReview={deleteReview}
         />
       )}
@@ -29,24 +39,26 @@ const ReviewSolutionContainer = ({ id, solution, updatePending, openReview, clos
   );
 };
 
-ReviewSolutionContainer.propTypes = {
+SolutionActionsContainer.propTypes = {
   id: PropTypes.string.isRequired,
   solution: ImmutablePropTypes.map,
+  acceptPending: PropTypes.bool.isRequired,
   updatePending: PropTypes.bool,
-  openReview: PropTypes.func.isRequired,
-  closeReview: PropTypes.func.isRequired,
+  setAccepted: PropTypes.func.isRequired,
+  setReviewState: PropTypes.func.isRequired,
   deleteReview: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   solution: getSolution(state, id),
+  acceptPending: isSetFlagPending(state, id, 'accepted'),
   updatePending: isSolutionReviewUpdatePending(state, id),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  openReview: () => dispatch(setSolutionReviewState(id, false)),
-  closeReview: () => dispatch(setSolutionReviewState(id, true)),
+  setAccepted: accepted => dispatch(setSolutionFlag(id, 'accepted', accepted)),
+  setReviewState: closed => dispatch(setSolutionReviewState(id, closed)),
   deleteReview: () => dispatch(deleteSolutionReview(id)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewSolutionContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(SolutionActionsContainer);

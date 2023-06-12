@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col, Modal, Tabs, Tab, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
 import { withRouter } from 'react-router';
@@ -22,8 +22,7 @@ import {
   StopIcon,
   SwapIcon,
 } from '../../components/icons';
-import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
-import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
+import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import SourceCodeBox from '../../components/Solutions/SourceCodeBox';
 import RecentlyVisited from '../../components/Solutions/RecentlyVisited';
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
@@ -226,7 +225,6 @@ class SolutionSourceCodes extends Component {
       match: {
         params: { solutionId, assignmentId, secondSolutionId },
       },
-      intl: { locale },
     } = this.props;
 
     const diffMode =
@@ -326,16 +324,9 @@ class SolutionSourceCodes extends Component {
                 <Row className="justify-content-sm-between">
                   <Col sm="auto" className="mb-3">
                     {!diffMode && (
-                      <>
-                        {hasPermissions(solution, 'setFlag') && (
-                          <AcceptSolutionContainer id={solution.id} locale={locale} />
-                        )}
-                        {hasPermissions(solution, 'review') && (
-                          <TheButtonGroup className="ml-2 text-nowrap">
-                            <ReviewSolutionContainer id={solution.id} locale={locale} showAllButtons />
-                          </TheButtonGroup>
-                        )}
-                      </>
+                      <TheButtonGroup className="ml-2 text-nowrap">
+                        <SolutionActionsContainer id={solution.id} showAllButtons />
+                      </TheButtonGroup>
                     )}
                   </Col>
 
@@ -674,7 +665,6 @@ SolutionSourceCodes.propTypes = {
   addComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
   removeComment: PropTypes.func.isRequired,
-  intl: PropTypes.object,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
@@ -722,5 +712,5 @@ export default withLinks(
       updateComment: comment => dispatch(updateComment(params.solutionId, comment)),
       removeComment: id => dispatch(removeComment(params.solutionId, id)),
     })
-  )(injectIntl(withRouter(SolutionSourceCodes)))
+  )(withRouter(SolutionSourceCodes))
 );

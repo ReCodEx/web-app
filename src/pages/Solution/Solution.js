@@ -10,8 +10,7 @@ import Page from '../../components/layout/Page';
 import { AssignmentSolutionNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SolutionDetail, { FailedSubmissionDetail } from '../../components/Solutions/SolutionDetail';
-import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
-import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
+import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { TheButtonGroup } from '../../components/widgets/TheButton';
@@ -142,14 +141,9 @@ class Solution extends Component {
                 hasPermissions(assignment, 'resubmitSubmissions')) && (
                 <Row>
                   <Col className="mb-3" xs={12} lg={true}>
-                    {hasPermissions(solution, 'setFlag') && (
-                      <AcceptSolutionContainer id={solution.id} locale={locale} />
-                    )}
-                    {hasPermissions(solution, 'review') && (
-                      <TheButtonGroup className="ml-2 text-nowrap">
-                        <ReviewSolutionContainer id={solution.id} locale={locale} />
-                      </TheButtonGroup>
-                    )}
+                    <TheButtonGroup>
+                      <SolutionActionsContainer id={solution.id} />
+                    </TheButtonGroup>
                   </Col>
 
                   <Col xs={12} lg="auto" className="mb-3">

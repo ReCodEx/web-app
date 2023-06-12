@@ -8,8 +8,7 @@ import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
-import AcceptSolutionContainer from '../../containers/AcceptSolutionContainer';
-import ReviewSolutionContainer from '../../containers/ReviewSolutionContainer';
+import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
@@ -200,24 +199,23 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
       cellRenderer: solution => (
         <TheButtonGroup>
           {solution.permissionHints && solution.permissionHints.viewDetail && (
-            <Link to={SOLUTION_DETAIL_URI_FACTORY(solution.assignmentId, solution.id)}>
-              <Button size="xs" variant="secondary">
-                <DetailIcon gapRight />
-                <FormattedMessage id="generic.detail" defaultMessage="Detail" />
-              </Button>
+            <>
+              <Link to={SOLUTION_DETAIL_URI_FACTORY(solution.assignmentId, solution.id)}>
+                <Button size="xs" variant="secondary">
+                  <DetailIcon gapRight />
+                  <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+                </Button>
+              </Link>
               <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(solution.assignmentId, solution.id)}>
                 <Button size="xs" variant="primary">
                   <CodeFileIcon fixedWidth gapRight />
                   <FormattedMessage id="generic.files" defaultMessage="Files" />
                 </Button>
               </Link>
-            </Link>
+            </>
           )}
-          {solution.permissionHints && solution.permissionHints.setFlag && (
-            <AcceptSolutionContainer id={solution.id} locale={locale} shortLabel size="xs" />
-          )}
-          {solution.permissionHints && solution.permissionHints.review && (
-            <ReviewSolutionContainer id={solution.id} locale={locale} size="xs" />
+          {solution.permissionHints && (solution.permissionHints.setFlag || solution.permissionHints.review) && (
+            <SolutionActionsContainer id={solution.id} showAllButtons dropdown />
           )}
           {solution.permissionHints && solution.permissionHints.delete && (
             <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} size="xs" />

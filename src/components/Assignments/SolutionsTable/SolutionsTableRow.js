@@ -7,9 +7,8 @@ import classnames from 'classnames';
 
 import Points from './Points';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
-import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
-import AcceptSolutionContainer from '../../../containers/AcceptSolutionContainer';
-import ReviewSolutionContainer from '../../../containers/ReviewSolutionContainer';
+import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer';
+import SolutionActionsContainer from '../../../containers/SolutionActionsContainer';
 
 import { DetailIcon, CodeFileIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
@@ -162,18 +161,8 @@ const SolutionsTableRow = ({
                 </>
               )}
 
-              {permissionHints && permissionHints.setFlag && (
-                <AcceptSolutionContainer
-                  id={id}
-                  locale={locale}
-                  captionAsTooltip={compact}
-                  shortLabel={!compact}
-                  size="xs"
-                />
-              )}
-
-              {permissionHints && permissionHints.review && (
-                <ReviewSolutionContainer id={id} locale={locale} captionAsTooltip={compact} size="xs" />
+              {permissionHints && (permissionHints.setFlag || permissionHints.review) && (
+                <SolutionActionsContainer id={id} captionAsTooltip={compact} showAllButtons dropdown />
               )}
 
               {permissionHints && permissionHints.delete && (
