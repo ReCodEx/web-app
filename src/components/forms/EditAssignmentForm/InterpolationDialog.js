@@ -152,7 +152,7 @@ const InterpolationDialog = ({
               }}
               disabled={!interval}>
               <SendIcon gapRight />
-              <FormattedMessage id="" defaultMessage="Update" />
+              <FormattedMessage id="generic.update" defaultMessage="Update" />
             </Button>
             <Button variant="secondary" onClick={() => setOpen(false)}>
               <CloseIcon gapRight />

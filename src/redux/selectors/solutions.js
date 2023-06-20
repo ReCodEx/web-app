@@ -16,6 +16,10 @@ export const isAccepted = createSelector([getSolutions, getParam], (solutions, i
   solutions.getIn([id, 'data', 'accepted'], false)
 );
 
+export const isPointsUpdatePending = createSelector([getSolutions, getParam], (solutions, id) =>
+  solutions.getIn([id, 'pending-points'], false)
+);
+
 export const isSetFlagPending = createSelector([getSolutions, getParams], (solutions, [id, flag]) =>
   solutions.getIn([id, `pending-set-flag-${flag}`], false)
 );

@@ -84,7 +84,7 @@ export const setPoints = (solutionId, overriddenPoints, bonusPoints) =>
     endpoint: `/assignment-solutions/${solutionId}/bonus-points`,
     method: 'POST',
     body: { overriddenPoints, bonusPoints },
-    meta: { solutionId, overriddenPoints, bonusPoints },
+    meta: { solutionId },
   });
 
 export const setSolutionFlag = (id, flag, value) =>
@@ -201,16 +201,25 @@ const reducer = handleActions(
         })
       ),
 
-    [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (
-      state,
-      { meta: { solutionId, overriddenPoints, bonusPoints } }
-    ) =>
-      state
-        .setIn(['resources', solutionId, 'data', 'bonusPoints'], Number(bonusPoints))
-        .setIn(
-          ['resources', solutionId, 'data', 'overriddenPoints'],
-          overriddenPoints !== null ? Number(overriddenPoints) : null
-        ),
+    [additionalActionTypes.SET_BONUS_POINTS_PENDING]: (state, { meta: { solutionId } }) =>
+      state.setIn(['resources', solutionId, 'pending-points'], true),
+
+    [additionalActionTypes.SET_BONUS_POINTS_REJECTED]: (state, { meta: { solutionId } }) =>
+      state.removeIn(['resources', solutionId, 'pending-points']),
+
+    [additionalActionTypes.SET_BONUS_POINTS_FULFILLED]: (state, { meta: { solutionId }, payload }) => {
+      state = state.removeIn(['resources', solutionId, 'pending-points']);
+      payload.forEach(solution => {
+        state = state.setIn(
+          ['resources', solution.id],
+          createRecord({
+            state: resourceStatus.FULFILLED,
+            data: solution,
+          })
+        );
+      });
+      return state;
+    },
 
     [additionalActionTypes.SET_FLAG_PENDING]: (state, { meta: { id, flag } }) =>
       state.setIn(['resources', id, `pending-set-flag-${flag}`], true),

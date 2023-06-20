@@ -128,7 +128,10 @@ class PendingReviewsList extends Component {
                                 ) : (
                                   <Icon icon="boxes-packing" gapRight />
                                 )}
-                                <FormattedMessage id="app.reviewSolutionButtons.close" defaultMessage="Close Review" />
+                                <FormattedMessage
+                                  id="app.solution.actions.review.close"
+                                  defaultMessage="Close Review"
+                                />
                               </Button>
                             )}
                           </>

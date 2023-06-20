@@ -81,6 +81,7 @@ const SolutionsTableRow = ({
           })}>
           <SolutionTableRowIcons
             id={id}
+            assignmentId={assignmentId}
             accepted={accepted}
             review={review}
             isBestSolution={isBestSolution}

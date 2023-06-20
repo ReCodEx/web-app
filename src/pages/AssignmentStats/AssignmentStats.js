@@ -80,6 +80,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
       cellRenderer: info => (
         <SolutionTableRowIcons
           id={info.id}
+          assignmentId={assignmentId}
           accepted={info.accepted}
           review={info.review}
           isReviewer={info.permissionHints && info.permissionHints.review}
