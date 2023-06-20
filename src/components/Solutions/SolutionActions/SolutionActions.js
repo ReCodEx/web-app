@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 
 import withLinks from '../../../helpers/withLinks';
+import { safeGet } from '../../../helpers/common';
 
 import ActionButton from './ActionButton';
 import ActionDropdown from './ActionDropdown';
@@ -14,42 +15,66 @@ import ActionDropdown from './ActionDropdown';
  */
 const actionsTemplates = {
   accept: {
-    short: <FormattedMessage id="app.acceptSolution.notAcceptedShort" defaultMessage="Accept" />,
-    label: <FormattedMessage id="app.acceptSolution.notAccepted" defaultMessage="Accept as Final" />,
+    short: <FormattedMessage id="app.solution.actions.accept" defaultMessage="Accept" />,
+    label: <FormattedMessage id="app.solution.actions.acceptLong" defaultMessage="Accept as Final" />,
     icon: ['far', 'check-circle'],
     pending: 'acceptPending',
   },
   unaccept: {
-    short: <FormattedMessage id="app.acceptSolution.acceptedShort" defaultMessage="Revoke" />,
-    label: <FormattedMessage id="app.acceptSolution.accepted" defaultMessage="Revoke as Final" />,
+    short: <FormattedMessage id="app.solution.actions.revokeAccept" defaultMessage="Revoke" />,
+    label: <FormattedMessage id="app.solution.actions.revokeAcceptLong" defaultMessage="Revoke as Final" />,
     icon: ['far', 'circle-xmark'],
     variant: 'warning',
     pending: 'acceptPending',
   },
 
+  // point actions
+  zeroPoints: {
+    label: <FormattedMessage id="app.solution.actions.points.zero" defaultMessage="Zero Points" />,
+    icon: 'battery-empty',
+    variant: 'danger',
+    pending: 'pointsPending',
+  },
+  fullPoints: {
+    label: <FormattedMessage id="app.solution.actions.points.full" defaultMessage="Full Points" />,
+    icon: 'battery-full',
+    pending: 'pointsPending',
+  },
+  clearPoints: {
+    label: <FormattedMessage id="app.solution.actions.points.clearOverride" defaultMessage="Clear Points Override" />,
+    icon: 'rotate-left',
+    variant: 'warning',
+    pending: 'pointsPending',
+  },
+
   // review actions
   open: {
-    label: <FormattedMessage id="app.reviewSolutionButtons.open" defaultMessage="Start Review" />,
+    label: <FormattedMessage id="app.solution.actions.review.open" defaultMessage="Start Review" />,
     icon: 'microscope',
     variant: 'info',
+    pending: 'updatePending',
   },
   reopen: {
-    label: <FormattedMessage id="app.reviewSolutionButtons.reopen" defaultMessage="Reopen Review" />,
+    label: <FormattedMessage id="app.solution.actions.review.reopen" defaultMessage="Reopen Review" />,
     icon: 'person-digging',
     variant: 'warning',
+    pending: 'updatePending',
   },
   openClose: {
-    label: <FormattedMessage id="app.reviewSolutionButtons.markReviewed" defaultMessage="Mark as Reviewed" />,
+    label: <FormattedMessage id="app.solution.actions.review.markReviewed" defaultMessage="Mark as Reviewed" />,
     icon: 'file-circle-check',
+    pending: 'updatePending',
   },
   close: {
-    label: <FormattedMessage id="app.reviewSolutionButtons.close" defaultMessage="Close Review" />,
+    label: <FormattedMessage id="app.solution.actions.review.close" defaultMessage="Close Review" />,
     icon: 'boxes-packing',
+    pending: 'updatePending',
   },
   delete: {
-    label: <FormattedMessage id="app.reviewSolutionButtons.delete" defaultMessage="Erase Review" />,
+    label: <FormattedMessage id="app.solution.actions.review.delete" defaultMessage="Erase Review" />,
     icon: 'trash',
     variant: 'danger',
+    pending: 'updatePending',
     confirm: (
       <FormattedMessage
         id="app.reviewSolutionButtons.deleteConfirm"
@@ -59,11 +84,24 @@ const actionsTemplates = {
   },
 };
 
-const knownActions = ['accept', 'unaccept', 'open', 'reopen', 'openClose', 'close', 'delete'];
+const knownActions = [
+  'accept',
+  'unaccept',
+  'zeroPoints',
+  'fullPoints',
+  'clearPoints',
+  'open',
+  'reopen',
+  'openClose',
+  'close',
+  'delete',
+];
 
 const SolutionActions = ({
   id,
   solution,
+  assignment,
+  pointsPending = false,
   acceptPending = false,
   showAllButtons = false,
   updatePending = false,
@@ -73,6 +111,7 @@ const SolutionActions = ({
   setAccepted = null,
   setReviewState = null,
   deleteReview = null,
+  setPoints = null,
   history: { push },
   location: { pathname },
   links: { SOLUTION_SOURCE_CODES_URI_FACTORY },
@@ -87,13 +126,30 @@ const SolutionActions = ({
   if (!permissionHints.review) {
     setReviewState = deleteReview = null;
   }
+  if (!permissionHints.setBonusPoints || !showAllButtons) {
+    setPoints = null;
+  }
 
   const reviewPageUri = SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id);
   const isOnReviewPage = pathname === SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id);
 
+  const bonusPoints = solution.bonusPoints;
+  const points = solution.overriddenPoints !== null ? solution.overriddenPoints : solution.actualPoints;
+  const evalPoints = safeGet(solution, ['lastSubmission', 'evaluation', 'points']);
+  const maxPoints = assignment.maxPointsBeforeFirstDeadline;
+
   const actionHandlers = {
     accept: !accepted && setAccepted && (() => setAccepted(true)),
     unaccept: accepted && setAccepted && (() => setAccepted(false)),
+    zeroPoints:
+      setPoints && points !== 0 && evalPoints !== 0 && (() => setPoints({ bonusPoints, overriddenPoints: 0 })),
+    fullPoints:
+      setPoints &&
+      points < maxPoints &&
+      evalPoints !== maxPoints &&
+      (() => setPoints({ bonusPoints, overriddenPoints: maxPoints })),
+    clearPoints:
+      setPoints && solution.overriddenPoints !== null && (() => setPoints({ bonusPoints, overriddenPoints: null })),
     open: setReviewState && (!review || !review.startedAt) && (() => setReviewState(false)),
     reopen: setReviewState && review && review.closedAt && (() => setReviewState(false)),
     openClose: setReviewState && (!review || !review.startedAt) && showAllButtons && (() => setReviewState(true)),
@@ -106,12 +162,13 @@ const SolutionActions = ({
     actionHandlers.reopen = actionHandlers.reopen && (() => actionHandlers.reopen().then(() => push(reviewPageUri)));
   }
 
+  const pendingIndicators = { acceptPending, updatePending, pointsPending };
   const actions = knownActions
     .filter(a => actionHandlers[a])
     .map(a => ({
       ...actionsTemplates[a],
       handler: actionHandlers[a],
-      pending: actionsTemplates[a].pending === 'acceptPending' ? acceptPending : updatePending,
+      pending: pendingIndicators[actionsTemplates[a].pending] || false,
     }));
 
   return dropdown ? (
@@ -140,6 +197,9 @@ SolutionActions.propTypes = {
   solution: PropTypes.shape({
     accepted: PropTypes.bool,
     assignmentId: PropTypes.string.isRequired,
+    bonusPoints: PropTypes.number,
+    actualPoints: PropTypes.number,
+    overriddenPoints: PropTypes.number,
     review: PropTypes.shape({
       startedAt: PropTypes.number,
       closedAt: PropTypes.number,
@@ -147,7 +207,11 @@ SolutionActions.propTypes = {
     }),
     permissionHints: PropTypes.object,
   }),
+  assignment: PropTypes.shape({
+    maxPointsBeforeFirstDeadline: PropTypes.number,
+  }),
   showAllButtons: PropTypes.bool,
+  pointsPending: PropTypes.bool,
   acceptPending: PropTypes.bool,
   updatePending: PropTypes.bool,
   captionAsTooltip: PropTypes.bool,
@@ -156,6 +220,7 @@ SolutionActions.propTypes = {
   setAccepted: PropTypes.func,
   setReviewState: PropTypes.func,
   deleteReview: PropTypes.func,
+  setPoints: PropTypes.func,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),

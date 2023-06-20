@@ -91,6 +91,7 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
       cellRenderer: info => (
         <SolutionTableRowIcons
           id={info.id}
+          assignmentId={info.assignmentId}
           accepted={info.accepted}
           review={info.review}
           isReviewer={info.permissionHints && info.permissionHints.review}
@@ -262,6 +263,7 @@ const prepareTableData = defaultMemoize(
             res.push({
               icon: {
                 id,
+                assignmentId,
                 commentsStats,
                 lastSubmission,
                 accepted,
