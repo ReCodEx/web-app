@@ -37,10 +37,10 @@ const getEditNoteFormInitialValues = defaultMemoize(note => ({ note }));
 
 const getImportantSolutions = defaultMemoize((solutions, selectedSolutionId) => {
   solutions = solutions.toArray();
-  const selectedIdx = solutions.findIndex(s => s.id === selectedSolutionId);
-  const accepted = solutions.find(s => s.accepted && s.id !== selectedSolutionId) || null;
-  const best = solutions.find(s => s.isBestSolution && s.id !== selectedSolutionId) || null;
-  let lastReviewed = solutions.filter(s => s.review && s.review.closedAt).shift();
+  const selectedIdx = solutions.findIndex(s => s && s.id === selectedSolutionId);
+  const accepted = solutions.find(s => s && s.accepted && s.id !== selectedSolutionId) || null;
+  const best = solutions.find(s => s && s.isBestSolution && s.id !== selectedSolutionId) || null;
+  let lastReviewed = solutions.filter(s => s && s.review && s.review.closedAt).shift();
   lastReviewed = lastReviewed && lastReviewed.id !== selectedSolutionId ? lastReviewed : null;
   return { selectedIdx, accepted, best, lastReviewed };
 });
