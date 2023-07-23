@@ -69,9 +69,14 @@ import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
+// View mode keys, labels, and filtering functions
 const VIEW_MODE_DEFAULT = 'default';
 const VIEW_MODE_GROUPED = 'grouped';
 const VIEW_MODE_BEST = 'best';
+const VIEW_MODE_LAST = 'last';
+const VIEW_MODE_ACCEPTED = 'accepted';
+const VIEW_MODE_REVIEWD = 'reviewed';
+
 const viewModes = {
   [VIEW_MODE_DEFAULT]: (
     <FormattedMessage id="app.assignmentSolutions.viewModes.default" defaultMessage="All solutions (default)" />
@@ -82,6 +87,33 @@ const viewModes = {
   [VIEW_MODE_BEST]: (
     <FormattedMessage id="app.assignmentSolutions.viewModes.best" defaultMessage="Best solutions only" />
   ),
+  [VIEW_MODE_LAST]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.last" defaultMessage="Latest solutions only" />
+  ),
+  [VIEW_MODE_ACCEPTED]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.accepted" defaultMessage="Accepted solutions only" />
+  ),
+  [VIEW_MODE_REVIEWD]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.reviewed" defaultMessage="Reviewed solutions only" />
+  ),
+};
+
+const _getLastAttemptIndices = defaultMemoize(solutions => {
+  const lastAttemptIndices = {};
+  solutions.filter(identity).forEach(s => {
+    lastAttemptIndices[s.authorId] = Math.max(s.attemptIndex || 0, lastAttemptIndices[s.authorId] || 0);
+  });
+  return lastAttemptIndices;
+});
+
+const viewModeFilters = {
+  [VIEW_MODE_DEFAULT]: null,
+  [VIEW_MODE_GROUPED]: null,
+  [VIEW_MODE_BEST]: solution => solution && solution.isBestSolution,
+  [VIEW_MODE_LAST]: (solution, _, solutions) =>
+    solution && solution.attemptIndex === _getLastAttemptIndices(solutions)[solution.authorId],
+  [VIEW_MODE_ACCEPTED]: solution => solution && solution.accepted,
+  [VIEW_MODE_REVIEWD]: solution => solution && solution.review,
 };
 
 const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, viewMode, locale, links) => {
@@ -262,7 +294,7 @@ const prepareTableData = defaultMemoize(
       .toArray()
       .map(getJsData)
       .filter(solution => solution && usersIndex[solution.authorId])
-      .filter(viewMode === VIEW_MODE_BEST ? solution => solution && solution.isBestSolution : identity)
+      .filter(viewModeFilters[viewMode] || identity)
       .map(
         ({
           id,
