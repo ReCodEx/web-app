@@ -432,7 +432,7 @@ class GroupUserSolutions extends Component {
             {plagiarisms && plagiarisms.length > 0 && (
               <Callout variant="danger" icon={<PlagiarismIcon />}>
                 <FormattedMessage
-                  id="app.assignmentStats.plagiarismsDetected"
+                  id="app.assignmentSolutions.plagiarismsDetected"
                   defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} with detected similarities. Such solutions may be plagiarisms."
                   values={{ count: plagiarisms.length }}
                 />
