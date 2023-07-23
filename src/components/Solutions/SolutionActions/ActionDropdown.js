@@ -9,11 +9,12 @@ import Icon, { CloseIcon, EditIcon, LoadingIcon, SuccessIcon } from '../../icons
 const ActionDropdown = ({ actions, placement = 'bottom', id, captionAsTooltip }) => {
   const [confirmAction, setConfirmAction] = useState(null);
   const target = useRef(null);
+  const anyPending = actions.some(a => a.pending);
 
   return (
     <Dropdown as="span">
-      <Dropdown.Toggle variant="warning" size="xs" ref={target}>
-        <EditIcon gapRight={!captionAsTooltip} />
+      <Dropdown.Toggle variant="warning" size="xs" ref={target} className={anyPending ? 'half-opaque' : ''}>
+        {anyPending ? <LoadingIcon gapRight={!captionAsTooltip} /> : <EditIcon gapRight={!captionAsTooltip} />}
         {!captionAsTooltip && <FormattedMessage id="generic.update" defaultMessage="Update" />}
       </Dropdown.Toggle>
 
