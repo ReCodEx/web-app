@@ -8,7 +8,7 @@ import AcceptInvitation from './AcceptInvitation';
 import App from '../containers/App';
 import Archive from './Archive';
 import Assignment from './Assignment';
-import AssignmentStats from './AssignmentStats';
+import AssignmentSolutions from './AssignmentSolutions';
 import ChangePassword from './ChangePassword';
 import Dashboard from './Dashboard';
 import EditAssignment from './EditAssignment';
@@ -86,7 +86,7 @@ const routesDescriptors = [
   r('app/assignment/:assignmentId', Assignment, 'ASSIGNMENT_DETAIL_URI_FACTORY', true),
   r('app/assignment/:assignmentId/user/:userId', Assignment, 'ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY', true),
   r('app/assignment/:assignmentId/edit', EditAssignment, 'ASSIGNMENT_EDIT_URI_FACTORY', true),
-  r('app/assignment/:assignmentId/stats', AssignmentStats, 'ASSIGNMENT_STATS_URI_FACTORY', true),
+  r('app/assignment/:assignmentId/solutions', AssignmentSolutions, 'ASSIGNMENT_STATS_URI_FACTORY', true),
   r('app/assignment/:assignmentId/solution/:solutionId', Solution, 'SOLUTION_DETAIL_URI_FACTORY', true),
   r(
     'app/assignment/:assignmentId/solution/:solutionId/sources',
