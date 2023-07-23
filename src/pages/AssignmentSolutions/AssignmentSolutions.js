@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Row, Col, Modal } from 'react-bootstrap';
+import { Row, Col, Modal, DropdownButton, Dropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -30,7 +30,6 @@ import Points from '../../components/Assignments/SolutionsTable/Points';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
-import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
 import Box from '../../components/widgets/Box';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import DateTime from '../../components/widgets/DateTime';
@@ -70,7 +69,22 @@ import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import withLinks from '../../helpers/withLinks';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
 
-const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, onlyBest, locale, links) => {
+const VIEW_MODE_DEFAULT = 'default';
+const VIEW_MODE_GROUPED = 'grouped';
+const VIEW_MODE_BEST = 'best';
+const viewModes = {
+  [VIEW_MODE_DEFAULT]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.default" defaultMessage="All solutions (default)" />
+  ),
+  [VIEW_MODE_GROUPED]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.grouped" defaultMessage="Grouped by users" />
+  ),
+  [VIEW_MODE_BEST]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.best" defaultMessage="Best solutions only" />
+  ),
+};
+
+const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, viewMode, locale, links) => {
   const { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
@@ -110,13 +124,13 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
         <small
           className={
             'text-nowrap' +
-            (onlyBest && lastAttemptIndex && lastAttemptIndex !== attemptIndex
+            (viewMode === VIEW_MODE_BEST && lastAttemptIndex && lastAttemptIndex !== attemptIndex
               ? ' text-bold text-warning'
               : ' text-muted')
           }>
           {!lastAttemptIndex ? (
             <LoadingIcon />
-          ) : onlyBest && lastAttemptIndex && lastAttemptIndex === attemptIndex ? (
+          ) : viewMode === VIEW_MODE_BEST && lastAttemptIndex && lastAttemptIndex === attemptIndex ? (
             attemptIndex
           ) : (
             <FormattedMessage
@@ -241,14 +255,14 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
 });
 
 const prepareTableData = defaultMemoize(
-  (assignmentSolutions, users, assignmentSolvers, runtimeEnvironments, onlyBestSolutionsCheckbox) => {
+  (assignmentSolutions, users, assignmentSolvers, runtimeEnvironments, viewMode) => {
     const solvers = (assignmentSolvers && assignmentSolvers.toJS()) || {};
     const usersIndex = arrayToObject(users);
     return assignmentSolutions
       .toArray()
       .map(getJsData)
       .filter(solution => solution && usersIndex[solution.authorId])
-      .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
+      .filter(viewMode === VIEW_MODE_BEST ? solution => solution && solution.isBestSolution : identity)
       .map(
         ({
           id,
@@ -319,21 +333,15 @@ class AssignmentSolutions extends Component {
     ]);
 
   state = {
-    groupByUsersCheckbox: true,
-    onlyBestSolutionsCheckbox: false,
+    viewMode: VIEW_MODE_DEFAULT,
     assignmentDialogOpen: false,
     closingReviews: false,
     closingReviewsFailed: false,
   };
 
-  checkboxClickHandler = ev => {
-    this.setState({ [ev.target.name]: !this.state[ev.target.name] }, () => {
-      // callback after the state is updated
-      storageSetItem(localStorageStateKey, {
-        groupByUsersCheckbox: this.state.groupByUsersCheckbox,
-        onlyBestSolutionsCheckbox: this.state.onlyBestSolutionsCheckbox,
-      });
-    });
+  viewModeSelectHandler = viewMode => {
+    this.setState({ viewMode });
+    storageSetItem(localStorageStateKey, { viewMode });
   };
 
   openDialog = () => this.setState({ assignmentDialogOpen: true });
@@ -397,7 +405,9 @@ class AssignmentSolutions extends Component {
       <Page
         resource={assignment}
         icon={<ResultsIcon />}
-        title={<FormattedMessage id="app.assignmentStats.title" defaultMessage="All Submissions of The Assignment" />}>
+        title={
+          <FormattedMessage id="app.assignmentSolutions.title" defaultMessage="All Submissions of The Assignment" />
+        }>
         {assignment => (
           <div>
             <AssignmentNavigation
@@ -412,7 +422,7 @@ class AssignmentSolutions extends Component {
             {plagiarisms && plagiarisms.length > 0 && (
               <Callout variant="danger" icon={<PlagiarismIcon />}>
                 <FormattedMessage
-                  id="app.assignmentStats.plagiarismsDetected"
+                  id="app.assignmentSolutions.plagiarismsDetected"
                   defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} with detected similarities. Such solutions may be plagiarisms."
                   values={{ count: plagiarisms.length }}
                 />
@@ -424,7 +434,7 @@ class AssignmentSolutions extends Component {
                 <Row className="align-items-center">
                   <Col className="pr-3 py-2">
                     <FormattedMessage
-                      id="app.assignmentStats.pendingReviews"
+                      id="app.assignmentSolutions.pendingReviews"
                       defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected assignment. Remember that the review comments are visible to the author after a review is closed."
                       values={{ count: pendingReviews.length }}
                     />
@@ -446,31 +456,29 @@ class AssignmentSolutions extends Component {
             )}
 
             <Row>
-              <Col md={12} lg={7}>
-                <div className="mb-3">
-                  <TheButtonGroup>
-                    {hasPermissions(assignment, 'viewAssignmentSolutions') && (
-                      <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
-                        <Button variant="primary">
-                          <DownloadIcon gapRight />
-                          <FormattedMessage
-                            id="app.assignment.downloadBestSolutionsArchive"
-                            defaultMessage="Download Bests"
-                          />
-                        </Button>
-                      </a>
-                    )}
+              <Col sm={12} md>
+                <TheButtonGroup className="mb-3 text-nowrap">
+                  {hasPermissions(assignment, 'viewAssignmentSolutions') && (
+                    <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
+                      <Button variant="primary">
+                        <DownloadIcon gapRight />
+                        <FormattedMessage
+                          id="app.assignment.downloadBestSolutionsArchive"
+                          defaultMessage="Download Bests"
+                        />
+                      </Button>
+                    </a>
+                  )}
 
-                    {hasPermissions(assignment, 'resubmitSubmissions') && (
-                      <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
-                    )}
+                  {hasPermissions(assignment, 'resubmitSubmissions') && (
+                    <ResubmitAllSolutionsContainer assignmentId={assignment.id} />
+                  )}
 
-                    <Button variant="info" onClick={this.openDialog}>
-                      <ChatIcon gapRight />
-                      <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
-                    </Button>
-                  </TheButtonGroup>
-                </div>
+                  <Button variant="info" onClick={this.openDialog}>
+                    <ChatIcon gapRight />
+                    <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
+                  </Button>
+                </TheButtonGroup>
 
                 <Modal show={this.state.assignmentDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
                   <CommentThreadContainer
@@ -495,25 +503,33 @@ class AssignmentSolutions extends Component {
                 </Modal>
               </Col>
 
-              <Col md={12} lg={5} className="text-right text-nowrap pt-2">
-                <OnOffCheckbox
-                  className="text-left mr-3"
-                  checked={this.state.groupByUsersCheckbox}
-                  disabled={this.state.onlyBestSolutionsCheckbox}
-                  name="groupByUsersCheckbox"
-                  onChange={this.checkboxClickHandler}>
-                  <FormattedMessage id="app.assignmentStats.groupByUsersCheckbox" defaultMessage="Group by users" />
-                </OnOffCheckbox>
-                <OnOffCheckbox
-                  className="text-left mr-3"
-                  checked={this.state.onlyBestSolutionsCheckbox}
-                  name="onlyBestSolutionsCheckbox"
-                  onChange={this.checkboxClickHandler}>
-                  <FormattedMessage
-                    id="app.assignmentStats.onlyBestSolutionsCheckbox"
-                    defaultMessage="Best solutions only"
-                  />
-                </OnOffCheckbox>
+              <Col sm={false} md="auto" className="text-nowrap pt-2 mb-3">
+                <DropdownButton
+                  menuAlign="right"
+                  title={
+                    <>
+                      <Icon icon="binoculars" gapRight />
+                      {viewModes[this.state.viewMode] || ''}
+                    </>
+                  }
+                  id="dropdown-menu-align-right">
+                  <Dropdown.Header>
+                    <FormattedMessage
+                      id="app.assignmentSolutions.viewModesTitle"
+                      defaultMessage="Select solutions view filter"
+                    />
+                  </Dropdown.Header>
+                  <Dropdown.Divider />
+                  {Object.keys(viewModes).map(viewMode => (
+                    <Dropdown.Item
+                      key={viewMode}
+                      eventKey={viewMode}
+                      active={viewMode === this.state.viewMode}
+                      onSelect={this.viewModeSelectHandler}>
+                      {viewModes[viewMode]}
+                    </Dropdown.Item>
+                  ))}
+                </DropdownButton>
               </Col>
             </Row>
 
@@ -524,7 +540,7 @@ class AssignmentSolutions extends Component {
                   loading={<LoadingSolutionsTable />}
                   failed={<FailedLoadingSolutionsTable />}>
                   {() =>
-                    this.state.groupByUsersCheckbox && !this.state.onlyBestSolutionsCheckbox ? (
+                    this.state.viewMode === VIEW_MODE_GROUPED ? (
                       <div>
                         {getStudents(group.id)
                           .sort(
@@ -544,7 +560,7 @@ class AssignmentSolutions extends Component {
                                         (
                                         <Link to={links.GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id)}>
                                           <FormattedMessage
-                                            id="app.assignmentStats.allUserSolutions"
+                                            id="app.assignmentSolutions.allUserSolutions"
                                             defaultMessage="all user solutions"
                                           />
                                         </Link>
@@ -574,7 +590,7 @@ class AssignmentSolutions extends Component {
                       <Box
                         title={
                           <FormattedMessage
-                            id="app.assignmentStats.assignmentSolutions"
+                            id="app.assignmentSolutions.assignmentSolutions"
                             defaultMessage="Assignment Solutions"
                           />
                         }
@@ -586,7 +602,7 @@ class AssignmentSolutions extends Component {
                             loggedUserId,
                             assignmentId,
                             group.id,
-                            this.state.onlyBestSolutionsCheckbox,
+                            this.state.viewMode,
                             locale,
                             links
                           )}
@@ -596,12 +612,12 @@ class AssignmentSolutions extends Component {
                             getStudents(group.id),
                             assignmentSolversLoading ? null : assignmentSolvers,
                             runtimes,
-                            this.state.onlyBestSolutionsCheckbox
+                            this.state.viewMode
                           )}
                           empty={
                             <div className="text-center text-muted">
                               <FormattedMessage
-                                id="app.assignmentStats.noSolutions"
+                                id="app.assignmentSolutions.noSolutions"
                                 defaultMessage="There are currently no submitted solutions."
                               />
                             </div>
