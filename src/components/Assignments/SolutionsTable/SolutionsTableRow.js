@@ -133,43 +133,45 @@ const SolutionsTableRow = ({
 
         {showActionButtons && (
           <td className="text-right valign-middle text-nowrap" rowSpan={splitOnTwoLines ? 2 : 1}>
-            <TheButtonGroup>
-              {permissionHints && permissionHints.viewDetail && (
-                <>
-                  <OptionalTooltipWrapper
-                    tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-                    hide={!compact}
-                    tooltipId={`detail-${id}`}>
-                    <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
-                      <Button size="xs" variant="secondary" disabled={selected}>
-                        <DetailIcon gapRight={!compact} />
-                        {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
-                      </Button>
-                    </Link>
-                  </OptionalTooltipWrapper>
+            {!selected && (
+              <TheButtonGroup>
+                {permissionHints && permissionHints.viewDetail && (
+                  <>
+                    <OptionalTooltipWrapper
+                      tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                      hide={!compact}
+                      tooltipId={`detail-${id}`}>
+                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)}>
+                        <Button size="xs" variant="secondary" disabled={selected}>
+                          <DetailIcon gapRight={!compact} />
+                          {!compact && <FormattedMessage id="generic.detail" defaultMessage="Detail" />}
+                        </Button>
+                      </Link>
+                    </OptionalTooltipWrapper>
 
-                  <OptionalTooltipWrapper
-                    tooltip={<FormattedMessage id="app.navigation.solutionFiles" defaultMessage="Submitted Files" />}
-                    hide={!compact}
-                    tooltipId={`codes-${id}`}>
-                    <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
-                      <Button size="xs" variant="primary" disabled={selected}>
-                        <CodeFileIcon fixedWidth gapRight={!compact} />
-                        {!compact && <FormattedMessage id="generic.files" defaultMessage="Files" />}
-                      </Button>
-                    </Link>
-                  </OptionalTooltipWrapper>
-                </>
-              )}
+                    <OptionalTooltipWrapper
+                      tooltip={<FormattedMessage id="app.navigation.solutionFiles" defaultMessage="Submitted Files" />}
+                      hide={!compact}
+                      tooltipId={`codes-${id}`}>
+                      <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
+                        <Button size="xs" variant="primary" disabled={selected}>
+                          <CodeFileIcon fixedWidth gapRight={!compact} />
+                          {!compact && <FormattedMessage id="generic.files" defaultMessage="Files" />}
+                        </Button>
+                      </Link>
+                    </OptionalTooltipWrapper>
+                  </>
+                )}
 
-              {permissionHints && (permissionHints.setFlag || permissionHints.review) && (
-                <SolutionActionsContainer id={id} captionAsTooltip={compact} showAllButtons dropdown />
-              )}
+                {permissionHints && (permissionHints.setFlag || permissionHints.review) && (
+                  <SolutionActionsContainer id={id} captionAsTooltip={compact} showAllButtons dropdown />
+                )}
 
-              {permissionHints && permissionHints.delete && (
-                <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
-              )}
-            </TheButtonGroup>
+                {permissionHints && permissionHints.delete && (
+                  <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
+                )}
+              </TheButtonGroup>
+            )}
           </td>
         )}
       </tr>
