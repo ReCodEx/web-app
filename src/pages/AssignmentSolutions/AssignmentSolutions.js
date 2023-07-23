@@ -301,9 +301,9 @@ const getPlagiarisms = defaultMemoize(assignmentSolutions =>
     .filter(solution => solution && solution.plagiarism)
 );
 
-const localStorageStateKey = 'AssignmentStats.state';
+const localStorageStateKey = 'AssignmentSolutions.state';
 
-class AssignmentStats extends Component {
+class AssignmentSolutions extends Component {
   static loadAsync = ({ assignmentId }, dispatch) =>
     Promise.all([
       dispatch(fetchAssignmentIfNeeded(assignmentId))
@@ -621,7 +621,7 @@ class AssignmentStats extends Component {
   }
 }
 
-AssignmentStats.propTypes = {
+AssignmentSolutions.propTypes = {
   loggedUserId: PropTypes.string.isRequired,
   assignmentId: PropTypes.string.isRequired,
   assignment: PropTypes.object,
@@ -679,12 +679,12 @@ export default withLinks(
         },
       }
     ) => ({
-      loadAsync: () => AssignmentStats.loadAsync({ assignmentId }, dispatch),
+      loadAsync: () => AssignmentSolutions.loadAsync({ assignmentId }, dispatch),
       downloadBestSolutionsArchive: name => ev => {
         ev.preventDefault();
         dispatch(downloadBestSolutionsArchive(assignmentId, name));
       },
       closeReview: id => dispatch(setSolutionReviewState(id, true)),
     })
-  )(injectIntl(AssignmentStats))
+  )(injectIntl(AssignmentSolutions))
 );
