@@ -100,7 +100,7 @@ class SolutionStatus extends Component {
       editNote = null,
       assignmentSolversLoading,
       assignmentSolverSelector,
-      links: { SOLUTION_DETAIL_URI_FACTORY },
+      links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY },
     } = this.props;
 
     const important = getImportantSolutions(otherSolutions, id);
@@ -366,7 +366,7 @@ class SolutionStatus extends Component {
                   )}
 
                   {review && review.issues > 0 && (
-                    <small className="text-muted">
+                    <small className="text-muted ml-3">
                       (
                       <FormattedMessage
                         id="app.solution.reviewIssuesCount"
@@ -375,6 +375,16 @@ class SolutionStatus extends Component {
                       />
                       )
                     </small>
+                  )}
+
+                  {review.closedAt && (
+                    <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
+                      <ReviewIcon
+                        review={review}
+                        gapLeft
+                        className={review.issues > 0 ? 'text-warning' : 'text-success'}
+                      />
+                    </Link>
                   )}
 
                   {important.lastReviewed && (

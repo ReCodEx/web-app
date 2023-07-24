@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
@@ -41,10 +42,13 @@ import {
 } from '../../redux/selectors/assignments';
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
+import { isLoggedAsStudent } from '../../redux/selectors/users';
 
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
 import { hasPermissions } from '../../helpers/common';
-import { PlagiarismIcon, SolutionResultsIcon, WarningIcon } from '../../components/icons';
+import { LinkIcon, PlagiarismIcon, SolutionResultsIcon, WarningIcon } from '../../components/icons';
+
+import withLinks from '../../helpers/withLinks';
 
 const assignmentHasRuntime = defaultMemoize(
   (assignment, runtimeId) =>
@@ -98,7 +102,9 @@ class Solution extends Component {
       fetchScoreConfigIfNeeded,
       assignmentSolversLoading,
       assignmentSolverSelector,
+      isStudent = false,
       intl: { locale },
+      links: { SOLUTION_SOURCE_CODES_URI_FACTORY },
     } = this.props;
 
     return (
@@ -195,6 +201,29 @@ class Solution extends Component {
                   </Callout>
                 )}
 
+              {isStudent && hasPermissions(solution, 'viewReview') && solution.review && solution.review.closedAt && (
+                <Callout variant={solution.review.issues > 0 ? 'warning' : 'success'}>
+                  <FormattedMessage
+                    id="app.solution.reviewAvailableCallout"
+                    defaultMessage="A review of this solution is available on the submitted files page."
+                  />
+                  {solution.review.issues > 0 && (
+                    <>
+                      {' ('}
+                      <FormattedMessage
+                        id="app.solution.reviewIssuesCount"
+                        defaultMessage="{issues} {issues, plural, one {issue} other {issues}} to resolve"
+                        values={{ issues: solution.review.issues }}
+                      />
+                      {')'}
+                    </>
+                  )}
+                  <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
+                    <LinkIcon largeGapLeft className="text-primary" />
+                  </Link>
+                </Callout>
+              )}
+
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
                 {runtimes => (
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
@@ -248,11 +277,13 @@ Solution.propTypes = {
   scoreConfigSelector: PropTypes.func,
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func.isRequired,
+  isStudent: PropTypes.bool,
   editNote: PropTypes.func.isRequired,
   deleteEvaluation: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
   intl: PropTypes.object,
+  links: PropTypes.object.isRequired,
 };
 
 export default connect(
@@ -274,6 +305,7 @@ export default connect(
     scoreConfigSelector: assignmentSubmissionScoreConfigSelector(state),
     assignmentSolversLoading: isAssignmentSolversLoading(state),
     assignmentSolverSelector: getAssignmentSolverSelector(state),
+    isStudent: isLoggedAsStudent(state),
   }),
   (dispatch, { match: { params } }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),
@@ -290,4 +322,4 @@ export default connect(
       ),
     download: (id, entry = null) => dispatch(download(id, entry)),
   })
-)(injectIntl(Solution));
+)(injectIntl(withLinks(Solution)));
