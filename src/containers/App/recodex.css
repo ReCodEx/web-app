@@ -296,11 +296,12 @@ a:focus {
 .card:target {
   /*box-shadow: 0 0 5px 2px #fd6!important;*/
   animation: 3s ease infinite running card-target;
-  border-color: #fe9 !important;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
-  border-right: 1px solid;
+  border-color: #ed3 !important;
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+  border-right: 2px solid;
 }
+
 
 .whenTargetted {
   display: none;

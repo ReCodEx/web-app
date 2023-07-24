@@ -23,6 +23,7 @@ class Box extends Component {
   componentDidMount() {
     if (this.props.id && this.props.location.hash === `#${this.props.id}`) {
       window.location.hash = this.props.location.hash;
+      window.scrollBy({ top: -65, behavior: 'instant' }); // 65 is slightly more than LTE top-bar (which is 57px in height)
     }
   }
 

@@ -544,7 +544,8 @@ class AssignmentSolutions extends Component {
                       {viewModes[this.state.viewMode] || ''}
                     </>
                   }
-                  id="dropdown-menu-align-right">
+                  className="elevation-2"
+                  id="viewModeDropdown">
                   <Dropdown.Header>
                     <FormattedMessage
                       id="app.assignmentSolutions.viewModesTitle"
