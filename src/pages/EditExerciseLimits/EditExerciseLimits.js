@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 import { formValueSelector } from 'redux-form';
@@ -88,18 +87,7 @@ class EditExerciseLimits extends Component {
   );
 
   transformAndSendHardwareGroups = defaultMemoize((hwGroupId, limits) => {
-    const {
-      setExerciseHardwareGroups,
-      setExerciseLimits,
-      reloadExercise,
-      invalidateExercise,
-      history: { replace },
-      location: { pathname, search, hash },
-    } = this.props;
-
-    if (hash) {
-      replace(pathname + search);
-    }
+    const { setExerciseHardwareGroups, setExerciseLimits, reloadExercise, invalidateExercise } = this.props;
 
     const limitsData = limits && limits[hwGroupId];
     return formData =>
@@ -116,15 +104,7 @@ class EditExerciseLimits extends Component {
   });
 
   transformAndSendLimitsValues = defaultMemoize((hwGroupId, tests, exerciseRuntimeEnvironments) => {
-    const {
-      setExerciseLimits,
-      reloadExercise,
-      history: { replace },
-      location: { pathname, search, hash },
-    } = this.props;
-    if (hash) {
-      replace(pathname + search);
-    }
+    const { setExerciseLimits, reloadExercise } = this.props;
     return formData =>
       setExerciseLimits(transformLimitsValues(formData, hwGroupId, exerciseRuntimeEnvironments, tests)).then(
         reloadExercise
@@ -317,15 +297,6 @@ EditExerciseLimits.propTypes = {
   cloneAll: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   invalidateExercise: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-    hash: PropTypes.string.isRequired,
-  }).isRequired,
 };
 
 const cloneVerticallyWrapper = defaultMemoize(
@@ -384,4 +355,4 @@ export default connect(
     reloadExercise: () => dispatch(fetchExercise(exerciseId)),
     invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
   })
-)(withRouter(EditExerciseLimits));
+)(EditExerciseLimits);

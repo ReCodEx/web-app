@@ -38,10 +38,24 @@ const ADDITIONAL_INTL_FORMATS = {
  * Also controls the state of the sidebar - collapsing and showing the sidebar.
  */
 class LayoutContainer extends Component {
+  newPageLoading = false;
+  pageHeight = 0;
+
+  _scrollTargetToView() {
+    if ((window.location.hash || this.props.location.hash) && this.pageHeight !== document.body.scrollHeight) {
+      // this will enforce immediate scroll-to-view
+      window.location.hash = this.props.location.hash;
+      window.scrollBy({ top: -65, behavior: 'instant' }); // 65 is slightly more than LTE top-bar (which is 57px in height)
+      this.pageHeight = document.body.scrollHeight; // make sure we scroll only if the render height changes
+    }
+  }
+
   componentDidMount() {
     this.resizeSidebarToDefault(this.props);
-    if (canUseDOM && (window.location.hash || this.props.location.hash)) {
-      window.location.hash = this.props.location.hash;
+    if (canUseDOM) {
+      this.newPageLoading = true;
+      this.pageHeight = -1;
+      this._scrollTargetToView();
     }
   }
 
@@ -54,8 +68,12 @@ class LayoutContainer extends Component {
       this.resizeSidebarToDefault(this.props);
     }
 
-    if (canUseDOM && (window.location.hash || this.props.location.hash)) {
-      window.location.hash = this.props.location.hash;
+    if (canUseDOM && this.newPageLoading) {
+      this._scrollTargetToView();
+    }
+
+    if (!this.props.pendingFetchOperations) {
+      this.newPageLoading = false;
     }
   }
 

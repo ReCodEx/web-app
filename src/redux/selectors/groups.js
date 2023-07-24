@@ -17,11 +17,9 @@ const getParam = (_, id) => id;
 const getGroups = state => state.groups;
 export const groupsSelector = state => state.groups.get('resources');
 
-export const notArchivedGroupsSelector = state =>
-  state.groups
-    .get('resources')
-    .filter(isReady)
-    .filter(group => group.getIn(['data', 'archived']) === false);
+export const notArchivedGroupsSelector = createSelector(groupsSelector, groups =>
+  groups.filter(isReady).filter(group => group.getIn(['data', 'archived']) === false)
+);
 
 export const groupSelector = createSelector([groupsSelector, getParam], (groups, id) => groups.get(id));
 
