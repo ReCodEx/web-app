@@ -31,7 +31,7 @@ const SolutionReviewIcon = ({ id, review, isReviewer = false, placement = 'botto
               <>
                 <FormattedMessage
                   id="app.solutionReviewIcon.tooltip.closedAt"
-                  defaultMessage="The review was closed at {closed}, the comments are available at source codes page."
+                  defaultMessage="The review was closed at {closed}, the comments are available on the submitted files page."
                   values={{ closed: <DateTime unixts={review.closedAt} /> }}
                 />{' '}
                 {review.issues > 0 ? (

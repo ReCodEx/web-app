@@ -78,6 +78,10 @@ export const isLoggedAsSuperAdmin = createSelector(getLoggedInUserEffectiveRole,
   isSuperadminRole(effectiveRole)
 );
 
+export const isLoggedAsStudent = createSelector(getLoggedInUserEffectiveRole, effectiveRole =>
+  isStudentRole(effectiveRole)
+);
+
 export const memberOfInstancesIdsSelector = userId =>
   createSelector(getUser(userId), user =>
     user && isReady(user) ? user.getIn(['data', 'privateData', 'instancesIds'], EMPTY_LIST) : EMPTY_LIST

@@ -1661,6 +1661,7 @@
   "app.solution.pointsExplainDialog.epsilonExplain": "Epsilon (1e-6) je přičteno, aby kompenzovalo zaokrouhlovací chyby.",
   "app.solution.pointsExplainDialog.overriddenPoints": "Vedoucí ručně přepsal hodnocení úlohy na <strong>{overriddenPoints}</strong> {overriddenPoints, plural, one {bod} =2 {body} =3 {body} =4 {body} other {bodů}} (a {bonusPoints} {bonusPoints, plural, one {bonusový bod} =2 {bonusové body} =3 {bonusové body} =4 {bonusové body} other {bonusových bodů}}).",
   "app.solution.pointsExplainDialog.title": "Vysvětlení hodnotícího procesu",
+  "app.solution.reviewAvailableCallout": "K tomuto řešení byla vytvořena revize, která se vám zobrazí na stránce s odevzdanými soubory.",
   "app.solution.reviewClosedAt": "Revidováno v",
   "app.solution.reviewIssuesCount": "{issues} {count, plural, one {připomínka} =2 {připomínky} =3 {připomínky} =4 {připomínky} other {připomínek}} k vyřešení",
   "app.solution.reviewNotStartedYet": "dosud nezahájeno",
