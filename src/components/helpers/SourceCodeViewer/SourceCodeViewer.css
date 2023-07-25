@@ -45,9 +45,12 @@
 .sourceCodeViewerComments {
   background-color: #f7f7f7;
   font-family: var(--font-family-sans-serif);
-  font-size: 127%;
   padding: 0.2em;
   white-space: initial;
+}
+
+pre .sourceCodeViewerComments, code .sourceCodeViewerComments {
+  font-size: 127%;
 }
 
 .sourceCodeViewerComments > div {
@@ -103,6 +106,18 @@
   margin-bottom: 0.2rem;
 }
 
+/* Overrides for review summary which is slightly different... */
+.reviewSummary > div > .recodex-markdown-container {
+  padding-left: 0.5rem;
+}
+
+.reviewSummary > div > .icon {
+  position: static;
+  margin: 0 0.5em;
+}
+
+
+/* Special add button */
 .sourceCodeViewer .scvAddButton {
   width: 0;
   height: 0;

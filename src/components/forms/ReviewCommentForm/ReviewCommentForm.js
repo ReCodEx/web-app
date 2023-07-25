@@ -15,6 +15,12 @@ import { CheckboxField, MarkdownTextAreaField } from '../Fields';
 
 const textValidator = text => !text || text.trim() === '';
 
+export const newCommentFormInitialValues = {
+  text: '',
+  issue: false,
+  suppressNotification: false,
+};
+
 const ReviewCommentForm = ({
   authorId = null,
   createdAt = null,

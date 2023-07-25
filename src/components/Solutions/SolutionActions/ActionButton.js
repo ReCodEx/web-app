@@ -37,7 +37,7 @@ ActionButton.propTypes = {
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   shortLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
-  confirm: PropTypes.string,
+  confirm: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   pending: PropTypes.bool,
   captionAsTooltip: PropTypes.bool,
   size: PropTypes.string,

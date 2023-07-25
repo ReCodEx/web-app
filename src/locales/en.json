@@ -1724,6 +1724,7 @@
   "app.solutionSourceCodes.reviewClosedInfo": "The review comments are now visible to the author. You may still edit the review, but each modification will be sent as an email notification to the author. If you wish to make more significant changes, re-open the review, make the modifications, and close it again.",
   "app.solutionSourceCodes.reviewPendingAbout": "A review is currently open. You may add comments in the code by double-clicking on the associated line.",
   "app.solutionSourceCodes.reviewPendingNeedsClosing": "Please note that the comments in the code are not visible to the author until you close the review. A notification mail will be sent to the author when you close it.",
+  "app.solutionSourceCodes.reviewSummary.title": "Review summary",
   "app.solutionSourceCodes.right": "Right side",
   "app.solutionSourceCodes.title": "Solution Source Code Files Overview",
   "app.solutionSourceCodes.titleDiff": "Comparing Source Codes of Two Solutions",

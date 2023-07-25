@@ -24,6 +24,7 @@ import {
 } from '../../components/icons';
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import SourceCodeBox from '../../components/Solutions/SourceCodeBox';
+import ReviewSummary from '../../components/Solutions/ReviewSummary';
 import RecentlyVisited from '../../components/Solutions/RecentlyVisited';
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
 import Callout from '../../components/widgets/Callout';
@@ -449,6 +450,25 @@ class SolutionSourceCodes extends Component {
 
                         return (
                           <>
+                            {((groupedReviewComments && (groupedReviewComments[''] || EMPTY_ARRAY).length > 0) ||
+                              canUpdateComments) && (
+                              <ReviewSummary
+                                reviewComments={groupedReviewComments[''] || EMPTY_ARRAY}
+                                reviewClosed={Boolean(solution.review && solution.review.closedAt)}
+                                authorView={solution.authorId === loggedUserId}
+                                restrictCommentAuthor={isPrimaryAdminOf(assignment.groupId) ? null : loggedUserId}
+                                addComment={
+                                  canUpdateComments && hasPermissions(solution, 'addReviewComment') ? addComment : null
+                                }
+                                updateComment={
+                                  canUpdateComments && hasPermissions(solution, 'review') ? updateComment : null
+                                }
+                                removeComment={
+                                  canUpdateComments && hasPermissions(solution, 'review') ? removeComment : null
+                                }
+                              />
+                            )}
+
                             {files.map(file => (
                               <SourceCodeBox
                                 key={file.id}

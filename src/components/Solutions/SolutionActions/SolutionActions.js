@@ -138,6 +138,7 @@ const SolutionActions = ({
   const evalPoints = safeGet(solution, ['lastSubmission', 'evaluation', 'points']);
   const maxPoints = assignment.maxPointsBeforeFirstDeadline;
 
+  const openReview = setReviewState && (() => setReviewState(false));
   const actionHandlers = {
     accept: !accepted && setAccepted && (() => setAccepted(true)),
     unaccept: accepted && setAccepted && (() => setAccepted(false)),
@@ -150,17 +151,19 @@ const SolutionActions = ({
       (() => setPoints({ bonusPoints, overriddenPoints: maxPoints })),
     clearPoints:
       setPoints && solution.overriddenPoints !== null && (() => setPoints({ bonusPoints, overriddenPoints: null })),
-    open: setReviewState && (!review || !review.startedAt) && (() => setReviewState(false)),
-    reopen: setReviewState && review && review.closedAt && (() => setReviewState(false)),
+    open:
+      openReview &&
+      (!review || !review.startedAt) &&
+      (isOnReviewPage ? openReview : () => openReview().then(() => push(reviewPageUri))),
+    reopen:
+      openReview &&
+      review &&
+      review.closedAt &&
+      (isOnReviewPage ? openReview : () => openReview().then(() => push(reviewPageUri))),
     openClose: setReviewState && (!review || !review.startedAt) && showAllButtons && (() => setReviewState(true)),
     close: setReviewState && review && review.startedAt && !review.closedAt && (() => setReviewState(true)),
     delete: showAllButtons && review && review.startedAt && deleteReview,
   };
-
-  if (!isOnReviewPage) {
-    actionHandlers.open = actionHandlers.open && (() => actionHandlers.open().then(() => push(reviewPageUri)));
-    actionHandlers.reopen = actionHandlers.reopen && (() => actionHandlers.reopen().then(() => push(reviewPageUri)));
-  }
 
   const pendingIndicators = { acceptPending, updatePending, pointsPending };
   const actions = knownActions
