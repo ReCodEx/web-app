@@ -46,7 +46,7 @@ class CommentThreadContainer extends Component {
       setPrivacy,
       refresh,
       deleteComment,
-      inModal = false,
+      displayAs = 'box',
     } = this.props;
 
     return (
@@ -62,7 +62,7 @@ class CommentThreadContainer extends Component {
             repostComment={repostComment}
             refresh={refresh}
             deleteComment={deleteComment}
-            inModal={inModal}
+            displayAs={displayAs}
           />
         )}
       </ResourceRenderer>
@@ -74,7 +74,7 @@ CommentThreadContainer.propTypes = {
   threadId: PropTypes.string.isRequired,
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  inModal: PropTypes.bool,
+  displayAs: PropTypes.string,
   thread: PropTypes.object,
   user: PropTypes.object,
   addComment: PropTypes.func.isRequired,

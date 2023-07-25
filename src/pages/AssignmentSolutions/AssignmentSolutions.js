@@ -530,7 +530,7 @@ class AssignmentSolutions extends Component {
                         defaultMessage="(supervisors and students of this group)"
                       />
                     }
-                    inModal
+                    displayAs="modal"
                   />
                 </Modal>
               </Col>

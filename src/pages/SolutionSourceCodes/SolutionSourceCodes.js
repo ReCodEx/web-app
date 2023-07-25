@@ -22,12 +22,13 @@ import {
   StopIcon,
   SwapIcon,
 } from '../../components/icons';
-import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import SourceCodeBox from '../../components/Solutions/SourceCodeBox';
 import ReviewSummary from '../../components/Solutions/ReviewSummary';
 import RecentlyVisited from '../../components/Solutions/RecentlyVisited';
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
 import Callout from '../../components/widgets/Callout';
+import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
+import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -67,7 +68,13 @@ const wrapInArray = defaultMemoize(entry => [entry]);
 const localStorageDiffMappingsKey = 'SolutionSourceCodes.diffMappings.';
 
 class SolutionSourceCodes extends Component {
-  state = { diffDialogOpen: false, mappingDialogOpenFile: null, mappingDialogDiffWith: null, diffMappings: {} };
+  state = {
+    diffDialogOpen: false,
+    mappingDialogOpenFile: null,
+    mappingDialogDiffWith: null,
+    diffMappings: {},
+    commentsOpen: false,
+  };
 
   static loadAsync = ({ solutionId, assignmentId, secondSolutionId }, dispatch) =>
     Promise.all([
@@ -146,6 +153,9 @@ class SolutionSourceCodes extends Component {
   closeDialogs = () => {
     this.setState({ diffDialogOpen: false, mappingDialogOpenFile: null, mappingDialogDiffWith: null });
   };
+
+  openComments = () => this.setState({ commentsOpen: true });
+  closeComments = () => this.setState({ commentsOpen: false });
 
   selectDiffSolution = id => {
     const {
@@ -592,6 +602,17 @@ class SolutionSourceCodes extends Component {
                 </ResourceRenderer>
               )}
             </ResourceRenderer>
+
+            <CommentThreadContainer
+              threadId={solution.id}
+              additionalPublicSwitchNote={
+                <FormattedMessage
+                  id="app.solutionDetail.comments.additionalSwitchNote"
+                  defaultMessage="(author of the solution and supervisors of this group)"
+                />
+              }
+              displayAs="panel"
+            />
 
             <Modal show={this.state.diffDialogOpen} backdrop="static" onHide={this.closeDialogs} size="xl">
               <Modal.Header closeButton>
