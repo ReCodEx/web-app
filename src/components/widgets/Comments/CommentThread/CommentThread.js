@@ -17,7 +17,7 @@ const CommentThread = ({
   setPrivacy,
   refresh,
   deleteComment,
-  inModal = false,
+  displayAs = 'box',
 }) => (
   <CommentBox
     title={title}
@@ -25,7 +25,7 @@ const CommentThread = ({
     footer={
       addComment && <AddComment addComment={addComment} additionalPublicSwitchNote={additionalPublicSwitchNote} />
     }
-    inModal={inModal}>
+    displayAs={displayAs}>
     <div>
       {comments.map((comment, i) =>
         comment.user.id === currentUserId ? (
@@ -76,7 +76,7 @@ CommentThread.propTypes = {
   setPrivacy: PropTypes.func,
   refresh: PropTypes.func,
   deleteComment: PropTypes.func,
-  inModal: PropTypes.bool,
+  displayAs: PropTypes.string,
 };
 
 export default CommentThread;
