@@ -1,30 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
 import { canUseDOM } from 'exenv';
 import { Prism as SyntaxHighlighter, createElement } from 'react-syntax-highlighter';
-import classnames from 'classnames';
 import { defaultMemoize } from 'reselect';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'prismjs/themes/prism.css';
 
-import UsersNameContainer from '../../../containers/UsersNameContainer';
-import ReviewCommentForm from '../../forms/ReviewCommentForm';
-import Confirm from '../../forms/Confirm';
-import DateTime from '../../widgets/DateTime';
-import Markdown from '../../widgets/Markdown';
-import Icon, { DeleteIcon, EditIcon, LoadingIcon, WarningIcon } from '../../icons';
+import ReviewCommentForm, { newCommentFormInitialValues } from '../../forms/ReviewCommentForm';
 import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting';
 import { getFileExtensionLC } from '../../../helpers/common';
 
+import SourceCodeComment from './SourceCodeComment';
 import './SourceCodeViewer.css';
-
-const newCommentFormInitialValues = {
-  text: '',
-  issue: false,
-  suppressNotification: false,
-};
 
 const groupCommentsByLine = defaultMemoize(comments => {
   const res = {};
@@ -59,7 +46,12 @@ class SourceCodeViewer extends React.Component {
   };
 
   startEditting = ({ id, line, text, issue }) => {
-    this.setState({ editComment: id, activeLine: line, newComment: null, editInitialValues: { text, issue } });
+    this.setState({
+      editComment: id,
+      activeLine: line,
+      newComment: null,
+      editInitialValues: { text, issue, suppressNotification: false },
+    });
   };
 
   closeForms = () => this.setState({ activeLine: null, newComment: null, editComment: null, editInitialValues: null });
@@ -92,75 +84,9 @@ class SourceCodeViewer extends React.Component {
     }).then(this.closeForms);
   };
 
-  renderComment = comment => {
-    const { authorView = false, updateComment = null, removeComment = null, restrictCommentAuthor = null } = this.props;
-    return (
-      <div className={classnames({ issue: comment.issue, 'half-opaque': comment.removing })}>
-        <span className="icon">
-          {comment.issue ? (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`issue-${comment.id}`}>
-                  {authorView ? (
-                    <FormattedMessage
-                      id="app.sourceCodeViewer.issueTooltipForAuthor"
-                      defaultMessage="This comment is marked as an issue, which means you are expected to fix it in your next submission."
-                    />
-                  ) : (
-                    <FormattedMessage
-                      id="app.sourceCodeViewer.issueTooltip"
-                      defaultMessage="This comment is marked as an issue, which means the author is expected to fix it in the next submission."
-                    />
-                  )}
-                </Tooltip>
-              }>
-              <WarningIcon className="text-danger" gapRight />
-            </OverlayTrigger>
-          ) : (
-            <Icon icon={['far', 'comment']} className="almost-transparent" gapRight />
-          )}
-        </span>
-
-        <small>
-          <UsersNameContainer userId={comment.author} showEmail="icon" />
-          <span className="actions">
-            {comment.removing && <LoadingIcon />}
-
-            {updateComment &&
-              !comment.removing &&
-              (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
-                <EditIcon className="text-warning" gapRight onClick={() => this.startEditting(comment)} />
-              )}
-            {removeComment &&
-              !comment.removing &&
-              (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
-                <Confirm
-                  id={`delcfrm-${comment.id}`}
-                  onConfirmed={() => this.props.removeComment(comment.id)}
-                  question={
-                    <FormattedMessage
-                      id="app.sourceCodeViewer.deleteCommentConfirm"
-                      defaultMessage="Do you really wish to remove this comment? This operation cannot be undone."
-                    />
-                  }>
-                  <DeleteIcon className="text-danger" gapRight />
-                </Confirm>
-              )}
-          </span>
-        </small>
-
-        <small className="float-right mr-2">
-          <DateTime unixts={comment.createdAt} showRelative />
-        </small>
-        <Markdown source={comment.text} />
-      </div>
-    );
-  };
-
   linesRenderer = ({ rows, stylesheet, useInlineStyles }) => {
+    const { authorView = false, updateComment = null, removeComment = null, restrictCommentAuthor = null } = this.props;
     const comments = groupCommentsByLine(this.props.comments || []);
-
     return rows.map((node, i) => {
       const lineNumber = i + 1;
       return (
@@ -189,7 +115,14 @@ class SourceCodeViewer extends React.Component {
                     showSuppressor={this.props.reviewClosed}
                   />
                 ) : (
-                  <React.Fragment key={comment.id}>{this.renderComment(comment)}</React.Fragment>
+                  <SourceCodeComment
+                    key={comment.id}
+                    comment={comment}
+                    authorView={authorView}
+                    restrictCommentAuthor={restrictCommentAuthor}
+                    startEditting={updateComment ? this.startEditting : null}
+                    removeComment={removeComment}
+                  />
                 )
               )}
 

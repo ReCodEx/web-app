@@ -1,2 +1,1 @@
-import ReviewCommentForm from './ReviewCommentForm';
-export default ReviewCommentForm;
+export { default, newCommentFormInitialValues } from './ReviewCommentForm';
