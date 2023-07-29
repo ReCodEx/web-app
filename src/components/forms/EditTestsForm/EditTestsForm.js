@@ -122,6 +122,7 @@ class EditTestsForm extends Component {
       submitSucceeded,
       invalid,
       formValues,
+      initialValues,
     } = this.props;
 
     return (
@@ -188,6 +189,7 @@ class EditTestsForm extends Component {
                         hasFailed={submitFailed}
                         handleSubmit={handleSubmit}
                         defaultIcon={<SaveIcon gapRight />}
+                        disabled={formValues.tests.length === 0}
                         messages={{
                           submit: <FormattedMessage id="app.editTestsForm.submit" defaultMessage="Save Tests" />,
                           submitting: (
@@ -197,22 +199,24 @@ class EditTestsForm extends Component {
                         }}
                       />
 
-                      <OptionalTooltipWrapper
-                        tooltip={
-                          <FormattedMessage
-                            id="app.editTestsForm.changeCalculatorDisabledTooltip"
-                            defaultMessage="The scoring algorithm may be changed only when there are no unsaved modifications in this form."
-                          />
-                        }
-                        hide={!dirty}>
-                        <Button onClick={this.openDialog} variant={dirty ? 'secondary' : 'primary'} disabled={dirty}>
-                          <Icon icon="calculator" gapRight />
-                          <FormattedMessage
-                            id="app.editTestsForm.changeCalculator"
-                            defaultMessage="Scoring Algorithm"
-                          />
-                        </Button>
-                      </OptionalTooltipWrapper>
+                      {initialValues.tests.length > 0 && (
+                        <OptionalTooltipWrapper
+                          tooltip={
+                            <FormattedMessage
+                              id="app.editTestsForm.changeCalculatorDisabledTooltip"
+                              defaultMessage="The scoring algorithm may be changed only when there are no unsaved modifications in this form."
+                            />
+                          }
+                          hide={!dirty}>
+                          <Button onClick={this.openDialog} variant={dirty ? 'secondary' : 'primary'} disabled={dirty}>
+                            <Icon icon="calculator" gapRight />
+                            <FormattedMessage
+                              id="app.editTestsForm.changeCalculator"
+                              defaultMessage="Scoring Algorithm"
+                            />
+                          </Button>
+                        </OptionalTooltipWrapper>
+                      )}
                     </TheButtonGroup>
 
                     <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
