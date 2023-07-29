@@ -1,7 +1,6 @@
 import { createSelector, defaultMemoize } from 'reselect';
 import { EMPTY_ARRAY, EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
-import { getAssignment } from './assignments';
 
 const getParam = (state, id) => id;
 
@@ -23,16 +22,6 @@ export const exerciseForkedFromSelector = defaultMemoize(exerciseId =>
 
 export const getExercise = id =>
   createSelector(getExercises, exercises => exercises && exercises.getIn(['resources', id]));
-
-export const getExerciseOfAssignmentJS = createSelector(
-  [getExercises, getAssignment],
-  (exercises, assignmentSelector) => assignmentId => {
-    const assignment = assignmentSelector(assignmentId);
-    const id = isReady(assignment) && assignment.getIn(['data', 'exerciseId']);
-    const exercise = id && exercises.getIn(['resources', id]);
-    return isReady(exercise) && exercise.get('data') ? exercise.get('data').toJS() : null;
-  }
-);
 
 export const getExerciseSelector = createSelector(getExercises, exercises => id => exercises.getIn(['resources', id]));
 

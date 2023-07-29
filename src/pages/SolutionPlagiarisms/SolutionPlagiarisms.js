@@ -369,7 +369,7 @@ export default withLinks(
         reviewComments: getSolutionReviewComments(state, solutionId),
         fileContentsSelector: getFilesContentSelector(state),
         userSolutionsSelector: getUserSolutionsSortedData(state),
-        assignment: getAssignment(state)(assignmentId),
+        assignment: getAssignment(state, assignmentId),
         plagiarisms: solution ? plagiarismsSelector(state, solution.getIn(['data', 'plagiarism']), solutionId) : null,
       };
     },

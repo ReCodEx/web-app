@@ -1,7 +1,7 @@
 import { createSelector, defaultMemoize } from 'reselect';
 import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
 import { getSolutions } from './solutions';
-import { getAsyncJob } from './asyncJobs';
+import { getAsyncJobSelector } from './asyncJobs';
 import { runtimeEnvironmentSelector } from './runtimeEnvironments';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
@@ -10,14 +10,17 @@ export const getAssignments = state => state.assignments;
 const getAssignmentResources = state => getAssignments(state).get('resources');
 const getParam = (state, id) => id;
 
-export const getAssignment = createSelector(getAssignmentResources, assignments => id => assignments.get(id));
+export const getAssignment = createSelector([getAssignmentResources, getParam], (assignments, id) =>
+  assignments.get(id)
+);
+export const getAssignmentSelector = createSelector(getAssignmentResources, assignments => id => assignments.get(id));
 
 export const getExerciseAssignments = createSelector([getAssignmentResources, getParam], (assignments, exerciseId) =>
   assignments.filter(assignment => isReady(assignment) && assignment.getIn(['data', 'exerciseId']) === exerciseId)
 );
 
 export const assignmentEnvironmentsSelector = createSelector(
-  [getAssignment, runtimeEnvironmentSelector],
+  [getAssignmentSelector, runtimeEnvironmentSelector],
   (assignmentSelector, envSelector) => id => {
     const assignment = assignmentSelector(id);
     const envIds = assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
@@ -67,19 +70,43 @@ export const getUserSolutionsSortedData = createSelector([getSolutions, getAssig
   )
 );
 
-export const isResubmitAllFetchPending = assignmentId =>
-  createSelector(getAssignment, assignmentSelector => {
-    const assignment = assignmentSelector(assignmentId);
-    return assignment.getIn(['resubmit-all', 'fetchPending'], false);
-  });
+export const isResubmitAllFetchPending = createSelector(getAssignment, assignment =>
+  assignment.getIn(['resubmit-all', 'fetchPending'], false)
+);
 
 // yes, this might seem awkward, but we really need only the last pending/failed job
-const getResubmitAllLastJob = type => assignmentId =>
-  createSelector([getAssignment, getAsyncJob], (assignmentSelector, asyncJobsSelector) => {
-    const assignment = assignmentSelector(assignmentId);
+const getResubmitAllLastJob = type =>
+  createSelector([getAssignment, getAsyncJobSelector], (assignment, asyncJobsSelector) => {
     const jobId = assignment.getIn(['resubmit-all', type, 0], null);
     return jobId && asyncJobsSelector(jobId);
   });
 
 export const getResubmitAllPendingJob = getResubmitAllLastJob('pending');
 export const getResubmitAllFailedJob = getResubmitAllLastJob('failed');
+
+/*
+ * Related async jobs
+ */
+
+const getAssignmentAsyncJobs = state => getAssignments(state).get('async-jobs');
+export const getFetchAssignmentAsyncJobsPending = createSelector(
+  [getAssignmentAsyncJobs, getParam],
+  (asyncJobs, id) => Boolean(asyncJobs) && asyncJobs.getIn([id, 'pending'], false)
+);
+
+export const hasPendingNotificationAsyncJob = createSelector(
+  [getAssignmentAsyncJobs, getAsyncJobSelector, getParam],
+  (asyncJobs, asyncJobsSelector, id) =>
+    Boolean(
+      asyncJobs &&
+        (asyncJobs.getIn([id, 'ids']) || EMPTY_LIST)
+          .map(id => asyncJobsSelector(id))
+          .find(
+            job =>
+              job &&
+              isReady(job) &&
+              job.getIn(['data', 'finishedAt']) === null &&
+              job.getIn(['data', 'command']) === 'assignmentNotification'
+          )
+    )
+);

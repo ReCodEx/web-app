@@ -67,7 +67,7 @@ AssignmentNameContainer.propTypes = {
 export default withLinks(
   connect(
     (state, { assignmentId }) => ({
-      assignment: getAssignment(state)(assignmentId),
+      assignment: getAssignment(state, assignmentId),
     }),
     (dispatch, { assignmentId }) => ({
       loadAssignmentIfNeeded: () => dispatch(fetchAssignmentIfNeeded(assignmentId)),

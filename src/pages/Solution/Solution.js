@@ -298,7 +298,7 @@ export default connect(
     solution: getSolution(state, solutionId),
     files: getSolutionFiles(state, solutionId),
     userSolutionsSelector: getUserSolutionsSortedData(state),
-    assignment: getAssignment(state)(assignmentId),
+    assignment: getAssignment(state, assignmentId),
     evaluations: evaluationsForSubmissionSelector(state, solutionId),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
     fetchStatus: fetchManyStatus(solutionId)(state),

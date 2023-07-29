@@ -67,9 +67,9 @@ ResubmitAllSolutionsContainer.propTypes = {
 };
 
 const mapStateToProps = (state, { assignmentId }) => ({
-  isFetchPending: isResubmitAllFetchPending(assignmentId)(state),
-  pendingJob: getResubmitAllPendingJob(assignmentId)(state),
-  failedJob: getResubmitAllFailedJob(assignmentId)(state),
+  isFetchPending: isResubmitAllFetchPending(state, assignmentId),
+  pendingJob: getResubmitAllPendingJob(state, assignmentId),
+  failedJob: getResubmitAllFailedJob(state, assignmentId),
 });
 
 const mapDispatchToProps = (dispatch, { assignmentId }) => ({

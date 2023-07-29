@@ -43,28 +43,31 @@ const sanitizeInputNumber = (value, defValue) => {
  * If the object holds `groups` property, it prepares multi-assign form.
  */
 export const prepareInitialValues = defaultMemoize(
-  ({
-    groups = null,
-    localizedTexts = null,
-    firstDeadline,
-    maxPointsBeforeFirstDeadline = 10,
-    allowSecondDeadline = false,
-    secondDeadline,
-    maxPointsBeforeSecondDeadline = 5,
-    maxPointsDeadlineInterpolation = false,
-    submissionsCountLimit = 50,
-    pointsPercentualThreshold = 0,
-    solutionFilesLimit = null,
-    solutionSizeLimit = null,
-    canViewLimitRatios = true,
-    canViewJudgeStdout = false,
-    canViewJudgeStderr = false,
-    isBonus = false,
-    disabledRuntimeEnvironmentIds = [],
-    runtimeEnvironmentIds,
-    isPublic = false,
-    visibleFrom = null,
-  }) => ({
+  (
+    {
+      groups = null,
+      localizedTexts = null,
+      firstDeadline,
+      maxPointsBeforeFirstDeadline = 10,
+      allowSecondDeadline = false,
+      secondDeadline,
+      maxPointsBeforeSecondDeadline = 5,
+      maxPointsDeadlineInterpolation = false,
+      submissionsCountLimit = 50,
+      pointsPercentualThreshold = 0,
+      solutionFilesLimit = null,
+      solutionSizeLimit = null,
+      canViewLimitRatios = true,
+      canViewJudgeStdout = false,
+      canViewJudgeStderr = false,
+      isBonus = false,
+      disabledRuntimeEnvironmentIds = [],
+      runtimeEnvironmentIds,
+      isPublic = false,
+      visibleFrom = null,
+    },
+    hasNotificationAsyncJob = false
+  ) => ({
     groups,
     localizedTexts: localizedTexts && getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
     firstDeadline: firstDeadline !== undefined ? moment.unix(firstDeadline) : moment().add(2, 'weeks').endOf('day'),
@@ -96,7 +99,7 @@ export const prepareInitialValues = defaultMemoize(
     ),
     visibility: isPublic ? (visibleFrom ? 'visibleFrom' : 'visible') : 'hidden',
     visibleFrom: visibleFrom ? moment.unix(visibleFrom) : moment().endOf('day'),
-    sendNotification: true,
+    sendNotification: !isPublic || (visibleFrom && moment().unix() < visibleFrom && hasNotificationAsyncJob),
     deadlines: allowSecondDeadline ? (maxPointsDeadlineInterpolation ? 'interpolated' : 'dual') : 'single',
   })
 );
@@ -318,7 +321,7 @@ class EditAssignmentForm extends Component {
       deadlines,
       runtimeEnvironments,
       visibility,
-      assignmentIsPublic,
+      showSendNotification,
       submitButtonMessages = SUBMIT_BUTTON_MESSAGES_DEFAULT,
       mergeJudgeLogs,
       intl: { locale },
@@ -764,7 +767,7 @@ class EditAssignmentForm extends Component {
                 />
               )}
 
-              {visibility !== 'hidden' && (!assignmentIsPublic || visibility === 'visibleFrom') && (
+              {visibility !== 'hidden' && showSendNotification && (
                 <Field
                   name="sendNotification"
                   component={CheckboxField}
@@ -859,7 +862,7 @@ EditAssignmentForm.propTypes = {
   deadlines: PropTypes.string,
   runtimeEnvironments: PropTypes.array,
   visibility: PropTypes.string,
-  assignmentIsPublic: PropTypes.bool,
+  showSendNotification: PropTypes.bool,
   submitButtonMessages: PropTypes.object,
   mergeJudgeLogs: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,

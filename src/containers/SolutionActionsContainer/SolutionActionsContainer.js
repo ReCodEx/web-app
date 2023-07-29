@@ -64,7 +64,7 @@ const mapStateToProps = (state, { id }) => {
   const assignmentId = solution && solution.getIn(['data', 'assignmentId']);
   return {
     solution,
-    assignment: assignmentId && getAssignment(state)(assignmentId),
+    assignment: assignmentId && getAssignment(state, assignmentId),
     pointsPending: isPointsUpdatePending(state, id),
     acceptPending: isSetFlagPending(state, id, 'accepted'),
     updatePending: isSolutionReviewUpdatePending(state, id),

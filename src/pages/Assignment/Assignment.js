@@ -287,7 +287,7 @@ export default connect(
   ) => {
     const loggedInUserId = loggedInUserIdSelector(state);
     return {
-      assignment: getAssignment(state)(assignmentId),
+      assignment: getAssignment(state, assignmentId),
       submitting: isSubmitting(state),
       runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
       userId,

@@ -20,12 +20,12 @@ const {
  */
 
 export const actionTypes = {
-  UPDATE: 'redux/comments/UPDATE',
-  UPDATE_FULFILLED: 'redux/comments/UPDATE_FULFILLED',
-  ...createActionsWithPostfixes('POST_COMMENT'),
-  ...createActionsWithPostfixes('TOGGLE_PRIVACY'),
-  ...createActionsWithPostfixes('SET_PRIVACY'),
-  ...createActionsWithPostfixes('DELETE_COMMENT'),
+  UPDATE: 'recodex/comments/UPDATE',
+  UPDATE_FULFILLED: 'recodex/comments/UPDATE_FULFILLED',
+  ...createActionsWithPostfixes('POST_COMMENT', 'recodex/comments'),
+  ...createActionsWithPostfixes('TOGGLE_PRIVACY', 'recodex/comments'),
+  ...createActionsWithPostfixes('SET_PRIVACY', 'recodex/comments'),
+  ...createActionsWithPostfixes('DELETE_COMMENT', 'recodex/comments'),
 };
 
 export const fetchThreadIfNeeded = actions.fetchOneIfNeeded;

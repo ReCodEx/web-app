@@ -19,7 +19,7 @@ DeleteAssignmentButtonContainer.propTypes = {
 
 export default connect(
   (state, { id }) => ({
-    assignment: getAssignment(state)(id),
+    assignment: getAssignment(state, id),
   }),
   (dispatch, { id, onDeleted }) => ({
     deleteAssignment: () => dispatch(deleteAssignment(id)).then(() => onDeleted && onDeleted()),

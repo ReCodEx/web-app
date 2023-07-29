@@ -700,7 +700,7 @@ export default withLinks(
         },
       }
     ) => {
-      const assignment = getAssignment(state)(assignmentId);
+      const assignment = getAssignment(state, assignmentId);
       const getStudentsIds = groupId => studentsIdsOfGroup(groupId)(state);
       const readyUsers = usersSelector(state).toArray().filter(isReady);
 
