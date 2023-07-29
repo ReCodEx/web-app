@@ -240,7 +240,7 @@ export const pathRelatedGroupSelector = (state, urlPath) => {
     }
 
     if (matchRes.params.assignmentId) {
-      const assignment = getAssignment(state)(matchRes.params.assignmentId);
+      const assignment = getAssignment(state, matchRes.params.assignmentId);
       const groupId = assignment && assignment.getIn(['data', 'groupId']);
       if (groupId) {
         return groupId;

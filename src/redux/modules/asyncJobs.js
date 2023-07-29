@@ -98,6 +98,19 @@ const reducer = handleActions(
           )
         )
       ),
+
+    [assignmentsActionTypes.FETCH_ASYNC_JOBS_FULFILLED]: (state, { payload }) =>
+      state.update('resources', jobs =>
+        jobs.merge(
+          new Map(
+            arrayToObject(
+              payload,
+              o => o.id,
+              data => createRecord({ state: resourceStatus.FULFILLED, data })
+            )
+          )
+        )
+      ),
   }),
   initialState
 );

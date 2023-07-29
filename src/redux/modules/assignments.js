@@ -3,7 +3,12 @@ import { fromJS, List } from 'immutable';
 
 import { createApiAction } from '../middleware/apiMiddleware';
 import { downloadHelper } from '../helpers/api/download';
-import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus,
+  createActionsWithPostfixes,
+} from '../helpers/resourceManager';
 import { arrayToObject } from '../../helpers/common';
 
 import { additionalActionTypes as solutionsActionTypes } from './solutions';
@@ -26,10 +31,8 @@ export const additionalActionTypes = {
   DOWNLOAD_BEST_SOLUTIONS_ARCHIVE: 'recodex/assignment/DOWNLOAD_BEST_SOLUTIONS_ARCHIVE',
   LOAD_EXERCISE_ASSIGNMENTS: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS',
   LOAD_EXERCISE_ASSIGNMENTS_FULFILLED: 'recodex/exercises/LOAD_EXERCISE_ASSIGNMENTS_FULFILLED',
-  RESUBMIT_ALL: 'recodex/assignment/RESUBMIT_ALL',
-  RESUBMIT_ALL_PENDING: 'recodex/assignment/RESUBMIT_ALL_PENDING',
-  RESUBMIT_ALL_FULFILLED: 'recodex/assignment/RESUBMIT_ALL_FULFILLED',
-  RESUBMIT_ALL_REJECTED: 'recodex/assignment/RESUBMIT_ALL_REJECTED',
+  ...createActionsWithPostfixes('RESUBMIT_ALL', 'recodex/assignment'),
+  ...createActionsWithPostfixes('FETCH_ASYNC_JOBS', 'recodex/assignment'),
 };
 
 /**
@@ -96,6 +99,13 @@ export const resubmitAllSolutions = assignmentId =>
     meta: { assignmentId },
   });
 
+export const fetchAssignmentAsyncJobs = assignmentId =>
+  createApiAction({
+    type: additionalActionTypes.FETCH_ASYNC_JOBS,
+    method: 'GET',
+    endpoint: `/exercise-assignments/${assignmentId}/async-jobs`,
+    meta: { assignmentId },
+  });
 /**
  * Reducer
  */
@@ -174,6 +184,17 @@ const reducer = handleActions(
           fetchPending: false,
         })
       ),
+
+    [additionalActionTypes.FETCH_ASYNC_JOBS_PENDING]: (state, { meta: { assignmentId } }) =>
+      state.setIn(['async-jobs', assignmentId, 'pending'], true).setIn(['async-jobs', assignmentId, 'ids'], null),
+
+    [additionalActionTypes.FETCH_ASYNC_JOBS_REJECTED]: (state, { meta: { assignmentId } }) =>
+      state.setIn(['async-jobs', assignmentId, 'pending'], false).setIn(['async-jobs', assignmentId, 'ids'], false),
+
+    [additionalActionTypes.FETCH_ASYNC_JOBS_FULFILLED]: (state, { payload, meta: { assignmentId } }) =>
+      state
+        .setIn(['async-jobs', assignmentId, 'pending'], false)
+        .setIn(['async-jobs', assignmentId, 'ids'], fromJS(payload.map(aj => aj.id))),
 
     [additionalReviewsActionTypes.FETCH_OPEN_REVIEWS_FULFILLED]: (state, { payload: { assignments } }) =>
       state.update('resources', resources =>

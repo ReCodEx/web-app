@@ -735,10 +735,10 @@ export default withLinks(
           secondSolutionId && secondSolutionId !== solutionId ? getSolutionFiles(state, secondSolutionId) : null,
         fileContentsSelector: getFilesContentSelector(state),
         userSolutionsSelector: getUserSolutionsSortedData(state),
-        assignment: getAssignment(state)(assignmentId),
+        assignment: getAssignment(state, assignmentId),
         secondAssignment:
           secondSolution && secondSolution.getIn(['data', 'assignmentId'])
-            ? getAssignment(state)(secondSolution.getIn(['data', 'assignmentId']))
+            ? getAssignment(state, secondSolution.getIn(['data', 'assignmentId']))
             : null,
         loggedUserId: loggedInUserIdSelector(state),
         effectiveRole: getLoggedInUserEffectiveRole(state),

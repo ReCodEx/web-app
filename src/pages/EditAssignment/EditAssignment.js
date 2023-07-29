@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
+import moment from 'moment';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
@@ -19,8 +20,18 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { fetchAssignment, editAssignment, syncWithExercise, validateAssignment } from '../../redux/modules/assignments';
-import { getAssignment } from '../../redux/selectors/assignments';
+import {
+  fetchAssignment,
+  editAssignment,
+  syncWithExercise,
+  validateAssignment,
+  fetchAssignmentAsyncJobs,
+} from '../../redux/modules/assignments';
+import {
+  getAssignment,
+  getFetchAssignmentAsyncJobsPending,
+  hasPendingNotificationAsyncJob,
+} from '../../redux/selectors/assignments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
@@ -28,6 +39,17 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 import { hasPermissions } from '../../helpers/common';
 
 import withLinks from '../../helpers/withLinks';
+
+const showSendNotification = (assignment, visibility, visibleFrom) => {
+  const isCurrentlyVisible =
+    assignment.isPublic && (!assignment.visibleFrom || assignment.visibleFrom * 1000 <= Date.now());
+  const willBecomeVisible = visibility !== 'hidden';
+  const willBeVisibleInFuture =
+    visibility === 'visibleFrom' && moment.isMoment(visibleFrom) && moment().unix() < visibleFrom.unix();
+
+  // either transitions from hidden to visible, or is visible now and will be hidden + scheduled for later
+  return isCurrentlyVisible ? willBeVisibleInFuture : willBecomeVisible;
+};
 
 class EditAssignment extends Component {
   componentDidMount = () => this.props.loadAsync();
@@ -40,7 +62,11 @@ class EditAssignment extends Component {
   }
 
   static loadAsync = ({ assignmentId }, dispatch) =>
-    Promise.all([dispatch(fetchAssignment(assignmentId)), dispatch(fetchRuntimeEnvironments())]);
+    Promise.all([
+      dispatch(fetchAssignment(assignmentId)),
+      dispatch(fetchRuntimeEnvironments()),
+      dispatch(fetchAssignmentAsyncJobs(assignmentId)),
+    ]);
 
   editAssignmentSubmitHandler = formData => {
     const { assignment, editAssignment, validateAssignment } = this.props;
@@ -72,16 +98,20 @@ class EditAssignment extends Component {
       },
       history: { replace },
       assignment,
+      asyncJobsLoading = false,
+      hasNotificationAsyncJob = false,
       userId,
       deadlines,
       exerciseSync,
       runtimeEnvironments,
       visibility,
+      visibleFrom,
     } = this.props;
 
     return (
       <Page
         resource={assignment}
+        forceLoading={asyncJobsLoading}
         icon={<EditAssignmentIcon />}
         title={<FormattedMessage id="app.editAssignment.title" defaultMessage="Edit Assignment Settings" />}>
         {assignment =>
@@ -145,14 +175,14 @@ class EditAssignment extends Component {
                       form="editAssignment"
                       userId={userId}
                       editTexts
-                      initialValues={assignment ? prepareEditFormInitialValues(assignment) : {}}
+                      initialValues={
+                        assignment ? prepareEditFormInitialValues(assignment, hasNotificationAsyncJob) : {}
+                      }
                       onSubmit={this.editAssignmentSubmitHandler}
                       deadlines={deadlines}
                       runtimeEnvironments={envs}
                       visibility={visibility}
-                      assignmentIsPublic={
-                        assignment.isPublic && (!assignment.visibleFrom || assignment.visibleFrom * 1000 <= Date.now())
-                      }
+                      showSendNotification={showSendNotification(assignment, visibility, visibleFrom)}
                       mergeJudgeLogs={assignment.mergeJudgeLogs}
                     />
                   )}
@@ -205,9 +235,12 @@ EditAssignment.propTypes = {
   assignment: ImmutablePropTypes.map,
   userId: PropTypes.string.isRequired,
   runtimeEnvironments: ImmutablePropTypes.map,
+  asyncJobsLoading: PropTypes.bool,
+  hasNotificationAsyncJob: PropTypes.bool,
   editAssignment: PropTypes.func.isRequired,
   deadlines: PropTypes.string,
   visibility: PropTypes.string,
+  visibleFrom: PropTypes.object,
   allowVisibleFrom: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
@@ -226,14 +259,17 @@ export default withLinks(
         },
       }
     ) => {
-      const assignment = getAssignment(state)(assignmentId);
+      const assignment = getAssignment(state, assignmentId);
       return {
         assignment,
         userId: loggedInUserIdSelector(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
+        asyncJobsLoading: getFetchAssignmentAsyncJobsPending(state, assignmentId),
+        hasNotificationAsyncJob: hasPendingNotificationAsyncJob(state, assignmentId),
         deadlines: editAssignmentFormSelector(state, 'deadlines'),
         visibility: editAssignmentFormSelector(state, 'visibility'),
         allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
+        visibleFrom: editAssignmentFormSelector(state, 'visibleFrom'),
       };
     },
     (
@@ -246,7 +282,8 @@ export default withLinks(
     ) => ({
       reset: () => dispatch(reset('editAssignment')),
       loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
-      editAssignment: data => dispatch(editAssignment(assignmentId, data)),
+      editAssignment: data =>
+        dispatch(editAssignment(assignmentId, data)).then(() => dispatch(fetchAssignmentAsyncJobs(assignmentId))),
       exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
       validateAssignment: version => dispatch(validateAssignment(assignmentId, version)),
     })

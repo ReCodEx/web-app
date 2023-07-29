@@ -230,7 +230,7 @@ class ExerciseAssignments extends Component {
                                   runtimeEnvironments={exercise.runtimeEnvironments}
                                   deadlines={deadlines}
                                   visibility={visibility}
-                                  assignmentIsPublic={false}
+                                  showSendNotification
                                   submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
                                   defaultIcon={<SaveIcon gapRight />}
                                   mergeJudgeLogs={exercise.mergeJudgeLogs}

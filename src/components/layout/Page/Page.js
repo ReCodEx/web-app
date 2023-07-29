@@ -10,6 +10,7 @@ const Page = ({
   windowTitle = null,
   icon = null,
   resource,
+  forceLoading = false,
   loadingTitle = (
     <span>
       <LoadingIcon gapRight />
@@ -49,6 +50,7 @@ const Page = ({
 }) => (
   <ResourceRenderer
     resource={resource}
+    forceLoading={forceLoading}
     loading={<PageContent title={loadingTitle} description={loadingDescription} />}
     failed={<PageContent title={failedTitle}>{failedDescription}</PageContent>}>
     {(...resources) => (
@@ -72,6 +74,7 @@ const stringOrFormattedMessage = PropTypes.oneOfType([
 
 Page.propTypes = {
   resource: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  forceLoading: PropTypes.bool,
   loadingTitle: stringOrFormattedMessage,
   loadingDescription: stringOrFormattedMessage,
   failedTitle: stringOrFormattedMessage,
