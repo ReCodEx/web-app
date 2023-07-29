@@ -24,9 +24,10 @@ const ShadowAssignmentsTableRow = ({
   item: { id, localizedTexts, createdAt, deadline, isBonus, isPublic, maxPoints, points, permissionHints },
   userId,
   isAdmin,
+  doubleClickPush,
   links: { SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY, SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
 }) => (
-  <tr>
+  <tr onDoubleClick={doubleClickPush && (() => doubleClickPush(SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(id)))}>
     <td className="text-nowrap shrink-col">
       {permissionHints.update && <VisibleIcon visible={isPublic} gapLeft gapRight />}
       <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} gapLeft gapRight />
@@ -100,6 +101,7 @@ ShadowAssignmentsTableRow.propTypes = {
   userId: PropTypes.string,
   links: PropTypes.object,
   isAdmin: PropTypes.bool,
+  doubleClickPush: PropTypes.func,
 };
 
 export default withLinks(ShadowAssignmentsTableRow);

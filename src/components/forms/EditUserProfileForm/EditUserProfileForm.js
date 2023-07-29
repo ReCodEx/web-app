@@ -193,7 +193,7 @@ const EditUserProfileForm = ({
             <Field
               name="oldPassword"
               component={PasswordField}
-              autoComplete="off"
+              autoComplete="new-password"
               label={<FormattedMessage id="app.changePasswordForm.oldPassword" defaultMessage="Old Password:" />}
             />
           )
@@ -202,7 +202,7 @@ const EditUserProfileForm = ({
         <Field
           name="password"
           component={PasswordField}
-          autoComplete="off"
+          autoComplete="new-password"
           label={<FormattedMessage id="app.changePasswordForm.password" defaultMessage="New Password:" />}
         />
 
@@ -216,6 +216,7 @@ const EditUserProfileForm = ({
           name="passwordConfirm"
           tabIndex={8}
           component={PasswordField}
+          autoComplete="new-password"
           label={<FormattedMessage id="app.changePasswordForm.passwordCheck" defaultMessage="New Password (again):" />}
         />
       </div>

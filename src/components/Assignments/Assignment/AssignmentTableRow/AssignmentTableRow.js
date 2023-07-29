@@ -48,6 +48,7 @@ const AssignmentTableRow = ({
   discussionOpen,
   setSelected = null,
   selected = false,
+  doubleClickPush = null,
   intl: { locale },
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
@@ -57,7 +58,15 @@ const AssignmentTableRow = ({
     GROUP_ASSIGNMENTS_URI_FACTORY,
   },
 }) => (
-  <tr>
+  <tr
+    onDoubleClick={
+      doubleClickPush &&
+      !setSelected &&
+      (() =>
+        doubleClickPush(
+          userId ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId) : ASSIGNMENT_DETAIL_URI_FACTORY(id)
+        ))
+    }>
     {setSelected && (
       <td className="text-nowrap shrink-col">
         <NiceCheckbox name={id} checked={selected} onChange={setSelected} />
@@ -219,6 +228,7 @@ AssignmentTableRow.propTypes = {
   showSecondDeadline: PropTypes.bool,
   setSelected: PropTypes.func,
   selected: PropTypes.bool,
+  doubleClickPush: PropTypes.func,
   groupsAccessor: PropTypes.func,
   discussionOpen: PropTypes.func,
   links: PropTypes.object,

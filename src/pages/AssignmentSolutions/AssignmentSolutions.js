@@ -410,6 +410,14 @@ class AssignmentSolutions extends Component {
     );
   };
 
+  openLinkGenerator = ({ actionButtons: { id, permissionHints } }) => {
+    const {
+      assignmentId,
+      links: { SOLUTION_DETAIL_URI_FACTORY },
+    } = this.props;
+    return permissionHints && permissionHints.viewDetail ? SOLUTION_DETAIL_URI_FACTORY(assignmentId, id) : null;
+  };
+
   // Re-format the data, so they can be rendered by the SortableTable ...
   render() {
     const {
@@ -647,6 +655,7 @@ class AssignmentSolutions extends Component {
                             runtimes,
                             this.state.viewMode
                           )}
+                          openLinkGenerator={this.openLinkGenerator}
                           empty={
                             <div className="text-center text-muted">
                               <FormattedMessage

@@ -7,6 +7,7 @@ import { defaultMemoize } from 'reselect';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { SaveIcon } from '../../icons';
+import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField, NumericTextField } from '../Fields';
 
@@ -108,6 +109,26 @@ const EditUserUIDataForm = ({
           id="app.editUserUIData.lastNameFirst"
           defaultMessage="In listings, show last names of users first"
         />
+      }
+    />
+
+    <Field
+      name="openOnDoubleclick"
+      component={CheckboxField}
+      onOff
+      label={
+        <>
+          <FormattedMessage
+            id="app.editUserUIData.openOnDoubleclick"
+            defaultMessage="In listings, use double click to open item details"
+          />
+          <Explanation id="assigned-at" placement="bottom">
+            <FormattedMessage
+              id="app.editUserUIData.openOnDoubleclick.explain"
+              defaultMessage="For the listing that show items with buttons or links leading to item detials, a double click (anywhere on the listing row) will be used as a shortcut for that button or link."
+            />
+          </Explanation>
+        </>
       }
     />
 

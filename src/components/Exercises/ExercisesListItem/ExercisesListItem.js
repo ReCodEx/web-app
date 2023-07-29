@@ -39,6 +39,7 @@ const ExercisesListItem = ({
   showAssignButton = false,
   assignExercise = null,
   reload,
+  doubleClickPush = null,
   links: {
     EXERCISE_URI_FACTORY,
     EXERCISE_EDIT_URI_FACTORY,
@@ -46,7 +47,8 @@ const ExercisesListItem = ({
     EXERCISE_EDIT_LIMITS_URI_FACTORY,
   },
 }) => (
-  <tr>
+  <tr
+    onDoubleClick={doubleClickPush && permissionHints.viewDetail && (() => doubleClickPush(EXERCISE_URI_FACTORY(id)))}>
     <td className="shrink-col">
       <ExercisePrefixIcons
         id={id}
@@ -205,6 +207,7 @@ ExercisesListItem.propTypes = {
   showAssignButton: PropTypes.bool,
   assignExercise: PropTypes.func,
   reload: PropTypes.func,
+  doubleClickPush: PropTypes.func,
   links: PropTypes.object,
 };
 

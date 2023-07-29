@@ -45,6 +45,7 @@ const SolutionsTableRow = ({
   selected = false,
   highlighted = false,
   showActionButtons = true,
+  doubleclickAction = null,
   onSelect = null,
   links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY },
   intl: { locale },
@@ -62,7 +63,11 @@ const SolutionsTableRow = ({
   const splitOnTwoLines = hasNote && compact;
 
   return (
-    <tbody onClick={!selected && onSelect ? () => onSelect(id) : null}>
+    <tbody
+      onClick={!selected && onSelect ? () => onSelect(id) : null}
+      onDoubleClick={
+        !onSelect && doubleclickAction && (() => doubleclickAction(SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)))
+      }>
       <tr
         className={classnames({
           'table-primary': selected,
@@ -229,6 +234,7 @@ SolutionsTableRow.propTypes = {
   selected: PropTypes.bool,
   highlighted: PropTypes.bool,
   showActionButtons: PropTypes.bool,
+  doubleclickAction: PropTypes.func,
   onSelect: PropTypes.func,
   links: PropTypes.object,
   intl: PropTypes.object,
