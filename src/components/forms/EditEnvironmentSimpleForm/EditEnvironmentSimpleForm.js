@@ -117,43 +117,49 @@ class EditEnvironmentSimpleForm extends Component {
 
             {error && <Callout variant="danger">{error}</Callout>}
 
-            <div className="text-center">
-              <TheButtonGroup>
-                {dirty && (
-                  <Button type="reset" onClick={reset} variant={'danger'}>
-                    <RefreshIcon gapRight />
-                    <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                  </Button>
-                )}
+            {(!invalid || dirty) && (
+              <div className="text-center">
+                <TheButtonGroup>
+                  {dirty && (
+                    <Button type="reset" onClick={reset} variant={'danger'}>
+                      <RefreshIcon gapRight />
+                      <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                    </Button>
+                  )}
 
-                <SubmitButton
-                  id="editTests"
-                  invalid={invalid}
-                  submitting={submitting}
-                  hasSucceeded={submitSucceeded}
-                  dirty={dirty}
-                  hasFailed={submitFailed}
-                  handleSubmit={handleSubmit}
-                  messages={{
-                    submit: (
-                      <FormattedMessage id="app.editEnvironmentSimpleForm.submit" defaultMessage="Save Environments" />
-                    ),
-                    submitting: (
-                      <FormattedMessage
-                        id="app.editEnvironmentSimpleForm.submitting"
-                        defaultMessage="Saving Environments..."
-                      />
-                    ),
-                    success: (
-                      <FormattedMessage
-                        id="app.editEnvironmentSimpleForm.success"
-                        defaultMessage="Environments Saved."
-                      />
-                    ),
-                  }}
-                />
-              </TheButtonGroup>
-            </div>
+                  {!invalid && (
+                    <SubmitButton
+                      id="editTests"
+                      submitting={submitting}
+                      hasSucceeded={submitSucceeded}
+                      dirty={dirty}
+                      hasFailed={submitFailed}
+                      handleSubmit={handleSubmit}
+                      messages={{
+                        submit: (
+                          <FormattedMessage
+                            id="app.editEnvironmentSimpleForm.submit"
+                            defaultMessage="Save Environments"
+                          />
+                        ),
+                        submitting: (
+                          <FormattedMessage
+                            id="app.editEnvironmentSimpleForm.submitting"
+                            defaultMessage="Saving Environments..."
+                          />
+                        ),
+                        success: (
+                          <FormattedMessage
+                            id="app.editEnvironmentSimpleForm.success"
+                            defaultMessage="Environments Saved."
+                          />
+                        ),
+                      }}
+                    />
+                  )}
+                </TheButtonGroup>
+              </div>
+            )}
           </>
         ) : (
           <>
