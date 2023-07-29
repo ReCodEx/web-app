@@ -50,11 +50,12 @@ export const showRangeInfo = (offset, limit, totalCount) =>
     <div className="text-muted text-right small">
       <FormattedMessage
         id="app.paginationContainer.showingRange"
-        defaultMessage="showing {offset} - {offsetEnd} (of {totalCount})"
+        defaultMessage="showing {offset}{nbsp}-{nbsp}{offsetEnd} (of{nbsp}{totalCount})"
         values={{
           offset: offset + 1,
           offsetEnd: Math.min(offset + limit, totalCount),
           totalCount,
+          nbsp: <>&nbsp;</>,
         }}
       />
     </div>

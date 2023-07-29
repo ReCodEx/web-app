@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { withRouter } from 'react-router';
 import { defaultMemoize } from 'reselect';
 import moment from 'moment';
 
@@ -13,6 +14,7 @@ import Icon, { DeleteIcon, InvertIcon, LoadingIcon, RefreshIcon, SquareIcon, Vis
 import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import { compareAssignmentsReverted, isBeforeDeadline, isUpToDate } from '../../../helpers/assignments';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
+import { UserUIDataContext } from '../../../../helpers/contexts';
 import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 import { prepareInitialValues, transformSubmittedData } from '../../../forms/EditAssignmentForm';
 
@@ -180,6 +182,7 @@ class AssignmentsTable extends Component {
       editAssignment = null,
       deleteAssignment = null,
       intl: { locale },
+      history: { push },
     } = this.props;
     const someAssignmentsAreLoading = assignments.some(isLoading);
     const assignmentsPreprocessedAll = assignments
@@ -196,227 +199,243 @@ class AssignmentsTable extends Component {
     const multiActions = Boolean(syncAssignment || editAssignment || deleteAssignment);
     return (
       <>
-        <Table hover className="mb-0">
-          {assignmentsPreprocessed.length > 0 && (
-            <thead>
-              <tr>
-                {multiActions && <th className="shrink-col" />}
-                <th className="shrink-col" />
+        <UserUIDataContext.Consumer>
+          {({ openOnDoubleclick = false }) => (
+            <Table hover className="mb-0">
+              {assignmentsPreprocessed.length > 0 && (
+                <thead>
+                  <tr>
+                    {multiActions && <th className="shrink-col" />}
+                    <th className="shrink-col" />
 
-                {showNames && (
-                  <th>
-                    <FormattedMessage id="app.assignments.name" defaultMessage="Assignment name" />
-                  </th>
-                )}
-
-                {showGroups && groupsAccessor && (
-                  <th>
-                    <FormattedMessage id="app.assignments.group" defaultMessage="Assigned in group" />
-                  </th>
-                )}
-
-                {assignmentEnvironmentsSelector && (
-                  <th>
-                    <FormattedMessage id="generic.runtimesShort" defaultMessage="Runtimes/Languages" />
-                  </th>
-                )}
-
-                {!isAdmin && Object.keys(stats).length !== 0 && (
-                  <th className="text-center text-nowrap">
-                    <FormattedMessage id="app.assignments.points" defaultMessage="Points" />
-                  </th>
-                )}
-
-                <th className="text-nowrap shrink-col">
-                  <FormattedMessage id="app.assignments.deadline" defaultMessage="Deadline" />
-                </th>
-
-                {showSecondDeadline && (
-                  <th className="text-nowrap shrink-col">
-                    <FormattedMessage id="app.assignments.secondDeadline" defaultMessage="Second deadline" />
-                  </th>
-                )}
-
-                <th className="text-nowrap shrink-col">
-                  <FormattedMessage id="app.assignments.maxPointsShort" defaultMessage="Max. points" />
-                </th>
-
-                <th />
-              </tr>
-            </thead>
-          )}
-          <tbody>
-            {someAssignmentsAreLoading ? (
-              <LoadingAssignmentTableRow colSpan={10} />
-            ) : (
-              assignmentsPreprocessedAll.length === 0 && (
-                <tr>
-                  <td className="text-center">
-                    {showGroups ? (
-                      <FormattedMessage
-                        id="app.assignmentsTable.noAssignmentsInAnyGroup"
-                        defaultMessage="This exercise has no assigments in any of the groups you can see."
-                      />
-                    ) : (
-                      <FormattedMessage
-                        id="app.assignmentsTable.noAssignments"
-                        defaultMessage="There are no assignments yet."
-                      />
-                    )}
-                  </td>
-                </tr>
-              )
-            )}
-
-            {!someAssignmentsAreLoading &&
-              assignmentsPreprocessed.map(assignment => (
-                <AssignmentTableRow
-                  key={assignment.id}
-                  item={assignment}
-                  runtimeEnvironments={assignmentEnvironmentsSelector && assignmentEnvironmentsSelector(assignment.id)}
-                  userId={userId}
-                  status={fetchAssignmentStatus(statuses, assignment.id)}
-                  locale={locale}
-                  stats={
-                    Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null
-                  }
-                  isAdmin={isAdmin}
-                  showNames={showNames}
-                  showGroups={showGroups}
-                  showSecondDeadline={showSecondDeadline}
-                  groupsAccessor={groupsAccessor}
-                  discussionOpen={() => this.openDialog(assignment)}
-                  setSelected={multiActions ? this.selectAssignmentClickHandler(assignmentsPreprocessedAll) : null}
-                  selected={Boolean(this.state.selectedAssignments[assignment.id])}
-                />
-              ))}
-          </tbody>
-
-          {!someAssignmentsAreLoading &&
-            onlyCurrent &&
-            assignmentsPreprocessedAll.length !== assignmentsPreprocessedCurrent.length && (
-              <tfoot>
-                <tr>
-                  <td colSpan={10} className="small text-muted text-center">
-                    {this.state.showAll ? (
-                      <FormattedMessage
-                        id="app.assignments.hidePastAssignments"
-                        defaultMessage="Total {count} {count, plural, one {assignment} other {assignments}} {count, plural, one {is past its} other {are past their}} deadline. <a>Hide old assignments.</a>"
-                        values={{
-                          count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
-                          a: content => (
-                            <a href="" onClick={this.hideOldAssignments}>
-                              {content}
-                            </a>
-                          ),
-                        }}
-                      />
-                    ) : (
-                      <FormattedMessage
-                        id="app.assignments.showHiddenPastAssignments"
-                        defaultMessage="There {count, plural, one {is} other {are}} {count} hidden {count, plural, one {assignment} other {assignments}} which {count, plural, one {is past its} other {are past their}} deadline. <a>Show all.</a>"
-                        values={{
-                          count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
-                          a: content => (
-                            <a href="" onClick={this.showAllAssignments}>
-                              {content}
-                            </a>
-                          ),
-                        }}
-                      />
-                    )}
-                  </td>
-                </tr>
-              </tfoot>
-            )}
-
-          {multiActions && !someAssignmentsAreLoading && assignmentsPreprocessed.length > 0 && (
-            <tfoot>
-              <tr>
-                <td colSpan={10}>
-                  <Icon
-                    icon="arrow-turn-up"
-                    transform={{ rotate: 90 }}
-                    className="text-muted"
-                    largeGapLeft
-                    largeGapRight
-                  />
-
-                  <TheButtonGroup>
-                    <Button variant="primary" size="sm" onClick={this.selectAllAssignments(assignmentsPreprocessedAll)}>
-                      <SquareIcon checked gapRight />
-                      <FormattedMessage id="app.assignments.selectAll" defaultMessage="Select All" />
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={this.invertSelectedAssignments(assignmentsPreprocessedAll)}>
-                      <InvertIcon gapRight />
-                      <FormattedMessage id="app.assignments.invertSelection" defaultMessage="Invert" />
-                    </Button>
-                  </TheButtonGroup>
-
-                  <TheButtonGroup className="ml-4">
-                    {syncAssignment && (
-                      <Button
-                        variant="warning"
-                        size="sm"
-                        disabled={this.state.pendingAction || !this.state.multiSync}
-                        onClick={this.syncSelectedAssignments}>
-                        {this.state.pendingAction === 'sync' ? <LoadingIcon gapRight /> : <RefreshIcon gapRight />}
-                        <FormattedMessage id="app.assignments.syncAllButton" defaultMessage="Sync with Exercise" />
-                      </Button>
+                    {showNames && (
+                      <th>
+                        <FormattedMessage id="app.assignments.name" defaultMessage="Assignment name" />
+                      </th>
                     )}
 
-                    {editAssignment && (
-                      <Button
-                        variant="success"
-                        size="sm"
-                        disabled={this.state.pendingAction || !this.state.multiVisible}
-                        onClick={() => this.visibleSelectedAssignments(assignmentsPreprocessedAll)}>
-                        {this.state.pendingAction === 'visible' ? <LoadingIcon gapRight /> : <VisibleIcon gapRight />}
-                        <FormattedMessage id="app.assignments.showAllButton" defaultMessage="Set Visible" />
-                      </Button>
+                    {showGroups && groupsAccessor && (
+                      <th>
+                        <FormattedMessage id="app.assignments.group" defaultMessage="Assigned in group" />
+                      </th>
                     )}
 
-                    {editAssignment && (
-                      <Button
-                        variant="warning"
-                        size="sm"
-                        disabled={this.state.pendingAction || !this.state.multiHide}
-                        onClick={() => this.hideSelectedAssignments(assignmentsPreprocessedAll)}>
-                        {this.state.pendingAction === 'hide' ? (
-                          <LoadingIcon gapRight />
-                        ) : (
-                          <VisibleIcon visible={false} gapRight />
-                        )}
-                        <FormattedMessage id="app.assignments.hideAllButton" defaultMessage="Set Hidden" />
-                      </Button>
+                    {assignmentEnvironmentsSelector && (
+                      <th>
+                        <FormattedMessage id="generic.runtimesShort" defaultMessage="Runtimes/Languages" />
+                      </th>
                     )}
 
-                    {deleteAssignment && (
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        disabled={this.state.pendingAction || !this.state.multiDelete}
-                        confirmId="deleteAssignments"
-                        confirm={
+                    {!isAdmin && Object.keys(stats).length !== 0 && (
+                      <th className="text-center text-nowrap">
+                        <FormattedMessage id="app.assignments.points" defaultMessage="Points" />
+                      </th>
+                    )}
+
+                    <th className="text-nowrap shrink-col">
+                      <FormattedMessage id="app.assignments.deadline" defaultMessage="Deadline" />
+                    </th>
+
+                    {showSecondDeadline && (
+                      <th className="text-nowrap shrink-col">
+                        <FormattedMessage id="app.assignments.secondDeadline" defaultMessage="Second deadline" />
+                      </th>
+                    )}
+
+                    <th className="text-nowrap shrink-col">
+                      <FormattedMessage id="app.assignments.maxPointsShort" defaultMessage="Max. points" />
+                    </th>
+
+                    <th />
+                  </tr>
+                </thead>
+              )}
+              <tbody>
+                {someAssignmentsAreLoading ? (
+                  <LoadingAssignmentTableRow colSpan={10} />
+                ) : (
+                  assignmentsPreprocessedAll.length === 0 && (
+                    <tr>
+                      <td className="text-center">
+                        {showGroups ? (
                           <FormattedMessage
-                            id="app.assignments.deleteAllButtonConfirm"
-                            defaultMessage="Do you really wish to remove all selected assignments?"
+                            id="app.assignmentsTable.noAssignmentsInAnyGroup"
+                            defaultMessage="This exercise has no assigments in any of the groups you can see."
                           />
-                        }
-                        onClick={this.deleteSelectedAssignments}>
-                        {this.state.pendingAction === 'delete' ? <LoadingIcon gapRight /> : <DeleteIcon gapRight />}
-                        <FormattedMessage id="app.assignments.deleteAllButton" defaultMessage="Delete" />
-                      </Button>
-                    )}
-                  </TheButtonGroup>
-                </td>
-              </tr>
-            </tfoot>
+                        ) : (
+                          <FormattedMessage
+                            id="app.assignmentsTable.noAssignments"
+                            defaultMessage="There are no assignments yet."
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  )
+                )}
+
+                {!someAssignmentsAreLoading &&
+                  assignmentsPreprocessed.map(assignment => (
+                    <AssignmentTableRow
+                      key={assignment.id}
+                      item={assignment}
+                      runtimeEnvironments={
+                        assignmentEnvironmentsSelector && assignmentEnvironmentsSelector(assignment.id)
+                      }
+                      userId={userId}
+                      status={fetchAssignmentStatus(statuses, assignment.id)}
+                      locale={locale}
+                      stats={
+                        Object.keys(stats).length !== 0
+                          ? stats.assignments.find(item => item.id === assignment.id)
+                          : null
+                      }
+                      isAdmin={isAdmin}
+                      showNames={showNames}
+                      showGroups={showGroups}
+                      showSecondDeadline={showSecondDeadline}
+                      groupsAccessor={groupsAccessor}
+                      discussionOpen={() => this.openDialog(assignment)}
+                      setSelected={multiActions ? this.selectAssignmentClickHandler(assignmentsPreprocessedAll) : null}
+                      selected={Boolean(this.state.selectedAssignments[assignment.id])}
+                      doubleClickPush={openOnDoubleclick ? push : null}
+                    />
+                  ))}
+              </tbody>
+
+              {!someAssignmentsAreLoading &&
+                onlyCurrent &&
+                assignmentsPreprocessedAll.length !== assignmentsPreprocessedCurrent.length && (
+                  <tfoot>
+                    <tr>
+                      <td colSpan={10} className="small text-muted text-center">
+                        {this.state.showAll ? (
+                          <FormattedMessage
+                            id="app.assignments.hidePastAssignments"
+                            defaultMessage="Total {count} {count, plural, one {assignment} other {assignments}} {count, plural, one {is past its} other {are past their}} deadline. <a>Hide old assignments.</a>"
+                            values={{
+                              count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
+                              a: content => (
+                                <a href="" onClick={this.hideOldAssignments}>
+                                  {content}
+                                </a>
+                              ),
+                            }}
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.assignments.showHiddenPastAssignments"
+                            defaultMessage="There {count, plural, one {is} other {are}} {count} hidden {count, plural, one {assignment} other {assignments}} which {count, plural, one {is past its} other {are past their}} deadline. <a>Show all.</a>"
+                            values={{
+                              count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
+                              a: content => (
+                                <a href="" onClick={this.showAllAssignments}>
+                                  {content}
+                                </a>
+                              ),
+                            }}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  </tfoot>
+                )}
+
+              {multiActions && !someAssignmentsAreLoading && assignmentsPreprocessed.length > 0 && (
+                <tfoot>
+                  <tr>
+                    <td colSpan={10}>
+                      <Icon
+                        icon="arrow-turn-up"
+                        transform={{ rotate: 90 }}
+                        className="text-muted"
+                        largeGapLeft
+                        largeGapRight
+                      />
+
+                      <TheButtonGroup>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={this.selectAllAssignments(assignmentsPreprocessedAll)}>
+                          <SquareIcon checked gapRight />
+                          <FormattedMessage id="app.assignments.selectAll" defaultMessage="Select All" />
+                        </Button>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={this.invertSelectedAssignments(assignmentsPreprocessedAll)}>
+                          <InvertIcon gapRight />
+                          <FormattedMessage id="app.assignments.invertSelection" defaultMessage="Invert" />
+                        </Button>
+                      </TheButtonGroup>
+
+                      <TheButtonGroup className="ml-4">
+                        {syncAssignment && (
+                          <Button
+                            variant="warning"
+                            size="sm"
+                            disabled={this.state.pendingAction || !this.state.multiSync}
+                            onClick={this.syncSelectedAssignments}>
+                            {this.state.pendingAction === 'sync' ? <LoadingIcon gapRight /> : <RefreshIcon gapRight />}
+                            <FormattedMessage id="app.assignments.syncAllButton" defaultMessage="Sync with Exercise" />
+                          </Button>
+                        )}
+
+                        {editAssignment && (
+                          <Button
+                            variant="success"
+                            size="sm"
+                            disabled={this.state.pendingAction || !this.state.multiVisible}
+                            onClick={() => this.visibleSelectedAssignments(assignmentsPreprocessedAll)}>
+                            {this.state.pendingAction === 'visible' ? (
+                              <LoadingIcon gapRight />
+                            ) : (
+                              <VisibleIcon gapRight />
+                            )}
+                            <FormattedMessage id="app.assignments.showAllButton" defaultMessage="Set Visible" />
+                          </Button>
+                        )}
+
+                        {editAssignment && (
+                          <Button
+                            variant="warning"
+                            size="sm"
+                            disabled={this.state.pendingAction || !this.state.multiHide}
+                            onClick={() => this.hideSelectedAssignments(assignmentsPreprocessedAll)}>
+                            {this.state.pendingAction === 'hide' ? (
+                              <LoadingIcon gapRight />
+                            ) : (
+                              <VisibleIcon visible={false} gapRight />
+                            )}
+                            <FormattedMessage id="app.assignments.hideAllButton" defaultMessage="Set Hidden" />
+                          </Button>
+                        )}
+
+                        {deleteAssignment && (
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            disabled={this.state.pendingAction || !this.state.multiDelete}
+                            confirmId="deleteAssignments"
+                            confirm={
+                              <FormattedMessage
+                                id="app.assignments.deleteAllButtonConfirm"
+                                defaultMessage="Do you really wish to remove all selected assignments?"
+                              />
+                            }
+                            onClick={this.deleteSelectedAssignments}>
+                            {this.state.pendingAction === 'delete' ? <LoadingIcon gapRight /> : <DeleteIcon gapRight />}
+                            <FormattedMessage id="app.assignments.deleteAllButton" defaultMessage="Delete" />
+                          </Button>
+                        )}
+                      </TheButtonGroup>
+                    </td>
+                  </tr>
+                </tfoot>
+              )}
+            </Table>
           )}
-        </Table>
+        </UserUIDataContext.Consumer>
 
         <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="xl">
           {this.state.dialogAssignment && (
@@ -460,6 +479,9 @@ AssignmentsTable.propTypes = {
   editAssignment: PropTypes.func,
   deleteAssignment: PropTypes.func,
   intl: PropTypes.object.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
 };
 
-export default injectIntl(AssignmentsTable);
+export default withRouter(injectIntl(AssignmentsTable));

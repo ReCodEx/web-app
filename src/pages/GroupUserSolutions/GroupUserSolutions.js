@@ -384,6 +384,13 @@ class GroupUserSolutions extends Component {
     );
   };
 
+  openLinkGenerator = ({ actionButtons: { id, assignmentId, permissionHints } }) => {
+    const {
+      links: { SOLUTION_DETAIL_URI_FACTORY },
+    } = this.props;
+    return permissionHints && permissionHints.viewDetail ? SOLUTION_DETAIL_URI_FACTORY(assignmentId, id) : null;
+  };
+
   // Re-format the data, so they can be rendered by the SortableTable ...
   render() {
     const {

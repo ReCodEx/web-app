@@ -377,7 +377,7 @@ class SolutionStatus extends Component {
                     </small>
                   )}
 
-                  {review.closedAt && (
+                  {review && review.closedAt && (
                     <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
                       <ReviewIcon
                         review={review}
