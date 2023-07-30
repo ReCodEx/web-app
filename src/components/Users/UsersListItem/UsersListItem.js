@@ -60,7 +60,10 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
   );
 
 UsersListItem.propTypes = {
-  user: PropTypes.object,
+  user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    privateData: PropTypes.shape({ isAllowed: PropTypes.bool, role: PropTypes.string, createdAt: PropTypes.number }),
+  }),
   emailColumn: PropTypes.bool,
   createdAtColumn: PropTypes.bool,
   createActions: PropTypes.func,

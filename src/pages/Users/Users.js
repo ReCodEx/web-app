@@ -245,6 +245,11 @@ Users.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
+Users.createActions.propTypes = {
+  id: PropTypes.string.isRequired,
+  privateData: PropTypes.shape({ isAllowed: PropTypes.bool }),
+};
+
 export default withLinks(
   connect(
     state => {
