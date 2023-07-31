@@ -1,7 +1,7 @@
 /* eslint no-console: "off" */
 import fs from 'fs';
 import { extract } from '@formatjs/cli-lib';
-import glob from 'glob';
+import { globSync } from 'glob';
 import 'colors';
 
 // global config parameters
@@ -16,7 +16,7 @@ const translationsDirectory = './src/locales/';
  */
 async function extractMessages() {
   // extract messages from all src files
-  const files = glob.sync(searchPattern);
+  const files = globSync(searchPattern, { posix: true });
   console.log(`Extracting messages from ${files.length} files...`);
   const extractedAsString = await extract(files, {});
   const extractedJson = JSON.parse(extractedAsString);

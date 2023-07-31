@@ -51,7 +51,6 @@ class Login extends Component {
     let url = null;
     if (redirect) {
       url = Buffer.from(decodeURIComponent(redirect), 'base64').toString();
-      // url = atob(decodeURIComponent(redirect));
     } else {
       const defaultPages = {
         home: HOME_URI,
