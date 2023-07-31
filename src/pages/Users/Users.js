@@ -90,6 +90,7 @@ class Users extends Component {
     </tr>
   );
 
+  // eslint-disable-next-line react/prop-types
   createActions = defaultMemoize(reload => ({ id, privateData }) => {
     const {
       takeOver,
@@ -100,20 +101,23 @@ class Users extends Component {
     return (
       isSuperAdmin && (
         <TheButtonGroup>
-          {privateData && privateData.isAllowed && (
-            <Button
-              size="xs"
-              variant="primary"
-              onClick={() =>
-                takeOver(id).then(() => {
-                  App.ignoreNextLocationChange();
-                  push(DASHBOARD_URI);
-                })
-              }>
-              <TransferIcon gapRight />
-              <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
-            </Button>
-          )}
+          {
+            /* eslint-disable-next-line react/prop-types */
+            privateData && privateData.isAllowed && (
+              <Button
+                size="xs"
+                variant="primary"
+                onClick={() =>
+                  takeOver(id).then(() => {
+                    App.ignoreNextLocationChange();
+                    push(DASHBOARD_URI);
+                  })
+                }>
+                <TransferIcon gapRight />
+                <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
+              </Button>
+            )
+          }
 
           <Link to={EDIT_USER_URI_FACTORY(id)}>
             <Button size="xs" variant="warning">
@@ -243,11 +247,6 @@ Users.propTypes = {
   reloadPagination: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
-};
-
-Users.createActions.propTypes = {
-  id: PropTypes.string.isRequired,
-  privateData: PropTypes.shape({ isAllowed: PropTypes.bool }),
 };
 
 export default withLinks(
