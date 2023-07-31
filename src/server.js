@@ -11,6 +11,7 @@ import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 import fs from 'fs';
+import { globSync } from 'glob';
 
 import { StaticRouter } from 'react-router';
 
@@ -29,30 +30,17 @@ import '@formatjs/intl-relativetimeformat/polyfill';
 import '@formatjs/intl-relativetimeformat/locale-data/en';
 import '@formatjs/intl-relativetimeformat/locale-data/cs';
 
-// Register global atob a btoa functions
-// TODO: These functions were removed from our code 20.7.2022, this polyfill will be removed in near future.
-global.Buffer = global.Buffer || require('buffer').Buffer;
-
-if (typeof btoa === 'undefined') {
-  global.btoa = str => Buffer.from(str).toString('base64');
-}
-
-if (typeof atob === 'undefined') {
-  global.atob = b64Encoded => Buffer.from(b64Encoded, 'base64').toString();
-}
-
 /**
  * Init server-side rendering of the app using Express with
  * some basic middleware for tempaltes and static file serving.
  */
 
 function getFileName(pattern, addPrefix = '') {
-  const glob = require('glob');
-  const files = glob.sync(pattern);
+  const files = globSync(pattern, { posix: true });
   if (!files || files.length < 1) {
     return null;
   }
-  const fileName = files[0].substr(files[0].lastIndexOf('/') + 1);
+  const fileName = files[0].substring(files[0].lastIndexOf('/') + 1);
   return fileName ? addPrefix + fileName : null;
 }
 
