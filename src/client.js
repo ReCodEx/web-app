@@ -1,7 +1,7 @@
 import 'cross-fetch/polyfill';
 
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -71,11 +71,12 @@ if (ini) {
 
 const store = configureStore(state, getToken(), getInstanceId(), getLang());
 
-render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(
   <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 );
