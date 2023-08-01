@@ -10,7 +10,10 @@ import { hasFailed, didInvalidate } from './status';
  * @param {string} resourceName Name of the resource
  * @return {Function} API endpoint factory
  */
-export const defaultApiEndpointFactory = resourceName => (id = '') => `/${resourceName}/${id}`;
+export const defaultApiEndpointFactory =
+  resourceName =>
+  (id = '') =>
+    `/${resourceName}/${id}`;
 
 /**
  * @param {string} resourceName Name of the resource
