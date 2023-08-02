@@ -39,7 +39,9 @@ class ShadowAssignmentPointsContainer extends Component {
     );
   };
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.id !== prevProps.id) {

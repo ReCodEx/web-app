@@ -27,10 +27,12 @@ const findPoints = defaultMemoize((points, loggedUserId) => {
 class ShadowAssignment extends Component {
   static loadAsync = ({ shadowId }, dispatch) => dispatch(fetchShadowAssignmentIfNeeded(shadowId));
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.shadowId !== prevProps.match.params.shadowId) {
+    if (this.props.params.shadowId !== prevProps.params.shadowId) {
       this.props.loadAsync();
     }
   }
@@ -87,10 +89,8 @@ class ShadowAssignment extends Component {
 }
 
 ShadowAssignment.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      shadowId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    shadowId: PropTypes.string.isRequired,
   }).isRequired,
   shadowAssignment: PropTypes.object,
   loggedUserId: PropTypes.string,
@@ -100,27 +100,13 @@ ShadowAssignment.propTypes = {
 };
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { shadowId },
-      },
-    }
-  ) => {
+  (state, { params: { shadowId } }) => {
     return {
       shadowAssignment: getShadowAssignment(state)(shadowId),
       loggedUserId: loggedInUserIdSelector(state),
     };
   },
-  (
-    dispatch,
-    {
-      match: {
-        params: { shadowId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { shadowId } }) => ({
     loadAsync: () => ShadowAssignment.loadAsync({ shadowId }, dispatch),
   })
 )(injectIntl(ShadowAssignment));

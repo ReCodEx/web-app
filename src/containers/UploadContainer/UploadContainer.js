@@ -27,7 +27,9 @@ import {
 } from '../../redux/modules/upload';
 
 class UploadContainer extends Component {
-  componentDidMount = () => this.props.init();
+  componentDidMount() {
+    this.props.init();
+  }
 
   retryUploadFile = file => {
     const { removeFailedFile, onChange } = this.props;

@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import AssignmentNameContainer from '../../../containers/AssignmentNameContainer';
 import ExercisesNameContainer from '../../../containers/ExercisesNameContainer';
@@ -55,10 +54,10 @@ const Navigation = ({
   emphasizeUser = false,
   links,
   secondaryLinks,
-  location,
   titlePrefix = null,
   titleSuffix = null,
 }) => {
+  const location = useLocation();
   links = Array.isArray(links) ? links.filter(link => link) : [];
   secondaryLinks = Array.isArray(secondaryLinks) ? secondaryLinks.filter(link => link) : [];
   const onlyUser = Boolean(userId && !groupId && !exerciseId && !assignmentId && !shadowId);
@@ -195,12 +194,8 @@ Navigation.propTypes = {
   emphasizeUser: PropTypes.bool,
   links: PropTypes.array,
   secondaryLinks: PropTypes.array,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-  }).isRequired,
   titlePrefix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   titleSuffix: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };
 
-export default withRouter(Navigation);
+export default Navigation;

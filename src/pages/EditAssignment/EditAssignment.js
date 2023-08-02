@@ -39,6 +39,7 @@ import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSy
 import { hasPermissions } from '../../helpers/common';
 
 import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
 
 const showSendNotification = (assignment, visibility, visibleFrom) => {
   const isCurrentlyVisible =
@@ -52,10 +53,12 @@ const showSendNotification = (assignment, visibility, visibleFrom) => {
 };
 
 class EditAssignment extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.assignmentId !== prevProps.match.params.assignmentId) {
+    if (this.props.params.assignmentId !== prevProps.params.assignmentId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -93,10 +96,8 @@ class EditAssignment extends Component {
   render() {
     const {
       links: { GROUP_ASSIGNMENTS_URI_FACTORY },
-      match: {
-        params: { assignmentId },
-      },
-      history: { replace },
+      params: { assignmentId },
+      navigate,
       assignment,
       asyncJobsLoading = false,
       hasNotificationAsyncJob = false,
@@ -206,7 +207,7 @@ class EditAssignment extends Component {
                     <p className="text-center">
                       <DeleteAssignmentButtonContainer
                         id={assignmentId}
-                        onDeleted={() => replace(GROUP_ASSIGNMENTS_URI_FACTORY(assignment.groupId))}
+                        onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(assignment.groupId), { replace: true })}
                       />
                     </p>
                   </div>
@@ -221,16 +222,10 @@ class EditAssignment extends Component {
 }
 
 EditAssignment.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      assignmentId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    assignmentId: PropTypes.string.isRequired,
   }).isRequired,
   assignment: ImmutablePropTypes.map,
   userId: PropTypes.string.isRequired,
@@ -245,20 +240,14 @@ EditAssignment.propTypes = {
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
   links: PropTypes.object,
+  navigate: withRouterProps.navigate,
 };
 
 const editAssignmentFormSelector = formValueSelector('editAssignment');
 
 export default withLinks(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { assignmentId },
-        },
-      }
-    ) => {
+    (state, { params: { assignmentId } }) => {
       const assignment = getAssignment(state, assignmentId);
       return {
         assignment,
@@ -272,14 +261,7 @@ export default withLinks(
         visibleFrom: editAssignmentFormSelector(state, 'visibleFrom'),
       };
     },
-    (
-      dispatch,
-      {
-        match: {
-          params: { assignmentId },
-        },
-      }
-    ) => ({
+    (dispatch, { params: { assignmentId } }) => ({
       reset: () => dispatch(reset('editAssignment')),
       loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
       editAssignment: data =>

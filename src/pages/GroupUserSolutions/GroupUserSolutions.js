@@ -365,10 +365,10 @@ class GroupUserSolutions extends Component {
     });
   };
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.props.loadAsync();
     this.setState(storageGetItem(localStorageStateKey, null));
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.groupId !== prevProps.groupId || this.props.userId !== prevProps.userId) {
@@ -621,14 +621,7 @@ GroupUserSolutions.propTypes = {
 
 export default withLinks(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { groupId, userId },
-        },
-      }
-    ) => {
+    (state, { params: { groupId, userId } }) => {
       return {
         groupId,
         userId,
@@ -645,14 +638,7 @@ export default withLinks(
         assignmentSolverSelector: getAssignmentSolverSelector(state),
       };
     },
-    (
-      dispatch,
-      {
-        match: {
-          params: { groupId, userId },
-        },
-      }
-    ) => ({
+    (dispatch, { params: { groupId, userId } }) => ({
       loadAsync: () => GroupUserSolutions.loadAsync({ groupId, userId }, dispatch),
       closeReview: id => dispatch(setSolutionReviewState(id, true)),
     })

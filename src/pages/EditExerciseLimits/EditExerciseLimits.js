@@ -51,10 +51,12 @@ import {
 import { hasPermissions } from '../../helpers/common';
 
 class EditExerciseLimits extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
       this.props.loadAsync();
     }
   }
@@ -278,10 +280,8 @@ class EditExerciseLimits extends Component {
 EditExerciseLimits.propTypes = {
   exercise: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      exerciseId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   setExerciseLimits: PropTypes.func.isRequired,
   setExerciseHardwareGroups: PropTypes.func.isRequired,
@@ -318,14 +318,7 @@ const editLimitsFormSelector = formValueSelector('editLimits');
 const editHardwareGroupFormSelector = formValueSelector('editHardwareGroup');
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { exerciseId },
-      },
-    }
-  ) => {
+  (state, { params: { exerciseId } }) => {
     return {
       exercise: getExercise(exerciseId)(state),
       userId: loggedInUserIdSelector(state),
@@ -337,14 +330,7 @@ export default connect(
       isSuperAdmin: isLoggedAsSuperAdmin(state),
     };
   },
-  (
-    dispatch,
-    {
-      match: {
-        params: { exerciseId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { exerciseId } }) => ({
     loadAsync: () => EditExerciseLimits.loadAsync({ exerciseId }, dispatch),
     setExerciseHardwareGroups: hwGroups => dispatch(setExerciseHardwareGroups(exerciseId, hwGroups)),
     setExerciseLimits: limits => dispatch(setExerciseLimits(exerciseId, { limits })),

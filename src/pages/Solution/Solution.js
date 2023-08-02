@@ -74,10 +74,12 @@ class Solution extends Component {
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId)),
     ]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.solutionId !== prevProps.match.params.solutionId) {
+    if (this.props.params.solutionId !== prevProps.params.solutionId) {
       this.props.loadAsync();
     }
   }
@@ -89,9 +91,7 @@ class Solution extends Component {
       files,
       download,
       userSolutionsSelector,
-      match: {
-        params: { assignmentId },
-      },
+      params: { assignmentId },
       evaluations,
       runtimeEnvironments,
       fetchStatus,
@@ -258,11 +258,9 @@ class Solution extends Component {
 }
 
 Solution.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      assignmentId: PropTypes.string.isRequired,
-      solutionId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    assignmentId: PropTypes.string.isRequired,
+    solutionId: PropTypes.string.isRequired,
   }).isRequired,
   assignment: PropTypes.object,
   children: PropTypes.element,
@@ -287,14 +285,7 @@ Solution.propTypes = {
 };
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { solutionId, assignmentId },
-      },
-    }
-  ) => ({
+  (state, { params: { solutionId, assignmentId } }) => ({
     solution: getSolution(state, solutionId),
     files: getSolutionFiles(state, solutionId),
     userSolutionsSelector: getUserSolutionsSortedData(state),
@@ -307,7 +298,7 @@ export default connect(
     assignmentSolverSelector: getAssignmentSolverSelector(state),
     isStudent: isLoggedAsStudent(state),
   }),
-  (dispatch, { match: { params } }) => ({
+  (dispatch, { params }) => ({
     loadAsync: () => Solution.loadAsync(params, dispatch),
     fetchScoreConfigIfNeeded: submissionId => dispatch(fetchAssignmentSubmissionScoreConfigIfNeeded(submissionId)),
     editNote: note => dispatch(setNote(params.solutionId, note)),

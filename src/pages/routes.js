@@ -1,5 +1,5 @@
 import React from 'react';
-import { matchPath, Switch, Route, Redirect } from 'react-router';
+import { matchPath, Routes, Route, Navigate } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 /* container components */
@@ -51,10 +51,25 @@ import SystemMessages from './SystemMessages/SystemMessages';
 import User from './User';
 import Users from './Users';
 
-import { LOGIN_URI_PREFIX, createLoginLinkWithRedirect } from '../redux/helpers/api/tools';
+import { LOGIN_URI_PREFIX, createLoginLinkWithRedirect, abortAllPendingRequests } from '../redux/helpers/api/tools';
 import { API_BASE, URL_PATH_PREFIX } from '../helpers/config';
 import { getAssignment } from '../redux/selectors/assignments';
 import { getShadowAssignment } from '../redux/selectors/shadowAssignments';
+import withRouter from '../helpers/withRouter';
+
+const unwrap = component => {
+  while (component && component.WrappedComponent) {
+    component = component.WrappedComponent;
+  }
+  return component;
+};
+
+// a global mechanism for suspending the abort optimization (when it can do some harm)
+let abortSuspended = false;
+
+export const suspendAbortPendingRequestsOptimization = () => {
+  abortSuspended = true;
+};
 
 /**
  * Helper function for creating internal route declarations.
@@ -65,8 +80,29 @@ import { getShadowAssignment } from '../redux/selectors/shadowAssignments';
  */
 const r = (basePath, component, linkName = '', auth = undefined) => {
   const path = basePath === '*' ? basePath : `${URL_PATH_PREFIX}/${basePath}`;
+
+  /*
+   * The abort of pending requests was shifted to unmount callback (since new router took away history.listen).
+   * Top-level components are unmountend only when the page navigates to a different top-level component.
+   */
+  const rootComponent = unwrap(component);
+  if (rootComponent && rootComponent.prototype) {
+    const componentWillUnmount = rootComponent.prototype.componentWillUnmount;
+    // must be an old 'function', so it captures 'this' properly
+    rootComponent.prototype.componentWillUnmount = function (...args) {
+      if (componentWillUnmount) {
+        componentWillUnmount.call(this, ...args);
+      }
+      if (!abortSuspended) {
+        abortAllPendingRequests();
+      }
+      abortSuspended = false;
+    };
+  }
+
   return {
-    route: { path, component, exact: true },
+    route: { path },
+    component: withRouter(component),
     basePath,
     auth,
     linkName,
@@ -159,13 +195,6 @@ const getRedirect = (routeObj, urlPath, isLoggedIn) => {
   }
 };
 
-const unwrap = component => {
-  while (component && component.WrappedComponent) {
-    component = component.WrappedComponent;
-  }
-  return component;
-};
-
 /**
  * Basically a replacement for old match function from react-router v3.
  * It tries to match actual route base on the URL and returns either a redirect
@@ -174,11 +203,11 @@ const unwrap = component => {
  * @param {Boolean} isLoggedIn
  */
 export const match = (urlPath, isLoggedIn) => {
-  const routeObj = routesDescriptors.find(({ route }) => matchPath(urlPath, route) !== null);
-  const component = unwrap(routeObj.route.component);
+  const routeObj = routesDescriptors.find(({ route }) => matchPath(route, urlPath) !== null);
+  const component = unwrap(routeObj.component);
 
   const redirect = getRedirect(routeObj, urlPath, isLoggedIn);
-  const match = matchPath(urlPath, routeObj.route);
+  const match = matchPath(routeObj.route, urlPath);
 
   const loadAsync = [unwrap(App).loadAsync(Boolean(component && component.customLoadGroups))];
   if (component && component.loadAsync) {
@@ -190,22 +219,22 @@ export const match = (urlPath, isLoggedIn) => {
 
 export const buildRoutes = (urlPath, isLoggedIn) => {
   return (
-    <Switch>
+    <Routes>
       {routesDescriptors.map(routeObj => {
         const redirect = getRedirect(routeObj, urlPath, isLoggedIn);
         return redirect ? (
-          <Redirect key={routeObj.route.path} path={routeObj.route.path} exact={routeObj.route.exact} to={redirect} />
+          <Route key={routeObj.route.path} path={routeObj.route.path} element={<Navigate to={redirect} replace />} />
         ) : (
-          <Route key={routeObj.route.path} {...routeObj.route} />
+          <Route key={routeObj.route.path} path={routeObj.route.path} Component={routeObj.component} />
         );
       })}
-    </Switch>
+    </Routes>
   );
 };
 
 export const pathHasCustomLoadGroups = defaultMemoize(urlPath => {
-  const routeObj = routesDescriptors.find(({ route }) => matchPath(urlPath, route) !== null);
-  const component = unwrap(routeObj.route.component);
+  const routeObj = routesDescriptors.find(({ route }) => matchPath(route, urlPath) !== null);
+  const component = unwrap(routeObj.component);
   return Boolean(component && component.customLoadGroups);
 });
 
@@ -222,12 +251,12 @@ export const pathHasCustomLoadGroups = defaultMemoize(urlPath => {
  * @returns {string|null} groupId of null if no group is related
  */
 export const pathRelatedGroupSelector = (state, urlPath) => {
-  const routeObj = routesDescriptors.find(({ route }) => matchPath(urlPath, route) !== null);
+  const routeObj = routesDescriptors.find(({ route }) => matchPath(route, urlPath) !== null);
   if (!routeObj) {
     return null;
   }
-  const matchRes = matchPath(urlPath, routeObj.route);
-  const component = unwrap(routeObj.route.component);
+  const matchRes = matchPath(routeObj.route, urlPath);
+  const component = unwrap(routeObj.component);
   if (component && component.customRelatedGroupSelector) {
     // completely custom selector given by the page component
     return component.customRelatedGroupSelector(state, matchRes.params);

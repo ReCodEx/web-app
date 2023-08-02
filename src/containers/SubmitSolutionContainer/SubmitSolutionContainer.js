@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 
-import App from '../App';
 import SubmitSolution from '../../components/Solutions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchUsersSolutions } from '../../redux/modules/solutions';
@@ -32,9 +30,11 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { cancel, changeNote } from '../../redux/modules/submission';
 import { reset as resetUpload } from '../../redux/modules/upload';
 
-import withLinks from '../../helpers/withLinks';
 import { canSubmit } from '../../redux/modules/canSubmit';
 import { isEmptyObject } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 class SubmitSolutionContainer extends Component {
   state = {
@@ -132,13 +132,13 @@ class SubmitSolutionContainer extends Component {
       submissionId,
       isReferenceSolution = false,
       afterEvaluationFinishes,
-      history: { push },
+      navigate,
       links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY, SOLUTION_DETAIL_URI_FACTORY },
     } = this.props;
-    App.ignoreNextLocationChange();
+    suspendAbortPendingRequestsOptimization();
     return isReferenceSolution
-      ? push(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
-      : afterEvaluationFinishes().then(() => push(SOLUTION_DETAIL_URI_FACTORY(id, submissionId)));
+      ? navigate(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
+      : afterEvaluationFinishes().then(() => navigate(SOLUTION_DETAIL_URI_FACTORY(id, submissionId)));
   };
 
   render = () => {
@@ -201,7 +201,6 @@ class SubmitSolutionContainer extends Component {
           onFilesChange={this.presubmit}
           isReferenceSolution={isReferenceSolution}
         />
-
         {showProgress && (
           <EvaluationProgressContainer
             isOpen={isProcessing && this.isMeTheObserver()}
@@ -215,10 +214,6 @@ class SubmitSolutionContainer extends Component {
 }
 
 SubmitSolutionContainer.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   id: PropTypes.string.isRequired,
   onSubmit: PropTypes.func,
   onReset: PropTypes.func,
@@ -252,40 +247,44 @@ SubmitSolutionContainer.propTypes = {
   showProgress: PropTypes.bool,
   isReferenceSolution: PropTypes.bool,
   afterEvaluationFinishes: PropTypes.func.isRequired,
+  navigate: withRouterProps.navigate,
 };
 
-export default withLinks(
-  connect(
-    (state, { id, userId }) => {
-      return {
-        userId: userId || loggedInUserIdSelector(state),
-        note: getNote(state),
-        uploadedFiles: uploadedFilesSelector(state, id),
-        removedFiles: removedUploadFilesSelector(state, id),
-        isProcessing: isProcessing(state),
-        isValidating: isValidating(state),
-        isSending: isSending(state),
-        hasFailed: hasFailed(state),
-        canSubmit: allFilesUploadedSelector(state, id),
-        submissionId: getSubmittedSolutionId(state),
-        monitor: getMonitorParams(state),
-        presubmitEnvironments: getPresubmitEnvironments(state),
-        presubmitVariables: getPresubmitVariables(state),
-        presubmitCountLimitOK: getPresubmitCountLimitOK(state),
-        presubmitSizeLimitOK: getPresubmitSizeLimitOK(state),
-        progressObserverId: getProgressObserverId(state),
-      };
-    },
-    (dispatch, { id, userId, onSubmit, afterEvaluationStarts = null, onReset, presubmitValidation }) => ({
-      changeNote: note => dispatch(changeNote(note)),
-      cancel: () => dispatch(cancel()),
-      submitSolution: (note, files, runtimeEnvironmentId = null, entryPoint = null, progressObserverId = null) =>
-        dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint, progressObserverId)).then(
-          afterEvaluationStarts
-        ),
-      presubmitSolution: files => dispatch(presubmitValidation(id, files)),
-      reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
-      afterEvaluationFinishes: () => Promise.all([dispatch(fetchUsersSolutions(userId, id)), dispatch(canSubmit(id))]),
-    })
-  )(withRouter(SubmitSolutionContainer))
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { id, userId }) => {
+        return {
+          userId: userId || loggedInUserIdSelector(state),
+          note: getNote(state),
+          uploadedFiles: uploadedFilesSelector(state, id),
+          removedFiles: removedUploadFilesSelector(state, id),
+          isProcessing: isProcessing(state),
+          isValidating: isValidating(state),
+          isSending: isSending(state),
+          hasFailed: hasFailed(state),
+          canSubmit: allFilesUploadedSelector(state, id),
+          submissionId: getSubmittedSolutionId(state),
+          monitor: getMonitorParams(state),
+          presubmitEnvironments: getPresubmitEnvironments(state),
+          presubmitVariables: getPresubmitVariables(state),
+          presubmitCountLimitOK: getPresubmitCountLimitOK(state),
+          presubmitSizeLimitOK: getPresubmitSizeLimitOK(state),
+          progressObserverId: getProgressObserverId(state),
+        };
+      },
+      (dispatch, { id, userId, onSubmit, afterEvaluationStarts = null, onReset, presubmitValidation }) => ({
+        changeNote: note => dispatch(changeNote(note)),
+        cancel: () => dispatch(cancel()),
+        submitSolution: (note, files, runtimeEnvironmentId = null, entryPoint = null, progressObserverId = null) =>
+          dispatch(onSubmit(userId, id, note, files, runtimeEnvironmentId, entryPoint, progressObserverId)).then(
+            afterEvaluationStarts
+          ),
+        presubmitSolution: files => dispatch(presubmitValidation(id, files)),
+        reset: () => dispatch(resetUpload(id)) && dispatch(onReset(userId, id)),
+        afterEvaluationFinishes: () =>
+          Promise.all([dispatch(fetchUsersSolutions(userId, id)), dispatch(canSubmit(id))]),
+      })
+    )(SubmitSolutionContainer)
+  )
 );

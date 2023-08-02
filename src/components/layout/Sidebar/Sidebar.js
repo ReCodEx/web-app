@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
-import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import Admin from './Admin';
@@ -27,11 +26,8 @@ const getUserData = defaultMemoize(user => getJsData(user));
 
 const Sidebar = ({
   pendingFetchOperations,
-  isCollapsed,
   loggedInUser,
   effectiveRole = null,
-  studentOf,
-  supervisorOf,
   currentUrl,
   instances,
   small = false,
@@ -47,12 +43,8 @@ const Sidebar = ({
     ARCHIVE_URI,
     SIS_INTEGRATION_URI,
   },
-  location: { pathname, search },
-  intl: { locale },
 }) => {
   const user = getUserData(loggedInUser);
-  // The following might get handy yet
-  // const currentLink = pathname + search;
 
   return (
     <aside className={classnames(['main-sidebar', `sidebar-dark-${SKIN}`, 'elevation-4', styles.mainSidebar])}>
@@ -174,20 +166,12 @@ const Sidebar = ({
 
 Sidebar.propTypes = {
   pendingFetchOperations: PropTypes.bool,
-  isCollapsed: PropTypes.bool,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-  }).isRequired,
   loggedInUser: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
-  studentOf: ImmutablePropTypes.map,
-  supervisorOf: ImmutablePropTypes.map,
   currentUrl: PropTypes.string,
   instances: ImmutablePropTypes.list,
   small: PropTypes.bool,
   links: PropTypes.object,
-  intl: PropTypes.object,
 };
 
-export default withLinks(withRouter(injectIntl(Sidebar)));
+export default withLinks(Sidebar);

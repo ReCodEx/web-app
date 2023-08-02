@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Card, Table, Row, Col } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
-import { withRouter } from 'react-router';
 
 import Page from '../../components/layout/Page';
 import PageContent from '../../components/layout/PageContent';
@@ -33,8 +32,9 @@ import { getFilesContentSelector } from '../../redux/selectors/files';
 import { plagiarismsSelector } from '../../redux/selectors/plagiarisms';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 
-import withLinks from '../../helpers/withLinks';
 import { hasPermissions, unique, avg } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
+import withRouter from '../../helpers/withRouter';
 
 import { preprocessFiles } from '../SolutionSourceCodes/functions';
 
@@ -64,12 +64,6 @@ class SolutionPlagiarisms extends Component {
   state = {
     selectedPlagiarism: null,
     openSelection: false,
-    // remove?
-    diffDialogOpen: false,
-    mappingDialogOpenFile: null,
-    mappingDialogDiffWith: null,
-    diffMappings: {},
-    selectedFragment: null,
   };
 
   static loadAsync = ({ solutionId, assignmentId }, dispatch) =>
@@ -100,12 +94,12 @@ class SolutionPlagiarisms extends Component {
         .then(files => Promise.all(files.map(file => dispatch(fetchContentIfNeeded(...fileNameAndEntry(file)))))),
     ]);
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.props.loadAsync();
-  };
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.solutionId !== prevProps.match.params.solutionId) {
+    if (this.props.params.solutionId !== prevProps.params.solutionId) {
       this.props.loadAsync();
       this.setState({ selectedPlagiarism: null });
     }
@@ -124,18 +118,6 @@ class SolutionPlagiarisms extends Component {
     return authors.length === 1 ? authors[0] : null;
   };
 
-  setSelectedFragment = selectedFragment => {
-    this.setState({ selectedFragment });
-  };
-
-  openMappingDialog = (mappingDialogOpenFile, mappingDialogDiffWith) => {
-    this.setState({ mappingDialogOpenFile, mappingDialogDiffWith });
-  };
-
-  closeDialogs = () => {
-    this.setState({ diffDialogOpen: false, mappingDialogOpenFile: null, mappingDialogDiffWith: null });
-  };
-
   render() {
     const {
       assignment,
@@ -144,9 +126,7 @@ class SolutionPlagiarisms extends Component {
       fileContentsSelector,
       download,
       plagiarisms,
-      match: {
-        params: { assignmentId },
-      },
+      params: { assignmentId },
     } = this.props;
 
     const canViewPlagiarism =
@@ -335,13 +315,6 @@ class SolutionPlagiarisms extends Component {
 }
 
 SolutionPlagiarisms.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      assignmentId: PropTypes.string.isRequired,
-      solutionId: PropTypes.string.isRequired,
-      secondSolutionId: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
   assignment: ImmutablePropTypes.map,
   children: PropTypes.element,
   solution: ImmutablePropTypes.map,
@@ -350,35 +323,31 @@ SolutionPlagiarisms.propTypes = {
   fileContentsSelector: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
+  params: PropTypes.shape({ assignmentId: PropTypes.string, solutionId: PropTypes.string }).isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { solutionId, assignmentId },
-        },
-      }
-    ) => {
-      const solution = getSolution(state, solutionId);
-      return {
-        solution,
-        files: getSolutionFiles(state, solutionId),
-        reviewComments: getSolutionReviewComments(state, solutionId),
-        fileContentsSelector: getFilesContentSelector(state),
-        userSolutionsSelector: getUserSolutionsSortedData(state),
-        assignment: getAssignment(state, assignmentId),
-        plagiarisms: solution ? plagiarismsSelector(state, solution.getIn(['data', 'plagiarism']), solutionId) : null,
-      };
-    },
-    (dispatch, { match: { params } }) => ({
-      loadAsync: () => SolutionPlagiarisms.loadAsync(params, dispatch),
-      download: (id, entry = null, solutionId = null) => dispatch(download(id, entry, solutionId)),
-      addComment: comment => dispatch(addComment(params.solutionId, comment)),
-      updateComment: comment => dispatch(updateComment(params.solutionId, comment)),
-      removeComment: id => dispatch(removeComment(params.solutionId, id)),
-    })
-  )(withRouter(SolutionPlagiarisms))
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { params: { solutionId, assignmentId } }) => {
+        const solution = getSolution(state, solutionId);
+        return {
+          solution,
+          files: getSolutionFiles(state, solutionId),
+          reviewComments: getSolutionReviewComments(state, solutionId),
+          fileContentsSelector: getFilesContentSelector(state),
+          userSolutionsSelector: getUserSolutionsSortedData(state),
+          assignment: getAssignment(state, assignmentId),
+          plagiarisms: solution ? plagiarismsSelector(state, solution.getIn(['data', 'plagiarism']), solutionId) : null,
+        };
+      },
+      (dispatch, { params }) => ({
+        loadAsync: () => SolutionPlagiarisms.loadAsync(params, dispatch),
+        download: (id, entry = null, solutionId = null) => dispatch(download(id, entry, solutionId)),
+        addComment: comment => dispatch(addComment(params.solutionId, comment)),
+        updateComment: comment => dispatch(updateComment(params.solutionId, comment)),
+        removeComment: id => dispatch(removeComment(params.solutionId, id)),
+      })
+    )(SolutionPlagiarisms)
+  )
 );

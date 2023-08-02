@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getConfigVar } from '../../helpers/config';
+import withRouter from '../../helpers/withRouter';
 import styles from './LoginExternFinalization.less';
 
 const EXTERNAL_AUTH_SERVICE_ID = getConfigVar('EXTERNAL_AUTH_SERVICE_ID');
@@ -37,7 +38,7 @@ class LoginExternFinalization extends Component {
   };
 
   componentDidMount() {
-    if (this.props.match.params.service !== EXTERNAL_AUTH_SERVICE_ID) {
+    if (this.props.params.service !== EXTERNAL_AUTH_SERVICE_ID) {
       // this is not the auth. service you are looking for...
       window.close();
       return;
@@ -68,11 +69,9 @@ class LoginExternFinalization extends Component {
 }
 
 LoginExternFinalization.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      service: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    service: PropTypes.string.isRequired,
   }).isRequired,
 };
 
-export default LoginExternFinalization;
+export default withRouter(LoginExternFinalization);

@@ -14,10 +14,12 @@ import { EditIcon } from '../../components/icons';
 class EditInstance extends Component {
   static loadAsync = ({ instanceId }, dispatch) => Promise.all([dispatch(fetchInstanceIfNeeded(instanceId))]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.instanceId !== prevProps.match.params.instanceId) {
+    if (this.props.params.instanceId !== prevProps.params.instanceId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -42,34 +44,18 @@ class EditInstance extends Component {
 EditInstance.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      instanceId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    instanceId: PropTypes.string.isRequired,
   }).isRequired,
   instance: ImmutablePropTypes.map,
   editInstance: PropTypes.func.isRequired,
 };
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { instanceId },
-      },
-    }
-  ) => ({
+  (state, { params: { instanceId } }) => ({
     instance: instanceSelector(state, instanceId),
   }),
-  (
-    dispatch,
-    {
-      match: {
-        params: { instanceId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { instanceId } }) => ({
     reset: () => dispatch(reset('editInstance')),
     loadAsync: () => EditInstance.loadAsync({ instanceId }, dispatch),
     editInstance: data => dispatch(editInstance(instanceId, data)),

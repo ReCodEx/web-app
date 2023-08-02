@@ -24,8 +24,9 @@ import { getPipeline } from '../../redux/selectors/pipelines';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 
-import withLinks from '../../helpers/withLinks';
 import { arrayToObject, hasPermissions } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
 
 // convert pipeline data into initial structure for pipeline edit metadata form
 const perpareInitialPipelineData = ({ name, description, version, parameters, author }) => ({
@@ -46,10 +47,12 @@ const perpareInitialEnvironmentsData = defaultMemoize((selectedIds, runtimeEnvir
 );
 
 class EditPipeline extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.pipelineId !== prevProps.match.params.pipelineId) {
+    if (this.props.params.pipelineId !== prevProps.params.pipelineId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -101,7 +104,7 @@ class EditPipeline extends Component {
   render() {
     const {
       links: { PIPELINES_URI },
-      history: { replace },
+      navigate,
       pipeline,
       runtimeEnvironments,
       isSuperadmin,
@@ -172,7 +175,10 @@ class EditPipeline extends Component {
                       />
                     </p>
                     <p className="text-center">
-                      <DeletePipelineButtonContainer id={pipeline.id} onDeleted={() => replace(PIPELINES_URI)} />
+                      <DeletePipelineButtonContainer
+                        id={pipeline.id}
+                        onDeleted={() => navigate(PIPELINES_URI, { replace: true })}
+                      />
                     </p>
                   </div>
                 </Box>
@@ -186,10 +192,6 @@ class EditPipeline extends Component {
 }
 
 EditPipeline.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   pipeline: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map.isRequired,
   isSuperadmin: PropTypes.bool.isRequired,
@@ -197,38 +199,23 @@ EditPipeline.propTypes = {
   reset: PropTypes.func.isRequired,
   editPipeline: PropTypes.func.isRequired,
   setPipelineRuntimeEnvironments: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      pipelineId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    pipelineId: PropTypes.string.isRequired,
   }).isRequired,
   links: PropTypes.object.isRequired,
+  navigate: withRouterProps.navigate,
 };
 
 export default withLinks(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { pipelineId },
-        },
-      }
-    ) => {
+    (state, { params: { pipelineId } }) => {
       return {
         pipeline: getPipeline(pipelineId)(state),
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
         isSuperadmin: isLoggedAsSuperAdmin(state),
       };
     },
-    (
-      dispatch,
-      {
-        match: {
-          params: { pipelineId },
-        },
-      }
-    ) => ({
+    (dispatch, { params: { pipelineId } }) => ({
       reset: () => dispatch(reset('editPipeline')),
       loadAsync: () => EditPipeline.loadAsync({ pipelineId }, dispatch),
       editPipeline: data => dispatch(editPipeline(pipelineId, data)),

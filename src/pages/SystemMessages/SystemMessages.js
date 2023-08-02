@@ -57,7 +57,9 @@ class SystemMessages extends Component {
 
   static loadAsync = (params, dispatch) => dispatch(fetchAllMessages());
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   render() {
     const {

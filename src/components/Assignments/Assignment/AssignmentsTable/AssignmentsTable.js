@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { withRouter } from 'react-router';
 import { defaultMemoize } from 'reselect';
 import moment from 'moment';
 
@@ -17,6 +16,8 @@ import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { UserUIDataContext } from '../../../../helpers/contexts';
 import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common';
 import { prepareInitialValues, transformSubmittedData } from '../../../forms/EditAssignmentForm';
+
+import withRouter, { withRouterProps } from '../../../../helpers/withRouter';
 
 const fetchAssignmentStatus = (statuses, assignmentId) => {
   const assignStatus =
@@ -182,7 +183,7 @@ class AssignmentsTable extends Component {
       editAssignment = null,
       deleteAssignment = null,
       intl: { locale },
-      history: { push },
+      navigate,
     } = this.props;
     const someAssignmentsAreLoading = assignments.some(isLoading);
     const assignmentsPreprocessedAll = assignments
@@ -297,7 +298,7 @@ class AssignmentsTable extends Component {
                       discussionOpen={() => this.openDialog(assignment)}
                       setSelected={multiActions ? this.selectAssignmentClickHandler(assignmentsPreprocessedAll) : null}
                       selected={Boolean(this.state.selectedAssignments[assignment.id])}
-                      doubleClickPush={openOnDoubleclick ? push : null}
+                      doubleClickPush={openOnDoubleclick ? navigate : null}
                     />
                   ))}
               </tbody>
@@ -479,9 +480,7 @@ AssignmentsTable.propTypes = {
   editAssignment: PropTypes.func,
   deleteAssignment: PropTypes.func,
   intl: PropTypes.object.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }),
+  navigate: withRouterProps.navigate,
 };
 
 export default withRouter(injectIntl(AssignmentsTable));

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table } from 'react-bootstrap';
-import { withRouter } from 'react-router';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
@@ -11,6 +10,7 @@ import { compareShadowAssignments } from '../../../helpers/assignments';
 import { LoadingIcon } from '../../../icons';
 import { UserUIDataContext } from '../../../../helpers/contexts';
 import { EMPTY_LIST, EMPTY_OBJ } from '../../../../helpers/common';
+import withRouter, { withRouterProps } from '../../../../helpers/withRouter';
 
 const ShadowAssignmentsTable = ({
   shadowAssignments = EMPTY_LIST,
@@ -18,7 +18,7 @@ const ShadowAssignmentsTable = ({
   stats = EMPTY_OBJ,
   isAdmin = false,
   intl: { locale },
-  history: { push },
+  navigate,
 }) => (
   <UserUIDataContext.Consumer>
     {({ openOnDoubleclick = false }) => (
@@ -93,7 +93,7 @@ const ShadowAssignmentsTable = ({
                   Object.keys(stats).length !== 0 ? stats.assignments.find(item => item.id === assignment.id) : null
                 }
                 isAdmin={isAdmin}
-                doubleClickPush={openOnDoubleclick ? push : null}
+                doubleClickPush={openOnDoubleclick ? navigate : null}
               />
             ))}
         </tbody>
@@ -108,9 +108,7 @@ ShadowAssignmentsTable.propTypes = {
   stats: PropTypes.object,
   isAdmin: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }),
+  navigate: withRouterProps.navigate,
 };
 
 export default withRouter(injectIntl(ShadowAssignmentsTable));

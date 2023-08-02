@@ -143,9 +143,9 @@ class ResultsTable extends Component {
     showOnlyMe: false,
   };
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.setState({ showOnlyMe: storageGetItem(localStorageShowOnlyMeKey, false) });
-  };
+  }
 
   toggleShowOnlyMe = () => {
     const showOnlyMe = !this.state.showOnlyMe;

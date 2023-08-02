@@ -11,17 +11,17 @@ class HeaderNotificationsContainer extends Component {
   state = { showAll: false };
 
   // Monitor clicking and hide the notifications panel when the user clicks sideways
-  componentDidMount = () => {
+  componentDidMount() {
     if (canUseDOM) {
       window.addEventListener('mousedown', this.close);
     }
-  };
+  }
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     if (canUseDOM) {
       window.removeEventListener('mousedown', this.close);
     }
-  };
+  }
 
   toggleShowAll = e => {
     e.preventDefault();

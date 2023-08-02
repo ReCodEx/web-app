@@ -20,6 +20,7 @@ import { getConfigVar, getConfigVarLocalized } from '../../helpers/config';
 import { getErrorMessage } from '../../locales/apiErrorMessages';
 
 import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
 
 const EXTERNAL_AUTH_URL = getConfigVar('EXTERNAL_AUTH_URL');
 const EXTERNAL_AUTH_SERVICE_ID = getConfigVar('EXTERNAL_AUTH_SERVICE_ID');
@@ -38,10 +39,8 @@ class Login extends Component {
       loggedInUser = null,
       instanceId = null,
       reset,
-      match: {
-        params: { redirect },
-      },
-      history: { replace },
+      params: { redirect },
+      navigate,
       links: { HOME_URI, DASHBOARD_URI, INSTANCE_URI_FACTORY, EDIT_USER_URI_FACTORY },
     } = this.props;
 
@@ -66,8 +65,8 @@ class Login extends Component {
           : DASHBOARD_URI; // system default
     }
 
-    // Redirect
-    replace(url);
+    // redirect
+    navigate(url, { replace: true });
   };
 
   /**
@@ -88,7 +87,7 @@ class Login extends Component {
 
   componentDidMount() {
     // if the user accidentally puts in an URL to login page with redirect...
-    if (this.props.isLoggedIn && this.props.match.params.redirect) {
+    if (this.props.isLoggedIn && this.props.params.redirect) {
       this.redirectAfterLogin();
     }
   }
@@ -96,9 +95,7 @@ class Login extends Component {
   render() {
     const {
       isLoggedIn,
-      match: {
-        params: { redirect = null },
-      },
+      params: { redirect = null },
       links: { RESET_PASSWORD_URI },
       intl: { locale },
     } = this.props;
@@ -175,14 +172,8 @@ class Login extends Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      redirect: PropTypes.string,
-    }),
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
+  params: PropTypes.shape({
+    redirect: PropTypes.string,
   }),
   isLoggedIn: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
@@ -190,6 +181,7 @@ Login.propTypes = {
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: PropTypes.object,
+  navigate: withRouterProps.navigate,
 };
 
 export default withLinks(

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
@@ -29,8 +29,8 @@ const SolutionsTable = ({
   assignmentSolversLoading = false,
   showActionButtons = true,
   onSelect = null,
-  history: { push },
 }) => {
+  const navigate = useNavigate();
   const highlightsIndex = createHighlightsIndex(highlights);
 
   return (
@@ -141,7 +141,7 @@ const SolutionsTable = ({
                   highlighted={highlightsIndex.has(id)}
                   showActionButtons={showActionButtons}
                   onSelect={onSelect}
-                  doubleclickAction={openOnDoubleclick ? push : null}
+                  doubleclickAction={openOnDoubleclick ? navigate : null}
                   {...data}
                 />
               );
@@ -166,9 +166,6 @@ SolutionsTable.propTypes = {
   assignmentSolversLoading: PropTypes.bool,
   showActionButtons: PropTypes.bool,
   onSelect: PropTypes.func,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }),
 };
 
-export default withRouter(SolutionsTable);
+export default SolutionsTable;

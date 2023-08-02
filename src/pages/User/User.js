@@ -112,11 +112,13 @@ MemberGroupsBox.propTypes = {
 };
 
 class User extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.match.params.userId !== prevProps.match.params.userId ||
+      this.props.params.userId !== prevProps.params.userId ||
       this.props.loggedInUserId !== prevProps.loggedInUserId
     ) {
       this.props.loadAsync();
@@ -374,20 +376,13 @@ User.propTypes = {
   isStudent: PropTypes.bool,
   memberGroups: PropTypes.object.isRequired,
   fetchManyGroupsStatus: PropTypes.string,
-  match: PropTypes.shape({ params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired }).isRequired,
+  params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   takeOver: PropTypes.func.isRequired,
 };
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { userId },
-      },
-    }
-  ) => ({
+  (state, { params: { userId } }) => ({
     userId,
     loggedInUserId: loggedInUserIdSelector(state),
     user: getUser(userId)(state),
@@ -396,7 +391,7 @@ export default connect(
     memberGroups: groupsUserIsMemberSelector(state, userId),
     fetchManyGroupsStatus: fetchManyGroupsStatus(state),
   }),
-  (dispatch, { match: { params } }) => ({
+  (dispatch, { params }) => ({
     loadAsync: () => User.loadAsync(params, dispatch),
     takeOver: userId => dispatch(takeOver(userId)),
   })

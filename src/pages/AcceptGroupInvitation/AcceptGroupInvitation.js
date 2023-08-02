@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import GroupsNameContainer from '../../containers/GroupsNameContainer';
@@ -29,8 +28,9 @@ import { resourceStatus, getJsData } from '../../redux/helpers/resourceManager';
 
 import { getLocalizedDescription } from '../../helpers/localizedData';
 import { isStudentRole } from '../../components/helpers/usersRoles';
-import withLinks from '../../helpers/withLinks';
 import { safeGet } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
 class AcceptGroupInvitation extends Component {
   static loadAsync = ({ invitationId }, dispatch) => dispatch(fetchGroupInvitationIfNeeded(invitationId));
@@ -40,7 +40,7 @@ class AcceptGroupInvitation extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.invitationId !== prevProps.match.params.invitationId) {
+    if (this.props.params.invitationId !== prevProps.params.invitationId) {
       this.props.loadAsync();
     }
   }
@@ -49,13 +49,14 @@ class AcceptGroupInvitation extends Component {
     const {
       invitation,
       acceptInvitation,
-      history: { replace },
+      navigate,
       links: { GROUP_ASSIGNMENTS_URI_FACTORY },
     } = this.props;
-
     const invitationJS = getJsData(invitation);
     if (invitationJS && invitationJS.groupId) {
-      return acceptInvitation().then(() => replace(GROUP_ASSIGNMENTS_URI_FACTORY(invitationJS.groupId)));
+      return acceptInvitation().then(() =>
+        navigate(GROUP_ASSIGNMENTS_URI_FACTORY(invitationJS.groupId), { replace: true })
+      );
     }
   };
 
@@ -247,11 +248,6 @@ class AcceptGroupInvitation extends Component {
 }
 
 AcceptGroupInvitation.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      invitationId: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
   invitation: ImmutablePropTypes.map,
   acceptingStatus: PropTypes.string,
   groupAccessor: PropTypes.func.isRequired,
@@ -259,42 +255,26 @@ AcceptGroupInvitation.propTypes = {
   effectiveRole: PropTypes.string,
   loadAsync: PropTypes.func.isRequired,
   acceptInvitation: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }),
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }).isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   links: PropTypes.object,
+  navigate: withRouterProps.navigate,
+  params: PropTypes.shape({ invitationId: PropTypes.string }).isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { invitationId },
-        },
-      }
-    ) => ({
-      invitation: invitationSelector(state, invitationId),
-      acceptingStatus: getInvitationAcceptingStatus(state, invitationId),
-      groupAccessor: groupAccessorSelector(state),
-      loggedUserId: loggedInUserIdSelector(state),
-      effectiveRole: getLoggedInUserEffectiveRole(state),
-    }),
-    (
-      dispatch,
-      {
-        match: {
-          params: { invitationId },
-        },
-      }
-    ) => ({
-      loadAsync: () => AcceptGroupInvitation.loadAsync({ invitationId }, dispatch),
-      acceptInvitation: () => dispatch(acceptGroupInvitation(invitationId)),
-    })
-  )(withRouter(injectIntl(AcceptGroupInvitation)))
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { params: { invitationId } }) => ({
+        invitation: invitationSelector(state, invitationId),
+        acceptingStatus: getInvitationAcceptingStatus(state, invitationId),
+        groupAccessor: groupAccessorSelector(state),
+        loggedUserId: loggedInUserIdSelector(state),
+        effectiveRole: getLoggedInUserEffectiveRole(state),
+      }),
+      (dispatch, { params: { invitationId } }) => ({
+        loadAsync: () => AcceptGroupInvitation.loadAsync({ invitationId }, dispatch),
+        acceptInvitation: () => dispatch(acceptGroupInvitation(invitationId)),
+      })
+    )(injectIntl(AcceptGroupInvitation))
+  )
 );

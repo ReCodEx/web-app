@@ -23,7 +23,9 @@ import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selector
 class Broker extends Component {
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchBrokerStats()), dispatch(fetchAllJobs())]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   render() {
     const {

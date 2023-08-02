@@ -60,10 +60,12 @@ class GroupInfo extends Component {
         ])
       );
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.groupId !== prevProps.match.params.groupId) {
+    if (this.props.params.groupId !== prevProps.params.groupId) {
       this.props.loadAsync();
       return;
     }
@@ -258,7 +260,7 @@ class GroupInfo extends Component {
 }
 
 GroupInfo.propTypes = {
-  match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
+  params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
@@ -287,14 +289,7 @@ GroupInfo.propTypes = {
 
 const addSubgroupFormSelector = formValueSelector('addSubgroup');
 
-const mapStateToProps = (
-  state,
-  {
-    match: {
-      params: { groupId },
-    },
-  }
-) => {
+const mapStateToProps = (state, { params: { groupId } }) => {
   const userId = loggedInUserIdSelector(state);
 
   return {
@@ -315,7 +310,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (dispatch, { match: { params } }) => ({
+const mapDispatchToProps = (dispatch, { params }) => ({
   addSubgroup:
     (instanceId, userId) =>
     ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>

@@ -4,9 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 
-import App from '../../containers/App';
 import Page from '../../components/layout/Page';
 import { PipelineNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
@@ -27,6 +25,8 @@ import PipelineExercisesList from '../../components/Pipelines/PipelineExercisesL
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { hasPermissions, identity } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 class Pipeline extends Component {
   state = {
@@ -49,9 +49,9 @@ class Pipeline extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.pipelineId !== prevProps.match.params.pipelineId) {
+    if (this.props.params.pipelineId !== prevProps.params.pipelineId) {
       this.props.loadAsync();
-      if (this.state.justForked !== this.props.match.params.pipelineId) {
+      if (this.state.justForked !== this.props.params.pipelineId) {
         this.setState({ justForked: null });
       }
     }
@@ -60,36 +60,34 @@ class Pipeline extends Component {
   fork = () => {
     const {
       forkPipeline,
-      history: { push },
+      navigate,
       links: { PIPELINE_URI_FACTORY },
     } = this.props;
     forkPipeline().then(({ value: newPipeline }) => {
       if (newPipeline) {
-        App.ignoreNextLocationChange();
+        suspendAbortPendingRequestsOptimization();
         this.setState({ justForked: newPipeline.id });
-        push(PIPELINE_URI_FACTORY(newPipeline.id));
+        navigate(PIPELINE_URI_FACTORY(newPipeline.id));
       }
     });
   };
 
   acknowledgeFork = (goBack = null) => {
     const {
-      history: { push },
+      navigate,
       links: { PIPELINE_URI_FACTORY },
     } = this.props;
 
     this.setState({ justForked: null });
     if (goBack) {
-      App.ignoreNextLocationChange();
-      push(PIPELINE_URI_FACTORY(goBack));
+      suspendAbortPendingRequestsOptimization();
+      navigate(PIPELINE_URI_FACTORY(goBack));
     }
   };
 
   render() {
     const {
-      match: {
-        params: { pipelineId },
-      },
+      params: { pipelineId },
       pipeline,
       pipelineExercises,
       runtimeEnvironments,
@@ -192,49 +190,30 @@ class Pipeline extends Component {
 }
 
 Pipeline.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      pipelineId: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   pipeline: ImmutablePropTypes.map,
   pipelineExercises: PropTypes.any,
   runtimeEnvironments: PropTypes.array,
   loadAsync: PropTypes.func.isRequired,
   forkPipeline: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
+  navigate: withRouterProps.navigate,
+  params: PropTypes.shape({ pipelineId: PropTypes.string }).isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { pipelineId },
-        },
-      }
-    ) => {
-      return {
-        pipeline: getPipeline(pipelineId)(state),
-        pipelineExercises: getPipelineExercises(state, pipelineId),
-        runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state),
-      };
-    },
-    (
-      dispatch,
-      {
-        match: {
-          params: { pipelineId },
-        },
-      }
-    ) => ({
-      loadAsync: () => Pipeline.loadAsync({ pipelineId }, dispatch),
-      forkPipeline: () => dispatch(forkPipeline(pipelineId)),
-    })
-  )(withRouter(Pipeline))
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { params: { pipelineId } }) => {
+        return {
+          pipeline: getPipeline(pipelineId)(state),
+          pipelineExercises: getPipelineExercises(state, pipelineId),
+          runtimeEnvironments: pipelineEnvironmentsSelector(pipelineId)(state),
+        };
+      },
+      (dispatch, { params: { pipelineId } }) => ({
+        loadAsync: () => Pipeline.loadAsync({ pipelineId }, dispatch),
+        forkPipeline: () => dispatch(forkPipeline(pipelineId)),
+      })
+    )(Pipeline)
+  )
 );

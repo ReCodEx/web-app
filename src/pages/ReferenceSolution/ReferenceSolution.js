@@ -49,10 +49,12 @@ class ReferenceSolution extends Component {
       dispatch(fetchReferenceSolutionFilesIfNeeded(referenceSolutionId)),
     ]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.referenceSolutionId !== prevProps.match.params.referenceSolutionId) {
+    if (this.props.params.referenceSolutionId !== prevProps.params.referenceSolutionId) {
       this.props.loadAsync();
     }
   }
@@ -153,11 +155,9 @@ class ReferenceSolution extends Component {
 }
 
 ReferenceSolution.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      exerciseId: PropTypes.string.isRequired,
-      referenceSolutionId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    exerciseId: PropTypes.string.isRequired,
+    referenceSolutionId: PropTypes.string.isRequired,
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   fetchScoreConfigIfNeeded: PropTypes.func.isRequired,
@@ -175,14 +175,7 @@ ReferenceSolution.propTypes = {
 
 export default injectIntl(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { exerciseId, referenceSolutionId },
-        },
-      }
-    ) => ({
+    (state, { params: { exerciseId, referenceSolutionId } }) => ({
       referenceSolution: getReferenceSolution(referenceSolutionId)(state),
       files: getSolutionFiles(state, referenceSolutionId),
       exercise: getExercise(exerciseId)(state),
@@ -190,7 +183,7 @@ export default injectIntl(
       fetchStatus: fetchManyStatus(referenceSolutionId)(state),
       scoreConfigSelector: referenceSubmissionScoreConfigSelector(state),
     }),
-    (dispatch, { match: { params } }) => ({
+    (dispatch, { params }) => ({
       loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
       fetchScoreConfigIfNeeded: submissionId => dispatch(fetchReferenceSubmissionScoreConfigIfNeeded(submissionId)),
       refreshSolutionEvaluations: () => {

@@ -25,6 +25,7 @@ import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 
 import { hasPermissions } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
 
 const LOCALIZED_TEXT_DEFAULTS = {
   name: '',
@@ -33,10 +34,12 @@ const LOCALIZED_TEXT_DEFAULTS = {
 };
 
 class EditShadowAssignment extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.shadowId !== prevProps.match.params.shadowId) {
+    if (this.props.params.shadowId !== prevProps.params.shadowId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -92,10 +95,8 @@ class EditShadowAssignment extends Component {
     const {
       shadowAssignment,
       isPublic,
-      match: {
-        params: { shadowId },
-      },
-      history: { replace },
+      params: { shadowId },
+      navigate,
       links: { GROUP_ASSIGNMENTS_URI_FACTORY },
     } = this.props;
 
@@ -140,7 +141,7 @@ class EditShadowAssignment extends Component {
                     <p className="text-center">
                       <DeleteShadowAssignmentButtonContainer
                         id={shadowId}
-                        onDeleted={() => replace(GROUP_ASSIGNMENTS_URI_FACTORY(this.groupId))}
+                        onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(this.groupId), { replace: true })}
                       />
                     </p>
                   </div>
@@ -155,49 +156,30 @@ class EditShadowAssignment extends Component {
 }
 
 EditShadowAssignment.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      shadowId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    shadowId: PropTypes.string.isRequired,
   }).isRequired,
   shadowAssignment: ImmutablePropTypes.map,
   editShadowAssignment: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   validateShadowAssignment: PropTypes.func.isRequired,
   links: PropTypes.object,
+  navigate: withRouterProps.navigate,
 };
 
 const editAssignmentFormSelector = formValueSelector('editShadowAssignment');
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { shadowId },
-      },
-    }
-  ) => {
+  (state, { params: { shadowId } }) => {
     const shadowAssignment = getShadowAssignment(state)(shadowId);
     return {
       shadowAssignment,
       isPublic: editAssignmentFormSelector(state, 'isPublic'),
     };
   },
-  (
-    dispatch,
-    {
-      match: {
-        params: { shadowId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { shadowId } }) => ({
     reset: () => dispatch(reset('editShadowAssignment')),
     loadAsync: () => EditShadowAssignment.loadAsync({ shadowId }, dispatch),
     editShadowAssignment: data => dispatch(editShadowAssignment(shadowId, data)),

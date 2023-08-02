@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { withRouter } from 'react-router';
 import { defaultMemoize } from 'reselect';
 
 import { UserUIDataContext } from '../../../helpers/contexts';
 import { CloseIcon, SortedIcon } from '../../icons';
+import withRouter, { withRouterProps } from '../../../helpers/withRouter';
 
 class SortableTable extends Component {
   constructor(props) {
@@ -16,16 +16,14 @@ class SortableTable extends Component {
 
   // Default row rendering fucntion (if the user does not provide custom function)
   defaultRowRenderer = (row, idx, columns, openLinkGenerator = null) => {
-    const {
-      history: { push },
-    } = this.props;
+    const { navigate } = this.props;
     const doubleClickLink = openLinkGenerator && openLinkGenerator(row, idx);
 
     return (
       <tr
         key={row.id || idx}
         className={row.selected ? 'selected' : ''}
-        onDoubleClick={doubleClickLink && (() => push(doubleClickLink))}>
+        onDoubleClick={doubleClickLink && (() => navigate(doubleClickLink))}>
         {columns.map(({ id: colId, cellRenderer, style, className, onClick, isClickable }) => {
           if (typeof isClickable === 'function') {
             isClickable = isClickable(row.id, colId);
@@ -96,6 +94,7 @@ class SortableTable extends Component {
       rowRenderer = this.defaultRowRenderer,
       openLinkGenerator = null,
       staticContext /* avoid capturing static context in the rest of ...props */,
+      navigate /* avoid capturing injected function by ...props */,
       ...props
     } = this.props;
     const { sortColumn, ascendant } = this.state;
@@ -166,9 +165,7 @@ SortableTable.propTypes = {
   rowRenderer: PropTypes.func,
   openLinkGenerator: PropTypes.func,
   staticContext: PropTypes.any,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }),
+  navigate: withRouterProps.navigate,
 };
 
 export default withRouter(SortableTable);

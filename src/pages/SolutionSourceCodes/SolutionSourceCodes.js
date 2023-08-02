@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, Modal, Tabs, Tab, Table } from 'react-bootstrap';
 import { defaultMemoize } from 'reselect';
-import { withRouter } from 'react-router';
 
 import Page from '../../components/layout/Page';
 import InsetPanel from '../../components/widgets/InsetPanel';
@@ -56,10 +55,12 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { loggedUserIsPrimaryAdminOfSelector } from '../../redux/selectors/usersGroups';
 
 import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage';
-import withLinks from '../../helpers/withLinks';
 import { isSupervisorRole } from '../../components/helpers/usersRoles';
 import { hasPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common';
 import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions';
+
+import withLinks from '../../helpers/withLinks';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 
@@ -107,15 +108,13 @@ class SolutionSourceCodes extends Component {
 
   getDiffMappingsLocalStorageKey = () => {
     const {
-      match: {
-        params: { solutionId, secondSolutionId },
-      },
+      params: { solutionId, secondSolutionId },
     } = this.props;
 
     return secondSolutionId ? `${localStorageDiffMappingsKey}${solutionId}/${secondSolutionId}` : null;
   };
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.props.loadAsync();
 
     const lsKey = this.getDiffMappingsLocalStorageKey();
@@ -124,12 +123,12 @@ class SolutionSourceCodes extends Component {
         diffMappings: storageGetItem(lsKey, {}),
       });
     }
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.match.params.solutionId !== prevProps.match.params.solutionId ||
-      this.props.match.params.secondSolutionId !== prevProps.match.params.secondSolutionId
+      this.props.params.solutionId !== prevProps.params.solutionId ||
+      this.props.params.secondSolutionId !== prevProps.params.secondSolutionId
     ) {
       this.props.loadAsync();
 
@@ -159,34 +158,31 @@ class SolutionSourceCodes extends Component {
 
   selectDiffSolution = id => {
     const {
-      match: {
-        params: { assignmentId, solutionId, secondSolutionId },
-      },
-      history: { replace },
+      params: { assignmentId, solutionId, secondSolutionId },
+      navigate,
       links: { SOLUTION_SOURCE_CODES_URI_FACTORY, SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY },
     } = this.props;
     this.closeDialogs();
     if (id !== secondSolutionId && (id || secondSolutionId))
-      replace(
+      navigate(
         id
           ? SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY(assignmentId, solutionId, id)
-          : SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solutionId)
+          : SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solutionId),
+        { replace: true }
       );
   };
 
   swapSolutions = () => {
     const {
       secondSolution,
-      match: {
-        params: { solutionId, secondSolutionId },
-      },
-      history: { replace },
+      params: { solutionId, secondSolutionId },
+      navigate,
       links: { SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY },
     } = this.props;
 
     const assignmentId = secondSolution && secondSolution.getIn(['data', 'assignmentId']);
     if (secondSolutionId && assignmentId && solutionId !== secondSolutionId) {
-      replace(SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY(assignmentId, secondSolutionId, solutionId));
+      navigate(SOLUTION_SOURCE_CODES_DIFF_URI_FACTORY(assignmentId, secondSolutionId, solutionId), { replace: true });
     }
   };
 
@@ -233,9 +229,7 @@ class SolutionSourceCodes extends Component {
       addComment,
       updateComment,
       removeComment,
-      match: {
-        params: { solutionId, assignmentId, secondSolutionId },
-      },
+      params: { solutionId, assignmentId, secondSolutionId },
     } = this.props;
 
     const diffMode =
@@ -680,13 +674,6 @@ class SolutionSourceCodes extends Component {
 }
 
 SolutionSourceCodes.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      assignmentId: PropTypes.string.isRequired,
-      solutionId: PropTypes.string.isRequired,
-      secondSolutionId: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
   assignment: ImmutablePropTypes.map,
   secondAssignment: ImmutablePropTypes.map,
   loggedUserId: PropTypes.string,
@@ -706,52 +693,49 @@ SolutionSourceCodes.propTypes = {
   addComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
   removeComment: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   links: PropTypes.object,
+  navigate: withRouterProps.navigate,
+  params: PropTypes.shape({
+    assignmentId: PropTypes.string,
+    solutionId: PropTypes.string,
+    secondSolutionId: PropTypes.string,
+  }).isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { solutionId, secondSolutionId, assignmentId },
-        },
-      }
-    ) => {
-      const secondSolution =
-        secondSolutionId && secondSolutionId !== solutionId ? getSolution(state, secondSolutionId) : null;
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { params: { solutionId, secondSolutionId, assignmentId } }) => {
+        const secondSolution =
+          secondSolutionId && secondSolutionId !== solutionId ? getSolution(state, secondSolutionId) : null;
 
-      return {
-        solution: getSolution(state, solutionId),
-        secondSolution,
-        files: getSolutionFiles(state, solutionId),
-        reviewComments: getSolutionReviewComments(state, solutionId),
-        secondFiles:
-          secondSolutionId && secondSolutionId !== solutionId ? getSolutionFiles(state, secondSolutionId) : null,
-        fileContentsSelector: getFilesContentSelector(state),
-        userSolutionsSelector: getUserSolutionsSortedData(state),
-        assignment: getAssignment(state, assignmentId),
-        secondAssignment:
-          secondSolution && secondSolution.getIn(['data', 'assignmentId'])
-            ? getAssignment(state, secondSolution.getIn(['data', 'assignmentId']))
-            : null,
-        loggedUserId: loggedInUserIdSelector(state),
-        effectiveRole: getLoggedInUserEffectiveRole(state),
-        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
-        isPrimaryAdminOf: loggedUserIsPrimaryAdminOfSelector(state),
-      };
-    },
-    (dispatch, { match: { params } }) => ({
-      loadAsync: () => SolutionSourceCodes.loadAsync(params, dispatch),
-      download: (id, entry = null) => dispatch(download(id, entry)),
-      addComment: comment => dispatch(addComment(params.solutionId, comment)),
-      updateComment: comment => dispatch(updateComment(params.solutionId, comment)),
-      removeComment: id => dispatch(removeComment(params.solutionId, id)),
-    })
-  )(withRouter(SolutionSourceCodes))
+        return {
+          solution: getSolution(state, solutionId),
+          secondSolution,
+          files: getSolutionFiles(state, solutionId),
+          reviewComments: getSolutionReviewComments(state, solutionId),
+          secondFiles:
+            secondSolutionId && secondSolutionId !== solutionId ? getSolutionFiles(state, secondSolutionId) : null,
+          fileContentsSelector: getFilesContentSelector(state),
+          userSolutionsSelector: getUserSolutionsSortedData(state),
+          assignment: getAssignment(state, assignmentId),
+          secondAssignment:
+            secondSolution && secondSolution.getIn(['data', 'assignmentId'])
+              ? getAssignment(state, secondSolution.getIn(['data', 'assignmentId']))
+              : null,
+          loggedUserId: loggedInUserIdSelector(state),
+          effectiveRole: getLoggedInUserEffectiveRole(state),
+          runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+          isPrimaryAdminOf: loggedUserIsPrimaryAdminOfSelector(state),
+        };
+      },
+      (dispatch, { params }) => ({
+        loadAsync: () => SolutionSourceCodes.loadAsync(params, dispatch),
+        download: (id, entry = null) => dispatch(download(id, entry)),
+        addComment: comment => dispatch(addComment(params.solutionId, comment)),
+        updateComment: comment => dispatch(updateComment(params.solutionId, comment)),
+        removeComment: id => dispatch(removeComment(params.solutionId, id)),
+      })
+    )(SolutionSourceCodes)
+  )
 );

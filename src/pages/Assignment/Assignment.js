@@ -70,7 +70,7 @@ class Assignment extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.match.params.assignmentId !== prevProps.match.params.assignmentId ||
+      this.props.params.assignmentId !== prevProps.params.assignmentId ||
       this.props.userId !== prevProps.userId ||
       (!prevProps.userId && this.props.loggedInUserId !== prevProps.loggedInUserId)
     ) {
@@ -80,7 +80,7 @@ class Assignment extends Component {
 
   reloadAfterSubmit = () =>
     Promise.all([
-      this.props.reloadSolvers(this.props.match.params.assignmentId, this.props.userId || this.props.loggedInUserId),
+      this.props.reloadSolvers(this.props.params.assignmentId, this.props.userId || this.props.loggedInUserId),
       this.props.reloadCanSubmit(),
     ]);
 
@@ -254,11 +254,9 @@ class Assignment extends Component {
 Assignment.propTypes = {
   userId: PropTypes.string,
   loggedInUserId: PropTypes.string,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      assignmentId: PropTypes.string.isRequired,
-      userId: PropTypes.string,
-    }).isRequired,
+  params: PropTypes.shape({
+    assignmentId: PropTypes.string.isRequired,
+    userId: PropTypes.string,
   }).isRequired,
   isStudentOf: PropTypes.func.isRequired,
   assignment: PropTypes.object,
@@ -277,14 +275,7 @@ Assignment.propTypes = {
 };
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { assignmentId, userId = null },
-      },
-    }
-  ) => {
+  (state, { params: { assignmentId, userId = null } }) => {
     const loggedInUserId = loggedInUserIdSelector(state);
     return {
       assignment: getAssignment(state, assignmentId),
@@ -300,14 +291,7 @@ export default connect(
       assignmentSolverSelector: getAssignmentSolverSelector(state),
     };
   },
-  (
-    dispatch,
-    {
-      match: {
-        params: { assignmentId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { assignmentId } }) => ({
     init: userId => () => dispatch(init(userId, assignmentId)),
     loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
     exerciseSync: () => dispatch(syncWithExercise(assignmentId)),

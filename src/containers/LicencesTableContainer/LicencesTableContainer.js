@@ -10,7 +10,9 @@ import { fetchInstanceLincences } from '../../redux/modules/licences';
 import { getLicencesOfInstance } from '../../redux/selectors/licences';
 
 class LicencesTableContainer extends Component {
-  componentDidMount = () => this.props.loadAsync(this.props.instance.id);
+  componentDidMount() {
+    this.props.loadAsync(this.props.instance.id);
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.instance.id !== prevProps.instance.id) {
