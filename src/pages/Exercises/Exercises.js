@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
-import App from '../../containers/App';
 import PageContent from '../../components/layout/PageContent';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 import CreateExerciseForm from '../../components/forms/CreateExerciseForm';
@@ -19,6 +18,7 @@ import { notArchivedGroupsSelector, groupDataAccessorSelector } from '../../redu
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 const CREATE_EXERCISE_FORM_INITIAL_VALUES = {
   groupId: '',
@@ -34,55 +34,45 @@ const prepareGroupOptions = defaultMemoize((groups, groupsAccessor, locale) =>
     .sort((a, b) => a.name.localeCompare(b.name, locale))
 );
 
-class Exercises extends Component {
-  createExercise = ({ groupId }) => {
-    const {
-      createGroupExercise,
-      history: { push },
-      links: { EXERCISE_EDIT_URI_FACTORY },
-    } = this.props;
+const Exercises = ({
+  groups,
+  groupsAccessor,
+  createGroupExercise,
+  links: { EXERCISE_EDIT_URI_FACTORY },
+  intl: { locale },
+}) => {
+  const navigate = useNavigate();
+  const createExercise = ({ groupId }) => {
     createGroupExercise(groupId).then(({ value: exercise }) => {
-      App.ignoreNextLocationChange();
-      push(EXERCISE_EDIT_URI_FACTORY(exercise.id));
+      suspendAbortPendingRequestsOptimization();
+      navigate(EXERCISE_EDIT_URI_FACTORY(exercise.id));
     });
   };
 
-  render() {
-    const {
-      groups,
-      groupsAccessor,
-      intl: { locale },
-    } = this.props;
+  return (
+    <PageContent
+      icon={<ExerciseIcon />}
+      title={<FormattedMessage id="app.exercises.title" defaultMessage="List of All Exercises" />}>
+      <>
+        <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
+          <ExercisesListContainer id="exercises-all" showGroups />
+        </Box>
 
-    return (
-      <PageContent
-        icon={<ExerciseIcon />}
-        title={<FormattedMessage id="app.exercises.title" defaultMessage="List of All Exercises" />}>
-        <>
-          <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
-            <ExercisesListContainer id="exercises-all" showGroups />
-          </Box>
-
-          <ResourceRenderer resource={groups.toArray()} returnAsArray>
-            {groups => (
-              <CreateExerciseForm
-                groups={prepareGroupOptions(groups, groupsAccessor, locale)}
-                onSubmit={this.createExercise}
-                initialValues={CREATE_EXERCISE_FORM_INITIAL_VALUES}
-              />
-            )}
-          </ResourceRenderer>
-        </>
-      </PageContent>
-    );
-  }
-}
+        <ResourceRenderer resource={groups.toArray()} returnAsArray>
+          {groups => (
+            <CreateExerciseForm
+              groups={prepareGroupOptions(groups, groupsAccessor, locale)}
+              onSubmit={createExercise}
+              initialValues={CREATE_EXERCISE_FORM_INITIAL_VALUES}
+            />
+          )}
+        </ResourceRenderer>
+      </>
+    </PageContent>
+  );
+};
 
 Exercises.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   intl: PropTypes.object,
@@ -99,5 +89,5 @@ export default withLinks(
     dispatch => ({
       createGroupExercise: groupId => dispatch(createExercise({ groupId })),
     })
-  )(injectIntl(withRouter(Exercises)))
+  )(injectIntl(Exercises))
 );

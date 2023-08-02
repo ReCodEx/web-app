@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { joinGroup, leaveGroup, fetchGroup } from '../../redux/modules/groups';
 import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
@@ -25,21 +25,21 @@ const LeaveJoinGroupButtonContainer = ({
   fetchGroup,
   fetchGroupStatsIfNeeded,
   size = 'xs',
-  history: { replace },
   links: { DASHBOARD_URI },
   redirectAfterLeave = false,
   onJoin = null,
   onLeave = null,
   ...props
-}) =>
-  isStudent ? (
+}) => {
+  const navigate = useNavigate();
+  return isStudent ? (
     userId === currentUserId ? (
       <LeaveGroupButton
         {...props}
         onClick={() =>
           leaveGroup(groupId, userId).then(() => {
             onLeave && onLeave();
-            redirectAfterLeave && replace(DASHBOARD_URI);
+            redirectAfterLeave && navigate(DASHBOARD_URI, { replace: true });
           })
         }
         size={size}
@@ -63,12 +63,9 @@ const LeaveJoinGroupButtonContainer = ({
       size={size}
     />
   );
+};
 
 LeaveJoinGroupButtonContainer.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   groupId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
@@ -98,4 +95,4 @@ const mapDispatchToProps = dispatch => ({
   fetchGroupStatsIfNeeded: gId => dispatch(fetchGroupStatsIfNeeded(gId)),
 });
 
-export default withLinks(connect(mapStateToProps, mapDispatchToProps)(withRouter(LeaveJoinGroupButtonContainer)));
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(LeaveJoinGroupButtonContainer));

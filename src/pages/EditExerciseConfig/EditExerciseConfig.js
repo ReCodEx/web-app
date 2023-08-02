@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { defaultMemoize } from 'reselect';
 
@@ -85,12 +84,15 @@ import {
 } from '../../helpers/exercise/configAdvanced';
 import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles';
 import { hasPermissions, safeGet } from '../../helpers/common';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
 class EditExerciseConfig extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
       this.props.loadAsync();
     }
   }
@@ -149,11 +151,11 @@ class EditExerciseConfig extends Component {
 
   removeUrlHash = () => {
     const {
-      history: { replace },
+      navigate,
       location: { pathname, search, hash },
     } = this.props;
     if (hash) {
-      replace(pathname + search);
+      navigate(pathname + search, { replace: true });
     }
   };
 
@@ -259,9 +261,7 @@ class EditExerciseConfig extends Component {
 
   render() {
     const {
-      match: {
-        params: { exerciseId },
-      },
+      params: { exerciseId },
       exercise,
       effectiveRole,
       runtimeEnvironments,
@@ -578,11 +578,6 @@ EditExerciseConfig.propTypes = {
   exercise: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
   runtimeEnvironments: ImmutablePropTypes.map.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      exerciseId: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
   exerciseConfig: PropTypes.object,
   exerciseEnvironmentConfig: PropTypes.object,
   exerciseScoreConfig: ImmutablePropTypes.map,
@@ -606,66 +601,51 @@ EditExerciseConfig.propTypes = {
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
   invalidateExercise: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-    hash: PropTypes.string.isRequired,
-  }).isRequired,
+  navigate: withRouterProps.navigate,
+  location: withRouterProps.location,
+  params: PropTypes.shape({ exerciseId: PropTypes.string }).isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => {
-      return {
-        exercise: getExercise(exerciseId)(state),
-        effectiveRole: getLoggedInUserEffectiveRole(state),
-        runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-        exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(exerciseId)(state),
-        exerciseScoreConfig: exerciseScoreConfigSelector(state, exerciseId),
-        exerciseTests: exerciseTestsSelector(exerciseId)(state),
-        pipelines: pipelinesSelector(state),
-        environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
-        pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state),
-        supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),
-        supplementaryFilesStatus: fetchSupplementaryFilesForExerciseStatus(state)(exerciseId),
-      };
-    },
-    (
-      dispatch,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => ({
-      loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
-      fetchPipelinesVariables: (runtimeId, pipelinesIds) =>
-        dispatch(fetchExercisePipelinesVariables(exerciseId, runtimeId, pipelinesIds)),
-      setExerciseConfigType: (exercise, configurationType) =>
-        dispatch(editExercise(exercise.id, { ...exercise, configurationType })),
-      editEnvironmentConfigs: data => dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
-      editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
-      editTests: data => dispatch(setExerciseTests(exerciseId, data)),
-      fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
-      setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-      reloadExercise: () => dispatch(fetchExercise(exerciseId)),
-      reloadConfig: () =>
-        dispatch(fetchExercise(exerciseId)).then(() =>
-          Promise.all([dispatch(fetchExerciseConfig(exerciseId)), dispatch(fetchExerciseEnvironmentConfig(exerciseId))])
-        ),
-      invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
-    })
-  )(injectIntl(withRouter(EditExerciseConfig)))
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { params: { exerciseId } }) => {
+        return {
+          exercise: getExercise(exerciseId)(state),
+          effectiveRole: getLoggedInUserEffectiveRole(state),
+          runtimeEnvironments: runtimeEnvironmentsSelector(state),
+          exerciseConfig: exerciseConfigSelector(exerciseId)(state),
+          exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(exerciseId)(state),
+          exerciseScoreConfig: exerciseScoreConfigSelector(state, exerciseId),
+          exerciseTests: exerciseTestsSelector(exerciseId)(state),
+          pipelines: pipelinesSelector(state),
+          environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
+          pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state),
+          supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),
+          supplementaryFilesStatus: fetchSupplementaryFilesForExerciseStatus(state)(exerciseId),
+        };
+      },
+      (dispatch, { params: { exerciseId } }) => ({
+        loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
+        fetchPipelinesVariables: (runtimeId, pipelinesIds) =>
+          dispatch(fetchExercisePipelinesVariables(exerciseId, runtimeId, pipelinesIds)),
+        setExerciseConfigType: (exercise, configurationType) =>
+          dispatch(editExercise(exercise.id, { ...exercise, configurationType })),
+        editEnvironmentConfigs: data => dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
+        editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
+        editTests: data => dispatch(setExerciseTests(exerciseId, data)),
+        fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
+        setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
+        reloadExercise: () => dispatch(fetchExercise(exerciseId)),
+        reloadConfig: () =>
+          dispatch(fetchExercise(exerciseId)).then(() =>
+            Promise.all([
+              dispatch(fetchExerciseConfig(exerciseId)),
+              dispatch(fetchExerciseEnvironmentConfig(exerciseId)),
+            ])
+          ),
+        invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
+      })
+    )(injectIntl(EditExerciseConfig))
+  )
 );

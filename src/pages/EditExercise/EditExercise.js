@@ -22,9 +22,10 @@ import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 
-import withLinks from '../../helpers/withLinks';
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { hasPermissions } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
 
 const localizedTextDefaults = {
   name: '',
@@ -58,13 +59,13 @@ const prepareInitialValues = defaultMemoize(
 );
 
 class EditExercise extends Component {
-  componentDidMount = () => {
+  componentDidMount() {
     this.props.loadAsync();
     window.scrollTo(0, 0);
-  };
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -86,7 +87,7 @@ class EditExercise extends Component {
   render() {
     const {
       links: { EXERCISES_URI },
-      history: { replace },
+      navigate,
       exercise,
     } = this.props;
 
@@ -145,7 +146,10 @@ class EditExercise extends Component {
                           />
                         </p>
                         <p className="text-center">
-                          <DeleteExerciseButtonContainer id={exercise.id} onDeleted={() => replace(EXERCISES_URI)} />
+                          <DeleteExerciseButtonContainer
+                            id={exercise.id}
+                            onDeleted={() => navigate(EXERCISES_URI, { replace: true })}
+                          />
                         </p>
                       </div>
                     </Box>
@@ -161,46 +165,27 @@ class EditExercise extends Component {
 }
 
 EditExercise.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   exercise: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      exerciseId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   links: PropTypes.object.isRequired,
+  navigate: withRouterProps.navigate,
 };
 
 export default withLinks(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => {
+    (state, { params: { exerciseId } }) => {
       return {
         exercise: getExercise(exerciseId)(state),
         submitting: isSubmitting(state),
         userId: loggedInUserIdSelector(state),
       };
     },
-    (
-      dispatch,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => ({
+    (dispatch, { params: { exerciseId } }) => ({
       reset: () => dispatch(reset('editExercise')),
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),

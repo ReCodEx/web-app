@@ -4,9 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { defaultMemoize } from 'reselect';
-import { withRouter } from 'react-router';
 
-import App from '../App';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../PaginationContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
@@ -19,6 +17,8 @@ import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnviro
 import { arrayToObject, EMPTY_OBJ } from '../../helpers/common';
 
 import withLinks from '../../helpers/withLinks';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 const filterInitialValues = defaultMemoize(
   ({ search = '', authorsIds = [], tags = [], runtimeEnvironments = [] }, allEnvironments) => ({
@@ -132,12 +132,12 @@ class ExercisesListContainer extends Component {
   assignExercise = exerciseId => {
     const {
       assignExercise,
-      history: { push },
+      navigate,
       links: { ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
     assignExercise(exerciseId).then(({ value: assignment }) => {
-      App.ignoreNextLocationChange();
-      push(ASSIGNMENT_EDIT_URI_FACTORY(assignment.id));
+      suspendAbortPendingRequestsOptimization();
+      navigate(ASSIGNMENT_EDIT_URI_FACTORY(assignment.id));
     });
   };
 
@@ -173,10 +173,6 @@ class ExercisesListContainer extends Component {
 }
 
 ExercisesListContainer.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   id: PropTypes.string.isRequired,
   rootGroup: PropTypes.string,
   showGroups: PropTypes.bool,
@@ -187,18 +183,21 @@ ExercisesListContainer.propTypes = {
   assignExercise: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
   links: PropTypes.object.isRequired,
+  navigate: withRouterProps.navigate,
 };
 
-export default withLinks(
-  connect(
-    (state, { rootGroup = null }) => ({
-      runtimeEnvironments: runtimeEnvironmentsSelector(state),
-    }),
-    (dispatch, { rootGroup = null }) => ({
-      fetchExercisesAuthorsIfNeeded: groupId => dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
-      fetchTags: () => dispatch(fetchTags()),
-      fetchRuntimeEnvironments: () => dispatch(fetchRuntimeEnvironments()),
-      assignExercise: exerciseId => dispatch(assignExercise(rootGroup, exerciseId)),
-    })
-  )(injectIntl(withRouter(ExercisesListContainer)))
+export default withRouter(
+  withLinks(
+    connect(
+      state => ({
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
+      }),
+      (dispatch, { rootGroup = null }) => ({
+        fetchExercisesAuthorsIfNeeded: groupId => dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
+        fetchTags: () => dispatch(fetchTags()),
+        fetchRuntimeEnvironments: () => dispatch(fetchRuntimeEnvironments()),
+        assignExercise: exerciseId => dispatch(assignExercise(rootGroup, exerciseId)),
+      })
+    )(injectIntl(ExercisesListContainer))
+  )
 );

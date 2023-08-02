@@ -87,10 +87,12 @@ class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
     Promise.all([dispatch(fetchUserIfNeeded(userId)), dispatch(fetchUserCalendarsIfNeeded(userId))]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.userId !== prevProps.match.params.userId) {
+    if (this.props.params.userId !== prevProps.params.userId) {
       this.props.loadAsync();
     }
   }
@@ -256,7 +258,7 @@ class EditUser extends Component {
 }
 
 EditUser.propTypes = {
-  match: PropTypes.shape({ params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired }).isRequired,
+  params: PropTypes.shape({ userId: PropTypes.string.isRequired }).isRequired,
   user: ImmutablePropTypes.map,
   calendars: ImmutablePropTypes.map,
   loggedUserId: PropTypes.string.isRequired,
@@ -276,28 +278,14 @@ EditUser.propTypes = {
 };
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { userId },
-      },
-    }
-  ) => ({
+  (state, { params: { userId } }) => ({
     user: getUser(userId)(state),
     loggedUserId: loggedInUserIdSelector(state),
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     lastToken: lastGeneratedToken(state),
     calendars: getUserCalendars(userId)(state),
   }),
-  (
-    dispatch,
-    {
-      match: {
-        params: { userId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { userId } }) => ({
     loadAsync: () => EditUser.loadAsync({ userId }, dispatch),
     refreshUser: () => dispatch(fetchUser(userId)),
     updateSettings: data => dispatch(updateSettings(userId, data)),

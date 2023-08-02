@@ -58,7 +58,9 @@ const getUniqueAuthors = solutions => {
 };
 
 class Dashboard extends Component {
-  componentDidMount = () => this.props.loadAsync(this.props.userId);
+  componentDidMount() {
+    this.props.loadAsync(this.props.userId);
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.userId !== prevProps.userId) {
@@ -316,7 +318,7 @@ export default withLinks(
         openReviewUpdating: isSolutionReviewUpdatePendingSelector(state),
       };
     },
-    (dispatch, { match: { params } }) => ({
+    (dispatch, { params }) => ({
       loadAsync: userId => Dashboard.loadAsync(params, dispatch, { userId }),
       refreshUser: userId => dispatch(fetchUser(userId)),
       reloadOpenReviewSolutions: userId =>

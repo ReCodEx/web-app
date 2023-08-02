@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import PageContent from '../../components/layout/PageContent';
 import ChangePasswordForm from '../../components/forms/ChangePasswordForm';
@@ -16,12 +16,9 @@ import { acceptInvitation } from '../../redux/modules/users';
 import { decode, isTokenValid } from '../../redux/helpers/token';
 import withLinks from '../../helpers/withLinks';
 
-const AcceptInvitation = ({
-  location: { search },
-  acceptInvitation,
-  history: { replace },
-  links: { DASHBOARD_URI },
-}) => {
+const AcceptInvitation = ({ acceptInvitation, links: { DASHBOARD_URI } }) => {
+  const navigate = useNavigate();
+  const { search } = useLocation();
   const [acceptOperation, setAcceptOperation] = useState();
 
   const rawToken = search.substring(1);
@@ -100,7 +97,7 @@ const AcceptInvitation = ({
               acceptInvitation(password, rawToken).then(
                 () => {
                   setAcceptOperation(true);
-                  replace(DASHBOARD_URI);
+                  navigate(DASHBOARD_URI, { replace: true });
                 },
                 () => setAcceptOperation(false)
               );
@@ -127,17 +124,11 @@ const AcceptInvitation = ({
 
 AcceptInvitation.propTypes = {
   acceptInvitation: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }),
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }).isRequired,
   links: PropTypes.object,
 };
 
 export default withLinks(
   connect(undefined, dispatch => ({
     acceptInvitation: (password, token) => dispatch(acceptInvitation(password, token)),
-  }))(withRouter(AcceptInvitation))
+  }))(AcceptInvitation)
 );

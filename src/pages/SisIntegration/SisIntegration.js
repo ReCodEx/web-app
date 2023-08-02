@@ -382,7 +382,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { match: { params } }) => ({
+const mapDispatchToProps = (dispatch, { params }) => ({
   loadAsync: () => SisIntegration.loadAsync(params, dispatch),
   createNewTerm: data => dispatch(create(data)),
   deleteTerm: id => dispatch(deleteTerm(id)),

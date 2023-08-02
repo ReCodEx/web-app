@@ -43,17 +43,17 @@ const getInitialValues = defaultMemoize(instances => {
 });
 
 class Registration extends Component {
-  componentDidMount = () => {
+  componentDidMount() {
     this.checkIfIsDone(this.props);
     this.props.loadAsync();
-  };
+  }
 
   componentDidUpdate = () => this.checkIfIsDone(this.props);
 
-  checkIfIsDone = ({ hasSucceeded, reset, history: { replace }, links: { DASHBOARD_URI } }) => {
+  checkIfIsDone = ({ hasSucceeded, reset, navigate, links: { DASHBOARD_URI } }) => {
     if (hasSucceeded) {
       setTimeout(() => {
-        replace(DASHBOARD_URI);
+        navigate(DASHBOARD_URI, { replace: true });
         reset();
       }, 600);
     }

@@ -42,19 +42,19 @@ class Instance extends Component {
       ),
     ]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.instanceId !== prevProps.match.params.instanceId) {
+    if (this.props.params.instanceId !== prevProps.params.instanceId) {
       this.props.loadAsync();
     }
   }
 
   render() {
     const {
-      match: {
-        params: { instanceId },
-      },
+      params: { instanceId },
       userId,
       user,
       refreshUser,
@@ -161,11 +161,9 @@ class Instance extends Component {
 Instance.propTypes = {
   loadAsync: PropTypes.func.isRequired,
   refreshUser: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      instanceId: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
+  params: PropTypes.shape({
+    instanceId: PropTypes.string.isRequired,
+  }),
   userId: PropTypes.string.isRequired,
   user: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
@@ -182,14 +180,7 @@ const addGroupFormSelector = formValueSelector('addGroup');
 
 export default withLinks(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { instanceId },
-        },
-      }
-    ) => {
+    (state, { params: { instanceId } }) => {
       const userId = loggedInUserIdSelector(state);
       return {
         userId,
@@ -201,14 +192,7 @@ export default withLinks(
         hasThreshold: addGroupFormSelector(state, 'hasThreshold'),
       };
     },
-    (
-      dispatch,
-      {
-        match: {
-          params: { instanceId },
-        },
-      }
-    ) => ({
+    (dispatch, { params: { instanceId } }) => ({
       createGroup:
         userId =>
         ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>

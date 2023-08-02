@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { withRouter } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import withLinks from '../../../helpers/withLinks';
 import { safeGet } from '../../../helpers/common';
@@ -112,10 +112,11 @@ const SolutionActions = ({
   setReviewState = null,
   deleteReview = null,
   setPoints = null,
-  history: { push },
-  location: { pathname },
   links: { SOLUTION_SOURCE_CODES_URI_FACTORY },
 }) => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   const review = solution && solution.review;
   const assignmentId = solution && solution.assignmentId;
   const accepted = solution && solution.accepted;
@@ -154,12 +155,12 @@ const SolutionActions = ({
     open:
       openReview &&
       (!review || !review.startedAt) &&
-      (isOnReviewPage ? openReview : () => openReview().then(() => push(reviewPageUri))),
+      (isOnReviewPage ? openReview : () => openReview().then(() => navigate(reviewPageUri))),
     reopen:
       openReview &&
       review &&
       review.closedAt &&
-      (isOnReviewPage ? openReview : () => openReview().then(() => push(reviewPageUri))),
+      (isOnReviewPage ? openReview : () => openReview().then(() => navigate(reviewPageUri))),
     openClose: setReviewState && (!review || !review.startedAt) && showAllButtons && (() => setReviewState(true)),
     close: setReviewState && review && review.startedAt && !review.closedAt && (() => setReviewState(true)),
     delete: showAllButtons && review && review.startedAt && deleteReview,
@@ -224,13 +225,7 @@ SolutionActions.propTypes = {
   setReviewState: PropTypes.func,
   deleteReview: PropTypes.func,
   setPoints: PropTypes.func,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }),
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }).isRequired,
   links: PropTypes.object.isRequired,
 };
 
-export default withLinks(withRouter(SolutionActions));
+export default withLinks(SolutionActions);

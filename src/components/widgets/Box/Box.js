@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
-import { withRouter } from 'react-router';
 import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Icon from '../../icons';
+import withRouter, { withRouterProps } from '../../../helpers/withRouter';
 
 import styles from './Box.less';
 
@@ -48,7 +48,8 @@ class Box extends Component {
   removeUrlHash = () => {
     const scrollPosition = window.scrollY;
     window.location.hash = '';
-    this.props.history.replace(this.props.location.pathname + this.props.location.search);
+    const { pathname, search } = this.props.location;
+    this.props.navigate(pathname + search, { replace: true });
     window.setTimeout(() => window.scrollTo(0, scrollPosition), 0);
   };
 
@@ -140,15 +141,8 @@ Box.propTypes = {
   children: PropTypes.element,
   className: PropTypes.string,
   customIcons: PropTypes.any,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-    hash: PropTypes.string.isRequired,
-  }).isRequired,
+  navigate: withRouterProps.navigate,
+  location: withRouterProps.location,
 };
 
 export default withRouter(Box);

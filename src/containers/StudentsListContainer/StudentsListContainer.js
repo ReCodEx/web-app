@@ -17,7 +17,9 @@ import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
 import { safeGet } from '../../helpers/common';
 
 class StudentsListContainer extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.groupId !== this.props.groupId) {

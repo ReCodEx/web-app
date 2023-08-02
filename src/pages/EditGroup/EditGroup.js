@@ -31,18 +31,21 @@ import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selector
 import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 
-import withLinks from '../../helpers/withLinks';
 import { hasPermissions, hasOneOfPermissions } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
 
 const canRelocate = group => hasPermissions(group, 'relocate') && !group.archived;
 
 const getRelocateFormInitialValues = defaultMemoize(group => ({ groupId: group.parentGroupId }));
 
 class EditGroup extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.groupId !== prevProps.match.params.groupId) {
+    if (this.props.params.groupId !== prevProps.params.groupId) {
       this.props.reset();
       this.props.loadAsync();
     }
@@ -62,7 +65,7 @@ class EditGroup extends Component {
 
   render() {
     const {
-      history: { replace },
+      navigate,
       group,
       groups,
       groupsAccessor,
@@ -194,10 +197,11 @@ class EditGroup extends Component {
                         group.parentGroupId === null || (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
                       }
                       onDeleted={() =>
-                        replace(
+                        navigate(
                           canViewParentDetail
                             ? GROUP_INFO_URI_FACTORY(group.parentGroupId)
-                            : INSTANCE_URI_FACTORY(instanceId)
+                            : INSTANCE_URI_FACTORY(instanceId),
+                          { replace: true }
                         )
                       }
                     />
@@ -231,18 +235,12 @@ class EditGroup extends Component {
 }
 
 EditGroup.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   links: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   reload: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      groupId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    groupId: PropTypes.string.isRequired,
   }).isRequired,
   group: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
@@ -254,20 +252,14 @@ EditGroup.propTypes = {
   hasThreshold: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
   intl: PropTypes.object,
+  navigate: withRouterProps.navigate,
 };
 
 const editGroupFormSelector = formValueSelector('editGroup');
 
 export default withLinks(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { groupId },
-        },
-      }
-    ) => ({
+    (state, { params: { groupId } }) => ({
       group: groupSelector(state, groupId),
       groups: notArchivedGroupsSelector(state),
       groupsAccessor: groupDataAccessorSelector(state),
@@ -277,14 +269,7 @@ export default withLinks(
       canViewParentDetail: canViewParentDetailSelector(state, groupId),
       instanceId: selectedInstanceId(state),
     }),
-    (
-      dispatch,
-      {
-        match: {
-          params: { groupId },
-        },
-      }
-    ) => ({
+    (dispatch, { params: { groupId } }) => ({
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
       reload: () => dispatch(fetchGroup(groupId)),

@@ -379,10 +379,10 @@ class AssignmentSolutions extends Component {
   openDialog = () => this.setState({ assignmentDialogOpen: true });
   closeDialog = () => this.setState({ assignmentDialogOpen: false });
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.props.loadAsync();
     this.setState(storageGetItem(localStorageStateKey, null));
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.assignmentId !== prevProps.assignmentId) {
@@ -701,14 +701,7 @@ AssignmentSolutions.propTypes = {
 
 export default withLinks(
   connect(
-    (
-      state,
-      {
-        match: {
-          params: { assignmentId },
-        },
-      }
-    ) => {
+    (state, { params: { assignmentId } }) => {
       const assignment = getAssignment(state, assignmentId);
       const getStudentsIds = groupId => studentsIdsOfGroup(groupId)(state);
       const readyUsers = usersSelector(state).toArray().filter(isReady);
@@ -729,14 +722,7 @@ export default withLinks(
         assignmentSolvers: getOneAssignmentSolvers(state, assignmentId),
       };
     },
-    (
-      dispatch,
-      {
-        match: {
-          params: { assignmentId },
-        },
-      }
-    ) => ({
+    (dispatch, { params: { assignmentId } }) => ({
       loadAsync: () => AssignmentSolutions.loadAsync({ assignmentId }, dispatch),
       downloadBestSolutionsArchive: name => ev => {
         ev.preventDefault();

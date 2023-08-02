@@ -12,7 +12,9 @@ import { LoadingIcon } from '../../components/icons';
 import withLinks from '../../helpers/withLinks';
 
 class PipelineNameContainer extends Component {
-  componentDidMount = () => this.props.loadPipelineIfNeeded();
+  componentDidMount() {
+    this.props.loadPipelineIfNeeded();
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.pipelineId !== prevProps.pipelineId) {

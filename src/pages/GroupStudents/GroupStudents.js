@@ -76,10 +76,12 @@ class GroupStudents extends Component {
       ),
     ]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.groupId !== prevProps.match.params.groupId) {
+    if (this.props.params.groupId !== prevProps.params.groupId) {
       this.props.loadAsync();
       return;
     }
@@ -195,14 +197,16 @@ class GroupStudents extends Component {
                 linkFactory={GROUP_STUDENTS_URI_FACTORY}
               />
 
-              {isStudentRole(effectiveRole) && isGroupStudent && !safeGet(data, ['privateData', 'publicStats'], false) && (
-                <Callout variant="info">
-                  <FormattedMessage
-                    id="app.groupStudents.privateStats"
-                    defaultMessage="The admin of the group has restricted the access to the results of students. Therefore, you can see only your own results, not the results of other students."
-                  />
-                </Callout>
-              )}
+              {isStudentRole(effectiveRole) &&
+                isGroupStudent &&
+                !safeGet(data, ['privateData', 'publicStats'], false) && (
+                  <Callout variant="info">
+                    <FormattedMessage
+                      id="app.groupStudents.privateStats"
+                      defaultMessage="The admin of the group has restricted the access to the results of students. Therefore, you can see only your own results, not the results of other students."
+                    />
+                  </Callout>
+                )}
 
               <ResourceRenderer resource={loggedUser}>
                 {loggedUser => (
@@ -316,11 +320,7 @@ class GroupStudents extends Component {
 }
 
 GroupStudents.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
-  match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
+  params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   loggedUser: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
@@ -347,14 +347,7 @@ GroupStudents.propTypes = {
   links: PropTypes.object,
 };
 
-const mapStateToProps = (
-  state,
-  {
-    match: {
-      params: { groupId },
-    },
-  }
-) => {
+const mapStateToProps = (state, { params: { groupId } }) => {
   const userId = loggedInUserIdSelector(state);
 
   return {
@@ -377,7 +370,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (dispatch, { match: { params } }) => ({
+const mapDispatchToProps = (dispatch, { params }) => ({
   loadAsync: () => GroupStudents.loadAsync(params, dispatch),
   fetchGroupStatsIfNeeded: () => dispatch(fetchGroupStatsIfNeeded(params.groupId, { allowReload: true })),
   fetchUsersSolutions: (userId, assignmentId) => dispatch(fetchUsersSolutions(userId, assignmentId)),

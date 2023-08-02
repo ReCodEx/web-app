@@ -6,7 +6,6 @@ import Button from '../../components/widgets/TheButton';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
-import App from '../../containers/App';
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
@@ -15,6 +14,7 @@ import { LoadingGroupData, FailedGroupLoading } from '../../components/Groups/he
 import { AssignmentsIcon, AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
@@ -42,13 +42,13 @@ import {
 } from '../../redux/selectors/usersGroups';
 import { getStatusesForLoggedUser, createGroupsStatsSelector } from '../../redux/selectors/stats';
 import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
-
-import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 
 import { isSuperadminRole } from '../../components/helpers/usersRoles';
 import { EMPTY_LIST, hasPermissions, hasOneOfPermissions } from '../../helpers/common';
-import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 class GroupAssignments extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
@@ -67,10 +67,12 @@ class GroupAssignments extends Component {
       ),
     ]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.groupId !== prevProps.match.params.groupId) {
+    if (this.props.params.groupId !== prevProps.params.groupId) {
       this.props.loadAsync();
       return;
     }
@@ -92,24 +94,24 @@ class GroupAssignments extends Component {
   createShadowAssignment = () => {
     const {
       createShadowAssignment,
-      history: { push },
+      navigate,
       links: { SHADOW_ASSIGNMENT_EDIT_URI_FACTORY },
     } = this.props;
     createShadowAssignment().then(({ value: shadowAssignment }) => {
-      App.ignoreNextLocationChange();
-      push(SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id));
+      suspendAbortPendingRequestsOptimization();
+      navigate(SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowAssignment.id));
     });
   };
 
   createGroupExercise = () => {
     const {
       createGroupExercise,
-      history: { push },
+      navigate,
       links: { EXERCISE_EDIT_URI_FACTORY },
     } = this.props;
     createGroupExercise().then(({ value: exercise }) => {
-      App.ignoreNextLocationChange();
-      push(EXERCISE_EDIT_URI_FACTORY(exercise.id));
+      suspendAbortPendingRequestsOptimization();
+      navigate(EXERCISE_EDIT_URI_FACTORY(exercise.id));
     });
   };
 
@@ -311,11 +313,7 @@ class GroupAssignments extends Component {
 }
 
 GroupAssignments.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
-  match: PropTypes.shape({ params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired }).isRequired,
+  params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   effectiveRole: PropTypes.string,
   group: ImmutablePropTypes.map,
@@ -335,16 +333,10 @@ GroupAssignments.propTypes = {
   createShadowAssignment: PropTypes.func.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
   links: PropTypes.object,
+  navigate: withRouterProps.navigate,
 };
 
-const mapStateToProps = (
-  state,
-  {
-    match: {
-      params: { groupId },
-    },
-  }
-) => {
+const mapStateToProps = (state, { params: { groupId } }) => {
   const userId = loggedInUserIdSelector(state);
 
   return {
@@ -364,7 +356,7 @@ const mapStateToProps = (
   };
 };
 
-const mapDispatchToProps = (dispatch, { match: { params } }) => ({
+const mapDispatchToProps = (dispatch, { params }) => ({
   loadAsync: () => GroupAssignments.loadAsync(params, dispatch),
   createShadowAssignment: () => dispatch(createShadowAssignment(params.groupId)),
   createGroupExercise: () => dispatch(createExercise({ groupId: params.groupId })),

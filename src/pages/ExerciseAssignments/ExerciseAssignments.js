@@ -68,7 +68,7 @@ class ExerciseAssignments extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
       this.props.loadAsync();
       this.reset();
     }
@@ -254,10 +254,8 @@ class ExerciseAssignments extends Component {
 
 ExerciseAssignments.propTypes = {
   userId: PropTypes.string.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      exerciseId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    exerciseId: PropTypes.string.isRequired,
   }).isRequired,
   exercise: ImmutablePropTypes.map,
   assignments: ImmutablePropTypes.map,
@@ -277,14 +275,7 @@ ExerciseAssignments.propTypes = {
 const multiAssignFormSelector = formValueSelector('multiAssign');
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { exerciseId },
-      },
-    }
-  ) => {
+  (state, { params: { exerciseId } }) => {
     const userId = loggedInUserIdSelector(state);
     return {
       userId,
@@ -297,14 +288,7 @@ export default connect(
       visibility: multiAssignFormSelector(state, 'visibility'),
     };
   },
-  (
-    dispatch,
-    {
-      match: {
-        params: { exerciseId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { exerciseId } }) => ({
     loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
     assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
     syncAssignment: id => dispatch(syncWithExercise(id)),

@@ -7,7 +7,6 @@ import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
-import App from '../../containers/App';
 import { SettingsIcon, TransferIcon, BanIcon, UserIcon } from '../../components/icons';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
@@ -25,8 +24,10 @@ import { selectedInstanceId } from '../../redux/selectors/auth';
 import { createAccount } from '../../redux/modules/registration';
 import { fetchPaginated } from '../../redux/modules/pagination';
 
-import withLinks from '../../helpers/withLinks';
 import { knownRoles, isSupervisorRole, isStudentRole, isSuperadminRole } from '../../components/helpers/usersRoles.js';
+import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
@@ -95,7 +96,7 @@ class Users extends Component {
     const {
       takeOver,
       isSuperAdmin,
-      history: { push },
+      navigate,
       links: { EDIT_USER_URI_FACTORY, DASHBOARD_URI },
     } = this.props;
     return (
@@ -109,8 +110,8 @@ class Users extends Component {
                 variant="primary"
                 onClick={() =>
                   takeOver(id).then(() => {
-                    App.ignoreNextLocationChange();
-                    push(DASHBOARD_URI);
+                    suspendAbortPendingRequestsOptimization();
+                    navigate(DASHBOARD_URI);
                   })
                 }>
                 <TransferIcon gapRight />
@@ -234,10 +235,6 @@ class Users extends Component {
 }
 
 Users.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   instanceId: PropTypes.string,
   isSuperAdmin: PropTypes.bool,
   user: ImmutablePropTypes.map,
@@ -247,6 +244,7 @@ Users.propTypes = {
   reloadPagination: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
+  navigate: withRouterProps.navigate,
 };
 
 export default withLinks(

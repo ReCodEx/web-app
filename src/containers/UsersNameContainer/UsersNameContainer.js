@@ -12,11 +12,11 @@ import { LoadingIcon, FailureIcon } from '../../components/icons';
 import './UsersNameContainer.css';
 
 class UsersNameContainer extends Component {
-  componentDidMount = () => {
+  componentDidMount() {
     if (this.props.userId && !this.props.noAutoload) {
       this.props.loadUserIfNeeded(this.props.userId);
     }
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (this.props.userId && this.props.userId !== prevProps.userId && !this.props.noAutoload) {

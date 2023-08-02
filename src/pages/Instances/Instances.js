@@ -10,7 +10,9 @@ import InstancesManagement from '../../components/Instances/InstancesManagement'
 class Instances extends Component {
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchInstances())]);
 
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   render() {
     const { instances } = this.props;

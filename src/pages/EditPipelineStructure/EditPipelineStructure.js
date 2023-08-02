@@ -20,10 +20,12 @@ import { getPipeline } from '../../redux/selectors/pipelines';
 import { hasPermissions } from '../../helpers/common';
 
 class EditPipeline extends Component {
-  componentDidMount = () => this.props.loadAsync();
+  componentDidMount() {
+    this.props.loadAsync();
+  }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.pipelineId !== prevProps.match.params.pipelineId) {
+    if (this.props.params.pipelineId !== prevProps.params.pipelineId) {
       this.props.loadAsync();
     }
   }
@@ -88,34 +90,18 @@ class EditPipeline extends Component {
 EditPipeline.propTypes = {
   pipeline: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      pipelineId: PropTypes.string.isRequired,
-    }).isRequired,
+  params: PropTypes.shape({
+    pipelineId: PropTypes.string.isRequired,
   }).isRequired,
 };
 
 export default connect(
-  (
-    state,
-    {
-      match: {
-        params: { pipelineId },
-      },
-    }
-  ) => {
+  (state, { params: { pipelineId } }) => {
     return {
       pipeline: getPipeline(pipelineId)(state),
     };
   },
-  (
-    dispatch,
-    {
-      match: {
-        params: { pipelineId },
-      },
-    }
-  ) => ({
+  (dispatch, { params: { pipelineId } }) => ({
     loadAsync: () => EditPipeline.loadAsync({ pipelineId }, dispatch),
   })
 )(EditPipeline);

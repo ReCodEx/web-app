@@ -17,6 +17,7 @@ import Layout from '../../components/layout/Layout';
 import { messages } from '../../locales';
 import { UserUIDataContext, LinksContext, UrlContext } from '../../helpers/contexts';
 import { buildRoutes, getLinks, pathRelatedGroupSelector } from '../../pages/routes';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
 import 'admin-lte/dist/css/adminlte.min.css';
 import 'admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css';
@@ -168,11 +169,7 @@ LayoutContainer.propTypes = {
   isLoggedIn: PropTypes.bool,
   sidebarIsCollapsed: PropTypes.bool,
   sidebarIsOpen: PropTypes.bool,
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-    hash: PropTypes.string.isRequired,
-  }).isRequired,
+  location: withRouterProps.location,
   userSettings: PropTypes.object,
   userUIData: PropTypes.object,
   relatedGroupId: PropTypes.string,
@@ -180,27 +177,29 @@ LayoutContainer.propTypes = {
   fetchManyGroupsStatus: PropTypes.string,
 };
 
-export default connect(
-  (state, { location: { pathname, search } }) => ({
-    lang: getLang(state),
-    isLoggedIn: isLoggedIn(state),
-    sidebarIsCollapsed: isCollapsed(state),
-    sidebarIsOpen: isVisible(state),
-    pendingFetchOperations: anyPendingFetchOperations(state),
-    userSettings: getLoggedInUserSettings(state),
-    userUIData: getLoggedInUserUiData(state),
-    relatedGroupId: pathRelatedGroupSelector(state, pathname + search),
-    memberGroups: groupsLoggedUserIsMemberSelector(state),
-    fetchManyGroupsStatus: fetchManyGroupsStatus(state),
-  }),
-  dispatch => ({
-    toggleVisibility: () => dispatch(toggleVisibility()),
-    toggleSize: () => dispatch(toggleSize()),
-    collapse: () => dispatch(collapse()),
-    unroll: () => dispatch(unroll()),
-    setLang: lang => {
-      dispatch(setLang(lang));
-      window.location.reload();
-    },
-  })
-)(LayoutContainer);
+export default withRouter(
+  connect(
+    (state, { location: { pathname, search } }) => ({
+      lang: getLang(state),
+      isLoggedIn: isLoggedIn(state),
+      sidebarIsCollapsed: isCollapsed(state),
+      sidebarIsOpen: isVisible(state),
+      pendingFetchOperations: anyPendingFetchOperations(state),
+      userSettings: getLoggedInUserSettings(state),
+      userUIData: getLoggedInUserUiData(state),
+      relatedGroupId: pathRelatedGroupSelector(state, pathname + search),
+      memberGroups: groupsLoggedUserIsMemberSelector(state),
+      fetchManyGroupsStatus: fetchManyGroupsStatus(state),
+    }),
+    dispatch => ({
+      toggleVisibility: () => dispatch(toggleVisibility()),
+      toggleSize: () => dispatch(toggleSize()),
+      collapse: () => dispatch(collapse()),
+      unroll: () => dispatch(unroll()),
+      setLang: lang => {
+        dispatch(setLang(lang));
+        window.location.reload();
+      },
+    })
+  )(LayoutContainer)
+);

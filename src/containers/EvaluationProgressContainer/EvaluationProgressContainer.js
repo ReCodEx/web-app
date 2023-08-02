@@ -33,7 +33,9 @@ class EvaluationProgressContainer extends Component {
 
   socket = null;
 
-  componentDidMount = () => this.init(this.props);
+  componentDidMount() {
+    this.init(this.props);
+  }
 
   componentDidUpdate = prevProps => {
     if (this.props.monitor && this.props.monitor.id) {
@@ -46,9 +48,9 @@ class EvaluationProgressContainer extends Component {
     }
   };
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.closeSocket();
-  };
+  }
 
   init = props => {
     const { monitor } = props;

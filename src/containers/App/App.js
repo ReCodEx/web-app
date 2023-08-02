@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Route, Redirect, Switch, withRouter } from 'react-router';
+import { Route, Routes } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { far as regularIcons } from '@fortawesome/free-regular-svg-icons';
 import { fas as solidIcons } from '@fortawesome/free-solid-svg-icons';
@@ -24,24 +24,14 @@ import { getJsData, resourceStatus } from '../../redux/helpers/resourceManager';
 import { userSwitching } from '../../redux/selectors/userSwitching';
 import { refreshUserToken, removeUser as removeUserFromSwitching } from '../../redux/modules/userSwitching';
 import { URL_PATH_PREFIX } from '../../helpers/config';
-import { pathHasCustomLoadGroups } from '../../pages/routes';
-import { knownLocales } from '../../helpers/localizedData';
+import { pathHasCustomLoadGroups, suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 import { LoadingIcon } from '../../components/icons';
-import { abortAllPendingRequests, SESSION_EXPIRED_MESSAGE } from '../../redux/helpers/api/tools';
+import { SESSION_EXPIRED_MESSAGE } from '../../redux/helpers/api/tools';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
 import './recodex.css';
 
 library.add(regularIcons, solidIcons, brandIcons);
-
-const _removePrefix = (str, prefix) => (prefix && str.startsWith(prefix) ? str.substr(prefix.length) : str);
-
-// Backward compatibility (if lang appear in URL, we just remove it)
-const removeLangFromUrl = url => {
-  url = _removePrefix(url, URL_PATH_PREFIX);
-  url = _removePrefix(url, '/');
-  url = url.replace(new RegExp(`^(${knownLocales.join('|')})/?`), '');
-  return `${URL_PATH_PREFIX}/${url}`;
-};
 
 const someStatusesFailed = (...statuses) =>
   statuses.includes(resourceStatus.FAILED) && !statuses.includes(resourceStatus.PENDING);
@@ -49,31 +39,29 @@ const someStatusesFailed = (...statuses) =>
 class App extends Component {
   static ignoreNextLocationChangeFlag = false;
 
-  static ignoreNextLocationChange = () => {
-    App.ignoreNextLocationChangeFlag = true;
-  };
-
-  static loadAsync = customLoadGroups => (params, dispatch, { userId }) =>
-    userId
-      ? Promise.all([
-          dispatch((dispatch, getState) =>
-            dispatch(fetchUserIfNeeded(userId)).then(() => {
-              const state = getState();
-              if (!selectedInstanceId(state)) {
-                const user = getJsData(getUser(userId)(state));
-                dispatch(selectInstance(user.privateData.instancesIds[0]));
-              }
-              return !customLoadGroups ? dispatch(fetchAllGroups()) : Promise.resolve();
-            })
-          ),
-          dispatch(fetchUsersInstancesIfNeeded(userId)),
-          dispatch(fetchAllUserMessages()),
-        ]).catch(response => {
-          if (response && response.status === 403) {
-            dispatch(logout()); // if requests demanding basic info about user are unauthorized, the user is either blocked or something fishy is going on...
-          }
-        })
-      : Promise.resolve();
+  static loadAsync =
+    customLoadGroups =>
+    (params, dispatch, { userId }) =>
+      userId
+        ? Promise.all([
+            dispatch((dispatch, getState) =>
+              dispatch(fetchUserIfNeeded(userId)).then(() => {
+                const state = getState();
+                if (!selectedInstanceId(state)) {
+                  const user = getJsData(getUser(userId)(state));
+                  dispatch(selectInstance(user.privateData.instancesIds[0]));
+                }
+                return !customLoadGroups ? dispatch(fetchAllGroups()) : Promise.resolve();
+              })
+            ),
+            dispatch(fetchUsersInstancesIfNeeded(userId)),
+            dispatch(fetchAllUserMessages()),
+          ]).catch(response => {
+            if (response && response.status === 403) {
+              dispatch(logout()); // if requests demanding basic info about user are unauthorized, the user is either blocked or something fishy is going on...
+            }
+          })
+        : Promise.resolve();
 
   constructor() {
     super();
@@ -83,29 +71,6 @@ class App extends Component {
   componentDidMount() {
     const hasCustomLoadGroups = pathHasCustomLoadGroups(this.props.location.pathname + this.props.location.search);
     this.props.loadAsync(this.props.userId, hasCustomLoadGroups);
-
-    /*
-     * Checking location changes to stop pending API calls which are no longer necessary.
-     */
-    let lastLocation = this.props.location;
-    this.removeHistoryListen = this.props.history.listen((location, action) => {
-      if (action === 'PUSH') {
-        // push means link click or push() call, other types are tricky, so we rather avoid them
-        if (App.ignoreNextLocationChangeFlag) {
-          App.ignoreNextLocationChangeFlag = false;
-        } else if (
-          !this.isRefreshingToken && // if token is being refreshed, we do not want to abort that
-          (lastLocation.pathname !== location.pathname || lastLocation.search !== location.search) // is there an actual URL change?
-        ) {
-          abortAllPendingRequests();
-        }
-      }
-      lastLocation = location;
-    });
-  }
-
-  componentWillUnmount() {
-    this.removeHistoryListen && this.removeHistoryListen();
   }
 
   componentDidUpdate(prevProps) {
@@ -149,6 +114,7 @@ class App extends Component {
         logout();
         addNotification(SESSION_EXPIRED_MESSAGE, false);
       } else if (isTokenInNeedOfRefreshment(token) && !this.isRefreshingToken) {
+        suspendAbortPendingRequestsOptimization();
         this.isRefreshingToken = true;
         refreshToken()
           .catch(() => {
@@ -189,26 +155,15 @@ class App extends Component {
         <LoadingIcon size="3x" />
       </div>
     ) : (
-      <Switch>
-        <Route exact path={`${URL_PATH_PREFIX}/login-extern/:service`} component={LoginExternFinalization} />
-        <Route
-          path={knownLocales.map(lang => `${URL_PATH_PREFIX}/${lang}/`)}
-          render={({ location }) => <Redirect to={removeLangFromUrl(location.pathname) + location.search} />}
-        />
-        <Route path="*" component={LayoutContainer} />
-      </Switch>
+      <Routes>
+        <Route path={`${URL_PATH_PREFIX}/login-extern/:service`} element={<LoginExternFinalization />} />
+        <Route path="*" element={<LayoutContainer />} />
+      </Routes>
     );
   }
 }
 
 App.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-  }).isRequired,
-  history: PropTypes.shape({
-    listen: PropTypes.func,
-  }).isRequired,
   accessToken: PropTypes.object,
   userId: PropTypes.string,
   instanceId: PropTypes.string,
@@ -223,28 +178,31 @@ App.propTypes = {
   removeUserFromSwitching: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
+  location: withRouterProps.location,
 };
 
-export default connect(
-  state => {
-    const userId = loggedInUserIdSelector(state);
-    return {
-      accessToken: accessTokenSelector(state),
-      userId,
-      instanceId: selectedInstanceId(state),
-      isLoggedIn: Boolean(userId),
-      userSwitchingState: userSwitching(state),
-      fetchUserStatus: fetchUserStatus(state, userId),
-      fetchManyGroupsStatus: fetchManyGroupsStatus(state),
-      fetchManyUserInstancesStatus: fetchManyUserInstancesStatus(state, userId),
-    };
-  },
-  dispatch => ({
-    loadAsync: (userId, hasCustomLoadGroups) => App.loadAsync(hasCustomLoadGroups)({}, dispatch, { userId }),
-    refreshToken: () => dispatch(refresh()),
-    refreshUserToken: (userId, token) => dispatch(refreshUserToken(userId, token)),
-    removeUserFromSwitching: id => dispatch(removeUserFromSwitching(id)),
-    logout: () => dispatch(logout()),
-    addNotification: (msg, successful) => dispatch(addNotification(msg, successful)),
-  })
-)(withRouter(App));
+export default withRouter(
+  connect(
+    state => {
+      const userId = loggedInUserIdSelector(state);
+      return {
+        accessToken: accessTokenSelector(state),
+        userId,
+        instanceId: selectedInstanceId(state),
+        isLoggedIn: Boolean(userId),
+        userSwitchingState: userSwitching(state),
+        fetchUserStatus: fetchUserStatus(state, userId),
+        fetchManyGroupsStatus: fetchManyGroupsStatus(state),
+        fetchManyUserInstancesStatus: fetchManyUserInstancesStatus(state, userId),
+      };
+    },
+    dispatch => ({
+      loadAsync: (userId, hasCustomLoadGroups) => App.loadAsync(hasCustomLoadGroups)({}, dispatch, { userId }),
+      refreshToken: () => dispatch(refresh()),
+      refreshUserToken: (userId, token) => dispatch(refreshUserToken(userId, token)),
+      removeUserFromSwitching: id => dispatch(removeUserFromSwitching(id)),
+      logout: () => dispatch(logout()),
+      addNotification: (msg, successful) => dispatch(addNotification(msg, successful)),
+    })
+  )(App)
+);

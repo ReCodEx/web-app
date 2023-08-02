@@ -7,13 +7,14 @@ import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import Express from 'express';
+import ejs from 'ejs';
 import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 import fs from 'fs';
 import { globSync } from 'glob';
 
-import { StaticRouter } from 'react-router';
+import { StaticRouter } from 'react-router-dom/server';
 
 import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
@@ -52,9 +53,8 @@ const bundle = process.env.BUNDLE || getFileName('public/bundle-*.js', `${urlPre
 const style = getFileName('public/style-*.css', `${urlPrefix}/`) || `${urlPrefix}/style.css`;
 
 const app = new Express();
-const ejs = require('ejs').__express;
 app.set('view engine', 'ejs');
-app.engine('ejs', ejs);
+app.engine('ejs', ejs.__express);
 app.use(
   urlPrefix,
   Express.static('public', {

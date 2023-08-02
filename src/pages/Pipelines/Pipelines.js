@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
-import App from '../../containers/App';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
@@ -19,6 +18,8 @@ import { create as createPipeline } from '../../redux/modules/pipelines';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
 
 import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 const submitHandler = defaultMemoize(setFilters => search => {
   const filters = {};
@@ -52,12 +53,12 @@ class Pipelines extends Component {
   newPipeline = () => {
     const {
       createPipeline,
-      history: { push },
+      navigate,
       links: { PIPELINE_EDIT_URI_FACTORY },
     } = this.props;
     createPipeline().then(({ value: pipeline }) => {
-      App.ignoreNextLocationChange();
-      push(PIPELINE_EDIT_URI_FACTORY(pipeline.id));
+      suspendAbortPendingRequestsOptimization();
+      navigate(PIPELINE_EDIT_URI_FACTORY(pipeline.id));
     });
   };
 
@@ -132,13 +133,10 @@ class Pipelines extends Component {
 }
 
 Pipelines.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   createPipeline: PropTypes.func.isRequired,
   isAuthorOfPipeline: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
+  navigate: withRouterProps.navigate,
 };
 
 export default withLinks(

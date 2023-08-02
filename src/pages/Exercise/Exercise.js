@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { withRouter } from 'react-router';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
@@ -49,8 +48,9 @@ import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolut
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { notArchivedGroupsSelector, groupDataAccessorSelector, getGroupsAdmins } from '../../redux/selectors/groups';
 
-import withLinks from '../../helpers/withLinks';
 import { hasPermissions } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks';
+import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
 const messages = defineMessages({
   referenceSolutionsBox: {
@@ -87,7 +87,7 @@ class Exercise extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.match.params.exerciseId !== prevProps.match.params.exerciseId) {
+    if (this.props.params.exerciseId !== prevProps.params.exerciseId) {
       this.props.loadAsync(this.props.userId);
       this.reset();
     }
@@ -98,11 +98,16 @@ class Exercise extends Component {
   };
 
   createReferenceSolution = () => {
-    const { userId, initCreateReferenceSolution, history, location } = this.props;
+    const {
+      userId,
+      initCreateReferenceSolution,
+      navigate,
+      location: { pathname, search },
+    } = this.props;
 
     const scrollPosition = window.scrollY;
     window.location.hash = '';
-    history.replace(location.pathname + location.search);
+    navigate(pathname + search, { replace: true });
     window.setTimeout(() => window.scrollTo(0, scrollPosition), 0);
 
     initCreateReferenceSolution(userId);
@@ -303,11 +308,6 @@ class Exercise extends Component {
 
 Exercise.propTypes = {
   userId: PropTypes.string.isRequired,
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      exerciseId: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
   exercise: ImmutablePropTypes.map,
   forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
@@ -326,57 +326,39 @@ Exercise.propTypes = {
   forkExercise: PropTypes.func.isRequired,
   attachExerciseToGroup: PropTypes.func.isRequired,
   detachExerciseFromGroup: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
-  location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-    search: PropTypes.string.isRequired,
-    hash: PropTypes.string.isRequired,
-  }).isRequired,
+  navigate: withRouterProps.navigate,
+  location: withRouterProps.location,
+  params: PropTypes.shape({ exerciseId: PropTypes.string }).isRequired,
 };
 
-export default withLinks(
-  connect(
-    (
-      state,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => {
-      const userId = loggedInUserIdSelector(state);
-      return {
-        userId,
-        exercise: exerciseSelector(exerciseId)(state),
-        forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
-        runtimeEnvironments: runtimeEnvironmentsSelector(state),
-        submitting: isSubmitting(state),
-        referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-        groups: notArchivedGroupsSelector(state),
-        groupsAccessor: groupDataAccessorSelector(state),
-        attachingGroupId: getExerciseAttachingGroupId(exerciseId)(state),
-        detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state),
-      };
-    },
-    (
-      dispatch,
-      {
-        match: {
-          params: { exerciseId },
-        },
-      }
-    ) => ({
-      loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
-      reload: () => dispatch(reloadExercise(exerciseId)),
-      initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
-      deleteReferenceSolution: solutionId =>
-        dispatch(deleteReferenceSolution(solutionId)).then(() => dispatch(reloadExercise(exerciseId))),
-      forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),
-      attachExerciseToGroup: groupId => dispatch(attachExerciseToGroup(exerciseId, groupId)),
-      detachExerciseFromGroup: groupId => dispatch(detachExerciseFromGroup(exerciseId, groupId)),
-    })
-  )(injectIntl(withRouter(Exercise)))
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { params: { exerciseId } }) => {
+        const userId = loggedInUserIdSelector(state);
+        return {
+          userId,
+          exercise: exerciseSelector(exerciseId)(state),
+          forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
+          runtimeEnvironments: runtimeEnvironmentsSelector(state),
+          submitting: isSubmitting(state),
+          referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+          groups: notArchivedGroupsSelector(state),
+          groupsAccessor: groupDataAccessorSelector(state),
+          attachingGroupId: getExerciseAttachingGroupId(exerciseId)(state),
+          detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state),
+        };
+      },
+      (dispatch, { params: { exerciseId } }) => ({
+        loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
+        reload: () => dispatch(reloadExercise(exerciseId)),
+        initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
+        deleteReferenceSolution: solutionId =>
+          dispatch(deleteReferenceSolution(solutionId)).then(() => dispatch(reloadExercise(exerciseId))),
+        forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),
+        attachExerciseToGroup: groupId => dispatch(attachExerciseToGroup(exerciseId, groupId)),
+        detachExerciseFromGroup: groupId => dispatch(detachExerciseFromGroup(exerciseId, groupId)),
+      })
+    )(injectIntl(Exercise))
+  )
 );

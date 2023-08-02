@@ -18,6 +18,7 @@ import {
 } from '../../redux/selectors/auth';
 
 import withLinks from '../../helpers/withLinks';
+import { withRouterProps } from '../../helpers/withRouter';
 
 /**
  * Component for changing old password for a new one for a user with a specific
@@ -42,10 +43,10 @@ class ChangePassword extends Component {
       const search = window.location.search;
       if (search.length === 0) {
         const {
-          history: { replace },
+          navigate,
           links: { RESET_PASSWORD_URI },
         } = this.props;
-        replace(RESET_PASSWORD_URI); // no token in URL query -> redirect to the reset form
+        navigate(RESET_PASSWORD_URI, { replace: true }); // no token in URL query -> redirect to the reset form
       } else {
         let token = search.substr(1);
         let decodedToken = decode(token);
@@ -71,12 +72,12 @@ class ChangePassword extends Component {
       this.timeout = setTimeout(() => {
         const {
           reset,
-          history: { replace },
+          navigate,
           links: { DASHBOARD_URI },
         } = this.props;
         this.timeout = null;
         reset();
-        replace(DASHBOARD_URI);
+        navigate(DASHBOARD_URI, { replace: true });
       }, 1500);
     }
   };
@@ -142,16 +143,13 @@ class ChangePassword extends Component {
 }
 
 ChangePassword.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-  }),
   isChanging: PropTypes.bool,
   changePassword: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   hasFailed: PropTypes.bool.isRequired,
   hasSucceeded: PropTypes.bool.isRequired,
   links: PropTypes.object,
+  navigate: withRouterProps.navigate,
 };
 
 export default withLinks(
