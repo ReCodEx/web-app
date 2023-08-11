@@ -167,20 +167,22 @@ class EditPipeline extends Component {
                 <Box
                   type="danger"
                   title={<FormattedMessage id="app.editPipeline.delete" defaultMessage="Delete the pipeline" />}>
-                  <div>
-                    <p>
+                  <Row className="align-items-center">
+                    <Col xs={false} sm="auto">
+                      <DeletePipelineButtonContainer
+                        id={pipeline.id}
+                        size="lg"
+                        className="m-2"
+                        onDeleted={() => navigate(PIPELINES_URI, { replace: true })}
+                      />
+                    </Col>
+                    <Col xs={12} sm className="text-muted">
                       <FormattedMessage
                         id="app.editPipeline.deleteWarning"
                         defaultMessage="Deleting an pipeline will break all exercises using the pipeline."
                       />
-                    </p>
-                    <p className="text-center">
-                      <DeletePipelineButtonContainer
-                        id={pipeline.id}
-                        onDeleted={() => navigate(PIPELINES_URI, { replace: true })}
-                      />
-                    </p>
-                  </div>
+                    </Col>
+                  </Row>
                 </Box>
               </Col>
             </Row>

@@ -197,20 +197,22 @@ class EditAssignment extends Component {
                   title={
                     <FormattedMessage id="app.editAssignment.deleteAssignment" defaultMessage="Delete the assignment" />
                   }>
-                  <div>
-                    <p>
+                  <Row className="align-items-center">
+                    <Col xs={false} sm="auto">
+                      <DeleteAssignmentButtonContainer
+                        id={assignmentId}
+                        size="lg"
+                        className="m-2"
+                        onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(assignment.groupId), { replace: true })}
+                      />
+                    </Col>
+                    <Col xs={12} sm className="text-muted">
                       <FormattedMessage
                         id="app.editAssignment.deleteAssignmentWarning"
                         defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."
                       />
-                    </p>
-                    <p className="text-center">
-                      <DeleteAssignmentButtonContainer
-                        id={assignmentId}
-                        onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(assignment.groupId), { replace: true })}
-                      />
-                    </p>
-                  </div>
+                    </Col>
+                  </Row>
                 </Box>
               )}
             </>

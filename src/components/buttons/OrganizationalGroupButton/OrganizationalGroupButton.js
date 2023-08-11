@@ -4,8 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { GroupIcon, LoadingIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
 
-const OrganizationalGroupButton = ({ organizational, pending, disabled = false, setOrganizational }) => (
+const OrganizationalGroupButton = ({ organizational, pending, disabled = false, setOrganizational, ...props }) => (
   <Button
+    {...props}
     variant={disabled ? 'secondary' : 'info'}
     onClick={setOrganizational(!organizational)}
     disabled={pending || disabled}>

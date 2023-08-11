@@ -12,18 +12,12 @@ import { identity } from '../../helpers/common';
 
 class ArchiveGroupButtonContainer extends Component {
   render() {
-    const { group, pending, setArchived, size = undefined, ...props } = this.props;
+    const { group, pending, setArchived, ...props } = this.props;
     return (
       <ResourceRenderer resource={group}>
         {({ directlyArchived, permissionHints }) =>
           permissionHints.archive ? (
-            <ArchiveGroupButton
-              archived={directlyArchived}
-              pending={pending}
-              setArchived={setArchived}
-              size={size}
-              {...props}
-            />
+            <ArchiveGroupButton archived={directlyArchived} pending={pending} setArchived={setArchived} {...props} />
           ) : null
         }
       </ResourceRenderer>
