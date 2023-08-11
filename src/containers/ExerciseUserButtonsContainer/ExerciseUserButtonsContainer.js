@@ -8,7 +8,7 @@ import { setAuthor, setAdmins } from '../../redux/modules/exercises';
 import { getExerciseSetAuthorStatus, getExerciseSetAdminsStatus } from '../../redux/selectors/exercises';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
-import { AdminIcon, AuthorIcon, LoadingIcon, WarningIcon } from '../../components/icons';
+import { AdminIcon, AuthorIcon, LoadingIcon, RemoveUserIcon, WarningIcon } from '../../components/icons';
 
 const ExerciseUserButtonsContainer = ({
   exercise,
@@ -72,7 +72,7 @@ const ExerciseUserButtonsContainer = ({
             {setAdminsStatus ? (
               <LoadingIcon fixedWidth />
             ) : isAdmin ? (
-              <AdminIcon fixedWidth />
+              <RemoveUserIcon fixedWidth />
             ) : (
               <AdminIcon fixedWidth />
             )}

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { AdminRoleIcon, ObserverIcon, SupervisorIcon, UserIcon, LoadingIcon } from '../../icons';
+import { AdminRoleIcon, ObserverIcon, RemoveUserIcon, SupervisorIcon, UserIcon, LoadingIcon } from '../../icons';
 
 const SupervisorsListItem = ({
   showButtons,
@@ -157,7 +157,7 @@ const SupervisorsListItem = ({
                   onClick={() => removeMember(groupId, id)}
                   variant="danger"
                   disabled={pendingMembership}>
-                  <Icon icon="user-slash" smallGapRight smallGapLeft fixedWidth />
+                  <RemoveUserIcon smallGapRight smallGapLeft fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
