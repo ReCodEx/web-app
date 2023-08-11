@@ -8,7 +8,7 @@ import { defaultMemoize } from 'reselect';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import AddUserContainer from '../../../containers/AddUserContainer';
 import { knownRoles, isSupervisorRole } from '../../helpers/usersRoles';
-import { AdminIcon, ObserverIcon, SupervisorIcon, LoadingIcon } from '../../icons';
+import { AdminRoleIcon, ObserverIcon, SupervisorIcon, LoadingIcon } from '../../icons';
 
 const ROLES_FILTER = knownRoles.filter(isSupervisorRole);
 
@@ -67,7 +67,7 @@ const AddSupervisor = ({
                   onClick={() => addAdmin(groupId, id)}
                   disabled={isMember}
                   variant={isMember ? 'secondary' : 'success'}>
-                  <AdminIcon smallGapRight smallGapLeft fixedWidth />
+                  <AdminRoleIcon smallGapRight smallGapLeft fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}

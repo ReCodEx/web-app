@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
-import { GroupIcon, AdminIcon, SupervisorIcon, ObserverIcon, UserIcon } from '../../icons';
+import { GroupIcon, AdminRoleIcon, SupervisorIcon, ObserverIcon, UserIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
 import './MemberGroupsDropdown.css';
@@ -43,7 +43,7 @@ const MemberGroupsDropdown = ({ groupId = null, memberGroups }) => (
         groupId={groupId}
         groups={memberGroups.admin}
         title={<FormattedMessage id="app.memberGroups.asAdmin" defaultMessage="Groups you administer" />}
-        icon={<AdminIcon gapRight />}
+        icon={<AdminRoleIcon gapRight />}
       />
 
       <DropdownFragment

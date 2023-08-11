@@ -15,15 +15,16 @@ import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTable
 import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
+import EditExerciseUsers from '../../components/Exercises/EditExerciseUsers';
 import { EditExerciseIcon } from '../../components/icons';
 
 import { fetchExerciseIfNeeded, editExercise, fetchTags } from '../../redux/modules/exercises';
 import { getExercise } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { loggedInUserSelector } from '../../redux/selectors/users';
 
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions, safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 import { withRouterProps } from '../../helpers/withRouter';
 
@@ -89,15 +90,17 @@ class EditExercise extends Component {
       links: { EXERCISES_URI },
       navigate,
       exercise,
+      loggedUser,
     } = this.props;
 
     return (
       <Page
-        resource={exercise}
+        resource={[exercise, loggedUser]}
         icon={<EditExerciseIcon />}
         title={<FormattedMessage id="app.editExercise.title" defaultMessage="Change Basic Exercise Settings" />}>
-        {exercise =>
-          exercise && (
+        {(exercise, loggedUser) =>
+          exercise &&
+          loggedUser && (
             <div>
               <ExerciseNavigation
                 exerciseId={exercise.id}
@@ -124,12 +127,20 @@ class EditExercise extends Component {
                 </Col>
                 <Col lg={6}>
                   <AttachmentFilesTableContainer exercise={exercise} />
+
                   <Box title={<FormattedMessage id="app.editExercise.editTags" defaultMessage="Edit Tags" />}>
                     <ExercisesTagsEditContainer exerciseId={exercise.id} />
                   </Box>
+
+                  {exercise.permissionHints.changeAuthor && safeGet(loggedUser, ['privateData', 'instancesIds', 0]) && (
+                    <EditExerciseUsers
+                      exercise={exercise}
+                      instanceId={safeGet(loggedUser, ['privateData', 'instancesIds', 0])}
+                    />
+                  )}
                 </Col>
               </Row>
-              <br />
+
               {exercise.permissionHints.remove && (
                 <Row>
                   <Col lg={12}>
@@ -138,20 +149,22 @@ class EditExercise extends Component {
                       title={
                         <FormattedMessage id="app.editExercise.deleteExercise" defaultMessage="Delete the exercise" />
                       }>
-                      <div>
-                        <p>
+                      <Row className="align-items-center">
+                        <Col xs={false} sm="auto">
+                          <DeleteExerciseButtonContainer
+                            id={exercise.id}
+                            size="lg"
+                            className="m-2"
+                            onDeleted={() => navigate(EXERCISES_URI, { replace: true })}
+                          />
+                        </Col>
+                        <Col xs={12} sm className="text-muted">
                           <FormattedMessage
                             id="app.editExercise.deleteExerciseWarning"
                             defaultMessage="Deletion of an exercise will not affect any existing assignments nor their solutions, except they could not be synchronized anymore. However, the deletion will effectively remove the exercise from all groups of residence."
                           />
-                        </p>
-                        <p className="text-center">
-                          <DeleteExerciseButtonContainer
-                            id={exercise.id}
-                            onDeleted={() => navigate(EXERCISES_URI, { replace: true })}
-                          />
-                        </p>
-                      </div>
+                        </Col>
+                      </Row>
                     </Box>
                   </Col>
                 </Row>
@@ -166,6 +179,7 @@ class EditExercise extends Component {
 
 EditExercise.propTypes = {
   exercise: ImmutablePropTypes.map,
+  loggedUser: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
@@ -178,13 +192,11 @@ EditExercise.propTypes = {
 
 export default withLinks(
   connect(
-    (state, { params: { exerciseId } }) => {
-      return {
-        exercise: getExercise(exerciseId)(state),
-        submitting: isSubmitting(state),
-        userId: loggedInUserIdSelector(state),
-      };
-    },
+    (state, { params: { exerciseId } }) => ({
+      exercise: getExercise(exerciseId)(state),
+      submitting: isSubmitting(state),
+      loggedUser: loggedInUserSelector(state),
+    }),
     (dispatch, { params: { exerciseId } }) => ({
       reset: () => dispatch(reset('editExercise')),
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
