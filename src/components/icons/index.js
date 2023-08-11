@@ -90,6 +90,7 @@ export const RedoIcon = props => <Icon {...props} icon="redo-alt" />;
 export const ReferenceSolutionIcon = props => <Icon {...props} icon="book" />;
 export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
+export const RemoveUserIcon = props => <Icon {...props} icon="user-slash" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
 export const ReviewIcon = ({ review = null, ...props }) =>
   review && review.closedAt ? (

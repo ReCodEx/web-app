@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import '../Sidebar.css';
 import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
-import Icon from '../../../icons';
+import { RemoveUserIcon } from '../../../icons';
 
 const MenuAvatar = ({
   title,
@@ -38,8 +38,7 @@ const MenuAvatar = ({
 
       {onRemove && (
         <span className="sidebarAvatarRemoveIcon">
-          <Icon
-            icon="user-slash"
+          <RemoveUserIcon
             className="text-danger"
             timid
             gapRight
