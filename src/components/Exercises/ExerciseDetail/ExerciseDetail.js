@@ -11,7 +11,15 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { SuccessOrFailureIcon, UserIcon, VisibleIcon, CodeIcon, TagIcon, ForkIcon } from '../../icons';
+import Icon, {
+  AdminIcon,
+  SuccessOrFailureIcon,
+  AuthorIcon,
+  VisibleIcon,
+  CodeIcon,
+  TagIcon,
+  ForkIcon,
+} from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
@@ -21,6 +29,7 @@ import { getTagStyle } from '../../../helpers/exercise/tags';
 
 const ExerciseDetail = ({
   authorId,
+  adminsIds = [],
   description = '',
   difficulty,
   createdAt,
@@ -39,11 +48,11 @@ const ExerciseDetail = ({
   links: { EXERCISE_URI_FACTORY },
 }) => (
   <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding className={className}>
-    <Table responsive size="sm">
+    <Table responsive size="sm" className="mb-1">
       <tbody>
         <tr>
           <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
-            <UserIcon />
+            <AuthorIcon />
           </td>
           <th>
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
@@ -52,6 +61,30 @@ const ExerciseDetail = ({
             <UsersNameContainer userId={authorId} showEmail="icon" link />
           </td>
         </tr>
+
+        {adminsIds.length > 0 && (
+          <tr>
+            <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+              <AdminIcon />
+            </td>
+            <th>
+              <FormattedMessage id="app.exercise.admins" defaultMessage="Administrators" />:
+              <Explanation id="admins">
+                <FormattedMessage
+                  id="app.exercise.admins.explanation"
+                  defaultMessage="The administrators have the same permissions as the author towards the exercise, but they are not explicitly mentioned in listings or used in search filters."
+                />
+              </Explanation>
+            </th>
+            <td>
+              {adminsIds.map(id => (
+                <div key={id}>
+                  <UsersNameContainer userId={id} showEmail="icon" link />
+                </div>
+              ))}
+            </td>
+          </tr>
+        )}
 
         <tr>
           <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
@@ -226,6 +259,7 @@ ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
+  adminsIds: PropTypes.array,
   groupsIds: PropTypes.array,
   difficulty: PropTypes.string.isRequired,
   description: PropTypes.string,

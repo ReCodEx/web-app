@@ -2,7 +2,7 @@ import { createSelector, defaultMemoize } from 'reselect';
 import { EMPTY_ARRAY, EMPTY_LIST } from '../../helpers/common';
 import { isReady } from '../helpers/resourceManager';
 
-const getParam = (state, id) => id;
+const getParam = (_, id) => id;
 
 const getExercises = state => state.exercises;
 const getResources = exercises => exercises && exercises.get('resources');
@@ -69,3 +69,18 @@ export const getExerciseTags = state => {
 export const getExerciseTagsLoading = state => getExercises(state).get('tags') === null;
 
 export const getExerciseTagsUpdatePending = state => getExercises(state).get('tagsPending', null);
+
+export const getExerciseSetArchivedStatus = createSelector(
+  [exercisesSelector, getParam],
+  (exercises, exerciseId) => exercises && exercises.getIn([exerciseId, 'archived'], null)
+);
+
+export const getExerciseSetAuthorStatus = createSelector(
+  [exercisesSelector, getParam],
+  (exercises, exerciseId) => exercises && exercises.getIn([exerciseId, 'author'], null)
+);
+
+export const getExerciseSetAdminsStatus = createSelector(
+  [exercisesSelector, getParam],
+  (exercises, exerciseId) => exercises && exercises.getIn([exerciseId, 'admins'], null)
+);

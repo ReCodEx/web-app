@@ -1,6 +1,11 @@
 import { handleActions } from 'redux-actions';
 import { Map, List, fromJS } from 'immutable';
-import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus,
+  createActionsWithPostfixes,
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
@@ -22,33 +27,18 @@ export { actionTypes };
 
 export const additionalActionTypes = {
   VALIDATE_EXERCISE: 'recodex/exercises/VALIDATE_EXERCISE',
-  FORK_EXERCISE: 'recodex/exercises/FORK_EXERCISE',
-  FORK_EXERCISE_PENDING: 'recodex/exercises/FORK_EXERCISE_PENDING',
-  FORK_EXERCISE_REJECTED: 'recodex/exercises/FORK_EXERCISE_REJECTED',
-  FORK_EXERCISE_FULFILLED: 'recodex/exercises/FORK_EXERCISE_FULFILLED',
   GET_PIPELINE_VARIABLES: 'recodex/exercises/GET_PIPELINE_VARIABLES',
   SET_HARDWARE_GROUPS: 'recodex/exercises/SET_HARDWARE_GROUPS',
   SET_HARDWARE_GROUPS_FULFILLED: 'recodex/exercises/SET_HARDWARE_GROUPS_FULFILLED',
-  ATTACH_EXERCISE_GROUP: 'recodex/exercises/ATTACH_EXERCISE_GROUP',
-  ATTACH_EXERCISE_GROUP_PENDING: 'recodex/exercises/ATTACH_EXERCISE_GROUP_PENDING',
-  ATTACH_EXERCISE_GROUP_REJECTED: 'recodex/exercises/ATTACH_EXERCISE_GROUP_REJECTED',
-  ATTACH_EXERCISE_GROUP_FULFILLED: 'recodex/exercises/ATTACH_EXERCISE_GROUP_FULFILLED',
-  DETACH_EXERCISE_GROUP: 'recodex/exercises/DETACH_EXERCISE_GROUP',
-  DETACH_EXERCISE_GROUP_PENDING: 'recodex/exercises/DETACH_EXERCISE_GROUP_PENDING',
-  DETACH_EXERCISE_GROUP_REJECTED: 'recodex/exercises/DETACH_EXERCISE_GROUP_REJECTED',
-  DETACH_EXERCISE_GROUP_FULFILLED: 'recodex/exercises/DETACH_EXERCISE_GROUP_FULFILLED',
-  FETCH_TAGS: 'recodex/exercises/FETCH_TAGS',
-  FETCH_TAGS_PENDING: 'recodex/exercises/FETCH_TAGS_PENDING',
-  FETCH_TAGS_REJECTED: 'recodex/exercises/FETCH_TAGS_REJECTED',
-  FETCH_TAGS_FULFILLED: 'recodex/exercises/FETCH_TAGS_FULFILLED',
-  ADD_TAG: 'recodex/exercises/ADD_TAG',
-  ADD_TAG_PENDING: 'recodex/exercises/ADD_TAG_PENDING',
-  ADD_TAG_REJECTED: 'recodex/exercises/ADD_TAG_REJECTED',
-  ADD_TAG_FULFILLED: 'recodex/exercises/ADD_TAG_FULFILLED',
-  REMOVE_TAG: 'recodex/exercises/REMOVE_TAG',
-  REMOVE_TAG_PENDING: 'recodex/exercises/REMOVE_TAG_PENDING',
-  REMOVE_TAG_REJECTED: 'recodex/exercises/REMOVE_TAG_REJECTED',
-  REMOVE_TAG_FULFILLED: 'recodex/exercises/REMOVE_TAG_FULFILLED',
+  ...createActionsWithPostfixes('FORK_EXERCISE', 'recodex/exercises'),
+  ...createActionsWithPostfixes('ATTACH_EXERCISE_GROUP', 'recodex/exercises'),
+  ...createActionsWithPostfixes('DETACH_EXERCISE_GROUP', 'recodex/exercises'),
+  ...createActionsWithPostfixes('FETCH_TAGS', 'recodex/exercises'),
+  ...createActionsWithPostfixes('ADD_TAG', 'recodex/exercises'),
+  ...createActionsWithPostfixes('REMOVE_TAG', 'recodex/exercises'),
+  ...createActionsWithPostfixes('SET_ARCHIVED', 'recodex/exercises'),
+  ...createActionsWithPostfixes('SET_AUTHOR', 'recodex/exercises'),
+  ...createActionsWithPostfixes('SET_ADMINS', 'recodex/exercises'),
 };
 
 export const loadExercise = actions.pushResource;
@@ -159,6 +149,37 @@ export const removeTag = (exerciseId, tagName) =>
     method: 'DELETE',
     endpoint: `/exercises/${exerciseId}/tags/${tagName}`,
     meta: { exerciseId, tagName },
+  });
+
+/*
+ * Others
+ */
+
+export const setArchived = (exerciseId, archived) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ARCHIVED,
+    method: 'POST',
+    endpoint: `/exercises/${exerciseId}/archived`,
+    meta: { exerciseId },
+    body: { archived },
+  });
+
+export const setAuthor = (exerciseId, author) =>
+  createApiAction({
+    type: additionalActionTypes.SET_AUTHOR,
+    method: 'POST',
+    endpoint: `/exercises/${exerciseId}/author`,
+    meta: { exerciseId },
+    body: { author },
+  });
+
+export const setAdmins = (exerciseId, admins) =>
+  createApiAction({
+    type: additionalActionTypes.SET_ADMINS,
+    method: 'POST',
+    endpoint: `/exercises/${exerciseId}/admins`,
+    meta: { exerciseId },
+    body: { admins },
   });
 
 /*
@@ -297,6 +318,51 @@ const reducer = handleActions(
     [additionalActionTypes.REMOVE_TAG_FULFILLED]: (state, { payload: data, meta: { exerciseId, tagName } }) =>
       state.delete('tagsPending').setIn(
         ['resources', exerciseId],
+        createRecord({
+          data,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now(),
+        })
+      ),
+
+    [additionalActionTypes.SET_ARCHIVED_PENDING]: (state, { meta: { exerciseId } }) =>
+      state.setIn(['resources', exerciseId, 'archived'], true),
+    [additionalActionTypes.SET_ARCHIVED_REJECTED]: (state, { meta: { exerciseId } }) =>
+      state.setIn(['resources', exerciseId, 'archived'], false),
+    [additionalActionTypes.SET_ARCHIVED_FULFILLED]: (state, { payload: data }) =>
+      state.setIn(
+        ['resources', data.id],
+        createRecord({
+          data,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now(),
+        })
+      ),
+
+    [additionalActionTypes.SET_AUTHOR_PENDING]: (state, { meta: { exerciseId } }) =>
+      state.setIn(['resources', exerciseId, 'author'], true),
+    [additionalActionTypes.SET_AUTHOR_REJECTED]: (state, { meta: { exerciseId } }) =>
+      state.setIn(['resources', exerciseId, 'author'], false),
+    [additionalActionTypes.SET_AUTHOR_FULFILLED]: (state, { payload: data }) =>
+      state.setIn(
+        ['resources', data.id],
+        createRecord({
+          data,
+          state: resourceStatus.FULFILLED,
+          didInvalidate: false,
+          lastUpdate: Date.now(),
+        })
+      ),
+
+    [additionalActionTypes.SET_ADMINS_PENDING]: (state, { meta: { exerciseId } }) =>
+      state.setIn(['resources', exerciseId, 'admins'], true),
+    [additionalActionTypes.SET_ADMINS_REJECTED]: (state, { meta: { exerciseId } }) =>
+      state.setIn(['resources', exerciseId, 'admins'], false),
+    [additionalActionTypes.SET_ADMINS_FULFILLED]: (state, { payload: data }) =>
+      state.setIn(
+        ['resources', data.id],
         createRecord({
           data,
           state: resourceStatus.FULFILLED,

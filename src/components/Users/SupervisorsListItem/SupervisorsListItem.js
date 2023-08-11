@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { AdminIcon, ObserverIcon, SupervisorIcon, UserIcon, LoadingIcon } from '../../icons';
+import Icon, { AdminRoleIcon, ObserverIcon, SupervisorIcon, UserIcon, LoadingIcon } from '../../icons';
 
 const SupervisorsListItem = ({
   showButtons,
@@ -41,7 +41,7 @@ const SupervisorsListItem = ({
                 </Popover.Content>
               </Popover>
             }>
-            <AdminIcon />
+            <AdminRoleIcon />
           </OverlayTrigger>
         ) : type === 'supervisor' ? (
           <OverlayTrigger
@@ -103,7 +103,7 @@ const SupervisorsListItem = ({
                   </Tooltip>
                 }>
                 <Button size="xs" onClick={() => addAdmin(groupId, id)} variant="warning" disabled={pendingMembership}>
-                  <AdminIcon smallGapRight smallGapLeft fixedWidth />
+                  <AdminRoleIcon smallGapRight smallGapLeft fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
