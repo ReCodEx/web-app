@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Form } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
 import { defaultMemoize } from 'reselect';
 
@@ -36,21 +36,22 @@ const RelocateGroupForm = ({
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Callout>
     )}
-    <Form>
-      <Field
-        name={'groupId'}
-        component={SelectField}
-        label={<FormattedMessage id="app.relocateGroupForm.parentGroup" defaultMessage="Parent Group:" />}
-        options={groups
-          .map(group => ({
-            key: group.id,
-            name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
-          }))
-          .sort((a, b) => a.name.localeCompare(b.name, locale))}
-      />
-
-      <div className="text-center">
-        <TheButtonGroup>
+    <Row className="align-items-end">
+      <Col xs={12} sm>
+        <Field
+          name={'groupId'}
+          component={SelectField}
+          label={<FormattedMessage id="app.relocateGroupForm.parentGroup" defaultMessage="Parent Group:" />}
+          options={groups
+            .map(group => ({
+              key: group.id,
+              name: getGroupCanonicalLocalizedName(group, groupsAccessor, locale),
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name, locale))}
+        />
+      </Col>
+      <Col xs={false} sm="auto">
+        <TheButtonGroup className="mb-3">
           {dirty && (
             <Button type="reset" onClick={reset} variant="danger">
               <RefreshIcon gapRight />
@@ -72,8 +73,8 @@ const RelocateGroupForm = ({
             }}
           />
         </TheButtonGroup>
-      </div>
-    </Form>
+      </Col>
+    </Row>
   </div>
 );
 

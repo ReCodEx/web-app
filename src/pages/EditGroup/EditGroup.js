@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Row, Col, Form } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -18,7 +18,7 @@ import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContai
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
-import { BanIcon, InfoIcon, EditGroupIcon } from '../../components/icons';
+import { BanIcon, EditGroupIcon, WarningIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, editGroup, relocateGroup } from '../../redux/modules/groups';
 import {
@@ -108,47 +108,6 @@ class EditGroup extends Component {
 
             <GroupArchivedWarning {...group} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_EDIT_URI_FACTORY} />
 
-            {hasPermissions(group, 'update') && (
-              <>
-                {!group.archived && (
-                  <Row>
-                    <Col lg={3}>
-                      <p>
-                        <OrganizationalGroupButtonContainer id={group.id} locale={locale} />
-                      </p>
-                    </Col>
-                    <Col lg={9}>
-                      <p className="small text-muted" style={{ padding: '0.75em' }}>
-                        <InfoIcon gapRight />
-                        <FormattedMessage
-                          id="app.editGroup.organizationalExplain"
-                          defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
-                        />
-                      </p>
-                    </Col>
-                  </Row>
-                )}
-                {hasPermissions(group, 'archive') && (!group.archived || group.directlyArchived) && (
-                  <Row>
-                    <Col lg={3}>
-                      <p>
-                        <ArchiveGroupButtonContainer id={group.id} onChange={reload} />
-                      </p>
-                    </Col>
-                    <Col lg={9}>
-                      <p className="small text-muted" style={{ padding: '0.75em' }}>
-                        <InfoIcon gapRight />
-                        <FormattedMessage
-                          id="app.editGroup.archivedExplain"
-                          defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
-                        />
-                      </p>
-                    </Col>
-                  </Row>
-                )}
-              </>
-            )}
-
             {hasPermissions(group, 'update') && !group.archived && (
               <EditGroupForm
                 form="editGroup"
@@ -179,20 +138,58 @@ class EditGroup extends Component {
               </ResourceRenderer>
             )}
 
+            {hasPermissions(group, 'update') && (
+              <>
+                {!group.archived && (
+                  <Box
+                    type="info"
+                    title={<FormattedMessage id="app.editGroup.changeGroupType" defaultMessage="Change group type" />}>
+                    <Row className="align-items-center">
+                      <Col xs={false} sm="auto">
+                        <OrganizationalGroupButtonContainer id={group.id} size="lg" className="m-2" locale={locale} />
+                      </Col>
+                      <Col xs={12} sm className="text-muted">
+                        <FormattedMessage
+                          id="app.editGroup.organizationalExplain"
+                          defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                        />
+                      </Col>
+                    </Row>
+                  </Box>
+                )}
+
+                {hasPermissions(group, 'archive') && (!group.archived || group.directlyArchived) && (
+                  <Box
+                    type="info"
+                    title={
+                      <FormattedMessage id="app.editGroup.archiveGroup" defaultMessage="Change archived status" />
+                    }>
+                    <Row className="align-items-center">
+                      <Col xs={false} sm="auto">
+                        <ArchiveGroupButtonContainer id={group.id} size="lg" className="m-2" onChange={reload} />
+                      </Col>
+                      <Col xs={12} sm className="text-muted">
+                        <FormattedMessage
+                          id="app.editGroup.archivedExplain"
+                          defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
+                        />
+                      </Col>
+                    </Row>
+                  </Box>
+                )}
+              </>
+            )}
+
             {hasPermissions(group, 'remove') && (
               <Box
                 type="danger"
                 title={<FormattedMessage id="app.editGroup.deleteGroup" defaultMessage="Delete Group" />}>
-                <div>
-                  <p>
-                    <FormattedMessage
-                      id="app.editGroup.deleteGroupWarning"
-                      defaultMessage="Deleting a group will make all attached entities (assignments, solutions, ...) inaccessible."
-                    />
-                  </p>
-                  <p className="text-center">
+                <Row className="align-items-center">
+                  <Col xs={false} sm="auto">
                     <DeleteGroupButtonContainer
                       id={group.id}
+                      size="lg"
+                      className="m-2"
                       disabled={
                         group.parentGroupId === null || (group.childGroups && group.childGroups.length > 0) // TODO whatabout archived sub-groups?
                       }
@@ -205,26 +202,36 @@ class EditGroup extends Component {
                         )
                       }
                     />
+                  </Col>
+                  <Col xs={12} sm>
+                    <div className="text-muted">
+                      <FormattedMessage
+                        id="app.editGroup.deleteGroupWarning"
+                        defaultMessage="Deleting a group will make all attached entities (assignments, solutions, ...) inaccessible."
+                      />
+                    </div>
 
                     {group.parentGroupId === null && (
-                      <Form.Text>
+                      <div className="mt-1">
+                        <WarningIcon className="text-danger" gapRight />
                         <FormattedMessage
                           id="app.editGroup.cannotDeleteRootGroup"
                           defaultMessage="This is a so-called root group and it cannot be deleted."
                         />
-                      </Form.Text>
+                      </div>
                     )}
 
                     {group.parentGroupId !== null && group.childGroups && group.childGroups.length > 0 && (
-                      <Form.Text>
+                      <div className="mt-1">
+                        <WarningIcon className="text-danger" gapRight />
                         <FormattedMessage
                           id="app.editGroup.cannotDeleteGroupWithSubgroups"
                           defaultMessage="Group with nested sub-groups cannot be deleted."
                         />
-                      </Form.Text>
+                      </div>
                     )}
-                  </p>
-                </div>
+                  </Col>
+                </Row>
               </Box>
             )}
           </div>

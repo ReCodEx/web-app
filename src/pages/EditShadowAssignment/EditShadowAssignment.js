@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
+import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
 import { defaultMemoize } from 'reselect';
@@ -131,20 +132,22 @@ class EditShadowAssignment extends Component {
                       defaultMessage="Delete the shadow assignment"
                     />
                   }>
-                  <div>
-                    <p>
+                  <Row className="align-items-center">
+                    <Col xs={false} sm="auto">
+                      <DeleteShadowAssignmentButtonContainer
+                        id={shadowId}
+                        size="lg"
+                        className="m-2"
+                        onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(this.groupId), { replace: true })}
+                      />
+                    </Col>
+                    <Col xs={12} sm className="text-muted">
                       <FormattedMessage
                         id="app.editShadowAssignment.deleteAssignmentWarning"
                         defaultMessage="Deleting shadow assignment will remove all student points as well."
                       />
-                    </p>
-                    <p className="text-center">
-                      <DeleteShadowAssignmentButtonContainer
-                        id={shadowId}
-                        onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(this.groupId), { replace: true })}
-                      />
-                    </p>
-                  </div>
+                    </Col>
+                  </Row>
                 </Box>
               )}
             </>
