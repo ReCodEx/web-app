@@ -72,7 +72,7 @@ class ExerciseGroups extends Component {
         }
         noPadding>
         <>
-          <Table hover>
+          <Table hover className="mb-1">
             <tbody>
               {groupsIds.map(groupId => (
                 <tr key={groupId}>

@@ -285,13 +285,7 @@ class EditExerciseConfig extends Component {
         }>
         {(exercise, tests) => (
           <div>
-            <ExerciseNavigation
-              exerciseId={exercise.id}
-              canEdit={hasPermissions(exercise, 'update')}
-              canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
-              canViewLimits={hasPermissions(exercise, 'viewLimits')}
-              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
-            />
+            <ExerciseNavigation exercise={exercise} />
 
             <ResourceRenderer resource={pipelines.toArray()} returnAsArray={true}>
               {(

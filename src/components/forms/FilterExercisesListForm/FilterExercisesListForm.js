@@ -19,7 +19,7 @@ import { loggedInUserIdSelector } from '../../../redux/selectors/auth';
 import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SubmitButton from '../SubmitButton';
-import { TextField, SelectField, TagsSelectorField } from '../Fields';
+import { TextField, RadioField, SelectField, TagsSelectorField } from '../Fields';
 import { identity, safeGet } from '../../../helpers/common';
 import { ExpandCollapseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
@@ -27,6 +27,36 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 
 const RTE_PREFIX = 'runtimeEnvironments.';
+
+const ARCHIVED_OPTIONS = [
+  {
+    key: 'default',
+    name: (
+      <FormattedMessage
+        id="app.filterExercisesListForm.archivedOptions.default"
+        defaultMessage="Regular exercises (default)"
+      />
+    ),
+  },
+  {
+    key: 'all',
+    name: (
+      <FormattedMessage
+        id="app.filterExercisesListForm.archivedOptions.all"
+        defaultMessage="All exercises (including archived)"
+      />
+    ),
+  },
+  {
+    key: 'only',
+    name: (
+      <FormattedMessage
+        id="app.filterExercisesListForm.archivedOptions.archived"
+        defaultMessage="Only archived exercises"
+      />
+    ),
+  },
+];
 
 const authorsToOptions = defaultMemoize((authors, locale) =>
   authors
@@ -184,6 +214,20 @@ class FilterExercisesListForm extends Component {
                   <>
                     {tags && tags.length > 0 && (
                       <>
+                        <Row className="mt-2">
+                          <Col xs={false} sm="auto">
+                            <FormLabel className="mr-2">
+                              <FormattedMessage
+                                id="app.filterExercisesListForm.archived"
+                                defaultMessage="Archived Status:"
+                              />
+                            </FormLabel>
+                          </Col>
+                          <Col xs={12} sm className="text-muted">
+                            <Field name="archived" component={RadioField} options={ARCHIVED_OPTIONS} />
+                          </Col>
+                        </Row>
+
                         <Row>
                           <Col lg={12}>
                             <hr />
@@ -215,7 +259,7 @@ class FilterExercisesListForm extends Component {
 
                     <Row>
                       <Col lg={12}>
-                        <div className="em-margin-bottom">
+                        <div className="mb-3">
                           <FormLabel>
                             <FormattedMessage
                               id="app.filterExercisesListForm.selectedEnvironments"
@@ -244,7 +288,7 @@ class FilterExercisesListForm extends Component {
 
                 <Row>
                   <Col lg={12}>
-                    <div className="mb-3 text-center">
+                    <div className="mb-2 text-center">
                       {this.isOpen() ? (
                         <TheButtonGroup>
                           <SubmitButton
@@ -268,7 +312,7 @@ class FilterExercisesListForm extends Component {
                           </Button>
                         </TheButtonGroup>
                       ) : (
-                        <span className="small clickable em-padding-horizontal" onClick={this.toggleOpen}>
+                        <span className="small clickable" onClick={this.toggleOpen}>
                           <ExpandCollapseIcon isOpen={this.isOpen()} gapRight />
                           <FormattedMessage
                             id="app.filterExercisesListForm.showAllFilters"

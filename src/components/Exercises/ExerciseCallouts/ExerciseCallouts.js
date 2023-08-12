@@ -5,11 +5,13 @@ import { defaultMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
 
 import Explanation from '../../widgets/Explanation';
-import { NeedFixingIcon, CheckRequiredIcon, LinkIcon } from '../../icons';
+import { ArchiveIcon, NeedFixingIcon, CheckRequiredIcon, LinkIcon } from '../../icons';
 import Callout from '../../widgets/Callout';
+import DateTime from '../../widgets/DateTime';
 import withLinks from '../../../helpers/withLinks';
 
-export const exerciseCalloutsAreVisible = ({ isBroken, hasReferenceSolutions }) => isBroken || !hasReferenceSolutions;
+export const exerciseCalloutsAreVisible = ({ archivedAt, isBroken, hasReferenceSolutions }) =>
+  archivedAt !== null || isBroken || !hasReferenceSolutions;
 
 const errorTypes = [
   'no-texts',
@@ -181,13 +183,27 @@ const transformErrors = defaultMemoize((errors, exerciseId, links) => {
 const ExerciseCallouts = ({
   id,
   isBroken = false,
+  archivedAt = null,
   hasReferenceSolutions,
   validationError = null,
   permissionHints = null,
   links,
 }) => (
   <>
-    {isBroken && (
+    {archivedAt !== null && (
+      <Callout variant="info" icon={<ArchiveIcon />}>
+        <h4>
+          <FormattedMessage id="app.exercise.archived" defaultMessage="The exercise has been archived." />
+        </h4>
+        <FormattedMessage
+          id="app.exercise.archivedDetailed"
+          defaultMessage="The exercise was placed into an archived state (at {archivedAt}). Archived exercises are not listed by default, cannot be modified, and cannot be assigned."
+          values={{ archivedAt: <DateTime unixts={archivedAt} /> }}
+        />
+      </Callout>
+    )}
+
+    {!archivedAt && isBroken && (
       <Callout variant="warning" icon={<NeedFixingIcon />}>
         <h4>
           <FormattedMessage
@@ -200,7 +216,7 @@ const ExerciseCallouts = ({
       </Callout>
     )}
 
-    {!isBroken && !hasReferenceSolutions && (
+    {!archivedAt && !isBroken && !hasReferenceSolutions && (
       <Callout variant="info" icon={<CheckRequiredIcon />}>
         <h4>
           <FormattedMessage
@@ -233,6 +249,7 @@ const ExerciseCallouts = ({
 ExerciseCallouts.propTypes = {
   id: PropTypes.string.isRequired,
   isBroken: PropTypes.bool,
+  archivedAt: PropTypes.number,
   hasReferenceSolutions: PropTypes.bool,
   validationError: PropTypes.string,
   permissionHints: PropTypes.object,

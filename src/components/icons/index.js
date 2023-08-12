@@ -15,9 +15,8 @@ export const AddIcon = props => <Icon {...props} icon="plus-circle" />;
 export const AdminIcon = props => <Icon {...props} icon="user-tie" />;
 export const AdminRoleIcon = props => <Icon {...props} icon="crown" />;
 export const AdressIcon = props => <Icon {...props} icon="at" />;
-export const ArchiveIcon = props => <Icon {...props} icon="archive" />;
-export const ArchiveGroupIcon = ({ archived = false, ...props }) => (
-  <Icon {...props} icon={archived ? 'dolly' : 'archive'} />
+export const ArchiveIcon = ({ archived = false, ...props }) => (
+  <Icon {...props} icon={archived ? 'dolly' : 'boxes-packing'} />
 );
 export const AssignmentIcon = props => <Icon {...props} icon="laptop-code" />;
 export const AssignmentsIcon = props => <Icon {...props} icon="tasks" />;
@@ -160,7 +159,7 @@ export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle"
 export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;
 export const ZipIcon = props => <Icon {...props} icon={['far', 'file-archive']} />;
 
-ArchiveGroupIcon.propTypes = {
+ArchiveIcon.propTypes = {
   archived: PropTypes.bool,
 };
 

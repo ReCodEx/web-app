@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { ArchiveGroupIcon, LoadingIcon } from '../../icons';
+import { ArchiveIcon, LoadingIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
 
 const ArchiveGroupButton = ({ archived, pending, disabled = false, setArchived, shortLabels = false, ...props }) => (
@@ -10,7 +10,7 @@ const ArchiveGroupButton = ({ archived, pending, disabled = false, setArchived, 
     variant={disabled ? 'secondary' : 'info'}
     onClick={setArchived(!archived)}
     disabled={pending || disabled}>
-    {pending ? <LoadingIcon gapRight /> : <ArchiveGroupIcon archived={archived} gapRight />}
+    {pending ? <LoadingIcon gapRight /> : <ArchiveIcon archived={archived} gapRight />}
     {archived === true ? (
       shortLabels ? (
         <FormattedMessage id="app.archiveGroupButton.unsetShort" defaultMessage="Excavate" />

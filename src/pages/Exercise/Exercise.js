@@ -143,31 +143,28 @@ class Exercise extends Component {
         resource={exercise}>
         {exercise => (
           <div>
-            <ExerciseNavigation
-              exerciseId={exercise.id}
-              canEdit={hasPermissions(exercise, 'update')}
-              canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
-              canViewLimits={hasPermissions(exercise, 'viewLimits')}
-              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
-            />
+            <ExerciseNavigation exercise={exercise} />
 
             <Row>
               <Col sm={12}>
                 <ExerciseCallouts {...exercise} />
 
-                {!exercise.isLocked && !exercise.isBroken && exercise.hasReferenceSolutions && (
-                  <Callout variant="success" icon={<SendIcon />} className="text-muted">
-                    <p>
-                      <FormattedMessage
-                        id="app.exercise.exerciseReadyToAssign"
-                        defaultMessage="The exercise is ready to be assigned. You may do this directly on the assignments page of selected group, or assign it simultaneously to multiple groups using form on Assignments page."
-                      />
-                      <Link to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exercise.id)}>
-                        <LinkIcon gapLeft className="text-muted" />
-                      </Link>
-                    </p>
-                  </Callout>
-                )}
+                {hasPermissions(exercise, 'assign') &&
+                  !exercise.isLocked &&
+                  !exercise.isBroken &&
+                  exercise.hasReferenceSolutions && (
+                    <Callout variant="success" icon={<SendIcon />} className="text-muted">
+                      <p>
+                        <FormattedMessage
+                          id="app.exercise.exerciseReadyToAssign"
+                          defaultMessage="The exercise is ready to be assigned. You may do this directly on the assignments page of selected group, or assign it simultaneously to multiple groups using form on Assignments page."
+                        />
+                        <Link to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exercise.id)}>
+                          <LinkIcon gapLeft className="text-muted" />
+                        </Link>
+                      </p>
+                    </Callout>
+                  )}
               </Col>
             </Row>
 
@@ -195,7 +192,7 @@ class Exercise extends Component {
                       title={formatMessage(messages.referenceSolutionsBox)}
                       noPadding
                       footer={
-                        hasPermissions(exercise, 'addReferenceSolution') && (
+                        hasPermissions(exercise, 'addReferenceSolution') ? (
                           <div className="text-center">
                             <Button
                               variant={exercise.isBroken ? 'secondary' : 'success'}
@@ -214,7 +211,7 @@ class Exercise extends Component {
                               )}
                             </Button>
                           </div>
-                        )
+                        ) : null
                       }>
                       <div>
                         <ResourceRenderer resource={referenceSolutions.toArray()} returnAsArray>
@@ -253,12 +250,12 @@ class Exercise extends Component {
                                 )}
                               />
                             ) : (
-                              <p className="text-center em-padding text-muted">
+                              <div className="text-center m-3 text-muted small">
                                 <FormattedMessage
                                   id="app.exercise.noReferenceSolutions"
                                   defaultMessage="There are no reference solutions for this exercise yet."
                                 />
-                              </p>
+                              </div>
                             )
                           }
                         </ResourceRenderer>

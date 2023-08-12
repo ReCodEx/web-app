@@ -1,17 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import Icon from './Icon';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+
+import Icon, { ArchiveIcon } from './index';
+import DateTime from '../widgets/DateTime';
 
 export const PrivateIcon = props => <Icon {...props} icon={['far', 'eye-slash']} />;
 export const NeedFixingIcon = props => <Icon {...props} icon="hammer" />;
 export const LockIcon = props => <Icon {...props} icon="lock" />;
 export const CheckRequiredIcon = props => <Icon {...props} icon="spell-check" />;
 
-export const ExercisePrefixIcons = ({ id, isPublic, isLocked, isBroken, hasReferenceSolutions, ...props }) => (
+export const ExercisePrefixIcons = ({
+  id,
+  isPublic,
+  isLocked,
+  isBroken,
+  archivedAt = null,
+  hasReferenceSolutions,
+  ...props
+}) => (
   <span>
-    {!isPublic && (
+    {archivedAt && (
+      <span>
+        <OverlayTrigger
+          placement="right"
+          overlay={
+            <Tooltip id={id}>
+              <FormattedMessage
+                id="app.ExercisePrefixIcons.archivedAt"
+                defaultMessage="Archived at {archivedAt}."
+                values={{ archivedAt: <DateTime unixts={archivedAt} /> }}
+              />
+            </Tooltip>
+          }>
+          <ArchiveIcon {...props} className="text-info" gapRight />
+        </OverlayTrigger>
+      </span>
+    )}
+
+    {!archivedAt && !isPublic && (
       <span>
         <OverlayTrigger
           placement="right"
@@ -28,7 +56,7 @@ export const ExercisePrefixIcons = ({ id, isPublic, isLocked, isBroken, hasRefer
       </span>
     )}
 
-    {isLocked && (
+    {!archivedAt && isLocked && (
       <span>
         <OverlayTrigger
           placement="right"
@@ -45,7 +73,7 @@ export const ExercisePrefixIcons = ({ id, isPublic, isLocked, isBroken, hasRefer
       </span>
     )}
 
-    {isBroken && (
+    {!archivedAt && isBroken && (
       <span>
         <OverlayTrigger
           placement="right"
@@ -62,7 +90,7 @@ export const ExercisePrefixIcons = ({ id, isPublic, isLocked, isBroken, hasRefer
       </span>
     )}
 
-    {!hasReferenceSolutions && (
+    {!archivedAt && !isBroken && !hasReferenceSolutions && (
       <span>
         <OverlayTrigger
           placement="right"
@@ -86,5 +114,6 @@ ExercisePrefixIcons.propTypes = {
   isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
+  archivedAt: PropTypes.number,
   hasReferenceSolutions: PropTypes.bool.isRequired,
 };

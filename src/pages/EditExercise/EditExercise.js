@@ -14,6 +14,7 @@ import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
 import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
+import ArchiveExerciseButtonContainer from '../../containers/ArchiveExerciseButtonContainer';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import EditExerciseUsers from '../../components/Exercises/EditExerciseUsers';
 import { EditExerciseIcon } from '../../components/icons';
@@ -24,7 +25,7 @@ import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserSelector } from '../../redux/selectors/users';
 
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
-import { hasPermissions, safeGet } from '../../helpers/common';
+import { safeGet } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 import { withRouterProps } from '../../helpers/withRouter';
 
@@ -102,13 +103,7 @@ class EditExercise extends Component {
           exercise &&
           loggedUser && (
             <div>
-              <ExerciseNavigation
-                exerciseId={exercise.id}
-                canEdit={hasPermissions(exercise, 'update')}
-                canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
-                canViewLimits={hasPermissions(exercise, 'viewLimits')}
-                canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
-              />
+              <ExerciseNavigation exercise={exercise} />
 
               {exerciseCalloutsAreVisible(exercise) && (
                 <Row>
@@ -118,28 +113,55 @@ class EditExercise extends Component {
                 </Row>
               )}
 
-              <Row>
-                <Col lg={6}>
-                  <EditExerciseForm
-                    initialValues={prepareInitialValues(exercise)}
-                    onSubmit={this.editExerciseSubmitHandler}
-                  />
-                </Col>
-                <Col lg={6}>
-                  <AttachmentFilesTableContainer exercise={exercise} />
-
-                  <Box title={<FormattedMessage id="app.editExercise.editTags" defaultMessage="Edit Tags" />}>
-                    <ExercisesTagsEditContainer exerciseId={exercise.id} />
-                  </Box>
-
-                  {exercise.permissionHints.changeAuthor && safeGet(loggedUser, ['privateData', 'instancesIds', 0]) && (
-                    <EditExerciseUsers
-                      exercise={exercise}
-                      instanceId={safeGet(loggedUser, ['privateData', 'instancesIds', 0])}
+              {exercise.permissionHints.update && (
+                <Row>
+                  <Col lg={6}>
+                    <EditExerciseForm
+                      initialValues={prepareInitialValues(exercise)}
+                      onSubmit={this.editExerciseSubmitHandler}
                     />
-                  )}
-                </Col>
-              </Row>
+                  </Col>
+                  <Col lg={6}>
+                    <AttachmentFilesTableContainer exercise={exercise} />
+
+                    <Box title={<FormattedMessage id="app.editExercise.editTags" defaultMessage="Edit Tags" />}>
+                      <ExercisesTagsEditContainer exerciseId={exercise.id} />
+                    </Box>
+
+                    {exercise.permissionHints.changeAuthor &&
+                      safeGet(loggedUser, ['privateData', 'instancesIds', 0]) && (
+                        <EditExerciseUsers
+                          exercise={exercise}
+                          instanceId={safeGet(loggedUser, ['privateData', 'instancesIds', 0])}
+                        />
+                      )}
+                  </Col>
+                </Row>
+              )}
+
+              {exercise.permissionHints.archive && (
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      type="warning"
+                      title={
+                        <FormattedMessage id="app.editExercise.archiveTitle" defaultMessage="Change archived status" />
+                      }>
+                      <Row className="align-items-center">
+                        <Col xs={false} sm="auto">
+                          <ArchiveExerciseButtonContainer id={exercise.id} size="lg" className="m-2" />
+                        </Col>
+                        <Col xs={12} sm className="text-muted">
+                          <FormattedMessage
+                            id="app.editExercise.archiveExplain"
+                            defaultMessage="Archived exercises are not listed by default, cannot be modified, and cannot be assigned. Exercise archive status has no impact on existing assignments. The archiving of exercises is not directly related to group archiving (although they share a similar purpose)."
+                          />
+                        </Col>
+                      </Row>
+                    </Box>
+                  </Col>
+                </Row>
+              )}
 
               {exercise.permissionHints.remove && (
                 <Row>

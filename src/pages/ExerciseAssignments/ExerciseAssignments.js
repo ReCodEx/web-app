@@ -137,13 +137,7 @@ class ExerciseAssignments extends Component {
         resource={exercise}>
         {exercise => (
           <div>
-            <ExerciseNavigation
-              exerciseId={exercise.id}
-              canEdit={hasPermissions(exercise, 'update')}
-              canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
-              canViewLimits={hasPermissions(exercise, 'viewLimits')}
-              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
-            />
+            <ExerciseNavigation exercise={exercise} />
 
             {exerciseCalloutsAreVisible(exercise) && (
               <Row>

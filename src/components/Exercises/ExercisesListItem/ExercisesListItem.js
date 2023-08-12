@@ -33,6 +33,7 @@ const ExercisesListItem = ({
   isPublic,
   isLocked,
   isBroken,
+  archivedAt,
   hasReferenceSolutions,
   permissionHints,
   showGroups = false,
@@ -55,6 +56,7 @@ const ExercisesListItem = ({
         isPublic={isPublic}
         isLocked={isLocked}
         isBroken={isBroken}
+        archivedAt={archivedAt}
         hasReferenceSolutions={hasReferenceSolutions}
       />
     </td>
@@ -200,6 +202,7 @@ ExercisesListItem.propTypes = {
   isPublic: PropTypes.bool.isRequired,
   isLocked: PropTypes.bool.isRequired,
   isBroken: PropTypes.bool.isRequired,
+  archivedAt: PropTypes.number,
   hasReferenceSolutions: PropTypes.bool.isRequired,
   localizedTexts: PropTypes.array.isRequired,
   permissionHints: PropTypes.object.isRequired,
