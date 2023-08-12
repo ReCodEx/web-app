@@ -48,7 +48,6 @@ import {
   validateLimitsConstraints,
   saturateLimitsConstraints,
 } from '../../helpers/exercise/limits';
-import { hasPermissions } from '../../helpers/common';
 
 class EditExerciseLimits extends Component {
   componentDidMount() {
@@ -136,13 +135,7 @@ class EditExerciseLimits extends Component {
         }>
         {(exercise, tests, limits) => (
           <div>
-            <ExerciseNavigation
-              exerciseId={exercise.id}
-              canEdit={hasPermissions(exercise, 'update')}
-              canViewTests={hasPermissions(exercise, 'viewConfig', 'viewScoreConfig')}
-              canViewLimits={hasPermissions(exercise, 'viewLimits')}
-              canViewAssignments={hasPermissions(exercise, 'viewAssignments')}
-            />
+            <ExerciseNavigation exercise={exercise} />
 
             {exerciseCalloutsAreVisible(exercise) && (
               <Row>

@@ -21,8 +21,9 @@ import withRouter, { withRouterProps } from '../../helpers/withRouter';
 import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
 const filterInitialValues = defaultMemoize(
-  ({ search = '', authorsIds = [], tags = [], runtimeEnvironments = [] }, allEnvironments) => ({
+  ({ search = '', archived = null, authorsIds = [], tags = [], runtimeEnvironments = [] }, allEnvironments) => ({
     search,
+    archived: archived === null ? 'default' : archived,
     author: authorsIds.length > 0 ? authorsIds[0] : null,
     tags,
     runtimeEnvironments: arrayToObject(
@@ -35,10 +36,13 @@ const filterInitialValues = defaultMemoize(
 
 const transformAndSetFilterData = defaultMemoize(
   (setFilters, rootGroup) =>
-    ({ search, author, tags, runtimeEnvironments }) => {
+    ({ search, archived, author, tags, runtimeEnvironments }) => {
       const data = {};
       if (search.trim()) {
         data.search = search.trim();
+      }
+      if (archived && (archived === 'all' || archived === 'only')) {
+        data.archived = archived;
       }
       if (author) {
         data.authorsIds = [author];

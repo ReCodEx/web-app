@@ -172,7 +172,7 @@ class GroupAssignments extends Component {
                 </div>
               )}
 
-              {!hasOneOfPermissions(data, 'viewAssignments', 'viewExercises') && (
+              {!hasOneOfPermissions(data, 'viewAssignments', 'assignExercise') && (
                 <Row>
                   <Col sm={12}>
                     <Callout variant="warning" className="larger" icon={<BanIcon />}>
@@ -267,7 +267,7 @@ class GroupAssignments extends Component {
                 </>
               )}
 
-              {hasPermissions(data, 'viewExercises') && (
+              {hasPermissions(data, 'assignExercise') && (
                 <Row>
                   <Col lg={12}>
                     <Box

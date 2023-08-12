@@ -42,13 +42,14 @@ class ExercisesNameContainer extends Component {
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </>
         }>
-        {({ id, name, localizedTexts, isPublic, isLocked, isBroken, hasReferenceSolutions }) => (
+        {({ id, name, localizedTexts, isPublic, isLocked, isBroken, archivedAt, hasReferenceSolutions }) => (
           <>
             <ExercisePrefixIcons
               id={id}
               isPublic={isPublic}
               isLocked={isLocked}
               isBroken={isBroken}
+              archivedAt={archivedAt}
               hasReferenceSolutions={hasReferenceSolutions}
             />
             {noLink ? (

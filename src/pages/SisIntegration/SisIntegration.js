@@ -13,7 +13,7 @@ import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsCo
 import AddSisTermForm from '../../components/forms/AddSisTermForm/AddSisTermForm';
 import TermsList from '../../components/SisIntegration/TermsList/TermsList';
 import Confirm from '../../components/forms/Confirm';
-import Icon, { ArchiveGroupIcon, EditIcon, DeleteIcon, UserIcon } from '../../components/icons';
+import Icon, { ArchiveIcon, EditIcon, DeleteIcon, UserIcon } from '../../components/icons';
 import PlantTermGroups, { createDefaultSemesterLocalization } from '../../components/SisIntegration/PlantTermGroups';
 import ArchiveTermGroups from '../../components/SisIntegration/ArchiveTermGroups';
 import EditTerm from '../../components/SisIntegration/EditTerm';
@@ -273,7 +273,7 @@ class SisIntegration extends Component {
                                         size="xs"
                                         variant="primary"
                                         onClick={() => this.openArchiveDialog(data, groups)}>
-                                        <ArchiveGroupIcon gapRight />
+                                        <ArchiveIcon gapRight />
                                         <FormattedMessage
                                           id="app.archiveGroupButton.setShort"
                                           defaultMessage="Archive"
