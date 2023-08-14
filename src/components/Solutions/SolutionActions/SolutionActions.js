@@ -84,6 +84,7 @@ const actionsTemplates = {
   },
 };
 
+// known actions list is kept separately since keys in actionsTemplates are not guaranteed to keep any ordering
 const knownActions = [
   'accept',
   'unaccept',

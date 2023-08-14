@@ -1,6 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { AssignmentsIcon, EditIcon, GroupIcon, ExerciseIcon, LimitsIcon, StudentsIcon, TestsIcon } from '../../icons';
+import {
+  AssignmentsIcon,
+  EditIcon,
+  GroupIcon,
+  ExerciseIcon,
+  LimitsIcon,
+  ReferenceSolutionIcon,
+  StudentsIcon,
+  TestsIcon,
+} from '../../icons';
 
 export const createGroupLinks = (
   { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY, GROUP_EDIT_URI_FACTORY },
@@ -36,6 +45,7 @@ export const createExerciseLinks = (
     EXERCISE_EDIT_URI_FACTORY,
     EXERCISE_EDIT_CONFIG_URI_FACTORY,
     EXERCISE_EDIT_LIMITS_URI_FACTORY,
+    EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY,
     EXERCISE_ASSIGNMENTS_URI_FACTORY,
   },
   exerciseId,
@@ -63,6 +73,11 @@ export const createExerciseLinks = (
     caption: <FormattedMessage id="app.navigation.exerciseLimits" defaultMessage="Limits" />,
     link: EXERCISE_EDIT_LIMITS_URI_FACTORY(exerciseId),
     icon: <LimitsIcon gapRight />,
+  },
+  {
+    caption: <FormattedMessage id="app.navigation.exerciseReferenceSolutions" defaultMessage="Reference solutions" />,
+    link: EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY(exerciseId),
+    icon: <ReferenceSolutionIcon gapRight />,
   },
   canViewAssignments && {
     caption: <FormattedMessage id="app.navigation.exerciseAssignments" defaultMessage="Assignments" />,

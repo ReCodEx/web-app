@@ -750,7 +750,7 @@ class EditAssignmentForm extends Component {
         <hr />
 
         <h4>
-          <FormattedMessage id="app.editAssignmentForm.visibility" defaultMessage="Visibility" />
+          <FormattedMessage id="generic.visibility" defaultMessage="Visibility" />
         </h4>
         <Container fluid>
           <Row>

@@ -24,6 +24,11 @@ export const fetchManyStatus = createSelector(getUsers, state => state.getIn(['f
 export const fetchUserStatus = createSelector([usersSelector, getParam], (users, id) => users.getIn([id, 'state']));
 
 export const getUser = userId => createSelector(usersSelector, users => users.get(userId));
+export const getUserSelector = createSelector(usersSelector, users => userId => users.get(userId));
+export const getReadyUserSelector = createSelector(usersSelector, users => userId => {
+  const user = users.get(userId);
+  return user && isReady(user) ? getJsData(user) : null;
+});
 
 export const readyUsersDataSelector = createSelector([usersSelector, getLang], (users, lang) =>
   users

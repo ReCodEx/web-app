@@ -63,7 +63,7 @@ class ReferenceSolutionDetail extends Component {
 
   render() {
     const {
-      solution: { id, description, runtimeEnvironmentId, createdAt, authorId, permissionHints = EMPTY_OBJ },
+      solution: { id, description, runtimeEnvironmentId, createdAt, authorId, visibility, permissionHints = EMPTY_OBJ },
       files,
       download,
       exercise,
@@ -103,6 +103,7 @@ class ReferenceSolutionDetail extends Component {
                 runtimeEnvironmentId &&
                 runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
               }
+              visibility={visibility}
             />
 
             <SolutionFiles
@@ -300,6 +301,7 @@ ReferenceSolutionDetail.propTypes = {
     createdAt: PropTypes.number.isRequired,
     authorId: PropTypes.string.isRequired,
     submissions: PropTypes.array.isRequired,
+    visibility: PropTypes.number.isRequired,
     permissionHints: PropTypes.object,
   }).isRequired,
   files: ImmutablePropTypes.map,

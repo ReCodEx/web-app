@@ -24,6 +24,7 @@ import EditUser from './EditUser';
 import EmailVerification from './EmailVerification';
 import Exercise from './Exercise';
 import ExerciseAssignments from './ExerciseAssignments';
+import ExerciseReferenceSolutions from './ExerciseReferenceSolutions';
 import Exercises from './Exercises';
 import FAQ from './FAQ';
 import GroupAssignments from './GroupAssignments';
@@ -148,12 +149,18 @@ const routesDescriptors = [
   r('app/exercises/:exerciseId', Exercise, 'EXERCISE_URI_FACTORY', true),
   r('app/exercises/:exerciseId/edit', EditExercise, 'EXERCISE_EDIT_URI_FACTORY', true),
   r('app/exercises/:exerciseId/assignments', ExerciseAssignments, 'EXERCISE_ASSIGNMENTS_URI_FACTORY', true),
+  r(
+    'app/exercises/:exerciseId/reference-solutions',
+    ExerciseReferenceSolutions,
+    'EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY',
+    true
+  ),
   r('app/exercises/:exerciseId/edit-config', EditExerciseConfig, 'EXERCISE_EDIT_CONFIG_URI_FACTORY', true),
   r('app/exercises/:exerciseId/edit-limits', EditExerciseLimits, 'EXERCISE_EDIT_LIMITS_URI_FACTORY', true),
   r(
     'app/exercises/:exerciseId/reference-solution/:referenceSolutionId',
     ReferenceSolution,
-    'EXERCISE_REFERENCE_SOLUTION_URI_FACTORY',
+    'REFERENCE_SOLUTION_URI_FACTORY',
     true
   ),
   r('app/pipelines', Pipelines, 'PIPELINES_URI', true),

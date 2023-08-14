@@ -133,11 +133,11 @@ class SubmitSolutionContainer extends Component {
       isReferenceSolution = false,
       afterEvaluationFinishes,
       navigate,
-      links: { EXERCISE_REFERENCE_SOLUTION_URI_FACTORY, SOLUTION_DETAIL_URI_FACTORY },
+      links: { REFERENCE_SOLUTION_URI_FACTORY, SOLUTION_DETAIL_URI_FACTORY },
     } = this.props;
     suspendAbortPendingRequestsOptimization();
     return isReferenceSolution
-      ? navigate(EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
+      ? navigate(REFERENCE_SOLUTION_URI_FACTORY(id, submissionId))
       : afterEvaluationFinishes().then(() => navigate(SOLUTION_DETAIL_URI_FACTORY(id, submissionId)));
   };
 
