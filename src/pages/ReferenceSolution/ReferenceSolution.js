@@ -6,6 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defaultMemoize } from 'reselect';
 
 import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
+import ReferenceSolutionActionsContainer from '../../containers/ReferenceSolutionActionsContainer';
 import Page from '../../components/layout/Page';
 import { ReferenceSolutionNavigation } from '../../components/layout/Navigation';
 import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
@@ -122,6 +123,10 @@ class ReferenceSolution extends Component {
                             isDebug={true}
                             locale={locale}
                           />
+
+                          {hasPermissions(referenceSolution, 'setVisibility') && (
+                            <ReferenceSolutionActionsContainer id={referenceSolution.id} />
+                          )}
                         </TheButtonGroup>
                       </div>
                     )}

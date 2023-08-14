@@ -1,6 +1,11 @@
 import { handleActions } from 'redux-actions';
 
-import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
+import factory, {
+  initialState,
+  createRecord,
+  resourceStatus,
+  createActionsWithPostfixes,
+} from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware';
 
 import { actionTypes as additionalSubmissionActionTypes } from './submission';
@@ -20,6 +25,7 @@ export const additionalActionTypes = {
   RESUBMIT: 'recodex/referenceSolutions/RESUBMIT',
   FETCHALL: 'recodex/referenceSolutions/FETCHALL',
   FETCHALL_FULFILLED: 'recodex/referenceSolutions/FETCHALL_FULFILLED',
+  ...createActionsWithPostfixes('SET_VISIBILITY', 'recodex/referenceSolutions'),
 };
 
 export const fetchReferenceSolution = actions.fetchResource;
@@ -44,6 +50,15 @@ export const resubmitReferenceSolution = (solutionId, progressObserverId = null,
       submissionType: 'referenceSolution',
       progressObserverId,
     },
+  });
+
+export const setVisibility = (solutionId, visibility = 1) =>
+  createApiAction({
+    type: additionalActionTypes.SET_VISIBILITY,
+    method: 'POST',
+    endpoint: `/reference-solutions/${solutionId}/visibility`,
+    meta: { solutionId },
+    body: { visibility },
   });
 
 /**
@@ -85,6 +100,23 @@ const reducer = handleActions(
             submissions.filter(submission => submission !== evaluationId)
           )
         : state,
+
+    [additionalActionTypes.SET_VISIBILITY_PENDING]: (state, { meta: { solutionId } }) =>
+      state.setIn(['resources', solutionId, 'visibility'], true),
+    [additionalActionTypes.SET_VISIBILITY_REJECTED]: (state, { meta: { solutionId } }) =>
+      state.setIn(['resources', solutionId, 'visibility'], false),
+    [additionalActionTypes.SET_VISIBILITY_FULFILLED]: (state, { payload: data, meta: { solutionId } }) =>
+      data
+        ? state.setIn(
+            ['resources', data.id],
+            createRecord({
+              data,
+              state: resourceStatus.FULFILLED,
+              didInvalidate: false,
+              lastUpdate: Date.now(),
+            })
+          )
+        : state.removeIn(['resources', solutionId]),
   }),
   initialState
 );

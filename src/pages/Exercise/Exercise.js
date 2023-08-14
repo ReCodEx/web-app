@@ -206,7 +206,7 @@ class Exercise extends Component {
                               ) : (
                                 <FormattedMessage
                                   id="app.exercise.submitReferenceSoution"
-                                  defaultMessage="Submit New Reference Solution"
+                                  defaultMessage="New Reference Solution"
                                 />
                               )}
                             </Button>

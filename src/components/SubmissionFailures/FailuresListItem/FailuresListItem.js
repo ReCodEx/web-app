@@ -20,7 +20,7 @@ const FailuresListItem = ({
   id,
   createActions,
   failure,
-  links: { SOLUTION_DETAIL_URI_FACTORY, EXERCISE_REFERENCE_SOLUTION_URI_FACTORY },
+  links: { SOLUTION_DETAIL_URI_FACTORY, REFERENCE_SOLUTION_URI_FACTORY },
 }) => (
   <tr>
     <td
@@ -44,7 +44,7 @@ const FailuresListItem = ({
         </Link>
       )}
       {failure.referenceSolutionId && (
-        <Link to={EXERCISE_REFERENCE_SOLUTION_URI_FACTORY(failure.exerciseId, failure.referenceSolutionId)}>
+        <Link to={REFERENCE_SOLUTION_URI_FACTORY(failure.exerciseId, failure.referenceSolutionId)}>
           <FormattedMessage id="app.failureListItem.referenceAssignment" defaultMessage="Reference assignment" />
         </Link>
       )}
