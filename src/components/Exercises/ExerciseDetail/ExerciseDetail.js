@@ -11,14 +11,16 @@ import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import withLinks from '../../../helpers/withLinks';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
+import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import Icon, {
   AdminIcon,
-  SuccessOrFailureIcon,
   AuthorIcon,
-  VisibleIcon,
   CodeIcon,
-  TagIcon,
   ForkIcon,
+  GroupIcon,
+  SuccessOrFailureIcon,
+  TagIcon,
+  VisibleIcon,
 } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
@@ -30,6 +32,7 @@ import { getTagStyle } from '../../../helpers/exercise/tags';
 const ExerciseDetail = ({
   authorId,
   adminsIds = [],
+  groupsIds = [],
   description = '',
   difficulty,
   createdAt,
@@ -250,6 +253,22 @@ const ExerciseDetail = ({
             </td>
           </tr>
         )}
+
+        <tr>
+          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+            <GroupIcon />
+          </td>
+          <td className="text-nowrap" colSpan={2}>
+            <strong>
+              <FormattedMessage id="app.exercise.groups" defaultMessage="Groups of Residence" />:
+            </strong>
+            {groupsIds.map(groupId => (
+              <div key={groupId} className="mt-1">
+                <GroupsNameContainer groupId={groupId} fullName translations links admins />
+              </div>
+            ))}
+          </td>
+        </tr>
       </tbody>
     </Table>
   </Box>

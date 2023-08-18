@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
-import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 import classnames from 'classnames';
@@ -17,6 +17,7 @@ import Box from '../../components/widgets/Box';
 import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
 import DateTime from '../../components/widgets/DateTime';
 import Icon, {
+  CloseIcon,
   DetailIcon,
   DeleteIcon,
   LoadingIcon,
@@ -25,6 +26,7 @@ import Icon, {
   VisibleIcon,
 } from '../../components/icons';
 import Confirm from '../../components/forms/Confirm';
+import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
 import ExerciseCallouts from '../../components/Exercises/ExerciseCallouts';
 import UsersName from '../../components/Users/UsersName';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
@@ -195,30 +197,43 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, locale, link
   return columns.filter(c => c);
 });
 
-const prepareTableData = defaultMemoize((referenceSolutions, userSelector, runtimeEnvironments) =>
-  referenceSolutions.map(
-    ({
-      id,
-      authorId,
-      exerciseId,
-      createdAt,
-      runtimeEnvironmentId,
-      visibility,
-      lastSubmission,
-      description,
-      permissionHints,
-    }) => {
-      return {
-        icon: { id, visibility, lastSubmission, permissionHints },
+const getDataFilter =
+  (userId, { showMine, showOthers, showCorrect, showImperfect, showPromoted, showPublic, showPrivate }) =>
+  ({ visibility, authorId, lastSubmission }) =>
+    (showMine || authorId !== userId) &&
+    (showOthers || authorId === userId) &&
+    (showCorrect || safeGet(lastSubmission, ['evaluation', 'score'], 0) < 1) &&
+    (showImperfect || safeGet(lastSubmission, ['evaluation', 'score'], 0) >= 1) &&
+    (showPromoted || visibility <= 1) &&
+    (showPublic || visibility !== 1) &&
+    (showPrivate || visibility > 0);
+
+const prepareTableData = defaultMemoize((referenceSolutions, userSelector, runtimeEnvironments, userId, filters) =>
+  referenceSolutions
+    .filter(getDataFilter(userId, filters))
+    .map(
+      ({
+        id,
+        authorId,
+        exerciseId,
         createdAt,
-        user: userSelector(authorId),
-        runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),
-        correctness: lastSubmission,
+        runtimeEnvironmentId,
+        visibility,
+        lastSubmission,
         description,
-        actionButtons: { id, exerciseId, permissionHints },
-      };
-    }
-  )
+        permissionHints,
+      }) => {
+        return {
+          icon: { id, visibility, lastSubmission, permissionHints },
+          createdAt,
+          user: userSelector(authorId),
+          runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),
+          correctness: lastSubmission,
+          description,
+          actionButtons: { id, exerciseId, permissionHints },
+        };
+      }
+    )
 );
 
 const getSolutionAuthors = referenceSolutions => {
@@ -227,7 +242,47 @@ const getSolutionAuthors = referenceSolutions => {
   return Object.keys(res);
 };
 
+const isLastOneOn = (...flags) => flags.filter(flag => flag).length === 1;
+
 class ExerciseReferenceSolutions extends Component {
+  state = {
+    filtersOpen: false,
+    showMine: true,
+    showOthers: true,
+    showCorrect: true,
+    showImperfect: true,
+    showPromoted: true,
+    showPublic: true,
+    showPrivate: true,
+  };
+
+  openFilters = () => this.setState({ filtersOpen: true });
+  closeFilters = () => this.setState({ filtersOpen: false });
+
+  toggleShowMine = () => this.setState({ showMine: !this.state.showMine || !this.state.showOthers });
+  toggleShowOthers = () => this.setState({ showOthers: !this.state.showMine || !this.state.showOthers });
+
+  toggleShowCorrect = () => this.setState({ showCorrect: !this.state.showCorrect || !this.state.showImperfect });
+  toggleShowImperfect = () => this.setState({ showImperfect: !this.state.showCorrect || !this.state.showImperfect });
+
+  toggleShowPromoted = () =>
+    this.setState({
+      showPromoted:
+        !this.state.showPromoted || isLastOneOn(this.state.showPromoted, this.state.showPublic, this.state.showPrivate),
+    });
+
+  toggleShowPublic = () =>
+    this.setState({
+      showPublic:
+        !this.state.showPublic || isLastOneOn(this.state.showPromoted, this.state.showPublic, this.state.showPrivate),
+    });
+
+  toggleShowPrivate = () =>
+    this.setState({
+      showPrivate:
+        !this.state.showPrivate || isLastOneOn(this.state.showPromoted, this.state.showPublic, this.state.showPrivate),
+    });
+
   static loadAsync = ({ exerciseId }, dispatch) =>
     Promise.all([
       dispatch(fetchExerciseIfNeeded(exerciseId)).then(
@@ -296,9 +351,9 @@ class ExerciseReferenceSolutions extends Component {
               </Col>
             </Row>
 
-            {hasPermissions(exercise, 'addReferenceSolution') && (
-              <Row>
-                <Col sm={12}>
+            <Row>
+              <Col xs={12} sm={true}>
+                {hasPermissions(exercise, 'addReferenceSolution') && (
                   <TheButtonGroup className="mb-3 text-nowrap">
                     <Button
                       variant={exercise.isBroken ? 'secondary' : 'success'}
@@ -318,9 +373,15 @@ class ExerciseReferenceSolutions extends Component {
                       )}
                     </Button>
                   </TheButtonGroup>
-                </Col>
-              </Row>
-            )}
+                )}
+              </Col>
+              <Col xs={12} sm="auto" className="mb-3">
+                <Button variant="primary" onClick={this.openFilters}>
+                  <Icon icon="sliders" gapRight />
+                  <FormattedMessage id="app.exerciseReferenceSolutions.filtersButton" defaultMessage="Change Filters" />
+                </Button>
+              </Col>
+            </Row>
 
             <Row>
               <Col sm={12}>
@@ -331,10 +392,21 @@ class ExerciseReferenceSolutions extends Component {
                         <Box
                           id="reference-solutions"
                           title={
-                            <FormattedMessage
-                              id="app.exercise.referenceSolutionsBox"
-                              defaultMessage="Reference Solutions"
-                            />
+                            <>
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.referenceSolutionsBox"
+                                defaultMessage="Reference Solutions"
+                              />{' '}
+                              <small className="text-muted ml-3">
+                                (
+                                <FormattedMessage
+                                  id="app.exerciseReferenceSolutions.referenceSolutionsCount"
+                                  defaultMessage="total {count}"
+                                  values={{ count: referenceSolutions.length }}
+                                />
+                                )
+                              </small>
+                            </>
                           }
                           noPadding
                           unlimitedHeight>
@@ -343,9 +415,9 @@ class ExerciseReferenceSolutions extends Component {
                               hover
                               columns={prepareTableColumnDescriptors(userId, locale, links, deleteReferenceSolution)}
                               defaultOrder="createdAt"
-                              data={prepareTableData(referenceSolutions, userSelector, runtimes)}
+                              data={prepareTableData(referenceSolutions, userSelector, runtimes, userId, this.state)}
                               empty={
-                                <div className="text-center text-muted">
+                                <div className="text-center text-muted small m-3">
                                   <FormattedMessage
                                     id="app.exerciseReferenceSolutions.noSolutions"
                                     defaultMessage="No reference solutions matching filter criteria."
@@ -355,54 +427,6 @@ class ExerciseReferenceSolutions extends Component {
                               className="mb-0"
                             />
 
-                            {/*
-                      <div>
-                        <ResourceRenderer resource={referenceSolutions.toArray()} returnAsArray>
-                          {referenceSolutions =>
-                            referenceSolutions.length > 0 ? (
-                              <ReferenceSolutionsTable
-                                referenceSolutions={referenceSolutions}
-                                runtimeEnvironments={runtimes}
-                                renderButtons={(solutionId, permissionHints) => (
-                                  <div>
-                                    <TheButtonGroup vertical>
-                                      <Link to={REFERENCE_SOLUTION_URI_FACTORY(exercise.id, solutionId)}>
-                                        <Button size="xs" variant="secondary">
-                                          <DetailIcon gapRight />
-                                          <FormattedMessage id="generic.detail" defaultMessage="Detail" />
-                                        </Button>
-                                      </Link>
-                                      {permissionHints && permissionHints.delete !== false && (
-                                        <Confirm
-                                          id={solutionId}
-                                          onConfirmed={() => deleteReferenceSolution(solutionId)}
-                                          question={
-                                            <FormattedMessage
-                                              id="app.exercise.referenceSolution.deleteConfirm"
-                                              defaultMessage="Are you sure you want to delete the reference solution? This cannot be undone."
-                                            />
-                                          }>
-                                          <Button size="xs" variant="danger">
-                                            <DeleteIcon gapRight />
-                                            <FormattedMessage id="generic.delete" defaultMessage="Delete" />
-                                          </Button>
-                                        </Confirm>
-                                      )}
-                                    </TheButtonGroup>
-                                  </div>
-                                )}
-                              />
-                            ) : (
-                              <div className="text-center m-3 text-muted small">
-                                <FormattedMessage
-                                  id="app.exercise.noReferenceSolutions"
-                                  defaultMessage="There are no reference solutions for this exercise yet."
-                                />
-                              </div>
-                            )
-                          }
-                        </ResourceRenderer>
-                        </div> */}
                             <SubmitSolutionContainer
                               userId={userId}
                               id={exercise.id}
@@ -423,6 +447,133 @@ class ExerciseReferenceSolutions extends Component {
                 </ResourceRenderer>
               </Col>
             </Row>
+
+            <Modal show={this.state.filtersOpen} onHide={this.closeFilters} size="lg">
+              <Modal.Header closeButton>
+                <Modal.Title>
+                  <FormattedMessage
+                    id="app.exerciseReferenceSolutions.filters.title"
+                    defaultMessage="Select reference solutions for display"
+                  />
+                </Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                <Row>
+                  <Col xs={12} sm={6} lg={3}>
+                    <strong>
+                      <FormattedMessage id="app.exerciseReferenceSolutions.filters.author" defaultMessage="Author" />:
+                    </strong>
+                  </Col>
+                  <Col xs={12} sm={6} lg={3}>
+                    <OnOffCheckbox name="toggleShowMine" checked={this.state.showMine} onChange={this.toggleShowMine}>
+                      <FormattedMessage id="app.exerciseReferenceSolutions.filters.showMine" defaultMessage="Mine" />
+                    </OnOffCheckbox>
+                  </Col>
+                  <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 6, offset: 0 }}>
+                    <OnOffCheckbox
+                      name="toggleShowOthers"
+                      checked={this.state.showOthers}
+                      onChange={this.toggleShowOthers}>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.showOthers"
+                        defaultMessage="Others"
+                      />
+                    </OnOffCheckbox>
+                  </Col>
+                </Row>
+
+                <hr />
+
+                <Row>
+                  <Col xs={12} sm={6} lg={3}>
+                    <strong>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.correctness"
+                        defaultMessage="Correctness"
+                      />
+                      :
+                    </strong>
+                  </Col>
+                  <Col xs={12} sm={6} lg={3}>
+                    <OnOffCheckbox
+                      name="toggleShowCorrect"
+                      checked={this.state.showCorrect}
+                      onChange={this.toggleShowCorrect}>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.showCorrect"
+                        defaultMessage="100% correct"
+                      />
+                    </OnOffCheckbox>
+                  </Col>
+                  <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 6, offset: 0 }}>
+                    <OnOffCheckbox
+                      name="toggleShowImperfect"
+                      checked={this.state.showImperfect}
+                      onChange={this.toggleShowImperfect}>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.showImperfect"
+                        defaultMessage="Imperfect (less than 100% correct)"
+                      />
+                    </OnOffCheckbox>
+                  </Col>
+                </Row>
+
+                <hr />
+
+                <Row>
+                  <Col xs={12} sm={6} lg={3}>
+                    <strong>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.visibility"
+                        defaultMessage="Visibility"
+                      />
+                      :
+                    </strong>
+                  </Col>
+                  <Col xs={12} sm={6} lg={3}>
+                    <OnOffCheckbox
+                      name="toggleShowPromoted"
+                      checked={this.state.showPromoted}
+                      onChange={this.toggleShowPromoted}>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.showPromoted"
+                        defaultMessage="Promoted"
+                      />
+                    </OnOffCheckbox>
+                  </Col>
+                  <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 3, offset: 0 }}>
+                    <OnOffCheckbox
+                      name="toggleShowPublic"
+                      checked={this.state.showPublic}
+                      onChange={this.toggleShowPublic}>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.showPublic"
+                        defaultMessage="Public"
+                      />
+                    </OnOffCheckbox>
+                  </Col>
+                  <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 3, offset: 0 }}>
+                    <OnOffCheckbox
+                      name="toggleShowPrivate"
+                      checked={this.state.showPrivate}
+                      onChange={this.toggleShowPrivate}>
+                      <FormattedMessage
+                        id="app.exerciseReferenceSolutions.filters.showPrivate"
+                        defaultMessage="Private"
+                      />
+                    </OnOffCheckbox>
+                  </Col>
+                </Row>
+              </Modal.Body>
+
+              <Modal.Footer className="d-block text-center">
+                <Button variant="secondary" onClick={this.closeFilters}>
+                  <CloseIcon gapRight />
+                  <FormattedMessage id="generic.close" defaultMessage="Close" />
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </>
         )}
       </Page>

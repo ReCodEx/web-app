@@ -12,6 +12,7 @@ import { ExerciseNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
+import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
 import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import ArchiveExerciseButtonContainer from '../../containers/ArchiveExerciseButtonContainer';
@@ -19,10 +20,19 @@ import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/E
 import EditExerciseUsers from '../../components/Exercises/EditExerciseUsers';
 import { EditExerciseIcon } from '../../components/icons';
 
-import { fetchExerciseIfNeeded, editExercise, fetchTags } from '../../redux/modules/exercises';
-import { getExercise } from '../../redux/selectors/exercises';
+import {
+  fetchExerciseIfNeeded,
+  editExercise,
+  fetchTags,
+  attachExerciseToGroup,
+  detachExerciseFromGroup,
+} from '../../redux/modules/exercises';
+import { fetchAllGroups } from '../../redux/modules/groups';
+import { fetchByIds } from '../../redux/modules/users';
+import { getExercise, getExerciseAttachingGroupId, getExerciseDetachingGroupId } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserSelector } from '../../redux/selectors/users';
+import { getGroupsAdmins } from '../../redux/selectors/groups';
 
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { safeGet } from '../../helpers/common';
@@ -61,6 +71,17 @@ const prepareInitialValues = defaultMemoize(
 );
 
 class EditExercise extends Component {
+  static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
+
+  static loadAsync = ({ exerciseId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchExerciseIfNeeded(exerciseId)),
+      dispatch(fetchAllGroups({ archived: true })).then(({ value: groups }) =>
+        dispatch(fetchByIds(getGroupsAdmins(groups)))
+      ),
+      dispatch(fetchTags()),
+    ]);
+
   componentDidMount() {
     this.props.loadAsync();
     window.scrollTo(0, 0);
@@ -72,9 +93,6 @@ class EditExercise extends Component {
       this.props.loadAsync();
     }
   }
-
-  static loadAsync = ({ exerciseId }, dispatch) =>
-    Promise.all([dispatch(fetchExerciseIfNeeded(exerciseId)), dispatch(fetchTags())]);
 
   editExerciseSubmitHandler = formData => {
     const { exercise, editExercise } = this.props;
@@ -92,6 +110,10 @@ class EditExercise extends Component {
       navigate,
       exercise,
       loggedUser,
+      attachingGroupId,
+      detachingGroupId,
+      attachExerciseToGroup,
+      detachExerciseFromGroup,
     } = this.props;
 
     return (
@@ -123,6 +145,15 @@ class EditExercise extends Component {
                   </Col>
                   <Col lg={6}>
                     <AttachmentFilesTableContainer exercise={exercise} />
+
+                    <ExerciseGroups
+                      showButtons
+                      groupsIds={exercise.groupsIds}
+                      attachingGroupId={attachingGroupId}
+                      detachingGroupId={detachingGroupId}
+                      attachExerciseToGroup={attachExerciseToGroup}
+                      detachExerciseFromGroup={detachExerciseFromGroup}
+                    />
 
                     <Box title={<FormattedMessage id="app.editExercise.editTags" defaultMessage="Edit Tags" />}>
                       <ExercisesTagsEditContainer exerciseId={exercise.id} />
@@ -202,9 +233,13 @@ class EditExercise extends Component {
 EditExercise.propTypes = {
   exercise: ImmutablePropTypes.map,
   loggedUser: ImmutablePropTypes.map,
+  attachingGroupId: PropTypes.string,
+  detachingGroupId: PropTypes.string,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
+  attachExerciseToGroup: PropTypes.func.isRequired,
+  detachExerciseFromGroup: PropTypes.func.isRequired,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired,
   }).isRequired,
@@ -218,11 +253,15 @@ export default withLinks(
       exercise: getExercise(exerciseId)(state),
       submitting: isSubmitting(state),
       loggedUser: loggedInUserSelector(state),
+      attachingGroupId: getExerciseAttachingGroupId(exerciseId)(state),
+      detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state),
     }),
     (dispatch, { params: { exerciseId } }) => ({
       reset: () => dispatch(reset('editExercise')),
       loadAsync: () => EditExercise.loadAsync({ exerciseId }, dispatch),
       editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
+      attachExerciseToGroup: groupId => dispatch(attachExerciseToGroup(exerciseId, groupId)),
+      detachExerciseFromGroup: groupId => dispatch(detachExerciseFromGroup(exerciseId, groupId)),
     })
   )(EditExercise)
 );

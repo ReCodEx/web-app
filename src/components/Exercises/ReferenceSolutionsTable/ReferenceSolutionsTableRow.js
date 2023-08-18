@@ -12,40 +12,36 @@ const ReferenceSolutionsTableRow = ({
   id,
   description,
   runtimeEnvironmentId,
-  permissionHints = null,
   authorId,
   createdAt,
   lastSubmission,
   runtimeEnvironments,
-  renderButtons,
+  onClick = null,
 }) => {
   const rte = runtimeEnvironments.find(e => e.id === runtimeEnvironmentId);
 
   return (
-    <tbody>
+    <tbody onClick={onClick} className={onClick ? 'clickable' : null}>
       <tr>
-        <td rowSpan={2} className="valign-middle text-muted">
-          <Icon icon="book" size="lg" gapLeft gapRight />
+        <td rowSpan={2} className="shrink-col pr-0">
+          <Icon icon="star" className="text-warning" />
         </td>
-        <td colSpan={4}>
+        <td colSpan={4} className="pb-1">
           {description || (
             <i className="text-muted small">
               <FormattedMessage id="app.referenceSolutionTable.noDescription" defaultMessage="no description given" />
             </i>
           )}
         </td>
-        <td className="text-right valign-middle" rowSpan={2}>
-          {renderButtons(id, permissionHints)}
-        </td>
       </tr>
       <tr>
-        <td className="text-nowrap">
+        <td className="text-nowrap text-muted small pt-0">
           <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
-        <td className="text-nowrap text-center shrink-col">
+        <td className="text-nowrap text-center shrink-col small pt-0">
           {rte ? <EnvironmentsListItem runtimeEnvironment={rte} /> : '-'}
         </td>
-        <td className="text-nowrap text-center shrink-col">
+        <td className="text-nowrap text-center shrink-col pt-0">
           {!lastSubmission || (!lastSubmission.evaluation && !lastSubmission.failure) ? (
             <OverlayTrigger
               placement="bottom"
@@ -80,7 +76,7 @@ const ReferenceSolutionsTableRow = ({
             </strong>
           )}
         </td>
-        <td className="text-nowrap">
+        <td className="text-nowrap text-muted small pt-0">
           <UsersNameContainer userId={authorId} isSimple listItem />
         </td>
       </tr>
@@ -96,8 +92,7 @@ ReferenceSolutionsTableRow.propTypes = {
   createdAt: PropTypes.number.isRequired,
   lastSubmission: PropTypes.object,
   runtimeEnvironments: PropTypes.array.isRequired,
-  permissionHints: PropTypes.object,
-  renderButtons: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };
 
 export default ReferenceSolutionsTableRow;
