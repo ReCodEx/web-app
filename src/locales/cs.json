@@ -772,6 +772,7 @@
   "app.exerciseConfigTypeButton.simpleConfiguration": "Jednoduchá konfigurace",
   "app.exerciseReferenceSolutions.filters.author": "Autor",
   "app.exerciseReferenceSolutions.filters.correctness": "Správnost",
+  "app.exerciseReferenceSolutions.filters.lastOneOfGroup": "V každé skupině musí zůstat alespoň jedna volba vybraná.",
   "app.exerciseReferenceSolutions.filters.showCorrect": "100% správné",
   "app.exerciseReferenceSolutions.filters.showImperfect": "Nedokonalé (ne zcela 100% správne)",
   "app.exerciseReferenceSolutions.filters.showMine": "Moje",
