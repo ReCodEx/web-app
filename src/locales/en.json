@@ -772,6 +772,7 @@
   "app.exerciseConfigTypeButton.simpleConfiguration": "Simple Configuration",
   "app.exerciseReferenceSolutions.filters.author": "Author",
   "app.exerciseReferenceSolutions.filters.correctness": "Correctness",
+  "app.exerciseReferenceSolutions.filters.lastOneOfGroup": "At least one option from each group must be selected.",
   "app.exerciseReferenceSolutions.filters.showCorrect": "100% correct",
   "app.exerciseReferenceSolutions.filters.showImperfect": "Imperfect (less than 100% correct)",
   "app.exerciseReferenceSolutions.filters.showMine": "Mine",

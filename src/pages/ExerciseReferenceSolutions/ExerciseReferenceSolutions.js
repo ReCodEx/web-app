@@ -21,7 +21,9 @@ import Icon, {
   DetailIcon,
   DeleteIcon,
   LoadingIcon,
+  LockIcon,
   ReferenceSolutionIcon,
+  RefreshIcon,
   SendIcon,
   VisibleIcon,
 } from '../../components/icons';
@@ -47,7 +49,8 @@ import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolut
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getReadyUserSelector } from '../../redux/selectors/users';
 
-import { hasPermissions, safeGet } from '../../helpers/common';
+import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
+import { hasPermissions, safeGet, objectFilter } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
@@ -242,43 +245,57 @@ const getSolutionAuthors = referenceSolutions => {
   return Object.keys(res);
 };
 
+const LOCAL_STORAGE_STATE_KEY = 'ExerciseReferenceSolutions.state';
+const INITIAL_FILTER_STATE = {
+  showMine: true,
+  showOthers: true,
+  showCorrect: true,
+  showImperfect: true,
+  showPromoted: true,
+  showPublic: true,
+  showPrivate: true,
+};
+
 const isLastOneOn = (...flags) => flags.filter(flag => flag).length === 1;
+const someFiltersOff = state => Object.keys(INITIAL_FILTER_STATE).some(key => !state[key]);
 
 class ExerciseReferenceSolutions extends Component {
   state = {
     filtersOpen: false,
-    showMine: true,
-    showOthers: true,
-    showCorrect: true,
-    showImperfect: true,
-    showPromoted: true,
-    showPublic: true,
-    showPrivate: true,
+    ...INITIAL_FILTER_STATE,
+  };
+
+  _setFilterState = newState => {
+    const toSave = objectFilter({ ...this.state, ...newState }, (_, key) => INITIAL_FILTER_STATE[key]);
+    storageSetItem(LOCAL_STORAGE_STATE_KEY, toSave);
+    this.setState(newState);
   };
 
   openFilters = () => this.setState({ filtersOpen: true });
   closeFilters = () => this.setState({ filtersOpen: false });
+  resetFilters = () => this.setState(INITIAL_FILTER_STATE);
 
-  toggleShowMine = () => this.setState({ showMine: !this.state.showMine || !this.state.showOthers });
-  toggleShowOthers = () => this.setState({ showOthers: !this.state.showMine || !this.state.showOthers });
+  toggleShowMine = () => this._setFilterState({ showMine: !this.state.showMine || !this.state.showOthers });
+  toggleShowOthers = () => this._setFilterState({ showOthers: !this.state.showMine || !this.state.showOthers });
 
-  toggleShowCorrect = () => this.setState({ showCorrect: !this.state.showCorrect || !this.state.showImperfect });
-  toggleShowImperfect = () => this.setState({ showImperfect: !this.state.showCorrect || !this.state.showImperfect });
+  toggleShowCorrect = () => this._setFilterState({ showCorrect: !this.state.showCorrect || !this.state.showImperfect });
+  toggleShowImperfect = () =>
+    this._setFilterState({ showImperfect: !this.state.showCorrect || !this.state.showImperfect });
 
   toggleShowPromoted = () =>
-    this.setState({
+    this._setFilterState({
       showPromoted:
         !this.state.showPromoted || isLastOneOn(this.state.showPromoted, this.state.showPublic, this.state.showPrivate),
     });
 
   toggleShowPublic = () =>
-    this.setState({
+    this._setFilterState({
       showPublic:
         !this.state.showPublic || isLastOneOn(this.state.showPromoted, this.state.showPublic, this.state.showPrivate),
     });
 
   toggleShowPrivate = () =>
-    this.setState({
+    this._setFilterState({
       showPrivate:
         !this.state.showPrivate || isLastOneOn(this.state.showPromoted, this.state.showPublic, this.state.showPrivate),
     });
@@ -297,6 +314,10 @@ class ExerciseReferenceSolutions extends Component {
 
   componentDidMount() {
     this.props.loadAsync(this.props.userId);
+    const newState = storageGetItem(LOCAL_STORAGE_STATE_KEY, null);
+    if (newState) {
+      this.setState(newState);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -375,11 +396,23 @@ class ExerciseReferenceSolutions extends Component {
                   </TheButtonGroup>
                 )}
               </Col>
-              <Col xs={12} sm="auto" className="mb-3">
-                <Button variant="primary" onClick={this.openFilters}>
-                  <Icon icon="sliders" gapRight />
-                  <FormattedMessage id="app.exerciseReferenceSolutions.filtersButton" defaultMessage="Change Filters" />
-                </Button>
+              <Col xs={12} sm="auto">
+                <TheButtonGroup className="mb-3 text-nowrap">
+                  {someFiltersOff(this.state) && (
+                    <Button variant="success" onClick={this.resetFilters}>
+                      <Icon icon="list-ul" gapRight />
+                      <FormattedMessage id="generic.showAll" defaultMessage="Show All" />
+                    </Button>
+                  )}
+
+                  <Button variant="primary" onClick={this.openFilters}>
+                    <Icon icon="sliders" gapRight />
+                    <FormattedMessage
+                      id="app.exerciseReferenceSolutions.filtersButton"
+                      defaultMessage="Change Filters"
+                    />
+                  </Button>
+                </TheButtonGroup>
               </Col>
             </Row>
 
@@ -466,19 +499,53 @@ class ExerciseReferenceSolutions extends Component {
                     </strong>
                   </Col>
                   <Col xs={12} sm={6} lg={3}>
-                    <OnOffCheckbox name="toggleShowMine" checked={this.state.showMine} onChange={this.toggleShowMine}>
+                    <OnOffCheckbox
+                      name="toggleShowMine"
+                      checked={this.state.showMine}
+                      onChange={this.toggleShowMine}
+                      disabled={!this.state.showOthers}>
                       <FormattedMessage id="app.exerciseReferenceSolutions.filters.showMine" defaultMessage="Mine" />
+                      {!this.state.showOthers && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="toggleShowPromoted">
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                                defaultMessage="At least one option from each group must be selected."
+                              />
+                            </Tooltip>
+                          }>
+                          <LockIcon gapLeft className="half-opaque" />
+                        </OverlayTrigger>
+                      )}
                     </OnOffCheckbox>
                   </Col>
+
                   <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 6, offset: 0 }}>
                     <OnOffCheckbox
                       name="toggleShowOthers"
                       checked={this.state.showOthers}
-                      onChange={this.toggleShowOthers}>
+                      onChange={this.toggleShowOthers}
+                      disabled={!this.state.showMine}>
                       <FormattedMessage
                         id="app.exerciseReferenceSolutions.filters.showOthers"
                         defaultMessage="Others"
                       />
+                      {!this.state.showMine && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="toggleShowPromoted">
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                                defaultMessage="At least one option from each group must be selected."
+                              />
+                            </Tooltip>
+                          }>
+                          <LockIcon gapLeft className="half-opaque" />
+                        </OverlayTrigger>
+                      )}
                     </OnOffCheckbox>
                   </Col>
                 </Row>
@@ -499,22 +566,53 @@ class ExerciseReferenceSolutions extends Component {
                     <OnOffCheckbox
                       name="toggleShowCorrect"
                       checked={this.state.showCorrect}
-                      onChange={this.toggleShowCorrect}>
+                      onChange={this.toggleShowCorrect}
+                      disabled={!this.state.showImperfect}>
                       <FormattedMessage
                         id="app.exerciseReferenceSolutions.filters.showCorrect"
                         defaultMessage="100% correct"
                       />
+                      {!this.state.showImperfect && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="toggleShowPromoted">
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                                defaultMessage="At least one option from each group must be selected."
+                              />
+                            </Tooltip>
+                          }>
+                          <LockIcon gapLeft className="half-opaque" />
+                        </OverlayTrigger>
+                      )}
                     </OnOffCheckbox>
                   </Col>
+
                   <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 6, offset: 0 }}>
                     <OnOffCheckbox
                       name="toggleShowImperfect"
                       checked={this.state.showImperfect}
-                      onChange={this.toggleShowImperfect}>
+                      onChange={this.toggleShowImperfect}
+                      disabled={!this.state.showCorrect}>
                       <FormattedMessage
                         id="app.exerciseReferenceSolutions.filters.showImperfect"
                         defaultMessage="Imperfect (less than 100% correct)"
                       />
+                      {!this.state.showCorrect && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="toggleShowPromoted">
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                                defaultMessage="At least one option from each group must be selected."
+                              />
+                            </Tooltip>
+                          }>
+                          <LockIcon gapLeft className="half-opaque" />
+                        </OverlayTrigger>
+                      )}
                     </OnOffCheckbox>
                   </Col>
                 </Row>
@@ -535,43 +633,98 @@ class ExerciseReferenceSolutions extends Component {
                     <OnOffCheckbox
                       name="toggleShowPromoted"
                       checked={this.state.showPromoted}
-                      onChange={this.toggleShowPromoted}>
+                      onChange={this.toggleShowPromoted}
+                      disabled={!this.state.showPublic && !this.state.showPrivate}>
                       <FormattedMessage
                         id="app.exerciseReferenceSolutions.filters.showPromoted"
                         defaultMessage="Promoted"
                       />
+                      {!this.state.showPublic && !this.state.showPrivate && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="toggleShowPromoted">
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                                defaultMessage="At least one option from each group must be selected."
+                              />
+                            </Tooltip>
+                          }>
+                          <LockIcon gapLeft className="half-opaque" />
+                        </OverlayTrigger>
+                      )}
                     </OnOffCheckbox>
                   </Col>
+
                   <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 3, offset: 0 }}>
                     <OnOffCheckbox
                       name="toggleShowPublic"
                       checked={this.state.showPublic}
-                      onChange={this.toggleShowPublic}>
+                      onChange={this.toggleShowPublic}
+                      disabled={!this.state.showPromoted && !this.state.showPrivate}>
                       <FormattedMessage
                         id="app.exerciseReferenceSolutions.filters.showPublic"
                         defaultMessage="Public"
                       />
+                      {!this.state.showPromoted && !this.state.showPrivate && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="toggleShowPromoted">
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                                defaultMessage="At least one option from each group must be selected."
+                              />
+                            </Tooltip>
+                          }>
+                          <LockIcon gapLeft className="half-opaque" />
+                        </OverlayTrigger>
+                      )}
                     </OnOffCheckbox>
                   </Col>
+
                   <Col xs={12} sm={{ span: 6, offset: 6 }} lg={{ span: 3, offset: 0 }}>
                     <OnOffCheckbox
                       name="toggleShowPrivate"
                       checked={this.state.showPrivate}
-                      onChange={this.toggleShowPrivate}>
+                      onChange={this.toggleShowPrivate}
+                      disabled={!this.state.showPublic && !this.state.showPromoted}>
                       <FormattedMessage
                         id="app.exerciseReferenceSolutions.filters.showPrivate"
                         defaultMessage="Private"
                       />
+                      {!this.state.showPublic && !this.state.showPromoted && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="toggleShowPromoted">
+                              <FormattedMessage
+                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                                defaultMessage="At least one option from each group must be selected."
+                              />
+                            </Tooltip>
+                          }>
+                          <LockIcon gapLeft className="half-opaque" />
+                        </OverlayTrigger>
+                      )}
                     </OnOffCheckbox>
                   </Col>
                 </Row>
               </Modal.Body>
 
               <Modal.Footer className="d-block text-center">
-                <Button variant="secondary" onClick={this.closeFilters}>
-                  <CloseIcon gapRight />
-                  <FormattedMessage id="generic.close" defaultMessage="Close" />
-                </Button>
+                <TheButtonGroup>
+                  {someFiltersOff(this.state) && (
+                    <Button variant="success" onClick={this.resetFilters}>
+                      <RefreshIcon gapRight />
+                      <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                    </Button>
+                  )}
+                  <Button variant="secondary" onClick={this.closeFilters}>
+                    <CloseIcon gapRight />
+                    <FormattedMessage id="generic.close" defaultMessage="Close" />
+                  </Button>
+                </TheButtonGroup>
               </Modal.Footer>
             </Modal>
           </>
