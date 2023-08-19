@@ -49,7 +49,7 @@ import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolut
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { getReadyUserSelector } from '../../redux/selectors/users';
 
-import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
+import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage';
 import { hasPermissions, safeGet, objectFilter } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 import withRouter, { withRouterProps } from '../../helpers/withRouter';
@@ -265,15 +265,18 @@ class ExerciseReferenceSolutions extends Component {
     ...INITIAL_FILTER_STATE,
   };
 
+  openFilters = () => this.setState({ filtersOpen: true });
+  closeFilters = () => this.setState({ filtersOpen: false });
+  resetFilters = () => {
+    storageRemoveItem(LOCAL_STORAGE_STATE_KEY);
+    this.setState(INITIAL_FILTER_STATE);
+  };
+
   _setFilterState = newState => {
     const toSave = objectFilter({ ...this.state, ...newState }, (_, key) => INITIAL_FILTER_STATE[key]);
     storageSetItem(LOCAL_STORAGE_STATE_KEY, toSave);
     this.setState(newState);
   };
-
-  openFilters = () => this.setState({ filtersOpen: true });
-  closeFilters = () => this.setState({ filtersOpen: false });
-  resetFilters = () => this.setState(INITIAL_FILTER_STATE);
 
   toggleShowMine = () => this._setFilterState({ showMine: !this.state.showMine || !this.state.showOthers });
   toggleShowOthers = () => this._setFilterState({ showOthers: !this.state.showMine || !this.state.showOthers });
