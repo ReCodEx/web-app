@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { defaultMemoize } from 'reselect';
 
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
@@ -43,6 +44,10 @@ import withRouter, { withRouterProps } from '../../helpers/withRouter';
 export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
   groupId: '',
 };
+
+const getPromotedReferenceSolutions = defaultMemoize(referenceSolutions =>
+  referenceSolutions.filter(rs => rs.visibility > 1)
+);
 
 class Exercise extends Component {
   state = { forkId: Math.random().toString() };
@@ -184,31 +189,40 @@ class Exercise extends Component {
                                 )}
                               </Button>
                             )}
-                            <Link to={EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY(exercise.id)}>
-                              <Button variant="primary">
-                                <FormattedMessage
-                                  id="app.exercise.allRefSolutions"
-                                  defaultMessage="All Reference Solutions"
-                                />
-                              </Button>
-                            </Link>
+                            {referenceSolutions && referenceSolutions.size > 0 && (
+                              <Link to={EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY(exercise.id)}>
+                                <Button variant="primary">
+                                  <FormattedMessage
+                                    id="app.exercise.allRefSolutions"
+                                    defaultMessage="All Reference Solutions"
+                                  />
+                                </Button>
+                              </Link>
+                            )}
                           </TheButtonGroup>
                         </div>
                       }>
                       <div>
                         <ResourceRenderer resource={referenceSolutions.toArray()} returnAsArray>
                           {referenceSolutions =>
-                            referenceSolutions.length > 0 ? (
+                            getPromotedReferenceSolutions(referenceSolutions).length > 0 ? (
                               <ReferenceSolutionsTable
-                                referenceSolutions={referenceSolutions}
+                                referenceSolutions={getPromotedReferenceSolutions(referenceSolutions)}
                                 runtimeEnvironments={runtimes}
                               />
                             ) : (
                               <div className="text-center m-3 text-muted small">
-                                <FormattedMessage
-                                  id="app.exercise.noPromotedReferenceSolutions"
-                                  defaultMessage="There are no promoted reference solutions for this exercise yet."
-                                />
+                                {referenceSolutions.length === 0 ? (
+                                  <FormattedMessage
+                                    id="app.exercise.noReferenceSolutions"
+                                    defaultMessage="There are no reference solutions for this exercise yet."
+                                  />
+                                ) : (
+                                  <FormattedMessage
+                                    id="app.exercise.noPromotedReferenceSolutions"
+                                    defaultMessage="There are no promoted reference solutions for this exercise yet."
+                                  />
+                                )}
                               </div>
                             )
                           }
