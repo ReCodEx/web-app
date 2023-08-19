@@ -6,14 +6,15 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
+import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
+import CommentThreadContainer from '../../containers/CommentThreadContainer';
 import Page from '../../components/layout/Page';
+import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import { ExerciseNavigation } from '../../components/layout/Navigation';
 import ExerciseDetail from '../../components/Exercises/ExerciseDetail';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ReferenceSolutionsTable from '../../components/Exercises/ReferenceSolutionsTable';
-import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import Box from '../../components/widgets/Box';
 import { ExerciseIcon, SendIcon, LinkIcon } from '../../components/icons';
 import ExerciseCallouts from '../../components/Exercises/ExerciseCallouts';
@@ -228,6 +229,16 @@ class Exercise extends Component {
                     </Box>
                   )}
                 </ResourceRenderer>
+
+                <CommentThreadContainer
+                  threadId={exercise.id}
+                  additionalPublicSwitchNote={
+                    <FormattedMessage
+                      id="app.exercise.comments.additionalSwitchNote"
+                      defaultMessage="(teachers who can see this exercise)"
+                    />
+                  }
+                />
               </Col>
             </Row>
 

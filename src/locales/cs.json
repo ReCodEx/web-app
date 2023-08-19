@@ -719,6 +719,7 @@
   "app.exercise.assignButton": "Zadat",
   "app.exercise.assignToGroup": "Zde můžete zadat úlohu najednou do více skupin, ve kterých jste vedoucím. Úlohu je také možné zadat individuálně na stránkách jednotlivých skupin. Vezměte prosím na vědomí, že úloha může být zadána v jedné skupině vícekrát, a proto je vhodné se ujistit, že vícenásobné zadání není způsobeno omylem.",
   "app.exercise.attach": "Připojit",
+  "app.exercise.comments.additionalSwitchNote": "(učitelé, kteří smí vidět tuto úlohu)",
   "app.exercise.defaultValueForAssignment": "Toto je výchozí (doporučená) hodnota pro zadané úlohy, ale každá zadaná úloha ji může nastavit jinak. Modifikace této hodnoty se nesynchronizují s již zadanými úlohami.",
   "app.exercise.description": "Krátký popis",
   "app.exercise.description.visibleOnlyToSupervisors": "(viditelný pouze pro vedoucí)",
