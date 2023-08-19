@@ -719,6 +719,7 @@
   "app.exercise.assignButton": "Assign",
   "app.exercise.assignToGroup": "Here, you can assign this exercise simultaneously to multiple groups under your supervision. The exercise can also be assigned from within the groups individually. Please note that an exercise may be assigned multiple times in a group, so beware accidental repetitive assignment.",
   "app.exercise.attach": "Attach",
+  "app.exercise.comments.additionalSwitchNote": "(teachers who can see this exercise)",
   "app.exercise.defaultValueForAssignment": "This is a default (recommended) value for assignments, but each assignment of this exercise may set it individually. Modifications of this value are not synchronized with already created assignments.",
   "app.exercise.description": "Short description",
   "app.exercise.description.visibleOnlyToSupervisors": "(visible only to supervisors)",
