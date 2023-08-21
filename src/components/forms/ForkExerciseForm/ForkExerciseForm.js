@@ -97,9 +97,9 @@ const ForkExerciseForm = ({
           {groups => (
             <>
               <Field
-                name={'groupId'}
+                name="groupId"
                 component={SelectField}
-                label={''}
+                label=""
                 ignoreDirty
                 addEmptyOption={true}
                 emptyOptionCaption={formatMessage(messages.emptyOption)}

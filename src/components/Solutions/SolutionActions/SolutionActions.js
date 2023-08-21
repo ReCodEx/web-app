@@ -3,26 +3,24 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import ActionButtons, { prepareButtonDescriptors, onlyLabels, onlyTooltips } from '../../widgets/ActionButtons';
 import withLinks from '../../../helpers/withLinks';
 import { safeGet } from '../../../helpers/common';
 
-import ActionButton from './ActionButton';
-import ActionDropdown from './ActionDropdown';
-
 /**
- * Action templates containing basic parameters: label, short (label), icon (name), variant (success if missing),
+ * Action templates containing basic parameters: label, label, tooltip icon (name), variant (success if missing),
  * and confirm (confirm yes/no message for a popover; no confirmation required if missing)
  */
 const actionsTemplates = {
   accept: {
-    short: <FormattedMessage id="app.solution.actions.accept" defaultMessage="Accept" />,
-    label: <FormattedMessage id="app.solution.actions.acceptLong" defaultMessage="Accept as Final" />,
+    label: <FormattedMessage id="app.solution.actions.accept" defaultMessage="Accept" />,
+    tooltip: <FormattedMessage id="app.solution.actions.acceptLong" defaultMessage="Accept as Final" />,
     icon: ['far', 'check-circle'],
     pending: 'acceptPending',
   },
   unaccept: {
-    short: <FormattedMessage id="app.solution.actions.revokeAccept" defaultMessage="Revoke" />,
-    label: <FormattedMessage id="app.solution.actions.revokeAcceptLong" defaultMessage="Revoke as Final" />,
+    label: <FormattedMessage id="app.solution.actions.revokeAccept" defaultMessage="Revoke" />,
+    tooltip: <FormattedMessage id="app.solution.actions.revokeAcceptLong" defaultMessage="Revoke as Final" />,
     icon: ['far', 'circle-xmark'],
     variant: 'warning',
     pending: 'acceptPending',
@@ -168,32 +166,16 @@ const SolutionActions = ({
   };
 
   const pendingIndicators = { acceptPending, updatePending, pointsPending };
-  const actions = knownActions
-    .filter(a => actionHandlers[a])
-    .map(a => ({
-      ...actionsTemplates[a],
-      handler: actionHandlers[a],
-      pending: pendingIndicators[actionsTemplates[a].pending] || false,
-    }));
+  const actions = prepareButtonDescriptors(actionsTemplates, knownActions, actionHandlers, pendingIndicators);
 
-  return dropdown ? (
-    <ActionDropdown id={id} actions={actions} captionAsTooltip={captionAsTooltip} />
-  ) : (
-    actions.map(action => (
-      <ActionButton
-        key={action.icon}
-        id={id}
-        variant={action.variant}
-        icon={action.icon}
-        label={action.label}
-        shortLabel={action.short || action.label}
-        confirm={action.confirm}
-        pending={action.pending}
-        captionAsTooltip={captionAsTooltip}
-        size={size}
-        onClick={action.handler}
-      />
-    ))
+  return (
+    <ActionButtons
+      id={id}
+      actions={captionAsTooltip ? onlyTooltips(actions) : onlyLabels(actions)}
+      size={size}
+      dropdown={dropdown}
+      dropdownLabel={captionAsTooltip ? null : <FormattedMessage id="generic.update" defaultMessage="Update" />}
+    />
   );
 };
 
