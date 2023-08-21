@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import ActionButtons, { prepareButtonDescriptors } from '../../widgets/ActionButtons';
 import withLinks from '../../../helpers/withLinks';
 
-import ActionButton from './ActionButton';
-import ActionDropdown from './ActionDropdown';
-
 /**
- * Action templates containing basic parameters: label, short (label), icon (name), variant (success if missing),
+ * Action templates containing basic parameters: label, icon (name), variant (success if missing),
  * and confirm (confirm yes/no message for a popover; no confirmation required if missing)
  */
 const actionsTemplates = {
@@ -58,7 +56,6 @@ const ReferenceSolutionActions = ({
   currentUserId = null,
   solution,
   visibilityPending = false,
-  captionAsTooltip = false,
   size = undefined,
   dropdown = false,
   setVisibility = null,
@@ -91,32 +88,16 @@ const ReferenceSolutionActions = ({
   };
 
   const pendingIndicators = { visibilityPending };
-  const actions = knownActions
-    .filter(a => actionHandlers[a])
-    .map(a => ({
-      ...actionsTemplates[a],
-      handler: actionHandlers[a],
-      pending: pendingIndicators[actionsTemplates[a].pending] || false,
-    }));
+  const actions = prepareButtonDescriptors(actionsTemplates, knownActions, actionHandlers, pendingIndicators);
 
-  return dropdown ? (
-    <ActionDropdown id={id} actions={actions} captionAsTooltip={captionAsTooltip} />
-  ) : (
-    actions.map(action => (
-      <ActionButton
-        key={action.icon}
-        id={id}
-        variant={action.variant}
-        icon={action.icon}
-        label={action.label}
-        shortLabel={action.short || action.label}
-        confirm={action.confirm}
-        pending={action.pending}
-        captionAsTooltip={captionAsTooltip}
-        size={size}
-        onClick={action.handler}
-      />
-    ))
+  return (
+    <ActionButtons
+      id={id}
+      actions={actions}
+      size={size}
+      dropdown={dropdown}
+      dropdownLabel={<FormattedMessage id="generic.update" defaultMessage="Update" />}
+    />
   );
 };
 
@@ -131,7 +112,6 @@ ReferenceSolutionActions.propTypes = {
   }),
   visibilityPending: PropTypes.bool,
   setVisibility: PropTypes.func,
-  captionAsTooltip: PropTypes.bool,
   size: PropTypes.string,
   dropdown: PropTypes.bool,
   links: PropTypes.object.isRequired,

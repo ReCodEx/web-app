@@ -39,7 +39,7 @@ const RelocateGroupForm = ({
     <Row className="align-items-end">
       <Col xs={12} sm>
         <Field
-          name={'groupId'}
+          name="groupId"
           component={SelectField}
           label={<FormattedMessage id="app.relocateGroupForm.parentGroup" defaultMessage="Parent Group:" />}
           options={groups

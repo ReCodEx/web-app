@@ -6,7 +6,7 @@ import { Dropdown, Overlay, Popover } from 'react-bootstrap';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { CloseIcon, EditIcon, LoadingIcon, SuccessIcon } from '../../icons';
 
-const ActionDropdown = ({ actions, placement = 'bottom', id, captionAsTooltip }) => {
+const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
   const [confirmAction, setConfirmAction] = useState(null);
   const target = useRef(null);
   const anyPending = actions.some(a => a.pending);
@@ -14,21 +14,23 @@ const ActionDropdown = ({ actions, placement = 'bottom', id, captionAsTooltip })
   return (
     <Dropdown as="span">
       <Dropdown.Toggle variant="warning" size="xs" ref={target} className={anyPending ? 'half-opaque' : ''}>
-        {anyPending ? <LoadingIcon gapRight={!captionAsTooltip} /> : <EditIcon gapRight={!captionAsTooltip} />}
-        {!captionAsTooltip && <FormattedMessage id="generic.update" defaultMessage="Update" />}
+        {anyPending ? <LoadingIcon gapRight={Boolean(label)} /> : <EditIcon gapRight={Boolean(label)} />}
+        {label}
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
         {actions.map(action => (
           <Dropdown.Item
-            key={action.icon}
+            key={action.key}
             onClick={action.confirm ? () => setConfirmAction(action) : action.handler}
             disabled={action.pending}>
             <small>
               {action.pending ? (
                 <LoadingIcon gapRight />
-              ) : (
+              ) : action.icon && (typeof action.icon === 'string' || Array.isArray(action.icon)) ? (
                 <Icon icon={action.icon} className={`text-${action.variant || 'success'}`} gapRight />
+              ) : (
+                action.icon
               )}
               {action.label}
             </small>
@@ -69,10 +71,21 @@ const ActionDropdown = ({ actions, placement = 'bottom', id, captionAsTooltip })
 };
 
 ActionDropdown.propTypes = {
-  actions: PropTypes.array.isRequired,
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      icon: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.array]),
+      label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+      tooltip: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+      confirm: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+      pending: PropTypes.bool,
+      variant: PropTypes.string,
+      handler: PropTypes.func,
+    })
+  ).isRequired,
+  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   placement: PropTypes.string,
   id: PropTypes.string.isRequired,
-  captionAsTooltip: PropTypes.bool,
 };
 
 export default ActionDropdown;
