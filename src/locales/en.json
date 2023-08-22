@@ -1940,6 +1940,7 @@
   "app.user.title": "User's profile",
   "app.userList.noUsers": "No users match selected filters.",
   "app.userName.externalIds": "External identifiers",
+  "app.userName.externalIdsClickInfo": "click to copy the ID(s) to clipboard",
   "app.userName.userDeactivated": "The user account was deactivated. The user may not sign in.",
   "app.userSwitching.loginAs": "Login as",
   "app.users.createUser": "Create User",

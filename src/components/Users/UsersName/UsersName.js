@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { defaultMemoize } from 'reselect';
 
 import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
@@ -129,10 +130,34 @@ const UsersName = ({
                             ))}
                           </tbody>
                         </table>
+                        <small className="text-muted">
+                          (
+                          <FormattedMessage
+                            id="app.userName.externalIdsClickInfo"
+                            defaultMessage="click to copy the ID(s) to clipboard"
+                          />
+                          )
+                        </small>
                       </Popover.Content>
                     </Popover>
                   }>
-                  <Icon icon={['far', 'id-card']} gapLeft className="text-muted half-opaque" />
+                  <CopyToClipboard
+                    text={Object.values(externalIds)
+                      .map(id => (Array.isArray(id) ? id.join(', ') : id))
+                      .join(', ')}>
+                    <Icon
+                      icon={['far', 'id-card']}
+                      gapLeft
+                      className="text-muted half-opaque clickable"
+                      style={{ '--fa-beat-scale': 1.5, '--fa-animation-duration': '0.3s' }}
+                      onClick={ev => {
+                        const style = 'fa-beat';
+                        const icon = ev.currentTarget;
+                        icon.classList.add(style);
+                        window.setTimeout(() => icon.classList.remove(style), 300);
+                      }}
+                    />
+                  </CopyToClipboard>
                 </OverlayTrigger>
               )}
               {privateData && privateData.email && showEmail === 'icon' && (

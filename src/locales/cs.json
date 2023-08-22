@@ -1940,6 +1940,7 @@
   "app.user.title": "Uživatelův profil",
   "app.userList.noUsers": "Žádní uživatelé nevyhovují zvoleným filtrům.",
   "app.userName.externalIds": "Externí identifikátory",
+  "app.userName.externalIdsClickInfo": "klikutím zkopírujete ID do schránky",
   "app.userName.userDeactivated": "Uživatelský účet byl deaktivován. Uživatel se nemůže přihlásit.",
   "app.userSwitching.loginAs": "Přihlásit jako",
   "app.users.createUser": "Vytvořit uživatele",
