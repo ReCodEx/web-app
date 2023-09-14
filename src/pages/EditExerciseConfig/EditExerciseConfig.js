@@ -17,11 +17,18 @@ import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSim
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
 import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
 import { InfoIcon, TestsIcon } from '../../components/icons';
 import Callout from '../../components/widgets/Callout';
 
-import { fetchExercise, fetchExerciseIfNeeded, editExercise, invalidateExercise } from '../../redux/modules/exercises';
+import {
+  fetchExercise,
+  fetchExerciseIfNeeded,
+  editExercise,
+  invalidateExercise,
+  sendNotification,
+} from '../../redux/modules/exercises';
 import {
   fetchExerciseConfig,
   fetchExerciseConfigIfNeeded,
@@ -274,6 +281,7 @@ class EditExerciseConfig extends Component {
       pipelinesVariables,
       supplementaryFiles,
       supplementaryFilesStatus,
+      sendNotification,
     } = this.props;
 
     return (
@@ -299,6 +307,8 @@ class EditExerciseConfig extends Component {
                       </Col>
                     </Row>
                   )}
+
+                  <ExerciseButtons {...exercise} sendNotification={sendNotification} />
 
                   {hasPermissions(exercise, 'update') && isEmpoweredSupervisorRole(effectiveRole) && (
                     <table className="em-margin-vertical">
@@ -595,6 +605,7 @@ EditExerciseConfig.propTypes = {
   reloadExercise: PropTypes.func.isRequired,
   reloadConfig: PropTypes.func.isRequired,
   invalidateExercise: PropTypes.func.isRequired,
+  sendNotification: PropTypes.func.isRequired,
   navigate: withRouterProps.navigate,
   location: withRouterProps.location,
   params: PropTypes.shape({ exerciseId: PropTypes.string }).isRequired,
@@ -639,6 +650,7 @@ export default withRouter(
             ])
           ),
         invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
+        sendNotification: message => dispatch(sendNotification(exerciseId, message)),
       })
     )(injectIntl(EditExerciseConfig))
   )

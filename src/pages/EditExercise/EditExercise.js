@@ -17,6 +17,7 @@ import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContai
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
 import ArchiveExerciseButtonContainer from '../../containers/ArchiveExerciseButtonContainer';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import EditExerciseUsers from '../../components/Exercises/EditExerciseUsers';
 import { EditExerciseIcon } from '../../components/icons';
 
@@ -26,6 +27,7 @@ import {
   fetchTags,
   attachExerciseToGroup,
   detachExerciseFromGroup,
+  sendNotification,
 } from '../../redux/modules/exercises';
 import { fetchAllGroups } from '../../redux/modules/groups';
 import { fetchByIds } from '../../redux/modules/users';
@@ -114,6 +116,7 @@ class EditExercise extends Component {
       detachingGroupId,
       attachExerciseToGroup,
       detachExerciseFromGroup,
+      sendNotification,
     } = this.props;
 
     return (
@@ -134,6 +137,8 @@ class EditExercise extends Component {
                   </Col>
                 </Row>
               )}
+
+              <ExerciseButtons {...exercise} sendNotification={sendNotification} />
 
               {exercise.permissionHints.update && (
                 <Row>
@@ -240,6 +245,7 @@ EditExercise.propTypes = {
   editExercise: PropTypes.func.isRequired,
   attachExerciseToGroup: PropTypes.func.isRequired,
   detachExerciseFromGroup: PropTypes.func.isRequired,
+  sendNotification: PropTypes.func.isRequired,
   params: PropTypes.shape({
     exerciseId: PropTypes.string.isRequired,
   }).isRequired,
@@ -262,6 +268,7 @@ export default withLinks(
       editExercise: (version, data) => dispatch(editExercise(exerciseId, { ...data, version })),
       attachExerciseToGroup: groupId => dispatch(attachExerciseToGroup(exerciseId, groupId)),
       detachExerciseFromGroup: groupId => dispatch(detachExerciseFromGroup(exerciseId, groupId)),
+      sendNotification: message => dispatch(sendNotification(exerciseId, message)),
     })
   )(EditExercise)
 );

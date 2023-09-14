@@ -19,11 +19,12 @@ import ReferenceSolutionsTable from '../../components/Exercises/ReferenceSolutio
 import Box from '../../components/widgets/Box';
 import { ExerciseIcon, SendIcon, LinkIcon } from '../../components/icons';
 import ExerciseCallouts from '../../components/Exercises/ExerciseCallouts';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import Callout from '../../components/widgets/Callout';
 
 import { isSubmitting } from '../../redux/selectors/submission';
-import { fetchExerciseIfNeeded, reloadExercise, forkExercise } from '../../redux/modules/exercises';
+import { fetchExerciseIfNeeded, reloadExercise, forkExercise, sendNotification } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
 import { fetchReferenceSolutions } from '../../redux/modules/referenceSolutions';
@@ -112,6 +113,7 @@ class Exercise extends Component {
       groupsAccessor,
       reload,
       forkExercise,
+      sendNotification,
       links: { EXERCISE_ASSIGNMENTS_URI_FACTORY, EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY },
     } = this.props;
 
@@ -148,6 +150,8 @@ class Exercise extends Component {
                   )}
               </Col>
             </Row>
+
+            <ExerciseButtons {...exercise} sendNotification={sendNotification} />
 
             <Row>
               <Col xl={6}>
@@ -296,6 +300,7 @@ Exercise.propTypes = {
   reload: PropTypes.func.isRequired,
   initCreateReferenceSolution: PropTypes.func.isRequired,
   forkExercise: PropTypes.func.isRequired,
+  sendNotification: PropTypes.func.isRequired,
   navigate: withRouterProps.navigate,
   location: withRouterProps.location,
   params: PropTypes.shape({ exerciseId: PropTypes.string }).isRequired,
@@ -322,6 +327,7 @@ export default withRouter(
         reload: () => dispatch(reloadExercise(exerciseId)),
         initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
         forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),
+        sendNotification: message => dispatch(sendNotification(exerciseId, message)),
       })
     )(injectIntl(Exercise))
   )
