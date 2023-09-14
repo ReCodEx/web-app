@@ -30,6 +30,7 @@ export const additionalActionTypes = {
   GET_PIPELINE_VARIABLES: 'recodex/exercises/GET_PIPELINE_VARIABLES',
   SET_HARDWARE_GROUPS: 'recodex/exercises/SET_HARDWARE_GROUPS',
   SET_HARDWARE_GROUPS_FULFILLED: 'recodex/exercises/SET_HARDWARE_GROUPS_FULFILLED',
+  SEND_NOTIFICATION: 'recodex/exercises/SEND_NOTIFICATION',
   ...createActionsWithPostfixes('FORK_EXERCISE', 'recodex/exercises'),
   ...createActionsWithPostfixes('ATTACH_EXERCISE_GROUP', 'recodex/exercises'),
   ...createActionsWithPostfixes('DETACH_EXERCISE_GROUP', 'recodex/exercises'),
@@ -180,6 +181,14 @@ export const setAdmins = (exerciseId, admins) =>
     endpoint: `/exercises/${exerciseId}/admins`,
     meta: { exerciseId },
     body: { admins },
+  });
+
+export const sendNotification = (id, message) =>
+  createApiAction({
+    type: additionalActionTypes.SEND_NOTIFICATION,
+    endpoint: `/exercises/${id}/notification`,
+    method: 'POST',
+    body: { message },
   });
 
 /*

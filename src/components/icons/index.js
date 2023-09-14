@@ -22,6 +22,7 @@ export const AssignmentIcon = props => <Icon {...props} icon="laptop-code" />;
 export const AssignmentsIcon = props => <Icon {...props} icon="tasks" />;
 export const AuthorIcon = props => <Icon {...props} icon="user-pen" />;
 export const BanIcon = props => <Icon {...props} icon="ban" />;
+export const BellIcon = props => <Icon {...props} icon={['far', 'bell']} />;
 export const BindIcon = props => <Icon {...props} icon="link" />;
 export const BonusIcon = props => <Icon {...props} icon="hand-holding-usd" />;
 export const BugIcon = props => <Icon {...props} icon="bug" />;

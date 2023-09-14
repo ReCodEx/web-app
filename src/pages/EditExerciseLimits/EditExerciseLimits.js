@@ -13,6 +13,7 @@ import HardwareGroupMetadata from '../../components/Exercises/HardwareGroupMetad
 import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm';
 import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Icon, { LimitsIcon } from '../../components/icons';
 import Callout from '../../components/widgets/Callout';
@@ -22,6 +23,7 @@ import {
   fetchExerciseIfNeeded,
   setExerciseHardwareGroups,
   invalidateExercise,
+  sendNotification,
 } from '../../redux/modules/exercises';
 import {
   fetchExerciseLimits,
@@ -124,6 +126,7 @@ class EditExerciseLimits extends Component {
       cloneHorizontally,
       cloneVertically,
       cloneAll,
+      sendNotification,
     } = this.props;
 
     return (
@@ -144,6 +147,8 @@ class EditExerciseLimits extends Component {
                 </Col>
               </Row>
             )}
+
+            <ExerciseButtons {...exercise} sendNotification={sendNotification} />
 
             {Boolean(exercise.hardwareGroups && exercise.hardwareGroups.length > 1) && (
               <Row>
@@ -290,6 +295,7 @@ EditExerciseLimits.propTypes = {
   cloneAll: PropTypes.func.isRequired,
   reloadExercise: PropTypes.func.isRequired,
   invalidateExercise: PropTypes.func.isRequired,
+  sendNotification: PropTypes.func.isRequired,
 };
 
 const cloneVerticallyWrapper = defaultMemoize(
@@ -333,5 +339,6 @@ export default connect(
     fetchExerciseLimits: envId => dispatch(fetchExerciseLimits(exerciseId, envId)),
     reloadExercise: () => dispatch(fetchExercise(exerciseId)),
     invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
+    sendNotification: message => dispatch(sendNotification(exerciseId, message)),
   })
 )(EditExerciseLimits);

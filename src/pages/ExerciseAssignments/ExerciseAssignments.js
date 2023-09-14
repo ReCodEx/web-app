@@ -14,12 +14,13 @@ import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { AssignmentsIcon, LockIcon, CheckRequiredIcon, SaveIcon } from '../../components/icons';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
+import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import EditAssignmentForm, {
   prepareInitialValues as prepareEditFormInitialValues,
 } from '../../components/forms/EditAssignmentForm';
 
-import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
+import { fetchExerciseIfNeeded, sendNotification } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import {
   create as assignExercise,
@@ -125,6 +126,7 @@ class ExerciseAssignments extends Component {
       syncAssignment,
       editAssignment,
       deleteAssignment,
+      sendNotification,
       intl: { formatMessage },
     } = this.props;
 
@@ -146,6 +148,8 @@ class ExerciseAssignments extends Component {
                 </Col>
               </Row>
             )}
+
+            <ExerciseButtons {...exercise} sendNotification={sendNotification} />
 
             {hasPermissions(exercise, 'viewAssignments') && (
               <Row>
@@ -264,6 +268,7 @@ ExerciseAssignments.propTypes = {
   syncAssignment: PropTypes.func.isRequired,
   editAssignment: PropTypes.func.isRequired,
   deleteAssignment: PropTypes.func.isRequired,
+  sendNotification: PropTypes.func.isRequired,
 };
 
 const multiAssignFormSelector = formValueSelector('multiAssign');
@@ -288,5 +293,6 @@ export default connect(
     syncAssignment: id => dispatch(syncWithExercise(id)),
     editAssignment: (id, body) => dispatch(editAssignment(id, body)),
     deleteAssignment: id => dispatch(deleteAssignment(id)),
+    sendNotification: message => dispatch(sendNotification(exerciseId, message)),
   })
 )(injectIntl(ExerciseAssignments));
