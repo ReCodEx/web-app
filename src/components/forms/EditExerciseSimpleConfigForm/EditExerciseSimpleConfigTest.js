@@ -32,7 +32,6 @@ const overrides = {
     showArgs: false,
     showOutputFile: false,
     showExtraFiles: true,
-    showJudge: false,
   },
   [ENV_HASKELL_ID]: {
     showCompilation: false,
