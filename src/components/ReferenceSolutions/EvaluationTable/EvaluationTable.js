@@ -27,7 +27,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
       {evaluations
         .sort((a, b) => {
           if (!a.submittedAt || !b.submittedAt) {
-            return a.evaluationStatus.localeCompare(b.evaluationStatus);
+            return a.id.localeCompare(b.id); // just to make it deterministic
           }
           return (
             ((b.evaluation && b.evaluation.evaluatedAt) || b.submittedAt) -
@@ -38,7 +38,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
             <td>
               <span className="d-none d-xl-inline">
-                <AssignmentStatusIcon id={e.id} status={e.evaluationStatus} accepted={false} />
+                <AssignmentStatusIcon id={e.id} submission={e} accepted={false} />
               </span>
               {e.isDebug && (
                 <OverlayTrigger
@@ -63,8 +63,8 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
             {e.evaluation && (
               <td
                 className={classnames({
-                  'text-danger': !e.isCorrect,
-                  'text-success': e.isCorrect,
+                  'text-danger': e.evaluation.score < 1.0,
+                  'text-success': e.evaluation.score >= 1.0,
                 })}>
                 <b>
                   <FormattedNumber style="percent" value={e.evaluation.score} />

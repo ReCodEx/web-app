@@ -1,1 +1,1 @@
-export { default, getStatusDesc } from './AssignmentStatusIcon';
+export { default } from './AssignmentStatusIcon';

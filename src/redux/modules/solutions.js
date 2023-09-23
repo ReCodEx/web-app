@@ -19,7 +19,7 @@ import { objectFilter } from '../../helpers/common';
 
 const resourceName = 'solutions';
 const needsRefetching = item =>
-  defaultNeedsRefetching(item) || item.getIn(['data', 'evaluationStatus']) === 'work-in-progress';
+  defaultNeedsRefetching(item) || (!item.getIn(['data', 'evaluation']) && !item.getIn(['data', 'failure']));
 
 const apiEndpointFactory = id => `/assignment-solutions/${id}`;
 const { actions, actionTypes, reduceActions } = factory({

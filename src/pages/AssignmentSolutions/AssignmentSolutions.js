@@ -131,7 +131,6 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
           review={info.review}
           isReviewer={info.permissionHints && info.permissionHints.review}
           isBestSolution={info.isBestSolution}
-          status={info.lastSubmission ? info.lastSubmission.evaluationStatus : null}
           lastSubmission={info.lastSubmission}
           commentsStats={info.commentsStats}
           plagiarism={Boolean(info.plagiarism)}
@@ -314,9 +313,7 @@ const prepareTableData = defaultMemoize(
           permissionHints,
           plagiarism = null,
         }) => {
-          const statusEvaluated =
-            lastSubmission &&
-            (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
+          const statusEvaluated = lastSubmission && (lastSubmission.evaluation || lastSubmission.failure);
           return {
             icon: { id, commentsStats, lastSubmission, accepted, review, permissionHints, isBestSolution, plagiarism },
             user: usersIndex[authorId],

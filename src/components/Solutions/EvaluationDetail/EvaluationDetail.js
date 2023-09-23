@@ -4,7 +4,6 @@ import classnames from 'classnames';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
-import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
@@ -12,11 +11,7 @@ import Icon, { SuccessOrFailureIcon, BugIcon } from '../../icons';
 
 const EvaluationDetail = ({
   evaluation,
-  isCorrect,
-  submittedAt,
   maxPoints = null,
-  accepted,
-  evaluationStatus = null,
   isDebug,
   viewResumbissions = false,
   showScoreDetail = null,
@@ -80,8 +75,8 @@ const EvaluationDetail = ({
           </th>
           <td
             className={classnames({
-              'text-danger': !isCorrect,
-              'text-success': isCorrect,
+              'text-danger': evaluation.score < 1.0,
+              'text-success': evaluation.score >= 1.0,
             })}>
             <b>
               <FormattedNumber style="percent" maximumFractionDigits={3} value={evaluation.score} />
@@ -113,59 +108,12 @@ const EvaluationDetail = ({
             </th>
             <td
               className={classnames({
-                'text-danger': !isCorrect || evaluation.points <= 0,
-                'text-success': isCorrect && evaluation.points > 0,
+                'text-danger': evaluation.score < 1.0 || evaluation.points <= 0,
+                'text-success': evaluation.score >= 1.0 && evaluation.points > 0,
               })}>
               <b>
                 {evaluation.points} / {maxPoints}
               </b>
-            </td>
-          </tr>
-        )}
-
-        {!referenceSolution && (
-          <tr>
-            <td className="text-center text-muted shrink-col px-2">
-              <b>
-                <AssignmentStatusIcon id={String(submittedAt)} status={evaluationStatus} accepted={accepted} />
-              </b>
-            </td>
-            <th className="text-nowrap">
-              <FormattedMessage id="app.submission.evaluationStatus" defaultMessage="Evaluation status" />:
-            </th>
-            <td>
-              <em>
-                {evaluationStatus === 'done' && (
-                  <FormattedMessage
-                    id="app.submission.evaluation.status.isCorrect"
-                    defaultMessage="The solution is correct and meets all criteria."
-                  />
-                )}
-                {evaluationStatus === 'work-in-progress' && (
-                  <FormattedMessage
-                    id="app.submission.evaluation.status.workInProgress"
-                    defaultMessage="The solution has not been evaluated yet."
-                  />
-                )}
-                {evaluationStatus === 'failed' && (
-                  <FormattedMessage
-                    id="app.submission.evaluation.status.failed"
-                    defaultMessage="The solution does not meet the defined criteria."
-                  />
-                )}
-                {evaluationStatus === 'evaluation-failed' && (
-                  <FormattedMessage
-                    id="app.submission.evaluation.status.systemFailiure"
-                    defaultMessage="Evaluation process failed and your submission could not have been evaluated. Please submit the solution once more. If you keep receiving errors please contact the administrator of this project."
-                  />
-                )}
-                {evaluationStatus === 'missing-submission' && (
-                  <FormattedMessage
-                    id="app.submission.evaluation.status.solutionMissingSubmission"
-                    defaultMessage="The solution was not submitted for evaluation. This was probably caused by an error in the assignment configuration."
-                  />
-                )}
-              </em>
             </td>
           </tr>
         )}
@@ -195,12 +143,8 @@ const EvaluationDetail = ({
 );
 
 EvaluationDetail.propTypes = {
-  isCorrect: PropTypes.bool.isRequired,
-  submittedAt: PropTypes.number.isRequired,
   evaluation: PropTypes.object,
   maxPoints: PropTypes.number,
-  accepted: PropTypes.bool,
-  evaluationStatus: PropTypes.string,
   isDebug: PropTypes.bool.isRequired,
   viewResumbissions: PropTypes.bool,
   showScoreDetail: PropTypes.func,

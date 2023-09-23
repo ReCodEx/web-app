@@ -131,7 +131,6 @@ const SolutionsTable = ({
                 <SolutionsTableRow
                   key={id}
                   id={id}
-                  status={data.lastSubmission ? data.lastSubmission.evaluationStatus : null}
                   runtimeEnvironment={runtimeEnvironment}
                   assignmentId={assignmentId}
                   groupId={groupId}

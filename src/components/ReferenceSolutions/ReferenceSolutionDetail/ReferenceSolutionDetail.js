@@ -80,12 +80,7 @@ class ReferenceSolutionDetail extends Component {
 
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
       /* eslint-disable no-var */
-      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } =
-        evaluationsJS[activeSubmissionId].data;
-    } else evaluationStatus = 'missing-submission';
-
-    if (evaluationStatus === 'evaluation-failed' && !failure) {
-      failure = true;
+      var { submittedBy, evaluation, failure, isDebug, ...restSub } = evaluationsJS[activeSubmissionId].data;
     }
 
     return (
@@ -214,8 +209,6 @@ class ReferenceSolutionDetail extends Component {
               {evaluation && (
                 <EvaluationDetail
                   evaluation={evaluation}
-                  submittedAt={createdAt}
-                  isCorrect={isCorrect}
                   isDebug={isDebug}
                   viewResumbissions
                   showScoreDetail={this.openScoreDialog}

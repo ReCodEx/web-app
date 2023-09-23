@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 import SolutionReviewIcon from '../../Solutions/SolutionReviewIcon';
-import AssignmentStatusIcon, { getStatusDesc } from '../Assignment/AssignmentStatusIcon';
+import AssignmentStatusIcon from '../Assignment/AssignmentStatusIcon';
 import CommentsIcon from './CommentsIcon';
 import { PlagiarismIcon } from '../../icons';
 
@@ -17,7 +17,6 @@ const SolutionTableRowIcons = ({
   accepted,
   review = null,
   isBestSolution,
-  status,
   lastSubmission,
   commentsStats = null,
   isReviewer = false,
@@ -25,12 +24,7 @@ const SolutionTableRowIcons = ({
   links: { SOLUTION_PLAGIARISMS_URI_FACTORY },
 }) => (
   <>
-    <AssignmentStatusIcon
-      id={id}
-      status={getStatusDesc(status, lastSubmission)}
-      accepted={accepted}
-      isBestSolution={isBestSolution}
-    />
+    <AssignmentStatusIcon id={id} submission={lastSubmission} accepted={accepted} isBestSolution={isBestSolution} />
 
     {review && <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={isReviewer} gapLeft />}
 
@@ -66,7 +60,6 @@ SolutionTableRowIcons.propTypes = {
     issues: PropTypes.number,
   }),
   isBestSolution: PropTypes.bool.isRequired,
-  status: PropTypes.string,
   lastSubmission: PropTypes.shape({
     evaluation: PropTypes.shape({
       score: PropTypes.number.isRequired,
