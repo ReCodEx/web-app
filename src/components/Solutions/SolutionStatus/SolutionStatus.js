@@ -85,7 +85,7 @@ class SolutionStatus extends Component {
         pointsPercentualThreshold,
       },
       evaluation,
-      evaluationStatus,
+      lastSubmission,
       submittedAt,
       userId,
       submittedBy,
@@ -270,7 +270,7 @@ class SolutionStatus extends Component {
 
               <tr>
                 <td className="text-center text-muted shrink-col px-2">
-                  <AssignmentStatusIcon id={String(submittedAt)} status={evaluationStatus} accepted={accepted} />
+                  <AssignmentStatusIcon id={String(submittedAt)} submission={lastSubmission} accepted={accepted} />
                 </td>
                 <th className="text-nowrap">
                   <FormattedMessage id="app.solution.scoredPoints" defaultMessage="Final score" />:
@@ -613,7 +613,7 @@ SolutionStatus.propTypes = {
     pointsPercentualThreshold: PropTypes.number,
   }).isRequired,
   evaluation: PropTypes.object,
-  evaluationStatus: PropTypes.string.isRequired,
+  lastSubmission: PropTypes.object,
   submittedAt: PropTypes.number.isRequired,
   userId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string,

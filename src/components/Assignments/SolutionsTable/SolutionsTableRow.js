@@ -19,14 +19,11 @@ import withLinks from '../../../helpers/withLinks';
 import SolutionTableRowIcons from './SolutionTableRowIcons';
 import styles from './SolutionsTable.less';
 
-const showScoreAndPoints = status => status === 'done' || status === 'failed';
-
 const SolutionsTableRow = ({
   id,
   attemptIndex,
   assignmentId,
   groupId,
-  status = null,
   note,
   lastSubmission,
   maxPoints,
@@ -90,7 +87,6 @@ const SolutionsTableRow = ({
             accepted={accepted}
             review={review}
             isBestSolution={isBestSolution}
-            status={status}
             lastSubmission={lastSubmission}
             commentsStats={commentsStats}
             isReviewer={permissionHints && permissionHints.review}
@@ -103,7 +99,7 @@ const SolutionsTableRow = ({
         </td>
 
         <td className="text-center text-nowrap valign-middle">
-          {showScoreAndPoints(status) ? (
+          {lastSubmission.evaluation ? (
             <strong className="text-success">
               <FormattedNumber style="percent" value={lastSubmission.evaluation.score} />
             </strong>
@@ -113,7 +109,7 @@ const SolutionsTableRow = ({
         </td>
 
         <td className="text-center text-nowrap valign-middle">
-          {showScoreAndPoints(status) ? (
+          {lastSubmission.evaluation ? (
             <strong className="text-success">
               <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} />
             </strong>
@@ -206,7 +202,6 @@ SolutionsTableRow.propTypes = {
   attemptIndex: PropTypes.number.isRequired,
   assignmentId: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
-  status: PropTypes.string,
   note: PropTypes.any.isRequired,
   maxPoints: PropTypes.number.isRequired,
   bonusPoints: PropTypes.number.isRequired,

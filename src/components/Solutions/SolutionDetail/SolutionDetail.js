@@ -92,14 +92,7 @@ class SolutionDetail extends Component {
     const evaluationsJS = evaluations.toJS();
     if (activeSubmissionId && evaluationsJS[activeSubmissionId] && evaluationsJS[activeSubmissionId].data) {
       /* eslint-disable no-var */
-      var { submittedBy, evaluation, failure, isCorrect, evaluationStatus, isDebug, ...restSub } =
-        evaluationsJS[activeSubmissionId].data;
-    } else {
-      evaluationStatus = 'missing-submission';
-    }
-
-    if (evaluationStatus === 'evaluation-failed' && !failure) {
-      failure = true;
+      var { submittedBy, evaluation, failure, isDebug, ...restSub } = evaluationsJS[activeSubmissionId].data;
     }
 
     return (
@@ -110,7 +103,7 @@ class SolutionDetail extends Component {
               id={id}
               attemptIndex={attemptIndex}
               evaluation={evaluation}
-              evaluationStatus={safeGet(lastSubmission, ['evaluationStatus'], 'missing-submission')}
+              lastSubmission={lastSubmission}
               submittedAt={createdAt}
               userId={authorId}
               submittedBy={submittedBy}
@@ -222,11 +215,7 @@ class SolutionDetail extends Component {
             {evaluation && (
               <EvaluationDetail
                 evaluation={evaluation}
-                submittedAt={createdAt}
                 maxPoints={maxPoints}
-                isCorrect={isCorrect}
-                accepted={accepted}
-                evaluationStatus={evaluationStatus}
                 isDebug={isDebug}
                 viewResumbissions={permissionHints.viewResubmissions}
                 showScoreDetail={this.openScoreDialog}

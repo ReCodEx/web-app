@@ -136,12 +136,11 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, locale, link
           safeGet(c2, ['evaluation', 'score'], -1) - safeGet(c1, ['evaluation', 'score'], -1) || d2 - d1,
         cellRenderer: lastSubmission => {
           const score = safeGet(lastSubmission, ['evaluation', 'score'], null);
-          const isCorrect = safeGet(lastSubmission, ['isCorrect'], false);
           return score !== null ? (
             <strong
               className={classnames({
-                'text-danger': !isCorrect,
-                'text-success': isCorrect,
+                'text-danger': score < 1.0,
+                'text-success': score >= 1.0,
               })}>
               <FormattedNumber style="percent" maximumFractionDigits={3} value={score} />
             </strong>

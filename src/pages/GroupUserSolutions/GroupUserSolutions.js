@@ -96,7 +96,6 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
           review={info.review}
           isReviewer={info.permissionHints && info.permissionHints.review}
           isBestSolution={info.isBestSolution}
-          status={info.lastSubmission ? info.lastSubmission.evaluationStatus : null}
           lastSubmission={info.lastSubmission}
           commentsStats={info.commentsStats}
           plagiarism={Boolean(info.plagiarism)}
@@ -255,9 +254,7 @@ const prepareTableData = defaultMemoize(
             permissionHints,
             plagiarism = null,
           }) => {
-            const statusEvaluated =
-              lastSubmission &&
-              (lastSubmission.evaluationStatus === 'done' || lastSubmission.evaluationStatus === 'failed');
+            const statusEvaluated = lastSubmission && (lastSubmission.evalutaion || lastSubmission.failure);
             const rte = getRuntime(runtimeEnvironmentId);
 
             res.push({

@@ -71,7 +71,7 @@ const ReferenceSolutionsTableRow = ({
               <EvaluationFailedIcon className="text-danger" />
             </OverlayTrigger>
           ) : (
-            <strong className={lastSubmission.isCorrect ? 'text-success' : 'text-danger'}>
+            <strong className={lastSubmission.evaluation.score >= 1.0 ? 'text-success' : 'text-danger'}>
               <FormattedNumber style="percent" value={lastSubmission.evaluation.score} />
             </strong>
           )}
