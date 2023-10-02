@@ -123,17 +123,12 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
   const columns = [
     new SortableTableColumnDescriptor('icon', '', {
       className: 'text-nowrap',
-      cellRenderer: info => (
+      cellRenderer: solution => (
         <SolutionTableRowIcons
-          id={info.id}
+          id={solution.id}
           assignmentId={assignmentId}
-          accepted={info.accepted}
-          review={info.review}
-          isReviewer={info.permissionHints && info.permissionHints.review}
-          isBestSolution={info.isBestSolution}
-          lastSubmission={info.lastSubmission}
-          commentsStats={info.commentsStats}
-          plagiarism={Boolean(info.plagiarism)}
+          solution={solution}
+          isReviewer={solution.permissionHints && solution.permissionHints.review}
         />
       ),
     }),
@@ -294,39 +289,23 @@ const prepareTableData = defaultMemoize(
       .map(getJsData)
       .filter(solution => solution && usersIndex[solution.authorId])
       .filter(viewModeFilters[viewMode] || identity)
-      .map(
-        ({
-          id,
-          lastSubmission,
-          authorId,
-          createdAt,
-          attemptIndex,
-          runtimeEnvironmentId,
-          note,
-          maxPoints,
-          bonusPoints,
-          actualPoints,
-          accepted,
-          review,
-          isBestSolution,
-          commentsStats,
-          permissionHints,
-          plagiarism = null,
-        }) => {
-          const statusEvaluated = lastSubmission && (lastSubmission.evaluation || lastSubmission.failure);
-          return {
-            icon: { id, commentsStats, lastSubmission, accepted, review, permissionHints, isBestSolution, plagiarism },
-            user: usersIndex[authorId],
-            date: createdAt,
-            attempt: { attemptIndex, lastAttemptIndex: solvers[authorId] && solvers[authorId].lastAttemptIndex },
-            validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
-            points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
-            runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId),
-            note,
-            actionButtons: { id, permissionHints },
-          };
-        }
-      );
+      .map(s => {
+        const statusEvaluated = s.lastSubmission && (s.lastSubmission.evaluation || s.lastSubmission.failure);
+        return {
+          icon: s,
+          user: usersIndex[s.authorId],
+          date: s.createdAt,
+          attempt: {
+            attemptIndex: s.attemptIndex,
+            lastAttemptIndex: solvers[s.authorId] && solvers[s.authorId].lastAttemptIndex,
+          },
+          validity: statusEvaluated ? safeGet(s.lastSubmission, ['evaluation', 'score']) : null,
+          points: statusEvaluated ? s : { actualPoints: null },
+          runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === s.runtimeEnvironmentId),
+          note: s.note,
+          actionButtons: s,
+        };
+      });
   }
 );
 

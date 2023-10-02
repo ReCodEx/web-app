@@ -11,6 +11,7 @@ const defaultMessageIcon = ['far', 'envelope'];
 
 export const AbortIcon = props => <Icon {...props} icon="car-crash" />;
 export const AcceptIcon = props => <Icon {...props} icon={['far', 'handshake']} />;
+export const AcceptedIcon = props => <Icon {...props} icon="circle-check" />;
 export const AddIcon = props => <Icon {...props} icon="plus-circle" />;
 export const AdminIcon = props => <Icon {...props} icon="user-tie" />;
 export const AdminRoleIcon = props => <Icon {...props} icon="crown" />;
@@ -78,9 +79,11 @@ export { NeedFixingIcon };
 export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} />;
 export const ObserverIcon = props => <Icon {...props} icon="binoculars" />;
 export const OutputIcon = props => <Icon {...props} icon="sign-out-alt" />;
+export const PastDeadlineIcon = props => <Icon {...props} icon="skull" />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const PipelineStructureIcon = props => <Icon {...props} icon="sitemap" />;
 export const PlagiarismIcon = props => <Icon icon="person-circle-exclamation" {...props} />;
+export const PointsIcon = props => <Icon icon="comment-dollar" {...props} />;
 export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-muted" {...props} />;
 export const PointsGraphIcon = props => <Icon icon={['far', 'chart-bar']} {...props} />;
 export const PointsInterpolationIcon = props => (
@@ -135,7 +138,7 @@ export const TestsIcon = props => <Icon {...props} icon="cogs" />;
 export const TransferIcon = props => <Icon {...props} icon="exchange-alt" />;
 
 const messageIconTypes = {
-  success: ['far', 'check-circle'],
+  success: ['far', 'circle-check'],
   info: 'info-circle',
   danger: 'radiation',
   warning: 'exclamation-triangle',

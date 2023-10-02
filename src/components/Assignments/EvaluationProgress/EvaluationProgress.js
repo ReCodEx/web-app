@@ -75,7 +75,7 @@ class EvaluationProgress extends Component {
                           'text-danger': !wasSuccessful,
                         })}>
                         <strong>
-                          <Icon icon={wasSuccessful ? 'check-circle' : 'times-circle'} />
+                          <Icon icon={wasSuccessful ? 'circle-check' : 'times-circle'} />
                         </strong>
                       </td>
                       <td>{text}</td>

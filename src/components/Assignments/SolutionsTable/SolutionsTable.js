@@ -108,8 +108,8 @@ const SolutionsTable = ({
           {solutions.size === 0 ? (
             <NoSolutionYetTableRow />
           ) : (
-            solutions.map((data, idx) => {
-              if (!data) {
+            solutions.map((solution, idx) => {
+              if (!solution) {
                 return (
                   <tbody key={idx}>
                     <tr>
@@ -121,17 +121,18 @@ const SolutionsTable = ({
                 );
               }
 
-              const id = data.id;
+              const id = solution.id;
               const runtimeEnvironment =
-                data.runtimeEnvironmentId &&
+                solution.runtimeEnvironmentId &&
                 runtimeEnvironments &&
-                runtimeEnvironments.find(({ id }) => id === data.runtimeEnvironmentId);
+                runtimeEnvironments.find(({ id }) => id === solution.runtimeEnvironmentId);
 
               return (
                 <SolutionsTableRow
                   key={id}
                   id={id}
                   runtimeEnvironment={runtimeEnvironment}
+                  solution={solution}
                   assignmentId={assignmentId}
                   groupId={groupId}
                   noteMaxlen={noteMaxlen}
@@ -141,7 +142,6 @@ const SolutionsTable = ({
                   showActionButtons={showActionButtons}
                   onSelect={onSelect}
                   doubleclickAction={openOnDoubleclick ? navigate : null}
-                  {...data}
                 />
               );
             })

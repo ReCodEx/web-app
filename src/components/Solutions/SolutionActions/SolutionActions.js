@@ -15,7 +15,7 @@ const actionsTemplates = {
   accept: {
     label: <FormattedMessage id="app.solution.actions.accept" defaultMessage="Accept" />,
     tooltip: <FormattedMessage id="app.solution.actions.acceptLong" defaultMessage="Accept as Final" />,
-    icon: ['far', 'check-circle'],
+    icon: ['far', 'circle-check'],
     pending: 'acceptPending',
   },
   unaccept: {

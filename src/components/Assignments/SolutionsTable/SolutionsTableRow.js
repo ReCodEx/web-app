@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -21,22 +21,10 @@ import styles from './SolutionsTable.less';
 
 const SolutionsTableRow = ({
   id,
-  attemptIndex,
-  assignmentId,
   groupId,
-  note,
-  lastSubmission,
-  maxPoints,
-  bonusPoints,
-  actualPoints,
-  createdAt,
-  accepted = false,
-  review = null,
-  isBestSolution = false,
-  plagiarism = null,
+  assignmentId,
+  solution,
   runtimeEnvironment = null,
-  commentsStats = null,
-  permissionHints = null,
   noteMaxlen = null,
   compact = false,
   selected = false,
@@ -45,8 +33,18 @@ const SolutionsTableRow = ({
   doubleclickAction = null,
   onSelect = null,
   links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY },
-  intl: { locale },
 }) => {
+  const {
+    attemptIndex,
+    note,
+    lastSubmission,
+    maxPoints,
+    bonusPoints,
+    actualPoints,
+    createdAt,
+    permissionHints = null,
+  } = solution;
+
   const trimmedNote = note && note.trim();
   const hasNote = Boolean(trimmedNote);
   const noteElement =
@@ -84,13 +82,8 @@ const SolutionsTableRow = ({
           <SolutionTableRowIcons
             id={id}
             assignmentId={assignmentId}
-            accepted={accepted}
-            review={review}
-            isBestSolution={isBestSolution}
-            lastSubmission={lastSubmission}
-            commentsStats={commentsStats}
+            solution={solution}
             isReviewer={permissionHints && permissionHints.review}
-            plagiarism={Boolean(plagiarism)}
           />
         </td>
 
@@ -199,31 +192,24 @@ const SolutionsTableRow = ({
 
 SolutionsTableRow.propTypes = {
   id: PropTypes.string.isRequired,
-  attemptIndex: PropTypes.number.isRequired,
+  solution: PropTypes.shape({
+    attemptIndex: PropTypes.number.isRequired,
+    note: PropTypes.any.isRequired,
+    maxPoints: PropTypes.number.isRequired,
+    bonusPoints: PropTypes.number.isRequired,
+    actualPoints: PropTypes.number,
+    lastSubmission: PropTypes.shape({
+      evaluation: PropTypes.shape({
+        score: PropTypes.number.isRequired,
+        points: PropTypes.number.isRequired,
+      }),
+    }),
+    createdAt: PropTypes.number.isRequired,
+    permissionHints: PropTypes.object,
+  }).isRequired,
   assignmentId: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
-  note: PropTypes.any.isRequired,
-  maxPoints: PropTypes.number.isRequired,
-  bonusPoints: PropTypes.number.isRequired,
-  actualPoints: PropTypes.number,
-  lastSubmission: PropTypes.shape({
-    evaluation: PropTypes.shape({
-      score: PropTypes.number.isRequired,
-      points: PropTypes.number.isRequired,
-    }),
-  }),
-  createdAt: PropTypes.number.isRequired,
-  accepted: PropTypes.bool,
-  review: PropTypes.shape({
-    startedAt: PropTypes.number,
-    closedAt: PropTypes.number,
-    issues: PropTypes.number,
-  }),
-  isBestSolution: PropTypes.bool,
-  commentsStats: PropTypes.object,
-  plagiarism: PropTypes.string,
   runtimeEnvironment: PropTypes.object,
-  permissionHints: PropTypes.object,
   noteMaxlen: PropTypes.number,
   compact: PropTypes.bool.isRequired,
   selected: PropTypes.bool,
@@ -232,7 +218,6 @@ SolutionsTableRow.propTypes = {
   doubleclickAction: PropTypes.func,
   onSelect: PropTypes.func,
   links: PropTypes.object,
-  intl: PropTypes.object,
 };
 
-export default withLinks(injectIntl(SolutionsTableRow));
+export default withLinks(SolutionsTableRow);
