@@ -88,17 +88,12 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
   const columns = [
     new SortableTableColumnDescriptor('icon', '', {
       className: 'text-nowrap',
-      cellRenderer: info => (
+      cellRenderer: solution => (
         <SolutionTableRowIcons
-          id={info.id}
-          assignmentId={info.assignmentId}
-          accepted={info.accepted}
-          review={info.review}
-          isReviewer={info.permissionHints && info.permissionHints.review}
-          isBestSolution={info.isBestSolution}
-          lastSubmission={info.lastSubmission}
-          commentsStats={info.commentsStats}
-          plagiarism={Boolean(info.plagiarism)}
+          id={solution.id}
+          assignmentId={solution.assignmentId}
+          solution={solution}
+          isReviewer={solution.permissionHints && solution.permissionHints.review}
         />
       ),
     }),
@@ -236,49 +231,21 @@ const prepareTableData = defaultMemoize(
         .toArray()
         .map(getJsData)
         .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
-        .forEach(
-          ({
-            id,
-            lastSubmission,
-            assignmentId,
-            createdAt,
-            runtimeEnvironmentId,
-            note,
-            maxPoints,
-            bonusPoints,
-            actualPoints,
-            accepted,
-            review,
-            isBestSolution,
-            commentsStats,
-            permissionHints,
-            plagiarism = null,
-          }) => {
-            const statusEvaluated = lastSubmission && (lastSubmission.evalutaion || lastSubmission.failure);
-            const rte = getRuntime(runtimeEnvironmentId);
+        .forEach(s => {
+          const statusEvaluated = s.lastSubmission && (s.lastSubmission.evalutaion || s.lastSubmission.failure);
+          const rte = getRuntime(s.runtimeEnvironmentId);
 
-            res.push({
-              icon: {
-                id,
-                assignmentId,
-                commentsStats,
-                lastSubmission,
-                accepted,
-                review,
-                permissionHints,
-                isBestSolution,
-                plagiarism,
-              },
-              assignment,
-              date: createdAt,
-              validity: statusEvaluated ? safeGet(lastSubmission, ['evaluation', 'score']) : null,
-              points: statusEvaluated ? { maxPoints, bonusPoints, actualPoints } : { actualPoints: null },
-              runtimeEnvironment: rte && getJsData(rte),
-              note,
-              actionButtons: { id, assignmentId, permissionHints },
-            });
-          }
-        )
+          res.push({
+            icon: s,
+            assignment,
+            date: s.createdAt,
+            validity: statusEvaluated ? safeGet(s.lastSubmission, ['evaluation', 'score']) : null,
+            points: statusEvaluated ? s : { actualPoints: null },
+            runtimeEnvironment: rte && getJsData(rte),
+            note: s.note,
+            actionButtons: s,
+          });
+        })
     );
 
     return res;

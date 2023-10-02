@@ -5,11 +5,17 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AssignmentSyncIcon from '../AssignmentSyncIcon';
-import AssignmentStatusIcon from '../AssignmentStatusIcon';
 import AssignmentMaxPoints from '../AssignmentMaxPoints';
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
-import { ChatIcon, EditIcon, ResultsIcon, MaybeBonusAssignmentIcon, MaybeVisibleAssignmentIcon } from '../../../icons';
+import {
+  AssignmentIcon,
+  ChatIcon,
+  EditIcon,
+  ResultsIcon,
+  MaybeBonusAssignmentIcon,
+  MaybeVisibleAssignmentIcon,
+} from '../../../icons';
 import DeleteAssignmentButtonContainer from '../../../../containers/DeleteAssignmentButtonContainer';
 import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
@@ -77,7 +83,7 @@ const AssignmentTableRow = ({
       {permissionHints.update || permissionHints.viewAssignmentSolutions ? (
         <MaybeVisibleAssignmentIcon id={id} isPublic={isPublic} visibleFrom={visibleFrom} />
       ) : (
-        <AssignmentStatusIcon id={id} status={status} accepted={accepted} />
+        <AssignmentIcon className="text-muted" />
       )}
       <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />
 

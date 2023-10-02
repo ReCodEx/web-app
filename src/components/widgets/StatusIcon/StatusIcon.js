@@ -4,7 +4,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../../icons';
 
-const StatusIcon = ({ id, message, icon, accepted = false }) => (
+const StatusIcon = ({ id, message, icon, placement = 'bottom', accepted = false }) => (
   <span>
     {accepted ? (
       <OverlayTrigger
@@ -20,12 +20,14 @@ const StatusIcon = ({ id, message, icon, accepted = false }) => (
             </span>
           </Tooltip>
         }>
-        <Icon icon="check-circle" className="text-green" />
+        <Icon icon="circle-check" className="text-green" />
       </OverlayTrigger>
-    ) : (
+    ) : message ? (
       <OverlayTrigger placement="bottom" overlay={<Tooltip id={id}>{message}</Tooltip>}>
         {icon}
       </OverlayTrigger>
+    ) : (
+      icon
     )}
   </span>
 );
@@ -33,7 +35,8 @@ const StatusIcon = ({ id, message, icon, accepted = false }) => (
 StatusIcon.propTypes = {
   id: PropTypes.string.isRequired,
   icon: PropTypes.any.isRequired,
-  message: PropTypes.any.isRequired,
+  message: PropTypes.any,
+  placement: PropTypes.string,
   accepted: PropTypes.bool,
 };
 

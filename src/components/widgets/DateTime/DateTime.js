@@ -5,7 +5,7 @@ import { FormattedDate, FormattedTime, FormattedRelativeTime } from 'react-intl'
 import classnames from 'classnames';
 import { defaultMemoize } from 'reselect';
 
-import Icon from '../../icons';
+import { BellIcon, PastDeadlineIcon } from '../../icons';
 import { EMPTY_OBJ } from '../../../helpers/common';
 import { UserUIDataContext } from '../../../helpers/contexts';
 import { knownLocales } from '../../../helpers/localizedData';
@@ -41,9 +41,9 @@ const dateTime = ({
       'text-muted': isDeadline && isAfter(unixts),
     })}>
     {isDeadline && isAfter(unixts - deadlineAlertTime) && !isAfter(unixts) && (
-      <Icon icon={['far', 'bell']} className="faa-shake animated" gapRight />
+      <BellIcon className="faa-shake animated" gapRight />
     )}
-    {isDeadline && isAfter(unixts) && <Icon icon="skull" className="half-opaque" gapRight />}
+    {isDeadline && isAfter(unixts) && <PastDeadlineIcon className="half-opaque" gapRight />}
     {showDate && (
       <span
         className={classnames({

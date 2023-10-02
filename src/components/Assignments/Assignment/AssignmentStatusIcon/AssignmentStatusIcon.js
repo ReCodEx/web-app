@@ -40,9 +40,7 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
       <StatusIcon
         id={id}
         icon={<EvaluationFailedIcon className="text-danger" />}
-        message={
-          <FormattedMessage id="app.assignemntStatusIcon.evaluationFailed" defaultMessage="Evaluation failed." />
-        }
+        message={<FormattedMessage id="app.solutionStatusIcon.evaluationFailed" defaultMessage="Evaluation failed." />}
       />
     );
   }

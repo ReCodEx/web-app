@@ -57,7 +57,7 @@ const assignmentCellRendererCreator = defaultMemoize((rawAssignments, locale) =>
         </span>
       </OverlayTrigger>
 
-      {points && points.accepted && <Icon icon="check-circle" className={`text-green ${styles.accepted}`} />}
+      {points && points.accepted && <Icon icon="circle-check" className={`text-green ${styles.accepted}`} />}
     </>
   );
 });

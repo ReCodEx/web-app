@@ -12,23 +12,24 @@ import EditSolutionNoteForm from '../../forms/EditSolutionNoteForm';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
-import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
 import withLinks from '../../../helpers/withLinks';
 import Icon, {
-  DeadlineIcon,
-  EditIcon,
-  InvertIcon,
-  NoteIcon,
-  UserIcon,
-  SupervisorIcon,
-  ReviewIcon,
-  SuccessIcon,
-  FailureIcon,
+  AcceptedIcon,
   CodeIcon,
+  EditIcon,
+  FailureIcon,
+  InvertIcon,
   LinkIcon,
   LoadingIcon,
+  NoteIcon,
+  PastDeadlineIcon,
+  PointsIcon,
+  ReviewIcon,
+  SuccessIcon,
+  SupervisorIcon,
+  UserIcon,
   WarningIcon,
 } from '../../icons';
 import AssignmentDeadlinesGraph from '../../Assignments/Assignment/AssignmentDeadlinesGraph';
@@ -85,7 +86,6 @@ class SolutionStatus extends Component {
         pointsPercentualThreshold,
       },
       evaluation,
-      lastSubmission,
       submittedAt,
       userId,
       submittedBy,
@@ -222,13 +222,12 @@ class SolutionStatus extends Component {
                         </Tooltip>
                       }>
                       <span>
-                        <DeadlineIcon className="text-muted" gapRight />
                         {submittedAt < firstDeadline ? (
-                          <SuccessIcon className="text-success" />
+                          <Icon icon={['far', 'circle-check']} className="text-success" />
                         ) : allowSecondDeadline && submittedAt < secondDeadline ? (
                           <InvertIcon className="text-warning" />
                         ) : (
-                          <FailureIcon />
+                          <PastDeadlineIcon className="text-muted" />
                         )}
                       </span>
                     </OverlayTrigger>
@@ -270,7 +269,7 @@ class SolutionStatus extends Component {
 
               <tr>
                 <td className="text-center text-muted shrink-col px-2">
-                  <AssignmentStatusIcon id={String(submittedAt)} submission={lastSubmission} accepted={accepted} />
+                  <PointsIcon />
                 </td>
                 <th className="text-nowrap">
                   <FormattedMessage id="app.solution.scoredPoints" defaultMessage="Final score" />:
@@ -291,11 +290,25 @@ class SolutionStatus extends Component {
                     {bonusPoints !== 0 ? (bonusPoints >= 0 ? '+' : '') + bonusPoints : ''} / {maxPoints}
                   </b>
 
-                  {important.accepted && (
+                  {accepted && (
                     <OverlayTrigger
                       placement="bottom"
                       overlay={
                         <Tooltip id="accepted">
+                          <FormattedMessage
+                            id="app.solutionStatusIcon.accepted"
+                            defaultMessage="The solution was marked as accepted."
+                          />
+                        </Tooltip>
+                      }>
+                      <AcceptedIcon largeGapLeft largeGapRight className="text-success" />
+                    </OverlayTrigger>
+                  )}
+                  {important.accepted && (
+                    <OverlayTrigger
+                      placement="bottom"
+                      overlay={
+                        <Tooltip id="another-accepted">
                           <FormattedMessage
                             id="app.solution.anotherAcceptedWarning"
                             defaultMessage="Another solution has been marked as accepted. Points of this solution are not taken into account."
@@ -613,7 +626,6 @@ SolutionStatus.propTypes = {
     pointsPercentualThreshold: PropTypes.number,
   }).isRequired,
   evaluation: PropTypes.object,
-  lastSubmission: PropTypes.object,
   submittedAt: PropTypes.number.isRequired,
   userId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string,
