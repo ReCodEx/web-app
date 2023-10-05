@@ -20,7 +20,7 @@ import EditUserUIDataForm, {
   EDITOR_FONT_SIZE_MAX,
   EDITOR_FONT_SIZE_DEFAULT,
 } from '../../components/forms/EditUserUIDataForm';
-import GenerateTokenForm from '../../components/forms/GenerateTokenForm';
+import GenerateTokenForm, { initialValues } from '../../components/forms/GenerateTokenForm';
 import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
 import CalendarTokens from '../../components/Users/CalendarTokens';
 import Box from '../../components/widgets/Box';
@@ -76,12 +76,6 @@ const prepareUserUIDataInitialValues = defaultMemoize(
     editorFontSize: prepareNumber(editorFontSize, EDITOR_FONT_SIZE_MIN, EDITOR_FONT_SIZE_MAX, EDITOR_FONT_SIZE_DEFAULT),
   })
 );
-
-const GENERATE_TOKEN_SCOPES = {
-  'read-all': true,
-  master: false,
-  refresh: false,
-};
 
 class EditUser extends Component {
   static loadAsync = ({ userId }, dispatch) =>
@@ -238,14 +232,7 @@ class EditUser extends Component {
 
                 <Row>
                   <Col lg={12}>
-                    <GenerateTokenForm
-                      onSubmit={generateToken}
-                      initialValues={{
-                        expiration: '604800', // one week (in string)
-                        scopes: GENERATE_TOKEN_SCOPES,
-                      }}
-                      lastToken={lastToken}
-                    />
+                    <GenerateTokenForm onSubmit={generateToken} initialValues={initialValues} lastToken={lastToken} />
                   </Col>
                 </Row>
               </>
@@ -308,12 +295,7 @@ export default connect(
     updateProfile: data => dispatch(updateProfile(userId, data)),
     makeLocalLogin: () => dispatch(makeLocalLogin(userId)),
     generateToken: formData =>
-      dispatch(
-        generateToken(
-          formData.expiration,
-          Object.keys(formData.scopes).filter(key => formData.scopes[key] === true)
-        )
-      ),
+      dispatch(generateToken(formData.expiration, formData.refresh ? [formData.scope, 'refresh'] : [formData.scope])),
     setRole: role => dispatch(setRole(userId, role)),
     takeOver: userId => dispatch(takeOver(userId)),
     createCalendar: () => dispatch(createUserCalendar(userId)),
