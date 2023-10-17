@@ -53,6 +53,7 @@
   "app.addSisTermForm.title": "Add new term",
   "app.addSisTermForm.winter": "Winter term",
   "app.addSisTermForm.year": "Year:",
+  "app.addStudent.cannotSearch": "You do not have permissions to search students, so you cannot add them explicitly.",
   "app.addStudent.inviteButton": "Invite to Register",
   "app.addStudent.inviteDialog.explain": "An invitation will be sent to the user at given email address. The user will receive a link for registration as a local user. User profile details (name and email) must be filled in correctly, since the user will not be able to modify them. Optionally, you may select a list of groups to which the user will be assigned immediately after registration.",
   "app.addStudent.inviteDialog.title": "Send invitation to ReCodEx",

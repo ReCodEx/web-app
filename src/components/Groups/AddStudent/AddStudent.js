@@ -53,15 +53,24 @@ const prepareInviteOnSubmitHandler = defaultMemoize(
     }
 );
 
-const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, inviteUser = null }) => {
+const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = false, inviteUser = null }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   return (
     <>
-      <AddUserContainer
-        instanceId={instanceId}
-        id={`add-student-${groupId}`}
-        createActions={({ id }) => <LeaveJoinGroupButtonContainer userId={id} groupId={groupId} />}
-      />
+      {canSearch ? (
+        <AddUserContainer
+          instanceId={instanceId}
+          id={`add-student-${groupId}`}
+          createActions={({ id }) => <LeaveJoinGroupButtonContainer userId={id} groupId={groupId} />}
+        />
+      ) : (
+        <div className="text-center text-muted small">
+          <FormattedMessage
+            id="app.addStudent.cannotSearch"
+            defaultMessage="You do not have permissions to search students, so you cannot add them explicitly."
+          />
+        </div>
+      )}
 
       {inviteUser && (
         <>
@@ -112,6 +121,7 @@ AddStudent.propTypes = {
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   groupId: PropTypes.string.isRequired,
+  canSearch: PropTypes.bool,
   inviteUser: PropTypes.func,
 };
 
