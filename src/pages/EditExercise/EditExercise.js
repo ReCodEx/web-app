@@ -34,7 +34,7 @@ import { fetchByIds } from '../../redux/modules/users';
 import { getExercise, getExerciseAttachingGroupId, getExerciseDetachingGroupId } from '../../redux/selectors/exercises';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { loggedInUserSelector } from '../../redux/selectors/users';
-import { getGroupsAdmins } from '../../redux/selectors/groups';
+import { getGroupsAdmins, groupDataAccessorSelector } from '../../redux/selectors/groups';
 
 import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
 import { safeGet } from '../../helpers/common';
@@ -117,6 +117,7 @@ class EditExercise extends Component {
       attachExerciseToGroup,
       detachExerciseFromGroup,
       sendNotification,
+      groupDataAccessor,
     } = this.props;
 
     return (
@@ -158,6 +159,7 @@ class EditExercise extends Component {
                       detachingGroupId={detachingGroupId}
                       attachExerciseToGroup={attachExerciseToGroup}
                       detachExerciseFromGroup={detachExerciseFromGroup}
+                      groupDataAccessor={groupDataAccessor}
                     />
 
                     <Box title={<FormattedMessage id="app.editExercise.editTags" defaultMessage="Edit Tags" />}>
@@ -240,6 +242,7 @@ EditExercise.propTypes = {
   loggedUser: ImmutablePropTypes.map,
   attachingGroupId: PropTypes.string,
   detachingGroupId: PropTypes.string,
+  groupDataAccessor: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   editExercise: PropTypes.func.isRequired,
@@ -261,6 +264,7 @@ export default withLinks(
       loggedUser: loggedInUserSelector(state),
       attachingGroupId: getExerciseAttachingGroupId(exerciseId)(state),
       detachingGroupId: getExerciseDetachingGroupId(exerciseId)(state),
+      groupDataAccessor: groupDataAccessorSelector(state),
     }),
     (dispatch, { params: { exerciseId } }) => ({
       reset: () => dispatch(reset('editExercise')),

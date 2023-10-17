@@ -8,7 +8,7 @@ import Icon, { GroupIcon, LoadingIcon } from '../../icons';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import Button from '../../widgets/TheButton';
 import GroupsTreeContainer from '../../../containers/GroupsTreeContainer';
-import { arrayToObject, identity } from '../../../helpers/common';
+import { arrayToObject, identity, EMPTY_MAP } from '../../../helpers/common';
 
 class ExerciseGroups extends Component {
   state = { dialogOpen: false };
@@ -51,12 +51,14 @@ class ExerciseGroups extends Component {
     );
   };
 
-  buttonsCreator = attachedGroupsIds => group => {
-    return <span>{attachedGroupsIds[group.id] ? this.detachButton(group.id) : this.attachButton(group.id)}</span>;
+  buttonsCreator = (attachedGroupsIds, groupDataAccessor) => group => {
+    return (groupDataAccessor(group.id) || EMPTY_MAP).getIn(['permissionHints', 'createExercise'], false) ? (
+      <span>{attachedGroupsIds[group.id] ? this.detachButton(group.id) : this.attachButton(group.id)}</span>
+    ) : null;
   };
 
   render() {
-    const { groupsIds = [], showButtons = false } = this.props;
+    const { groupsIds = [], showButtons = false, groupDataAccessor } = this.props;
     return (
       <Box
         title={<FormattedMessage id="app.exercise.groups" defaultMessage="Groups of Residence" />}
@@ -82,7 +84,11 @@ class ExerciseGroups extends Component {
                   <td>
                     <GroupsNameContainer groupId={groupId} fullName translations links admins />
                   </td>
-                  <td className="text-right">{showButtons && this.detachButton(groupId)}</td>
+                  <td className="text-right">
+                    {showButtons &&
+                      (groupDataAccessor(groupId) || EMPTY_MAP).getIn(['permissionHints', 'createExercise'], false) &&
+                      this.detachButton(groupId)}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -101,7 +107,10 @@ class ExerciseGroups extends Component {
               <Modal.Body>
                 <GroupsTreeContainer
                   onlyEditable
-                  buttonsCreator={this.buttonsCreator(arrayToObject(groupsIds, identity, () => true))}
+                  buttonsCreator={this.buttonsCreator(
+                    arrayToObject(groupsIds, identity, () => true),
+                    groupDataAccessor
+                  )}
                 />
               </Modal.Body>
             </Modal>
@@ -119,6 +128,7 @@ ExerciseGroups.propTypes = {
   detachingGroupId: PropTypes.string,
   attachExerciseToGroup: PropTypes.func.isRequired,
   detachExerciseFromGroup: PropTypes.func.isRequired,
+  groupDataAccessor: PropTypes.func.isRequired,
 };
 
 export default ExerciseGroups;
