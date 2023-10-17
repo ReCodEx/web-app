@@ -52,7 +52,7 @@ import withLinks from '../../helpers/withLinks';
 import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 
-import { isSuperadminRole, isSupervisorRole, isStudentRole } from '../../components/helpers/usersRoles';
+import { isSuperadminRole, isStudentRole } from '../../components/helpers/usersRoles';
 import { EMPTY_LIST, hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
@@ -270,43 +270,46 @@ class GroupStudents extends Component {
 
                     {
                       // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
-                      (isSuperadminRole(effectiveRole) ||
-                        ((isGroupSupervisor || isGroupAdmin) &&
-                          !data.organizational &&
-                          !data.archived &&
-                          isSupervisorRole(effectiveRole) &&
-                          !isStudentRole(effectiveRole))) && (
-                        <Row>
-                          <Col xl={6}>
-                            <Box
-                              title={
-                                <FormattedMessage id="app.groupStudents.addStudent" defaultMessage="Add Student" />
-                              }
-                              isOpen>
-                              <AddStudent
-                                instanceId={data.privateData.instanceId}
-                                groups={invitableGroups}
-                                groupsAccessor={groupsAccessor}
-                                groupId={data.id}
-                                inviteUser={hasPermissions(data, 'inviteStudents') ? inviteUser : null}
-                              />
-                            </Box>
-                          </Col>
+                      !data.organizational &&
+                        !data.archived &&
+                        (hasPermissions(data, 'inviteStudents') || hasPermissions(data, 'editInvitations')) && (
+                          <Row>
+                            {hasPermissions(data, 'inviteStudents') && (
+                              <Col xl={6}>
+                                <Box
+                                  title={
+                                    <FormattedMessage id="app.groupStudents.addStudent" defaultMessage="Add Student" />
+                                  }
+                                  isOpen>
+                                  <AddStudent
+                                    instanceId={data.privateData.instanceId}
+                                    groups={invitableGroups}
+                                    groupsAccessor={groupsAccessor}
+                                    groupId={data.id}
+                                    canSearch={
+                                      isSuperadminRole(effectiveRole) ||
+                                      ((isGroupSupervisor || isGroupAdmin) && !isStudentRole(effectiveRole))
+                                    }
+                                    inviteUser={inviteUser}
+                                  />
+                                </Box>
+                              </Col>
+                            )}
 
-                          <Col xl={6}>
-                            <Box
-                              title={
-                                <FormattedMessage id="app.groupStudents.invitations" defaultMessage="Invitations" />
-                              }
-                              isOpen>
-                              <GroupInvitationsContainer
-                                groupId={data.id}
-                                actionButtons={hasPermissions(data, 'editInvitations')}
-                              />
-                            </Box>
-                          </Col>
-                        </Row>
-                      )
+                            <Col xl={6}>
+                              <Box
+                                title={
+                                  <FormattedMessage id="app.groupStudents.invitations" defaultMessage="Invitations" />
+                                }
+                                isOpen>
+                                <GroupInvitationsContainer
+                                  groupId={data.id}
+                                  actionButtons={hasPermissions(data, 'editInvitations')}
+                                />
+                              </Box>
+                            </Col>
+                          </Row>
+                        )
                     }
                   </>
                 )}
