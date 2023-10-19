@@ -31,13 +31,16 @@ export const fetchFileIfNeeded = actions.fetchOneIfNeeded;
  *
  * @param {string} fileId
  * @param {string|null} entry ZIP archive path (works only for zip uploaded files)
+ * @param {string|null} saveAs if present, the file will be saved under given name (no need to fetch metadata)
+ * @param {string|null} similarSolutionId ACL hint if plagiarism source is to be downloaded
+ *                                        (ID of a solution which is similar with downloaded file)
  */
-export const download = (fileId, entry = null, similarSolutionId = null) =>
+export const download = (fileId, entry = null, saveAs = null, similarSolutionId = null) =>
   downloadHelper({
     endpoint: `/uploaded-files/${fileId}/download?` + urlQueryString({ entry, similarSolutionId }),
-    fetch: entry ? null : fetchFileIfNeeded,
+    fetch: entry || saveAs ? null : fetchFileIfNeeded,
     actionType: actionTypes.DOWNLOAD,
-    fileNameSelector: entry ? null : (id, state) => getJsData(getFile(id)(state)).name,
+    fileNameSelector: saveAs ? () => saveAs : entry ? null : (id, state) => getJsData(getFile(id)(state)).name,
     contentType: 'application/octet-stream',
   })(fileId, entry && entry.split('/').pop());
 

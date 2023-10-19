@@ -343,7 +343,7 @@ export default withRouter(
       },
       (dispatch, { params }) => ({
         loadAsync: () => SolutionPlagiarisms.loadAsync(params, dispatch),
-        download: (id, entry = null, solutionId = null) => dispatch(download(id, entry, solutionId)),
+        download: (...args) => dispatch(download(...args)),
         addComment: comment => dispatch(addComment(params.solutionId, comment)),
         updateComment: comment => dispatch(updateComment(params.solutionId, comment)),
         removeComment: id => dispatch(removeComment(params.solutionId, id)),

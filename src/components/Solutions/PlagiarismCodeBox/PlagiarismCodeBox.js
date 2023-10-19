@@ -276,6 +276,7 @@ class PlagiarismCodeBox extends Component {
                         download(
                           selectedPlagiarismFile.solutionFile.id,
                           selectedPlagiarismFile.fileEntry || null,
+                          selectedPlagiarismFile.solutionFile.name,
                           solutionId
                         );
                       }}
