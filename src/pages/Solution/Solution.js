@@ -13,9 +13,11 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import SolutionDetail, { FailedSubmissionDetail } from '../../components/Solutions/SolutionDetail';
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
+import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
+import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
@@ -33,6 +35,13 @@ import {
   deleteSubmissionEvaluation,
 } from '../../redux/modules/submissionEvaluations';
 import { fetchAssignmentSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
+import {
+  init,
+  submitAssignmentSolution as submitSolution,
+  presubmitAssignmentSolution as presubmitSolution,
+} from '../../redux/modules/submission';
+import { canSubmit } from '../../redux/modules/canSubmit';
+
 import { getSolution, isAssignmentSolversLoading, getAssignmentSolverSelector } from '../../redux/selectors/solutions';
 import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
 import {
@@ -43,6 +52,9 @@ import {
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
 import { isLoggedAsStudent } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { isSubmitting } from '../../redux/selectors/submission';
+import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
 import { hasPermissions } from '../../helpers/common';
@@ -72,6 +84,7 @@ class Solution extends Component {
       dispatch(fetchSubmissionEvaluationsForSolution(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId)),
+      dispatch(canSubmit(assignmentId)),
     ]);
 
   componentDidMount() {
@@ -91,6 +104,11 @@ class Solution extends Component {
       files,
       download,
       userSolutionsSelector,
+      loggedInUserId,
+      submitting,
+      canSubmit,
+      initCanSubmit,
+      reloadCanSubmit,
       params: { assignmentId },
       evaluations,
       runtimeEnvironments,
@@ -132,7 +150,6 @@ class Solution extends Component {
                 }
                 canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               />
-
               {solution.plagiarism && hasPermissions(solution, 'viewDetectedPlagiarisms') && (
                 <Callout variant="warning" icon={<PlagiarismIcon />}>
                   <FormattedMessage
@@ -141,7 +158,6 @@ class Solution extends Component {
                   />
                 </Callout>
               )}
-
               {(hasPermissions(solution, 'setFlag') ||
                 hasPermissions(solution, 'review') ||
                 hasPermissions(assignment, 'resubmitSubmissions')) && (
@@ -189,6 +205,32 @@ class Solution extends Component {
                 </Row>
               )}
 
+              {isStudent && (
+                <Row>
+                  <Col xs={12} className="mb-3 text-right">
+                    <ResourceRenderer loading={<SubmitSolutionButton disabled={true} />} resource={canSubmit}>
+                      {canSubmitObj => (
+                        <SubmitSolutionButton
+                          onClick={initCanSubmit(assignment.id)}
+                          disabled={!canSubmitObj.canSubmit}
+                        />
+                      )}
+                    </ResourceRenderer>
+                    <SubmitSolutionContainer
+                      userId={loggedInUserId}
+                      id={assignment.id}
+                      onSubmit={submitSolution}
+                      presubmitValidation={presubmitSolution}
+                      afterEvaluationStarts={reloadCanSubmit}
+                      onReset={initCanSubmit}
+                      isOpen={submitting}
+                      solutionFilesLimit={assignment.solutionFilesLimit}
+                      solutionSizeLimit={assignment.solutionSizeLimit}
+                    />
+                  </Col>
+                </Row>
+              )}
+
               {hasPermissions(solution, 'review') &&
                 solution.review &&
                 solution.review.startedAt &&
@@ -200,7 +242,6 @@ class Solution extends Component {
                     />
                   </Callout>
                 )}
-
               {isStudent && hasPermissions(solution, 'viewReview') && solution.review && solution.review.closedAt && (
                 <Callout variant={solution.review.issues > 0 ? 'warning' : 'success'}>
                   <FormattedMessage
@@ -223,7 +264,6 @@ class Solution extends Component {
                   </Link>
                 </Callout>
               )}
-
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
                 {runtimes => (
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
@@ -267,6 +307,9 @@ Solution.propTypes = {
   solution: PropTypes.object,
   files: ImmutablePropTypes.map,
   userSolutionsSelector: PropTypes.func.isRequired,
+  loggedInUserId: PropTypes.string,
+  submitting: PropTypes.bool.isRequired,
+  canSubmit: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
   fetchScoreConfigIfNeeded: PropTypes.func.isRequired,
   evaluations: PropTypes.object,
@@ -280,6 +323,8 @@ Solution.propTypes = {
   deleteEvaluation: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
+  initCanSubmit: PropTypes.func.isRequired,
+  reloadCanSubmit: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
@@ -289,6 +334,9 @@ export default connect(
     solution: getSolution(state, solutionId),
     files: getSolutionFiles(state, solutionId),
     userSolutionsSelector: getUserSolutionsSortedData(state),
+    loggedInUserId: loggedInUserIdSelector(state),
+    submitting: isSubmitting(state),
+    canSubmit: canSubmitSolution(assignmentId)(state),
     assignment: getAssignment(state, assignmentId),
     evaluations: evaluationsForSubmissionSelector(state, solutionId),
     runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
@@ -312,5 +360,7 @@ export default connect(
         dispatch(fetchSolutionIfNeeded(params.solutionId))
       ),
     download: (id, entry = null) => dispatch(download(id, entry)),
+    initCanSubmit: userId => () => dispatch(init(userId, params.assignmentId)),
+    reloadCanSubmit: () => dispatch(canSubmit(params.assignmentId)),
   })
 )(injectIntl(withLinks(Solution)));

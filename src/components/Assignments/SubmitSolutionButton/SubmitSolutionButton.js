@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/TheButton';
-import Icon from '../../icons';
+import Icon, { CodeFileIcon } from '../../icons';
 
 const SubmitSolutionButton = ({ disabled = false, onClick }) => (
   <Button variant="success" disabled={disabled} onClick={onClick}>
-    <Icon icon="bug" gapRight />
+    <span className="fa-layers fa-fw mr-2">
+      <CodeFileIcon transform="grow-2" />
+      <Icon icon="share" className="almost-opaque" transform="shrink-4 right-7 up-8" />
+    </span>
     <FormattedMessage id="app.solutionsTable.submitNewSolution" defaultMessage="Submit New Solution" />
   </Button>
 );
