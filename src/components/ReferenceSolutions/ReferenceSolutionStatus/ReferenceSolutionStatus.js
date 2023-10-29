@@ -69,7 +69,7 @@ const ReferenceSolutionStatus = ({
             <FormattedMessage id="generic.author" defaultMessage="Author" />:
           </th>
           <td>
-            <UsersNameContainer userId={authorId} link />
+            <UsersNameContainer userId={authorId} showEmail="icon" link />
           </td>
         </tr>
 
