@@ -206,29 +206,28 @@ class Solution extends Component {
               )}
 
               {isStudent && (
-                <Row>
-                  <Col xs={12} className="mb-3 text-right">
-                    <ResourceRenderer loading={<SubmitSolutionButton disabled={true} />} resource={canSubmit}>
-                      {canSubmitObj => (
-                        <SubmitSolutionButton
-                          onClick={initCanSubmit(assignment.id)}
-                          disabled={!canSubmitObj.canSubmit}
-                        />
-                      )}
-                    </ResourceRenderer>
-                    <SubmitSolutionContainer
-                      userId={loggedInUserId}
-                      id={assignment.id}
-                      onSubmit={submitSolution}
-                      presubmitValidation={presubmitSolution}
-                      afterEvaluationStarts={reloadCanSubmit}
-                      onReset={initCanSubmit}
-                      isOpen={submitting}
-                      solutionFilesLimit={assignment.solutionFilesLimit}
-                      solutionSizeLimit={assignment.solutionSizeLimit}
-                    />
-                  </Col>
-                </Row>
+                <ResourceRenderer resource={canSubmit}>
+                  {canSubmitObj =>
+                    canSubmitObj.canSubmit && (
+                      <Row>
+                        <Col xs={12} className="mb-3 text-right">
+                          <SubmitSolutionButton onClick={initCanSubmit(assignment.id)} />
+                          <SubmitSolutionContainer
+                            userId={loggedInUserId}
+                            id={assignment.id}
+                            onSubmit={submitSolution}
+                            presubmitValidation={presubmitSolution}
+                            afterEvaluationStarts={reloadCanSubmit}
+                            onReset={initCanSubmit}
+                            isOpen={submitting}
+                            solutionFilesLimit={assignment.solutionFilesLimit}
+                            solutionSizeLimit={assignment.solutionSizeLimit}
+                          />
+                        </Col>
+                      </Row>
+                    )
+                  }
+                </ResourceRenderer>
               )}
 
               {hasPermissions(solution, 'review') &&

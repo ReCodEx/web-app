@@ -175,6 +175,8 @@
   "app.assignments.hideAllButton": "Set Hidden",
   "app.assignments.hidePastAssignments": "Total {count} {count, plural, one {assignment} other {assignments}} {count, plural, one {is past its} other {are past their}} deadline. <a>Hide old assignments.</a>",
   "app.assignments.invertSelection": "Invert",
+  "app.assignments.lockedSubmissions.reason": "Reason",
+  "app.assignments.lockedSubmissions.title": "Submissions are currently locked out",
   "app.assignments.maxPoints": "Max. Points",
   "app.assignments.maxPointsShort": "Max. points",
   "app.assignments.name": "Assignment name",
