@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
+import OptionalPopoverWrapper from '../../components/widgets/OptionalPopoverWrapper';
 
 import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments';
 import { canSubmit } from '../../redux/modules/canSubmit';
@@ -54,6 +55,11 @@ import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/L
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
 import { hasPermissions } from '../../helpers/common';
 
+const getReason = ({ lockedReason }, locale) =>
+  typeof lockedReason === 'object'
+    ? lockedReason[locale] || lockedReason.en || Object.values(lockedReason)[0] || 'Reason unknown.'
+    : lockedReason;
+
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, { userId }) =>
     Promise.all([
@@ -99,6 +105,7 @@ class Assignment extends Component {
       fetchManyStatus,
       assignmentSolversLoading,
       assignmentSolverSelector,
+      intl: { locale },
     } = this.props;
 
     return (
@@ -179,21 +186,50 @@ class Assignment extends Component {
                         <p className="text-center">
                           <ResourceRenderer loading={<SubmitSolutionButton disabled={true} />} resource={canSubmit}>
                             {canSubmitObj => (
-                              <SubmitSolutionButton onClick={init(assignment.id)} disabled={!canSubmitObj.canSubmit} />
+                              <OptionalPopoverWrapper
+                                container={this}
+                                popoverId={`submit-locked-${assignment.id}`}
+                                placement="bottom"
+                                hide={!canSubmitObj.lockedReason}
+                                title={
+                                  <FormattedMessage
+                                    id="app.assignments.lockedSubmissions.title"
+                                    defaultMessage="Submissions are currently locked out"
+                                  />
+                                }
+                                contents={
+                                  <>
+                                    <strong>
+                                      <FormattedMessage
+                                        id="app.assignments.lockedSubmissions.reason"
+                                        defaultMessage="Reason"
+                                      />
+                                      :
+                                    </strong>{' '}
+                                    {getReason(canSubmitObj, locale)}
+                                  </>
+                                }>
+                                <SubmitSolutionButton
+                                  onClick={init(assignment.id)}
+                                  disabled={!canSubmitObj.canSubmit}
+                                />
+                              </OptionalPopoverWrapper>
                             )}
                           </ResourceRenderer>
                         </p>
-                        <SubmitSolutionContainer
-                          userId={loggedInUserId}
-                          id={assignment.id}
-                          onSubmit={submitSolution}
-                          presubmitValidation={presubmitSolution}
-                          afterEvaluationStarts={this.reloadAfterSubmit}
-                          onReset={init}
-                          isOpen={submitting}
-                          solutionFilesLimit={assignment.solutionFilesLimit}
-                          solutionSizeLimit={assignment.solutionSizeLimit}
-                        />
+                        {canSubmitObj.canSubmit && (
+                          <SubmitSolutionContainer
+                            userId={loggedInUserId}
+                            id={assignment.id}
+                            onSubmit={submitSolution}
+                            presubmitValidation={presubmitSolution}
+                            afterEvaluationStarts={this.reloadAfterSubmit}
+                            onReset={init}
+                            isOpen={submitting}
+                            solutionFilesLimit={assignment.solutionFilesLimit}
+                            solutionSizeLimit={assignment.solutionSizeLimit}
+                          />
+                        )}
                       </div>
                     )}
 
@@ -272,30 +308,33 @@ Assignment.propTypes = {
   assignmentSolverSelector: PropTypes.func.isRequired,
   reloadCanSubmit: PropTypes.func.isRequired,
   reloadSolvers: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
-export default connect(
-  (state, { params: { assignmentId, userId = null } }) => {
-    const loggedInUserId = loggedInUserIdSelector(state);
-    return {
-      assignment: getAssignment(state, assignmentId),
-      submitting: isSubmitting(state),
-      runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
-      userId,
-      loggedInUserId,
-      isStudentOf: loggedUserIsStudentOfSelector(state),
-      canSubmit: canSubmitSolution(assignmentId)(state),
-      solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
-      fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
-      assignmentSolversLoading: isAssignmentSolversLoading(state),
-      assignmentSolverSelector: getAssignmentSolverSelector(state),
-    };
-  },
-  (dispatch, { params: { assignmentId } }) => ({
-    init: userId => () => dispatch(init(userId, assignmentId)),
-    loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
-    exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
-    reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
-    reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
-  })
-)(Assignment);
+export default injectIntl(
+  connect(
+    (state, { params: { assignmentId, userId = null } }) => {
+      const loggedInUserId = loggedInUserIdSelector(state);
+      return {
+        assignment: getAssignment(state, assignmentId),
+        submitting: isSubmitting(state),
+        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+        userId,
+        loggedInUserId,
+        isStudentOf: loggedUserIsStudentOfSelector(state),
+        canSubmit: canSubmitSolution(assignmentId)(state),
+        solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
+        fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
+        assignmentSolversLoading: isAssignmentSolversLoading(state),
+        assignmentSolverSelector: getAssignmentSolverSelector(state),
+      };
+    },
+    (dispatch, { params: { assignmentId } }) => ({
+      init: userId => () => dispatch(init(userId, assignmentId)),
+      loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
+      exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+      reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
+      reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
+    })
+  )(Assignment)
+);

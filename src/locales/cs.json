@@ -175,6 +175,8 @@
   "app.assignments.hideAllButton": "Skrýt studentům",
   "app.assignments.hidePastAssignments": "Celkem {count} {count, plural, one {zadaná úloha má} =2 {zadané úlohy mají} =3 {zadané úlohy mají} =4 {zadané úlohy mají} other {zadaných úloh má}} termín v minulosti. <a>Skrýt staré úlohy.</a>",
   "app.assignments.invertSelection": "Invertovat",
+  "app.assignments.lockedSubmissions.reason": "Důvod",
+  "app.assignments.lockedSubmissions.title": "Odevzdávání řešení je v tuto chvíli zablokováno",
   "app.assignments.maxPoints": "Maximum bodů",
   "app.assignments.maxPointsShort": "Max. bodů",
   "app.assignments.name": "Název zadání",
