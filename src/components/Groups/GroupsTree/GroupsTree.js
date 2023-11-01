@@ -36,19 +36,21 @@ const defaultButtonsCreator = (
         </OverlayTrigger>
       )}
 
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id={`info-${group.id}`}>
-            <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-          </Tooltip>
-        }>
-        <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-          <Button variant="primary" size="xs">
-            <GroupIcon />
-          </Button>
-        </Link>
-      </OverlayTrigger>
+      {hasPermissions(group, 'viewPublicDetail') && (
+        <OverlayTrigger
+          placement="bottom"
+          overlay={
+            <Tooltip id={`info-${group.id}`}>
+              <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+            </Tooltip>
+          }>
+          <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
+            <Button variant="primary" size="xs">
+              <GroupIcon />
+            </Button>
+          </Link>
+        </OverlayTrigger>
+      )}
 
       {hasPermissions(group, 'viewDetail') && (
         <OverlayTrigger

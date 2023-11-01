@@ -139,7 +139,7 @@ class GroupInfo extends Component {
 
             <GroupArchivedWarning {...data} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_INFO_URI_FACTORY} />
 
-            {!hasPermissions(data, 'viewDetail') && (
+            {!hasPermissions(data, 'viewPublicDetail') && (
               <Row>
                 <Col sm={12}>
                   <Callout variant="warning" className="larger" icon={<BanIcon />}>
@@ -154,7 +154,7 @@ class GroupInfo extends Component {
 
             <Row>
               <Col sm={6}>
-                {hasPermissions(data, 'viewDetail') && (
+                {hasPermissions(data, 'viewPublicDetail') && (
                   <GroupInfoTable
                     group={data}
                     supervisors={supervisors}
@@ -224,7 +224,7 @@ class GroupInfo extends Component {
                 )}
               </Col>
               <Col sm={6}>
-                {hasPermissions(data, 'viewSubgroups') && (
+                {hasPermissions(data, 'viewPublicDetail') && (
                   <Box
                     title={<FormattedMessage id="app.groupDetail.subgroups" defaultMessage="Subgroups Hierarchy" />}
                     unlimitedHeight
