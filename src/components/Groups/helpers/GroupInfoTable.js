@@ -29,17 +29,7 @@ const getDescription = (localizedTexts, locale) => {
 };
 
 const GroupInfoTable = ({
-  group: {
-    id,
-    externalId,
-    organizational,
-    localizedTexts,
-    primaryAdminsIds,
-    public: isPublic = false,
-    privateData: { threshold, publicStats, bindings },
-  },
-  groups,
-  supervisors,
+  group: { externalId, organizational, localizedTexts, public: isPublic = false, privateData },
   isAdmin,
   locale,
 }) => (
@@ -53,7 +43,7 @@ const GroupInfoTable = ({
       unlimitedHeight>
       <Table>
         <tbody>
-          {!organizational && (
+          {!organizational && privateData && (
             <tr>
               <th>
                 <FormattedMessage
@@ -63,7 +53,7 @@ const GroupInfoTable = ({
                 :
               </th>
               <td>
-                <SuccessOrFailureIcon success={publicStats} />
+                <SuccessOrFailureIcon success={privateData.publicStats} />
               </td>
             </tr>
           )}
@@ -78,7 +68,7 @@ const GroupInfoTable = ({
               </td>
             </tr>
           )}
-          {threshold !== null && !organizational && (
+          {privateData && privateData.threshold !== null && !organizational && (
             <tr>
               <th>
                 <FormattedMessage
@@ -88,7 +78,7 @@ const GroupInfoTable = ({
                 :
               </th>
               <td>
-                <FormattedNumber value={threshold} style="percent" />
+                <FormattedNumber value={privateData.threshold} style="percent" />
               </td>
             </tr>
           )}
@@ -107,9 +97,10 @@ const GroupInfoTable = ({
             </tr>
           )}
 
-          {bindings &&
+          {privateData &&
+            privateData.bindings &&
             Object.values(
-              objectMap(bindings, (codes, provider) =>
+              objectMap(privateData.bindings, (codes, provider) =>
                 codes && codes.length > 0 ? (
                   <tr key={`bindings-${provider}`}>
                     <th>
@@ -148,11 +139,9 @@ const GroupInfoTable = ({
 
 GroupInfoTable.propTypes = {
   group: PropTypes.shape({
-    id: PropTypes.string.isRequired,
     externalId: PropTypes.string,
     parentGroupId: PropTypes.string,
     threshold: PropTypes.number,
-    primaryAdminsIds: PropTypes.array.isRequired,
     public: PropTypes.bool.isRequired,
     organizational: PropTypes.bool.isRequired,
     localizedTexts: PropTypes.array,
@@ -162,8 +151,6 @@ GroupInfoTable.propTypes = {
       bindings: PropTypes.object,
     }),
   }),
-  groups: PropTypes.object.isRequired,
-  supervisors: PropTypes.array.isRequired,
   isAdmin: PropTypes.bool,
   locale: PropTypes.string.isRequired,
 };
