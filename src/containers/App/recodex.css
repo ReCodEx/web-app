@@ -326,6 +326,10 @@ code {
   white-space: pre-wrap;
 }
 
+.recodex-markdown-container code:not(pre > code) {
+  color: #072;
+}
+
 .wider-tooltip {
   width: 300px;
 }
