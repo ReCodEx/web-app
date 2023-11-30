@@ -26,6 +26,14 @@ import cfsStyles from '../../helpers/CodeFragmentSelector/CodeFragmentSelector.l
 
 const linesCount = content => (content.match(/\n/g) || '').length + 1;
 
+const mergeRemainingFragments = (fragments, remainingFragments) => {
+  Object.keys(remainingFragments).forEach(fileIdx => {
+    remainingFragments[fileIdx].forEach(f => {
+      fragments.push({ ...f, doubleClickData: fileIdx });
+    });
+  });
+};
+
 class PlagiarismCodeBox extends Component {
   // Generate content for <pre> element that holds line numbers (based on size of the two compared contents).
   content1Ref = null;
@@ -46,16 +54,19 @@ class PlagiarismCodeBox extends Component {
 
   // Get fragments from the plagiarism record and split them to 2 lists (left half and right half)
   fragmentsRef = null;
+  remainingFragmentsRef = null;
   splitFragmentsCache = null;
 
-  splitFragments = fragments => {
-    if (this.fragmentsRef !== fragments) {
+  preprocessFragments = (fragments, remainingFragments) => {
+    if (this.fragmentsRef !== fragments || this.remainingFragmentsRef !== remainingFragments) {
       this.splitFragmentsCache = [[], []];
-      fragments.forEach(([f0, f1]) => {
-        this.splitFragmentsCache[0].push(f0);
-        this.splitFragmentsCache[1].push(f1);
+      fragments.forEach(([f0, f1], idx) => {
+        this.splitFragmentsCache[0].push({ ...f0, clickData: idx });
+        this.splitFragmentsCache[1].push({ ...f1, clickData: idx });
       });
+      mergeRemainingFragments(this.splitFragmentsCache[0], remainingFragments);
       this.fragmentsRef = fragments;
+      this.remainingFragmentsRef = remainingFragments;
     }
     return this.splitFragmentsCache;
   };
@@ -75,13 +86,26 @@ class PlagiarismCodeBox extends Component {
     }
   }
 
-  selectFragment = selectedFragment => this.setState({ selectedFragment });
+  fragmentClickHandler = data => {
+    const selectedFragment =
+      this.state.selectedFragment !== null
+        ? data[data.indexOf(this.state.selectedFragment) + 1] || null
+        : data.length > 0
+        ? data[0]
+        : null;
+
+    this.setState({ selectedFragment });
+  };
+
+  fragmentDoubleClickHandler = data => {
+    // console.log(data);
+  };
 
   _selectRelFragment = (ev, rel) => {
     const count = this.props.selectedPlagiarismFile.fragments.length;
     if (count > 0) {
       const next = this.state.selectedFragment !== null ? this.state.selectedFragment + rel : 0;
-      this.selectFragment(next >= 0 && next < count ? next : null);
+      this.fragmentClickHandler(next >= 0 && next < count ? next : null);
     }
 
     if (window) {
@@ -124,8 +148,10 @@ class PlagiarismCodeBox extends Component {
       download = null,
       fileContentsSelector,
       selectedPlagiarismFile,
+      remainingFragments,
       similarity = null,
-      selectPlagiarismFile = null,
+      // selectPlagiarismFile = null,
+      openSelectFileDialog = null,
       links: { SOLUTION_DETAIL_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
     } = this.props;
 
@@ -214,7 +240,7 @@ class PlagiarismCodeBox extends Component {
                     />
                   )}
 
-                  {selectPlagiarismFile ? (
+                  {openSelectFileDialog ? (
                     <OverlayTrigger
                       placement="bottom"
                       overlay={
@@ -225,7 +251,7 @@ class PlagiarismCodeBox extends Component {
                           />
                         </Tooltip>
                       }>
-                      <CodeCompareIcon className="text-primary ml-4 mr-3" onClick={selectPlagiarismFile} />
+                      <CodeCompareIcon className="text-primary ml-4 mr-3" onClick={openSelectFileDialog} />
                     </OverlayTrigger>
                   ) : (
                     <CodeCompareIcon className="text-muted ml-4 mr-3" />
@@ -341,17 +367,19 @@ class PlagiarismCodeBox extends Component {
                   <div className={this.state.fullWidth ? styles.fullWidth : ''}>
                     <CodeFragmentSelector
                       content={content.content}
-                      fragments={this.splitFragments(selectedPlagiarismFile.fragments)[0]}
+                      fragments={this.preprocessFragments(selectedPlagiarismFile.fragments, remainingFragments)[0]}
                       selected={this.state.selectedFragment}
-                      setSelected={this.selectFragment}
+                      clickHandler={this.fragmentClickHandler}
+                      doubleClickHandler={this.fragmentDoubleClickHandler}
                     />
                   </div>
                   <div className={this.state.fullWidth ? styles.fullWidth : ''}>
                     <CodeFragmentSelector
                       content={secondContent.content}
-                      fragments={this.splitFragments(selectedPlagiarismFile.fragments)[1]}
+                      fragments={this.preprocessFragments(selectedPlagiarismFile.fragments, remainingFragments)[1]}
                       selected={this.state.selectedFragment}
-                      setSelected={this.selectFragment}
+                      clickHandler={this.fragmentClickHandler}
+                      doubleClickHandler={this.fragmentDoubleClickHandler}
                     />
                   </div>
                 </div>
@@ -381,7 +409,9 @@ PlagiarismCodeBox.propTypes = {
   fileContentsSelector: PropTypes.func,
   selectedPlagiarismFile: PropTypes.object.isRequired,
   similarity: PropTypes.number,
+  remainingFragments: PropTypes.object,
   selectPlagiarismFile: PropTypes.func,
+  openSelectFileDialog: PropTypes.func,
   links: PropTypes.object,
 };
 
