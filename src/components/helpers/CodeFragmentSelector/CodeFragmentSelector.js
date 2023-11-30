@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import { identity } from '../../../helpers/common';
 import styles from './CodeFragmentSelector.less';
 
 // Process fragments and generate a list of start+end markers sorted by offset.
@@ -23,19 +24,19 @@ const _fragment = (content, startOffset, endOffset, refs, selectedFragment) => {
     .map(x => Number(x))
     .sort((a, b) => a - b);
 
-  // get ref to the next fragment (after selection), or first fragment (if nothing is selected)
-  const next = isSelected
-    ? refsArr[refsArr.indexOf(selectedFragment) + 1] || null
-    : refsArr.length > 0
-    ? refsArr[0]
-    : null;
+  // click and double click data passed to the respective handlers
+  // double click works only if there are no signle click actions (as secondary fragments)
+  const clickData = refsArr.map(idx => refs[idx].clickData).filter(identity);
+  const doubleClickData = refsArr.map(idx => refs[idx].doubleClickData).filter(identity);
 
   return {
     key: startOffset,
     content: content.substring(startOffset, endOffset),
     isSelected,
-    next,
-    count: refsArr.length,
+    clickData: clickData.length > 0 ? clickData : null,
+    // if click is empty, double click may be present
+    doubleClickData: clickData.length === 0 && doubleClickData.length > 0 ? doubleClickData : null,
+    count: clickData.length || doubleClickData.length,
   };
 };
 
@@ -64,7 +65,7 @@ const chopContent = (content, fragments, selected) => {
     while (i < markers.length && markers[i].offset === lastOffset) {
       const { idx, start } = markers[i];
       if (start) {
-        references[idx] = true; // opening new position
+        references[idx] = fragments[idx]; // opening new position
       } else if (references[idx]) {
         delete references[idx]; // closing a position
       }
@@ -87,31 +88,42 @@ const mouseDownHandler = ev => {
 
 class CodeFragmentSelector extends React.Component {
   render() {
-    const { content = '', fragments = [], selected = null, setSelected = null } = this.props;
+    const { content = '', fragments = [], selected = null, clickHandler = null, doubleClickHandler } = this.props;
     return (
       <pre className={styles.codeFragments}>
-        {chopContent(content, fragments, selected).map(({ key, content, isSelected, next, count }) => (
-          <span
-            key={key}
-            className={classnames({
-              [styles.selectable]: count > 0,
-              [styles.overlap]: count > 1,
-              [styles.overlapMore]: count > 2,
-              [styles.clickable]: count > 0 && setSelected,
-              [styles.selected]: isSelected,
-            })}
-            onClick={
-              count > 0 && setSelected
-                ? ev => {
-                    setSelected(next);
-                    ev.preventDefault();
-                  }
-                : null
-            }
-            onMouseDown={mouseDownHandler}>
-            {content}
-          </span>
-        ))}
+        {chopContent(content, fragments, selected).map(
+          ({ key, content, isSelected, clickData, doubleClickData, count }) => (
+            <span
+              key={key}
+              className={classnames({
+                [styles.selectable]: count > 0,
+                [styles.overlap]: count > 1,
+                [styles.overlapMore]: count > 2,
+                [styles.clickable]: (clickData && clickHandler) || (doubleClickData && doubleClickHandler),
+                [styles.selected]: isSelected,
+                [styles.secondary]: !clickData && doubleClickData,
+              })}
+              onClick={
+                clickData && clickHandler
+                  ? ev => {
+                      clickHandler(clickData);
+                      ev.preventDefault();
+                    }
+                  : null
+              }
+              onDoubleClick={
+                doubleClickData && doubleClickHandler
+                  ? ev => {
+                      doubleClickHandler(doubleClickData);
+                      ev.preventDefault();
+                    }
+                  : null
+              }
+              onMouseDown={mouseDownHandler}>
+              {content}
+            </span>
+          )
+        )}
       </pre>
     );
   }
@@ -121,7 +133,8 @@ CodeFragmentSelector.propTypes = {
   content: PropTypes.string,
   fragments: PropTypes.array,
   selected: PropTypes.number,
-  setSelected: PropTypes.func,
+  clickHandler: PropTypes.func,
+  doubleClickHandler: PropTypes.func,
 };
 
 export default CodeFragmentSelector;
