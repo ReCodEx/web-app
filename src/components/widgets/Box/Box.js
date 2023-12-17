@@ -57,6 +57,7 @@ class Box extends Component {
     const {
       id = null,
       title,
+      flexTitle = false,
       description = null,
       type = 'light',
       solid = false,
@@ -80,7 +81,7 @@ class Box extends Component {
           [className]: className.length > 0,
         })}>
         <Card.Header onClick={this.toggleDetails}>
-          <Card.Title>
+          <Card.Title className={flexTitle ? 'd-flex justify-content-between float-none' : null}>
             {title}
 
             <span className="whenTargetted text-warning">
@@ -129,6 +130,7 @@ class Box extends Component {
 Box.propTypes = {
   id: PropTypes.string,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  flexTitle: PropTypes.bool,
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   type: PropTypes.string,
   isOpen: PropTypes.bool,

@@ -6,12 +6,12 @@ import { defaultMemoize } from 'reselect';
 
 import PlagiarismCodeBox from '../PlagiarismCodeBox';
 import SourceCodeBox from '../SourceCodeBox';
-import DateTime from '../../widgets/DateTime';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Box from '../../widgets/Box';
+import InsetPanel from '../../widgets/InsetPanel';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import GroupsNameContainer from '../../../containers/GroupsNameContainer';
-import { CloseIcon, CodeFileIcon, LoadingIcon } from '../../icons';
+import Icon, { CodeCompareIcon, CloseIcon, LoadingIcon } from '../../icons';
+import FileSelectionTableRow from './FileSelectionTableRow';
 
 /**
  * Construct an object { fileIdx => fragmentsArray } where the fragments array holds only
@@ -28,7 +28,7 @@ const getRemainingFragments = defaultMemoize((files, selected) => {
 });
 
 class PlagiarismCodeBoxWithSelector extends Component {
-  state = { selectedFile: 0, dialogOpen: false };
+  state = { selectedFile: 0, dialogOpen: false, switchTo: null };
 
   componentDidUpdate(prevProps) {
     if (
@@ -39,9 +39,20 @@ class PlagiarismCodeBoxWithSelector extends Component {
     }
   }
 
-  openDialog = ev => {
-    this.setState({ dialogOpen: true });
-    ev.stopPropagation();
+  openDialog = (ev, switchToRaw = null) => {
+    // restrict to which files a switch is possible
+    let switchTo =
+      switchToRaw &&
+      switchToRaw.filter(id => id !== this.state.selectedFile && id < this.props.selectedPlagiarismSource.files.length);
+    if (switchTo && switchTo.length === 0) {
+      switchTo = null;
+    }
+
+    this.setState({ dialogOpen: true, switchTo });
+
+    if (ev) {
+      ev.stopPropagation();
+    }
   };
 
   closeDialog = () => this.setState({ dialogOpen: false });
@@ -49,7 +60,15 @@ class PlagiarismCodeBoxWithSelector extends Component {
   selectFile = selectedFile => this.setState({ selectedFile, dialogOpen: false });
 
   render() {
-    const { file, solutionId, selectedPlagiarismSource = null, download, fileContentsSelector } = this.props;
+    const {
+      file,
+      solutionId,
+      selectedPlagiarismSource = null,
+      download,
+      fileContentsSelector,
+      authorId = null,
+      sourceAuthorId = null,
+    } = this.props;
     const sourceContents =
       selectedPlagiarismSource &&
       selectedPlagiarismSource.files.map(file => file && fileContentsSelector(file.solutionFile.id, file.fileEntry));
@@ -75,65 +94,97 @@ class PlagiarismCodeBoxWithSelector extends Component {
           <>
             <PlagiarismCodeBox
               {...file}
+              authorId={authorId}
+              sourceAuthorId={sourceAuthorId}
               solutionId={solutionId}
               download={download}
               fileContentsSelector={fileContentsSelector}
               selectedPlagiarismFile={selectedPlagiarismSource.files[this.state.selectedFile]}
               selectPlagiarismFile={selectedPlagiarismSource.files.length > 1 ? this.selectFile : null}
               openSelectFileDialog={selectedPlagiarismSource.files.length > 1 ? this.openDialog : null}
+              sourceFilesCount={selectedPlagiarismSource.files.length}
               similarity={selectedPlagiarismSource.similarity}
               remainingFragments={getRemainingFragments(selectedPlagiarismSource.files, this.state.selectedFile)}
             />
+
             {selectedPlagiarismSource.files.length > 1 && (
               <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
                 <Modal.Header closeButton>
                   <Modal.Title>
-                    <FormattedMessage
-                      id="app.solutionPlagiarisms.selectPlagiarismFileModal.title"
-                      defaultMessage="Select one of the possible source files to be compared"
-                    />
+                    {this.state.selectedFile !== null && this.state.switchTo ? (
+                      <FormattedMessage
+                        id="app.solutionPlagiarisms.selectPlagiarismFileModal.titleSwitch"
+                        defaultMessage="Change the displayed source file (on the right)"
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id="app.solutionPlagiarisms.selectPlagiarismFileModal.title"
+                        defaultMessage="Select one of the possible source files to be compared (on the right)"
+                      />
+                    )}
                   </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="p-0">
+                  {this.state.selectedFile !== null && this.state.switchTo && (
+                    <InsetPanel className="m-1">
+                      <FormattedMessage
+                        id="app.solutionPlagiarisms.selectPlagiarismFileModal.switchToExplain"
+                        defaultMessage="The area you wish to visualize is not covered by the selected source file. You may switch to another file that covers it."
+                      />
+                    </InsetPanel>
+                  )}
+
                   <Table hover className="m-0">
-                    <tbody>
-                      {selectedPlagiarismSource.files.map((file, idx) => (
-                        <tr
-                          key={file.id}
-                          className={this.state.selectedFile === idx ? 'table-primary' : 'clickable'}
-                          onClick={this.state.selectedFile !== idx ? () => this.selectFile(idx) : null}>
-                          <td className="text-nowrap shrink-col">
-                            <CodeFileIcon className="text-muted" gapLeft gapRight />
-                          </td>
-                          <td>
-                            <code>
-                              {file.solutionFile.name}
-                              {file.fileEntry ? `/${file.fileEntry}` : ''}
-                            </code>
-                          </td>
-                          <td>
-                            <FormattedMessage
-                              id="app.solutionPlagiarisms.selectPlagiarismFileModal.fromSolution"
-                              defaultMessage="solution"
-                            />{' '}
-                            <strong>#{file.solution.attemptIndex}</strong>
-                          </td>
-                          <td>
-                            (<DateTime unixts={file.solution.createdAt} />)
-                          </td>
-                          <td className="small">
-                            <GroupsNameContainer groupId={file.groupId} admins />
+                    {this.state.selectedFile !== null && this.state.switchTo ? (
+                      <tbody>
+                        <FileSelectionTableRow
+                          file={selectedPlagiarismSource.files[this.state.selectedFile]}
+                          idx={this.state.selectedFile}
+                          selected
+                        />
+                        <tr>
+                          <td colSpan={7} className="text-center larger p-3 text-success">
+                            <Icon icon={['far', 'circle-down']} />
                           </td>
                         </tr>
-                      ))}
-                    </tbody>
+                        {this.state.switchTo.map(idx => (
+                          <FileSelectionTableRow
+                            key={idx}
+                            file={selectedPlagiarismSource.files[idx]}
+                            idx={idx}
+                            selected={this.state.selectedFile === idx}
+                            selectFile={this.selectFile}
+                          />
+                        ))}
+                      </tbody>
+                    ) : (
+                      <tbody>
+                        {selectedPlagiarismSource.files.map((file, idx) => (
+                          <FileSelectionTableRow
+                            key={idx}
+                            file={file}
+                            idx={idx}
+                            selected={this.state.selectedFile === idx}
+                            selectFile={this.selectFile}
+                          />
+                        ))}
+                      </tbody>
+                    )}
                   </Table>
                 </Modal.Body>
                 <Modal.Footer>
-                  <Button variant="secondary" onClick={this.closeDialog}>
-                    <CloseIcon gapRight />
-                    <FormattedMessage id="generic.close" defaultMessage="Close" />
-                  </Button>
+                  <TheButtonGroup>
+                    {this.state.selectedFile !== null && this.state.switchTo && this.state.switchTo.length === 1 && (
+                      <Button variant="success" onClick={() => this.selectFile(this.state.switchTo[0])}>
+                        <CodeCompareIcon gapRight />
+                        <FormattedMessage id="generic.change" defaultMessage="Change" />
+                      </Button>
+                    )}
+                    <Button variant="secondary" onClick={this.closeDialog}>
+                      <CloseIcon gapRight />
+                      <FormattedMessage id="generic.close" defaultMessage="Close" />
+                    </Button>
+                  </TheButtonGroup>
                 </Modal.Footer>
               </Modal>
             )}
@@ -169,6 +220,8 @@ PlagiarismCodeBoxWithSelector.propTypes = {
   download: PropTypes.func,
   fileContentsSelector: PropTypes.func,
   selectedPlagiarismSource: PropTypes.object.isRequired,
+  authorId: PropTypes.string,
+  sourceAuthorId: PropTypes.string,
 };
 
 export default PlagiarismCodeBoxWithSelector;
