@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import { identity } from '../../../helpers/common';
 import styles from './CodeFragmentSelector.less';
 
 // Process fragments and generate a list of start+end markers sorted by offset.
@@ -26,6 +25,7 @@ const _fragment = (content, startOffset, endOffset, refs, selectedFragment) => {
 
   // click and double click data passed to the respective handlers
   // double click works only if there are no signle click actions (as secondary fragments)
+  const identity = x => x !== undefined && x !== null;
   const clickData = refsArr.map(idx => refs[idx].clickData).filter(identity);
   const doubleClickData = refsArr.map(idx => refs[idx].doubleClickData).filter(identity);
 

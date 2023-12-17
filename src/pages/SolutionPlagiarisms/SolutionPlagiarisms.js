@@ -183,14 +183,25 @@ class SolutionPlagiarisms extends Component {
                         />
 
                         {Object.keys(plagiarisms).length > 1 && (
-                          <span className="text-muted ml-2">
-                            {' '}
-                            <FormattedMessage
-                              id="app.solutionPlagiarisms.suspectedSourcesAvailable"
-                              defaultMessage="of {count} available"
-                              values={{ count: Object.keys(plagiarisms).length }}
-                            />
-                          </span>
+                          <>
+                            <span className="text-muted ml-2">
+                              {' '}
+                              <FormattedMessage
+                                id="app.solutionPlagiarisms.suspectedSourcesAvailable"
+                                defaultMessage="of {count} available"
+                                values={{ count: Object.keys(plagiarisms).length }}
+                              />
+                            </span>
+                            <span className="text-primary clickable ml-2" onClick={this.openPlagiarismSelection}>
+                              {' '}
+                              (
+                              <FormattedMessage
+                                id="app.solutionPlagiarisms.changeSelectedSource"
+                                defaultMessage="change selected source"
+                              />
+                              )
+                            </span>
+                          </>
                         )}
                       </>
                     )}
@@ -255,17 +266,13 @@ class SolutionPlagiarisms extends Component {
                 ) : (
                   <Card.Footer>
                     <UsersNameContainer userId={selectedSource} showExternalIdentifiers showEmail="icon" noAutoload />
-                    {Object.keys(plagiarisms).length > 1 && (
-                      <span className="text-primary clickable ml-3" onClick={this.openPlagiarismSelection}>
-                        {' '}
-                        (
-                        <FormattedMessage
-                          id="app.solutionPlagiarisms.changeSelectedSource"
-                          defaultMessage="change selected source"
-                        />
-                        )
-                      </span>
-                    )}
+
+                    <span className="float-right text-muted">
+                      <FormattedMessage
+                        id="app.solutionPlagiarisms.displayedOnRight"
+                        defaultMessage="displayed on the right"
+                      />
+                    </span>
                   </Card.Footer>
                 )}
               </Card>
@@ -281,6 +288,8 @@ class SolutionPlagiarisms extends Component {
                         download={download}
                         fileContentsSelector={fileContentsSelector}
                         selectedPlagiarismSource={indexedPlagiarismFiles[fileFullId(file)]}
+                        authorId={solution.authorId}
+                        sourceAuthorId={selectedSource}
                       />
                     ))
                   }
