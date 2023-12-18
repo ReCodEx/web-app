@@ -216,6 +216,7 @@ const SourceCodeBox = ({
             </div>
           ) : (
             <SourceCodeViewer
+              id={id}
               content={content.content}
               name={name}
               solutionId={solutionId}

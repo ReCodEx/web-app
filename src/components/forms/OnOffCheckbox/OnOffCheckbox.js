@@ -8,21 +8,32 @@ import { WarningIcon } from '../../icons';
 import 'react-toggle/style.css';
 import './OnOffCheckbox.css'; // eslint-disable-line import/no-deprecated
 
-const OnOffCheckbox = ({ children, name, className, disabled, checked, error, warning, dirty, ...props }) => (
+const OnOffCheckbox = ({
+  children,
+  name,
+  className,
+  disabled,
+  checked,
+  error,
+  warning,
+  dirty,
+  id = name,
+  ...props
+}) => (
   <FormLabel
     className={classnames({
       [className]: className && className.length > 0,
       onOffCheckboxLabelDisabled: disabled,
       onOffCheckboxLabel: !disabled,
     })}>
-    <Toggle {...props} checked={checked} name={name} id={name} value={checked ? 'true' : 'false'} disabled={disabled} />
+    <Toggle {...props} checked={checked} name={name} id={id} value={checked ? 'true' : 'false'} disabled={disabled} />
     <span className="onOffCheckboxLabelText">
       {children}
       {Boolean(error || warning) && (
         <OverlayTrigger
           placement="bottom"
           overlay={
-            <Tooltip id={name} className="wider-tooltip">
+            <Tooltip id={`${id}-tooltip`} className="wider-tooltip">
               {error || warning}
             </Tooltip>
           }>
@@ -40,6 +51,7 @@ OnOffCheckbox.propTypes = {
   error: PropTypes.any,
   warning: PropTypes.any,
   dirty: PropTypes.bool,
+  id: PropTypes.string,
   name: PropTypes.string,
   className: PropTypes.string,
 };

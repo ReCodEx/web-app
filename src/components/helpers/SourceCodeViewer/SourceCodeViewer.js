@@ -85,7 +85,13 @@ class SourceCodeViewer extends React.Component {
   };
 
   linesRenderer = ({ rows, stylesheet, useInlineStyles }) => {
-    const { authorView = false, updateComment = null, removeComment = null, restrictCommentAuthor = null } = this.props;
+    const {
+      id,
+      authorView = false,
+      updateComment = null,
+      removeComment = null,
+      restrictCommentAuthor = null,
+    } = this.props;
     const comments = groupCommentsByLine(this.props.comments || []);
     return rows.map((node, i) => {
       const lineNumber = i + 1;
@@ -128,7 +134,7 @@ class SourceCodeViewer extends React.Component {
 
               {this.state.newComment && this.state.newComment === lineNumber && (
                 <ReviewCommentForm
-                  form="review-comment-new"
+                  form={`review-comment-new-${id}`}
                   initialValues={newCommentFormInitialValues}
                   onCancel={this.closeForms}
                   onSubmit={this.createNewComment}
@@ -171,6 +177,7 @@ class SourceCodeViewer extends React.Component {
 }
 
 SourceCodeViewer.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   content: PropTypes.string,
   solutionId: PropTypes.string.isRequired,

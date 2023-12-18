@@ -22,6 +22,7 @@ export const newCommentFormInitialValues = {
 };
 
 const ReviewCommentForm = ({
+  form,
   authorId = null,
   createdAt = null,
   onCancel = null,
@@ -77,6 +78,7 @@ const ReviewCommentForm = ({
       <Row>
         <Col>
           <Field
+            id={`${form}-issue`}
             name="issue"
             component={CheckboxField}
             onOff
@@ -97,6 +99,7 @@ const ReviewCommentForm = ({
         {showSuppressor && (
           <Col sm="auto">
             <Field
+              id={`${form}-suppressNotification`}
               name="suppressNotification"
               component={CheckboxField}
               onOff
@@ -155,6 +158,7 @@ const ReviewCommentForm = ({
 );
 
 ReviewCommentForm.propTypes = {
+  form: PropTypes.string,
   createdAt: PropTypes.number,
   authorId: PropTypes.string,
   onCancel: PropTypes.func,

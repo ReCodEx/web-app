@@ -18,7 +18,7 @@ const CheckboxField = ({
   return (
     <FormGroup
       className={error ? 'text-danger' : warning ? 'text-warning' : dirty && !ignoreDirty ? 'text-primary' : undefined}
-      controlId={input.name}>
+      controlId={props.id || input.name}>
       <Component
         {...props}
         {...input}
@@ -34,6 +34,7 @@ const CheckboxField = ({
 };
 
 CheckboxField.propTypes = {
+  id: PropTypes.string,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
