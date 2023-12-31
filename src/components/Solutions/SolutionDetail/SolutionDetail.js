@@ -261,7 +261,7 @@ class SolutionDetail extends Component {
         <SourceCodeViewerContainer
           solutionId={id}
           show={openFileId !== null}
-          fileId={openFileId}
+          fileId={openFileId || ''}
           fileName={openFileName}
           zipEntry={openZipEntry}
           files={files}
