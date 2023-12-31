@@ -1,7 +1,7 @@
 %define name recodex-web
 %define short_name web-app
-%define version 2.9.1
-%define unmangled_version 22b3abcd136969a5e035e2618b8c3935d0c4a71d
+%define version 2.10.0
+%define unmangled_version 71640583ebf97d6c8f73a78a97f272d2aaa24a6a
 %define release 1
 
 Summary: ReCodEx web-app component
