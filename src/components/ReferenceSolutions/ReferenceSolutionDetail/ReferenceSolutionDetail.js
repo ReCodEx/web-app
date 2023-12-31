@@ -213,7 +213,7 @@ class ReferenceSolutionDetail extends Component {
           files={files}
           openAnotherFile={this.openFile}
           show={openFileId !== null}
-          fileId={openFileId}
+          fileId={openFileId || ''}
           fileName={openFileName}
           zipEntry={openZipEntry}
           isReference={true}
