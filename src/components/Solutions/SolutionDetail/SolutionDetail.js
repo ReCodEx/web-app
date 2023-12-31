@@ -17,10 +17,10 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SolutionFiles from '../SolutionFiles';
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
-import { RefreshIcon, EvaluationFailedIcon } from '../../icons';
+import { RefreshIcon } from '../../icons';
+import FailureReport from '../../SubmissionFailures/FailureReport';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import DateTime from '../../widgets/DateTime';
 
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
@@ -152,56 +152,7 @@ class SolutionDetail extends Component {
               </Callout>
             )}
 
-            {failure && (
-              <>
-                <Callout variant="danger" icon={<EvaluationFailedIcon />}>
-                  <h4>
-                    <FormattedMessage
-                      id="app.submissionEvaluation.evaluationFailedHeading"
-                      defaultMessage="The evaluation has failed!"
-                    />
-                  </h4>
-
-                  {typeof failure === 'object' ? (
-                    <p>
-                      <FormattedMessage
-                        id="app.submissionEvaluation.evaluationFailedMessage"
-                        defaultMessage="Backend message"
-                      />
-                      : <em>{failure.description}</em>
-                    </p>
-                  ) : (
-                    <p>
-                      <FormattedMessage
-                        id="app.submissionEvaluation.evaluationFailedInternalError"
-                        defaultMessage="Internal backend error."
-                      />
-                    </p>
-                  )}
-                </Callout>
-
-                {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
-                  <Callout variant="success" icon="fire-extinguisher">
-                    <span className="small float-right">
-                      (<DateTime unixts={failure.resolvedAt} />)
-                    </span>
-                    <h4>
-                      <FormattedMessage
-                        id="app.submissionEvaluation.evaluationFailureResolved"
-                        defaultMessage="The failure has been resolved by admin!"
-                      />
-                    </h4>
-                    <p>
-                      <FormattedMessage
-                        id="app.submissionEvaluation.evaluationFailureResolvedNote"
-                        defaultMessage="Resolution note"
-                      />
-                      : <em>{failure.resolutionNote}</em>
-                    </p>
-                  </Callout>
-                )}
-              </>
-            )}
+            {failure && <FailureReport failure={failure} />}
 
             {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (
               <Callout variant="warning">
