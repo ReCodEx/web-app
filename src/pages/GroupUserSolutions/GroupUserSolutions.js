@@ -232,7 +232,7 @@ const prepareTableData = defaultMemoize(
         .map(getJsData)
         .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
         .forEach(s => {
-          const statusEvaluated = s.lastSubmission && (s.lastSubmission.evalutaion || s.lastSubmission.failure);
+          const statusEvaluated = s.lastSubmission && (s.lastSubmission.evaluation || s.lastSubmission.failure);
           const rte = getRuntime(s.runtimeEnvironmentId);
 
           res.push({
