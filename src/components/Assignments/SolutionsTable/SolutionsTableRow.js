@@ -83,7 +83,7 @@ const SolutionsTableRow = ({
             id={id}
             assignmentId={assignmentId}
             solution={solution}
-            isReviewer={permissionHints && permissionHints.review}
+            permissionHints={permissionHints}
           />
         </td>
 
