@@ -59,7 +59,7 @@ import { compareAssignmentsReverted } from '../../components/helpers/assignments
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import { getLocalizedName } from '../../helpers/localizedData';
 import withLinks from '../../helpers/withLinks';
-import { safeGet, identity, hasPermissions, hasOneOfPermissions } from '../../helpers/common';
+import { safeGet, identity, hasPermissions, hasOneOfPermissions, unique } from '../../helpers/common';
 
 /**
  * Sorts all assignments and create a numerical index, so the solutions can be sorted faster
@@ -292,6 +292,10 @@ const getPlagiarisms = defaultMemoize((assignments, getAssignmentSolutions) =>
     : []
 );
 
+const getPlagiarismUniqueAssignments = defaultMemoize(plagiarisms =>
+  unique(plagiarisms.map(({ assignmentId }) => assignmentId))
+);
+
 const localStorageStateKey = 'GroupUserSolutions.state';
 
 class GroupUserSolutions extends Component {
@@ -403,9 +407,12 @@ class GroupUserSolutions extends Component {
             {plagiarisms && plagiarisms.length > 0 && (
               <Callout variant="danger" icon={<PlagiarismIcon />}>
                 <FormattedMessage
-                  id="app.assignmentSolutions.plagiarismsDetected"
-                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} with detected similarities. Such solutions may be plagiarisms."
-                  values={{ count: plagiarisms.length }}
+                  id="app.assignmentSolutions.plagiarismsDetected.assignments"
+                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (of {assignments} {assignments, plural, one {assignment} other {assignments}}) with detected similarities. Such solutions may be plagiarisms."
+                  values={{
+                    count: plagiarisms.length,
+                    assignments: getPlagiarismUniqueAssignments(plagiarisms).length,
+                  }}
                 />
               </Callout>
             )}
