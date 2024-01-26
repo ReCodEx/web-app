@@ -67,7 +67,7 @@ import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
 import withLinks from '../../helpers/withLinks';
-import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions } from '../../helpers/common';
+import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions, unique } from '../../helpers/common';
 
 // View mode keys, labels, and filtering functions
 const VIEW_MODE_DEFAULT = 'default';
@@ -76,6 +76,7 @@ const VIEW_MODE_BEST = 'best';
 const VIEW_MODE_LAST = 'last';
 const VIEW_MODE_ACCEPTED = 'accepted';
 const VIEW_MODE_REVIEWD = 'reviewed';
+const VIEW_MODE_PLAGIARISM = 'plagiarism';
 
 const viewModes = {
   [VIEW_MODE_DEFAULT]: (
@@ -96,6 +97,9 @@ const viewModes = {
   [VIEW_MODE_REVIEWD]: (
     <FormattedMessage id="app.assignmentSolutions.viewModes.reviewed" defaultMessage="Reviewed solutions only" />
   ),
+  [VIEW_MODE_PLAGIARISM]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.plagiarism" defaultMessage="Only plagiarism suspects" />
+  ),
 };
 
 const _getLastAttemptIndices = defaultMemoize(solutions => {
@@ -114,6 +118,7 @@ const viewModeFilters = {
     solution && solution.attemptIndex === _getLastAttemptIndices(solutions)[solution.authorId],
   [VIEW_MODE_ACCEPTED]: solution => solution && solution.accepted,
   [VIEW_MODE_REVIEWD]: solution => solution && solution.review,
+  [VIEW_MODE_PLAGIARISM]: solution => solution && solution.plagiarism,
 };
 
 const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, viewMode, locale, links) => {
@@ -323,6 +328,8 @@ const getPlagiarisms = defaultMemoize(assignmentSolutions =>
     .filter(solution => solution && solution.plagiarism)
 );
 
+const getPlagiarismUniqueAuthors = defaultMemoize(plagiarisms => unique(plagiarisms.map(({ authorId }) => authorId)));
+
 const localStorageStateKey = 'AssignmentSolutions.state';
 
 class AssignmentSolutions extends Component {
@@ -438,9 +445,9 @@ class AssignmentSolutions extends Component {
             {plagiarisms && plagiarisms.length > 0 && (
               <Callout variant="danger" icon={<PlagiarismIcon />}>
                 <FormattedMessage
-                  id="app.assignmentSolutions.plagiarismsDetected"
-                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} with detected similarities. Such solutions may be plagiarisms."
-                  values={{ count: plagiarisms.length }}
+                  id="app.assignmentSolutions.plagiarismsDetected.authors"
+                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (from {authors} {authors, plural, one {author} other {unique authors}}) with detected similarities. Such solutions may be plagiarisms."
+                  values={{ count: plagiarisms.length, authors: getPlagiarismUniqueAuthors(plagiarisms).length }}
                 />
               </Callout>
             )}
