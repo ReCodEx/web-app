@@ -2,27 +2,19 @@
 import 'cross-fetch/polyfill';
 
 // server setup
-import React from 'react';
-import { Provider } from 'react-redux';
-import { renderToString } from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import Express from 'express';
 import ejs from 'ejs';
-import Promise from 'bluebird';
 import Helmet from 'react-helmet';
 import cookieParser from 'cookie-parser';
 import fs from 'fs';
 import { globSync } from 'glob';
 
-import { StaticRouter } from 'react-router-dom/server';
-
 import { configureStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
-import { isLoggedAsSuperAdmin } from './redux/selectors/users';
 import { match } from './pages/routes';
 import { TOKEN_COOKIES_KEY, INSTANCEID_COOKIES_KEY } from './redux/middleware/authMiddleware';
 import { LANG_COOKIES_KEY } from './redux/middleware/langMiddleware';
-import App from './containers/App';
 
 import '@formatjs/intl-pluralrules/polyfill';
 import '@formatjs/intl-pluralrules/locale-data/en';
@@ -65,6 +57,11 @@ app.use(
 );
 app.use(cookieParser());
 
+/**
+ * Note: this method was originally created to support SSR (serialize store as well).
+ * At present, we have no additional support for SSR and some features (like user IP locking)
+ * will not work at all. SSR may be reintroduce in the future, but this should be rewritten.
+ */
 const renderPage = (res, store = null, html = '') => {
   const reduxState = store ? serialize(store.getState(), { isJSON: true }) : 'undefined';
   const head = Helmet.rewind();
@@ -86,16 +83,26 @@ app.get('*', (req, res) => {
   const lang = req.cookies[LANG_COOKIES_KEY] || null; // Selected instance
   const store = configureStore(undefined, token, instanceId, lang);
   const location = req.originalUrl;
-  const context = {};
 
   try {
+    /*
+     * Important!
+     * Parts that were responsible for SSR were disabled on 26.1.2024.
+     * SSR were not working properly and new API features (IP locking) were introduced
+     * that are not SSR ready.
+     * We keep the original code commented, so this may be fixed in the future.
+     */
+
     const userId = loggedInUserIdSelector(store.getState()); // try to get the user ID from the token (if any)
-    const isSuperadmin = isLoggedAsSuperAdmin(store.getState());
-    const { redirect, params, loadAsync } = match(location, Boolean(userId));
+    const { redirect /*, params, loadAsync */ } = match(location, Boolean(userId));
+    // const isSuperadmin = isLoggedAsSuperAdmin(store.getState());
+    // const context = {};
 
     if (redirect) {
       res.redirect(302, redirect);
     } else {
+      renderPage(res);
+      /*
       Promise.all(
         loadAsync.map(la =>
           la(params, store.dispatch, {
@@ -116,6 +123,7 @@ app.get('*', (req, res) => {
           renderPage(res, store, html);
         })
         .catch(() => renderPage(res)); // without SSR
+        */
     }
   } catch (error) {
     res.status(500).send(error.message);
