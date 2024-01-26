@@ -24,7 +24,9 @@ const SolutionTableRowIcons = ({
     <>
       <SolutionStatusIcon id={id} solution={solution} />
 
-      {review && <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={permissionHints.review} gapLeft />}
+      {review && (
+        <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={permissionHints.review || false} gapLeft />
+      )}
 
       {Boolean(plagiarism) && permissionHints.viewDetectedPlagiarisms && (
         <Link to={SOLUTION_PLAGIARISMS_URI_FACTORY(assignmentId, id)}>
