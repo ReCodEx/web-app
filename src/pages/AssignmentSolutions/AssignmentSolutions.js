@@ -133,7 +133,7 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
           id={solution.id}
           assignmentId={assignmentId}
           solution={solution}
-          isReviewer={solution.permissionHints && solution.permissionHints.review}
+          permissionHints={solution.permissionHints}
         />
       ),
     }),

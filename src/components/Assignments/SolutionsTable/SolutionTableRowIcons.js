@@ -15,7 +15,7 @@ const SolutionTableRowIcons = ({
   id,
   assignmentId,
   solution,
-  isReviewer = false,
+  permissionHints = {},
   links: { SOLUTION_PLAGIARISMS_URI_FACTORY },
 }) => {
   const { review = null, commentsStats = null, plagiarism = null } = solution;
@@ -24,9 +24,9 @@ const SolutionTableRowIcons = ({
     <>
       <SolutionStatusIcon id={id} solution={solution} />
 
-      {review && <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={isReviewer} gapLeft />}
+      {review && <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={permissionHints.review} gapLeft />}
 
-      {Boolean(plagiarism) && isReviewer && (
+      {Boolean(plagiarism) && permissionHints.viewDetectedPlagiarisms && (
         <Link to={SOLUTION_PLAGIARISMS_URI_FACTORY(assignmentId, id)}>
           <OverlayTrigger
             placement="right"
@@ -60,7 +60,10 @@ SolutionTableRowIcons.propTypes = {
     }),
     plagiarism: PropTypes.string,
   }).isRequired,
-  isReviewer: PropTypes.bool,
+  permissionHints: PropTypes.PropTypes.shape({
+    review: PropTypes.bool,
+    viewDetectedPlagiarisms: PropTypes.bool,
+  }),
   links: PropTypes.object,
 };
 
