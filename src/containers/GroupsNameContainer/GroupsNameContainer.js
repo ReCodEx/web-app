@@ -9,7 +9,8 @@ import { groupSelector, groupAccessorSelector } from '../../redux/selectors/grou
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { hasPermissions } from '../../helpers/common';
 import GroupsName from '../../components/Groups/GroupsName';
-import Icon, { LoadingIcon } from '../../components/icons';
+import Icon, { GroupIcon, LoadingIcon } from '../../components/icons';
+import OptionalTooltipWrapper from '../../components/widgets/OptionalTooltipWrapper';
 import UsersNameContainer from '../UsersNameContainer';
 
 class GroupsNameContainer extends Component {
@@ -37,6 +38,8 @@ class GroupsNameContainer extends Component {
       ancestorLinks = false,
       admins = false,
       separator = <Icon icon="link" className="small half-opaque" largeGapLeft largeGapRight />,
+      showIcon = false,
+      iconTooltip = null,
     } = this.props;
     return (
       <ResourceRenderer
@@ -49,6 +52,17 @@ class GroupsNameContainer extends Component {
         }>
         {group => (
           <>
+            {showIcon && (
+              <OptionalTooltipWrapper tooltip={iconTooltip} hide={!iconTooltip} tooltipId={`groupIcon-${group.id}`}>
+                <GroupIcon
+                  gapRight
+                  className="text-muted"
+                  organizational={group.organizational}
+                  archived={group.archived}
+                  exam={group.exam}
+                />
+              </OptionalTooltipWrapper>
+            )}
             {fullName &&
               group.parentGroupsIds
                 .filter((_, idx) => idx > 0)
@@ -104,6 +118,8 @@ GroupsNameContainer.propTypes = {
   noLoadAsync: PropTypes.bool,
   group: ImmutablePropTypes.map,
   groupAccessor: PropTypes.func.isRequired,
+  showIcon: PropTypes.bool,
+  iconTooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   loadAsync: PropTypes.func.isRequired,
 };
 

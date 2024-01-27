@@ -61,8 +61,8 @@ export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
 export const FailureIcon = props => <Icon className="text-danger" {...props} icon="times" />;
 export const FaqIcon = props => <Icon {...props} icon={['far', 'question-circle']} />;
 export const ForkIcon = props => <Icon {...props} icon="code-branch" />;
-export const GroupIcon = ({ organizational = false, archived = false, ...props }) => (
-  <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'} />
+export const GroupIcon = ({ organizational = false, archived = false, exam = false, ...props }) => (
+  <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : exam ? 'person-circle-check' : 'users'} />
 );
 export const HomeIcon = props => <Icon {...props} icon="home" />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
@@ -178,6 +178,7 @@ ExpandCollapseIcon.propTypes = {
 GroupIcon.propTypes = {
   organizational: PropTypes.bool,
   archived: PropTypes.bool,
+  exam: PropTypes.bool,
 };
 
 ReviewIcon.propTypes = {

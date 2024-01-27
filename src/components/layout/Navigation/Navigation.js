@@ -10,7 +10,7 @@ import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import ShadowAssignmentNameContainer from '../../../containers/ShadowAssignmentNameContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import PipelineNameContainer from '../../../containers/PipelineNameContainer';
-import { AssignmentIcon, ExerciseIcon, GroupIcon, PipelineIcon, ShadowAssignmentIcon } from '../../icons';
+import { AssignmentIcon, ExerciseIcon, PipelineIcon, ShadowAssignmentIcon } from '../../icons';
 
 import styles from './Navigation.less';
 
@@ -82,16 +82,15 @@ const Navigation = ({
 
           {groupId && (
             <span>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="groupIconTooltip">
-                    <FormattedMessage id="app.navigation.group" defaultMessage="Group" />
-                  </Tooltip>
-                }>
-                <GroupIcon gapRight className="text-muted" />
-              </OverlayTrigger>
-              <GroupsNameContainer groupId={groupId} fullName translations admins ancestorLinks />
+              <GroupsNameContainer
+                groupId={groupId}
+                fullName
+                translations
+                admins
+                ancestorLinks
+                showIcon
+                iconTooltip={<FormattedMessage id="app.navigation.group" defaultMessage="Group" />}
+              />
             </span>
           )}
 
