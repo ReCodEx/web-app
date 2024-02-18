@@ -5,51 +5,46 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { defaultMemoize } from 'reselect';
 
-import OrganizationalGroupButton from '../../components/buttons/OrganizationalGroupButton';
-import { setOrganizational } from '../../redux/modules/groups';
+import ExamGroupButton from '../../components/buttons/ExamGroupButton';
+import { setExamFlag } from '../../redux/modules/groups';
 import { groupSelector, groupTypePendingChange } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { getErrorMessage } from '../../locales/apiErrorMessages';
 import { addNotification } from '../../redux/modules/notifications';
 
-const setOrganizationalHandlingErrors = defaultMemoize(
-  (organizational, setOrganizational, addNotification, formatMessage) => () =>
-    setOrganizational(!organizational).catch(err => {
+const setExamFlagHandlingErrors = defaultMemoize(
+  (exam, setExamFlag, addNotification, formatMessage) => () =>
+    setExamFlag(!exam).catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);
     })
 );
 
-const OrganizationalGroupButtonContainer = ({
+const ExamGroupButtonContainer = ({
   group,
   pending,
-  setOrganizational,
+  setExamFlag,
   addNotification,
   intl: { formatMessage },
   ...props
 }) => (
   <ResourceRenderer resource={group}>
-    {({ exam, organizational, privateData: { students, assignments }, permissionHints }) => (
-      <OrganizationalGroupButton
-        organizational={organizational}
+    {({ exam, organizational, childGroups, permissionHints }) => (
+      <ExamGroupButton
+        exam={exam}
         pending={pending}
-        setOrganizational={setOrganizationalHandlingErrors(
-          organizational,
-          setOrganizational,
-          addNotification,
-          formatMessage
-        )}
-        disabled={!permissionHints.setOrganizational || exam || students.length > 0 || assignments.length > 0}
+        setExamFlag={setExamFlagHandlingErrors(exam, setExamFlag, addNotification, formatMessage)}
+        disabled={!permissionHints.setExamFlag || organizational || childGroups.length > 0}
         {...props}
       />
     )}
   </ResourceRenderer>
 );
 
-OrganizationalGroupButtonContainer.propTypes = {
+ExamGroupButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
   pending: PropTypes.bool.isRequired,
-  setOrganizational: PropTypes.func.isRequired,
+  setExamFlag: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
   intl: PropTypes.object,
 };
@@ -60,8 +55,8 @@ const mapStateToProps = (state, { id }) => ({
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  setOrganizational: organizational => dispatch(setOrganizational(id, organizational)),
+  setExamFlag: value => dispatch(setExamFlag(id, value)),
   addNotification: (...args) => dispatch(addNotification(...args)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(OrganizationalGroupButtonContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ExamGroupButtonContainer));

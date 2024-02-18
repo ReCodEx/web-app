@@ -13,9 +13,9 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import EditGroupForm, { EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT } from '../../components/forms/EditGroupForm';
 import RelocateGroupForm, { getPossibleParentsOfGroup } from '../../components/forms/RelocateGroupForm';
 import OrganizationalGroupButtonContainer from '../../containers/OrganizationalGroupButtonContainer';
+import ExamGroupButtonContainer from '../../containers/ExamGroupButtonContainer';
 import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer';
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
-import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
@@ -124,21 +124,57 @@ class EditGroup extends Component {
               )}
 
               <Col xs={12} xl={group.archived || !hasPermissions(group, 'update') ? 12 : 6}>
-                {!group.archived && hasPermissions(group, 'setOrganizational') && (
+                {!group.archived && hasOneOfPermissions(group, 'setOrganizational', 'setExamFlag') && (
                   <Box
                     type="info"
                     title={<FormattedMessage id="app.editGroup.changeGroupType" defaultMessage="Change group type" />}>
-                    <Row className="align-items-center">
-                      <Col xs={false} sm="auto">
-                        <OrganizationalGroupButtonContainer id={group.id} className="m-2" locale={locale} />
-                      </Col>
-                      <Col xs={12} sm className="text-muted small">
-                        <FormattedMessage
-                          id="app.editGroup.organizationalExplain"
-                          defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
-                        />
-                      </Col>
-                    </Row>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <td className="text-bold text-right p-2">
+                            <FormattedMessage id="app.editGroup.currentType" defaultMessage="Current type" />:
+                          </td>
+                          <td className="p-2">
+                            {group.exam ? (
+                              <FormattedMessage id="app.groupTypeButton.exam" defaultMessage="Exam" />
+                            ) : group.organizational ? (
+                              <FormattedMessage
+                                id="app.groupTypeButton.organizational"
+                                defaultMessage="Organizational"
+                              />
+                            ) : (
+                              <FormattedMessage id="app.groupTypeButton.regular" defaultMessage="Regular" />
+                            )}
+                          </td>
+                        </tr>
+                        {!group.exam && (
+                          <tr>
+                            <td>
+                              <OrganizationalGroupButtonContainer id={group.id} className="m-2" locale={locale} />
+                            </td>
+                            <td className="text-muted small p-2">
+                              <FormattedMessage
+                                id="app.editGroup.organizationalExplain"
+                                defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
+                              />
+                            </td>
+                          </tr>
+                        )}
+                        {!group.organizational && (
+                          <tr>
+                            <td>
+                              <ExamGroupButtonContainer id={group.id} className="m-2" locale={locale} />
+                            </td>
+                            <td className="text-muted small p-2">
+                              <FormattedMessage
+                                id="app.editGroup.examExplain"
+                                defaultMessage="Exam groups work the same as regular groups internally. The exam flag is mainly an idicator for the users and it may also affect the way how the group is listed or when it is archived. This indicator is completely independent of the Exam terms which can be set on a so named page."
+                              />
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </Box>
                 )}
 
@@ -257,10 +293,10 @@ EditGroup.propTypes = {
   groupsAccessor: PropTypes.func.isRequired,
   canViewParentDetail: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
-  editGroup: PropTypes.func.isRequired,
-  relocateGroup: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
+  editGroup: PropTypes.func.isRequired,
+  relocateGroup: PropTypes.func.isRequired,
   intl: PropTypes.object,
   navigate: withRouterProps.navigate,
 };

@@ -3,7 +3,7 @@ import { Map, fromJS } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
-import factory, { initialState } from '../helpers/resourceManager';
+import factory, { initialState, createActionsWithPostfixes } from '../helpers/resourceManager';
 
 import createRecord from '../helpers/resourceManager/recordFactory';
 import { resourceStatus } from '../helpers/resourceManager/status';
@@ -30,34 +30,15 @@ const { actions, actionTypes, reduceActions } = factory({ resourceName });
 export { actionTypes };
 
 export const additionalActionTypes = {
-  JOIN_GROUP: 'recodex/groups/JOIN_GROUP',
-  JOIN_GROUP_PENDING: 'recodex/groups/JOIN_GROUP_PENDING',
-  JOIN_GROUP_FULFILLED: 'recodex/groups/JOIN_GROUP_FULFILLED',
-  JOIN_GROUP_REJECTED: 'recodex/groups/JOIN_GROUP_REJECTED',
-  LEAVE_GROUP: 'recodex/groups/LEAVE_GROUP',
-  LEAVE_GROUP_PENDING: 'recodex/groups/LEAVE_GROUP_PENDING',
-  LEAVE_GROUP_FULFILLED: 'recodex/groups/LEAVE_GROUP_FULFILLED',
-  LEAVE_GROUP_REJECTED: 'recodex/groups/LEAVE_GROUP_REJECTED',
-  ADD_MEMBER: 'recodex/groups/ADD_MEMBER',
-  ADD_MEMBER_PENDING: 'recodex/groups/ADD_MEMBER_PENDING',
-  ADD_MEMBER_FULFILLED: 'recodex/groups/ADD_MEMBER_FULFILLED',
-  ADD_MEMBER_REJECTED: 'recodex/groups/ADD_MEMBER_REJECTED',
-  REMOVE_MEMBER: 'recodex/groups/REMOVE_MEMBER',
-  REMOVE_MEMBER_PENDING: 'recodex/groups/REMOVE_MEMBER_PENDING',
-  REMOVE_MEMBER_FULFILLED: 'recodex/groups/REMOVE_MEMBER_FULFILLED',
-  REMOVE_MEMBER_REJECTED: 'recodex/groups/REMOVE_MEMBER_REJECTED',
-  SET_ORGANIZATIONAL: 'recodex/groups/SET_ORGANIZATIONAL',
-  SET_ORGANIZATIONAL_PENDING: 'recodex/groups/SET_ORGANIZATIONAL_PENDING',
-  SET_ORGANIZATIONAL_FULFILLED: 'recodex/groups/SET_ORGANIZATIONAL_FULFILLED',
-  SET_ORGANIZATIONAL_REJECTED: 'recodex/groups/SET_ORGANIZATIONAL_REJECTED',
-  SET_ARCHIVED: 'recodex/groups/SET_ARCHIVED',
-  SET_ARCHIVED_PENDING: 'recodex/groups/SET_ARCHIVED_PENDING',
-  SET_ARCHIVED_FULFILLED: 'recodex/groups/SET_ARCHIVED_FULFILLED',
-  SET_ARCHIVED_REJECTED: 'recodex/groups/SET_ARCHIVED_REJECTED',
-  RELOCATE: 'recodex/groups/RELOCATE',
-  RELOCATE_PENDING: 'recodex/groups/RELOCATE_PENDING',
-  RELOCATE_FULFILLED: 'recodex/groups/RELOCATE_FULFILLED',
-  RELOCATE_REJECTED: 'recodex/groups/RELOCATE_REJECTED',
+  ...createActionsWithPostfixes('JOIN_GROUP', 'recodex/groups'),
+  ...createActionsWithPostfixes('LEAVE_GROUP', 'recodex/groups'),
+  ...createActionsWithPostfixes('ADD_MEMBER', 'recodex/groups'),
+  ...createActionsWithPostfixes('REMOVE_MEMBER', 'recodex/groups'),
+  ...createActionsWithPostfixes('SET_ORGANIZATIONAL', 'recodex/groups'),
+  ...createActionsWithPostfixes('SET_ARCHIVED', 'recodex/groups'),
+  ...createActionsWithPostfixes('SET_EXAM_FLAG', 'recodex/groups'),
+  //  ...createActionsWithPostfixes('REMOVE_EXAM', 'recodex/groups'),
+  ...createActionsWithPostfixes('RELOCATE', 'recodex/groups'),
 };
 
 export const loadGroup = actions.pushResource;
@@ -183,6 +164,25 @@ export const relocateGroup = (groupId, newParentId) =>
     endpoint: `/groups/${groupId}/relocate/${newParentId}`,
   });
 
+export const setExamFlag = (groupId, value = true) =>
+  createApiAction({
+    type: additionalActionTypes.SET_EXAM_FLAG,
+    method: 'POST',
+    endpoint: `/groups/${groupId}/exam`,
+    body: { value },
+    meta: { groupId },
+  });
+
+/*
+export const removeExam = groupId =>
+  createApiAction({
+    type: additionalActionTypes.REMOVE_EXAM,
+    method: 'DELETE',
+    endpoint: `/groups/${groupId}/exam`,
+    meta: { groupId },
+  });
+*/
+
 /**
  * Reducer
  */
@@ -266,15 +266,15 @@ const reducer = handleActions(
         .updateIn(['resources', groupId, 'pending-membership'], memberships => memberships.filter(id => id !== userId)),
 
     [additionalActionTypes.SET_ORGANIZATIONAL_PENDING]: (state, { meta: { groupId } }) =>
-      state.setIn(['resources', groupId, 'pending-organizational'], true),
+      state.setIn(['resources', groupId, 'pending-group-type'], true),
 
     [additionalActionTypes.SET_ORGANIZATIONAL_FULFILLED]: (state, { payload, meta: { groupId } }) =>
       state
-        .deleteIn(['resources', groupId, 'pending-organizational'])
+        .deleteIn(['resources', groupId, 'pending-group-type'])
         .setIn(['resources', groupId, 'data'], fromJS(payload)),
 
     [additionalActionTypes.SET_ORGANIZATIONAL_REJECTED]: (state, { meta: { groupId } }) =>
-      state.deleteIn(['resources', groupId, 'pending-organizational']),
+      state.deleteIn(['resources', groupId, 'pending-group-type']),
 
     [additionalActionTypes.SET_ARCHIVED_PENDING]: (state, { meta: { groupId } }) =>
       state.setIn(['resources', groupId, 'pending-archived'], true),
@@ -285,6 +285,27 @@ const reducer = handleActions(
     [additionalActionTypes.SET_ARCHIVED_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-archived']),
 
+    [additionalActionTypes.SET_EXAM_FLAG_PENDING]: (state, { meta: { groupId } }) =>
+      state.setIn(['resources', groupId, 'pending-group-type'], true),
+
+    [additionalActionTypes.SET_EXAM_FLAG_FULFILLED]: (state, { payload, meta: { groupId } }) =>
+      state
+        .deleteIn(['resources', groupId, 'pending-group-type'])
+        .setIn(['resources', groupId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.SET_EXAM_FLAG_REJECTED]: (state, { meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-group-type']),
+
+    /*
+    [additionalActionTypes.REMOVE_EXAM_PENDING]: (state, { meta: { groupId } }) =>
+      state.setIn(['resources', groupId, 'pending-exam-period'], true),
+
+    [additionalActionTypes.REMOVE_EXAM_FULFILLED]: (state, { payload, meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-exam-period']).setIn(['resources', groupId, 'data'], fromJS(payload)),
+
+    [additionalActionTypes.REMOVE_EXAM_REJECTED]: (state, { meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-exam-period']),
+*/
     [additionalActionTypes.RELOCATE_FULFILLED]: (state, { payload }) =>
       payload.reduce(
         (state, data) => state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
