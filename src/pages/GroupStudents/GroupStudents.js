@@ -53,7 +53,7 @@ import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 
 import { isSuperadminRole, isStudentRole } from '../../components/helpers/usersRoles';
-import { EMPTY_LIST, hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
+import { EMPTY_LIST, hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupStudents extends Component {
@@ -152,12 +152,7 @@ class GroupStudents extends Component {
 
           return (
             <div>
-              <GroupNavigation
-                groupId={data.id}
-                canEdit={hasOneOfPermissions(data, 'update', 'archive', 'remove', 'relocate')}
-                canViewDetail={hasPermissions(data, 'viewDetail')}
-                emails={studentEmails || null}
-              />
+              <GroupNavigation group={data} emails={studentEmails || null} />
 
               {canLeaveGroup && (
                 <div className="my-3">

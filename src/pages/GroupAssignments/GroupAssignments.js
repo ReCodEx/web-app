@@ -159,12 +159,7 @@ class GroupAssignments extends Component {
 
           return (
             <div>
-              <GroupNavigation
-                groupId={data.id}
-                canEdit={hasOneOfPermissions(data, 'update', 'archive', 'remove', 'relocate')}
-                canViewDetail={hasPermissions(data, 'viewDetail')}
-                emails={studentEmails || null}
-              />
+              <GroupNavigation group={data} emails={studentEmails || null} />
 
               {canLeaveGroup && (
                 <div className="my-3">

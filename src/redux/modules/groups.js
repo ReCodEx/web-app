@@ -37,7 +37,8 @@ export const additionalActionTypes = {
   ...createActionsWithPostfixes('SET_ORGANIZATIONAL', 'recodex/groups'),
   ...createActionsWithPostfixes('SET_ARCHIVED', 'recodex/groups'),
   ...createActionsWithPostfixes('SET_EXAM_FLAG', 'recodex/groups'),
-  //  ...createActionsWithPostfixes('REMOVE_EXAM', 'recodex/groups'),
+  ...createActionsWithPostfixes('SET_EXAM_PERIOD', 'recodex/groups'),
+  ...createActionsWithPostfixes('REMOVE_EXAM_PERIOD', 'recodex/groups'),
   ...createActionsWithPostfixes('RELOCATE', 'recodex/groups'),
 };
 
@@ -173,15 +174,27 @@ export const setExamFlag = (groupId, value = true) =>
     meta: { groupId },
   });
 
-/*
-export const removeExam = groupId =>
-  createApiAction({
-    type: additionalActionTypes.REMOVE_EXAM,
-    method: 'DELETE',
-    endpoint: `/groups/${groupId}/exam`,
+export const setExamPeriod = (groupId, begin, end = null, strict = undefined) => {
+  const body = { begin, end };
+  if (strict !== undefined && strict !== null) {
+    body.strict = strict;
+  }
+  return createApiAction({
+    type: additionalActionTypes.SET_EXAM_PERIOD,
+    method: 'POST',
+    endpoint: `/groups/${groupId}/examPeriod`,
+    body,
     meta: { groupId },
   });
-*/
+};
+
+export const removeExamPeriod = groupId =>
+  createApiAction({
+    type: additionalActionTypes.REMOVE_EXAM_PERIOD,
+    method: 'DELETE',
+    endpoint: `/groups/${groupId}/examPeriod`,
+    meta: { groupId },
+  });
 
 /**
  * Reducer
@@ -296,16 +309,30 @@ const reducer = handleActions(
     [additionalActionTypes.SET_EXAM_FLAG_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-group-type']),
 
-    /*
-    [additionalActionTypes.REMOVE_EXAM_PENDING]: (state, { meta: { groupId } }) =>
+    [additionalActionTypes.SET_EXAM_PERIOD_PENDING]: (state, { meta: { groupId } }) =>
       state.setIn(['resources', groupId, 'pending-exam-period'], true),
 
-    [additionalActionTypes.REMOVE_EXAM_FULFILLED]: (state, { payload, meta: { groupId } }) =>
-      state.deleteIn(['resources', groupId, 'pending-exam-period']).setIn(['resources', groupId, 'data'], fromJS(payload)),
+    [additionalActionTypes.SET_EXAM_PERIOD_FULFILLED]: (state, { payload, meta: { groupId } }) =>
+      state
+        .deleteIn(['resources', groupId, 'pending-exam-period'])
+        .setIn(['resources', groupId, 'data'], fromJS(payload)),
 
-    [additionalActionTypes.REMOVE_EXAM_REJECTED]: (state, { meta: { groupId } }) =>
+    [additionalActionTypes.SET_EXAM_PERIOD_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-exam-period']),
-*/
+
+    [additionalActionTypes.REMOVE_EXAM_PERIOD_PENDING]: (state, { meta: { groupId } }) =>
+      state.setIn(['resources', groupId, 'pending-exam-period'], true),
+
+    [additionalActionTypes.REMOVE_EXAM_PERIOD_FULFILLED]: (state, { meta: { groupId } }) =>
+      state
+        .deleteIn(['resources', groupId, 'pending-exam-period'])
+        .setIn(['resources', groupId, 'data', 'privateData', 'examBegin'], null)
+        .setIn(['resources', groupId, 'data', 'privateData', 'examEnd'], null)
+        .setIn(['resources', groupId, 'data', 'privateData', 'examLockStrict'], null),
+
+    [additionalActionTypes.REMOVE_EXAM_PERIOD_REJECTED]: (state, { meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-exam-period']),
+
     [additionalActionTypes.RELOCATE_FULFILLED]: (state, { payload }) =>
       payload.reduce(
         (state, data) => state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),

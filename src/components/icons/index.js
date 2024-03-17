@@ -31,6 +31,7 @@ export { CheckRequiredIcon };
 export const CircleIcon = ({ selected = false, ...props }) => (
   <Icon {...props} icon={['far', selected ? 'circle-dot' : 'circle']} />
 );
+export const ClockIcon = props => <Icon {...props} icon={['far', 'clock']} />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CodeFileIcon = props => <Icon {...props} icon={['far', 'file-code']} />;
 export const CodeIcon = props => <Icon {...props} icon="code" />;
@@ -64,6 +65,7 @@ export const ForkIcon = props => <Icon {...props} icon="code-branch" />;
 export const GroupIcon = ({ organizational = false, archived = false, exam = false, ...props }) => (
   <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : exam ? 'person-circle-check' : 'users'} />
 );
+export const GroupExamsIcon = props => <Icon {...props} icon="lock" />;
 export const HomeIcon = props => <Icon {...props} icon="home" />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const InputIcon = props => <Icon {...props} icon="sign-in-alt" />;

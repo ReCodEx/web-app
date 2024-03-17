@@ -28,6 +28,7 @@ import ExerciseReferenceSolutions from './ExerciseReferenceSolutions';
 import Exercises from './Exercises';
 import FAQ from './FAQ';
 import GroupAssignments from './GroupAssignments';
+import GroupExams from './GroupExams';
 import GroupInfo from './GroupInfo';
 import GroupStudents from './GroupStudents';
 import GroupUserSolutions from './GroupUserSolutions';
@@ -171,6 +172,7 @@ const routesDescriptors = [
   r('app/group/:groupId/info', GroupInfo, 'GROUP_INFO_URI_FACTORY', true),
   r('app/group/:groupId/assignments', GroupAssignments, 'GROUP_ASSIGNMENTS_URI_FACTORY', true),
   r('app/group/:groupId/students', GroupStudents, 'GROUP_STUDENTS_URI_FACTORY', true),
+  r('app/group/:groupId/exams', GroupExams, 'GROUP_EXAMS_URI_FACTORY', true),
   r('app/group/:groupId/user/:userId', GroupUserSolutions, 'GROUP_USER_SOLUTIONS_URI_FACTORY', true),
   r('app/instance/:instanceId', Instance, 'INSTANCE_URI_FACTORY', true),
   r('app/users', Users, 'USERS_URI', true),

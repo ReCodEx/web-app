@@ -88,11 +88,7 @@ class EditGroup extends Component {
         title={<FormattedMessage id="app.editGroup.title" defaultMessage="Change Group Settings" />}>
         {group => (
           <div>
-            <GroupNavigation
-              groupId={group.id}
-              canEdit={hasOneOfPermissions(group, 'update', 'archive', 'remove', 'relocate')}
-              canViewDetail={hasPermissions(group, 'viewDetail')}
-            />
+            <GroupNavigation group={group} />
 
             {!hasOneOfPermissions(group, 'update', 'archive', 'remove', 'relocate') && (
               <Row>

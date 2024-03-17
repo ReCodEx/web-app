@@ -4,6 +4,7 @@ import {
   AssignmentsIcon,
   EditIcon,
   GroupIcon,
+  GroupExamsIcon,
   ExerciseIcon,
   LimitsIcon,
   ReferenceSolutionIcon,
@@ -12,10 +13,17 @@ import {
 } from '../../icons';
 
 export const createGroupLinks = (
-  { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY, GROUP_EDIT_URI_FACTORY },
+  {
+    GROUP_INFO_URI_FACTORY,
+    GROUP_ASSIGNMENTS_URI_FACTORY,
+    GROUP_STUDENTS_URI_FACTORY,
+    GROUP_EDIT_URI_FACTORY,
+    GROUP_EXAMS_URI_FACTORY,
+  },
   groupId,
   canViewDetail = true,
-  canEdit = false
+  canEdit = false,
+  canSeeExams = false
 ) => [
   {
     caption: <FormattedMessage id="app.navigation.groupInfo" defaultMessage="Group Info" />,
@@ -36,6 +44,11 @@ export const createGroupLinks = (
     caption: <FormattedMessage id="app.navigation.edit" defaultMessage="Edit" />,
     link: GROUP_EDIT_URI_FACTORY(groupId),
     icon: <EditIcon gapRight />,
+  },
+  canSeeExams && {
+    caption: <FormattedMessage id="app.navigation.groupExams" defaultMessage="Exam Terms" />,
+    link: GROUP_EXAMS_URI_FACTORY(groupId),
+    icon: <GroupExamsIcon gapRight />,
   },
 ];
 
