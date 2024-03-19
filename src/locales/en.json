@@ -315,6 +315,8 @@
   "app.editAssignmentForm.interpolationDialog.intervalLabel": "Update interval:",
   "app.editAssignmentForm.interpolationDialog.title": "Points Interpolation Helper",
   "app.editAssignmentForm.isBonus": "Assignment is bonus one and points from it are not included in students overall score",
+  "app.editAssignmentForm.isExam": "Exam assignment",
+  "app.editAssignmentForm.isExamExplanation": "Exam assignments are secured during examination periods so that they are not visible to students that have not yet lock themselves in the group. Furthermore, if an exam assignment has the deadline synced with the end of the exam, it is updated automatically when the end of exam changes.",
   "app.editAssignmentForm.localized.assignmentSyncInfo": "Please note that the localized texts (name and complete description) are overwritten by the most recent data from the exercise when update of the assignment is invoked (if the exercise has been modified after the assignment). The only exception is the hint for students which is associated only with the assignment.",
   "app.editAssignmentForm.localized.completeDescription": "Complete description (everything the user needs to solve this exercise):",
   "app.editAssignmentForm.localized.description": "Short description (visible only to supervisors):",

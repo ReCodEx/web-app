@@ -160,7 +160,7 @@ class GroupInfo extends Component {
                   />
                 )}
 
-                {hasPermissions(data, 'viewMembers') && (
+                {hasPermissions(data, 'viewDetail') && (
                   <Box
                     noPadding
                     collapsable

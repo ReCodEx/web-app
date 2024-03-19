@@ -315,6 +315,8 @@
   "app.editAssignmentForm.interpolationDialog.intervalLabel": "Interval změny:",
   "app.editAssignmentForm.interpolationDialog.title": "Pomocník pro interpolaci bodů",
   "app.editAssignmentForm.isBonus": "Zadaná úloha je bonusová, její body tedy nejsou počítány do celkového maximálního počtu bodů skupiny",
+  "app.editAssignmentForm.isExam": "Zkoušková úloha",
+  "app.editAssignmentForm.isExamExplanation": "Zkouškové úlohy jsou více zabezpečené během zkouškových termínů tak, že v průběhu termínu jsou viditelné pouze studentům, kteří se již zamkli ve skupině. Pokud má zkoušková úloha nastavený termín na stejnou dobu, jako je konec zkoušky, je termín automaticky upraven pokud dojde ke změně konce zkoušky.",
   "app.editAssignmentForm.localized.assignmentSyncInfo": "Lokalizované texty (název a kompletní popis úlohy) jsou přepsány údaji z původní úlohy vždy, když je provedena aktualizace zadané úlohy (pokud dojde ke změně úlohy po jejím zadání). Jedinou výjimkou je položka nápověda pro studenty, která je asosciována pouze se zadanou úlohou.",
   "app.editAssignmentForm.localized.completeDescription": "Kompletní zadání (vše, co uživatel potřebuje, aby mohl úlohu vyřešit):",
   "app.editAssignmentForm.localized.description": "Krátký popis (viditelný pouze pro vedoucí):",
