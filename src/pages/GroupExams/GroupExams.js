@@ -9,14 +9,15 @@ import { formValueSelector } from 'redux-form';
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
-import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 import { GroupExamsIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, setExamPeriod, removeExamPeriod } from '../../redux/modules/groups';
 import { addNotification } from '../../redux/modules/notifications';
 import { groupSelector, groupDataAccessorSelector, groupTypePendingChange } from '../../redux/selectors/groups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
 
 import withLinks from '../../helpers/withLinks';
 import GroupExamStatus from '../../components/Groups/GroupExamStatus';
@@ -35,6 +36,7 @@ class GroupExams extends Component {
   render() {
     const {
       group,
+      currentUser,
       groupsAccessor,
       examBeginImmediately,
       examEndRelative,
@@ -46,14 +48,16 @@ class GroupExams extends Component {
 
     return (
       <Page
-        resource={group}
+        resource={[group, currentUser]}
         icon={<GroupExamsIcon />}
         title={<FormattedMessage id="app.groupExams.title" defaultMessage="Group Exam Terms" />}>
-        {group => (
+        {(group, currentUser) => (
           <div>
             <GroupNavigation group={group} />
 
             <GroupArchivedWarning {...group} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_EDIT_URI_FACTORY} />
+
+            <GroupExamPending {...group} currentUser={currentUser} />
 
             <Row>
               <Col xs={12} xl={6}>
@@ -97,6 +101,7 @@ GroupExams.propTypes = {
     groupId: PropTypes.string.isRequired,
   }).isRequired,
   group: ImmutablePropTypes.map,
+  currentUser: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
   examBeginImmediately: PropTypes.bool,
@@ -115,6 +120,7 @@ export default withLinks(
       group: groupSelector(state, groupId),
       groupsAccessor: groupDataAccessorSelector(state),
       userId: loggedInUserIdSelector(state),
+      currentUser: loggedInUserSelector(state),
       isSuperAdmin: isLoggedAsSuperAdmin(state),
       examBeginImmediately: examFormSelector(state, 'beginImmediately'),
       examEndRelative: examFormSelector(state, 'endRelative'),
