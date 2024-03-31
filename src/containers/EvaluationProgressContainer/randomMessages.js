@@ -1,32 +1,32 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
-  m1: { id: 'app.randomMessages.m1', defaultMessage: 'Buy some milk' },
-  m2: { id: 'app.randomMessages.m2', defaultMessage: 'Buy some tea' },
-  m3: { id: 'app.randomMessages.m3', defaultMessage: 'Learn how to juggle' },
+  m1: { id: 'app.randomMessages.m1', defaultMessage: 'Initialize astral results generator' },
+  m2: { id: 'app.randomMessages.m2', defaultMessage: 'Uplink to Skynet established' },
+  m3: { id: 'app.randomMessages.m3', defaultMessage: 'Jamming NSA eavesdropping devices' },
   m4: {
     id: 'app.randomMessages.m4',
-    defaultMessage: 'Push the big red button',
+    defaultMessage: 'Searching for the right button to press',
   },
-  m5: { id: 'app.randomMessages.m5', defaultMessage: 'Take a nap' },
+  m5: { id: 'app.randomMessages.m5', defaultMessage: 'Sus-pend all processes until further notice' },
   m6: {
     id: 'app.randomMessages.m6',
-    defaultMessage: 'Start evaluation of student solution at last',
+    defaultMessage: 'Start evaluation of student solution (or pretending to do so)',
   },
-  m7: { id: 'app.randomMessages.m7', defaultMessage: 'Go for a run' },
+  m7: { id: 'app.randomMessages.m7', defaultMessage: 'Go for launch' },
   m8: {
     id: 'app.randomMessages.m8',
-    defaultMessage: 'Proove Riemann hypothesis',
+    defaultMessage: 'Downloading theorem prover',
   },
-  m9: { id: 'app.randomMessages.m9', defaultMessage: 'Draw hippopotamus' },
+  m9: { id: 'app.randomMessages.m9', defaultMessage: 'Drawing hippopotamus' },
   m10: {
     id: 'app.randomMessages.m10',
-    defaultMessage: 'Think about the meaning of life',
+    defaultMessage: 'Computing "the meaning of life" answer',
   },
-  m11: { id: 'app.randomMessages.m11', defaultMessage: 'Make a cup of tea' },
+  m11: { id: 'app.randomMessages.m11', defaultMessage: 'Fermentation in progress' },
   m12: {
     id: 'app.randomMessages.m12',
-    defaultMessage: 'Freak out before near deadline',
+    defaultMessage: 'Recording students screams',
   },
   m13: { id: 'app.randomMessages.m13', defaultMessage: 'Take a bear for a walk' },
   m14: {
@@ -35,102 +35,102 @@ export default defineMessages({
   },
   m15: {
     id: 'app.randomMessages.m15',
-    defaultMessage: 'Generate random files on the filesystem',
+    defaultMessage: 'Generating random files on the filesystem',
   },
   m16: {
     id: 'app.randomMessages.m16',
-    defaultMessage: 'Execute OS startup routine',
+    defaultMessage: 'Rebooting all worker servers (yet again)',
   },
   m17: {
     id: 'app.randomMessages.m17',
-    defaultMessage: 'Secretly upload all feasible source files',
+    defaultMessage: 'Unauthorized leak detected',
   },
   m18: {
     id: 'app.randomMessages.m18',
-    defaultMessage: 'Find TLB table and destroy it',
+    defaultMessage: 'Stack overflow detected while searching Stack Overflow for the correct answers',
   },
   m19: {
     id: 'app.randomMessages.m19',
-    defaultMessage: 'Paging switched off... Good luck',
+    defaultMessage: 'Preparing next testing chamber... for science!',
   },
   m20: {
     id: 'app.randomMessages.m20',
-    defaultMessage: 'Decoding of the instruction failed, wrong CPU connected',
+    defaultMessage: 'The cake is a lie',
   },
   m21: {
     id: 'app.randomMessages.m21',
-    defaultMessage: 'A bug in ReCodex has been found, try to fix it really fast',
+    defaultMessage: 'A bug in ReCodex has been found, trying to fix it automatically with GPT',
   },
   m22: {
     id: 'app.randomMessages.m22',
-    defaultMessage: 'Cache not found, try to find it on the Internet',
+    defaultMessage: 'Suspending bitcoin miners',
   },
   m23: {
     id: 'app.randomMessages.m23',
-    defaultMessage: 'HDD not responding, wake up gnomes and try it again',
+    defaultMessage: 'Refilling sand in the sandbox',
   },
   m24: {
     id: 'app.randomMessages.m24',
-    defaultMessage: 'Algorithm not working, rethink...',
+    defaultMessage: 'This evaluation will not halt if the tested code does',
   },
   m25: {
     id: 'app.randomMessages.m25',
-    defaultMessage: 'Virtualization not virtualizing properly, fix it',
+    defaultMessage: 'Cloud cannot be accessed due to inappropriate weather',
   },
   m26: {
     id: 'app.randomMessages.m26',
-    defaultMessage: 'Assignment too difficult, reassign it to our supercomputer',
+    defaultMessage: 'Activating local hadron collider',
   },
   m27: {
     id: 'app.randomMessages.m27',
-    defaultMessage: 'Write for-loop directly to the console',
+    defaultMessage: 'Warning, GPT refused to evaluate the solution',
   },
   m28: {
     id: 'app.randomMessages.m28',
-    defaultMessage: 'Finally discover how to terminate VIM session',
+    defaultMessage: 'Terminating sequence for VIM session found, closing in progress',
   },
   m29: {
     id: 'app.randomMessages.m29',
-    defaultMessage: 'Repair your lawn mower',
+    defaultMessage: 'Sorting zeroes and ones',
   },
   m30: {
     id: 'app.randomMessages.m30',
-    defaultMessage: 'Check vehicle before ride',
+    defaultMessage: 'Suspending evaluation until sufficient funding will be raised',
   },
   m31: {
     id: 'app.randomMessages.m31',
-    defaultMessage: 'Go out with friends',
+    defaultMessage: 'Powering up crystall ball auxiliary device',
   },
   m32: {
     id: 'app.randomMessages.m32',
-    defaultMessage: 'Count jokes about Chuck Norris',
+    defaultMessage: 'Omega 13 device activated',
   },
   m33: {
     id: 'app.randomMessages.m33',
-    defaultMessage: 'Clean your greasy keyboard',
+    defaultMessage: 'Insufficient CPU cores available, insert another core and press Enter',
   },
   m34: {
     id: 'app.randomMessages.m34',
-    defaultMessage: 'Buy a nice flower for your mom',
+    defaultMessage: 'User sanitization protocol activated',
   },
   m35: {
     id: 'app.randomMessages.m35',
-    defaultMessage: 'Support favourite project',
+    defaultMessage: 'Scanning GitHub for plagiarism detection',
   },
   m36: {
     id: 'app.randomMessages.m36',
-    defaultMessage: 'Try to turn it off and on again',
+    defaultMessage: 'GLaDOS main core reactivated',
   },
   m37: {
     id: 'app.randomMessages.m37',
-    defaultMessage: 'Draw an unicorn on the wall',
+    defaultMessage: 'Boiling easter eggs',
   },
 });
 
 export const extraMessages = defineMessages({
   last: {
     id: 'app.randomMessages.last',
-    defaultMessage: 'Generate random evaluation of submitted solution',
+    defaultMessage: 'Generating random evaluation results of submitted solution',
   },
   error: {
     id: 'app.randomMessages.error',
