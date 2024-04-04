@@ -217,11 +217,42 @@ export const getFirstItemInOrder = (arr, comarator = _defaultComparator) => {
 
 /**
  * Compare two entities (scalars, arrays, or objects). In case of arrays and objects,
+ * the items/properties are compared with strict '==='.
+ * @param {*} a
+ * @param {*} b
+ * @returns {boolean} true if the values are equal
+ */
+export const shallowCompare = (a, b) => {
+  if (typeof a !== typeof b) {
+    return false;
+  }
+
+  if (typeof a !== 'object' || a === null || b === null) {
+    return a === b; // compare scalars
+  }
+
+  if (Array.isArray(a) !== Array.isArray(b)) {
+    return false;
+  }
+
+  if (Array.isArray(a)) {
+    // compare arrays
+    return a.length === b.length ? a.every((val, idx) => val === b[idx]) : false;
+  } else {
+    // compare objects
+    const aKeys = Object.keys(a);
+    const bKeys = new Set(Object.keys(b));
+    return aKeys.length === bKeys.size ? aKeys.every(key => bKeys.has(key) && a[key] === b[key]) : false;
+  }
+};
+
+/**
+ * Compare two entities (scalars, arrays, or objects). In case of arrays and objects,
  * the items/properties are compared recursively.
  * @param {*} a
  * @param {*} b
  * @param {boolean} emptyObjectArrayEquals if true, {} and [] are treated as equal
- * @returns {boolean} true if the values are matching
+ * @returns {boolean} true if the values are equal
  */
 export const deepCompare = (a, b, emptyObjectArrayEquals = false) => {
   if (typeof a !== typeof b) {

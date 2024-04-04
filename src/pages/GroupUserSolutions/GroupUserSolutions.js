@@ -33,6 +33,7 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 import Callout from '../../components/widgets/Callout';
 
 import { fetchUserIfNeeded } from '../../redux/modules/users';
@@ -42,6 +43,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { fetchGroupStudentsSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
 import { setSolutionReviewState } from '../../redux/modules/solutionReviews';
 import { groupSelector, groupsAssignmentsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
+import { loggedInUserSelector } from '../../redux/selectors/users';
 import {
   assignmentEnvironmentsSelector,
   getUserSolutions,
@@ -365,6 +367,7 @@ class GroupUserSolutions extends Component {
       groupId,
       userId,
       group,
+      currentUser,
       groupsAccessor,
       assignments,
       assignmentEnvironmentsSelector,
@@ -384,14 +387,16 @@ class GroupUserSolutions extends Component {
 
     return (
       <Page
-        resource={group}
+        resource={[group, currentUser]}
         icon={<UserIcon />}
         title={
           <FormattedMessage id="app.groupUserSolutions.title" defaultMessage="All Submissions of Selected User" />
         }>
-        {group => (
+        {(group, currentUser) => (
           <div>
             <GroupNavigation group={group} userId={userId} />
+
+            <GroupExamPending {...group} currentUser={currentUser} />
 
             <GroupArchivedWarning
               {...group}
@@ -569,6 +574,7 @@ GroupUserSolutions.propTypes = {
   groupId: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
+  currentUser: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   assignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
@@ -592,6 +598,7 @@ export default withLinks(
         groupId,
         userId,
         group: groupSelector(state, groupId),
+        currentUser: loggedInUserSelector(state),
         groupsAccessor: groupDataAccessorSelector(state),
         assignments: groupsAssignmentsSelector(state, groupId),
         assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),

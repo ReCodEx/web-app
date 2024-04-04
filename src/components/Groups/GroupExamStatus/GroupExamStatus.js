@@ -7,6 +7,7 @@ import ExamForm, {
   prepareInitValues as prepareExamInitValues,
   transformSubmittedData as transformExamData,
 } from '../../forms/ExamForm';
+import ExamLockButtonContainer from '../../../containers/ExamLockButtonContainer';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { BanIcon, ClockIcon, EditIcon, GroupExamsIcon, LoadingIcon } from '../../icons';
@@ -14,7 +15,8 @@ import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
 import { getErrorMessage } from '../../../locales/apiErrorMessages';
 
-import { hasPermissions } from '../../../helpers/common';
+import { isStudentRole } from '../../helpers/usersRoles';
+import { hasPermissions, shallowCompare } from '../../../helpers/common';
 
 const REFRESH_INTERVAL = 1; // [s]
 
@@ -90,8 +92,10 @@ class GroupExamStatus extends Component {
   };
 
   periodicRefresh = () => {
-    this.setState(GroupExamStatus.getDerivedStateFromProps(this.props, this.state));
-    // console.log(this.state);
+    const newState = GroupExamStatus.getDerivedStateFromProps(this.props, this.state);
+    if (newState.hasExam || !shallowCompare(this.state, newState)) {
+      this.setState(newState);
+    }
   };
 
   componentDidMount() {
@@ -111,7 +115,17 @@ class GroupExamStatus extends Component {
   }
 
   render() {
-    const { group, examBeginImmediately, examEndRelative, pending, removeExamPeriod } = this.props;
+    const {
+      group,
+      examBeginImmediately,
+      examEndRelative,
+      pending,
+      removeExamPeriod,
+      currentUser: {
+        privateData: { ipLock, groupLock, isGroupLockStrict, role },
+      },
+    } = this.props;
+    const isStudent = isStudentRole(role);
 
     return (
       <>
@@ -141,56 +155,70 @@ class GroupExamStatus extends Component {
             <table>
               <tbody>
                 <tr>
-                  <td className="text-bold p-2">
+                  <td className="text-bold">
                     <FormattedMessage id="app.groupExams.beginAt" defaultMessage="Begins at" />:
                   </td>
-                  <td>
+                  <td className="p-2">
                     <DateTime unixts={group.privateData.examBegin} showRelative />
                   </td>
                 </tr>
                 <tr>
-                  <td className="text-bold p-2">
+                  <td className="text-bold">
                     <FormattedMessage id="app.groupExams.endAt" defaultMessage="Ends at" />:
                   </td>
-                  <td>
+                  <td className="p-2">
                     <DateTime unixts={group.privateData.examEnd} showRelative />
                   </td>
                 </tr>
-                <tr>
-                  <td className="text-bold p-2">
-                    <FormattedMessage id="app.groupExams.locking" defaultMessage="Lock type" />:
-                  </td>
-                  <td>
-                    <em>
-                      {group.privateData.examLockStrict ? (
-                        <FormattedMessage id="app.groupExams.lockStrict" defaultMessage="strict" />
-                      ) : (
-                        <FormattedMessage id="app.groupExams.lockRegular" defaultMessage="regular" />
-                      )}
-                    </em>
-                    <Explanation
-                      id="lock-explain"
-                      title={
-                        group.privateData.examLockStrict ? (
-                          <FormattedMessage id="app.groupExams.lockStrictTitle" defaultMessage="Strict lock" />
+
+                {!isStudent && (
+                  <tr>
+                    <td className="text-bold">
+                      <FormattedMessage id="app.groupExams.locking" defaultMessage="Lock type" />:
+                    </td>
+                    <td className="p-2">
+                      <em>
+                        {group.privateData.examLockStrict ? (
+                          <FormattedMessage id="app.groupExams.lockStrict" defaultMessage="strict" />
                         ) : (
-                          <FormattedMessage id="app.groupExams.lockRegularTitle" defaultMessage="Regular lock" />
-                        )
-                      }>
-                      {group.privateData.examLockStrict ? (
-                        <FormattedMessage
-                          id="app.groupExams.lockStrictExplanation"
-                          defaultMessage="Users taking the exam will not be allowed to access any other group, not even for reading (so thet are cut of source codes they submitted before the exam)."
-                        />
-                      ) : (
-                        <FormattedMessage
-                          id="app.groupExams.lockRegularExplanation"
-                          defaultMessage="Users taking the exam will be able to access other groups in read-only mode (for instance to utilize pieces of previously submitted code)."
-                        />
-                      )}
-                    </Explanation>
-                  </td>
-                </tr>
+                          <FormattedMessage id="app.groupExams.lockRegular" defaultMessage="regular" />
+                        )}
+                      </em>
+                      <Explanation
+                        id="lock-explain"
+                        title={
+                          group.privateData.examLockStrict ? (
+                            <FormattedMessage id="app.groupExams.lockStrictTitle" defaultMessage="Strict lock" />
+                          ) : (
+                            <FormattedMessage id="app.groupExams.lockRegularTitle" defaultMessage="Regular lock" />
+                          )
+                        }>
+                        {group.privateData.examLockStrict ? (
+                          <FormattedMessage
+                            id="app.groupExams.lockStrictExplanation"
+                            defaultMessage="Users taking the exam will not be allowed to access any other group, not even for reading (so thet are cut of source codes they submitted before the exam)."
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.groupExams.lockRegularExplanation"
+                            defaultMessage="Users taking the exam will be able to access other groups in read-only mode (for instance to utilize pieces of previously submitted code)."
+                          />
+                        )}
+                      </Explanation>
+                    </td>
+                  </tr>
+                )}
+
+                {isStudent && ipLock && (
+                  <tr>
+                    <td className="text-bold">
+                      <FormattedMessage id="app.groupExams.ipLocked" defaultMessage="IP locked" />:
+                    </td>
+                    <td className="p-2">
+                      <code>{ipLock}</code>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           )}
@@ -271,6 +299,50 @@ class GroupExamStatus extends Component {
               </TheButtonGroup>
             </>
           )}
+
+          {isStudent && this.state.examInProgress && (
+            <>
+              <hr />
+              {groupLock ? (
+                <>
+                  <div className="mb-1">
+                    <FormattedMessage
+                      id="app.groupExams.pending.studentLockedTitle"
+                      defaultMessage="You are locked in for an exam"
+                    />
+                    .
+                  </div>
+                  <div className="text-muted small mb-1">
+                    <FormattedMessage
+                      id="app.groupExams.lockedStudentInfo"
+                      defaultMessage="You may now see and submit solutions to exam assignments."
+                    />{' '}
+                    {isGroupLockStrict ? (
+                      <FormattedMessage
+                        id="app.groupExams.lockedStudentInfoStrict"
+                        defaultMessage="You may not access any other groups until the exam lock expires."
+                      />
+                    ) : (
+                      <FormattedMessage
+                        id="app.groupExams.lockedStudentInfoRegular"
+                        defaultMessage="You may access other groups in read-only mode until the exam lock expires."
+                      />
+                    )}
+                  </div>
+                </>
+              ) : (
+                <ExamLockButtonContainer groupId={group.id} />
+              )}
+            </>
+          )}
+
+          <hr className="mb-1" />
+          <div className="text-muted text-center small">
+            <FormattedMessage
+              id="app.groupExams.timeAccuracyWarning"
+              defaultMessage="Your local system clock should be sufficiently synchronized or this component may not work properly."
+            />
+          </div>
         </Callout>
 
         {hasPermissions(group, 'setExamPeriod') && (
@@ -320,10 +392,19 @@ class GroupExamStatus extends Component {
 
 GroupExamStatus.propTypes = {
   group: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     privateData: PropTypes.shape({
       examBegin: PropTypes.number,
       examEnd: PropTypes.number,
       examLockStrict: PropTypes.bool,
+    }).isRequired,
+  }).isRequired,
+  currentUser: PropTypes.shape({
+    privateData: PropTypes.shape({
+      ipLock: PropTypes.string,
+      groupLock: PropTypes.string,
+      isGroupLockStrict: PropTypes.bool,
+      role: PropTypes.string,
     }).isRequired,
   }).isRequired,
   examBeginImmediately: PropTypes.bool,

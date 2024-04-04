@@ -39,6 +39,8 @@ export const additionalActionTypes = {
   ...createActionsWithPostfixes('SET_EXAM_FLAG', 'recodex/groups'),
   ...createActionsWithPostfixes('SET_EXAM_PERIOD', 'recodex/groups'),
   ...createActionsWithPostfixes('REMOVE_EXAM_PERIOD', 'recodex/groups'),
+  ...createActionsWithPostfixes('LOCK_STUDENT_EXAM', 'recodex/groups'),
+  ...createActionsWithPostfixes('UNLOCK_STUDENT_EXAM', 'recodex/groups'),
   ...createActionsWithPostfixes('RELOCATE', 'recodex/groups'),
 };
 
@@ -165,6 +167,10 @@ export const relocateGroup = (groupId, newParentId) =>
     endpoint: `/groups/${groupId}/relocate/${newParentId}`,
   });
 
+/*
+ * Exam-related stuff
+ */
+
 export const setExamFlag = (groupId, value = true) =>
   createApiAction({
     type: additionalActionTypes.SET_EXAM_FLAG,
@@ -194,6 +200,22 @@ export const removeExamPeriod = groupId =>
     method: 'DELETE',
     endpoint: `/groups/${groupId}/examPeriod`,
     meta: { groupId },
+  });
+
+export const lockStudentForExam = (groupId, userId) =>
+  createApiAction({
+    type: additionalActionTypes.LOCK_STUDENT_EXAM,
+    method: 'POST',
+    endpoint: `/groups/${groupId}/lock/${userId}`,
+    meta: { groupId, userId },
+  });
+
+export const unlockStudentFromExam = (groupId, userId) =>
+  createApiAction({
+    type: additionalActionTypes.UNLOCK_STUDENT_EXAM,
+    method: 'DELETE',
+    endpoint: `/groups/${groupId}/lock/${userId}`,
+    meta: { groupId, userId },
   });
 
 /**
@@ -298,6 +320,12 @@ const reducer = handleActions(
     [additionalActionTypes.SET_ARCHIVED_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-archived']),
 
+    [additionalActionTypes.RELOCATE_FULFILLED]: (state, { payload }) =>
+      payload.reduce(
+        (state, data) => state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
+        state
+      ),
+
     [additionalActionTypes.SET_EXAM_FLAG_PENDING]: (state, { meta: { groupId } }) =>
       state.setIn(['resources', groupId, 'pending-group-type'], true),
 
@@ -333,11 +361,25 @@ const reducer = handleActions(
     [additionalActionTypes.REMOVE_EXAM_PERIOD_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-exam-period']),
 
-    [additionalActionTypes.RELOCATE_FULFILLED]: (state, { payload }) =>
-      payload.reduce(
-        (state, data) => state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
-        state
-      ),
+    [additionalActionTypes.LOCK_STUDENT_EXAM_PENDING]: (state, { meta: { groupId, userId } }) =>
+      state.setIn(['resources', groupId, 'pending-user-lock'], userId),
+
+    [additionalActionTypes.LOCK_STUDENT_EXAM_FULFILLED]: (state, { payload: { group }, meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-user-lock']).setIn(['resources', groupId, 'data'], fromJS(group)),
+
+    [additionalActionTypes.LOCK_STUDENT_EXAM_REJECTED]: (state, { meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-user-lock']),
+
+    [additionalActionTypes.UNLOCK_STUDENT_EXAM_PENDING]: (state, { meta: { groupId, userId } }) =>
+      state.setIn(['resources', groupId, 'pending-user-unlock'], userId),
+
+    [additionalActionTypes.UNLOCK_STUDENT_EXAM_FULFILLED]: (state, { meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-user-unlock']),
+
+    [additionalActionTypes.UNLOCK_STUDENT_EXAM_REJECTED]: (state, { meta: { groupId } }) =>
+      state.deleteIn(['resources', groupId, 'pending-user-unlock']),
+
+    // external actions
 
     [assignmentsActionTypes.UPDATE_FULFILLED]: (state, { payload: { id: assignmentId, groupId } }) =>
       state.updateIn(['resources', groupId, 'data', 'privateData', 'assignments'], assignments =>

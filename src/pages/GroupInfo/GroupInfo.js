@@ -17,7 +17,7 @@ import {
 } from '../../redux/modules/groups';
 import { fetchByIds, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
 import { groupSelector, groupDataAccessorSelector, groupsSelector } from '../../redux/selectors/groups';
 import {
   primaryAdminsOfGroupSelector,
@@ -45,6 +45,7 @@ import AddSupervisor from '../../components/Groups/AddSupervisor';
 import { BanIcon, GroupIcon } from '../../components/icons';
 import { hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -89,6 +90,7 @@ class GroupInfo extends Component {
   render() {
     const {
       group,
+      currentUser,
       userId,
       groups,
       groupsAccessor,
@@ -115,12 +117,12 @@ class GroupInfo extends Component {
 
     return (
       <Page
-        resource={group}
+        resource={[group, currentUser]}
         icon={group => <GroupIcon organizational={group && group.organizational} archived={group && group.archived} />}
         title={<FormattedMessage id="app.groupInfo.title" defaultMessage="Group Details and Metadata" />}
         loading={<LoadingGroupData />}
         failed={<FailedGroupLoading />}>
-        {data => (
+        {(data, currentUser) => (
           <div>
             <GroupNavigation group={data} />
 
@@ -132,6 +134,8 @@ class GroupInfo extends Component {
                   <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} size={null} redirectAfterLeave />
                 </div>
               )}
+
+            <GroupExamPending {...data} currentUser={currentUser} />
 
             <GroupArchivedWarning {...data} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_INFO_URI_FACTORY} />
 
@@ -259,6 +263,7 @@ GroupInfo.propTypes = {
   params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
+  currentUser: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   instance: ImmutablePropTypes.map,
   primaryAdmins: PropTypes.array,
@@ -290,6 +295,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 
   return {
     group: groupSelector(state, groupId),
+    currentUser: loggedInUserSelector(state),
     userId,
     groups: groupsSelector(state),
     groupsAccessor: groupDataAccessorSelector(state),

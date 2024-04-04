@@ -14,6 +14,7 @@ import { actionTypes as paginationActionTypes } from './pagination';
 import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';
 import { actionTypes as registrationActionTypes } from './registration';
 import { actionTypes as authActionTypes } from './authTypes';
+import { additionalActionTypes as groupActionTypes } from './groups';
 
 import { arrayToObject } from '../../helpers/common';
 
@@ -249,6 +250,9 @@ const reducer = handleActions(
       user && user.id
         ? state.setIn(['resources', user.id], createRecord({ state: resourceStatus.FULFILLED, data: user }))
         : state,
+
+    [groupActionTypes.LOCK_STUDENT_EXAM_FULFILLED]: (state, { payload: { user } }) =>
+      state.setIn(['resources', user.id], createRecord({ state: resourceStatus.FULFILLED, data: user })),
   }),
   initialState
 );

@@ -10,7 +10,6 @@ import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning';
-import GroupExamPending from '../../components/Groups/GroupExamPending';
 import { GroupExamsIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, setExamPeriod, removeExamPeriod } from '../../redux/modules/groups';
@@ -57,12 +56,11 @@ class GroupExams extends Component {
 
             <GroupArchivedWarning {...group} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_EDIT_URI_FACTORY} />
 
-            <GroupExamPending {...group} currentUser={currentUser} />
-
             <Row>
               <Col xs={12} xl={6}>
                 <GroupExamStatus
                   group={group}
+                  currentUser={currentUser}
                   examBeginImmediately={examBeginImmediately}
                   examEndRelative={examEndRelative}
                   setExamPeriod={setExamPeriod}
