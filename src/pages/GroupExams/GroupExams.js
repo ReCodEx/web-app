@@ -10,6 +10,7 @@ import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning';
+import GroupExamsTable from '../../components/Groups/GroupExamsTable';
 import { GroupExamsIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, setExamPeriod, removeExamPeriod } from '../../redux/modules/groups';
@@ -70,17 +71,11 @@ class GroupExams extends Component {
               </Col>
 
               <Col xs={12} xl={6}>
-                <Box title={<FormattedMessage id="app.groupExams.listBoxTitle" defaultMessage="Previous exams" />}>
-                  {group.privateData.exams && group.privateData.exams.length > 0 ? null : (
-                    <div className="text-center text-muted p-2">
-                      <em>
-                        <FormattedMessage
-                          id="app.groupExams.noPreviousExams"
-                          defaultMessage="There are no previous exams recorded."
-                        />
-                      </em>
-                    </div>
-                  )}
+                <Box
+                  title={<FormattedMessage id="app.groupExams.listBoxTitle" defaultMessage="Previous exams" />}
+                  noPadding
+                  unlimitedHeight>
+                  <GroupExamsTable exams={group.privateData.exams} />
                 </Box>
               </Col>
             </Row>
