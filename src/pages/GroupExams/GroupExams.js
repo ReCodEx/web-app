@@ -11,18 +11,36 @@ import { GroupNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning';
 import GroupExamsTable from '../../components/Groups/GroupExamsTable';
+import GroupExamStatus from '../../components/Groups/GroupExamStatus';
+import LockedStudentsTable from '../../components/Groups/LockedStudentsTable';
 import { GroupExamsIcon } from '../../components/icons';
 
 import { fetchGroup, fetchGroupIfNeeded, setExamPeriod, removeExamPeriod } from '../../redux/modules/groups';
+import { fetchByIds } from '../../redux/modules/users';
 import { addNotification } from '../../redux/modules/notifications';
 import { groupSelector, groupDataAccessorSelector, groupTypePendingChange } from '../../redux/selectors/groups';
+import { lockedStudentsOfGroupSelector } from '../../redux/selectors/usersGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
 
 import withLinks from '../../helpers/withLinks';
-import GroupExamStatus from '../../components/Groups/GroupExamStatus';
+import { hasPermissions, safeGet } from '../../helpers/common';
+
+const isExam = ({ privateData: { examBegin, examEnd } }) => {
+  const now = Date.now() / 1000;
+  return examBegin && examEnd && examEnd > now && examBegin <= now;
+};
 
 class GroupExams extends Component {
+  static loadAsync = ({ groupId }, dispatch) =>
+    Promise.all([
+      dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
+        hasPermissions(group, 'viewStudents')
+          ? dispatch(fetchByIds(safeGet(group, ['privateData', 'students']) || []))
+          : Promise.resolve()
+      ),
+    ]);
+
   componentDidMount() {
     this.props.loadAsync();
   }
@@ -33,9 +51,21 @@ class GroupExams extends Component {
     }
   }
 
+  linkFactory = id => {
+    const {
+      params: { groupId, examId = null },
+      links: { GROUP_EXAMS_URI_FACTORY, GROUP_EXAMS_SPECIFIC_EXAM_URI_FACTORY },
+    } = this.props;
+    return String(id) === String(examId)
+      ? GROUP_EXAMS_URI_FACTORY(groupId)
+      : GROUP_EXAMS_SPECIFIC_EXAM_URI_FACTORY(groupId, id);
+  };
+
   render() {
     const {
+      params: { examId = null },
       group,
+      lockedStudents,
       currentUser,
       groupsAccessor,
       examBeginImmediately,
@@ -75,10 +105,37 @@ class GroupExams extends Component {
                   title={<FormattedMessage id="app.groupExams.listBoxTitle" defaultMessage="Previous exams" />}
                   noPadding
                   unlimitedHeight>
-                  <GroupExamsTable exams={group.privateData.exams} />
+                  <GroupExamsTable
+                    exams={group.privateData.exams}
+                    selected={isExam(group) ? null : examId}
+                    linkFactory={isExam(group) ? null : this.linkFactory}
+                  />
                 </Box>
               </Col>
             </Row>
+
+            {(examId || isExam(group)) && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
+              <Row>
+                <Col xs={12}>
+                  <Box
+                    title={
+                      <FormattedMessage id="app.groupExams.studentsBoxTitle" defaultMessage="Participating students" />
+                    }
+                    noPadding
+                    unlimitedHeight>
+                    {isExam(group) ? (
+                      <LockedStudentsTable
+                        groupId={group.id}
+                        lockedStudents={lockedStudents}
+                        currentUser={currentUser}
+                      />
+                    ) : (
+                      examId
+                    )}
+                  </Box>
+                </Col>
+              </Row>
+            )}
           </div>
         )}
       </Page>
@@ -92,9 +149,11 @@ GroupExams.propTypes = {
   reload: PropTypes.func.isRequired,
   params: PropTypes.shape({
     groupId: PropTypes.string.isRequired,
+    examId: PropTypes.number,
   }).isRequired,
   group: ImmutablePropTypes.map,
   currentUser: ImmutablePropTypes.map,
+  lockedStudents: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
   examBeginImmediately: PropTypes.bool,
@@ -112,6 +171,7 @@ export default withLinks(
     (state, { params: { groupId } }) => ({
       group: groupSelector(state, groupId),
       groupsAccessor: groupDataAccessorSelector(state),
+      lockedStudents: lockedStudentsOfGroupSelector(state, groupId),
       userId: loggedInUserIdSelector(state),
       currentUser: loggedInUserSelector(state),
       isSuperAdmin: isLoggedAsSuperAdmin(state),
@@ -119,8 +179,8 @@ export default withLinks(
       examEndRelative: examFormSelector(state, 'endRelative'),
       examPendingChange: groupTypePendingChange(state, groupId),
     }),
-    (dispatch, { params: { groupId } }) => ({
-      loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
+    (dispatch, { params: { groupId, examId } }) => ({
+      loadAsync: () => GroupExams.loadAsync({ groupId, examId }, dispatch),
       reload: () => dispatch(fetchGroup(groupId)),
       addNotification: (...args) => dispatch(addNotification(...args)),
       setExamPeriod: (begin, end, strict) => dispatch(setExamPeriod(groupId, begin, end, strict)),

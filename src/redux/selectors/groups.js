@@ -79,6 +79,11 @@ export const groupPendingUserLock = createSelector(
   (groups, id) => groups && groups.getIn([id, 'pending-user-lock'], null)
 );
 
+export const groupPendingUserUnlock = createSelector(
+  [groupsSelector, getParam],
+  (groups, id) => groups && groups.getIn([id, 'pending-user-unlock'], null)
+);
+
 export const groupArchivedPendingChange = createSelector(
   [groupsSelector, getParam],
   (groups, id) => groups && groups.getIn([id, 'pending-archived'], false)

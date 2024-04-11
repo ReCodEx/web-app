@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { defaultMemoize } from 'reselect';
 
 import DateTime from '../../widgets/DateTime';
@@ -10,12 +11,12 @@ import { VisibleIcon } from '../../icons';
 
 const sortExams = defaultMemoize(exams => {
   const sorted = [...exams];
-  return sorted.sort((a, b) => a.end - b.end);
+  return sorted.sort((a, b) => a.end - b.end || a.begin - b.begin);
 });
 
-const GroupExamsTable = ({ exams = null, selected = null, setSelected = null }) =>
+const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) =>
   exams && exams.length > 0 ? (
-    <Table className="mb-0">
+    <Table className="mb-0" hover>
       <thead>
         <tr>
           <th />
@@ -28,12 +29,12 @@ const GroupExamsTable = ({ exams = null, selected = null, setSelected = null }) 
           <th>
             <FormattedMessage id="app.groupExamsTable.lockType" defaultMessage="Lock type" />
           </th>
-          {setSelected && <th />}
+          {linkFactory && <th />}
         </tr>
       </thead>
       <tbody>
         {sortExams(exams).map((exam, idx) => (
-          <tr key={exam.id} className={selected === exam.id ? 'table-primary' : ''}>
+          <tr key={exam.id} className={selected === String(exam.id) ? 'table-primary' : ''}>
             <td className="text-bold">#{idx + 1}</td>
             <td>
               <DateTime unixts={exam.begin} showRelative showSeconds />
@@ -50,16 +51,21 @@ const GroupExamsTable = ({ exams = null, selected = null, setSelected = null }) 
                 )}
               </em>
             </td>
-            {setSelected && (
-              <td>
-                <Button
-                  size="xs"
-                  variant="primary"
-                  disabled={selected === exam.id}
-                  onClick={() => setSelected(exam.id)}>
-                  <VisibleIcon visible gapRight />
-                  <FormattedMessage id="app.groupExamsTable.selectButton" defaultMessage="Detail" />
-                </Button>
+            {linkFactory && (
+              <td className="text-right">
+                <Link to={linkFactory(exam.id) || ''}>
+                  <Button
+                    size="xs"
+                    variant={selected === String(exam.id) ? 'primary-outline' : 'primary'}
+                    disabled={!linkFactory(exam.id)}>
+                    <VisibleIcon visible={selected !== String(exam.id)} gapRight />
+                    {selected === String(exam.id) ? (
+                      <FormattedMessage id="app.groupExamsTable.unselectButton" defaultMessage="Unselect" />
+                    ) : (
+                      <FormattedMessage id="app.groupExamsTable.selectButton" defaultMessage="Detail" />
+                    )}
+                  </Button>
+                </Link>
               </td>
             )}
           </tr>
@@ -69,7 +75,10 @@ const GroupExamsTable = ({ exams = null, selected = null, setSelected = null }) 
   ) : (
     <div className="text-center text-muted p-2">
       <em>
-        <FormattedMessage id="app.groupExams.noPreviousExams" defaultMessage="There are no previous exams recorded." />
+        <FormattedMessage
+          id="app.groupExamsTable.noPreviousExams"
+          defaultMessage="There are no previous exams recorded."
+        />
       </em>
     </div>
   );
@@ -77,7 +86,7 @@ const GroupExamsTable = ({ exams = null, selected = null, setSelected = null }) 
 GroupExamsTable.propTypes = {
   exams: PropTypes.array,
   selected: PropTypes.string,
-  setSelected: PropTypes.func,
+  linkFactory: PropTypes.func,
 };
 
 export default GroupExamsTable;

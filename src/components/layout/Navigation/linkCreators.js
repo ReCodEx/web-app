@@ -49,6 +49,7 @@ export const createGroupLinks = (
     caption: <FormattedMessage id="app.navigation.groupExams" defaultMessage="Exam Terms" />,
     link: GROUP_EXAMS_URI_FACTORY(groupId),
     icon: <GroupExamsIcon gapRight />,
+    match: (link, pathname) => pathname.startsWith(link),
   },
 ];
 

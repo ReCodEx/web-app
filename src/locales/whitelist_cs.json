@@ -163,5 +163,6 @@
   "app.systemMessagesList.text",
   "generic.detail",
   "generic.email",
-  "generic.role"
+  "generic.role",
+  "app.groupExamsTable.selectButton"
 ]

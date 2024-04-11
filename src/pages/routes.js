@@ -173,6 +173,7 @@ const routesDescriptors = [
   r('app/group/:groupId/assignments', GroupAssignments, 'GROUP_ASSIGNMENTS_URI_FACTORY', true),
   r('app/group/:groupId/students', GroupStudents, 'GROUP_STUDENTS_URI_FACTORY', true),
   r('app/group/:groupId/exams', GroupExams, 'GROUP_EXAMS_URI_FACTORY', true),
+  r('app/group/:groupId/exams/:examId', GroupExams, 'GROUP_EXAMS_SPECIFIC_EXAM_URI_FACTORY', true),
   r('app/group/:groupId/user/:userId', GroupUserSolutions, 'GROUP_USER_SOLUTIONS_URI_FACTORY', true),
   r('app/instance/:instanceId', Instance, 'INSTANCE_URI_FACTORY', true),
   r('app/users', Users, 'USERS_URI', true),

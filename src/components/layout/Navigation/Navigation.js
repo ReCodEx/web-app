@@ -14,8 +14,18 @@ import { AssignmentIcon, ExerciseIcon, PipelineIcon, ShadowAssignmentIcon } from
 
 import styles from './Navigation.less';
 
-const NavigationLink = ({ link, href, caption, icon = null, location: { pathname, search }, className }) =>
-  link === pathname + search ? (
+const defaultLinkMatch = (link, pathname, search) => link === pathname + search;
+
+const NavigationLink = ({
+  link,
+  href,
+  caption,
+  icon = null,
+  location: { pathname, search },
+  className,
+  match = defaultLinkMatch,
+}) =>
+  match(link, pathname, search) ? (
     <strong className={className}>
       {icon}
       {caption}
@@ -38,6 +48,7 @@ NavigationLink.propTypes = {
   caption: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   icon: PropTypes.element,
   className: PropTypes.string,
+  match: PropTypes.func,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
     search: PropTypes.string.isRequired,

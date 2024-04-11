@@ -253,6 +253,9 @@ const reducer = handleActions(
 
     [groupActionTypes.LOCK_STUDENT_EXAM_FULFILLED]: (state, { payload: { user } }) =>
       state.setIn(['resources', user.id], createRecord({ state: resourceStatus.FULFILLED, data: user })),
+
+    [groupActionTypes.UNLOCK_STUDENT_EXAM_FULFILLED]: (state, { payload }) =>
+      state.setIn(['resources', payload.id], createRecord({ state: resourceStatus.FULFILLED, data: payload })),
   }),
   initialState
 );
