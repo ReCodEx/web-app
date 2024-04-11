@@ -109,6 +109,7 @@
   "app.externalRegistrationForm.instance",
   "app.failureList.headLink",
   "app.faq.title",
+  "app.groupExamsTable.selectButton",
   "app.homepage.githubLink",
   "app.homepage.title",
   "app.instancesTable.admin",
@@ -163,6 +164,5 @@
   "app.systemMessagesList.text",
   "generic.detail",
   "generic.email",
-  "generic.role",
-  "app.groupExamsTable.selectButton"
+  "generic.role"
 ]
