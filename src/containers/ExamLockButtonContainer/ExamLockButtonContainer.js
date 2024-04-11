@@ -58,7 +58,12 @@ const mapStateToProps = (state, { groupId }) => ({
 });
 
 const mapDispatchToProps = (dispatch, { groupId }) => ({
-  lockStudentForExam: userId => dispatch(lockStudentForExam(groupId, userId)),
+  lockStudentForExam: userId =>
+    dispatch(lockStudentForExam(groupId, userId)).then(() => {
+      if (window) {
+        window.location.reload();
+      }
+    }),
   addNotification: (...args) => dispatch(addNotification(...args)),
 });
 
