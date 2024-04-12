@@ -17,6 +17,7 @@ import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignmen
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 import GroupExamPending from '../../components/Groups/GroupExamPending';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { isStudentLocked } from '../../components/helpers/exams';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
@@ -220,6 +221,7 @@ class GroupAssignments extends Component {
                               stats={groupStats.find(item => item.userId === userId)}
                               userId={isGroupAdmin || isGroupSupervisor ? null : userId}
                               isAdmin={isGroupAdmin || isGroupSupervisor || isSuperadminRole(effectiveRole)}
+                              noDiscussion={isStudentLocked(currentUser)}
                             />
                           )}
                         </ResourceRenderer>

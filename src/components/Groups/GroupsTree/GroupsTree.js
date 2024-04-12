@@ -36,7 +36,7 @@ const defaultButtonsCreator = (
         </OverlayTrigger>
       )}
 
-      {hasPermissions(group, 'viewPublicDetail') && (
+      {hasPermissions(group, 'viewDetail') && (
         <OverlayTrigger
           placement="bottom"
           overlay={
@@ -52,7 +52,7 @@ const defaultButtonsCreator = (
         </OverlayTrigger>
       )}
 
-      {hasPermissions(group, 'viewDetail') && (
+      {hasPermissions(group, 'viewAssignments') && (
         <OverlayTrigger
           placement="bottom"
           overlay={

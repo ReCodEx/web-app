@@ -22,6 +22,7 @@ import FailureReport from '../../SubmissionFailures/FailureReport';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 
+import { isStudentLocked } from '../../helpers/exams';
 import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
 
 class SolutionDetail extends Component {
@@ -85,6 +86,7 @@ class SolutionDetail extends Component {
       canResubmit = false,
       assignmentSolversLoading,
       assignmentSolverSelector,
+      currentUser,
     } = this.props;
 
     const { openFileId, openFileName, openZipEntry, scoreDialogOpened } = this.state;
@@ -201,15 +203,17 @@ class SolutionDetail extends Component {
               />
             )}
 
-            <CommentThreadContainer
-              threadId={id}
-              additionalPublicSwitchNote={
-                <FormattedMessage
-                  id="app.solutionDetail.comments.additionalSwitchNote"
-                  defaultMessage="(author of the solution and supervisors of this group)"
-                />
-              }
-            />
+            {!isStudentLocked(currentUser) && (
+              <CommentThreadContainer
+                threadId={id}
+                additionalPublicSwitchNote={
+                  <FormattedMessage
+                    id="app.solutionDetail.comments.additionalSwitchNote"
+                    defaultMessage="(author of the solution and supervisors of this group)"
+                  />
+                }
+              />
+            )}
           </Col>
 
           {evaluations && (
@@ -311,6 +315,7 @@ SolutionDetail.propTypes = {
   assignmentSolverSelector: PropTypes.func.isRequired,
   assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
+  currentUser: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
   editNote: PropTypes.func,
   deleteEvaluation: PropTypes.func,

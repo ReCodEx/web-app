@@ -50,7 +50,7 @@ import {
   assignmentEnvironmentsSelector,
 } from '../../redux/selectors/assignments';
 import { getFilesContentSelector } from '../../redux/selectors/files';
-import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
+import { getLoggedInUserEffectiveRole, loggedInUserSelector } from '../../redux/selectors/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { loggedUserIsPrimaryAdminOfSelector } from '../../redux/selectors/usersGroups';
 
@@ -59,6 +59,7 @@ import { isSupervisorRole } from '../../components/helpers/usersRoles';
 import { hasPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common';
 import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions';
 
+import { isStudentLocked } from '../../components/helpers/exams';
 import withLinks from '../../helpers/withLinks';
 import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
@@ -216,6 +217,7 @@ class SolutionSourceCodes extends Component {
       secondAssignment,
       solution,
       secondSolution,
+      currentUser,
       files,
       secondFiles,
       reviewComments,
@@ -234,7 +236,9 @@ class SolutionSourceCodes extends Component {
 
     const diffMode =
       secondSolutionId && secondSolutionId !== solutionId && secondSolution && isSupervisorRole(effectiveRole);
-    const resources = diffMode ? [solution, assignment, secondSolution, secondAssignment] : [solution, assignment];
+    const resources = diffMode
+      ? [solution, assignment, currentUser, secondSolution, secondAssignment]
+      : [solution, assignment, currentUser];
 
     return (
       <Page
@@ -250,7 +254,7 @@ class SolutionSourceCodes extends Component {
             <FormattedMessage id="app.solutionSourceCodes.title" defaultMessage="Solution Source Code Files Overview" />
           )
         }>
-        {(solution, assignment, secondSolution = null, secondAssignment = null) => (
+        {(solution, assignment, currentUser, secondSolution = null, secondAssignment = null) => (
           <div>
             <AssignmentSolutionNavigation
               solutionId={solution.id}
@@ -597,16 +601,18 @@ class SolutionSourceCodes extends Component {
               )}
             </ResourceRenderer>
 
-            <CommentThreadContainer
-              threadId={solution.id}
-              additionalPublicSwitchNote={
-                <FormattedMessage
-                  id="app.solutionDetail.comments.additionalSwitchNote"
-                  defaultMessage="(author of the solution and supervisors of this group)"
-                />
-              }
-              displayAs="panel"
-            />
+            {!isStudentLocked(currentUser) && (
+              <CommentThreadContainer
+                threadId={solution.id}
+                additionalPublicSwitchNote={
+                  <FormattedMessage
+                    id="app.solutionDetail.comments.additionalSwitchNote"
+                    defaultMessage="(author of the solution and supervisors of this group)"
+                  />
+                }
+                displayAs="panel"
+              />
+            )}
 
             <Modal show={this.state.diffDialogOpen} backdrop="static" onHide={this.closeDialogs} size="xl">
               <Modal.Header closeButton>
@@ -676,6 +682,7 @@ class SolutionSourceCodes extends Component {
 SolutionSourceCodes.propTypes = {
   assignment: ImmutablePropTypes.map,
   secondAssignment: ImmutablePropTypes.map,
+  currentUser: ImmutablePropTypes.map,
   loggedUserId: PropTypes.string,
   effectiveRole: PropTypes.string,
   runtimeEnvironments: PropTypes.array,
@@ -724,6 +731,7 @@ export default withRouter(
               ? getAssignment(state, secondSolution.getIn(['data', 'assignmentId']))
               : null,
           loggedUserId: loggedInUserIdSelector(state),
+          currentUser: loggedInUserSelector(state),
           effectiveRole: getLoggedInUserEffectiveRole(state),
           runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
           isPrimaryAdminOf: loggedUserIsPrimaryAdminOfSelector(state),

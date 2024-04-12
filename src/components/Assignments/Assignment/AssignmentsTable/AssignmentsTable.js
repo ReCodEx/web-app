@@ -177,6 +177,7 @@ class AssignmentsTable extends Component {
       isAdmin = false,
       showNames = true,
       showGroups = false,
+      noDiscussion = false,
       groupsAccessor = null,
       onlyCurrent = false,
       syncAssignment = null,
@@ -295,7 +296,7 @@ class AssignmentsTable extends Component {
                       showGroups={showGroups}
                       showSecondDeadline={showSecondDeadline}
                       groupsAccessor={groupsAccessor}
-                      discussionOpen={() => this.openDialog(assignment)}
+                      discussionOpen={noDiscussion ? null : () => this.openDialog(assignment)}
                       setSelected={multiActions ? this.selectAssignmentClickHandler(assignmentsPreprocessedAll) : null}
                       selected={Boolean(this.state.selectedAssignments[assignment.id])}
                       doubleClickPush={openOnDoubleclick ? navigate : null}
@@ -438,28 +439,30 @@ class AssignmentsTable extends Component {
           )}
         </UserUIDataContext.Consumer>
 
-        <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="xl">
-          {this.state.dialogAssignment && (
-            <CommentThreadContainer
-              threadId={this.state.dialogAssignment.id}
-              title={
-                <>
-                  <FormattedMessage id="app.assignments.discussionModalTitle" defaultMessage="Public Discussion" />:{' '}
-                  <LocalizedExerciseName
-                    entity={{ name: '??', localizedTexts: this.state.dialogAssignment.localizedTexts }}
+        {!noDiscussion && (
+          <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="xl">
+            {this.state.dialogAssignment && (
+              <CommentThreadContainer
+                threadId={this.state.dialogAssignment.id}
+                title={
+                  <>
+                    <FormattedMessage id="app.assignments.discussionModalTitle" defaultMessage="Public Discussion" />:{' '}
+                    <LocalizedExerciseName
+                      entity={{ name: '??', localizedTexts: this.state.dialogAssignment.localizedTexts }}
+                    />
+                  </>
+                }
+                additionalPublicSwitchNote={
+                  <FormattedMessage
+                    id="app.assignments.discussionModal.additionalSwitchNote"
+                    defaultMessage="(supervisors and students of this group)"
                   />
-                </>
-              }
-              additionalPublicSwitchNote={
-                <FormattedMessage
-                  id="app.assignments.discussionModal.additionalSwitchNote"
-                  defaultMessage="(supervisors and students of this group)"
-                />
-              }
-              displayAs="modal"
-            />
-          )}
-        </Modal>
+                }
+                displayAs="modal"
+              />
+            )}
+          </Modal>
+        )}
       </>
     );
   }
@@ -474,6 +477,7 @@ AssignmentsTable.propTypes = {
   isAdmin: PropTypes.bool,
   showNames: PropTypes.bool,
   showGroups: PropTypes.bool,
+  noDiscussion: PropTypes.bool,
   groupsAccessor: PropTypes.func,
   onlyCurrent: PropTypes.bool,
   syncAssignment: PropTypes.func,

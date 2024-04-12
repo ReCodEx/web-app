@@ -40,6 +40,7 @@ class AssignmentsTableContainer extends Component {
       stats,
       onlyCurrent = false,
       hideEmpty = false,
+      noDiscussion = false,
     } = this.props;
     return hideEmpty && assignments.size === 0 ? null : (
       <ResourceRenderer
@@ -60,6 +61,7 @@ class AssignmentsTableContainer extends Component {
               stats={userStats}
               statuses={userStats && userStats.assignments}
               onlyCurrent={onlyCurrent}
+              noDiscussion={noDiscussion}
             />
           );
         }}
@@ -73,6 +75,7 @@ AssignmentsTableContainer.propTypes = {
   userId: PropTypes.string,
   onlyCurrent: PropTypes.bool,
   hideEmpty: PropTypes.bool,
+  noDiscussion: PropTypes.bool,
   assignments: ImmutablePropTypes.list,
   assignmentEnvironmentsSelector: PropTypes.func,
   stats: ImmutablePropTypes.map,

@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import ExamLockButtonContainer from '../../../containers/ExamLockButtonContainer';
 import Callout from '../../widgets/Callout';
-import { InfoIcon, GroupExamsIcon } from '../../icons';
+import { InfoIcon, GroupExamsIcon, LinkIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
 
 import { isStudentRole } from '../../helpers/usersRoles';
+import withLinks from '../../../helpers/withLinks';
 
 const REFRESH_INTERVAL = 1; // [s]
 
@@ -53,8 +55,23 @@ class GroupExamPending extends Component {
       currentUser: {
         privateData: { groupLock, isGroupLockStrict, ipLock, role },
       },
+      links: { GROUP_ASSIGNMENTS_URI_FACTORY },
     } = this.props;
     const isStudent = isStudentRole(role);
+
+    if (isStudent && groupLock && groupLock !== id) {
+      return (
+        <Callout variant="warning" icon={<GroupExamsIcon />}>
+          <FormattedMessage
+            id="app.groupExams.lockedElsewhere"
+            defaultMessage="You are already locked for an exam in a different group (you can see this group in a read-only mode now)."
+          />
+          <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupLock)}>
+            <LinkIcon gapLeft className="text-primary" />
+          </Link>
+        </Callout>
+      );
+    }
 
     return (
       this.state.isExam && (
@@ -254,6 +271,7 @@ GroupExamPending.propTypes = {
       role: PropTypes.string,
     }).isRequired,
   }),
+  links: PropTypes.object,
 };
 
-export default GroupExamPending;
+export default withLinks(GroupExamPending);
