@@ -10,6 +10,7 @@ import {
   ENV_C_GCC_ID,
   ENV_CPP_GCC_ID,
   ENV_ARDUINO_ID,
+  ENV_SYCL_ID,
 } from './environments';
 
 /**
@@ -304,7 +305,7 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
   new Variable('compile-args', 'string[]', [])
     .individualEnvs()
     .forCompilation()
-    .setRuntimeFilter([ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID]),
+    .setRuntimeFilter([ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID, ENV_SYCL_ID]),
   new Variable('entry-point', 'file')
     .individualEnvs()
     .setPipelineFilter('hasEntryPoint')
