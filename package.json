@@ -48,7 +48,7 @@
     "cross-fetch": "^4.0.0",
     "css-loader": "^6.8.1",
     "deep-equal": "^2.2.2",
-    "ejs": "^3.1.9",
+    "ejs": "^3.1.10",
     "exenv": "^1.2.2",
     "express": "^4.18.2",
     "file-saver": "^2.0.5",
