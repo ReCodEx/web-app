@@ -74,13 +74,7 @@ class Instance extends Component {
       <Page
         resource={instance}
         icon={<InstanceIcon />}
-        title={instance => (
-          <FormattedMessage
-            id="app.instance.title"
-            defaultMessage="{name}: Instance Overview and Groups List"
-            values={{ name: getLocalizedName(instance.rootGroup, locale) }}
-          />
-        )}
+        title={<FormattedMessage id="app.instance.title" defaultMessage="Instance Overview and Groups List" />}
         windowTitle={instance => getLocalizedName(instance.rootGroup, locale)}>
         {data => (
           <div>

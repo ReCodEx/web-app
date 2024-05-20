@@ -30,9 +30,22 @@ const apiErrorCodes = defineMessages({
     defaultMessage:
       'Attempt to register a new user failed since external authenticator did not provide a role. The external user identity may not have required attributes.',
   },
-  '400-106': { id: 'app.apiErrorCodes.400-106', defaultMessage: 'The user is already registered.' },
+  '400-501': {
+    id: 'app.apiErrorCodes.400-501',
+    defaultMessage: 'The group is archived, it cannot be modified.',
+  },
+  '403-000': {
+    id: 'app.apiErrorCodes.403-000',
+    defaultMessage: 'Insufficient privileges to access requested resource or to perform requested operation.',
+  },
   '403-001': { id: 'app.apiErrorCodes.403-001', defaultMessage: 'The user account does not exist.' },
   '403-002': { id: 'app.apiErrorCodes.403-002', defaultMessage: 'The user account has been disabled.' },
+  '403-003': {
+    id: 'app.apiErrorCodes.403-003',
+    defaultMessage:
+      'Your user account is currently locked in a secure mode. Requests are accepted only from IP address {lockedAddress}.',
+  },
+  '404-000': { id: 'app.apiErrorCodes.404-000', defaultMessage: 'Resource not found.' },
   '409_100': {
     id: 'app.apiErrorCodes.409_100',
     defaultMessage:
@@ -49,7 +62,53 @@ const apiErrorCodes = defineMessages({
   '500-000': { id: 'app.apiErrorCodes.500-000', defaultMessage: 'Unexpected internal error.' },
 });
 
+const apiBaseErrorCodes = defineMessages({
+  400: {
+    id: 'app.apiErrorCodes.400',
+    defaultMessage: 'Bad request',
+  },
+  401: {
+    id: 'app.apiErrorCodes.401',
+    defaultMessage: 'User not authenticated',
+  },
+  403: {
+    id: 'app.apiErrorCodes.403',
+    defaultMessage: 'Insufficient privileges',
+  },
+  404: { id: 'app.apiErrorCodes.404', defaultMessage: 'Resource not found' },
+  409: { id: 'app.apiErrorCodes.409', defaultMessage: 'Unresolvable conflict' },
+  500: { id: 'app.apiErrorCodes.500', defaultMessage: 'Internal server error' },
+  501: { id: 'app.apiErrorCodes.501', defaultMessage: 'Feature not implemented' },
+});
+
+/*
+ * Public methods
+ */
+
+/**
+ * Is given structure an error report with a known code?
+ * @param {Object} error structure
+ * @returns {Boolean}
+ */
 export const hasErrorMessage = error => Boolean(error && error.code && apiErrorCodes[error.code]);
+
+/**
+ * Get error code in its raw form xxx-yyy
+ * @param {Object} error structure
+ * @returns {String} error code
+ */
+export const getErrorCode = error => (error && error.code) || null;
+
+/**
+ * Get error code parsed as an array of two ints
+ * @param {Object} error structure
+ * @returns {Integer[]} [major,minor]
+ */
+export const getErrorCodeStructured = error => {
+  const code = getErrorCode(error);
+  const tokens = (code && code.split('-')) || [];
+  return [null, null].map((_, idx) => parseInt(tokens[idx])).map(x => (isNaN(x) ? null : x));
+};
 
 export const getErrorMessage =
   formatMessage =>
@@ -57,11 +116,25 @@ export const getErrorMessage =
     error,
     fallbackMessage = <FormattedMessage id="app.apiErrorCodes.unknown" defaultMessage="Unknown API error." />
   ) => {
-    const code = error && error.code;
+    const code = getErrorCode(error);
     const parameters = (error && error.parameters) || {};
     if (code && apiErrorCodes[code]) {
       return formatMessage(apiErrorCodes[code], parameters);
     } else {
       return (error && error.message) || fallbackMessage;
+    }
+  };
+
+export const getBaseErrorMessage =
+  formatMessage =>
+  (
+    error,
+    fallbackMessage = <FormattedMessage id="app.apiErrorCodes.unknown" defaultMessage="Unknown API error." />
+  ) => {
+    const codePrefix = getErrorCodeStructured(error)[0];
+    if (codePrefix && apiBaseErrorCodes[codePrefix]) {
+      return formatMessage(apiBaseErrorCodes[codePrefix]);
+    } else {
+      return fallbackMessage;
     }
   };

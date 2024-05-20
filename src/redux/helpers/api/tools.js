@@ -213,14 +213,14 @@ const processResponse = (call, dispatch) =>
 
       const contentType = res.headers.get('content-type');
       if (contentType.includes('json')) {
-        return res.json().then(json => Promise.reject(json.error || json));
+        return res.json();
       }
 
       return Promise.reject(res);
     })
     .then(({ success = true, error = null, payload = {} }) => {
       if (!success) {
-        if (error && error.message) {
+        if (error && error.message && (!error.code || !error.code.startsWith('4'))) {
           dispatch && dispatch(addNotification(`Server response: ${error.message}`, false));
         }
         return Promise.reject(error || new Error('The API call was not successful.'));

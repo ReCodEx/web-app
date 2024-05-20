@@ -19,12 +19,19 @@ import { resourceStatus, isReadyOrReloading } from './status';
  * @param {RecordDescriptor} record The properties of the record
  * @return {object} ImmutableJS map with the properties of the record
  */
-const createRecord = ({ data = null, state = resourceStatus.PENDING, didInvalidate = false, lastUpdate = null } = {}) =>
+const createRecord = ({
+  data = null,
+  state = resourceStatus.PENDING,
+  didInvalidate = false,
+  lastUpdate = null,
+  error = undefined,
+} = {}) =>
   fromJS({
     state,
     data,
     didInvalidate,
     lastUpdate: lastUpdate !== null ? lastUpdate : Date.now(),
+    ...(error ? { error } : {}),
   });
 
 export default createRecord;

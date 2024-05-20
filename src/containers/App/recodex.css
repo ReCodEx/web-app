@@ -232,7 +232,7 @@ table.table-hover .selected th.clickable:hover,
 table.table-hover td.clickable.selected:hover,
 table.table-hover th.clickable.selected:hover,
 table.table.tbody-hover tbody:hover .selected td,
-table.table.tbody-hover tbody:hover .selected th, 
+table.table.tbody-hover tbody:hover .selected th,
 table.table.tbody-hover tbody:hover td.selected,
 table.table.tbody-hover tbody:hover th.selected {
   background-color: #b0ddb0;
@@ -370,6 +370,17 @@ table.table tbody:first-child tr:first-child th {
   top: 50%;
   background-color: transparent !important;
   font-size: 24px;
+  transform: translate(-50%, -50%);
+}
+
+.callout.large-icon {
+  border-left-width: 100px;
+}
+.callout.large-icon .callout-icon {
+  left: -50px;
+  top: 50%;
+  background-color: transparent !important;
+  font-size: 48px;
   transform: translate(-50%, -50%);
 }
 

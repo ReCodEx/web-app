@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { defaultMemoize } from 'reselect';
+
 import { LoadingIcon, WarningIcon } from '../../icons';
 import {
   isLoading,
@@ -12,35 +14,8 @@ import {
   isDeleting,
   isDeleted,
   getJsData,
+  getUniqueErrors,
 } from '../../../redux/helpers/resourceManager';
-
-const defaultLoading = noIcons => (
-  <span>
-    {!noIcons && <LoadingIcon gapRight />}
-    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  </span>
-);
-
-const defaultLoadingBulky = noIcons => (
-  <p className="text-center larger em-padding">
-    {!noIcons && <LoadingIcon gapRight />}
-    <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
-  </p>
-);
-
-const defaultFailed = noIcons => (
-  <span>
-    {!noIcons && <WarningIcon gapRight />}
-    <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
-  </span>
-);
-
-const defaultFailedBulky = noIcons => (
-  <p className="text-center text-danger larger em-padding">
-    {!noIcons && <WarningIcon gapRight />}
-    <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
-  </p>
-);
 
 const shallowResourcesEqual = (oldResources, newResources) => {
   if (List.isList(oldResources) || List.isList(newResources)) {
@@ -101,21 +76,57 @@ class ResourceRenderer extends Component {
     return this.renderFromCache();
   };
 
+  renderWrapped = (content, extraClasses = '') => {
+    const { bulkyLoading } = this.props;
+    return bulkyLoading ? (
+      <p className={`text-center larger em-padding ${extraClasses}`}>{content}</p>
+    ) : (
+      <span className={extraClasses}>{content}</span>
+    );
+  };
+
+  renderLoading = () => {
+    const { loading = null, bulkyLoading, noIcons } = this.props;
+
+    if (loading) {
+      return typeof loading === 'function' ? loading(noIcons, bulkyLoading) : loading;
+    }
+
+    return this.renderWrapped(
+      <>
+        {!noIcons && <LoadingIcon gapRight />}
+        <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
+      </>
+    );
+  };
+
+  getErrors = defaultMemoize(resources => getUniqueErrors(resources));
+
+  renderFailed = resources => {
+    const { failed = null, bulkyLoading, noIcons } = this.props;
+
+    if (failed) {
+      return typeof failed === 'function' ? failed(this.getErrors(resources), noIcons, bulkyLoading) : failed;
+    }
+
+    return this.renderWrapped(
+      <>
+        {!noIcons && <WarningIcon className="text-danger" gapRight />}
+        <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
+      </>
+    );
+  };
+
   render() {
-    const {
-      noIcons = false,
-      bulkyLoading = false,
-      loading = bulkyLoading ? defaultLoadingBulky(noIcons) : defaultLoading(noIcons),
-      failed = bulkyLoading ? defaultFailedBulky(noIcons) : defaultFailed(noIcons),
-      resource,
-      hiddenUntilReady = false,
-      forceLoading = false,
-    } = this.props;
+    const { resource, hiddenUntilReady = false, forceLoading = false } = this.props;
 
     const resources = Array.isArray(resource) || List.isList(resource) ? resource : [resource];
     const stillLoading = !resource || resources.find(res => !res) || resources.some(isLoading) || forceLoading;
     const isReloading =
-      stillLoading && !forceLoading && resources.length > 0 && resources.every(res => res && isReadyOrReloading(res));
+      stillLoading &&
+      !forceLoading &&
+      (resources.length || resources.size) > 0 &&
+      resources.every(res => res && isReadyOrReloading(res));
 
     if (isReloading && this.oldData !== null) {
       return this.renderFromCache();
@@ -124,18 +135,18 @@ class ResourceRenderer extends Component {
     return stillLoading
       ? hiddenUntilReady
         ? null
-        : loading
+        : this.renderLoading()
       : resources.some(hasFailed)
       ? hiddenUntilReady
         ? null
-        : failed
+        : this.renderFailed(resources)
       : this.renderReady(resources);
   }
 }
 
 ResourceRenderer.propTypes = {
-  loading: PropTypes.element,
-  failed: PropTypes.element,
+  loading: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.func]),
+  failed: PropTypes.oneOfType([PropTypes.element, PropTypes.string, PropTypes.func]),
   children: PropTypes.func.isRequired,
   resource: PropTypes.oneOfType([PropTypes.object, PropTypes.array, ImmutablePropTypes.list]),
   hiddenUntilReady: PropTypes.bool,
