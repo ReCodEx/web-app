@@ -126,7 +126,7 @@ class GroupInfo extends Component {
         failed={<FailedGroupLoading />}>
         {(data, currentUser) => (
           <div>
-            <GroupNavigation group={data} />
+            {data.privateData && <GroupNavigation group={data} />}
 
             {!isAdmin &&
               !isSupervisor &&
@@ -137,7 +137,7 @@ class GroupInfo extends Component {
                 </div>
               )}
 
-            <GroupExamPending {...data} currentUser={currentUser} />
+            {data.privateData && <GroupExamPending {...data} currentUser={currentUser} />}
 
             <GroupArchivedWarning {...data} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_INFO_URI_FACTORY} />
 

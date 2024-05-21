@@ -33,7 +33,7 @@ import './recodex.css';
 
 library.add(regularIcons, solidIcons, brandIcons);
 
-const someStatusesFailed = (...statuses) =>
+const reloadIsRequired = (...statuses) =>
   statuses.includes(resourceStatus.FAILED) && !statuses.includes(resourceStatus.PENDING);
 
 class App extends Component {
@@ -66,11 +66,13 @@ class App extends Component {
   constructor() {
     super();
     this.isRefreshingToken = false;
+    this.reloadsCount = 0;
   }
 
   componentDidMount() {
     const hasCustomLoadGroups = pathHasCustomLoadGroups(this.props.location.pathname + this.props.location.search);
     this.props.loadAsync(this.props.userId, hasCustomLoadGroups);
+    this.reloadsCount = 0;
   }
 
   componentDidUpdate(prevProps) {
@@ -78,15 +80,22 @@ class App extends Component {
 
     const hadCustomLoadGroups = pathHasCustomLoadGroups(prevProps.location.pathname + prevProps.location.search);
     const hasCustomLoadGroups = pathHasCustomLoadGroups(this.props.location.pathname + this.props.location.search);
+
+    if (this.props.userId !== prevProps.userId || (hadCustomLoadGroups && !hasCustomLoadGroups)) {
+      this.reloadsCount = 0;
+    }
+
     if (
       this.props.userId !== prevProps.userId ||
       (hadCustomLoadGroups && !hasCustomLoadGroups) ||
-      someStatusesFailed(
-        this.props.fetchUserStatus,
-        !pathHasCustomLoadGroups && this.props.fetchManyGroupsStatus,
-        this.props.fetchManyUserInstancesStatus
-      )
+      (this.reloadsCount < 3 &&
+        reloadIsRequired(
+          this.props.fetchUserStatus,
+          !pathHasCustomLoadGroups && this.props.fetchManyGroupsStatus,
+          this.props.fetchManyUserInstancesStatus
+        ))
     ) {
+      this.reloadsCount++;
       this.props.loadAsync(this.props.userId, hasCustomLoadGroups);
     }
   }

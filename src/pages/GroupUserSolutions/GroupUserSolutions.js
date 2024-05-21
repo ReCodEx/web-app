@@ -394,9 +394,9 @@ class GroupUserSolutions extends Component {
         }>
         {(group, currentUser) => (
           <div>
-            <GroupNavigation group={group} userId={userId} />
+            {group.privateData && <GroupNavigation group={group} userId={userId} />}
 
-            <GroupExamPending {...group} currentUser={currentUser} />
+            {group.privateData && <GroupExamPending {...group} currentUser={currentUser} />}
 
             <GroupArchivedWarning
               {...group}

@@ -153,7 +153,7 @@ class GroupStudents extends Component {
 
           return (
             <div>
-              <GroupNavigation group={data} emails={studentEmails || null} />
+              {data.privateData && <GroupNavigation group={data} emails={studentEmails || null} />}
 
               {canLeaveGroup && (
                 <div className="my-3">
@@ -174,7 +174,7 @@ class GroupStudents extends Component {
                 </Row>
               )}
 
-              {<GroupExamPending {...data} currentUser={loggedUser} />}
+              {data.privateData && <GroupExamPending {...data} currentUser={loggedUser} />}
 
               {data.organizational && (
                 <Row>
