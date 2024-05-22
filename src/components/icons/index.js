@@ -160,7 +160,7 @@ export const VisibleIcon = ({ visible = true, ...props }) =>
   visible ? (
     <Icon {...props} icon={['far', 'eye']} />
   ) : (
-    <Icon {...props} icon={['far', 'eye-slash']} className="text-muted" />
+    <Icon className="text-muted" {...props} icon={['far', 'eye-slash']} />
   );
 export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
 export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;

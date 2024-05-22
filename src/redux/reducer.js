@@ -21,6 +21,7 @@ import exercisesAuthors from './modules/exercisesAuthors';
 import files from './modules/files';
 import filesContent from './modules/filesContent';
 import groups from './modules/groups';
+import groupExamLocks from './modules/groupExamLocks';
 import groupExercises from './modules/groupExercises';
 import groupInvitations from './modules/groupInvitations';
 import groupResults from './modules/groupResults';
@@ -81,6 +82,7 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   files,
   filesContent,
   groups,
+  groupExamLocks,
   groupExercises,
   groupInvitations,
   groupResults,

@@ -37,10 +37,10 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
           <tr key={exam.id} className={selected === String(exam.id) ? 'table-primary' : ''}>
             <td className="text-bold">#{idx + 1}</td>
             <td>
-              <DateTime unixts={exam.begin} showRelative showSeconds />
+              <DateTime unixts={exam.begin} showSeconds />
             </td>
             <td>
-              <DateTime unixts={exam.end} showRelative showSeconds />
+              <DateTime unixts={exam.end} showSeconds />
             </td>
             <td>
               <em>
@@ -56,9 +56,9 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
                 <Link to={linkFactory(exam.id) || ''}>
                   <Button
                     size="xs"
-                    variant={selected === String(exam.id) ? 'primary-outline' : 'primary'}
+                    variant={selected === String(exam.id) ? 'secondary' : 'primary'}
                     disabled={!linkFactory(exam.id)}>
-                    <VisibleIcon visible={selected !== String(exam.id)} gapRight />
+                    <VisibleIcon visible={selected !== String(exam.id)} className="text-light" gapRight />
                     {selected === String(exam.id) ? (
                       <FormattedMessage id="app.groupExamsTable.unselectButton" defaultMessage="Unselect" />
                     ) : (
