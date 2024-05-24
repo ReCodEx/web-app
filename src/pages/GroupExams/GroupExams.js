@@ -25,13 +25,19 @@ import { groupExamLocksSelector } from '../../redux/selectors/groupExamLocks';
 import { lockedStudentsOfGroupSelector } from '../../redux/selectors/usersGroups';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
 import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
+import { getJsData } from '../../redux/helpers/resourceManager';
 
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions, safeGet } from '../../helpers/common';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { isExam } from '../../helpers/groups';
 
+const REFRESH_INTERVAL = 1; // [s]
+
 class GroupExams extends Component {
+  state = { examInProgress: false };
+  intervalHandler = null;
+
   static loadAsync = ({ groupId }, dispatch) =>
     Promise.all([
       dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
@@ -41,10 +47,30 @@ class GroupExams extends Component {
       ),
     ]);
 
+  static getDerivedStateFromProps({ group }) {
+    const groupJs = getJsData(group);
+    const examInProgress = Boolean(groupJs && isExam(groupJs));
+    return { examInProgress };
+  }
+
+  periodicRefresh = () => {
+    const newState = GroupExams.getDerivedStateFromProps(this.props, this.state);
+    if (newState.examInProgress !== this.state.examInProgress) {
+      this.setState(newState);
+    }
+  };
+
   componentDidMount() {
     this.props.loadAsync();
     if (this.props.params.examId) {
       this.props.loadGroupExamLocks();
+    }
+
+    if (window && 'setInterval' in window) {
+      if (this.intervalHandler) {
+        window.clearInterval(this.intervalHandler);
+      }
+      this.intervalHandler = window.setInterval(this.periodicRefresh, REFRESH_INTERVAL * 1000);
     }
   }
 
@@ -54,6 +80,13 @@ class GroupExams extends Component {
     }
     if (this.props.params.examId !== prevProps.params.examId && this.props.params.examId) {
       this.props.loadGroupExamLocks();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.intervalHandler) {
+      window.clearInterval(this.intervalHandler);
+      this.intervalHandler = null;
     }
   }
 
@@ -114,19 +147,19 @@ class GroupExams extends Component {
                   unlimitedHeight>
                   <GroupExamsTable
                     exams={group.privateData.exams}
-                    selected={isExam(group) ? null : examId}
-                    linkFactory={isExam(group) ? null : this.linkFactory}
+                    selected={this.state.examInProgress ? null : examId}
+                    linkFactory={this.state.examInProgress ? null : this.linkFactory}
                   />
                 </Box>
               </Col>
             </Row>
 
-            {(examId || isExam(group)) && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
+            {(examId || this.state.examInProgress) && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
               <Row>
                 <Col xs={12}>
                   <Box
                     title={
-                      isExam(group) ? (
+                      this.state.examInProgress ? (
                         <FormattedMessage
                           id="app.groupExams.studentsBoxTitle"
                           defaultMessage="Participating students"
@@ -140,7 +173,7 @@ class GroupExams extends Component {
                     }
                     noPadding
                     unlimitedHeight>
-                    {isExam(group) ? (
+                    {this.state.examInProgress ? (
                       <LockedStudentsTable
                         groupId={group.id}
                         lockedStudents={lockedStudents}

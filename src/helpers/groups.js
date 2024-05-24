@@ -1,4 +1,8 @@
-export const isExam = ({ privateData: { examBegin, examEnd } }) => {
+import { safeGet } from './common';
+
+export const isExam = group => {
+  const examBegin = safeGet(group, ['privateData', 'examBegin']);
+  const examEnd = safeGet(group, ['privateData', 'examEnd']);
   const now = Date.now() / 1000;
   return examBegin && examEnd && examEnd > now && examBegin <= now;
 };
