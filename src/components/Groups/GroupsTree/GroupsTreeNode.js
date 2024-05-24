@@ -8,9 +8,10 @@ import { defaultMemoize } from 'reselect';
 import GroupsTree from './GroupsTree';
 import GroupsName from '../GroupsName';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import Icon, { GroupIcon, LoadingIcon } from '../../icons';
+import Icon, { GroupIcon, GroupExamsIcon, LoadingIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 import { isRegularObject } from '../../../helpers/common';
+import { isExam } from '../../../helpers/groups';
 
 /**
  * Assemble the right CSS classes for the list item.
@@ -38,6 +39,7 @@ const GroupsTreeNode = React.memo(
       id,
       localizedTexts,
       primaryAdmins = [],
+      exam,
       organizational,
       archived,
       isPublic,
@@ -85,6 +87,32 @@ const GroupsTreeNode = React.memo(
               </em>
               )
             </span>
+          )}
+          {isExam(group) ? (
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`${id}-pendingexam-tooltip`}>
+                  <FormattedMessage
+                    id="app.groupTree.treeViewLeaf.pendingExamTooltip"
+                    defaultMessage="The group is locked for an exam"
+                  />
+                </Tooltip>
+              }>
+              <GroupExamsIcon className="text-danger" gapLeft />
+            </OverlayTrigger>
+          ) : (
+            exam && (
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`${id}-exam-tooltip`}>
+                    <FormattedMessage id="app.groupTree.treeViewLeaf.examTooltip" defaultMessage="Exam group" />
+                  </Tooltip>
+                }>
+                <GroupIcon exam={true} className="text-warning" gapLeft />
+              </OverlayTrigger>
+            )
           )}
           {organizational && (
             <OverlayTrigger
@@ -157,6 +185,7 @@ GroupsTreeNode.propTypes = {
     id: PropTypes.string,
     localizedTexts: PropTypes.array.isRequired,
     primaryAdmins: PropTypes.array,
+    exam: PropTypes.bool,
     organizational: PropTypes.bool,
     archived: PropTypes.bool,
     isPublic: PropTypes.bool,

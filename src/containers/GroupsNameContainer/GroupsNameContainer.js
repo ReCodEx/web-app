@@ -53,7 +53,10 @@ class GroupsNameContainer extends Component {
         {group => (
           <>
             {showIcon && (
-              <OptionalTooltipWrapper tooltip={iconTooltip} hide={!iconTooltip} tooltipId={`groupIcon-${group.id}`}>
+              <OptionalTooltipWrapper
+                tooltip={iconTooltip && typeof iconTooltip === 'function' ? iconTooltip(group) : iconTooltip}
+                hide={!iconTooltip}
+                tooltipId={`groupIcon-${group.id}`}>
                 <GroupIcon
                   gapRight
                   className="text-muted"
@@ -119,7 +122,7 @@ GroupsNameContainer.propTypes = {
   group: ImmutablePropTypes.map,
   groupAccessor: PropTypes.func.isRequired,
   showIcon: PropTypes.bool,
-  iconTooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  iconTooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.func]),
   loadAsync: PropTypes.func.isRequired,
 };
 

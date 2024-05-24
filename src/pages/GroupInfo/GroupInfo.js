@@ -120,7 +120,13 @@ class GroupInfo extends Component {
     return (
       <Page
         resource={[group, currentUser]}
-        icon={group => <GroupIcon organizational={group && group.organizational} archived={group && group.archived} />}
+        icon={group => (
+          <GroupIcon
+            organizational={group && group.organizational}
+            exam={group && group.exam}
+            archived={group && group.archived}
+          />
+        )}
         title={<FormattedMessage id="app.groupInfo.title" defaultMessage="Group Details and Metadata" />}
         loading={<LoadingGroupData />}
         failed={<FailedGroupLoading />}>

@@ -29,11 +29,7 @@ import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selector
 import withLinks from '../../helpers/withLinks';
 import { hasPermissions, safeGet } from '../../helpers/common';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-
-const isExam = ({ privateData: { examBegin, examEnd } }) => {
-  const now = Date.now() / 1000;
-  return examBegin && examEnd && examEnd > now && examBegin <= now;
-};
+import { isExam } from '../../helpers/groups';
 
 class GroupExams extends Component {
   static loadAsync = ({ groupId }, dispatch) =>

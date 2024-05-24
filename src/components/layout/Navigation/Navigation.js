@@ -16,6 +16,16 @@ import styles from './Navigation.less';
 
 const defaultLinkMatch = (link, pathname, search) => link === pathname + search;
 
+const groupIconTooltip = group => {
+  if (group.exam) {
+    return <FormattedMessage id="app.navigation.examGroup" defaultMessage="Exam group" />;
+  }
+  if (group.organizational) {
+    return <FormattedMessage id="app.navigation.organizationalGroup" defaultMessage="Organizational group" />;
+  }
+  return <FormattedMessage id="app.navigation.group" defaultMessage="Group" />;
+};
+
 const NavigationLink = ({
   link,
   href,
@@ -100,7 +110,7 @@ const Navigation = ({
                 admins
                 ancestorLinks
                 showIcon
-                iconTooltip={<FormattedMessage id="app.navigation.group" defaultMessage="Group" />}
+                iconTooltip={groupIconTooltip}
               />
             </span>
           )}
