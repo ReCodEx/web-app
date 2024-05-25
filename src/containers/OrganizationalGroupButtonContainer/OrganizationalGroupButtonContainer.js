@@ -2,20 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
+import { defaultMemoize } from 'reselect';
 
 import OrganizationalGroupButton from '../../components/buttons/OrganizationalGroupButton';
 import { setOrganizational } from '../../redux/modules/groups';
-import { groupSelector, groupOrganizationalPendingChange } from '../../redux/selectors/groups';
+import { groupSelector, groupTypePendingChange } from '../../redux/selectors/groups';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { getErrorMessage } from '../../locales/apiErrorMessages';
+import { addNotification } from '../../redux/modules/notifications';
 
-const OrganizationalGroupButtonContainer = ({ group, pending, setOrganizational, ...props }) => (
+const setOrganizationalHandlingErrors = defaultMemoize(
+  (organizational, setOrganizational, addNotification, formatMessage) => () =>
+    setOrganizational(!organizational).catch(err => {
+      addNotification(getErrorMessage(formatMessage)(err), false);
+    })
+);
+
+const OrganizationalGroupButtonContainer = ({
+  group,
+  pending,
+  setOrganizational,
+  addNotification,
+  intl: { formatMessage },
+  ...props
+}) => (
   <ResourceRenderer resource={group}>
-    {({ organizational, privateData: { students, assignments }, permissionHints }) => (
+    {({ exam, organizational, privateData: { students, assignments }, permissionHints }) => (
       <OrganizationalGroupButton
         organizational={organizational}
         pending={pending}
-        setOrganizational={setOrganizational}
-        disabled={!permissionHints.update || students.length > 0 || assignments.length > 0}
+        setOrganizational={setOrganizationalHandlingErrors(
+          organizational,
+          setOrganizational,
+          addNotification,
+          formatMessage
+        )}
+        disabled={!permissionHints.setOrganizational || exam || students.length > 0 || assignments.length > 0}
         {...props}
       />
     )}
@@ -27,18 +50,18 @@ OrganizationalGroupButtonContainer.propTypes = {
   group: ImmutablePropTypes.map,
   pending: PropTypes.bool.isRequired,
   setOrganizational: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired,
+  intl: PropTypes.object,
 };
 
 const mapStateToProps = (state, { id }) => ({
   group: groupSelector(state, id),
-  pending: groupOrganizationalPendingChange(id)(state),
+  pending: groupTypePendingChange(state, id),
 });
 
 const mapDispatchToProps = (dispatch, { id }) => ({
-  setOrganizational: organizational => () => dispatch(setOrganizational(id, organizational)),
+  setOrganizational: organizational => dispatch(setOrganizational(id, organizational)),
+  addNotification: (...args) => dispatch(addNotification(...args)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(OrganizationalGroupButtonContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(OrganizationalGroupButtonContainer));

@@ -17,7 +17,7 @@ import {
 } from '../../redux/modules/groups';
 import { fetchByIds, fetchUser } from '../../redux/modules/users';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
 import { groupSelector, groupDataAccessorSelector, groupsSelector } from '../../redux/selectors/groups';
 import {
   primaryAdminsOfGroupSelector,
@@ -43,8 +43,9 @@ import GroupsTreeContainer from '../../containers/GroupsTreeContainer';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 import { BanIcon, GroupIcon } from '../../components/icons';
-import { hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
+import { hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 
 import withLinks from '../../helpers/withLinks';
 
@@ -89,6 +90,7 @@ class GroupInfo extends Component {
   render() {
     const {
       group,
+      currentUser,
       userId,
       groups,
       groupsAccessor,
@@ -102,6 +104,8 @@ class GroupInfo extends Component {
       isStudent,
       addSubgroup,
       hasThreshold,
+      isOrganizational,
+      isExam,
       pendingMemberships,
       addAdmin,
       addSupervisor,
@@ -115,18 +119,20 @@ class GroupInfo extends Component {
 
     return (
       <Page
-        resource={group}
-        icon={group => <GroupIcon organizational={group && group.organizational} archived={group && group.archived} />}
+        resource={[group, currentUser]}
+        icon={group => (
+          <GroupIcon
+            organizational={group && group.organizational}
+            exam={group && group.exam}
+            archived={group && group.archived}
+          />
+        )}
         title={<FormattedMessage id="app.groupInfo.title" defaultMessage="Group Details and Metadata" />}
         loading={<LoadingGroupData />}
         failed={<FailedGroupLoading />}>
-        {data => (
+        {(data, currentUser) => (
           <div>
-            <GroupNavigation
-              groupId={data.id}
-              canEdit={hasOneOfPermissions(data, 'update', 'archive', 'remove', 'relocate')}
-              canViewDetail={hasPermissions(data, 'viewDetail')}
-            />
+            {data.privateData && <GroupNavigation group={data} />}
 
             {!isAdmin &&
               !isSupervisor &&
@@ -136,6 +142,8 @@ class GroupInfo extends Component {
                   <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} size={null} redirectAfterLeave />
                 </div>
               )}
+
+            {data.privateData && <GroupExamPending {...data} currentUser={currentUser} />}
 
             <GroupArchivedWarning {...data} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_INFO_URI_FACTORY} />
 
@@ -164,7 +172,7 @@ class GroupInfo extends Component {
                   />
                 )}
 
-                {hasPermissions(data, 'viewMembers') && (
+                {hasPermissions(data, 'viewDetail') && (
                   <Box
                     noPadding
                     collapsable
@@ -248,6 +256,8 @@ class GroupInfo extends Component {
                     isOpen={false}
                     hasThreshold={hasThreshold}
                     isSuperAdmin={isSuperAdmin}
+                    isOrganizational={isOrganizational}
+                    isExam={isExam}
                   />
                 )}
               </Col>
@@ -263,6 +273,7 @@ GroupInfo.propTypes = {
   params: PropTypes.shape({ groupId: PropTypes.string.isRequired }).isRequired,
   userId: PropTypes.string.isRequired,
   group: ImmutablePropTypes.map,
+  currentUser: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   instance: ImmutablePropTypes.map,
   primaryAdmins: PropTypes.array,
@@ -282,6 +293,8 @@ GroupInfo.propTypes = {
   addObserver: PropTypes.func.isRequired,
   removeMember: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
+  isOrganizational: PropTypes.bool,
+  isExam: PropTypes.bool,
   pendingMemberships: ImmutablePropTypes.list,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
@@ -294,6 +307,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 
   return {
     group: groupSelector(state, groupId),
+    currentUser: loggedInUserSelector(state),
     userId,
     groups: groupsSelector(state),
     groupsAccessor: groupDataAccessorSelector(state),
@@ -306,6 +320,8 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     isStudent: loggedUserIsStudentOfSelector(state)(groupId),
     hasThreshold: addSubgroupFormSelector(state, 'hasThreshold'),
+    isOrganizational: addSubgroupFormSelector(state, 'isOrganizational'),
+    isExam: addSubgroupFormSelector(state, 'isExam'),
     pendingMemberships: pendingMembershipsSelector(state, groupId),
   };
 };

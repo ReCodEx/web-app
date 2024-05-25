@@ -2,6 +2,8 @@
  * Status of a resource record - helper functions
  * @module status
  */
+import { List } from 'immutable';
+import { deepCompare, identity } from '../../../helpers/common';
 
 export const resourceStatus = {
   PENDING: 'PENDING',
@@ -58,6 +60,43 @@ export const isDeleted = item => !item || item.get('state') === resourceStatus.D
  * @return {boolean} True when the item could not be loaded, written, updated or deleted.
  */
 export const hasFailed = item => Boolean(item) && item.get('state') === resourceStatus.FAILED;
+
+/**
+ * Return error object { message, code, ... } of a failed resource.
+ * @param {Object} item
+ * @returns {Object} as plain old JS object
+ */
+export const getError = item => (hasFailed(item) ? item.get('error').toJS() : null);
+
+/**
+ * Get errors for a list of resources and return it (without duplicates)
+ * @param {Array|List} list of resources
+ * @returns {Array} of error objects (null returned for unknown errors)
+ */
+export const getUniqueErrors = list => {
+  const errors = (List.isList(list) ? list.toArray() : list).filter(hasFailed).map(getError);
+  const unknownErrors = errors.some(e => !e || typeof e !== 'object' || !e.code || !e.message);
+  const knownErrors = errors.filter(e => e && typeof e === 'object' && e.code && e.message);
+  knownErrors.sort(
+    ({ code: c1, message: m1 }, { code: c2, message: m2 }) => c1.localeCompare(c2, 'en') || m1.localeCompare(m2, 'en')
+  );
+
+  // remove duplicates
+  let lastError = null;
+  knownErrors.forEach((e, idx) => {
+    if (lastError && deepCompare(e, lastError)) {
+      knownErrors[idx] = null; // nulls are removed duplicates
+    } else {
+      lastError = e;
+    }
+  });
+
+  const res = knownErrors.filter(identity); // filter out removed duplicates
+  if (unknownErrors) {
+    res.push(null); // push one null for unknown error(s)
+  }
+  return res;
+};
 
 /**
  * @param {Object} item The item

@@ -13,6 +13,7 @@ import { LoadingGroupData, FailedGroupLoading } from '../../components/Groups/he
 import { StudentsIcon, BanIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import AddStudent from '../../components/Groups/AddStudent';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import GroupInvitationsContainer from '../../containers/GroupInvitationsContainer';
 
@@ -53,7 +54,7 @@ import { isReady } from '../../redux/helpers/resourceManager/index';
 import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
 
 import { isSuperadminRole, isStudentRole } from '../../components/helpers/usersRoles';
-import { EMPTY_LIST, hasPermissions, hasOneOfPermissions, safeGet } from '../../helpers/common';
+import { EMPTY_LIST, hasPermissions, safeGet } from '../../helpers/common';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
 
 class GroupStudents extends Component {
@@ -128,12 +129,12 @@ class GroupStudents extends Component {
 
     return (
       <Page
-        resource={group}
+        resource={[group, loggedUser]}
         icon={<StudentsIcon />}
         title={<FormattedMessage id="app.groupStudents.title" defaultMessage="Group Students" />}
         loading={<LoadingGroupData />}
         failed={<FailedGroupLoading />}>
-        {data => {
+        {(data, loggedUser) => {
           const canLeaveGroup =
             !isGroupAdmin &&
             !isGroupSupervisor &&
@@ -152,12 +153,7 @@ class GroupStudents extends Component {
 
           return (
             <div>
-              <GroupNavigation
-                groupId={data.id}
-                canEdit={hasOneOfPermissions(data, 'update', 'archive', 'remove', 'relocate')}
-                canViewDetail={hasPermissions(data, 'viewDetail')}
-                emails={studentEmails || null}
-              />
+              {data.privateData && <GroupNavigation group={data} emails={studentEmails || null} />}
 
               {canLeaveGroup && (
                 <div className="my-3">
@@ -177,6 +173,8 @@ class GroupStudents extends Component {
                   </Col>
                 </Row>
               )}
+
+              {data.privateData && <GroupExamPending {...data} currentUser={loggedUser} />}
 
               {data.organizational && (
                 <Row>
@@ -208,112 +206,99 @@ class GroupStudents extends Component {
                   </Callout>
                 )}
 
-              <ResourceRenderer resource={loggedUser}>
-                {loggedUser => (
-                  <>
-                    {!data.organizational && hasPermissions(data, 'viewAssignments', 'viewStudents') && (
-                      <Row>
-                        <Col lg={12}>
+              {!data.organizational && hasPermissions(data, 'viewAssignments', 'viewStudents') && (
+                <Row>
+                  <Col lg={12}>
+                    <Box
+                      title={
+                        <FormattedMessage
+                          id="app.groupStudents.studentsResultsTable"
+                          defaultMessage="Students and Their Results"
+                        />
+                      }
+                      unlimitedHeight
+                      noPadding>
+                      <ResourceRenderer resource={stats} bulkyLoading>
+                        {groupStats => (
+                          <ResourceRenderer resource={assignments} returnAsArray bulkyLoading>
+                            {assignments => (
+                              <ResourceRenderer resource={shadowAssignments} returnAsArray bulkyLoading>
+                                {shadowAssignments => (
+                                  <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray bulkyLoading>
+                                    {runtimes => (
+                                      <ResultsTable
+                                        users={students}
+                                        loggedUser={loggedUser}
+                                        isSuperadmin={isSuperadminRole(effectiveRole)}
+                                        assignments={assignments}
+                                        shadowAssignments={shadowAssignments}
+                                        stats={groupStats}
+                                        group={data}
+                                        runtimeEnvironments={runtimes}
+                                        userSolutionsSelector={userSolutionsSelector}
+                                        userSolutionsStatusSelector={userSolutionsStatusSelector}
+                                        fetchGroupStatsIfNeeded={fetchGroupStatsIfNeeded}
+                                        fetchUsersSolutions={fetchUsersSolutions}
+                                        setShadowPoints={setShadowPoints}
+                                        removeShadowPoints={removeShadowPoints}
+                                        renderActions={id =>
+                                          data.archived ? null : (
+                                            <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
+                                          )
+                                        }
+                                      />
+                                    )}
+                                  </ResourceRenderer>
+                                )}
+                              </ResourceRenderer>
+                            )}
+                          </ResourceRenderer>
+                        )}
+                      </ResourceRenderer>
+                    </Box>
+                  </Col>
+                </Row>
+              )}
+
+              {
+                // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
+                !data.organizational &&
+                  !data.archived &&
+                  (hasPermissions(data, 'inviteStudents') || hasPermissions(data, 'editInvitations')) && (
+                    <Row>
+                      {hasPermissions(data, 'inviteStudents') && (
+                        <Col xl={6}>
                           <Box
-                            title={
-                              <FormattedMessage
-                                id="app.groupStudents.studentsResultsTable"
-                                defaultMessage="Students and Their Results"
-                              />
-                            }
-                            unlimitedHeight
-                            noPadding>
-                            <ResourceRenderer resource={stats} bulkyLoading>
-                              {groupStats => (
-                                <ResourceRenderer resource={assignments} returnAsArray bulkyLoading>
-                                  {assignments => (
-                                    <ResourceRenderer resource={shadowAssignments} returnAsArray bulkyLoading>
-                                      {shadowAssignments => (
-                                        <ResourceRenderer
-                                          resource={runtimeEnvironments.toArray()}
-                                          returnAsArray
-                                          bulkyLoading>
-                                          {runtimes => (
-                                            <ResultsTable
-                                              users={students}
-                                              loggedUser={loggedUser}
-                                              isSuperadmin={isSuperadminRole(effectiveRole)}
-                                              assignments={assignments}
-                                              shadowAssignments={shadowAssignments}
-                                              stats={groupStats}
-                                              group={data}
-                                              runtimeEnvironments={runtimes}
-                                              userSolutionsSelector={userSolutionsSelector}
-                                              userSolutionsStatusSelector={userSolutionsStatusSelector}
-                                              fetchGroupStatsIfNeeded={fetchGroupStatsIfNeeded}
-                                              fetchUsersSolutions={fetchUsersSolutions}
-                                              setShadowPoints={setShadowPoints}
-                                              removeShadowPoints={removeShadowPoints}
-                                              renderActions={id =>
-                                                data.archived ? null : (
-                                                  <LeaveJoinGroupButtonContainer userId={id} groupId={data.id} />
-                                                )
-                                              }
-                                            />
-                                          )}
-                                        </ResourceRenderer>
-                                      )}
-                                    </ResourceRenderer>
-                                  )}
-                                </ResourceRenderer>
-                              )}
-                            </ResourceRenderer>
+                            title={<FormattedMessage id="app.groupStudents.addStudent" defaultMessage="Add Student" />}
+                            isOpen>
+                            <AddStudent
+                              instanceId={data.privateData.instanceId}
+                              groups={invitableGroups}
+                              groupsAccessor={groupsAccessor}
+                              groupId={data.id}
+                              canSearch={
+                                isSuperadminRole(effectiveRole) ||
+                                ((isGroupSupervisor || isGroupAdmin) && !isStudentRole(effectiveRole))
+                              }
+                              inviteUser={inviteUser}
+                            />
                           </Box>
                         </Col>
-                      </Row>
-                    )}
+                      )}
 
-                    {
-                      // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
-                      !data.organizational &&
-                        !data.archived &&
-                        (hasPermissions(data, 'inviteStudents') || hasPermissions(data, 'editInvitations')) && (
-                          <Row>
-                            {hasPermissions(data, 'inviteStudents') && (
-                              <Col xl={6}>
-                                <Box
-                                  title={
-                                    <FormattedMessage id="app.groupStudents.addStudent" defaultMessage="Add Student" />
-                                  }
-                                  isOpen>
-                                  <AddStudent
-                                    instanceId={data.privateData.instanceId}
-                                    groups={invitableGroups}
-                                    groupsAccessor={groupsAccessor}
-                                    groupId={data.id}
-                                    canSearch={
-                                      isSuperadminRole(effectiveRole) ||
-                                      ((isGroupSupervisor || isGroupAdmin) && !isStudentRole(effectiveRole))
-                                    }
-                                    inviteUser={inviteUser}
-                                  />
-                                </Box>
-                              </Col>
-                            )}
-
-                            <Col xl={6}>
-                              <Box
-                                title={
-                                  <FormattedMessage id="app.groupStudents.invitations" defaultMessage="Invitations" />
-                                }
-                                isOpen>
-                                <GroupInvitationsContainer
-                                  groupId={data.id}
-                                  actionButtons={hasPermissions(data, 'editInvitations')}
-                                />
-                              </Box>
-                            </Col>
-                          </Row>
-                        )
-                    }
-                  </>
-                )}
-              </ResourceRenderer>
+                      <Col xl={6}>
+                        <Box
+                          title={<FormattedMessage id="app.groupStudents.invitations" defaultMessage="Invitations" />}
+                          isOpen>
+                          <GroupInvitationsContainer
+                            groupId={data.id}
+                            actionButtons={hasPermissions(data, 'editInvitations')}
+                          />
+                        </Box>
+                      </Col>
+                    </Row>
+                  )
+              }
             </div>
           );
         }}
@@ -328,6 +313,7 @@ GroupStudents.propTypes = {
   loggedUser: ImmutablePropTypes.map,
   effectiveRole: PropTypes.string,
   group: ImmutablePropTypes.map,
+  currentUser: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   invitableGroups: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,

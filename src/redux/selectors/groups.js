@@ -69,11 +69,25 @@ export const canViewParentDetailSelector = createSelector([groupsSelector, getPa
   return Boolean(parentId && groups.getIn([parentId, 'data', 'permissionHints', 'viewDetail']));
 });
 
-export const groupOrganizationalPendingChange = id =>
-  createSelector(groupsSelector, groups => groups && groups.getIn([id, 'pending-organizational'], false));
+export const groupTypePendingChange = createSelector(
+  [groupsSelector, getParam],
+  (groups, id) => groups && groups.getIn([id, 'pending-group-type'], false)
+);
 
-export const groupArchivedPendingChange = id =>
-  createSelector(groupsSelector, groups => groups && groups.getIn([id, 'pending-archived'], false));
+export const groupPendingUserLock = createSelector(
+  [groupsSelector, getParam],
+  (groups, id) => groups && groups.getIn([id, 'pending-user-lock'], null)
+);
+
+export const groupPendingUserUnlock = createSelector(
+  [groupsSelector, getParam],
+  (groups, id) => groups && groups.getIn([id, 'pending-user-unlock'], null)
+);
+
+export const groupArchivedPendingChange = createSelector(
+  [groupsSelector, getParam],
+  (groups, id) => groups && groups.getIn([id, 'pending-archived'], false)
+);
 
 export const fetchManyGroupsStatus = createSelector(getGroups, state =>
   state.getIn(['fetchManyStatus', fetchAllGroupsEndpoint])

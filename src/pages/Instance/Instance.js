@@ -64,6 +64,8 @@ class Instance extends Component {
       isAdmin,
       isSuperAdmin,
       hasThreshold,
+      isOrganizational,
+      isExam,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY },
       intl: { locale },
     } = this.props;
@@ -72,13 +74,7 @@ class Instance extends Component {
       <Page
         resource={instance}
         icon={<InstanceIcon />}
-        title={instance => (
-          <FormattedMessage
-            id="app.instance.title"
-            defaultMessage="{name}: Instance Overview and Groups List"
-            values={{ name: getLocalizedName(instance.rootGroup, locale) }}
-          />
-        )}
+        title={<FormattedMessage id="app.instance.title" defaultMessage="Instance Overview and Groups List" />}
         windowTitle={instance => getLocalizedName(instance.rootGroup, locale)}>
         {data => (
           <div>
@@ -146,6 +142,8 @@ class Instance extends Component {
                     collapsable
                     isOpen={false}
                     hasThreshold={hasThreshold}
+                    isOrganizational={isOrganizational}
+                    isExam={isExam}
                     isSuperAdmin={isSuperAdmin}
                   />
                 )}
@@ -173,6 +171,8 @@ Instance.propTypes = {
   isSuperAdmin: PropTypes.bool.isRequired,
   links: PropTypes.object.isRequired,
   hasThreshold: PropTypes.bool,
+  isOrganizational: PropTypes.bool,
+  isExam: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
@@ -190,6 +190,8 @@ export default withLinks(
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         hasThreshold: addGroupFormSelector(state, 'hasThreshold'),
+        isOrganizational: addGroupFormSelector(state, 'isOrganizational'),
+        isExam: addGroupFormSelector(state, 'isExam'),
       };
     },
     (dispatch, { params: { instanceId } }) => ({

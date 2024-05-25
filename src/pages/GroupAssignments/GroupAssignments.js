@@ -15,7 +15,9 @@ import { AssignmentsIcon, AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
 import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
+import { isStudentLocked } from '../../components/helpers/exams';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
@@ -27,7 +29,7 @@ import { create as createExercise } from '../../redux/modules/exercises';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
+import { getLoggedInUserEffectiveRole, loggedInUserSelector } from '../../redux/selectors/users';
 import {
   groupSelector,
   groupDataAccessorSelector,
@@ -118,6 +120,7 @@ class GroupAssignments extends Component {
   render() {
     const {
       group,
+      currentUser,
       groupsAccessor,
       students,
       effectiveRole,
@@ -135,12 +138,12 @@ class GroupAssignments extends Component {
 
     return (
       <Page
-        resource={group}
+        resource={[group, currentUser]}
         icon={<AssignmentsIcon />}
         title={<FormattedMessage id="app.groupDetail.title" defaultMessage="Group Assignments" />}
         loading={<LoadingGroupData />}
         failed={<FailedGroupLoading />}>
-        {data => {
+        {(data, currentUser) => {
           const canLeaveGroup =
             !isGroupAdmin &&
             !isGroupSupervisor &&
@@ -159,12 +162,7 @@ class GroupAssignments extends Component {
 
           return (
             <div>
-              <GroupNavigation
-                groupId={data.id}
-                canEdit={hasOneOfPermissions(data, 'update', 'archive', 'remove', 'relocate')}
-                canViewDetail={hasPermissions(data, 'viewDetail')}
-                emails={studentEmails || null}
-              />
+              {data.privateData && <GroupNavigation group={data} emails={studentEmails || null} />}
 
               {canLeaveGroup && (
                 <div className="my-3">
@@ -184,6 +182,8 @@ class GroupAssignments extends Component {
                   </Col>
                 </Row>
               )}
+
+              {data.privateData && <GroupExamPending {...data} currentUser={currentUser} />}
 
               {data.organizational && (
                 <Row>
@@ -221,6 +221,7 @@ class GroupAssignments extends Component {
                               stats={groupStats.find(item => item.userId === userId)}
                               userId={isGroupAdmin || isGroupSupervisor ? null : userId}
                               isAdmin={isGroupAdmin || isGroupSupervisor || isSuperadminRole(effectiveRole)}
+                              noDiscussion={isStudentLocked(currentUser)}
                             />
                           )}
                         </ResourceRenderer>
@@ -317,6 +318,7 @@ GroupAssignments.propTypes = {
   userId: PropTypes.string.isRequired,
   effectiveRole: PropTypes.string,
   group: ImmutablePropTypes.map,
+  currentUser: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
@@ -341,6 +343,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 
   return {
     group: groupSelector(state, groupId),
+    currentUser: loggedInUserSelector(state),
     groupsAccessor: groupDataAccessorSelector(state),
     userId,
     effectiveRole: getLoggedInUserEffectiveRole(state),

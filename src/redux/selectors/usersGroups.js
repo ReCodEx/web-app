@@ -5,6 +5,7 @@ import { readyUsersDataSelector, isLoggedAsSuperAdmin } from './users';
 import { groupsSelector, groupSelectorCreator } from './groups';
 import { loggedInUserIdSelector } from './auth';
 import { isReady, getJsData } from '../helpers/resourceManager';
+import { isStudentLocked } from '../../components/helpers/exams';
 
 const getState = state => state;
 const getParam = (_, id) => id;
@@ -75,6 +76,16 @@ export const studentsOfGroupSelector = createSelector(
     const studentIds = studentsIdsOfGroup(groupId)(state);
     const studentsIndex = new Set(studentIds);
     return users.filter(user => studentsIndex.has(user.id));
+  }
+);
+
+export const lockedStudentsOfGroupSelector = createSelector(
+  [readyUsersDataSelector, getParam, getState],
+  (users, groupId, state) => {
+    const studentIds = studentsIdsOfGroup(groupId)(state);
+    const studentsIndex = new Set(studentIds);
+    const now = Date.now() / 1000;
+    return users.filter(user => isStudentLocked(user, groupId, now) && studentsIndex.has(user.id));
   }
 );
 

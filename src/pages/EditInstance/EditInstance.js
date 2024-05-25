@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 
@@ -34,7 +35,10 @@ class EditInstance extends Component {
     const { instance, editInstance } = this.props;
 
     return (
-      <Page resource={instance} icon={<EditIcon />} title={instance => instance.name}>
+      <Page
+        resource={instance}
+        icon={<EditIcon />}
+        title={<FormattedMessage id="app.editInstance.title" defaultMessage="Edit Instance Parameters" />}>
         {instance => <EditInstanceForm initialValues={this.getInitialValues(instance)} onSubmit={editInstance} />}
       </Page>
     );

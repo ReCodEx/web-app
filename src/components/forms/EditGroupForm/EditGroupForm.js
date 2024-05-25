@@ -24,6 +24,7 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   publicStats: false,
   hasThreshold: false,
   isOrganizational: false,
+  isExam: false,
   detaining: false,
   makeMeAdmin: true,
   threshold: 0,
@@ -47,6 +48,7 @@ const EditGroupForm = ({
   reset,
   isSuperAdmin,
   isOrganizational = false,
+  isExam = false,
 }) => (
   <FormBox
     title={
@@ -103,7 +105,7 @@ const EditGroupForm = ({
     {isSuperAdmin && (
       <Field
         name="externalId"
-        tabIndex={2}
+        tabIndex={10}
         component={TextField}
         maxLength={255}
         required
@@ -122,7 +124,7 @@ const EditGroupForm = ({
           <Col lg={6}>
             <Field
               name="isPublic"
-              tabIndex={3}
+              tabIndex={20}
               component={CheckboxField}
               onOff
               label={
@@ -138,7 +140,7 @@ const EditGroupForm = ({
         <Col lg={6}>
           <Field
             name="publicStats"
-            tabIndex={4}
+            tabIndex={30}
             component={CheckboxField}
             onOff
             label={
@@ -151,27 +153,40 @@ const EditGroupForm = ({
         </Col>
 
         {createNew && (
-          <Col lg={6}>
-            <Field
-              name="isOrganizational"
-              tabIndex={5}
-              component={CheckboxField}
-              onOff
-              label={
-                <FormattedMessage
-                  id="app.createGroup.isOrganizational"
-                  defaultMessage="Organizational (for structural purposes only)"
-                />
-              }
-            />
-          </Col>
+          <>
+            <Col lg={6}>
+              <Field
+                name="isOrganizational"
+                tabIndex={40}
+                component={CheckboxField}
+                onOff
+                label={
+                  <FormattedMessage
+                    id="app.createGroup.isOrganizational"
+                    defaultMessage="Organizational (for structural purposes only)"
+                  />
+                }
+                disabled={isExam}
+              />
+            </Col>
+            <Col lg={6}>
+              <Field
+                name="isExam"
+                tabIndex={45}
+                component={CheckboxField}
+                onOff
+                label={<FormattedMessage id="app.createGroup.isExam" defaultMessage="Exam" />}
+                disabled={isOrganizational}
+              />
+            </Col>
+          </>
         )}
 
         {!isOrganizational && (
           <Col lg={6}>
             <Field
               name="detaining"
-              tabIndex={6}
+              tabIndex={50}
               component={CheckboxField}
               onOff
               label={
@@ -188,7 +203,7 @@ const EditGroupForm = ({
           <Col lg={6}>
             <Field
               name="makeMeAdmin"
-              tabIndex={5}
+              tabIndex={60}
               component={CheckboxField}
               onOff
               label={<FormattedMessage id="app.createGroup.makeMeAdmin" defaultMessage="Make me a group admin" />}
@@ -201,7 +216,7 @@ const EditGroupForm = ({
         <Col lg={6}>
           <Field
             name="hasThreshold"
-            tabIndex={7}
+            tabIndex={70}
             component={CheckboxField}
             onOff
             label={
@@ -216,7 +231,7 @@ const EditGroupForm = ({
           {hasThreshold && (
             <NumericTextField
               name="threshold"
-              tabIndex={8}
+              tabIndex={80}
               validateMin={0}
               validateMax={100}
               maxLength={3}
@@ -253,6 +268,7 @@ EditGroupForm.propTypes = {
   reset: PropTypes.func,
   isSuperAdmin: PropTypes.bool,
   isOrganizational: PropTypes.bool,
+  isExam: PropTypes.bool,
 };
 
 const validate = ({ localizedTexts }) => {

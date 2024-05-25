@@ -37,6 +37,7 @@ import {
   getAssignmentSolverSelector,
 } from '../../redux/selectors/solutions';
 import { loggedUserIsStudentOfSelector } from '../../redux/selectors/usersGroups';
+import { loggedInUserSelector } from '../../redux/selectors/users';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
@@ -53,6 +54,7 @@ import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
+import { isStudentLocked } from '../../components/helpers/exams';
 import { hasPermissions } from '../../helpers/common';
 
 const getReason = ({ lockedReason }, locale) =>
@@ -96,6 +98,7 @@ class Assignment extends Component {
       submitting,
       userId,
       loggedInUserId,
+      currentUser,
       init,
       isStudentOf,
       canSubmit,
@@ -110,10 +113,10 @@ class Assignment extends Component {
 
     return (
       <Page
-        resource={assignment}
+        resource={[assignment, currentUser]}
         icon={<AssignmentIcon />}
         title={<FormattedMessage id="app.assignment.title" defaultMessage="Assignment Detail" />}>
-        {assignment => (
+        {(assignment, currentUser) => (
           <div>
             <AssignmentNavigation
               assignmentId={assignment.id}
@@ -261,21 +264,23 @@ class Assignment extends Component {
                       </Box>
                     )}
 
-                    <CommentThreadContainer
-                      threadId={assignment.id}
-                      title={
-                        <FormattedMessage
-                          id="app.assignments.discussionModalTitle"
-                          defaultMessage="Public Discussion"
-                        />
-                      }
-                      additionalPublicSwitchNote={
-                        <FormattedMessage
-                          id="app.assignments.discussionModal.additionalSwitchNote"
-                          defaultMessage="(supervisors and students of this group)"
-                        />
-                      }
-                    />
+                    {!isStudentLocked(currentUser) && (
+                      <CommentThreadContainer
+                        threadId={assignment.id}
+                        title={
+                          <FormattedMessage
+                            id="app.assignments.discussionModalTitle"
+                            defaultMessage="Public Discussion"
+                          />
+                        }
+                        additionalPublicSwitchNote={
+                          <FormattedMessage
+                            id="app.assignments.discussionModal.additionalSwitchNote"
+                            defaultMessage="(supervisors and students of this group)"
+                          />
+                        }
+                      />
+                    )}
                   </Col>
                 </Row>
               )}
@@ -290,6 +295,7 @@ class Assignment extends Component {
 Assignment.propTypes = {
   userId: PropTypes.string,
   loggedInUserId: PropTypes.string,
+  currentUser: ImmutablePropTypes.map,
   params: PropTypes.shape({
     assignmentId: PropTypes.string.isRequired,
     userId: PropTypes.string,
@@ -321,6 +327,7 @@ export default injectIntl(
         runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
         userId,
         loggedInUserId,
+        currentUser: loggedInUserSelector(state),
         isStudentOf: loggedUserIsStudentOfSelector(state),
         canSubmit: canSubmitSolution(assignmentId)(state),
         solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),

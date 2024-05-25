@@ -61,6 +61,7 @@ export const prepareInitialValues = defaultMemoize(
       canViewJudgeStdout = false,
       canViewJudgeStderr = false,
       isBonus = false,
+      isExam = false,
       disabledRuntimeEnvironmentIds = [],
       runtimeEnvironmentIds,
       isPublic = false,
@@ -86,6 +87,7 @@ export const prepareInitialValues = defaultMemoize(
     canViewJudgeStdout,
     canViewJudgeStderr,
     isBonus,
+    isExam,
     runtimeEnvironmentIds,
     enabledRuntime: disabledRuntimeEnvironmentIds.reduce(
       (result, item) => {
@@ -119,6 +121,7 @@ export const transformSubmittedData = ({
   canViewJudgeStdout,
   canViewJudgeStderr,
   isBonus,
+  isExam,
   enabledRuntime,
   visibility,
   visibleFrom,
@@ -143,6 +146,7 @@ export const transformSubmittedData = ({
     canViewJudgeStdout,
     canViewJudgeStderr,
     isBonus,
+    isExam,
     disabledRuntimeEnvironmentIds,
     isPublic: visibility !== 'hidden',
     sendNotification,
@@ -714,6 +718,31 @@ class EditAssignmentForm extends Component {
                     id="app.editAssignmentForm.isBonus"
                     defaultMessage="Assignment is bonus one and points from it are not included in students overall score"
                   />
+                }
+              />
+            </Col>
+          </Row>
+        </Container>
+
+        <hr className="mt-0 mb-4" />
+
+        <Container fluid>
+          <Row>
+            <Col xs={12}>
+              <Field
+                name="isExam"
+                component={CheckboxField}
+                onOff
+                label={
+                  <>
+                    <FormattedMessage id="app.editAssignmentForm.isExam" defaultMessage="Exam assignment" />
+                    <Explanation id="isExamExplanation">
+                      <FormattedMessage
+                        id="app.editAssignmentForm.isExamExplanation"
+                        defaultMessage="Exam assignments are secured during examination periods so that they are not visible to students that have not yet lock themselves in the group. Furthermore, if an exam assignment has the deadline synced with the end of the exam, it is updated automatically when the end of exam changes."
+                      />
+                    </Explanation>
+                  </>
                 }
               />
             </Col>

@@ -12,10 +12,15 @@ import PageContent from '../../components/layout/PageContent';
 import LoginForm from '../../components/forms/LoginForm';
 import ExternalLoginBox from '../../containers/ExternalLogin';
 import Callout from '../../components/widgets/Callout';
+import Button from '../../components/widgets/TheButton';
+import Icon from '../../components/icons';
 
-import { login } from '../../redux/modules/auth';
+import { login, logout } from '../../redux/modules/auth';
 import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
 import { loggedInUserSelector } from '../../redux/selectors/users';
+
+import { getError } from '../../redux/helpers/resourceManager';
+
 import { getConfigVar, getConfigVarLocalized } from '../../helpers/config';
 import { getErrorMessage } from '../../locales/apiErrorMessages';
 
@@ -95,24 +100,41 @@ class Login extends Component {
   render() {
     const {
       isLoggedIn,
+      loggedInUser,
+      logout,
       params: { redirect = null },
       links: { RESET_PASSWORD_URI },
-      intl: { locale },
+      intl: { locale, formatMessage },
     } = this.props;
 
     const external = EXTERNAL_AUTH_URL && EXTERNAL_AUTH_SERVICE_ID;
+    const userError = getError(loggedInUser);
 
     return (
       <PageContent icon="sign-in-alt" title={<FormattedMessage id="app.login.title" defaultMessage="Sign In" />}>
         <>
           {isLoggedIn ? (
-            <Row>
-              <Col sm={12}>
-                <Callout variant="success">
-                  <FormattedMessage id="app.login.alreadyLoggedIn" defaultMessage="You are already logged in." />
-                </Callout>
-              </Col>
-            </Row>
+            userError ? (
+              <Row>
+                <Col sm={12}>
+                  <Callout variant="danger">
+                    <p>{getErrorMessage(formatMessage)(userError)}</p>
+                    <Button variant="danger" onClick={logout}>
+                      <Icon icon="sign-out-alt" gapRight />
+                      <FormattedMessage id="app.logout" defaultMessage="Logout" />
+                    </Button>
+                  </Callout>
+                </Col>
+              </Row>
+            ) : (
+              <Row>
+                <Col sm={12}>
+                  <Callout variant="success">
+                    <FormattedMessage id="app.login.alreadyLoggedIn" defaultMessage="You are already logged in." />
+                  </Callout>
+                </Col>
+              </Row>
+            )
           ) : (
             <>
               {redirect && (
@@ -171,13 +193,14 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  login: PropTypes.func.isRequired,
   params: PropTypes.shape({
     redirect: PropTypes.string,
   }),
   isLoggedIn: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
   loggedInUser: ImmutablePropTypes.map,
+  login: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   intl: PropTypes.object,
@@ -193,6 +216,7 @@ export default withLinks(
     }),
     dispatch => ({
       login: ({ email, password }) => dispatch(login(email, password)),
+      logout: () => dispatch(logout()),
       reset: () => {
         dispatch(reset('login'));
       },

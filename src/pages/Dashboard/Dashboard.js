@@ -183,7 +183,13 @@ class Dashboard extends Component {
                               }
                               unlimitedHeight>
                               <>
-                                <AssignmentsTableContainer userId={user.id} groupId={groupId} onlyCurrent hideEmpty />
+                                <AssignmentsTableContainer
+                                  userId={user.id}
+                                  groupId={groupId}
+                                  onlyCurrent
+                                  hideEmpty
+                                  noDiscussion
+                                />
                                 <ShadowAssignmentsTableContainer userId={user.id} groupId={groupId} hideEmpty />
                               </>
                             </Box>

@@ -51,8 +51,7 @@ import {
 } from '../../redux/selectors/assignments';
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
 import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
-import { isLoggedAsStudent } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { loggedInUserSelector, isLoggedAsStudent } from '../../redux/selectors/users';
 import { isSubmitting } from '../../redux/selectors/submission';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
 
@@ -104,7 +103,7 @@ class Solution extends Component {
       files,
       download,
       userSolutionsSelector,
-      loggedInUserId,
+      currentUser,
       submitting,
       canSubmit,
       initCanSubmit,
@@ -130,8 +129,8 @@ class Solution extends Component {
         resource={assignment}
         icon={<SolutionResultsIcon />}
         title={<FormattedMessage id="app.submission.evaluation.title" defaultMessage="Solution Detail" />}>
-        <ResourceRenderer failed={<FailedSubmissionDetail />} resource={[solution, assignment]}>
-          {(solution, assignment) => (
+        <ResourceRenderer failed={<FailedSubmissionDetail />} resource={[solution, assignment, currentUser]}>
+          {(solution, assignment, currentUser) => (
             <div>
               <AssignmentSolutionNavigation
                 solutionId={solution.id}
@@ -213,7 +212,7 @@ class Solution extends Component {
                         <Col xs={12} className="mb-3 text-right">
                           <SubmitSolutionButton onClick={initCanSubmit(assignment.id)} />
                           <SubmitSolutionContainer
-                            userId={loggedInUserId}
+                            userId={currentUser.id}
                             id={assignment.id}
                             onSubmit={submitSolution}
                             presubmitValidation={presubmitSolution}
@@ -283,6 +282,7 @@ class Solution extends Component {
                         scoreConfigSelector={scoreConfigSelector}
                         fetchScoreConfigIfNeeded={fetchScoreConfigIfNeeded}
                         canResubmit={hasPermissions(assignment, 'resubmitSubmissions')}
+                        currentUser={currentUser}
                       />
                     )}
                   </FetchManyResourceRenderer>
@@ -306,7 +306,7 @@ Solution.propTypes = {
   solution: PropTypes.object,
   files: ImmutablePropTypes.map,
   userSolutionsSelector: PropTypes.func.isRequired,
-  loggedInUserId: PropTypes.string,
+  currentUser: ImmutablePropTypes.map,
   submitting: PropTypes.bool.isRequired,
   canSubmit: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
@@ -333,7 +333,7 @@ export default connect(
     solution: getSolution(state, solutionId),
     files: getSolutionFiles(state, solutionId),
     userSolutionsSelector: getUserSolutionsSortedData(state),
-    loggedInUserId: loggedInUserIdSelector(state),
+    currentUser: loggedInUserSelector(state),
     submitting: isSubmitting(state),
     canSubmit: canSubmitSolution(assignmentId)(state),
     assignment: getAssignment(state, assignmentId),

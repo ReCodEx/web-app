@@ -10,12 +10,32 @@ import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import ShadowAssignmentNameContainer from '../../../containers/ShadowAssignmentNameContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import PipelineNameContainer from '../../../containers/PipelineNameContainer';
-import { AssignmentIcon, ExerciseIcon, GroupIcon, PipelineIcon, ShadowAssignmentIcon } from '../../icons';
+import { AssignmentIcon, ExerciseIcon, PipelineIcon, ShadowAssignmentIcon } from '../../icons';
 
 import styles from './Navigation.less';
 
-const NavigationLink = ({ link, href, caption, icon = null, location: { pathname, search }, className }) =>
-  link === pathname + search ? (
+const defaultLinkMatch = (link, pathname, search) => link === pathname + search;
+
+const groupIconTooltip = group => {
+  if (group.exam) {
+    return <FormattedMessage id="app.navigation.examGroup" defaultMessage="Exam group" />;
+  }
+  if (group.organizational) {
+    return <FormattedMessage id="app.navigation.organizationalGroup" defaultMessage="Organizational group" />;
+  }
+  return <FormattedMessage id="app.navigation.group" defaultMessage="Group" />;
+};
+
+const NavigationLink = ({
+  link,
+  href,
+  caption,
+  icon = null,
+  location: { pathname, search },
+  className,
+  match = defaultLinkMatch,
+}) =>
+  match(link, pathname, search) ? (
     <strong className={className}>
       {icon}
       {caption}
@@ -38,6 +58,7 @@ NavigationLink.propTypes = {
   caption: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   icon: PropTypes.element,
   className: PropTypes.string,
+  match: PropTypes.func,
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
     search: PropTypes.string.isRequired,
@@ -82,16 +103,15 @@ const Navigation = ({
 
           {groupId && (
             <span>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="groupIconTooltip">
-                    <FormattedMessage id="app.navigation.group" defaultMessage="Group" />
-                  </Tooltip>
-                }>
-                <GroupIcon gapRight className="text-muted" />
-              </OverlayTrigger>
-              <GroupsNameContainer groupId={groupId} fullName translations admins ancestorLinks />
+              <GroupsNameContainer
+                groupId={groupId}
+                fullName
+                translations
+                admins
+                ancestorLinks
+                showIcon
+                iconTooltip={groupIconTooltip}
+              />
             </span>
           )}
 

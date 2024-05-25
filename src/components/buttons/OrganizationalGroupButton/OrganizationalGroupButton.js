@@ -8,13 +8,13 @@ const OrganizationalGroupButton = ({ organizational, pending, disabled = false, 
   <Button
     {...props}
     variant={disabled ? 'secondary' : 'info'}
-    onClick={setOrganizational(!organizational)}
+    onClick={setOrganizational}
     disabled={pending || disabled}>
     {pending ? <LoadingIcon gapRight /> : <GroupIcon organizational={!organizational} gapRight />}
     {organizational ? (
-      <FormattedMessage id="app.organizationalGroupButton.unset" defaultMessage="Change to Regular Group" />
+      <FormattedMessage id="app.groupTypeButton.regular" defaultMessage="Regular" />
     ) : (
-      <FormattedMessage id="app.organizationalGroupButton.set" defaultMessage="Change to Organizational Group" />
+      <FormattedMessage id="app.groupTypeButton.organizational" defaultMessage="Organizational" />
     )}
   </Button>
 );

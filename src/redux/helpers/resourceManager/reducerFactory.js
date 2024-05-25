@@ -10,8 +10,8 @@ const reducerFactory = (actionTypes, id = 'id') => ({
       ? state.setIn(['resources', meta[id], 'state'], resourceStatus.RELOADING)
       : state.setIn(['resources', meta[id]], createRecord()),
 
-  [actionTypes.FETCH_REJECTED]: (state, { meta }) =>
-    state.setIn(['resources', meta[id]], createRecord({ state: resourceStatus.FAILED })),
+  [actionTypes.FETCH_REJECTED]: (state, { meta, payload: error }) =>
+    state.setIn(['resources', meta[id]], createRecord({ state: resourceStatus.FAILED, error })),
 
   [actionTypes.FETCH_FULFILLED]: (state, { meta, payload: data }) =>
     state.setIn(['resources', meta[id]], createRecord({ state: resourceStatus.FULFILLED, data })),

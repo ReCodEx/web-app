@@ -31,6 +31,7 @@ export { CheckRequiredIcon };
 export const CircleIcon = ({ selected = false, ...props }) => (
   <Icon {...props} icon={['far', selected ? 'circle-dot' : 'circle']} />
 );
+export const ClockIcon = props => <Icon {...props} icon={['far', 'clock']} />;
 export const CloseIcon = props => <Icon {...props} icon="times" />;
 export const CodeFileIcon = props => <Icon {...props} icon={['far', 'file-code']} />;
 export const CodeIcon = props => <Icon {...props} icon="code" />;
@@ -61,9 +62,10 @@ export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
 export const FailureIcon = props => <Icon className="text-danger" {...props} icon="times" />;
 export const FaqIcon = props => <Icon {...props} icon={['far', 'question-circle']} />;
 export const ForkIcon = props => <Icon {...props} icon="code-branch" />;
-export const GroupIcon = ({ organizational = false, archived = false, ...props }) => (
-  <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : 'users'} />
+export const GroupIcon = ({ organizational = false, archived = false, exam = false, ...props }) => (
+  <Icon {...props} icon={organizational ? 'sitemap' : archived ? 'archive' : exam ? 'person-circle-check' : 'users'} />
 );
+export const GroupExamsIcon = props => <Icon {...props} icon="lock" />;
 export const HomeIcon = props => <Icon {...props} icon="home" />;
 export const InfoIcon = props => <Icon {...props} icon="info-circle" />;
 export const InputIcon = props => <Icon {...props} icon="sign-in-alt" />;
@@ -152,12 +154,13 @@ export const UndoIcon = props => <Icon {...props} icon="undo-alt" />;
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
 export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
+export const UserLockIcon = props => <Icon {...props} icon="user-lock" />;
 export const UserProfileIcon = props => <Icon {...props} icon={['far', 'address-card']} />;
 export const VisibleIcon = ({ visible = true, ...props }) =>
   visible ? (
     <Icon {...props} icon={['far', 'eye']} />
   ) : (
-    <Icon {...props} icon={['far', 'eye-slash']} className="text-muted" />
+    <Icon className="text-muted" {...props} icon={['far', 'eye-slash']} />
   );
 export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
 export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;
@@ -178,6 +181,7 @@ ExpandCollapseIcon.propTypes = {
 GroupIcon.propTypes = {
   organizational: PropTypes.bool,
   archived: PropTypes.bool,
+  exam: PropTypes.bool,
 };
 
 ReviewIcon.propTypes = {
