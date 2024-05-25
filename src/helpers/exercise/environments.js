@@ -21,6 +21,7 @@ export const ENV_PYTHON3_ID = 'python3';
 export const ENV_RUST_ID = 'rust';
 export const ENV_CARGO_ID = 'rust-cargo';
 export const ENV_SCALA_ID = 'scala';
+export const ENV_SYCL_ID = 'sycl-intel';
 
 /**
  * List of environment IDs allowed in simple form.
@@ -47,6 +48,7 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_RUST_ID,
   ENV_CARGO_ID,
   ENV_SCALA_ID,
+  ENV_SYCL_ID,
 ];
 
 /**
