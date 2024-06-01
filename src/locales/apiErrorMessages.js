@@ -90,7 +90,8 @@ const apiBaseErrorCodes = defineMessages({
  * @param {Object} error structure
  * @returns {Boolean}
  */
-export const hasErrorMessage = error => Boolean(error && error.code && apiErrorCodes[error.code]);
+export const hasErrorMessage = error =>
+  Boolean(error && typeof error === 'object' && error.code && apiErrorCodes[error.code]);
 
 /**
  * Get error code in its raw form xxx-yyy

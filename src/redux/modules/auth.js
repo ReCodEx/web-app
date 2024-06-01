@@ -164,13 +164,14 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
   return handleActions(
     {
       [actionTypes.LOGIN_PENDING]: (state, { meta: { service } }) =>
-        state.setIn(['status', service], statusTypes.LOGGING_IN),
+        state.setIn(['status', service], statusTypes.LOGGING_IN).deleteIn(['errors', service]),
 
       [actionTypes.LOGIN_FULFILLED]: (state, { payload: { accessToken, user }, meta: { service, popupWindow } }) => {
         closeAuthPopupWindow(popupWindow);
         return state.getIn(['status', service]) === statusTypes.LOGGING_IN // this should prevent re-login, when explicit logout ocurred whilst refreshing token
           ? state
               .setIn(['status', service], statusTypes.LOGGED_IN)
+              .deleteIn(['errors', service])
               .set('jwt', accessToken)
               .set('accessToken', decodeAndValidateAccessToken(accessToken))
               .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
@@ -178,10 +179,11 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
           : state;
       },
 
-      [actionTypes.LOGIN_REJECTED]: (state, { meta: { service, popupWindow } }) => {
+      [actionTypes.LOGIN_REJECTED]: (state, { meta: { service, popupWindow }, payload }) => {
         closeAuthPopupWindow(popupWindow);
         return state
           .setIn(['status', service], statusTypes.LOGIN_FAILED)
+          .setIn(['errors', service], fromJS(payload))
           .set('jwt', null)
           .set('accessToken', null)
           .set('userId', null)
@@ -196,6 +198,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
           ? state
           : state
               .setIn(['status', service], statusTypes.LOGGED_IN)
+              .deleteIn(['errors', service])
               .set('jwt', accessToken)
               .set('accessToken', decodeAndValidateAccessToken(accessToken))
               .set('userId', getUserId(decodeAndValidateAccessToken(accessToken)))
@@ -204,6 +207,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
       [actionTypes.LOGOUT]: state =>
         state
           .update('status', services => services.map(() => statusTypes.LOGGED_OUT))
+          .delete('errors')
           .set('jwt', null)
           .set('accessToken', null)
           .set('userId', null)
