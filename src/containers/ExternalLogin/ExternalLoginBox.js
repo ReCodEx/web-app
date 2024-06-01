@@ -8,7 +8,7 @@ import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { LinkIcon, LoadingIcon, SuccessIcon } from '../../components/icons';
 import { externalLogin, externalLoginFailed, statusTypes } from '../../redux/modules/auth';
-import { statusSelector } from '../../redux/selectors/auth';
+import { statusSelector, loginErrorSelector } from '../../redux/selectors/auth';
 import { hasErrorMessage, getErrorMessage } from '../../locales/apiErrorMessages';
 
 export const openPopupWindow = url =>
@@ -33,11 +33,9 @@ class ExternalLoginBox extends Component {
       // cancel the window and the interval
       this.popupWindow.postMessage('received', e.origin);
       this.props.login(token, this.popupWindow, error => {
-        error.json().then(body => {
-          if (body && body.error && hasErrorMessage(body.error)) {
-            this.setState({ lastError: body.error });
-          }
-        });
+        if (hasErrorMessage(error)) {
+          this.setState({ lastError: error });
+        }
       });
       this.dispose(); // delayed window close (1s)
     }
@@ -96,6 +94,7 @@ class ExternalLoginBox extends Component {
       name,
       helpUrl,
       loginStatus,
+      loginError,
       intl: { formatMessage },
     } = this.props;
 
@@ -139,15 +138,13 @@ class ExternalLoginBox extends Component {
             </p>
           )}
 
-          {!pending && this.state.lastError && (
+          {!pending && (loginStatus === statusTypes.LOGIN_FAILED || this.state.lastError) && (
             <Callout variant="danger" className="em-margin-top">
-              {getErrorMessage(formatMessage)(this.state.lastError)}
-            </Callout>
-          )}
-
-          {!pending && this.state.lastError === null && loginStatus === statusTypes.LOGIN_FAILED && (
-            <Callout variant="danger" className="em-margin-top">
-              <FormattedMessage id="app.externalLogin.failed" defaultMessage="External authentication failed." />
+              {loginError || this.state.lastError ? (
+                getErrorMessage(formatMessage)(loginError || this.state.lastError)
+              ) : (
+                <FormattedMessage id="app.externalLogin.failed" defaultMessage="External authentication failed." />
+              )}
             </Callout>
           )}
         </>
@@ -162,6 +159,7 @@ ExternalLoginBox.propTypes = {
   service: PropTypes.string.isRequired,
   helpUrl: PropTypes.string,
   loginStatus: PropTypes.string,
+  loginError: PropTypes.object,
   login: PropTypes.func.isRequired,
   fail: PropTypes.func.isRequired,
   afterLogin: PropTypes.func.isRequired,
@@ -171,6 +169,7 @@ ExternalLoginBox.propTypes = {
 export default connect(
   (state, { service }) => ({
     loginStatus: statusSelector(service)(state),
+    loginError: loginErrorSelector(state, service),
   }),
   (dispatch, { service, afterLogin = null }) => ({
     login: (token, popupWindow, errorHandler = null) => {
