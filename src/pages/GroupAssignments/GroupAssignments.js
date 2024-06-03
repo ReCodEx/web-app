@@ -147,8 +147,9 @@ class GroupAssignments extends Component {
           const canLeaveGroup =
             !isGroupAdmin &&
             !isGroupSupervisor &&
-            (data.public || (isGroupStudent && !data.privateData.detaining)) &&
-            !data.organizational;
+            !data.organizational &&
+            !data.archived &&
+            (data.public || (isGroupStudent && !data.privateData.detaining));
 
           const studentEmails =
             !data.organizational &&
@@ -201,7 +202,7 @@ class GroupAssignments extends Component {
               <GroupArchivedWarning
                 {...data}
                 groupsDataAccessor={groupsAccessor}
-                linkFactory={GROUP_ASSIGNMENTS_URI_FACTORY}
+                linkFactory={isGroupStudent ? null : GROUP_ASSIGNMENTS_URI_FACTORY}
               />
 
               {!data.organizational && hasPermissions(data, 'viewAssignments') && (
