@@ -76,19 +76,26 @@ class Archive extends Component {
             <FormattedMessage id="app.group.unsetRoot" defaultMessage="Unset" />
           )}
         </Button>
-        <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
-          <Button variant="primary" size="xs">
-            <GroupIcon gapRight />
-            <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-          </Button>
-        </Link>
-        <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
-          <Button variant="primary" size="xs">
-            <AssignmentsIcon gapRight />
-            <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
-          </Button>
-        </Link>
-        {!group.organizational && (
+
+        {hasPermissions(group, 'viewDetail') && (
+          <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
+            <Button variant="primary" size="xs">
+              <GroupIcon gapRight />
+              <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+            </Button>
+          </Link>
+        )}
+
+        {hasPermissions(group, 'viewAssignments') && (
+          <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
+            <Button variant="primary" size="xs">
+              <AssignmentsIcon gapRight />
+              <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+            </Button>
+          </Link>
+        )}
+
+        {!group.organizational && hasPermissions(group, 'viewAssignments') && (
           <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
             <Button variant="primary" size="xs">
               <StudentsIcon gapRight />
@@ -96,6 +103,7 @@ class Archive extends Component {
             </Button>
           </Link>
         )}
+
         {hasPermissions(group, 'archive') && (!group.archived || group.directlyArchived) && (
           <ArchiveGroupButtonContainer id={group.id} size="xs" shortLabels onChange={() => loadAsync(instanceId)} />
         )}
