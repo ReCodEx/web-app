@@ -136,8 +136,9 @@ class GroupInfo extends Component {
 
             {!isAdmin &&
               !isSupervisor &&
-              (data.public || (isStudent && !data.privateData.detaining)) &&
-              !data.organizational && (
+              !data.organizational &&
+              !data.archived &&
+              (data.public || (isStudent && !data.privateData.detaining)) && (
                 <div className="my-3">
                   <LeaveJoinGroupButtonContainer userId={userId} groupId={data.id} size={null} redirectAfterLeave />
                 </div>
@@ -145,7 +146,11 @@ class GroupInfo extends Component {
 
             {data.privateData && <GroupExamPending {...data} currentUser={currentUser} />}
 
-            <GroupArchivedWarning {...data} groupsDataAccessor={groupsAccessor} linkFactory={GROUP_INFO_URI_FACTORY} />
+            <GroupArchivedWarning
+              {...data}
+              groupsDataAccessor={groupsAccessor}
+              linkFactory={isStudent ? null : GROUP_INFO_URI_FACTORY}
+            />
 
             {!hasPermissions(data, 'viewPublicDetail') && (
               <Row>
