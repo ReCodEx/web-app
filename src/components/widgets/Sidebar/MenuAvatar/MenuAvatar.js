@@ -12,7 +12,7 @@ const MenuAvatar = ({
   firstName,
   notificationsCount = 0,
   isActive = false,
-  onClick,
+  onClick = null,
   onRemove = null,
 }) => (
   <li
@@ -23,7 +23,7 @@ const MenuAvatar = ({
     <a
       onClick={ev => {
         ev.preventDefault();
-        onClick();
+        onClick && onClick();
       }}
       className="nav-link sidebarCursorPointer">
       <AvatarContainer
@@ -43,7 +43,7 @@ const MenuAvatar = ({
             timid
             gapRight
             onClick={ev => {
-              ev.preventDefault();
+              ev.stopPropagation();
               onRemove();
             }}
           />
