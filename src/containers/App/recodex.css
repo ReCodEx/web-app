@@ -153,6 +153,10 @@ th.shrink-col {
   width: 100%;
 }
 
+.full-width-modal div.modal-dialog {
+  max-width: 95vw;
+}
+
 .half-width {
   width: 50%;
 }

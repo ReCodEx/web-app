@@ -15,15 +15,28 @@ table.logWrapper td {
   border: 0 !important;
 }
 
-pre.log {
-  font-size: 80%;
+.logBase {
   margin: 0;
   padding: 0.5em;
   line-height: 1.1;
   width: 100%;
-  max-height: 9.8em;
-  overflow: auto;
   background-color: var(--light);
   border: 1px solid var(--gray);
   border-radius: 0.25rem;
+  scroll-padding-bottom: 1em;
+  scroll-padding-right: 1em;
+}
+
+pre.log {
+  .logBase;
+  margin-top: 0.25em;
+  margin-bottom: 0.75em;
+  padding: 0.75em;
+}
+
+pre.logSmall {
+  .logBase;
+  font-size: 80%;
+  max-height: 9.8em;
+  overflow: auto;
 }
