@@ -120,11 +120,6 @@ class SolutionDetail extends Component {
               bonusPoints={bonusPoints}
               runtimeEnvironmentId={runtimeEnvironmentId}
               runtimeEnvironments={runtimeEnvironments}
-              environment={
-                runtimeEnvironments &&
-                runtimeEnvironmentId &&
-                runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
-              }
               otherSolutions={otherSolutions}
               assignmentSolversLoading={assignmentSolversLoading}
               assignmentSolverSelector={assignmentSolverSelector}

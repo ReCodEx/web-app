@@ -30,6 +30,7 @@ import Icon, {
   SuccessIcon,
   SupervisorIcon,
   UserIcon,
+  VisibleIcon,
   WarningIcon,
 } from '../../icons';
 import AssignmentDeadlinesGraph from '../../Assignments/Assignment/AssignmentDeadlinesGraph';
@@ -71,25 +72,18 @@ class SolutionStatus extends Component {
 
   render() {
     const {
+      referenceSolution = false,
       id,
       attemptIndex,
       otherSolutions,
-      assignment: {
-        id: assignmentId,
-        groupId,
-        firstDeadline,
-        allowSecondDeadline,
-        secondDeadline,
-        maxPointsDeadlineInterpolation,
-        maxPointsBeforeFirstDeadline,
-        maxPointsBeforeSecondDeadline,
-        pointsPercentualThreshold,
-      },
+      assignment,
       evaluation,
       submittedAt,
       userId,
       submittedBy,
       note,
+      description,
+      visibility = null,
       accepted,
       review = null,
       runtimeEnvironmentId,
@@ -100,21 +94,42 @@ class SolutionStatus extends Component {
       overriddenPoints = null,
       editNote = null,
       assignmentSolversLoading,
-      assignmentSolverSelector,
+      assignmentSolverSelector = null,
       links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY },
     } = this.props;
 
-    const important = getImportantSolutions(otherSolutions, id);
+    const {
+      id: assignmentId,
+      groupId,
+      firstDeadline,
+      allowSecondDeadline,
+      secondDeadline,
+      maxPointsDeadlineInterpolation,
+      maxPointsBeforeFirstDeadline,
+      maxPointsBeforeSecondDeadline,
+      pointsPercentualThreshold,
+    } = assignment || {};
+
+    const important = otherSolutions && getImportantSolutions(otherSolutions, id);
     const environment =
       runtimeEnvironments && runtimeEnvironmentId && runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId);
 
-    const assignmentSolver = assignmentSolverSelector && assignmentSolverSelector(assignmentId, userId);
+    const assignmentSolver = assignmentSolverSelector && assignmentId && assignmentSolverSelector(assignmentId, userId);
     const lastAttemptIndex = assignmentSolver && assignmentSolver.get('lastAttemptIndex');
 
     return (
       <>
         <Box
-          title={<FormattedMessage id="app.solution.title" defaultMessage="The Solution" />}
+          title={
+            referenceSolution ? (
+              <FormattedMessage
+                id="app.referenceSolutionDetail.title.details"
+                defaultMessage="Reference Solution Detail"
+              />
+            ) : (
+              <FormattedMessage id="app.solution.title" defaultMessage="The Solution" />
+            )
+          }
           noPadding={true}
           collapsable={true}
           isOpen={true}>
@@ -128,7 +143,12 @@ class SolutionStatus extends Component {
                   <FormattedMessage id="generic.author" defaultMessage="Author" />:
                 </th>
                 <td>
-                  <UsersNameContainer userId={userId} showEmail="icon" />
+                  <UsersNameContainer
+                    userId={userId}
+                    showEmail="icon"
+                    showExternalIdentifiers={!referenceSolution}
+                    link={referenceSolution}
+                  />
                 </td>
               </tr>
 
@@ -147,104 +167,130 @@ class SolutionStatus extends Component {
                     </Explanation>
                   </th>
                   <td>
-                    <UsersNameContainer userId={submittedBy} showEmail="icon" />
+                    <UsersNameContainer userId={submittedBy} showEmail="icon" link={referenceSolution} />
                   </td>
                 </tr>
               )}
 
-              {(note.length > 0 || Boolean(editNote)) && (
+              {referenceSolution ? (
                 <tr>
                   <td className="text-center text-muted shrink-col px-2">
-                    <NoteIcon />
+                    <EditIcon />
                   </td>
-                  <th className="text-nowrap">
-                    <FormattedMessage id="app.solution.note" defaultMessage="Note:" />
-                    <Explanation id="note">
-                      <FormattedMessage
-                        id="app.solution.explanations.note"
-                        defaultMessage="Short note left by the author of the solution that can be used to distinguish between solutions of one assignment. The note is also visible by teachers, so it can be used to pass brief information to them (however, comments are more suitable for elaborate conversations)."
-                      />
-                    </Explanation>
+                  <th>
+                    <FormattedMessage id="generic.description" defaultMessage="Description" />:
                   </th>
-                  <td>
-                    {note.length > 0 ? (
-                      note
-                    ) : (
-                      <em className="text-muted small">
-                        <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
-                      </em>
-                    )}
-
-                    {Boolean(editNote) && (
-                      <span className="float-right text-warning mx-2">
-                        <EditIcon onClick={this.openEditDialog} />
-                      </span>
-                    )}
-                  </td>
+                  <td>{description}</td>
                 </tr>
+              ) : (
+                (note.length > 0 || Boolean(editNote)) && (
+                  <tr>
+                    <td className="text-center text-muted shrink-col px-2">
+                      <NoteIcon />
+                    </td>
+                    <th className="text-nowrap">
+                      <FormattedMessage id="app.solution.note" defaultMessage="Note:" />
+                      <Explanation id="note">
+                        <FormattedMessage
+                          id="app.solution.explanations.note"
+                          defaultMessage="Short note left by the author of the solution that can be used to distinguish between solutions of one assignment. The note is also visible by teachers, so it can be used to pass brief information to them (however, comments are more suitable for elaborate conversations)."
+                        />
+                      </Explanation>
+                    </th>
+                    <td>
+                      {note.length > 0 ? (
+                        note
+                      ) : (
+                        <em className="text-muted small">
+                          <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
+                        </em>
+                      )}
+
+                      {Boolean(editNote) && (
+                        <span className="float-right text-warning mx-2">
+                          <EditIcon onClick={this.openEditDialog} />
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                )
               )}
 
               <tr>
                 <td className="text-center text-muted shrink-col px-2">
                   <Icon icon={['far', 'clock']} />
                 </td>
-                <th className="text-nowrap">
-                  <FormattedMessage id="app.solution.submittedAt" defaultMessage="Submitted at" />:
-                  <Explanation id="submittedAt">
-                    <FormattedMessage
-                      id="app.solution.explanations.submittedAt"
-                      defaultMessage="Time when the solution was uploaded to ReCodEx. The time is important for the scoring since it determines whether the solution is on time or late with respect to the deadline(s)."
-                    />
-                  </Explanation>
-                </th>
-                <td>
-                  <span className="mr-2">
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="deadlineInfo">
-                          {submittedAt < firstDeadline ? (
-                            <FormattedMessage
-                              id="app.solution.submittedBeforeFirstDeadline"
-                              defaultMessage="The solution was submitted before the deadline"
-                            />
-                          ) : allowSecondDeadline && submittedAt < secondDeadline ? (
-                            <FormattedMessage
-                              id="app.solution.submittedBeforeSecondDeadline"
-                              defaultMessage="The solution was submitted after the first but still before the second deadline"
-                            />
-                          ) : (
-                            <FormattedMessage
-                              id="app.solution.submittedAfterDeadlines"
-                              defaultMessage="The solution was submitted after the deadline"
-                            />
-                          )}
-                        </Tooltip>
-                      }>
-                      <span>
-                        {submittedAt < firstDeadline ? (
-                          <Icon icon={['far', 'circle-check']} className="text-success" />
-                        ) : allowSecondDeadline && submittedAt < secondDeadline ? (
-                          <InvertIcon className="text-warning" />
-                        ) : (
-                          <PastDeadlineIcon className="text-muted" />
-                        )}
+
+                {referenceSolution ? (
+                  <>
+                    <th>
+                      <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />:
+                    </th>
+                    <td>
+                      <DateTime unixts={submittedAt} showRelative />
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <th className="text-nowrap">
+                      <FormattedMessage id="app.solution.submittedAt" defaultMessage="Submitted at" />:
+                      <Explanation id="submittedAt">
+                        <FormattedMessage
+                          id="app.solution.explanations.submittedAt"
+                          defaultMessage="Time when the solution was uploaded to ReCodEx. The time is important for the scoring since it determines whether the solution is on time or late with respect to the deadline(s)."
+                        />
+                      </Explanation>
+                    </th>
+                    <td>
+                      <span className="mr-2">
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="deadlineInfo">
+                              {submittedAt < firstDeadline ? (
+                                <FormattedMessage
+                                  id="app.solution.submittedBeforeFirstDeadline"
+                                  defaultMessage="The solution was submitted before the deadline"
+                                />
+                              ) : allowSecondDeadline && submittedAt < secondDeadline ? (
+                                <FormattedMessage
+                                  id="app.solution.submittedBeforeSecondDeadline"
+                                  defaultMessage="The solution was submitted after the first but still before the second deadline"
+                                />
+                              ) : (
+                                <FormattedMessage
+                                  id="app.solution.submittedAfterDeadlines"
+                                  defaultMessage="The solution was submitted after the deadline"
+                                />
+                              )}
+                            </Tooltip>
+                          }>
+                          <span>
+                            {submittedAt < firstDeadline ? (
+                              <Icon icon={['far', 'circle-check']} className="text-success" />
+                            ) : allowSecondDeadline && submittedAt < secondDeadline ? (
+                              <InvertIcon className="text-warning" />
+                            ) : (
+                              <PastDeadlineIcon className="text-muted" />
+                            )}
+                          </span>
+                        </OverlayTrigger>
                       </span>
-                    </OverlayTrigger>
-                  </span>
 
-                  <DateTime unixts={submittedAt} />
+                      <DateTime unixts={submittedAt} />
 
-                  {submittedAt > firstDeadline && (
-                    <>
-                      <span className="px-1"> </span>
-                      <small className="text-muted">
-                        ({moment.duration(firstDeadline - submittedAt, 'seconds').humanize()}{' '}
-                        <FormattedMessage id="app.solution.afterDeadline" defaultMessage="after the deadline" />)
-                      </small>
-                    </>
-                  )}
-                </td>
+                      {submittedAt > firstDeadline && (
+                        <>
+                          <span className="px-1"> </span>
+                          <small className="text-muted">
+                            ({moment.duration(firstDeadline - submittedAt, 'seconds').humanize()}{' '}
+                            <FormattedMessage id="app.solution.afterDeadline" defaultMessage="after the deadline" />)
+                          </small>
+                        </>
+                      )}
+                    </td>
+                  </>
+                )}
               </tr>
 
               {Boolean(environment) && Boolean(environment.name) && (
@@ -267,177 +313,226 @@ class SolutionStatus extends Component {
                 </tr>
               )}
 
-              <tr>
-                <td className="text-center text-muted shrink-col px-2">
-                  <PointsIcon />
-                </td>
-                <th className="text-nowrap">
-                  <FormattedMessage id="app.solution.scoredPoints" defaultMessage="Final score" />:
-                  <Explanation id="scoredPoints">
-                    <FormattedMessage
-                      id="app.solution.explanations.scoredPoints"
-                      defaultMessage="Points awarded to this soluion and current points limit that was vaild at the time the solution was uploaded. Click the explanation link for more details about the scoring process."
-                    />
-                  </Explanation>
-                </th>
-                <td
-                  className={classnames({
-                    'text-danger': actualPoints + bonusPoints <= 0,
-                    'text-success': actualPoints + bonusPoints > 0,
-                  })}>
-                  <b>
-                    {actualPoints || 0}
-                    {bonusPoints !== 0 ? (bonusPoints >= 0 ? '+' : '') + bonusPoints : ''} / {maxPoints}
-                  </b>
-
-                  {accepted && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="accepted">
-                          <FormattedMessage
-                            id="app.solutionStatusIcon.accepted"
-                            defaultMessage="The solution was marked as accepted."
-                          />
-                        </Tooltip>
-                      }>
-                      <AcceptedIcon largeGapLeft largeGapRight className="text-success" />
-                    </OverlayTrigger>
-                  )}
-                  {important.accepted && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="another-accepted">
-                          <FormattedMessage
-                            id="app.solution.anotherAcceptedWarning"
-                            defaultMessage="Another solution has been marked as accepted. Points of this solution are not taken into account."
-                          />
-                        </Tooltip>
-                      }>
-                      <WarningIcon largeGapLeft largeGapRight className="text-warning" />
-                    </OverlayTrigger>
-                  )}
-                  {!important.accepted && important.best && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="best">
-                          <FormattedMessage
-                            id="app.solution.anotherBestWarning"
-                            defaultMessage="Another solution is considered as the best (i.e., it has gained more points or it has the same points but it was submitted later)."
-                          />
-                        </Tooltip>
-                      }>
-                      <WarningIcon largeGapLeft largeGapRight className="text-warning" />
-                    </OverlayTrigger>
-                  )}
-
-                  {evaluation && (
-                    <span className="float-right clickable text-primary mx-2" onClick={this.openExplainDialog}>
-                      <small>
-                        <FormattedMessage id="generic.explain" defaultMessage="explain" />
-                      </small>
-                      <Icon icon="calculator" gapLeft />
-                    </span>
-                  )}
-                </td>
-              </tr>
-
-              <tr>
-                <td className="text-center text-muted shrink-col px-2">
-                  <ReviewIcon review={review} />
-                </td>
-                <th className="text-nowrap">
-                  {review && review.closedAt ? (
-                    <>
-                      <FormattedMessage id="app.solution.reviewClosedAt" defaultMessage="Reviewed at" />:
-                    </>
-                  ) : (
-                    <>
-                      <FormattedMessage id="app.solution.reviewStartedAt" defaultMessage="Review started at" />:
-                    </>
-                  )}
-                  <Explanation id="reviews">
-                    <FormattedMessage
-                      id="app.solution.explanations.reviews"
-                      defaultMessage="Indicates last change in the review state. The review is started before the teacher can make any comments. When the review is closed, all comments become visible to the author. Review comments are visible at the submitted files page."
-                    />
-                  </Explanation>
-                </th>
-                <td>
-                  {review && review.startedAt ? (
-                    <DateTime unixts={review.closedAt || review.startedAt} />
-                  ) : (
-                    <i className="text-muted">
-                      <FormattedMessage id="app.solution.reviewNotStartedYet" defaultMessage="not started yet" />
-                    </i>
-                  )}
-
-                  {review && review.issues > 0 && (
-                    <small className="text-muted ml-3">
-                      (
+              {visibility !== null && (
+                <tr>
+                  <td className="text-center text-muted shrink-col px-2">
+                    <VisibleIcon visible={visibility > 0} />
+                  </td>
+                  <th>
+                    <FormattedMessage id="generic.visibility" defaultMessage="Visibility" />:
+                  </th>
+                  <td>
+                    {visibility <= 0 && (
+                      <FormattedMessage id="app.referenceSolutionDetail.visibility.private" defaultMessage="Private" />
+                    )}
+                    {visibility === 1 && (
+                      <FormattedMessage id="app.referenceSolutionDetail.visibility.public" defaultMessage="Public" />
+                    )}
+                    {visibility > 1 && (
                       <FormattedMessage
-                        id="app.solution.reviewIssuesCount"
-                        defaultMessage="{issues} {issues, plural, one {issue} other {issues}} to resolve"
-                        values={{ issues: review.issues }}
+                        id="app.referenceSolutionDetail.visibility.promoted"
+                        defaultMessage="Promoted"
                       />
-                      )
-                    </small>
-                  )}
+                    )}
+                    <Explanation id="assigned-at">
+                      {visibility <= 0 && (
+                        <FormattedMessage
+                          id="app.referenceSolutionDetail.visibility.privateExplanation"
+                          defaultMessage="Private solutions are visible only to their author. Experimental and temporary submissions should be kept private so other suprevisors are not overwhelmed with abundance of irrelevant source codes."
+                        />
+                      )}
+                      {visibility === 1 && (
+                        <FormattedMessage
+                          id="app.referenceSolutionDetail.visibility.publicExplanation"
+                          defaultMessage="Public solutions are visible to all supervisors who can see the exercise."
+                        />
+                      )}
+                      {visibility > 1 && (
+                        <FormattedMessage
+                          id="app.referenceSolutionDetail.visibility.promotedExplanation"
+                          defaultMessage="Promoted solutions are public solutions explicitly recommended by the author of the exercise as the ones that are worth checking out by supervisors who consider to assign the exercise."
+                        />
+                      )}
+                    </Explanation>
+                  </td>
+                </tr>
+              )}
 
-                  {review && review.closedAt && (
-                    <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
-                      <ReviewIcon
-                        review={review}
-                        gapLeft
-                        className={review.issues > 0 ? 'text-warning' : 'text-success'}
-                      />
-                    </Link>
-                  )}
+              {!referenceSolution && (
+                <>
+                  <tr>
+                    <td className="text-center text-muted shrink-col px-2">
+                      <PointsIcon />
+                    </td>
+                    <th className="text-nowrap">
+                      <FormattedMessage id="app.solution.scoredPoints" defaultMessage="Final score" />:
+                      <Explanation id="scoredPoints">
+                        <FormattedMessage
+                          id="app.solution.explanations.scoredPoints"
+                          defaultMessage="Points awarded to this soluion and current points limit that was vaild at the time the solution was uploaded. Click the explanation link for more details about the scoring process."
+                        />
+                      </Explanation>
+                    </th>
+                    <td
+                      className={classnames({
+                        'text-danger': actualPoints + bonusPoints <= 0,
+                        'text-success': actualPoints + bonusPoints > 0,
+                      })}>
+                      <b>
+                        {actualPoints || 0}
+                        {bonusPoints !== 0 ? (bonusPoints >= 0 ? '+' : '') + bonusPoints : ''} / {maxPoints}
+                      </b>
 
-                  {important.lastReviewed && (
-                    <span className="small float-right mx-2">
-                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.lastReviewed.id)}>
-                        <FormattedMessage id="app.solution.lastReviewed" defaultMessage="last reviewed" />
-                        <LinkIcon gapLeft />
-                      </Link>
-                    </span>
-                  )}
-                </td>
-              </tr>
+                      {accepted && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="accepted">
+                              <FormattedMessage
+                                id="app.solutionStatusIcon.accepted"
+                                defaultMessage="The solution was marked as accepted."
+                              />
+                            </Tooltip>
+                          }>
+                          <AcceptedIcon largeGapLeft largeGapRight className="text-success" />
+                        </OverlayTrigger>
+                      )}
+                      {important.accepted && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="another-accepted">
+                              <FormattedMessage
+                                id="app.solution.anotherAcceptedWarning"
+                                defaultMessage="Another solution has been marked as accepted. Points of this solution are not taken into account."
+                              />
+                            </Tooltip>
+                          }>
+                          <WarningIcon largeGapLeft largeGapRight className="text-warning" />
+                        </OverlayTrigger>
+                      )}
+                      {!important.accepted && important.best && (
+                        <OverlayTrigger
+                          placement="bottom"
+                          overlay={
+                            <Tooltip id="best">
+                              <FormattedMessage
+                                id="app.solution.anotherBestWarning"
+                                defaultMessage="Another solution is considered as the best (i.e., it has gained more points or it has the same points but it was submitted later)."
+                              />
+                            </Tooltip>
+                          }>
+                          <WarningIcon largeGapLeft largeGapRight className="text-warning" />
+                        </OverlayTrigger>
+                      )}
 
-              <tr>
-                <td className="text-center text-muted shrink-col px-2">
-                  <Icon icon="list-ol" />
-                </td>
-                <th className="text-nowrap">
-                  <FormattedMessage id="app.solution.solutionAttempt" defaultMessage="Solution Attempt" />:
-                </th>
-                <td>
-                  {!lastAttemptIndex ? (
-                    <LoadingIcon />
-                  ) : (
-                    <FormattedMessage
-                      id="app.solution.solutionAttemptValue"
-                      defaultMessage="{index} of {count}"
-                      values={{
-                        index: attemptIndex,
-                        count: lastAttemptIndex,
-                      }}
-                    />
-                  )}
+                      {evaluation && (
+                        <span className="float-right clickable text-primary mx-2" onClick={this.openExplainDialog}>
+                          <small>
+                            <FormattedMessage id="generic.explain" defaultMessage="explain" />
+                          </small>
+                          <Icon icon="calculator" gapLeft />
+                        </span>
+                      )}
+                    </td>
+                  </tr>
 
-                  {otherSolutions && otherSolutions.size > 1 && (
-                    <span
-                      className="small float-right clickable text-primary mx-2"
-                      onClick={this.openOtherSolutionsDialog}>
-                      <FormattedMessage id="app.solution.allSolutions" defaultMessage="all solutions" />
-                      <Icon icon="list-ul" gapLeft />
-                    </span>
-                  )}
-                </td>
-              </tr>
+                  <tr>
+                    <td className="text-center text-muted shrink-col px-2">
+                      <ReviewIcon review={review} />
+                    </td>
+                    <th className="text-nowrap">
+                      {review && review.closedAt ? (
+                        <>
+                          <FormattedMessage id="app.solution.reviewClosedAt" defaultMessage="Reviewed at" />:
+                        </>
+                      ) : (
+                        <>
+                          <FormattedMessage id="app.solution.reviewStartedAt" defaultMessage="Review started at" />:
+                        </>
+                      )}
+                      <Explanation id="reviews">
+                        <FormattedMessage
+                          id="app.solution.explanations.reviews"
+                          defaultMessage="Indicates last change in the review state. The review is started before the teacher can make any comments. When the review is closed, all comments become visible to the author. Review comments are visible at the submitted files page."
+                        />
+                      </Explanation>
+                    </th>
+                    <td>
+                      {review && review.startedAt ? (
+                        <DateTime unixts={review.closedAt || review.startedAt} />
+                      ) : (
+                        <i className="text-muted">
+                          <FormattedMessage id="app.solution.reviewNotStartedYet" defaultMessage="not started yet" />
+                        </i>
+                      )}
+
+                      {review && review.issues > 0 && (
+                        <small className="text-muted ml-3">
+                          (
+                          <FormattedMessage
+                            id="app.solution.reviewIssuesCount"
+                            defaultMessage="{issues} {issues, plural, one {issue} other {issues}} to resolve"
+                            values={{ issues: review.issues }}
+                          />
+                          )
+                        </small>
+                      )}
+
+                      {review && review.closedAt && (
+                        <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
+                          <ReviewIcon
+                            review={review}
+                            gapLeft
+                            className={review.issues > 0 ? 'text-warning' : 'text-success'}
+                          />
+                        </Link>
+                      )}
+
+                      {important.lastReviewed && (
+                        <span className="small float-right mx-2">
+                          <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.lastReviewed.id)}>
+                            <FormattedMessage id="app.solution.lastReviewed" defaultMessage="last reviewed" />
+                            <LinkIcon gapLeft />
+                          </Link>
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="text-center text-muted shrink-col px-2">
+                      <Icon icon="list-ol" />
+                    </td>
+                    <th className="text-nowrap">
+                      <FormattedMessage id="app.solution.solutionAttempt" defaultMessage="Solution Attempt" />:
+                    </th>
+                    <td>
+                      {!lastAttemptIndex ? (
+                        <LoadingIcon />
+                      ) : (
+                        <FormattedMessage
+                          id="app.solution.solutionAttemptValue"
+                          defaultMessage="{index} of {count}"
+                          values={{
+                            index: attemptIndex,
+                            count: lastAttemptIndex,
+                          }}
+                        />
+                      )}
+
+                      {otherSolutions && otherSolutions.size > 1 && (
+                        <span
+                          className="small float-right clickable text-primary mx-2"
+                          onClick={this.openOtherSolutionsDialog}>
+                          <FormattedMessage id="app.solution.allSolutions" defaultMessage="all solutions" />
+                          <Icon icon="list-ul" gapLeft />
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </Table>
         </Box>
@@ -582,38 +677,44 @@ class SolutionStatus extends Component {
           </Modal>
         )}
 
-        <Modal show={this.state.otherSolutionsDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <FormattedMessage
-                id="app.solution.otherSolutionsTitle"
-                defaultMessage="All Solutions of The Assignment"
+        {assignmentSolverSelector && (
+          <Modal show={this.state.otherSolutionsDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+            <Modal.Header closeButton>
+              <Modal.Title>
+                <FormattedMessage
+                  id="app.solution.otherSolutionsTitle"
+                  defaultMessage="All Solutions of The Assignment"
+                />
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <SolutionsTable
+                solutions={otherSolutions}
+                assignmentId={assignmentId}
+                groupId={groupId}
+                runtimeEnvironments={runtimeEnvironments}
+                noteMaxlen={32}
+                selected={id}
+                assignmentSolversLoading={assignmentSolversLoading}
+                assignmentSolver={assignmentSolver}
+                compact
               />
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <SolutionsTable
-              solutions={otherSolutions}
-              assignmentId={assignmentId}
-              groupId={groupId}
-              runtimeEnvironments={runtimeEnvironments}
-              noteMaxlen={32}
-              selected={id}
-              assignmentSolversLoading={assignmentSolversLoading}
-              assignmentSolver={assignmentSolver}
-              compact
-            />
-          </Modal.Body>
-        </Modal>
+            </Modal.Body>
+          </Modal>
+        )}
       </>
     );
   }
 }
 
 SolutionStatus.propTypes = {
-  id: PropTypes.string.isRequired,
-  attemptIndex: PropTypes.number.isRequired,
-  otherSolutions: ImmutablePropTypes.list.isRequired,
+  referenceSolution: PropTypes.bool,
+  submittedAt: PropTypes.number.isRequired,
+  userId: PropTypes.string.isRequired,
+  submittedBy: PropTypes.string,
+  id: PropTypes.string,
+  attemptIndex: PropTypes.number,
+  otherSolutions: ImmutablePropTypes.list,
   assignment: PropTypes.shape({
     id: PropTypes.string.isRequired,
     groupId: PropTypes.string.isRequired,
@@ -624,13 +725,12 @@ SolutionStatus.propTypes = {
     maxPointsBeforeFirstDeadline: PropTypes.number.isRequired,
     maxPointsBeforeSecondDeadline: PropTypes.number,
     pointsPercentualThreshold: PropTypes.number,
-  }).isRequired,
+  }),
   evaluation: PropTypes.object,
-  submittedAt: PropTypes.number.isRequired,
-  userId: PropTypes.string.isRequired,
-  submittedBy: PropTypes.string,
   note: PropTypes.string,
-  accepted: PropTypes.bool.isRequired,
+  description: PropTypes.string,
+  visibility: PropTypes.number,
+  accepted: PropTypes.bool,
   review: PropTypes.shape({
     startedAt: PropTypes.number,
     closedAt: PropTypes.number,
@@ -638,13 +738,13 @@ SolutionStatus.propTypes = {
   }),
   runtimeEnvironmentId: PropTypes.string,
   runtimeEnvironments: PropTypes.array,
-  maxPoints: PropTypes.number.isRequired,
-  bonusPoints: PropTypes.number.isRequired,
+  maxPoints: PropTypes.number,
+  bonusPoints: PropTypes.number,
   actualPoints: PropTypes.number,
   overriddenPoints: PropTypes.number,
   editNote: PropTypes.func,
   assignmentSolversLoading: PropTypes.bool,
-  assignmentSolverSelector: PropTypes.func.isRequired,
+  assignmentSolverSelector: PropTypes.func,
   links: PropTypes.object.isRequired,
 };
 

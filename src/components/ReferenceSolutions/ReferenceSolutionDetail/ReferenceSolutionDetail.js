@@ -13,7 +13,7 @@ import SourceCodeViewerContainer from '../../../containers/SourceCodeViewerConta
 import SubmissionEvaluations from '../../Solutions/SubmissionEvaluations';
 import { ScoreConfigInfoDialog } from '../../scoreConfig/ScoreConfigInfo';
 import CompilationLogs from '../../Solutions/CompilationLogs';
-import ReferenceSolutionStatus from '../ReferenceSolutionStatus/ReferenceSolutionStatus';
+import SolutionStatus from '../../Solutions/SolutionStatus';
 
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
@@ -87,18 +87,15 @@ class ReferenceSolutionDetail extends Component {
       <div>
         <Row>
           <Col md={6} sm={12}>
-            <ReferenceSolutionStatus
+            <SolutionStatus
+              referenceSolution
               description={description}
               submittedAt={createdAt}
-              authorId={authorId}
+              userId={authorId}
               submittedBy={submittedBy}
-              exerciseId={exercise.id}
-              environment={
-                runtimeEnvironments &&
-                runtimeEnvironmentId &&
-                runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId)
-              }
               visibility={visibility}
+              runtimeEnvironmentId={runtimeEnvironmentId}
+              runtimeEnvironments={runtimeEnvironments}
             />
 
             <SolutionFiles
