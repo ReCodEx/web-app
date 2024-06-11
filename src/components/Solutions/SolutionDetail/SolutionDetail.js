@@ -17,7 +17,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SolutionFiles from '../SolutionFiles';
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
-import { RefreshIcon } from '../../icons';
+import { RefreshIcon, WarningIcon } from '../../icons';
 import FailureReport from '../../SubmissionFailures/FailureReport';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
@@ -59,24 +59,27 @@ class SolutionDetail extends Component {
     const {
       solution: {
         id,
-        attemptIndex,
-        note = '',
-        createdAt,
-        authorId,
-        maxPoints,
-        overriddenPoints,
-        bonusPoints,
-        actualPoints,
-        accepted,
-        review = null,
         runtimeEnvironmentId,
         lastSubmission,
         permissionHints = EMPTY_OBJ,
+        createdAt,
+        authorId,
+        description = null,
+        note = null,
+        attemptIndex = null,
+        maxPoints = null,
+        overriddenPoints = null,
+        bonusPoints = null,
+        actualPoints = null,
+        accepted = null,
+        review = null,
+        visibility = null,
       },
       files,
       download,
       otherSolutions,
-      assignment,
+      exercise = null,
+      assignment = null,
       evaluations,
       runtimeEnvironments,
       editNote = null,
@@ -97,6 +100,8 @@ class SolutionDetail extends Component {
       var { submittedBy, evaluation, failure, isDebug, ...restSub } = evaluationsJS[activeSubmissionId].data;
     }
 
+    const referenceSolution = exercise !== null;
+
     return (
       <div>
         <Row>
@@ -110,6 +115,7 @@ class SolutionDetail extends Component {
               userId={authorId}
               submittedBy={submittedBy}
               note={note}
+              description={description}
               editNote={editNote}
               accepted={accepted}
               review={review}
@@ -123,9 +129,20 @@ class SolutionDetail extends Component {
               otherSolutions={otherSolutions}
               assignmentSolversLoading={assignmentSolversLoading}
               assignmentSolverSelector={assignmentSolverSelector}
+              visibility={visibility}
+              referenceSolution={referenceSolution}
             />
           </Col>
           <Col xl={6}>
+            {referenceSolution && !evaluation && (!evaluations || evaluations.size === 0) && (
+              <Callout variant="danger" icon={<WarningIcon />}>
+                <FormattedMessage
+                  id="app.submissionEvaluation.noEvaluationsWhatSoEver"
+                  defaultMessage="There are no submission evaluations. This is higly unusual, since the solution is submitted for evaluation as soon as it is created. Check the configuration of the exercise and try to resubmit this solution again."
+                />
+              </Callout>
+            )}
+
             {!evaluation && !failure && refreshSolutionEvaluations && (
               <Callout variant="warning">
                 <table>
@@ -151,7 +168,7 @@ class SolutionDetail extends Component {
 
             {failure && <FailureReport failure={failure} />}
 
-            {activeSubmissionId !== safeGet(lastSubmission, ['id']) && (
+            {!referenceSolution && activeSubmissionId !== safeGet(lastSubmission, ['id']) && (
               <Callout variant="warning">
                 <FormattedMessage
                   id="app.evaluationDetail.notActualEvaluation"
@@ -167,6 +184,7 @@ class SolutionDetail extends Component {
                 isDebug={isDebug}
                 viewResumbissions={permissionHints.viewResubmissions}
                 showScoreDetail={this.openScoreDialog}
+                referenceSolution={referenceSolution}
               />
             )}
           </Col>
@@ -176,14 +194,15 @@ class SolutionDetail extends Component {
           <Col xl={6}>
             <SolutionFiles
               solutionId={id}
-              attemptIndex={attemptIndex}
               files={files}
               authorId={authorId}
+              isReference={referenceSolution}
+              attemptIndex={attemptIndex}
               openFile={this.openFile}
               download={download}
             />
 
-            {permissionHints.setBonusPoints && (
+            {!referenceSolution && assignment && permissionHints.setBonusPoints && (
               <PointsContainer
                 submissionId={id}
                 overriddenPoints={overriddenPoints}
@@ -202,10 +221,17 @@ class SolutionDetail extends Component {
               <CommentThreadContainer
                 threadId={id}
                 additionalPublicSwitchNote={
-                  <FormattedMessage
-                    id="app.solutionDetail.comments.additionalSwitchNote"
-                    defaultMessage="(author of the solution and supervisors of this group)"
-                  />
+                  referenceSolution ? (
+                    <FormattedMessage
+                      id="app.referenceSolutionDetail.comments.additionalSwitchNote"
+                      defaultMessage="(teachers who can see this reference solution)"
+                    />
+                  ) : (
+                    <FormattedMessage
+                      id="app.solutionDetail.comments.additionalSwitchNote"
+                      defaultMessage="(author of the solution and supervisors of this group)"
+                    />
+                  )
                 }
               />
             )}
@@ -219,55 +245,60 @@ class SolutionDetail extends Component {
                 <TestResults
                   evaluation={evaluation}
                   runtimeEnvironmentId={runtimeEnvironmentId}
-                  showJudgeLogStdout={permissionHints.viewEvaluationJudgeStdout}
-                  showJudgeLogStderr={permissionHints.viewEvaluationJudgeStderr}
-                  isJudgeLogStdoutPublic={assignment.canViewJudgeStdout}
-                  isJudgeLogStderrPublic={assignment.canViewJudgeStderr}
-                  isJudgeLogMerged={assignment.mergeJudgeLogs}
+                  showJudgeLogStdout={referenceSolution || permissionHints.viewEvaluationJudgeStdout}
+                  showJudgeLogStderr={referenceSolution || permissionHints.viewEvaluationJudgeStderr}
+                  isJudgeLogStdoutPublic={referenceSolution ? null : assignment.canViewJudgeStdout}
+                  isJudgeLogStderrPublic={referenceSolution ? null : assignment.canViewJudgeStderr}
+                  isJudgeLogMerged={(assignment || exercise).mergeJudgeLogs}
                 />
               )}
 
               {evaluation && permissionHints.downloadResultArchive && (
                 <Row>
                   <Col lg={6} md={12}>
-                    <DownloadResultArchiveContainer submissionId={restSub.id} />
+                    <DownloadResultArchiveContainer submissionId={restSub.id} isReference={referenceSolution} />
                   </Col>
                 </Row>
               )}
 
-              {activeSubmissionId && permissionHints.viewResubmissions && evaluations && evaluations.size > 1 && (
-                <Row>
-                  <Col lg={12}>
-                    <ResourceRenderer resource={evaluations.toArray()} returnAsArray>
-                      {evaluations => (
-                        <SubmissionEvaluations
-                          submissionId={id}
-                          evaluations={evaluations}
-                          activeSubmissionId={activeSubmissionId}
-                          onSelect={this.setActiveSubmission}
-                          onDelete={permissionHints.deleteEvaluation ? deleteEvaluation : null}
-                          confirmDeleteLastSubmit
-                        />
-                      )}
-                    </ResourceRenderer>
-                  </Col>
-                </Row>
-              )}
+              {activeSubmissionId &&
+                (referenceSolution || permissionHints.viewResubmissions) &&
+                evaluations &&
+                evaluations.size > 1 && (
+                  <Row>
+                    <Col lg={12}>
+                      <ResourceRenderer resource={evaluations.toArray()} returnAsArray>
+                        {evaluations => (
+                          <SubmissionEvaluations
+                            submissionId={id}
+                            evaluations={evaluations}
+                            activeSubmissionId={activeSubmissionId}
+                            showInfo={!referenceSolution}
+                            onSelect={this.setActiveSubmission}
+                            onDelete={permissionHints.deleteEvaluation ? deleteEvaluation : null}
+                            confirmDeleteLastSubmit
+                          />
+                        )}
+                      </ResourceRenderer>
+                    </Col>
+                  </Row>
+                )}
             </Col>
           )}
         </Row>
 
         <SourceCodeViewerContainer
           solutionId={id}
+          files={files}
           show={openFileId !== null}
           fileId={openFileId || ''}
           fileName={openFileName}
           zipEntry={openZipEntry}
-          files={files}
           openAnotherFile={this.openFile}
           onHide={this.hideFile}
           submittedBy={authorId}
         />
+
         {activeSubmissionId && scoreConfigSelector && (
           <ScoreConfigInfoDialog
             show={scoreDialogOpened}
@@ -284,38 +315,44 @@ class SolutionDetail extends Component {
 
 SolutionDetail.propTypes = {
   solution: PropTypes.shape({
+    // common part for both solution types
     id: PropTypes.string.isRequired,
-    attemptIndex: PropTypes.number.isRequired,
-    note: PropTypes.string,
+    runtimeEnvironmentId: PropTypes.string,
     lastSubmission: PropTypes.shape({ id: PropTypes.string.isRequired }),
     createdAt: PropTypes.number.isRequired,
     authorId: PropTypes.string.isRequired,
-    maxPoints: PropTypes.number.isRequired,
-    bonusPoints: PropTypes.number.isRequired,
+    permissionHints: PropTypes.object,
+    // specific to assignment solutions only
+    note: PropTypes.string,
+    attemptIndex: PropTypes.number,
+    maxPoints: PropTypes.number,
+    bonusPoints: PropTypes.number,
     overriddenPoints: PropTypes.number,
     actualPoints: PropTypes.number,
-    accepted: PropTypes.bool.isRequired,
+    accepted: PropTypes.bool,
     review: PropTypes.shape({
       startedAt: PropTypes.number,
       closedAt: PropTypes.number,
       issues: PropTypes.number,
     }),
-    runtimeEnvironmentId: PropTypes.string,
-    permissionHints: PropTypes.object,
+    // specific to reference solutions only
+    description: PropTypes.string,
+    visibility: PropTypes.number,
   }).isRequired,
   files: ImmutablePropTypes.map,
-  download: PropTypes.func,
-  otherSolutions: ImmutablePropTypes.list.isRequired,
-  assignmentSolversLoading: PropTypes.bool,
-  assignmentSolverSelector: PropTypes.func.isRequired,
-  assignment: PropTypes.object.isRequired,
   evaluations: PropTypes.object.isRequired,
-  currentUser: PropTypes.object.isRequired,
   runtimeEnvironments: PropTypes.array,
+  currentUser: PropTypes.object.isRequired,
+  exercise: PropTypes.object,
+  otherSolutions: ImmutablePropTypes.list,
+  assignmentSolversLoading: PropTypes.bool,
+  assignmentSolverSelector: PropTypes.func,
+  assignment: PropTypes.object,
   editNote: PropTypes.func,
+  scoreConfigSelector: PropTypes.func,
+  download: PropTypes.func,
   deleteEvaluation: PropTypes.func,
   refreshSolutionEvaluations: PropTypes.func,
-  scoreConfigSelector: PropTypes.func,
   fetchScoreConfigIfNeeded: PropTypes.func,
   canResubmit: PropTypes.bool,
 };
