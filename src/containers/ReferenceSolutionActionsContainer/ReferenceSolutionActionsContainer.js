@@ -49,7 +49,7 @@ export default connect(
   (state, { id }) => {
     return {
       currentUserId: loggedInUserIdSelector(state),
-      solution: getReferenceSolution(id)(state),
+      solution: getReferenceSolution(state, id),
       visibilityPending: getReferenceSolutionSetVisibilityStatus(state, id),
     };
   },

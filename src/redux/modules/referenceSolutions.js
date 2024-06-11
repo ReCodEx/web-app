@@ -25,6 +25,7 @@ export const additionalActionTypes = {
   RESUBMIT: 'recodex/referenceSolutions/RESUBMIT',
   FETCHALL: 'recodex/referenceSolutions/FETCHALL',
   FETCHALL_FULFILLED: 'recodex/referenceSolutions/FETCHALL_FULFILLED',
+  ...createActionsWithPostfixes('SET_NOTE', 'recodex/referenceSolutions'),
   ...createActionsWithPostfixes('SET_VISIBILITY', 'recodex/referenceSolutions'),
 };
 
@@ -50,6 +51,15 @@ export const resubmitReferenceSolution = (solutionId, progressObserverId = null,
       submissionType: 'referenceSolution',
       progressObserverId,
     },
+  });
+
+export const setDescription = (solutionId, note) =>
+  createApiAction({
+    type: additionalActionTypes.SET_NOTE,
+    endpoint: `/reference-solutions/${solutionId}`,
+    method: 'POST',
+    body: { note },
+    meta: { solutionId },
   });
 
 export const setVisibility = (solutionId, visibility = 1) =>
@@ -100,6 +110,15 @@ const reducer = handleActions(
             submissions.filter(submission => submission !== evaluationId)
           )
         : state,
+
+    [additionalActionTypes.SET_NOTE_FULFILLED]: (state, { payload }) =>
+      state.setIn(
+        ['resources', payload.id],
+        createRecord({
+          state: resourceStatus.FULFILLED,
+          data: payload,
+        })
+      ),
 
     [additionalActionTypes.SET_VISIBILITY_PENDING]: (state, { meta: { solutionId } }) =>
       state.setIn(['resources', solutionId, 'visibility'], true),

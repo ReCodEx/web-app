@@ -47,7 +47,7 @@ import { getSolutionReviewComments } from '../../redux/selectors/solutionReviews
 import {
   getAssignment,
   getUserSolutionsSortedData,
-  assignmentEnvironmentsSelector,
+  getAssignmentEnvironments,
 } from '../../redux/selectors/assignments';
 import { getFilesContentSelector } from '../../redux/selectors/files';
 import { getLoggedInUserEffectiveRole, loggedInUserSelector } from '../../redux/selectors/users';
@@ -733,7 +733,7 @@ export default withRouter(
           loggedUserId: loggedInUserIdSelector(state),
           currentUser: loggedInUserSelector(state),
           effectiveRole: getLoggedInUserEffectiveRole(state),
-          runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+          runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
           isPrimaryAdminOf: loggedUserIsPrimaryAdminOfSelector(state),
         };
       },

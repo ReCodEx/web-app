@@ -82,7 +82,6 @@ class SolutionStatus extends Component {
       userId,
       submittedBy,
       note,
-      description,
       visibility = null,
       accepted,
       review = null,
@@ -172,48 +171,44 @@ class SolutionStatus extends Component {
                 </tr>
               )}
 
-              {referenceSolution ? (
+              {(referenceSolution || note.length > 0 || Boolean(editNote)) && (
                 <tr>
                   <td className="text-center text-muted shrink-col px-2">
-                    <EditIcon />
+                    <NoteIcon />
                   </td>
-                  <th>
-                    <FormattedMessage id="generic.description" defaultMessage="Description" />:
+                  <th className="text-nowrap">
+                    {referenceSolution ? (
+                      <>
+                        <FormattedMessage id="generic.description" defaultMessage="Description" />:
+                      </>
+                    ) : (
+                      <>
+                        <FormattedMessage id="app.solution.note" defaultMessage="Note:" />
+                        <Explanation id="note">
+                          <FormattedMessage
+                            id="app.solution.explanations.note"
+                            defaultMessage="Short note left by the author of the solution that can be used to distinguish between solutions of one assignment. The note is also visible by teachers, so it can be used to pass brief information to them (however, comments are more suitable for elaborate conversations)."
+                          />
+                        </Explanation>
+                      </>
+                    )}
                   </th>
-                  <td>{description}</td>
-                </tr>
-              ) : (
-                (note.length > 0 || Boolean(editNote)) && (
-                  <tr>
-                    <td className="text-center text-muted shrink-col px-2">
-                      <NoteIcon />
-                    </td>
-                    <th className="text-nowrap">
-                      <FormattedMessage id="app.solution.note" defaultMessage="Note:" />
-                      <Explanation id="note">
-                        <FormattedMessage
-                          id="app.solution.explanations.note"
-                          defaultMessage="Short note left by the author of the solution that can be used to distinguish between solutions of one assignment. The note is also visible by teachers, so it can be used to pass brief information to them (however, comments are more suitable for elaborate conversations)."
-                        />
-                      </Explanation>
-                    </th>
-                    <td>
-                      {note.length > 0 ? (
-                        note
-                      ) : (
-                        <em className="text-muted small">
-                          <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
-                        </em>
-                      )}
+                  <td>
+                    {referenceSolution || note.length > 0 ? (
+                      note
+                    ) : (
+                      <em className="text-muted small">
+                        <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
+                      </em>
+                    )}
 
-                      {Boolean(editNote) && (
-                        <span className="float-right text-warning mx-2">
-                          <EditIcon onClick={this.openEditDialog} />
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                )
+                    {Boolean(editNote) && (
+                      <span className="float-right text-warning mx-2">
+                        <EditIcon onClick={this.openEditDialog} />
+                      </span>
+                    )}
+                  </td>
+                </tr>
               )}
 
               <tr>
@@ -541,7 +536,14 @@ class SolutionStatus extends Component {
           <Modal show={this.state.editDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
-                <FormattedMessage id="app.solution.editNoteModalTitle" defaultMessage="Edit Solution Note" />
+                {referenceSolution ? (
+                  <FormattedMessage
+                    id="app.referenceSolution.editDescriptionModalTitle"
+                    defaultMessage="Edit Solution Description"
+                  />
+                ) : (
+                  <FormattedMessage id="app.solution.editNoteModalTitle" defaultMessage="Edit Solution Note" />
+                )}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -728,7 +730,6 @@ SolutionStatus.propTypes = {
   }),
   evaluation: PropTypes.object,
   note: PropTypes.string,
-  description: PropTypes.string,
   visibility: PropTypes.number,
   accepted: PropTypes.bool,
   review: PropTypes.shape({
