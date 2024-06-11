@@ -6,7 +6,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Confirm from '../../forms/Confirm';
 import Box from '../../widgets/Box';
-import EvaluationTable from '../../ReferenceSolutions/EvaluationTable';
+import EvaluationTable from '../../Solutions/EvaluationTable';
 import Icon, { DeleteIcon } from '../../icons';
 
 const deleteButton = (id, onDelete, confirmation = null) =>
