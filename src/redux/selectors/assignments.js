@@ -19,20 +19,27 @@ export const getExerciseAssignments = createSelector([getAssignmentResources, ge
   assignments.filter(assignment => isReady(assignment) && assignment.getIn(['data', 'exerciseId']) === exerciseId)
 );
 
+const _getAssignmentEnvironments = (assignmentSelector, envSelector, id) => {
+  const assignment = assignmentSelector(id);
+  const envIds = assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
+  const disabledEnvIds = assignment && assignment.getIn(['data', 'disabledRuntimeEnvironmentIds']);
+
+  return envIds && disabledEnvIds && envSelector
+    ? envIds
+        .toArray()
+        .filter(env => !disabledEnvIds.toArray().includes(env))
+        .map(envSelector)
+    : null;
+};
+
+export const getAssignmentEnvironments = createSelector(
+  [getAssignmentSelector, runtimeEnvironmentSelector, getParam],
+  _getAssignmentEnvironments
+);
+
 export const assignmentEnvironmentsSelector = createSelector(
   [getAssignmentSelector, runtimeEnvironmentSelector],
-  (assignmentSelector, envSelector) => id => {
-    const assignment = assignmentSelector(id);
-    const envIds = assignment && assignment.getIn(['data', 'runtimeEnvironmentIds']);
-    const disabledEnvIds = assignment && assignment.getIn(['data', 'disabledRuntimeEnvironmentIds']);
-
-    return envIds && disabledEnvIds && envSelector
-      ? envIds
-          .toArray()
-          .filter(env => !disabledEnvIds.toArray().includes(env))
-          .map(envSelector)
-      : null;
-  }
+  (assignmentSelector, envSelector) => id => _getAssignmentEnvironments(assignmentSelector, envSelector, id)
 );
 
 export const getAssignmentSolutions = createSelector(

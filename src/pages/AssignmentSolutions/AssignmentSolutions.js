@@ -52,7 +52,7 @@ import { groupSelector } from '../../redux/selectors/groups';
 import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
 import {
   getAssignment,
-  assignmentEnvironmentsSelector,
+  getAssignmentEnvironments,
   getUserSolutionsSortedData,
   getAssignmentSolutions,
 } from '../../redux/selectors/assignments';
@@ -698,7 +698,7 @@ export default withLinks(
         getUserSolutions: userId => getUserSolutionsSortedData(state)(userId, assignmentId),
         assignmentSolutions: getAssignmentSolutions(state, assignmentId),
         getGroup: id => groupSelector(state, id),
-        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+        runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
         fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),
         assignmentSolversLoading: isAssignmentSolversLoading(state),
         assignmentSolverSelector: getAssignmentSolverSelector(state),

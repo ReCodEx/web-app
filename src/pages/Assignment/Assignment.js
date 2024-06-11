@@ -25,7 +25,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 
 import {
   getAssignment,
-  assignmentEnvironmentsSelector,
+  getAssignmentEnvironments,
   getUserSolutionsSortedData,
 } from '../../redux/selectors/assignments';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit';
@@ -324,7 +324,7 @@ export default injectIntl(
       return {
         assignment: getAssignment(state, assignmentId),
         submitting: isSubmitting(state),
-        runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+        runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
         userId,
         loggedInUserId,
         currentUser: loggedInUserSelector(state),

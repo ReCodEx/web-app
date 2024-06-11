@@ -16,7 +16,11 @@ import { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import { ReferenceSolutionIcon } from '../../components/icons';
 
-import { fetchReferenceSolutionIfNeeded, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
+import {
+  fetchReferenceSolutionIfNeeded,
+  fetchReferenceSolution,
+  setDescription,
+} from '../../redux/modules/referenceSolutions';
 import { fetchReferenceSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
 import { download } from '../../redux/modules/files';
 import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
@@ -70,6 +74,7 @@ class ReferenceSolution extends Component {
       exercise,
       fetchStatus,
       evaluations,
+      editNote,
       refreshSolutionEvaluations,
       deleteEvaluation,
       scoreConfigSelector,
@@ -144,6 +149,7 @@ class ReferenceSolution extends Component {
                       runtimeEnvironments={exercise.runtimeEnvironments}
                       currentUser={currentUser}
                       exercise={exercise}
+                      editNote={hasPermissions(referenceSolution, 'update') ? editNote : null}
                       scoreConfigSelector={scoreConfigSelector}
                       download={download}
                       deleteEvaluation={deleteEvaluation}
@@ -173,6 +179,7 @@ ReferenceSolution.propTypes = {
   referenceSolution: ImmutablePropTypes.map,
   files: ImmutablePropTypes.map,
   exercise: ImmutablePropTypes.map,
+  editNote: PropTypes.func.isRequired,
   refreshSolutionEvaluations: PropTypes.func,
   deleteEvaluation: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
@@ -186,16 +193,17 @@ export default injectIntl(
   connect(
     (state, { params: { exerciseId, referenceSolutionId } }) => ({
       currentUser: loggedInUserSelector(state),
-      referenceSolution: getReferenceSolution(referenceSolutionId)(state),
+      referenceSolution: getReferenceSolution(state, referenceSolutionId),
       files: getSolutionFiles(state, referenceSolutionId),
       exercise: getExercise(exerciseId)(state),
-      evaluations: evaluationsForReferenceSolutionSelector(referenceSolutionId)(state),
+      evaluations: evaluationsForReferenceSolutionSelector(state, referenceSolutionId),
       fetchStatus: fetchManyStatus(referenceSolutionId)(state),
       scoreConfigSelector: referenceSubmissionScoreConfigSelector(state),
     }),
     (dispatch, { params }) => ({
       loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
       fetchScoreConfigIfNeeded: submissionId => dispatch(fetchReferenceSubmissionScoreConfigIfNeeded(submissionId)),
+      editNote: note => dispatch(setDescription(params.referenceSolutionId, note)),
       refreshSolutionEvaluations: () => {
         dispatch(fetchReferenceSolution(params.referenceSolutionId));
         dispatch(fetchReferenceSolutionEvaluationsForSolution(params.referenceSolutionId));

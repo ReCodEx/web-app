@@ -7,6 +7,7 @@ import factory, {
   defaultNeedsRefetching,
   createRecord,
   resourceStatus,
+  createActionsWithPostfixes,
 } from '../helpers/resourceManager';
 import { actionTypes as submissionActionTypes } from './submission';
 import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
@@ -33,36 +34,15 @@ const { actions, actionTypes, reduceActions } = factory({
  */
 export { actionTypes };
 export const additionalActionTypes = {
-  LOAD_USERS_SOLUTIONS: 'recodex/solutions/LOAD_USERS_SOLUTIONS',
-  LOAD_USERS_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_USERS_SOLUTIONS_PENDING',
-  LOAD_USERS_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_USERS_SOLUTIONS_FULFILLED',
-  LOAD_USERS_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_USERS_SOLUTIONS_REJECTED',
-  LOAD_ASSIGNMENT_SOLUTIONS: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS',
-  LOAD_ASSIGNMENT_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_PENDING',
-  LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED',
-  LOAD_ASSIGNMENT_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLUTIONS_REJECTED',
-  LOAD_GROUP_STUDENTS_SOLUTIONS: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS',
-  LOAD_GROUP_STUDENTS_SOLUTIONS_PENDING: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS_PENDING',
-  LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED',
-  LOAD_GROUP_STUDENTS_SOLUTIONS_REJECTED: 'recodex/solutions/LOAD_GROUP_STUDENTS_SOLUTIONS_REJECTED',
-  SET_NOTE: 'recodex/solutions/SET_NOTE',
-  SET_NOTE_PENDING: 'recodex/solutions/SET_NOTE_PENDING',
-  SET_NOTE_FULFILLED: 'recodex/solutions/SET_NOTE_FULFILLED',
-  SET_NOTE_REJECTED: 'recodex/solutions/SET_NOTE_REJECTED',
-  SET_BONUS_POINTS: 'recodex/solutions/SET_BONUS_POINTS',
-  SET_BONUS_POINTS_PENDING: 'recodex/solutions/SET_BONUS_POINTS_PENDING',
-  SET_BONUS_POINTS_FULFILLED: 'recodex/solutions/SET_BONUS_POINTS_FULFILLED',
-  SET_BONUS_POINTS_REJECTED: 'recodex/solutions/SET_BONUS_POINTS_REJECTED',
-  SET_FLAG: 'recodex/solutions/SET_FLAG',
-  SET_FLAG_PENDING: 'recodex/solutions/SET_FLAG_PENDING',
-  SET_FLAG_FULFILLED: 'recodex/solutions/SET_FLAG_FULFILLED',
-  SET_FLAG_REJECTED: 'recodex/solutions/SET_FLAG_REJECTED',
-  DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE',
-  LOAD_ASSIGNMENT_SOLVERS: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS',
-  LOAD_ASSIGNMENT_SOLVERS_PENDING: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_PENDING',
-  LOAD_ASSIGNMENT_SOLVERS_FULFILLED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_FULFILLED',
-  LOAD_ASSIGNMENT_SOLVERS_REJECTED: 'recodex/solutions/LOAD_ASSIGNMENT_SOLVERS_REJECTED',
+  ...createActionsWithPostfixes('LOAD_USERS_SOLUTIONS', 'recodex/solutions'),
+  ...createActionsWithPostfixes('LOAD_ASSIGNMENT_SOLUTIONS', 'recodex/solutions'),
+  ...createActionsWithPostfixes('LOAD_GROUP_STUDENTS_SOLUTIONS', 'recodex/solutions'),
+  ...createActionsWithPostfixes('SET_NOTE', 'recodex/solutions'),
+  ...createActionsWithPostfixes('SET_BONUS_POINTS', 'recodex/solutions'),
+  ...createActionsWithPostfixes('SET_FLAG', 'recodex/solutions'),
+  ...createActionsWithPostfixes('LOAD_ASSIGNMENT_SOLVERS', 'recodex/solutions'),
   INVALIDATE_ASSIGNMENT_SOLVERS: 'recodex/solutions/INVALIDATE_ASSIGNMENT_SOLVERS',
+  DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE',
 };
 
 export const fetchSolution = actions.fetchResource;

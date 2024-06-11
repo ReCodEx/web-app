@@ -46,7 +46,7 @@ import { getSolution, isAssignmentSolversLoading, getAssignmentSolverSelector } 
 import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
 import {
   getAssignment,
-  assignmentEnvironmentsSelector,
+  getAssignmentEnvironments,
   getUserSolutionsSortedData,
 } from '../../redux/selectors/assignments';
 import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
@@ -338,7 +338,7 @@ export default connect(
     canSubmit: canSubmitSolution(assignmentId)(state),
     assignment: getAssignment(state, assignmentId),
     evaluations: evaluationsForSubmissionSelector(state, solutionId),
-    runtimeEnvironments: assignmentEnvironmentsSelector(state)(assignmentId),
+    runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
     fetchStatus: fetchManyStatus(solutionId)(state),
     scoreConfigSelector: assignmentSubmissionScoreConfigSelector(state),
     assignmentSolversLoading: isAssignmentSolversLoading(state),

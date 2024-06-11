@@ -114,8 +114,7 @@ class SolutionDetail extends Component {
               submittedAt={createdAt}
               userId={authorId}
               submittedBy={submittedBy}
-              note={note}
-              description={description}
+              note={referenceSolution ? description : note}
               editNote={editNote}
               accepted={accepted}
               review={review}
