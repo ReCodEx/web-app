@@ -36,7 +36,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
         })
         .map((e, idx) => (
           <tr key={e.id} className={selectedRowId === e.id ? 'activeRow' : ''}>
-            <td>
+            <td className="text-nowrap">
               <span className="d-none d-xl-inline">
                 <AssignmentStatusIcon id={e.id} submission={e} accepted={false} />
               </span>
