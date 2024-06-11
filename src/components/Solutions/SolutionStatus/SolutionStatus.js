@@ -553,7 +553,7 @@ class SolutionStatus extends Component {
           </Modal>
         )}
 
-        {evaluation && (
+        {!referenceSolution && evaluation && (
           <Modal show={this.state.explainDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>

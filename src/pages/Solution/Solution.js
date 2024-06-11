@@ -269,20 +269,20 @@ class Solution extends Component {
                       <SolutionDetail
                         solution={solution}
                         files={files}
-                        download={download}
+                        evaluations={evaluations}
+                        runtimeEnvironments={runtimes}
+                        currentUser={currentUser}
                         otherSolutions={userSolutionsSelector(solution.authorId, assignment.id)}
                         assignmentSolversLoading={assignmentSolversLoading}
                         assignmentSolverSelector={assignmentSolverSelector}
                         assignment={assignment}
-                        evaluations={evaluations}
-                        runtimeEnvironments={runtimes}
-                        deleteEvaluation={deleteEvaluation}
-                        refreshSolutionEvaluations={refreshSolutionEvaluations}
                         editNote={hasPermissions(solution, 'update') ? editNote : null}
                         scoreConfigSelector={scoreConfigSelector}
+                        download={download}
+                        deleteEvaluation={deleteEvaluation}
+                        refreshSolutionEvaluations={refreshSolutionEvaluations}
                         fetchScoreConfigIfNeeded={fetchScoreConfigIfNeeded}
                         canResubmit={hasPermissions(assignment, 'resubmitSubmissions')}
-                        currentUser={currentUser}
                       />
                     )}
                   </FetchManyResourceRenderer>

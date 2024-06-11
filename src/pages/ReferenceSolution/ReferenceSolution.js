@@ -9,7 +9,7 @@ import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferen
 import ReferenceSolutionActionsContainer from '../../containers/ReferenceSolutionActionsContainer';
 import Page from '../../components/layout/Page';
 import { ReferenceSolutionNavigation } from '../../components/layout/Navigation';
-import ReferenceSolutionDetail from '../../components/ReferenceSolutions/ReferenceSolutionDetail';
+import SolutionDetail from '../../components/Solutions/SolutionDetail';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { TheButtonGroup } from '../../components/widgets/TheButton';
@@ -26,6 +26,7 @@ import {
   deleteReferenceSolutionEvaluation,
 } from '../../redux/modules/referenceSolutionEvaluations';
 
+import { loggedInUserSelector } from '../../redux/selectors/users';
 import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
 import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
 import { getExercise } from '../../redux/selectors/exercises';
@@ -63,6 +64,7 @@ class ReferenceSolution extends Component {
   render() {
     const {
       referenceSolution,
+      currentUser,
       files,
       download,
       exercise,
@@ -79,8 +81,8 @@ class ReferenceSolution extends Component {
       <Page
         icon={<ReferenceSolutionIcon />}
         title={<FormattedMessage id="app.referenceSolution.title" defaultMessage="Reference Solution Detail" />}
-        resource={referenceSolution}>
-        {referenceSolution => (
+        resource={[referenceSolution, currentUser]}>
+        {(referenceSolution, currentUser) => (
           <ResourceRenderer resource={exercise}>
             {exercise => (
               <>
@@ -135,16 +137,17 @@ class ReferenceSolution extends Component {
 
                 <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>
                   {() => (
-                    <ReferenceSolutionDetail
+                    <SolutionDetail
                       solution={referenceSolution}
                       files={files}
-                      download={download}
                       evaluations={evaluations}
+                      runtimeEnvironments={exercise.runtimeEnvironments}
+                      currentUser={currentUser}
                       exercise={exercise}
+                      scoreConfigSelector={scoreConfigSelector}
+                      download={download}
                       deleteEvaluation={deleteEvaluation}
                       refreshSolutionEvaluations={refreshSolutionEvaluations}
-                      runtimeEnvironments={exercise.runtimeEnvironments}
-                      scoreConfigSelector={scoreConfigSelector}
                       fetchScoreConfigIfNeeded={fetchScoreConfigIfNeeded}
                       canResubmit={hasPermissions(referenceSolution, 'evaluate')}
                     />
@@ -166,6 +169,7 @@ ReferenceSolution.propTypes = {
   }).isRequired,
   loadAsync: PropTypes.func.isRequired,
   fetchScoreConfigIfNeeded: PropTypes.func.isRequired,
+  currentUser: ImmutablePropTypes.map,
   referenceSolution: ImmutablePropTypes.map,
   files: ImmutablePropTypes.map,
   exercise: ImmutablePropTypes.map,
@@ -181,6 +185,7 @@ ReferenceSolution.propTypes = {
 export default injectIntl(
   connect(
     (state, { params: { exerciseId, referenceSolutionId } }) => ({
+      currentUser: loggedInUserSelector(state),
       referenceSolution: getReferenceSolution(referenceSolutionId)(state),
       files: getSolutionFiles(state, referenceSolutionId),
       exercise: getExercise(exerciseId)(state),
