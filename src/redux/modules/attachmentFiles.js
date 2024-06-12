@@ -32,7 +32,6 @@ export const addAttachmentFiles = (exerciseId, files) =>
     method: 'POST',
     body: { files: files.map(({ id }) => id) },
     meta: { exerciseId },
-    uploadFiles: true,
   });
 
 export const removeAttachmentFile = (exerciseId, fileId) =>
