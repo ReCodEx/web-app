@@ -30,7 +30,6 @@ export const addPipelineFiles = (pipelineId, files) =>
     method: 'POST',
     body: { files: files.map(({ id }) => id) },
     meta: { pipelineId },
-    uploadFiles: true,
   });
 
 export const removePipelineFile = (pipelineId, fileId) =>
