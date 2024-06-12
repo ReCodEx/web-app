@@ -79,7 +79,7 @@ const dateTime = ({
           'text-nowrap': true,
           [styles.trailingRelative]: showDate || showTime,
         })}>
-        <FormattedRelativeTime value={unixts - Date.now() / 1000} numeric="auto" updateIntervalInSeconds={1000000} />
+        <FormattedRelativeTime value={unixts - Date.now() / 1000} numeric="always" updateIntervalInSeconds={1000000} />
       </span>
     )}
   </span>
