@@ -1,4 +1,4 @@
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { arrayToObject, getFileExtensionLC, EMPTY_OBJ } from '../../helpers/common';
 
 const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
@@ -25,7 +25,7 @@ const preprocessZipEntries = ({ zipEntries, ...file }) => {
 /**
  * Preprocess zip entries, consolidate, and sort by names.
  */
-export const preprocessFiles = defaultMemoize(files =>
+export const preprocessFiles = lruMemoize(files =>
   files
     .sort(nameComparator)
     .map(preprocessZipEntries)
@@ -39,7 +39,7 @@ export const preprocessFiles = defaultMemoize(files =>
  * @return {Array} copy of files array where file objects are augmented -- if a file is matched with a second file
  *                 a `diffWith` entry is added into the file object
  */
-export const associateFilesForDiff = defaultMemoize((files, secondFiles, mapping = EMPTY_OBJ) => {
+export const associateFilesForDiff = lruMemoize((files, secondFiles, mapping = EMPTY_OBJ) => {
   if (!secondFiles) {
     return files;
   }
@@ -114,7 +114,7 @@ export const associateFilesForDiff = defaultMemoize((files, secondFiles, mapping
 /**
  * Helper that computes reverted mapping { secondId: firstId } from the result of associateFilesForDiff.
  */
-export const getRevertedMapping = defaultMemoize(files =>
+export const getRevertedMapping = lruMemoize(files =>
   arrayToObject(
     files.filter(({ diffWith }) => Boolean(diffWith)),
     ({ diffWith }) => diffWith.id
@@ -124,7 +124,7 @@ export const getRevertedMapping = defaultMemoize(files =>
 /**
  * Prepare an object, where keys are file names (with #entries) and values are arrays of comments.
  */
-export const groupReviewCommentPerFile = defaultMemoize((files, reviews, closed, isSupervisor) => {
+export const groupReviewCommentPerFile = lruMemoize((files, reviews, closed, isSupervisor) => {
   const res = { '': [] }; // '' key is reserved for reviews that do not have a matching file
   files.forEach(({ name }) => {
     res[name] = [];

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { Table } from 'react-bootstrap';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
@@ -9,7 +9,7 @@ import Icon, { CloseIcon, SaveIcon, ZipIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
 
-const indexFileNames = defaultMemoize(files => new Set(files.map(file => file.name)));
+const indexFileNames = lruMemoize(files => new Set(files.map(file => file.name)));
 
 const FilesTable = ({
   description = null,

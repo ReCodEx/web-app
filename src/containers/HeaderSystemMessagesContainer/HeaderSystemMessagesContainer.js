@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import HeaderSystemMessagesDropdown from '../../components/layout/HeaderSystemMessagesDropdown';
 import { readyActiveSystemMessagesSelector, fetchManyUserStatus } from '../../redux/selectors/systemMessages';
@@ -13,7 +13,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import { safeGet } from '../../helpers/common';
 
-const getVisibleSystemMessages = defaultMemoize((systemMessages, user) => {
+const getVisibleSystemMessages = lruMemoize((systemMessages, user) => {
   const systemMessagesAccepted = safeGet(user, ['privateData', 'uiData', 'systemMessagesAccepted']);
   return systemMessagesAccepted ? systemMessages.filter(m => m.visibleFrom > systemMessagesAccepted) : systemMessages;
 });

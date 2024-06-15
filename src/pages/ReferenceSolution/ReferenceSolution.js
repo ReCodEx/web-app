@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ResubmitReferenceSolutionContainer from '../../containers/ResubmitReferenceSolutionContainer';
 import ReferenceSolutionActionsContainer from '../../containers/ReferenceSolutionActionsContainer';
@@ -42,7 +42,7 @@ import {
 
 import { hasPermissions } from '../../helpers/common';
 
-const exerciseHasRuntime = defaultMemoize(
+const exerciseHasRuntime = lruMemoize(
   (exercise, runtimeId) => exercise.runtimeEnvironments.find(({ id }) => id === runtimeId) !== undefined
 );
 

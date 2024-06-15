@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
 
 import { InputIcon, OutputIcon, TransferIcon, RemoveIcon, WarningIcon } from '../../icons';
@@ -10,7 +10,7 @@ import { isVariableValueValid } from '../../../helpers/pipelines';
 import { safeGet, arrayToObject } from '../../../helpers/common';
 import styles from '../styles.less';
 
-const prepareSelectionIndex = defaultMemoize(
+const prepareSelectionIndex = lruMemoize(
   selections =>
     selections &&
     arrayToObject(

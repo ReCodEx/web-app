@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset, startAsyncValidation } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ import withLinks from '../../helpers/withLinks';
 const ALLOW_LOCAL_REGISTRATION = getConfigVar('ALLOW_LOCAL_REGISTRATION');
 const EXTERNAL_AUTH_HELPDESK_URL = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
 
-const getInitialValues = defaultMemoize(instances => {
+const getInitialValues = lruMemoize(instances => {
   const firstInstance = instances && instances[0];
   return {
     firstName: '',

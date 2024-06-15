@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
@@ -21,7 +21,7 @@ import withLinks from '../../helpers/withLinks';
 import { withRouterProps } from '../../helpers/withRouter';
 import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
-const submitHandler = defaultMemoize(setFilters => search => {
+const submitHandler = lruMemoize(setFilters => search => {
   const filters = {};
   if (search && search.trim()) {
     filters.search = search.trim();

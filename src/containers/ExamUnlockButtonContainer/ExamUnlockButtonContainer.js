@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ExamUnlockButton from '../../components/buttons/ExamUnlockButton';
 import { unlockStudentFromExam } from '../../redux/modules/groups';
@@ -11,7 +11,7 @@ import { loggedInUserSelector } from '../../redux/selectors/users';
 import { getErrorMessage } from '../../locales/apiErrorMessages';
 import { addNotification } from '../../redux/modules/notifications';
 
-const unlockStudentHandlingErrors = defaultMemoize(
+const unlockStudentHandlingErrors = lruMemoize(
   (unlockStudentFromExam, addNotification, formatMessage) => () =>
     unlockStudentFromExam().catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);

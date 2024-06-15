@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
 import { Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises';
 import {
@@ -58,7 +58,7 @@ const ARCHIVED_OPTIONS = [
   },
 ];
 
-const authorsToOptions = defaultMemoize((authors, locale) =>
+const authorsToOptions = lruMemoize((authors, locale) =>
   authors
     .filter(identity)
     .sort(

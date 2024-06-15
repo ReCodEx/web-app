@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
 import { Prism as SyntaxHighlighter, createElement } from 'react-syntax-highlighter';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'prismjs/themes/prism.css';
 
@@ -13,7 +13,7 @@ import { getFileExtensionLC } from '../../../helpers/common';
 import SourceCodeComment from './SourceCodeComment';
 import './SourceCodeViewer.css';
 
-const groupCommentsByLine = defaultMemoize(comments => {
+const groupCommentsByLine = lruMemoize(comments => {
   const res = {};
 
   // group by

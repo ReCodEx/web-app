@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import { ExerciseNavigation } from '../../components/layout/Navigation';
@@ -126,7 +126,7 @@ class EditExerciseConfig extends Component {
       dispatch(fetchPipelines()),
     ]);
 
-  setConfigTypeCreator = defaultMemoize(
+  setConfigTypeCreator = lruMemoize(
     (exercise, configurationType, pipelines, environments, tests, config, environmentConfigs) => {
       const { setExerciseConfigType, editEnvironmentConfigs, setConfig, reloadConfig } = this.props;
       return () => {
@@ -172,7 +172,7 @@ class EditExerciseConfig extends Component {
     this.scoreConfigExtraData = data;
   };
 
-  transformAndSendTestsValues = defaultMemoize(originalCalculator => data => {
+  transformAndSendTestsValues = lruMemoize(originalCalculator => data => {
     this.removeUrlHash();
 
     const { editTests, editScoreConfig, reloadConfig, invalidateExercise } = this.props;
@@ -191,7 +191,7 @@ class EditExerciseConfig extends Component {
     return resPromise.then(reloadConfig);
   });
 
-  transformAndSendConfigValuesCreator = defaultMemoize((transform, ...transformArgs) => {
+  transformAndSendConfigValuesCreator = lruMemoize((transform, ...transformArgs) => {
     const { setConfig, reloadExercise } = this.props;
     return data => {
       this.removeUrlHash();
@@ -199,7 +199,7 @@ class EditExerciseConfig extends Component {
     };
   });
 
-  transformAndSendSimpleRuntimesValuesCreator = defaultMemoize(
+  transformAndSendSimpleRuntimesValuesCreator = lruMemoize(
     (pipelines, environments, tests, config, environmentConfigs) => {
       const { editEnvironmentConfigs, reloadConfig, setConfig } = this.props;
 
@@ -222,7 +222,7 @@ class EditExerciseConfig extends Component {
     }
   );
 
-  transformAndSendRuntimesValuesCreator = defaultMemoize((tests, config) => {
+  transformAndSendRuntimesValuesCreator = lruMemoize((tests, config) => {
     const { editEnvironmentConfigs, fetchPipelinesVariables, setConfig, reloadConfig } = this.props;
     const selectedPipelines = getPipelines(config);
     return data => {
@@ -242,7 +242,7 @@ class EditExerciseConfig extends Component {
     };
   });
 
-  transformAndSendPipelinesCreator = defaultMemoize((tests, config, environmentConfigs) => ({ pipelines }) => {
+  transformAndSendPipelinesCreator = lruMemoize((tests, config, environmentConfigs) => ({ pipelines }) => {
     this.removeUrlHash();
     const { setConfig, fetchPipelinesVariables, reloadConfig } = this.props;
     const runtimeId = safeGet(environmentConfigs, [0, 'runtimeEnvironmentId'], null);

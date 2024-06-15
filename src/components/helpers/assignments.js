@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import Explanation from '../widgets/Explanation';
 
 const syncMessages = {
@@ -53,7 +53,7 @@ export const getSyncMessages = syncInfo => {
   return res;
 };
 
-export const isUpToDate = defaultMemoize(syncInfo =>
+export const isUpToDate = lruMemoize(syncInfo =>
   Object.keys(syncMessages).every(field => syncInfo[field] && syncInfo[field].upToDate)
 );
 

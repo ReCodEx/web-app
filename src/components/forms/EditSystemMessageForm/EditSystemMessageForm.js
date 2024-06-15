@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Modal } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { SelectField, DatetimeField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -22,7 +22,7 @@ const typeOptions = [
   { key: 'danger', name: 'Danger' },
 ];
 
-const getRoleOptions = defaultMemoize(formatMessage =>
+const getRoleOptions = lruMemoize(formatMessage =>
   Object.keys(roleLabelsSimpleMessages).map(role => ({
     key: role,
     name: formatMessage(roleLabelsSimpleMessages[role]),

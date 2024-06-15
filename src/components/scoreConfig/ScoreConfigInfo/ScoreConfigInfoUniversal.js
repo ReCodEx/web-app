@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ScoreConfigUniversalExpression from '../ScoreConfigUniversalExpression';
 import { Ast } from '../../../helpers/exercise/scoreAst';
 import { arrayToObject } from '../../../helpers/common';
 import InsetPanel from '../../widgets/InsetPanel';
 
-const createAst = defaultMemoize((config, testResults) => {
+const createAst = lruMemoize((config, testResults) => {
   const results =
     testResults &&
     arrayToObject(

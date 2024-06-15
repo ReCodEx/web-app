@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import AddUserContainer from '../../../containers/AddUserContainer';
@@ -12,7 +12,7 @@ import { AdminRoleIcon, ObserverIcon, SupervisorIcon, LoadingIcon } from '../../
 
 const ROLES_FILTER = knownRoles.filter(isSupervisorRole);
 
-const buildMembersIndex = defaultMemoize(
+const buildMembersIndex = lruMemoize(
   (primaryAdmins, supervisors, observers, studentsIds) =>
     new Set([
       ...primaryAdmins.map(u => u.id),

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
@@ -13,7 +13,7 @@ import Callout from '../../widgets/Callout';
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
 import { hasPermissions } from '../../../helpers/common';
 
-export const getPossibleParentsOfGroup = defaultMemoize((groups, group) =>
+export const getPossibleParentsOfGroup = lruMemoize((groups, group) =>
   groups.filter(g => g.id !== group.id && hasPermissions(g, 'addSubgroup') && !g.parentGroupsIds.includes(group.id))
 );
 

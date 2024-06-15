@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import moment from 'moment';
 
 import ShadowAssignmentPointsTable from '../../components/Assignments/ShadowAssignmentPointsTable';
@@ -12,7 +12,7 @@ import { setShadowAssignmentPoints, removeShadowAssignmentPoints } from '../../r
 import { studentsOfGroupSelector } from '../../redux/selectors/usersGroups';
 import { safeGet, arrayToObject } from '../../helpers/common';
 
-const prepareInitialValues = defaultMemoize((students, maxPoints) => ({
+const prepareInitialValues = lruMemoize((students, maxPoints) => ({
   points: maxPoints,
   note: '',
   students: Object.fromEntries(students.map(({ id }) => [id, false])),

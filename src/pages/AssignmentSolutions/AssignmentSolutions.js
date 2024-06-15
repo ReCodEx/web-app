@@ -5,7 +5,7 @@ import { Row, Col, Modal, DropdownButton, Dropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
@@ -102,7 +102,7 @@ const viewModes = {
   ),
 };
 
-const _getLastAttemptIndices = defaultMemoize(solutions => {
+const _getLastAttemptIndices = lruMemoize(solutions => {
   const lastAttemptIndices = {};
   solutions.filter(identity).forEach(s => {
     lastAttemptIndices[s.authorId] = Math.max(s.attemptIndex || 0, lastAttemptIndices[s.authorId] || 0);
@@ -121,7 +121,7 @@ const viewModeFilters = {
   [VIEW_MODE_PLAGIARISM]: solution => solution && solution.plagiarism,
 };
 
-const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId, groupId, viewMode, locale, links) => {
+const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, groupId, viewMode, locale, links) => {
   const { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
@@ -285,50 +285,48 @@ const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, assignmentId
   return columns.filter(c => c);
 });
 
-const prepareTableData = defaultMemoize(
-  (assignmentSolutions, users, assignmentSolvers, runtimeEnvironments, viewMode) => {
-    const solvers = (assignmentSolvers && assignmentSolvers.toJS()) || {};
-    const usersIndex = arrayToObject(users);
-    return assignmentSolutions
-      .toArray()
-      .map(getJsData)
-      .filter(solution => solution && usersIndex[solution.authorId])
-      .filter(viewModeFilters[viewMode] || identity)
-      .map(s => {
-        const statusEvaluated = s.lastSubmission && (s.lastSubmission.evaluation || s.lastSubmission.failure);
-        return {
-          icon: s,
-          user: usersIndex[s.authorId],
-          date: s.createdAt,
-          attempt: {
-            attemptIndex: s.attemptIndex,
-            lastAttemptIndex: solvers[s.authorId] && solvers[s.authorId].lastAttemptIndex,
-          },
-          validity: statusEvaluated ? safeGet(s.lastSubmission, ['evaluation', 'score']) : null,
-          points: statusEvaluated ? s : { actualPoints: null },
-          runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === s.runtimeEnvironmentId),
-          note: s.note,
-          actionButtons: s,
-        };
-      });
-  }
-);
+const prepareTableData = lruMemoize((assignmentSolutions, users, assignmentSolvers, runtimeEnvironments, viewMode) => {
+  const solvers = (assignmentSolvers && assignmentSolvers.toJS()) || {};
+  const usersIndex = arrayToObject(users);
+  return assignmentSolutions
+    .toArray()
+    .map(getJsData)
+    .filter(solution => solution && usersIndex[solution.authorId])
+    .filter(viewModeFilters[viewMode] || identity)
+    .map(s => {
+      const statusEvaluated = s.lastSubmission && (s.lastSubmission.evaluation || s.lastSubmission.failure);
+      return {
+        icon: s,
+        user: usersIndex[s.authorId],
+        date: s.createdAt,
+        attempt: {
+          attemptIndex: s.attemptIndex,
+          lastAttemptIndex: solvers[s.authorId] && solvers[s.authorId].lastAttemptIndex,
+        },
+        validity: statusEvaluated ? safeGet(s.lastSubmission, ['evaluation', 'score']) : null,
+        points: statusEvaluated ? s : { actualPoints: null },
+        runtimeEnvironment: runtimeEnvironments.find(({ id }) => id === s.runtimeEnvironmentId),
+        note: s.note,
+        actionButtons: s,
+      };
+    });
+});
 
-const getPendingReviewSolutions = defaultMemoize(assignmentSolutions =>
+const getPendingReviewSolutions = lruMemoize(assignmentSolutions =>
   assignmentSolutions
     .toArray()
     .map(getJsData)
     .filter(solution => solution && solution.review && solution.review.startedAt && !solution.review.closedAt)
 );
 
-const getPlagiarisms = defaultMemoize(assignmentSolutions =>
+const getPlagiarisms = lruMemoize(assignmentSolutions =>
   assignmentSolutions
     .toArray()
     .map(getJsData)
     .filter(solution => solution && solution.plagiarism)
 );
 
-const getPlagiarismUniqueAuthors = defaultMemoize(plagiarisms => unique(plagiarisms.map(({ authorId }) => authorId)));
+const getPlagiarismUniqueAuthors = lruMemoize(plagiarisms => unique(plagiarisms.map(({ authorId }) => authorId)));
 
 const localStorageStateKey = 'AssignmentSolutions.state';
 

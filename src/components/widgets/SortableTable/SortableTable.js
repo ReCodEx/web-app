@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { UserUIDataContext } from '../../../helpers/contexts';
 import { CloseIcon, SortedIcon } from '../../icons';
@@ -58,7 +58,7 @@ class SortableTable extends Component {
   };
 
   // Helper function that actually sorts the data according to internal state
-  sortData = defaultMemoize((data, colId, ascendant) => {
+  sortData = lruMemoize((data, colId, ascendant) => {
     const { columns } = this.props;
     const column = columns && columns.find(({ id }) => id === colId);
     return column === null || column.comparator === null

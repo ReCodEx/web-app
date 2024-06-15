@@ -1,4 +1,4 @@
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { safeGet, arrayToObject, createIndex } from '../../helpers/common';
 
 export const ENV_ARDUINO_ID = 'arduino-gcc';
@@ -59,7 +59,7 @@ export const STANDALONE_ENVIRONMENTS = [ENV_ARDUINO_ID, ENV_DATA_ONLY_ID, ENV_PR
 
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
 
-export const onlySimpleEnvironments = defaultMemoize(environments =>
+export const onlySimpleEnvironments = lruMemoize(environments =>
   environments.filter(env => SIMPLE_FORM_ENVIRONMENTS_INDEX[env.id] !== undefined)
 );
 
@@ -163,7 +163,7 @@ export const compareVariablesForEquality = (vars1, vars2) => {
  * @param {array} selectedPipelinesIds Selected pipelines IDs.
  * @returns {object} Variable names and how many times they are present in the pipeline sequence.
  */
-export const getPossibleVariablesNames = defaultMemoize((pipelines, selectedPipelinesIds) => {
+export const getPossibleVariablesNames = lruMemoize((pipelines, selectedPipelinesIds) => {
   if (!pipelines || !selectedPipelinesIds || selectedPipelinesIds.length === 0) {
     return null;
   }

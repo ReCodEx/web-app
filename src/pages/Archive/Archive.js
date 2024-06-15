@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
@@ -31,7 +31,7 @@ const normalizeString = str =>
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '');
 
-const prepareGroupsFilter = defaultMemoize((search, showAll, locale) => {
+const prepareGroupsFilter = lruMemoize((search, showAll, locale) => {
   search = normalizeString(search);
   return group => (showAll || group.archived) && (!search || getLocalizedName(group, locale).includes(search));
 });

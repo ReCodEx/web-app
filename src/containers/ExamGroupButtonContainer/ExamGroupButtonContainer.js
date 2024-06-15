@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ExamGroupButton from '../../components/buttons/ExamGroupButton';
 import { setExamFlag } from '../../redux/modules/groups';
@@ -12,7 +12,7 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { getErrorMessage } from '../../locales/apiErrorMessages';
 import { addNotification } from '../../redux/modules/notifications';
 
-const setExamFlagHandlingErrors = defaultMemoize(
+const setExamFlagHandlingErrors = lruMemoize(
   (exam, setExamFlag, addNotification, formatMessage) => () =>
     setExamFlag(!exam).catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);

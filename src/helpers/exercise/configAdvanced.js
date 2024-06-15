@@ -1,11 +1,11 @@
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { safeGet, arrayToObject, encodeNumId, encodeId } from '../common';
 
 /**
  * Return ordered list of pipeline IDs used in exercise config.
  * @param {Object[]} config Exercise configuration object.
  */
-export const getPipelines = defaultMemoize(config =>
+export const getPipelines = lruMemoize(config =>
   // There should be only one environment and all tests have the same pipelines (hence we take first and first)
   (safeGet(config, [0, 'tests', 0, 'pipelines']) || []).map(({ name }) => name)
 );
@@ -14,7 +14,7 @@ export const getPipelines = defaultMemoize(config =>
  * Return initial values (list of pipeline IDs) for EditExercisePipelinesForm.
  * @param {Object[]} config Exercise configuration object.
  */
-export const getPipelinesInitialValues = defaultMemoize(config => ({
+export const getPipelinesInitialValues = lruMemoize(config => ({
   pipelines: getPipelines(config),
 }));
 

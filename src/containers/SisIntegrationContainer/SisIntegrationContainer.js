@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Card, Table } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Box from '../../components/widgets/Box';
 import Button from '../../components/widgets/TheButton';
@@ -33,7 +33,7 @@ const timeToMinutes = time => {
   return isNaN(minutes) ? 9999 : minutes;
 };
 
-const preprocessCourses = defaultMemoize((courses, groupsAccessor, locale) =>
+const preprocessCourses = lruMemoize((courses, groupsAccessor, locale) =>
   courses
     .map(({ course, groups }) => ({
       course,

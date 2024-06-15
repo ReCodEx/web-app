@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import { PipelineNavigation } from '../../components/layout/Navigation';
@@ -38,7 +38,7 @@ const perpareInitialPipelineData = ({ name, description, version, parameters, au
 });
 
 // get selected runtimes and all runtimes and prepare object for environment selection form
-const perpareInitialEnvironmentsData = defaultMemoize((selectedIds, runtimeEnvironments) =>
+const perpareInitialEnvironmentsData = lruMemoize((selectedIds, runtimeEnvironments) =>
   arrayToObject(
     runtimeEnvironments.map(rte => rte.id),
     id => id,

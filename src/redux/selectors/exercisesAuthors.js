@@ -1,4 +1,4 @@
-import { createSelector, defaultMemoize } from 'reselect';
+import { createSelector, lruMemoize } from 'reselect';
 import { EMPTY_LIST } from '../../helpers/common';
 import { isReady, isLoading } from '../helpers/resourceManager';
 import { usersSelector } from './users';
@@ -12,12 +12,11 @@ export const getAllExericsesAuthors = createSelector(
     (authors && isReady(authors) && users && authors.get('data').map(id => users.get(id))) || EMPTY_LIST
 );
 
-export const getAllExericsesAuthorsIsLoading = createSelector(
-  [exericsesAuthorsAllSelector],
-  authors => Boolean(authors && isLoading(authors))
+export const getAllExericsesAuthorsIsLoading = createSelector([exericsesAuthorsAllSelector], authors =>
+  Boolean(authors && isLoading(authors))
 );
 
-export const getExercisesAuthorsOfGroup = defaultMemoize(groupId =>
+export const getExercisesAuthorsOfGroup = lruMemoize(groupId =>
   createSelector(
     [exericsesAuthorsOfGroupSelector(groupId), usersSelector],
     (authors, users) =>
@@ -25,9 +24,6 @@ export const getExercisesAuthorsOfGroup = defaultMemoize(groupId =>
   )
 );
 
-export const getExercisesAuthorsOfGroupIsLoading = defaultMemoize(groupId =>
-  createSelector(
-    [exericsesAuthorsOfGroupSelector(groupId)],
-    authors => Boolean(authors && isLoading(authors))
-  )
+export const getExercisesAuthorsOfGroupIsLoading = lruMemoize(groupId =>
+  createSelector([exericsesAuthorsOfGroupSelector(groupId)], authors => Boolean(authors && isLoading(authors)))
 );

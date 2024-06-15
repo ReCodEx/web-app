@@ -1,6 +1,6 @@
 import React from 'react';
 import { matchPath, Routes, Route, Navigate } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 /* container components */
 import AcceptGroupInvitation from './AcceptGroupInvitation';
@@ -242,7 +242,7 @@ export const buildRoutes = (urlPath, isLoggedIn) => {
   );
 };
 
-export const pathHasCustomLoadGroups = defaultMemoize(urlPath => {
+export const pathHasCustomLoadGroups = lruMemoize(urlPath => {
   const routeObj = routesDescriptors.find(({ route }) => matchPath(route, urlPath) !== null);
   const component = unwrap(routeObj.component);
   return Boolean(component && component.customLoadGroups);

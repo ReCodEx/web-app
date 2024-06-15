@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
 import { resubmitSolution, fetchUsersSolutions } from '../../redux/modules/solutions';
@@ -10,7 +10,7 @@ import EvaluationProgressContainer from '../EvaluationProgressContainer';
 import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 
-const getResubmitObserverId = defaultMemoize((id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id);
+const getResubmitObserverId = lruMemoize((id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id);
 
 class ResubmitSolutionContainer extends Component {
   isMeTheObserver = () => {
@@ -68,7 +68,4 @@ const mapDispatchToProps = (dispatch, { id, isPrivate = false, assignmentId }) =
     ]),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ResubmitSolutionContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ResubmitSolutionContainer);

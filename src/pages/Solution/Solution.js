@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import { AssignmentSolutionNavigation } from '../../components/layout/Navigation';
@@ -61,7 +61,7 @@ import { LinkIcon, PlagiarismIcon, SolutionResultsIcon, WarningIcon } from '../.
 
 import withLinks from '../../helpers/withLinks';
 
-const assignmentHasRuntime = defaultMemoize(
+const assignmentHasRuntime = lruMemoize(
   (assignment, runtimeId) =>
     assignment.runtimeEnvironmentIds.find(id => id === runtimeId) !== undefined &&
     assignment.disabledRuntimeEnvironmentIds.find(id => id === runtimeId) === undefined

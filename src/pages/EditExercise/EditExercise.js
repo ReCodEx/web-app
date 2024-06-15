@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import { ExerciseNavigation } from '../../components/layout/Navigation';
@@ -48,7 +48,7 @@ const localizedTextDefaults = {
   description: '',
 };
 
-const prepareInitialValues = defaultMemoize(
+const prepareInitialValues = lruMemoize(
   ({
     id,
     version,

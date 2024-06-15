@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Button from '../../widgets/TheButton';
 import Icon, { PipelineIcon } from '../../icons';
@@ -20,7 +20,7 @@ const validateFileName = value =>
     />
   ) : undefined;
 
-const prepareFilesOptions = defaultMemoize((supplementaryFiles, locale) => {
+const prepareFilesOptions = lruMemoize((supplementaryFiles, locale) => {
   const supplementaryFilesOptions = unique(supplementaryFiles.map(({ name }) => name))
     .sort((a, b) => a.localeCompare(b, locale))
     .map(name => ({

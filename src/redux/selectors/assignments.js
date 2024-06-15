@@ -1,4 +1,4 @@
-import { createSelector, defaultMemoize } from 'reselect';
+import { createSelector, lruMemoize } from 'reselect';
 import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
 import { getSolutions } from './solutions';
 import { getAsyncJobSelector } from './asyncJobs';
@@ -54,7 +54,7 @@ export const getAssignmentSolutions = createSelector(
 );
 
 export const getUserSolutions = createSelector([getSolutions, getAssignments], (solutions, assignments) =>
-  defaultMemoize((userId, assignmentId) =>
+  lruMemoize((userId, assignmentId) =>
     assignments
       .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
       .map(id => solutions.get(id))
@@ -63,7 +63,7 @@ export const getUserSolutions = createSelector([getSolutions, getAssignments], (
 );
 
 export const getUserSolutionsSortedData = createSelector([getSolutions, getAssignments], (solutions, assignments) =>
-  defaultMemoize((userId, assignmentId) =>
+  lruMemoize((userId, assignmentId) =>
     assignments
       .getIn(['solutions', assignmentId, userId], EMPTY_LIST)
       .map(id => solutions.get(id))

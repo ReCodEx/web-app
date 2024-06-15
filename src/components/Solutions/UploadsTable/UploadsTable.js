@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage, FormattedRelativeTime } from 'react-intl';
 import { Table, ProgressBar, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { prettyPrintBytes } from '../../helpers/stringFormatters';
 import Icon, { CloseIcon, DeleteIcon, LoadingIcon, SuccessIcon, UploadIcon, WarningIcon } from '../../icons';
@@ -11,7 +11,7 @@ import InsetPanel from '../../widgets/InsetPanel';
 import HighlightedText from '../../widgets/HighlightedText';
 import { getErrorMessage } from '../../../locales/apiErrorMessages';
 
-const estimateCompletionTime = defaultMemoize(({ totalSize, uploadedSize, startedAt, updatedAt }) => {
+const estimateCompletionTime = lruMemoize(({ totalSize, uploadedSize, startedAt, updatedAt }) => {
   if (!totalSize) {
     return null;
   }

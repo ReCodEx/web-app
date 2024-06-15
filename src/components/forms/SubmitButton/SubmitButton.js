@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Button from '../../widgets/TheButton';
 import { SendIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
 import Confirm from '../Confirm';
 import { getErrorMessage } from '../../../locales/apiErrorMessages';
 
-const getIcons = defaultMemoize(defaultIcon => ({
+const getIcons = lruMemoize(defaultIcon => ({
   submit: defaultIcon || <SendIcon gapRight />,
   success: <SuccessIcon gapRight />,
   submitting: <LoadingIcon gapRight />,
@@ -17,7 +17,7 @@ const getIcons = defaultMemoize(defaultIcon => ({
   invalid: <WarningIcon gapRight />,
 }));
 
-const getMessages = defaultMemoize(messages => {
+const getMessages = lruMemoize(messages => {
   const messageDefaults = {
     submit: <FormattedMessage id="generic.submit" defaultMessage="Submit" />,
     success: <FormattedMessage id="generic.submitted" defaultMessage="Submitted" />,

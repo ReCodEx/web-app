@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import EditEnvironmentList from './EditEnvironmentList';
 import SubmitButton from '../SubmitButton';
@@ -22,7 +22,7 @@ const preprocessExtensions = ({ extensions, ...rest }) => ({
   ...rest,
   extensions: extensions.replace(/[ [\]]/g, '').split(','),
 });
-const getSelectedEnvs = defaultMemoize((initialValues, runtimeEnvironments, locale) => {
+const getSelectedEnvs = lruMemoize((initialValues, runtimeEnvironments, locale) => {
   const indexed = arrayToObject(runtimeEnvironments);
   return Object.keys(initialValues)
     .filter(env => initialValues[env])

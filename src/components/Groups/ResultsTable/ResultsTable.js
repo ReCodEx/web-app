@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -30,7 +30,7 @@ import { storageGetItem, storageSetItem } from '../../../helpers/localStorage';
 import styles from './ResultsTable.less';
 import escapeString from '../../helpers/escapeString';
 
-const assignmentCellRendererCreator = defaultMemoize((rawAssignments, locale) => {
+const assignmentCellRendererCreator = lruMemoize((rawAssignments, locale) => {
   const assignments = {};
   rawAssignments.forEach(a => (assignments[a.id] = a));
   return (points, idx, key, row) => (
@@ -62,7 +62,7 @@ const assignmentCellRendererCreator = defaultMemoize((rawAssignments, locale) =>
   );
 });
 
-const shadowAssignmentCellRendererCreator = defaultMemoize((shadowAssignments, locale) => {
+const shadowAssignmentCellRendererCreator = lruMemoize((shadowAssignments, locale) => {
   const assignments = {};
   shadowAssignments.forEach(a => (assignments[a.id] = a));
   return (points, idx, key, row) => (
@@ -222,7 +222,7 @@ class ResultsTable extends Component {
     }
   };
 
-  prepareColumnDescriptors = defaultMemoize(
+  prepareColumnDescriptors = lruMemoize(
     (assignments, shadowAssignments, loggedUser, locale, isTeacher, showOnlyMe = false) => {
       const {
         group,
@@ -395,7 +395,7 @@ class ResultsTable extends Component {
   );
 
   // Re-format the data, so they can be rendered by the SortableTable ...
-  prepareData = defaultMemoize((assignments, shadowAssignments, users, stats, showOnlyMe = false) => {
+  prepareData = lruMemoize((assignments, shadowAssignments, users, stats, showOnlyMe = false) => {
     const { loggedUser, renderActions, group } = this.props;
     if (!hasPermissions(group, 'viewStats') || showOnlyMe) {
       users = users.filter(({ id }) => id === loggedUser.id);

@@ -4,7 +4,7 @@ import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Modal, Table, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { TextField, SelectField } from '../../forms/Fields';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
@@ -16,7 +16,7 @@ import { getBoxTypeDescription } from '../comments';
 
 export const newBoxInitialData = { name: '', type: '', portsIn: {}, portsOut: {} };
 
-const suggestedBoxName = defaultMemoize((boxType, boxes) => {
+const suggestedBoxName = lruMemoize((boxType, boxes) => {
   const names = new Set(boxes.map(({ name }) => name));
   const prefix = boxType || 'box';
   let suffix = 1;
@@ -26,7 +26,7 @@ const suggestedBoxName = defaultMemoize((boxType, boxes) => {
   return `${prefix}${suffix}`;
 });
 
-const prepareBoxTypeOptions = defaultMemoize(boxTypes =>
+const prepareBoxTypeOptions = lruMemoize(boxTypes =>
   Object.values(boxTypes)
     .map(({ name, type }) => ({ key: type, name: `${name} (${type})` }))
     .sort((a, b) => a.name.localeCompare(b.name, 'en'))
@@ -38,7 +38,7 @@ const getSortedPorts = ports =>
     .sort()
     .map(name => ({ name, ...ports[name] }));
 
-const preparePortsOfSelectedBoxType = defaultMemoize(boxType => {
+const preparePortsOfSelectedBoxType = lruMemoize(boxType => {
   const portsIn = (boxType && getSortedPorts(boxType.portsIn)) || [];
   const portsOut = (boxType && getSortedPorts(boxType.portsOut)) || [];
   return { portsIn, portsOut };

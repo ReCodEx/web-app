@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { LoadingIcon, WarningIcon } from '../../icons';
 import {
@@ -100,7 +100,7 @@ class ResourceRenderer extends Component {
     );
   };
 
-  getErrors = defaultMemoize(resources => getUniqueErrors(resources));
+  getErrors = lruMemoize(resources => getUniqueErrors(resources));
 
   renderFailed = resources => {
     const { failed = null, bulkyLoading, noIcons } = this.props;

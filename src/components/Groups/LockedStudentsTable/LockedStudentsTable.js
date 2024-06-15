@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import UsersName from '../../Users/UsersName';
 import ExamUnlockButtonContainer from '../../../containers/ExamUnlockButtonContainer';
 import { createUserNameComparator } from '../../helpers/users';
 
-const sortStudents = defaultMemoize((lockedStudents, locale) => {
+const sortStudents = lruMemoize((lockedStudents, locale) => {
   const sorted = [...lockedStudents];
   return sorted.sort(createUserNameComparator(locale));
 });

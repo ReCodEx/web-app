@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
-const getSortedTestResults = defaultMemoize(({ testResults }, locale) =>
+const getSortedTestResults = lruMemoize(({ testResults }, locale) =>
   testResults.sort((a, b) => a.testName.localeCompare(b.testName, locale))
 );
 

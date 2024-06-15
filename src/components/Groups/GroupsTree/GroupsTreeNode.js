@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Collapse from 'react-collapse';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import GroupsTree from './GroupsTree';
 import GroupsName from '../GroupsName';
@@ -18,7 +18,7 @@ import { isExam } from '../../../helpers/groups';
  * @param {bool} clickable whether the item can be clicked on
  * @param {bool} archived whether the group i
  */
-const prepareClassList = defaultMemoize((clickable, archived) => {
+const prepareClassList = lruMemoize((clickable, archived) => {
   const classes = [];
   if (clickable) {
     classes.push('clickable');

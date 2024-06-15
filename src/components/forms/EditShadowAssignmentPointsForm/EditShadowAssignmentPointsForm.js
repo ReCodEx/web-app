@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Form, Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
@@ -12,7 +12,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { RefreshIcon, DeleteIcon, SaveIcon } from '../../icons';
 
-export const getPointsFormInitialValues = defaultMemoize((userPoints, awardeeId) => {
+export const getPointsFormInitialValues = lruMemoize((userPoints, awardeeId) => {
   return userPoints
     ? {
         pointsId: userPoints.id,

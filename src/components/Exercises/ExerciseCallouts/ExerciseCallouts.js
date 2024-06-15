@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
 
 import Explanation from '../../widgets/Explanation';
@@ -132,7 +132,7 @@ const createErrorLink = (tag, exerciseId, links) => {
   );
 };
 
-const transformErrors = defaultMemoize((errors, exerciseId, links) => {
+const transformErrors = lruMemoize((errors, exerciseId, links) => {
   const taggedErrors = {};
   errors.split('\n').forEach(error => {
     const match = error.match(/^@(?<tag>[-a-zA-Z0-9_]+)[ ](?<rest>.*)$/);

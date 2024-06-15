@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ExamLockButton from '../../components/buttons/ExamLockButton';
 import { lockStudentForExam } from '../../redux/modules/groups';
@@ -15,7 +15,7 @@ import { addNotification } from '../../redux/modules/notifications';
 
 import { isStudentRole } from '../../components/helpers/usersRoles';
 
-const lockStudentHandlingErrors = defaultMemoize(
+const lockStudentHandlingErrors = lruMemoize(
   (userId, lockStudentForExam, addNotification, formatMessage) => () =>
     lockStudentForExam(userId).catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);
