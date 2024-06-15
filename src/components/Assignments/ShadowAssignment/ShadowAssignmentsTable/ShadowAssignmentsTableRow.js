@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import withLinks from '../../../../helpers/withLinks';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
@@ -12,11 +12,11 @@ import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
 import { safeGet } from '../../../../helpers/common';
 
-const getUserPoints = defaultMemoize((points, userId) =>
+const getUserPoints = lruMemoize((points, userId) =>
   safeGet(points, [({ awardeeId }) => awardeeId === userId, 'points'], <span>&mdash;</span>)
 );
 
-const getUserPointsNote = defaultMemoize((points, userId) =>
+const getUserPointsNote = lruMemoize((points, userId) =>
   safeGet(points, [({ awardeeId }) => awardeeId === userId, 'note'], '')
 );
 

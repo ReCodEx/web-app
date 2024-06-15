@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { SelectField, CheckboxField, NumericTextField } from '../Fields';
 
@@ -32,7 +32,7 @@ const messages = defineMessages({
   },
 });
 
-const difficultyOptions = defaultMemoize(formatMessage => [
+const difficultyOptions = lruMemoize(formatMessage => [
   { key: 'easy', name: formatMessage(messages.easy) },
   { key: 'medium', name: formatMessage(messages.medium) },
   { key: 'hard', name: formatMessage(messages.hard) },

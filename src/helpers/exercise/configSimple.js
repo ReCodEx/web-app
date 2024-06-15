@@ -1,4 +1,4 @@
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { safeGet, encodeNumId, identity, deepReduce, objectMap, EMPTY_ARRAY } from '../common';
 import {
   ENV_DATA_ONLY_ID,
@@ -345,7 +345,7 @@ const SPECIAL_ENV_PIPELINE_FILTERS = {
 /**
  * Prepare the initial form data for configuration form ...
  */
-export const getSimpleConfigInitValues = defaultMemoize((config, tests, exerciseEnvironmentsConfig) => {
+export const getSimpleConfigInitValues = lruMemoize((config, tests, exerciseEnvironmentsConfig) => {
   const environmentsIds = exerciseEnvironmentsConfig.map(env => env.runtimeEnvironmentId);
 
   const res = {};
@@ -458,7 +458,7 @@ export const transformSimpleConfigValues = (formData, pipelines, environments, t
  * @param {Array} config of the exercise tests
  * @return {Set} containing names of all files used in the config
  */
-export const extractUsedFilesFromConfig = defaultMemoize(
+export const extractUsedFilesFromConfig = lruMemoize(
   //  config => deepReduce(config, [null, 'tests', null, 'pipelines', null, 'variables', null], (_, x) => console.log(x))
   config =>
     deepReduce(

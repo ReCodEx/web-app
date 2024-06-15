@@ -1,4 +1,4 @@
-import { createSelector, defaultMemoize } from 'reselect';
+import { createSelector, lruMemoize } from 'reselect';
 
 import { EMPTY_MAP, EMPTY_LIST } from '../../helpers/common';
 import { readyUsersDataSelector, isLoggedAsSuperAdmin } from './users';
@@ -35,11 +35,11 @@ export const userStudentOfGroupIdsSelector = createSelector([groupsSelector, get
     .map(group => group.id)
 );
 
-export const isSupervisorOfSelector = defaultMemoize((state, userId, groupId) =>
+export const isSupervisorOfSelector = lruMemoize((state, userId, groupId) =>
   supervisorsIdsOfGroup(groupId)(state).includes(userId)
 );
 
-export const isStudentOfSelector = defaultMemoize((state, userId, groupId) =>
+export const isStudentOfSelector = lruMemoize((state, userId, groupId) =>
   studentsIdsOfGroup(groupId)(state).includes(userId)
 );
 

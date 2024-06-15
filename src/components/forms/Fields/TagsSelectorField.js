@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormLabel, Badge } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
 
 import { AddIcon, CloseIcon } from '../../icons';
 import { getTagStyle } from '../../../helpers/exercise/tags';
 
-const activeTagsIndex = defaultMemoize(fields => {
+const activeTagsIndex = lruMemoize(fields => {
   const res = {};
   fields.forEach((_, index) => (res[fields.get(index)] = index));
   return res;

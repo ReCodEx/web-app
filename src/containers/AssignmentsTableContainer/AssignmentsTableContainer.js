@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -17,9 +17,7 @@ import { createGroupsStatsSelector } from '../../redux/selectors/stats';
 
 import { EMPTY_OBJ } from '../../helpers/common';
 
-const getUserStats = defaultMemoize(
-  (stats, userId) => (userId && stats.find(stat => stat.userId === userId)) || EMPTY_OBJ
-);
+const getUserStats = lruMemoize((stats, userId) => (userId && stats.find(stat => stat.userId === userId)) || EMPTY_OBJ);
 
 class AssignmentsTableContainer extends Component {
   componentDidMount() {

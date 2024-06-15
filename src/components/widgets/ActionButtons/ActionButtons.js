@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ActionButton from './ActionButton';
 import ActionDropdown from './ActionDropdown';
@@ -19,7 +19,7 @@ import ActionDropdown from './ActionDropdown';
  *                               replaces the pending value in the action descriptor)
  * @returns {Object[]} list of descriptors
  */
-export const prepareButtonDescriptors = defaultMemoize((template, order, handlers = null, pendingIndicators = null) => {
+export const prepareButtonDescriptors = lruMemoize((template, order, handlers = null, pendingIndicators = null) => {
   return order
     .filter(key => template[key])
     .map(key => ({
@@ -39,7 +39,7 @@ export const prepareButtonDescriptors = defaultMemoize((template, order, handler
  * @param {Object[]} actions
  * @returns {Object[]}
  */
-export const onlyLabels = defaultMemoize(actions =>
+export const onlyLabels = lruMemoize(actions =>
   actions.map(({ label, tooltip, ...action }) => ({ ...action, label: label || tooltip }))
 );
 
@@ -49,7 +49,7 @@ export const onlyLabels = defaultMemoize(actions =>
  * @param {Object[]} actions
  * @returns {Object[]}
  */
-export const onlyTooltips = defaultMemoize(actions =>
+export const onlyTooltips = lruMemoize(actions =>
   actions.map(({ label, tooltip, ...action }) => ({ ...action, tooltip: tooltip || label }))
 );
 

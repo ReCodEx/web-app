@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
 import { getLocalizedText } from '../../../helpers/localizedData';
@@ -13,7 +13,7 @@ import { TypedMessageIcon } from '../../icons';
 
 import styles from './MessagesList.less';
 
-const prepareData = defaultMemoize((systemMessages, showAll, renderActions) => {
+const prepareData = lruMemoize((systemMessages, showAll, renderActions) => {
   const filteredMessages = showAll ? systemMessages : systemMessages.filter(msg => msg.visibleTo * 1000 >= Date.now());
 
   return filteredMessages.map(message => ({
@@ -26,7 +26,7 @@ const prepareData = defaultMemoize((systemMessages, showAll, renderActions) => {
 class MessagesList extends Component {
   state = { showAll: false, visibleMessages: [] };
 
-  prepareColumnDescriptors = defaultMemoize(locale => {
+  prepareColumnDescriptors = lruMemoize(locale => {
     const columns = [
       new SortableTableColumnDescriptor(
         'text',

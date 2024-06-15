@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { DetailIcon, EditIcon, LimitsIcon, LoadingIcon, TestsIcon, WarningIcon } from '../../icons';
@@ -18,7 +18,7 @@ const PREVIEW_SIZE = 10;
 const nameComparator = locale => (a, b) =>
   getLocalizedName(a, locale).localeCompare(getLocalizedName(b, locale), locale);
 
-const preprocessExercises = defaultMemoize((exercises, locale, offset = 0, limit = 1000) =>
+const preprocessExercises = lruMemoize((exercises, locale, offset = 0, limit = 1000) =>
   exercises
     .toJS()
     .sort(nameComparator(locale))

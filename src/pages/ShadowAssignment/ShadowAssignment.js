@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments';
 import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
@@ -20,7 +20,7 @@ import { ShadowAssignmentIcon } from '../../components/icons';
 import { getLocalizedName } from '../../helpers/localizedData';
 import { hasPermissions, EMPTY_OBJ } from '../../helpers/common';
 
-const findPoints = defaultMemoize((points, loggedUserId) => {
+const findPoints = lruMemoize((points, loggedUserId) => {
   return points.find(p => p.awardeeId === loggedUserId) || EMPTY_OBJ;
 });
 

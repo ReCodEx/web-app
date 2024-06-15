@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { CloseIcon, DownloadIcon, FailureIcon, SuccessIcon } from '../../icons';
@@ -12,7 +12,7 @@ import TestResultsTableRow from './TestResultsTableRow';
 import TestResultsTableLog from './TestResultsTableLog';
 import CopyLogToClipboard from './CopyLogToClipboard';
 
-const getResult = defaultMemoize((results, name) => results.find(r => r.testName === name));
+const getResult = lruMemoize((results, name) => results.find(r => r.testName === name));
 
 class TestResultsTable extends Component {
   constructor(props) {

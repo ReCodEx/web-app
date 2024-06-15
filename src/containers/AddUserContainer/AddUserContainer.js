@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import PaginationContainer from '../PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
@@ -15,7 +15,7 @@ import { FormattedMessage } from 'react-intl';
 
 const LIMITS = [10];
 
-const submitHandler = defaultMemoize((rolesFilter, setFilters) => search => {
+const submitHandler = lruMemoize((rolesFilter, setFilters) => search => {
   const filters = {};
   if (search && search.trim()) {
     filters.search = search.trim();

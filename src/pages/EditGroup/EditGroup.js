@@ -5,7 +5,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
@@ -38,7 +38,7 @@ import { withRouterProps } from '../../helpers/withRouter';
 
 const canRelocate = group => hasPermissions(group, 'relocate') && !group.archived;
 
-const getRelocateFormInitialValues = defaultMemoize(group => ({ groupId: group.parentGroupId }));
+const getRelocateFormInitialValues = lruMemoize(group => ({ groupId: group.parentGroupId }));
 
 class EditGroup extends Component {
   componentDidMount() {
@@ -52,7 +52,7 @@ class EditGroup extends Component {
     }
   }
 
-  getInitialValues = defaultMemoize(
+  getInitialValues = lruMemoize(
     ({ localizedTexts, externalId, public: isPublic, privateData: { publicStats, threshold, detaining } }) => ({
       localizedTexts: getLocalizedTextsInitialValues(localizedTexts, EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
       externalId,

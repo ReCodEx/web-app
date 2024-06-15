@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
@@ -77,7 +77,7 @@ const prepareCachedAssignmentsComparator = (assignments, locale) => {
   return (a, b) => (index[a.id] && index[b.id] ? index[a.id] - index[b.id] : 0);
 };
 
-const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, locale, links) => {
+const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, links) => {
   const {
     SOLUTION_DETAIL_URI_FACTORY,
     SOLUTION_SOURCE_CODES_URI_FACTORY,
@@ -225,36 +225,34 @@ const prepareTableColumnDescriptors = defaultMemoize((assignments, groupId, loca
   return columns;
 });
 
-const prepareTableData = defaultMemoize(
-  (assignments, getAssignmentSolutions, getRuntime, onlyBestSolutionsCheckbox) => {
-    const res = [];
-    assignments.forEach(assignment =>
-      getAssignmentSolutions(assignment.id)
-        .toArray()
-        .map(getJsData)
-        .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
-        .forEach(s => {
-          const statusEvaluated = s.lastSubmission && (s.lastSubmission.evaluation || s.lastSubmission.failure);
-          const rte = getRuntime(s.runtimeEnvironmentId);
+const prepareTableData = lruMemoize((assignments, getAssignmentSolutions, getRuntime, onlyBestSolutionsCheckbox) => {
+  const res = [];
+  assignments.forEach(assignment =>
+    getAssignmentSolutions(assignment.id)
+      .toArray()
+      .map(getJsData)
+      .filter(onlyBestSolutionsCheckbox ? solution => solution && solution.isBestSolution : identity)
+      .forEach(s => {
+        const statusEvaluated = s.lastSubmission && (s.lastSubmission.evaluation || s.lastSubmission.failure);
+        const rte = getRuntime(s.runtimeEnvironmentId);
 
-          res.push({
-            icon: s,
-            assignment,
-            date: s.createdAt,
-            validity: statusEvaluated ? safeGet(s.lastSubmission, ['evaluation', 'score']) : null,
-            points: statusEvaluated ? s : { actualPoints: null },
-            runtimeEnvironment: rte && getJsData(rte),
-            note: s.note,
-            actionButtons: s,
-          });
-        })
-    );
+        res.push({
+          icon: s,
+          assignment,
+          date: s.createdAt,
+          validity: statusEvaluated ? safeGet(s.lastSubmission, ['evaluation', 'score']) : null,
+          points: statusEvaluated ? s : { actualPoints: null },
+          runtimeEnvironment: rte && getJsData(rte),
+          note: s.note,
+          actionButtons: s,
+        });
+      })
+  );
 
-    return res;
-  }
-);
+  return res;
+});
 
-const getPendingReviewSolutions = defaultMemoize((assignments, getAssignmentSolutions) =>
+const getPendingReviewSolutions = lruMemoize((assignments, getAssignmentSolutions) =>
   assignments
     ? assignments
         .toArray()
@@ -275,7 +273,7 @@ const getPendingReviewSolutions = defaultMemoize((assignments, getAssignmentSolu
     : []
 );
 
-const getPlagiarisms = defaultMemoize((assignments, getAssignmentSolutions) =>
+const getPlagiarisms = lruMemoize((assignments, getAssignmentSolutions) =>
   assignments
     ? assignments
         .toArray()
@@ -294,7 +292,7 @@ const getPlagiarisms = defaultMemoize((assignments, getAssignmentSolutions) =>
     : []
 );
 
-const getPlagiarismUniqueAssignments = defaultMemoize(plagiarisms =>
+const getPlagiarismUniqueAssignments = lruMemoize(plagiarisms =>
   unique(plagiarisms.map(({ assignmentId }) => assignmentId))
 );
 

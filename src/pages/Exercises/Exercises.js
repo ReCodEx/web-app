@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import PageContent from '../../components/layout/PageContent';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
@@ -24,7 +24,7 @@ const CREATE_EXERCISE_FORM_INITIAL_VALUES = {
   groupId: '',
 };
 
-const prepareGroupOptions = defaultMemoize((groups, groupsAccessor, locale) =>
+const prepareGroupOptions = lruMemoize((groups, groupsAccessor, locale) =>
   groups
     .filter(group => hasPermissions(group, 'createExercise'))
     .map(group => ({

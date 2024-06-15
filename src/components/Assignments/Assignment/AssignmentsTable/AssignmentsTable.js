@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import moment from 'moment';
 
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
@@ -73,7 +73,7 @@ class AssignmentsTable extends Component {
     this.setState({ selectedAssignments, multiSync, multiVisible, multiHide, multiDelete });
   };
 
-  selectAllAssignments = defaultMemoize(assignments => () => {
+  selectAllAssignments = lruMemoize(assignments => () => {
     const selectedAssignments = {};
     assignments.forEach(assignment => {
       selectedAssignments[assignment.id] = true;
@@ -81,7 +81,7 @@ class AssignmentsTable extends Component {
     this.updateSelectedAssignments(selectedAssignments, assignments);
   });
 
-  invertSelectedAssignments = defaultMemoize(assignments => () => {
+  invertSelectedAssignments = lruMemoize(assignments => () => {
     const selectedAssignments = {};
     assignments.forEach(assignment => {
       selectedAssignments[assignment.id] = !this.state.selectedAssignments[assignment.id];
@@ -89,7 +89,7 @@ class AssignmentsTable extends Component {
     this.updateSelectedAssignments(selectedAssignments, assignments);
   });
 
-  selectAssignmentClickHandler = defaultMemoize(assignments => ev => {
+  selectAssignmentClickHandler = lruMemoize(assignments => ev => {
     if (ev.target && ev.target.name) {
       const id = ev.target.name;
       const selectedAssignments = {};

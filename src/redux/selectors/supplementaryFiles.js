@@ -1,4 +1,4 @@
-import { createSelector, defaultMemoize } from 'reselect';
+import { createSelector, lruMemoize } from 'reselect';
 
 import { fetchSupplementaryFilesForExerciseEndpoint } from '../modules/supplementaryFiles';
 import { EMPTY_MAP } from '../../helpers/common';
@@ -8,7 +8,7 @@ import { getExercise } from './exercises';
 export const supplementaryFilesSelector = state => state.supplementaryFiles.get('resources');
 const supplementaryFilesFetchManyStatusSelector = state => state.supplementaryFiles.get('fetchManyStatus');
 
-export const getSupplementaryFilesForExercise = defaultMemoize(exerciseId =>
+export const getSupplementaryFilesForExercise = lruMemoize(exerciseId =>
   createSelector([getExercise(exerciseId), supplementaryFilesSelector], (exercise, supplementaryFiles) => {
     const ids = exercise && exercise.getIn(['data', 'supplementaryFilesIds']);
     return ids && supplementaryFiles

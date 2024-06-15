@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import NoSolutionYetTableRow from './NoSolutionYetTableRow';
 import SolutionsTableRow from './SolutionsTableRow';
@@ -14,7 +14,7 @@ import { UserUIDataContext } from '../../../helpers/contexts';
 
 import styles from './SolutionsTable.less';
 
-const createHighlightsIndex = defaultMemoize(highlights => new Set(highlights));
+const createHighlightsIndex = lruMemoize(highlights => new Set(highlights));
 
 const SolutionsTable = ({
   assignmentId,

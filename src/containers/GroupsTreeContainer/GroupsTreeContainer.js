@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Nav } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { groupsSelector, notArchivedGroupsSelector } from '../../redux/selectors/groups';
 import { usersSelector } from '../../redux/selectors/users';
@@ -71,7 +71,7 @@ const prepareGroupObject = (
  * Prepares plain-js datastructure that could be fed to GroupsTree component.
  * With memoization, this is basically a higher-level selector that creates hiarchial augmented group objects.
  */
-const prepareGroupsTree = defaultMemoize(
+const prepareGroupsTree = lruMemoize(
   (groups, users, locale, selectedGroupId, showArchived, onlyEditable, customFilter) => {
     let group = prepareGroupObject(selectedGroupId, groups, users, locale, true, showArchived, group => {
       return (

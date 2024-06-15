@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import { ExerciseNavigation } from '../../components/layout/Navigation';
@@ -51,7 +51,7 @@ const SUBMIT_BUTTON_MESSAGES = {
   success: <FormattedMessage id="app.multiAssignForm.success" defaultMessage="Exercise was assigned." />,
 };
 
-const getAssignmentsGroups = defaultMemoize(assignments => assignments.map(({ groupId }) => groupId));
+const getAssignmentsGroups = lruMemoize(assignments => assignments.map(({ groupId }) => groupId));
 
 class ExerciseAssignments extends Component {
   state = { forkId: null };
@@ -79,7 +79,7 @@ class ExerciseAssignments extends Component {
     this.setState({ forkId: Math.random().toString() });
   }
 
-  multiAssignFormInitialValues = defaultMemoize(
+  multiAssignFormInitialValues = lruMemoize(
     (visibleGroups, runtimeEnvironments, solutionFilesLimit, solutionSizeLimit) => {
       const groups = visibleGroups.reduce((acc, { id }) => {
         acc[`id${id}`] = false;

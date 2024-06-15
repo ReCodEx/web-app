@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { arrayToObject, identity, objectFilter, deepCompare } from './common';
 
 export const KNOWN_DATA_TYPES = ['file', 'remote-file', 'string']
@@ -76,7 +76,7 @@ export const coerceVariableValue = variable => {
  * @return {Object} keys are variable names, values are objects holding { portsIn, portsOut } values,
  *                  both are arrays of objects { box, port } where the variable is present
  */
-export const getVariablesUtilization = defaultMemoize(boxes => {
+export const getVariablesUtilization = lruMemoize(boxes => {
   const utils = {};
   boxes.forEach(box =>
     ['portsIn', 'portsOut'].forEach(ports =>
@@ -99,7 +99,7 @@ export const getVariablesUtilization = defaultMemoize(boxes => {
  * @param {Object[]} variables
  * @return {Object} keys are names, values are types
  */
-export const getVariablesTypes = defaultMemoize(variables =>
+export const getVariablesTypes = lruMemoize(variables =>
   arrayToObject(
     variables,
     ({ name }) => name,

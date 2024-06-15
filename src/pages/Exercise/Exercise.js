@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
@@ -46,7 +46,7 @@ export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
   groupId: '',
 };
 
-const getPromotedReferenceSolutions = defaultMemoize(referenceSolutions =>
+const getPromotedReferenceSolutions = lruMemoize(referenceSolutions =>
   referenceSolutions.filter(rs => rs.visibility > 1)
 );
 

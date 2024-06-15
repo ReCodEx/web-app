@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import DateTime from '../../widgets/DateTime';
 import { LockIcon, UnlockIcon } from '../../icons';
 
-const sortLocks = defaultMemoize(locks => [...locks].sort(({ createdAt: c1 }, { createdAt: c2 }) => c1 - c2));
+const sortLocks = lruMemoize(locks => [...locks].sort(({ createdAt: c1 }, { createdAt: c2 }) => c1 - c2));
 
 const LocksTable = ({ locks }) =>
   locks.length > 0 ? (

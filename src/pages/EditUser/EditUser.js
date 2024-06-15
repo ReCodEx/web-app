@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import { UserNavigation } from '../../components/layout/Navigation';
@@ -53,7 +53,7 @@ const prepareNumber = (number, min, max, defaultValue) => {
   return Math.max(Math.min(number, max), min);
 };
 
-const prepareUserUIDataInitialValues = defaultMemoize(
+const prepareUserUIDataInitialValues = lruMemoize(
   ({
     darkTheme = true,
     vimMode = false,

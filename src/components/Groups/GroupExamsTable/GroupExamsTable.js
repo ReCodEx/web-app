@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import DateTime from '../../widgets/DateTime';
 import Button from '../../widgets/TheButton';
 import { VisibleIcon } from '../../icons';
 
-const sortExams = defaultMemoize(exams => {
+const sortExams = lruMemoize(exams => {
   const sorted = [...exams];
   return sorted.sort((a, b) => a.end - b.end || a.begin - b.begin);
 });

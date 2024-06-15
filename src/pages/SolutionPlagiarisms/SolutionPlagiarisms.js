@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Card, Table, Row, Col } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import PageContent from '../../components/layout/PageContent';
@@ -50,7 +50,7 @@ const _getPlagiarismFiles = plagiarisms =>
     )
   );
 
-const indexPlagiarismsBySourceFiles = defaultMemoize(plagiarisms => {
+const indexPlagiarismsBySourceFiles = lruMemoize(plagiarisms => {
   const res = {};
   plagiarisms.forEach(record => {
     if (record && record.files && record.files.length > 0) {

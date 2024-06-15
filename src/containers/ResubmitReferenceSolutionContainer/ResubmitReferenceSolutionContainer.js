@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
 import { resubmitReferenceSolution, fetchReferenceSolution } from '../../redux/modules/referenceSolutions';
@@ -10,7 +10,7 @@ import { fetchReferenceSolutionEvaluationsForSolution } from '../../redux/module
 import { isProcessing, getMonitorParams, getSubmittedSolutionId } from '../../redux/selectors/submission';
 import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
 
-const getResubmitObserverId = defaultMemoize((id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id);
+const getResubmitObserverId = lruMemoize((id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id);
 
 class ResubmitReferenceSolutionContainer extends Component {
   isMeTheObserver = () => {
@@ -61,7 +61,4 @@ const mapDispatchToProps = (dispatch, { id }) => ({
     Promise.all([dispatch(fetchReferenceSolution(id)), dispatch(fetchReferenceSolutionEvaluationsForSolution(id))]),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ResubmitReferenceSolutionContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ResubmitReferenceSolutionContainer);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../PaginationContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -20,7 +20,7 @@ import withLinks from '../../helpers/withLinks';
 import withRouter, { withRouterProps } from '../../helpers/withRouter';
 import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
-const filterInitialValues = defaultMemoize(
+const filterInitialValues = lruMemoize(
   ({ search = '', archived = null, authorsIds = [], tags = [], runtimeEnvironments = [] }, allEnvironments) => ({
     search,
     archived: archived === null ? 'default' : archived,
@@ -34,7 +34,7 @@ const filterInitialValues = defaultMemoize(
   })
 );
 
-const transformAndSetFilterData = defaultMemoize(
+const transformAndSetFilterData = lruMemoize(
   (setFilters, rootGroup) =>
     ({ search, archived, author, tags, runtimeEnvironments }) => {
       const data = {};
@@ -63,7 +63,7 @@ const transformAndSetFilterData = defaultMemoize(
     }
 );
 
-const getDefaultFilters = defaultMemoize(rootGroup => (rootGroup ? { groupsIds: [rootGroup] } : EMPTY_OBJ));
+const getDefaultFilters = lruMemoize(rootGroup => (rootGroup ? { groupsIds: [rootGroup] } : EMPTY_OBJ));
 
 class ExercisesListContainer extends Component {
   componentDidMount() {

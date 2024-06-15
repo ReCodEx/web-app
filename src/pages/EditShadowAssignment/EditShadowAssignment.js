@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector, SubmissionError } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import moment from 'moment';
 
 import Page from '../../components/layout/Page';
@@ -52,7 +52,7 @@ class EditShadowAssignment extends Component {
 
   static loadAsync = ({ shadowId }, dispatch) => dispatch(fetchShadowAssignment(shadowId));
 
-  getInitialValues = defaultMemoize(({ localizedTexts, isPublic, isBonus, maxPoints, deadline }) => ({
+  getInitialValues = lruMemoize(({ localizedTexts, isPublic, isBonus, maxPoints, deadline }) => ({
     sendNotification: true,
     isPublic,
     isBonus,

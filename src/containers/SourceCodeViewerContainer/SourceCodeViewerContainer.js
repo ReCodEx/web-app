@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Dropdown, DropdownButton, Modal } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Button from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
@@ -31,7 +31,7 @@ const preprocessZipEntries = ({ zipEntries, ...file }) => {
   return file;
 };
 
-const preprocessFiles = defaultMemoize(files =>
+const preprocessFiles = lruMemoize(files =>
   files
     .sort(nameComparator)
     .map(preprocessZipEntries)

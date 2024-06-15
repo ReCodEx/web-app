@@ -4,7 +4,7 @@ import { reduxForm, Field, FieldArray, formValues } from 'redux-form';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { SaveIcon, WarningIcon } from '../../icons';
 import { DatetimeField, CheckboxField, RadioField, NumericTextField } from '../Fields';
@@ -42,7 +42,7 @@ const sanitizeInputNumber = (value, defValue) => {
  * If the object is assignment object, it correctly prepares editing form.
  * If the object holds `groups` property, it prepares multi-assign form.
  */
-export const prepareInitialValues = defaultMemoize(
+export const prepareInitialValues = lruMemoize(
   (
     {
       groups = null,
@@ -249,7 +249,7 @@ const SUBMIT_BUTTON_MESSAGES_DEFAULT = {
   success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
 };
 
-const getAllGroups = defaultMemoize((groups, groupsAccessor, locale) =>
+const getAllGroups = lruMemoize((groups, groupsAccessor, locale) =>
   groups && groupsAccessor
     ? groups
         .filter(g => !g.organizational && !g.archived && hasPermissions(g, 'assignExercise'))
@@ -262,7 +262,7 @@ const getAllGroups = defaultMemoize((groups, groupsAccessor, locale) =>
     : EMPTY_ARRAY
 );
 
-const getUserGroups = defaultMemoize((groups, userId, groupsAccessor, locale) =>
+const getUserGroups = lruMemoize((groups, userId, groupsAccessor, locale) =>
   getAllGroups(groups, groupsAccessor, locale).filter(
     g =>
       safeGet(g, ['primaryAdminsIds', id => id === userId]) ||

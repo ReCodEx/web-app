@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ExpressionNode from './ExpressionNode';
 import EditFunctionNodeForm from './EditFunctionNodeForm';
@@ -53,7 +53,7 @@ const EDIT_FORMS_TITLES = {
   ),
 };
 
-const createTestNameIndexMemoized = defaultMemoize(tests => createTestNameIndex(tests));
+const createTestNameIndexMemoized = lruMemoize(tests => createTestNameIndex(tests));
 
 class ScoreConfigUniversalExpression extends Component {
   shouldComponentUpdate(nextProps, nextState) {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import classnames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
 
 import Admin from './Admin';
@@ -22,7 +22,7 @@ import styles from './sidebar.less';
 const SKIN = getConfigVar('SKIN') || 'green';
 const URL_PREFIX = getConfigVar('URL_PATH_PREFIX');
 
-const getUserData = defaultMemoize(user => getJsData(user));
+const getUserData = lruMemoize(user => getJsData(user));
 
 const Sidebar = ({
   pendingFetchOperations,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import DownloadSolutionArchiveContainer from '../../../containers/DownloadSolutionArchiveContainer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -25,7 +25,7 @@ const preprocessZipEntries = ({ zipEntries, ...file }) => {
   return file;
 };
 
-const preprocessFiles = defaultMemoize(files =>
+const preprocessFiles = lruMemoize(files =>
   files
     .sort(nameComparator)
     .map(preprocessZipEntries)

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Modal, Table } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import PlagiarismCodeBox from '../PlagiarismCodeBox';
 import SourceCodeBox from '../SourceCodeBox';
@@ -17,7 +17,7 @@ import FileSelectionTableRow from './FileSelectionTableRow';
  * Construct an object { fileIdx => fragmentsArray } where the fragments array holds only
  * references to the left (target) part. Selected file fragments are excluded.
  */
-const getRemainingFragments = defaultMemoize((files, selected) => {
+const getRemainingFragments = lruMemoize((files, selected) => {
   const res = {};
   files.forEach((file, idx) => {
     if (idx !== selected) {

@@ -1,11 +1,11 @@
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { encodeId, encodeNumId, safeGet } from '../common';
 
 /*
  * Memory and Time limits
  */
-export const getLimitsInitValues = defaultMemoize((limits, tests, environments, hwGroup) => {
+export const getLimitsInitValues = lruMemoize((limits, tests, environments, hwGroup) => {
   const res = {};
   let wallTimeCount = 0;
   let cpuTimeCount = 0;
@@ -117,7 +117,7 @@ const combineHardwareGroupLimitsConstraints = exerciseHwGroups => {
 };
 
 // Compute limit constraints from hwGroup metadata
-export const getLimitsConstraints = defaultMemoize((exerciseHwGroups, preciseTime) => {
+export const getLimitsConstraints = lruMemoize((exerciseHwGroups, preciseTime) => {
   const res = combineHardwareGroupLimitsConstraints(exerciseHwGroups);
   return {
     memory: { min: 128, max: res.memory },
@@ -133,7 +133,7 @@ export const getLimitsConstraints = defaultMemoize((exerciseHwGroups, preciseTim
 });
 
 // Compute complete list for visualization of a single
-export const getLimitsConstraintsOfSingleGroup = defaultMemoize(exerciseHwGroup => {
+export const getLimitsConstraintsOfSingleGroup = lruMemoize(exerciseHwGroup => {
   const res = combineHardwareGroupLimitsConstraints([exerciseHwGroup]);
   for (const key in res) {
     res[key] = {
@@ -228,13 +228,8 @@ const saturateField = (limits, envId, test, fieldName, max, min = 0.1, patchFact
  * @param {*} exerciseHwGroups HW group records (containing metadata with constraints).
  */
 export const saturateLimitsConstraints = (limits, exerciseHwGroups) => {
-  const {
-    memory,
-    cpuTimePerTest,
-    wallTimePerTest,
-    cpuTimePerExercise,
-    wallTimePerExercise,
-  } = combineHardwareGroupLimitsConstraints(exerciseHwGroups);
+  const { memory, cpuTimePerTest, wallTimePerTest, cpuTimePerExercise, wallTimePerExercise } =
+    combineHardwareGroupLimitsConstraints(exerciseHwGroups);
 
   if (!limits) {
     return limits;

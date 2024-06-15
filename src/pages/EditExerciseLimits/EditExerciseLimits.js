@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import { formValueSelector } from 'redux-form';
 
 import Page from '../../components/layout/Page';
@@ -70,7 +70,7 @@ class EditExerciseLimits extends Component {
       dispatch(fetchExerciseTestsIfNeeded(exerciseId)),
     ]);
 
-  doesHardwareGroupChangeDropLimits = defaultMemoize(
+  doesHardwareGroupChangeDropLimits = lruMemoize(
     (currentHwGroupId, limits, tests, exerciseRuntimeEnvironments, hardwareGroups) => {
       const limitsData =
         currentHwGroupId && getLimitsInitValues(limits, tests, exerciseRuntimeEnvironments, currentHwGroupId);
@@ -89,7 +89,7 @@ class EditExerciseLimits extends Component {
     }
   );
 
-  transformAndSendHardwareGroups = defaultMemoize((hwGroupId, limits) => {
+  transformAndSendHardwareGroups = lruMemoize((hwGroupId, limits) => {
     const { setExerciseHardwareGroups, setExerciseLimits, reloadExercise, invalidateExercise } = this.props;
 
     const limitsData = limits && limits[hwGroupId];
@@ -106,7 +106,7 @@ class EditExerciseLimits extends Component {
         .then(reloadExercise);
   });
 
-  transformAndSendLimitsValues = defaultMemoize((hwGroupId, tests, exerciseRuntimeEnvironments) => {
+  transformAndSendLimitsValues = lruMemoize((hwGroupId, tests, exerciseRuntimeEnvironments) => {
     const { setExerciseLimits, reloadExercise } = this.props;
     return formData =>
       setExerciseLimits(transformLimitsValues(formData, hwGroupId, exerciseRuntimeEnvironments, tests)).then(
@@ -298,17 +298,17 @@ EditExerciseLimits.propTypes = {
   sendNotification: PropTypes.func.isRequired,
 };
 
-const cloneVerticallyWrapper = defaultMemoize(
+const cloneVerticallyWrapper = lruMemoize(
   dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
     dispatch(cloneVertically(formName, testName, runtimeEnvironmentId, field))
 );
 
-const cloneHorizontallyWrapper = defaultMemoize(
+const cloneHorizontallyWrapper = lruMemoize(
   dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
     dispatch(cloneHorizontally(formName, testName, runtimeEnvironmentId, field))
 );
 
-const cloneAllWrapper = defaultMemoize(
+const cloneAllWrapper = lruMemoize(
   dispatch => (formName, testName, runtimeEnvironmentId) => field => () =>
     dispatch(cloneAll(formName, testName, runtimeEnvironmentId, field))
 );

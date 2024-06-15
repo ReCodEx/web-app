@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col, Modal, Tabs, Tab, Table } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Page from '../../components/layout/Page';
 import InsetPanel from '../../components/widgets/InsetPanel';
@@ -65,7 +65,7 @@ import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 
-const wrapInArray = defaultMemoize(entry => [entry]);
+const wrapInArray = lruMemoize(entry => [entry]);
 
 const localStorageDiffMappingsKey = 'SolutionSourceCodes.diffMappings.';
 

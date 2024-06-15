@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
@@ -26,7 +26,7 @@ const defaultPagesCaptions = defineMessages({
   },
 });
 
-const getDefaultPages = defaultMemoize(formatMessage =>
+const getDefaultPages = lruMemoize(formatMessage =>
   Object.keys(defaultPagesCaptions).map(key => ({
     key,
     name: formatMessage(defaultPagesCaptions[key]),

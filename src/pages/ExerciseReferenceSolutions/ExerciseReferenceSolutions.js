@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import { Row, Col, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
@@ -54,7 +54,7 @@ import { hasPermissions, safeGet, objectFilter } from '../../helpers/common';
 import withLinks from '../../helpers/withLinks';
 import withRouter, { withRouterProps } from '../../helpers/withRouter';
 
-const prepareTableColumnDescriptors = defaultMemoize((loggedUserId, locale, links, deleteReferenceSolution) => {
+const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, deleteReferenceSolution) => {
   const { REFERENCE_SOLUTION_URI_FACTORY } = links;
   const nameComparator = createUserNameComparator(locale);
 
@@ -210,7 +210,7 @@ const getDataFilter =
     (showPublic || visibility !== 1) &&
     (showPrivate || visibility > 0);
 
-const prepareTableData = defaultMemoize((referenceSolutions, userSelector, runtimeEnvironments, userId, filters) =>
+const prepareTableData = lruMemoize((referenceSolutions, userSelector, runtimeEnvironments, userId, filters) =>
   referenceSolutions
     .filter(getDataFilter(userId, filters))
     .map(

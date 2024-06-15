@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
 import { UserRoleIcon } from '../../helpers/usersRoles';
@@ -15,7 +15,7 @@ import withLinks from '../../../helpers/withLinks';
 
 import styles from './usersName.less';
 
-const userNameStyle = defaultMemoize((size, large) => ({
+const userNameStyle = lruMemoize((size, large) => ({
   lineHeight: `${size}px`,
   fontSize: large ? size / 2 : 'inherit',
 }));

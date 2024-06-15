@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import InviteUserForm from '../../forms/InviteUserForm';
@@ -15,7 +15,7 @@ import Icon from '../../icons';
 
 import { arrayToObject } from '../../../helpers/common';
 
-const prepareInviteUserInitialValues = defaultMemoize((groups, groupId) => ({
+const prepareInviteUserInitialValues = lruMemoize((groups, groupId) => ({
   titlesBeforeName: '',
   firstName: '',
   lastName: '',
@@ -28,7 +28,7 @@ const prepareInviteUserInitialValues = defaultMemoize((groups, groupId) => ({
   ),
 }));
 
-const prepareInviteOnSubmitHandler = defaultMemoize(
+const prepareInviteOnSubmitHandler = lruMemoize(
   (inviteUser, setDialogOpen, instanceId) =>
     ({ email, titlesBeforeName, firstName, lastName, titlesAfterName, groups }) => {
       email = email.trim();

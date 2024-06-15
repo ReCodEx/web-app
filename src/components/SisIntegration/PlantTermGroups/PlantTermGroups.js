@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, Table } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Field, FieldArray, reduxForm } from 'redux-form';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import DeleteGroupButtonContainer from '../../../containers/DeleteGroupButtonContainer';
 import LocalizedTextsFormField from '../../forms/LocalizedTextsFormField';
@@ -54,7 +54,7 @@ export const createDefaultSemesterLocalization = (year, term) => {
   }));
 };
 
-const getExistingSemestralGroups = defaultMemoize((groups, rootGroups, externalId) => {
+const getExistingSemestralGroups = lruMemoize((groups, rootGroups, externalId) => {
   const result = arrayToObject(
     rootGroups,
     g => g.id,

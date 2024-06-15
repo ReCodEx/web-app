@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import { SettingsIcon, TransferIcon, BanIcon, UserIcon } from '../../components/icons';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
@@ -29,14 +29,14 @@ import withLinks from '../../helpers/withLinks';
 import { withRouterProps } from '../../helpers/withRouter';
 import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
 
-const filterInitialValues = defaultMemoize(({ search = '', roles = [] }) => {
+const filterInitialValues = lruMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
   knownRoles.forEach(role => (initials.roles[role] = false));
   roles.forEach(role => (initials.roles[role] = true));
   return initials;
 });
 
-const transformAndSetFilterData = defaultMemoize(setFilters => ({ search, roles }) => {
+const transformAndSetFilterData = lruMemoize(setFilters => ({ search, roles }) => {
   const data = {
     search: search.trim(),
     roles: Object.keys(roles).filter(role => roles[role]),
@@ -92,7 +92,7 @@ class Users extends Component {
   );
 
   // eslint-disable-next-line react/prop-types
-  createActions = defaultMemoize(reload => ({ id, privateData }) => {
+  createActions = lruMemoize(reload => ({ id, privateData }) => {
     const {
       takeOver,
       isSuperAdmin,

@@ -5,7 +5,7 @@ import { Table, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 import moment from 'moment';
 
 import EditSolutionNoteForm from '../../forms/EditSolutionNoteForm';
@@ -36,9 +36,9 @@ import Icon, {
 import AssignmentDeadlinesGraph from '../../Assignments/Assignment/AssignmentDeadlinesGraph';
 import SolutionsTable from '../../Assignments/SolutionsTable';
 
-const getEditNoteFormInitialValues = defaultMemoize(note => ({ note }));
+const getEditNoteFormInitialValues = lruMemoize(note => ({ note }));
 
-const getImportantSolutions = defaultMemoize((solutions, selectedSolutionId) => {
+const getImportantSolutions = lruMemoize((solutions, selectedSolutionId) => {
   solutions = solutions.toArray();
   const selectedIdx = solutions.findIndex(s => s && s.id === selectedSolutionId);
   const accepted = solutions.find(s => s && s.accepted && s.id !== selectedSolutionId) || null;

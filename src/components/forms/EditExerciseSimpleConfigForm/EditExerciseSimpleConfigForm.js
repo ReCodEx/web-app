@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { defaultMemoize } from 'reselect';
+import { lruMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
@@ -27,7 +27,7 @@ import {
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 import { encodeNumId, createIndex, safeSet, safeGet, deepReduce } from '../../../helpers/common';
 
-const supplementaryFilesOptions = defaultMemoize((files, locale) =>
+const supplementaryFilesOptions = lruMemoize((files, locale) =>
   files
     .sort((a, b) => a.name.localeCompare(b.name, locale))
     .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
@@ -37,7 +37,7 @@ const supplementaryFilesOptions = defaultMemoize((files, locale) =>
     }))
 );
 
-const createFilesNamesIndex = defaultMemoize(
+const createFilesNamesIndex = lruMemoize(
   files => files && new Set(deepReduce(files, [null, 'name']).filter(name => name))
 );
 
