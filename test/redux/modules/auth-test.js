@@ -12,7 +12,7 @@ import reducerFactory, {
 } from '../../../src/redux/modules/auth';
 import { isLoggedIn, hasSucceeded, hasFailed, statusSelector } from '../../../src/redux/selectors/auth';
 
-import decodeJwt from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 chai.use(spies);
 const expect = chai.expect;
@@ -106,7 +106,7 @@ describe('Authentication', () => {
         const expectedState = fromJS({
           status: {},
           jwt: validToken,
-          accessToken: decodeJwt(validToken),
+          accessToken: jwtDecode(validToken),
           userId: 123,
           instanceId: 'instance-id',
         });

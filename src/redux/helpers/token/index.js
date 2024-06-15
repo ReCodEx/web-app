@@ -1,8 +1,8 @@
-import decodeJwt from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export const decode = token => {
   try {
-    return decodeJwt(token);
+    return jwtDecode(token);
   } catch (e) {
     return null;
   }

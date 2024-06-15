@@ -154,10 +154,6 @@ class LayoutContainer extends Component {
   }
 }
 
-LayoutContainer.contextTypes = {
-  router: PropTypes.object,
-};
-
 LayoutContainer.propTypes = {
   lang: PropTypes.string,
   toggleSize: PropTypes.func.isRequired,
