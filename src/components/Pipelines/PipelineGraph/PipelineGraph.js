@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { canUseDOM } from 'exenv';
 import Viz from 'viz.js';
+import { Module, render } from 'viz.js/lite.render.js';
 
 import InsetPanel from '../../widgets/InsetPanel';
 import { LoadingIcon } from '../../icons';
 import { isExternalReference } from '../../../helpers/pipelines';
 import * as styles from '../styles.less';
-
-const { Module, render } = require('viz.js/lite.render.js');
 
 // string sanitizations
 const normalizeDotId = id => (id || '').replace(/[^-a-zA-Z0-9_]/, '');
