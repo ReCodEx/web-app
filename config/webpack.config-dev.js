@@ -19,12 +19,13 @@ const gitRevisionPlugin = new GitRevisionPlugin({
 });
 
 module.exports = {
-  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : 'none',
+  devtool: process.env.NODE_ENV === 'development' ? 'eval-source-map' : 'none',
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/',
+    //sourceMapFilename: '[name].js.map',
   },
   mode: 'development',
   resolve: {
