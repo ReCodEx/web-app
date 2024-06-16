@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormGroup, FormLabel } from 'react-bootstrap';
+import AceEditor from 'react-ace';
 import { canUseDOM } from 'exenv';
 
 import { UserUIDataContext } from '../../../helpers/contexts';
 
 // load the ACE editor only when rendering in the browser
 import { getAceModeFromExtension } from '../../helpers/syntaxHighlighting';
-const AceEditor = canUseDOM ? require('react-ace').default : null;
 
 const SourceCodeField = ({
   input,

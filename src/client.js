@@ -17,29 +17,30 @@ import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js';
 import 'admin-lte/dist/js/adminlte.js';
 
 // Patch for ACE editor (it has complex loading)
-require('ace-builds');
-require('ace-builds/webpack-resolver');
-require('ace-builds/src-noconflict/theme-monokai');
-require('ace-builds/src-noconflict/theme-github');
-require('ace-builds/src-noconflict/mode-c_cpp');
-require('ace-builds/src-noconflict/mode-csharp');
-require('ace-builds/src-noconflict/mode-css');
-require('ace-builds/src-noconflict/mode-groovy');
-require('ace-builds/src-noconflict/mode-html');
-require('ace-builds/src-noconflict/mode-kotlin');
-require('ace-builds/src-noconflict/mode-java');
-require('ace-builds/src-noconflict/mode-javascript');
-require('ace-builds/src-noconflict/mode-makefile');
-require('ace-builds/src-noconflict/mode-pascal');
-require('ace-builds/src-noconflict/mode-php');
-require('ace-builds/src-noconflict/mode-python');
-require('ace-builds/src-noconflict/mode-rust');
-require('ace-builds/src-noconflict/mode-scala');
-require('ace-builds/src-noconflict/mode-typescript');
-require('ace-builds/src-noconflict/keybinding-vim');
+import 'ace-builds';
+import 'ace-builds/webpack-resolver';
+import 'ace-builds/src-noconflict/theme-monokai';
+import 'ace-builds/src-noconflict/theme-github';
+import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/mode-csharp';
+import 'ace-builds/src-noconflict/mode-css';
+import 'ace-builds/src-noconflict/mode-groovy';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-kotlin';
+import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-makefile';
+import 'ace-builds/src-noconflict/mode-pascal';
+import 'ace-builds/src-noconflict/mode-php';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-rust';
+import 'ace-builds/src-noconflict/mode-scala';
+import 'ace-builds/src-noconflict/mode-typescript';
+import 'ace-builds/src-noconflict/keybinding-vim';
+
+import ace from 'ace-builds/src-noconflict/ace';
 
 // override of worker paths, so they load properly
-const ace = require('ace-builds/src-noconflict/ace');
 const ACE_CDN_PREFIX = 'https://cdn.jsdelivr.net/npm/ace-builds@1.4.12/src-noconflict/';
 ace.config.set('basePath', ACE_CDN_PREFIX);
 const KNOWN_ACE_WORKERS = {

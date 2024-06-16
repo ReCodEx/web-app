@@ -8,10 +8,7 @@ import SourceCodeField from './SourceCodeField';
 import OnOffCheckbox from '../OnOffCheckbox';
 import * as styles from './MarkdownTextAreaField.less';
 
-import { canUseDOM } from 'exenv';
-if (canUseDOM) {
-  require('ace-builds/src-noconflict/mode-markdown');
-}
+import 'ace-builds/src-noconflict/mode-markdown';
 
 class MarkdownTextAreaField extends Component {
   state = {
