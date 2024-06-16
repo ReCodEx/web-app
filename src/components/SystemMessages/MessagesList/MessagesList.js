@@ -11,7 +11,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import FilterSystemMessagesForm from '../../forms/FilterSystemMessagesForm/FilterSystemMessagesForm';
 import { TypedMessageIcon } from '../../icons';
 
-import styles from './MessagesList.less';
+import * as styles from './MessagesList.less';
 
 const prepareData = lruMemoize((systemMessages, showAll, renderActions) => {
   const filteredMessages = showAll ? systemMessages : systemMessages.filter(msg => msg.visibleTo * 1000 >= Date.now());

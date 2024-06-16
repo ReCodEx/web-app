@@ -9,7 +9,7 @@ import Markdown from '../../widgets/Markdown';
 import DateTime from '../../widgets/DateTime';
 import { getLocalizedText } from '../../../helpers/localizedData';
 
-import styles from '../Header/Header.less';
+import * as styles from '../Header/Header.less';
 
 const preventClickPropagation = ev => ev.stopPropagation();
 

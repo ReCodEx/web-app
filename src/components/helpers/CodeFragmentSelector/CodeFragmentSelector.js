@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import styles from './CodeFragmentSelector.less';
+import * as styles from './CodeFragmentSelector.less';
 
 // Process fragments and generate a list of start+end markers sorted by offset.
 const _getMarkers = fragments => {

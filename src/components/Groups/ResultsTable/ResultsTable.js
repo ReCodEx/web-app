@@ -27,7 +27,7 @@ import { safeGet, EMPTY_ARRAY, EMPTY_OBJ, hasPermissions } from '../../../helper
 import withLinks from '../../../helpers/withLinks';
 import { storageGetItem, storageSetItem } from '../../../helpers/localStorage';
 
-import styles from './ResultsTable.less';
+import * as styles from './ResultsTable.less';
 import escapeString from '../../helpers/escapeString';
 
 const assignmentCellRendererCreator = lruMemoize((rawAssignments, locale) => {

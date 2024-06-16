@@ -17,7 +17,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
 import withLinks from '../../../helpers/withLinks';
 import SolutionTableRowIcons from './SolutionTableRowIcons';
-import styles from './SolutionsTable.less';
+import * as styles from './SolutionsTable.less';
 
 const SolutionsTableRow = ({
   id,

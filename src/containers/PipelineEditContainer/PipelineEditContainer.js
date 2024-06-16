@@ -41,7 +41,7 @@ import { getBoxTypes } from '../../redux/selectors/boxes';
 import { objectMap, arrayToObject, encodeId, identity } from '../../helpers/common';
 import { downloadString } from '../../redux/helpers/api/download';
 
-import styles from '../../components/Pipelines/styles.less';
+import * as styles from '../../components/Pipelines/styles.less';
 import InsetPanel from '../../components/widgets/InsetPanel';
 
 const getFormattedErrorAsKey = element => {

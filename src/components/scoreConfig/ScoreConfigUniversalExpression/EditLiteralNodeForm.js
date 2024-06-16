@@ -8,7 +8,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { CloseIcon, SaveIcon } from '../../icons';
 import { AstNode, AstNodeValue } from '../../../helpers/exercise/scoreAst';
 
-import formStyles from '../../forms/Fields/commonStyles.less';
+import * as formStyles from '../../forms/Fields/commonStyles.less';
 
 class EditLiteralNodeForm extends Component {
   state = {

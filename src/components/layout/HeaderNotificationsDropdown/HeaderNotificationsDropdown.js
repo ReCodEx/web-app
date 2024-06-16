@@ -7,7 +7,7 @@ import { Dropdown } from 'react-bootstrap';
 import Icon from '../../icons';
 import HeaderNotification from '../HeaderNotification';
 
-import styles from '../Header/Header.less';
+import * as styles from '../Header/Header.less';
 
 const preventClickPropagation = ev => ev.stopPropagation();
 

@@ -12,7 +12,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import PipelineNameContainer from '../../../containers/PipelineNameContainer';
 import { AssignmentIcon, ExerciseIcon, PipelineIcon, ShadowAssignmentIcon } from '../../icons';
 
-import styles from './Navigation.less';
+import * as styles from './Navigation.less';
 
 const defaultLinkMatch = (link, pathname, search) => link === pathname + search;
 

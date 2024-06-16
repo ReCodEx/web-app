@@ -17,7 +17,7 @@ import withLinks from '../../../helpers/withLinks';
 import { getExternalIdForCAS } from '../../../helpers/cas';
 import { getConfigVar } from '../../../helpers/config';
 
-import styles from './sidebar.less';
+import * as styles from './sidebar.less';
 
 const SKIN = getConfigVar('SKIN') || 'green';
 const URL_PREFIX = getConfigVar('URL_PATH_PREFIX');

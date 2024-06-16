@@ -18,7 +18,7 @@ import Callout from '../../widgets/Callout';
 import Icon, { CopyIcon, UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
 import { composeFunctions } from '../../../helpers/common';
 
-import style from './tree.less';
+import * as style from './tree.less';
 
 const CLOSED_DIALOGS_STATE = {
   [`${FUNCTION_NODE}DialogOpen`]: false,

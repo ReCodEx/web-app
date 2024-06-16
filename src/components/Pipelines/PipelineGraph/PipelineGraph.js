@@ -6,7 +6,7 @@ import Viz from 'viz.js';
 import InsetPanel from '../../widgets/InsetPanel';
 import { LoadingIcon } from '../../icons';
 import { isExternalReference } from '../../../helpers/pipelines';
-import styles from '../styles.less';
+import * as styles from '../styles.less';
 
 const { Module, render } = require('viz.js/lite.render.js');
 

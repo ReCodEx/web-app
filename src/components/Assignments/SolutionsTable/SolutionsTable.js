@@ -12,7 +12,7 @@ import { LoadingIcon } from '../../icons';
 import { EMPTY_ARRAY } from '../../../helpers/common';
 import { UserUIDataContext } from '../../../helpers/contexts';
 
-import styles from './SolutionsTable.less';
+import * as styles from './SolutionsTable.less';
 
 const createHighlightsIndex = lruMemoize(highlights => new Set(highlights));
 

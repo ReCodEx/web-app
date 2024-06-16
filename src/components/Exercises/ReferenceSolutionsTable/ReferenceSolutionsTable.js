@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import ReferenceSolutionsTableRow from './ReferenceSolutionsTableRow';
 import withLinks from '../../../helpers/withLinks';
 
-import styles from './ReferenceSolutionsTable.less';
+import * as styles from './ReferenceSolutionsTable.less';
 
 const ReferenceSolutionsTable = ({
   referenceSolutions = [],

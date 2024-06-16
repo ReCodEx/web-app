@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { arrayToObject } from '../../../helpers/common';
-import styles from './InsetPanel.less';
+import * as styles from './InsetPanel.less';
 
 // Inset panel replaces old <Well> component from bootstrap 3
 const InsetPanel = ({ children, className = '', size = '', ...props }) => {

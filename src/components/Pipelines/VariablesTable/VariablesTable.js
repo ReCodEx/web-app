@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { InputIcon, OutputIcon, TransferIcon, RemoveIcon, WarningIcon } from '../../icons';
 import { isVariableValueValid } from '../../../helpers/pipelines';
 import { safeGet, arrayToObject } from '../../../helpers/common';
-import styles from '../styles.less';
+import * as styles from '../styles.less';
 
 const prepareSelectionIndex = lruMemoize(
   selections =>

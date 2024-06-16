@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getConfigVar } from '../../helpers/config';
 import withRouter from '../../helpers/withRouter';
-import styles from './LoginExternFinalization.less';
+import * as styles from './LoginExternFinalization.less';
 
 const EXTERNAL_AUTH_SERVICE_ID = getConfigVar('EXTERNAL_AUTH_SERVICE_ID');
 

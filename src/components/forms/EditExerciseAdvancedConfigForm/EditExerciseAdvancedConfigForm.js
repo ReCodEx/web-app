@@ -18,7 +18,7 @@ import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
 import { advancedExerciseConfigFormFill } from '../../../redux/modules/exerciseConfigs';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
 
-import styles from './EditExerciseAdvancedConfig.less';
+import * as styles from './EditExerciseAdvancedConfig.less';
 
 class EditExerciseAdvancedConfigForm extends Component {
   render() {
