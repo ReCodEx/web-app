@@ -3623,10 +3623,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ace-builds@npm:^1.4.14":
-  version: 1.7.1
-  resolution: "ace-builds@npm:1.7.1"
-  checksum: da1a550ab3332c055b15fa0fe804d8705e5527d687866f57d5931f080883b2d1c517f2f7bc652169d37aa9aa5eabeb74ffe168f4394e59dc34db3291061ceb41
+"ace-builds@npm:^1.32.8":
+  version: 1.35.0
+  resolution: "ace-builds@npm:1.35.0"
+  checksum: e7440f4b87a74a3954b2fa20f4a3f70ff749784ae673f2ba7189449ae5fe9e945a7d07b508583f808a20bdee2cbf57d6f99e3208b2bcca193110c78883593901
   languageName: node
   linkType: hard
 
@@ -14194,19 +14194,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-ace@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "react-ace@npm:10.1.0"
+"react-ace@npm:^11.0.1":
+  version: 11.0.1
+  resolution: "react-ace@npm:11.0.1"
   dependencies:
-    ace-builds: ^1.4.14
+    ace-builds: ^1.32.8
     diff-match-patch: ^1.0.5
     lodash.get: ^4.4.2
     lodash.isequal: ^4.5.0
-    prop-types: ^15.7.2
+    prop-types: ^15.8.1
   peerDependencies:
     react: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 8fc67e02f911dcc31cf474df97c06f2ba5b5f402d9ed425895e479e2daddf4894a2cd0e81744b37b7f2b07109cfe4470fc5ebeed305d648c596e3442142e4823
+  checksum: 8cec04263c5a14156a3e6899c47b7af4a6d217004c0ee1a6a667509caa6bb53d973801917257723cbe3160d9a50b984af64168cafd93706f61dafe3bb5b01f2f
   languageName: node
   linkType: hard
 
@@ -14705,7 +14705,7 @@ __metadata:
     prismjs: ^1.29.0
     prop-types: ^15.8.1
     react: ^18.3.1
-    react-ace: ^10.1.0
+    react-ace: ^11.0.1
     react-bootstrap: 1.6.8
     react-collapse: ^5.1.1
     react-copy-to-clipboard: ^5.1.0
