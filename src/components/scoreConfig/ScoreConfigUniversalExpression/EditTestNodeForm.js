@@ -10,7 +10,7 @@ import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SaveIcon } from '../../icons';
 import { AstNode, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
 
-import formStyles from '../../forms/Fields/commonStyles.less';
+import * as formStyles from '../../forms/Fields/commonStyles.less';
 
 class EditTestNodeForm extends Component {
   state = {

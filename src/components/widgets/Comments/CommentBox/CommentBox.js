@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import Box from '../../Box';
 import Icon, { ChatIcon } from '../../../icons';
-import styles from '../comments.less';
+import * as styles from '../comments.less';
 
 class CommentBox extends Component {
   state = { prevCount: 0, panelOpen: false };

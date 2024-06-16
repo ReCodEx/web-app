@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, FormGroup, FormControl, FormLabel, InputGroup } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import styles from './commonStyles.less';
+import * as styles from './commonStyles.less';
 
 const SelectField = ({
   input,

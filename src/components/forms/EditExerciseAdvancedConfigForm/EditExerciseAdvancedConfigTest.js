@@ -10,7 +10,7 @@ import { SelectField, TextField, ExpandingTextField, ExpandingSelectField } from
 import Confirm from '../../forms/Confirm';
 import { encodeId, safeGet, unique } from '../../../helpers/common';
 
-import styles from './EditExerciseAdvancedConfig.less';
+import * as styles from './EditExerciseAdvancedConfig.less';
 
 const validateFileName = value =>
   !value || value.trim() === '' ? (

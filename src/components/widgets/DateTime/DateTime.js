@@ -10,7 +10,7 @@ import { EMPTY_OBJ } from '../../../helpers/common';
 import { UserUIDataContext } from '../../../helpers/contexts';
 import { knownLocales } from '../../../helpers/localizedData';
 
-import styles from './DateTime.less';
+import * as styles from './DateTime.less';
 
 const isAfter = unixTime => {
   return unixTime * 1000 < Date.now();

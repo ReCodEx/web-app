@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import { SuccessIcon, WarningIcon, DeleteIcon, CopyIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 
-import styles from '../Header/Header.less';
+import * as styles from '../Header/Header.less';
 
 class HeaderNotification extends Component {
   state = { hovering: false, clickedCopy: false };

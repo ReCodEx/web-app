@@ -14,7 +14,7 @@ import { InfoIcon, SaveIcon, RefreshIcon } from '../../icons';
 import { encodeId, encodeNumId, identity } from '../../../helpers/common';
 import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';
 
-import styles from './styles.less';
+import * as styles from './styles.less';
 
 class EditLimitsForm extends Component {
   render() {

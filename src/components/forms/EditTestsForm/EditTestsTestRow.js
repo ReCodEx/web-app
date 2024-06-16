@@ -8,7 +8,7 @@ import Button from '../../widgets/TheButton';
 import Icon, { RemoveIcon } from '../../icons';
 import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
 
-import style from './EditTests.less';
+import * as style from './EditTests.less';
 
 const EditTestsTestRow = ({ test, onRemove, calculator, percent, used = false, readOnly = false }) => (
   <tr>

@@ -6,7 +6,7 @@ import { Form, Row, Col } from 'react-bootstrap';
 import Markdown from '../../widgets/Markdown';
 import SourceCodeField from './SourceCodeField';
 import OnOffCheckbox from '../OnOffCheckbox';
-import styles from './MarkdownTextAreaField.less';
+import * as styles from './MarkdownTextAreaField.less';
 
 import { canUseDOM } from 'exenv';
 if (canUseDOM) {

@@ -16,7 +16,7 @@ import {
 } from '../../../helpers/exercise/scoreAst';
 import { EMPTY_OBJ } from '../../../helpers/common';
 
-import style from './tree.less';
+import * as style from './tree.less';
 
 // Icons representing generic types of nodes
 const ICONS = {

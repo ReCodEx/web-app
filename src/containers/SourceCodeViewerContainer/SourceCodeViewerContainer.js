@@ -17,7 +17,7 @@ import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
 import DownloadSolutionArchiveContainer from '../DownloadSolutionArchiveContainer';
 import UsersNameContainer from '../UsersNameContainer';
 
-import styles from './sourceCode.less';
+import * as styles from './sourceCode.less';
 
 const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
 

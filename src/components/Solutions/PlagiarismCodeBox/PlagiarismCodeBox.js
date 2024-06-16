@@ -20,10 +20,10 @@ import Icon, {
 } from '../../icons';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import CodeFragmentSelector from '../../helpers/CodeFragmentSelector';
-import cfsStyles from '../../helpers/CodeFragmentSelector/CodeFragmentSelector.less';
+import * as cfsStyles from '../../helpers/CodeFragmentSelector/CodeFragmentSelector.less';
 import withLinks from '../../../helpers/withLinks';
 
-import styles from './PlagiarismCodeBox.less';
+import * as styles from './PlagiarismCodeBox.less';
 
 const linesCount = content => (content.match(/\n/g) || '').length + 1;
 

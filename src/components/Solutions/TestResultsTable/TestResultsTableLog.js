@@ -7,7 +7,7 @@ import { DownloadIcon } from '../../icons';
 import { downloadString } from '../../../redux/helpers/api/download';
 
 import CopyLogToClipboard from './CopyLogToClipboard';
-import styles from './TestResultsTable.less';
+import * as styles from './TestResultsTable.less';
 
 const TestResultsTableLog = ({
   testName,

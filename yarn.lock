@@ -6334,20 +6334,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cosmiconfig@npm:^8.3.5":
-  version: 8.3.6
-  resolution: "cosmiconfig@npm:8.3.6"
+"cosmiconfig@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "cosmiconfig@npm:9.0.0"
   dependencies:
+    env-paths: ^2.2.1
     import-fresh: ^3.3.0
     js-yaml: ^4.1.0
     parse-json: ^5.2.0
-    path-type: ^4.0.0
   peerDependencies:
     typescript: ">=4.9.5"
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: dc339ebea427898c9e03bf01b56ba7afbac07fc7d2a2d5a15d6e9c14de98275a9565da949375aee1809591c152c0a3877bb86dbeaf74d5bd5aaa79955ad9e7a0
+  checksum: a30c424b53d442ea0bdd24cb1b3d0d8687c8dda4a17ab6afcdc439f8964438801619cdb66e8e79f63b9caa3e6586b60d8bab9ce203e72df6c5e80179b971fe8f
   languageName: node
   linkType: hard
 
@@ -6414,9 +6414,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:^6.11.0":
-  version: 6.11.0
-  resolution: "css-loader@npm:6.11.0"
+"css-loader@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "css-loader@npm:7.1.2"
   dependencies:
     icss-utils: ^5.1.0
     postcss: ^8.4.33
@@ -6428,13 +6428,13 @@ __metadata:
     semver: ^7.5.4
   peerDependencies:
     "@rspack/core": 0.x || 1.x
-    webpack: ^5.0.0
+    webpack: ^5.27.0
   peerDependenciesMeta:
     "@rspack/core":
       optional: true
     webpack:
       optional: true
-  checksum: 5c8d35975a7121334905394e88e28f05df72f037dbed2fb8fec4be5f0b313ae73a13894ba791867d4a4190c35896da84a7fd0c54fb426db55d85ba5e714edbe3
+  checksum: 15bfd90d778ddab90ee1d04c8c8bcc13ea6c0791d01b52b09d1b1c753b3410f7a7788a510d93726a9878e70b7c1a140f21efdf5c96e1857872107551d3897822
   languageName: node
   linkType: hard
 
@@ -7612,7 +7612,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"env-paths@npm:^2.2.0":
+"env-paths@npm:^2.2.0, env-paths@npm:^2.2.1":
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
   checksum: 65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
@@ -9622,10 +9622,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^15.0.0, globals@npm:^15.4.0":
+"globals@npm:^15.0.0":
   version: 15.4.0
   resolution: "globals@npm:15.4.0"
   checksum: 9f9b229613df6a3e78fd75527b3a5dc069c891edf68b4e38f063abcb70c4c5bc27c991d7dd0f302a084cb831d293b0e0b05dc97899676f7598d8581fe8763a21
+  languageName: node
+  linkType: hard
+
+"globals@npm:^15.5.0":
+  version: 15.5.0
+  resolution: "globals@npm:15.5.0"
+  checksum: a4cf8401ecef60098ab98b4202560e793a24a2701330f8cb70ab3b002abbb74059345d3f2059773da921c16eccb014392755a5b1e71b400f8266d4913a5f8a87
   languageName: node
   linkType: hard
 
@@ -11667,13 +11674,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"less-loader@npm:^11.1.4":
-  version: 11.1.4
-  resolution: "less-loader@npm:11.1.4"
+"less-loader@npm:^12.2.0":
+  version: 12.2.0
+  resolution: "less-loader@npm:12.2.0"
   peerDependencies:
+    "@rspack/core": 0.x || 1.x
     less: ^3.5.0 || ^4.0.0
     webpack: ^5.0.0
-  checksum: 29b2055a05283e16e99d0333802c185b6e1a5408212336e25b07f53d56acd8683dcd643b3e3c0c32abba0d9d5fda5ccf73cb8da00ae634ec6b929307861955c8
+  peerDependenciesMeta:
+    "@rspack/core":
+      optional: true
+    webpack:
+      optional: true
+  checksum: df08dba1d733d6b4202ce185e8fe4897c407a20aeba01dc214f514352ab5aadcd53fc76366b9e473f9ec920bb612d839b39c686303d2ce2155edf61a7be69b7b
   languageName: node
   linkType: hard
 
@@ -13526,17 +13539,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-loader@npm:^7.3.4":
-  version: 7.3.4
-  resolution: "postcss-loader@npm:7.3.4"
+"postcss-loader@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "postcss-loader@npm:8.1.1"
   dependencies:
-    cosmiconfig: ^8.3.5
+    cosmiconfig: ^9.0.0
     jiti: ^1.20.0
     semver: ^7.5.4
   peerDependencies:
+    "@rspack/core": 0.x || 1.x
     postcss: ^7.0.0 || ^8.0.1
     webpack: ^5.0.0
-  checksum: f109eb266580eb296441a1ae057f93629b9b79ad962bdd3fc134417180431606a5419b6f5848c31e6d92c818e71fe96e4335a85cc5332c2f7b14e2869951e5b3
+  peerDependenciesMeta:
+    "@rspack/core":
+      optional: true
+    webpack:
+      optional: true
+  checksum: b09e230181ff70b374a3e265dc526302b9865e2697b5f9c4ff78dfeb716a3508f3247ed49c8ee6630dddfdf6df7d73556d6bd2eb165a00c48dba3a1bd01e3a2e
   languageName: node
   linkType: hard
 
@@ -14481,7 +14500,7 @@ __metadata:
     cookie-parser: ^1.4.6
     core-js: ^3.37.1
     cross-fetch: ^4.0.0
-    css-loader: ^6.11.0
+    css-loader: ^7.1.2
     css-modules-require-hook: ^4.2.3
     deep-equal: ^2.2.3
     dotenv: ^16.4.5
@@ -14507,7 +14526,7 @@ __metadata:
     git-revision-webpack-plugin: ^5.0.0
     glob: ^10.4.1
     global: ^4.4.0
-    globals: ^15.4.0
+    globals: ^15.5.0
     highlight.js: ^11.9.0
     image-webpack-loader: ^8.1.0
     immutable: ^3.8.2
@@ -14516,14 +14535,14 @@ __metadata:
     json-loader: ^0.5.7
     jwt-decode: ^4.0.0
     less: ^4.2.0
-    less-loader: ^11.1.4
+    less-loader: ^12.2.0
     markdown-it: ^14.1.0
     mini-css-extract-plugin: ^2.9.0
     mocha: ^10.4.0
     mocha-lcov-reporter: ^1.3.0
     mock-local-storage: ^1.1.24
     moment: ^2.30.1
-    postcss-loader: ^7.3.4
+    postcss-loader: ^8.1.1
     prettier: ^3.3.2
     pretty-ms: ^9.0.0
     prismjs: ^1.29.0
@@ -14562,7 +14581,7 @@ __metadata:
     serialize-javascript: ^6.0.2
     statuscode: 0.0.0
     strip-loader: ^0.1.2
-    style-loader: ^3.3.4
+    style-loader: ^4.0.0
     terser-webpack-plugin: ^5.3.10
     validator: ^13.12.0
     viz.js: ^2.1.2
@@ -16205,12 +16224,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-loader@npm:^3.3.4":
-  version: 3.3.4
-  resolution: "style-loader@npm:3.3.4"
+"style-loader@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "style-loader@npm:4.0.0"
   peerDependencies:
-    webpack: ^5.0.0
-  checksum: caac3f2fe2c3c89e49b7a2a9329e1cfa515ecf5f36b9c4885f9b218019fda207a9029939b2c35821dec177a264a007e7c391ccdd3ff7401881ce6287b9c8f38b
+    webpack: ^5.27.0
+  checksum: 0b751b4cc8394a2fe1df6194bb2f6dd68e859e36f22030994bb7b5220f24f9efb5705e78b2442226e6fa4c90f74b397529c7eb0a1d7326fb016e1e140e90151c
   languageName: node
   linkType: hard
 

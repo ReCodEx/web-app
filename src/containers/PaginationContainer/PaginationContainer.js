@@ -27,7 +27,7 @@ import {
 } from '../../redux/modules/pagination';
 import { identity, EMPTY_OBJ } from '../../helpers/common';
 
-import styles from './PaginationContainer.less';
+import * as styles from './PaginationContainer.less';
 
 const DEFAULT_LIMITS = [25, 50, 100, 200];
 

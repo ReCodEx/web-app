@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import withLinks from '../../../helpers/withLinks';
 import { UserUIDataContext } from '../../../helpers/contexts';
 
-import styles from './commonStyles.less';
+import * as styles from './commonStyles.less';
 
 class DatetimeField extends Component {
   /**

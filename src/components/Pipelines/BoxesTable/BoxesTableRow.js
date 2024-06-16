@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { AddIcon, BindIcon, UnbindIcon, InputIcon, OutputIcon, RemoveIcon, WarningIcon } from '../../icons';
 import { getVariablesTypes } from '../../../helpers/pipelines';
 import { getBoxTypeDescription } from '../comments';
-import styles from '../styles.less';
+import * as styles from '../styles.less';
 
 /**
  * Prepare ports obect with all data required for rendering.

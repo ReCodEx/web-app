@@ -11,7 +11,7 @@ import Icon, { DeleteIcon } from '../../../icons';
 import { Posted, Posting, Failed } from './Status';
 import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
 
-import styles from '../comments.less';
+import * as styles from '../comments.less';
 
 const Comment = ({
   isFromCurrentUser = false,

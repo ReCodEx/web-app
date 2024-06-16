@@ -28,7 +28,7 @@ import { Ast, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
 
 import { arrayToObject } from '../../../helpers/common';
 
-import style from './EditTests.less';
+import * as style from './EditTests.less';
 
 class EditTestsForm extends Component {
   idCounter = 0; // counter used to generate unique IDs

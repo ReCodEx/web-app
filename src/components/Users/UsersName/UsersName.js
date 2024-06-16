@@ -13,7 +13,7 @@ import NotVerified from './NotVerified';
 import Icon, { MailIcon, BanIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks';
 
-import styles from './usersName.less';
+import * as styles from './usersName.less';
 
 const userNameStyle = lruMemoize((size, large) => ({
   lineHeight: `${size}px`,

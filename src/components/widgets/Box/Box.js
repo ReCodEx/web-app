@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import Icon from '../../icons';
 import withRouter, { withRouterProps } from '../../../helpers/withRouter';
 
-import styles from './Box.less';
+import * as styles from './Box.less';
 
 /**
  * component for bounding other components like text paragraphs or tables inside.

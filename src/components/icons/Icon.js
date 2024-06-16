@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
-import style from './Icon.less';
+import * as style from './Icon.less';
 
 const Icon = ({
   smallGapLeft = false,
