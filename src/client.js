@@ -17,7 +17,7 @@ import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js';
 import 'admin-lte/dist/js/adminlte.js';
 
 // Patch for ACE editor (it has complex loading)
-import 'ace-builds';
+import ace from 'ace-builds';
 import 'ace-builds/webpack-resolver';
 import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/theme-github';
@@ -38,7 +38,7 @@ import 'ace-builds/src-noconflict/mode-scala';
 import 'ace-builds/src-noconflict/mode-typescript';
 import 'ace-builds/src-noconflict/keybinding-vim';
 
-import ace from 'ace-builds/src-noconflict/ace';
+// import ace from 'ace-builds/src-noconflict/ace';
 
 // override of worker paths, so they load properly
 const ACE_CDN_PREFIX = 'https://cdn.jsdelivr.net/npm/ace-builds@1.4.12/src-noconflict/';

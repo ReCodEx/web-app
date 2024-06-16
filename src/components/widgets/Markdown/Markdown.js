@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const hljs = require('highlight.js');
-const md = require('markdown-it')({
+import hljs from 'highlight.js';
+import markdownIT from 'markdown-it';
+import katex from '@iktakahiro/markdown-it-katex';
+
+const md = markdownIT({
   highlight: function (str, language) {
     if (language && hljs.getLanguage(language)) {
       try {
@@ -14,7 +17,7 @@ const md = require('markdown-it')({
 
     return ''; // use external default escaping
   },
-}).use(require('@iktakahiro/markdown-it-katex'));
+}).use(katex);
 
 const Markdown = ({ source }) => (
   <div
