@@ -1,7 +1,7 @@
 import { canUseDOM } from 'exenv';
 
-import messagesCs from './cs'; // eslint-disable-line
-import messagesEn from './en'; // eslint-disable-line
+import messagesCs from './cs';  
+import messagesEn from './en';  
 
 import '@formatjs/intl-pluralrules/polyfill';
 import '@formatjs/intl-pluralrules/locale-data/en';

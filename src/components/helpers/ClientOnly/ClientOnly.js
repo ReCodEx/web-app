@@ -5,7 +5,7 @@ class ClientOnly extends Component {
   state = { isBrowser: false };
 
   componentDidMount() {
-    this.setState({ isBrowser: true }); // eslint-disable-line react/no-did-mount-set-state
+    this.setState({ isBrowser: true });  
   }
 
   render() {
