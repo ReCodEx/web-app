@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { WarningIcon } from '../../icons';
 
 import 'react-toggle/style.css';
-import './OnOffCheckbox.css'; // eslint-disable-line import/no-deprecated
+import './OnOffCheckbox.css';  
 
 const OnOffCheckbox = ({
   children,

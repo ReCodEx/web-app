@@ -14,7 +14,7 @@ const CheckboxField = ({
   ...props
 }) => {
   const Component = onOff ? OnOffCheckbox : NiceCheckbox;
-  /* eslint-disable no-unneeded-ternary */
+   
   return (
     <FormGroup
       className={error ? 'text-danger' : warning ? 'text-warning' : dirty && !ignoreDirty ? 'text-primary' : undefined}
