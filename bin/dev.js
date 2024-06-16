@@ -35,18 +35,33 @@ app.get('*', (req, res) => {
   });
 });
 
-const server = new WebpackDevServer(webpack(config), {
-  static: {
-    directory: path.join(__dirname, '..', 'public'),
-  },
-  hot: true,
-  port: WEBPACK_DEV_SERVER_PORT,
-  devMiddleware: {
-    stats: { colors: true },
-    publicPath: '/',
-  },
-});
+//console.log(webpack(config));
 
+const server = new WebpackDevServer(
+  {
+    static: {
+      directory: path.join(__dirname, '..', 'public'),
+    },
+    hot: true,
+    host: 'localhost',
+    port: WEBPACK_DEV_SERVER_PORT,
+    devMiddleware: {
+      stats: { colors: true },
+      publicPath: '/',
+    },
+  },
+  webpack(config)
+);
+
+(async () => {
+  await server.start();
+  console.log(
+    `${colors.yellow('WebpackDevServer')} is running on ${colors.underline(
+      `http://localhost:${WEBPACK_DEV_SERVER_PORT}`
+    )}`
+  );
+})();
+/*
 server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
   console.log(
     `${colors.yellow('WebpackDevServer')} is running on ${colors.underline(
@@ -54,7 +69,7 @@ server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
     )}`
   );
 });
-
+*/
 app.listen(PORT, () => {
   console.log(`${colors.green('WebApp')} is running on ${colors.underline(`http://localhost:${PORT}`)}`);
 });
