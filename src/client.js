@@ -6,7 +6,7 @@ import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import { configureStore } from './redux/store';
+import { configureOurStore } from './redux/store';
 import { getToken, getInstanceId } from './redux/middleware/authMiddleware';
 import { getLang } from './redux/middleware/langMiddleware';
 import App from './containers/App';
@@ -70,7 +70,7 @@ if (ini) {
   });
 }
 
-const store = configureStore(state, getToken(), getInstanceId(), getLang());
+const store = configureOurStore(state, getToken(), getInstanceId(), getLang());
 
 const container = document.getElementById('root');
 const root = createRoot(container);

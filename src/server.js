@@ -10,7 +10,7 @@ import cookieParser from 'cookie-parser';
 import fs from 'fs';
 import { globSync } from 'glob';
 
-import { configureStore } from './redux/store';
+import { configureOurStore } from './redux/store';
 import { loggedInUserIdSelector } from './redux/selectors/auth';
 import { match } from './pages/routes';
 import { TOKEN_COOKIES_KEY, INSTANCEID_COOKIES_KEY } from './redux/middleware/authMiddleware';
@@ -81,7 +81,7 @@ app.get('*', (req, res) => {
   const token = req.cookies[TOKEN_COOKIES_KEY]; // undefined === the user is not logged in
   const instanceId = req.cookies[INSTANCEID_COOKIES_KEY] || null; // Selected instance
   const lang = req.cookies[LANG_COOKIES_KEY] || null; // Selected instance
-  const store = configureStore(undefined, token, instanceId, lang);
+  const store = configureOurStore(undefined, token, instanceId, lang);
   const location = req.originalUrl;
 
   try {
