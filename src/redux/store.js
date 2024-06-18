@@ -1,6 +1,5 @@
 import { canUseDOM } from 'exenv';
-import { createStore, compose, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import promiseMiddleware from 'redux-promise-middleware';
 import * as storage from 'redux-storage';
 import createEngine from 'redux-storage-engine-localstorage';
@@ -19,40 +18,40 @@ const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX'
 
 const engine = filter(createEngine(`${PERSISTENT_TOKENS_KEY_PREFIX}/store`), ['userSwitching']);
 
-const middleware = [
-  langMiddleware,
-  authMiddleware,
-  apiMiddleware,
-  promiseMiddleware,
-  thunkMiddleware,
-  storage.createMiddleware(
-    engine,
-    [],
-    [authActionTypes.LOGIN_FULFILLED, authActionTypes.LOGOUT, switchingActionTypes.REMOVE_USER]
-  ),
-];
-
-const composeEnhancers = (canUseDOM && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-
-const dev = () =>
-  composeEnhancers(
-    applyMiddleware(
-      ...middleware,
-      loggerMiddleware(
-        !canUseDOM,
-        process.env.LOGGER_MIDDLEWARE_VERBOSE === 'true',
-        process.env.LOGGER_MIDDLEWARE_EXCEPTIONS === 'true'
-      )
-    )
-  );
-
-const prod = () => compose(applyMiddleware(...middleware));
-
 const isDev = () => process.env.NODE_ENV === 'development';
 
-export const configureStore = (initialState, token, instanceId, lang) => {
-  const reducer = createReducer(token, instanceId, lang);
-  const store = createStore(storage.reducer(reducer), initialState, (isDev() ? dev : prod)());
+export const configureOurStore = (preloadedState, token, instanceId, lang) => {
+  const reducer = storage.reducer(createReducer(token, instanceId, lang));
+  const store = configureStore({
+    reducer,
+    preloadedState,
+    devTools: isDev(),
+    middleware: getDefaultMiddleware => {
+      const defaultMiddleware = getDefaultMiddleware({ serializableCheck: false, immutableCheck: false });
+      const middleware = [
+        langMiddleware,
+        authMiddleware,
+        apiMiddleware,
+        promiseMiddleware,
+        ...defaultMiddleware,
+        storage.createMiddleware(
+          engine,
+          [],
+          [authActionTypes.LOGIN_FULFILLED, authActionTypes.LOGOUT, switchingActionTypes.REMOVE_USER]
+        ),
+      ];
+      if (isDev()) {
+        middleware.push(
+          loggerMiddleware(
+            !canUseDOM,
+            process.env.LOGGER_MIDDLEWARE_VERBOSE === 'true',
+            process.env.LOGGER_MIDDLEWARE_EXCEPTIONS === 'true'
+          )
+        );
+      }
+      return middleware;
+    },
+  });
 
   if (canUseDOM) {
     const load = storage.createLoader(engine);
