@@ -149,7 +149,7 @@ class EditPipeline extends Component {
               </Col>
               <Col lg={6}>
                 {isSuperadmin && (
-                  <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray>
+                  <ResourceRenderer resourceArray={runtimeEnvironments}>
                     {environments => (
                       <EditPipelineEnvironmentsForm
                         initialValues={perpareInitialEnvironmentsData(pipeline.runtimeEnvironmentIds, environments)}

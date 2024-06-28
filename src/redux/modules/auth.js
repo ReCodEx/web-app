@@ -128,7 +128,7 @@ const closeAuthPopupWindow = popupWindow => {
       popupWindow.postMessage('die', window.location.origin);
       popupWindow.close();
     } catch (e) {
-      // silent fail, this is probably because one of the kill succeeded and the other one failed
+      // silent fail, this is probably because one of the kills succeeded and the other one failed
     }
   }
 };

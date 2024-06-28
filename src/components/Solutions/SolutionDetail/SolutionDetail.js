@@ -266,7 +266,7 @@ class SolutionDetail extends Component {
                 evaluations.size > 1 && (
                   <Row>
                     <Col lg={12}>
-                      <ResourceRenderer resource={evaluations.toArray()} returnAsArray>
+                      <ResourceRenderer resourceArray={evaluations}>
                         {evaluations => (
                           <SubmissionEvaluations
                             submissionId={id}

@@ -10,8 +10,8 @@ const InstancesManagement = ({ instances }) => (
   <Page
     title={<FormattedMessage id="app.instances.title" defaultMessage="Instances" />}
     description={<FormattedMessage id="app.instances.description" defaultMessage="Management of all instances" />}
-    resource={instances.toArray()}>
-    {(...instances) => (
+    resourceArray={instances}>
+    {instances => (
       <Row>
         <Col lg={6}>
           <Box title={<FormattedMessage id="app.instances.listTitle" defaultMessage="List of instances" />} noPadding>

@@ -42,13 +42,13 @@ const PaginationButtons = ({
   return (
     <Pagination size={size} className={className}>
       {prev && <Pagination.Prev disabled={activePage <= 1} onClick={() => onSelect && onSelect(activePage - 1)} />}
-      {prepareButtonsIndices(activePage, items, maxButtons).map(index =>
+      {prepareButtonsIndices(activePage, items, maxButtons).map((index, i) =>
         index ? (
           <Pagination.Item key={index} active={activePage === index} onClick={() => onSelect && onSelect(index)}>
             {index}
           </Pagination.Item>
         ) : (
-          <Pagination.Ellipsis key={index} />
+          <Pagination.Ellipsis key={`elips-${i}`} />
         )
       )}
       {next && <Pagination.Next disabled={activePage >= items} onClick={() => onSelect && onSelect(activePage + 1)} />}

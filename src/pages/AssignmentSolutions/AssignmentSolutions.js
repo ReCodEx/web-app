@@ -685,7 +685,10 @@ export default withLinks(
     (state, { params: { assignmentId } }) => {
       const assignment = getAssignment(state, assignmentId);
       const getStudentsIds = groupId => studentsIdsOfGroup(groupId)(state);
-      const readyUsers = usersSelector(state).toArray().filter(isReady);
+      const readyUsers = usersSelector(state)
+        .toArray()
+        .map(([_, val]) => val) // users are map, get rid of keys
+        .filter(isReady);
 
       return {
         loggedUserId: loggedInUserIdSelector(state),

@@ -10,31 +10,19 @@ const getEndpointResources = endpoint => state => state[endpoint].get('resources
  */
 
 export const getPaginationOffset = simpleScalarMemoize(componentId =>
-  createSelector(
-    getPagination(componentId),
-    pagination => pagination && pagination.get('offset')
-  )
+  createSelector(getPagination(componentId), pagination => pagination && pagination.get('offset'))
 );
 
 export const getPaginationLimit = simpleScalarMemoize(componentId =>
-  createSelector(
-    getPagination(componentId),
-    pagination => pagination && pagination.get('limit')
-  )
+  createSelector(getPagination(componentId), pagination => pagination && pagination.get('limit'))
 );
 
 export const getPaginationTotalCount = simpleScalarMemoize(componentId =>
-  createSelector(
-    getPagination(componentId),
-    pagination => pagination && pagination.get('totalCount')
-  )
+  createSelector(getPagination(componentId), pagination => pagination && pagination.get('totalCount'))
 );
 
 export const getPaginationOrderBy = simpleScalarMemoize(componentId =>
-  createSelector(
-    getPagination(componentId),
-    pagination => (pagination && pagination.get('orderBy')) || null
-  )
+  createSelector(getPagination(componentId), pagination => (pagination && pagination.get('orderBy')) || null)
 );
 
 export const getPaginationFilters = simpleScalarMemoize(componentId =>
@@ -45,35 +33,29 @@ export const getPaginationFilters = simpleScalarMemoize(componentId =>
 );
 
 export const getPaginationIsPending = simpleScalarMemoize(componentId =>
-  createSelector(
-    getPagination(componentId),
-    pagination => Boolean(pagination && pagination.get('pending'))
-  )
+  createSelector(getPagination(componentId), pagination => Boolean(pagination && pagination.get('pending')))
 );
 
 export const getPaginationDataJS = simpleScalarMemoize((componentId, endpoint) =>
-  createSelector(
-    [getPagination(componentId), getEndpointResources(endpoint)],
-    (pagination, resources) => {
-      const totalCount = pagination && pagination.get('totalCount');
-      if (!pagination || !resources || !totalCount) {
-        return EMPTY_ARRAY;
-      }
-
-      // Get the right range of offsets
-      let offset = pagination.get('offset');
-      const offsetEnd = Math.min(offset + pagination.get('limit'), totalCount);
-
-      // Collect entities by their IDs
-      const res = [];
-      while (offset < offsetEnd) {
-        const id = pagination.getIn(['data', offset], null);
-        const entity = id && resources.get(id);
-        const entityData = isReady(entity) && entity.get('data');
-        res.push(entityData ? entityData.toJS() : null);
-        ++offset;
-      }
-      return res;
+  createSelector([getPagination(componentId), getEndpointResources(endpoint)], (pagination, resources) => {
+    const totalCount = pagination && pagination.get('totalCount');
+    if (!pagination || !resources || !totalCount) {
+      return EMPTY_ARRAY;
     }
-  )
+
+    // Get the right range of offsets
+    let offset = pagination.get('offset');
+    const offsetEnd = Math.min(offset + pagination.get('limit'), totalCount);
+
+    // Collect entities by their IDs
+    const res = [];
+    while (offset < offsetEnd) {
+      const id = pagination.getIn(['data', offset], null);
+      const entity = id && resources.get(id);
+      const entityData = isReady(entity) && entity.get('data');
+      res.push(entityData ? entityData.toJS() : null);
+      ++offset;
+    }
+    return res;
+  })
 );

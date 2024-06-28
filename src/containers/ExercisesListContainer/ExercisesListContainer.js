@@ -119,7 +119,7 @@ class ExercisesListContainer extends Component {
     const { id, runtimeEnvironments, rootGroup } = this.props;
 
     return (
-      <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray bulkyLoading>
+      <ResourceRenderer resourceArray={runtimeEnvironments} bulkyLoading>
         {envs => (
           <FilterExercisesListForm
             form={`${id}-filterForm`}

@@ -93,7 +93,7 @@ const ForkExerciseForm = ({
         </Callout>
       )}
       <Form className="forkForm">
-        <ResourceRenderer resource={groups.toArray()} returnAsArray>
+        <ResourceRenderer resourceArray={groups}>
           {groups => (
             <>
               <Field

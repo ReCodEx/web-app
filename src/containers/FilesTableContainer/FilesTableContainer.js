@@ -31,10 +31,7 @@ class FilesTableContainer extends Component {
 
     return (
       <Box title={title} collapsable isOpen={isOpen} unlimitedHeight>
-        <ResourceRenderer
-          resource={files.toArray()}
-          returnAsArray
-          forceLoading={fetchFilesStatus && isLoadingState(fetchFilesStatus)}>
+        <ResourceRenderer resourceArray={files} forceLoading={fetchFilesStatus && isLoadingState(fetchFilesStatus)}>
           {filesJs => <FilesTable files={filesJs} {...restProps} />}
         </ResourceRenderer>
       </Box>

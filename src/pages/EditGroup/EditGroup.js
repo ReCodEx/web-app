@@ -195,7 +195,7 @@ class EditGroup extends Component {
                 )}
 
                 {canRelocate(group) && (
-                  <ResourceRenderer resource={groups.toArray()} returnAsArray>
+                  <ResourceRenderer resourceArray={groups}>
                     {groups =>
                       getPossibleParentsOfGroup(groups, group).length > 1 && (
                         <Box

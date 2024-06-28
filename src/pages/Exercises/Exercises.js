@@ -58,7 +58,7 @@ const Exercises = ({
           <ExercisesListContainer id="exercises-all" showGroups />
         </Box>
 
-        <ResourceRenderer resource={groups.toArray()} returnAsArray>
+        <ResourceRenderer resourceArray={groups}>
           {groups => (
             <CreateExerciseForm
               groups={prepareGroupOptions(groups, groupsAccessor, locale)}

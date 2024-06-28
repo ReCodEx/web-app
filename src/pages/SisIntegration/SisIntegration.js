@@ -223,9 +223,7 @@ class SisIntegration extends Component {
                 />
               </Callout>
 
-              <ResourceRenderer
-                resource={isSuperadminRole(effectiveRole) ? allGroups.toArray() : adminOfGroups.toArray()}
-                returnAsArray={true}>
+              <ResourceRenderer resourceArray={isSuperadminRole(effectiveRole) ? allGroups : adminOfGroups}>
                 {groups => (
                   <>
                     {isStudentRole(effectiveRole) && (

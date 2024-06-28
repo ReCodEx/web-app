@@ -8,8 +8,8 @@ import GroupsName from '../GroupsName';
 import { GroupIcon } from '../../icons';
 
 const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) => (
-  <ResourceRenderer resource={groups.toArray()}>
-    {(...groups) => (
+  <ResourceRenderer resourceArray={groups}>
+    {groups => (
       <Table hover {...props}>
         <tbody>
           {groups.map(({ id, name, localizedTexts, organizational, public: isPublic }) => (

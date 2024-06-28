@@ -420,9 +420,9 @@ class ExerciseReferenceSolutions extends Component {
 
             <Row>
               <Col sm={12}>
-                <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
+                <ResourceRenderer resourceArray={runtimeEnvironments}>
                   {runtimes => (
-                    <ResourceRenderer resource={referenceSolutions.toArray()} returnAsArray>
+                    <ResourceRenderer resourceArray={referenceSolutions}>
                       {referenceSolutions => (
                         <Box
                           id="reference-solutions"

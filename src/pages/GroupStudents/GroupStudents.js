@@ -225,7 +225,7 @@ class GroupStudents extends Component {
                             {assignments => (
                               <ResourceRenderer resource={shadowAssignments} returnAsArray bulkyLoading>
                                 {shadowAssignments => (
-                                  <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray bulkyLoading>
+                                  <ResourceRenderer resourceArray={runtimeEnvironments} bulkyLoading>
                                     {runtimes => (
                                       <ResultsTable
                                         users={students}

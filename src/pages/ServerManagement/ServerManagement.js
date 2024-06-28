@@ -58,7 +58,7 @@ class Broker extends Component {
                     <FormattedMessage id="app.asyncJobs.title" defaultMessage="Core Background Jobs" />
                   </h4>
                   <AsyncJobsButtons refresh={refreshAsyncJobs} pingAction={ping} pingStatus={pingStatus} />
-                  <ResourceRenderer resource={asyncJobs.toArray()} returnAsArray>
+                  <ResourceRenderer resourceArray={asyncJobs}>
                     {asyncJobs => <AsyncJobsList asyncJobs={asyncJobs} abort={abort} />}
                   </ResourceRenderer>
                 </Col>
