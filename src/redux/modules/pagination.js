@@ -1,5 +1,5 @@
 import { handleActions, createAction } from 'redux-actions';
-import { List, Map, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import { createApiAction } from '../middleware/apiMiddleware';
 import { didInvalidate } from '../helpers/resourceManager';
 import {
@@ -24,7 +24,7 @@ export const actionTypes = {
 };
 
 const paginationStructure = {
-  data: [], // cache for entity IDs
+  data: {}, // cache for entity IDs
   totalCount: null, // total number of items available for given combination of filters
   orderBy: null, // ordering column
   filters: {}, // current combination of applied filters
@@ -70,60 +70,57 @@ export const decodeOrderBy = orderBy => {
 
 export const setPaginationFilters = componentId => createAction(actionTypes.SET_FILTERS, null, () => ({ componentId }));
 
-export const fetchPaginated = (componentId, endpoint) => (
-  locale = null,
-  offset = null,
-  limit = null,
-  forceInvalidate = false
-) => (dispatch, getState) => {
-  if (offset === null) {
-    offset = getPaginationOffset(componentId)(getState());
-  }
-  if (limit === null) {
-    limit = getPaginationLimit(componentId)(getState());
-  }
-  const orderBy = getPaginationOrderBy(componentId)(getState());
-  const filters = getPaginationFilters(componentId)(getState());
-  if (endpoint !== 'pipelines') {
-    filters.instanceId = selectedInstanceId(getState());
-  }
+export const fetchPaginated =
+  (componentId, endpoint) =>
+  (locale = null, offset = null, limit = null, forceInvalidate = false) =>
+  (dispatch, getState) => {
+    if (offset === null) {
+      offset = getPaginationOffset(componentId)(getState());
+    }
+    if (limit === null) {
+      limit = getPaginationLimit(componentId)(getState());
+    }
+    const orderBy = getPaginationOrderBy(componentId)(getState());
+    const filters = getPaginationFilters(componentId)(getState());
+    if (endpoint !== 'pipelines') {
+      filters.instanceId = selectedInstanceId(getState());
+    }
 
-  const query = { offset, limit, filters };
-  if (locale) {
-    query.locale = locale;
-  }
-  if (orderBy) {
-    query.orderBy = orderBy;
-  }
+    const query = { offset, limit, filters };
+    if (locale) {
+      query.locale = locale;
+    }
+    if (orderBy) {
+      query.orderBy = orderBy;
+    }
 
-  return dispatch(
-    createApiAction({
-      type: actionTypes.FETCH_PAGINATED,
-      endpoint: `/${endpoint}`,
-      meta: {
-        componentId,
-        endpoint,
-        offset,
-        limit,
-        started: Date.now(),
-        forceInvalidate,
-      },
-      query,
-    })
-  );
-};
+    return dispatch(
+      createApiAction({
+        type: actionTypes.FETCH_PAGINATED,
+        endpoint: `/${endpoint}`,
+        meta: {
+          componentId,
+          endpoint,
+          offset,
+          limit,
+          started: Date.now(),
+          forceInvalidate,
+        },
+        query,
+      })
+    );
+  };
 
 /*
  * Reductors
  */
 
-const preprocessItems = (items, offset) => {
-  const res = [];
-  items.forEach(item => {
-    res[offset++] = item.id;
+const addItemsWithMutations = (items, offset) => data =>
+  data.withMutations(mutable => {
+    items.forEach(item => {
+      mutable.set(offset++, item.id);
+    });
   });
-  return res;
-};
 
 export default handleActions(
   {
@@ -142,7 +139,7 @@ export default handleActions(
     [actionTypes.SET_FILTERS]: (state, { payload, meta: { componentId } }) =>
       state
         .setIn([componentId, 'didInvalidate'], true)
-        .setIn([componentId, 'offset'], 0) // modification of filters require
+        .setIn([componentId, 'offset'], 0) // modification of filters require position reset
         .setIn([componentId, 'filters'], fromJS(payload)),
 
     [actionTypes.SET_ORDERBY]: (state, { payload, meta: { componentId } }) =>
@@ -160,14 +157,14 @@ export default handleActions(
       }
 
       // If important change occured or data are invalid, reset data cache ...
-      totalCount = Number(totalCount);
+      const totalCountNum = Number(totalCount);
       if (
         forceInvalidate ||
-        state.getIn([componentId, 'totalCount']) !== totalCount ||
+        state.getIn([componentId, 'totalCount']) !== totalCountNum ||
         didInvalidate(state.get(componentId))
       ) {
         state = state
-          .setIn([componentId, 'data'], List()) // remove cached indices (parameters have changed)
+          .setIn([componentId, 'data'], Map()) // remove cached indices (parameters have changed)
           .setIn([componentId, 'lastUpdate'], Date.now())
           .setIn([componentId, 'didInvalidate'], false);
       }
@@ -178,13 +175,16 @@ export default handleActions(
       }
 
       return state
-        .mergeIn([componentId], {
-          totalCount,
-          orderBy,
-          filters: Array.isArray(filters) ? {} : filters,
-          pending: false,
-        })
-        .mergeIn([componentId, 'data'], preprocessItems(items, offset));
+        .mergeIn(
+          [componentId],
+          fromJS({
+            totalCount: totalCountNum,
+            orderBy,
+            filters: Array.isArray(filters) ? {} : filters,
+            pending: false,
+          })
+        )
+        .updateIn([componentId, 'data'], addItemsWithMutations(items, offset));
     },
 
     [actionTypes.FETCH_PAGINATED_REJECTED]: (state, { meta: { componentId, started } }) =>

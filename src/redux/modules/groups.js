@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 
 import { addNotification } from './notifications';
 import { createApiAction } from '../middleware/apiMiddleware';
@@ -441,12 +441,10 @@ const reducer = handleActions(
     [sisSupervisedCoursesActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
       state.update('resources', oldGroups =>
         oldGroups.merge(
-          new Map(
-            arrayToObject(
-              groups,
-              o => o.id,
-              data => createRecord({ state: resourceStatus.FULFILLED, data })
-            )
+          arrayToObject(
+            groups,
+            o => o.id,
+            data => createRecord({ state: resourceStatus.FULFILLED, data })
           )
         )
       ),
@@ -454,12 +452,10 @@ const reducer = handleActions(
     [sisSubscribedCoursesActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
       state.update('resources', oldGroups =>
         oldGroups.merge(
-          new Map(
-            arrayToObject(
-              groups,
-              o => o.id,
-              data => createRecord({ state: resourceStatus.FULFILLED, data })
-            )
+          arrayToObject(
+            groups,
+            o => o.id,
+            data => createRecord({ state: resourceStatus.FULFILLED, data })
           )
         )
       ),
@@ -467,12 +463,10 @@ const reducer = handleActions(
     [sisPossibleParentsActionTypes.FETCH_FULFILLED]: (state, { payload: groups }) =>
       state.update('resources', oldGroups =>
         oldGroups.merge(
-          new Map(
-            arrayToObject(
-              groups,
-              o => o.id,
-              data => createRecord({ state: resourceStatus.FULFILLED, data })
-            )
+          arrayToObject(
+            groups,
+            o => o.id,
+            data => createRecord({ state: resourceStatus.FULFILLED, data })
           )
         )
       ),
@@ -480,12 +474,10 @@ const reducer = handleActions(
     [invitationsActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
       state.update('resources', oldGroups =>
         oldGroups.merge(
-          new Map(
-            arrayToObject(
-              groups,
-              o => o.id,
-              data => createRecord({ state: resourceStatus.FULFILLED, data })
-            )
+          arrayToObject(
+            groups,
+            o => o.id,
+            data => createRecord({ state: resourceStatus.FULFILLED, data })
           )
         )
       ),

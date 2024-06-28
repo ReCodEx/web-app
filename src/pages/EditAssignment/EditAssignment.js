@@ -170,7 +170,7 @@ class EditAssignment extends Component {
                   />
                 }
                 unlimitedHeight>
-                <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
+                <ResourceRenderer resourceArray={runtimeEnvironments}>
                   {envs => (
                     <EditAssignmentForm
                       form="editAssignment"

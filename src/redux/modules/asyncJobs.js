@@ -3,7 +3,6 @@ import factory, { initialState, resourceStatus, createRecord } from '../helpers/
 import { createApiAction } from '../middleware/apiMiddleware';
 import { additionalActionTypes as assignmentsActionTypes } from './assignments';
 import { arrayToObject } from '../../helpers/common';
-import { Map } from 'immutable';
 
 const resourceName = 'asyncJobs';
 const {
@@ -89,12 +88,10 @@ const reducer = handleActions(
     [assignmentsActionTypes.RESUBMIT_ALL_FULFILLED]: (state, { payload: { pending, failed } }) =>
       state.update('resources', jobs =>
         jobs.merge(
-          new Map(
-            arrayToObject(
-              [...pending, ...failed],
-              o => o.id,
-              data => createRecord({ state: resourceStatus.FULFILLED, data })
-            )
+          arrayToObject(
+            [...pending, ...failed],
+            o => o.id,
+            data => createRecord({ state: resourceStatus.FULFILLED, data })
           )
         )
       ),
@@ -102,12 +99,10 @@ const reducer = handleActions(
     [assignmentsActionTypes.FETCH_ASYNC_JOBS_FULFILLED]: (state, { payload }) =>
       state.update('resources', jobs =>
         jobs.merge(
-          new Map(
-            arrayToObject(
-              payload,
-              o => o.id,
-              data => createRecord({ state: resourceStatus.FULFILLED, data })
-            )
+          arrayToObject(
+            payload,
+            o => o.id,
+            data => createRecord({ state: resourceStatus.FULFILLED, data })
           )
         )
       ),

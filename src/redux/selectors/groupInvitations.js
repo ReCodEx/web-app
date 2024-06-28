@@ -15,6 +15,7 @@ export const invitationSelector = createSelector([groupsInvitationsSelector, get
 export const groupInvitationsSelector = createSelector([groupsInvitationsSelector, getParam], (invitations, groupId) =>
   invitations
     .toArray()
+    .map(([_, val]) => val) // invitations are stored in map, get the values
     .filter(isReady)
     .map(getJsData)
     .filter(invitation => invitation.groupId === groupId)

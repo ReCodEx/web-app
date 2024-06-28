@@ -171,7 +171,7 @@ class EditExerciseLimits extends Component {
               </Row>
             )}
 
-            <ResourceRenderer resource={hardwareGroups.toArray()} returnAsArray={true}>
+            <ResourceRenderer resourceArray={hardwareGroups}>
               {hwgs => (
                 <Row>
                   {exercise.permissionHints.setLimits && (

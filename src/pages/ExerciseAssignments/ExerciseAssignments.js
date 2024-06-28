@@ -200,9 +200,9 @@ class ExerciseAssignments extends Component {
 
                   {!exercise.isLocked && exercise.hasReferenceSolutions && (
                     <Box title={formatMessage(messages.groupsBoxTitle)} unlimitedHeight>
-                      <ResourceRenderer resource={assignableGroups.toArray()} returnAsArray>
+                      <ResourceRenderer resourceArray={assignableGroups}>
                         {assignableGroups => (
-                          <ResourceRenderer resource={assignments.toList()} returnAsArray>
+                          <ResourceRenderer resourceArray={assignments}>
                             {assignments => (
                               <>
                                 <Callout variant="info">

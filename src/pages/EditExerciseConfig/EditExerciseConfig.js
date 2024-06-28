@@ -295,7 +295,7 @@ class EditExerciseConfig extends Component {
           <div>
             <ExerciseNavigation exercise={exercise} />
 
-            <ResourceRenderer resource={pipelines.toArray()} returnAsArray={true}>
+            <ResourceRenderer resourceArray={pipelines}>
               {(
                 pipelines // pipelines are returned as a whole array (so they can be cached properly)
               ) => (
@@ -317,7 +317,7 @@ class EditExerciseConfig extends Component {
                           <td className="valing-middle em-padding-right">
                             <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
                               {(config, environmentConfigs) => (
-                                <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
+                                <ResourceRenderer resourceArray={runtimeEnvironments}>
                                   {environments => (
                                     <ExerciseConfigTypeButton
                                       isSimple={isSimple(exercise)}
@@ -377,8 +377,7 @@ class EditExerciseConfig extends Component {
                                   <ResourceRenderer resource={exerciseEnvironmentConfig}>
                                     {environmentConfigs => (
                                       <ResourceRenderer
-                                        resource={runtimeEnvironments.toArray()}
-                                        returnAsArray
+                                        resourceArray={runtimeEnvironments}
                                         forceLoading={runtimeEnvironments.size === 0}>
                                         {environments => (
                                           <EditEnvironmentSimpleForm
@@ -417,7 +416,7 @@ class EditExerciseConfig extends Component {
                       {(config, environmentConfigs) => (
                         <Row>
                           <Col lg={6}>
-                            <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray>
+                            <ResourceRenderer resourceArray={runtimeEnvironments}>
                               {environments => (
                                 <EditEnvironmentConfigForm
                                   initialValues={getEnvironmentInitValues(environmentConfigs)}
@@ -486,8 +485,7 @@ class EditExerciseConfig extends Component {
                           <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
                             {(config, envConfig) => (
                               <ResourceRenderer
-                                resource={supplementaryFiles.toArray()}
-                                returnAsArray
+                                resourceArray={supplementaryFiles}
                                 forceLoading={isLoadingState(supplementaryFilesStatus)}>
                                 {files =>
                                   tests.length > 0 ? (

@@ -161,7 +161,7 @@ class Exercise extends Component {
               <Col xl={6}>
                 <ExerciseDetail {...exercise} forkedFrom={forkedFrom} locale={locale} className="d-none d-xl-flex" />
 
-                <ResourceRenderer resource={runtimeEnvironments.toArray()} returnAsArray={true}>
+                <ResourceRenderer resourceArray={runtimeEnvironments}>
                   {runtimes => (
                     <Box
                       id="reference-solutions"
@@ -207,7 +207,7 @@ class Exercise extends Component {
                         </div>
                       }>
                       <div>
-                        <ResourceRenderer resource={referenceSolutions.toArray()} returnAsArray>
+                        <ResourceRenderer resourceArray={referenceSolutions}>
                           {referenceSolutions =>
                             getPromotedReferenceSolutions(referenceSolutions).length > 0 ? (
                               <ReferenceSolutionsTable

@@ -29,6 +29,7 @@ export const primaryAdminsIdsOfGroup = groupId =>
 export const userStudentOfGroupIdsSelector = createSelector([groupsSelector, getParam], (groups, userId) =>
   groups
     .toArray()
+    .map(([_, val]) => val) // groups are map, remove keys
     .filter(isReady)
     .map(getJsData)
     .filter(group => group.privateData && group.privateData.students && group.privateData.students.indexOf(userId) >= 0)
@@ -135,7 +136,7 @@ export const loggedUserAdminOfGroupsSelector = loggedUserMemberOfGroupsSelector(
 // membership checking function of type for logged user (implemented separately to be more efficient)
 const loggedUserIsMemberOfSelector = type =>
   createSelector(loggedUserMemberOfGroupsSelector(type), groups => {
-    const lookupIndex = new Set(groups.toArray().map(group => group.getIn(['data', 'id'])));
+    const lookupIndex = new Set(groups.toArray().map(([_, group]) => group.getIn(['data', 'id'])));
     return groupId => lookupIndex.has(groupId);
   });
 

@@ -98,7 +98,7 @@ const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = f
                 />
               </InsetPanel>
 
-              <ResourceRenderer resource={groups.toArray()} returnAsArray>
+              <ResourceRenderer resourceArray={groups}>
                 {groups => (
                   <InviteUserForm
                     onSubmit={prepareInviteOnSubmitHandler(inviteUser, setDialogOpen, instanceId)}
