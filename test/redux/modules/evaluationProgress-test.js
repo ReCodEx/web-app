@@ -1,4 +1,4 @@
-import chai from 'chai';
+import * as chai from 'chai';
 import spies from 'chai-spies';
 import { Map, List } from 'immutable';
 

@@ -1,12 +1,8 @@
-import chai from 'chai';
-import spies from 'chai-spies';
 import { fromJS } from 'immutable';
-
 import actionTypesFactory from '../../../../src/redux/helpers/resourceManager/actionTypesFactory.js';
 import actionCreatorsFactory from '../../../../src/redux/helpers/resourceManager/actionCreatorsFactory.js';
 
-chai.use(spies);
-const expect = chai.expect;
+import chai from '../../../chai-spy.js';
 
 // prepared spies
 let globalNeedsRefetching = false; // this is really disgusting, I know...
@@ -39,13 +35,13 @@ describe('Resource manager', () => {
         const { fetchResource } = actionCreators;
 
         // fetchResource must be a function with one parameter
-        expect(fetchResource).to.be.a('function');
-        expect(fetchResource.length).to.equal(1);
+        chai.expect(fetchResource).to.be.a('function');
+        chai.expect(fetchResource.length).to.equal(1);
 
         // calling fetchResource will create an action through the 'createApiAction' function
         fetchResource('abc');
-        expect(createApiAction).to.have.been.called.once;
-        expect(createApiAction).to.have.been.called.with({
+        chai.expect(createApiAction).to.have.been.called.once;
+        chai.expect(createApiAction).to.have.been.called.with({
           type: actionTypes.FETCH,
           method: 'GET',
           endpoint: 'url/abc',
@@ -57,13 +53,13 @@ describe('Resource manager', () => {
         const { fetchOneIfNeeded } = actionCreators;
 
         // fetchResource must be a function with one parameter
-        expect(fetchOneIfNeeded).to.be.a('function');
-        expect(fetchOneIfNeeded.length).to.equal(1);
+        chai.expect(fetchOneIfNeeded).to.be.a('function');
+        chai.expect(fetchOneIfNeeded.length).to.equal(1);
 
         // calling fetchResource will create a thunk
         const thunk = fetchOneIfNeeded('abc');
-        expect(thunk).to.be.a('function');
-        expect(thunk.length).to.equal(2);
+        chai.expect(thunk).to.be.a('function');
+        chai.expect(thunk.length).to.equal(2);
 
         const getState = () =>
           fromJS({
@@ -76,8 +72,8 @@ describe('Resource manager', () => {
         const dispatch = chai.spy();
         const thunkResult = thunk(dispatch, getState);
 
-        expect(dispatch).to.not.have.been.called();
-        expect(thunkResult.then).to.be.a('function');
+        chai.expect(dispatch).to.not.have.been.called();
+        chai.expect(thunkResult.then).to.be.a('function');
         thunkResult.then(() => done()); // must be resolved right away
       });
 
@@ -96,8 +92,8 @@ describe('Resource manager', () => {
         const dispatch = chai.spy();
         thunk(dispatch, getState); // we don't care about the resulting state in this test
 
-        expect(dispatch).to.have.been.called.once;
-        expect(dispatch).to.have.been.called.with(fetchResource('abc'));
+        chai.expect(dispatch).to.have.been.called.once;
+        chai.expect(dispatch).to.have.been.called.with(fetchResource('abc'));
       });
     });
 
@@ -106,13 +102,13 @@ describe('Resource manager', () => {
         const { fetchMany } = actionCreators;
 
         // fetchResource must be a function with one parameter
-        expect(fetchMany).to.be.a('function');
-        expect(fetchMany.length).to.equal(1);
+        chai.expect(fetchMany).to.be.a('function');
+        chai.expect(fetchMany.length).to.equal(1);
 
         // calling fetchResource will create an action through the 'createApiAction' function
         fetchMany({});
-        expect(createApiAction).to.have.been.called.once;
-        expect(createApiAction).to.have.been.called.with({
+        chai.expect(createApiAction).to.have.been.called.once;
+        chai.expect(createApiAction).to.have.been.called.with({
           type: actionTypes.FETCH_MANY,
           method: 'GET',
           endpoint: 'url/',
@@ -124,14 +120,14 @@ describe('Resource manager', () => {
       it('must create an "add resource" action creator', () => {
         const { addResource } = actionCreators;
 
-        expect(addResource).to.be.a('function');
-        expect(addResource.length).to.equal(1);
+        chai.expect(addResource).to.be.a('function');
+        chai.expect(addResource.length).to.equal(1);
 
         const body = { foo: 'bar', abc: 'xyz' };
         const tmpId = 'random-tmp-id';
         addResource(body, tmpId);
-        expect(createApiAction).to.have.been.called.once;
-        expect(createApiAction).to.have.been.called.with({
+        chai.expect(createApiAction).to.have.been.called.once;
+        chai.expect(createApiAction).to.have.been.called.with({
           type: actionTypes.ADD,
           method: 'POST',
           endpoint: 'url/',
@@ -150,14 +146,14 @@ describe('Resource manager', () => {
       it('must create an "update resource" action creator', () => {
         const { updateResource } = actionCreators;
 
-        expect(updateResource).to.be.a('function');
-        expect(updateResource.length).to.equal(2);
+        chai.expect(updateResource).to.be.a('function');
+        chai.expect(updateResource.length).to.equal(2);
 
         const body = { foo: 'bar', abc: 'xyz' };
         const id = 'some-id';
         updateResource(id, body);
-        expect(createApiAction).to.have.been.called.once;
-        expect(createApiAction).to.have.been.called.with({
+        chai.expect(createApiAction).to.have.been.called.once;
+        chai.expect(createApiAction).to.have.been.called.with({
           type: actionTypes.UPDATE,
           method: 'POST',
           endpoint: `url/${id}`,
@@ -171,13 +167,13 @@ describe('Resource manager', () => {
       it('must create an "remove resource" action creator', () => {
         const { removeResource } = actionCreators;
 
-        expect(removeResource).to.be.a('function');
-        expect(removeResource.length).to.equal(1);
+        chai.expect(removeResource).to.be.a('function');
+        chai.expect(removeResource.length).to.equal(1);
 
         const id = 'some-id';
         removeResource(id);
-        expect(createApiAction).to.have.been.called.once;
-        expect(createApiAction).to.have.been.called.with({
+        chai.expect(createApiAction).to.have.been.called.once;
+        chai.expect(createApiAction).to.have.been.called.with({
           type: actionTypes.REMOVE,
           method: 'DELETE',
           endpoint: `url/${id}`,

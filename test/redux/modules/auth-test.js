@@ -1,4 +1,4 @@
-import chai from 'chai';
+import * as chai from 'chai';
 import spies from 'chai-spies';
 import { fromJS } from 'immutable';
 
