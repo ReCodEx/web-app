@@ -1,2 +1,2 @@
-import DifficultyIcon from './DifficultyIcon';
+import DifficultyIcon from './DifficultyIcon.js';
 export default DifficultyIcon;

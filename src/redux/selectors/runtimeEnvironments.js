@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { fetchRuntimeEnvironmentsEndpoint } from '../modules/runtimeEnvironments';
+import { fetchRuntimeEnvironmentsEndpoint } from '../modules/runtimeEnvironments.js';
 
 const getRuntimeEnvironments = state => state.runtimeEnvironments;
 

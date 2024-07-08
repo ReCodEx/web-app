@@ -1,5 +1,5 @@
 import { lruMemoize } from 'reselect';
-import { safeGet, arrayToObject, createIndex } from '../../helpers/common';
+import { safeGet, arrayToObject, createIndex } from '../../helpers/common.js';
 
 export const ENV_ARDUINO_ID = 'arduino-gcc';
 export const ENV_BASH_ID = 'bash';

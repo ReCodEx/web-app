@@ -9,16 +9,16 @@ import PaginationContainer, { createSortingIcon, showRangeInfo } from '../Pagina
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FilterExercisesListForm from '../../components/forms/FilterExercisesListForm';
-import { fetchExercisesAuthorsIfNeeded } from '../../redux/modules/exercisesAuthors';
-import { create as assignExercise } from '../../redux/modules/assignments';
-import { fetchTags } from '../../redux/modules/exercises';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { arrayToObject, EMPTY_OBJ } from '../../helpers/common';
+import { fetchExercisesAuthorsIfNeeded } from '../../redux/modules/exercisesAuthors.js';
+import { create as assignExercise } from '../../redux/modules/assignments.js';
+import { fetchTags } from '../../redux/modules/exercises.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
+import { arrayToObject, EMPTY_OBJ } from '../../helpers/common.js';
 
-import withLinks from '../../helpers/withLinks';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
-import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 const filterInitialValues = lruMemoize(
   ({ search = '', archived = null, authorsIds = [], tags = [], runtimeEnvironments = [] }, allEnvironments) => ({

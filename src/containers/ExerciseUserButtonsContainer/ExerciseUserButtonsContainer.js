@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import { setAuthor, setAdmins } from '../../redux/modules/exercises';
-import { getExerciseSetAuthorStatus, getExerciseSetAdminsStatus } from '../../redux/selectors/exercises';
+import { setAuthor, setAdmins } from '../../redux/modules/exercises.js';
+import { getExerciseSetAuthorStatus, getExerciseSetAdminsStatus } from '../../redux/selectors/exercises.js';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import { AdminIcon, AuthorIcon, LoadingIcon, RemoveUserIcon, WarningIcon } from '../../components/icons';

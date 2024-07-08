@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
-import { fetchManyEndpoint } from '../modules/pipelines';
-import { unique } from '../../helpers/common';
-import { runtimeEnvironmentSelector } from './runtimeEnvironments';
+import { fetchManyEndpoint } from '../modules/pipelines.js';
+import { unique } from '../../helpers/common.js';
+import { runtimeEnvironmentSelector } from './runtimeEnvironments.js';
 
 const getPipelines = state => state.pipelines;
 const getResources = pipelines => pipelines.get('resources');

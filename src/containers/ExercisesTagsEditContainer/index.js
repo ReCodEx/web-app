@@ -1,2 +1,2 @@
-import ExercisesTagsEditContainer from './ExercisesTagsEditContainer';
+import ExercisesTagsEditContainer from './ExercisesTagsEditContainer.js';
 export default ExercisesTagsEditContainer;

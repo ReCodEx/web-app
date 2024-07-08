@@ -17,9 +17,9 @@ import DateTime from '../../widgets/DateTime';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
 import Icon, { BanIcon, EditIcon, DeleteIcon, SaveIcon, SquareIcon } from '../../icons';
-import { createUserNameComparator } from '../../helpers/users';
-import { arrayToObject, safeGet } from '../../../helpers/common';
-import withLinks from '../../../helpers/withLinks';
+import { createUserNameComparator } from '../../helpers/users.js';
+import { arrayToObject, safeGet } from '../../../helpers/common.js';
+import withLinks from '../../../helpers/withLinks.js';
 
 class ShadowAssignmentPointsTable extends Component {
   state = { dialogStudentId: null, dialogPointsId: null, multiAwardMode: false };

@@ -1,2 +1,2 @@
-import EvaluationTable from './EvaluationTable';
+import EvaluationTable from './EvaluationTable.js';
 export default EvaluationTable;

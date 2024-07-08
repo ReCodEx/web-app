@@ -5,12 +5,12 @@ import { reduxForm } from 'redux-form';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import { knownRoles, roleLabels, roleDescriptions, UserRoleIcon } from '../../helpers/usersRoles';
+import { knownRoles, roleLabels, roleDescriptions, UserRoleIcon } from '../../helpers/usersRoles.js';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
-import StandaloneRadioField from '../Fields/StandaloneRadioField';
+import StandaloneRadioField from '../Fields/StandaloneRadioField.js';
 
 const EditUserRoleForm = ({
   currentRole = null,

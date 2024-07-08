@@ -6,11 +6,11 @@ import { injectIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import OrganizationalGroupButton from '../../components/buttons/OrganizationalGroupButton';
-import { setOrganizational } from '../../redux/modules/groups';
-import { groupSelector, groupTypePendingChange } from '../../redux/selectors/groups';
+import { setOrganizational } from '../../redux/modules/groups.js';
+import { groupSelector, groupTypePendingChange } from '../../redux/selectors/groups.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { getErrorMessage } from '../../locales/apiErrorMessages';
-import { addNotification } from '../../redux/modules/notifications';
+import { getErrorMessage } from '../../locales/apiErrorMessages.js';
+import { addNotification } from '../../redux/modules/notifications.js';
 
 const setOrganizationalHandlingErrors = lruMemoize(
   (organizational, setOrganizational, addNotification, formatMessage) => () =>

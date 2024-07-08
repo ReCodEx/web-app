@@ -13,20 +13,20 @@ import { ShadowAssignmentNavigation } from '../../components/layout/Navigation';
 import EditShadowAssignmentForm from '../../components/forms/EditShadowAssignmentForm';
 import DeleteShadowAssignmentButtonContainer from '../../containers/DeleteShadowAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
-import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData.js';
 import { EditShadowAssignmentIcon } from '../../components/icons';
 
 import {
   fetchShadowAssignment,
   editShadowAssignment,
   validateShadowAssignment,
-} from '../../redux/modules/shadowAssignments';
-import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
+} from '../../redux/modules/shadowAssignments.js';
+import { getShadowAssignment } from '../../redux/selectors/shadowAssignments.js';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 
-import { hasPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
+import { hasPermissions } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
 
 const LOCALIZED_TEXT_DEFAULTS = {
   name: '',

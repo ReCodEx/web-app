@@ -1,2 +1,2 @@
-import GroupsTreeContainer from './GroupsTreeContainer';
+import GroupsTreeContainer from './GroupsTreeContainer.js';
 export default GroupsTreeContainer;

@@ -4,13 +4,13 @@ import { Table } from 'react-bootstrap';
 import { formValues } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
-import EditTestsTestRow from './EditTestsTestRow';
+import EditTestsTestRow from './EditTestsTestRow.js';
 import Callout from '../../widgets/Callout';
 import Button from '../../widgets/TheButton';
 import { AddIcon } from '../../icons';
-import { prettyPrintPercent } from '../../helpers/stringFormatters';
-import { safeGet } from '../../../helpers/common';
-import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
+import { prettyPrintPercent } from '../../helpers/stringFormatters.js';
+import { safeGet } from '../../../helpers/common.js';
+import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore.js';
 
 const EditTestsTest = ({ fields, calculator, testValues, usedTests, addNewTest, readOnly = false }) => {
   const weightSum = Math.max(

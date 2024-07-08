@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { downloadEvaluationArchive } from '../../redux/modules/submissionEvaluations';
-import { downloadEvaluationArchive as downloadRefEvaluationArchive } from '../../redux/modules/referenceSolutionEvaluations';
+import { downloadEvaluationArchive } from '../../redux/modules/submissionEvaluations.js';
+import { downloadEvaluationArchive as downloadRefEvaluationArchive } from '../../redux/modules/referenceSolutionEvaluations.js';
 import ResultArchiveInfoBox from '../../components/Solutions/ResultArchiveInfoBox';
 
 const DownloadResultArchiveContainer = ({

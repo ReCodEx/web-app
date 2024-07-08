@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Navigation from './Navigation';
+import Navigation from './Navigation.js';
 import { ReferenceSolutionIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
-import { createExerciseLinks } from './linkCreators';
+import withLinks from '../../../helpers/withLinks.js';
+import { createExerciseLinks } from './linkCreators.js';
 
 const ReferenceSolutionNavigation = ({
   solutionId,

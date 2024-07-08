@@ -1,2 +1,2 @@
-import GroupExamStatus from './GroupExamStatus';
+import GroupExamStatus from './GroupExamStatus.js';
 export default GroupExamStatus;

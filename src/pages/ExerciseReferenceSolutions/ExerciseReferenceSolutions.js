@@ -31,28 +31,28 @@ import Confirm from '../../components/forms/Confirm';
 import OnOffCheckbox from '../../components/forms/OnOffCheckbox';
 import ExerciseCallouts from '../../components/Exercises/ExerciseCallouts';
 import UsersName from '../../components/Users/UsersName';
-import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
-import { createUserNameComparator } from '../../components/helpers/users';
+import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem.js';
+import { createUserNameComparator } from '../../components/helpers/users.js';
 import ReferenceSolutionActionsContainer from '../../containers/ReferenceSolutionActionsContainer';
 
-import { isSubmitting } from '../../redux/selectors/submission';
-import { fetchExerciseIfNeeded, reloadExercise } from '../../redux/modules/exercises';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { fetchReferenceSolutions, deleteReferenceSolution } from '../../redux/modules/referenceSolutions';
-import { init, submitReferenceSolution, presubmitReferenceSolution } from '../../redux/modules/submission';
-import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
-import { fetchByIds } from '../../redux/modules/users';
-import { exerciseSelector } from '../../redux/selectors/exercises';
-import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
+import { isSubmitting } from '../../redux/selectors/submission.js';
+import { fetchExerciseIfNeeded, reloadExercise } from '../../redux/modules/exercises.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
+import { fetchReferenceSolutions, deleteReferenceSolution } from '../../redux/modules/referenceSolutions.js';
+import { init, submitReferenceSolution, presubmitReferenceSolution } from '../../redux/modules/submission.js';
+import { fetchHardwareGroups } from '../../redux/modules/hwGroups.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { exerciseSelector } from '../../redux/selectors/exercises.js';
+import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions.js';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { getReadyUserSelector } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { getReadyUserSelector } from '../../redux/selectors/users.js';
 
-import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage';
-import { hasPermissions, safeGet, objectFilter } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage.js';
+import { hasPermissions, safeGet, objectFilter } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 
 const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, deleteReferenceSolution) => {
   const { REFERENCE_SOLUTION_URI_FACTORY } = links;

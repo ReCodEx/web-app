@@ -22,8 +22,8 @@ import FailureReport from '../../SubmissionFailures/FailureReport';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 
-import { isStudentLocked } from '../../helpers/exams';
-import { safeGet, EMPTY_OBJ } from '../../../helpers/common';
+import { isStudentLocked } from '../../helpers/exams.js';
+import { safeGet, EMPTY_OBJ } from '../../../helpers/common.js';
 
 class SolutionDetail extends Component {
   state = {

@@ -1,2 +1,2 @@
-import EditSolutionNoteForm from './EditSolutionNoteForm';
+import EditSolutionNoteForm from './EditSolutionNoteForm.js';
 export default EditSolutionNoteForm;

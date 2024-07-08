@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-import ReferenceSolutionsTableRow from './ReferenceSolutionsTableRow';
-import withLinks from '../../../helpers/withLinks';
+import ReferenceSolutionsTableRow from './ReferenceSolutionsTableRow.js';
+import withLinks from '../../../helpers/withLinks.js';
 
 import * as styles from './ReferenceSolutionsTable.less';
 

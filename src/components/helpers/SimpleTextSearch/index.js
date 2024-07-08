@@ -1,2 +1,2 @@
-import SimpleTextSearch from './SimpleTextSearch';
+import SimpleTextSearch from './SimpleTextSearch.js';
 export default SimpleTextSearch;

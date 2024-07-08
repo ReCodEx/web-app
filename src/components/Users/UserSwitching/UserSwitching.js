@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuAvatar from '../../widgets/Sidebar/MenuAvatar';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import { safeGet } from '../../../helpers/common';
+import { safeGet } from '../../../helpers/common.js';
 
 const UserSwitching = ({ users = [], currentUser, loginAs, removeUser }) => (
   <ResourceRenderer resource={currentUser}>

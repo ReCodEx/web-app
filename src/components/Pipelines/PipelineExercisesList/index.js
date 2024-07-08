@@ -1,2 +1,2 @@
-import PipelineExercisesList from './PipelineExercisesList';
+import PipelineExercisesList from './PipelineExercisesList.js';
 export default PipelineExercisesList;

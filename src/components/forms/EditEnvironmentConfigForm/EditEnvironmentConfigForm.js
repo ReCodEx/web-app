@@ -4,15 +4,15 @@ import { reduxForm, Field, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables';
+import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables.js';
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
-import { compareVariablesForEquality } from '../../../helpers/exercise/environments';
-import { safeGet, safeSet } from '../../../helpers/common';
+import { compareVariablesForEquality } from '../../../helpers/exercise/environments.js';
+import { safeGet, safeSet } from '../../../helpers/common.js';
 
 class EditEnvironmentConfigForm extends Component {
   setDefaultVariables = () => {

@@ -1,2 +1,2 @@
-import DeleteAssignmentButtonContainer from './DeleteAssignmentButtonContainer';
+import DeleteAssignmentButtonContainer from './DeleteAssignmentButtonContainer.js';
 export default DeleteAssignmentButtonContainer;

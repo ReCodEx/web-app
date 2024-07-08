@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import Viz from 'viz.js';
 import { Module, render } from 'viz.js/lite.render.js';
 
 import InsetPanel from '../../widgets/InsetPanel';
 import { LoadingIcon } from '../../icons';
-import { isExternalReference } from '../../../helpers/pipelines';
+import { isExternalReference } from '../../../helpers/pipelines.js';
+import { canUseDOM } from '../../../helpers/common.js';
 import * as styles from '../styles.less';
 
 // string sanitizations

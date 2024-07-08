@@ -1,2 +1,2 @@
-export { default as UsersComment } from './UsersComment';
-export { default as SomebodyElsesComment } from './SomebodyElsesComment';
+export { default as UsersComment } from './UsersComment.js';
+export { default as SomebodyElsesComment } from './SomebodyElsesComment.js';

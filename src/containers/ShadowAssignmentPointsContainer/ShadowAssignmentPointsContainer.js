@@ -6,11 +6,11 @@ import moment from 'moment';
 
 import ShadowAssignmentPointsTable from '../../components/Assignments/ShadowAssignmentPointsTable';
 
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchByIds } from '../../redux/modules/users';
-import { setShadowAssignmentPoints, removeShadowAssignmentPoints } from '../../redux/modules/shadowAssignments';
-import { studentsOfGroupSelector } from '../../redux/selectors/usersGroups';
-import { safeGet, arrayToObject } from '../../helpers/common';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { setShadowAssignmentPoints, removeShadowAssignmentPoints } from '../../redux/modules/shadowAssignments.js';
+import { studentsOfGroupSelector } from '../../redux/selectors/usersGroups.js';
+import { safeGet, arrayToObject } from '../../helpers/common.js';
 
 const prepareInitialValues = lruMemoize((students, maxPoints) => ({
   points: maxPoints,

@@ -1,2 +1,2 @@
-import ArchiveGroupButton from './ArchiveGroupButton';
+import ArchiveGroupButton from './ArchiveGroupButton.js';
 export default ArchiveGroupButton;

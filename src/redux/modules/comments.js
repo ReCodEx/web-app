@@ -1,9 +1,9 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import factory, { initialState, createActionsWithPostfixes } from '../helpers/resourceManager';
-import { commentsSelector } from '../selectors/comments';
+import { commentsSelector } from '../selectors/comments.js';
 
 const resourceName = 'comments';
 const {

@@ -1,2 +1,2 @@
-import RecentlyVisited from './RecentlyVisited';
+import RecentlyVisited from './RecentlyVisited.js';
 export default RecentlyVisited;

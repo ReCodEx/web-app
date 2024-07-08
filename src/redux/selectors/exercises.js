@@ -1,5 +1,5 @@
 import { createSelector, lruMemoize } from 'reselect';
-import { EMPTY_ARRAY, EMPTY_LIST } from '../../helpers/common';
+import { EMPTY_ARRAY, EMPTY_LIST } from '../../helpers/common.js';
 import { isReady } from '../helpers/resourceManager';
 
 const getParam = (_, id) => id;

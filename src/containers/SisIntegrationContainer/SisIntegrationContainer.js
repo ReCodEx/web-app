@@ -15,15 +15,15 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { AssignmentsIcon } from '../../components/icons';
 import CourseLabel, { getLocalizedData } from '../../components/SisIntegration/CourseLabel';
 
-import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
-import { fetchSisSubscribedGroups } from '../../redux/modules/sisSubscribedGroups';
-import { sisStateSelector } from '../../redux/selectors/sisStatus';
-import { sisSubscribedCoursesGroupsSelector } from '../../redux/selectors/sisSubscribedGroups';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupDataAccessorSelector } from '../../redux/selectors/groups';
+import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus.js';
+import { fetchSisSubscribedGroups } from '../../redux/modules/sisSubscribedGroups.js';
+import { sisStateSelector } from '../../redux/selectors/sisStatus.js';
+import { sisSubscribedCoursesGroupsSelector } from '../../redux/selectors/sisSubscribedGroups.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { groupDataAccessorSelector } from '../../redux/selectors/groups.js';
 
-import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
-import withLinks from '../../helpers/withLinks';
+import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData.js';
+import withLinks from '../../helpers/withLinks.js';
 
 const dowFix = dow => (typeof dow === 'number' ? dow : 8);
 

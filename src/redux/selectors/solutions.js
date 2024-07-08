@@ -3,7 +3,7 @@ import {
   fetchManyAssignmentSolutionsEndpoint,
   fetchManyUserSolutionsEndpoint,
   fetchManyGroupStudentsSolutionsEndpoint,
-} from '../modules/solutions';
+} from '../modules/solutions.js';
 
 const getParam = (_, id) => id;
 const getParams = (_, ...params) => params;

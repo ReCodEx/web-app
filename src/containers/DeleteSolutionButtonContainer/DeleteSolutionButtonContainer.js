@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import { getSolution } from '../../redux/selectors/solutions';
-import { deleteSolution } from '../../redux/modules/solutions';
+import { getSolution } from '../../redux/selectors/solutions.js';
+import { deleteSolution } from '../../redux/modules/solutions.js';
 
 const DeleteSolutionButtonContainer = ({ solution, deleteSolution, onDeleted, groupId, ...props }) => (
   <DeleteButton {...props} resource={solution} deleteAction={deleteSolution} />

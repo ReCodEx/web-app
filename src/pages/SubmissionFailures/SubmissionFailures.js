@@ -5,11 +5,11 @@ import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import { fetchAllFailures, resolveFailure } from '../../redux/modules/submissionFailures';
-import { fetchManyStatus, readySubmissionFailuresSelector } from '../../redux/selectors/submissionFailures';
-import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList';
-import Box from '../../components/widgets/Box/Box';
-import ResolveFailure from '../../components/SubmissionFailures/ResolveFailure/ResolveFailure';
+import { fetchAllFailures, resolveFailure } from '../../redux/modules/submissionFailures.js';
+import { fetchManyStatus, readySubmissionFailuresSelector } from '../../redux/selectors/submissionFailures.js';
+import FailuresList from '../../components/SubmissionFailures/FailuresList/FailuresList.js';
+import Box from '../../components/widgets/Box/Box.js';
+import ResolveFailure from '../../components/SubmissionFailures/ResolveFailure/ResolveFailure.js';
 import Button from '../../components/widgets/TheButton';
 import { EvaluationFailedIcon, LoadingIcon, WarningIcon } from '../../components/icons';
 

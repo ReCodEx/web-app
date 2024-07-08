@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
-import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList';
+import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList.js';
 import { SaveIcon } from '../../icons';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';

@@ -1,1 +1,1 @@
-export { default } from './ExerciseGroups';
+export { default } from './ExerciseGroups.js';

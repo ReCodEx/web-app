@@ -5,16 +5,16 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
-import EditEnvironmentList from './EditEnvironmentList';
+import EditEnvironmentList from './EditEnvironmentList.js';
 import SubmitButton from '../SubmitButton';
 import Box from '../../widgets/Box';
 import Callout from '../../widgets/Callout';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { RefreshIcon } from '../../icons';
-import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
-import { getConfigVar } from '../../../helpers/config';
-import { arrayToObject } from '../../../helpers/common';
+import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments.js';
+import { getConfigVar } from '../../../helpers/config.js';
+import { arrayToObject } from '../../../helpers/common.js';
 
 const environmentsHelpUrl = getConfigVar('ENVIRONMENTS_INFO_URL');
 

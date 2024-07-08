@@ -1,2 +1,2 @@
-import AssignmentSyncIcon from './AssignmentSyncIcon';
+import AssignmentSyncIcon from './AssignmentSyncIcon.js';
 export default AssignmentSyncIcon;

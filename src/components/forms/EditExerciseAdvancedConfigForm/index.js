@@ -1,2 +1,2 @@
-import EditExerciseAdvancedConfigForm from './EditExerciseAdvancedConfigForm';
+import EditExerciseAdvancedConfigForm from './EditExerciseAdvancedConfigForm.js';
 export default EditExerciseAdvancedConfigForm;

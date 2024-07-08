@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Modal } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import ScoreConfigInfo from './ScoreConfigInfo';
+import ScoreConfigInfo from './ScoreConfigInfo.js';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 
 const ScoreConfigInfoDialog = ({ show, onHide, scoreConfig, testResults, canResubmit = false }) => (

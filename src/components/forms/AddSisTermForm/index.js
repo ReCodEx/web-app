@@ -1,2 +1,2 @@
-import AddSisTermForm from './AddSisTermForm';
+import AddSisTermForm from './AddSisTermForm.js';
 export default AddSisTermForm;

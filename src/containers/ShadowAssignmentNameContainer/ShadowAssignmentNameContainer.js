@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments';
-import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
+import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments.js';
+import { getShadowAssignment } from '../../redux/selectors/shadowAssignments.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import { LoadingIcon } from '../../components/icons';
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 class ShadowAssignmentNameContainer extends Component {
   componentDidMount() {

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import ScoreConfigInfoDefault from './ScoreConfigInfoDefault';
+import ScoreConfigInfoDefault from './ScoreConfigInfoDefault.js';
 import Callout from '../../widgets/Callout';
 import DateTime from '../../widgets/DateTime';
-import ScoreConfigInfoUniform from './ScoreConfigInfoUniform';
-import ScoreConfigInfoWeighted from './ScoreConfigInfoWeighted';
-import ScoreConfigInfoUniversal from './ScoreConfigInfoUniversal';
-import { UNIFORM_ID, WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
+import ScoreConfigInfoUniform from './ScoreConfigInfoUniform.js';
+import ScoreConfigInfoWeighted from './ScoreConfigInfoWeighted.js';
+import ScoreConfigInfoUniversal from './ScoreConfigInfoUniversal.js';
+import { UNIFORM_ID, WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore.js';
 
 const knownCalculators = {
   [UNIFORM_ID]: ScoreConfigInfoUniform,

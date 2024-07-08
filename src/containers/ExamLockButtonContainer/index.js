@@ -1,2 +1,2 @@
-import ExamLockButtonContainer from './ExamLockButtonContainer';
+import ExamLockButtonContainer from './ExamLockButtonContainer.js';
 export default ExamLockButtonContainer;

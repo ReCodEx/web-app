@@ -1,4 +1,4 @@
-import { createApiCallPromise, getHeaders, isTwoHundredCode } from '../helpers/api/tools';
+import { createApiCallPromise, getHeaders, isTwoHundredCode } from '../helpers/api/tools.js';
 
 export const CALL_API = 'recodex-api/CALL';
 export const createApiAction = request => ({ type: CALL_API, request });

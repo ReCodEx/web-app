@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
+import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import Box from '../../widgets/Box';
-import { getLimitsConstraintsOfSingleGroup } from '../../../helpers/exercise/limits';
+import { getLimitsConstraintsOfSingleGroup } from '../../../helpers/exercise/limits.js';
 import Icon from '../../icons';
 
 const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {

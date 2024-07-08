@@ -1,2 +1,2 @@
-import OrganizationalGroupButtonContainer from './OrganizationalGroupButtonContainer';
+import OrganizationalGroupButtonContainer from './OrganizationalGroupButtonContainer.js';
 export default OrganizationalGroupButtonContainer;

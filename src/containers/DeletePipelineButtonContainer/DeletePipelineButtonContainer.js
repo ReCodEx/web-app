@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import { deletePipeline } from '../../redux/modules/pipelines';
-import { getPipeline } from '../../redux/selectors/pipelines';
+import { deletePipeline } from '../../redux/modules/pipelines.js';
+import { getPipeline } from '../../redux/selectors/pipelines.js';
 
 const DeletePipelineButtonContainer = ({
   resourceless = false,

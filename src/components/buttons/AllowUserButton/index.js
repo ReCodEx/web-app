@@ -1,2 +1,2 @@
-import AllowUserButton from './AllowUserButton';
+import AllowUserButton from './AllowUserButton.js';
 export default AllowUserButton;

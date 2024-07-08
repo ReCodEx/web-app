@@ -21,7 +21,7 @@ import Icon, {
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import CodeFragmentSelector from '../../helpers/CodeFragmentSelector';
 import * as cfsStyles from '../../helpers/CodeFragmentSelector/CodeFragmentSelector.less';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 import * as styles from './PlagiarismCodeBox.less';
 

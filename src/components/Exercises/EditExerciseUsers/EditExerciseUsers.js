@@ -10,7 +10,7 @@ import Box from '../../widgets/Box';
 import Explanation from '../../widgets/Explanation';
 import { AdminIcon, AuthorIcon } from '../../icons';
 
-import { knownRoles, isSupervisorRole } from '../../helpers/usersRoles';
+import { knownRoles, isSupervisorRole } from '../../helpers/usersRoles.js';
 
 const ROLES_FILTER = knownRoles.filter(isSupervisorRole);
 

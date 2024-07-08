@@ -1,2 +1,2 @@
-import FilesTableContainer from './FilesTableContainer';
+import FilesTableContainer from './FilesTableContainer.js';
 export default FilesTableContainer;

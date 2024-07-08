@@ -1,2 +1,2 @@
-import SubmitButton from './SubmitButton';
+import SubmitButton from './SubmitButton.js';
 export default SubmitButton;

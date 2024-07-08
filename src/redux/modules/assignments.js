@@ -1,19 +1,19 @@
 import { handleActions } from 'redux-actions';
 import { fromJS, List } from 'immutable';
 
-import { createApiAction } from '../middleware/apiMiddleware';
-import { downloadHelper } from '../helpers/api/download';
+import { createApiAction } from '../middleware/apiMiddleware.js';
+import { downloadHelper } from '../helpers/api/download.js';
 import factory, {
   initialState,
   createRecord,
   resourceStatus,
   createActionsWithPostfixes,
 } from '../helpers/resourceManager';
-import { arrayToObject } from '../../helpers/common';
+import { arrayToObject } from '../../helpers/common.js';
 
-import { additionalActionTypes as solutionsActionTypes } from './solutions';
-import { actionTypes as submissionActionTypes } from './submission';
-import { additionalActionTypes as additionalReviewsActionTypes } from './solutionReviews';
+import { additionalActionTypes as solutionsActionTypes } from './solutions.js';
+import { actionTypes as submissionActionTypes } from './submission.js';
+import { additionalActionTypes as additionalReviewsActionTypes } from './solutionReviews.js';
 
 const resourceName = 'assignments';
 const { actions, actionTypes, reduceActions } = factory({

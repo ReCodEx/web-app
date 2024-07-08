@@ -5,11 +5,11 @@ import classnames from 'classnames';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import withLinks from '../../../../helpers/withLinks';
+import withLinks from '../../../../helpers/withLinks.js';
 import Icon, { DeleteIcon } from '../../../icons';
 
 import { Posted, Posting, Failed } from './Status';
-import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
+import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer.js';
 
 import * as styles from '../comments.less';
 

@@ -1,2 +1,2 @@
-import HeaderNotification from './HeaderNotification';
+import HeaderNotification from './HeaderNotification.js';
 export default HeaderNotification;

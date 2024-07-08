@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState, getJsData } from '../helpers/resourceManager';
-import { getFile } from '../selectors/files';
-import { downloadHelper } from '../helpers/api/download';
-import { urlQueryString } from '../../helpers/common';
+import { getFile } from '../selectors/files.js';
+import { downloadHelper } from '../helpers/api/download.js';
+import { urlQueryString } from '../../helpers/common.js';
 
 const resourceName = 'files';
 const { actions, reduceActions } = factory({

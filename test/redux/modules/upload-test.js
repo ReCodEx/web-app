@@ -8,7 +8,7 @@ import reducer, {
   restoreRemovedFile,
   finalizeUpload,
   manuallyFailUpload,
-} from '../../../src/redux/modules/upload';
+} from '../../../src/redux/modules/upload.js';
 
 import { fromJS, Map } from 'immutable';
 

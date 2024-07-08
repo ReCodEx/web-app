@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import reducer from '../../../src/redux/modules/groupExercises';
+import reducer from '../../../src/redux/modules/groupExercises.js';
 
 const actionType = 'recodex/resource/exercises/FETCH_MANY_FULFILLED';
 
@@ -10,7 +10,7 @@ describe('Group exercises', () => {
 
     const newState = reducer(state, {
       type: actionType,
-      meta: { endpoint: '/exercises' }
+      meta: { endpoint: '/exercises' },
     });
 
     expect(newState).to.eql(state);
@@ -21,7 +21,7 @@ describe('Group exercises', () => {
     const action = {
       type: actionType,
       payload: [{ id: 'A' }],
-      meta: { endpoint: '/groups/X/exercises' }
+      meta: { endpoint: '/groups/X/exercises' },
     };
 
     const newState = reducer(state, action);
@@ -34,7 +34,7 @@ describe('Group exercises', () => {
     const action = {
       type: actionType,
       payload: [{ id: 'C' }],
-      meta: { endpoint: '/groups/X/exercises' }
+      meta: { endpoint: '/groups/X/exercises' },
     };
 
     const newState = reducer(state, action);
@@ -47,7 +47,7 @@ describe('Group exercises', () => {
     const action = {
       type: actionType,
       payload: [{ id: 'A' }],
-      meta: { endpoint: '/groups/X/exercises' }
+      meta: { endpoint: '/groups/X/exercises' },
     };
 
     const newState = reducer(state, action);
@@ -60,7 +60,7 @@ describe('Group exercises', () => {
     const action = {
       type: actionType,
       payload: [{ id: 'B' }],
-      meta: { endpoint: '/groups/Y/exercises' }
+      meta: { endpoint: '/groups/Y/exercises' },
     };
 
     const newState = reducer(state, action);
@@ -74,7 +74,7 @@ describe('Group exercises', () => {
     const action = {
       type: actionType,
       payload: [{ id: 'X' }],
-      meta: { endpoint: `/groups/${guid}/exercises` }
+      meta: { endpoint: `/groups/${guid}/exercises` },
     };
 
     const newState = reducer(state, action);
@@ -87,7 +87,7 @@ describe('Group exercises', () => {
     const action = {
       type: actionType,
       payload: [{ id: 'C' }, { id: 'D' }],
-      meta: { endpoint: '/groups/X/exercises' }
+      meta: { endpoint: '/groups/X/exercises' },
     };
 
     const newState = reducer(state, action);

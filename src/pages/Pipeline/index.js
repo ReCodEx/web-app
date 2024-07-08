@@ -1,2 +1,2 @@
-import Pipeline from './Pipeline';
+import Pipeline from './Pipeline.js';
 export default Pipeline;

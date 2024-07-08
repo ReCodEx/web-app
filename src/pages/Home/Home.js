@@ -18,11 +18,11 @@ import Icon, {
 } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Markdown from '../../components/widgets/Markdown';
-import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
-import { selectedInstance } from '../../redux/selectors/instances';
-import { isSupervisorRole } from '../../components/helpers/usersRoles';
-import { getConfigVar, URL_PATH_PREFIX } from '../../helpers/config';
-import { getLocalizedName, getLocalizedDescription } from '../../helpers/localizedData';
+import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
+import { selectedInstance } from '../../redux/selectors/instances.js';
+import { isSupervisorRole } from '../../components/helpers/usersRoles.js';
+import { getConfigVar, URL_PATH_PREFIX } from '../../helpers/config.js';
+import { getLocalizedName, getLocalizedDescription } from '../../helpers/localizedData.js';
 
 const BASIC_HTML = {
   strong: content => <strong>{content}</strong>,

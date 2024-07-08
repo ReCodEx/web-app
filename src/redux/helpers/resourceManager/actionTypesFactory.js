@@ -2,7 +2,7 @@
  * @module actionTypesFactory
  */
 
-import { arrayToObject } from '../../../helpers/common';
+import { arrayToObject } from '../../../helpers/common.js';
 
 const defaultPrefix = resourceName => `recodex/resource/${resourceName}`;
 const twoPhaseActions = ['ADD', 'UPDATE', 'REMOVE', 'FETCH', 'FETCH_MANY'];

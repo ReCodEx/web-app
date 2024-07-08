@@ -1,2 +1,2 @@
-import EditExerciseConfig from './EditExerciseConfig';
+import EditExerciseConfig from './EditExerciseConfig.js';
 export default EditExerciseConfig;

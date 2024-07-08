@@ -15,7 +15,7 @@ import {
   getPaginationTotalCount,
   getPaginationIsPending,
   getPaginationDataJS,
-} from '../../redux/selectors/pagination';
+} from '../../redux/selectors/pagination.js';
 import {
   registerPaginationComponent,
   setPaginationOffsetLimit,
@@ -24,8 +24,8 @@ import {
   decodeOrderBy,
   setPaginationFilters,
   fetchPaginated,
-} from '../../redux/modules/pagination';
-import { identity, EMPTY_OBJ } from '../../helpers/common';
+} from '../../redux/modules/pagination.js';
+import { identity, EMPTY_OBJ } from '../../helpers/common.js';
 
 import * as styles from './PaginationContainer.less';
 

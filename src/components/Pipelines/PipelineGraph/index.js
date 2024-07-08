@@ -1,2 +1,2 @@
-import PipelineGraph from './PipelineGraph';
+import PipelineGraph from './PipelineGraph.js';
 export default PipelineGraph;

@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { resourceStatus, getJsData } from '../helpers/resourceManager';
-import { getSolutions } from './solutions';
+import { getSolutions } from './solutions.js';
 
 const getSolutionsReviewsResources = state => state.solutionReviews.get('resources');
 const getOpenReviews = state => state.solutionReviews.get('open-reviews');

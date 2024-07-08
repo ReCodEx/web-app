@@ -8,9 +8,9 @@ import PaginationContainer from '../PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersList from '../../components/Users/UsersList';
-import { loggedInUserSelector } from '../../redux/selectors/users';
-import { getPaginationFilters } from '../../redux/selectors/pagination';
-import { EMPTY_OBJ } from '../../helpers/common';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
+import { getPaginationFilters } from '../../redux/selectors/pagination.js';
+import { EMPTY_OBJ } from '../../helpers/common.js';
 import { FormattedMessage } from 'react-intl';
 
 const LIMITS = [10];

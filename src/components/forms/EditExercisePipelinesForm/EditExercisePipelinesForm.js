@@ -4,12 +4,12 @@ import { reduxForm, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
 import FormBox from '../../widgets/FormBox';
-import EditExercisePipelinesTable from './EditExercisePipelinesTable';
+import EditExercisePipelinesTable from './EditExercisePipelinesTable.js';
 import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { RefreshIcon } from '../../icons';
-import { createIndex } from '../../../helpers/common';
+import { createIndex } from '../../../helpers/common.js';
 
 class EditExercisePipelinesForm extends Component {
   render() {

@@ -1,2 +1,2 @@
-import ResolveFailure from './ResolveFailure';
+import ResolveFailure from './ResolveFailure.js';
 export default ResolveFailure;

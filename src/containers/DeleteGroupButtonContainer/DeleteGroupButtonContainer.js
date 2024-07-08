@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import { deleteGroup } from '../../redux/modules/groups';
-import { groupSelector } from '../../redux/selectors/groups';
+import { deleteGroup } from '../../redux/modules/groups.js';
+import { groupSelector } from '../../redux/selectors/groups.js';
 
 const DeleteGroupButtonContainer = ({ group, deleteGroup, onDeleted, ...props }) => (
   <DeleteButton {...props} resource={group} deleteAction={deleteGroup} />

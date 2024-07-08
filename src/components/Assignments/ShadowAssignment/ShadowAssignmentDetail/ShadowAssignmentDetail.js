@@ -7,7 +7,7 @@ import Icon, { BonusIcon, VisibleIcon, SuccessOrFailureIcon, DeadlineIcon } from
 import Box from '../../../widgets/Box';
 import Explanation from '../../../widgets/Explanation';
 import DateTime from '../../../widgets/DateTime';
-import Version from '../../../widgets/Version/Version';
+import Version from '../../../widgets/Version/Version.js';
 
 const ShadowAssignmentDetail = ({
   maxPoints,

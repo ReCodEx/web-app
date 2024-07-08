@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import LicencesTable from '../../components/Instances/LicencesTable';
 
-import { fetchInstanceLincences } from '../../redux/modules/licences';
-import { getLicencesOfInstance } from '../../redux/selectors/licences';
+import { fetchInstanceLincences } from '../../redux/modules/licences.js';
+import { getLicencesOfInstance } from '../../redux/selectors/licences.js';
 
 class LicencesTableContainer extends Component {
   componentDidMount() {

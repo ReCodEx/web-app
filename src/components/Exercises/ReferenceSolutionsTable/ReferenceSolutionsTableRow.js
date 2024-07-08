@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
 import Icon, { EvaluationFailedIcon, LoadingIcon } from '../../icons';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import DateTime from '../../widgets/DateTime';

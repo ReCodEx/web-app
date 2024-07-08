@@ -1,2 +1,2 @@
-import EditPipelineStructure from './EditPipelineStructure';
+import EditPipelineStructure from './EditPipelineStructure.js';
 export default EditPipelineStructure;

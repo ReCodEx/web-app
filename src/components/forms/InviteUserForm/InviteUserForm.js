@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import isEmail from 'validator/lib/isEmail';
+import isEmail from 'validator/lib/isEmail.js';
 
 import SubmitButton from '../SubmitButton';
 import Callout from '../../widgets/Callout';
-import { validateRegistrationData } from '../../../redux/modules/users';
+import { validateRegistrationData } from '../../../redux/modules/users.js';
 import { TextField, CheckboxField } from '../Fields';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
 
 const InviteUserForm = ({
   groups,

@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState, resourceStatus, createRecord } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
-import { additionalActionTypes as assignmentsActionTypes } from './assignments';
-import { arrayToObject } from '../../helpers/common';
+import { createApiAction } from '../middleware/apiMiddleware.js';
+import { additionalActionTypes as assignmentsActionTypes } from './assignments.js';
+import { arrayToObject } from '../../helpers/common.js';
 
 const resourceName = 'asyncJobs';
 const {

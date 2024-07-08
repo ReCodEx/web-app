@@ -5,7 +5,7 @@ import { Card, Tab, Nav } from 'react-bootstrap';
 
 import Confirm from '../Confirm';
 import { CloseIcon } from '../../icons';
-import { identity } from '../../../helpers/common';
+import { identity } from '../../../helpers/common.js';
 import InsetPanel from '../../widgets/InsetPanel';
 
 class TabbedArrayField extends Component {

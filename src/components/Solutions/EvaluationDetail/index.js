@@ -1,2 +1,2 @@
-import EvaluationDetail from './EvaluationDetail';
+import EvaluationDetail from './EvaluationDetail.js';
 export default EvaluationDetail;

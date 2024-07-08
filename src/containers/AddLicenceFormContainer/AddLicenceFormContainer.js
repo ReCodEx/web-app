@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 
 import AddLicenceForm from '../../components/forms/AddLicenceForm';
-import { addLicence } from '../../redux/modules/licences';
+import { addLicence } from '../../redux/modules/licences.js';
 
 const AddLicenceFormContainer = ({ addLicence }) => <AddLicenceForm onSubmit={addLicence} />;
 
@@ -13,16 +13,13 @@ AddLicenceFormContainer.propTypes = {
   addLicence: PropTypes.func.isRequired,
 };
 
-export default connect(
-  null,
-  (dispatch, { instanceId }) => ({
-    addLicence: ({ note, validUntil }) =>
-      dispatch(
-        addLicence(instanceId, {
-          isValid: true,
-          note,
-          validUntil: validUntil.unix(),
-        })
-      ).then(() => dispatch(reset('addLicence'))),
-  })
-)(AddLicenceFormContainer);
+export default connect(null, (dispatch, { instanceId }) => ({
+  addLicence: ({ note, validUntil }) =>
+    dispatch(
+      addLicence(instanceId, {
+        isValid: true,
+        note,
+        validUntil: validUntil.unix(),
+      })
+    ).then(() => dispatch(reset('addLicence'))),
+}))(AddLicenceFormContainer);

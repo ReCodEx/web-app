@@ -1,22 +1,18 @@
 import { createSelector } from 'reselect';
-import { EMPTY_LIST } from '../../helpers/common';
+import { EMPTY_LIST } from '../../helpers/common.js';
 import { isReady } from '../helpers/resourceManager';
-import { loggedInUserSelector } from './users';
-import { selectedInstanceId } from './auth';
-import { fetchUsersInstancesEndpont } from '../modules/instances';
+import { loggedInUserSelector } from './users.js';
+import { selectedInstanceId } from './auth.js';
+import { fetchUsersInstancesEndpont } from '../modules/instances.js';
 
 const getParam = (state, id) => id;
 
 const getInstances = state => state.instances;
 const getResources = instances => instances.get('resources');
 
-export const instancesSelector = createSelector(
-  getInstances,
-  getResources
-);
-export const instanceSelector = createSelector(
-  [instancesSelector, (state, id) => id],
-  (instances, id) => instances.get(id)
+export const instancesSelector = createSelector(getInstances, getResources);
+export const instanceSelector = createSelector([instancesSelector, (state, id) => id], (instances, id) =>
+  instances.get(id)
 );
 
 export const selectedInstance = createSelector(
@@ -24,16 +20,12 @@ export const selectedInstance = createSelector(
   (id, instances) => id && instances && instances.get(id)
 );
 
-export const publicInstancesSelector = createSelector(
-  instancesSelector,
-  instances => instances.filter(instance => instance.getIn(['data', 'isOpen']) === true)
+export const publicInstancesSelector = createSelector(instancesSelector, instances =>
+  instances.filter(instance => instance.getIn(['data', 'isOpen']) === true)
 );
 
 export const instanceByIdSelector = instanceId =>
-  createSelector(
-    [instancesSelector],
-    instances => instances.get(instanceId)
-  );
+  createSelector([instancesSelector], instances => instances.get(instanceId));
 
 export const loggedInUserMemberOfInstances = createSelector(
   [loggedInUserSelector, instancesSelector],
@@ -50,7 +42,6 @@ export const isAdminOfInstance = (userId, instanceId) =>
     instance => !!instance && isReady(instance) && instance.getIn(['data', 'admin']) === userId
   );
 
-export const fetchManyUserInstancesStatus = createSelector(
-  [getInstances, getParam],
-  (state, userId) => state.getIn(['fetchManyStatus', fetchUsersInstancesEndpont(userId)])
+export const fetchManyUserInstancesStatus = createSelector([getInstances, getParam], (state, userId) =>
+  state.getIn(['fetchManyStatus', fetchUsersInstancesEndpont(userId)])
 );

@@ -8,7 +8,7 @@ import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import Confirm from '../../forms/Confirm';
 import Icon, { AbortIcon, AssignmentIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const formatArgs = args =>
   args && typeof args === 'object'

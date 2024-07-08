@@ -1,2 +1,2 @@
-import DeleteSolutionButtonContainer from './DeleteSolutionButtonContainer';
+import DeleteSolutionButtonContainer from './DeleteSolutionButtonContainer.js';
 export default DeleteSolutionButtonContainer;

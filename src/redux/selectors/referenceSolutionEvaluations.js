@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
-import { fetchManyEndpoint } from '../modules/referenceSolutionEvaluations';
-import { getReferenceSolution } from './referenceSolutions';
+import { fetchManyEndpoint } from '../modules/referenceSolutionEvaluations.js';
+import { getReferenceSolution } from './referenceSolutions.js';
 
 const getReferenceSolutionEvaluations = state => state.referenceSolutionEvaluations;
 const getResources = referenceSolutionEvaluations => referenceSolutionEvaluations.get('resources');

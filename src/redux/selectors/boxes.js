@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
-import { objectMap } from '../../helpers/common';
+import { objectMap } from '../../helpers/common.js';
 
 const getResources = state => state.boxes.get('resources');
 

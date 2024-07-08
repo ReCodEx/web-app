@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
-import { fetchManyEndpoint } from '../modules/submissionEvaluations';
-import { getSolutions } from './solutions';
+import { fetchManyEndpoint } from '../modules/submissionEvaluations.js';
+import { getSolutions } from './solutions.js';
 
 const getParam = (state, id) => id;
 

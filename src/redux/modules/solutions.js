@@ -1,7 +1,7 @@
 import { handleActions, createAction } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import factory, {
   initialState,
   defaultNeedsRefetching,
@@ -9,14 +9,14 @@ import factory, {
   resourceStatus,
   createActionsWithPostfixes,
 } from '../helpers/resourceManager';
-import { actionTypes as submissionActionTypes } from './submission';
-import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations';
+import { actionTypes as submissionActionTypes } from './submission.js';
+import { actionTypes as submissionEvaluationActionTypes } from './submissionEvaluations.js';
 import {
   actionTypes as reviewsActionTypes,
   additionalActionTypes as additionalReviewsActionTypes,
-} from './solutionReviews';
-import { getAssignmentSolversLastUpdate } from '../selectors/solutions';
-import { objectFilter } from '../../helpers/common';
+} from './solutionReviews.js';
+import { getAssignmentSolversLastUpdate } from '../selectors/solutions.js';
+import { objectFilter } from '../../helpers/common.js';
 
 const resourceName = 'solutions';
 const needsRefetching = item =>

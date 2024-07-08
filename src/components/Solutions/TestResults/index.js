@@ -1,2 +1,2 @@
-import TestResults from './TestResults';
+import TestResults from './TestResults.js';
 export default TestResults;

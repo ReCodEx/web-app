@@ -13,7 +13,7 @@ import {
   parseIntervalStr,
   formatIntervalStr,
   extrapolateSecondDeadline,
-} from './deadlineHelpers';
+} from './deadlineHelpers.js';
 
 const InterpolationDialog = ({
   onSubmit,

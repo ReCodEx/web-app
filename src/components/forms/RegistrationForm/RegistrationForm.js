@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, change } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import isEmail from 'validator/lib/isEmail';
+import isEmail from 'validator/lib/isEmail.js';
 
-import { eventAggregator } from '../../../helpers/eventAggregator';
+import { eventAggregator } from '../../../helpers/eventAggregator.js';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { EmailField, TextField, PasswordField, PasswordStrength, SelectField, CheckboxField } from '../Fields';
-import { validateRegistrationData } from '../../../redux/modules/users';
+import { validateRegistrationData } from '../../../redux/modules/users.js';
 import SubmitButton from '../SubmitButton';
 
 const RegistrationForm = ({

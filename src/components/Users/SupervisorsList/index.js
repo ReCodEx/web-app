@@ -1,2 +1,2 @@
-import SupervisorsList from './SupervisorsList';
+import SupervisorsList from './SupervisorsList.js';
 export default SupervisorsList;

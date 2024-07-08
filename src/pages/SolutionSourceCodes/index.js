@@ -1,2 +1,2 @@
-import SolutionSourceCodes from './SolutionSourceCodes';
+import SolutionSourceCodes from './SolutionSourceCodes.js';
 export default SolutionSourceCodes;

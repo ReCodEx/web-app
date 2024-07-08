@@ -1,10 +1,10 @@
 import { createAction } from 'redux-actions';
-import { createApiAction } from '../../middleware/apiMiddleware';
+import { createApiAction } from '../../middleware/apiMiddleware.js';
 
-import actionTypesFactory, { createActionsWithPostfixes } from './actionTypesFactory';
-import actionCreatorsFactory from './actionCreatorsFactory';
-import reducerFactory, { initialState } from './reducerFactory';
-import createRecord, { getData, getJsData, getId } from './recordFactory';
+import actionTypesFactory, { createActionsWithPostfixes } from './actionTypesFactory.js';
+import actionCreatorsFactory from './actionCreatorsFactory.js';
+import reducerFactory, { initialState } from './reducerFactory.js';
+import createRecord, { getData, getJsData, getId } from './recordFactory.js';
 
 import {
   resourceStatus,
@@ -20,9 +20,9 @@ import {
   isTooOld,
   afterTenMinutesIsTooOld,
   isReady,
-} from './status';
+} from './status.js';
 
-import { defaultApiEndpointFactory, defaultSelectorFactory, defaultNeedsRefetching } from './utils';
+import { defaultApiEndpointFactory, defaultSelectorFactory, defaultNeedsRefetching } from './utils.js';
 
 export {
   actionTypesFactory,

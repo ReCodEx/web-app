@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
-import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer';
+import DeleteSolutionButtonContainer from '../../containers/DeleteSolutionButtonContainer/DeleteSolutionButtonContainer.js';
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
@@ -24,50 +24,50 @@ import Icon, {
   ResultsIcon,
   UserIcon,
 } from '../../components/icons';
-import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons';
+import SolutionTableRowIcons from '../../components/Assignments/SolutionsTable/SolutionTableRowIcons.js';
 import UsersName from '../../components/Users/UsersName';
-import Points from '../../components/Assignments/SolutionsTable/Points';
+import Points from '../../components/Assignments/SolutionsTable/Points.js';
 import SolutionsTable from '../../components/Assignments/SolutionsTable';
-import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
-import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
+import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable.js';
+import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable.js';
 import Box from '../../components/widgets/Box';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import DateTime from '../../components/widgets/DateTime';
 import SortableTable, { SortableTableColumnDescriptor } from '../../components/widgets/SortableTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import { createUserNameComparator } from '../../components/helpers/users';
+import { createUserNameComparator } from '../../components/helpers/users.js';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
-import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem';
+import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem.js';
 import Callout from '../../components/widgets/Callout';
 
-import { fetchByIds } from '../../redux/modules/users';
-import { fetchAssignmentIfNeeded, downloadBestSolutionsArchive } from '../../redux/modules/assignments';
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchAssignmentSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions';
-import { setSolutionReviewState } from '../../redux/modules/solutionReviews';
-import { usersSelector } from '../../redux/selectors/users';
-import { groupSelector } from '../../redux/selectors/groups';
-import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { fetchAssignmentIfNeeded, downloadBestSolutionsArchive } from '../../redux/modules/assignments.js';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { fetchAssignmentSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions.js';
+import { setSolutionReviewState } from '../../redux/modules/solutionReviews.js';
+import { usersSelector } from '../../redux/selectors/users.js';
+import { groupSelector } from '../../redux/selectors/groups.js';
+import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups.js';
 import {
   getAssignment,
   getAssignmentEnvironments,
   getUserSolutionsSortedData,
   getAssignmentSolutions,
-} from '../../redux/selectors/assignments';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+} from '../../redux/selectors/assignments.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import {
   fetchManyAssignmentSolutionsStatus,
   isAssignmentSolversLoading,
   getAssignmentSolverSelector,
   getOneAssignmentSolvers,
-} from '../../redux/selectors/solutions';
+} from '../../redux/selectors/solutions.js';
 import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
-import { storageGetItem, storageSetItem } from '../../helpers/localStorage';
-import withLinks from '../../helpers/withLinks';
-import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions, unique } from '../../helpers/common';
+import { storageGetItem, storageSetItem } from '../../helpers/localStorage.js';
+import withLinks from '../../helpers/withLinks.js';
+import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions, unique } from '../../helpers/common.js';
 
 // View mode keys, labels, and filtering functions
 const VIEW_MODE_DEFAULT = 'default';

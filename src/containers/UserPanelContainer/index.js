@@ -1,2 +1,2 @@
-import UserPanelContainer from './UserPanelContainer';
+import UserPanelContainer from './UserPanelContainer.js';
 export default UserPanelContainer;

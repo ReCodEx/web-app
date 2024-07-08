@@ -1,2 +1,2 @@
-import CompilationLogs from './CompilationLogs';
+import CompilationLogs from './CompilationLogs.js';
 export default CompilationLogs;

@@ -1,2 +1,2 @@
-import AssignmentSync from './AssignmentSync';
+import AssignmentSync from './AssignmentSync.js';
 export default AssignmentSync;

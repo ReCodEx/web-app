@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import Icon, { ArchiveIcon } from './index';
+import Icon, { ArchiveIcon } from './index.js';
 import DateTime from '../widgets/DateTime';
 
 export const PrivateIcon = props => <Icon {...props} icon={['far', 'eye-slash']} />;

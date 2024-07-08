@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import ArchiveExerciseButton from '../../components/buttons/ArchiveExerciseButton';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { setArchived } from '../../redux/modules/exercises';
-import { getExercise, getExerciseSetArchivedStatus } from '../../redux/selectors/exercises';
+import { setArchived } from '../../redux/modules/exercises.js';
+import { getExercise, getExerciseSetArchivedStatus } from '../../redux/selectors/exercises.js';
 
 const ArchiveExerciseButtonContainer = ({ exercise = null, setArchived, pending, ...props }) => (
   <ResourceRenderer resource={exercise}>

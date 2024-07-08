@@ -14,43 +14,43 @@ import { LoadingGroupData, FailedGroupLoading } from '../../components/Groups/he
 import { AssignmentsIcon, AddIcon, BanIcon } from '../../components/icons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
 import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignment/ShadowAssignmentsTable';
-import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning.js';
 import GroupExamPending from '../../components/Groups/GroupExamPending';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { isStudentLocked } from '../../components/helpers/exams';
+import { isStudentLocked } from '../../components/helpers/exams.js';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import ExercisesListContainer from '../../containers/ExercisesListContainer';
 
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchGroupStats } from '../../redux/modules/stats';
-import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
-import { fetchShadowAssignmentsForGroup, createShadowAssignment } from '../../redux/modules/shadowAssignments';
-import { create as createExercise } from '../../redux/modules/exercises';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
+import { fetchGroupStats } from '../../redux/modules/stats.js';
+import { fetchAssignmentsForGroup } from '../../redux/modules/assignments.js';
+import { fetchShadowAssignmentsForGroup, createShadowAssignment } from '../../redux/modules/shadowAssignments.js';
+import { create as createExercise } from '../../redux/modules/exercises.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { getLoggedInUserEffectiveRole, loggedInUserSelector } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { getLoggedInUserEffectiveRole, loggedInUserSelector } from '../../redux/selectors/users.js';
 import {
   groupSelector,
   groupDataAccessorSelector,
   groupsAssignmentsSelector,
   groupsShadowAssignmentsSelector,
-} from '../../redux/selectors/groups';
+} from '../../redux/selectors/groups.js';
 import {
   studentsOfGroupSelector,
   loggedUserIsStudentOfSelector,
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
-} from '../../redux/selectors/usersGroups';
-import { getStatusesForLoggedUser, createGroupsStatsSelector } from '../../redux/selectors/stats';
-import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
-import { isReady } from '../../redux/helpers/resourceManager/index';
+} from '../../redux/selectors/usersGroups.js';
+import { getStatusesForLoggedUser, createGroupsStatsSelector } from '../../redux/selectors/stats.js';
+import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments.js';
+import { isReady } from '../../redux/helpers/resourceManager/index.js';
 
-import { isSuperadminRole } from '../../components/helpers/usersRoles';
-import { EMPTY_LIST, hasPermissions, hasOneOfPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
-import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
+import { isSuperadminRole } from '../../components/helpers/usersRoles.js';
+import { EMPTY_LIST, hasPermissions, hasOneOfPermissions } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 class GroupAssignments extends Component {
   static loadAsync = ({ groupId }, dispatch) =>

@@ -11,10 +11,10 @@ import {
   fetchSupplementaryFilesForPipeline,
   addPipelineFiles,
   removePipelineFile,
-} from '../../redux/modules/pipelineFiles';
-import { downloadSupplementaryFile } from '../../redux/modules/files';
+} from '../../redux/modules/pipelineFiles.js';
+import { downloadSupplementaryFile } from '../../redux/modules/files.js';
 
-import { getSupplementaryFilesForPipeline } from '../../redux/selectors/pipelineFiles';
+import { getSupplementaryFilesForPipeline } from '../../redux/selectors/pipelineFiles.js';
 
 const PipelineFilesTableContainer = ({
   pipeline,

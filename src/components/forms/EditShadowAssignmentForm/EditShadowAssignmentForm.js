@@ -12,8 +12,8 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
 import Explanation from '../../widgets/Explanation';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
-import { safeGet } from '../../../helpers/common';
+import { validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
+import { safeGet } from '../../../helpers/common.js';
 
 const EditShadowAssignmentForm = ({
   initialValues: shadowAssignment,

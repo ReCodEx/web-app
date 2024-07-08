@@ -5,13 +5,13 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Collapse from 'react-collapse';
 import { lruMemoize } from 'reselect';
 
-import GroupsTree from './GroupsTree';
+import GroupsTree from './GroupsTree.js';
 import GroupsName from '../GroupsName';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Icon, { GroupIcon, GroupExamsIcon, LoadingIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
-import { isRegularObject } from '../../../helpers/common';
-import { isExam } from '../../../helpers/groups';
+import withLinks from '../../../helpers/withLinks.js';
+import { isRegularObject } from '../../../helpers/common.js';
+import { isExam } from '../../../helpers/groups.js';
 
 /**
  * Assemble the right CSS classes for the list item.

@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import { createRecord, resourceStatus, defaultNeedsRefetching, isLoading, getJsData } from '../helpers/resourceManager';
-import { selectedInstanceId } from '../selectors/auth';
+import { selectedInstanceId } from '../selectors/auth.js';
 
 export const actionTypes = {
   FETCH: 'recodex/exercisesAuthors/FETCH',
@@ -26,22 +26,24 @@ const fakeResult = item => ({
 
 const archivedPromises = {};
 
-export const fetchExercisesAuthors = (groupId = null) => (dispatch, getState) => {
-  const instanceId = selectedInstanceId(getState());
-  const query = { instanceId };
-  if (groupId) {
-    query.groupId = groupId;
-  }
-  archivedPromises[groupId] = dispatch(
-    createApiAction({
-      type: actionTypes.FETCH,
-      endpoint: '/exercises/authors',
-      meta: { instanceId, groupId },
-      query,
-    })
-  );
-  return archivedPromises[groupId];
-};
+export const fetchExercisesAuthors =
+  (groupId = null) =>
+  (dispatch, getState) => {
+    const instanceId = selectedInstanceId(getState());
+    const query = { instanceId };
+    if (groupId) {
+      query.groupId = groupId;
+    }
+    archivedPromises[groupId] = dispatch(
+      createApiAction({
+        type: actionTypes.FETCH,
+        endpoint: '/exercises/authors',
+        meta: { instanceId, groupId },
+        query,
+      })
+    );
+    return archivedPromises[groupId];
+  };
 
 export const fetchExercisesAuthorsIfNeeded = groupId => (dispatch, getState) => {
   const item = getState().exercisesAuthors.getIn(itemPath(groupId));

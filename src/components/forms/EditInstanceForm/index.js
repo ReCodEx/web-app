@@ -1,2 +1,2 @@
-import EditInstanceForm from './EditInstanceForm';
+import EditInstanceForm from './EditInstanceForm.js';
 export default EditInstanceForm;

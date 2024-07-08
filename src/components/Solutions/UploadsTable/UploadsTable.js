@@ -4,12 +4,12 @@ import { injectIntl, FormattedMessage, FormattedRelativeTime } from 'react-intl'
 import { Table, ProgressBar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
+import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import Icon, { CloseIcon, DeleteIcon, LoadingIcon, SuccessIcon, UploadIcon, WarningIcon } from '../../icons';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import HighlightedText from '../../widgets/HighlightedText';
-import { getErrorMessage } from '../../../locales/apiErrorMessages';
+import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 const estimateCompletionTime = lruMemoize(({ totalSize, uploadedSize, startedAt, updatedAt }) => {
   if (!totalSize) {

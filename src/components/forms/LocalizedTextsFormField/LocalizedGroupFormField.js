@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 
-import SharedLocalizedFields from './SharedLocalizedFields';
+import SharedLocalizedFields from './SharedLocalizedFields.js';
 import { MarkdownTextAreaField } from '../Fields';
 import InsetPanel from '../../widgets/InsetPanel';
 

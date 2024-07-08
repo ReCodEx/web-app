@@ -4,11 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { Form, Row, Col } from 'react-bootstrap';
 
 import Markdown from '../../widgets/Markdown';
-import SourceCodeField from './SourceCodeField';
+import SourceCodeField from './SourceCodeField.js';
 import OnOffCheckbox from '../OnOffCheckbox';
 import * as styles from './MarkdownTextAreaField.less';
-
-import 'ace-builds/src-noconflict/mode-markdown';
 
 class MarkdownTextAreaField extends Component {
   state = {

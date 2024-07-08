@@ -1,1 +1,1 @@
-export { default } from './HighlightedText';
+export { default } from './HighlightedText.js';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from './Icon';
-import { NeedFixingIcon, ExercisePrefixIcons, LockIcon, CheckRequiredIcon } from './ExercisePrefixIcons';
+import Icon from './Icon.js';
+import { NeedFixingIcon, ExercisePrefixIcons, LockIcon, CheckRequiredIcon } from './ExercisePrefixIcons.js';
 
 /*
  * Icons with meta-names
@@ -215,7 +215,7 @@ VisibleIcon.propTypes = {
 };
 
 export { ExercisePrefixIcons };
-export { default as MaybeBonusAssignmentIcon } from './MaybeBonusAssignmentIcon';
-export { default as MaybeVisibleAssignmentIcon } from './MaybeVisibleAssignmentIcon';
+export { default as MaybeBonusAssignmentIcon } from './MaybeBonusAssignmentIcon.js';
+export { default as MaybeVisibleAssignmentIcon } from './MaybeVisibleAssignmentIcon.js';
 
 export default Icon;

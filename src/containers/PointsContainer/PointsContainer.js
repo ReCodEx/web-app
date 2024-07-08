@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PointsForm from '../../components/forms/PointsForm';
 
-import { setPoints } from '../../redux/modules/solutions';
+import { setPoints } from '../../redux/modules/solutions.js';
 
 const PointsContainer = ({ overriddenPoints = null, bonusPoints, setPoints, ...props }) => (
   <PointsForm

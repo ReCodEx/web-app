@@ -1,2 +1,2 @@
-import BoxesTable from './BoxesTable';
+import BoxesTable from './BoxesTable.js';
 export default BoxesTable;

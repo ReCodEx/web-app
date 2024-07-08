@@ -1,2 +1,2 @@
-import ExercisesListContainer from './ExercisesListContainer';
+import ExercisesListContainer from './ExercisesListContainer.js';
 export default ExercisesListContainer;

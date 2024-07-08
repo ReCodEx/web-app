@@ -1,2 +1,2 @@
-import PipelineNameContainer from './PipelineNameContainer';
+import PipelineNameContainer from './PipelineNameContainer.js';
 export default PipelineNameContainer;

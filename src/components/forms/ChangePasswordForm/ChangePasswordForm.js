@@ -8,7 +8,7 @@ import { SuccessIcon, LoadingIcon } from '../../icons';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { PasswordField, PasswordStrength } from '../Fields';
-import { validatePasswordStrength } from '../../../redux/modules/auth';
+import { validatePasswordStrength } from '../../../redux/modules/auth.js';
 
 const ChangePasswordForm = ({
   submitting,

@@ -4,8 +4,8 @@ import { Field, FieldArray } from 'redux-form';
 import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
-import { EMPTY_ARRAY } from '../../../helpers/common';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
+import { EMPTY_ARRAY } from '../../../helpers/common.js';
 import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { ExpandCollapseIcon, WarningIcon } from '../../icons';
@@ -18,7 +18,7 @@ import {
   ENV_C_GCC_ID,
   ENV_CPP_GCC_ID,
   ENV_SYCL_ID,
-} from '../../../helpers/exercise/environments';
+} from '../../../helpers/exercise/environments.js';
 
 const COMPILER_ARGS_ENVS = [ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID, ENV_SYCL_ID];
 

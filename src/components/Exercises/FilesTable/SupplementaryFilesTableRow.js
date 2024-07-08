@@ -5,7 +5,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
+import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import Confirm from '../../../components/forms/Confirm';
 import Icon, { DeleteIcon } from '../../../components/icons';
 

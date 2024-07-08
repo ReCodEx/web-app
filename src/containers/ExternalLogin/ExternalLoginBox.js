@@ -7,9 +7,9 @@ import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import { LinkIcon, LoadingIcon, SuccessIcon } from '../../components/icons';
-import { externalLogin, externalLoginFailed, statusTypes } from '../../redux/modules/auth';
-import { statusSelector, loginErrorSelector } from '../../redux/selectors/auth';
-import { hasErrorMessage, getErrorMessage } from '../../locales/apiErrorMessages';
+import { externalLogin, externalLoginFailed, statusTypes } from '../../redux/modules/auth.js';
+import { statusSelector, loginErrorSelector } from '../../redux/selectors/auth.js';
+import { hasErrorMessage, getErrorMessage } from '../../locales/apiErrorMessages.js';
 
 export const openPopupWindow = url =>
   typeof window !== 'undefined'

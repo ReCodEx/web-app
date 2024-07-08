@@ -1,2 +1,2 @@
-import LicencesTableContainer from './LicencesTableContainer';
+import LicencesTableContainer from './LicencesTableContainer.js';
 export default LicencesTableContainer;

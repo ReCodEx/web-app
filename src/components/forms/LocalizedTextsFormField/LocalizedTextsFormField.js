@@ -4,13 +4,13 @@ import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { TabbedArrayField } from '../Fields';
-import LocalizedAssignmentFormField from './LocalizedAssignmentFormField';
-import LocalizedShadowAssignmentFormField from './LocalizedShadowAssignmentFormField';
-import LocalizedExerciseFormField from './LocalizedExerciseFormField';
-import LocalizedGroupFormField from './LocalizedGroupFormField';
-import LocalizedSystemMessageFormField from './LocalizedSystemMessageFormField';
+import LocalizedAssignmentFormField from './LocalizedAssignmentFormField.js';
+import LocalizedShadowAssignmentFormField from './LocalizedShadowAssignmentFormField.js';
+import LocalizedExerciseFormField from './LocalizedExerciseFormField.js';
+import LocalizedGroupFormField from './LocalizedGroupFormField.js';
+import LocalizedSystemMessageFormField from './LocalizedSystemMessageFormField.js';
 import { WarningIcon } from '../../icons';
-import { knownLocalesNames } from '../../../helpers/localizedData';
+import { knownLocalesNames } from '../../../helpers/localizedData.js';
 
 const fieldTypes = {
   assignment: LocalizedAssignmentFormField,

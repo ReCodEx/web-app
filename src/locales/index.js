@@ -1,14 +1,14 @@
-import { canUseDOM } from 'exenv';
+import { canUseDOM } from '../helpers/common.js';
 
-import messagesCs from './cs';  
-import messagesEn from './en';  
+import messagesCs from './cs.json';
+import messagesEn from './en.json';
 
-import '@formatjs/intl-pluralrules/polyfill';
-import '@formatjs/intl-pluralrules/locale-data/en';
-import '@formatjs/intl-pluralrules/locale-data/cs';
-import '@formatjs/intl-relativetimeformat/polyfill';
-import '@formatjs/intl-relativetimeformat/locale-data/en';
-import '@formatjs/intl-relativetimeformat/locale-data/cs';
+import '@formatjs/intl-pluralrules/polyfill.js';
+import '@formatjs/intl-pluralrules/locale-data/en.js';
+import '@formatjs/intl-pluralrules/locale-data/cs.js';
+import '@formatjs/intl-relativetimeformat/polyfill.js';
+import '@formatjs/intl-relativetimeformat/locale-data/en.js';
+import '@formatjs/intl-relativetimeformat/locale-data/cs.js';
 
 export const messages = { cs: messagesCs, en: messagesEn };
 export const isAvailable = lang => Object.keys(messages).indexOf(lang) !== -1;

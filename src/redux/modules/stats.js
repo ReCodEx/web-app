@@ -4,8 +4,8 @@ import factory, { initialState, resourceStatus } from '../helpers/resourceManage
 import {
   actionTypes as solutionActionTypes,
   additionalActionTypes as additionalSolutionsActionTypes,
-} from './solutions';
-import { additionalActionTypes as additonalShadowAssignmentsActionTypes } from './shadowAssignments';
+} from './solutions.js';
+import { additionalActionTypes as additonalShadowAssignmentsActionTypes } from './shadowAssignments.js';
 
 /**
  * Create actions & reducer

@@ -1,9 +1,9 @@
 import { handleActions, createAction } from 'redux-actions';
-import { actionTypes as authActionTypes } from './authTypes';
+import { actionTypes as authActionTypes } from './authTypes.js';
 import { decode, isTokenValid } from '../helpers/token';
-import { addNotification } from './notifications';
-import { createApiAction } from '../middleware/apiMiddleware';
-import { safeGet } from '../../helpers/common';
+import { addNotification } from './notifications.js';
+import { createApiAction } from '../middleware/apiMiddleware.js';
+import { safeGet } from '../../helpers/common.js';
 
 export const actionTypes = {
   REMOVE_USER: 'recodex/userSwitching/REMOVE_USER',

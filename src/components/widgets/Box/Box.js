@@ -6,7 +6,7 @@ import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Icon from '../../icons';
-import withRouter, { withRouterProps } from '../../../helpers/withRouter';
+import withRouter, { withRouterProps } from '../../../helpers/withRouter.js';
 
 import * as styles from './Box.less';
 

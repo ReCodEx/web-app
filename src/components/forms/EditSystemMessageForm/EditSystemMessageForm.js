@@ -10,10 +10,10 @@ import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
-import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
-import withLinks from '../../../helpers/withLinks';
+import { validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
+import withLinks from '../../../helpers/withLinks.js';
 import { CloseIcon, SaveIcon } from '../../icons';
-import { roleLabelsSimpleMessages } from '../../helpers/usersRoles';
+import { roleLabelsSimpleMessages } from '../../helpers/usersRoles.js';
 
 const typeOptions = [
   { key: 'success', name: 'Success' },

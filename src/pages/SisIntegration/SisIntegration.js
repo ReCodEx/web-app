@@ -10,35 +10,35 @@ import Page from '../../components/layout/Page';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import SisIntegrationContainer from '../../containers/SisIntegrationContainer';
 import SisSupervisorGroupsContainer from '../../containers/SisSupervisorGroupsContainer';
-import AddSisTermForm from '../../components/forms/AddSisTermForm/AddSisTermForm';
-import TermsList from '../../components/SisIntegration/TermsList/TermsList';
+import AddSisTermForm from '../../components/forms/AddSisTermForm/AddSisTermForm.js';
+import TermsList from '../../components/SisIntegration/TermsList/TermsList.js';
 import Confirm from '../../components/forms/Confirm';
 import Icon, { ArchiveIcon, EditIcon, DeleteIcon, UserIcon } from '../../components/icons';
 import PlantTermGroups, { createDefaultSemesterLocalization } from '../../components/SisIntegration/PlantTermGroups';
 import ArchiveTermGroups from '../../components/SisIntegration/ArchiveTermGroups';
 import EditTerm from '../../components/SisIntegration/EditTerm';
-import Box from '../../components/widgets/Box/Box';
+import Box from '../../components/widgets/Box/Box.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 
-import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms';
-import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/groups';
-import { fetchUser } from '../../redux/modules/users';
-import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
-import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms';
-import { notArchivedGroupsSelector } from '../../redux/selectors/groups';
-import { loggedUserAdminOfGroupsSelector } from '../../redux/selectors/usersGroups';
+import { fetchAllTerms, create, deleteTerm, editTerm } from '../../redux/modules/sisTerms.js';
+import { createGroup, fetchAllGroups, setArchived } from '../../redux/modules/groups.js';
+import { fetchUser } from '../../redux/modules/users.js';
+import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
+import { fetchManyStatus, readySisTermsSelector } from '../../redux/selectors/sisTerms.js';
+import { notArchivedGroupsSelector } from '../../redux/selectors/groups.js';
+import { loggedUserAdminOfGroupsSelector } from '../../redux/selectors/usersGroups.js';
 
 import {
   getLocalizedTextsInitialValues,
   getLocalizedName,
   transformLocalizedTextsFormData,
-} from '../../helpers/localizedData';
-import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles';
-import { getExternalIdForCAS } from '../../helpers/cas';
-import { arrayToObject } from '../../helpers/common';
+} from '../../helpers/localizedData.js';
+import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles.js';
+import { getExternalIdForCAS } from '../../helpers/cas.js';
+import { arrayToObject } from '../../helpers/common.js';
 
 const ADD_SIS_TERM_INITIAL_VALUES = {
   year: new Date(new Date().getTime() - 86400000 * 180).getFullYear(), // actual year (shifted by 180 days back)

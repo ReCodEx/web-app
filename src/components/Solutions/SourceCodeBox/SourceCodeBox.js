@@ -10,8 +10,8 @@ import SourceCodeViewer from '../../helpers/SourceCodeViewer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { CodeCompareIcon, DownloadIcon, LoadingIcon, WarningIcon } from '../../icons';
 
-import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting';
-import { getFileExtensionLC, simpleScalarMemoize } from '../../../helpers/common';
+import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting.js';
+import { getFileExtensionLC, simpleScalarMemoize } from '../../../helpers/common.js';
 
 const normalizeLineEndings = simpleScalarMemoize(content => content.replaceAll('\r', ''));
 

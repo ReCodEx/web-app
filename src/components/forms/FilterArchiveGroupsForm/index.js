@@ -1,2 +1,2 @@
-import FilterArchiveGroupsForm from './FilterArchiveGroupsForm';
+import FilterArchiveGroupsForm from './FilterArchiveGroupsForm.js';
 export default FilterArchiveGroupsForm;

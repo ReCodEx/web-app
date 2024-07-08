@@ -1,2 +1,2 @@
-import MemberGroupsDropdown from './MemberGroupsDropdown';
+import MemberGroupsDropdown from './MemberGroupsDropdown.js';
 export default MemberGroupsDropdown;

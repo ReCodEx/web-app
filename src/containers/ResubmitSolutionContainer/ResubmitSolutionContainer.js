@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { lruMemoize } from 'reselect';
 
 import ResubmitSolution from '../../components/buttons/ResubmitSolution';
-import { resubmitSolution, fetchUsersSolutions } from '../../redux/modules/solutions';
-import { isProcessing, getMonitorParams, getSubmittedSolutionId } from '../../redux/selectors/submission';
+import { resubmitSolution, fetchUsersSolutions } from '../../redux/modules/solutions.js';
+import { isProcessing, getMonitorParams, getSubmittedSolutionId } from '../../redux/selectors/submission.js';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
-import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations';
-import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
+import { fetchSubmissionEvaluationsForSolution } from '../../redux/modules/submissionEvaluations.js';
+import { getProgressObserverId } from '../../redux/selectors/evaluationProgress.js';
 
 const getResubmitObserverId = lruMemoize((id, isDebug) => 'resubmit_' + (isDebug ? 'debug' : 'regular') + '_' + id);
 

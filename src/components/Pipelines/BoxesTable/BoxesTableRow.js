@@ -5,8 +5,8 @@ import { OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { AddIcon, BindIcon, UnbindIcon, InputIcon, OutputIcon, RemoveIcon, WarningIcon } from '../../icons';
-import { getVariablesTypes } from '../../../helpers/pipelines';
-import { getBoxTypeDescription } from '../comments';
+import { getVariablesTypes } from '../../../helpers/pipelines.js';
+import { getBoxTypeDescription } from '../comments.js';
 import * as styles from '../styles.less';
 
 /**

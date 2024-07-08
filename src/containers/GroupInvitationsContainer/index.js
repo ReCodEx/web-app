@@ -1,2 +1,2 @@
-import GroupInvitationsContainer from './GroupInvitationsContainer';
+import GroupInvitationsContainer from './GroupInvitationsContainer.js';
 export default GroupInvitationsContainer;

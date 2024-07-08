@@ -7,7 +7,7 @@ import Header from '../Header';
 import Footer from '../Footer';
 
 import SidebarContainer from '../../../containers/SidebarContainer';
-import { getConfigVar } from '../../../helpers/config';
+import { getConfigVar } from '../../../helpers/config.js';
 
 const title = getConfigVar('TITLE');
 

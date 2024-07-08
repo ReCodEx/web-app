@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
 import InfoBox from '../../widgets/InfoBox';
-import { getLocalizedName } from '../../../helpers/localizedData';
+import { getLocalizedName } from '../../../helpers/localizedData.js';
 
 const UsersStats = ({ id, localizedTexts, stats: { points, hasLimit, passesLimit }, intl: { locale } }) => {
   const localizedName = getLocalizedName({ localizedTexts }, locale);

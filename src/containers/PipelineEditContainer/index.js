@@ -1,2 +1,2 @@
-import PipelineEditContainer from './PipelineEditContainer';
+import PipelineEditContainer from './PipelineEditContainer.js';
 export default PipelineEditContainer;

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import SubmitSolution from '../../components/Solutions/SubmitSolution';
 import EvaluationProgressContainer from '../EvaluationProgressContainer';
-import { fetchUsersSolutions } from '../../redux/modules/solutions';
+import { fetchUsersSolutions } from '../../redux/modules/solutions.js';
 import {
   getNote,
   isProcessing,
@@ -18,23 +18,23 @@ import {
   getPresubmitCountLimitOK,
   getPresubmitSizeLimitOK,
   hasEntryPoint,
-} from '../../redux/selectors/submission';
+} from '../../redux/selectors/submission.js';
 
 import {
   uploadedFilesSelector,
   removedUploadFilesSelector,
   allFilesUploadedSelector,
-} from '../../redux/selectors/upload';
-import { getProgressObserverId } from '../../redux/selectors/evaluationProgress';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { cancel, changeNote } from '../../redux/modules/submission';
-import { reset as resetUpload } from '../../redux/modules/upload';
+} from '../../redux/selectors/upload.js';
+import { getProgressObserverId } from '../../redux/selectors/evaluationProgress.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { cancel, changeNote } from '../../redux/modules/submission.js';
+import { reset as resetUpload } from '../../redux/modules/upload.js';
 
-import { canSubmit } from '../../redux/modules/canSubmit';
-import { isEmptyObject } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
-import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
+import { canSubmit } from '../../redux/modules/canSubmit.js';
+import { isEmptyObject } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 class SubmitSolutionContainer extends Component {
   state = {

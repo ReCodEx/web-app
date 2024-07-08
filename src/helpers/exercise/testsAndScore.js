@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { attemptExtractWeights } from './scoreAstFunctions';
-import { arrayToObject, EMPTY_OBJ } from '../common';
+import { attemptExtractWeights } from './scoreAstFunctions.js';
+import { arrayToObject, EMPTY_OBJ } from '../common.js';
 
 export const UNIFORM_ID = 'uniform';
 export const WEIGHTED_ID = 'weighted';

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 
-import SharedLocalizedFields from './SharedLocalizedFields';
-import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields';
+import SharedLocalizedFields from './SharedLocalizedFields.js';
+import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields.js';
 import { MarkdownTextAreaField } from '../Fields';
 import InsetPanel from '../../widgets/InsetPanel';
 

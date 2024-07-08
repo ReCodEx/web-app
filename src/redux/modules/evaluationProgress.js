@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { actionTypes as submissionActionTypes } from './submission';
+import { actionTypes as submissionActionTypes } from './submission.js';
 
 export const initialState = fromJS({
   webSocketChannelId: null,

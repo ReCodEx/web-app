@@ -1,5 +1,5 @@
 import { lruMemoize } from 'reselect';
-import { safeGet, arrayToObject, encodeNumId, encodeId } from '../common';
+import { safeGet, arrayToObject, encodeNumId, encodeId } from '../common.js';
 
 /**
  * Return ordered list of pipeline IDs used in exercise config.

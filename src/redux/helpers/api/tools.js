@@ -1,14 +1,14 @@
 import statusCode from 'statuscode';
-import { flatten } from 'flat';
-import { canUseDOM } from 'exenv';
+import flatten from 'flat';
 import { Buffer } from 'buffer';
 
-import { addNotification } from '../../modules/notifications';
-import { newPendingFetchOperation, completedFetchOperation } from '../../modules/app';
+import { addNotification } from '../../modules/notifications.js';
+import { newPendingFetchOperation, completedFetchOperation } from '../../modules/app.js';
 import { isTokenValid, decode } from '../../helpers/token';
-import { getLang } from '../../selectors/app';
-import { API_BASE, URL_PATH_PREFIX } from '../../../helpers/config';
-import { actionTypes as authActionTypes } from '../../modules/authTypes';
+import { getLang } from '../../selectors/app.js';
+import { API_BASE, URL_PATH_PREFIX } from '../../../helpers/config.js';
+import { actionTypes as authActionTypes } from '../../modules/authTypes.js';
+import { canUseDOM } from '../../../helpers/common.js';
 
 export const isTwoHundredCode = status => statusCode.accept(status, '2xx');
 export const isServerError = status => statusCode.accept(status, '5xx');

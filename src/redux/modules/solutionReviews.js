@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import factory, {
   initialState,
   createRecord,

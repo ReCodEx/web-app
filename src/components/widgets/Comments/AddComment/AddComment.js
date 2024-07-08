@@ -5,7 +5,7 @@ import { Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
 
 import Button from '../../TheButton';
 import Icon from '../../../icons';
-import { safeGet } from '../../../../helpers/common';
+import { safeGet } from '../../../../helpers/common.js';
 
 const messages = defineMessages({
   placeholder: {

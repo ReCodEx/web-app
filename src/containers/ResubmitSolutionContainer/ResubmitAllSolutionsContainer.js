@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import { ResubmitAllSolutions } from '../../components/buttons/ResubmitSolution';
-import { fetchResubmitAllStatus, resubmitAllSolutions } from '../../redux/modules/assignments';
-import { abort } from '../../redux/modules/asyncJobs';
+import { fetchResubmitAllStatus, resubmitAllSolutions } from '../../redux/modules/assignments.js';
+import { abort } from '../../redux/modules/asyncJobs.js';
 import {
   isResubmitAllFetchPending,
   getResubmitAllPendingJob,
   getResubmitAllFailedJob,
-} from '../../redux/selectors/assignments';
+} from '../../redux/selectors/assignments.js';
 
 const POLLING_INTERVAL = 5000; // 5s, when async job is pending
 const LONG_POLLING_INTERVAL = 60000; // 1 minute, when failed job is pending

@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import Points from './Points';
-import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
+import Points from './Points.js';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
 import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer';
 import SolutionActionsContainer from '../../../containers/SolutionActionsContainer';
 
@@ -15,8 +15,8 @@ import DateTime from '../../widgets/DateTime';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
-import withLinks from '../../../helpers/withLinks';
-import SolutionTableRowIcons from './SolutionTableRowIcons';
+import withLinks from '../../../helpers/withLinks.js';
+import SolutionTableRowIcons from './SolutionTableRowIcons.js';
 import * as styles from './SolutionsTable.less';
 
 const SolutionsTableRow = ({

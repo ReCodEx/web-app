@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
-import { downloadHelper } from '../helpers/api/download';
+import { createApiAction } from '../middleware/apiMiddleware.js';
+import { downloadHelper } from '../helpers/api/download.js';
 
 const resourceName = 'supplementaryFiles';
 const { actions, reduceActions } = factory({ resourceName });

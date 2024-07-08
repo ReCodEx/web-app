@@ -1,2 +1,2 @@
-import OrganizationalGroupButton from './OrganizationalGroupButton';
+import OrganizationalGroupButton from './OrganizationalGroupButton.js';
 export default OrganizationalGroupButton;

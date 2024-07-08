@@ -5,12 +5,12 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { isReady, isLoading, getJsData } from '../../../../redux/helpers/resourceManager';
-import ShadowAssignmentsTableRow from './ShadowAssignmentsTableRow';
-import { compareShadowAssignments } from '../../../helpers/assignments';
+import ShadowAssignmentsTableRow from './ShadowAssignmentsTableRow.js';
+import { compareShadowAssignments } from '../../../helpers/assignments.js';
 import { LoadingIcon } from '../../../icons';
-import { UserUIDataContext } from '../../../../helpers/contexts';
-import { EMPTY_LIST, EMPTY_OBJ } from '../../../../helpers/common';
-import withRouter, { withRouterProps } from '../../../../helpers/withRouter';
+import { UserUIDataContext } from '../../../../helpers/contexts.js';
+import { EMPTY_LIST, EMPTY_OBJ } from '../../../../helpers/common.js';
+import withRouter, { withRouterProps } from '../../../../helpers/withRouter.js';
 
 const ShadowAssignmentsTable = ({
   shadowAssignments = EMPTY_LIST,

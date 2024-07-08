@@ -1,2 +1,2 @@
-import MenuGroup from './MenuGroup';
+import MenuGroup from './MenuGroup.js';
 export default MenuGroup;

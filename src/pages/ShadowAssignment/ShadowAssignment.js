@@ -5,9 +5,9 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
-import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments';
-import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { fetchShadowAssignmentIfNeeded } from '../../redux/modules/shadowAssignments.js';
+import { getShadowAssignment } from '../../redux/selectors/shadowAssignments.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 
 import Page from '../../components/layout/Page';
 import { ShadowAssignmentNavigation } from '../../components/layout/Navigation';
@@ -17,8 +17,8 @@ import ShadowAssignmentPointsDetail from '../../components/Assignments/ShadowAss
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import { ShadowAssignmentIcon } from '../../components/icons';
 
-import { getLocalizedName } from '../../helpers/localizedData';
-import { hasPermissions, EMPTY_OBJ } from '../../helpers/common';
+import { getLocalizedName } from '../../helpers/localizedData.js';
+import { hasPermissions, EMPTY_OBJ } from '../../helpers/common.js';
 
 const findPoints = lruMemoize((points, loggedUserId) => {
   return points.find(p => p.awardeeId === loggedUserId) || EMPTY_OBJ;

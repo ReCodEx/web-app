@@ -1,2 +1,2 @@
-import GroupUserSolutions from './GroupUserSolutions';
+import GroupUserSolutions from './GroupUserSolutions.js';
 export default GroupUserSolutions;

@@ -1,2 +1,2 @@
-import ShadowAssignmentNameContainer from './ShadowAssignmentNameContainer';
+import ShadowAssignmentNameContainer from './ShadowAssignmentNameContainer.js';
 export default ShadowAssignmentNameContainer;

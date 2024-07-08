@@ -1,2 +1,2 @@
-import Archive from './Archive';
+import Archive from './Archive.js';
 export default Archive;

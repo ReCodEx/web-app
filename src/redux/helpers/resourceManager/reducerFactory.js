@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
-import createRecord from './recordFactory';
-import { resourceStatus } from './status';
+import createRecord from './recordFactory.js';
+import { resourceStatus } from './status.js';
 
 export const initialState = fromJS({ resources: {}, fetchManyStatus: {} });
 

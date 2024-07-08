@@ -8,9 +8,9 @@ import ShadowAssignmentsTable from '../../components/Assignments/ShadowAssignmen
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LoadingIcon } from '../../components/icons';
 
-import { fetchShadowAssignmentsForGroup } from '../../redux/modules/shadowAssignments';
-import { groupsShadowAssignmentsSelector } from '../../redux/selectors/groups';
-import { loggedUserIsSupervisorOfSelector, loggedUserIsAdminOfSelector } from '../../redux/selectors/usersGroups';
+import { fetchShadowAssignmentsForGroup } from '../../redux/modules/shadowAssignments.js';
+import { groupsShadowAssignmentsSelector } from '../../redux/selectors/groups.js';
+import { loggedUserIsSupervisorOfSelector, loggedUserIsAdminOfSelector } from '../../redux/selectors/usersGroups.js';
 
 class ShadowAssignmentsTableContainer extends Component {
   componentDidMount() {

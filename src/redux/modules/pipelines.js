@@ -6,12 +6,12 @@ import factory, {
   resourceStatus,
   createActionsWithPostfixes,
 } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 
-import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles';
-import { actionTypes as paginationActionTypes, fetchPaginated } from './pagination';
+import { actionTypes as pipelineFilesActionTypes } from './pipelineFiles.js';
+import { actionTypes as paginationActionTypes, fetchPaginated } from './pagination.js';
 
-import { arrayToObject } from '../../helpers/common';
+import { arrayToObject } from '../../helpers/common.js';
 
 const resourceName = 'pipelines';
 const { actions, reduceActions } = factory({ resourceName });

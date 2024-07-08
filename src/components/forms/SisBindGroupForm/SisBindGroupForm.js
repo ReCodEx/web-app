@@ -9,7 +9,7 @@ import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
 import CourseLabel from '../../SisIntegration/CourseLabel';
 import { CloseIcon, InfoIcon } from '../../icons';
 

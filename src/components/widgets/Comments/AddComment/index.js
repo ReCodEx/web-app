@@ -1,1 +1,1 @@
-export { default } from './AddComment';
+export { default } from './AddComment.js';

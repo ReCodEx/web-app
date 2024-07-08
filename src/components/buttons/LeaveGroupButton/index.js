@@ -1,2 +1,2 @@
-import LeaveGroupButton from './LeaveGroupButton';
+import LeaveGroupButton from './LeaveGroupButton.js';
 export default LeaveGroupButton;

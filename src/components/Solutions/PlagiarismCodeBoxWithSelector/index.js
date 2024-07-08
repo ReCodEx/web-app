@@ -1,2 +1,2 @@
-import PlagiarismCodeBoxWithSelector from './PlagiarismCodeBoxWithSelector';
+import PlagiarismCodeBoxWithSelector from './PlagiarismCodeBoxWithSelector.js';
 export default PlagiarismCodeBoxWithSelector;

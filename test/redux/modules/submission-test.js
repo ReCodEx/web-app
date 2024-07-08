@@ -8,7 +8,7 @@ import reducer, {
   init,
   changeNote,
   finishProcessing,
-} from '../../../src/redux/modules/submission';
+} from '../../../src/redux/modules/submission.js';
 
 import { Map } from 'immutable';
 

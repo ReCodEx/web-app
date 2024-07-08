@@ -5,7 +5,7 @@ import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
 
 import { AddIcon, CloseIcon } from '../../icons';
-import { getTagStyle } from '../../../helpers/exercise/tags';
+import { getTagStyle } from '../../../helpers/exercise/tags.js';
 
 const activeTagsIndex = lruMemoize(fields => {
   const res = {};

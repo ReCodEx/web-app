@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import GridLine from './GridLine';
-import PointsLine from './PointsLine';
+import GridLine from './GridLine.js';
+import PointsLine from './PointsLine.js';
 import {
   getAppropriateWidth,
   computeMaxPointsIntervals,

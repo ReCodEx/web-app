@@ -15,28 +15,28 @@ import PlagiarismCodeBoxWithSelector from '../../components/Solutions/Plagiarism
 import Icon, { BanIcon, PlagiarismIcon, UserIcon } from '../../components/icons';
 import UsersNameContainer from '../../containers/UsersNameContainer';
 
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { fetchSolutionIfNeeded, fetchUsersSolutions } from '../../redux/modules/solutions';
-import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
-import { addComment, updateComment, removeComment } from '../../redux/modules/solutionReviews';
-import { download } from '../../redux/modules/files';
-import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
-import { fetchPlagiarismsIfNeeded } from '../../redux/modules/plagiarisms';
-import { fetchByIds as fetchUsersByIds } from '../../redux/modules/users';
-import { getSolution } from '../../redux/selectors/solutions';
-import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
-import { getSolutionReviewComments } from '../../redux/selectors/solutionReviews';
-import { getAssignment, getUserSolutionsSortedData } from '../../redux/selectors/assignments';
-import { getFilesContentSelector } from '../../redux/selectors/files';
-import { plagiarismsSelector } from '../../redux/selectors/plagiarisms';
-import { isReady } from '../../redux/helpers/resourceManager/index';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments.js';
+import { fetchSolutionIfNeeded, fetchUsersSolutions } from '../../redux/modules/solutions.js';
+import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles.js';
+import { addComment, updateComment, removeComment } from '../../redux/modules/solutionReviews.js';
+import { download } from '../../redux/modules/files.js';
+import { fetchContentIfNeeded } from '../../redux/modules/filesContent.js';
+import { fetchPlagiarismsIfNeeded } from '../../redux/modules/plagiarisms.js';
+import { fetchByIds as fetchUsersByIds } from '../../redux/modules/users.js';
+import { getSolution } from '../../redux/selectors/solutions.js';
+import { getSolutionFiles } from '../../redux/selectors/solutionFiles.js';
+import { getSolutionReviewComments } from '../../redux/selectors/solutionReviews.js';
+import { getAssignment, getUserSolutionsSortedData } from '../../redux/selectors/assignments.js';
+import { getFilesContentSelector } from '../../redux/selectors/files.js';
+import { plagiarismsSelector } from '../../redux/selectors/plagiarisms.js';
+import { isReady } from '../../redux/helpers/resourceManager/index.js';
 
-import { hasPermissions, unique, avg } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import withRouter from '../../helpers/withRouter';
+import { hasPermissions, unique, avg } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter from '../../helpers/withRouter.js';
 
-import { preprocessFiles } from '../SolutionSourceCodes/functions';
+import { preprocessFiles } from '../SolutionSourceCodes/functions.js';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 const fileFullId = file => (file.parentId || file.id) + '/' + (file.entryName || '');

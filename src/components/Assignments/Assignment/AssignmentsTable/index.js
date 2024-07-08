@@ -1,1 +1,1 @@
-export { default } from './AssignmentsTable';
+export { default } from './AssignmentsTable.js';

@@ -1,4 +1,4 @@
-import { getConfigVar } from './config';
+import { getConfigVar } from './config.js';
 
 const PERSISTENT_TOKENS_KEY_PREFIX = (getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex') + '/';
 

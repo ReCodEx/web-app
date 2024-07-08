@@ -24,44 +24,44 @@ import {
 import SourceCodeBox from '../../components/Solutions/SourceCodeBox';
 import ReviewSummary from '../../components/Solutions/ReviewSummary';
 import RecentlyVisited from '../../components/Solutions/RecentlyVisited';
-import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
+import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions.js';
 import Callout from '../../components/widgets/Callout';
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { fetchSolutionIfNeeded, fetchUsersSolutions } from '../../redux/modules/solutions';
-import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments.js';
+import { fetchSolutionIfNeeded, fetchUsersSolutions } from '../../redux/modules/solutions.js';
+import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles.js';
 import {
   fetchSolutionReviewIfNeeded,
   addComment,
   updateComment,
   removeComment,
-} from '../../redux/modules/solutionReviews';
-import { download } from '../../redux/modules/files';
-import { fetchContentIfNeeded } from '../../redux/modules/filesContent';
-import { getSolution } from '../../redux/selectors/solutions';
-import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
-import { getSolutionReviewComments } from '../../redux/selectors/solutionReviews';
+} from '../../redux/modules/solutionReviews.js';
+import { download } from '../../redux/modules/files.js';
+import { fetchContentIfNeeded } from '../../redux/modules/filesContent.js';
+import { getSolution } from '../../redux/selectors/solutions.js';
+import { getSolutionFiles } from '../../redux/selectors/solutionFiles.js';
+import { getSolutionReviewComments } from '../../redux/selectors/solutionReviews.js';
 import {
   getAssignment,
   getUserSolutionsSortedData,
   getAssignmentEnvironments,
-} from '../../redux/selectors/assignments';
-import { getFilesContentSelector } from '../../redux/selectors/files';
-import { getLoggedInUserEffectiveRole, loggedInUserSelector } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { loggedUserIsPrimaryAdminOfSelector } from '../../redux/selectors/usersGroups';
+} from '../../redux/selectors/assignments.js';
+import { getFilesContentSelector } from '../../redux/selectors/files.js';
+import { getLoggedInUserEffectiveRole, loggedInUserSelector } from '../../redux/selectors/users.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { loggedUserIsPrimaryAdminOfSelector } from '../../redux/selectors/usersGroups.js';
 
-import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage';
-import { isSupervisorRole } from '../../components/helpers/usersRoles';
-import { hasPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common';
-import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions';
+import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage.js';
+import { isSupervisorRole } from '../../components/helpers/usersRoles.js';
+import { hasPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common.js';
+import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions.js';
 
-import { isStudentLocked } from '../../components/helpers/exams';
-import withLinks from '../../helpers/withLinks';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { isStudentLocked } from '../../components/helpers/exams.js';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 

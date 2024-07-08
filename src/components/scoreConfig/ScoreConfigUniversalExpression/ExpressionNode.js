@@ -13,8 +13,8 @@ import {
   AstNode,
   AstNodeValue,
   AstNodePlaceholder,
-} from '../../../helpers/exercise/scoreAst';
-import { EMPTY_OBJ } from '../../../helpers/common';
+} from '../../../helpers/exercise/scoreAst.js';
+import { EMPTY_OBJ } from '../../../helpers/common.js';
 
 import * as style from './tree.less';
 

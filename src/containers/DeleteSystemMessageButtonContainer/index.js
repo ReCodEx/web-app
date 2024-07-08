@@ -1,2 +1,2 @@
-import DeleteSystemMessageButtonContainer from './DeleteSystemMessageButtonContainer';
+import DeleteSystemMessageButtonContainer from './DeleteSystemMessageButtonContainer.js';
 export default DeleteSystemMessageButtonContainer;

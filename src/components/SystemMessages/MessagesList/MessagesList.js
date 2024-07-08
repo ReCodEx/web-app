@@ -4,11 +4,11 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
-import { getLocalizedText } from '../../../helpers/localizedData';
+import { getLocalizedText } from '../../../helpers/localizedData.js';
 import DateTime from '../../widgets/DateTime';
-import { roleLabels, rolePriorities } from '../../helpers/usersRoles';
+import { roleLabels, rolePriorities } from '../../helpers/usersRoles.js';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import FilterSystemMessagesForm from '../../forms/FilterSystemMessagesForm/FilterSystemMessagesForm';
+import FilterSystemMessagesForm from '../../forms/FilterSystemMessagesForm/FilterSystemMessagesForm.js';
 import { TypedMessageIcon } from '../../icons';
 
 import * as styles from './MessagesList.less';

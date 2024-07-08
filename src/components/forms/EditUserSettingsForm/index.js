@@ -1,2 +1,2 @@
-import EditUserSettingsForm from './EditUserSettingsForm';
+import EditUserSettingsForm from './EditUserSettingsForm.js';
 export default EditUserSettingsForm;

@@ -1,2 +1,2 @@
-import SourceCodeBox from './SourceCodeBox';
+import SourceCodeBox from './SourceCodeBox.js';
 export default SourceCodeBox;

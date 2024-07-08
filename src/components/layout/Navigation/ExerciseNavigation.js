@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Navigation from './Navigation';
-import withLinks from '../../../helpers/withLinks';
-import { createExerciseLinks } from './linkCreators';
+import Navigation from './Navigation.js';
+import withLinks from '../../../helpers/withLinks.js';
+import { createExerciseLinks } from './linkCreators.js';
 
 const ExerciseNavigation = ({ exercise: { id, permissionHints }, links }) => {
   const canEdit = permissionHints.update || permissionHints.archive || permissionHints.remove;

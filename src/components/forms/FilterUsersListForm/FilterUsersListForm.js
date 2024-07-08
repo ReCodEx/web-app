@@ -6,8 +6,8 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, TextField } from '../Fields';
-import { knownRoles, roleLabelsPlural } from '../../helpers/usersRoles';
-import { identity } from '../../../helpers/common';
+import { knownRoles, roleLabelsPlural } from '../../helpers/usersRoles.js';
+import { identity } from '../../../helpers/common.js';
 import InsetPanel from '../../widgets/InsetPanel';
 import Callout from '../../widgets/Callout';
 

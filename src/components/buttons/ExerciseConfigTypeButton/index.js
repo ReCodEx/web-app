@@ -1,2 +1,2 @@
-import ExerciseConfigTypeButton from './ExerciseConfigTypeButton';
+import ExerciseConfigTypeButton from './ExerciseConfigTypeButton.js';
 export default ExerciseConfigTypeButton;

@@ -11,8 +11,8 @@ import FormBox from '../../widgets/FormBox';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { InfoIcon, SaveIcon, RefreshIcon } from '../../icons';
-import { encodeId, encodeNumId, identity } from '../../../helpers/common';
-import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits';
+import { encodeId, encodeNumId, identity } from '../../../helpers/common.js';
+import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits.js';
 
 import * as styles from './styles.less';
 

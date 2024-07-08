@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { Prism as SyntaxHighlighter, createElement } from 'react-syntax-highlighter';
 import { lruMemoize } from 'reselect';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'prismjs/themes/prism.css';
 
 import ReviewCommentForm, { newCommentFormInitialValues } from '../../forms/ReviewCommentForm';
-import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting';
-import { getFileExtensionLC } from '../../../helpers/common';
+import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting.js';
+import { getFileExtensionLC, canUseDOM } from '../../../helpers/common.js';
 
-import SourceCodeComment from './SourceCodeComment';
+import SourceCodeComment from './SourceCodeComment.js';
 import './SourceCodeViewer.css';
 
 const groupCommentsByLine = lruMemoize(comments => {

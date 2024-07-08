@@ -9,8 +9,8 @@ import reducerFactory, {
   login,
   externalLogin,
   LOCAL_LOGIN,
-} from '../../../src/redux/modules/auth';
-import { isLoggedIn, hasSucceeded, hasFailed, statusSelector } from '../../../src/redux/selectors/auth';
+} from '../../../src/redux/modules/auth.js';
+import { isLoggedIn, hasSucceeded, hasFailed, statusSelector } from '../../../src/redux/selectors/auth.js';
 
 import { jwtDecode } from 'jwt-decode';
 

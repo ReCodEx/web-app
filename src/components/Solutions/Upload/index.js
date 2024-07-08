@@ -1,2 +1,2 @@
-import Upload from './Upload';
+import Upload from './Upload.js';
 export default Upload;

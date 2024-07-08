@@ -1,2 +1,2 @@
-import UserSwitching from './UserSwitching';
+import UserSwitching from './UserSwitching.js';
 export default UserSwitching;

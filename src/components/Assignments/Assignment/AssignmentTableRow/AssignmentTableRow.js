@@ -6,7 +6,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AssignmentSyncIcon from '../AssignmentSyncIcon';
 import AssignmentMaxPoints from '../AssignmentMaxPoints';
-import withLinks from '../../../../helpers/withLinks';
+import withLinks from '../../../../helpers/withLinks.js';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import {
   AssignmentIcon,
@@ -22,7 +22,7 @@ import DateTime from '../../../widgets/DateTime';
 import NiceCheckbox from '../../../forms/NiceCheckbox';
 import EnvironmentsList from '../../../helpers/EnvironmentsList';
 import ResourceRenderer from '../../../helpers/ResourceRenderer';
-import { getGroupCanonicalLocalizedName } from '../../../../helpers/localizedData';
+import { getGroupCanonicalLocalizedName } from '../../../../helpers/localizedData.js';
 
 const AssignmentTableRow = ({
   item: {

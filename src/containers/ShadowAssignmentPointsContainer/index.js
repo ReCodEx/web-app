@@ -1,2 +1,2 @@
-import ShadowAssignmentPointsContainer from './ShadowAssignmentPointsContainer';
+import ShadowAssignmentPointsContainer from './ShadowAssignmentPointsContainer.js';
 export default ShadowAssignmentPointsContainer;

@@ -6,9 +6,9 @@ import UserSwitchingContainer from '../../containers/UserSwitchingContainer';
 
 import UserPanel, { UserPanelLoading, UserPanelFailed } from '../../components/widgets/Sidebar/UserPanel';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
-import { accessTokenExpiration } from '../../redux/selectors/auth';
-import { logout, restrictEffectiveRole } from '../../redux/modules/auth';
+import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
+import { accessTokenExpiration } from '../../redux/selectors/auth.js';
+import { logout, restrictEffectiveRole } from '../../redux/modules/auth.js';
 
 const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration, logout, small = false }) => (
   <ResourceRenderer

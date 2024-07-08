@@ -6,11 +6,11 @@ import { lruMemoize } from 'reselect';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { CloseIcon, DownloadIcon, FailureIcon, SuccessIcon } from '../../icons';
-import { downloadString } from '../../../redux/helpers/api/download';
+import { downloadString } from '../../../redux/helpers/api/download.js';
 
-import TestResultsTableRow from './TestResultsTableRow';
-import TestResultsTableLog from './TestResultsTableLog';
-import CopyLogToClipboard from './CopyLogToClipboard';
+import TestResultsTableRow from './TestResultsTableRow.js';
+import TestResultsTableLog from './TestResultsTableLog.js';
+import CopyLogToClipboard from './CopyLogToClipboard.js';
 
 const getResult = lruMemoize((results, name) => results.find(r => r.testName === name));
 

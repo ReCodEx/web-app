@@ -6,7 +6,7 @@ import { Modal, ProgressBar, Table } from 'react-bootstrap';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import Button from '../../widgets/TheButton';
-import EvaluationStatusText from './EvaluationStatusText';
+import EvaluationStatusText from './EvaluationStatusText.js';
 import Icon from '../../icons';
 
 const messagesContainerStyle = {

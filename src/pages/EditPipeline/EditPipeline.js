@@ -17,16 +17,16 @@ import { EditIcon } from '../../components/icons';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import { fetchPipelineIfNeeded, editPipeline, setPipelineRuntimeEnvironments } from '../../redux/modules/pipelines';
-import { fetchBoxTypes } from '../../redux/modules/boxes';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { getPipeline } from '../../redux/selectors/pipelines';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+import { fetchPipelineIfNeeded, editPipeline, setPipelineRuntimeEnvironments } from '../../redux/modules/pipelines.js';
+import { fetchBoxTypes } from '../../redux/modules/boxes.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { getPipeline } from '../../redux/selectors/pipelines.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users.js';
 
-import { arrayToObject, hasPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
+import { arrayToObject, hasPermissions } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
 
 // convert pipeline data into initial structure for pipeline edit metadata form
 const perpareInitialPipelineData = ({ name, description, version, parameters, author }) => ({

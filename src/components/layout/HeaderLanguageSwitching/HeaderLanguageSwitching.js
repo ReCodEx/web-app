@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import { knownLocalesNames } from '../../../helpers/localizedData';
+import { knownLocalesNames } from '../../../helpers/localizedData.js';
 
 const HeaderLanguageSwitching = ({ currentLang, availableLangs, setLang }) => (
   <Dropdown as="li" alignRight className="nav-item">

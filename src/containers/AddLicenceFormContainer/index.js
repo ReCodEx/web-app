@@ -1,2 +1,2 @@
-import AddLicenceFormContainer from './AddLicenceFormContainer';
+import AddLicenceFormContainer from './AddLicenceFormContainer.js';
 export default AddLicenceFormContainer;

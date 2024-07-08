@@ -8,7 +8,7 @@ import AssignmentNameContainer from '../../../containers/AssignmentNameContainer
 import DateTime from '../../widgets/DateTime';
 import Button from '../../widgets/TheButton';
 import { DeleteIcon } from '../../icons';
-import { getRecentlyVisitedSolutions, clearRecentlyVisitedSolutions } from './functions';
+import { getRecentlyVisitedSolutions, clearRecentlyVisitedSolutions } from './functions.js';
 
 const RecentlyVisited = ({ selectedId, secondSelectedId = null, onSelect = null }) => {
   const [renderTrigger, setRenderTrigger] = useState(0);

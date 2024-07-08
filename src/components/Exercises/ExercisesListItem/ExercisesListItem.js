@@ -15,9 +15,9 @@ import { ExercisePrefixIcons, EditIcon, LimitsIcon, TestsIcon } from '../../icon
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import AssignExerciseButton from '../../buttons/AssignExerciseButton';
-import { getTagStyle } from '../../../helpers/exercise/tags';
+import { getTagStyle } from '../../../helpers/exercise/tags.js';
 
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const ExercisesListItem = ({
   id,

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import { deleteExercise } from '../../redux/modules/exercises';
-import { getExercise } from '../../redux/selectors/exercises';
+import { deleteExercise } from '../../redux/modules/exercises.js';
+import { getExercise } from '../../redux/selectors/exercises.js';
 
 const DeleteExerciseButtonContainer = ({
   resourceless = false,

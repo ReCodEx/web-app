@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import MenuItem from '../MenuItem';
 import LoadingMenuItem from '../LoadingMenuItem';
 import { isLoading } from '../../../../redux/helpers/resourceManager';
-import { getLocalizedName } from '../../../../helpers/localizedData';
+import { getLocalizedName } from '../../../../helpers/localizedData.js';
 import Icon from '../../../icons';
 
 import '../Sidebar.css';

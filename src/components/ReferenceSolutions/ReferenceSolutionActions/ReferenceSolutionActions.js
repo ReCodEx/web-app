@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ActionButtons, { prepareButtonDescriptors } from '../../widgets/ActionButtons';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 /**
  * Action templates containing basic parameters: label, icon (name), variant (success if missing),

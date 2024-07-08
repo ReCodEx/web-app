@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { fromJS } from 'immutable';
 
-import reducer, { additionalActionTypes, forkExercise, forkStatuses } from '../../../src/redux/modules/exercises';
+import reducer, { additionalActionTypes, forkExercise, forkStatuses } from '../../../src/redux/modules/exercises.js';
 
 describe('exercises', () => {
   describe('forking', () => {
@@ -10,10 +10,9 @@ describe('exercises', () => {
     const initialState = fromJS({
       resources: {
         [id]: {
-          data: {
-          }
-        }
-      }
+          data: {},
+        },
+      },
     });
 
     it('must start a fork API action', () => {
@@ -22,7 +21,7 @@ describe('exercises', () => {
         type: additionalActionTypes.FORK_EXERCISE,
         endpoint: `/exercises/${id}/fork`,
         method: 'POST',
-        meta: { id, forkId }
+        meta: { id, forkId },
       });
     });
 
@@ -49,9 +48,12 @@ describe('exercises', () => {
       state = reducer(state, action3);
 
       const exerciseId = 'exe1';
-      const action4 = { type: additionalActionTypes.FORK_EXERCISE_FULFILLED, payload: { id: exerciseId }, meta: { id, forkId: 'xxx' } };
+      const action4 = {
+        type: additionalActionTypes.FORK_EXERCISE_FULFILLED,
+        payload: { id: exerciseId },
+        meta: { id, forkId: 'xxx' },
+      };
       state = reducer(state, action4);
-
 
       const forks = state.getIn(['resources', id, 'data', 'forks']);
 

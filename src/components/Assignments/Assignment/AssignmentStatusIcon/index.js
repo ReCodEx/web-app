@@ -1,1 +1,1 @@
-export { default } from './AssignmentStatusIcon';
+export { default } from './AssignmentStatusIcon.js';

@@ -1,5 +1,5 @@
-import Avatar from './Avatar';
+import Avatar from './Avatar.js';
 export default Avatar;
-export { default as LoadingAvatar } from './LoadingAvatar';
-export { default as FailedAvatar } from './FailedAvatar';
-export { default as FakeAvatar } from './FakeAvatar';
+export { default as LoadingAvatar } from './LoadingAvatar.js';
+export { default as FailedAvatar } from './FailedAvatar.js';
+export { default as FakeAvatar } from './FakeAvatar.js';

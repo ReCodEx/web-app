@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 import { handleActions, createAction } from 'redux-actions';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 
 export const actionTypes = {
   INIT: 'recodex/upload/INIT',

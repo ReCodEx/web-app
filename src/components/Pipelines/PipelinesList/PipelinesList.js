@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
 import PipelinesListItem from '../PipelinesListItem';
-import { identity } from '../../../helpers/common';
+import { identity } from '../../../helpers/common.js';
 
 const PipelinesList = ({ pipelines = [], heading = null, createActions, intl: { locale } }) => (
   <Table hover>

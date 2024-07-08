@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
@@ -11,10 +10,11 @@ import PageContent from '../../components/layout/PageContent';
 import ResendVerificationEmailContainer from '../../containers/ResendVerificationEmailContainer';
 
 import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
-import { verifyEmail } from '../../redux/modules/emailVerification';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { verificationStatusSelector } from '../../redux/selectors/emailVerification';
+import { verifyEmail } from '../../redux/modules/emailVerification.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { verificationStatusSelector } from '../../redux/selectors/emailVerification.js';
 import { LoadingIcon, SuccessIcon, FailureIcon, MailIcon } from '../../components/icons';
+import { canUseDOM } from '../../helpers/common.js';
 
 /**
  * Component for changing old password for a new one for a user with a specific

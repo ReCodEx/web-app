@@ -1,1 +1,1 @@
-export { default } from './CodeFragmentSelector';
+export { default } from './CodeFragmentSelector.js';

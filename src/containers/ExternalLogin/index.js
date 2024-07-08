@@ -1,2 +1,2 @@
-import ExternalLoginBox from './ExternalLoginBox';
+import ExternalLoginBox from './ExternalLoginBox.js';
 export default ExternalLoginBox;

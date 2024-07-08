@@ -1,2 +1,2 @@
-import SolutionActionsContainer from './SolutionActionsContainer';
+import SolutionActionsContainer from './SolutionActionsContainer.js';
 export default SolutionActionsContainer;

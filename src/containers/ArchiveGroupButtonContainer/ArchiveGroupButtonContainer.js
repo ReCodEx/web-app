@@ -4,11 +4,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import ArchiveGroupButton from '../../components/buttons/ArchiveGroupButton';
-import { setArchived } from '../../redux/modules/groups';
-import { groupSelector, groupArchivedPendingChange } from '../../redux/selectors/groups';
+import { setArchived } from '../../redux/modules/groups.js';
+import { groupSelector, groupArchivedPendingChange } from '../../redux/selectors/groups.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import { identity } from '../../helpers/common';
+import { identity } from '../../helpers/common.js';
 
 class ArchiveGroupButtonContainer extends Component {
   render() {

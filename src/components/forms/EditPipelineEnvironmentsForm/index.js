@@ -1,2 +1,2 @@
-import EditPipelineEnvironmentsForm from './EditPipelineEnvironmentsForm';
+import EditPipelineEnvironmentsForm from './EditPipelineEnvironmentsForm.js';
 export default EditPipelineEnvironmentsForm;

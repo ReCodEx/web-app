@@ -1,2 +1,2 @@
-export { default } from './SolutionDetail';
-export { default as FailedSubmissionDetail } from './FailedSubmissionDetail';
+export { default } from './SolutionDetail.js';
+export { default as FailedSubmissionDetail } from './FailedSubmissionDetail.js';

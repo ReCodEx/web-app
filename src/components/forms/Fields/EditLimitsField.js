@@ -7,10 +7,10 @@ import prettyMs from 'pretty-ms';
 
 import Button from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
-import LimitsValueField from './LimitsValueField';
+import LimitsValueField from './LimitsValueField.js';
 
-import { validateLimitsField } from '../../../helpers/exercise/limits';
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
+import { validateLimitsField } from '../../../helpers/exercise/limits.js';
+import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import Icon from '../../icons';
 
 const prettyPrintBytesWrap = value => (Number.isNaN(Number(value)) ? '-' : prettyPrintBytes(Number(value) * 1024));

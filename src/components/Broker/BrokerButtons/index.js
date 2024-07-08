@@ -1,2 +1,2 @@
-import BrokerButtons from './BrokerButtons';
+import BrokerButtons from './BrokerButtons.js';
 export default BrokerButtons;

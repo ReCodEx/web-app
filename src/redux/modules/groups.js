@@ -1,24 +1,24 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import { addNotification } from './notifications';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { addNotification } from './notifications.js';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import factory, { initialState, createActionsWithPostfixes } from '../helpers/resourceManager';
 
-import createRecord from '../helpers/resourceManager/recordFactory';
-import { resourceStatus } from '../helpers/resourceManager/status';
-import { actionTypes as assignmentsActionTypes } from './assignments';
+import createRecord from '../helpers/resourceManager/recordFactory.js';
+import { resourceStatus } from '../helpers/resourceManager/status.js';
+import { actionTypes as assignmentsActionTypes } from './assignments.js';
 import {
   actionTypes as invitationsActionTypes,
   additionalActionTypes as additionalInvitationsActionTypes,
-} from './groupInvitations';
-import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments';
-import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes';
-import { actionTypes as sisSubscribedCoursesActionTypes } from './sisSubscribedGroups';
-import { actionTypes as sisPossibleParentsActionTypes } from './sisPossibleParents';
-import { selectedInstanceId } from '../selectors/auth';
+} from './groupInvitations.js';
+import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments.js';
+import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes.js';
+import { actionTypes as sisSubscribedCoursesActionTypes } from './sisSubscribedGroups.js';
+import { actionTypes as sisPossibleParentsActionTypes } from './sisPossibleParents.js';
+import { selectedInstanceId } from '../selectors/auth.js';
 
-import { objectMap, arrayToObject } from '../../helpers/common';
+import { objectMap, arrayToObject } from '../../helpers/common.js';
 
 const resourceName = 'groups';
 const { actions, actionTypes, reduceActions } = factory({ resourceName });

@@ -1,2 +1,2 @@
-import RemoveFromGroupButton from './RemoveFromGroupButton';
+import RemoveFromGroupButton from './RemoveFromGroupButton.js';
 export default RemoveFromGroupButton;

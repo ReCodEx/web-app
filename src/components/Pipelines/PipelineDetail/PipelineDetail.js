@@ -11,8 +11,8 @@ import Explanation from '../../widgets/Explanation';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Icon, { UserIcon, CodeIcon, ForkIcon } from '../../icons';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
-import Version from '../../widgets/Version/Version';
-import ParametersList from '../ParametersList/ParametersList';
+import Version from '../../widgets/Version/Version.js';
+import ParametersList from '../ParametersList/ParametersList.js';
 
 const PipelineDetail = ({
   author,

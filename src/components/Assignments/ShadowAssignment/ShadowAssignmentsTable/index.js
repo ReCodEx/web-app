@@ -1,1 +1,1 @@
-export { default } from './ShadowAssignmentsTable';
+export { default } from './ShadowAssignmentsTable.js';

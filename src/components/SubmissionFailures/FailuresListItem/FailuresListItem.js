@@ -7,7 +7,7 @@ import classnames from 'classnames';
 
 import DateTime from '../../widgets/DateTime';
 import Icon from '../../icons';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const ERROR_ICONS = {
   broker_reject: 'exchange-alt',

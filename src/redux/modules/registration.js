@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 
 export const actionTypes = {
   CREATE_ACCOUNT: 'recodex/registration/CREATE_ACCOUNT',

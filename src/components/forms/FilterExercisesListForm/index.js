@@ -1,2 +1,2 @@
-import FilterExercisesListForm from './FilterExercisesListForm';
+import FilterExercisesListForm from './FilterExercisesListForm.js';
 export default FilterExercisesListForm;

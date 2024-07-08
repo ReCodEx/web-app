@@ -1,2 +1,2 @@
-import AddUserContainer from './AddUserContainer';
+import AddUserContainer from './AddUserContainer.js';
 export default AddUserContainer;

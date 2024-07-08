@@ -1,2 +1,2 @@
-import OptionalTooltipWrapper from './OptionalTooltipWrapper';
+import OptionalTooltipWrapper from './OptionalTooltipWrapper.js';
 export default OptionalTooltipWrapper;

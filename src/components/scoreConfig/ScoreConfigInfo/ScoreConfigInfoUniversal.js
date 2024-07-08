@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import ScoreConfigUniversalExpression from '../ScoreConfigUniversalExpression';
-import { Ast } from '../../../helpers/exercise/scoreAst';
-import { arrayToObject } from '../../../helpers/common';
+import { Ast } from '../../../helpers/exercise/scoreAst.js';
+import { arrayToObject } from '../../../helpers/common.js';
 import InsetPanel from '../../widgets/InsetPanel';
 
 const createAst = lruMemoize((config, testResults) => {

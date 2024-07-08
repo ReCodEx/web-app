@@ -4,12 +4,12 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import GroupsTreeNode from './GroupsTreeNode';
+import GroupsTreeNode from './GroupsTreeNode.js';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 
 import { GroupIcon, AssignmentsIcon, EditIcon, StudentsIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
-import { hasPermissions } from '../../../helpers/common';
+import withLinks from '../../../helpers/withLinks.js';
+import { hasPermissions } from '../../../helpers/common.js';
 
 import './styles.css';
 

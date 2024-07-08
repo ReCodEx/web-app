@@ -7,7 +7,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { MailIcon, TypedMessageIcon } from '../../icons';
 import Markdown from '../../widgets/Markdown';
 import DateTime from '../../widgets/DateTime';
-import { getLocalizedText } from '../../../helpers/localizedData';
+import { getLocalizedText } from '../../../helpers/localizedData.js';
 
 import * as styles from '../Header/Header.less';
 

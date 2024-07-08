@@ -1,2 +1,2 @@
-import FetchManyResourceRenderer from './FetchManyResourceRenderer';
+import FetchManyResourceRenderer from './FetchManyResourceRenderer.js';
 export default FetchManyResourceRenderer;

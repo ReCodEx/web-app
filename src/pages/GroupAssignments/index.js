@@ -1,2 +1,2 @@
-import GroupAssignments from './GroupAssignments';
+import GroupAssignments from './GroupAssignments.js';
 export default GroupAssignments;

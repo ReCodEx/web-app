@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { fromJS } from 'immutable';
 
-import reducer, { additionalActionTypes, setSolutionFlag } from '../../../src/redux/modules/solutions';
+import reducer, { additionalActionTypes, setSolutionFlag } from '../../../src/redux/modules/solutions.js';
 
 describe('Solutions', () => {
   describe('Mark as accepted', () => {

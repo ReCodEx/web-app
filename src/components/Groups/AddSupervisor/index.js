@@ -1,2 +1,2 @@
-import AddSupervisor from './AddSupervisor';
+import AddSupervisor from './AddSupervisor.js';
 export default AddSupervisor;

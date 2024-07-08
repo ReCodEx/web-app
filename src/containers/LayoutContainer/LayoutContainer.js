@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import moment from 'moment';
-import { canUseDOM } from 'exenv';
 
-import { setLang } from '../../redux/modules/app';
-import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar';
-import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app';
-import { isVisible, isCollapsed } from '../../redux/selectors/sidebar';
-import { isLoggedIn } from '../../redux/selectors/auth';
-import { getLoggedInUserSettings, getLoggedInUserUiData } from '../../redux/selectors/users';
-import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
+import { setLang } from '../../redux/modules/app.js';
+import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar.js';
+import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app.js';
+import { isVisible, isCollapsed } from '../../redux/selectors/sidebar.js';
+import { isLoggedIn } from '../../redux/selectors/auth.js';
+import { getLoggedInUserSettings, getLoggedInUserUiData } from '../../redux/selectors/users.js';
+import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups.js';
 
 import Layout from '../../components/layout/Layout';
 import { messages } from '../../locales';
-import { UserUIDataContext, LinksContext, UrlContext } from '../../helpers/contexts';
-import { buildRoutes, getLinks, pathRelatedGroupSelector } from '../../pages/routes';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { UserUIDataContext, LinksContext, UrlContext } from '../../helpers/contexts.js';
+import { buildRoutes, getLinks, pathRelatedGroupSelector } from '../../pages/routes.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
+import { canUseDOM } from '../../helpers/common.js';
 
 import 'admin-lte/dist/css/adminlte.min.css';
 import 'admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css';

@@ -6,7 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../../widgets/TheButton';
 import PipelinesListItem from '../../Pipelines/PipelinesListItem';
 import { AddIcon, DeleteIcon, TransferIcon } from '../../icons';
-import { EMPTY_FNC } from '../../../helpers/common';
+import { EMPTY_FNC } from '../../../helpers/common.js';
 
 class EditExercisePipelinesTable extends Component {
   state = { selectedPipeline: null };

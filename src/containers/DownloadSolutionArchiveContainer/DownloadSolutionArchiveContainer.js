@@ -4,14 +4,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { downloadSolutionArchive } from '../../redux/modules/submissionEvaluations';
-import { downloadSolutionArchive as downloadRefSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations';
-import { getUser } from '../../redux/selectors/users';
+import { downloadSolutionArchive } from '../../redux/modules/submissionEvaluations.js';
+import { downloadSolutionArchive as downloadRefSolutionArchive } from '../../redux/modules/referenceSolutionEvaluations.js';
+import { getUser } from '../../redux/selectors/users.js';
 import Button from '../../components/widgets/TheButton';
 import Icon from '../../components/icons';
 import OptionalTooltipWrapper from '../../components/widgets/OptionalTooltipWrapper';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { toPlainAscii } from '../../helpers/common';
+import { toPlainAscii } from '../../helpers/common.js';
 
 const solutionArchiveFileName = (solutionId, user, index = null) => {
   const components = [user.name.lastName, user.name.firstName];

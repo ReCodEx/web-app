@@ -13,10 +13,10 @@ import Callout from '../../widgets/Callout';
 import Icon, { BanIcon, ClockIcon, EditIcon, GroupExamsIcon, LoadingIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
-import { getErrorMessage } from '../../../locales/apiErrorMessages';
+import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
-import { isStudentRole } from '../../helpers/usersRoles';
-import { hasPermissions, shallowCompare } from '../../../helpers/common';
+import { isStudentRole } from '../../helpers/usersRoles.js';
+import { hasPermissions, shallowCompare } from '../../../helpers/common.js';
 
 const REFRESH_INTERVAL = 1; // [s]
 
@@ -32,8 +32,8 @@ class GroupExamStatus extends Component {
     const nextChange = examInProgress
       ? group.privateData.examEnd - now
       : hasExam
-      ? group.privateData.examBegin - now
-      : null;
+        ? group.privateData.examBegin - now
+        : null;
     const changeImminent = nextChange && nextChange <= 5; // s
     const examModal = (state.examModal && !changeImminent) || false;
     return { hasExam, examInProgress, changeImminent, examEndsIn24, examModal };

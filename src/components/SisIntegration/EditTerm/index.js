@@ -1,2 +1,2 @@
-import EditTerm from './EditTerm';
+import EditTerm from './EditTerm.js';
 export default EditTerm;

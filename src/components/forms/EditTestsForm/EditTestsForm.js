@@ -6,10 +6,10 @@ import { FormattedMessage } from 'react-intl';
 import { Modal, Table, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import EditTestsTest from './EditTestsTest';
+import EditTestsTest from './EditTestsTest.js';
 import ScoreConfigUniversalExpression from '../../scoreConfig/ScoreConfigUniversalExpression';
 import SubmitButton from '../SubmitButton';
-import StandaloneRadioField from '../Fields/StandaloneRadioField';
+import StandaloneRadioField from '../Fields/StandaloneRadioField.js';
 import Box from '../../widgets/Box';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
@@ -23,10 +23,10 @@ import {
   SCORE_CALCULATOR_CAPTIONS,
   SCORE_CALCULATOR_DESCRIPTIONS,
   createTestNameIndex,
-} from '../../../helpers/exercise/testsAndScore';
-import { Ast, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
+} from '../../../helpers/exercise/testsAndScore.js';
+import { Ast, AstNodeTestResult } from '../../../helpers/exercise/scoreAst.js';
 
-import { arrayToObject } from '../../../helpers/common';
+import { arrayToObject } from '../../../helpers/common.js';
 
 import * as style from './EditTests.less';
 

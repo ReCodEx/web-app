@@ -1,2 +1,2 @@
-import SolutionActions from './SolutionActions';
+import SolutionActions from './SolutionActions.js';
 export default SolutionActions;

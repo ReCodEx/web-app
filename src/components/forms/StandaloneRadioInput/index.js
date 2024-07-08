@@ -1,2 +1,2 @@
-import StandaloneRadioInput from './StandaloneRadioInput';
+import StandaloneRadioInput from './StandaloneRadioInput.js';
 export default StandaloneRadioInput;

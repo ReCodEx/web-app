@@ -8,7 +8,7 @@ import Icon, { GroupIcon, LoadingIcon } from '../../icons';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import Button from '../../widgets/TheButton';
 import GroupsTreeContainer from '../../../containers/GroupsTreeContainer';
-import { arrayToObject, identity, EMPTY_MAP } from '../../../helpers/common';
+import { arrayToObject, identity, EMPTY_MAP } from '../../../helpers/common.js';
 
 class ExerciseGroups extends Component {
   state = { dialogOpen: false };

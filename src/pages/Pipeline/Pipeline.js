@@ -13,20 +13,20 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Confirm from '../../components/forms/Confirm';
 import Callout from '../../components/widgets/Callout';
 
-import { fetchPipelineIfNeeded, fetchPipelineExercises, forkPipeline } from '../../redux/modules/pipelines';
-import { fetchByIds } from '../../redux/modules/users';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { getPipeline, getPipelineExercises, pipelineEnvironmentsSelector } from '../../redux/selectors/pipelines';
+import { fetchPipelineIfNeeded, fetchPipelineExercises, forkPipeline } from '../../redux/modules/pipelines.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { getPipeline, getPipelineExercises, pipelineEnvironmentsSelector } from '../../redux/selectors/pipelines.js';
 
-import { getVariablesUtilization } from '../../helpers/pipelines';
+import { getVariablesUtilization } from '../../helpers/pipelines.js';
 import PipelineDetail from '../../components/Pipelines/PipelineDetail';
 import PipelineGraph from '../../components/Pipelines/PipelineGraph';
 import PipelineExercisesList from '../../components/Pipelines/PipelineExercisesList';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { hasPermissions, identity } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
-import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
+import { hasPermissions, identity } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 class Pipeline extends Component {
   state = {

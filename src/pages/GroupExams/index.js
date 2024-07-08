@@ -1,2 +1,2 @@
-import GroupExams from './GroupExams';
+import GroupExams from './GroupExams.js';
 export default GroupExams;

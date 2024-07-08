@@ -8,7 +8,7 @@ import MemberGroupsDropdown from '../../Groups/MemberGroupsDropdown';
 import ClientOnly from '../../helpers/ClientOnly';
 import FetchManyResourceRenderer from '../../helpers/FetchManyResourceRenderer';
 import Icon, { GroupIcon, LoadingIcon, WarningIcon } from '../../icons';
-import { getConfigVar } from '../../../helpers/config';
+import { getConfigVar } from '../../../helpers/config.js';
 
 const SKIN = getConfigVar('SKIN') || 'green';
 

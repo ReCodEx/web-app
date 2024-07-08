@@ -1,2 +1,2 @@
-import ResetPassword from './ResetPassword';
+import ResetPassword from './ResetPassword.js';
 export default ResetPassword;

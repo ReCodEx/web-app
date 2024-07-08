@@ -22,15 +22,15 @@ import {
   fetchManyGroupInvitationsStatus,
   groupInvitationsSelector,
   groupInvitationsAccessorJS,
-} from '../../redux/selectors/groupInvitations';
+} from '../../redux/selectors/groupInvitations.js';
 import {
   fetchGroupInvitations,
   createGroupInvitation,
   editGroupInvitation,
   deleteGroupInvitation,
-} from '../../redux/modules/groupInvitations';
+} from '../../redux/modules/groupInvitations.js';
 
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 class GroupInvitationsContainer extends Component {
   state = { dialogOpen: false, editInvitation: null };

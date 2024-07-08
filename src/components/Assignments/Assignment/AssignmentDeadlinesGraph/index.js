@@ -1,1 +1,1 @@
-export { default } from './AssignmentDeadlinesGraph';
+export { default } from './AssignmentDeadlinesGraph.js';

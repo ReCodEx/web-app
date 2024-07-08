@@ -1,8 +1,8 @@
 import { createSelector, lruMemoize } from 'reselect';
-import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common';
-import { getSolutions } from './solutions';
-import { getAsyncJobSelector } from './asyncJobs';
-import { runtimeEnvironmentSelector } from './runtimeEnvironments';
+import { EMPTY_LIST, EMPTY_MAP } from '../../helpers/common.js';
+import { getSolutions } from './solutions.js';
+import { getAsyncJobSelector } from './asyncJobs.js';
+import { runtimeEnvironmentSelector } from './runtimeEnvironments.js';
 import { isReady, getJsData } from '../helpers/resourceManager';
 
 export const getAssignments = state => state.assignments;

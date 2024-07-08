@@ -14,11 +14,11 @@ import {
   addSupervisor,
   addObserver,
   removeMember,
-} from '../../redux/modules/groups';
-import { fetchByIds, fetchUser } from '../../redux/modules/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
-import { groupSelector, groupDataAccessorSelector, groupsSelector } from '../../redux/selectors/groups';
+} from '../../redux/modules/groups.js';
+import { fetchByIds, fetchUser } from '../../redux/modules/users.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users.js';
+import { groupSelector, groupDataAccessorSelector, groupsSelector } from '../../redux/selectors/groups.js';
 import {
   primaryAdminsOfGroupSelector,
   supervisorsOfGroupSelector,
@@ -28,26 +28,26 @@ import {
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
   pendingMembershipsSelector,
-} from '../../redux/selectors/usersGroups';
+} from '../../redux/selectors/usersGroups.js';
 
 import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import GroupInfoTable, { LoadingGroupData, FailedGroupLoading } from '../../components/Groups/helpers';
 import SupervisorsList from '../../components/Users/SupervisorsList';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
-import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers/localizedData';
-import { isReady } from '../../redux/helpers/resourceManager/index';
+import { getLocalizedName, transformLocalizedTextsFormData } from '../../helpers/localizedData.js';
+import { isReady } from '../../redux/helpers/resourceManager/index.js';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import GroupsTreeContainer from '../../containers/GroupsTreeContainer';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import AddSupervisor from '../../components/Groups/AddSupervisor';
 import { BanIcon, GroupIcon } from '../../components/icons';
-import { hasPermissions, safeGet } from '../../helpers/common';
-import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import { hasPermissions, safeGet } from '../../helpers/common.js';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning.js';
 import GroupExamPending from '../../components/Groups/GroupExamPending';
 
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch) =>

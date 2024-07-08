@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BonusPoints from './BonusPoints';
+import BonusPoints from './BonusPoints.js';
 
 const Points = ({ points, maxPoints, bonusPoints }) => (
   <span>

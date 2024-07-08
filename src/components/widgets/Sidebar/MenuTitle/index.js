@@ -1,2 +1,2 @@
-import MenuTitle from './MenuTitle';
+import MenuTitle from './MenuTitle.js';
 export default MenuTitle;

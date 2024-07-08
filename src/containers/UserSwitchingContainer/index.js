@@ -1,2 +1,2 @@
-import UserSwitchingContainer from './UserSwitchingContainer';
+import UserSwitchingContainer from './UserSwitchingContainer.js';
 export default UserSwitchingContainer;

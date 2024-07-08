@@ -1,14 +1,14 @@
 import { handleActions, createAction } from 'redux-actions';
 import { Map, fromJS } from 'immutable';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import { didInvalidate } from '../helpers/resourceManager';
 import {
   getPaginationOffset,
   getPaginationLimit,
   getPaginationOrderBy,
   getPaginationFilters,
-} from '../selectors/pagination';
-import { selectedInstanceId } from '../selectors/auth';
+} from '../selectors/pagination.js';
+import { selectedInstanceId } from '../selectors/auth.js';
 
 export const actionTypes = {
   REGISTER: 'recodex/pagination/REGISTER',

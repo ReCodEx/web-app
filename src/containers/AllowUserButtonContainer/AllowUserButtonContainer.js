@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AllowUserButton from '../../components/buttons/AllowUserButton';
-import { setIsAllowed } from '../../redux/modules/users';
-import { userIsAllowed, userIsAllowedPending } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { setIsAllowed } from '../../redux/modules/users.js';
+import { userIsAllowed, userIsAllowedPending } from '../../redux/selectors/users.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 
 const AllowUserButtonContainer = ({ id, loggedInUserId, isAllowed, pending, setIsAllowed, ...props }) =>
   loggedInUserId !== id ? (

@@ -2,9 +2,13 @@ import Express from 'express';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import config from '../config/webpack.config-dev.js';
 import colors from 'colors';
 import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
 
 const WEBPACK_DEV_SERVER_PORT = process.env.WEBPACK_DEV_SERVER_PORT || 8081;
 const fileConfig = fs.readFileSync('etc/env.json', 'utf8');
@@ -34,8 +38,6 @@ app.get('*', (req, res) => {
     urlPrefix,
   });
 });
-
-//console.log(webpack(config));
 
 const server = new WebpackDevServer(
   {

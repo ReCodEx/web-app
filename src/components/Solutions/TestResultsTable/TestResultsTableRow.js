@@ -6,8 +6,8 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
-import exitCodeMapping from '../../helpers/exitCodeMapping';
+import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
+import exitCodeMapping from '../../helpers/exitCodeMapping.js';
 import Icon, { SuccessOrFailureIcon } from '../../icons';
 
 const hasValue = value => value !== null;

@@ -1,2 +1,2 @@
-import ForkExerciseForm from './ForkExerciseForm';
+import ForkExerciseForm from './ForkExerciseForm.js';
 export default ForkExerciseForm;

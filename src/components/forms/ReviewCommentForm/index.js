@@ -1,1 +1,1 @@
-export { default, newCommentFormInitialValues } from './ReviewCommentForm';
+export { default, newCommentFormInitialValues } from './ReviewCommentForm.js';

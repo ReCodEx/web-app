@@ -1,2 +1,2 @@
-import LocalizedTexts from './LocalizedTexts';
+import LocalizedTexts from './LocalizedTexts.js';
 export default LocalizedTexts;

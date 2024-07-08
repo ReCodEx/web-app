@@ -6,12 +6,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ReferenceSolutionActions from '../../components/ReferenceSolutions/ReferenceSolutionActions';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import { setVisibility } from '../../redux/modules/referenceSolutions';
+import { setVisibility } from '../../redux/modules/referenceSolutions.js';
 import {
   getReferenceSolution,
   getReferenceSolutionSetVisibilityStatus,
-} from '../../redux/selectors/referenceSolutions';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+} from '../../redux/selectors/referenceSolutions.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 
 const ReferenceSolutionActionsContainer = ({
   id,

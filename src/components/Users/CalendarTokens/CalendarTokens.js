@@ -9,7 +9,7 @@ import DateTime from '../../widgets/DateTime';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { CopyIcon, InfoIcon, LoadingIcon, WarningIcon, RefreshIcon } from '../../icons';
 
-import { API_BASE } from '../../../helpers/config';
+import { API_BASE } from '../../../helpers/config.js';
 
 class CalendarTokens extends Component {
   state = { createPending: false, copiedCalendar: null };

@@ -7,7 +7,7 @@ import { lruMemoize } from 'reselect';
 import Button from '../../widgets/TheButton';
 import { SendIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
 import Confirm from '../Confirm';
-import { getErrorMessage } from '../../../locales/apiErrorMessages';
+import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 const getIcons = lruMemoize(defaultIcon => ({
   submit: defaultIcon || <SendIcon gapRight />,

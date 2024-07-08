@@ -1,1 +1,1 @@
-export { default } from './CommentBox';
+export { default } from './CommentBox.js';

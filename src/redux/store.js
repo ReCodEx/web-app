@@ -1,18 +1,18 @@
-import { canUseDOM } from 'exenv';
 import { configureStore } from '@reduxjs/toolkit';
 import promiseMiddleware from 'redux-promise-middleware';
 import * as storage from 'redux-storage';
 import createEngine from 'redux-storage-engine-localstorage';
 import filter from 'redux-storage-decorator-filter';
 
-import authMiddleware from './middleware/authMiddleware';
-import apiMiddleware from './middleware/apiMiddleware';
-import loggerMiddleware from './middleware/loggerMiddleware';
-import langMiddleware from './middleware/langMiddleware';
-import createReducer from './reducer';
-import { actionTypes as authActionTypes } from './modules/authTypes';
-import { actionTypes as switchingActionTypes } from './modules/userSwitching';
-import { getConfigVar } from '../helpers/config';
+import authMiddleware from './middleware/authMiddleware.js';
+import apiMiddleware from './middleware/apiMiddleware.js';
+import loggerMiddleware from './middleware/loggerMiddleware.js';
+import langMiddleware from './middleware/langMiddleware.js';
+import createReducer from './reducer.js';
+import { actionTypes as authActionTypes } from './modules/authTypes.js';
+import { actionTypes as switchingActionTypes } from './modules/userSwitching.js';
+import { getConfigVar } from '../helpers/config.js';
+import { canUseDOM } from '../helpers/common.js';
 
 const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 

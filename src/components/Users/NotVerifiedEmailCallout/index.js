@@ -1,2 +1,2 @@
-import NotVerifiedEmailCallout from './NotVerifiedEmailCallout';
+import NotVerifiedEmailCallout from './NotVerifiedEmailCallout.js';
 export default NotVerifiedEmailCallout;

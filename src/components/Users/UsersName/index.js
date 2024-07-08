@@ -1,4 +1,4 @@
-import UsersName from './UsersName';
+import UsersName from './UsersName.js';
 export default UsersName;
-export { default as LoadingUsersName } from './LoadingUsersName';
-export { default as FailedUsersName } from './FailedUsersName';
+export { default as LoadingUsersName } from './LoadingUsersName.js';
+export { default as FailedUsersName } from './FailedUsersName.js';

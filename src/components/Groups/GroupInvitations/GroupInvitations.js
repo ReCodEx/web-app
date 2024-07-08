@@ -9,7 +9,7 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 import DateTime from '../../widgets/DateTime';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { CopyIcon, DeleteIcon, EditIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const GroupInvitations = ({
   invitations,

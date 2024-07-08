@@ -1,2 +1,2 @@
-import UsersListItem from './UsersListItem';
+import UsersListItem from './UsersListItem.js';
 export default UsersListItem;

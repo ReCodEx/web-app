@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { LinksContext } from '../helpers/contexts';
+import { LinksContext } from '../helpers/contexts.js';
 
 const withLinks = Inner => {
   const ComponentWithLinks = props => (

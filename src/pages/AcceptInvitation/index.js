@@ -1,2 +1,2 @@
-import AcceptInvitation from './AcceptInvitation';
+import AcceptInvitation from './AcceptInvitation.js';
 export default AcceptInvitation;

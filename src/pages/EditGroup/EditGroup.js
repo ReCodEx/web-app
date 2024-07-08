@@ -18,23 +18,23 @@ import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonCont
 import DeleteGroupButtonContainer from '../../containers/DeleteGroupButtonContainer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning.js';
 import { BanIcon, EditGroupIcon, WarningIcon } from '../../components/icons';
 
-import { fetchGroup, fetchGroupIfNeeded, editGroup, relocateGroup } from '../../redux/modules/groups';
+import { fetchGroup, fetchGroupIfNeeded, editGroup, relocateGroup } from '../../redux/modules/groups.js';
 import {
   groupSelector,
   canViewParentDetailSelector,
   notArchivedGroupsSelector,
   groupDataAccessorSelector,
-} from '../../redux/selectors/groups';
-import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
+} from '../../redux/selectors/groups.js';
+import { loggedInUserIdSelector, selectedInstanceId } from '../../redux/selectors/auth.js';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users.js';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData.js';
 
-import { hasPermissions, hasOneOfPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
+import { hasPermissions, hasOneOfPermissions } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
 
 const canRelocate = group => hasPermissions(group, 'relocate') && !group.archived;
 

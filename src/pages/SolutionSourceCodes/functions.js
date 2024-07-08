@@ -1,5 +1,5 @@
 import { lruMemoize } from 'reselect';
-import { arrayToObject, getFileExtensionLC, EMPTY_OBJ } from '../../helpers/common';
+import { arrayToObject, getFileExtensionLC, EMPTY_OBJ } from '../../helpers/common.js';
 
 const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
 

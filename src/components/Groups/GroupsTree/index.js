@@ -1,2 +1,2 @@
-import GroupsTree from './GroupsTree';
+import GroupsTree from './GroupsTree.js';
 export default GroupsTree;

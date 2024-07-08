@@ -1,2 +1,2 @@
-import LockedStudentsTable from './LockedStudentsTable';
+import LockedStudentsTable from './LockedStudentsTable.js';
 export default LockedStudentsTable;

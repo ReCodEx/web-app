@@ -6,15 +6,15 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/TheButton';
 import Icon from '../../icons';
 import Confirm from '../../forms/Confirm';
-import { ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments';
+import { ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments.js';
 
-import EditExerciseSimpleConfigTestCompilation from './EditExerciseSimpleConfigTestCompilation';
-import EditExerciseSimpleConfigTestInputs from './EditExerciseSimpleConfigTestInputs';
-import EditExerciseSimpleConfigTestExecArgs from './EditExerciseSimpleConfigTestExecArgs';
-import EditExerciseSimpleConfigTestExecEntryPoint from './EditExerciseSimpleConfigTestEntryPoint';
-import EditExerciseSimpleConfigTestOutput from './EditExerciseSimpleConfigTestOutput';
-import EditExerciseSimpleConfigTestJudge from './EditExerciseSimpleConfigTestJudge';
-import EditExerciseSimpleConfigTestExtraFiles from './EditExerciseSimpleConfigTestExtraFiles';
+import EditExerciseSimpleConfigTestCompilation from './EditExerciseSimpleConfigTestCompilation.js';
+import EditExerciseSimpleConfigTestInputs from './EditExerciseSimpleConfigTestInputs.js';
+import EditExerciseSimpleConfigTestExecArgs from './EditExerciseSimpleConfigTestExecArgs.js';
+import EditExerciseSimpleConfigTestExecEntryPoint from './EditExerciseSimpleConfigTestEntryPoint.js';
+import EditExerciseSimpleConfigTestOutput from './EditExerciseSimpleConfigTestOutput.js';
+import EditExerciseSimpleConfigTestJudge from './EditExerciseSimpleConfigTestJudge.js';
+import EditExerciseSimpleConfigTestExtraFiles from './EditExerciseSimpleConfigTestExtraFiles.js';
 
 import './EditExerciseSimpleConfigForm.css';
 

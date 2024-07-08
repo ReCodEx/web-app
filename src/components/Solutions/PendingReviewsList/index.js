@@ -1,2 +1,2 @@
-import PendingReviewsList from './PendingReviewsList';
+import PendingReviewsList from './PendingReviewsList.js';
 export default PendingReviewsList;

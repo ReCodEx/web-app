@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 
-import DatetimeField from '../../forms/Fields/DatetimeField';
+import DatetimeField from '../../forms/Fields/DatetimeField.js';
 import SubmitButton from '../../forms/SubmitButton';
 import Button from '../../widgets/TheButton';
 import { CloseIcon, SaveIcon } from '../../icons';

@@ -15,17 +15,17 @@ import Callout from '../../components/widgets/Callout';
 import Button from '../../components/widgets/TheButton';
 import Icon from '../../components/icons';
 
-import { login, logout } from '../../redux/modules/auth';
-import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { login, logout } from '../../redux/modules/auth.js';
+import { isLoggedIn, selectedInstanceId } from '../../redux/selectors/auth.js';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
 
 import { getError } from '../../redux/helpers/resourceManager';
 
-import { getConfigVar, getConfigVarLocalized } from '../../helpers/config';
-import { getErrorMessage } from '../../locales/apiErrorMessages';
+import { getConfigVar, getConfigVarLocalized } from '../../helpers/config.js';
+import { getErrorMessage } from '../../locales/apiErrorMessages.js';
 
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
 
 const EXTERNAL_AUTH_URL = getConfigVar('EXTERNAL_AUTH_URL');
 const EXTERNAL_AUTH_SERVICE_ID = getConfigVar('EXTERNAL_AUTH_SERVICE_ID');
@@ -66,8 +66,8 @@ class Login extends Component {
         defaultPage && defaultPages[defaultPage]
           ? defaultPages[defaultPage]
           : loggedInUser && loggedInUser.getIn(['data', 'isVerified']) === false
-          ? EDIT_USER_URI_FACTORY(loggedInUser.getIn(['data', 'id']))
-          : DASHBOARD_URI; // system default
+            ? EDIT_USER_URI_FACTORY(loggedInUser.getIn(['data', 'id']))
+            : DASHBOARD_URI; // system default
     }
 
     // redirect

@@ -1,7 +1,7 @@
 import { createSelector, lruMemoize } from 'reselect';
-import { EMPTY_MAP } from '../../helpers/common';
+import { EMPTY_MAP } from '../../helpers/common.js';
 import { isReady } from '../helpers/resourceManager';
-import { getExercise } from './exercises';
+import { getExercise } from './exercises.js';
 
 export const attachmentFilesSelector = state => state.attachmentFiles.get('resources');
 

@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
 
 import factory, { initialState, resourceStatus, createRecord } from '../helpers/resourceManager';
-import { downloadHelper } from '../helpers/api/download';
-import { actionTypes as additionalSubmissionActionTypes } from './submission';
+import { downloadHelper } from '../helpers/api/download.js';
+import { actionTypes as additionalSubmissionActionTypes } from './submission.js';
 
 const resourceName = 'submissionEvaluations';
 const { actionTypes, actions, reduceActions } = factory({

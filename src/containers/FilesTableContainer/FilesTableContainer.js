@@ -7,9 +7,9 @@ import FilesTable from '../../components/Exercises/FilesTable';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import { reset } from '../../redux/modules/upload';
-import { uploadedFilesSelector, allFilesUploadedSelector } from '../../redux/selectors/upload';
-import { isLoadingState } from '../../redux/helpers/resourceManager/status';
+import { reset } from '../../redux/modules/upload.js';
+import { uploadedFilesSelector, allFilesUploadedSelector } from '../../redux/selectors/upload.js';
+import { isLoadingState } from '../../redux/helpers/resourceManager/status.js';
 
 class FilesTableContainer extends Component {
   componentDidMount() {

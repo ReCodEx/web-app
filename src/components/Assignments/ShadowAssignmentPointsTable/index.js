@@ -1,2 +1,2 @@
-import ShadowAssignmentPointsTable from './ShadowAssignmentPointsTable';
+import ShadowAssignmentPointsTable from './ShadowAssignmentPointsTable.js';
 export default ShadowAssignmentPointsTable;

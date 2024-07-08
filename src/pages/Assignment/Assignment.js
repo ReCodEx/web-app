@@ -9,35 +9,35 @@ import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import OptionalPopoverWrapper from '../../components/widgets/OptionalPopoverWrapper';
 
-import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments';
-import { canSubmit } from '../../redux/modules/canSubmit';
+import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments.js';
+import { canSubmit } from '../../redux/modules/canSubmit.js';
 import {
   init,
   submitAssignmentSolution as submitSolution,
   presubmitAssignmentSolution as presubmitSolution,
-} from '../../redux/modules/submission';
+} from '../../redux/modules/submission.js';
 import {
   fetchUsersSolutions,
   fetchAssignmentSolvers,
   fetchAssignmentSolversIfNeeded,
-} from '../../redux/modules/solutions';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+} from '../../redux/modules/solutions.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 
 import {
   getAssignment,
   getAssignmentEnvironments,
   getUserSolutionsSortedData,
-} from '../../redux/selectors/assignments';
-import { canSubmitSolution } from '../../redux/selectors/canSubmit';
-import { isSubmitting } from '../../redux/selectors/submission';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+} from '../../redux/selectors/assignments.js';
+import { canSubmitSolution } from '../../redux/selectors/canSubmit.js';
+import { isSubmitting } from '../../redux/selectors/submission.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import {
   fetchManyUserSolutionsStatus,
   isAssignmentSolversLoading,
   getAssignmentSolverSelector,
-} from '../../redux/selectors/solutions';
-import { loggedUserIsStudentOfSelector } from '../../redux/selectors/usersGroups';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+} from '../../redux/selectors/solutions.js';
+import { loggedUserIsStudentOfSelector } from '../../redux/selectors/usersGroups.js';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
@@ -52,10 +52,10 @@ import SolutionsTable from '../../components/Assignments/SolutionsTable';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
-import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable';
-import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable';
-import { isStudentLocked } from '../../components/helpers/exams';
-import { hasPermissions } from '../../helpers/common';
+import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable.js';
+import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable.js';
+import { isStudentLocked } from '../../components/helpers/exams.js';
+import { hasPermissions } from '../../helpers/common.js';
 
 const getReason = ({ lockedReason }, locale) =>
   typeof lockedReason === 'object'

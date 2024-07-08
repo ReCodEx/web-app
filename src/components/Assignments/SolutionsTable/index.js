@@ -1,2 +1,2 @@
-import SolutionsTable from './SolutionsTable';
+import SolutionsTable from './SolutionsTable.js';
 export default SolutionsTable;

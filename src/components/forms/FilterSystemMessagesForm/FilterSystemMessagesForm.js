@@ -6,7 +6,7 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { CheckboxField } from '../Fields';
-import { identity } from '../../../helpers/common';
+import { identity } from '../../../helpers/common.js';
 
 const FilterSystemMessagesForm = ({
   onSubmit = identity,

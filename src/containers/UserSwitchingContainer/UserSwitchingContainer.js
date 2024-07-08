@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import UserSwitching from '../../components/Users/UserSwitching';
 
-import { switchUser, removeUser } from '../../redux/modules/userSwitching';
-import { loggedInUserSelector } from '../../redux/selectors/users';
-import { usersSelector } from '../../redux/selectors/userSwitching';
+import { switchUser, removeUser } from '../../redux/modules/userSwitching.js';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
+import { usersSelector } from '../../redux/selectors/userSwitching.js';
 
 UserSwitching.propTypes = {
   currentUser: PropTypes.object.isRequired,

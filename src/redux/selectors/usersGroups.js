@@ -1,11 +1,11 @@
 import { createSelector, lruMemoize } from 'reselect';
 
-import { EMPTY_MAP, EMPTY_LIST } from '../../helpers/common';
-import { readyUsersDataSelector, isLoggedAsSuperAdmin } from './users';
-import { groupsSelector, groupSelectorCreator } from './groups';
-import { loggedInUserIdSelector } from './auth';
+import { EMPTY_MAP, EMPTY_LIST } from '../../helpers/common.js';
+import { readyUsersDataSelector, isLoggedAsSuperAdmin } from './users.js';
+import { groupsSelector, groupSelectorCreator } from './groups.js';
+import { loggedInUserIdSelector } from './auth.js';
 import { isReady, getJsData } from '../helpers/resourceManager';
-import { isStudentLocked } from '../../components/helpers/exams';
+import { isStudentLocked } from '../../components/helpers/exams.js';
 
 const getState = state => state;
 const getParam = (_, id) => id;

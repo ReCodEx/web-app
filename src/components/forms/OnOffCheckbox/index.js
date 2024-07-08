@@ -1,2 +1,2 @@
-import OnOffCheckbox from './OnOffCheckbox';
+import OnOffCheckbox from './OnOffCheckbox.js';
 export default OnOffCheckbox;

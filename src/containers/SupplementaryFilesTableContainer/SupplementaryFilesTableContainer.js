@@ -12,12 +12,12 @@ import {
   addSupplementaryFiles,
   removeSupplementaryFile,
   downloadSupplementaryArchive,
-} from '../../redux/modules/supplementaryFiles';
-import { downloadSupplementaryFile } from '../../redux/modules/files';
+} from '../../redux/modules/supplementaryFiles.js';
+import { downloadSupplementaryFile } from '../../redux/modules/files.js';
 import {
   getSupplementaryFilesForExercise,
   fetchSupplementaryFilesForExerciseStatus,
-} from '../../redux/selectors/supplementaryFiles';
+} from '../../redux/selectors/supplementaryFiles.js';
 
 const SupplementaryFilesTableContainer = ({
   exercise,

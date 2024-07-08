@@ -1,6 +1,6 @@
 import { lruMemoize } from 'reselect';
 
-import { encodeId, encodeNumId, safeGet } from '../common';
+import { encodeId, encodeNumId, safeGet } from '../common.js';
 
 /*
  * Memory and Time limits

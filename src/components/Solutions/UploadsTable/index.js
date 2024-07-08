@@ -1,2 +1,2 @@
-import UploadsTable from './UploadsTable';
+import UploadsTable from './UploadsTable.js';
 export default UploadsTable;

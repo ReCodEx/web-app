@@ -10,20 +10,20 @@ import { SaveIcon, WarningIcon } from '../../icons';
 import { DatetimeField, CheckboxField, RadioField, NumericTextField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
-import AssignmentFormGroupsList from './AssignmentFormGroupsList';
-import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess';
-import InterpolationDialog from './InterpolationDialog';
+import AssignmentFormGroupsList from './AssignmentFormGroupsList.js';
+import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess.js';
+import InterpolationDialog from './InterpolationDialog.js';
 import Explanation from '../../widgets/Explanation';
 import Callout from '../../widgets/Callout';
-import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation';
+import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation.js';
 import {
   getGroupCanonicalLocalizedName,
   getLocalizedTextsInitialValues,
   validateLocalizedTextsFormData,
   transformLocalizedTextsFormData,
-} from '../../../helpers/localizedData';
-import { safeGet, safeSet, EMPTY_ARRAY, hasPermissions } from '../../../helpers/common';
-import DeadlinesGraphDialog from './DeadlinesGraphDialog';
+} from '../../../helpers/localizedData.js';
+import { safeGet, safeSet, EMPTY_ARRAY, hasPermissions } from '../../../helpers/common.js';
+import DeadlinesGraphDialog from './DeadlinesGraphDialog.js';
 
 const localizedTextDefaults = {
   name: '',
@@ -76,8 +76,8 @@ export const prepareInitialValues = lruMemoize(
     secondDeadline: secondDeadline
       ? moment.unix(secondDeadline)
       : firstDeadline !== undefined
-      ? moment.unix(firstDeadline).add(2, 'weeks')
-      : moment().add(4, 'weeks').endOf('day'),
+        ? moment.unix(firstDeadline).add(2, 'weeks')
+        : moment().add(4, 'weeks').endOf('day'),
     maxPointsBeforeSecondDeadline: sanitizeInputNumber(maxPointsBeforeSecondDeadline, 5),
     submissionsCountLimit: sanitizeInputNumber(submissionsCountLimit, 50),
     pointsPercentualThreshold: sanitizeInputNumber(pointsPercentualThreshold, 0),

@@ -1,1 +1,1 @@
-export { default } from './UsersStats';
+export { default } from './UsersStats.js';

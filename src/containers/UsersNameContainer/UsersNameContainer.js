@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
-import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { getUser, loggedInUserSelector } from '../../redux/selectors/users';
+import { fetchUserIfNeeded } from '../../redux/modules/users.js';
+import { getUser, loggedInUserSelector } from '../../redux/selectors/users.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import UsersName, { LoadingUsersName, FailedUsersName } from '../../components/Users/UsersName';
 import { LoadingIcon, FailureIcon } from '../../components/icons';

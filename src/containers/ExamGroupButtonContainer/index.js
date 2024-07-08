@@ -1,2 +1,2 @@
-import ExamGroupButtonContainer from './ExamGroupButtonContainer';
+import ExamGroupButtonContainer from './ExamGroupButtonContainer.js';
 export default ExamGroupButtonContainer;

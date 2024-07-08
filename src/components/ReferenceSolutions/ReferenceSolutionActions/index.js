@@ -1,2 +1,2 @@
-import ReferenceSolutionActions from './ReferenceSolutionActions';
+import ReferenceSolutionActions from './ReferenceSolutionActions.js';
 export default ReferenceSolutionActions;

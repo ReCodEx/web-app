@@ -1,2 +1,2 @@
-import ResourceRenderer from './ResourceRenderer';
+import ResourceRenderer from './ResourceRenderer.js';
 export default ResourceRenderer;

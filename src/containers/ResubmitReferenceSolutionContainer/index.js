@@ -1,2 +1,2 @@
-import ResubmitReferenceSolutionContainer from './ResubmitReferenceSolutionContainer';
+import ResubmitReferenceSolutionContainer from './ResubmitReferenceSolutionContainer.js';
 export default ResubmitReferenceSolutionContainer;

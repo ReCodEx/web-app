@@ -157,10 +157,10 @@ class ResourceRenderer extends Component {
         ? null
         : this.renderLoading()
       : resources.some(hasFailed)
-      ? hiddenUntilReady
-        ? null
-        : this.renderFailed(resources)
-      : this.renderReady(resources);
+        ? hiddenUntilReady
+          ? null
+          : this.renderFailed(resources)
+        : this.renderReady(resources);
   }
 }
 

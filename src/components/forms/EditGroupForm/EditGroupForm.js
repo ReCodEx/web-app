@@ -12,7 +12,7 @@ import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { RefreshIcon } from '../../icons';
 
 import { TextField, CheckboxField, NumericTextField } from '../Fields';
-import { getLocalizedTextsInitialValues, validateLocalizedTextsFormData } from '../../../helpers/localizedData';
+import { getLocalizedTextsInitialValues, validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
 
 export const EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT = {
   name: '',

@@ -16,21 +16,21 @@ import LockedStudentsTable from '../../components/Groups/LockedStudentsTable';
 import LocksTable from '../../components/Groups/LocksTable';
 import { GroupExamsIcon } from '../../components/icons';
 
-import { fetchGroup, fetchGroupIfNeeded, setExamPeriod, removeExamPeriod } from '../../redux/modules/groups';
-import { fetchGroupExamLocksIfNeeded } from '../../redux/modules/groupExamLocks';
-import { fetchByIds } from '../../redux/modules/users';
-import { addNotification } from '../../redux/modules/notifications';
-import { groupSelector, groupDataAccessorSelector, groupTypePendingChange } from '../../redux/selectors/groups';
-import { groupExamLocksSelector } from '../../redux/selectors/groupExamLocks';
-import { lockedStudentsOfGroupSelector } from '../../redux/selectors/usersGroups';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
+import { fetchGroup, fetchGroupIfNeeded, setExamPeriod, removeExamPeriod } from '../../redux/modules/groups.js';
+import { fetchGroupExamLocksIfNeeded } from '../../redux/modules/groupExamLocks.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { addNotification } from '../../redux/modules/notifications.js';
+import { groupSelector, groupDataAccessorSelector, groupTypePendingChange } from '../../redux/selectors/groups.js';
+import { groupExamLocksSelector } from '../../redux/selectors/groupExamLocks.js';
+import { lockedStudentsOfGroupSelector } from '../../redux/selectors/usersGroups.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users.js';
 import { getJsData } from '../../redux/helpers/resourceManager';
 
-import withLinks from '../../helpers/withLinks';
-import { hasPermissions, safeGet } from '../../helpers/common';
+import withLinks from '../../helpers/withLinks.js';
+import { hasPermissions, safeGet } from '../../helpers/common.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { isExam } from '../../helpers/groups';
+import { isExam } from '../../helpers/groups.js';
 
 const REFRESH_INTERVAL = 1; // [s]
 

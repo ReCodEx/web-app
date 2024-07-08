@@ -8,7 +8,7 @@ import StandaloneRadioField from '../../forms/StandaloneRadioInput';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import { CloseIcon, SaveIcon } from '../../icons';
-import { AstNode, AstNodeTestResult } from '../../../helpers/exercise/scoreAst';
+import { AstNode, AstNodeTestResult } from '../../../helpers/exercise/scoreAst.js';
 
 import * as formStyles from '../../forms/Fields/commonStyles.less';
 

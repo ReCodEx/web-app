@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { Map } from 'immutable';
-import { EMPTY_MAP } from '../../helpers/common';
-import { loggedInUserIdSelector } from './auth';
+import { EMPTY_MAP } from '../../helpers/common.js';
+import { loggedInUserIdSelector } from './auth.js';
 
 const getResources = state => state.sisSupervisedCourses.get('resources');
 

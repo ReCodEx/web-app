@@ -7,20 +7,20 @@ import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
 import { Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
-import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises';
+import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises.js';
 import {
   getAllExericsesAuthors,
   getAllExericsesAuthorsIsLoading,
   getExercisesAuthorsOfGroup,
   getExercisesAuthorsOfGroupIsLoading,
-} from '../../../redux/selectors/exercisesAuthors';
-import { loggedInUserIdSelector } from '../../../redux/selectors/auth';
+} from '../../../redux/selectors/exercisesAuthors.js';
+import { loggedInUserIdSelector } from '../../../redux/selectors/auth.js';
 
-import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList';
+import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList.js';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SubmitButton from '../SubmitButton';
 import { TextField, RadioField, SelectField, TagsSelectorField } from '../Fields';
-import { identity, safeGet } from '../../../helpers/common';
+import { identity, safeGet } from '../../../helpers/common.js';
 import { ExpandCollapseIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';

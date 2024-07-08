@@ -5,8 +5,8 @@ import 'react-datetime/css/react-datetime.css';
 import { Form, FormGroup, FormLabel, InputGroup } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import withLinks from '../../../helpers/withLinks';
-import { UserUIDataContext } from '../../../helpers/contexts';
+import withLinks from '../../../helpers/withLinks.js';
+import { UserUIDataContext } from '../../../helpers/contexts.js';
 
 import * as styles from './commonStyles.less';
 

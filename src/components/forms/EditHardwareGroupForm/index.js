@@ -1,2 +1,2 @@
-import EditHardwareGroupForm from './EditHardwareGroupForm';
+import EditHardwareGroupForm from './EditHardwareGroupForm.js';
 export default EditHardwareGroupForm;

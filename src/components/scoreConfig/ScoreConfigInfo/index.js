@@ -1,3 +1,3 @@
-import ScoreConfigInfo from './ScoreConfigInfo';
-import ScoreConfigInfoDialog from './ScoreConfigInfoDialog';
+import ScoreConfigInfo from './ScoreConfigInfo.js';
+import ScoreConfigInfoDialog from './ScoreConfigInfoDialog.js';
 export { ScoreConfigInfo, ScoreConfigInfoDialog };
