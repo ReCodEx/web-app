@@ -5,8 +5,8 @@ import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button from '../../widgets/TheButton';
-import TextField from '../Fields/TextField';
-import SelectField from '../Fields/SelectField';
+import TextField from '../Fields/TextField.js';
+import SelectField from '../Fields/SelectField.js';
 import { AddIcon, CloseIcon } from '../../icons';
 
 const EMPTY_VALUE = { file: '', name: '', type: 'file[]' };

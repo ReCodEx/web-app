@@ -11,7 +11,7 @@ import Box from '../../widgets/Box';
 import InsetPanel from '../../widgets/InsetPanel';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { CodeCompareIcon, CloseIcon, LoadingIcon } from '../../icons';
-import FileSelectionTableRow from './FileSelectionTableRow';
+import FileSelectionTableRow from './FileSelectionTableRow.js';
 
 /**
  * Construct an object { fileIdx => fragmentsArray } where the fragments array holds only

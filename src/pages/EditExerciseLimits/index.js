@@ -1,2 +1,2 @@
-import EditExerciseLimits from './EditExerciseLimits';
+import EditExerciseLimits from './EditExerciseLimits.js';
 export default EditExerciseLimits;

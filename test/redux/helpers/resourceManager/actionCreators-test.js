@@ -2,8 +2,8 @@ import chai from 'chai';
 import spies from 'chai-spies';
 import { fromJS } from 'immutable';
 
-import actionTypesFactory from '../../../../src/redux/helpers/resourceManager/actionTypesFactory';
-import actionCreatorsFactory from '../../../../src/redux/helpers/resourceManager/actionCreatorsFactory';
+import actionTypesFactory from '../../../../src/redux/helpers/resourceManager/actionTypesFactory.js';
+import actionCreatorsFactory from '../../../../src/redux/helpers/resourceManager/actionCreatorsFactory.js';
 
 chai.use(spies);
 const expect = chai.expect;

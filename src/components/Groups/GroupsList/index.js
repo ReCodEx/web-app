@@ -1,2 +1,2 @@
-import GroupsList from './GroupsList';
+import GroupsList from './GroupsList.js';
 export default GroupsList;

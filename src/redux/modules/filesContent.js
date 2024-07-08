@@ -7,9 +7,9 @@ import {
   resourceStatus,
   createRecord,
 } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
-import { getFilesContent } from '../selectors/files';
-import { urlQueryString } from '../../helpers/common';
+import { createApiAction } from '../middleware/apiMiddleware.js';
+import { getFilesContent } from '../selectors/files.js';
+import { urlQueryString } from '../../helpers/common.js';
 
 const actionTypes = {
   FETCH: 'recodex/filesContent/FETCH',

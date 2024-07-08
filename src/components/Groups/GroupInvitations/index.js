@@ -1,2 +1,2 @@
-import GroupInvitations from './GroupInvitations';
+import GroupInvitations from './GroupInvitations.js';
 export default GroupInvitations;

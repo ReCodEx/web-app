@@ -6,7 +6,7 @@ import { lruMemoize } from 'reselect';
 
 import UsersName from '../../Users/UsersName';
 import ExamUnlockButtonContainer from '../../../containers/ExamUnlockButtonContainer';
-import { createUserNameComparator } from '../../helpers/users';
+import { createUserNameComparator } from '../../helpers/users.js';
 
 const sortStudents = lruMemoize((lockedStudents, locale) => {
   const sorted = [...lockedStudents];

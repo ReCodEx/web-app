@@ -1,2 +1,2 @@
-import AttachmentFilesTableContainer from './AttachmentFilesTableContainer';
+import AttachmentFilesTableContainer from './AttachmentFilesTableContainer.js';
 export default AttachmentFilesTableContainer;

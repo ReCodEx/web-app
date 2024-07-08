@@ -1,2 +1,2 @@
-import ExamLockButton from './ExamLockButton';
+import ExamLockButton from './ExamLockButton.js';
 export default ExamLockButton;

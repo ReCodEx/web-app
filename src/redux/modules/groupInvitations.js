@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import factory, {
   createRecord,
   initialState,

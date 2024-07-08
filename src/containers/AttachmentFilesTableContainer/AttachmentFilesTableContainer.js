@@ -12,9 +12,9 @@ import {
   addAttachmentFiles,
   removeAttachmentFile,
   downloadAttachmentArchive,
-} from '../../redux/modules/attachmentFiles';
+} from '../../redux/modules/attachmentFiles.js';
 
-import { getAttachmentFilesForExercise } from '../../redux/selectors/attachmentFiles';
+import { getAttachmentFilesForExercise } from '../../redux/selectors/attachmentFiles.js';
 
 const AttachmentFilesTableContainer = ({
   exercise,

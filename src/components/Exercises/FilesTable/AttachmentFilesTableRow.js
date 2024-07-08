@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
-import withLinks from '../../../helpers/withLinks';
+import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
+import withLinks from '../../../helpers/withLinks.js';
 import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import Confirm from '../../../components/forms/Confirm';

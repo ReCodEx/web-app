@@ -5,18 +5,18 @@ import { Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 import { lruMemoize } from 'reselect';
 
-import ExpressionNode from './ExpressionNode';
-import EditFunctionNodeForm from './EditFunctionNodeForm';
-import EditTestNodeForm from './EditTestNodeForm';
-import EditLiteralNodeForm from './EditLiteralNodeForm';
+import ExpressionNode from './ExpressionNode.js';
+import EditFunctionNodeForm from './EditFunctionNodeForm.js';
+import EditTestNodeForm from './EditTestNodeForm.js';
+import EditLiteralNodeForm from './EditLiteralNodeForm.js';
 
-import { createTestNameIndex } from '../../../helpers/exercise/testsAndScore';
-import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst';
-import { removeConstantExpressions, optimize } from '../../../helpers/exercise/scoreAstFunctions';
+import { createTestNameIndex } from '../../../helpers/exercise/testsAndScore.js';
+import { FUNCTION_NODE, TEST_NODE, LITERAL_NODE, Ast } from '../../../helpers/exercise/scoreAst.js';
+import { removeConstantExpressions, optimize } from '../../../helpers/exercise/scoreAstFunctions.js';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { CopyIcon, UndoIcon, RedoIcon, InfoIcon, CloseIcon } from '../../icons';
-import { composeFunctions } from '../../../helpers/common';
+import { composeFunctions } from '../../../helpers/common.js';
 
 import * as style from './tree.less';
 

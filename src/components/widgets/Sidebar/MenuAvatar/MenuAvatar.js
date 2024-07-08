@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import '../Sidebar.css';
-import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
+import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer.js';
 import { RemoveUserIcon } from '../../../icons';
 
 const MenuAvatar = ({

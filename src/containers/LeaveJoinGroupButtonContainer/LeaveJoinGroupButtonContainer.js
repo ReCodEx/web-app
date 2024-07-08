@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { joinGroup, leaveGroup, fetchGroup } from '../../redux/modules/groups';
-import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
-import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isStudentOfSelector } from '../../redux/selectors/usersGroups';
+import { joinGroup, leaveGroup, fetchGroup } from '../../redux/modules/groups.js';
+import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats.js';
+import { fetchAssignmentsForGroup } from '../../redux/modules/assignments.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { isStudentOfSelector } from '../../redux/selectors/usersGroups.js';
 
 import JoinGroupButton from '../../components/buttons/JoinGroupButton';
 import LeaveGroupButton from '../../components/buttons/LeaveGroupButton';
 import RemoveFromGroupButton from '../../components/buttons/RemoveFromGroupButton';
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 const LeaveJoinGroupButtonContainer = ({
   isStudent,

@@ -1,4 +1,4 @@
-import { storageGetItem, storageSetItem, storageRemoveItem } from '../../../helpers/localStorage';
+import { storageGetItem, storageSetItem, storageRemoveItem } from '../../../helpers/localStorage.js';
 
 const SOLUTIONS_LOCAL_STORAGE_KEY = 'Soluttions.SourceCodeBox.recent';
 const MAX_RECENT_SOLUTIONS = 25;

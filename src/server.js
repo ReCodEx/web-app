@@ -1,5 +1,5 @@
 // necessary polyfill for both browser and server
-import 'cross-fetch/polyfill';
+import 'cross-fetch/dist/node-polyfill.js';
 
 // server setup
 import serialize from 'serialize-javascript';
@@ -10,18 +10,18 @@ import cookieParser from 'cookie-parser';
 import fs from 'fs';
 import { globSync } from 'glob';
 
-import { configureOurStore } from './redux/store';
-import { loggedInUserIdSelector } from './redux/selectors/auth';
-import { match } from './pages/routes';
-import { TOKEN_COOKIES_KEY, INSTANCEID_COOKIES_KEY } from './redux/middleware/authMiddleware';
-import { LANG_COOKIES_KEY } from './redux/middleware/langMiddleware';
+import { configureOurStore } from './redux/store.js';
+import { loggedInUserIdSelector } from './redux/selectors/auth.js';
+import { match } from './pages/routes.js';
+import { TOKEN_COOKIES_KEY, INSTANCEID_COOKIES_KEY } from './redux/middleware/authMiddleware.js';
+import { LANG_COOKIES_KEY } from './redux/middleware/langMiddleware.js';
 
-import '@formatjs/intl-pluralrules/polyfill';
-import '@formatjs/intl-pluralrules/locale-data/en';
-import '@formatjs/intl-pluralrules/locale-data/cs';
-import '@formatjs/intl-relativetimeformat/polyfill';
-import '@formatjs/intl-relativetimeformat/locale-data/en';
-import '@formatjs/intl-relativetimeformat/locale-data/cs';
+import '@formatjs/intl-pluralrules/polyfill.js';
+import '@formatjs/intl-pluralrules/locale-data/en.js';
+import '@formatjs/intl-pluralrules/locale-data/cs.js';
+import '@formatjs/intl-relativetimeformat/polyfill.js';
+import '@formatjs/intl-relativetimeformat/locale-data/en.js';
+import '@formatjs/intl-relativetimeformat/locale-data/cs.js';
 
 /**
  * Init server-side rendering of the app using Express with

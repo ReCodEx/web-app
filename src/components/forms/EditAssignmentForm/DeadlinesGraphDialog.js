@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 import AssignmentDeadlinesGraph from '../../Assignments/Assignment/AssignmentDeadlinesGraph';
 import { PointsGraphIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
-import { deadlinesAndPontsAreValid } from './deadlineHelpers';
+import { deadlinesAndPontsAreValid } from './deadlineHelpers.js';
 
 const DeadlinesGraphDialog = ({ deadlines, maxPointsBeforeFirstDeadline, maxPointsBeforeSecondDeadline, ...props }) => {
   const [open, setOpen] = useState(false);

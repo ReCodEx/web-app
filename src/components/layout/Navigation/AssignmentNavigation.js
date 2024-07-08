@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Navigation from './Navigation';
-import withLinks from '../../../helpers/withLinks';
+import Navigation from './Navigation.js';
+import withLinks from '../../../helpers/withLinks.js';
 import { AssignmentIcon, EditIcon, ExerciseIcon, ResultsIcon } from '../../icons';
-import { createGroupLinks } from './linkCreators';
+import { createGroupLinks } from './linkCreators.js';
 
 const AssignmentNavigation = ({
   assignmentId,

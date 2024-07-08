@@ -6,10 +6,10 @@ import { Tooltip, OverlayTrigger, Modal } from 'react-bootstrap';
 
 import UserName from '../../../Users/UsersName';
 import EffectiveRoleSwitching from '../../../Users/EffectiveRoleSwitching';
-import withLinks from '../../../../helpers/withLinks';
+import withLinks from '../../../../helpers/withLinks.js';
 import Icon from '../../../icons';
-import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer';
-import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../../helpers/usersRoles';
+import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer.js';
+import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../../helpers/usersRoles.js';
 
 class UserPanel extends Component {
   state = { effectiveRoleDialogOpened: false, effectiveRoleUpdating: null };

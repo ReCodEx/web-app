@@ -1,2 +1,2 @@
-import SubmitSolution from './SubmitSolution';
+import SubmitSolution from './SubmitSolution.js';
 export default SubmitSolution;

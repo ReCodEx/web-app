@@ -11,9 +11,9 @@ import Callout from '../../widgets/Callout';
 import { RefreshIcon, SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
-import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest';
-import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
-import { ENV_JAVA_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments';
+import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest.js';
+import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config.js';
+import { ENV_JAVA_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments.js';
 import {
   exerciseConfigFormSmartFillAll,
   exerciseConfigFormSmartFillInput,
@@ -23,9 +23,9 @@ import {
   exerciseConfigFormSmartFillJudge,
   exerciseConfigFormSmartFillCompilation,
   exerciseConfigFormSmartFillExtraFiles,
-} from '../../../redux/modules/exerciseConfigs';
-import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
-import { encodeNumId, createIndex, safeSet, safeGet, deepReduce } from '../../../helpers/common';
+} from '../../../redux/modules/exerciseConfigs.js';
+import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs.js';
+import { encodeNumId, createIndex, safeSet, safeGet, deepReduce } from '../../../helpers/common.js';
 
 const supplementaryFilesOptions = lruMemoize((files, locale) =>
   files

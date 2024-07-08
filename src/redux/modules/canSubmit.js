@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
-import { actionTypes as assignmentActionTypes } from './assignments';
+import { actionTypes as assignmentActionTypes } from './assignments.js';
 
 /**
  * Create actions & reducer

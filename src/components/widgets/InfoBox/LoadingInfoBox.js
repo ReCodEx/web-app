@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import InfoBox from './InfoBox';
+import InfoBox from './InfoBox.js';
 
 const LoadingInfoBox = ({
   title = <FormattedMessage id="generic.loading" defaultMessage="Loading..." />,

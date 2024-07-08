@@ -9,7 +9,7 @@ import Markdown from '../../widgets/Markdown';
 import DateTime from '../../widgets/DateTime';
 import DifficultyIcon from '../DifficultyIcon';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import Icon, {
@@ -22,12 +22,12 @@ import Icon, {
   TagIcon,
   VisibleIcon,
 } from '../../icons';
-import { getLocalizedDescription } from '../../../helpers/localizedData';
+import { getLocalizedDescription } from '../../../helpers/localizedData.js';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
-import Version from '../../widgets/Version/Version';
+import Version from '../../widgets/Version/Version.js';
 import Explanation from '../../widgets/Explanation';
-import { getTagStyle } from '../../../helpers/exercise/tags';
+import { getTagStyle } from '../../../helpers/exercise/tags.js';
 
 const ExerciseDetail = ({
   authorId,

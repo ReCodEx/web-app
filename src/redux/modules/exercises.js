@@ -6,13 +6,13 @@ import factory, {
   resourceStatus,
   createActionsWithPostfixes,
 } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 
-import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles';
-import { actionTypes as attachmentFilesActionTypes } from './attachmentFiles';
-import { actionTypes as paginationActionTypes } from './pagination';
+import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles.js';
+import { actionTypes as attachmentFilesActionTypes } from './attachmentFiles.js';
+import { actionTypes as paginationActionTypes } from './pagination.js';
 
-import { arrayToObject, unique } from '../../helpers/common';
+import { arrayToObject, unique } from '../../helpers/common.js';
 
 const resourceName = 'exercises';
 const { actions, reduceActions, actionTypes } = factory({

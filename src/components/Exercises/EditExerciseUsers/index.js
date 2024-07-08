@@ -1,2 +1,2 @@
-import EditExerciseUsers from './EditExerciseUsers';
+import EditExerciseUsers from './EditExerciseUsers.js';
 export default EditExerciseUsers;

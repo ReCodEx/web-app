@@ -1,12 +1,11 @@
-import { canUseDOM } from 'exenv';
-import { safeGet } from './common';
+import fs from 'fs';
+import { safeGet, canUseDOM } from './common.js';
 
 export const getConfigVar = name => {
   let MY_VAR = '';
   if (canUseDOM) {
     MY_VAR = safeGet(window, ['__RECODEX_CONFIG__', name], '');
   } else {
-    const fs = require('fs');
     MY_VAR = JSON.parse(fs.readFileSync('etc/env.json', 'utf8'))[name] || '';
   }
   return MY_VAR;

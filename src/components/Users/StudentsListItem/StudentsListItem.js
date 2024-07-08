@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { ProgressBar } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const StudentsListItem = ({
   id,

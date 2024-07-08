@@ -10,19 +10,19 @@ import Page from '../../components/layout/Page';
 import Box from '../../components/widgets/Box';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import GroupsTreeContainer from '../../containers/GroupsTreeContainer';
-import withLinks from '../../helpers/withLinks';
-import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm';
-import { getLocalizedName } from '../../helpers/localizedData';
-import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer';
+import withLinks from '../../helpers/withLinks.js';
+import FilterArchiveGroupsForm from '../../components/forms/FilterArchiveGroupsForm/FilterArchiveGroupsForm.js';
+import { getLocalizedName } from '../../helpers/localizedData.js';
+import ArchiveGroupButtonContainer from '../../containers/ArchiveGroupButtonContainer/ArchiveGroupButtonContainer.js';
 import { ArchiveIcon, GroupIcon, SuccessOrFailureIcon, AssignmentsIcon, StudentsIcon } from '../../components/icons';
 
-import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchInstancesIfNeeded } from '../../redux/modules/instances';
-import { fetchByIds } from '../../redux/modules/users';
-import { selectedInstanceId } from '../../redux/selectors/auth';
-import { selectedInstance } from '../../redux/selectors/instances';
-import { getGroupsAdmins } from '../../redux/selectors/groups';
-import { hasPermissions } from '../../helpers/common';
+import { fetchAllGroups } from '../../redux/modules/groups.js';
+import { fetchInstancesIfNeeded } from '../../redux/modules/instances.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { selectedInstanceId } from '../../redux/selectors/auth.js';
+import { selectedInstance } from '../../redux/selectors/instances.js';
+import { getGroupsAdmins } from '../../redux/selectors/groups.js';
+import { hasPermissions } from '../../helpers/common.js';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>

@@ -1,2 +1,2 @@
-import PipelinesListItem from './PipelinesListItem';
+import PipelinesListItem from './PipelinesListItem.js';
 export default PipelinesListItem;

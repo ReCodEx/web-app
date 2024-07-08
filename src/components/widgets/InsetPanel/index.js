@@ -1,1 +1,1 @@
-export { default } from './InsetPanel';
+export { default } from './InsetPanel.js';

@@ -1,13 +1,19 @@
-const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import webpack from 'webpack';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { GitRevisionPlugin } from 'git-revision-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import dotenv from 'dotenv';
+import os from 'os';
+
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename); // get the name of the directory
 
 const getVersion = () => {
   if (process.env.VERSION) {
     return JSON.stringify(process.env.VERSION);
   } else {
-    const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
     const gitRevisionPlugin = new GitRevisionPlugin({
       versionCommand: 'describe --always --tags',
     });
@@ -16,20 +22,20 @@ const getVersion = () => {
 };
 
 // load variables from .env
-require('dotenv').config();
+dotenv.config();
 
 // fix Windows 10 and Ubuntu issues with less loader:
 try {
-  require('os').networkInterfaces();
+  os.networkInterfaces();
 } catch (e) {
-  require('os').networkInterfaces = () => ({});
+  os.networkInterfaces = () => ({});
 }
 
 const extractCss = new MiniCssExtractPlugin({
   filename: 'style-[contenthash].css',
 });
 
-module.exports = {
+export default {
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle-[contenthash].js',
@@ -50,6 +56,10 @@ module.exports = {
         exclude: /node_modules/,
         include: /src/,
         use: ['babel-loader?cacheDirectory'],
+        type: 'javascript/auto',
+        resolve: {
+          fullySpecified: false,
+        },
       },
       {
         test: /\.css$/,

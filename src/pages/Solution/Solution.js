@@ -19,47 +19,51 @@ import { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments.js';
 import {
   fetchSolution,
   fetchSolutionIfNeeded,
   fetchUsersSolutions,
   setNote,
   fetchAssignmentSolversIfNeeded,
-} from '../../redux/modules/solutions';
-import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
-import { download } from '../../redux/modules/files';
+} from '../../redux/modules/solutions.js';
+import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles.js';
+import { download } from '../../redux/modules/files.js';
 import {
   fetchSubmissionEvaluationsForSolution,
   deleteSubmissionEvaluation,
-} from '../../redux/modules/submissionEvaluations';
-import { fetchAssignmentSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
+} from '../../redux/modules/submissionEvaluations.js';
+import { fetchAssignmentSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig.js';
 import {
   init,
   submitAssignmentSolution as submitSolution,
   presubmitAssignmentSolution as presubmitSolution,
-} from '../../redux/modules/submission';
-import { canSubmit } from '../../redux/modules/canSubmit';
+} from '../../redux/modules/submission.js';
+import { canSubmit } from '../../redux/modules/canSubmit.js';
 
-import { getSolution, isAssignmentSolversLoading, getAssignmentSolverSelector } from '../../redux/selectors/solutions';
-import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
+import {
+  getSolution,
+  isAssignmentSolversLoading,
+  getAssignmentSolverSelector,
+} from '../../redux/selectors/solutions.js';
+import { getSolutionFiles } from '../../redux/selectors/solutionFiles.js';
 import {
   getAssignment,
   getAssignmentEnvironments,
   getUserSolutionsSortedData,
-} from '../../redux/selectors/assignments';
-import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations';
-import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
-import { loggedInUserSelector, isLoggedAsStudent } from '../../redux/selectors/users';
-import { isSubmitting } from '../../redux/selectors/submission';
-import { canSubmitSolution } from '../../redux/selectors/canSubmit';
+} from '../../redux/selectors/assignments.js';
+import { evaluationsForSubmissionSelector, fetchManyStatus } from '../../redux/selectors/submissionEvaluations.js';
+import { assignmentSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig.js';
+import { loggedInUserSelector, isLoggedAsStudent } from '../../redux/selectors/users.js';
+import { isSubmitting } from '../../redux/selectors/submission.js';
+import { canSubmitSolution } from '../../redux/selectors/canSubmit.js';
 
-import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions';
-import { hasPermissions } from '../../helpers/common';
+import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions.js';
+import { hasPermissions } from '../../helpers/common.js';
 import { LinkIcon, PlagiarismIcon, SolutionResultsIcon, WarningIcon } from '../../components/icons';
 
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 const assignmentHasRuntime = lruMemoize(
   (assignment, runtimeId) =>

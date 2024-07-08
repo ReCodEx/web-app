@@ -16,12 +16,12 @@ import GroupsNameContainer from '../../containers/GroupsNameContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import DateTime from '../../components/widgets/DateTime';
 
-import { fetchUserIfNeeded } from '../../redux/modules/users';
-import { takeOver } from '../../redux/modules/auth';
+import { fetchUserIfNeeded } from '../../redux/modules/users.js';
+import { takeOver } from '../../redux/modules/auth.js';
 
-import { getUser, isLoggedAsSuperAdmin, isStudent } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupsUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
+import { getUser, isLoggedAsSuperAdmin, isStudent } from '../../redux/selectors/users.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { groupsUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups.js';
 
 import Icon, {
   AssignmentsIcon,
@@ -39,7 +39,7 @@ import Icon, {
   UserProfileIcon,
   WarningIcon,
 } from '../../components/icons';
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 const MemberGroupsBox = withLinks(
   ({

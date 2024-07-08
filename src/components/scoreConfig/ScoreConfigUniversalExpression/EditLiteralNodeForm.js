@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { CloseIcon, SaveIcon } from '../../icons';
-import { AstNode, AstNodeValue } from '../../../helpers/exercise/scoreAst';
+import { AstNode, AstNodeValue } from '../../../helpers/exercise/scoreAst.js';
 
 import * as formStyles from '../../forms/Fields/commonStyles.less';
 

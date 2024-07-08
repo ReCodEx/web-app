@@ -6,14 +6,14 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages';
-import { fetchManyStatus, readySystemMessagesSelector } from '../../redux/selectors/systemMessages';
-import Box from '../../components/widgets/Box/Box';
+import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages.js';
+import { fetchManyStatus, readySystemMessagesSelector } from '../../redux/selectors/systemMessages.js';
+import Box from '../../components/widgets/Box/Box.js';
 import { AddIcon, EditIcon, LoadingIcon, WarningIcon } from '../../components/icons';
-import EditSystemMessageForm from '../../components/forms/EditSystemMessageForm/EditSystemMessageForm';
-import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
+import EditSystemMessageForm from '../../components/forms/EditSystemMessageForm/EditSystemMessageForm.js';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData.js';
 import moment from 'moment';
-import MessagesList from '../../components/SystemMessages/MessagesList/MessagesList';
+import MessagesList from '../../components/SystemMessages/MessagesList/MessagesList.js';
 import DeleteSystemMessageButtonContainer from '../../containers/DeleteSystemMessageButtonContainer';
 
 const localizedTextDefaults = {

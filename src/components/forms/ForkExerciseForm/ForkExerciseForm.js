@@ -12,13 +12,13 @@ import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { WarningIcon, ForkIcon } from '../../icons';
-import { forkStatuses } from '../../../redux/modules/exercises';
-import { getFork } from '../../../redux/selectors/exercises';
+import { forkStatuses } from '../../../redux/modules/exercises.js';
+import { getFork } from '../../../redux/selectors/exercises.js';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
-import { hasPermissions } from '../../../helpers/common';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
+import { hasPermissions } from '../../../helpers/common.js';
 
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 import './ForkExerciseForm.css';
 

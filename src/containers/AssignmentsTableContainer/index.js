@@ -1,2 +1,2 @@
-import AssignmentsTableContainer from './AssignmentsTableContainer';
+import AssignmentsTableContainer from './AssignmentsTableContainer.js';
 export default AssignmentsTableContainer;

@@ -1,2 +1,2 @@
-import LocksTable from './LocksTable';
+import LocksTable from './LocksTable.js';
 export default LocksTable;

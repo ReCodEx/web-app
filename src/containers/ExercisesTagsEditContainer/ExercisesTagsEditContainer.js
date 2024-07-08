@@ -6,15 +6,15 @@ import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import AddExerciseTagForm from '../../components/forms/AddExerciseTagForm';
-import { addTag, removeTag } from '../../redux/modules/exercises';
+import { addTag, removeTag } from '../../redux/modules/exercises.js';
 import {
   exerciseSelector,
   getExerciseTags,
   getExerciseTagsLoading,
   getExerciseTagsUpdatePending,
-} from '../../redux/selectors/exercises';
+} from '../../redux/selectors/exercises.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { getTagCSSColor } from '../../helpers/exercise/tags';
+import { getTagCSSColor } from '../../helpers/exercise/tags.js';
 import { LoadingIcon, RemoveIcon, TagIcon } from '../../components/icons';
 import Button from '../../components/widgets/TheButton';
 

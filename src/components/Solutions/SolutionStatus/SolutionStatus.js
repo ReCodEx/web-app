@@ -13,8 +13,8 @@ import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem';
-import withLinks from '../../../helpers/withLinks';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
+import withLinks from '../../../helpers/withLinks.js';
 import Icon, {
   AcceptedIcon,
   CodeIcon,

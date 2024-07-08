@@ -1,2 +1,2 @@
-import CalendarTokens from './CalendarTokens';
+import CalendarTokens from './CalendarTokens.js';
 export default CalendarTokens;

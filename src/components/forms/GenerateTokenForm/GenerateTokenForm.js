@@ -12,7 +12,7 @@ import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField } from '../Fields';
 import Icon, { CopyIcon } from '../../icons';
-import { objectMap } from '../../../helpers/common';
+import { objectMap } from '../../../helpers/common.js';
 
 import './GenerateTokenForm.css';
 

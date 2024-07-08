@@ -1,2 +1,2 @@
-import GroupExamsTable from './GroupExamsTable';
+import GroupExamsTable from './GroupExamsTable.js';
 export default GroupExamsTable;

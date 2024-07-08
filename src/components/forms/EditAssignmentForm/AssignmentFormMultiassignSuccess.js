@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 import Icon, { GroupIcon, AssignmentsIcon } from '../../icons';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
-import { identity } from '../../../helpers/common';
-import withLinks from '../../../helpers/withLinks';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
+import { identity } from '../../../helpers/common.js';
+import withLinks from '../../../helpers/withLinks.js';
 
 const AssignmentFormMultiassignSuccess = ({
   assignedToGroups,

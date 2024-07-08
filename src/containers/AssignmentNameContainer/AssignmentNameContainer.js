@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments';
-import { getAssignment } from '../../redux/selectors/assignments';
+import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments.js';
+import { getAssignment } from '../../redux/selectors/assignments.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import { LoadingIcon } from '../../components/icons';
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 class AssignmentNameContainer extends Component {
   componentDidMount() {

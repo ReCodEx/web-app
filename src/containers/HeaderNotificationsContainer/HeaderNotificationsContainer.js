@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
+
 import HeaderNotificationsDropdown from '../../components/layout/HeaderNotificationsDropdown';
-import { hideNotification } from '../../redux/modules/notifications';
-import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications';
+import { hideNotification } from '../../redux/modules/notifications.js';
+import { newNotificationsSelector, oldNotificationsSelector } from '../../redux/selectors/notifications.js';
+import { canUseDOM } from '../../helpers/common.js';
 
 class HeaderNotificationsContainer extends Component {
   state = { showAll: false };

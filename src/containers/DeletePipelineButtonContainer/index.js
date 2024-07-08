@@ -1,2 +1,2 @@
-import DeletePipelineButtonContainer from './DeletePipelineButtonContainer';
+import DeletePipelineButtonContainer from './DeletePipelineButtonContainer.js';
 export default DeletePipelineButtonContainer;

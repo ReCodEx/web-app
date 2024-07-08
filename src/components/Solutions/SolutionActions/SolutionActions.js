@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import ActionButtons, { prepareButtonDescriptors, onlyLabels, onlyTooltips } from '../../widgets/ActionButtons';
-import withLinks from '../../../helpers/withLinks';
-import { safeGet } from '../../../helpers/common';
+import withLinks from '../../../helpers/withLinks.js';
+import { safeGet } from '../../../helpers/common.js';
 
 /**
  * Action templates containing basic parameters: label, label, tooltip icon (name), variant (success if missing),

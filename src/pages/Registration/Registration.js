@@ -16,13 +16,13 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import InsetPanel from '../../components/widgets/InsetPanel';
 import { MailIcon, LinkIcon, SignInIcon } from '../../components/icons';
 
-import { createAccount, createExternalAccount } from '../../redux/modules/registration';
-import { fetchInstances } from '../../redux/modules/instances';
-import { publicInstancesSelector } from '../../redux/selectors/instances';
-import { hasSucceeded } from '../../redux/selectors/registration';
+import { createAccount, createExternalAccount } from '../../redux/modules/registration.js';
+import { fetchInstances } from '../../redux/modules/instances.js';
+import { publicInstancesSelector } from '../../redux/selectors/instances.js';
+import { hasSucceeded } from '../../redux/selectors/registration.js';
 
-import { getConfigVar, getConfigVarLocalized } from '../../helpers/config';
-import withLinks from '../../helpers/withLinks';
+import { getConfigVar, getConfigVarLocalized } from '../../helpers/config.js';
+import withLinks from '../../helpers/withLinks.js';
 
 // Configuration properties
 const ALLOW_LOCAL_REGISTRATION = getConfigVar('ALLOW_LOCAL_REGISTRATION');

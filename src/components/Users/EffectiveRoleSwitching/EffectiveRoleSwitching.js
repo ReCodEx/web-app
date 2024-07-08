@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
-import { knownRoles, roleLabels, UserRoleIcon } from '../../helpers/usersRoles';
-import StandaloneRadioInput from '../../forms/StandaloneRadioInput/StandaloneRadioInput';
+import { knownRoles, roleLabels, UserRoleIcon } from '../../helpers/usersRoles.js';
+import StandaloneRadioInput from '../../forms/StandaloneRadioInput/StandaloneRadioInput.js';
 
 const EffectiveRoleSwitching = ({ effectiveRole, setEffectiveRole, updating = null }) => (
   <Table hover className="no-margin">

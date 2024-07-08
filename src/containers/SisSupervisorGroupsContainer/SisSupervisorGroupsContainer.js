@@ -27,24 +27,24 @@ import Icon, {
   StudentsIcon,
 } from '../../components/icons';
 
-import { fetchAllGroups, fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus';
+import { fetchAllGroups, fetchGroupIfNeeded } from '../../redux/modules/groups.js';
+import { fetchSisStatusIfNeeded } from '../../redux/modules/sisStatus.js';
 import {
   fetchSisSupervisedCourses,
   sisCreateGroup,
   sisBindGroup,
   sisUnbindGroup,
-} from '../../redux/modules/sisSupervisedCourses';
-import { fetchSisPossibleParentsIfNeeded } from '../../redux/modules/sisPossibleParents';
-import { sisPossibleParentsSelector } from '../../redux/selectors/sisPossibleParents';
-import { sisStateSelector } from '../../redux/selectors/sisStatus';
-import { sisSupervisedCoursesSelector } from '../../redux/selectors/sisSupervisedCourses';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupAccessorSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
+} from '../../redux/modules/sisSupervisedCourses.js';
+import { fetchSisPossibleParentsIfNeeded } from '../../redux/modules/sisPossibleParents.js';
+import { sisPossibleParentsSelector } from '../../redux/selectors/sisPossibleParents.js';
+import { sisStateSelector } from '../../redux/selectors/sisStatus.js';
+import { sisSupervisedCoursesSelector } from '../../redux/selectors/sisSupervisedCourses.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { groupAccessorSelector, groupDataAccessorSelector } from '../../redux/selectors/groups.js';
 
-import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
-import withLinks from '../../helpers/withLinks';
-import { unique, arrayToObject, hasPermissions, safeGet } from '../../helpers/common';
+import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData.js';
+import withLinks from '../../helpers/withLinks.js';
+import { unique, arrayToObject, hasPermissions, safeGet } from '../../helpers/common.js';
 
 const filterGroupsForBinding = (groups, alreadyBoundGroups) => {
   const bound = arrayToObject(alreadyBoundGroups);

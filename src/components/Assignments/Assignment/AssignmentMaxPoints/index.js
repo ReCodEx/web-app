@@ -1,1 +1,1 @@
-export { default } from './AssignmentMaxPoints';
+export { default } from './AssignmentMaxPoints.js';

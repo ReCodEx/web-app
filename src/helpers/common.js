@@ -388,3 +388,9 @@ export const hasOneOfPermissions = (entity, ...fields) => {
   }
   return fields.reduce((acc, field) => acc || Boolean(safeGet(entity, ['permissionHints', field], false)), false);
 };
+
+/*
+ * UI/Component tools
+ */
+
+export const canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);

@@ -1,2 +1,2 @@
-import ResetPasswordForm from './ResetPasswordForm';
+import ResetPasswordForm from './ResetPasswordForm.js';
 export default ResetPasswordForm;

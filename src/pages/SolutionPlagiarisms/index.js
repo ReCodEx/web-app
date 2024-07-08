@@ -1,2 +1,2 @@
-import SolutionPlagiarisms from './SolutionPlagiarisms';
+import SolutionPlagiarisms from './SolutionPlagiarisms.js';
 export default SolutionPlagiarisms;

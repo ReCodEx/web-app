@@ -17,45 +17,45 @@ import GroupExamPending from '../../components/Groups/GroupExamPending';
 import LeaveJoinGroupButtonContainer from '../../containers/LeaveJoinGroupButtonContainer';
 import GroupInvitationsContainer from '../../containers/GroupInvitationsContainer';
 
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchGroupStats, fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
-import { fetchByIds, inviteUser } from '../../redux/modules/users';
-import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
+import { fetchGroupStats, fetchGroupStatsIfNeeded } from '../../redux/modules/stats.js';
+import { fetchByIds, inviteUser } from '../../redux/modules/users.js';
+import { fetchAssignmentsForGroup } from '../../redux/modules/assignments.js';
 import {
   fetchShadowAssignmentsForGroup,
   setShadowAssignmentPoints,
   removeShadowAssignmentPoints,
-} from '../../redux/modules/shadowAssignments';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { fetchUsersSolutions } from '../../redux/modules/solutions';
+} from '../../redux/modules/shadowAssignments.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { fetchUsersSolutions } from '../../redux/modules/solutions.js';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
 import {
   groupSelector,
   groupDataAccessorSelector,
   groupsAssignmentsSelector,
   groupsShadowAssignmentsSelector,
-} from '../../redux/selectors/groups';
+} from '../../redux/selectors/groups.js';
 import {
   studentsOfGroupSelector,
   loggedUserIsStudentOfSelector,
   loggedUserIsSupervisorOfSelector,
   loggedUserIsAdminOfSelector,
   loggedUserCanInviteToGroupsSelector,
-} from '../../redux/selectors/usersGroups';
-import { createGroupsStatsSelector } from '../../redux/selectors/stats';
-import { getUserSolutionsSortedData } from '../../redux/selectors/assignments';
-import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
+} from '../../redux/selectors/usersGroups.js';
+import { createGroupsStatsSelector } from '../../redux/selectors/stats.js';
+import { getUserSolutionsSortedData } from '../../redux/selectors/assignments.js';
+import { fetchManyUserSolutionsStatus } from '../../redux/selectors/solutions.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
 
-import withLinks from '../../helpers/withLinks';
-import { isReady } from '../../redux/helpers/resourceManager/index';
-import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable';
+import withLinks from '../../helpers/withLinks.js';
+import { isReady } from '../../redux/helpers/resourceManager/index.js';
+import ResultsTable from '../../components/Groups/ResultsTable/ResultsTable.js';
 
-import { isSuperadminRole, isStudentRole } from '../../components/helpers/usersRoles';
-import { EMPTY_LIST, hasPermissions, safeGet } from '../../helpers/common';
-import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning';
+import { isSuperadminRole, isStudentRole } from '../../components/helpers/usersRoles.js';
+import { EMPTY_LIST, hasPermissions, safeGet } from '../../helpers/common.js';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning.js';
 
 class GroupStudents extends Component {
   static loadAsync = ({ groupId }, dispatch) =>

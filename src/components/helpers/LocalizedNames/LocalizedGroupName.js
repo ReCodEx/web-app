@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Icon from '../../icons';
-import { getLocalizedName, getOtherLocalizedNames } from '../../../helpers/localizedData';
+import { getLocalizedName, getOtherLocalizedNames } from '../../../helpers/localizedData.js';
 
 const LocalizedGroupName = ({ entity, translations = false, intl: { locale } }) => {
   const otherNames = getOtherLocalizedNames(entity, locale);

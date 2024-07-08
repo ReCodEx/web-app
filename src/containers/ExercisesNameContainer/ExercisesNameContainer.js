@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import { exerciseSelector } from '../../redux/selectors/exercises';
+import { fetchExerciseIfNeeded } from '../../redux/modules/exercises.js';
+import { exerciseSelector } from '../../redux/selectors/exercises.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import { LoadingIcon, ExercisePrefixIcons } from '../../components/icons';
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 class ExercisesNameContainer extends Component {
   componentDidMount() {

@@ -49,15 +49,15 @@ import Solution from './Solution';
 import SolutionPlagiarisms from './SolutionPlagiarisms';
 import SolutionSourceCodes from './SolutionSourceCodes';
 import SubmissionFailures from './SubmissionFailures';
-import SystemMessages from './SystemMessages/SystemMessages';
+import SystemMessages from './SystemMessages/SystemMessages.js';
 import User from './User';
 import Users from './Users';
 
-import { LOGIN_URI_PREFIX, createLoginLinkWithRedirect, abortAllPendingRequests } from '../redux/helpers/api/tools';
-import { API_BASE, URL_PATH_PREFIX } from '../helpers/config';
-import { getAssignment } from '../redux/selectors/assignments';
-import { getShadowAssignment } from '../redux/selectors/shadowAssignments';
-import withRouter from '../helpers/withRouter';
+import { LOGIN_URI_PREFIX, createLoginLinkWithRedirect, abortAllPendingRequests } from '../redux/helpers/api/tools.js';
+import { API_BASE, URL_PATH_PREFIX } from '../helpers/config.js';
+import { getAssignment } from '../redux/selectors/assignments.js';
+import { getShadowAssignment } from '../redux/selectors/shadowAssignments.js';
+import withRouter from '../helpers/withRouter.js';
 
 const unwrap = component => {
   while (component && component.WrappedComponent) {

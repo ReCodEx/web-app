@@ -7,7 +7,7 @@ import { lruMemoize } from 'reselect';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import AddUserContainer from '../../../containers/AddUserContainer';
-import { knownRoles, isSupervisorRole } from '../../helpers/usersRoles';
+import { knownRoles, isSupervisorRole } from '../../helpers/usersRoles.js';
 import { AdminRoleIcon, ObserverIcon, SupervisorIcon, LoadingIcon } from '../../icons';
 
 const ROLES_FILTER = knownRoles.filter(isSupervisorRole);

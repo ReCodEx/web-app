@@ -1,7 +1,7 @@
 import { createSelector, lruMemoize } from 'reselect';
 import { isReady } from '../helpers/resourceManager';
-import { getPipeline } from './pipelines';
-import { EMPTY_MAP } from '../../helpers/common';
+import { getPipeline } from './pipelines.js';
+import { EMPTY_MAP } from '../../helpers/common.js';
 
 const getPipelineFiles = state => state.pipelineFiles;
 export const getPipelineFile = id => createSelector(getPipelineFiles, pipelineFiles => pipelineFiles.get(id));

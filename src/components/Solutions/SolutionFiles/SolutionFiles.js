@@ -11,7 +11,7 @@ import Callout from '../../widgets/Callout';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Box from '../../widgets/Box';
 import Icon, { CodeFileIcon, DownloadIcon, ZipIcon } from '../../icons';
-import { prettyPrintBytes } from '../../helpers/stringFormatters';
+import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 
 const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
 

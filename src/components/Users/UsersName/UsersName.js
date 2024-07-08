@@ -6,12 +6,12 @@ import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { lruMemoize } from 'reselect';
 
-import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer';
-import { UserRoleIcon } from '../../helpers/usersRoles';
-import { UserUIDataContext } from '../../../helpers/contexts';
-import NotVerified from './NotVerified';
+import AvatarContainer from '../../../containers/AvatarContainer/AvatarContainer.js';
+import { UserRoleIcon } from '../../helpers/usersRoles.js';
+import { UserUIDataContext } from '../../../helpers/contexts.js';
+import NotVerified from './NotVerified.js';
 import Icon, { MailIcon, BanIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 import * as styles from './usersName.less';
 

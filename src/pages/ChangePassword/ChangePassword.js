@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { canUseDOM } from 'exenv';
 import { FormattedMessage, FormattedRelativeTime } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
@@ -10,15 +9,16 @@ import PageContent from '../../components/layout/PageContent';
 import ChangePasswordForm from '../../components/forms/ChangePasswordForm';
 import Callout from '../../components/widgets/Callout';
 import { decode, isTokenValid, isInScope } from '../../redux/helpers/token';
-import { changePassword } from '../../redux/modules/auth';
+import { changePassword } from '../../redux/modules/auth.js';
 import {
   isChanging,
   hasChangingFailed as hasFailed,
   hasChangingSucceeded as hasSucceeded,
-} from '../../redux/selectors/auth';
+} from '../../redux/selectors/auth.js';
 
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
+import { canUseDOM } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
 
 /**
  * Component for changing old password for a new one for a user with a specific

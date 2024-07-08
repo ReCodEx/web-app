@@ -1,2 +1,2 @@
-import ExerciseReferenceSolutions from './ExerciseReferenceSolutions';
+import ExerciseReferenceSolutions from './ExerciseReferenceSolutions.js';
 export default ExerciseReferenceSolutions;

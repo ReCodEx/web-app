@@ -6,8 +6,8 @@ import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
 
 import { InputIcon, OutputIcon, TransferIcon, RemoveIcon, WarningIcon } from '../../icons';
-import { isVariableValueValid } from '../../../helpers/pipelines';
-import { safeGet, arrayToObject } from '../../../helpers/common';
+import { isVariableValueValid } from '../../../helpers/pipelines.js';
+import { safeGet, arrayToObject } from '../../../helpers/common.js';
 import * as styles from '../styles.less';
 
 const prepareSelectionIndex = lruMemoize(

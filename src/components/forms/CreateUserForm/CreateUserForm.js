@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, change } from 'redux-form';
-import isEmail from 'validator/lib/isEmail';
+import isEmail from 'validator/lib/isEmail.js';
 
 import SubmitButton from '../SubmitButton';
 import Callout from '../../widgets/Callout';
-import { validateRegistrationData } from '../../../redux/modules/users';
+import { validateRegistrationData } from '../../../redux/modules/users.js';
 import { TextField, PasswordField, PasswordStrength } from '../Fields';
 
 const CreateUserForm = ({

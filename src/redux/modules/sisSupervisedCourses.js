@@ -1,9 +1,9 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState, createRecord, resourceStatus } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import { fromJS } from 'immutable';
-import { actionTypes } from './sisSupervisedCoursesTypes';
-import { actionTypes as groupsActionTypes } from './groups';
+import { actionTypes } from './sisSupervisedCoursesTypes.js';
+import { actionTypes as groupsActionTypes } from './groups.js';
 /**
  * Create actions & reducer
  */

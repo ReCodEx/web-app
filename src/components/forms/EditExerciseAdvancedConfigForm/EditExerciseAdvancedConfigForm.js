@@ -12,11 +12,11 @@ import Callout from '../../widgets/Callout';
 import { RefreshIcon, SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
-import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest';
-import { encodeNumId } from '../../../helpers/common';
-import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config';
-import { advancedExerciseConfigFormFill } from '../../../redux/modules/exerciseConfigs';
-import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs';
+import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest.js';
+import { encodeNumId } from '../../../helpers/common.js';
+import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config.js';
+import { advancedExerciseConfigFormFill } from '../../../redux/modules/exerciseConfigs.js';
+import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs.js';
 
 import * as styles from './EditExerciseAdvancedConfig.less';
 

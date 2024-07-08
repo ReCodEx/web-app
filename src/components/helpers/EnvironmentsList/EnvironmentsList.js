@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../../icons';
-import EnvironmentsListItem from './EnvironmentsListItem';
+import EnvironmentsListItem from './EnvironmentsListItem.js';
 
 const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false, intl: { locale } }) => {
   const environments =

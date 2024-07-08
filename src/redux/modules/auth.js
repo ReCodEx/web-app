@@ -1,13 +1,13 @@
 import { handleActions, createAction } from 'redux-actions';
 import { fromJS } from 'immutable';
 import { decode, isTokenValid } from '../helpers/token';
-import { createApiAction } from '../middleware/apiMiddleware';
-import { logout } from '../helpers/api/tools';
-import { actionTypes as registrationActionTypes } from './registration';
-import { actionTypes as usersActionTypes } from './users';
-import { safeGet } from '../../helpers/common';
+import { createApiAction } from '../middleware/apiMiddleware.js';
+import { logout } from '../helpers/api/tools.js';
+import { actionTypes as registrationActionTypes } from './registration.js';
+import { actionTypes as usersActionTypes } from './users.js';
+import { safeGet } from '../../helpers/common.js';
 
-import { actionTypes, statusTypes } from './authTypes';
+import { actionTypes, statusTypes } from './authTypes.js';
 export { actionTypes, statusTypes };
 
 const getUserId = token => token.get('sub');

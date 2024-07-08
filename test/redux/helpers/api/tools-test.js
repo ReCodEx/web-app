@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import {
   getHeaders,
   assembleEndpoint
-} from '../../../../src/redux/helpers/api/tools';
+} from '../../../../src/redux/helpers/api/tools.js';
 
 describe('API middleware and helper functions', () => {
   describe('(Helper functions)', () => {

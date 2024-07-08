@@ -1,2 +1,2 @@
-import Exercise from './Exercise';
+import Exercise from './Exercise.js';
 export default Exercise;

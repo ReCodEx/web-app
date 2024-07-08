@@ -1,5 +1,5 @@
-import createRecord from '../../../../src/redux/helpers/resourceManager/recordFactory';
-import { resourceStatus } from '../../../../src/redux/helpers/resourceManager/status';
+import createRecord from '../../../../src/redux/helpers/resourceManager/recordFactory.js';
+import { resourceStatus } from '../../../../src/redux/helpers/resourceManager/status.js';
 import chai from 'chai';
 import chaiImmutable from 'chai-immutable';
 chai.use(chaiImmutable);

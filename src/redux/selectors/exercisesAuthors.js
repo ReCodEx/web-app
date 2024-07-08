@@ -1,7 +1,7 @@
 import { createSelector, lruMemoize } from 'reselect';
-import { EMPTY_LIST } from '../../helpers/common';
+import { EMPTY_LIST } from '../../helpers/common.js';
 import { isReady, isLoading } from '../helpers/resourceManager';
-import { usersSelector } from './users';
+import { usersSelector } from './users.js';
 
 const exericsesAuthorsAllSelector = state => state.exercisesAuthors.get('all');
 const exericsesAuthorsOfGroupSelector = groupId => state => state.exercisesAuthors.getIn(['groups', groupId]);

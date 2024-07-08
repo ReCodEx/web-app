@@ -1,2 +1,2 @@
-import Solution from './Solution';
+import Solution from './Solution.js';
 export default Solution;

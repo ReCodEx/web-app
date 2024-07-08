@@ -4,7 +4,7 @@
  */
 
 import { fromJS } from 'immutable';
-import { resourceStatus, isReadyOrReloading } from './status';
+import { resourceStatus, isReadyOrReloading } from './status.js';
 
 /**
  * @typedef RecordDescriptor

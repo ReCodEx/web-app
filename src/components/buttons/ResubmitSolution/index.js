@@ -1,3 +1,3 @@
-import ResubmitSolution from './ResubmitSolution';
+import ResubmitSolution from './ResubmitSolution.js';
 export default ResubmitSolution;
-export { default as ResubmitAllSolutions } from './ResubmitAllSolutions';
+export { default as ResubmitAllSolutions } from './ResubmitAllSolutions.js';

@@ -1,2 +1,2 @@
-import AssignExerciseButton from './AssignExerciseButton';
+import AssignExerciseButton from './AssignExerciseButton.js';
 export default AssignExerciseButton;

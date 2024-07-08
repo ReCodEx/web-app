@@ -1,2 +1,2 @@
-import ArchiveExerciseButtonContainer from './ArchiveExerciseButtonContainer';
+import ArchiveExerciseButtonContainer from './ArchiveExerciseButtonContainer.js';
 export default ArchiveExerciseButtonContainer;

@@ -1,2 +1,2 @@
-import SystemMessages from './SystemMessages';
+import SystemMessages from './SystemMessages.js';
 export default SystemMessages;

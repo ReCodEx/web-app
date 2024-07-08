@@ -20,23 +20,23 @@ import EditAssignmentForm, {
   prepareInitialValues as prepareEditFormInitialValues,
 } from '../../components/forms/EditAssignmentForm';
 
-import { fetchExerciseIfNeeded, sendNotification } from '../../redux/modules/exercises';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { fetchExerciseIfNeeded, sendNotification } from '../../redux/modules/exercises.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 import {
   create as assignExercise,
   editAssignment,
   deleteAssignment,
   syncWithExercise,
   fetchExerciseAssignments,
-} from '../../redux/modules/assignments';
-import { exerciseSelector } from '../../redux/selectors/exercises';
+} from '../../redux/modules/assignments.js';
+import { exerciseSelector } from '../../redux/selectors/exercises.js';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupDataAccessorSelector } from '../../redux/selectors/groups';
-import { loggedUserCanAssignToGroupsSelector } from '../../redux/selectors/usersGroups';
-import { assignmentEnvironmentsSelector, getExerciseAssignments } from '../../redux/selectors/assignments';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { groupDataAccessorSelector } from '../../redux/selectors/groups.js';
+import { loggedUserCanAssignToGroupsSelector } from '../../redux/selectors/usersGroups.js';
+import { assignmentEnvironmentsSelector, getExerciseAssignments } from '../../redux/selectors/assignments.js';
 
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions } from '../../helpers/common.js';
 
 const messages = defineMessages({
   groupsBoxTitle: {

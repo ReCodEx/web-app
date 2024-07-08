@@ -5,7 +5,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 import DateTime from '../../../widgets/DateTime';
 import { WarningIcon } from '../../../icons';
-import { isUpToDate } from '../../../helpers/assignments';
+import { isUpToDate } from '../../../helpers/assignments.js';
 
 const AssignmentSyncIcon = ({ id, syncInfo, ...props }) => {
   return !isUpToDate(syncInfo) ? (

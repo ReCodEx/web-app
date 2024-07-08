@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Navigation from './Navigation';
-import withLinks from '../../../helpers/withLinks';
-import { createGroupLinks } from './linkCreators';
+import Navigation from './Navigation.js';
+import withLinks from '../../../helpers/withLinks.js';
+import { createGroupLinks } from './linkCreators.js';
 import { MailIcon, UserIcon, UserProfileIcon } from '../../icons';
-import { hasPermissions, hasOneOfPermissions } from '../../../helpers/common';
+import { hasPermissions, hasOneOfPermissions } from '../../../helpers/common.js';
 
 const GroupNavigation = ({ group, userId = null, emails = null, links }) => {
   const canEdit = hasOneOfPermissions(group, 'update', 'archive', 'remove', 'relocate');

@@ -6,7 +6,7 @@ import { Field } from 'redux-form';
 import { CheckboxField } from '../Fields';
 import Icon from '../../icons';
 import Button from '../../widgets/TheButton';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
 
 const AssignmentFormGroupsList = ({ groups, groupsAccessor, isOpen, toggleOpenState, intl: { locale } }) => (
   <>

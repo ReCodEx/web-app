@@ -1,2 +1,2 @@
-import ClientOnly from './ClientOnly';
+import ClientOnly from './ClientOnly.js';
 export default ClientOnly;

@@ -1,9 +1,9 @@
 import { createSelector, lruMemoize } from 'reselect';
 
-import { fetchSupplementaryFilesForExerciseEndpoint } from '../modules/supplementaryFiles';
-import { EMPTY_MAP } from '../../helpers/common';
+import { fetchSupplementaryFilesForExerciseEndpoint } from '../modules/supplementaryFiles.js';
+import { EMPTY_MAP } from '../../helpers/common.js';
 import { isReady } from '../helpers/resourceManager';
-import { getExercise } from './exercises';
+import { getExercise } from './exercises.js';
 
 export const supplementaryFilesSelector = state => state.supplementaryFiles.get('resources');
 const supplementaryFilesFetchManyStatusSelector = state => state.supplementaryFiles.get('fetchManyStatus');

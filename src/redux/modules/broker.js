@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { createRecord, resourceStatus } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import { fromJS } from 'immutable';
 
 export const actionTypes = {

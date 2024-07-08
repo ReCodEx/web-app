@@ -5,8 +5,8 @@ import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
 
-import BoxesTableRow from './BoxesTableRow';
-import { arrayToObject } from '../../../helpers/common';
+import BoxesTableRow from './BoxesTableRow.js';
+import { arrayToObject } from '../../../helpers/common.js';
 
 const prepareSelectionIndex = lruMemoize(
   selections =>

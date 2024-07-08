@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
-import { UserUIDataContext } from '../../../helpers/contexts';
+import { UserUIDataContext } from '../../../helpers/contexts.js';
 import { CloseIcon, SortedIcon } from '../../icons';
-import withRouter, { withRouterProps } from '../../../helpers/withRouter';
+import withRouter, { withRouterProps } from '../../../helpers/withRouter.js';
 
 class SortableTable extends Component {
   constructor(props) {
@@ -64,8 +64,8 @@ class SortableTable extends Component {
     return column === null || column.comparator === null
       ? data
       : ascendant
-      ? data.sort(column.comparator)
-      : data.sort(column.comparator).reverse();
+        ? data.sort(column.comparator)
+        : data.sort(column.comparator).reverse();
   });
 
   getHeaderSuffixRow = () => {

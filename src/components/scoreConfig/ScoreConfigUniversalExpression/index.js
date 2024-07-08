@@ -1,2 +1,2 @@
-import ScoreConfigUniversalExpression from './ScoreConfigUniversalExpression';
+import ScoreConfigUniversalExpression from './ScoreConfigUniversalExpression.js';
 export default ScoreConfigUniversalExpression;

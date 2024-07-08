@@ -8,7 +8,7 @@ import Button from '../../widgets/TheButton';
 import Icon, { PipelineIcon } from '../../icons';
 import { SelectField, TextField, ExpandingTextField, ExpandingSelectField } from '../Fields';
 import Confirm from '../../forms/Confirm';
-import { encodeId, safeGet, unique } from '../../../helpers/common';
+import { encodeId, safeGet, unique } from '../../../helpers/common.js';
 
 import * as styles from './EditExerciseAdvancedConfig.less';
 

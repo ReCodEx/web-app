@@ -1,4 +1,4 @@
-import { identity } from '../../../helpers/common';
+import { identity } from '../../../helpers/common.js';
 
 class SortableTableColumnDescriptor {
   constructor(

@@ -11,8 +11,8 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../../forms/SubmitButton';
 import { CloseIcon, SaveIcon, RefreshIcon, InputIcon, OutputIcon } from '../../../components/icons';
-import { encodeId, safeSet } from '../../../helpers/common';
-import { getBoxTypeDescription } from '../comments';
+import { encodeId, safeSet } from '../../../helpers/common.js';
+import { getBoxTypeDescription } from '../comments.js';
 
 export const newBoxInitialData = { name: '', type: '', portsIn: {}, portsOut: {} };
 

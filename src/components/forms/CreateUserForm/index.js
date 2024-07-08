@@ -1,2 +1,2 @@
-import CreateUserForm from './CreateUserForm';
+import CreateUserForm from './CreateUserForm.js';
 export default CreateUserForm;

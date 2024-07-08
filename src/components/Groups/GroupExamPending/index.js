@@ -1,2 +1,2 @@
-import GroupExamPending from './GroupExamPending';
+import GroupExamPending from './GroupExamPending.js';
 export default GroupExamPending;

@@ -7,8 +7,8 @@ import Box from '../../widgets/Box';
 import Callout from '../../widgets/Callout';
 import Markdown from '../../widgets/Markdown';
 import { SuccessOrFailureIcon } from '../../icons';
-import { getLocalizedDescription } from '../../../helpers/localizedData';
-import { objectMap, identity } from '../../../helpers/common';
+import { getLocalizedDescription } from '../../../helpers/localizedData.js';
+import { objectMap, identity } from '../../../helpers/common.js';
 
 const knownBindingProviderLabels = {
   sis: <FormattedMessage id="app.groupDetail.bindings.sis" defaultMessage="SIS UK scheduling event codes" />,

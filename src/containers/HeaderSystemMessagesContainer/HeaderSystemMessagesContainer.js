@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 import { lruMemoize } from 'reselect';
 
 import HeaderSystemMessagesDropdown from '../../components/layout/HeaderSystemMessagesDropdown';
-import { readyActiveSystemMessagesSelector, fetchManyUserStatus } from '../../redux/selectors/systemMessages';
-import { loggedInUserSelector } from '../../redux/selectors/users';
-import { updateUIData } from '../../redux/modules/users';
+import { readyActiveSystemMessagesSelector, fetchManyUserStatus } from '../../redux/selectors/systemMessages.js';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
+import { updateUIData } from '../../redux/modules/users.js';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
-import { safeGet } from '../../helpers/common';
+import { safeGet } from '../../helpers/common.js';
 
 const getVisibleSystemMessages = lruMemoize((systemMessages, user) => {
   const systemMessagesAccepted = safeGet(user, ['privateData', 'uiData', 'systemMessagesAccepted']);

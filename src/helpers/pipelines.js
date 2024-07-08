@@ -4,7 +4,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
-import { arrayToObject, identity, objectFilter, deepCompare } from './common';
+import { arrayToObject, identity, objectFilter, deepCompare } from './common.js';
 
 export const KNOWN_DATA_TYPES = ['file', 'remote-file', 'string']
   .reduce((acc, type) => [...acc, type, type + '[]'], [])

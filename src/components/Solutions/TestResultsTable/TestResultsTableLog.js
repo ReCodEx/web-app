@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { DownloadIcon } from '../../icons';
-import { downloadString } from '../../../redux/helpers/api/download';
+import { downloadString } from '../../../redux/helpers/api/download.js';
 
-import CopyLogToClipboard from './CopyLogToClipboard';
+import CopyLogToClipboard from './CopyLogToClipboard.js';
 import * as styles from './TestResultsTable.less';
 
 const TestResultsTableLog = ({

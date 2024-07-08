@@ -9,7 +9,7 @@ import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
 import { WarningIcon } from '../../../components/icons';
 
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const messages = defineMessages({
   emptyOption: {

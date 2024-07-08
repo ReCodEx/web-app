@@ -1,1 +1,1 @@
-export { default } from './PaginationButtons';
+export { default } from './PaginationButtons.js';

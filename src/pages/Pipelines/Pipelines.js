@@ -11,15 +11,15 @@ import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
-import { canEditPipeline } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { canEditPipeline } from '../../redux/selectors/users.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import { AddIcon, EditIcon, PipelineIcon } from '../../components/icons';
-import { create as createPipeline } from '../../redux/modules/pipelines';
+import { create as createPipeline } from '../../redux/modules/pipelines.js';
 import PipelinesList from '../../components/Pipelines/PipelinesList';
 
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
-import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 const submitHandler = lruMemoize(setFilters => search => {
   const filters = {};

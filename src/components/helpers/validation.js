@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { defineMessages } from 'react-intl';
-import isNumeric from 'validator/lib/isNumeric';
+import isNumeric from 'validator/lib/isNumeric.js';
 
 export const isPositiveInteger = n =>
   typeof n !== 'undefined' && (typeof n === 'number' || isNumeric(n)) && parseInt(n) > 0;

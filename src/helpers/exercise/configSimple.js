@@ -1,5 +1,5 @@
 import { lruMemoize } from 'reselect';
-import { safeGet, encodeNumId, identity, deepReduce, objectMap, EMPTY_ARRAY } from '../common';
+import { safeGet, encodeNumId, identity, deepReduce, objectMap, EMPTY_ARRAY } from '../common.js';
 import {
   ENV_DATA_ONLY_ID,
   ENV_JAVA_ID,
@@ -11,7 +11,7 @@ import {
   ENV_CPP_GCC_ID,
   ENV_ARDUINO_ID,
   ENV_SYCL_ID,
-} from './environments';
+} from './environments.js';
 
 /**
  * Base class for all pipeline variables being edited in the config form.

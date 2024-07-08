@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
 import Avatar, { LoadingAvatar, FailedAvatar, FakeAvatar } from '../../components/widgets/Avatar';
-import { safeGet } from '../../helpers/common';
+import { safeGet } from '../../helpers/common.js';
 
 const AvatarContainer = ({ currentUser, avatarUrl, fullName, firstName, size = 45, ...props }) => (
   <ResourceRenderer

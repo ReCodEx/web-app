@@ -1,2 +1,2 @@
-import Pipelines from './Pipelines';
+import Pipelines from './Pipelines.js';
 export default Pipelines;

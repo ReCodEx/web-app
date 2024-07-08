@@ -1,2 +1,2 @@
-import InviteUserForm from './InviteUserForm';
+import InviteUserForm from './InviteUserForm.js';
 export default InviteUserForm;

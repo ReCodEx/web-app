@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { lruMemoize } from 'reselect';
 
-import ActionButton from './ActionButton';
-import ActionDropdown from './ActionDropdown';
+import ActionButton from './ActionButton.js';
+import ActionDropdown from './ActionDropdown.js';
 
 /*
  * Helper functions

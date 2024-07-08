@@ -1,6 +1,6 @@
 import GroupInvitationForm, {
   createNewGroupInvitationInitialData,
   createEditGroupInvitationInitialData,
-} from './GroupInvitationForm';
+} from './GroupInvitationForm.js';
 export default GroupInvitationForm;
 export { createNewGroupInvitationInitialData, createEditGroupInvitationInitialData };

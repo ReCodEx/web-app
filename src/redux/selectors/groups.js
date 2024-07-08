@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect';
 
-import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY, objectMap } from '../../helpers/common';
-import { fetchAllGroupsEndpoint } from '../modules/groups';
-import { getAssignments } from './assignments';
-import { getShadowAssignments } from './shadowAssignments';
-import { loggedInUserIdSelector } from './auth';
-import { getLang } from './app';
+import { EMPTY_LIST, EMPTY_MAP, EMPTY_ARRAY, objectMap } from '../../helpers/common.js';
+import { fetchAllGroupsEndpoint } from '../modules/groups.js';
+import { getAssignments } from './assignments.js';
+import { getShadowAssignments } from './shadowAssignments.js';
+import { loggedInUserIdSelector } from './auth.js';
+import { getLang } from './app.js';
 import { isReady } from '../helpers/resourceManager';
-import { getLocalizedResourceName } from '../../helpers/localizedData';
+import { getLocalizedResourceName } from '../../helpers/localizedData.js';
 
 /**
  * Select groups part of the state

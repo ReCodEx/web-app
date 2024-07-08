@@ -1,2 +1,2 @@
-import SisIntegration from './SisIntegration';
+import SisIntegration from './SisIntegration.js';
 export default SisIntegration;

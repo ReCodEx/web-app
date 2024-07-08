@@ -13,7 +13,7 @@ import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon from '../../icons';
 
-import { arrayToObject } from '../../../helpers/common';
+import { arrayToObject } from '../../../helpers/common.js';
 
 const prepareInviteUserInitialValues = lruMemoize((groups, groupId) => ({
   titlesBeforeName: '',

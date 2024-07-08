@@ -1,2 +1,2 @@
-import SolutionStatus from './SolutionStatus';
+import SolutionStatus from './SolutionStatus.js';
 export default SolutionStatus;

@@ -1,1 +1,1 @@
-export { default } from './SolutionReviewIcon';
+export { default } from './SolutionReviewIcon.js';

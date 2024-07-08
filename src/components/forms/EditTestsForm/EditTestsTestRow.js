@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { TextField, NumericTextField } from '../Fields';
 import Button from '../../widgets/TheButton';
 import Icon, { RemoveIcon } from '../../icons';
-import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore';
+import { WEIGHTED_ID, UNIVERSAL_ID } from '../../../helpers/exercise/testsAndScore.js';
 
 import * as style from './EditTests.less';
 

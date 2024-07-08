@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
-import isNumeric from 'validator/lib/isNumeric';
+import isNumeric from 'validator/lib/isNumeric.js';
 
-import TextField from './TextField';
+import TextField from './TextField.js';
 
 class NumericTextField extends Component {
   format = value => {

@@ -6,10 +6,10 @@ import { FormattedMessage } from 'react-intl';
 
 import SolutionStatusIcon from '../../Solutions/SolutionStatusIcon';
 import SolutionReviewIcon from '../../Solutions/SolutionReviewIcon';
-import CommentsIcon from './CommentsIcon';
+import CommentsIcon from './CommentsIcon.js';
 import { PlagiarismIcon } from '../../icons';
 
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const SolutionTableRowIcons = ({
   id,

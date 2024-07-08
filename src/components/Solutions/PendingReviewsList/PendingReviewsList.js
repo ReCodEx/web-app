@@ -11,7 +11,7 @@ import Button from '../../widgets/TheButton';
 import Box from '../../widgets/Box';
 import Icon, { AssignmentIcon, GroupIcon, LoadingIcon, RefreshIcon, WarningIcon } from '../../icons';
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 class PendingReviewsList extends Component {
   state = { allPending: false };

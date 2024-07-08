@@ -1,2 +1,2 @@
-import InstancesTable from './InstancesTable';
+import InstancesTable from './InstancesTable.js';
 export default InstancesTable;

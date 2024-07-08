@@ -28,18 +28,22 @@ import {
   attachExerciseToGroup,
   detachExerciseFromGroup,
   sendNotification,
-} from '../../redux/modules/exercises';
-import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchByIds } from '../../redux/modules/users';
-import { getExercise, getExerciseAttachingGroupId, getExerciseDetachingGroupId } from '../../redux/selectors/exercises';
-import { isSubmitting } from '../../redux/selectors/submission';
-import { loggedInUserSelector } from '../../redux/selectors/users';
-import { getGroupsAdmins, groupDataAccessorSelector } from '../../redux/selectors/groups';
+} from '../../redux/modules/exercises.js';
+import { fetchAllGroups } from '../../redux/modules/groups.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import {
+  getExercise,
+  getExerciseAttachingGroupId,
+  getExerciseDetachingGroupId,
+} from '../../redux/selectors/exercises.js';
+import { isSubmitting } from '../../redux/selectors/submission.js';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
+import { getGroupsAdmins, groupDataAccessorSelector } from '../../redux/selectors/groups.js';
 
-import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData';
-import { safeGet } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData.js';
+import { safeGet } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
 
 const localizedTextDefaults = {
   name: '',

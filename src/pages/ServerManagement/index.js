@@ -1,2 +1,2 @@
-import ServerManagement from './ServerManagement';
+import ServerManagement from './ServerManagement.js';
 export default ServerManagement;

@@ -6,16 +6,16 @@ import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
 
-import Admin from './Admin';
+import Admin from './Admin.js';
 import UserPanelContainer from '../../../containers/UserPanelContainer';
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
 import { LoadingIcon } from '../../icons';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
-import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles';
-import withLinks from '../../../helpers/withLinks';
-import { getExternalIdForCAS } from '../../../helpers/cas';
-import { getConfigVar } from '../../../helpers/config';
+import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles.js';
+import withLinks from '../../../helpers/withLinks.js';
+import { getExternalIdForCAS } from '../../../helpers/cas.js';
+import { getConfigVar } from '../../../helpers/config.js';
 
 import * as styles from './sidebar.less';
 

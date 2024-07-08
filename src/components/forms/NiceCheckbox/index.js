@@ -1,2 +1,2 @@
-import NiceCheckbox from './NiceCheckbox';
+import NiceCheckbox from './NiceCheckbox.js';
 export default NiceCheckbox;

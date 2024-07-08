@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import { deleteAssignment } from '../../redux/modules/assignments';
-import { getAssignment } from '../../redux/selectors/assignments';
+import { deleteAssignment } from '../../redux/modules/assignments.js';
+import { getAssignment } from '../../redux/selectors/assignments.js';
 
 const DeleteAssignmentButtonContainer = ({ assignment, deleteAssignment, onDeleted, ...props }) => (
   <DeleteButton {...props} resource={assignment} deleteAction={deleteAssignment} />

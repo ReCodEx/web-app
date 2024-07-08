@@ -1,2 +1,2 @@
-import UsersNameContainer from './UsersNameContainer';
+import UsersNameContainer from './UsersNameContainer.js';
 export default UsersNameContainer;

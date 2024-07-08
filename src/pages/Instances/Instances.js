@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { fetchInstances } from '../../redux/modules/instances';
-import { instancesSelector } from '../../redux/selectors/instances';
+import { fetchInstances } from '../../redux/modules/instances.js';
+import { instancesSelector } from '../../redux/selectors/instances.js';
 
 import InstancesManagement from '../../components/Instances/InstancesManagement';
 

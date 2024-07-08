@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
 import Markdown from '../../widgets/Markdown';
-import { getLocalizedDescription } from '../../../helpers/localizedData';
+import { getLocalizedDescription } from '../../../helpers/localizedData.js';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 const getDescription = (localizedTexts, locale) => {

@@ -1,2 +1,2 @@
-import Explanation from './Explanation';
+import Explanation from './Explanation.js';
 export default Explanation;

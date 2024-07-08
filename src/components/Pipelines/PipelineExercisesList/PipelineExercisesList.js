@@ -8,9 +8,9 @@ import { lruMemoize } from 'reselect';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { DetailIcon, EditIcon, LimitsIcon, LoadingIcon, TestsIcon, WarningIcon } from '../../icons';
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
-import { getLocalizedName } from '../../../helpers/localizedData';
+import { getLocalizedName } from '../../../helpers/localizedData.js';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const COLLAPSE_LIMIT = 50;
 const PREVIEW_SIZE = 10;

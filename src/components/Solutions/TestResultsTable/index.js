@@ -1,1 +1,1 @@
-export { default } from './TestResultsTable';
+export { default } from './TestResultsTable.js';

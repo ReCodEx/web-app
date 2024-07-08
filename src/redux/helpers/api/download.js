@@ -1,5 +1,6 @@
-import { createApiAction } from '../../middleware/apiMiddleware';
-import { addNotification } from '../../modules/notifications';
+import saveAs from 'file-saver';
+import { createApiAction } from '../../middleware/apiMiddleware.js';
+import { addNotification } from '../../modules/notifications.js';
 
 const trivialFileNameSelector = (id, _) => id;
 
@@ -40,7 +41,6 @@ export const downloadHelper =
       })
       .then(({ value }) => value.blob())
       .then(blob => {
-        const { saveAs } = require('file-saver'); // dynamic loading, to avoid errors in headles nodejs execution
         const typedBlob = new Blob([blob], { type: contentType });
         fileName = fileName || fileNameSelector(id, getState());
         saveAs(typedBlob, fileName, { autoBom: false });
@@ -50,7 +50,6 @@ export const downloadHelper =
   };
 
 export const downloadString = (fileName, data, contentType, addBOM = false) => {
-  const { saveAs } = require('file-saver'); // dynamic loading, to avoid errors in headles nodejs execution
   const blobData = addBOM ? [new Uint8Array([0xef, 0xbb, 0xbf])] : [];
   blobData.push(data);
   const typedBlob = new Blob(blobData, { type: contentType });

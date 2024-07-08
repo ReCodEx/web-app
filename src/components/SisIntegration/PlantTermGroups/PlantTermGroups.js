@@ -12,8 +12,8 @@ import SubmitButton from '../../forms/SubmitButton';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import Icon, { CloseIcon } from '../../icons';
-import { getLocalizedName, validateLocalizedTextsFormData } from '../../../helpers/localizedData';
-import { arrayToObject } from '../../../helpers/common';
+import { getLocalizedName, validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
+import { arrayToObject } from '../../../helpers/common.js';
 
 const SEMESTER_LOCALIZATIONS = {
   1: [

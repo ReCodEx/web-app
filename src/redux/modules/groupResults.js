@@ -1,10 +1,10 @@
 import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import factory, { initialState } from '../helpers/resourceManager';
-import createRecord from '../helpers/resourceManager/recordFactory';
-import { resourceStatus } from '../helpers/resourceManager/status';
+import createRecord from '../helpers/resourceManager/recordFactory.js';
+import { resourceStatus } from '../helpers/resourceManager/status.js';
 
 const resourceName = 'groupResults';
 const { reduceActions } = factory({

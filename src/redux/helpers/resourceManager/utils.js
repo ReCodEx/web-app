@@ -3,7 +3,7 @@
  * @module utils
  */
 
-import { hasFailed, didInvalidate } from './status';
+import { hasFailed, didInvalidate } from './status.js';
 
 /**
  * Create a simple default factory: id => "/<resourceName>/[<id>]"

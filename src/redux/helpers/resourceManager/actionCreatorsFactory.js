@@ -3,8 +3,8 @@
  * @module actionCreatorsFactory
  */
 
-import { isLoading } from './status';
-import { getJsData } from './recordFactory';
+import { isLoading } from './status.js';
+import { getJsData } from './recordFactory.js';
 
 const actionCreatorsFactory = ({
   actionTypes,

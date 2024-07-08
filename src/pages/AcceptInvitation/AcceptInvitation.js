@@ -12,9 +12,9 @@ import InsetPanel from '../../components/widgets/InsetPanel';
 import DateTime from '../../components/widgets/DateTime';
 import Callout from '../../components/widgets/Callout';
 
-import { acceptInvitation } from '../../redux/modules/users';
+import { acceptInvitation } from '../../redux/modules/users.js';
 import { decode, isTokenValid } from '../../redux/helpers/token';
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 const AcceptInvitation = ({ acceptInvitation, links: { DASHBOARD_URI } }) => {
   const navigate = useNavigate();

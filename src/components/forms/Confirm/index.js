@@ -1,2 +1,2 @@
-import Confirm from './Confirm';
+import Confirm from './Confirm.js';
 export default Confirm;

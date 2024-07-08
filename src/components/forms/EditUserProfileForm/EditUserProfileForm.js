@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, change } from 'redux-form';
-import isEmail from 'validator/lib/isEmail';
+import isEmail from 'validator/lib/isEmail.js';
 
 import FormBox from '../../widgets/FormBox';
 import Callout from '../../widgets/Callout';
 import SubmitButton from '../SubmitButton';
 import Explanation from '../../widgets/Explanation';
 import { SaveIcon } from '../../icons';
-import { validateRegistrationData } from '../../../redux/modules/users';
+import { validateRegistrationData } from '../../../redux/modules/users.js';
 import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
 
 const EditUserProfileForm = ({

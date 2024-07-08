@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import InsetPanel from '../../widgets/InsetPanel';
-import SharedLocalizedFields from './SharedLocalizedFields';
-import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields';
+import SharedLocalizedFields from './SharedLocalizedFields.js';
+import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields.js';
 
 const LocalizedShadowAssignmentFormField = ({ prefix, data: enabled }) => (
   <InsetPanel>

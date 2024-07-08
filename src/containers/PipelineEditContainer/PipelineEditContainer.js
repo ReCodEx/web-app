@@ -35,11 +35,11 @@ import {
   comparePipelineEntities,
   checkPipelineStructure,
   validatePipeline,
-} from '../../helpers/pipelines';
-import { editPipeline, reloadPipeline } from '../../redux/modules/pipelines';
-import { getBoxTypes } from '../../redux/selectors/boxes';
-import { objectMap, arrayToObject, encodeId, identity } from '../../helpers/common';
-import { downloadString } from '../../redux/helpers/api/download';
+} from '../../helpers/pipelines.js';
+import { editPipeline, reloadPipeline } from '../../redux/modules/pipelines.js';
+import { getBoxTypes } from '../../redux/selectors/boxes.js';
+import { objectMap, arrayToObject, encodeId, identity } from '../../helpers/common.js';
+import { downloadString } from '../../redux/helpers/api/download.js';
 
 import * as styles from '../../components/Pipelines/styles.less';
 import InsetPanel from '../../components/widgets/InsetPanel';

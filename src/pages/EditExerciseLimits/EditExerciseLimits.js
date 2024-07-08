@@ -11,7 +11,7 @@ import Page from '../../components/layout/Page';
 import { ExerciseNavigation } from '../../components/layout/Navigation';
 import HardwareGroupMetadata from '../../components/Exercises/HardwareGroupMetadata';
 import EditHardwareGroupForm from '../../components/forms/EditHardwareGroupForm';
-import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm';
+import EditLimitsForm from '../../components/forms/EditLimitsForm/EditLimitsForm.js';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -24,7 +24,7 @@ import {
   setExerciseHardwareGroups,
   invalidateExercise,
   sendNotification,
-} from '../../redux/modules/exercises';
+} from '../../redux/modules/exercises.js';
 import {
   fetchExerciseLimits,
   fetchExerciseLimitsIfNeeded,
@@ -32,16 +32,16 @@ import {
   cloneHorizontally,
   cloneVertically,
   cloneAll,
-} from '../../redux/modules/limits';
-import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
-import { getExercise } from '../../redux/selectors/exercises';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { limitsSelector } from '../../redux/selectors/limits';
-import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups';
-import { isLoggedAsSuperAdmin } from '../../redux/selectors/users';
+} from '../../redux/modules/limits.js';
+import { fetchHardwareGroups } from '../../redux/modules/hwGroups.js';
+import { getExercise } from '../../redux/selectors/exercises.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { limitsSelector } from '../../redux/selectors/limits.js';
+import { hardwareGroupsSelector } from '../../redux/selectors/hwGroups.js';
+import { isLoggedAsSuperAdmin } from '../../redux/selectors/users.js';
 
-import { fetchExerciseTestsIfNeeded } from '../../redux/modules/exerciseTests';
-import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
+import { fetchExerciseTestsIfNeeded } from '../../redux/modules/exerciseTests.js';
+import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests.js';
 
 import {
   getLimitsInitValues,
@@ -49,7 +49,7 @@ import {
   getLimitsConstraints,
   validateLimitsConstraints,
   saturateLimitsConstraints,
-} from '../../helpers/exercise/limits';
+} from '../../helpers/exercise/limits.js';
 
 class EditExerciseLimits extends Component {
   componentDidMount() {

@@ -1,1 +1,1 @@
-export { default as InstanceInfoTable } from './InstanceInfoTable';
+export { default as InstanceInfoTable } from './InstanceInfoTable.js';

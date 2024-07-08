@@ -1,2 +1,2 @@
-import CreateExerciseForm from './CreateExerciseForm';
+import CreateExerciseForm from './CreateExerciseForm.js';
 export default CreateExerciseForm;

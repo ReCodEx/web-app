@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Navigation from './Navigation';
-import withLinks from '../../../helpers/withLinks';
+import Navigation from './Navigation.js';
+import withLinks from '../../../helpers/withLinks.js';
 import { PipelineIcon, PipelineStructureIcon, EditIcon } from '../../icons';
 
 const PipelineNavigation = ({

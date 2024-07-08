@@ -1,1 +1,1 @@
-export { default } from './SourceCodeViewerContainer';
+export { default } from './SourceCodeViewerContainer.js';

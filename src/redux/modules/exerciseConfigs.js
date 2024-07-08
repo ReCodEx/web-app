@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import { change } from 'redux-form';
 
 import factory, { initialState } from '../helpers/resourceManager';
-import { encodeId, encodeNumId, safeGet, range } from '../../helpers/common';
+import { encodeId, encodeNumId, safeGet, range } from '../../helpers/common.js';
 
 /**
  * Create actions & reducer
@@ -407,8 +407,8 @@ export const advancedExerciseConfigFormFill =
       pipelineIdx === null
         ? range(0, safeGet(formData, [sourceTestKey], []).length) // all pipeline indices
         : Array.isArray(pipelineIdx)
-        ? pipelineIdx
-        : [pipelineIdx];
+          ? pipelineIdx
+          : [pipelineIdx];
 
     pipelines.forEach(idx => {
       const variableValues = safeGet(formData, [sourceTestKey, idx], {});

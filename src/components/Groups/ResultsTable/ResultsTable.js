@@ -7,8 +7,8 @@ import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import SolutionsTable from '../../Assignments/SolutionsTable';
-import LoadingSolutionsTable from '../../Assignments/SolutionsTable/LoadingSolutionsTable';
-import FailedLoadingSolutionsTable from '../../Assignments/SolutionsTable/FailedLoadingSolutionsTable';
+import LoadingSolutionsTable from '../../Assignments/SolutionsTable/LoadingSolutionsTable.js';
+import FailedLoadingSolutionsTable from '../../Assignments/SolutionsTable/FailedLoadingSolutionsTable.js';
 import EditShadowAssignmentPointsForm, {
   getPointsFormInitialValues,
   transformPointsFormSubmitData,
@@ -17,18 +17,18 @@ import UsersName from '../../Users/UsersName';
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
 import FetchManyResourceRenderer from '../../helpers/FetchManyResourceRenderer';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { getLocalizedName } from '../../../helpers/localizedData';
-import { createUserNameComparator } from '../../helpers/users';
-import { compareAssignments, compareShadowAssignments } from '../../helpers/assignments';
-import { downloadString } from '../../../redux/helpers/api/download';
+import { getLocalizedName } from '../../../helpers/localizedData.js';
+import { createUserNameComparator } from '../../helpers/users.js';
+import { compareAssignments, compareShadowAssignments } from '../../helpers/assignments.js';
+import { downloadString } from '../../../redux/helpers/api/download.js';
 import Button from '../../widgets/TheButton';
 import Icon, { DownloadIcon, LoadingIcon } from '../../icons';
-import { safeGet, EMPTY_ARRAY, EMPTY_OBJ, hasPermissions } from '../../../helpers/common';
-import withLinks from '../../../helpers/withLinks';
-import { storageGetItem, storageSetItem } from '../../../helpers/localStorage';
+import { safeGet, EMPTY_ARRAY, EMPTY_OBJ, hasPermissions } from '../../../helpers/common.js';
+import withLinks from '../../../helpers/withLinks.js';
+import { storageGetItem, storageSetItem } from '../../../helpers/localStorage.js';
 
 import * as styles from './ResultsTable.less';
-import escapeString from '../../helpers/escapeString';
+import escapeString from '../../helpers/escapeString.js';
 
 const assignmentCellRendererCreator = lruMemoize((rawAssignments, locale) => {
   const assignments = {};

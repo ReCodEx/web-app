@@ -8,8 +8,8 @@ import { reset } from 'redux-form';
 import Page from '../../components/layout/Page';
 import EditInstanceForm from '../../components/forms/EditInstanceForm';
 
-import { fetchInstanceIfNeeded, editInstance } from '../../redux/modules/instances';
-import { instanceSelector } from '../../redux/selectors/instances';
+import { fetchInstanceIfNeeded, editInstance } from '../../redux/modules/instances.js';
+import { instanceSelector } from '../../redux/selectors/instances.js';
 import { EditIcon } from '../../components/icons';
 
 class EditInstance extends Component {

@@ -8,7 +8,7 @@ import Explanation from '../../widgets/Explanation';
 import { ArchiveIcon, NeedFixingIcon, CheckRequiredIcon, LinkIcon } from '../../icons';
 import Callout from '../../widgets/Callout';
 import DateTime from '../../widgets/DateTime';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 export const exerciseCalloutsAreVisible = ({ archivedAt, isBroken, hasReferenceSolutions }) =>
   archivedAt !== null || isBroken || !hasReferenceSolutions;

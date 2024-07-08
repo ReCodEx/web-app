@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
-import withLinks from '../../../../helpers/withLinks';
+import withLinks from '../../../../helpers/withLinks.js';
 import { LocalizedExerciseName } from '../../../helpers/LocalizedNames';
 import { EditIcon, MaybeBonusAssignmentIcon, VisibleIcon, WarningIcon } from '../../../icons';
 import DeleteShadowAssignmentButtonContainer from '../../../../containers/DeleteShadowAssignmentButtonContainer';
 import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import DateTime from '../../../widgets/DateTime';
-import { safeGet } from '../../../../helpers/common';
+import { safeGet } from '../../../../helpers/common.js';
 
 const getUserPoints = lruMemoize((points, userId) =>
   safeGet(points, [({ awardeeId }) => awardeeId === userId, 'points'], <span>&mdash;</span>)

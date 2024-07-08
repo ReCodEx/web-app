@@ -8,8 +8,8 @@ import {
   didInvalidate,
   afterTenMinutesIsTooOld,
   isTooOld
-} from '../../../../src/redux/helpers/resourceManager/status';
-import createRecord from '../../../../src/redux/helpers/resourceManager/recordFactory';
+} from '../../../../src/redux/helpers/resourceManager/status.js';
+import createRecord from '../../../../src/redux/helpers/resourceManager/recordFactory.js';
 
 describe('Resource manager', () => {
   describe('(Status)', () => {

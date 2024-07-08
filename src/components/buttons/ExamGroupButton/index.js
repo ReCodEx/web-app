@@ -1,2 +1,2 @@
-import ExamGroupButton from './ExamGroupButton';
+import ExamGroupButton from './ExamGroupButton.js';
 export default ExamGroupButton;

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { EMPTY_MAP } from '../../helpers/common';
+import { EMPTY_MAP } from '../../helpers/common.js';
 
 const getFiles = state => state.upload;
 

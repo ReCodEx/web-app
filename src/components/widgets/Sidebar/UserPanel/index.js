@@ -1,3 +1,3 @@
-export { default } from './UserPanel';
-export { default as UserPanelFailed } from './UserPanelFailed';
-export { default as UserPanelLoading } from './UserPanelLoading';
+export { default } from './UserPanel.js';
+export { default as UserPanelFailed } from './UserPanelFailed.js';
+export { default as UserPanelLoading } from './UserPanelLoading.js';

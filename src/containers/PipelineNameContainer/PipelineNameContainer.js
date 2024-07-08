@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { fetchPipelineIfNeeded } from '../../redux/modules/pipelines';
-import { getPipeline } from '../../redux/selectors/pipelines';
+import { fetchPipelineIfNeeded } from '../../redux/modules/pipelines.js';
+import { getPipeline } from '../../redux/selectors/pipelines.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LoadingIcon } from '../../components/icons';
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 class PipelineNameContainer extends Component {
   componentDidMount() {

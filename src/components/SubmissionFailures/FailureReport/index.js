@@ -1,2 +1,2 @@
-import FailureReport from './FailureReport';
+import FailureReport from './FailureReport.js';
 export default FailureReport;

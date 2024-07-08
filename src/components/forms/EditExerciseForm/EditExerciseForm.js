@@ -11,11 +11,11 @@ import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
-import { validateExercise } from '../../../redux/modules/exercises';
-import { validateLocalizedTextsFormData } from '../../../helpers/localizedData';
+import { validateExercise } from '../../../redux/modules/exercises.js';
+import { validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
 import Explanation from '../../widgets/Explanation';
 import { SaveIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const messages = defineMessages({
   easy: {

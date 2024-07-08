@@ -7,18 +7,18 @@ import { FormattedMessage } from 'react-intl';
 
 import Page from '../../components/layout/Page';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons';
-import StatsList from '../../components/Broker/StatsList/StatsList';
+import BrokerButtons from '../../components/Broker/BrokerButtons/BrokerButtons.js';
+import StatsList from '../../components/Broker/StatsList/StatsList.js';
 import AsyncJobsButtons from '../../components/AsyncJobs/AsyncJobsButtons';
 import AsyncJobsList from '../../components/AsyncJobs/AsyncJobsList';
 import { BanIcon, ServerIcon } from '../../components/icons';
 import Callout from '../../components/widgets/Callout';
 
-import { fetchBrokerStats, freezeBroker, unfreezeBroker } from '../../redux/modules/broker';
-import { fetchAllJobs, ping, abort } from '../../redux/modules/asyncJobs';
-import { brokerStatsSelector, brokerFreezeSelector, brokerUnfreezeSelector } from '../../redux/selectors/broker';
-import { getAllAsyncJobs, getPingStatus } from '../../redux/selectors/asyncJobs';
-import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users';
+import { fetchBrokerStats, freezeBroker, unfreezeBroker } from '../../redux/modules/broker.js';
+import { fetchAllJobs, ping, abort } from '../../redux/modules/asyncJobs.js';
+import { brokerStatsSelector, brokerFreezeSelector, brokerUnfreezeSelector } from '../../redux/selectors/broker.js';
+import { getAllAsyncJobs, getPingStatus } from '../../redux/selectors/asyncJobs.js';
+import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users.js';
 
 class Broker extends Component {
   static loadAsync = (params, dispatch) => Promise.all([dispatch(fetchBrokerStats()), dispatch(fetchAllJobs())]);

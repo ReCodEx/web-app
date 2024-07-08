@@ -4,8 +4,8 @@ import reducer, {
   initialState,
   addNotification,
   hideNotification,
-  hideAll
-} from '../../../src/redux/modules/notifications';
+  hideAll,
+} from '../../../src/redux/modules/notifications.js';
 
 describe('App notifications', () => {
   describe('(Action creators)', () => {
@@ -18,8 +18,8 @@ describe('App notifications', () => {
           id: 'abc',
           msg: 'Hello world!!',
           successful: true,
-          time
-        }
+          time,
+        },
       });
     });
 
@@ -33,15 +33,15 @@ describe('App notifications', () => {
       expect(action).to.eql({
         type: 'recodex/notifications/HIDE_NOTIFICATION',
         payload: {
-          id: 'abc'
-        }
+          id: 'abc',
+        },
       });
     });
 
     it('must create correct "hide all" action', () => {
       const action = hideAll();
       expect(action).to.eql({
-        type: 'recodex/notifications/HIDE_ALL'
+        type: 'recodex/notifications/HIDE_ALL',
       });
     });
   });
@@ -52,17 +52,14 @@ describe('App notifications', () => {
       expect(state).to.eql(
         Map({
           visible: List(),
-          hidden: List()
+          hidden: List(),
         })
       );
     });
 
     it('must add a new notification', () => {
       const time = 123456;
-      const state = reducer(
-        initialState,
-        addNotification('XYZ', false, 'abc', time)
-      );
+      const state = reducer(initialState, addNotification('XYZ', false, 'abc', time));
       expect(state.get('hidden').size).to.equal(0);
       expect(state.get('visible').size).to.equal(1);
       expect(state.get('visible').first()).to.eql({
@@ -70,16 +67,13 @@ describe('App notifications', () => {
         msg: 'XYZ',
         successful: false,
         time,
-        count: 1
+        count: 1,
       });
     });
 
     it('must group notifications with same messages', () => {
       const time = 123456;
-      let state = reducer(
-        initialState,
-        addNotification('XYZ', false, 'abc', time)
-      );
+      let state = reducer(initialState, addNotification('XYZ', false, 'abc', time));
       state = reducer(state, addNotification('XYZ', false, 'cba', time));
       expect(state.get('hidden').size).to.equal(0);
       expect(state.get('visible').size).to.equal(1);
@@ -88,14 +82,14 @@ describe('App notifications', () => {
         msg: 'XYZ',
         successful: false,
         time,
-        count: 2
+        count: 2,
       });
     });
 
     it('must remove a notification', () => {
       let state = Map({
         visible: List([{ id: 'abc' }]),
-        hidden: List()
+        hidden: List(),
       });
 
       state = reducer(state, hideNotification('abc'));
@@ -107,7 +101,7 @@ describe('App notifications', () => {
     it('must remove all notifications', () => {
       let state = Map({
         visible: List([{ id: 'abc' }, { id: 'def' }]),
-        hidden: List()
+        hidden: List(),
       });
 
       state = reducer(state, hideAll());

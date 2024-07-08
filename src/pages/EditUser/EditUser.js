@@ -11,7 +11,7 @@ import { UserNavigation } from '../../components/layout/Navigation';
 import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import { LocalIcon, TransferIcon, EditUserIcon } from '../../components/icons';
-import { isStudentRole } from '../../components/helpers/usersRoles';
+import { isStudentRole } from '../../components/helpers/usersRoles.js';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
@@ -34,16 +34,16 @@ import {
   updateUIData,
   makeLocalLogin,
   setRole,
-} from '../../redux/modules/users';
-import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import { generateToken, takeOver } from '../../redux/modules/auth';
-import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth';
+} from '../../redux/modules/users.js';
+import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users.js';
+import { generateToken, takeOver } from '../../redux/modules/auth.js';
+import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import {
   fetchUserCalendarsIfNeeded,
   createUserCalendar,
   setUserCalendarExpired,
-} from '../../redux/modules/userCalendars';
-import { getUserCalendars } from '../../redux/selectors/userCalendars';
+} from '../../redux/modules/userCalendars.js';
+import { getUserCalendars } from '../../redux/selectors/userCalendars.js';
 
 const prepareNumber = (number, min, max, defaultValue) => {
   number = Number(number);

@@ -1,2 +1,2 @@
-import LoadingUsersListItem from './LoadingUsersListItem';
+import LoadingUsersListItem from './LoadingUsersListItem.js';
 export default LoadingUsersListItem;

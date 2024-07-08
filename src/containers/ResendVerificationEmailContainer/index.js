@@ -1,2 +1,2 @@
-import ResendVerificationEmailContainer from './ResendVerificationEmailContainer';
+import ResendVerificationEmailContainer from './ResendVerificationEmailContainer.js';
 export default ResendVerificationEmailContainer;

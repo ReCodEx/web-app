@@ -6,14 +6,14 @@ import { injectIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import ExamLockButton from '../../components/buttons/ExamLockButton';
-import { lockStudentForExam } from '../../redux/modules/groups';
-import { groupPendingUserLock } from '../../redux/selectors/groups';
-import { loggedInUserSelector } from '../../redux/selectors/users';
+import { lockStudentForExam } from '../../redux/modules/groups.js';
+import { groupPendingUserLock } from '../../redux/selectors/groups.js';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { getErrorMessage } from '../../locales/apiErrorMessages';
-import { addNotification } from '../../redux/modules/notifications';
+import { getErrorMessage } from '../../locales/apiErrorMessages.js';
+import { addNotification } from '../../redux/modules/notifications.js';
 
-import { isStudentRole } from '../../components/helpers/usersRoles';
+import { isStudentRole } from '../../components/helpers/usersRoles.js';
 
 const lockStudentHandlingErrors = lruMemoize(
   (userId, lockStudentForExam, addNotification, formatMessage) => () =>

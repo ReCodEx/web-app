@@ -1,14 +1,13 @@
 import cookies from 'browser-cookies';
-import { canUseDOM } from 'exenv';
 
-import { actionTypes } from '../modules/authTypes';
-import { jwtSelector } from '../selectors/auth';
-import { actionTypes as registrationActionTypes } from '../modules/registration';
-import { actionTypes as usersActionTypes } from '../modules/users';
-import { setLang } from '../modules/app';
-import { CALL_API } from './apiMiddleware';
-import { safeGet } from '../../helpers/common';
-import { getConfigVar } from '../../helpers/config';
+import { actionTypes } from '../modules/authTypes.js';
+import { jwtSelector } from '../selectors/auth.js';
+import { actionTypes as registrationActionTypes } from '../modules/registration.js';
+import { actionTypes as usersActionTypes } from '../modules/users.js';
+import { setLang } from '../modules/app.js';
+import { CALL_API } from './apiMiddleware.js';
+import { safeGet, canUseDOM } from '../../helpers/common.js';
+import { getConfigVar } from '../../helpers/config.js';
 
 const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 

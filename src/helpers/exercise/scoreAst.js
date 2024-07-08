@@ -24,8 +24,8 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { arrayToObject, objectFind, deepCompare } from '../common';
-import { evaluationFunctions } from './scoreAstFunctions';
+import { arrayToObject, objectFind, deepCompare } from '../common.js';
+import { evaluationFunctions } from './scoreAstFunctions.js';
 
 // Generic node types
 export const FUNCTION_NODE = 'function';

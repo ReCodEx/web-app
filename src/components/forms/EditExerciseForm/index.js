@@ -1,2 +1,2 @@
-import EditExerciseForm from './EditExerciseForm';
+import EditExerciseForm from './EditExerciseForm.js';
 export default EditExerciseForm;

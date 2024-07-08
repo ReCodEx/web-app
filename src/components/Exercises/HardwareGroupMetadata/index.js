@@ -1,2 +1,2 @@
-import HardwareGroupMetadata from './HardwareGroupMetadata';
+import HardwareGroupMetadata from './HardwareGroupMetadata.js';
 export default HardwareGroupMetadata;

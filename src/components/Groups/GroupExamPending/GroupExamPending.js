@@ -9,8 +9,8 @@ import { InfoIcon, GroupExamsIcon, LinkIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
 
-import { isStudentRole } from '../../helpers/usersRoles';
-import withLinks from '../../../helpers/withLinks';
+import { isStudentRole } from '../../helpers/usersRoles.js';
+import withLinks from '../../../helpers/withLinks.js';
 
 const REFRESH_INTERVAL = 1; // [s]
 

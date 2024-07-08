@@ -1,2 +1,2 @@
-import DeleteShadowAssignmentButtonContainer from './DeleteShadowAssignmentButtonContainer';
+import DeleteShadowAssignmentButtonContainer from './DeleteShadowAssignmentButtonContainer.js';
 export default DeleteShadowAssignmentButtonContainer;

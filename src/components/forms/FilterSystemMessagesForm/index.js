@@ -1,2 +1,2 @@
-import FilterSystemMessagesForm from './FilterSystemMessagesForm';
+import FilterSystemMessagesForm from './FilterSystemMessagesForm.js';
 export default FilterSystemMessagesForm;

@@ -1,13 +1,13 @@
 import { fromJS } from 'immutable';
-import { createApiAction } from '../../../src/redux/middleware/apiMiddleware';
-import { actionTypes as authActionTypes } from '../../../src/redux/modules/auth';
+import { createApiAction } from '../../../src/redux/middleware/apiMiddleware.js';
+import { actionTypes as authActionTypes } from '../../../src/redux/modules/auth.js';
 
 import middleware, {
   TOKEN_LOCAL_STORAGE_KEY,
   storeToken,
   removeToken,
   getToken,
-} from '../../../src/redux/middleware/authMiddleware';
+} from '../../../src/redux/middleware/authMiddleware.js';
 
 import chai from 'chai';
 import spies from 'chai-spies';

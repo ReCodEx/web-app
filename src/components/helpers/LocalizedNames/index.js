@@ -1,2 +1,2 @@
-export { default as LocalizedExerciseName } from './LocalizedExerciseName';
-export { default as LocalizedGroupName } from './LocalizedGroupName';
+export { default as LocalizedExerciseName } from './LocalizedExerciseName.js';
+export { default as LocalizedGroupName } from './LocalizedGroupName.js';

@@ -1,2 +1,2 @@
-import ShadowAssignment from './ShadowAssignment';
+import ShadowAssignment from './ShadowAssignment.js';
 export default ShadowAssignment;

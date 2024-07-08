@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import { GroupIcon, AdminRoleIcon, SupervisorIcon, ObserverIcon, UserIcon } from '../../icons';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 import './MemberGroupsDropdown.css';
 

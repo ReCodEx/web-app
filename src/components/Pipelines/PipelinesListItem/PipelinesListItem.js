@@ -8,7 +8,7 @@ import classnames from 'classnames';
 
 import Icon, { PipelineIcon } from '../../icons';
 import DateTime from '../../widgets/DateTime';
-import withLinks from '../../../helpers/withLinks';
+import withLinks from '../../../helpers/withLinks.js';
 
 const PipelinesListItem = ({
   id,

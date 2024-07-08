@@ -7,13 +7,13 @@
 
 ## Installation
 
-Web application requires [NodeJS](https://nodejs.org/en/) 18.x server as a runtime
+The web application requires [NodeJS](https://nodejs.org/en/) 20.x server as a runtime
 environment. This runtime is needed for executing JavaScript code on server and
 sending the pre-render parts of pages to clients, so the final rendering in
 browsers is a lot quicker and the page is accessible to search engines for
 indexing.
 
-But some functionality is better in other full fledged web servers like *Apache*
+But some functionality is better in other full-fledged web servers like *Apache*
 or *Nginx*, so the common practice is to use a tandem of both. *NodeJS* takes
 care of basic functionality of the app while the other server (Apache) is set as
 reverse proxy and providing additional functionality like SSL encryption, load

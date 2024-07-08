@@ -20,27 +20,27 @@ import {
   fetchReferenceSolutionIfNeeded,
   fetchReferenceSolution,
   setDescription,
-} from '../../redux/modules/referenceSolutions';
-import { fetchReferenceSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles';
-import { download } from '../../redux/modules/files';
-import { fetchExerciseIfNeeded } from '../../redux/modules/exercises';
-import { fetchReferenceSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig';
+} from '../../redux/modules/referenceSolutions.js';
+import { fetchReferenceSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles.js';
+import { download } from '../../redux/modules/files.js';
+import { fetchExerciseIfNeeded } from '../../redux/modules/exercises.js';
+import { fetchReferenceSubmissionScoreConfigIfNeeded } from '../../redux/modules/exerciseScoreConfig.js';
 import {
   fetchReferenceSolutionEvaluationsForSolution,
   deleteReferenceSolutionEvaluation,
-} from '../../redux/modules/referenceSolutionEvaluations';
+} from '../../redux/modules/referenceSolutionEvaluations.js';
 
-import { loggedInUserSelector } from '../../redux/selectors/users';
-import { getReferenceSolution } from '../../redux/selectors/referenceSolutions';
-import { getSolutionFiles } from '../../redux/selectors/solutionFiles';
-import { getExercise } from '../../redux/selectors/exercises';
-import { referenceSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
+import { getReferenceSolution } from '../../redux/selectors/referenceSolutions.js';
+import { getSolutionFiles } from '../../redux/selectors/solutionFiles.js';
+import { getExercise } from '../../redux/selectors/exercises.js';
+import { referenceSubmissionScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig.js';
 import {
   evaluationsForReferenceSolutionSelector,
   fetchManyStatus,
-} from '../../redux/selectors/referenceSolutionEvaluations';
+} from '../../redux/selectors/referenceSolutionEvaluations.js';
 
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions } from '../../helpers/common.js';
 
 const exerciseHasRuntime = lruMemoize(
   (exercise, runtimeId) => exercise.runtimeEnvironments.find(({ id }) => id === runtimeId) !== undefined

@@ -18,16 +18,20 @@ import UsersList from '../../components/Users/UsersList';
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../../containers/PaginationContainer';
 import FilterUsersListForm from '../../components/forms/FilterUsersListForm';
 import CreateUserForm from '../../components/forms/CreateUserForm';
-import { loggedInUserSelector, isLoggedAsSuperAdmin, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
-import { takeOver } from '../../redux/modules/auth';
-import { selectedInstanceId } from '../../redux/selectors/auth';
-import { createAccount } from '../../redux/modules/registration';
-import { fetchPaginated } from '../../redux/modules/pagination';
+import {
+  loggedInUserSelector,
+  isLoggedAsSuperAdmin,
+  getLoggedInUserEffectiveRole,
+} from '../../redux/selectors/users.js';
+import { takeOver } from '../../redux/modules/auth.js';
+import { selectedInstanceId } from '../../redux/selectors/auth.js';
+import { createAccount } from '../../redux/modules/registration.js';
+import { fetchPaginated } from '../../redux/modules/pagination.js';
 
 import { knownRoles, isSupervisorRole, isStudentRole, isSuperadminRole } from '../../components/helpers/usersRoles.js';
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
-import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 const filterInitialValues = lruMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };

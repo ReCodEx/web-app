@@ -6,15 +6,15 @@ import { connect } from 'react-redux';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import StudentsList from '../../components/Users/StudentsList';
 
-import { readyUsersDataSelector } from '../../redux/selectors/users';
-import { groupSelector } from '../../redux/selectors/groups';
-import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups';
-import { createGroupsStatsSelector } from '../../redux/selectors/stats';
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { fetchByIds } from '../../redux/modules/users';
-import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
+import { readyUsersDataSelector } from '../../redux/selectors/users.js';
+import { groupSelector } from '../../redux/selectors/groups.js';
+import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups.js';
+import { createGroupsStatsSelector } from '../../redux/selectors/stats.js';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats.js';
 
-import { safeGet } from '../../helpers/common';
+import { safeGet } from '../../helpers/common.js';
 
 class StudentsListContainer extends Component {
   componentDidMount() {

@@ -6,11 +6,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import SolutionActions from '../../components/Solutions/SolutionActions';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
-import { setSolutionReviewState, deleteSolutionReview } from '../../redux/modules/solutionReviews';
-import { setPoints, setSolutionFlag } from '../../redux/modules/solutions';
-import { getAssignment } from '../../redux/selectors/assignments';
-import { getSolution, isPointsUpdatePending, isSetFlagPending } from '../../redux/selectors/solutions';
-import { isSolutionReviewUpdatePending } from '../../redux/selectors/solutionReviews';
+import { setSolutionReviewState, deleteSolutionReview } from '../../redux/modules/solutionReviews.js';
+import { setPoints, setSolutionFlag } from '../../redux/modules/solutions.js';
+import { getAssignment } from '../../redux/selectors/assignments.js';
+import { getSolution, isPointsUpdatePending, isSetFlagPending } from '../../redux/selectors/solutions.js';
+import { isSolutionReviewUpdatePending } from '../../redux/selectors/solutionReviews.js';
 
 const SolutionActionsContainer = ({
   id,

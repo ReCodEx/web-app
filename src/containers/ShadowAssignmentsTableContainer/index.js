@@ -1,2 +1,2 @@
-import ShadowAssignmentsTableContainer from './ShadowAssignmentsTableContainer';
+import ShadowAssignmentsTableContainer from './ShadowAssignmentsTableContainer.js';
 export default ShadowAssignmentsTableContainer;

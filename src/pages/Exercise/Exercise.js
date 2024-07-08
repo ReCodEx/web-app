@@ -23,24 +23,29 @@ import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ForkExerciseForm from '../../components/forms/ForkExerciseForm';
 import Callout from '../../components/widgets/Callout';
 
-import { isSubmitting } from '../../redux/selectors/submission';
-import { fetchExerciseIfNeeded, reloadExercise, forkExercise, sendNotification } from '../../redux/modules/exercises';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { fetchReferenceSolutions } from '../../redux/modules/referenceSolutions';
-import { init, submitReferenceSolution, presubmitReferenceSolution } from '../../redux/modules/submission';
-import { fetchHardwareGroups } from '../../redux/modules/hwGroups';
-import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchByIds } from '../../redux/modules/users';
-import { exerciseSelector, exerciseForkedFromSelector } from '../../redux/selectors/exercises';
-import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions';
+import { isSubmitting } from '../../redux/selectors/submission.js';
+import {
+  fetchExerciseIfNeeded,
+  reloadExercise,
+  forkExercise,
+  sendNotification,
+} from '../../redux/modules/exercises.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
+import { fetchReferenceSolutions } from '../../redux/modules/referenceSolutions.js';
+import { init, submitReferenceSolution, presubmitReferenceSolution } from '../../redux/modules/submission.js';
+import { fetchHardwareGroups } from '../../redux/modules/hwGroups.js';
+import { fetchAllGroups } from '../../redux/modules/groups.js';
+import { fetchByIds } from '../../redux/modules/users.js';
+import { exerciseSelector, exerciseForkedFromSelector } from '../../redux/selectors/exercises.js';
+import { referenceSolutionsSelector } from '../../redux/selectors/referenceSolutions.js';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { notArchivedGroupsSelector, groupDataAccessorSelector, getGroupsAdmins } from '../../redux/selectors/groups';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { notArchivedGroupsSelector, groupDataAccessorSelector, getGroupsAdmins } from '../../redux/selectors/groups.js';
 
-import { hasPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { hasPermissions } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 
 export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
   groupId: '',

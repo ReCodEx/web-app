@@ -1,2 +1,2 @@
-import GroupInfo from './GroupInfo';
+import GroupInfo from './GroupInfo.js';
 export default GroupInfo;

@@ -4,10 +4,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchGroupIfNeeded } from '../../redux/modules/groups';
-import { groupSelector, groupAccessorSelector } from '../../redux/selectors/groups';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
+import { groupSelector, groupAccessorSelector } from '../../redux/selectors/groups.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions } from '../../helpers/common.js';
 import GroupsName from '../../components/Groups/GroupsName';
 import Icon, { GroupIcon, LoadingIcon } from '../../components/icons';
 import OptionalTooltipWrapper from '../../components/widgets/OptionalTooltipWrapper';

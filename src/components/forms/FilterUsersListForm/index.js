@@ -1,2 +1,2 @@
-import FilterUsersListForm from './FilterUsersListForm';
+import FilterUsersListForm from './FilterUsersListForm.js';
 export default FilterUsersListForm;

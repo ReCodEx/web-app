@@ -1,2 +1,2 @@
-import SisCreateGroupForm from './SisCreateGroupForm';
+import SisCreateGroupForm from './SisCreateGroupForm.js';
 export default SisCreateGroupForm;

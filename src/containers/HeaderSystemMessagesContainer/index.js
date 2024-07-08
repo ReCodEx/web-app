@@ -1,2 +1,2 @@
-import HeaderSystemMessagesContainer from './HeaderSystemMessagesContainer';
+import HeaderSystemMessagesContainer from './HeaderSystemMessagesContainer.js';
 export default HeaderSystemMessagesContainer;

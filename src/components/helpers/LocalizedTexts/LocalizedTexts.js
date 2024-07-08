@@ -8,8 +8,8 @@ import Icon from '../../icons';
 import Markdown from '../../widgets/Markdown';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
-import { knownLocales } from '../../../helpers/localizedData';
-import { UrlContext } from '../../../helpers/contexts';
+import { knownLocales } from '../../../helpers/localizedData.js';
+import { UrlContext } from '../../../helpers/contexts.js';
 
 import './LocalizedTexts.css';
 

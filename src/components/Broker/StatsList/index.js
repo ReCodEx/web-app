@@ -1,2 +1,2 @@
-import StatsList from './StatsList';
+import StatsList from './StatsList.js';
 export default StatsList;

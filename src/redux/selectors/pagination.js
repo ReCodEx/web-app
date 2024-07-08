@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { EMPTY_OBJ, EMPTY_ARRAY, simpleScalarMemoize } from '../../helpers/common';
+import { EMPTY_OBJ, EMPTY_ARRAY, simpleScalarMemoize } from '../../helpers/common.js';
 import { isReady } from '../helpers/resourceManager';
 
 const getPagination = componentId => state => state.pagination.get(componentId);

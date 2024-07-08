@@ -1,2 +1,2 @@
-import SolutionFiles from './SolutionFiles';
+import SolutionFiles from './SolutionFiles.js';
 export default SolutionFiles;

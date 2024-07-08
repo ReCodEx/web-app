@@ -19,23 +19,23 @@ import AssignmentsTableContainer from '../../containers/AssignmentsTableContaine
 import ShadowAssignmentsTableContainer from '../../containers/ShadowAssignmentsTableContainer';
 import PendingReviewsList from '../../components/Solutions/PendingReviewsList';
 
-import { fetchUserIfNeeded, fetchUser, fetchByIds } from '../../redux/modules/users';
-import { fetchAllGroups } from '../../redux/modules/groups';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+import { fetchUserIfNeeded, fetchUser, fetchByIds } from '../../redux/modules/users.js';
+import { fetchAllGroups } from '../../redux/modules/groups.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 import {
   fetchPendingReviewsOfUser,
   setSolutionReviewState,
   removePendingReview,
-} from '../../redux/modules/solutionReviews';
+} from '../../redux/modules/solutionReviews.js';
 
-import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups';
+import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups.js';
 import {
   getOpenReviewsSolutions,
   getOpenReviewsSolutionsState,
   isSolutionReviewUpdatePendingSelector,
-} from '../../redux/selectors/solutionReviews';
+} from '../../redux/selectors/solutionReviews.js';
 
 import {
   DashboardIcon,
@@ -45,9 +45,9 @@ import {
   SupervisorIcon,
   StudentsIcon,
 } from '../../components/icons';
-import { isSupervisorRole } from '../../components/helpers/usersRoles';
-import withLinks from '../../helpers/withLinks';
-import { safeGet } from '../../helpers/common';
+import { isSupervisorRole } from '../../components/helpers/usersRoles.js';
+import withLinks from '../../helpers/withLinks.js';
+import { safeGet } from '../../helpers/common.js';
 
 const INITIAL_LOADING_THRESHOLD = 3; // if there are more groups, the boxes will be collapsed and data loaded on demand
 

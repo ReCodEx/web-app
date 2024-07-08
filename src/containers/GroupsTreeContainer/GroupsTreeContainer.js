@@ -6,15 +6,15 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Nav } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
-import { groupsSelector, notArchivedGroupsSelector } from '../../redux/selectors/groups';
-import { usersSelector } from '../../redux/selectors/users';
-import { selectedInstance } from '../../redux/selectors/instances';
+import { groupsSelector, notArchivedGroupsSelector } from '../../redux/selectors/groups.js';
+import { usersSelector } from '../../redux/selectors/users.js';
+import { selectedInstance } from '../../redux/selectors/instances.js';
 import { isReady, getJsData } from '../../redux/helpers/resourceManager';
 import GroupsTree from '../../components/Groups/GroupsTree';
 import { LoadingIcon } from '../../components/icons';
 
-import { identity, hasPermissions, isRegularObject } from '../../helpers/common';
-import { getLocalizedName } from '../../helpers/localizedData';
+import { identity, hasPermissions, isRegularObject } from '../../helpers/common.js';
+import { getLocalizedName } from '../../helpers/localizedData.js';
 
 /**
  * Helper function that prepares augmented group object. Child groups are transformed as well recursively

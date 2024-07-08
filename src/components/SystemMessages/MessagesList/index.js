@@ -1,2 +1,2 @@
-import MessagesList from './MessagesList';
+import MessagesList from './MessagesList.js';
 export default MessagesList;

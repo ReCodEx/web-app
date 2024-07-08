@@ -1,2 +1,2 @@
-import ExerciseAssignments from './ExerciseAssignments';
+import ExerciseAssignments from './ExerciseAssignments.js';
 export default ExerciseAssignments;

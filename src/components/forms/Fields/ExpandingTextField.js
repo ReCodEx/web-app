@@ -5,7 +5,7 @@ import { Field } from 'redux-form';
 import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Button from '../../widgets/TheButton';
-import TextField from './TextField';
+import TextField from './TextField.js';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
 const ExpandingTextField = ({

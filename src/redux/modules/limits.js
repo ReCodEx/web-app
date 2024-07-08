@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import { change } from 'redux-form';
 
-import { encodeId, encodeNumId } from '../../helpers/common';
+import { encodeId, encodeNumId } from '../../helpers/common.js';
 import factory, { initialState } from '../helpers/resourceManager';
 
 /**
@@ -56,64 +56,70 @@ const getTargetFormKeys = (
 };
 
 // Clone given value vertically (all test in environment)
-export const cloneVertically = (
-  formName, // form identifier
-  testId, // test identifier
-  runtimeEnvironmentId, // environment identifier
-  field // field identifier (memory or time)
-) => (dispatch, getState) => {
-  const state = getState();
-  const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
-  if (value !== null) {
-    getTargetFormKeys(
-      state,
-      formName,
-      null, // no test name => all test selected
-      runtimeEnvironmentId,
-      field
-    ).map(key => dispatch(change(formName, key, value)));
-  }
-};
+export const cloneVertically =
+  (
+    formName, // form identifier
+    testId, // test identifier
+    runtimeEnvironmentId, // environment identifier
+    field // field identifier (memory or time)
+  ) =>
+  (dispatch, getState) => {
+    const state = getState();
+    const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
+    if (value !== null) {
+      getTargetFormKeys(
+        state,
+        formName,
+        null, // no test name => all test selected
+        runtimeEnvironmentId,
+        field
+      ).map(key => dispatch(change(formName, key, value)));
+    }
+  };
 
 // Clone given value horizontally (all environments of the same test)
-export const cloneHorizontally = (
-  formName, // form identifier
-  testId, // test identifier
-  runtimeEnvironmentId, // environment identifier
-  field // field identifier (memory or time)
-) => (dispatch, getState) => {
-  const state = getState();
-  const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
-  if (value !== null) {
-    getTargetFormKeys(
-      state,
-      formName,
-      testId,
-      null, // no environment ID => all environments accepted
-      field
-    ).map(key => dispatch(change(formName, key, value)));
-  }
-};
+export const cloneHorizontally =
+  (
+    formName, // form identifier
+    testId, // test identifier
+    runtimeEnvironmentId, // environment identifier
+    field // field identifier (memory or time)
+  ) =>
+  (dispatch, getState) => {
+    const state = getState();
+    const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
+    if (value !== null) {
+      getTargetFormKeys(
+        state,
+        formName,
+        testId,
+        null, // no environment ID => all environments accepted
+        field
+      ).map(key => dispatch(change(formName, key, value)));
+    }
+  };
 
 // Clone given value to all fields
-export const cloneAll = (
-  formName, // form identifier
-  testId, // test identifier
-  runtimeEnvironmentId, // environment identifier
-  field // field identifier (memory or time)
-) => (dispatch, getState) => {
-  const state = getState();
-  const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
-  if (value !== null) {
-    getTargetFormKeys(
-      state,
-      formName,
-      null, // no test name ...
-      null, // ... nor environment ID => all fields
-      field
-    ).map(key => dispatch(change(formName, key, value)));
-  }
-};
+export const cloneAll =
+  (
+    formName, // form identifier
+    testId, // test identifier
+    runtimeEnvironmentId, // environment identifier
+    field // field identifier (memory or time)
+  ) =>
+  (dispatch, getState) => {
+    const state = getState();
+    const value = getFormLimitsOf(state, formName, testId, runtimeEnvironmentId, field);
+    if (value !== null) {
+      getTargetFormKeys(
+        state,
+        formName,
+        null, // no test name ...
+        null, // ... nor environment ID => all fields
+        field
+      ).map(key => dispatch(change(formName, key, value)));
+    }
+  };
 
 const reducer = handleActions(reduceActions, initialState);
 export default reducer;

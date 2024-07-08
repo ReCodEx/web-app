@@ -6,11 +6,11 @@ import { Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
-import NoSolutionYetTableRow from './NoSolutionYetTableRow';
-import SolutionsTableRow from './SolutionsTableRow';
+import NoSolutionYetTableRow from './NoSolutionYetTableRow.js';
+import SolutionsTableRow from './SolutionsTableRow.js';
 import { LoadingIcon } from '../../icons';
-import { EMPTY_ARRAY } from '../../../helpers/common';
-import { UserUIDataContext } from '../../../helpers/contexts';
+import { EMPTY_ARRAY } from '../../../helpers/common.js';
+import { UserUIDataContext } from '../../../helpers/contexts.js';
 
 import * as styles from './SolutionsTable.less';
 

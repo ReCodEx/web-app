@@ -5,7 +5,7 @@ import {
   ENV_CS_DOTNET_CORE_ID,
   ENV_JAVA_ID,
   ENV_PYTHON3_ID,
-} from '../../helpers/exercise/environments';
+} from '../../helpers/exercise/environments.js';
 
 /**
  * Free Pascal Runtime Error Codes

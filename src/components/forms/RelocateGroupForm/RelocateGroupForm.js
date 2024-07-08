@@ -10,8 +10,8 @@ import SubmitButton from '../SubmitButton';
 import Icon, { RefreshIcon, WarningIcon } from '../../icons';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData';
-import { hasPermissions } from '../../../helpers/common';
+import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
+import { hasPermissions } from '../../../helpers/common.js';
 
 export const getPossibleParentsOfGroup = lruMemoize((groups, group) =>
   groups.filter(g => g.id !== group.id && hasPermissions(g, 'addSubgroup') && !g.parentGroupsIds.includes(group.id))

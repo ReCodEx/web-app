@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import ReviewCommentForm, { newCommentFormInitialValues } from '../../forms/ReviewCommentForm';
-import SourceCodeComment from '../../helpers/SourceCodeViewer/SourceCodeComment';
+import SourceCodeComment from '../../helpers/SourceCodeViewer/SourceCodeComment.js';
 import Button from '../../widgets/TheButton';
 import Box from '../../widgets/Box';
 import { AddIcon } from '../../icons';

@@ -1,2 +1,2 @@
-import LocalizedTextsFormField from './LocalizedTextsFormField';
+import LocalizedTextsFormField from './LocalizedTextsFormField.js';
 export default LocalizedTextsFormField;

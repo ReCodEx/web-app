@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { resendVerificationEmail } from '../../redux/modules/emailVerification';
-import { resendingStatusSelector } from '../../redux/selectors/emailVerification';
+import { resendVerificationEmail } from '../../redux/modules/emailVerification.js';
+import { resendingStatusSelector } from '../../redux/selectors/emailVerification.js';
 import ResendEmailVerification from '../../components/buttons/ResendEmailVerification';
 
 const ResendVerificationEmailContainer = ({ userId, state, resend, ...props }) => (

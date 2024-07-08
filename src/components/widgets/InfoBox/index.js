@@ -1,3 +1,3 @@
-export { default } from './InfoBox';
-export { default as LoadingInfoBox } from './LoadingInfoBox';
-export { default as SimpleInfoBox } from './SimpleInfoBox';
+export { default } from './InfoBox.js';
+export { default as LoadingInfoBox } from './LoadingInfoBox.js';
+export { default as SimpleInfoBox } from './SimpleInfoBox.js';

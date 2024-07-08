@@ -8,7 +8,7 @@ import FormBox from '../../widgets/FormBox';
 import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, LanguageSelectField } from '../Fields';
-import { isStudentRole, isSupervisorRole } from '../../helpers/usersRoles';
+import { isStudentRole, isSupervisorRole } from '../../helpers/usersRoles.js';
 
 const EditUserSettingsForm = ({
   user,

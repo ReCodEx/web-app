@@ -12,12 +12,12 @@ import { PipelineStructureIcon } from '../../components/icons';
 import PipelineFilesTableContainer from '../../containers/PipelineFilesTableContainer';
 import PipelineEditContainer from '../../containers/PipelineEditContainer';
 
-import { fetchPipelineIfNeeded } from '../../redux/modules/pipelines';
-import { fetchBoxTypes } from '../../redux/modules/boxes';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { getPipeline } from '../../redux/selectors/pipelines';
+import { fetchPipelineIfNeeded } from '../../redux/modules/pipelines.js';
+import { fetchBoxTypes } from '../../redux/modules/boxes.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { getPipeline } from '../../redux/selectors/pipelines.js';
 
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions } from '../../helpers/common.js';
 
 class EditPipeline extends Component {
   componentDidMount() {

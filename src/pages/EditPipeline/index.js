@@ -1,2 +1,2 @@
-import EditPipeline from './EditPipeline';
+import EditPipeline from './EditPipeline.js';
 export default EditPipeline;

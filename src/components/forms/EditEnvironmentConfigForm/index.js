@@ -1,2 +1,2 @@
-import EditEnvironmentConfigForm from './EditEnvironmentConfigForm';
+import EditEnvironmentConfigForm from './EditEnvironmentConfigForm.js';
 export default EditEnvironmentConfigForm;

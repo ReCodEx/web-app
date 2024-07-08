@@ -1,4 +1,4 @@
-import { safeGet } from './common';
+import { safeGet } from './common.js';
 
 export const isExam = group => {
   const examBegin = safeGet(group, ['privateData', 'examBegin']);

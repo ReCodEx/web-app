@@ -19,17 +19,17 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 
-import { fetchUser, fetchByIds } from '../../redux/modules/users';
-import { fetchInstanceIfNeeded } from '../../redux/modules/instances';
-import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances';
-import { createGroup, fetchAllGroups } from '../../redux/modules/groups';
-import { fetchManyGroupsStatus, getGroupsAdmins } from '../../redux/selectors/groups';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
-import { isLoggedAsSuperAdmin, getUser } from '../../redux/selectors/users';
-import { transformLocalizedTextsFormData, getLocalizedName } from '../../helpers/localizedData';
+import { fetchUser, fetchByIds } from '../../redux/modules/users.js';
+import { fetchInstanceIfNeeded } from '../../redux/modules/instances.js';
+import { instanceSelector, isAdminOfInstance } from '../../redux/selectors/instances.js';
+import { createGroup, fetchAllGroups } from '../../redux/modules/groups.js';
+import { fetchManyGroupsStatus, getGroupsAdmins } from '../../redux/selectors/groups.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
+import { isLoggedAsSuperAdmin, getUser } from '../../redux/selectors/users.js';
+import { transformLocalizedTextsFormData, getLocalizedName } from '../../helpers/localizedData.js';
 
-import withLinks from '../../helpers/withLinks';
-import InstanceInfoTable from '../../components/Instances/InstanceDetail/InstanceInfoTable';
+import withLinks from '../../helpers/withLinks.js';
+import InstanceInfoTable from '../../components/Instances/InstanceDetail/InstanceInfoTable.js';
 
 class Instance extends Component {
   static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.

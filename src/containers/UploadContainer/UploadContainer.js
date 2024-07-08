@@ -9,7 +9,7 @@ import {
   removedUploadFilesSelector,
   failedUploadFilesSelector,
   isUploadCanceledByRequest,
-} from '../../redux/selectors/upload';
+} from '../../redux/selectors/upload.js';
 
 import {
   init,
@@ -24,7 +24,7 @@ import {
   manuallyFailUpload,
   finalizeUpload,
   fetchUploadFileDigest,
-} from '../../redux/modules/upload';
+} from '../../redux/modules/upload.js';
 
 class UploadContainer extends Component {
   componentDidMount() {

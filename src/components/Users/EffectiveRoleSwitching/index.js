@@ -1,2 +1,2 @@
-import EffectiveRoleSwitching from './EffectiveRoleSwitching';
+import EffectiveRoleSwitching from './EffectiveRoleSwitching.js';
 export default EffectiveRoleSwitching;

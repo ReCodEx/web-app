@@ -1,6 +1,6 @@
 import EditShadowAssignmentPointsForm, {
   getPointsFormInitialValues,
   transformPointsFormSubmitData,
-} from './EditShadowAssignmentPointsForm';
+} from './EditShadowAssignmentPointsForm.js';
 export default EditShadowAssignmentPointsForm;
 export { getPointsFormInitialValues, transformPointsFormSubmitData };

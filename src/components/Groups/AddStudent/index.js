@@ -1,2 +1,2 @@
-import AddStudent from './AddStudent';
+import AddStudent from './AddStudent.js';
 export default AddStudent;

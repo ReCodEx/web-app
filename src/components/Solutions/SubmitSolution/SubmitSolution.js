@@ -12,9 +12,9 @@ import UploadContainer from '../../../containers/UploadContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import Confirm from '../../forms/Confirm';
 
-import { uploadedFilesSelector } from '../../../redux/selectors/upload';
-import { hasEntryPoint } from '../../../redux/selectors/submission';
-import { getConfigVar } from '../../../helpers/config';
+import { uploadedFilesSelector } from '../../../redux/selectors/upload.js';
+import { hasEntryPoint } from '../../../redux/selectors/submission.js';
+import { getConfigVar } from '../../../helpers/config.js';
 
 const environmentsHelpUrl = getConfigVar('ENVIRONMENTS_INFO_URL');
 

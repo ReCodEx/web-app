@@ -19,18 +19,18 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import Markdown from '../../components/widgets/Markdown';
 
-import { fetchGroupInvitationIfNeeded, acceptGroupInvitation } from '../../redux/modules/groupInvitations';
-import { invitationSelector, getInvitationAcceptingStatus } from '../../redux/selectors/groupInvitations';
-import { groupAccessorSelector } from '../../redux/selectors/groups';
-import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { fetchGroupInvitationIfNeeded, acceptGroupInvitation } from '../../redux/modules/groupInvitations.js';
+import { invitationSelector, getInvitationAcceptingStatus } from '../../redux/selectors/groupInvitations.js';
+import { groupAccessorSelector } from '../../redux/selectors/groups.js';
+import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import { resourceStatus, getJsData } from '../../redux/helpers/resourceManager';
 
-import { getLocalizedDescription } from '../../helpers/localizedData';
-import { isStudentRole } from '../../components/helpers/usersRoles';
-import { safeGet } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
+import { getLocalizedDescription } from '../../helpers/localizedData.js';
+import { isStudentRole } from '../../components/helpers/usersRoles.js';
+import { safeGet } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 
 class AcceptGroupInvitation extends Component {
   static loadAsync = ({ invitationId }, dispatch) => dispatch(fetchGroupInvitationIfNeeded(invitationId));

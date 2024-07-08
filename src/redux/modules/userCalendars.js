@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 import { fromJS } from 'immutable';
 
 import factory, { initialState } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 
 export const additionalActionTypes = {
   SET_EXPIRED: 'recodex/userCalendars/SET_EXPIRED',

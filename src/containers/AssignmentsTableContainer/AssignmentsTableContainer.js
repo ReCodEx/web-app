@@ -9,13 +9,13 @@ import AssignmentsTable from '../../components/Assignments/Assignment/Assignment
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LoadingIcon } from '../../components/icons';
 
-import { fetchAssignmentsForGroup } from '../../redux/modules/assignments';
-import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats';
-import { groupsAssignmentsSelector } from '../../redux/selectors/groups';
-import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments';
-import { createGroupsStatsSelector } from '../../redux/selectors/stats';
+import { fetchAssignmentsForGroup } from '../../redux/modules/assignments.js';
+import { fetchGroupStatsIfNeeded } from '../../redux/modules/stats.js';
+import { groupsAssignmentsSelector } from '../../redux/selectors/groups.js';
+import { assignmentEnvironmentsSelector } from '../../redux/selectors/assignments.js';
+import { createGroupsStatsSelector } from '../../redux/selectors/stats.js';
 
-import { EMPTY_OBJ } from '../../helpers/common';
+import { EMPTY_OBJ } from '../../helpers/common.js';
 
 const getUserStats = lruMemoize((stats, userId) => (userId && stats.find(stat => stat.userId === userId)) || EMPTY_OBJ);
 

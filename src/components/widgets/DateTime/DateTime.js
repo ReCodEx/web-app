@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedDate, FormattedTime, FormattedRelativeTime } from 'react-intl';
@@ -6,9 +6,9 @@ import classnames from 'classnames';
 import { lruMemoize } from 'reselect';
 
 import { BellIcon, PastDeadlineIcon } from '../../icons';
-import { EMPTY_OBJ } from '../../../helpers/common';
-import { UserUIDataContext } from '../../../helpers/contexts';
-import { knownLocales } from '../../../helpers/localizedData';
+import { EMPTY_OBJ } from '../../../helpers/common.js';
+import { UserUIDataContext } from '../../../helpers/contexts.js';
+import { knownLocales } from '../../../helpers/localizedData.js';
 
 import * as styles from './DateTime.less';
 
@@ -31,59 +31,63 @@ const dateTime = ({
   showSeconds = false,
   showRelative = isDeadline,
   noWrap = true,
-}) => (
-  <span
-    className={classnames({
-      'text-nowrap': noWrap,
-      'text-warning': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts - deadlineDangerTime),
-      'text-danger': isDeadline && isAfter(unixts - deadlineDangerTime) && !isAfter(unixts),
-      'text-bold': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts),
-      'text-muted': isDeadline && isAfter(unixts),
-    })}>
-    {isDeadline && isAfter(unixts - deadlineAlertTime) && !isAfter(unixts) && (
-      <BellIcon className="faa-shake animated" gapRight />
-    )}
-    {isDeadline && isAfter(unixts) && <PastDeadlineIcon className="half-opaque" gapRight />}
-    {showDate && (
-      <span
-        className={classnames({
-          'text-nowrap': true,
-        })}>
-        <UserUIDataContext.Consumer>
-          {({ dateFormatOverride = null }) =>
-            getLocalizedIntlDateFormatter(dateFormatOverride) ? (
-              getLocalizedIntlDateFormatter(dateFormatOverride).format(unixts * 1000)
-            ) : (
-              <FormattedDate value={unixts * 1000} />
-            )
-          }
-        </UserUIDataContext.Consumer>
+}) => {
+  const { dateFormatOverride = null } = useContext(UserUIDataContext);
 
-        {(showTime || showRelative) && <span className="px-1"> </span>}
-      </span>
-    )}
+  return (
+    <span
+      className={classnames({
+        'text-nowrap': noWrap,
+        'text-warning': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts - deadlineDangerTime),
+        'text-danger': isDeadline && isAfter(unixts - deadlineDangerTime) && !isAfter(unixts),
+        'text-bold': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts),
+        'text-muted': isDeadline && isAfter(unixts),
+      })}>
+      {isDeadline && isAfter(unixts - deadlineAlertTime) && !isAfter(unixts) && (
+        <BellIcon className="faa-shake animated" gapRight />
+      )}
+      {isDeadline && isAfter(unixts) && <PastDeadlineIcon className="half-opaque" gapRight />}
+      {showDate && (
+        <span
+          className={classnames({
+            'text-nowrap': true,
+          })}>
+          {getLocalizedIntlDateFormatter(dateFormatOverride) ? (
+            getLocalizedIntlDateFormatter(dateFormatOverride).format(unixts * 1000)
+          ) : (
+            <FormattedDate value={unixts * 1000} />
+          )}
 
-    {showTime && (
-      <span
-        className={classnames({
-          'text-nowrap': true,
-        })}>
-        <FormattedTime value={unixts * 1000} format={showSeconds ? '24hourWithSeconds' : '24hour'} />
-        {showRelative && <span className="px-1"> </span>}
-      </span>
-    )}
+          {(showTime || showRelative) && <span className="px-1"> </span>}
+        </span>
+      )}
 
-    {showRelative && (
-      <span
-        className={classnames({
-          'text-nowrap': true,
-          [styles.trailingRelative]: showDate || showTime,
-        })}>
-        <FormattedRelativeTime value={unixts - Date.now() / 1000} numeric="always" updateIntervalInSeconds={1000000} />
-      </span>
-    )}
-  </span>
-);
+      {showTime && (
+        <span
+          className={classnames({
+            'text-nowrap': true,
+          })}>
+          <FormattedTime value={unixts * 1000} format={showSeconds ? '24hourWithSeconds' : '24hour'} />
+          {showRelative && <span className="px-1"> </span>}
+        </span>
+      )}
+
+      {showRelative && (
+        <span
+          className={classnames({
+            'text-nowrap': true,
+            [styles.trailingRelative]: showDate || showTime,
+          })}>
+          <FormattedRelativeTime
+            value={unixts - Date.now() / 1000}
+            numeric="always"
+            updateIntervalInSeconds={1000000}
+          />
+        </span>
+      )}
+    </span>
+  );
+};
 
 const DateTime = ({
   unixts = null,

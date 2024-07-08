@@ -1,2 +1,2 @@
-import EditUser from './EditUser';
+import EditUser from './EditUser.js';
 export default EditUser;

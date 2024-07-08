@@ -15,7 +15,7 @@ import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSim
 import EditExerciseAdvancedConfigForm from '../../components/forms/EditExerciseAdvancedConfigForm';
 import EditEnvironmentSimpleForm from '../../components/forms/EditEnvironmentSimpleForm';
 import EditEnvironmentConfigForm from '../../components/forms/EditEnvironmentConfigForm';
-import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm';
+import EditExercisePipelinesForm from '../../components/forms/EditExercisePipelinesForm/EditExercisePipelinesForm.js';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import ExerciseConfigTypeButton from '../../components/buttons/ExerciseConfigTypeButton';
@@ -28,45 +28,45 @@ import {
   editExercise,
   invalidateExercise,
   sendNotification,
-} from '../../redux/modules/exercises';
+} from '../../redux/modules/exercises.js';
 import {
   fetchExerciseConfig,
   fetchExerciseConfigIfNeeded,
   setExerciseConfig,
-} from '../../redux/modules/exerciseConfigs';
-import { getExercise } from '../../redux/selectors/exercises';
-import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs';
-import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables';
-import { getExercisePielinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables';
+} from '../../redux/modules/exerciseConfigs.js';
+import { getExercise } from '../../redux/selectors/exercises.js';
+import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs.js';
+import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
+import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables.js';
+import { getExercisePielinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables.js';
 import {
   getSupplementaryFilesForExercise,
   fetchSupplementaryFilesForExerciseStatus,
-} from '../../redux/selectors/supplementaryFiles';
-import { isLoadingState } from '../../redux/helpers/resourceManager/status';
+} from '../../redux/selectors/supplementaryFiles.js';
+import { isLoadingState } from '../../redux/helpers/resourceManager/status.js';
 
-import withLinks from '../../helpers/withLinks';
-import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs';
+import withLinks from '../../helpers/withLinks.js';
+import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs.js';
 import {
   fetchExerciseEnvironmentConfig,
   fetchExerciseEnvironmentConfigIfNeeded,
   setExerciseEnvironmentConfig,
-} from '../../redux/modules/exerciseEnvironmentConfigs';
-import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig';
-import { fetchScoreConfigIfNeeded, setScoreConfig } from '../../redux/modules/exerciseScoreConfig';
-import { fetchExerciseTestsIfNeeded, setExerciseTests } from '../../redux/modules/exerciseTests';
-import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests';
-import { fetchPipelines } from '../../redux/modules/pipelines';
-import { pipelinesSelector, getPipelinesEnvironmentsWhichHasEntryPoint } from '../../redux/selectors/pipelines';
+} from '../../redux/modules/exerciseEnvironmentConfigs.js';
+import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig.js';
+import { fetchScoreConfigIfNeeded, setScoreConfig } from '../../redux/modules/exerciseScoreConfig.js';
+import { fetchExerciseTestsIfNeeded, setExerciseTests } from '../../redux/modules/exerciseTests.js';
+import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests.js';
+import { fetchPipelines } from '../../redux/modules/pipelines.js';
+import { pipelinesSelector, getPipelinesEnvironmentsWhichHasEntryPoint } from '../../redux/selectors/pipelines.js';
 
 import {
   getTestsInitValues,
   transformTestsValues,
   transformScoreConfig,
   UNIVERSAL_ID as UNIVERSAL_SCORE_CALCULATOR,
-} from '../../helpers/exercise/testsAndScore';
+} from '../../helpers/exercise/testsAndScore.js';
 import {
   onlySimpleEnvironments,
   getSimpleEnvironmentsInitValues,
@@ -75,23 +75,23 @@ import {
   transformSimpleEnvironmentsValues,
   transformEnvironmentValues,
   getPossibleVariablesNames,
-} from '../../helpers/exercise/environments';
-import { isSimple, SIMPLE_CONFIG_TYPE, ADVANCED_CONFIG_TYPE } from '../../helpers/exercise/config';
+} from '../../helpers/exercise/environments.js';
+import { isSimple, SIMPLE_CONFIG_TYPE, ADVANCED_CONFIG_TYPE } from '../../helpers/exercise/config.js';
 import {
   getSimpleConfigInitValues,
   transformSimpleConfigValues,
   extractUsedFilesFromConfig,
-} from '../../helpers/exercise/configSimple';
+} from '../../helpers/exercise/configSimple.js';
 import {
   getPipelines,
   getPipelinesInitialValues,
   assembleNewConfig,
   getAdvancedConfigInitValues,
   transformAdvancedConfigValues,
-} from '../../helpers/exercise/configAdvanced';
-import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles';
-import { hasPermissions, safeGet } from '../../helpers/common';
-import withRouter, { withRouterProps } from '../../helpers/withRouter';
+} from '../../helpers/exercise/configAdvanced.js';
+import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles.js';
+import { hasPermissions, safeGet } from '../../helpers/common.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 
 class EditExerciseConfig extends Component {
   componentDidMount() {

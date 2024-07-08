@@ -1,1 +1,1 @@
-export { default } from './SolutionStatusIcon';
+export { default } from './SolutionStatusIcon.js';

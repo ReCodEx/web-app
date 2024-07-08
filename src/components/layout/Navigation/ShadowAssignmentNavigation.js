@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Navigation from './Navigation';
-import withLinks from '../../../helpers/withLinks';
+import Navigation from './Navigation.js';
+import withLinks from '../../../helpers/withLinks.js';
 import { ShadowAssignmentIcon, EditIcon } from '../../icons';
-import { createGroupLinks } from './linkCreators';
+import { createGroupLinks } from './linkCreators.js';
 
 const ShadowAssignmentNavigation = ({ shadowId, groupId, canEdit = false, links }) => (
   <Navigation

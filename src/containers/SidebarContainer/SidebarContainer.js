@@ -1,7 +1,11 @@
 import { connect } from 'react-redux';
-import Sidebar from '../../components/layout/Sidebar/Sidebar';
-import { loggedInUserMemberOfInstances } from '../../redux/selectors/instances';
-import { loggedInUserSelector, notificationsSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users';
+import Sidebar from '../../components/layout/Sidebar/Sidebar.js';
+import { loggedInUserMemberOfInstances } from '../../redux/selectors/instances.js';
+import {
+  loggedInUserSelector,
+  notificationsSelector,
+  getLoggedInUserEffectiveRole,
+} from '../../redux/selectors/users.js';
 
 export default connect(state => ({
   loggedInUser: loggedInUserSelector(state),

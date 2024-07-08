@@ -1,2 +1,2 @@
-import EditExercisePipelinesForm from './EditExercisePipelinesForm';
+import EditExercisePipelinesForm from './EditExercisePipelinesForm.js';
 export default EditExercisePipelinesForm;

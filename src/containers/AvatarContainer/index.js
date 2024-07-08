@@ -1,2 +1,2 @@
-import AvatarContainer from './AvatarContainer';
+import AvatarContainer from './AvatarContainer.js';
 export default AvatarContainer;

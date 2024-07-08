@@ -1,2 +1,2 @@
-import ArchiveGroupButtonContainer from './ArchiveGroupButtonContainer';
+import ArchiveGroupButtonContainer from './ArchiveGroupButtonContainer.js';
 export default ArchiveGroupButtonContainer;

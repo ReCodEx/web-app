@@ -1,2 +1,2 @@
-import ParametersList from './ParametersList';
+import ParametersList from './ParametersList.js';
 export default ParametersList;

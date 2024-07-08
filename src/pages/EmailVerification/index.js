@@ -1,2 +1,2 @@
-import EmailVerification from './EmailVerification';
+import EmailVerification from './EmailVerification.js';
 export default EmailVerification;

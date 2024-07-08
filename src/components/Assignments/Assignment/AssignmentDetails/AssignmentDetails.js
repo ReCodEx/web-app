@@ -21,7 +21,7 @@ import Explanation from '../../../widgets/Explanation';
 import Button from '../../../widgets/TheButton';
 import AssignmentDeadlinesGraph from '../AssignmentDeadlinesGraph';
 import AssignmentMaxPoints from '../AssignmentMaxPoints';
-import { getPointsAtTime } from '../AssignmentDeadlinesGraph/helpers';
+import { getPointsAtTime } from '../AssignmentDeadlinesGraph/helpers.js';
 
 const AssignmentDetails = ({
   isOpen = true,

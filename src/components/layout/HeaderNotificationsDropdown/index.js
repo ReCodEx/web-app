@@ -1,2 +1,2 @@
-import HeaderNotificationsDropdown from './HeaderNotificationsDropdown';
+import HeaderNotificationsDropdown from './HeaderNotificationsDropdown.js';
 export default HeaderNotificationsDropdown;

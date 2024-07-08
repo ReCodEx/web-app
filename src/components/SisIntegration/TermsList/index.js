@@ -1,2 +1,2 @@
-import TermsList from './TermsList';
+import TermsList from './TermsList.js';
 export default TermsList;

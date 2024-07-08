@@ -1,2 +1,2 @@
-import JoinGroupButton from './JoinGroupButton';
+import JoinGroupButton from './JoinGroupButton.js';
 export default JoinGroupButton;

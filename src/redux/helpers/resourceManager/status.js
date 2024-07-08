@@ -3,7 +3,7 @@
  * @module status
  */
 import { List } from 'immutable';
-import { deepCompare, identity } from '../../../helpers/common';
+import { deepCompare, identity } from '../../../helpers/common.js';
 
 export const resourceStatus = {
   PENDING: 'PENDING',

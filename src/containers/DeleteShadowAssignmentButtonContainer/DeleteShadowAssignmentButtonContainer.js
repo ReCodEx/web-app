@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import DeleteButton from '../../components/buttons/DeleteButton';
-import { deleteShadowAssignment } from '../../redux/modules/shadowAssignments';
-import { getShadowAssignment } from '../../redux/selectors/shadowAssignments';
+import { deleteShadowAssignment } from '../../redux/modules/shadowAssignments.js';
+import { getShadowAssignment } from '../../redux/selectors/shadowAssignments.js';
 
 const DeleteShadowAssignmentButtonContainer = ({ shadowAssignment, deleteShadowAssignment, onDeleted, ...props }) => (
   <DeleteButton {...props} resource={shadowAssignment} deleteAction={deleteShadowAssignment} />

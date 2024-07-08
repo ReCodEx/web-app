@@ -7,14 +7,14 @@ import { Row, Col } from 'react-bootstrap';
 import PageContent from '../../components/layout/PageContent';
 import ResetPasswordForm from '../../components/forms/ResetPasswordForm';
 
-import { resetPassword } from '../../redux/modules/auth';
+import { resetPassword } from '../../redux/modules/auth.js';
 import {
   isReseting,
   hasResetingFailed as hasFailed,
   hasResetingSucceeded as hasSucceeded,
-} from '../../redux/selectors/auth';
+} from '../../redux/selectors/auth.js';
 
-import withLinks from '../../helpers/withLinks';
+import withLinks from '../../helpers/withLinks.js';
 
 /**
  * This component enables the user to request reseting password for his/her email address.

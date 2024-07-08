@@ -1,2 +1,2 @@
-import OptionalPopoverWrapper from './OptionalPopoverWrapper';
+import OptionalPopoverWrapper from './OptionalPopoverWrapper.js';
 export default OptionalPopoverWrapper;

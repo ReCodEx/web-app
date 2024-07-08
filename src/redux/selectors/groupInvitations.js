@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { isReady, getJsData } from '../helpers/resourceManager';
-import { fetchGroupInvitationsEndpoint } from '../modules/groupInvitations';
+import { fetchGroupInvitationsEndpoint } from '../modules/groupInvitations.js';
 
 const getParam = (state, id) => id;
 

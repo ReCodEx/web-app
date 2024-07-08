@@ -1,2 +1,2 @@
-import SubmitSolutionButton from './SubmitSolutionButton';
+import SubmitSolutionButton from './SubmitSolutionButton.js';
 export default SubmitSolutionButton;

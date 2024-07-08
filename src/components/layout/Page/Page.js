@@ -6,7 +6,7 @@ import PageContent from '../PageContent';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { LoadingIcon, WarningIcon } from '../../icons';
 import Callout from '../../widgets/Callout';
-import { getErrorCodeStructured, getBaseErrorMessage, getErrorMessage } from '../../../locales/apiErrorMessages';
+import { getErrorCodeStructured, getBaseErrorMessage, getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 const failedIcons = {
   400: <Icon icon={['far', 'circle-xmark']} />,

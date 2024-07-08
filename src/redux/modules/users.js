@@ -7,16 +7,16 @@ import factory, {
   resourceStatus,
   createActionsWithPostfixes,
 } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 
-import { actionTypes as emailVerificationActionTypes } from './emailVerification';
-import { actionTypes as paginationActionTypes } from './pagination';
-import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors';
-import { actionTypes as registrationActionTypes } from './registration';
-import { actionTypes as authActionTypes } from './authTypes';
-import { additionalActionTypes as groupActionTypes } from './groups';
+import { actionTypes as emailVerificationActionTypes } from './emailVerification.js';
+import { actionTypes as paginationActionTypes } from './pagination.js';
+import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors.js';
+import { actionTypes as registrationActionTypes } from './registration.js';
+import { actionTypes as authActionTypes } from './authTypes.js';
+import { additionalActionTypes as groupActionTypes } from './groups.js';
 
-import { arrayToObject } from '../../helpers/common';
+import { arrayToObject } from '../../helpers/common.js';
 
 export const additionalActionTypes = {
   // createActionsWithPostfixes generates all 4 constants for async operations

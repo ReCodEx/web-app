@@ -6,10 +6,10 @@ import factory, {
   resourceStatus,
   createActionsWithPostfixes,
 } from '../helpers/resourceManager';
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 
-import { actionTypes as additionalSubmissionActionTypes } from './submission';
-import { actionTypes as referenceSolutionEvaluationsActionTypes } from './referenceSolutionEvaluations';
+import { actionTypes as additionalSubmissionActionTypes } from './submission.js';
+import { actionTypes as referenceSolutionEvaluationsActionTypes } from './referenceSolutionEvaluations.js';
 
 const resourceName = 'referenceSolutions';
 const { actions, reduceActions } = factory({

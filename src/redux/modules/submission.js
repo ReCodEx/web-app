@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 import { handleActions, createAction } from 'redux-actions';
-import { createApiAction } from '../middleware/apiMiddleware';
-import { actionTypes as uploadActionTypes } from './upload';
+import { createApiAction } from '../middleware/apiMiddleware.js';
+import { actionTypes as uploadActionTypes } from './upload.js';
 
 export const submissionStatus = {
   NONE: 'NONE',

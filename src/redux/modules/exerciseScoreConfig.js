@@ -1,11 +1,11 @@
 import { handleActions } from 'redux-actions';
 
-import { createApiAction } from '../middleware/apiMiddleware';
+import { createApiAction } from '../middleware/apiMiddleware.js';
 import factory, { initialState } from '../helpers/resourceManager';
-import createRecord from '../helpers/resourceManager/recordFactory';
-import { resourceStatus } from '../helpers/resourceManager/status';
-import { defaultNeedsRefetching } from '../helpers/resourceManager/utils';
-import { subId } from '../selectors/exerciseScoreConfig';
+import createRecord from '../helpers/resourceManager/recordFactory.js';
+import { resourceStatus } from '../helpers/resourceManager/status.js';
+import { defaultNeedsRefetching } from '../helpers/resourceManager/utils.js';
+import { subId } from '../selectors/exerciseScoreConfig.js';
 
 /**
  * Create basic actions

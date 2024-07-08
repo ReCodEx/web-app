@@ -12,7 +12,7 @@ import {
   failedTask,
   finish as finishEvaluationProgress,
   dropObserver,
-} from '../../redux/modules/evaluationProgress';
+} from '../../redux/modules/evaluationProgress.js';
 
 import {
   getExpectedTasksCount,
@@ -21,12 +21,12 @@ import {
   getFailedPercent,
   getMessages,
   isFinished,
-} from '../../redux/selectors/evaluationProgress';
+} from '../../redux/selectors/evaluationProgress.js';
 
-import { finishProcessing as finishSubmissionProcessing } from '../../redux/modules/submission';
+import { finishProcessing as finishSubmissionProcessing } from '../../redux/modules/submission.js';
 
 import EvaluationProgress from '../../components/Assignments/EvaluationProgress';
-import randomMessages, { extraMessages } from './randomMessages';
+import randomMessages, { extraMessages } from './randomMessages.js';
 
 class EvaluationProgressContainer extends Component {
   state = { realTimeProcessing: true, monitor: null };

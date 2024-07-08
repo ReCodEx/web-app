@@ -1,2 +1,2 @@
-import EditEnvironmentSimpleForm from './EditEnvironmentSimpleForm';
+import EditEnvironmentSimpleForm from './EditEnvironmentSimpleForm.js';
 export default EditEnvironmentSimpleForm;

@@ -10,9 +10,9 @@ import {
   fetchThreadIfNeeded,
   updateThread,
   deleteComment,
-} from '../../redux/modules/comments';
-import { loggedInUserSelector } from '../../redux/selectors/users';
-import { commentsThreadSelector } from '../../redux/selectors/comments';
+} from '../../redux/modules/comments.js';
+import { loggedInUserSelector } from '../../redux/selectors/users.js';
+import { commentsThreadSelector } from '../../redux/selectors/comments.js';
 
 import CommentThread, {
   LoadingCommentThread,

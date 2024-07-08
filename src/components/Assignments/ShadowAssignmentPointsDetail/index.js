@@ -1,2 +1,2 @@
-import ShadowAssignmentPointsDetail from './ShadowAssignmentPointsDetail';
+import ShadowAssignmentPointsDetail from './ShadowAssignmentPointsDetail.js';
 export default ShadowAssignmentPointsDetail;

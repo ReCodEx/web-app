@@ -8,9 +8,9 @@ import reducer, {
   init,
   completedTask,
   skippedTask,
-  failedTask
-} from '../../../src/redux/modules/evaluationProgress';
-import { actionTypes as submissionActionTypes } from '../../../src/redux/modules/submission';
+  failedTask,
+} from '../../../src/redux/modules/evaluationProgress.js';
+import { actionTypes as submissionActionTypes } from '../../../src/redux/modules/submission.js';
 
 chai.use(spies);
 const expect = chai.expect;
@@ -30,10 +30,10 @@ describe('Evaluation progress', () => {
           total: 0,
           completed: 0,
           skipped: 0,
-          failed: 0
+          failed: 0,
         }),
         messages: List(),
-        progressObserverId: null
+        progressObserverId: null,
       })
     );
   });
@@ -44,26 +44,26 @@ describe('Evaluation progress', () => {
         type: actionTypes.INIT,
         payload: {
           webSocketChannelId: 'abcdefgh',
-          expectedTasksCount: 5
-        }
+          expectedTasksCount: 5,
+        },
       });
     });
 
     it('must create action for completed task', () => {
       expect(completedTask()).to.eql({
-        type: actionTypes.COMPLETED_TASK
+        type: actionTypes.COMPLETED_TASK,
       });
     });
 
     it('must create action for skipped task', () => {
       expect(skippedTask()).to.eql({
-        type: actionTypes.SKIPPED_TASK
+        type: actionTypes.SKIPPED_TASK,
       });
     });
 
     it('must create action for failed task', () => {
       expect(failedTask()).to.eql({
-        type: actionTypes.FAILED_TASK
+        type: actionTypes.FAILED_TASK,
       });
     });
   });
@@ -94,10 +94,10 @@ describe('Evaluation progress', () => {
           submission: {},
           webSocketChannel: {
             id: 'abc',
-            expectedTasksCount: 123
-          }
+            expectedTasksCount: 123,
+          },
         },
-        meta: { submissionType: 'assignmentSolution' }
+        meta: { submissionType: 'assignmentSolution' },
       };
       const state = reducer(initialState, action);
 

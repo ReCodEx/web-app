@@ -1,2 +1,2 @@
-import EvaluationProgress from './EvaluationProgress';
+import EvaluationProgress from './EvaluationProgress.js';
 export default EvaluationProgress;

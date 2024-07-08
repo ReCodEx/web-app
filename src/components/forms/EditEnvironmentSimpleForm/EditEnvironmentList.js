@@ -7,7 +7,7 @@ import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { CheckboxField } from '../Fields';
 import Icon, { InfoIcon, InvertIcon, SquareIcon } from '../../icons';
-import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments';
+import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments.js';
 
 const EditEnvironmentList = ({
   runtimeEnvironments,

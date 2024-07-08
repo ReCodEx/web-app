@@ -12,13 +12,13 @@ import CreateExerciseForm from '../../components/forms/CreateExerciseForm';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { ExerciseIcon } from '../../components/icons';
-import { create as createExercise } from '../../redux/modules/exercises';
-import { notArchivedGroupsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups';
+import { create as createExercise } from '../../redux/modules/exercises.js';
+import { notArchivedGroupsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups.js';
 
-import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData';
-import { hasPermissions } from '../../helpers/common';
-import withLinks from '../../helpers/withLinks';
-import { suspendAbortPendingRequestsOptimization } from '../../pages/routes';
+import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData.js';
+import { hasPermissions } from '../../helpers/common.js';
+import withLinks from '../../helpers/withLinks.js';
+import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 const CREATE_EXERCISE_FORM_INITIAL_VALUES = {
   groupId: '',

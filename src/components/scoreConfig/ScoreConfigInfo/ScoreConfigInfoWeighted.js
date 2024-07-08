@@ -4,7 +4,7 @@ import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
 import InsetPanel from '../../widgets/InsetPanel';
-import { safeGet, EMPTY_OBJ, arrayToObject } from '../../../helpers/common';
+import { safeGet, EMPTY_OBJ, arrayToObject } from '../../../helpers/common.js';
 
 const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
   const results =

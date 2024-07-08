@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ExercisesListItem from '../ExercisesListItem';
 import { LoadingIcon } from '../../icons';
-import { UserUIDataContext } from '../../../helpers/contexts';
+import { UserUIDataContext } from '../../../helpers/contexts.js';
 
 const ExercisesList = ({
   heading = null,

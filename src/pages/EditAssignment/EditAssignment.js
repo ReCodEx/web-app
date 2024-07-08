@@ -19,27 +19,27 @@ import Icon, { EditAssignmentIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
-import { loggedInUserIdSelector } from '../../redux/selectors/auth';
+import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import {
   fetchAssignment,
   editAssignment,
   syncWithExercise,
   validateAssignment,
   fetchAssignmentAsyncJobs,
-} from '../../redux/modules/assignments';
+} from '../../redux/modules/assignments.js';
 import {
   getAssignment,
   getFetchAssignmentAsyncJobsPending,
   hasPendingNotificationAsyncJob,
-} from '../../redux/selectors/assignments';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments';
-import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments';
+} from '../../redux/selectors/assignments.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
+import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 import { ResubmitAllSolutionsContainer } from '../../containers/ResubmitSolutionContainer';
 import AssignmentSync from '../../components/Assignments/Assignment/AssignmentSync';
-import { hasPermissions } from '../../helpers/common';
+import { hasPermissions } from '../../helpers/common.js';
 
-import withLinks from '../../helpers/withLinks';
-import { withRouterProps } from '../../helpers/withRouter';
+import withLinks from '../../helpers/withLinks.js';
+import { withRouterProps } from '../../helpers/withRouter.js';
 
 const showSendNotification = (assignment, visibility, visibleFrom) => {
   const isCurrentlyVisible =

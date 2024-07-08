@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import actionTypesFactory, { getActionTypes } from '../../../../src/redux/helpers/resourceManager/actionTypesFactory';
+import actionTypesFactory, { getActionTypes } from '../../../../src/redux/helpers/resourceManager/actionTypesFactory.js';
 
 describe('Resource manager', () => {
   describe('(Action types)', () => {

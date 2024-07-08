@@ -11,7 +11,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import SubmitButton from '../../forms/SubmitButton';
 import { CloseIcon, SaveIcon, RefreshIcon } from '../../../components/icons';
-import { KNOWN_DATA_TYPES, isArrayType } from '../../../helpers/pipelines';
+import { KNOWN_DATA_TYPES, isArrayType } from '../../../helpers/pipelines.js';
 
 export const newVariableInitialData = {
   name: '',

@@ -1,2 +1,2 @@
-import ReferenceSolutionsTable from './ReferenceSolutionsTable';
+import ReferenceSolutionsTable from './ReferenceSolutionsTable.js';
 export default ReferenceSolutionsTable;

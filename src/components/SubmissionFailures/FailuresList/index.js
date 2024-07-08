@@ -1,2 +1,2 @@
-import FailuresList from './FailuresList';
+import FailuresList from './FailuresList.js';
 export default FailuresList;

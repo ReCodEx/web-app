@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import factory, { initialState } from '../helpers/resourceManager';
-import { actionTypes as groupsActionTypes } from './groups';
+import { actionTypes as groupsActionTypes } from './groups.js';
 
 const resourceName = 'instances';
 const { actions, reduceActions } = factory({ resourceName });

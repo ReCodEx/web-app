@@ -1,2 +1,2 @@
-import ResultsTable from './ResultsTable';
+import ResultsTable from './ResultsTable.js';
 export default ResultsTable;

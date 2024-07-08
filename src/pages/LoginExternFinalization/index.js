@@ -1,3 +1,3 @@
-import LoginExternFinalization from './LoginExternFinalization';
+import LoginExternFinalization from './LoginExternFinalization.js';
 
 export default LoginExternFinalization;

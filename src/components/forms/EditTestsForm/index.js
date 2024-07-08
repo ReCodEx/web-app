@@ -1,2 +1,2 @@
-import EditTestsForm from './EditTestsForm';
+import EditTestsForm from './EditTestsForm.js';
 export default EditTestsForm;

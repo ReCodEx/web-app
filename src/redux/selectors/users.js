@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect';
 
-import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common';
+import { EMPTY_LIST, EMPTY_OBJ } from '../../helpers/common.js';
 import { isReady, getJsData } from '../helpers/resourceManager';
-import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles';
+import { isStudentRole, isSupervisorRole, isSuperadminRole } from '../../components/helpers/usersRoles.js';
 
-import { fetchManyEndpoint } from '../modules/users';
-import { loggedInUserIdSelector, accessTokenSelector } from './auth';
-import { pipelineSelector } from './pipelines';
-import { getLang } from './app';
+import { fetchManyEndpoint } from '../modules/users.js';
+import { loggedInUserIdSelector, accessTokenSelector } from './auth.js';
+import { pipelineSelector } from './pipelines.js';
+import { getLang } from './app.js';
 
 const getParam = (state, id) => id;
 

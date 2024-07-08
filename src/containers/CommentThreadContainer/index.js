@@ -1,1 +1,1 @@
-export { default } from './CommentThreadContainer';
+export { default } from './CommentThreadContainer.js';

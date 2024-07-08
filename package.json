@@ -9,6 +9,7 @@
     "url": "https://github.com/recodex/web-app.git"
   },
   "private": true,
+  "type": "module",
   "scripts": {
     "clean": "rm -f public/bundle* && rm -f public/style* && rm -f bin/server.js && rm -f bin/style* && rm -fr tmp/messages/*",
     "build:server": "webpack --config config/webpack.server.js",
@@ -50,7 +51,6 @@
     "css-loader": "^7.1.2",
     "deep-equal": "^2.2.3",
     "ejs": "^3.1.10",
-    "exenv": "^1.2.2",
     "express": "^4.19.2",
     "file-saver": "^2.0.5",
     "flat": "^5.0.2",
@@ -139,6 +139,7 @@
     "eslint-plugin-promise": "^6.4.0",
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-standard": "^5.0.0",
+    "esm": "^3.2.25",
     "fetch-mock": "^9.11.0",
     "file-loader": "^6.2.0",
     "git-revision-webpack-plugin": "^5.0.0",

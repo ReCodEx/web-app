@@ -5,8 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import UsersName from '../../../components/Users/UsersName';
 import DateTime from '../../widgets/DateTime';
 import { LoadingIcon } from '../../icons';
-import { UserRoleIcon } from '../../helpers/usersRoles';
-import { safeGet } from '../../../helpers/common';
+import { UserRoleIcon } from '../../helpers/usersRoles.js';
+import { safeGet } from '../../../helpers/common.js';
 
 const createEmailLink = user => {
   const email = safeGet(user, ['privateData', 'email']);

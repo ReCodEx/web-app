@@ -1,2 +1,2 @@
-import ResendEmailVerification from './ResendEmailVerification';
+import ResendEmailVerification from './ResendEmailVerification.js';
 export default ResendEmailVerification;

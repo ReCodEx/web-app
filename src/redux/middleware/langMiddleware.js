@@ -1,8 +1,8 @@
 import cookies from 'browser-cookies';
-import { canUseDOM } from 'exenv';
 
-import { actionTypes } from '../modules/app';
-import { getConfigVar } from '../../helpers/config';
+import { actionTypes } from '../modules/app.js';
+import { getConfigVar } from '../../helpers/config.js';
+import { canUseDOM } from '../../helpers/common.js';
 
 const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 

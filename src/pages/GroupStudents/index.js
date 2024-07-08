@@ -1,2 +1,2 @@
-import GroupStudents from './GroupStudents';
+import GroupStudents from './GroupStudents.js';
 export default GroupStudents;

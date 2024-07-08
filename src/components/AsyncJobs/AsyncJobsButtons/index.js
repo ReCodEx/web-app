@@ -1,2 +1,2 @@
-import AsyncJobsButtons from './AsyncJobsButtons';
+import AsyncJobsButtons from './AsyncJobsButtons.js';
 export default AsyncJobsButtons;
