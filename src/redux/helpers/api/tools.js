@@ -1,5 +1,5 @@
 import statusCode from 'statuscode';
-import flatten from 'flat';
+import { flatten } from 'flat';
 import { Buffer } from 'buffer';
 
 import { addNotification } from '../../modules/notifications.js';

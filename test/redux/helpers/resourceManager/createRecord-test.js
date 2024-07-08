@@ -1,6 +1,6 @@
 import createRecord from '../../../../src/redux/helpers/resourceManager/recordFactory.js';
 import { resourceStatus } from '../../../../src/redux/helpers/resourceManager/status.js';
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiImmutable from 'chai-immutable';
 chai.use(chaiImmutable);
 const expect = chai.expect;
@@ -23,7 +23,7 @@ describe('Resource manager', () => {
         state: 'WHATEVER!!',
         didInvalidate: true,
         lastUpdate: Date.now() + 1000000,
-        data: 'not null'
+        data: 'not null',
       };
       const record = createRecord(cfg);
       expect(record.get('state')).to.equal(cfg.state);
@@ -43,8 +43,8 @@ describe('Resource manager', () => {
         items: ['a', 'b', 'c'],
         nested: {
           child: 'CHILD',
-          list: ['x', 'y', { p: 'q' }]
-        }
+          list: ['x', 'y', { p: 'q' }],
+        },
       };
       const record = createRecord({ data });
       expect(record.get('data')).to.be.an('object');

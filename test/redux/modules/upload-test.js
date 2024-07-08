@@ -12,7 +12,7 @@ import reducer, {
 
 import { fromJS, Map } from 'immutable';
 
-import chai from 'chai';
+import * as chai from 'chai';
 import chaiImmutable from 'chai-immutable';
 
 chai.use(chaiImmutable);
