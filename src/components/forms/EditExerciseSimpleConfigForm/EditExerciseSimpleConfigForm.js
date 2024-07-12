@@ -13,7 +13,12 @@ import SubmitButton from '../SubmitButton';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest.js';
 import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config.js';
-import { ENV_JAVA_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments.js';
+import {
+  ENV_DATA_ONLY_ID,
+  ENV_HASKELL_ID,
+  ENV_JAVA_ID,
+  ENV_PROLOG_ID,
+} from '../../../helpers/exercise/environments.js';
 import {
   exerciseConfigFormSmartFillAll,
   exerciseConfigFormSmartFillInput,

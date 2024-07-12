@@ -14,13 +14,22 @@ import Confirm from '../../forms/Confirm';
 import Explanation from '../../widgets/Explanation';
 import {
   ENV_ARDUINO_ID,
-  ENV_JAVA_ID,
   ENV_C_GCC_ID,
   ENV_CPP_GCC_ID,
+  ENV_JAVA_ID,
+  ENV_MAVEN_ID,
   ENV_SYCL_ID,
 } from '../../../helpers/exercise/environments.js';
 
 const COMPILER_ARGS_ENVS = [ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID, ENV_SYCL_ID];
+
+const validateExecTarget = value =>
+  !value || value.trim() === '' ? (
+    <FormattedMessage
+      id="app.editExerciseConfigForm.validation.execTargetInvalidName"
+      defaultMessage="Invalid goal name."
+    />
+  ) : undefined;
 
 class EditExerciseSimpleConfigTestCompilation extends Component {
   constructor(props) {
@@ -218,7 +227,9 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                     }
                                     readOnly={readOnly}
                                   />
+
                                   <br />
+
                                   {possibleEntryPoints.length > 0 && (
                                     <Field
                                       name={`${test}.entry-point.${env.id}`}
@@ -233,6 +244,38 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                         />
                                       }
                                     />
+                                  )}
+
+                                  {env.id === ENV_MAVEN_ID && (
+                                    /*
+                                     * A special case for Maven only
+                                     */
+                                    <FieldArray
+                                      name={`${test}.exec-targets.${env.id}`}
+                                      component={ExpandingTextField}
+                                      min={1}
+                                      maxLength={256}
+                                      validateEach={validateExecTarget}
+                                      placeholder="exec:java"
+                                      readOnly={readOnly}
+                                      label={
+                                        <>
+                                          <FormattedMessage
+                                            id="app.editExerciseSimpleConfigTests.execTargets"
+                                            defaultMessage="Execution goals:"
+                                          />
+                                          <Explanation id={`${test}.exec-targets-explanation`}>
+                                            <FormattedMessage
+                                              id="app.editExerciseSimpleConfigTests.execTargetsExplanation"
+                                              defaultMessage="Maven project goals to be executed. The default is 'exec:java'. At least one goal must be specified."
+                                            />
+                                          </Explanation>
+                                        </>
+                                      }
+                                    />
+                                    /*
+                                     * End of special case for Maven
+                                     */
                                   )}
                                 </Col>
                               </Row>

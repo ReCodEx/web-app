@@ -347,6 +347,7 @@ export const exerciseConfigFormSmartFillAll = (formName, firstTestId, tests, fil
     'entry-point-string', // standalone, used for Haskell
     'jar-files',
     'compile-args',
+    'exec-targets',
   ]);
 
 export const exerciseConfigFormSmartFillInput = (formName, firstTestId, tests, files) =>
@@ -375,6 +376,7 @@ export const exerciseConfigFormSmartFillCompilation = (formName, firstTestId, te
     'entry-point',
     'jar-files',
     'compile-args',
+    'exec-targets',
   ]);
 
 export const exerciseConfigFormSmartFillExtraFiles = (formName, firstTestId, tests, files) =>

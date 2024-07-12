@@ -10,16 +10,17 @@ import Icon, { AddIcon, CloseIcon } from '../../icons';
 
 const ExpandingTextField = ({
   fields = [],
-  meta: { active, dirty, error, warning },
   label = null,
   noItems = null,
   validateEach,
   readOnly = false,
+  min = 0,
+  max = 256,
+  meta, // we just need to exclude this from props
   ...props
 }) => (
   <div>
     {Boolean(label) && <FormLabel>{label}</FormLabel>}
-
     {fields.map((field, index) => (
       <Field
         key={index}
@@ -48,33 +49,37 @@ const ExpandingTextField = ({
                   </Button>
                 </OverlayTrigger>
               ) : (
+                fields.length < max && (
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id={Date.now()}>
+                        <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
+                      </Tooltip>
+                    }>
+                    <Button onClick={() => fields.push('')} size="xs" noShadow>
+                      <AddIcon fixedWidth />
+                    </Button>
+                  </OverlayTrigger>
+                )
+              )}
+
+              {fields.length > min && (
                 <OverlayTrigger
                   placement="top"
                   overlay={
                     <Tooltip id={Date.now()}>
-                      <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
+                      <FormattedMessage
+                        id="app.expandingTextField.tooltip.remove"
+                        defaultMessage="Remove this item from the list."
+                      />
                     </Tooltip>
                   }>
-                  <Button onClick={() => fields.push('')} size="xs" noShadow>
-                    <AddIcon fixedWidth />
+                  <Button onClick={() => fields.remove(index)} size="xs" noShadow>
+                    <CloseIcon fixedWidth />
                   </Button>
                 </OverlayTrigger>
               )}
-
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id={Date.now()}>
-                    <FormattedMessage
-                      id="app.expandingTextField.tooltip.remove"
-                      defaultMessage="Remove this item from the list."
-                    />
-                  </Tooltip>
-                }>
-                <Button onClick={() => fields.remove(index)} size="xs" noShadow>
-                  <CloseIcon fixedWidth />
-                </Button>
-              </OverlayTrigger>
             </>
           )
         }
@@ -120,6 +125,8 @@ ExpandingTextField.propTypes = {
   noItems: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   validateEach: PropTypes.func,
   readOnly: PropTypes.bool,
+  min: PropTypes.number,
+  max: PropTypes.number,
 };
 
 export default ExpandingTextField;
