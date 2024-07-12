@@ -46,11 +46,13 @@ import 'ace-builds/src-noconflict/keybinding-vim.js';
  */
 const consoleError = console.error; // eslint-disable-line no-console
 console.error /* eslint-disable-line no-console */ = (msg, ...rest) => {
-  if (msg.startsWith('Warning: findDOMNode is deprecated and will be removed in the next major release.')) {
-    return;
-  }
-  if (msg.includes('Support for defaultProps will be removed')) {
-    return;
+  if (typeof msg === 'string') {
+    if (msg.startsWith('Warning: findDOMNode is deprecated and will be removed in the next major release.')) {
+      return;
+    }
+    if (msg.includes('Support for defaultProps will be removed')) {
+      return;
+    }
   }
   consoleError(msg, ...rest);
 };

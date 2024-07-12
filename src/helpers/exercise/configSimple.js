@@ -1,15 +1,16 @@
 import { lruMemoize } from 'reselect';
 import { safeGet, encodeNumId, identity, deepReduce, objectMap, EMPTY_ARRAY } from '../common.js';
 import {
-  ENV_DATA_ONLY_ID,
-  ENV_JAVA_ID,
-  ENV_KOTLIN_ID,
-  ENV_GROOVY_ID,
-  ENV_SCALA_ID,
-  ENV_HASKELL_ID,
+  ENV_ARDUINO_ID,
   ENV_C_GCC_ID,
   ENV_CPP_GCC_ID,
-  ENV_ARDUINO_ID,
+  ENV_DATA_ONLY_ID,
+  ENV_GROOVY_ID,
+  ENV_HASKELL_ID,
+  ENV_JAVA_ID,
+  ENV_KOTLIN_ID,
+  ENV_MAVEN_ID,
+  ENV_SCALA_ID,
   ENV_SYCL_ID,
 } from './environments.js';
 
@@ -306,6 +307,7 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
     .individualEnvs()
     .forCompilation()
     .setRuntimeFilter([ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID, ENV_SYCL_ID]),
+  new Variable('exec-targets', 'string[]', ['exec:java']).individualEnvs().setRuntimeFilter([ENV_MAVEN_ID]),
   new Variable('entry-point', 'file')
     .individualEnvs()
     .setPipelineFilter('hasEntryPoint')

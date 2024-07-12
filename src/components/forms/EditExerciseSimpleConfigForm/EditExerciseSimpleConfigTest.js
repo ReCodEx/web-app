@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from '../../widgets/TheButton';
 import Icon from '../../icons';
 import Confirm from '../../forms/Confirm';
-import { ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID } from '../../../helpers/exercise/environments.js';
+import { ENV_DATA_ONLY_ID, ENV_HASKELL_ID, ENV_PROLOG_ID } from '../../../helpers/exercise/environments.js';
 
 import EditExerciseSimpleConfigTestCompilation from './EditExerciseSimpleConfigTestCompilation.js';
 import EditExerciseSimpleConfigTestInputs from './EditExerciseSimpleConfigTestInputs.js';
@@ -26,17 +26,17 @@ const overrides = {
     showJudgeBuiltins: false,
     showJudgeArgs: false,
   },
-  [ENV_PROLOG_ID]: {
-    showCompilation: false,
-    showInputsFiles: false,
-    showArgs: false,
-    showOutputFile: false,
-    showExtraFiles: true,
-  },
   [ENV_HASKELL_ID]: {
     showCompilation: false,
     showArgs: false,
     showStringEntryPoint: true,
+    showOutputFile: false,
+    showExtraFiles: true,
+  },
+  [ENV_PROLOG_ID]: {
+    showCompilation: false,
+    showInputsFiles: false,
+    showArgs: false,
     showOutputFile: false,
     showExtraFiles: true,
   },
