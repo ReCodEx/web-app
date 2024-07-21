@@ -161,6 +161,19 @@ class EditPipelineForm extends Component {
                     }
                   />
                 </Col>
+                <Col xl={6} lg={12}>
+                  <Field
+                    name="parameters.hasSuccessExitCodes"
+                    component={CheckboxField}
+                    onOff
+                    label={
+                      <FormattedMessage
+                        id="app.editPipelineForm.hasSuccessExitCodes"
+                        defaultMessage="Has success exit codes"
+                      />
+                    }
+                  />
+                </Col>
               </Row>
             </>
           )}

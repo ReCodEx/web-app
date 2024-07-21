@@ -63,6 +63,19 @@ const someValuesHaveNozeroLength = (obj, ...keys) => {
   return false;
 };
 
+const nonDefaultSuccessExitCodes = obj => {
+  if (!obj || typeof obj !== 'object' || !obj['success-exit-codes']) {
+    return false;
+  }
+
+  for (const val of Object.values(obj['success-exit-codes'])) {
+    if (val.trim() !== '0') {
+      return true;
+    }
+  }
+  return false;
+};
+
 /**
  * Make sure file(s) in form data (specified by given path) exist.
  * If not, proper form error message(s) is/are filled.
@@ -156,6 +169,7 @@ class EditExerciseSimpleConfigForm extends Component {
 
   render() {
     const {
+      initialValues,
       reset,
       change,
       handleSubmit,
@@ -251,13 +265,14 @@ class EditExerciseSimpleConfigForm extends Component {
             {exerciseTests
               .sort((a, b) => a.name.localeCompare(b.name, locale))
               .map((test, idx) => {
-                const testData = formValues && formValues.config && formValues.config[encodeNumId(test.id)];
-                const hasCompilationSetting = someValuesHaveNozeroLength(
-                  testData,
-                  'extra-files',
-                  'jar-files',
-                  'compile-args'
-                );
+                const testData = formValues?.config?.[encodeNumId(test.id)];
+                const hasCompilationSetting =
+                  someValuesHaveNozeroLength(
+                    initialValues?.config?.[encodeNumId(test.id)],
+                    'extra-files',
+                    'jar-files',
+                    'compile-args'
+                  ) || nonDefaultSuccessExitCodes(initialValues?.config?.[encodeNumId(test.id)]);
                 return (
                   <EditExerciseSimpleConfigTest
                     change={change}

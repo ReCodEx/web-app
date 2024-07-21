@@ -6,6 +6,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
+import Explanation from '../../widgets/Explanation';
 import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import exitCodeMapping from '../../helpers/exitCodeMapping.js';
 import Icon, { SuccessOrFailureIcon } from '../../icons';
@@ -103,6 +104,8 @@ const TestResultsTableRow = ({
     wallTime,
     cpuTime,
     exitCode,
+    exitCodeOk,
+    exitCodeNative,
     exitSignal,
     judgeLogStdout = '',
     judgeLogStderr = '',
@@ -171,7 +174,23 @@ const TestResultsTableRow = ({
           </strong>
         </OverlayTrigger>
       )}
-      {(exitCode !== -1 || !exitSignal) && exitCodeMapping(runtimeEnvironmentId, exitCode)}
+
+      {exitCodeNative ? (
+        <>
+          <SuccessOrFailureIcon success={exitCodeOk} gapRight />
+          {exitCodeOk ? exitCode : exitCodeMapping(runtimeEnvironmentId, exitCode)}
+          {(exitCode === 0) !== exitCodeOk && (
+            <Explanation id={`exit-code-expl-${testName}`} placement="bottom">
+              <FormattedMessage
+                id="app.submissions.testResultsTable.exitCodeExplanation"
+                defaultMessage="Usually, exit code 0 is treated as success and non-zero codes as errors. This exercise have specified alternative exit codes that are treated as a success of the executed solution."
+              />
+            </Explanation>
+          )}
+        </>
+      ) : (
+        !exitSignal && status !== 'SKIPPED' && <span className="text-muted">{exitCode}</span>
+      )}
     </td>
 
     {(showJudgeLogStdout || showJudgeLogStderr) && (
@@ -240,6 +259,8 @@ TestResultsTableRow.propTypes = {
     wallTime: PropTypes.number,
     cpuTime: PropTypes.number,
     exitCode: PropTypes.number,
+    exitCodeOk: PropTypes.bool,
+    exitCodeNative: PropTypes.bool,
     exitSignal: PropTypes.number,
     judgeLogStdout: PropTypes.string,
     judgeLogStderr: PropTypes.string,

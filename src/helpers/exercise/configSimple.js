@@ -13,6 +13,7 @@ import {
   ENV_SCALA_ID,
   ENV_SYCL_ID,
 } from './environments.js';
+import { exitCodesStrToBitmap, exitCodesBitmapToTokens } from './config.js';
 
 /**
  * Base class for all pipeline variables being edited in the config form.
@@ -315,6 +316,14 @@ const _PIPELINE_DEFAULT_VARS_DESCRIPTORS = [
       'entry-point': objectMap(entryPoint, val => (val === '$entry-point' ? '' : val)),
     }))
     .setTransformPostprocess(value => value || '$entry-point')
+    .forCompilationAndExecution(),
+  new Variable('success-exit-codes', 'string[]', '0')
+    .individualEnvs()
+    .setPipelineFilter('hasSuccessExitCodes')
+    .setInitialPostprocess(({ 'success-exit-codes': codes }) => ({
+      'success-exit-codes': objectMap(codes, c => (c || ['0']).join(', ')),
+    }))
+    .setTransformPostprocess(codes => exitCodesBitmapToTokens(exitCodesStrToBitmap(codes)))
     .forCompilationAndExecution(),
 ];
 

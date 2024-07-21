@@ -78,6 +78,7 @@ class EditPipeline extends Component {
       producesFiles = false,
       hasEntryPoint = false,
       hasExtraFiles = false,
+      hasSuccessExitCodes = false,
     },
     global,
   }) => {
@@ -91,6 +92,7 @@ class EditPipeline extends Component {
         producesFiles,
         hasEntryPoint,
         hasExtraFiles,
+        hasSuccessExitCodes,
       };
       dataForApi.global = global;
     }

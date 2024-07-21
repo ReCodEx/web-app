@@ -37,6 +37,12 @@ const pipelineParams = {
       defaultMessage="Extra source files can be added to tested solution"
     />
   ),
+  hasSuccessExitCodes: (
+    <FormattedMessage
+      id="app.pipelineParams.hasSuccessExitCodes"
+      defaultMessage="Configurable exit-codes that are accepted as a success when tested soution is executed"
+    />
+  ),
 };
 
 const pipelineParameterMapping = parameter => {
