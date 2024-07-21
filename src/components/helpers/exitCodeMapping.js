@@ -12,7 +12,6 @@ import {
  * https://www.freepascal.org/docs-html/user/userap4.html
  */
 const pascalCodes = {
-  0: <FormattedMessage id="app.exitCodes.pascal.0" defaultMessage="OK" />,
   1: <FormattedMessage id="app.exitCodes.pascal.1" defaultMessage="Invalid function number" />,
   2: <FormattedMessage id="app.exitCodes.pascal.2" defaultMessage="File not found" />,
   3: <FormattedMessage id="app.exitCodes.pascal.3" defaultMessage="Path not found" />,
@@ -70,7 +69,6 @@ const pascalCodes = {
 };
 
 const python3Codes = {
-  0: <FormattedMessage id="app.exitCodes.python3.0" defaultMessage="OK" />,
   1: <FormattedMessage id="app.exitCodes.python3.1" defaultMessage="Base exception" />,
   101: <FormattedMessage id="app.exitCodes.python3.101" defaultMessage="Assertion error" />,
   102: <FormattedMessage id="app.exitCodes.python3.102" defaultMessage="Type error" />,
@@ -119,8 +117,6 @@ const exitCodeMapping = (runtimeEnvironmentId, exitCode) => {
 // TODO - eventually replace those switches with objects.
 const javaMapping = exitCode => {
   switch (exitCode) {
-    case 0:
-      return <FormattedMessage id="app.exitCodes.java.0" defaultMessage="OK" />;
     case 1:
       return <FormattedMessage id="app.exitCodes.java.1" defaultMessage="Unknown error" />;
     case 2:
@@ -160,8 +156,6 @@ const javaMapping = exitCode => {
 
 const csDotnetMapping = exitCode => {
   switch (exitCode) {
-    case 0:
-      return <FormattedMessage id="app.exitCodes.csharp.0" defaultMessage="OK" />;
     case 1:
       return <FormattedMessage id="app.exitCodes.csharp.1" defaultMessage="User error" />;
     case 101:

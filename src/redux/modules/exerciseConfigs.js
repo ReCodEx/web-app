@@ -348,6 +348,7 @@ export const exerciseConfigFormSmartFillAll = (formName, firstTestId, tests, fil
     'jar-files',
     'compile-args',
     'exec-targets',
+    'success-exit-codes',
   ]);
 
 export const exerciseConfigFormSmartFillInput = (formName, firstTestId, tests, files) =>
@@ -377,6 +378,7 @@ export const exerciseConfigFormSmartFillCompilation = (formName, firstTestId, te
     'jar-files',
     'compile-args',
     'exec-targets',
+    'success-exit-codes',
   ]);
 
 export const exerciseConfigFormSmartFillExtraFiles = (formName, firstTestId, tests, files) =>

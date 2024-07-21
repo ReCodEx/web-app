@@ -9,7 +9,7 @@ import { EMPTY_ARRAY } from '../../../helpers/common.js';
 import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { ExpandCollapseIcon, WarningIcon } from '../../icons';
-import { SelectField, ExpandingInputFilesField, ExpandingSelectField, ExpandingTextField } from '../Fields';
+import { TextField, SelectField, ExpandingInputFilesField, ExpandingSelectField, ExpandingTextField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import Explanation from '../../widgets/Explanation';
 import {
@@ -20,6 +20,7 @@ import {
   ENV_MAVEN_ID,
   ENV_SYCL_ID,
 } from '../../../helpers/exercise/environments.js';
+import { validateExitCodes } from '../../../helpers/exercise/config.js';
 
 const COMPILER_ARGS_ENVS = [ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID, ENV_SYCL_ID];
 
@@ -277,6 +278,28 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                      * End of special case for Maven
                                      */
                                   )}
+
+                                  <Field
+                                    name={`${test}.success-exit-codes.${env.id}`}
+                                    component={TextField}
+                                    disabled={readOnly}
+                                    maxLength={1024}
+                                    validate={validateExitCodes}
+                                    label={
+                                      <>
+                                        <FormattedMessage
+                                          id="app.editExerciseSimpleConfigTests.successExitCodes"
+                                          defaultMessage="Accepted exit codes:"
+                                        />
+                                        <Explanation id={`${test}.exec-targets-explanation`}>
+                                          <FormattedMessage
+                                            id="app.editExerciseSimpleConfigTests.successExitCodesExplanation"
+                                            defaultMessage="List of exit codes that are accepted as successful completion of tested solution. Exit codes are separated by commas, ranges of codes may be specifed using dash '-' (e.g., '1, 3, 5-7'). Zero is the default accepted exit code."
+                                          />
+                                        </Explanation>
+                                      </>
+                                    }
+                                  />
                                 </Col>
                               </Row>
                             </Container>
