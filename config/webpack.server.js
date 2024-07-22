@@ -13,7 +13,7 @@ dotenv.config();
 export default {
   entry: path.join(__dirname, '..', 'src/server.js'),
   output: {
-    filename: 'server.js',
+    filename: 'server.mjs',
     path: path.join(__dirname, '..', 'bin'),
     chunkFormat: 'module',
   },

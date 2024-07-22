@@ -136,7 +136,7 @@ $ yarn dev
 $ yarn build
 $ yarn deploy  # copies all neccessary files to prod/ directory
 $ cd prod
-$ node bin/server.js
+$ node bin/server.mjs
 ```
 
 Both modes can be configured to use different ports or set base address of used

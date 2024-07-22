@@ -6,8 +6,8 @@ public/bundle.js.map
 public/
 bin/*.jpg
 bin/*.css
-bin/server.js
-bin/server.js.map
+bin/server.mjs
+bin/server.mjs.map
 tmp
 build
 npm-debug.log
@@ -19,7 +19,7 @@ package-lock.json
 /run_server.bat
 /run_manage_translations.bat
 /etc/env.json
-/bin/server.js.LICENSE.txt
+/bin/server.mjs.LICENSE.txt
 /yarn-error.log
 /.yarn/cache
 /.yarn/install-state.gz

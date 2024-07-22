@@ -15,7 +15,7 @@ StandardError=journal
 User=recodex
 Group=recodex
 WorkingDirectory=/opt/recodex-web
-ExecStart=/usr/bin/node /opt/recodex-web/bin/server.js
+ExecStart=/usr/bin/node /opt/recodex-web/bin/server.mjs
 Restart=on-failure
 RestartSec=5
 
