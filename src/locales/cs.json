@@ -311,6 +311,8 @@
   "app.editAssignmentForm.canViewJudgeStdoutExplanation": "Pokud je přepínač nastaven, zpřístupní primární logy sudího (stdout) studentům. Vezměte na vědomí, že zveřejnění logů dá studentům potřebné prostředky, aby mohli získat testovací vstupy, což nemusí být u některých úloh žádoucí.",
   "app.editAssignmentForm.canViewLimitRatios": "Viditelnost paměti a času",
   "app.editAssignmentForm.canViewLimitRatiosExplanation": "Zda studenti vidí dobu běhu a spotřebovanou paměť svých řešení. Naměřené hodnoty jsou uvedeny relativně vůči nastaveným limitům, tedy studenti nevidí absolutní čísla ale pouze poměr v procentech.",
+  "app.editAssignmentForm.canViewMeasuredValues": "Zobrazit absolutní hodnoty",
+  "app.editAssignmentForm.canViewMeasuredValuesExplanation": "Zda studenti vidí absolutní hodnoty doby běhu a spotřebované paměťi (ne pouze relativní poměr vůči nastaveným limitům testů).",
   "app.editAssignmentForm.deadlines.dual": "Dva termíny",
   "app.editAssignmentForm.deadlines.dual.explanation": "Zadaná úloha má dva termíny odevzdání a dva bodové limity. Řešení odevzdaná před prvním termínem jsou hodnocena body v rozsahu prvního limitu, řešení odevzdaná mezi danými termíny jsou hodnocena body v rozsahu druhého limitu. Řešení odevzdaná po druhém termínu nedostanou žádné body.",
   "app.editAssignmentForm.deadlines.interpolated": "Dva termíny s interpolací",

@@ -58,6 +58,7 @@ export const prepareInitialValues = lruMemoize(
       solutionFilesLimit = null,
       solutionSizeLimit = null,
       canViewLimitRatios = true,
+      canViewMeasuredValues = false,
       canViewJudgeStdout = false,
       canViewJudgeStderr = false,
       isBonus = false,
@@ -84,6 +85,7 @@ export const prepareInitialValues = lruMemoize(
     solutionFilesLimit,
     solutionSizeLimit: solutionSizeLimit && Math.ceil(solutionSizeLimit / 1024), // B -> KiB
     canViewLimitRatios,
+    canViewMeasuredValues,
     canViewJudgeStdout,
     canViewJudgeStderr,
     isBonus,
@@ -118,6 +120,7 @@ export const transformSubmittedData = ({
   solutionFilesLimit,
   solutionSizeLimit,
   canViewLimitRatios,
+  canViewMeasuredValues,
   canViewJudgeStdout,
   canViewJudgeStderr,
   isBonus,
@@ -143,6 +146,7 @@ export const transformSubmittedData = ({
     solutionFilesLimit,
     solutionSizeLimit: solutionSizeLimit ? solutionSizeLimit * 1024 : null, // if not null, convert KiB -> B
     canViewLimitRatios,
+    canViewMeasuredValues: canViewLimitRatios && canViewMeasuredValues,
     canViewJudgeStdout,
     canViewJudgeStderr,
     isBonus,
@@ -325,6 +329,7 @@ class EditAssignmentForm extends Component {
       deadlines,
       runtimeEnvironments,
       visibility,
+      canViewLimitRatios,
       showSendNotification,
       submitButtonMessages = SUBMIT_BUTTON_MESSAGES_DEFAULT,
       mergeJudgeLogs,
@@ -626,7 +631,7 @@ class EditAssignmentForm extends Component {
 
         <Container fluid>
           <Row>
-            <Col md={mergeJudgeLogs ? 6 : 12} lg={mergeJudgeLogs ? 6 : 4}>
+            <Col md={6} xl={mergeJudgeLogs ? 4 : 6}>
               <Field
                 name="canViewLimitRatios"
                 component={CheckboxField}
@@ -647,7 +652,29 @@ class EditAssignmentForm extends Component {
                 }
               />
             </Col>
-            <Col md={6} lg={mergeJudgeLogs ? 6 : 4}>
+            <Col md={6} xl={mergeJudgeLogs ? 4 : 6}>
+              <Field
+                name="canViewMeasuredValues"
+                component={CheckboxField}
+                onOff
+                disabled={!canViewLimitRatios}
+                label={
+                  <span>
+                    <FormattedMessage
+                      id="app.editAssignmentForm.canViewMeasuredValues"
+                      defaultMessage="Show absolute measurements"
+                    />
+                    <Explanation id="canViewMeasuredValuesExplanation">
+                      <FormattedMessage
+                        id="app.editAssignmentForm.canViewMeasuredValuesExplanation"
+                        defaultMessage="Whether the students can see the measured execution time and consumed memory in absolute units (not just as a relative ratio of the test limits)."
+                      />
+                    </Explanation>
+                  </span>
+                }
+              />
+            </Col>
+            <Col md={6} xl={mergeJudgeLogs ? 4 : 6}>
               <Field
                 name="canViewJudgeStdout"
                 component={CheckboxField}
@@ -685,7 +712,7 @@ class EditAssignmentForm extends Component {
             </Col>
 
             {!mergeJudgeLogs && (
-              <Col md={6} lg={4}>
+              <Col md={6}>
                 <Field
                   name="canViewJudgeStderr"
                   component={CheckboxField}
@@ -891,6 +918,7 @@ EditAssignmentForm.propTypes = {
   deadlines: PropTypes.string,
   runtimeEnvironments: PropTypes.array,
   visibility: PropTypes.string,
+  canViewLimitRatios: PropTypes.bool,
   showSendNotification: PropTypes.bool,
   submitButtonMessages: PropTypes.object,
   mergeJudgeLogs: PropTypes.bool.isRequired,
