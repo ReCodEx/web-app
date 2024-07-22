@@ -107,6 +107,7 @@ class EditAssignment extends Component {
       runtimeEnvironments,
       visibility,
       visibleFrom,
+      canViewLimitRatios,
     } = this.props;
 
     return (
@@ -185,6 +186,7 @@ class EditAssignment extends Component {
                       visibility={visibility}
                       showSendNotification={showSendNotification(assignment, visibility, visibleFrom)}
                       mergeJudgeLogs={assignment.mergeJudgeLogs}
+                      canViewLimitRatios={canViewLimitRatios}
                     />
                   )}
                 </ResourceRenderer>
@@ -238,6 +240,7 @@ EditAssignment.propTypes = {
   deadlines: PropTypes.string,
   visibility: PropTypes.string,
   visibleFrom: PropTypes.object,
+  canViewLimitRatios: PropTypes.bool,
   allowVisibleFrom: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
@@ -261,6 +264,7 @@ export default withLinks(
         visibility: editAssignmentFormSelector(state, 'visibility'),
         allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
         visibleFrom: editAssignmentFormSelector(state, 'visibleFrom'),
+        canViewLimitRatios: editAssignmentFormSelector(state, 'canViewLimitRatios'),
       };
     },
     (dispatch, { params: { assignmentId } }) => ({

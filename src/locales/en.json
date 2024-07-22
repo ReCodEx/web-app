@@ -311,6 +311,8 @@
   "app.editAssignmentForm.canViewJudgeStdoutExplanation": "If set, judge primary logs (stdout) are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desriable for some categories of exercises.",
   "app.editAssignmentForm.canViewLimitRatios": "Visibility of memory and time",
   "app.editAssignmentForm.canViewLimitRatiosExplanation": "Whether the students can see the measured execution time and consumed memory of their solutions. The measurements are displayed relatively to the established limits, so the students do not see the absolute values but only a percentage.",
+  "app.editAssignmentForm.canViewMeasuredValues": "Show absolute measurements",
+  "app.editAssignmentForm.canViewMeasuredValuesExplanation": "Whether the students can see the measured execution time and consumed memory in absolute units (not just as a relative ratio of the test limits).",
   "app.editAssignmentForm.deadlines.dual": "Dual deadlines",
   "app.editAssignmentForm.deadlines.dual.explanation": "The assignment has two deadlines and two max. points limits. Solutions submitted before the first deadline are awarded points up to the first limit, solutions between the two deadlines are awarded points up to the second limit. No points are granted for solutions after the second deadline.",
   "app.editAssignmentForm.deadlines.interpolated": "Dual deadlines interpolated",
