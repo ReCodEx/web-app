@@ -104,6 +104,18 @@ const EditUserSettingsForm = ({
         />
 
         <Field
+          name="solutionAcceptedEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editUserSettings.solutionAcceptedEmails"
+              defaultMessage="Solution accepted status changed"
+            />
+          }
+        />
+
+        <Field
           name="pointsChangedEmails"
           component={CheckboxField}
           onOff
@@ -139,31 +151,43 @@ const EditUserSettingsForm = ({
     />
 
     {isSupervisorRole(user.privateData.role) && (
-      <Field
-        name="assignmentSubmitAfterAcceptedEmails"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editUserSettings.assignmentSubmitAfterAcceptedEmails"
-            defaultMessage="New solution evaluated for an assignment where another solution has already been accepted"
-          />
-        }
-      />
-    )}
+      <>
+        <Field
+          name="assignmentSubmitAfterAcceptedEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editUserSettings.assignmentSubmitAfterAcceptedEmails"
+              defaultMessage="New solution evaluated for an assignment where another solution has already been accepted"
+            />
+          }
+        />
 
-    {isSupervisorRole(user.privateData.role) && (
-      <Field
-        name="assignmentSubmitAfterReviewedEmails"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage
-            id="app.editUserSettings.assignmentSubmitAfterReviewedEmails"
-            defaultMessage="New solution evaluated for an assignment where another solution has already been reviewed"
-          />
-        }
-      />
+        <Field
+          name="assignmentSubmitAfterReviewedEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editUserSettings.assignmentSubmitAfterReviewedEmails"
+              defaultMessage="New solution evaluated for an assignment where another solution has already been reviewed"
+            />
+          }
+        />
+
+        <Field
+          name="solutionReviewRequestedEmails"
+          component={CheckboxField}
+          onOff
+          label={
+            <FormattedMessage
+              id="app.editUserSettings.solutionReviewRequestedEmails"
+              defaultMessage="Student requested code review for a solution"
+            />
+          }
+        />
+      </>
     )}
   </FormBox>
 );
