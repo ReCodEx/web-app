@@ -45,7 +45,7 @@ describe('Solutions', () => {
 
       const successAction = {
         type: additionalActionTypes.SET_FLAG_FULFILLED,
-        payload: { assignments: [] },
+        payload: { solutions: [{ id, accepted: true }] },
         meta: { id, flag: 'accepted', value: true },
       };
 
@@ -78,7 +78,13 @@ describe('Solutions', () => {
 
       const successAction = {
         type: additionalActionTypes.SET_FLAG_FULFILLED,
-        payload: { assignments: [] },
+        payload: {
+          solutions: [
+            { id, accepted: true, isBestSolution: true },
+            { id: id2, accepted: false, isBestSolution: false },
+            { id: id3, accepted: false, isBestSolution: false },
+          ],
+        },
         meta: { id, flag: 'accepted', value: true },
       };
 

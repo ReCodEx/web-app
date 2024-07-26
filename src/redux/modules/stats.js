@@ -57,13 +57,15 @@ const reducer = handleActions(
     [solutionActionTypes.REMOVE_FULFILLED]: (state, { meta: { groupId } }) =>
       state.hasIn(['resources', groupId]) ? state.setIn(['resources', groupId, 'didInvalidate'], true) : state,
 
-    [additionalSolutionsActionTypes.SET_FLAG_FULFILLED]: (state, { payload }) =>
-      state.updateIn(['resources', payload.groupId, 'data'], stats => {
-        if (!stats) {
-          stats = List();
-        }
-        return stats.filter(userStats => userStats.get('userId') !== payload.userId).push(fromJS(payload));
-      }),
+    [additionalSolutionsActionTypes.SET_FLAG_FULFILLED]: (state, { payload: { stats: newStats } }) =>
+      newStats
+        ? state.updateIn(['resources', newStats.groupId, 'data'], stats => {
+            if (!stats) {
+              stats = List();
+            }
+            return stats.filter(userStats => userStats.get('userId') !== newStats.userId).push(fromJS(newStats));
+          })
+        : state,
 
     [additonalShadowAssignmentsActionTypes.CREATE_POINTS_FULFILLED]: handleShadowPointsModification,
     [additonalShadowAssignmentsActionTypes.UPDATE_POINTS_FULFILLED]: handleShadowPointsModification,

@@ -1,3 +1,3 @@
-import ActionButtons, { prepareButtonDescriptors, onlyLabels, onlyTooltips } from './ActionButtons.js';
+import ActionButtons, { prepareButtonDescriptors, onlyLabels } from './ActionButtons.js';
 export default ActionButtons;
-export { prepareButtonDescriptors, onlyLabels, onlyTooltips };
+export { prepareButtonDescriptors, onlyLabels };
