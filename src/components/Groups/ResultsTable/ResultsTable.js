@@ -22,7 +22,7 @@ import { createUserNameComparator } from '../../helpers/users.js';
 import { compareAssignments, compareShadowAssignments } from '../../helpers/assignments.js';
 import { downloadString } from '../../../redux/helpers/api/download.js';
 import Button from '../../widgets/TheButton';
-import Icon, { DownloadIcon, LoadingIcon } from '../../icons';
+import Icon, { DownloadIcon, LoadingIcon, ReviewRequestIcon } from '../../icons';
 import { safeGet, EMPTY_ARRAY, EMPTY_OBJ, hasPermissions } from '../../../helpers/common.js';
 import withLinks from '../../../helpers/withLinks.js';
 import { storageGetItem, storageSetItem } from '../../../helpers/localStorage.js';
@@ -58,6 +58,7 @@ const assignmentCellRendererCreator = lruMemoize((rawAssignments, locale) => {
       </OverlayTrigger>
 
       {points && points.accepted && <Icon icon="circle-check" className={`text-green ${styles.accepted}`} />}
+      {points && points.reviewRequest && <ReviewRequestIcon className={`text-primary ${styles.reviewRequest}`} />}
     </>
   );
 });
@@ -413,12 +414,12 @@ class ResultsTable extends Component {
       };
 
       assignments.forEach(assignment => {
-        const { points = undefined, accepted = false } = safeGet(
-          userStats,
-          ['assignments', a => a.id === assignment.id],
-          EMPTY_OBJ
-        );
-        data[assignment.id] = points ? { ...points, accepted } : EMPTY_OBJ;
+        const {
+          points = undefined,
+          accepted = false,
+          reviewRequest = false,
+        } = safeGet(userStats, ['assignments', a => a.id === assignment.id], EMPTY_OBJ);
+        data[assignment.id] = points ? { ...points, accepted, reviewRequest } : EMPTY_OBJ;
       });
 
       shadowAssignments.forEach(shadowAssignment => {
