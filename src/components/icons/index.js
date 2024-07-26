@@ -97,12 +97,15 @@ export const RefreshIcon = props => <Icon {...props} icon="sync" />;
 export const RemoveIcon = props => <Icon {...props} icon="minus-circle" />;
 export const RemoveUserIcon = props => <Icon {...props} icon="user-slash" />;
 export const ResultsIcon = props => <Icon {...props} icon="chart-line" />;
-export const ReviewIcon = ({ review = null, ...props }) =>
+export const ReviewIcon = ({ review = null, reviewRequest = false, ...props }) =>
   review && review.closedAt ? (
     <Icon {...props} icon={review.issues > 0 ? 'file-circle-exclamation' : 'file-circle-check'} />
+  ) : !review && reviewRequest ? (
+    <ReviewRequestIcon {...props} />
   ) : (
     <Icon {...props} icon="microscope" />
   );
+export const ReviewRequestIcon = props => <Icon {...props} icon="hands-praying" />;
 export const SaveIcon = props => <Icon {...props} icon={['far', 'save']} />;
 export const SearchIcon = props => <Icon {...props} icon="search" />;
 export const ServerIcon = props => <Icon {...props} icon="server" />;
@@ -190,6 +193,7 @@ ReviewIcon.propTypes = {
     closedAt: PropTypes.number,
     issues: PropTypes.number,
   }),
+  reviewRequest: PropTypes.bool,
 };
 
 SortedIcon.propTypes = {

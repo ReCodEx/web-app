@@ -57,24 +57,7 @@ class SolutionDetail extends Component {
 
   render() {
     const {
-      solution: {
-        id,
-        runtimeEnvironmentId,
-        lastSubmission,
-        permissionHints = EMPTY_OBJ,
-        createdAt,
-        authorId,
-        description = null,
-        note = null,
-        attemptIndex = null,
-        maxPoints = null,
-        overriddenPoints = null,
-        bonusPoints = null,
-        actualPoints = null,
-        accepted = null,
-        review = null,
-        visibility = null,
-      },
+      solution,
       files,
       download,
       otherSolutions,
@@ -92,6 +75,20 @@ class SolutionDetail extends Component {
       currentUser,
     } = this.props;
 
+    const {
+      id,
+      runtimeEnvironmentId,
+      lastSubmission,
+      permissionHints = EMPTY_OBJ,
+      authorId,
+      description = null,
+      note = null,
+      attemptIndex = null,
+      maxPoints = null,
+      overriddenPoints = null,
+      bonusPoints = null,
+    } = solution;
+
     const { openFileId, openFileName, openZipEntry, scoreDialogOpened } = this.state;
     const activeSubmissionId = this.state.activeSubmissionId || safeGet(lastSubmission, ['id'], null);
     const evaluationsJS = evaluations.toJS();
@@ -107,29 +104,17 @@ class SolutionDetail extends Component {
         <Row>
           <Col xl={6}>
             <SolutionStatus
-              id={id}
-              attemptIndex={attemptIndex}
+              solution={solution}
+              referenceSolution={referenceSolution}
               evaluation={evaluation}
-              lastSubmission={lastSubmission}
-              submittedAt={createdAt}
-              userId={authorId}
               submittedBy={submittedBy}
               note={referenceSolution ? description : note}
               editNote={editNote}
-              accepted={accepted}
-              review={review}
               assignment={assignment}
-              actualPoints={actualPoints}
-              overriddenPoints={overriddenPoints}
-              maxPoints={maxPoints}
-              bonusPoints={bonusPoints}
-              runtimeEnvironmentId={runtimeEnvironmentId}
               runtimeEnvironments={runtimeEnvironments}
               otherSolutions={otherSolutions}
               assignmentSolversLoading={assignmentSolversLoading}
               assignmentSolverSelector={assignmentSolverSelector}
-              visibility={visibility}
-              referenceSolution={referenceSolution}
             />
           </Col>
           <Col xl={6}>

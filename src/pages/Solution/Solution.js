@@ -14,6 +14,7 @@ import SolutionDetail, { FailedSubmissionDetail } from '../../components/Solutio
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import ResubmitSolutionContainer from '../../containers/ResubmitSolutionContainer';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
+import SolutionReviewRequestButtonContainer from '../../containers/SolutionReviewRequestButtonContainer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import { TheButtonGroup } from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
@@ -60,8 +61,8 @@ import { isSubmitting } from '../../redux/selectors/submission.js';
 import { canSubmitSolution } from '../../redux/selectors/canSubmit.js';
 
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions.js';
-import { hasPermissions } from '../../helpers/common.js';
-import { LinkIcon, PlagiarismIcon, SolutionResultsIcon, WarningIcon } from '../../components/icons';
+import { hasPermissions, hasOneOfPermissions } from '../../helpers/common.js';
+import { LinkIcon, PlagiarismIcon, ReviewRequestIcon, SolutionResultsIcon, WarningIcon } from '../../components/icons';
 
 import withLinks from '../../helpers/withLinks.js';
 
@@ -153,6 +154,7 @@ class Solution extends Component {
                 }
                 canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               />
+
               {solution.plagiarism && hasPermissions(solution, 'viewDetectedPlagiarisms') && (
                 <Callout variant="warning" icon={<PlagiarismIcon />}>
                   <FormattedMessage
@@ -161,13 +163,16 @@ class Solution extends Component {
                   />
                 </Callout>
               )}
-              {(hasPermissions(solution, 'setFlag') ||
-                hasPermissions(solution, 'review') ||
+
+              {(hasOneOfPermissions(solution, 'setFlagAsStudent', 'setFlag', 'review') ||
                 hasPermissions(assignment, 'resubmitSubmissions')) && (
                 <Row>
                   <Col className="mb-3" xs={12} lg={true}>
                     <TheButtonGroup>
                       <SolutionActionsContainer id={solution.id} />
+                      {!solution.review && hasOneOfPermissions(solution, 'setFlagAsStudent', 'setFlag') && (
+                        <SolutionReviewRequestButtonContainer id={solution.id} />
+                      )}
                     </TheButtonGroup>
                   </Col>
 
@@ -192,6 +197,29 @@ class Solution extends Component {
                             />
                           </>
                         )}
+
+                      {isStudent && (
+                        <ResourceRenderer resource={canSubmit}>
+                          {canSubmitObj =>
+                            canSubmitObj.canSubmit && (
+                              <>
+                                <SubmitSolutionButton onClick={initCanSubmit(assignment.id)} />
+                                <SubmitSolutionContainer
+                                  userId={currentUser.id}
+                                  id={assignment.id}
+                                  onSubmit={submitSolution}
+                                  presubmitValidation={presubmitSolution}
+                                  afterEvaluationStarts={reloadCanSubmit}
+                                  onReset={initCanSubmit}
+                                  isOpen={submitting}
+                                  solutionFilesLimit={assignment.solutionFilesLimit}
+                                  solutionSizeLimit={assignment.solutionSizeLimit}
+                                />
+                              </>
+                            )
+                          }
+                        </ResourceRenderer>
+                      )}
                     </TheButtonGroup>
 
                     {hasPermissions(assignment, 'resubmitSubmissions') &&
@@ -208,42 +236,27 @@ class Solution extends Component {
                 </Row>
               )}
 
-              {isStudent && (
-                <ResourceRenderer resource={canSubmit}>
-                  {canSubmitObj =>
-                    canSubmitObj.canSubmit && (
-                      <Row>
-                        <Col xs={12} className="mb-3 text-right">
-                          <SubmitSolutionButton onClick={initCanSubmit(assignment.id)} />
-                          <SubmitSolutionContainer
-                            userId={currentUser.id}
-                            id={assignment.id}
-                            onSubmit={submitSolution}
-                            presubmitValidation={presubmitSolution}
-                            afterEvaluationStarts={reloadCanSubmit}
-                            onReset={initCanSubmit}
-                            isOpen={submitting}
-                            solutionFilesLimit={assignment.solutionFilesLimit}
-                            solutionSizeLimit={assignment.solutionSizeLimit}
-                          />
-                        </Col>
-                      </Row>
-                    )
-                  }
-                </ResourceRenderer>
+              {hasPermissions(solution, 'review') && (
+                <>
+                  {solution.review && solution.review.startedAt && !solution.review.closedAt && (
+                    <Callout variant="info">
+                      <FormattedMessage
+                        id="app.solution.reviewPendingAbout"
+                        defaultMessage="The solution is currently under review. Please, do not forget to close the review when you are done since the author does not see the comments until the review is closed."
+                      />
+                    </Callout>
+                  )}
+                  {!solution.review && solution.reviewRequest && (
+                    <Callout variant="warning" icon={<ReviewRequestIcon />}>
+                      <FormattedMessage
+                        id="app.solution.reviewRequestNote"
+                        defaultMessage="The student has requested a code review for this solution."
+                      />
+                    </Callout>
+                  )}
+                </>
               )}
 
-              {hasPermissions(solution, 'review') &&
-                solution.review &&
-                solution.review.startedAt &&
-                !solution.review.closedAt && (
-                  <Callout variant="info">
-                    <FormattedMessage
-                      id="app.solution.reviewPendingAbout"
-                      defaultMessage="The solution is currently under review. Please, do not forget to close the review when you are done since the author does not see the comments until the review is closed."
-                    />
-                  </Callout>
-                )}
               {isStudent && hasPermissions(solution, 'viewReview') && solution.review && solution.review.closedAt && (
                 <Callout variant={solution.review.issues > 0 ? 'warning' : 'success'}>
                   <FormattedMessage
@@ -266,6 +279,7 @@ class Solution extends Component {
                   </Link>
                 </Callout>
               )}
+
               <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
                 {runtimes => (
                   <FetchManyResourceRenderer fetchManyStatus={fetchStatus}>

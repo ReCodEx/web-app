@@ -17,6 +17,7 @@ import {
   CodeCompareIcon,
   PlagiarismIcon,
   RefreshIcon,
+  ReviewRequestIcon,
   SolutionResultsIcon,
   StopIcon,
   SwapIcon,
@@ -27,6 +28,7 @@ import RecentlyVisited from '../../components/Solutions/RecentlyVisited';
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions.js';
 import Callout from '../../components/widgets/Callout';
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
+import SolutionReviewRequestButtonContainer from '../../containers/SolutionReviewRequestButtonContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
@@ -56,7 +58,7 @@ import { loggedUserIsPrimaryAdminOfSelector } from '../../redux/selectors/usersG
 
 import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage.js';
 import { isSupervisorRole } from '../../components/helpers/usersRoles.js';
-import { hasPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common.js';
+import { hasPermissions, hasOneOfPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common.js';
 import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions.js';
 
 import { isStudentLocked } from '../../components/helpers/exams.js';
@@ -319,26 +321,30 @@ class SolutionSourceCodes extends Component {
               </>
             )}
 
-            {isSupervisorRole(effectiveRole) && (
-              <>
-                {solution.plagiarism && hasPermissions(solution, 'viewDetectedPlagiarisms') && (
-                  <Callout variant="warning" icon={<PlagiarismIcon />}>
-                    <FormattedMessage
-                      id="app.solution.suspectedPlagiarismWarning"
-                      defaultMessage="Similar solutions have been detected, the solution is suspected of being a plagiarism. Details can be found on 'Similarities' page."
-                    />
-                  </Callout>
-                )}
+            {solution.plagiarism && hasPermissions(solution, 'viewDetectedPlagiarisms') && (
+              <Callout variant="warning" icon={<PlagiarismIcon />}>
+                <FormattedMessage
+                  id="app.solution.suspectedPlagiarismWarning"
+                  defaultMessage="Similar solutions have been detected, the solution is suspected of being a plagiarism. Details can be found on 'Similarities' page."
+                />
+              </Callout>
+            )}
 
-                <Row className="justify-content-sm-between">
-                  <Col sm="auto" className="mb-3">
-                    {!diffMode && (
-                      <TheButtonGroup className="ml-2 text-nowrap">
-                        <SolutionActionsContainer id={solution.id} showAllButtons />
-                      </TheButtonGroup>
-                    )}
-                  </Col>
+            {(isSupervisorRole(effectiveRole) ||
+              (!diffMode && !solution.review && hasOneOfPermissions(solution, 'setFlagAsStudent', 'setFlag'))) && (
+              <Row className="justify-content-sm-between">
+                <Col sm="auto" className="mb-3">
+                  {!diffMode && (
+                    <TheButtonGroup className="text-nowrap">
+                      <SolutionActionsContainer id={solution.id} showAllButtons />
+                      {!solution.review && hasOneOfPermissions(solution, 'setFlagAsStudent', 'setFlag') && (
+                        <SolutionReviewRequestButtonContainer id={solution.id} />
+                      )}
+                    </TheButtonGroup>
+                  )}
+                </Col>
 
+                {isSupervisorRole(effectiveRole) && (
                   <Col sm="auto" className="mb-3">
                     <TheButtonGroup>
                       <Button variant="primary" onClick={this.openDiffDialog}>
@@ -364,45 +370,56 @@ class SolutionSourceCodes extends Component {
                       )}
                     </TheButtonGroup>
                   </Col>
-                </Row>
+                )}
+              </Row>
+            )}
 
-                {!diffMode && (
+            {isSupervisorRole(effectiveRole) && !diffMode && (
+              <>
+                {(!solution.review || !solution.review.startedAt) && (
                   <>
-                    {(!solution.review || !solution.review.startedAt) && (
-                      <InsetPanel>
+                    {solution.reviewRequest && (
+                      <Callout variant="warning" icon={<ReviewRequestIcon />}>
                         <FormattedMessage
-                          id="app.solutionSourceCodes.codeReviewsAbout"
-                          defaultMessage="You may create a code review here and assign comments directly to individual lines of code. When a review is started, you can add comments by double-clicking the associated line of code. The comments will become visible to the author when the review is closed. The reviews are not visible when the compare mode is active."
-                        />
-                      </InsetPanel>
-                    )}
-
-                    {solution.review && solution.review.startedAt && !solution.review.closedAt && (
-                      <Callout variant="info">
-                        <p className="mb-2">
-                          <FormattedMessage
-                            id="app.solutionSourceCodes.reviewPendingAbout"
-                            defaultMessage="A review is currently open. You may add comments in the code by double-clicking on the associated line."
-                          />
-                        </p>
-                        <p>
-                          <FormattedMessage
-                            id="app.solutionSourceCodes.reviewPendingNeedsClosing"
-                            defaultMessage="Please note that the comments in the code are not visible to the author until you close the review. A notification mail will be sent to the author when you close it."
-                          />
-                        </p>
-                      </Callout>
-                    )}
-
-                    {solution.review && solution.review.closedAt && (
-                      <Callout variant="success">
-                        <FormattedMessage
-                          id="app.solutionSourceCodes.reviewClosedInfo"
-                          defaultMessage="The review comments are now visible to the author. You may still edit the review, but each modification will be sent as an email notification to the author. If you wish to make more significant changes, re-open the review, make the modifications, and close it again."
+                          id="app.solution.reviewRequestNote"
+                          defaultMessage="The student has requested a code review for this solution."
                         />
                       </Callout>
                     )}
+
+                    <InsetPanel>
+                      <FormattedMessage
+                        id="app.solutionSourceCodes.codeReviewsAbout"
+                        defaultMessage="You may create a code review here and assign comments directly to individual lines of code. When a review is started, you can add comments by double-clicking the associated line of code. The comments will become visible to the author when the review is closed. The reviews are not visible when the compare mode is active."
+                      />
+                    </InsetPanel>
                   </>
+                )}
+
+                {solution.review && solution.review.startedAt && !solution.review.closedAt && (
+                  <Callout variant="info">
+                    <p className="mb-2">
+                      <FormattedMessage
+                        id="app.solutionSourceCodes.reviewPendingAbout"
+                        defaultMessage="A review is currently open. You may add comments in the code by double-clicking on the associated line."
+                      />
+                    </p>
+                    <p>
+                      <FormattedMessage
+                        id="app.solutionSourceCodes.reviewPendingNeedsClosing"
+                        defaultMessage="Please note that the comments in the code are not visible to the author until you close the review. A notification mail will be sent to the author when you close it."
+                      />
+                    </p>
+                  </Callout>
+                )}
+
+                {solution.review && solution.review.closedAt && (
+                  <Callout variant="success">
+                    <FormattedMessage
+                      id="app.solutionSourceCodes.reviewClosedInfo"
+                      defaultMessage="The review comments are now visible to the author. You may still edit the review, but each modification will be sent as an email notification to the author. If you wish to make more significant changes, re-open the review, make the modifications, and close it again."
+                    />
+                  </Callout>
                 )}
               </>
             )}
