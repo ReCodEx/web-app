@@ -72,25 +72,28 @@ class SolutionStatus extends Component {
 
   render() {
     const {
+      solution: {
+        id,
+        attemptIndex,
+        createdAt,
+        authorId,
+        accepted,
+        reviewRequest = false,
+        review = null,
+        maxPoints,
+        bonusPoints,
+        actualPoints,
+        overriddenPoints = null,
+        visibility = null,
+        runtimeEnvironmentId,
+      },
       referenceSolution = false,
-      id,
-      attemptIndex,
       otherSolutions,
       assignment,
       evaluation,
-      submittedAt,
-      userId,
       submittedBy,
       note,
-      visibility = null,
-      accepted,
-      review = null,
-      runtimeEnvironmentId,
       runtimeEnvironments,
-      maxPoints,
-      bonusPoints,
-      actualPoints,
-      overriddenPoints = null,
       editNote = null,
       assignmentSolversLoading,
       assignmentSolverSelector = null,
@@ -113,7 +116,8 @@ class SolutionStatus extends Component {
     const environment =
       runtimeEnvironments && runtimeEnvironmentId && runtimeEnvironments.find(({ id }) => id === runtimeEnvironmentId);
 
-    const assignmentSolver = assignmentSolverSelector && assignmentId && assignmentSolverSelector(assignmentId, userId);
+    const assignmentSolver =
+      assignmentSolverSelector && assignmentId && assignmentSolverSelector(assignmentId, authorId);
     const lastAttemptIndex = assignmentSolver && assignmentSolver.get('lastAttemptIndex');
 
     return (
@@ -143,7 +147,7 @@ class SolutionStatus extends Component {
                 </th>
                 <td>
                   <UsersNameContainer
-                    userId={userId}
+                    userId={authorId}
                     showEmail="icon"
                     showExternalIdentifiers={!referenceSolution}
                     link={referenceSolution}
@@ -151,7 +155,7 @@ class SolutionStatus extends Component {
                 </td>
               </tr>
 
-              {Boolean(submittedBy) && submittedBy !== userId && (
+              {Boolean(submittedBy) && submittedBy !== authorId && (
                 <tr>
                   <td className="text-center text-muted shrink-col px-2">
                     <SupervisorIcon />
@@ -222,7 +226,7 @@ class SolutionStatus extends Component {
                       <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />:
                     </th>
                     <td>
-                      <DateTime unixts={submittedAt} showRelative />
+                      <DateTime unixts={createdAt} showRelative />
                     </td>
                   </>
                 ) : (
@@ -242,12 +246,12 @@ class SolutionStatus extends Component {
                           placement="bottom"
                           overlay={
                             <Tooltip id="deadlineInfo">
-                              {submittedAt < firstDeadline ? (
+                              {createdAt < firstDeadline ? (
                                 <FormattedMessage
                                   id="app.solution.submittedBeforeFirstDeadline"
                                   defaultMessage="The solution was submitted before the deadline"
                                 />
-                              ) : allowSecondDeadline && submittedAt < secondDeadline ? (
+                              ) : allowSecondDeadline && createdAt < secondDeadline ? (
                                 <FormattedMessage
                                   id="app.solution.submittedBeforeSecondDeadline"
                                   defaultMessage="The solution was submitted after the first but still before the second deadline"
@@ -261,9 +265,9 @@ class SolutionStatus extends Component {
                             </Tooltip>
                           }>
                           <span>
-                            {submittedAt < firstDeadline ? (
+                            {createdAt < firstDeadline ? (
                               <Icon icon={['far', 'circle-check']} className="text-success" />
-                            ) : allowSecondDeadline && submittedAt < secondDeadline ? (
+                            ) : allowSecondDeadline && createdAt < secondDeadline ? (
                               <InvertIcon className="text-warning" />
                             ) : (
                               <PastDeadlineIcon className="text-muted" />
@@ -272,13 +276,13 @@ class SolutionStatus extends Component {
                         </OverlayTrigger>
                       </span>
 
-                      <DateTime unixts={submittedAt} />
+                      <DateTime unixts={createdAt} />
 
-                      {submittedAt > firstDeadline && (
+                      {createdAt > firstDeadline && (
                         <>
                           <span className="px-1"> </span>
                           <small className="text-muted">
-                            ({moment.duration(firstDeadline - submittedAt, 'seconds').humanize()}{' '}
+                            ({moment.duration(firstDeadline - createdAt, 'seconds').humanize()}{' '}
                             <FormattedMessage id="app.solution.afterDeadline" defaultMessage="after the deadline" />)
                           </small>
                         </>
@@ -434,7 +438,7 @@ class SolutionStatus extends Component {
 
                   <tr>
                     <td className="text-center text-muted shrink-col px-2">
-                      <ReviewIcon review={review} />
+                      <ReviewIcon review={review} reviewRequest={reviewRequest} />
                     </td>
                     <th className="text-nowrap">
                       {review && review.closedAt ? (
@@ -458,6 +462,11 @@ class SolutionStatus extends Component {
                         <DateTime unixts={review.closedAt || review.startedAt} />
                       ) : (
                         <i className="text-muted">
+                          {reviewRequest && (
+                            <strong className="text-success">
+                              <FormattedMessage id="app.solution.reviewRequested" defaultMessage="requested" />,{' '}
+                            </strong>
+                          )}
                           <FormattedMessage id="app.solution.reviewNotStartedYet" defaultMessage="not started yet" />
                         </i>
                       )}
@@ -668,7 +677,7 @@ class SolutionStatus extends Component {
                       maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
                       allowSecondDeadline={allowSecondDeadline}
                       maxPointsDeadlineInterpolation={maxPointsDeadlineInterpolation}
-                      markerTime={submittedAt}
+                      markerTime={createdAt}
                       markerPoints={maxPoints}
                       viewportAspectRatio={2 / 5}
                     />
@@ -710,12 +719,28 @@ class SolutionStatus extends Component {
 }
 
 SolutionStatus.propTypes = {
+  solution: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    attemptIndex: PropTypes.number,
+    createdAt: PropTypes.number.isRequired,
+    authorId: PropTypes.string.isRequired,
+    accepted: PropTypes.bool,
+    reviewRequest: PropTypes.bool,
+    review: PropTypes.shape({
+      startedAt: PropTypes.number,
+      closedAt: PropTypes.number,
+      issues: PropTypes.number,
+    }),
+    maxPoints: PropTypes.number,
+    bonusPoints: PropTypes.number,
+    actualPoints: PropTypes.number,
+    overriddenPoints: PropTypes.number,
+    runtimeEnvironmentId: PropTypes.string,
+    visibility: PropTypes.number,
+  }),
   referenceSolution: PropTypes.bool,
-  submittedAt: PropTypes.number.isRequired,
-  userId: PropTypes.string.isRequired,
   submittedBy: PropTypes.string,
   id: PropTypes.string,
-  attemptIndex: PropTypes.number,
   otherSolutions: ImmutablePropTypes.list,
   assignment: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -730,19 +755,7 @@ SolutionStatus.propTypes = {
   }),
   evaluation: PropTypes.object,
   note: PropTypes.string,
-  visibility: PropTypes.number,
-  accepted: PropTypes.bool,
-  review: PropTypes.shape({
-    startedAt: PropTypes.number,
-    closedAt: PropTypes.number,
-    issues: PropTypes.number,
-  }),
-  runtimeEnvironmentId: PropTypes.string,
   runtimeEnvironments: PropTypes.array,
-  maxPoints: PropTypes.number,
-  bonusPoints: PropTypes.number,
-  actualPoints: PropTypes.number,
-  overriddenPoints: PropTypes.number,
   editNote: PropTypes.func,
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func,

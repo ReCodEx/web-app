@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import SolutionStatusIcon from '../../Solutions/SolutionStatusIcon';
 import SolutionReviewIcon from '../../Solutions/SolutionReviewIcon';
 import CommentsIcon from './CommentsIcon.js';
-import { PlagiarismIcon } from '../../icons';
+import { PlagiarismIcon, ReviewIcon } from '../../icons';
 
 import withLinks from '../../../helpers/withLinks.js';
 
@@ -18,14 +18,35 @@ const SolutionTableRowIcons = ({
   permissionHints = {},
   links: { SOLUTION_PLAGIARISMS_URI_FACTORY },
 }) => {
-  const { review = null, commentsStats = null, plagiarism = null } = solution;
+  const { review = null, reviewRequest = false, commentsStats = null, plagiarism = null } = solution;
 
   return (
     <>
       <SolutionStatusIcon id={id} solution={solution} />
 
-      {review && (
+      {review ? (
         <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={permissionHints.review || false} gapLeft />
+      ) : (
+        reviewRequest && (
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id={`reviewRequest-${id}`}>
+                <FormattedMessage
+                  id="app.solution.reviewRequestNote"
+                  defaultMessage="The student has requested a code review for this solution."
+                />
+              </Tooltip>
+            }>
+            <ReviewIcon
+              reviewRequest
+              className="text-primary fa-bounce"
+              style={{ '--fa-animation-duration': '2s' }}
+              transform="down-3"
+              gapLeft
+            />
+          </OverlayTrigger>
+        )
       )}
 
       {Boolean(plagiarism) && permissionHints.viewDetectedPlagiarisms && (
@@ -60,6 +81,7 @@ SolutionTableRowIcons.propTypes = {
       closedAt: PropTypes.number,
       issues: PropTypes.number,
     }),
+    reviewRequest: PropTypes.bool,
     plagiarism: PropTypes.string,
   }).isRequired,
   permissionHints: PropTypes.PropTypes.shape({
