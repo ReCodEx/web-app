@@ -43,16 +43,6 @@ export const onlyLabels = lruMemoize(actions =>
   actions.map(({ label, tooltip, ...action }) => ({ ...action, label: label || tooltip }))
 );
 
-/**
- * Transforms the action descriptors. All labels are removed, only tooltips remain.
- * If tooltip is missing and label exists, it becomes a tooltip.
- * @param {Object[]} actions
- * @returns {Object[]}
- */
-export const onlyTooltips = lruMemoize(actions =>
-  actions.map(({ label, tooltip, ...action }) => ({ ...action, tooltip: tooltip || label }))
-);
-
 const ActionButtons = ({ id, actions, size = undefined, dropdown = false, dropdownLabel = null }) => {
   return dropdown ? (
     <ActionDropdown id={id} actions={actions} label={dropdownLabel} />

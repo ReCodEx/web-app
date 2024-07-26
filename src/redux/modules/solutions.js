@@ -207,44 +207,17 @@ const reducer = handleActions(
     [additionalActionTypes.SET_FLAG_REJECTED]: (state, { meta: { id, flag } }) =>
       state.removeIn(['resources', id, `pending-set-flag-${flag}`]),
 
-    [additionalActionTypes.SET_FLAG_FULFILLED]: (state, { payload: { assignments }, meta: { id, flag, value } }) => {
+    [additionalActionTypes.SET_FLAG_FULFILLED]: (state, { payload: { solutions = [] }, meta: { id, flag } }) => {
       state = state.removeIn(['resources', id, `pending-set-flag-${flag}`]);
-      state = state.updateIn(['resources', id, 'data'], data => data.set(flag, value));
-
-      if (flag === 'accepted') {
-        // Accepted flag requires special treatement
-        const assignmentId = state.getIn(['resources', id, 'data', 'assignmentId']);
-        if (value) {
-          // Accepted solution needs to be updated
-          const userId = state.getIn(['resources', id, 'data', 'authorId']);
-          state = state.updateIn(
-            ['resources', id, 'data'],
-            data => data.set('isBestSolution', true) // accepted also becomes best solution
-          );
-
-          if (assignmentId && userId) {
-            state = state
-              // All other solutions from the same assignment by the same author needs to be updated
-              .update('resources', resources =>
-                resources.map((item, itemId) => {
-                  const aId = item.getIn(['data', 'assignmentId']);
-                  const uId = item.getIn(['data', 'authorId']);
-                  return itemId === id || aId !== assignmentId || uId !== userId
-                    ? item // no modification (either it is accepted solution, or it is solution from another assignment/by another user)
-                    : item.update('data', data => data.set('accepted', false).set('isBestSolution', false)); // no other solution can be accepted nor best
-                })
-              );
-          }
-        } else {
-          // Unaccepted -> best solution flag may change to another solution...
-          const assignmentStats = assignments.find(a => a.id === assignmentId);
-          const newBestSolutionId = assignmentStats && assignmentStats.bestSolutionId;
-          state = state.updateIn(['resources', id, 'data'], data => data.set('isBestSolution', false));
-          if (newBestSolutionId && state.hasIn(['resources', newBestSolutionId, 'data', 'isBestSolution'])) {
-            state = state.setIn(['resources', newBestSolutionId, 'data', 'isBestSolution'], true);
-          }
-        }
-      }
+      solutions.forEach(solution => {
+        state = state.setIn(
+          ['resources', solution.id],
+          createRecord({
+            state: resourceStatus.FULFILLED,
+            data: solution,
+          })
+        );
+      });
       return state;
     },
 

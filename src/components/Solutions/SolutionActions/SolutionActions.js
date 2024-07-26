@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import ActionButtons, { prepareButtonDescriptors, onlyLabels, onlyTooltips } from '../../widgets/ActionButtons';
+import ActionButtons, { prepareButtonDescriptors, onlyLabels } from '../../widgets/ActionButtons';
 import withLinks from '../../../helpers/withLinks.js';
 import { safeGet } from '../../../helpers/common.js';
 
@@ -171,7 +171,7 @@ const SolutionActions = ({
   return (
     <ActionButtons
       id={id}
-      actions={captionAsTooltip ? onlyTooltips(actions) : onlyLabels(actions)}
+      actions={onlyLabels(actions)}
       size={size}
       dropdown={dropdown}
       dropdownLabel={captionAsTooltip ? null : <FormattedMessage id="generic.update" defaultMessage="Update" />}
