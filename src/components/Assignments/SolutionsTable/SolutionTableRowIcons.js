@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import SolutionStatusIcon from '../../Solutions/SolutionStatusIcon';
 import SolutionReviewIcon from '../../Solutions/SolutionReviewIcon';
 import CommentsIcon from './CommentsIcon.js';
-import { PlagiarismIcon, ReviewIcon } from '../../icons';
+import { PlagiarismIcon, ReviewRequestIcon } from '../../icons';
 
 import withLinks from '../../../helpers/withLinks.js';
 
@@ -38,8 +38,7 @@ const SolutionTableRowIcons = ({
                 />
               </Tooltip>
             }>
-            <ReviewIcon
-              reviewRequest
+            <ReviewRequestIcon
               className="text-primary fa-bounce"
               style={{ '--fa-animation-duration': '2s' }}
               transform="down-3"

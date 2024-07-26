@@ -221,7 +221,7 @@ table.table-hover td.clickable:hover,
 table.table-hover th.clickable:hover,
 table.table.tbody-hover tbody:hover td,
 table.table.tbody-hover tbody:hover th {
-  background-color: #eeeeee;
+  background-color: #e0e0f0;
 }
 
 table .selected td,
