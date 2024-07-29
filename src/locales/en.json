@@ -1620,6 +1620,8 @@
   "app.reviewCommentForm.labelNew": "Create new comment:",
   "app.reviewCommentForm.suppressNotification": "Suppress e-mail notification",
   "app.reviewCommentForm.suppressNotificationExplanation": "When the review is closed, a notification is sent to the author with every change. You may suppress the notification if the change you are performing is not significant.",
+  "app.reviewRequestsList.failed": "Loading of the requested reviews failed. Please try refreshing this component later.",
+  "app.reviewRequestsList.title": "Solutions with requested code reviews",
   "app.reviewSolutionButtons.closeAll": "Close All Open Reviews",
   "app.reviewSolutionButtons.closePendingReviews": "Close pending reviews",
   "app.reviewSolutionButtons.deleteConfirm": "All review comments will be erased as well. Do you wish to proceed?",

@@ -28,7 +28,7 @@ const AssignmentNavigation = ({
       },
       canViewSolutions && {
         caption: <FormattedMessage id="app.navigation.allSolutions" defaultMessage="All Solutions" />,
-        link: links.ASSIGNMENT_STATS_URI_FACTORY(assignmentId),
+        link: links.ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignmentId),
         icon: <ResultsIcon gapRight />,
       },
       canEdit && {

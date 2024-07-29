@@ -18,10 +18,13 @@ import GroupsNameContainer from '../../containers/GroupsNameContainer';
 import AssignmentsTableContainer from '../../containers/AssignmentsTableContainer';
 import ShadowAssignmentsTableContainer from '../../containers/ShadowAssignmentsTableContainer';
 import PendingReviewsList from '../../components/Solutions/PendingReviewsList';
+import ReviewRequestsList from '../../components/Solutions/ReviewRequestsList';
+import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 
 import { fetchUserIfNeeded, fetchUser, fetchByIds } from '../../redux/modules/users.js';
 import { fetchAllGroups } from '../../redux/modules/groups.js';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
+import { fetchReviewRequestsForTeacher } from '../../redux/modules/solutions.js';
 import {
   fetchPendingReviewsOfUser,
   setSolutionReviewState,
@@ -31,11 +34,13 @@ import {
 import { getUser, isStudent, isSupervisor, isLoggedAsSuperAdmin } from '../../redux/selectors/users.js';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups.js';
+import { getReviewRequestSolutions, getReviewRequestSolutionsState } from '../../redux/selectors/solutions.js';
 import {
   getOpenReviewsSolutions,
   getOpenReviewsSolutionsState,
   isSolutionReviewUpdatePendingSelector,
 } from '../../redux/selectors/solutionReviews.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
 
 import {
   DashboardIcon,
@@ -50,6 +55,15 @@ import withLinks from '../../helpers/withLinks.js';
 import { safeGet } from '../../helpers/common.js';
 
 const INITIAL_LOADING_THRESHOLD = 3; // if there are more groups, the boxes will be collapsed and data loaded on demand
+
+const getSolutions = ([
+  {
+    value: { solutions: s1 },
+  },
+  {
+    value: { solutions: s2 },
+  },
+]) => [...s1, ...s2];
 
 const getUniqueAuthors = solutions => {
   const res = {};
@@ -79,9 +93,10 @@ class Dashboard extends Component {
     Promise.all([
       dispatch(fetchUserIfNeeded(userId)).then(({ value: user }) =>
         user && user.privateData && isSupervisorRole(user.privateData.role)
-          ? dispatch(fetchPendingReviewsOfUser(userId)).then(({ value }) =>
-              dispatch(fetchByIds(getUniqueAuthors(value.solutions)))
-            )
+          ? Promise.all([
+              dispatch(fetchReviewRequestsForTeacher(userId)),
+              dispatch(fetchPendingReviewsOfUser(userId)),
+            ]).then(values => dispatch(fetchByIds(getUniqueAuthors(getSolutions(values)))))
           : Promise.resolve()
       ),
       dispatch(fetchRuntimeEnvironments()),
@@ -89,6 +104,7 @@ class Dashboard extends Component {
     ]);
 
   reloadOpenReviewSolutions = () => this.props.reloadOpenReviewSolutions(this.props.userId);
+  reloadReviewRequestSolutions = () => this.props.reloadReviewRequestSolutions(this.props.userId);
 
   closeReview = params => this.props.closeReview({ userId: this.props.userId, ...params });
 
@@ -102,7 +118,10 @@ class Dashboard extends Component {
       refreshUser,
       openReviewSolutions,
       openReviewSolutionsState,
+      reviewRequestSolutions,
+      reviewRequestSolutionsState,
       openReviewUpdating,
+      runtimeEnvironments,
       links: { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY, GROUP_STUDENTS_URI_FACTORY },
     } = this.props;
 
@@ -221,59 +240,70 @@ class Dashboard extends Component {
                           </Col>
                         </Row>
                       ) : (
-                        <div>
-                          <PendingReviewsList
-                            state={openReviewSolutionsState}
-                            solutions={openReviewSolutions}
-                            updatingSelector={openReviewUpdating}
-                            closeReview={this.closeReview}
-                            refresh={this.reloadOpenReviewSolutions}
-                          />
+                        <ResourceRenderer resourceArray={runtimeEnvironments}>
+                          {runtimes => (
+                            <div>
+                              <PendingReviewsList
+                                solutionsState={openReviewSolutionsState}
+                                solutions={openReviewSolutions}
+                                updatingSelector={openReviewUpdating}
+                                closeReview={this.closeReview}
+                                refresh={this.reloadOpenReviewSolutions}
+                              />
 
-                          <h3 className="mt-4 mb-3">
-                            <SupervisorIcon gapLeft gapRight className="text-muted" />
-                            <FormattedMessage
-                              id="app.dashboard.supervisorOf"
-                              defaultMessage="Groups managed by you (as admin or supervisor)"
-                            />
-                          </h3>
+                              <ReviewRequestsList
+                                solutionsState={reviewRequestSolutionsState}
+                                solutions={reviewRequestSolutions}
+                                runtimeEnvironments={runtimes}
+                                refresh={this.reloadReviewRequestSolutions}
+                              />
 
-                          {memberGroupsAdminOrSupervisor.map(groupId => (
-                            <Box
-                              key={groupId}
-                              title={<GroupsNameContainer groupId={groupId} fullName admins links />}
-                              collapsable
-                              noPadding
-                              isOpen={memberGroupsAdminOrSupervisor.length <= INITIAL_LOADING_THRESHOLD}
-                              footer={
-                                <div className="mb-2 text-center">
-                                  <TheButtonGroup>
-                                    <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
-                                      <Button size="sm">
-                                        <GroupIcon gapRight />
-                                        <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
-                                      </Button>
-                                    </Link>
-                                    <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
-                                      <Button size="sm">
-                                        <AssignmentsIcon gapRight />
-                                        <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
-                                      </Button>
-                                    </Link>
-                                    <Link to={GROUP_STUDENTS_URI_FACTORY(groupId)}>
-                                      <Button size="sm">
-                                        <StudentsIcon gapRight />
-                                        <FormattedMessage id="app.group.students" defaultMessage="Students" />
-                                      </Button>
-                                    </Link>
-                                  </TheButtonGroup>
-                                </div>
-                              }
-                              unlimitedHeight>
-                              <StudentsListContainer groupId={groupId} />
-                            </Box>
-                          ))}
-                        </div>
+                              <h3 className="mt-4 mb-3">
+                                <SupervisorIcon gapLeft gapRight className="text-muted" />
+                                <FormattedMessage
+                                  id="app.dashboard.supervisorOf"
+                                  defaultMessage="Groups managed by you (as admin or supervisor)"
+                                />
+                              </h3>
+
+                              {memberGroupsAdminOrSupervisor.map(groupId => (
+                                <Box
+                                  key={groupId}
+                                  title={<GroupsNameContainer groupId={groupId} fullName admins links />}
+                                  collapsable
+                                  noPadding
+                                  isOpen={memberGroupsAdminOrSupervisor.length <= INITIAL_LOADING_THRESHOLD}
+                                  footer={
+                                    <div className="mb-2 text-center">
+                                      <TheButtonGroup>
+                                        <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
+                                          <Button size="sm">
+                                            <GroupIcon gapRight />
+                                            <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
+                                          </Button>
+                                        </Link>
+                                        <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
+                                          <Button size="sm">
+                                            <AssignmentsIcon gapRight />
+                                            <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
+                                          </Button>
+                                        </Link>
+                                        <Link to={GROUP_STUDENTS_URI_FACTORY(groupId)}>
+                                          <Button size="sm">
+                                            <StudentsIcon gapRight />
+                                            <FormattedMessage id="app.group.students" defaultMessage="Students" />
+                                          </Button>
+                                        </Link>
+                                      </TheButtonGroup>
+                                    </div>
+                                  }
+                                  unlimitedHeight>
+                                  <StudentsListContainer groupId={groupId} />
+                                </Box>
+                              ))}
+                            </div>
+                          )}
+                        </ResourceRenderer>
                       )}
                     </>
                   )}
@@ -300,7 +330,11 @@ Dashboard.propTypes = {
   fetchManyGroupsStatus: PropTypes.string,
   openReviewSolutions: PropTypes.object,
   openReviewSolutionsState: PropTypes.string,
+  reviewRequestSolutions: PropTypes.object,
+  reviewRequestSolutionsState: PropTypes.string,
+  runtimeEnvironments: ImmutablePropTypes.map,
   reloadOpenReviewSolutions: PropTypes.func.isRequired,
+  reloadReviewRequestSolutions: PropTypes.func.isRequired,
   openReviewUpdating: PropTypes.func.isRequired,
   closeReview: PropTypes.func.isRequired,
   links: PropTypes.object,
@@ -322,6 +356,9 @@ export default withLinks(
         openReviewSolutions: getOpenReviewsSolutions(state, userId),
         openReviewSolutionsState: getOpenReviewsSolutionsState(state, userId),
         openReviewUpdating: isSolutionReviewUpdatePendingSelector(state),
+        reviewRequestSolutions: getReviewRequestSolutions(state, userId),
+        reviewRequestSolutionsState: getReviewRequestSolutionsState(state, userId),
+        runtimeEnvironments: runtimeEnvironmentsSelector(state),
       };
     },
     (dispatch, { params }) => ({
@@ -329,6 +366,10 @@ export default withLinks(
       refreshUser: userId => dispatch(fetchUser(userId)),
       reloadOpenReviewSolutions: userId =>
         dispatch(fetchPendingReviewsOfUser(userId)).then(({ value }) =>
+          dispatch(fetchByIds(getUniqueAuthors(value.solutions)))
+        ),
+      reloadReviewRequestSolutions: userId =>
+        dispatch(fetchReviewRequestsForTeacher(userId)).then(({ value }) =>
           dispatch(fetchByIds(getUniqueAuthors(value.solutions)))
         ),
       closeReview: ({ userId, groupId, assignmentId, solutionId }) =>

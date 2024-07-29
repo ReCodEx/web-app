@@ -1620,6 +1620,8 @@
   "app.reviewCommentForm.labelNew": "Vytvořit nový komentář:",
   "app.reviewCommentForm.suppressNotification": "Neodesílat oznámení",
   "app.reviewCommentForm.suppressNotificationExplanation": "Poté, co byla revize uzavřena, se s každou provedenou změnou posílá oznámení autorovi. Můžete potlačit odeslání oznámení, pokud provádíte pouze drobnou úpravu.",
+  "app.reviewRequestsList.failed": "Načítání seznamu žádostí o revizi selhalo. Prosíme, zkuste po chvíli občerstvit tuto komponentu.",
+  "app.reviewRequestsList.title": "Solutions with requested code reviews",
   "app.reviewSolutionButtons.closeAll": "Zavřit všechny otevřené revize",
   "app.reviewSolutionButtons.closePendingReviews": "Uzavřít probíhající revize",
   "app.reviewSolutionButtons.deleteConfirm": "Všechny komentáře v kódu budou smazány společně s revizí. Opravdu si přejete smazat?",
