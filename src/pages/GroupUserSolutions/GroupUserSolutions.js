@@ -85,7 +85,7 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
     SOLUTION_DETAIL_URI_FACTORY,
     SOLUTION_SOURCE_CODES_URI_FACTORY,
     ASSIGNMENT_DETAIL_URI_FACTORY,
-    ASSIGNMENT_STATS_URI_FACTORY,
+    ASSIGNMENT_SOLUTIONS_URI_FACTORY,
   } = links;
 
   const assignmentsComparator = prepareCachedAssignmentsComparator(assignments, locale);
@@ -125,7 +125,7 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
           assignment && (
             <small className="text-nowrap">
               {hasPermissions(assignment, 'viewAssignmentSolutions') ? (
-                <Link to={ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                <Link to={ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)}>
                   <LocalizedExerciseName entity={{ name: '??', localizedTexts: assignment.localizedTexts }} />
                 </Link>
               ) : (
@@ -490,7 +490,7 @@ class GroupUserSolutions extends Component {
                                         <small className="ml-3 text-nowrap">
                                           (
                                           {hasPermissions(assignment, 'viewAssignmentSolutions') ? (
-                                            <Link to={links.ASSIGNMENT_STATS_URI_FACTORY(assignment.id)}>
+                                            <Link to={links.ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)}>
                                               <FormattedMessage
                                                 id="app.groupUserSolutions.allAssignmentSolutions"
                                                 defaultMessage="all assignment solutions"

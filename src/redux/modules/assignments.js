@@ -106,6 +106,7 @@ export const fetchAssignmentAsyncJobs = assignmentId =>
     endpoint: `/exercise-assignments/${assignmentId}/async-jobs`,
     meta: { assignmentId },
   });
+
 /**
  * Reducer
  */
@@ -148,27 +149,6 @@ const reducer = handleActions(
         )
       ),
 
-    [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload: { solution }, meta: { submissionType } }) => {
-      if (submissionType !== 'assignmentSolution' || !solution || !solution.id) {
-        return state;
-      }
-
-      if (!state.hasIn(['solutions', solution.assignmentId, solution.authorId])) {
-        state = state.setIn(['solutions', solution.assignmentId, solution.authorId], List());
-      }
-
-      return state.updateIn(['solutions', solution.assignmentId, solution.authorId], solutions =>
-        solutions.push(solution.id)
-      );
-    },
-
-    [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
-      state.setIn(['solutions', assignmentId, userId], fromJS(payload.map(solution => solution.id))),
-
-    [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: solutionsFulfilledReducer,
-
-    [solutionsActionTypes.LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED]: solutionsFulfilledReducer,
-
     [additionalActionTypes.RESUBMIT_ALL_PENDING]: (state, { meta: { assignmentId } }) =>
       state.setIn(['resources', assignmentId, 'resubmit-all', 'fetchPending'], true),
 
@@ -195,6 +175,38 @@ const reducer = handleActions(
       state
         .setIn(['async-jobs', assignmentId, 'pending'], false)
         .setIn(['async-jobs', assignmentId, 'ids'], fromJS(payload.map(aj => aj.id))),
+
+    [submissionActionTypes.SUBMIT_FULFILLED]: (state, { payload: { solution }, meta: { submissionType } }) => {
+      if (submissionType !== 'assignmentSolution' || !solution || !solution.id) {
+        return state;
+      }
+
+      if (!state.hasIn(['solutions', solution.assignmentId, solution.authorId])) {
+        state = state.setIn(['solutions', solution.assignmentId, solution.authorId], List());
+      }
+
+      return state.updateIn(['solutions', solution.assignmentId, solution.authorId], solutions =>
+        solutions.push(solution.id)
+      );
+    },
+
+    [solutionsActionTypes.LOAD_USERS_SOLUTIONS_FULFILLED]: (state, { payload, meta: { userId, assignmentId } }) =>
+      state.setIn(['solutions', assignmentId, userId], fromJS(payload.map(solution => solution.id))),
+
+    [solutionsActionTypes.LOAD_ASSIGNMENT_SOLUTIONS_FULFILLED]: solutionsFulfilledReducer,
+
+    [solutionsActionTypes.LOAD_GROUP_STUDENTS_SOLUTIONS_FULFILLED]: solutionsFulfilledReducer,
+
+    [solutionsActionTypes.FETCH_REVIEW_REQUESTS_FULFILLED]: (state, { payload: { assignments } }) =>
+      state.update('resources', resources =>
+        resources.withMutations(mutable =>
+          assignments.reduce(
+            (mutable, assignment) =>
+              mutable.set(assignment.id, createRecord({ state: resourceStatus.FULFILLED, data: assignment })),
+            mutable
+          )
+        )
+      ),
 
     [additionalReviewsActionTypes.FETCH_OPEN_REVIEWS_FULFILLED]: (state, { payload: { assignments } }) =>
       state.update('resources', resources =>

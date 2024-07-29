@@ -64,6 +64,7 @@ const SolutionsTableRow = ({
         !onSelect && doubleclickAction && (() => doubleclickAction(SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)))
       }>
       <tr
+        id={id}
         className={classnames({
           'table-primary': selected,
           clickable: !selected && onSelect,

@@ -228,7 +228,7 @@ class ResultsTable extends Component {
       const {
         group,
         links: {
-          ASSIGNMENT_STATS_URI_FACTORY,
+          ASSIGNMENT_SOLUTIONS_URI_FACTORY,
           ASSIGNMENT_DETAIL_URI_FACTORY,
           SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY,
           GROUP_USER_SOLUTIONS_URI_FACTORY,
@@ -309,7 +309,7 @@ class ResultsTable extends Component {
                   <Link
                     to={
                       isTeacher
-                        ? ASSIGNMENT_STATS_URI_FACTORY(assignment.id)
+                        ? ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)
                         : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
                     }>
                     <LocalizedExerciseName entity={assignment} />

@@ -38,7 +38,7 @@ class PendingReviewsList extends Component {
 
   render() {
     const {
-      state = resourceStatus.PENDING,
+      solutionsState = resourceStatus.PENDING,
       solutions = {},
       updatingSelector,
       closeReview = null,
@@ -46,11 +46,11 @@ class PendingReviewsList extends Component {
       links: { SOLUTION_SOURCE_CODES_URI_FACTORY },
     } = this.props;
 
-    return state === resourceStatus.FULFILLED && (!solutions || Object.keys(solutions).length === 0) ? null : (
+    return solutionsState === resourceStatus.FULFILLED && (!solutions || Object.keys(solutions).length === 0) ? null : (
       <Box
         title={<FormattedMessage id="app.pendingReviewsList.title" defaultMessage="All open reviews" />}
         footer={
-          state === resourceStatus.FULFILLED ? (
+          solutionsState === resourceStatus.FULFILLED ? (
             <div className="text-center">
               <Button variant="success" onClick={this.closeAll} disabled={this.state.allPending}>
                 {this.state.allPending ? <LoadingIcon gapRight /> : <Icon icon="boxes-packing" gapRight />}
@@ -62,17 +62,17 @@ class PendingReviewsList extends Component {
         noPadding
         isOpen
         customIcons={
-          state !== resourceStatus.PENDING &&
+          solutionsState !== resourceStatus.PENDING &&
           refresh && <RefreshIcon className="text-primary" timid onClick={refresh} gapRight />
         }>
         <>
-          {state === resourceStatus.PENDING && (
+          {solutionsState === resourceStatus.PENDING && (
             <div className="text-center my-3">
               <LoadingIcon />
             </div>
           )}
 
-          {state === resourceStatus.FAILED && (
+          {solutionsState === resourceStatus.FAILED && (
             <div className="text-center my-3">
               <WarningIcon className="text-danger" gapRight />
               <FormattedMessage
@@ -82,7 +82,7 @@ class PendingReviewsList extends Component {
             </div>
           )}
 
-          {state === resourceStatus.FULFILLED &&
+          {solutionsState === resourceStatus.FULFILLED &&
             Object.keys(solutions).map(groupId => (
               <div key={groupId} className="m-3">
                 <GroupIcon className="text-muted" gapRight />
@@ -152,7 +152,7 @@ class PendingReviewsList extends Component {
 
 PendingReviewsList.propTypes = {
   solutions: PropTypes.object,
-  state: PropTypes.string,
+  solutionsState: PropTypes.string,
   updatingSelector: PropTypes.func.isRequired,
   closeReview: PropTypes.func,
   refresh: PropTypes.func,

@@ -30,8 +30,9 @@ class AssignmentNameContainer extends Component {
   render() {
     const {
       assignment,
-      noLink,
-      links: { ASSIGNMENT_DETAIL_URI_FACTORY },
+      noLink = false,
+      solutionsLink = false,
+      links: { ASSIGNMENT_DETAIL_URI_FACTORY, ASSIGNMENT_SOLUTIONS_URI_FACTORY },
     } = this.props;
     return (
       <ResourceRenderer
@@ -46,7 +47,7 @@ class AssignmentNameContainer extends Component {
           noLink ? (
             <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
           ) : (
-            <Link to={ASSIGNMENT_DETAIL_URI_FACTORY(id)}>
+            <Link to={solutionsLink ? ASSIGNMENT_SOLUTIONS_URI_FACTORY(id) : ASSIGNMENT_DETAIL_URI_FACTORY(id)}>
               <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
             </Link>
           )
@@ -60,6 +61,7 @@ AssignmentNameContainer.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   assignment: ImmutablePropTypes.map,
   noLink: PropTypes.bool,
+  solutionsLink: PropTypes.bool,
   loadAssignmentIfNeeded: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
 };

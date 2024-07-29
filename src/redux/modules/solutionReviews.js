@@ -8,6 +8,8 @@ import factory, {
   resourceStatus,
   createActionsWithPostfixes,
 } from '../helpers/resourceManager';
+import { createSolutionsGroupAssignmentIndex } from './solutions.js';
+
 const resourceName = 'solutionReviews';
 
 const apiEndpointFactory = id => `/assignment-solutions/${id}/review`;
@@ -77,27 +79,6 @@ export const removePendingReview = createAction(
  * Reducer
  */
 
-const createOpenReviewsIndex = ({ solutions, assignments }) => {
-  const agIndex = {};
-  const res = {};
-  assignments.forEach(assignment => {
-    if (assignment.groupId) {
-      res[assignment.groupId] = res[assignment.groupId] || {};
-      res[assignment.groupId][assignment.id] = res[assignment.groupId][assignment.id] || [];
-      agIndex[assignment.id] = assignment.groupId;
-    }
-  });
-
-  solutions.forEach(solution => {
-    const groupId = agIndex[solution.assignmentId];
-    if (groupId) {
-      res[groupId][solution.assignmentId].push(solution.id);
-    }
-  });
-
-  return res;
-};
-
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [actionTypes.FETCH_FULFILLED]: (state, { meta: { id }, payload: { reviewComments: data } }) =>
@@ -140,8 +121,10 @@ const reducer = handleActions(
     [additionalActionTypes.FETCH_OPEN_REVIEWS_REJECTED]: (state, { meta: { userId } }) =>
       state.setIn(['open-reviews', userId], resourceStatus.FAILED),
 
-    [additionalActionTypes.FETCH_OPEN_REVIEWS_FULFILLED]: (state, { meta: { userId }, payload }) =>
-      state.setIn(['open-reviews', userId], fromJS(createOpenReviewsIndex(payload))),
+    [additionalActionTypes.FETCH_OPEN_REVIEWS_FULFILLED]: (
+      state,
+      { meta: { userId }, payload: { solutions, assignments } }
+    ) => state.setIn(['open-reviews', userId], fromJS(createSolutionsGroupAssignmentIndex(solutions, assignments))),
 
     [additionalActionTypes.REMOVE_PENDING_REVIEW]: (
       state,

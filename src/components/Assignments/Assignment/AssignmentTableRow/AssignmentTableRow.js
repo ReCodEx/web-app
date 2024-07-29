@@ -60,7 +60,7 @@ const AssignmentTableRow = ({
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
     ASSIGNMENT_EDIT_URI_FACTORY,
-    ASSIGNMENT_STATS_URI_FACTORY,
+    ASSIGNMENT_SOLUTIONS_URI_FACTORY,
     GROUP_ASSIGNMENTS_URI_FACTORY,
   },
 }) => (
@@ -169,7 +169,7 @@ const AssignmentTableRow = ({
           ))}
 
         {permissionHints.viewAssignmentSolutions && (
-          <Link to={ASSIGNMENT_STATS_URI_FACTORY(id)}>
+          <Link to={ASSIGNMENT_SOLUTIONS_URI_FACTORY(id)}>
             <OverlayTrigger
               placement="bottom"
               overlay={

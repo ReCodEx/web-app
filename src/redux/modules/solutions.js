@@ -41,6 +41,7 @@ export const additionalActionTypes = {
   ...createActionsWithPostfixes('SET_BONUS_POINTS', 'recodex/solutions'),
   ...createActionsWithPostfixes('SET_FLAG', 'recodex/solutions'),
   ...createActionsWithPostfixes('LOAD_ASSIGNMENT_SOLVERS', 'recodex/solutions'),
+  ...createActionsWithPostfixes('FETCH_REVIEW_REQUESTS', 'recodex/solutions'),
   INVALIDATE_ASSIGNMENT_SOLVERS: 'recodex/solutions/INVALIDATE_ASSIGNMENT_SOLVERS',
   DOWNLOAD_RESULT_ARCHIVE: 'recodex/files/DOWNLOAD_RESULT_ARCHIVE',
 };
@@ -143,9 +144,38 @@ export const fetchAssignmentSolversIfNeeded =
 
 export const invalidateAssignmentSolvers = createAction(additionalActionTypes.INVALIDATE_ASSIGNMENT_SOLVERS);
 
+export const fetchReviewRequestsForTeacher = userId =>
+  createApiAction({
+    type: additionalActionTypes.FETCH_REVIEW_REQUESTS,
+    endpoint: `/users/${userId}/review-requests`,
+    method: 'GET',
+    meta: { userId },
+  });
+
 /**
  * Reducer
  */
+
+export const createSolutionsGroupAssignmentIndex = (solutions, assignments) => {
+  const agIndex = {};
+  const res = {};
+  assignments.forEach(assignment => {
+    if (assignment.groupId) {
+      res[assignment.groupId] = res[assignment.groupId] || {};
+      res[assignment.groupId][assignment.id] = res[assignment.groupId][assignment.id] || [];
+      agIndex[assignment.id] = assignment.groupId;
+    }
+  });
+
+  solutions.forEach(solution => {
+    const groupId = agIndex[solution.assignmentId];
+    if (groupId) {
+      res[groupId][solution.assignmentId].push(solution.id);
+    }
+  });
+
+  return res;
+};
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
@@ -279,6 +309,28 @@ const reducer = handleActions(
           )
         )
       ),
+
+    [additionalActionTypes.FETCH_REVIEW_REQUESTS_PENDING]: (state, { meta: { userId } }) =>
+      state.setIn(['review-requests', userId], resourceStatus.PENDING),
+
+    [additionalActionTypes.FETCH_REVIEW_REQUESTS_REJECTED]: (state, { meta: { userId } }) =>
+      state.setIn(['review-requests', userId], resourceStatus.FAILED),
+
+    [additionalActionTypes.FETCH_REVIEW_REQUESTS_FULFILLED]: (
+      state,
+      { meta: { userId }, payload: { solutions, assignments } }
+    ) =>
+      state
+        .setIn(['review-requests', userId], fromJS(createSolutionsGroupAssignmentIndex(solutions, assignments)))
+        .update('resources', resources =>
+          resources.withMutations(mutable =>
+            solutions.reduce(
+              (mutable, solution) =>
+                mutable.set(solution.id, createRecord({ state: resourceStatus.FULFILLED, data: solution })),
+              mutable
+            )
+          )
+        ),
   }),
   initialState
 );
