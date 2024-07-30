@@ -246,6 +246,7 @@ class Dashboard extends Component {
                               <PendingReviewsList
                                 solutionsState={openReviewSolutionsState}
                                 solutions={openReviewSolutions}
+                                runtimeEnvironments={runtimes}
                                 updatingSelector={openReviewUpdating}
                                 closeReview={this.closeReview}
                                 refresh={this.reloadOpenReviewSolutions}

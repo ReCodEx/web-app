@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Table } from 'react-bootstrap';
+import { Table, Badge } from 'react-bootstrap';
+import { lruMemoize } from 'reselect';
 
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
@@ -24,7 +25,12 @@ import Icon, {
   WarningIcon,
 } from '../../icons';
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
+import { objectMap } from '../../../helpers/common.js';
 import withLinks from '../../../helpers/withLinks.js';
+
+const getGroupsCount = lruMemoize(
+  groups => groups && objectMap(groups, g => Object.values(g).reduce((count, solutions) => count + solutions.length, 0))
+);
 
 class ReviewRequestsList extends Component {
   state = {};
@@ -39,6 +45,8 @@ class ReviewRequestsList extends Component {
       refresh = null,
       links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY },
     } = this.props;
+
+    const groupCounts = getGroupsCount(solutions);
 
     return solutionsState === resourceStatus.FULFILLED && (!solutions || Object.keys(solutions).length === 0) ? null : (
       <Box
@@ -80,7 +88,13 @@ class ReviewRequestsList extends Component {
                       <GroupsNameContainer groupId={groupId} fullName translations links />
                     </td>
                     <td className="text-right text-muted">
+                      {this.state[`group-${groupId}`] && (
+                        <Badge variant="primary" pill className="px-2 mr-3">
+                          {groupCounts?.[groupId]}
+                        </Badge>
+                      )}
                       <Icon
+                        className="valign-middle"
                         icon={!this.state[`group-${groupId}`] ? 'circle-chevron-down' : 'circle-chevron-left'}
                         gapRight
                         timid
@@ -100,6 +114,7 @@ class ReviewRequestsList extends Component {
                           <td>
                             <AssignmentNameContainer assignmentId={assignmentId} solutionsLink />
                           </td>
+
                           {solution ? (
                             <>
                               <td>

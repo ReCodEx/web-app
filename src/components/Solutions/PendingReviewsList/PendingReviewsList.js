@@ -1,20 +1,40 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { Table, Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { lruMemoize } from 'reselect';
 
 import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import AssignmentNameContainer from '../../../containers/AssignmentNameContainer';
 import DateTime from '../../widgets/DateTime';
-import Button from '../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Box from '../../widgets/Box';
-import Icon, { AssignmentIcon, GroupIcon, LoadingIcon, RefreshIcon, WarningIcon } from '../../icons';
+import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
+import Points from '../../Assignments/SolutionsTable/Points.js';
+import Icon, {
+  AssignmentIcon,
+  CodeFileIcon,
+  DetailIcon,
+  GroupIcon,
+  LoadingIcon,
+  RefreshIcon,
+  ReviewIcon,
+  WarningIcon,
+} from '../../icons';
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
+import { objectMap } from '../../../helpers/common.js';
 import withLinks from '../../../helpers/withLinks.js';
+
+const getGroupsCount = lruMemoize(
+  groups => groups && objectMap(groups, g => Object.values(g).reduce((count, solutions) => count + solutions.length, 0))
+);
 
 class PendingReviewsList extends Component {
   state = { allPending: false };
+
+  toggleGroupOpened = id => this.setState({ [`group-${id}`]: !this.state[`group-${id}`] });
 
   closeAll = () => {
     const { solutions, closeReview, refresh } = this.props;
@@ -40,11 +60,14 @@ class PendingReviewsList extends Component {
     const {
       solutionsState = resourceStatus.PENDING,
       solutions = {},
+      runtimeEnvironments,
       updatingSelector,
       closeReview = null,
       refresh = null,
-      links: { SOLUTION_SOURCE_CODES_URI_FACTORY },
+      links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY, GROUP_USER_SOLUTIONS_URI_FACTORY },
     } = this.props;
+
+    const groupCounts = getGroupsCount(solutions);
 
     return solutionsState === resourceStatus.FULFILLED && (!solutions || Object.keys(solutions).length === 0) ? null : (
       <Box
@@ -82,68 +105,165 @@ class PendingReviewsList extends Component {
             </div>
           )}
 
-          {solutionsState === resourceStatus.FULFILLED &&
-            Object.keys(solutions).map(groupId => (
-              <div key={groupId} className="m-3">
-                <GroupIcon className="text-muted" gapRight />
-                <GroupsNameContainer groupId={groupId} fullName translations links />
+          {solutionsState === resourceStatus.FULFILLED && (
+            <Table hover className="mb-0">
+              {Object.keys(solutions).map(groupId => (
+                <tbody key={groupId}>
+                  <tr className="bg-light">
+                    <td className="shrink-col">
+                      <GroupIcon className="text-muted" />
+                    </td>
+                    <td colSpan={8}>
+                      <GroupsNameContainer groupId={groupId} fullName translations links />
+                    </td>
+                    <td className="text-right text-muted">
+                      {this.state[`group-${groupId}`] && (
+                        <Badge variant="primary" pill className="px-2 mr-3">
+                          {groupCounts?.[groupId]}
+                        </Badge>
+                      )}
+                      <Icon
+                        className="valign-middle"
+                        icon={!this.state[`group-${groupId}`] ? 'circle-chevron-down' : 'circle-chevron-left'}
+                        gapRight
+                        timid
+                        onClick={() => this.toggleGroupOpened(groupId)}
+                      />
+                    </td>
+                  </tr>
 
-                {Object.keys(solutions[groupId]).map(assignmentId => (
-                  <div key={assignmentId} className="ml-4 my-1">
-                    <AssignmentIcon className="text-muted" gapRight />
-                    <AssignmentNameContainer assignmentId={assignmentId} />
+                  {!this.state[`group-${groupId}`] &&
+                    Object.keys(solutions[groupId]).map(assignmentId =>
+                      solutions[groupId][assignmentId].map((solution, idx) => (
+                        <tr key={solution ? solution.id : `loading-${idx}`} className="ml-4">
+                          <td className="shrink-col"></td>
+                          <td className="shrink-col">
+                            <AssignmentIcon className="text-muted" />
+                          </td>
+                          <td>
+                            <AssignmentNameContainer assignmentId={assignmentId} solutionsLink />
+                          </td>
 
-                    {solutions[groupId][assignmentId].map((solution, idx) => (
-                      <div key={solution ? solution.id : `loading-${idx}`} className="ml-4">
-                        {solution ? (
-                          <>
-                            <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
-                              <span>
-                                <UsersNameContainer userId={solution.authorId} isSimple noAutoload />
-                              </span>
-                              #{solution.attemptIndex}{' '}
-                              <span className="px-1 text-muted">
-                                <FormattedMessage id="app.pendingReviewsList.submitted" defaultMessage="submitted" />
-                              </span>{' '}
-                              <DateTime unixts={solution.createdAt} showTime={false} /> (
-                              <DateTime unixts={solution.createdAt} showDate={false} />){' '}
-                            </Link>
-                            <span className="px-1 text-muted">
-                              <FormattedMessage
-                                id="app.pendingReviewsList.reviewOpenedAt"
-                                defaultMessage="review opened at"
-                              />{' '}
-                            </span>
-                            <DateTime unixts={solution.review.startedAt} showTime={false} /> (
-                            <DateTime unixts={solution.review.startedAt} showDate={false} />)
-                            {closeReview && (
-                              <Button
-                                size="xs"
-                                variant="success"
-                                className="ml-3"
-                                disabled={updatingSelector(solution.id)}
-                                onClick={() => closeReview({ groupId, assignmentId, solutionId: solution.id })}>
-                                {updatingSelector(solution.id) ? (
-                                  <LoadingIcon gapRight />
-                                ) : (
-                                  <Icon icon="boxes-packing" gapRight />
-                                )}
-                                <FormattedMessage
-                                  id="app.solution.actions.review.close"
-                                  defaultMessage="Close Review"
+                          {solution ? (
+                            <>
+                              <td>
+                                <UsersNameContainer
+                                  userId={solution.authorId}
+                                  noAutoload
+                                  link={GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, solution.authorId)}
                                 />
-                              </Button>
-                            )}
-                          </>
-                        ) : (
-                          <LoadingIcon />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            ))}
+                              </td>
+
+                              <td>
+                                <strong>#{solution.attemptIndex} </strong>
+                                <small className="ml-2 text-muted">
+                                  (<DateTime unixts={solution.createdAt} />)
+                                </small>
+                              </td>
+
+                              <td className="text-center text-nowrap valign-middle">
+                                {solution.lastSubmission.evaluation ? (
+                                  <strong className="text-success">
+                                    <FormattedNumber style="percent" value={solution.lastSubmission.evaluation.score} />
+                                  </strong>
+                                ) : (
+                                  <span className="text-danger">-</span>
+                                )}
+                              </td>
+
+                              <td className="text-center text-nowrap valign-middle">
+                                {solution.lastSubmission.evaluation ? (
+                                  <strong className="text-success">
+                                    <Points
+                                      points={solution.actualPoints}
+                                      bonusPoints={solution.bonusPoints}
+                                      maxPoints={solution.maxPoints}
+                                    />
+                                  </strong>
+                                ) : (
+                                  <span className="text-danger">-</span>
+                                )}
+                              </td>
+
+                              <td className="text-center text-nowrap valign-middle">
+                                <EnvironmentsListItem
+                                  runtimeEnvironment={runtimeEnvironments.find(
+                                    ({ id }) => id === solution.runtimeEnvironmentId
+                                  )}
+                                />
+                              </td>
+
+                              <td>
+                                <OverlayTrigger
+                                  placement="bottom"
+                                  overlay={
+                                    <Tooltip id={`review-tip-${solution.id}`}>
+                                      <FormattedMessage
+                                        id="app.pendingReviewsList.reviewOpenedAt"
+                                        defaultMessage="Review opened at"
+                                      />
+                                    </Tooltip>
+                                  }>
+                                  <span>
+                                    <ReviewIcon review={solution.review} className="text-danger mr-2" />
+                                    <small>
+                                      <DateTime unixts={solution.review.startedAt} />
+                                    </small>
+                                  </span>
+                                </OverlayTrigger>
+                              </td>
+
+                              <td className="shrink-col text-right">
+                                <TheButtonGroup>
+                                  {closeReview && (
+                                    <Button
+                                      size="xs"
+                                      variant="success"
+                                      disabled={updatingSelector(solution.id)}
+                                      onClick={() => closeReview({ groupId, assignmentId, solutionId: solution.id })}>
+                                      {updatingSelector(solution.id) ? (
+                                        <LoadingIcon gapRight />
+                                      ) : (
+                                        <Icon icon="boxes-packing" gapRight />
+                                      )}
+                                      <FormattedMessage
+                                        id="app.solution.actions.review.close"
+                                        defaultMessage="Close Review"
+                                      />
+                                    </Button>
+                                  )}
+
+                                  {solution.permissionHints && solution.permissionHints.viewDetail && (
+                                    <>
+                                      <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
+                                        <Button size="xs" variant="secondary">
+                                          <DetailIcon gapRight />
+                                          <FormattedMessage id="generic.detail" defaultMessage="Detail" />
+                                        </Button>
+                                      </Link>
+                                      <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
+                                        <Button size="xs" variant="primary">
+                                          <CodeFileIcon fixedWidth gapRight />
+                                          <FormattedMessage id="generic.files" defaultMessage="Files" />
+                                        </Button>
+                                      </Link>
+                                    </>
+                                  )}
+                                </TheButtonGroup>
+                              </td>
+                            </>
+                          ) : (
+                            <td colSpan={7}>
+                              <LoadingIcon />
+                            </td>
+                          )}
+                        </tr>
+                      ))
+                    )}
+                </tbody>
+              ))}
+            </Table>
+          )}
         </>
       </Box>
     );
@@ -153,6 +273,7 @@ class PendingReviewsList extends Component {
 PendingReviewsList.propTypes = {
   solutions: PropTypes.object,
   solutionsState: PropTypes.string,
+  runtimeEnvironments: PropTypes.array.isRequired,
   updatingSelector: PropTypes.func.isRequired,
   closeReview: PropTypes.func,
   refresh: PropTypes.func,
