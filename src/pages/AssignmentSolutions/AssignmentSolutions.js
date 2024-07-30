@@ -75,7 +75,8 @@ const VIEW_MODE_GROUPED = 'grouped';
 const VIEW_MODE_BEST = 'best';
 const VIEW_MODE_LAST = 'last';
 const VIEW_MODE_ACCEPTED = 'accepted';
-const VIEW_MODE_REVIEWD = 'reviewed';
+const VIEW_MODE_REVIEWED = 'reviewed';
+const VIEW_MODE_REVIEW_REQUESTS = 'review-requests';
 const VIEW_MODE_PLAGIARISM = 'plagiarism';
 
 const viewModes = {
@@ -94,8 +95,11 @@ const viewModes = {
   [VIEW_MODE_ACCEPTED]: (
     <FormattedMessage id="app.assignmentSolutions.viewModes.accepted" defaultMessage="Accepted solutions only" />
   ),
-  [VIEW_MODE_REVIEWD]: (
+  [VIEW_MODE_REVIEWED]: (
     <FormattedMessage id="app.assignmentSolutions.viewModes.reviewed" defaultMessage="Reviewed solutions only" />
+  ),
+  [VIEW_MODE_REVIEW_REQUESTS]: (
+    <FormattedMessage id="app.assignmentSolutions.viewModes.reviewRequests" defaultMessage="Review requests" />
   ),
   [VIEW_MODE_PLAGIARISM]: (
     <FormattedMessage id="app.assignmentSolutions.viewModes.plagiarism" defaultMessage="Only plagiarism suspects" />
@@ -117,7 +121,8 @@ const viewModeFilters = {
   [VIEW_MODE_LAST]: (solution, _, solutions) =>
     solution && solution.attemptIndex === _getLastAttemptIndices(solutions)[solution.authorId],
   [VIEW_MODE_ACCEPTED]: solution => solution && solution.accepted,
-  [VIEW_MODE_REVIEWD]: solution => solution && solution.review,
+  [VIEW_MODE_REVIEWED]: solution => solution && solution.review,
+  [VIEW_MODE_REVIEW_REQUESTS]: solution => solution && !solution.review && solution.reviewRequest,
   [VIEW_MODE_PLAGIARISM]: solution => solution && solution.plagiarism,
 };
 
