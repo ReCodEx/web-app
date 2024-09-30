@@ -39,6 +39,8 @@ import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourc
 import { createUserNameComparator } from '../../components/helpers/users.js';
 import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 import EnvironmentsListItem from '../../components/helpers/EnvironmentsList/EnvironmentsListItem.js';
+import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/GroupArchivedWarning.js';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 import Callout from '../../components/widgets/Callout';
 
 import { fetchByIds } from '../../redux/modules/users.js';
@@ -47,8 +49,8 @@ import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 import { fetchAssignmentSolutions, fetchAssignmentSolversIfNeeded } from '../../redux/modules/solutions.js';
 import { setSolutionReviewState } from '../../redux/modules/solutionReviews.js';
-import { usersSelector } from '../../redux/selectors/users.js';
-import { groupSelector } from '../../redux/selectors/groups.js';
+import { usersSelector, loggedInUserSelector } from '../../redux/selectors/users.js';
+import { groupSelector, groupDataAccessorSelector } from '../../redux/selectors/groups.js';
 import { studentsIdsOfGroup } from '../../redux/selectors/usersGroups.js';
 import {
   getAssignment,
@@ -408,10 +410,12 @@ class AssignmentSolutions extends Component {
   render() {
     const {
       loggedUserId,
+      currentUser,
       assignmentId,
       assignment,
       getStudents,
       getGroup,
+      groupsAccessor,
       getUserSolutions,
       runtimeEnvironments,
       assignmentSolutions,
@@ -445,41 +449,59 @@ class AssignmentSolutions extends Component {
               canViewExercise={true}
             />
 
-            {plagiarisms && plagiarisms.length > 0 && (
-              <Callout variant="danger" icon={<PlagiarismIcon />}>
-                <FormattedMessage
-                  id="app.assignmentSolutions.plagiarismsDetected.authors"
-                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (from {authors} {authors, plural, one {author} other {unique authors}}) with detected similarities. Such solutions may be plagiarisms."
-                  values={{ count: plagiarisms.length, authors: getPlagiarismUniqueAuthors(plagiarisms).length }}
-                />
-              </Callout>
-            )}
+            <ResourceRenderer resource={[getGroup(assignment.groupId), currentUser]}>
+              {(group, currentUser) => (
+                <>
+                  {group.privateData && <GroupExamPending {...group} currentUser={currentUser} />}
 
-            {pendingReviews && pendingReviews.length > 0 && (
-              <Callout variant="warning">
-                <Row className="align-items-center">
-                  <Col className="pr-3 py-2">
-                    <FormattedMessage
-                      id="app.assignmentSolutions.pendingReviews"
-                      defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected assignment. Remember that the review comments are visible to the author after a review is closed."
-                      values={{ count: pendingReviews.length }}
-                    />
-                  </Col>
-                  <Col xl="auto">
-                    <Button
-                      variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
-                      onClick={() => this.closeReviews(pendingReviews)}
-                      disabled={this.state.closingReviews}>
-                      {this.state.closingReviews ? <LoadingIcon gapRight /> : <Icon icon="boxes-packing" gapRight />}
+                  <GroupArchivedWarning
+                    {...group}
+                    groupsDataAccessor={groupsAccessor}
+                    linkFactory={links.GROUP_EDIT_URI_FACTORY}
+                  />
+
+                  {plagiarisms && plagiarisms.length > 0 && (
+                    <Callout variant="danger" icon={<PlagiarismIcon />}>
                       <FormattedMessage
-                        id="app.reviewSolutionButtons.closePendingReviews"
-                        defaultMessage="Close pending reviews"
+                        id="app.assignmentSolutions.plagiarismsDetected.authors"
+                        defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (from {authors} {authors, plural, one {author} other {unique authors}}) with detected similarities. Such solutions may be plagiarisms."
+                        values={{ count: plagiarisms.length, authors: getPlagiarismUniqueAuthors(plagiarisms).length }}
                       />
-                    </Button>
-                  </Col>
-                </Row>
-              </Callout>
-            )}
+                    </Callout>
+                  )}
+
+                  {pendingReviews && pendingReviews.length > 0 && !group.archived && (
+                    <Callout variant="warning">
+                      <Row className="align-items-center">
+                        <Col className="pr-3 py-2">
+                          <FormattedMessage
+                            id="app.assignmentSolutions.pendingReviews"
+                            defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected assignment. Remember that the review comments are visible to the author after a review is closed."
+                            values={{ count: pendingReviews.length }}
+                          />
+                        </Col>
+                        <Col xl="auto">
+                          <Button
+                            variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
+                            onClick={() => this.closeReviews(pendingReviews)}
+                            disabled={this.state.closingReviews}>
+                            {this.state.closingReviews ? (
+                              <LoadingIcon gapRight />
+                            ) : (
+                              <Icon icon="boxes-packing" gapRight />
+                            )}
+                            <FormattedMessage
+                              id="app.reviewSolutionButtons.closePendingReviews"
+                              defaultMessage="Close pending reviews"
+                            />
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Callout>
+                  )}
+                </>
+              )}
+            </ResourceRenderer>
 
             <Row>
               <Col sm={12} md>
@@ -667,10 +689,12 @@ class AssignmentSolutions extends Component {
 
 AssignmentSolutions.propTypes = {
   loggedUserId: PropTypes.string.isRequired,
+  currentUser: ImmutablePropTypes.map,
   assignmentId: PropTypes.string.isRequired,
   assignment: PropTypes.object,
   getStudents: PropTypes.func.isRequired,
   getGroup: PropTypes.func.isRequired,
+  groupsAccessor: PropTypes.func.isRequired,
   getUserSolutions: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array,
   assignmentSolutions: ImmutablePropTypes.list,
@@ -697,6 +721,7 @@ export default withLinks(
 
       return {
         loggedUserId: loggedInUserIdSelector(state),
+        currentUser: loggedInUserSelector(state),
         assignmentId,
         assignment,
         getStudentsIds,
@@ -704,6 +729,7 @@ export default withLinks(
         getUserSolutions: userId => getUserSolutionsSortedData(state)(userId, assignmentId),
         assignmentSolutions: getAssignmentSolutions(state, assignmentId),
         getGroup: id => groupSelector(state, id),
+        groupsAccessor: groupDataAccessorSelector(state),
         runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
         fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),
         assignmentSolversLoading: isAssignmentSolversLoading(state),
