@@ -418,7 +418,7 @@ class GroupUserSolutions extends Component {
               </Callout>
             )}
 
-            {pendingReviews && pendingReviews.length > 0 && (
+            {pendingReviews && pendingReviews.length > 0 && !group.archived && (
               <Callout variant="warning">
                 <Row className="align-items-center">
                   <Col className="pr-3 py-2">
