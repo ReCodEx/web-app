@@ -15381,9 +15381,9 @@ __metadata:
   linkType: hard
 
 "uplot@npm:^1.6.18":
-  version: 1.6.30
-  resolution: "uplot@npm:1.6.30"
-  checksum: 5627d02eb62c68cf127d94c5c12da791572be1f116d018c375dde73b640275054bcc66a849c379f4b2f038a983f096fd62ab0fcaa46734feaa68fdbcbca1d160
+  version: 1.6.31
+  resolution: "uplot@npm:1.6.31"
+  checksum: 5ef8d5a01122b77eef2f8c83ea2b5630f9e43f979758f76bb4032b895797afdfe666d0ec588150db0bec7494068ee62b3944cb1b74fcd588f717fda48879a6c8
   languageName: node
   linkType: hard
 
