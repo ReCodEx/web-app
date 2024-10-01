@@ -37,7 +37,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <hr />
       <Row>
         <Col lg={12} xl={6}>
-          <Image src={`${URL_PATH_PREFIX}/public/logo.png`} className="text-center m-5" />
+          <Image src={`${URL_PATH_PREFIX}/public/logo.png`} className="text-center m-5 w-100 w-lg-auto" style={{ maxWidth: '66vw' }} />
         </Col>
         <Col lg={12} xl={6}>
           <div className="m-5">
