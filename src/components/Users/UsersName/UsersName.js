@@ -166,7 +166,7 @@ const UsersName = ({
                 </a>
               )}
               {privateData && privateData.email && showEmail === 'full' && (
-                <small className="em-padding-left">
+                <Col className="em-padding-left d-inline d-md-block" style={{ float: window.innerWidth < 768 ? 'inline-start' : 'none' }}>
                   {'('}
                   <a href={`mailto:${email}`}>{privateData.email}</a>
                   {')'}
