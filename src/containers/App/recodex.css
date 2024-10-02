@@ -6,6 +6,18 @@
  * these styles tend to cover other ReCodEx-specific situations.
  */
 
+ @media (max-width: 767px) {
+  :root {
+    font-size: 85%;
+  }
+}
+
+@media (max-width: 575px) {
+  :root {
+    font-size: 70%;
+  }
+}
+
 /*
  * Additional text modifications
  */

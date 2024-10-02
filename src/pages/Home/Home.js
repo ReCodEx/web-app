@@ -24,6 +24,8 @@ import { isSupervisorRole } from '../../components/helpers/usersRoles.js';
 import { getConfigVar, URL_PATH_PREFIX } from '../../helpers/config.js';
 import { getLocalizedName, getLocalizedDescription } from '../../helpers/localizedData.js';
 
+import * as styles from './Home.less';
+
 const BASIC_HTML = {
   strong: content => <strong>{content}</strong>,
   em: content => <em>{content}</em>,
@@ -37,7 +39,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <hr />
       <Row>
         <Col lg={12} xl={6}>
-          <Image src={`${URL_PATH_PREFIX}/public/logo.png`} className="text-center m-5" />
+          <Image src={`${URL_PATH_PREFIX}/public/logo.png`} className={styles.logo} />
         </Col>
         <Col lg={12} xl={6}>
           <div className="m-5">
