@@ -64,6 +64,8 @@ class Instance extends Component {
       isAdmin,
       isSuperAdmin,
       hasThreshold,
+      threshold,
+      pointsLimit,
       isOrganizational,
       isExam,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY },
@@ -142,6 +144,8 @@ class Instance extends Component {
                     collapsable
                     isOpen={false}
                     hasThreshold={hasThreshold}
+                    threshold={threshold}
+                    pointsLimit={pointsLimit}
                     isOrganizational={isOrganizational}
                     isExam={isExam}
                     isSuperAdmin={isSuperAdmin}
@@ -171,6 +175,8 @@ Instance.propTypes = {
   isSuperAdmin: PropTypes.bool.isRequired,
   links: PropTypes.object.isRequired,
   hasThreshold: PropTypes.bool,
+  threshold: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isOrganizational: PropTypes.bool,
   isExam: PropTypes.bool,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
@@ -190,6 +196,8 @@ export default withLinks(
         isAdmin: isAdminOfInstance(userId, instanceId)(state),
         isSuperAdmin: isLoggedAsSuperAdmin(state),
         hasThreshold: addGroupFormSelector(state, 'hasThreshold'),
+        threshold: addGroupFormSelector(state, 'threshold'),
+        pointsLimit: addGroupFormSelector(state, 'pointsLimit'),
         isOrganizational: addGroupFormSelector(state, 'isOrganizational'),
         isExam: addGroupFormSelector(state, 'isExam'),
       };
@@ -197,12 +205,13 @@ export default withLinks(
     (dispatch, { params: { instanceId } }) => ({
       createGroup:
         userId =>
-        ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
+        ({ localizedTexts, isOrganizational, hasThreshold, threshold, pointsLimit, makeMeAdmin, ...data }) =>
           dispatch(
             createGroup({
               ...data,
-              hasThreshold,
-              threshold: hasThreshold ? threshold : undefined,
+              isOrganizational,
+              threshold: (!isOrganizational && hasThreshold && Number(threshold)) || null,
+              pointsLimit: (!isOrganizational && hasThreshold && Number(pointsLimit)) || null,
               localizedTexts: transformLocalizedTextsFormData(localizedTexts),
               noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
               instanceId,

@@ -104,6 +104,8 @@ class GroupInfo extends Component {
       isStudent,
       addSubgroup,
       hasThreshold,
+      threshold,
+      pointsLimit,
       isOrganizational,
       isExam,
       pendingMemberships,
@@ -166,7 +168,7 @@ class GroupInfo extends Component {
             )}
 
             <Row>
-              <Col sm={6}>
+              <Col xl={6}>
                 {hasPermissions(data, 'viewPublicDetail') && (
                   <GroupInfoTable
                     group={data}
@@ -236,7 +238,7 @@ class GroupInfo extends Component {
                   </Box>
                 )}
               </Col>
-              <Col sm={6}>
+              <Col xl={6}>
                 {hasPermissions(data, 'viewPublicDetail') && (
                   <Box
                     title={<FormattedMessage id="app.groupDetail.subgroups" defaultMessage="Subgroups Hierarchy" />}
@@ -260,6 +262,8 @@ class GroupInfo extends Component {
                     collapsable
                     isOpen={false}
                     hasThreshold={hasThreshold}
+                    threshold={threshold}
+                    pointsLimit={pointsLimit}
                     isSuperAdmin={isSuperAdmin}
                     isOrganizational={isOrganizational}
                     isExam={isExam}
@@ -298,6 +302,8 @@ GroupInfo.propTypes = {
   addObserver: PropTypes.func.isRequired,
   removeMember: PropTypes.func.isRequired,
   hasThreshold: PropTypes.bool,
+  threshold: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isOrganizational: PropTypes.bool,
   isExam: PropTypes.bool,
   pendingMemberships: ImmutablePropTypes.list,
@@ -325,6 +331,8 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isSuperAdmin: isLoggedAsSuperAdmin(state),
     isStudent: loggedUserIsStudentOfSelector(state)(groupId),
     hasThreshold: addSubgroupFormSelector(state, 'hasThreshold'),
+    threshold: addSubgroupFormSelector(state, 'threshold'),
+    pointsLimit: addSubgroupFormSelector(state, 'pointsLimit'),
     isOrganizational: addSubgroupFormSelector(state, 'isOrganizational'),
     isExam: addSubgroupFormSelector(state, 'isExam'),
     pendingMemberships: pendingMembershipsSelector(state, groupId),
@@ -334,12 +342,13 @@ const mapStateToProps = (state, { params: { groupId } }) => {
 const mapDispatchToProps = (dispatch, { params }) => ({
   addSubgroup:
     (instanceId, userId) =>
-    ({ localizedTexts, hasThreshold, threshold, makeMeAdmin, ...data }) =>
+    ({ localizedTexts, isOrganizational, hasThreshold, threshold, pointsLimit, makeMeAdmin, ...data }) =>
       dispatch(
         createGroup({
           ...data,
-          hasThreshold,
-          threshold: hasThreshold ? threshold : undefined,
+          isOrganizational,
+          threshold: (!isOrganizational && hasThreshold && Number(threshold)) || null,
+          pointsLimit: (!isOrganizational && hasThreshold && Number(pointsLimit)) || null,
           localizedTexts: transformLocalizedTextsFormData(localizedTexts),
           noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
           instanceId,
