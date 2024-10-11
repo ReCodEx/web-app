@@ -8,9 +8,9 @@ import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentL
 import { MarkdownTextAreaField } from '../Fields';
 import InsetPanel from '../../widgets/InsetPanel';
 
-const LocalizedExerciseFormField = ({ prefix, data: enabled }) => (
+const LocalizedExerciseFormField = ({ prefix, data: enabled, ignoreDirty = false }) => (
   <InsetPanel>
-    <SharedLocalizedFields prefix={prefix} enabled={enabled} />
+    <SharedLocalizedFields prefix={prefix} enabled={enabled} ignoreDirty={ignoreDirty} />
     <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
 
     <Field
@@ -30,6 +30,7 @@ const LocalizedExerciseFormField = ({ prefix, data: enabled }) => (
 LocalizedExerciseFormField.propTypes = {
   prefix: PropTypes.string.isRequired,
   data: PropTypes.bool.isRequired,
+  ignoreDirty: PropTypes.bool,
 };
 
 export default LocalizedExerciseFormField;

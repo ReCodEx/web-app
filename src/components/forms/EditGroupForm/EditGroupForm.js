@@ -7,6 +7,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Callout from '../../widgets/Callout';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import FormBox from '../../widgets/FormBox';
+import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { RefreshIcon } from '../../icons';
@@ -27,7 +28,8 @@ export const EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES = {
   isExam: false,
   detaining: false,
   makeMeAdmin: true,
-  threshold: 0,
+  threshold: 100,
+  pointsLimit: null,
   localizedTexts: getLocalizedTextsInitialValues([], EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
 };
 
@@ -42,13 +44,14 @@ const EditGroupForm = ({
   invalid,
   createNew = false,
   hasThreshold,
-  isPublic,
   collapsable = false,
   isOpen = true,
   reset,
   isSuperAdmin,
   isOrganizational = false,
   isExam = false,
+  threshold = '',
+  pointsLimit = '',
 }) => (
   <FormBox
     title={
@@ -100,71 +103,65 @@ const EditGroupForm = ({
       </Callout>
     )}
 
-    <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="group" />
+    <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="group" ignoreDirty={createNew} />
 
-    {isSuperAdmin && (
-      <Field
-        name="externalId"
-        tabIndex={10}
-        component={TextField}
-        maxLength={255}
-        required
-        label={
-          <FormattedMessage
-            id="app.createGroup.externalId"
-            defaultMessage="External ID of the group (helps create bindings to external data sources):"
-          />
-        }
-      />
-    )}
-    <br />
     <Container fluid>
-      <Row>
-        {(isSuperAdmin || isPublic) && ( // any user can turn public flag off, but only superuser may turn it on :)
+      {isSuperAdmin && (
+        <Row className="align-items-end">
+          <Col lg={6}>
+            <Field
+              name="externalId"
+              tabIndex={10}
+              component={TextField}
+              maxLength={255}
+              required
+              ignoreDirty={createNew}
+              label={<FormattedMessage id="app.createGroup.externalId" defaultMessage="External ID of the group:" />}
+            />
+          </Col>
           <Col lg={6}>
             <Field
               name="isPublic"
               tabIndex={20}
               component={CheckboxField}
               onOff
+              ignoreDirty={createNew}
               label={
-                <FormattedMessage
-                  id="app.createGroup.isPublic"
-                  defaultMessage="Public (everyone can see and join this group)"
-                />
+                <>
+                  <FormattedMessage id="app.createGroup.isPublic" defaultMessage="Public" />
+                  <Explanation id="isPublic">
+                    <FormattedMessage
+                      id="app.createGroup.isPublic.explanation"
+                      defaultMessage="Everyone can see and join this group (only superadmin can make group public)."
+                    />
+                  </Explanation>
+                </>
               }
             />
           </Col>
-        )}
+        </Row>
+      )}
 
-        <Col lg={6}>
-          <Field
-            name="publicStats"
-            tabIndex={30}
-            component={CheckboxField}
-            onOff
-            label={
-              <FormattedMessage
-                id="app.createGroup.publicStats"
-                defaultMessage="Students can see statistics of each other"
-              />
-            }
-          />
-        </Col>
-
+      <Row>
         {createNew && (
           <>
             <Col lg={6}>
               <Field
                 name="isOrganizational"
-                tabIndex={40}
+                tabIndex={30}
                 component={CheckboxField}
                 onOff
+                ignoreDirty
                 label={
-                  <FormattedMessage
-                    id="app.createGroup.isOrganizational"
-                    defaultMessage="Organizational (for structural purposes only)"
-                  />
+                  <>
+                    <FormattedMessage id="app.createGroup.isOrganizational" defaultMessage="Organizational" />
+                    <Explanation id="isOrganizational">
+                      <FormattedMessage
+                        id="app.createGroup.isOrganizational.explanation"
+                        defaultMessage="A group for organizing sub-groups and exercises. It may not contain any students nor assignments."
+                      />
+                    </Explanation>
+                  </>
                 }
                 disabled={isExam}
               />
@@ -172,10 +169,21 @@ const EditGroupForm = ({
             <Col lg={6}>
               <Field
                 name="isExam"
-                tabIndex={45}
+                tabIndex={40}
                 component={CheckboxField}
                 onOff
-                label={<FormattedMessage id="app.createGroup.isExam" defaultMessage="Exam" />}
+                ignoreDirty
+                label={
+                  <>
+                    <FormattedMessage id="app.createGroup.isExam" defaultMessage="Exam" />
+                    <Explanation id="isExam">
+                      <FormattedMessage
+                        id="app.createGroup.isExam.explanation"
+                        defaultMessage="A marker that designates this group for student examination (a test). This may affect how the group appears in listings or when it is archived."
+                      />
+                    </Explanation>
+                  </>
+                }
                 disabled={isOrganizational}
               />
             </Col>
@@ -185,66 +193,128 @@ const EditGroupForm = ({
         {!isOrganizational && (
           <Col lg={6}>
             <Field
-              name="detaining"
+              name="publicStats"
               tabIndex={50}
               component={CheckboxField}
               onOff
+              ignoreDirty={createNew}
               label={
-                <FormattedMessage
-                  id="app.createGroup.detaining"
-                  defaultMessage="Detaining students (only supervisor can remove them)"
-                />
+                <>
+                  <FormattedMessage id="app.createGroup.publicStats" defaultMessage="Sharing results" />
+                  <Explanation id="publicStats">
+                    <FormattedMessage
+                      id="app.createGroup.publicStats.explanation"
+                      defaultMessage="Students can see how many points other students got in their assignments."
+                    />
+                  </Explanation>
+                </>
               }
             />
           </Col>
         )}
 
-        {createNew && (
+        {!isOrganizational && (
           <Col lg={6}>
             <Field
-              name="makeMeAdmin"
+              name="detaining"
               tabIndex={60}
               component={CheckboxField}
               onOff
-              label={<FormattedMessage id="app.createGroup.makeMeAdmin" defaultMessage="Make me a group admin" />}
+              ignoreDirty={createNew}
+              label={
+                <>
+                  <FormattedMessage id="app.createGroup.detaining" defaultMessage="Detaining" />
+                  <Explanation id="detaining">
+                    <FormattedMessage
+                      id="app.createGroup.detaining.explanation"
+                      defaultMessage="Students cannot leave the group on their own. Only a group supervisor/admin can remove them."
+                    />
+                  </Explanation>
+                </>
+              }
             />
           </Col>
         )}
       </Row>
 
-      <Row>
-        <Col lg={6}>
-          <Field
-            name="hasThreshold"
-            tabIndex={70}
-            component={CheckboxField}
-            onOff
-            label={
-              <FormattedMessage
-                id="app.createGroup.hasThreshold"
-                defaultMessage="Students require cetrain number of points to complete the course"
-              />
-            }
-          />
-        </Col>
-        <Col lg={6}>
-          {hasThreshold && (
+      {!isOrganizational && (
+        <Row>
+          <Col xs={12}>
+            <Field
+              name="hasThreshold"
+              tabIndex={70}
+              component={CheckboxField}
+              onOff
+              ignoreDirty={createNew}
+              label={
+                <>
+                  <FormattedMessage
+                    id="app.createGroup.hasThreshold"
+                    defaultMessage="Students require cetrain number of points to complete the course"
+                  />
+                  <Explanation id="hasThreshold">
+                    <FormattedMessage
+                      id="app.createGroup.hasThreshold.explanation"
+                      defaultMessage="The required amount of points can be specified relatively (percentage of total sum of points) or as an absolute point limit. Only one of these values should be specified."
+                    />
+                  </Explanation>
+                </>
+              }
+            />
+          </Col>
+        </Row>
+      )}
+
+      {hasThreshold && !isOrganizational && (
+        <Row>
+          <Col lg={6}>
             <NumericTextField
               name="threshold"
               tabIndex={80}
-              validateMin={0}
+              validateMin={1}
               validateMax={100}
+              nullable
               maxLength={3}
+              ignoreDirty={createNew}
               label={
                 <FormattedMessage
                   id="app.createGroup.threshold"
-                  defaultMessage="Minimum percent of the total points count needed to complete the course:"
+                  defaultMessage="Relative amount of total points [%]:"
                 />
               }
+              disabled={threshold === null && pointsLimit !== null}
             />
-          )}
-        </Col>
-      </Row>
+          </Col>
+          <Col lg={6}>
+            <NumericTextField
+              name="pointsLimit"
+              tabIndex={85}
+              validateMin={1}
+              validateMax={999999}
+              nullable
+              maxLength={6}
+              ignoreDirty={createNew}
+              label={<FormattedMessage id="app.createGroup.pointsLimit" defaultMessage="Absolute amount of points:" />}
+              disabled={threshold !== null}
+            />
+          </Col>
+        </Row>
+      )}
+
+      {createNew && (
+        <Row>
+          <Col xs={12}>
+            <Field
+              name="makeMeAdmin"
+              tabIndex={90}
+              component={CheckboxField}
+              onOff
+              ignoreDirty
+              label={<FormattedMessage id="app.createGroup.makeMeAdmin" defaultMessage="Make me a group admin" />}
+            />
+          </Col>
+        </Row>
+      )}
     </Container>
 
     {error && dirty && <Callout variant="danger">{error}</Callout>}
@@ -261,7 +331,6 @@ EditGroupForm.propTypes = {
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   hasThreshold: PropTypes.bool,
-  isPublic: PropTypes.bool,
   createNew: PropTypes.bool,
   collapsable: PropTypes.bool,
   isOpen: PropTypes.bool,
@@ -269,6 +338,8 @@ EditGroupForm.propTypes = {
   isSuperAdmin: PropTypes.bool,
   isOrganizational: PropTypes.bool,
   isExam: PropTypes.bool,
+  threshold: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const validate = ({ localizedTexts }) => {
