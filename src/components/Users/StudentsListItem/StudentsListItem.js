@@ -12,32 +12,47 @@ const StudentsListItem = ({
   stats,
   renderActions,
   links: { GROUP_USER_SOLUTIONS_URI_FACTORY },
-}) => (
-  <tr>
-    <td>
-      <UsersNameContainer userId={id} link={groupId && GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, id)} listItem />
-    </td>
-    <td width={150}>
-      {stats && (
-        <ProgressBar
-          className="progress-xs"
-          now={stats.points.total > 0 ? Math.min(1, stats.points.gained / stats.points.total) * 100 : 0}
-          variant={!stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'}
-        />
-      )}
-    </td>
-    <td>
-      {stats && (
-        <FormattedMessage
-          id="app.studentsList.gainedPointsOfWithoutBreakingSpaces"
-          defaultMessage="{gained, number} of {total, number}"
-          values={{ ...stats.points }}
-        />
-      )}
-    </td>
-    {renderActions && <td>{renderActions(id)}</td>}
-  </tr>
-);
+}) => {
+  const totalPoints = (stats && stats && (stats.points.total || stats.points.limit)) || 0;
+  return (
+    <tr>
+      <td>
+        <UsersNameContainer userId={id} link={groupId && GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, id)} listItem />
+      </td>
+      <td className="valign-middle">
+        {stats && (
+          <ProgressBar
+            className="progress-xs"
+            now={totalPoints > 0 ? Math.min(1, stats.points.gained / totalPoints) * 100 : 0}
+            variant={!stats.hasLimit ? 'info' : stats.passesLimit ? 'success' : 'danger'}
+          />
+        )}
+      </td>
+      <td className="text-nowrap shrink-col">
+        {stats && (
+          <>
+            <FormattedMessage
+              id="app.studentsList.gainedPointsOfWithoutBreakingSpaces"
+              defaultMessage="{gained, number} of {total, number}"
+              values={{ gained: stats.points.gained, total: totalPoints }}
+            />
+            {Boolean(stats.points.limit && stats.points.total && stats.points.limit !== stats.points.total) && (
+              <small className="ml-2 text-muted">
+                {' '}
+                <FormattedMessage
+                  id="app.studentsList.statsPointsLimit"
+                  defaultMessage="(required {limit, number})"
+                  values={{ limit: stats.points.limit }}
+                />
+              </small>
+            )}
+          </>
+        )}
+      </td>
+      {renderActions && <td>{renderActions(id)}</td>}
+    </tr>
+  );
+};
 
 StudentsListItem.propTypes = {
   id: PropTypes.string.isRequired,
@@ -45,6 +60,7 @@ StudentsListItem.propTypes = {
   stats: PropTypes.shape({
     points: PropTypes.shape({
       total: PropTypes.number.isRequired,
+      limit: PropTypes.number,
       gained: PropTypes.number.isRequired,
     }),
     hasLimit: PropTypes.bool,
