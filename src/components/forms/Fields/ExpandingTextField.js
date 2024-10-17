@@ -8,6 +8,18 @@ import Button from '../../widgets/TheButton';
 import TextField from './TextField.js';
 import Icon, { AddIcon, CloseIcon } from '../../icons';
 
+const handleMultilinePaste = (ev, fields, index) => {
+  const text = (ev.clipboardData || window.clipboardData).getData('text');
+  const lines = text.trim().split('\n');
+  if (lines.length > 1) {
+    ev.preventDefault();
+    lines.forEach((line, idx) => fields.insert(index + idx + 1, line.trim()));
+    if (!fields.get(index)) {
+      fields.remove(index);
+    }
+  }
+};
+
 const ExpandingTextField = ({
   fields = [],
   label = null,
@@ -30,6 +42,7 @@ const ExpandingTextField = ({
         validate={validateEach}
         disabled={readOnly}
         groupClassName="mb-1"
+        onPaste={ev => handleMultilinePaste(ev, fields, index)}
         append={
           readOnly ? null : (
             <>
