@@ -5,9 +5,9 @@ import InsetPanel from '../../widgets/InsetPanel';
 import SharedLocalizedFields from './SharedLocalizedFields.js';
 import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentLocalizedFields.js';
 
-const LocalizedShadowAssignmentFormField = ({ prefix, data: enabled }) => (
+const LocalizedShadowAssignmentFormField = ({ prefix, data: enabled, ignoreDirty = false }) => (
   <InsetPanel>
-    <SharedLocalizedFields prefix={prefix} enabled={enabled} />
+    <SharedLocalizedFields prefix={prefix} enabled={enabled} ignoreDirty={ignoreDirty} />
     <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
   </InsetPanel>
 );
@@ -15,6 +15,7 @@ const LocalizedShadowAssignmentFormField = ({ prefix, data: enabled }) => (
 LocalizedShadowAssignmentFormField.propTypes = {
   prefix: PropTypes.string.isRequired,
   data: PropTypes.bool.isRequired,
+  ignoreDirty: PropTypes.bool,
 };
 
 export default LocalizedShadowAssignmentFormField;

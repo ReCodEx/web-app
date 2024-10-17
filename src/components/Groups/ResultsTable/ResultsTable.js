@@ -22,7 +22,7 @@ import { createUserNameComparator } from '../../helpers/users.js';
 import { compareAssignments, compareShadowAssignments } from '../../helpers/assignments.js';
 import { downloadString } from '../../../redux/helpers/api/download.js';
 import Button from '../../widgets/TheButton';
-import Icon, { DownloadIcon, LoadingIcon, ReviewRequestIcon } from '../../icons';
+import Icon, { AcceptedIcon, DownloadIcon, LoadingIcon, ReviewRequestIcon } from '../../icons';
 import { safeGet, EMPTY_ARRAY, EMPTY_OBJ, hasPermissions } from '../../../helpers/common.js';
 import withLinks from '../../../helpers/withLinks.js';
 import { storageGetItem, storageSetItem } from '../../../helpers/localStorage.js';
@@ -382,6 +382,21 @@ class ResultsTable extends Component {
         )
       );
 
+      columns.push(
+        new SortableTableColumnDescriptor('passed', '', {
+          className: 'text-center shrink-col',
+          headerSuffixClassName: styles.maxPointsRow,
+          cellRenderer: stats => (
+            <>
+              {stats.hasLimit && stats.passesLimit && <AcceptedIcon className="text-success" />}
+              {stats.hasLimit && !stats.passesLimit && (
+                <Icon icon={['far', 'circle-xmark']} className="text-muted half-opaque" />
+              )}
+            </>
+          ),
+        })
+      );
+
       if (hasPermissions(group, 'update')) {
         columns.push(
           new SortableTableColumnDescriptor('buttons', '', {
@@ -409,6 +424,7 @@ class ResultsTable extends Component {
         selected: !showOnlyMe && user.id === loggedUser.id,
         user,
         total: userStats && userStats.points,
+        passed: userStats,
         buttons: renderActions && hasPermissions(group, 'update') ? renderActions(user.id) : '',
         // actually 'update' is not the right premission, but its sufficiently close :)
       };

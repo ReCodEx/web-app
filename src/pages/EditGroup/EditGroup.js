@@ -53,14 +53,21 @@ class EditGroup extends Component {
   }
 
   getInitialValues = lruMemoize(
-    ({ localizedTexts, externalId, public: isPublic, privateData: { publicStats, threshold, detaining } }) => ({
+    ({
+      localizedTexts,
+      externalId,
+      public: isPublic,
+      privateData: { publicStats, threshold, pointsLimit, detaining },
+    }) => ({
       localizedTexts: getLocalizedTextsInitialValues(localizedTexts, EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
       externalId,
       isPublic,
       publicStats,
       detaining,
-      hasThreshold: threshold !== null && threshold !== undefined,
-      threshold: threshold !== null && threshold !== undefined ? String(Number(threshold) * 100) : '0',
+      hasThreshold:
+        (threshold !== null && threshold !== undefined) || (pointsLimit !== null && pointsLimit !== undefined),
+      threshold: Number(threshold || 0) * 100 || null,
+      pointsLimit: pointsLimit || null,
     })
   );
 
@@ -74,6 +81,8 @@ class EditGroup extends Component {
       editGroup,
       relocateGroup,
       hasThreshold,
+      threshold,
+      pointsLimit,
       canViewParentDetail,
       instanceId,
       reload,
@@ -113,7 +122,9 @@ class EditGroup extends Component {
                     initialValues={this.getInitialValues(group)}
                     onSubmit={editGroup}
                     hasThreshold={hasThreshold}
-                    isPublic={group.public}
+                    threshold={threshold}
+                    pointsLimit={pointsLimit}
+                    isOrganizational={group.organizational}
                     isSuperAdmin={isSuperAdmin}
                   />
                 </Col>
@@ -290,6 +301,8 @@ EditGroup.propTypes = {
   canViewParentDetail: PropTypes.bool.isRequired,
   instanceId: PropTypes.string,
   hasThreshold: PropTypes.bool,
+  threshold: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isSuperAdmin: PropTypes.bool,
   editGroup: PropTypes.func.isRequired,
   relocateGroup: PropTypes.func.isRequired,
@@ -307,6 +320,8 @@ export default withLinks(
       groupsAccessor: groupDataAccessorSelector(state),
       userId: loggedInUserIdSelector(state),
       hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
+      threshold: editGroupFormSelector(state, 'threshold'),
+      pointsLimit: editGroupFormSelector(state, 'pointsLimit'),
       isSuperAdmin: isLoggedAsSuperAdmin(state),
       canViewParentDetail: canViewParentDetailSelector(state, groupId),
       instanceId: selectedInstanceId(state),
@@ -315,20 +330,27 @@ export default withLinks(
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
       reload: () => dispatch(fetchGroup(groupId)),
-      editGroup: ({ localizedTexts, externalId, isPublic, publicStats, detaining, threshold, hasThreshold }) => {
-        const transformedData = {
-          localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-          externalId,
-          isPublic,
-          publicStats,
-          detaining,
-          hasThreshold,
-        };
-        if (hasThreshold) {
-          transformedData.threshold = Number(threshold);
-        }
-        return dispatch(editGroup(groupId, transformedData));
-      },
+      editGroup: ({
+        localizedTexts,
+        externalId,
+        isPublic,
+        publicStats,
+        detaining,
+        hasThreshold,
+        threshold,
+        pointsLimit,
+      }) =>
+        dispatch(
+          editGroup(groupId, {
+            localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+            externalId,
+            isPublic,
+            publicStats,
+            detaining,
+            threshold: (hasThreshold && Number(threshold)) || null,
+            pointsLimit: (hasThreshold && Number(pointsLimit)) || null,
+          })
+        ),
       relocateGroup: ({ groupId: newParentId }) => dispatch(relocateGroup(groupId, newParentId)),
     })
   )(injectIntl(EditGroup))

@@ -68,7 +68,7 @@ const GroupInfoTable = ({
               </td>
             </tr>
           )}
-          {privateData && privateData.threshold !== null && !organizational && (
+          {privateData && Boolean(privateData.threshold) && !organizational && (
             <tr>
               <th>
                 <FormattedMessage
@@ -79,6 +79,20 @@ const GroupInfoTable = ({
               </th>
               <td>
                 <FormattedNumber value={privateData.threshold} style="percent" />
+              </td>
+            </tr>
+          )}
+          {privateData && Boolean(privateData.pointsLimit) && !organizational && (
+            <tr>
+              <th>
+                <FormattedMessage
+                  id="app.groupDetail.pointsLimit"
+                  defaultMessage="Minimal amount of points needed to complete the course"
+                />
+                :
+              </th>
+              <td>
+                <FormattedNumber value={privateData.pointsLimit} />
               </td>
             </tr>
           )}
@@ -147,6 +161,7 @@ GroupInfoTable.propTypes = {
     localizedTexts: PropTypes.array,
     privateData: PropTypes.shape({
       threshold: PropTypes.number,
+      pointsLimit: PropTypes.number,
       publicStats: PropTypes.bool.isRequired,
       bindings: PropTypes.object,
     }),

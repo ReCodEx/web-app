@@ -139,12 +139,7 @@ const PlantTermGroups = ({
           component={TextField}
           maxLength={255}
           readOnly
-          label={
-            <FormattedMessage
-              id="app.createGroup.externalId"
-              defaultMessage="External ID of the group (helps create bindings to external data sources):"
-            />
-          }
+          label={<FormattedMessage id="app.createGroup.externalId" defaultMessage="External ID of the group:" />}
         />
 
         {submitFailed && (
