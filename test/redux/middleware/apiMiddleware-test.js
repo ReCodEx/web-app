@@ -31,9 +31,10 @@ describe('API middleware and helper functions', () => {
       };
 
       // setup fetchMock
-      fetchMock.restore();
+      fetchMock.unmockGlobal();
+      fetchMock.config.allowRelativeUrls = true;
       const endpoint = `${API_BASE}/abc`;
-      fetchMock.mock(endpoint, { success: true });
+      fetchMock.mockGlobal().get(endpoint, { success: true });
 
       const dispatchSpy = chai.spy();
       const dispatch = action => {
@@ -47,18 +48,18 @@ describe('API middleware and helper functions', () => {
           chai.expect(dispatchSpy).to.have.been.called.twice;
 
           // examine the HTTP request
-          chai.expect(fetchMock.calls('matched').length).to.equal(1);
-          chai.expect(fetchMock.calls('unmatched').length).to.equal(0);
-          const [url, req] = fetchMock.calls('matched').pop();
+          chai.expect(fetchMock.callHistory.calls('matched').length).to.equal(1);
+          chai.expect(fetchMock.callHistory.calls('unmatched').length).to.equal(0);
+          const { url, options } = fetchMock.callHistory.calls('matched')[0];
           chai.expect(url).to.equal(endpoint);
-          chai.expect(req.method.toLowerCase()).to.equal('get');
-          fetchMock.restore();
+          chai.expect(options.method.toLowerCase()).to.equal('get');
+
+          fetchMock.clearHistory();
 
           // examine the NEXT call
           chai.expect(spy).to.have.been.called();
           chai.expect(spy).to.have.been.called.once;
 
-          fetchMock.restore();
           done();
         } catch (e) {
           console.log(e);
