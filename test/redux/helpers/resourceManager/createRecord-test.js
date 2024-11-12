@@ -10,7 +10,7 @@ describe('Resource manager', () => {
     it('must create a default record with all correct default values', () => {
       const record = createRecord();
       expect(record).to.be.an('object');
-      expect(record).to.have.size(4); // 4 fields - not more, not less
+      expect(record.size).to.equal(4); // 4 fields - not more, not less
       expect(record.get('state')).to.equal(resourceStatus.PENDING);
       expect(record.get('data')).to.equal(null);
       expect(record.get('didInvalidate')).to.equal(false);
@@ -48,15 +48,15 @@ describe('Resource manager', () => {
       };
       const record = createRecord({ data });
       expect(record.get('data')).to.be.an('object');
-      expect(record.get('data')).to.have.size(3);
+      expect(record.get('data').size).to.equal(3);
       expect(record.getIn(['data', 'name'])).to.equal('DATA');
-      expect(record.getIn(['data', 'items'])).to.have.size(3);
+      expect(record.getIn(['data', 'items']).size).to.equal(3);
       expect(record.getIn(['data', 'items']).first()).to.equal('a');
       expect(record.getIn(['data', 'items']).get(1)).to.equal('b');
       expect(record.getIn(['data', 'items']).last()).to.equal('c');
-      expect(record.getIn(['data', 'nested'])).to.have.size(2);
+      expect(record.getIn(['data', 'nested']).size).to.equal(2);
       expect(record.getIn(['data', 'nested', 'child'])).to.equal('CHILD');
-      expect(record.getIn(['data', 'nested', 'list'])).to.have.size(3);
+      expect(record.getIn(['data', 'nested', 'list']).size).to.equal(3);
       expect(record.getIn(['data', 'nested', 'list', 0])).to.equal('x');
       expect(record.getIn(['data', 'nested', 'list', 1])).to.equal('y');
       expect(record.getIn(['data', 'nested', 'list', 2, 'p'])).to.equal('q');

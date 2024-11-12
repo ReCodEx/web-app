@@ -58,7 +58,7 @@
     "glob": "^11.0.0",
     "global": "^4.4.0",
     "highlight.js": "^11.10.0",
-    "immutable": "^4.3.7",
+    "immutable": "^5.0.2",
     "jwt-decode": "^4.0.0",
     "markdown-it": "^14.1.0",
     "moment": "^2.30.1",
