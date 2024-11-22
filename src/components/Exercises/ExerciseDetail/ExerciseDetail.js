@@ -54,7 +54,7 @@ const ExerciseDetail = ({
     <Table responsive size="sm" className="mb-1">
       <tbody>
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <AuthorIcon />
           </td>
           <th>
@@ -67,7 +67,7 @@ const ExerciseDetail = ({
 
         {adminsIds.length > 0 && (
           <tr>
-            <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+            <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
               <AdminIcon />
             </td>
             <th>
@@ -90,14 +90,14 @@ const ExerciseDetail = ({
         )}
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <Icon icon={['far', 'file-alt']} />
           </td>
           <th className="text-nowrap">
             <FormattedMessage id="app.exercise.description" defaultMessage="Short description" />
             :
             <br />
-            <span className="text-muted small">
+            <span className="text-body-secondary small">
               <FormattedMessage
                 id="app.exercise.description.visibleOnlyToSupervisors"
                 defaultMessage="(visible only to supervisors)"
@@ -110,7 +110,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <Icon icon="graduation-cap" />
           </td>
           <th className="text-nowrap">
@@ -122,7 +122,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <CodeIcon />
           </td>
           <th className="text-nowrap">
@@ -134,7 +134,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <TagIcon />
           </td>
           <th className="text-nowrap">
@@ -150,7 +150,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <Icon icon={['far', 'clock']} />
           </td>
           <th className="text-nowrap">
@@ -162,7 +162,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <Icon icon={['far', 'copy']} />
           </td>
           <th>
@@ -174,7 +174,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <VisibleIcon />
           </td>
           <th className="text-nowrap">
@@ -186,7 +186,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <Icon icon="unlock-alt" />
           </td>
           <th className="text-nowrap">
@@ -198,7 +198,7 @@ const ExerciseDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <Icon icon={['far', 'folder-open']} />
           </td>
           <th>
@@ -232,7 +232,7 @@ const ExerciseDetail = ({
 
         {forkedFrom && (
           <tr>
-            <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+            <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
               <ForkIcon />
             </td>
             <th className="text-nowrap">
@@ -255,7 +255,7 @@ const ExerciseDetail = ({
         )}
 
         <tr>
-          <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
+          <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
             <GroupIcon />
           </td>
           <td className="text-nowrap" colSpan={2}>

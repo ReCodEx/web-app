@@ -53,7 +53,7 @@ const EditHardwareGroupForm = ({
         </TheButtonGroup>
       </div>
     }>
-    <p className="text-muted text-justify small">
+    <p className="text-body-secondary small">
       <InfoIcon gapRight />
       <FormattedMessage
         id="app.editHardwareGroupForm.about"

@@ -79,12 +79,12 @@ class ExerciseGroups extends Component {
               {groupsIds.map(groupId => (
                 <tr key={groupId}>
                   <td className="shrink-col">
-                    <GroupIcon className="text-muted" />
+                    <GroupIcon className="text-body-secondary" />
                   </td>
                   <td>
                     <GroupsNameContainer groupId={groupId} fullName translations links admins />
                   </td>
-                  <td className="text-right">
+                  <td className="text-end">
                     {showButtons &&
                       (groupDataAccessor(groupId) || EMPTY_MAP).getIn(['permissionHints', 'createExercise'], false) &&
                       this.detachButton(groupId)}

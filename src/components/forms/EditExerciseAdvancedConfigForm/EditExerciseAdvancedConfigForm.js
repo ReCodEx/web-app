@@ -83,7 +83,7 @@ class EditExerciseAdvancedConfigForm extends Component {
         {pipelinesVariables && (
           <Table
             className={classnames({
-              'no-margin': true,
+              'm-0': true,
               [styles.configTable]: true,
             })}>
             {exerciseTests

@@ -138,7 +138,7 @@ class EditGroup extends Component {
                     <table>
                       <tbody>
                         <tr>
-                          <td className="text-bold text-right p-2">
+                          <td className="fw-bold text-end p-2">
                             <FormattedMessage id="app.editGroup.currentType" defaultMessage="Current type" />:
                           </td>
                           <td className="p-2">
@@ -159,7 +159,7 @@ class EditGroup extends Component {
                             <td>
                               <OrganizationalGroupButtonContainer id={group.id} className="m-2" locale={locale} />
                             </td>
-                            <td className="text-muted small p-2">
+                            <td className="text-body-secondary small p-2">
                               <FormattedMessage
                                 id="app.editGroup.organizationalExplain"
                                 defaultMessage="Regular groups are containers for students and assignments. Organizational groups are intended to create hierarchy, so they are forbidden to hold any students or assignments."
@@ -172,7 +172,7 @@ class EditGroup extends Component {
                             <td>
                               <ExamGroupButtonContainer id={group.id} className="m-2" locale={locale} />
                             </td>
-                            <td className="text-muted small p-2">
+                            <td className="text-body-secondary small p-2">
                               <FormattedMessage
                                 id="app.editGroup.examExplain"
                                 defaultMessage="Exam groups work the same as regular groups internally. The exam flag is mainly an idicator for the users and it may also affect the way how the group is listed or when it is archived. This indicator is completely independent of the Exam terms which can be set on a so named page."
@@ -195,7 +195,7 @@ class EditGroup extends Component {
                       <Col xs={false} sm="auto">
                         <ArchiveGroupButtonContainer id={group.id} shortLabels className="m-2" onChange={reload} />
                       </Col>
-                      <Col xs={12} sm className="text-muted small">
+                      <Col xs={12} sm className="text-body-secondary small">
                         <FormattedMessage
                           id="app.editGroup.archivedExplain"
                           defaultMessage="Archived groups are containers for students, assignments and results after the course is finished. They are immutable and can be accessed through separate Archive page."
@@ -248,7 +248,7 @@ class EditGroup extends Component {
                         />
                       </Col>
                       <Col xs={12} sm>
-                        <div className="text-muted small">
+                        <div className="text-body-secondary small">
                           <FormattedMessage
                             id="app.editGroup.deleteGroupWarning"
                             defaultMessage="Deleting a group will make all attached entities (assignments, solutions, ...) inaccessible."

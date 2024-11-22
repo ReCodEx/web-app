@@ -27,8 +27,8 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
                 sendResult === false || sendResult < 0
                   ? 'danger'
                   : sendResult === null || sendResult === true
-                  ? 'warning'
-                  : 'success'
+                    ? 'warning'
+                    : 'success'
               }
               onClick={() => (sendResult !== null && sendResult !== true ? setSendResult(null) : setMessage(''))}
               disabled={sendResult !== null}
@@ -41,7 +41,7 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
           <Overlay target={buttonTarget.current} show={sendResult !== null && sendResult !== true} placement="bottom">
             {props => (
               <Popover id={id} {...props}>
-                <Popover.Title>
+                <Popover.Header>
                   {sendResult === false || sendResult < 0 ? (
                     <>
                       <WarningIcon className="text-danger" gapRight />
@@ -62,12 +62,12 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
                       values={{ sendResult }}
                     />
                   )}
-                </Popover.Title>
-                <Popover.Content className="text-center">
+                </Popover.Header>
+                <Popover.Body className="text-center">
                   <Button onClick={() => setSendResult(null)} size="xs" variant="success">
                     <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
                   </Button>
-                </Popover.Content>
+                </Popover.Body>
               </Popover>
             )}
           </Overlay>

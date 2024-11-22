@@ -76,7 +76,7 @@ const SolutionFiles = ({
               unlimitedHeight
               title={<FormattedMessage id="app.solutionFiles.title" defaultMessage="Submitted Files" />}>
               {files.length === 0 ? (
-                <div className="text-center text-muted small">
+                <div className="text-center text-body-secondary small">
                   <FormattedMessage id="app.solutionFiles.noFiles" defaultMessage="No files were submitted." />
                 </div>
               ) : (
@@ -85,11 +85,11 @@ const SolutionFiles = ({
                     {preprocessFiles(files).map(file => (
                       <tr key={file.id}>
                         {file.parentId && (
-                          <td className="text-nowrap shrink-col text-muted pr-0">
+                          <td className="text-nowrap shrink-col text-body-secondary pe-0">
                             <Icon icon="level-up-alt" className="fa-rotate-90" gapLeft />
                           </td>
                         )}
-                        <td className="text-nowrap shrink-col text-muted">
+                        <td className="text-nowrap shrink-col text-body-secondary">
                           {file.isEntryPoint ? (
                             <OverlayTrigger
                               placement="bottom"
@@ -110,17 +110,21 @@ const SolutionFiles = ({
                           )}
                         </td>
 
-                        <td className="full-width" colSpan={file.parentId ? 1 : 2}>
+                        <td className="w-100" colSpan={file.parentId ? 1 : 2}>
                           <code
                             className={
-                              file.parentId ? 'text-muted small' : file.isEntryPoint ? 'text-success text-bold' : ''
+                              file.parentId
+                                ? 'text-body-secondary small'
+                                : file.isEntryPoint
+                                  ? 'text-success fw-bold'
+                                  : ''
                             }>
                             {file.name}
                           </code>
                         </td>
                         <td className="small text-nowrap">{prettyPrintBytes(file.size)}</td>
 
-                        <td className="text-nowrap shrink-col text-right">
+                        <td className="text-nowrap shrink-col text-end">
                           <TheButtonGroup>
                             {Boolean(openFile) && !file.name.toLowerCase().endsWith('.zip') && (
                               <OverlayTrigger
@@ -171,15 +175,15 @@ const SolutionFiles = ({
                   <tfoot>
                     <tr>
                       <td colSpan={2} />
-                      <td className="small text-muted">
+                      <td className="small text-body-secondary">
                         <em>
                           <FormattedMessage id="app.solutionFiles.total" defaultMessage="Total:" />
                         </em>
                       </td>
-                      <td className="small text-muted">
+                      <td className="small text-body-secondary">
                         <em>{prettyPrintBytes(filesSize)}</em>
                       </td>
-                      <td className="text-nowrap shrink-col text-right">
+                      <td className="text-nowrap shrink-col text-end">
                         <DownloadSolutionArchiveContainer
                           solutionId={solutionId}
                           attemptIndex={attemptIndex}

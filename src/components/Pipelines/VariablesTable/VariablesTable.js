@@ -34,7 +34,7 @@ const VariablesTable = ({
   const secondarySelectionsIndexed = secondarySelections && prepareSelectionIndex(secondarySelections);
 
   return (
-    <Table hover={variables.length > 0 && !pending} className={pending ? 'half-opaque' : ''} size="sm">
+    <Table hover={variables.length > 0 && !pending} className={pending ? 'opacity-50' : ''} size="sm">
       <thead>
         <tr>
           {utilization && <th />}
@@ -103,7 +103,7 @@ const VariablesTable = ({
                       {portsOut > 1 ? (
                         <WarningIcon className="text-danger" />
                       ) : portsIn && portsOut ? (
-                        <TransferIcon className="text-muted" />
+                        <TransferIcon className="text-body-secondary" />
                       ) : portsIn ? (
                         <InputIcon className="text-primary" />
                       ) : portsOut ? (
@@ -118,8 +118,8 @@ const VariablesTable = ({
                 <td
                   className={classnames({
                     'text-danger': portsOut > 1,
-                    'text-bold': primarySelection === variable.name,
-                    'text-italic': secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
+                    'fw-bold': primarySelection === variable.name,
+                    'fst-italic': secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
                   })}>
                   {variable.name}
                 </td>
@@ -138,7 +138,7 @@ const VariablesTable = ({
                           />
                         </Tooltip>
                       }>
-                      <WarningIcon gapLeft className="text-danger float-right m-1" />
+                      <WarningIcon gapLeft className="text-danger float-end m-1" />
                     </OverlayTrigger>
                   )}
 
@@ -172,7 +172,7 @@ const VariablesTable = ({
 
         {variables.length === 0 && (
           <tr>
-            <td colSpan={7} className="text-center text-muted small">
+            <td colSpan={7} className="text-center text-body-secondary small">
               <em>
                 <FormattedMessage
                   id="app.pipelines.variablesTable.noVariables"

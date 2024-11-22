@@ -20,7 +20,7 @@ const HeaderSystemMessagesDropdown = ({
   acceptActiveMessages,
   unacceptActiveMessages,
 }) => (
-  <Dropdown as="li" alignRight navbar className="nav-item">
+  <Dropdown as="li" align="end" navbar className="nav-item">
     <Dropdown.Toggle as="a" id="dropdown-header-system-messages" bsPrefix="nav-link">
       <MailIcon />
       {systemMessages.length > 0 && (
@@ -43,16 +43,16 @@ const HeaderSystemMessagesDropdown = ({
       <Dropdown.Divider className="mb-0" />
 
       <div className={styles.messageList}>
-        <Table responsive hover className="no-margin">
+        <Table responsive hover className="m-0">
           <tbody>
             {systemMessages.map((message, idx) => (
               <tr key={idx}>
-                <td className={`text-${message.type} bg-${message.type} shrink-col valign-middle text-center`}>
+                <td className={`text-${message.type} bg-${message.type} shrink-col align-middle text-center`}>
                   <TypedMessageIcon type={message.type} size="lg" />
                 </td>
                 <td>
                   <Markdown source={getLocalizedText(message, locale)} />
-                  <small className="text-muted text-nowrap float-right">
+                  <small className="text-body-secondary text-nowrap float-end">
                     <UsersNameContainer userId={message.authorId} isSimple />
                     &nbsp;
                     <DateTime

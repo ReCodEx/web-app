@@ -44,7 +44,7 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
             </Button>
 
             {!syncInfo.isSynchronizationPossible && (
-              <span style={{ marginLeft: '2em' }} className="text-muted">
+              <span style={{ marginLeft: '2em' }} className="text-body-secondary">
                 <FormattedMessage
                   id="app.assignment.syncButton.exerciseBroken"
                   defaultMessage="The update button is disabled since the exercise is broken. The exercise configuration must be mended first."

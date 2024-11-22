@@ -32,7 +32,7 @@ const ExercisesTagsEditContainer = ({ exercise, tags, tagsLoading, updatePending
                   <td>
                     <TagIcon style={{ color: getTagCSSColor(tag) }} />
                   </td>
-                  <td className="full-width">{tag}</td>
+                  <td className="w-100">{tag}</td>
                   <td>
                     <Button variant="danger" size="xs" onClick={() => removeTag(tag)} disabled={updatePending}>
                       {updatePending ? <LoadingIcon gapRight /> : <RemoveIcon gapRight />}
@@ -44,7 +44,7 @@ const ExercisesTagsEditContainer = ({ exercise, tags, tagsLoading, updatePending
             </tbody>
           </Table>
         ) : (
-          <p className="small text-muted text-center">
+          <p className="small text-body-secondary text-center">
             <FormattedMessage id="app.editExerciseTags.noTags" defaultMessage="no tags assigned" />
           </p>
         )}

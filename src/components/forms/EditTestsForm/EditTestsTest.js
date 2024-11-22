@@ -39,7 +39,7 @@ const EditTestsTest = ({ fields, calculator, testValues, usedTests, addNewTest, 
               </th>
             )}
             {!readOnly && addNewTest && (
-              <th className="valign-middle text-right">
+              <th className="align-middle text-end">
                 {fields.length < 99 && (
                   <Button onClick={addNewTest} variant="primary" size="xs">
                     <AddIcon gapRight />

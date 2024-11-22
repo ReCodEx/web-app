@@ -14,7 +14,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
   return (
     <Box
       title={<FormattedMessage id="app.hardwareGroupMetadata.title" defaultMessage="Hardware Group Metadata" />}
-      description={<h5 className="text-bold">{hardwareGroup.name}</h5>}
+      description={<h5 className="fw-bold">{hardwareGroup.name}</h5>}
       type="primary"
       unlimitedHeight>
       <Table>

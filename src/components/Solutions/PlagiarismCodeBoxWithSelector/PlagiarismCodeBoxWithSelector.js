@@ -200,7 +200,7 @@ class PlagiarismCodeBoxWithSelector extends Component {
         collapseable
         isOpen={false}
         titleSuffix={
-          <small className="text-muted ml-3">
+          <small className="text-body-secondary ms-3">
             (
             <FormattedMessage
               id="app.solutionPlagiarisms.noMatchesForFile"

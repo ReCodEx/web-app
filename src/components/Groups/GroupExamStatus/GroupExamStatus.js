@@ -155,7 +155,7 @@ class GroupExamStatus extends Component {
             <table>
               <tbody>
                 <tr>
-                  <td className="text-bold">
+                  <td className="fw-bold">
                     <FormattedMessage id="app.groupExams.beginAt" defaultMessage="Begins at" />:
                   </td>
                   <td className="p-2">
@@ -163,7 +163,7 @@ class GroupExamStatus extends Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="text-bold">
+                  <td className="fw-bold">
                     <FormattedMessage id="app.groupExams.endAt" defaultMessage="Ends at" />:
                   </td>
                   <td className="p-2">
@@ -173,7 +173,7 @@ class GroupExamStatus extends Component {
 
                 {!isStudent && (
                   <tr>
-                    <td className="text-bold">
+                    <td className="fw-bold">
                       <FormattedMessage id="app.groupExams.locking" defaultMessage="Lock type" />:
                     </td>
                     <td className="p-2">
@@ -211,7 +211,7 @@ class GroupExamStatus extends Component {
 
                 {isStudent && ipLock && (
                   <tr>
-                    <td className="text-bold">
+                    <td className="fw-bold">
                       <FormattedMessage id="app.groupExams.ipLocked" defaultMessage="IP locked" />:
                     </td>
                     <td className="p-2">
@@ -312,7 +312,7 @@ class GroupExamStatus extends Component {
                     />
                     .
                   </div>
-                  <div className="text-muted small mb-1">
+                  <div className="text-body-secondary small mb-1">
                     <FormattedMessage
                       id="app.groupExams.lockedStudentInfo"
                       defaultMessage="You may now see and submit solutions to exam assignments."
@@ -337,7 +337,7 @@ class GroupExamStatus extends Component {
           )}
 
           <hr className="mb-1" />
-          <div className="text-muted text-center small">
+          <div className="text-body-secondary text-center small">
             <FormattedMessage
               id="app.groupExams.timeAccuracyWarning"
               defaultMessage="Your local system clock should be sufficiently synchronized or this component may not work properly."

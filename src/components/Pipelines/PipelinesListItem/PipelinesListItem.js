@@ -41,11 +41,11 @@ const PipelinesListItem = ({
             )}
           </Tooltip>
         }>
-        <PipelineIcon className={author ? 'text-muted' : 'text-primary'} />
+        <PipelineIcon className={author ? 'text-body-secondary' : 'text-primary'} />
       </OverlayTrigger>
     </td>
 
-    <td className="text-center shrink-col text-muted">
+    <td className="text-center shrink-col text-body-secondary">
       {parameters.isCompilationPipeline && (
         <OverlayTrigger
           placement="bottom"
@@ -84,7 +84,7 @@ const PipelinesListItem = ({
       )}
     </td>
 
-    <td className="text-center shrink-col text-muted">
+    <td className="text-center shrink-col text-body-secondary">
       {parameters.producesStdout && (
         <OverlayTrigger
           placement="bottom"
@@ -117,8 +117,8 @@ const PipelinesListItem = ({
 
     <td
       className={classnames({
-        'text-bold': true,
-        'full-width': fullWidthName,
+        'fw-bold': true,
+        'w-100': fullWidthName,
       })}>
       <Link to={PIPELINE_URI_FACTORY(id)}>{name}</Link>
     </td>
@@ -131,7 +131,7 @@ const PipelinesListItem = ({
       </td>
     )}
 
-    <td className="text-right text-nowrap">{createActions && createActions(id)}</td>
+    <td className="text-end text-nowrap">{createActions && createActions(id)}</td>
   </tr>
 );
 

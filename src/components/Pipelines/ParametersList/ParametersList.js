@@ -61,7 +61,7 @@ const ParametersList = ({ parameters }) => (
           <td className="shrink-col">
             <i>{pipelineParameterMapping(parameterName)}</i>:
           </td>
-          <td className="em-padding-left">
+          <td className="ps-3">
             <code>{String(parameters[parameterName])}</code>
           </td>
         </tr>

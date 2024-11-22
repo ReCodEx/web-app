@@ -58,7 +58,7 @@ const ShadowAssignmentsTable = ({
         <tbody>
           {shadowAssignments.size === 0 && (
             <tr>
-              <td className="text-center em-padding text-muted">
+              <td className="text-center p-3 text-body-secondary">
                 <FormattedMessage
                   id="app.shadowAssignmentsTable.noAssignments"
                   defaultMessage="There are no shadow assignments."
@@ -69,7 +69,7 @@ const ShadowAssignmentsTable = ({
 
           {shadowAssignments.some(isLoading) && (
             <tr>
-              <td className="text-center em-padding" colSpan={isAdmin ? 5 : 4}>
+              <td className="text-center p-3" colSpan={isAdmin ? 5 : 4}>
                 <LoadingIcon gapRight />
                 <FormattedMessage
                   id="app.shadowAssignmentsTable.loading"

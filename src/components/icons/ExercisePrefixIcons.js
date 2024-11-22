@@ -51,7 +51,7 @@ export const ExercisePrefixIcons = ({
               />
             </Tooltip>
           }>
-          <PrivateIcon {...props} className="text-muted" gapRight />
+          <PrivateIcon {...props} className="text-body-secondary" gapRight />
         </OverlayTrigger>
       </span>
     )}

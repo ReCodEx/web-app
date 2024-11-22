@@ -102,7 +102,7 @@ const PlantTermGroups = ({
                   {existingSemestralGroups[group.id].length === 0 ? (
                     <Field name={`groups.${group.id}`} component={SimpleCheckboxField} />
                   ) : (
-                    <Icon icon="seedling" className="text-muted half-opaque" />
+                    <Icon icon="seedling" className="text-body-secondary opacity-50" />
                   )}
                 </td>
                 <td>

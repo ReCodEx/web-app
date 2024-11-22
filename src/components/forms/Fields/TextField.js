@@ -19,6 +19,7 @@ const TextField = ({
   <FormGroup controlId={input.name} className={groupClassName}>
     {Boolean(label) && <FormLabel>{label}</FormLabel>}
     <InputGroup>
+      {prepend || null}
       <FormControl
         {...input}
         {...props}
@@ -33,8 +34,7 @@ const TextField = ({
           'border-warning': !error && warning,
         })}
       />
-      {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
-      {append && <InputGroup.Append>{append}</InputGroup.Append>}
+      {append || null}
     </InputGroup>
     {error && <Form.Text className="text-danger"> {error} </Form.Text>}
     {!error && warning && <Form.Text className="text-warning"> {warning} </Form.Text>}

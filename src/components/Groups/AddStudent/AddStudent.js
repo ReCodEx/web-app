@@ -64,7 +64,7 @@ const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = f
           createActions={({ id }) => <LeaveJoinGroupButtonContainer userId={id} groupId={groupId} />}
         />
       ) : (
-        <div className="text-center text-muted small">
+        <div className="text-center text-body-secondary small">
           <FormattedMessage
             id="app.addStudent.cannotSearch"
             defaultMessage="You do not have permissions to search students, so you cannot add them explicitly."

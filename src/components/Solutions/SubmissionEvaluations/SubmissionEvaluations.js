@@ -14,7 +14,7 @@ const deleteButton = (id, onDelete, confirmation = null) =>
     <Confirm id={id} onConfirmed={() => onDelete(id)} question={confirmation}>
       <Button variant="danger" size="xs">
         <DeleteIcon fixedWidth />
-        <span className="d-none d-xl-inline pl-1">
+        <span className="d-none d-xl-inline ps-1">
           <FormattedMessage id="generic.delete" defaultMessage="Delete" />
         </span>
       </Button>
@@ -22,7 +22,7 @@ const deleteButton = (id, onDelete, confirmation = null) =>
   ) : (
     <Button variant="danger" size="xs" onClick={() => onDelete(id)}>
       <DeleteIcon fixedWidth />
-      <span className="d-none d-xl-inline pl-1">
+      <span className="d-none d-xl-inline ps-1">
         <FormattedMessage id="generic.delete" defaultMessage="Delete" />
       </span>
     </Button>
@@ -48,7 +48,7 @@ const SubmissionEvaluations = ({
     isOpen={true}>
     <>
       {showInfo && (
-        <Callout variant="info" className="small em-margin">
+        <Callout variant="info" className="small m-3">
           <FormattedMessage
             id="app.submissionEvaluation.tableInfo"
             defaultMessage="This table shows the history of evaluations. You may select which evaluation you would like to display, but only the most recent evaluation is considered the valid one (and it is also the only one visible to the student)."
@@ -59,11 +59,11 @@ const SubmissionEvaluations = ({
         evaluations={evaluations}
         selectedRowId={activeSubmissionId}
         renderButtons={(id, idx) => (
-          <td className="text-right text-nowrap">
+          <td className="text-end text-nowrap">
             {id === activeSubmissionId ? (
               <Button variant="success" size="xs" disabled>
                 <Icon icon={['far', 'eye']} fixedWidth />
-                <span className="d-none d-xl-inline pl-1">
+                <span className="d-none d-xl-inline ps-1">
                   <FormattedMessage id="app.submissionEvaluation.visible" defaultMessage="Visible" />
                 </span>
               </Button>
@@ -71,7 +71,7 @@ const SubmissionEvaluations = ({
               <TheButtonGroup>
                 <Button variant="primary" size="xs" onClick={() => onSelect(id)}>
                   <Icon icon={['far', 'eye']} fixedWidth />
-                  <span className="d-none d-xl-inline pl-1">
+                  <span className="d-none d-xl-inline ps-1">
                     <FormattedMessage id="app.submissionEvaluation.show" defaultMessage="Show" />
                   </span>
                 </Button>

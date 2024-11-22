@@ -191,8 +191,8 @@ class ScoreConfigUniversalExpression extends Component {
                 fixedWidth
                 size="lg"
                 className={classnames({
-                  'halfem-margin-vertical': true,
-                  'em-margin-horizontal': true,
+                  'my-2': true,
+                  'mx-3': true,
                   'text-primary': true,
                 })}
                 disabled={!ast.canUndo()}
@@ -213,8 +213,8 @@ class ScoreConfigUniversalExpression extends Component {
                 fixedWidth
                 size="lg"
                 className={classnames({
-                  'halfem-margin-vertical': true,
-                  'em-margin-horizontal': true,
+                  'my-2': true,
+                  'mx-3': true,
                   'text-primary': true,
                 })}
                 disabled={!ast.canRedo()}
@@ -238,7 +238,7 @@ class ScoreConfigUniversalExpression extends Component {
                 icon="air-freshener"
                 fixedWidth
                 size="lg"
-                className="halfem-margin-vertical em-margin-horizontal text-warning"
+                className="my-2 mx-3 text-warning"
                 disabled={!ast.isValid()}
                 onClick={this.openOptimizationDialog}
               />
@@ -256,12 +256,7 @@ class ScoreConfigUniversalExpression extends Component {
                   />
                 </Tooltip>
               }>
-              <InfoIcon
-                fixedWidth
-                size="lg"
-                className="halfem-margin-vertical em-margin-horizontal text-muted"
-                onClick={this.openHelpDialog}
-              />
+              <InfoIcon fixedWidth size="lg" className="my-2 mx-3 text-body-secondary" onClick={this.openHelpDialog} />
             </OverlayTrigger>
 
             <br />
@@ -277,7 +272,7 @@ class ScoreConfigUniversalExpression extends Component {
                 icon="flask"
                 fixedWidth
                 size="lg"
-                className="halfem-margin-vertical em-margin-horizontal text-danger"
+                className="my-2 mx-3 text-danger"
                 onClick={this.openDebugDialog}
               />
             </OverlayTrigger>
@@ -414,7 +409,7 @@ class ScoreConfigUniversalExpression extends Component {
               <table>
                 <tbody>
                   <tr>
-                    <td className="em-padding valign-middle">
+                    <td className="p-3 align-middle">
                       <Button onClick={() => this.performOptimizations(removeConstantExpressions)} variant="success">
                         <FormattedMessage
                           id="app.scoreConfigExpression.optimize.removeConstantsButton"
@@ -422,7 +417,7 @@ class ScoreConfigUniversalExpression extends Component {
                         />
                       </Button>
                     </td>
-                    <td className="em-padding valign-middle text-muted small">
+                    <td className="p-3 align-middle text-body-secondary small">
                       <FormattedMessage
                         id="app.scoreConfigExpression.optimize.removeConstantsInfo"
                         defaultMessage="All constant sub-expressions (sub-trees) are evaluated and replaced with numeric literal nodes."
@@ -430,7 +425,7 @@ class ScoreConfigUniversalExpression extends Component {
                     </td>
                   </tr>
                   <tr>
-                    <td className="em-padding valign-middle">
+                    <td className="p-3 align-middle">
                       <Button onClick={() => this.performOptimizations(optimize)} variant="success">
                         <FormattedMessage
                           id="app.scoreConfigExpression.optimize.optimizeButton"
@@ -438,7 +433,7 @@ class ScoreConfigUniversalExpression extends Component {
                         />
                       </Button>
                     </td>
-                    <td className="em-padding valign-middle text-muted small">
+                    <td className="p-3 align-middle text-body-secondary small">
                       <FormattedMessage
                         id="app.scoreConfigExpression.optimize.optimizeInfo"
                         defaultMessage="Perform basic set of optimizations which simplify the tree but have no effect on the result (removing double negtion, removing 0 from sum() and 1 from mul(), etc.)."
@@ -446,7 +441,7 @@ class ScoreConfigUniversalExpression extends Component {
                     </td>
                   </tr>
                   <tr>
-                    <td className="em-padding valign-middle">
+                    <td className="p-3 align-middle">
                       <Button
                         onClick={() => this.performOptimizations(removeConstantExpressions, optimize)}
                         variant="success">
@@ -456,7 +451,7 @@ class ScoreConfigUniversalExpression extends Component {
                         />
                       </Button>
                     </td>
-                    <td className="em-padding valign-middle text-muted small">
+                    <td className="p-3 align-middle text-body-secondary small">
                       <FormattedMessage
                         id="app.scoreConfigExpression.optimize.allInfo"
                         defaultMessage="Perform all optimizations mentioned above in the correct order."
@@ -493,7 +488,7 @@ class ScoreConfigUniversalExpression extends Component {
               </p>
               <pre className="small">
                 <CopyIcon
-                  className="float-right"
+                  className="float-end"
                   size="2x"
                   onClick={ev => {
                     let node = ev.target;

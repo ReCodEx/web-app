@@ -115,7 +115,7 @@ const roleIcon = ({ role, ...props }) => {
       return <SupervisorStudentIcon {...props} />;
     default:
       return (
-        <span className="text-muted">
+        <span className="text-body-secondary">
           <UserIcon {...props} />
         </span>
       );

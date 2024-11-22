@@ -20,7 +20,7 @@ const SourceCodeComment = ({
   restrictCommentAuthor = null,
 }) => {
   return (
-    <div className={classnames({ issue: comment.issue, 'half-opaque': comment.removing })}>
+    <div className={classnames({ issue: comment.issue, 'opacity-50': comment.removing })}>
       <span className="icon">
         {comment.issue ? (
           <OverlayTrigger
@@ -43,7 +43,7 @@ const SourceCodeComment = ({
             <WarningIcon className="text-danger" gapRight />
           </OverlayTrigger>
         ) : (
-          <Icon icon={['far', 'comment']} className="almost-transparent" gapRight />
+          <Icon icon={['far', 'comment']} className="opacity-25" gapRight />
         )}
       </span>
 
@@ -57,23 +57,25 @@ const SourceCodeComment = ({
             (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
               <EditIcon className="text-warning" gapRight onClick={() => startEditting(comment)} />
             )}
-          {removeComment && !comment.removing && (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
-            <Confirm
-              id={`delcfrm-${comment.id}`}
-              onConfirmed={() => removeComment(comment.id)}
-              question={
-                <FormattedMessage
-                  id="app.sourceCodeViewer.deleteCommentConfirm"
-                  defaultMessage="Do you really wish to remove this comment? This operation cannot be undone."
-                />
-              }>
-              <DeleteIcon className="text-danger" gapRight />
-            </Confirm>
-          )}
+          {removeComment &&
+            !comment.removing &&
+            (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
+              <Confirm
+                id={`delcfrm-${comment.id}`}
+                onConfirmed={() => removeComment(comment.id)}
+                question={
+                  <FormattedMessage
+                    id="app.sourceCodeViewer.deleteCommentConfirm"
+                    defaultMessage="Do you really wish to remove this comment? This operation cannot be undone."
+                  />
+                }>
+                <DeleteIcon className="text-danger" gapRight />
+              </Confirm>
+            )}
         </span>
       </small>
 
-      <small className="float-right mr-2">
+      <small className="float-end me-2">
         <DateTime unixts={comment.createdAt} showRelative />
       </small>
       <Markdown source={comment.text} />

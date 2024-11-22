@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { FormControl, Table } from 'react-bootstrap';
+import { FormSelect, Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import StandaloneRadioField from '../../forms/StandaloneRadioInput';
@@ -63,12 +63,11 @@ class EditTestNodeForm extends Component {
         </InsetPanel>
 
         {tests.length > 10 ? (
-          <FormControl
-            as="select"
+          <FormSelect
             className={classnames({
               'form-control': true,
               [formStyles.dirty]: this.dirty(),
-              'full-width': true,
+              'w-100': true,
             })}
             onChange={ev => ev.target && ev.target.value && this.setState({ selected: ev.target.value })}>
             {tests.map(({ id, name }) => (
@@ -76,7 +75,7 @@ class EditTestNodeForm extends Component {
                 {name}
               </option>
             ))}
-          </FormControl>
+          </FormSelect>
         ) : (
           <Table hover>
             <tbody>
@@ -87,7 +86,7 @@ class EditTestNodeForm extends Component {
                   className={classnames({
                     'bg-info': (node && node.test) === test.id,
                   })}>
-                  <td className="valign-middle shrink-col">
+                  <td className="align-middle shrink-col">
                     <StandaloneRadioField
                       name="test"
                       value={String(test.id)}

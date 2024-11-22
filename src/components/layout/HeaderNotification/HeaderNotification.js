@@ -68,7 +68,7 @@ class HeaderNotification extends Component {
                     e.preventDefault();
                     hide && hide(id);
                   }}>
-                  <DeleteIcon className="fa text-red" smallGapRight fixedWidth />
+                  <DeleteIcon className="fa text-danger" smallGapRight fixedWidth />
                 </span>
               ) : successful ? (
                 <SuccessIcon className="text-success" smallGapRight fixedWidth />
@@ -94,7 +94,7 @@ class HeaderNotification extends Component {
             <span>{msg}</span>
             {count > 1 && (
               <span className={styles.badgeContainer}>
-                <Badge variant="secondary">{count}</Badge>
+                <Badge bg="secondary">{count}</Badge>
               </span>
             )}
           </>

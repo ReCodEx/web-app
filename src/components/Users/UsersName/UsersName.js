@@ -101,7 +101,7 @@ const UsersName = ({
                   showTooltip
                   tooltipId={'user-role'}
                   gapLeft
-                  className="text-muted half-opaque"
+                  className="text-body-secondary opacity-50"
                 />
               )}
 
@@ -110,15 +110,15 @@ const UsersName = ({
                   placement="right"
                   overlay={
                     <Popover id={id}>
-                      <Popover.Title>
+                      <Popover.Header>
                         <FormattedMessage id="app.userName.externalIds" defaultMessage="External identifiers" />
-                      </Popover.Title>
-                      <Popover.Content>
+                      </Popover.Header>
+                      <Popover.Body>
                         <table>
                           <tbody>
                             {Object.keys(externalIds).map(service => (
                               <tr key={service}>
-                                <td className="em-padding-right">{service}:</td>
+                                <td className="pe-3">{service}:</td>
                                 <td>
                                   <strong>
                                     {Array.isArray(externalIds[service])
@@ -130,7 +130,7 @@ const UsersName = ({
                             ))}
                           </tbody>
                         </table>
-                        <small className="text-muted">
+                        <small className="text-body-secondary">
                           (
                           <FormattedMessage
                             id="app.userName.externalIdsClickInfo"
@@ -138,7 +138,7 @@ const UsersName = ({
                           />
                           )
                         </small>
-                      </Popover.Content>
+                      </Popover.Body>
                     </Popover>
                   }>
                   <CopyToClipboard
@@ -148,7 +148,7 @@ const UsersName = ({
                     <Icon
                       icon={['far', 'id-card']}
                       gapLeft
-                      className="text-muted half-opaque clickable"
+                      className="text-body-secondary opacity-50 clickable"
                       style={{ '--fa-beat-scale': 1.5, '--fa-animation-duration': '0.3s' }}
                       onClick={ev => {
                         const style = 'fa-beat';
@@ -166,7 +166,7 @@ const UsersName = ({
                 </a>
               )}
               {privateData && privateData.email && showEmail === 'full' && (
-                <small className="em-padding-left">
+                <small className="ps-3">
                   {'('}
                   <a href={`mailto:${email}`}>{privateData.email}</a>
                   {')'}

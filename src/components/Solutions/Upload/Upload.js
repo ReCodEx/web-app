@@ -40,7 +40,7 @@ const Upload = ({
               <FormattedMessage id="app.uploadFiles.addFileButton" defaultMessage="Select File(s) for Upload" />
             </Button>
           </div>
-          <div className="small text-muted my-3">
+          <div className="small text-body-secondary my-3">
             <FormattedMessage id="app.uploadFiles.dragAndDrop" defaultMessage="Or simply drag and drop files here..." />
           </div>
         </div>

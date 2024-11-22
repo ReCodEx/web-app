@@ -62,7 +62,7 @@ const SourceCodeBox = ({
               <code>{name}</code>
               {diffWith && (
                 <>
-                  <CodeCompareIcon className="text-muted ml-4 mr-3" />
+                  <CodeCompareIcon className="text-body-secondary ms-4 me-3" />
                   <code>{diffWith.name}</code>
                 </>
               )}
@@ -135,7 +135,7 @@ const SourceCodeBox = ({
                       </Tooltip>
                     }>
                     <CodeCompareIcon
-                      className={adjustDiffMapping ? 'text-primary ml-4 mr-3' : 'text-muted ml-4 mr-3'}
+                      className={adjustDiffMapping ? 'text-primary ms-4 me-3' : 'text-body-secondary ms-4 me-3'}
                       onClick={
                         adjustDiffMapping ? () => adjustDiffMapping({ id, parentId, name, entryName }, diffWith) : null
                       }
@@ -175,7 +175,7 @@ const SourceCodeBox = ({
                   {diffWith ? (
                     <code>{diffWith.name}</code>
                   ) : (
-                    <em className="small text-muted">
+                    <em className="small text-body-secondary">
                       <FormattedMessage
                         id="app.solutionSourceCodes.noDiffWithFile"
                         defaultMessage="no corresponding file for the comparison found"

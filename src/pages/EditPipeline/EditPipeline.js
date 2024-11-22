@@ -178,7 +178,7 @@ class EditPipeline extends Component {
                         onDeleted={() => navigate(PIPELINES_URI, { replace: true })}
                       />
                     </Col>
-                    <Col xs={12} sm className="text-muted">
+                    <Col xs={12} sm className="text-body-secondary">
                       <FormattedMessage
                         id="app.editPipeline.deleteWarning"
                         defaultMessage="Deleting an pipeline will break all exercises using the pipeline."

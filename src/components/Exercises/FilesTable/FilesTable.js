@@ -70,7 +70,7 @@ const FilesTable = ({
       )}
 
       {files.length === 0 && (
-        <p className="text-center em-padding">
+        <p className="text-center p-3">
           <Icon icon={['far', 'folder-open']} gapRight />
           <FormattedMessage id="app.filesTable.empty" defaultMessage="There are no saved files yet." />
         </p>

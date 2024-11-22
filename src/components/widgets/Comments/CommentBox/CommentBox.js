@@ -63,7 +63,7 @@ class CommentBox extends Component {
         </Modal.Header>
         <Modal.Body>{this.renderMessages()}</Modal.Body>
         <Modal.Footer>
-          <div className="full-width">{footer}</div>
+          <div className="w-100">{footer}</div>
         </Modal.Footer>
       </>
     ) : displayAs === 'panel' ? (
@@ -72,7 +72,7 @@ class CommentBox extends Component {
           <div>
             <span className={styles.panelIcon}>
               {this.state.panelOpen ? (
-                <Icon icon="angles-right" className="text-muted" onClick={this.closePanel} />
+                <Icon icon="angles-right" className="text-body-secondary" onClick={this.closePanel} />
               ) : (
                 <ChatIcon className="text-primary" onClick={this.openPanel} />
               )}

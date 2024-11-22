@@ -39,9 +39,9 @@ const ReviewCommentForm = ({
       <Row>
         <Col>
           {authorId && createdAt && (
-            <small className="float-right">
+            <small className="float-end">
               <UsersNameContainer userId={authorId} showEmail="icon" />
-              <span className="ml-3">
+              <span className="ms-3">
                 <DateTime unixts={createdAt} showRelative />
               </span>
             </small>

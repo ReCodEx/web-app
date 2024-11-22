@@ -60,7 +60,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
 
   const columns = [
     new SortableTableColumnDescriptor('icon', '', {
-      className: 'text-nowrap text-muted',
+      className: 'text-nowrap text-body-secondary',
       cellRenderer: ({ visibility }) =>
         visibility > 1 ? (
           <OverlayTrigger
@@ -102,7 +102,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
       'createdAt',
       <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />,
       {
-        className: 'text-left',
+        className: 'text-start',
         comparator: ({ createdAt: d1 }, { createdAt: d2 }) => d2 - d1, // dates are implicitly in reversed order
         cellRenderer: (createdAt, idx) =>
           createdAt && <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
@@ -110,7 +110,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
     ),
 
     new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.author" defaultMessage="Author" />, {
-      className: 'text-left',
+      className: 'text-start',
       comparator: ({ user: u1, createdAt: d1 }, { user: u2, createdAt: d2 }) => nameComparator(u1, u2) || d2 - d1, // dates are implicitly in reversed order
       cellRenderer: user =>
         user ? <UsersName {...user} currentUserId={loggedUserId} showEmail="icon" listItem /> : <LoadingIcon />,
@@ -155,13 +155,13 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
       'description',
       <FormattedMessage id="generic.description" defaultMessage="Description" />,
       {
-        className: 'small full-width',
-        headerClassName: 'text-left',
+        className: 'small w-100',
+        headerClassName: 'text-start',
       }
     ),
 
     new SortableTableColumnDescriptor('actionButtons', '', {
-      className: 'text-right valign-middle text-nowrap',
+      className: 'text-end align-middle text-nowrap',
       cellRenderer: solution => (
         <TheButtonGroup>
           <Link to={REFERENCE_SOLUTION_URI_FACTORY(solution.exerciseId, solution.id)}>
@@ -432,7 +432,7 @@ class ExerciseReferenceSolutions extends Component {
                                 id="app.exerciseReferenceSolutions.referenceSolutionsBox"
                                 defaultMessage="Reference Solutions"
                               />{' '}
-                              <small className="text-muted ml-3">
+                              <small className="text-body-secondary ms-3">
                                 (
                                 <FormattedMessage
                                   id="app.exerciseReferenceSolutions.referenceSolutionsCount"
@@ -452,7 +452,7 @@ class ExerciseReferenceSolutions extends Component {
                               defaultOrder="createdAt"
                               data={prepareTableData(referenceSolutions, userSelector, runtimes, userId, this.state)}
                               empty={
-                                <div className="text-center text-muted small m-3">
+                                <div className="text-center text-body-secondary small m-3">
                                   <FormattedMessage
                                     id="app.exerciseReferenceSolutions.noSolutions"
                                     defaultMessage="No reference solutions matching filter criteria."
@@ -518,7 +518,7 @@ class ExerciseReferenceSolutions extends Component {
                               />
                             </Tooltip>
                           }>
-                          <LockIcon gapLeft className="half-opaque" />
+                          <LockIcon gapLeft className="opacity-50" />
                         </OverlayTrigger>
                       )}
                     </OnOffCheckbox>
@@ -545,7 +545,7 @@ class ExerciseReferenceSolutions extends Component {
                               />
                             </Tooltip>
                           }>
-                          <LockIcon gapLeft className="half-opaque" />
+                          <LockIcon gapLeft className="opacity-50" />
                         </OverlayTrigger>
                       )}
                     </OnOffCheckbox>
@@ -585,7 +585,7 @@ class ExerciseReferenceSolutions extends Component {
                               />
                             </Tooltip>
                           }>
-                          <LockIcon gapLeft className="half-opaque" />
+                          <LockIcon gapLeft className="opacity-50" />
                         </OverlayTrigger>
                       )}
                     </OnOffCheckbox>
@@ -612,7 +612,7 @@ class ExerciseReferenceSolutions extends Component {
                               />
                             </Tooltip>
                           }>
-                          <LockIcon gapLeft className="half-opaque" />
+                          <LockIcon gapLeft className="opacity-50" />
                         </OverlayTrigger>
                       )}
                     </OnOffCheckbox>
@@ -652,7 +652,7 @@ class ExerciseReferenceSolutions extends Component {
                               />
                             </Tooltip>
                           }>
-                          <LockIcon gapLeft className="half-opaque" />
+                          <LockIcon gapLeft className="opacity-50" />
                         </OverlayTrigger>
                       )}
                     </OnOffCheckbox>
@@ -679,7 +679,7 @@ class ExerciseReferenceSolutions extends Component {
                               />
                             </Tooltip>
                           }>
-                          <LockIcon gapLeft className="half-opaque" />
+                          <LockIcon gapLeft className="opacity-50" />
                         </OverlayTrigger>
                       )}
                     </OnOffCheckbox>
@@ -706,7 +706,7 @@ class ExerciseReferenceSolutions extends Component {
                               />
                             </Tooltip>
                           }>
-                          <LockIcon gapLeft className="half-opaque" />
+                          <LockIcon gapLeft className="opacity-50" />
                         </OverlayTrigger>
                       )}
                     </OnOffCheckbox>

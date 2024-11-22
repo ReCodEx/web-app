@@ -180,7 +180,7 @@ class SisSupervisorGroupsContainer extends Component {
         }
         unlimitedHeight>
         <div>
-          <p className="text-muted">
+          <p className="text-body-secondary">
             <FormattedMessage
               id="app.sisSupervisor.sisGroupsCreateExplain"
               defaultMessage="SIS courses you teach in particular semesters and which have mapping to ReCodEx. You may create new groups with binding or bind existing groups to these courses."
@@ -227,22 +227,22 @@ class SisSupervisorGroupsContainer extends Component {
                                         ) || a.course.code.localeCompare(b.course.code, locale)
                                     )
                                     .map(course => (
-                                      <Card key={course.course.code} className="card-light">
+                                      <Card key={course.course.code} className="card-light mb-3">
                                         <Card.Header>
-                                          <Accordion.Toggle as="div" eventKey={course.course.code}>
+                                          <Accordion.Button as="div" eventKey={course.course.code}>
                                             {course && (
                                               <small>
                                                 <CourseLabel {...course.course} groupsCount={course.groups.length} />
                                               </small>
                                             )}
-                                          </Accordion.Toggle>
+                                          </Accordion.Button>
                                         </Card.Header>
 
                                         <Accordion.Collapse eventKey={course.course.code}>
                                           <>
                                             <Card.Body>
                                               {course.groups.length > 0 ? (
-                                                <Table hover className="no-margin">
+                                                <Table hover className="m-0">
                                                   <thead>
                                                     <tr>
                                                       <th className="shrink-col" />
@@ -304,14 +304,14 @@ class SisSupervisorGroupsContainer extends Component {
                                                                     placement="right"
                                                                     overlay={
                                                                       <Popover id={`grp-pop-${group.id}`}>
-                                                                        <Popover.Title>
+                                                                        <Popover.Header>
                                                                           <FormattedMessage
                                                                             id="app.sisSupervisor.multiGroupPopover.title"
                                                                             defaultMessage="The group has multiple bindings:"
                                                                           />
-                                                                        </Popover.Title>
-                                                                        <Popover.Content>
-                                                                          <ul className="em-padding-left">
+                                                                        </Popover.Header>
+                                                                        <Popover.Body>
+                                                                          <ul className="ps-3">
                                                                             {group.privateData.bindings.sis
                                                                               .sort()
                                                                               .map(code => (
@@ -320,14 +320,14 @@ class SisSupervisorGroupsContainer extends Component {
                                                                                   {code === course.course.code && (
                                                                                     <Icon
                                                                                       icon={['far', 'star']}
-                                                                                      className="text-muted"
+                                                                                      className="text-body-secondary"
                                                                                       gapLeft
                                                                                     />
                                                                                   )}
                                                                                 </li>
                                                                               ))}
                                                                           </ul>
-                                                                        </Popover.Content>
+                                                                        </Popover.Body>
                                                                       </Popover>
                                                                     }>
                                                                     <Icon
@@ -343,7 +343,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                   <UsersNameContainer key={id} userId={id} isSimple />
                                                                 ))}
                                                               </td>
-                                                              <td className="text-right">
+                                                              <td className="text-end">
                                                                 <TheButtonGroup>
                                                                   {hasPermissions(group, 'update') && (
                                                                     <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
@@ -453,7 +453,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                   </tbody>
                                                 </Table>
                                               ) : (
-                                                <p className="text-center text-muted">
+                                                <p className="text-center text-body-secondary">
                                                   <FormattedMessage
                                                     id="app.sisSupervisor.noSisGroups"
                                                     defaultMessage="Currently there are no ReCodEx groups matching this SIS course."

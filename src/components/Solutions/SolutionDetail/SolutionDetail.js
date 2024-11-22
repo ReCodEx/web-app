@@ -132,7 +132,7 @@ class SolutionDetail extends Component {
                 <table>
                   <tbody>
                     <tr>
-                      <td width="100%" className="em-padding-right">
+                      <td width="100%" className="pe-3">
                         <FormattedMessage
                           id="app.submissionEvaluation.noEvaluationYet"
                           defaultMessage="The evaluation is not available yet. Click the refresh button for an update."

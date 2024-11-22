@@ -30,8 +30,8 @@ const Layout = ({
 }) => (
   <div
     className={classnames({
-      wrapper: true,
-      'sidebar-mini': true,
+      'app-wrapper': true,
+      'sidebar-expand-lg': true,
       'sidebar-collapse': sidebarIsCollapsed,
       'sidebar-open': sidebarIsOpen,
     })}

@@ -79,7 +79,7 @@ class EditEnvironmentSimpleForm extends Component {
               <Icon
                 icon={this.state.expanded ? 'compress' : 'expand'}
                 size="lg"
-                className="valign-middle"
+                className="align-middle"
                 onClick={this.toggleExpanded}
               />
             </OverlayTrigger>
@@ -89,7 +89,7 @@ class EditEnvironmentSimpleForm extends Component {
           <>
             {environmentsHelpUrl && (
               <InsetPanel size="sm">
-                <div className="small text-muted">
+                <div className="small text-body-secondary">
                   <FormattedMessage
                     id="app.editEnvironmentSimpleForm.linkToWiki"
                     defaultMessage="Select all runtime environments the exercise should support. You may find more information about the environments at our <a>wiki page</a>."
@@ -170,7 +170,7 @@ class EditEnvironmentSimpleForm extends Component {
                     <td className="text-nowrap">
                       <strong>{env.longName}</strong>
                     </td>
-                    <td className="text-muted">{env.description}</td>
+                    <td className="text-body-secondary">{env.description}</td>
                     <td>
                       {env.extensions &&
                         env.extensions.map(ext => (
@@ -184,7 +184,7 @@ class EditEnvironmentSimpleForm extends Component {
               </tbody>
             </Table>
             {!readOnly && (
-              <div className="text-center text-primary clickable small halfem-margin-top" onClick={this.toggleExpanded}>
+              <div className="text-center text-primary clickable small mt-2" onClick={this.toggleExpanded}>
                 <FormattedMessage id="generic.showAll" defaultMessage="Show All" />
                 ...
               </div>

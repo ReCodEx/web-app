@@ -8,11 +8,11 @@ const Explanation = ({ id = null, title = null, children, placement = 'right' })
     placement={placement}
     overlay={
       <Popover id={id || Date.now()}>
-        {title && <Popover.Title>{title}</Popover.Title>}
-        <Popover.Content className="small">{children}</Popover.Content>
+        {title && <Popover.Header>{title}</Popover.Header>}
+        <Popover.Body className="small">{children}</Popover.Body>
       </Popover>
     }>
-    <Icon icon={['far', 'question-circle']} className="text-muted small" gapLeft gapRight />
+    <Icon icon={['far', 'question-circle']} className="text-body-secondary small" gapLeft gapRight />
   </OverlayTrigger>
 );
 Explanation.propTypes = {

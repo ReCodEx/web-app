@@ -82,19 +82,19 @@ class ReviewRequestsList extends Component {
                 <tbody key={groupId}>
                   <tr className="bg-light">
                     <td className="shrink-col">
-                      <GroupIcon className="text-muted" />
+                      <GroupIcon className="text-body-secondary" />
                     </td>
                     <td colSpan={7}>
                       <GroupsNameContainer groupId={groupId} fullName translations links />
                     </td>
-                    <td className="text-right text-muted">
+                    <td className="text-end text-body-secondary">
                       {this.state[`group-${groupId}`] && (
-                        <Badge variant="primary" pill className="px-2 mr-3">
+                        <Badge bg="primary" pill className="px-2 me-3">
                           {groupCounts?.[groupId]}
                         </Badge>
                       )}
                       <Icon
-                        className="valign-middle"
+                        className="align-middle"
                         icon={!this.state[`group-${groupId}`] ? 'circle-chevron-down' : 'circle-chevron-left'}
                         gapRight
                         timid
@@ -106,10 +106,10 @@ class ReviewRequestsList extends Component {
                   {!this.state[`group-${groupId}`] &&
                     Object.keys(solutions[groupId]).map(assignmentId =>
                       solutions[groupId][assignmentId].map((solution, idx) => (
-                        <tr key={solution ? solution.id : `loading-${idx}`} className="ml-4">
+                        <tr key={solution ? solution.id : `loading-${idx}`} className="ms-4">
                           <td className="shrink-col"></td>
                           <td className="shrink-col">
-                            <AssignmentIcon className="text-muted" />
+                            <AssignmentIcon className="text-body-secondary" />
                           </td>
                           <td>
                             <AssignmentNameContainer assignmentId={assignmentId} solutionsLink />
@@ -127,12 +127,12 @@ class ReviewRequestsList extends Component {
 
                               <td>
                                 <strong>#{solution.attemptIndex} </strong>
-                                <small className="ml-2 text-muted">
+                                <small className="ms-2 text-body-secondary">
                                   (<DateTime unixts={solution.createdAt} />)
                                 </small>
                               </td>
 
-                              <td className="text-center text-nowrap valign-middle">
+                              <td className="text-center text-nowrap align-middle">
                                 {solution.lastSubmission.evaluation ? (
                                   <strong className="text-success">
                                     <FormattedNumber style="percent" value={solution.lastSubmission.evaluation.score} />
@@ -142,7 +142,7 @@ class ReviewRequestsList extends Component {
                                 )}
                               </td>
 
-                              <td className="text-center text-nowrap valign-middle">
+                              <td className="text-center text-nowrap align-middle">
                                 {solution.lastSubmission.evaluation ? (
                                   <strong className="text-success">
                                     <Points
@@ -156,7 +156,7 @@ class ReviewRequestsList extends Component {
                                 )}
                               </td>
 
-                              <td className="text-center text-nowrap valign-middle">
+                              <td className="text-center text-nowrap align-middle">
                                 <EnvironmentsListItem
                                   runtimeEnvironment={runtimeEnvironments.find(
                                     ({ id }) => id === solution.runtimeEnvironmentId
@@ -164,7 +164,7 @@ class ReviewRequestsList extends Component {
                                 />
                               </td>
 
-                              <td className="shrink-col text-right">
+                              <td className="shrink-col text-end">
                                 <TheButtonGroup>
                                   {solution.permissionHints && solution.permissionHints.viewDetail && (
                                     <>

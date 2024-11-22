@@ -67,7 +67,7 @@ const SupervisorsList = ({
 
         {primaryAdmins.length === 0 && supervisors.length === 0 && observers.length === 0 && (
           <tr>
-            <td className="text-center text-muted">
+            <td className="text-center text-body-secondary">
               <FormattedMessage
                 id="app.membersList.noMembers"
                 defaultMessage="The group has no supervisors or admins."

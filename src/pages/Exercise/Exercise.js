@@ -141,14 +141,14 @@ class Exercise extends Component {
                   !exercise.isLocked &&
                   !exercise.isBroken &&
                   exercise.hasReferenceSolutions && (
-                    <Callout variant="success" icon={<SendIcon />} className="text-muted">
+                    <Callout variant="success" icon={<SendIcon />} className="text-body-secondary">
                       <p>
                         <FormattedMessage
                           id="app.exercise.exerciseReadyToAssign"
                           defaultMessage="The exercise is ready to be assigned. You may do this directly on the assignments page of selected group, or assign it simultaneously to multiple groups using form on Assignments page."
                         />
                         <Link to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exercise.id)}>
-                          <LinkIcon gapLeft className="text-muted" />
+                          <LinkIcon gapLeft className="text-body-secondary" />
                         </Link>
                       </p>
                     </Callout>
@@ -220,7 +220,7 @@ class Exercise extends Component {
                                 runtimeEnvironments={runtimes}
                               />
                             ) : (
-                              <div className="text-center m-3 text-muted small">
+                              <div className="text-center m-3 text-body-secondary small">
                                 {referenceSolutions.length === 0 ? (
                                   <FormattedMessage
                                     id="app.exercise.noReferenceSolutions"

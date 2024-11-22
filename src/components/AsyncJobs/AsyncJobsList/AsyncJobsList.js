@@ -50,8 +50,8 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
           {asyncJobs
             .sort((a, b) => b.createdAt - a.createdAt)
             .map(job => (
-              <tr key={job.id} className={job.finishedAt ? 'text-muted' : ''}>
-                <td className="small valign-baseline text-muted text-center px-2">
+              <tr key={job.id} className={job.finishedAt ? 'text-body-secondary' : ''}>
+                <td className="small align-baseline text-body-secondary text-center px-2">
                   {job.finishedAt ? (
                     <Icon icon="box" />
                   ) : job.startedAt ? (
@@ -62,29 +62,29 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                     <Icon icon="child" className="text-success" />
                   )}
                 </td>
-                <td className="small text-nowrap valign-baseline">
+                <td className="small text-nowrap align-baseline">
                   <DateTime unixts={job.createdAt} showDate={false} showSeconds showOverlay />
                 </td>
-                <td className="small text-nowrap valign-baseline">
+                <td className="small text-nowrap align-baseline">
                   <DateTime unixts={job.scheduledAt} emptyPlaceholder="-" />
                 </td>
-                <td className="small text-nowrap valign-baseline">
+                <td className="small text-nowrap align-baseline">
                   {job.startedAt ? (
                     <OverlayTrigger
                       placement="bottom"
                       overlay={
                         <Popover id={`start-${job.id}`}>
-                          <Popover.Title>
+                          <Popover.Header>
                             <FormattedMessage id="app.asyncJobs.list.processInfo" defaultMessage="Processing info" />
-                          </Popover.Title>
-                          <Popover.Content>
+                          </Popover.Header>
+                          <Popover.Body>
                             <DateTime unixts={job.startedAt} showSeconds showRelative />
                             <br />
                             <FormattedMessage id="app.asyncJobs.list.worker" defaultMessage="Worker" />:{' '}
                             <code>{job.workerId}</code>
                             <br />
                             <FormattedMessage id="app.asyncJobs.list.retries" defaultMessage="Retries" />: {job.retries}
-                          </Popover.Content>
+                          </Popover.Body>
                         </Popover>
                       }>
                       {
@@ -97,20 +97,20 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                     '-'
                   )}
                 </td>
-                <td className="small text-nowrap valign-baseline">
+                <td className="small text-nowrap align-baseline">
                   <DateTime unixts={job.finishedAt} emptyPlaceholder="-" showDate={false} showSeconds showOverlay />
                 </td>
-                <td className="valign-baseline">
+                <td className="align-baseline">
                   {job.arguments && Object.keys(job.arguments).length > 0 ? (
                     <OverlayTrigger
                       overlay={
                         <Popover id={`pop-${job.id}`}>
-                          <Popover.Title>
+                          <Popover.Header>
                             <FormattedMessage id="app.asyncJobs.list.args" defaultMessage="Command arguments" />
-                          </Popover.Title>
-                          <Popover.Content>
+                          </Popover.Header>
+                          <Popover.Body>
                             <code>{formatArgs(job.arguments)}</code>
-                          </Popover.Content>
+                          </Popover.Body>
                         </Popover>
                       }>
                       <code>{job.command}</code>
@@ -119,7 +119,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                     <code>{job.command}</code>
                   )}
                 </td>
-                <td className="small text-nowrap valign-baseline">{job.error}</td>
+                <td className="small text-nowrap align-baseline">{job.error}</td>
                 <td>
                   {job.associatedAssignment && (
                     <OverlayTrigger
@@ -157,7 +157,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
         </tbody>
       </Table>
     ) : (
-      <div className="small text-center text-muted em-padding">
+      <div className="small text-center text-body-secondary p-3">
         <FormattedMessage
           id="app.asyncJobs.list.noJobs"
           defaultMessage="No background jobs have been enqueued recently..."

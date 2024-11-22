@@ -78,7 +78,7 @@ class EditFunctionNodeForm extends Component {
                 className={classnames({
                   'bg-info': node && !pushDown && node.getType() === astClass.type,
                 })}>
-                <td className="valign-middle shrink-col">
+                <td className="align-middle shrink-col">
                   <StandaloneRadioField
                     name="nodeFunction"
                     value={astClass.type}

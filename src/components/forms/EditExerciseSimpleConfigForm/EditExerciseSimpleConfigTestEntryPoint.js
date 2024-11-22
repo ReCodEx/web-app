@@ -20,7 +20,7 @@ const entryPointValidate = value => {
 };
 
 const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, testErrors, readOnly = false }) => (
-  <table className="full-width">
+  <table className="w-100">
     <tbody>
       <tr>
         <td>
@@ -33,7 +33,7 @@ const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, tes
         </td>
       </tr>
       <tr>
-        <td className="full-width">
+        <td className="w-100">
           <Field
             name={`${test}.entry-point-string`}
             component={TextField}
@@ -45,7 +45,7 @@ const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, tes
         </td>
 
         {!readOnly && (
-          <td className="valign-top">
+          <td className="align-top">
             {Boolean(smartFillEntryPoint) && (
               <Confirm
                 id="smartFillEntryPoint"

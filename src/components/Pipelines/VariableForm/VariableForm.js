@@ -47,7 +47,7 @@ class VariableForm extends Component {
               <FormattedMessage
                 id="app.pipelines.variableForm.titleEditting"
                 defaultMessage="Editting Variable <strong>{editing}</strong>"
-                values={{ editing, strong: content => <strong className="ml-1">{content}</strong> }}
+                values={{ editing, strong: content => <strong className="ms-1">{content}</strong> }}
               />
             ) : (
               <FormattedMessage id="app.pipelines.variableForm.titleNew" defaultMessage="Add New Variable" />

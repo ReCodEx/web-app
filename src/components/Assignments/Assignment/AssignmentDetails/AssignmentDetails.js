@@ -72,7 +72,7 @@ const AssignmentDetails = ({
           <tbody>
             {permissionHints.update && (
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="text-center text-body-secondary shrink-col px-2">
                   <VisibleIcon />
                 </td>
                 <th>
@@ -86,7 +86,7 @@ const AssignmentDetails = ({
 
             {permissionHints.update && (
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="text-center text-body-secondary shrink-col px-2">
                   <Icon icon="plane-departure" />
                 </td>
                 <th>
@@ -106,7 +106,7 @@ const AssignmentDetails = ({
 
             {permissionHints.update && isPublic && visibleFrom && visibleFrom * 1000 > Date.now() && (
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="text-center text-body-secondary shrink-col px-2">
                   <Icon icon={['far', 'clock']} />
                 </td>
                 <th>
@@ -119,7 +119,7 @@ const AssignmentDetails = ({
             )}
 
             <tr>
-              <td className="text-center text-muted shrink-col px-2">
+              <td className="text-center text-body-secondary shrink-col px-2">
                 <DeadlineIcon />
               </td>
               <th>
@@ -166,7 +166,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-muted shrink-col px-2">
+              <td className="text-center text-body-secondary shrink-col px-2">
                 <Icon icon="trophy" />
               </td>
               <th>
@@ -205,7 +205,7 @@ const AssignmentDetails = ({
 
             {isBonus && (
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="text-center text-body-secondary shrink-col px-2">
                   <BonusIcon />
                 </td>
                 <th>
@@ -218,7 +218,7 @@ const AssignmentDetails = ({
             )}
 
             <tr>
-              <td className="text-center text-muted shrink-col px-2">
+              <td className="text-center text-body-secondary shrink-col px-2">
                 <Icon icon="percent" />
               </td>
               <th>
@@ -234,7 +234,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-muted shrink-col px-2">
+              <td className="text-center text-body-secondary shrink-col px-2">
                 <CodeIcon />
               </td>
               <th>
@@ -252,7 +252,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-muted shrink-col px-2">
+              <td className="text-center text-body-secondary shrink-col px-2">
                 {isStudent && canSubmit.canSubmit ? <SendIcon /> : <Icon icon="hashtag" />}
               </td>
               <th>
@@ -269,7 +269,7 @@ const AssignmentDetails = ({
                   <>
                     {lastAttemptIndex || canSubmit.total}
                     {canSubmit.total > canSubmit.evaluated && (
-                      <span className="text-muted">
+                      <span className="text-body-secondary">
                         {' '}
                         {canSubmit.evaluated - canSubmit.total}
                         <Explanation id="submissionsCountDecreased">
@@ -283,7 +283,7 @@ const AssignmentDetails = ({
                     )}
                     {submissionsCountLimit !== null && ` / ${submissionsCountLimit}`}
                     {lastAttemptIndex && lastAttemptIndex > canSubmit.total && (
-                      <small className="pl-2 text-muted">
+                      <small className="ps-2 text-body-secondary">
                         (
                         <FormattedMessage
                           id="app.assignment.submissionCountLimitIncreasedByDeletion"
@@ -301,7 +301,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-muted shrink-col px-2">
+              <td className="text-center text-body-secondary shrink-col px-2">
                 <Icon icon={['far', 'file-code']} />
               </td>
               <th>

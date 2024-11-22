@@ -47,7 +47,7 @@ export const createSortingIcon = (colName, orderByColumn, orderByDescending, set
 // Show label with actually displayed range info ...
 export const showRangeInfo = (offset, limit, totalCount) =>
   totalCount > limit && (
-    <div className="text-muted text-right small">
+    <div className="text-body-secondary text-end small">
       <FormattedMessage
         id="app.paginationContainer.showingRange"
         defaultMessage="showing {offset}{nbsp}-{nbsp}{offsetEnd} (of{nbsp}{totalCount})"
@@ -266,7 +266,7 @@ class PaginationContainer extends Component {
                   </Col>
                   {totalCount > limit && (
                     <Col md={9}>
-                      <div className="float-right">
+                      <div className="float-end">
                         <PaginationButtons
                           prev
                           next

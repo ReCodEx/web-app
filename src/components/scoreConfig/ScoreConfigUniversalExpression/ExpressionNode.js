@@ -29,7 +29,7 @@ const ICONS = {
 const ICONS_CSS_CLASSES = {
   [FUNCTION_NODE]: 'text-info',
   [TEST_NODE]: 'text-warning',
-  [LITERAL_NODE]: 'text-muted',
+  [LITERAL_NODE]: 'text-body-secondary',
 };
 
 // Tooltips for add buttons for individual generic types
@@ -268,7 +268,7 @@ const ExpressionNode = ({
       </span>
 
       {node.evaluated !== null && !(node instanceof AstNodeValue) && (
-        <small className="text-muted em-padding-left">= {nodeValuePrettyPrint(node.evaluated)}</small>
+        <small className="text-body-secondary ps-3">= {nodeValuePrettyPrint(node.evaluated)}</small>
       )}
 
       {node.children && (

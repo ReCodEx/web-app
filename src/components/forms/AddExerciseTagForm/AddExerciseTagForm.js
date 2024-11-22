@@ -30,7 +30,7 @@ const AddExerciseTagForm = ({
       name="tag"
       component={TextField}
       ignoreDirty
-      groupClassName="full-width"
+      groupClassName="w-100"
       list="knownExerciseTags"
       maxLength={16}
       append={

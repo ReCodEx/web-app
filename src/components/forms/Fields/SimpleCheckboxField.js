@@ -5,7 +5,7 @@ import NiceCheckbox from '../NiceCheckbox';
 
 const SimpleCheckboxField = ({ input, meta: { dirty, error, warning }, ignoreDirty = false, ...props }) => {
   return (
-    <FormGroup controlId={input.name} className="no-margin">
+    <FormGroup controlId={input.name} className="m-0">
       <NiceCheckbox
         {...props}
         {...input}

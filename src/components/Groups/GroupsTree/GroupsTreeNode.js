@@ -24,7 +24,7 @@ const prepareClassList = lruMemoize((clickable, archived) => {
     classes.push('clickable');
   }
   if (archived) {
-    classes.push('text-muted');
+    classes.push('text-body-secondary');
   }
   return classes.join(' ');
 });
@@ -58,17 +58,17 @@ const GroupsTreeNode = React.memo(
           onClick={clickable ? () => setOpen(!isOpen) : undefined}>
           <Icon
             icon={leafNode ? DEFAULT_ICON : alwaysVisible ? 'square' : isOpen ? 'minus-square' : 'plus-square'}
-            className="text-muted"
+            className="text-body-secondary"
             gapRight
             fixedWidth
           />
 
-          <span className={id === selectedGroupId ? 'text-bold text-primary' : ''}>
+          <span className={id === selectedGroupId ? 'fw-bold text-primary' : ''}>
             <GroupsName id={id} localizedTexts={localizedTexts} translations />
           </span>
 
           {primaryAdmins && primaryAdmins.length > 0 && (
-            <span className="pl-2">
+            <span className="ps-2">
               (
               <em className="small">
                 {primaryAdmins.map(admin => (
@@ -125,7 +125,7 @@ const GroupsTreeNode = React.memo(
                   />
                 </Tooltip>
               }>
-              <GroupIcon organizational={true} className="text-muted" gapLeft />
+              <GroupIcon organizational={true} className="text-body-secondary" gapLeft />
             </OverlayTrigger>
           )}
           {archived && (
@@ -139,7 +139,7 @@ const GroupsTreeNode = React.memo(
                   />
                 </Tooltip>
               }>
-              <GroupIcon archived={true} className="text-muted" gapLeft />
+              <GroupIcon archived={true} className="text-body-secondary" gapLeft />
             </OverlayTrigger>
           )}
           {isPublic && (
@@ -153,12 +153,12 @@ const GroupsTreeNode = React.memo(
                   />
                 </Tooltip>
               }>
-              <Icon icon="eye" className="text-muted" gapLeft />
+              <Icon icon="eye" className="text-body-secondary" gapLeft />
             </OverlayTrigger>
           )}
 
           {buttonsCreator && (
-            <span className="float-right" onClick={clickEventDisipator}>
+            <span className="float-end" onClick={clickEventDisipator}>
               {buttonsCreator(group, selectedGroupId, links)}
             </span>
           )}

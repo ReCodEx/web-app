@@ -239,7 +239,7 @@ class SubmitSolution extends Component {
                       ))}
                     </FormControl>
                     {environmentsHelpUrl && (
-                      <p className="small text-muted em-margin-top">
+                      <p className="small text-body-secondary mt-3">
                         <FormattedMessage
                           id="app.submitSolution.linkToWiki"
                           defaultMessage="Select the right environment, under which you wish to submit your solution. You may find more information about the environments at our <a>wiki page</a>."
@@ -302,7 +302,7 @@ class SubmitSolution extends Component {
           {hasFailed && <Callout variant="danger">{formatMessage(commonMessages.submissionRejected)}</Callout>}
         </Modal.Body>
         <Modal.Footer>
-          <div className="text-center em-margin-bottomm">
+          <div className="text-center m-3-bottomm">
             <TheButtonGroup>
               {isSending && (
                 <Button type="submit" disabled={true} variant="success">
@@ -325,8 +325,8 @@ class SubmitSolution extends Component {
             </TheButtonGroup>
           </div>
 
-          <InsetPanel className="em-margin-top">
-            <Form.Text className="text-left">{formatMessage(commonMessages.instructions)}</Form.Text>
+          <InsetPanel className="mt-3">
+            <Form.Text className="text-start">{formatMessage(commonMessages.instructions)}</Form.Text>
           </InsetPanel>
         </Modal.Footer>
       </Modal>

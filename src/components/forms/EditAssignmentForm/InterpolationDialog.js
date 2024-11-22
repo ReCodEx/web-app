@@ -99,7 +99,7 @@ const InterpolationDialog = ({
                       </FormText>
                     ) : (
                       <FormText className="text-primary">
-                        <strong className="mr-2">Computed second deadline:</strong>
+                        <strong className="me-2">Computed second deadline:</strong>
                         <DateTime
                           unixts={extrapolateSecondDeadline(
                             firstDeadline,

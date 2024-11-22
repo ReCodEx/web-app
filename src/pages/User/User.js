@@ -59,7 +59,7 @@ const MemberGroupsBox = withLinks(
         <tbody>
           {groups.map(groupId => (
             <tr key={groupId}>
-              <td className="full-width">
+              <td className="w-100">
                 <GroupsNameContainer groupId={groupId} fullName translations links admins />
               </td>
               <td className="text-nowrap">
@@ -162,53 +162,53 @@ class User extends Component {
                 <Table className="mb-1">
                   <tbody>
                     <tr>
-                      <td className="text-nowrap text-muted text-center pl-4">
+                      <td className="text-nowrap text-body-secondary text-center ps-4">
                         <Icon icon="user-graduate" />
                       </td>
-                      <td className="text-nowrap text-bold">
+                      <td className="text-nowrap fw-bold">
                         <FormattedMessage id="app.editUserProfile.titlesBeforeName" defaultMessage="Prefix Title:" />
                       </td>
-                      <td className="full-width">{user.name.titlesBeforeName}</td>
+                      <td className="w-100">{user.name.titlesBeforeName}</td>
                     </tr>
 
                     <tr>
-                      <td className="text-nowrap text-muted text-center pl-4">
+                      <td className="text-nowrap text-body-secondary text-center ps-4">
                         <Icon icon="user-tag" />
                       </td>
-                      <td className="text-nowrap text-bold">
+                      <td className="text-nowrap fw-bold">
                         <FormattedMessage id="app.editUserProfile.firstName" defaultMessage="Given Name:" />
                       </td>
-                      <td className="full-width">{user.name.firstName}</td>
+                      <td className="w-100">{user.name.firstName}</td>
                     </tr>
 
                     <tr>
-                      <td className="text-nowrap text-muted text-center pl-4">
+                      <td className="text-nowrap text-body-secondary text-center ps-4">
                         <Icon icon="user-tag" />
                       </td>
-                      <td className="text-nowrap text-bold">
+                      <td className="text-nowrap fw-bold">
                         <FormattedMessage id="app.editUserProfile.lastName" defaultMessage="Surname:" />
                       </td>
-                      <td className="full-width">{user.name.lastName}</td>
+                      <td className="w-100">{user.name.lastName}</td>
                     </tr>
 
                     <tr>
-                      <td className="text-nowrap text-muted text-center pl-4">
+                      <td className="text-nowrap text-body-secondary text-center ps-4">
                         <Icon icon="user-graduate" />
                       </td>
-                      <td className="text-nowrap text-bold">
+                      <td className="text-nowrap fw-bold">
                         <FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />
                       </td>
-                      <td className="full-width">{user.name.titlesAfterName}</td>
+                      <td className="w-100">{user.name.titlesAfterName}</td>
                     </tr>
 
                     <tr>
-                      <td className="text-nowrap text-muted text-center pl-4">
+                      <td className="text-nowrap text-body-secondary text-center ps-4">
                         <MailIcon />
                       </td>
-                      <td className="text-nowrap text-bold">
+                      <td className="text-nowrap fw-bold">
                         <FormattedMessage id="app.changePasswordForm.email" defaultMessage="Email:" />
                       </td>
-                      <td className="full-width">
+                      <td className="w-100">
                         <a href={`mailto:${user.privateData.email}`}>{user.privateData.email}</a>
                         {user.isVerified ? (
                           <SuccessIcon className="text-success" largeGapLeft />
@@ -219,46 +219,46 @@ class User extends Component {
                     </tr>
 
                     <tr>
-                      <td className="text-nowrap text-muted text-center pl-4">
+                      <td className="text-nowrap text-body-secondary text-center ps-4">
                         <Icon icon="baby" />
                       </td>
-                      <td className="text-nowrap text-bold">
+                      <td className="text-nowrap fw-bold">
                         <FormattedMessage id="app.user.accountCreatedAt" defaultMessage="Account Created At:" />
                       </td>
-                      <td className="full-width">
+                      <td className="w-100">
                         <DateTime unixts={user.privateData.createdAt} showRelative />
                       </td>
                     </tr>
 
                     <tr>
-                      <td className="text-nowrap text-muted text-center pl-4">
+                      <td className="text-nowrap text-body-secondary text-center ps-4">
                         <SignInIcon />
                       </td>
-                      <td className="text-nowrap text-bold">
+                      <td className="text-nowrap fw-bold">
                         <FormattedMessage id="app.user.lastAuthenticationAt" defaultMessage="Last Authentication At:" />
                       </td>
-                      <td className="full-width">
+                      <td className="w-100">
                         <DateTime unixts={user.privateData.lastAuthenticationAt} showRelative />
                       </td>
                     </tr>
 
                     {user.privateData.externalIds && (
                       <tr>
-                        <td className="text-nowrap text-muted text-center pl-4">
+                        <td className="text-nowrap text-body-secondary text-center ps-4">
                           <Icon icon={['far', 'id-card']} />
                         </td>
-                        <td className="text-nowrap text-bold">
+                        <td className="text-nowrap fw-bold">
                           <FormattedMessage
                             id="app.user.externalIds"
                             defaultMessage="Associated External Identifiers:"
                           />
                         </td>
-                        <td className="full-width">
+                        <td className="w-100">
                           {Object.keys(user.privateData.externalIds)
                             .sort()
                             .map(provider => (
                               <div key={provider}>
-                                <em className="mr-2">{provider}:</em>
+                                <em className="me-2">{provider}:</em>
                                 <code>{user.privateData.externalIds[provider]}</code>
                               </div>
                             ))}
@@ -304,7 +304,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <UserIcon gapRight className="text-muted" />
+                          <UserIcon gapRight className="text-body-secondary" />
                           <FormattedMessage
                             id="app.user.studentOfGroups"
                             defaultMessage="Groups the user is student of"
@@ -321,7 +321,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <SuperadminIcon gapRight className="text-muted" />
+                          <SuperadminIcon gapRight className="text-body-secondary" />
                           <FormattedMessage id="app.user.adminOfGroups" defaultMessage="Groups the user administrate" />
                         </>
                       }
@@ -334,7 +334,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <SupervisorIcon gapRight className="text-muted" />
+                          <SupervisorIcon gapRight className="text-body-secondary" />
                           <FormattedMessage
                             id="app.user.supervisorOfGroups"
                             defaultMessage="Groups the user supervise"
@@ -350,7 +350,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <ObserverIcon gapRight className="text-muted" />
+                          <ObserverIcon gapRight className="text-body-secondary" />
                           <FormattedMessage id="app.user.observerOfGroups" defaultMessage="Groups the user observe" />
                         </>
                       }

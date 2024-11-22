@@ -48,7 +48,7 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
         </td>
       )}
 
-      {createActions && <td className="text-right">{createActions(user)}</td>}
+      {createActions && <td className="text-end">{createActions(user)}</td>}
     </tr>
   ) : (
     <tr>

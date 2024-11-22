@@ -139,7 +139,7 @@ class ExternalLoginBox extends Component {
           )}
 
           {!pending && (loginStatus === statusTypes.LOGIN_FAILED || this.state.lastError) && (
-            <Callout variant="danger" className="em-margin-top">
+            <Callout variant="danger" className="mt-3">
               {loginError || this.state.lastError ? (
                 getErrorMessage(formatMessage)(loginError || this.state.lastError)
               ) : (

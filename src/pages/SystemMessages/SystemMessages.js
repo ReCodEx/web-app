@@ -124,8 +124,8 @@ class SystemMessages extends Component {
                       </TheButtonGroup>
                     )}
                   />
-                  <hr className="no-margin" />
-                  <p className="em-margin-top text-center">
+                  <hr className="m-0" />
+                  <p className="mt-3 text-center">
                     <Button onClick={() => this.setState({ isOpen: true, createNew: true })} variant="success">
                       <AddIcon gapRight />
                       <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />

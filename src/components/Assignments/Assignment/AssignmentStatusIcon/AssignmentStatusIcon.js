@@ -9,7 +9,7 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
     return (
       <StatusIcon
         id={id}
-        icon={<Icon icon="exclamation-triangle" className="text-red" />}
+        icon={<Icon icon="exclamation-triangle" className="text-danger" />}
         message={
           <FormattedMessage
             id="app.assignemntStatusIcon.solutionMissingSubmission"
@@ -24,7 +24,7 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
     return (
       <StatusIcon
         id={id}
-        icon={<Icon icon="cogs" className="text-yellow" />}
+        icon={<Icon icon="cogs" className="text-warning" />}
         message={
           <FormattedMessage
             id="app.assignemntStatusIcon.inProgress"
@@ -50,7 +50,7 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
       <StatusIcon
         id={id}
         accepted={accepted}
-        icon={<Icon icon={isBestSolution ? 'thumbs-up' : ['far', 'thumbs-up']} className="text-green" />}
+        icon={<Icon icon={isBestSolution ? 'thumbs-up' : ['far', 'thumbs-up']} className="text-success" />}
         message={
           <>
             <FormattedMessage id="app.assignemntStatusIcon.ok" defaultMessage="Assignment is successfully completed." />
@@ -70,7 +70,7 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
     <StatusIcon
       id={id}
       accepted={accepted}
-      icon={<Icon icon={isBestSolution ? 'thumbs-down' : ['far', 'thumbs-down']} className="text-red" />}
+      icon={<Icon icon={isBestSolution ? 'thumbs-down' : ['far', 'thumbs-down']} className="text-danger" />}
       message={
         <>
           <FormattedMessage

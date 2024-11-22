@@ -70,14 +70,14 @@ const SolutionsTableRow = ({
           clickable: !selected && onSelect,
           'table-warning': highlighted,
         })}>
-        <td className="text-nowrap valign-middle text-bold" rowSpan={splitOnTwoLines ? 2 : 1}>
+        <td className="text-nowrap align-middle fw-bold" rowSpan={splitOnTwoLines ? 2 : 1}>
           {attemptIndex}.
         </td>
 
         <td
           rowSpan={splitOnTwoLines ? 2 : 1}
           className={classnames({
-            'valign-middle': true,
+            'align-middle': true,
             'text-nowrap': true,
           })}>
           <SolutionTableRowIcons
@@ -88,11 +88,11 @@ const SolutionsTableRow = ({
           />
         </td>
 
-        <td className="text-nowrap valign-middle">
+        <td className="text-nowrap align-middle">
           <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
 
-        <td className="text-center text-nowrap valign-middle">
+        <td className="text-center text-nowrap align-middle">
           {lastSubmission.evaluation ? (
             <strong className="text-success">
               <FormattedNumber style="percent" value={lastSubmission.evaluation.score} />
@@ -102,7 +102,7 @@ const SolutionsTableRow = ({
           )}
         </td>
 
-        <td className="text-center text-nowrap valign-middle">
+        <td className="text-center text-nowrap align-middle">
           {lastSubmission.evaluation ? (
             <strong className="text-success">
               <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} />
@@ -112,7 +112,7 @@ const SolutionsTableRow = ({
           )}
         </td>
 
-        <td className="text-center text-nowrap valign-middle">
+        <td className="text-center text-nowrap align-middle">
           {runtimeEnvironment ? (
             <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames={!compact} />
           ) : (
@@ -127,7 +127,7 @@ const SolutionsTableRow = ({
         )}
 
         {showActionButtons && (
-          <td className="text-right valign-middle text-nowrap" rowSpan={splitOnTwoLines ? 2 : 1}>
+          <td className="text-end align-middle text-nowrap" rowSpan={splitOnTwoLines ? 2 : 1}>
             {!selected && (
               <TheButtonGroup>
                 {permissionHints && permissionHints.viewDetail && (

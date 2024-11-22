@@ -51,7 +51,7 @@ const CommentThread = ({
         </p>
       )}
 
-      <p className="text-center small text-muted">
+      <p className="text-center small text-body-secondary">
         <a
           href="#"
           onClick={ev => {

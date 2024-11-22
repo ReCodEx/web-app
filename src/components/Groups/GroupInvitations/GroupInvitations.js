@@ -47,12 +47,12 @@ const GroupInvitations = ({
               <tbody
                 key={invitation.id}
                 className={classnames({
-                  'text-muted': hasExpired,
+                  'text-body-secondary': hasExpired,
                   'table-warning': selected === invitation.id,
                 })}>
                 <tr>
                   <td colSpan={editInvitation || deleteInvitation ? 5 : 4}>
-                    <code className={hasExpired ? 'text-muted small' : 'small'}>{uri}</code>
+                    <code className={hasExpired ? 'text-body-secondary small' : 'small'}>{uri}</code>
                     {!hasExpired &&
                       (copiedInvitation === invitation.id ? (
                         <Icon
@@ -100,7 +100,7 @@ const GroupInvitations = ({
                   </td>
 
                   {(editInvitation || deleteInvitation) && (
-                    <td className="text-nowrap text-right shrink-col">
+                    <td className="text-nowrap text-end shrink-col">
                       <TheButtonGroup>
                         {editInvitation && (
                           <Button variant="warning" size="xs" onClick={() => editInvitation(invitation.id)}>
@@ -134,7 +134,7 @@ const GroupInvitations = ({
           })}
         </Table>
       ) : (
-        <div className="text-center text-muted mb-3">
+        <div className="text-center text-body-secondary mb-3">
           <FormattedMessage
             id="app.groupInvitations.noInvitations"
             defaultMessage="There are currently no invitations."

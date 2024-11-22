@@ -31,7 +31,7 @@ const PipelineDetail = ({
     <Table responsive size="sm" className="mb-1">
       <tbody>
         <tr>
-          <td className="text-center shrink-col px-2 text-muted">
+          <td className="text-center shrink-col px-2 text-body-secondary">
             <UserIcon />
           </td>
           <th>
@@ -41,7 +41,7 @@ const PipelineDetail = ({
             {author ? (
               <UsersNameContainer userId={author} link />
             ) : (
-              <i className="text-muted">
+              <i className="text-body-secondary">
                 ReCodEx
                 <Explanation id="no-author">
                   <FormattedMessage
@@ -55,7 +55,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col px-2 text-muted">
+          <td className="text-center shrink-col px-2 text-body-secondary">
             <Icon icon={['far', 'file-alt']} />
           </td>
           <th className="text-nowrap">
@@ -67,7 +67,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col px-2 text-muted">
+          <td className="text-center shrink-col px-2 text-body-secondary">
             <CodeIcon />
           </td>
           <th className="text-nowrap">
@@ -79,7 +79,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col px-2 text-muted">
+          <td className="text-center shrink-col px-2 text-body-secondary">
             <Icon icon="stream" />
           </td>
           <th className="text-nowrap">
@@ -91,7 +91,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col px-2 text-muted">
+          <td className="text-center shrink-col px-2 text-body-secondary">
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
@@ -103,7 +103,7 @@ const PipelineDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center shrink-col px-2 text-muted">
+          <td className="text-center shrink-col px-2 text-body-secondary">
             <Icon icon={['far', 'copy']} />
           </td>
           <th>
@@ -116,7 +116,7 @@ const PipelineDetail = ({
 
         {forkedFrom && (
           <tr>
-            <td className="text-center shrink-col px-2 text-muted">
+            <td className="text-center shrink-col px-2 text-body-secondary">
               <ForkIcon />
             </td>
             <th>

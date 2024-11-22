@@ -85,7 +85,7 @@ class ResourceRenderer extends Component {
   renderWrapped = (content, extraClasses = '') => {
     const { bulkyLoading } = this.props;
     return bulkyLoading ? (
-      <p className={`text-center larger em-padding ${extraClasses}`}>{content}</p>
+      <p className={`text-center larger p-3 ${extraClasses}`}>{content}</p>
     ) : (
       <span className={extraClasses}>{content}</span>
     );

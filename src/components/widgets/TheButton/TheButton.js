@@ -5,16 +5,18 @@ import classnames from 'classnames';
 import Confirm from '../../forms/Confirm';
 
 const TheButtonInternal = React.forwardRef(
-  ({ className, onClick = null, variant, noShadow = false, ...props }, ref) => (
+  ({ className, onClick = null, variant, noShadow = false, size, ...props }, ref) => (
     <Button
       className={classnames({
         'text-nowrap': true,
-        'elevation-2': !noShadow,
-        [`bg-gradient-${variant}`]: !variant.startsWith('outline-'),
+        'shadow-sm': !noShadow,
+        'bg-gradient': !variant.startsWith('outline-'),
+        'btn-xs': size === 'xs', // manual override for smaller button type
         [className]: className.length > 0,
       })}
       onClick={onClick}
-      variant={variant.startsWith('outline-') ? variant : null}
+      variant={variant}
+      size={size === 'xs' ? null : size}
       {...props}
       ref={ref}
     />
@@ -48,6 +50,7 @@ TheButtonInternal.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
   noShadow: PropTypes.bool,
+  size: PropTypes.string,
 };
 
 TheButton.propTypes = {

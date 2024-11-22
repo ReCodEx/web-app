@@ -83,7 +83,7 @@ const AssignmentTableRow = ({
       {permissionHints.update || permissionHints.viewAssignmentSolutions ? (
         <MaybeVisibleAssignmentIcon id={id} isPublic={isPublic} visibleFrom={visibleFrom} />
       ) : (
-        <AssignmentIcon className="text-muted" />
+        <AssignmentIcon className="text-body-secondary" />
       )}
       <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />
 
@@ -146,7 +146,7 @@ const AssignmentTableRow = ({
       />
     </td>
 
-    <td className="text-right text-nowrap valign-middle">
+    <td className="text-end text-nowrap align-middle">
       <TheButtonGroup>
         {discussionOpen &&
           (permissionHints.viewAssignmentSolutions || permissionHints.update || permissionHints.remove ? (

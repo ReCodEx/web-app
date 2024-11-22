@@ -42,7 +42,7 @@ const AssignmentFormMultiassignSuccess = ({
                 <Icon icon="check" />
               </td>
               <td>{getGroupCanonicalLocalizedName(group, groupsAccessor, locale)}</td>
-              <td className="text-right">
+              <td className="text-end">
                 <TheButtonGroup>
                   <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                     <Button size="xs" variant="primary">

@@ -10,10 +10,10 @@ const StatsList = ({ stats }) => (
       <tbody>
         {Object.keys(stats).map(name => (
           <tr key={name}>
-            <td className="em-padding-left">
+            <td className="ps-3">
               <b>{name}</b>
             </td>
-            <td className="em-padding-left">
+            <td className="ps-3">
               <code>{String(stats[name])}</code>
             </td>
           </tr>

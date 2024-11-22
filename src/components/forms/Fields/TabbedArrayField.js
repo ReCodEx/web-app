@@ -53,7 +53,7 @@ class TabbedArrayField extends Component {
       <div>
         {fields.length > 0 && (
           <Tab.Container id={id} defaultActiveKey={defaultIndex}>
-            <Card>
+            <Card className="mb-3">
               <Card.Header>
                 <Nav variant="tabs" className="nav-tabs-custom" id="localized-texts">
                   {indices.map((fieldIdx, tabIdx) => {

@@ -54,7 +54,7 @@ class CalendarTokens extends Component {
     return (
       <>
         <p className="mt-4 mx-4 mb-2">
-          <InfoIcon gapRight className="text-muted" />
+          <InfoIcon gapRight className="text-body-secondary" />
           <FormattedMessage
             id="app.calendarTokens.explain"
             defaultMessage="ReCodEx API can feed iCal data to your calendar. It will export deadline events for all assignments in all groups related to you. Anyone with the iCal identifier will be able to read the calendar and the calendar is read-only. When activated, you will get a calendar URL in the following format."
@@ -88,9 +88,9 @@ class CalendarTokens extends Component {
             <tbody>
               {calendars.map((calendar, idx) =>
                 calendar ? (
-                  <tr key={calendar.id} className={calendar.expiredAt ? 'text-muted' : ''}>
-                    <td className="full-width px-3">
-                      <code className={calendar.expiredAt ? 'text-muted' : ''}>{calendar.id}</code>
+                  <tr key={calendar.id} className={calendar.expiredAt ? 'text-body-secondary' : ''}>
+                    <td className="w-100 px-3">
+                      <code className={calendar.expiredAt ? 'text-body-secondary' : ''}>{calendar.id}</code>
                       {!calendar.expiredAt &&
                         (this.state.copiedCalendar === calendar.id ? (
                           <Icon icon="clipboard-check" gapLeft className="text-success" />

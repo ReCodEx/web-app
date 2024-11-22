@@ -84,8 +84,8 @@ const CourseLabel = ({
             />
           </Tooltip>
         }>
-        <Badge className="halfem-margin-left">
-          {groupsCount > 1 && <small className="valign-top">{groupsCount}x</small>}
+        <Badge className="ms-2">
+          {groupsCount > 1 && <small className="align-top">{groupsCount}x</small>}
           <GroupIcon gapLeft={groupsCount > 1} />
         </Badge>
       </OverlayTrigger>

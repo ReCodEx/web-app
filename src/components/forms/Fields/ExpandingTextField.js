@@ -101,8 +101,8 @@ const ExpandingTextField = ({
     ))}
 
     {fields.length === 0 && (
-      <div className="text-muted small">
-        <span className="pr-3">
+      <div className="text-body-secondary small">
+        <span className="pe-3">
           {noItems || (
             <FormattedMessage id="app.expandingTextField.noItems" defaultMessage="There are no items yet..." />
           )}

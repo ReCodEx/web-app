@@ -28,7 +28,7 @@ const TestResultsTableLog = ({
             <tr>
               <td>
                 {!isJudgeLogMerged && (
-                  <span className={'text-muted' + (small ? ' small' : '')}>
+                  <span className={'text-body-secondary' + (small ? ' small' : '')}>
                     <FormattedMessage id="app.submissions.testResultsTable.primaryLog" defaultMessage="Primary Log" />
                     {isJudgeLogStdoutPublic === false && (
                       <strong>
@@ -65,7 +65,7 @@ const TestResultsTableLog = ({
             <tr>
               <td>
                 {!isJudgeLogMerged && (
-                  <span className={'text-muted' + (small ? ' small' : '')}>
+                  <span className={'text-body-secondary' + (small ? ' small' : '')}>
                     <FormattedMessage
                       id="app.submissions.testResultsTable.secondaryLog"
                       defaultMessage="Secondary Log"

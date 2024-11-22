@@ -47,10 +47,10 @@ const RecentlyVisited = ({ selectedId, secondSelectedId = null, onSelect = null 
               }
               className={
                 id === selectedId
-                  ? 'table-primary text-muted'
+                  ? 'table-primary text-body-secondary'
                   : id === secondSelectedId
-                  ? 'table-warning text-muted'
-                  : 'clickable'
+                    ? 'table-warning text-body-secondary'
+                    : 'clickable'
               }>
               <td>
                 <UsersNameContainer userId={authorId} showEmail="icon" />
@@ -79,7 +79,7 @@ const RecentlyVisited = ({ selectedId, secondSelectedId = null, onSelect = null 
       </div>
     </>
   ) : (
-    <div className="text-muted text-center p-4">
+    <div className="text-body-secondary text-center p-4">
       <FormattedMessage
         id="app.solutions.recentlyVisited.noRecentlyVisited"
         defaultMessage="There are no other solutions recorded as recently visited. Try finding and opening the solution that you wish to compare with this one and then refreshing this page."
