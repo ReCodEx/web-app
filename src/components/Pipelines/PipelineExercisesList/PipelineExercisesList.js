@@ -66,7 +66,7 @@ const PipelineExercisesList = ({
       {pipelineExercises.size > 0 && (
         <thead>
           <tr>
-            <th className="pl-4">
+            <th className="ps-4">
               <FormattedMessage id="generic.name" defaultMessage="Name" />
             </th>
             <th>
@@ -74,7 +74,7 @@ const PipelineExercisesList = ({
             </th>
             <th className="shrink-col text-nowrap">
               {pipelineExercises.size > 5 && (
-                <small className="text-muted">
+                <small className="text-body-secondary">
                   <FormattedMessage
                     id="app.pipelineExercisessList.totalCount"
                     defaultMessage="Total exercises: {count}"
@@ -90,7 +90,7 @@ const PipelineExercisesList = ({
       <tbody>
         {exercises.map(exercise => (
           <tr key={exercise.id}>
-            <td className="pl-4">{getLocalizedName(exercise, locale)}</td>
+            <td className="ps-4">{getLocalizedName(exercise, locale)}</td>
             <td>
               <UsersNameContainer
                 userId={exercise.authorId}
@@ -138,7 +138,7 @@ const PipelineExercisesList = ({
 
         {pipelineExercises.size === 0 && (
           <tr>
-            <td className="text-center text-muted" colSpan={3}>
+            <td className="text-center text-body-secondary" colSpan={3}>
               <FormattedMessage
                 id="app.pipelineExercisessList.empty"
                 defaultMessage="There are no exercises using this pipeline at the moment."

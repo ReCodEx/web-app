@@ -29,16 +29,16 @@ const SupervisorsListItem = ({
             overlay={
               <Popover id={`icon-${id}`}>
                 {
-                  <Popover.Title>
+                  <Popover.Header>
                     <FormattedMessage id="app.membersList.adminPopover.title" defaultMessage="Administrator" />
-                  </Popover.Title>
+                  </Popover.Header>
                 }
-                <Popover.Content className="small text-muted">
+                <Popover.Body className="small text-body-secondary">
                   <FormattedMessage
                     id="app.membersList.adminPopover.description"
                     defaultMessage="An administrator can do almost anything with the group and all its assets including managing other members. Administrators are also displayed in group listings. Administrator privileges are passed down to all sub-groups transitively."
                   />
-                </Popover.Content>
+                </Popover.Body>
               </Popover>
             }>
             <AdminRoleIcon />
@@ -49,16 +49,16 @@ const SupervisorsListItem = ({
             overlay={
               <Popover id={`icon-${id}`}>
                 {
-                  <Popover.Title>
+                  <Popover.Header>
                     <FormattedMessage id="app.membersList.supervisorPopover.title" defaultMessage="Supervisor" />
-                  </Popover.Title>
+                  </Popover.Header>
                 }
-                <Popover.Content className="small text-muted">
+                <Popover.Body className="small text-body-secondary">
                   <FormattedMessage
                     id="app.membersList.supervisorPopover.description"
                     defaultMessage="A supervisor is slightly less potent than administrator. The privileges encompass everything related to students and assignments; however, suppervisor cannot manage other members. Unlike the admin, the supervisor privileges are tied to this group only (they are not inherited by the subgroups)."
                   />
-                </Popover.Content>
+                </Popover.Body>
               </Popover>
             }>
             <SupervisorIcon />
@@ -69,16 +69,16 @@ const SupervisorsListItem = ({
             overlay={
               <Popover id={`icon-${id}`}>
                 {
-                  <Popover.Title>
+                  <Popover.Header>
                     <FormattedMessage id="app.membersList.observerPopover.title" defaultMessage="Observer" />
-                  </Popover.Title>
+                  </Popover.Header>
                 }
-                <Popover.Content className="small text-muted">
+                <Popover.Body className="small text-body-secondary">
                   <FormattedMessage
                     id="app.membersList.observerPopover.description"
                     defaultMessage="An observer has complete read-only access to the group and its assets. Unlike the admin, the observer privileges are tied to this group only (they are not inherited by the subgroups)."
                   />
-                </Popover.Content>
+                </Popover.Body>
               </Popover>
             }>
             <ObserverIcon />
@@ -92,7 +92,7 @@ const SupervisorsListItem = ({
       </td>
 
       {showButtons && (
-        <td className="text-nowrap text-right">
+        <td className="text-nowrap text-end">
           <TheButtonGroup>
             {addAdmin && (
               <OverlayTrigger

@@ -43,7 +43,7 @@ const UploadsTable = ({
       <thead>
         <tr>
           <th />
-          <th className="full-width text-nowrap">
+          <th className="w-100 text-nowrap">
             <FormattedMessage id="app.uploadFiles.fileName" defaultMessage="File Name" />
           </th>
           <th className="text-nowrap">
@@ -59,7 +59,7 @@ const UploadsTable = ({
             .sort((a, b) => a.file.name.localeCompare(b.file.name, locale))
             .map(uploading => (
               <tr key={'uploading-' + uploading.file.name}>
-                <td className="text-left valign-middle text-nowrap">
+                <td className="text-start align-middle text-nowrap">
                   {uploading.canceling || uploading.cancelRequested ? (
                     <OverlayTrigger
                       placement="bottom"
@@ -114,7 +114,7 @@ const UploadsTable = ({
                     </OverlayTrigger>
                   )}
                 </td>
-                <td className="text-monospace full-width">
+                <td className="font-monospace w-100">
                   {uploading.file.name}
                   <br />
                   <ProgressBar
@@ -126,7 +126,7 @@ const UploadsTable = ({
                     className="progress-xs"
                   />
                 </td>
-                <td className="text-nowrap small valign-middle">
+                <td className="text-nowrap small align-middle">
                   {uploading.partialFile && (
                     <>
                       <FormattedMessage
@@ -151,7 +151,7 @@ const UploadsTable = ({
                     </>
                   )}
                 </td>
-                <td className="text-center valign-middle text-nowrap">
+                <td className="text-center align-middle text-nowrap">
                   {!uploading.canceling && !uploading.cancelRequested && !uploading.completing && (
                     <OverlayTrigger
                       placement="bottom"
@@ -177,7 +177,7 @@ const UploadsTable = ({
             .sort((a, b) => a.file.name.localeCompare(b.file.name, locale))
             .map(failed => (
               <tr key={'failed-' + failed.file.name}>
-                <td className="text-left valign-middle text-nowrap">
+                <td className="text-start align-middle text-nowrap">
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
@@ -201,7 +201,7 @@ const UploadsTable = ({
                     <WarningIcon className="text-danger" gapRight fixedWidth />
                   </OverlayTrigger>
                 </td>
-                <td className="text-monospace full-width text-danger">
+                <td className="font-monospace w-100 text-danger">
                   <strong>
                     {failed.error && failed.error.code === '400-003' ? (
                       <HighlightedText regex="[^a-zA-Z0-9\- _\.()\[\]!]+">{failed.file.name}</HighlightedText>
@@ -210,8 +210,8 @@ const UploadsTable = ({
                     )}
                   </strong>
                 </td>
-                <td className="text-nowrap valign-middle">{prettyPrintBytes(failed.file.size)}</td>
-                <td className="text-center valign-middle text-nowrap">
+                <td className="text-nowrap align-middle">{prettyPrintBytes(failed.file.size)}</td>
+                <td className="text-center align-middle text-nowrap">
                   <TheButtonGroup>
                     <OverlayTrigger
                       placement="bottom"
@@ -246,7 +246,7 @@ const UploadsTable = ({
             .sort((a, b) => a.name.localeCompare(b.name, locale))
             .map(uploaded => (
               <tr key={'uploaded-' + uploaded.name}>
-                <td className="text-left valign-middle text-nowrap">
+                <td className="text-start align-middle text-nowrap">
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
@@ -275,9 +275,9 @@ const UploadsTable = ({
                     </OverlayTrigger>
                   )}
                 </td>
-                <td className="text-monospace full-width">{uploaded.name}</td>
-                <td className="text-nowrap valign-middle">{prettyPrintBytes(uploaded.size)}</td>
-                <td className="text-center valign-middle text-nowrap">
+                <td className="font-monospace w-100">{uploaded.name}</td>
+                <td className="text-nowrap align-middle">{prettyPrintBytes(uploaded.size)}</td>
+                <td className="text-center align-middle text-nowrap">
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
@@ -298,7 +298,7 @@ const UploadsTable = ({
             .sort((a, b) => a.name.localeCompare(b.name, locale))
             .map(removed => (
               <tr key={'removed' + removed.name}>
-                <td className="text-left valign-middle text-nowrap">
+                <td className="text-start align-middle text-nowrap">
                   <OverlayTrigger
                     placement="bottom"
                     overlay={
@@ -309,14 +309,14 @@ const UploadsTable = ({
                         />
                       </Tooltip>
                     }>
-                    <DeleteIcon className="text-muted" gapRight fixedWidth />
+                    <DeleteIcon className="text-body-secondary" gapRight fixedWidth />
                   </OverlayTrigger>
                 </td>
-                <td className="text-monospace full-width text-muted">
+                <td className="font-monospace w-100 text-body-secondary">
                   <strike>{removed.name}</strike>
                 </td>
-                <td className="text-nowrap valign-middle text-muted">{prettyPrintBytes(removed.size)}</td>
-                <td className="text-center valign-middle text-nowrap">
+                <td className="text-nowrap align-middle text-body-secondary">{prettyPrintBytes(removed.size)}</td>
+                <td className="text-center align-middle text-nowrap">
                   <OverlayTrigger
                     placement="bottom"
                     overlay={

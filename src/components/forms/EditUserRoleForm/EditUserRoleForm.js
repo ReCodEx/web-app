@@ -49,7 +49,7 @@ const EditUserRoleForm = ({
       </Callout>
     )}
 
-    <Table hover className="no-margin">
+    <Table hover className="m-0">
       <tbody>
         {knownRoles.map(role => (
           <tr
@@ -66,13 +66,13 @@ const EditUserRoleForm = ({
             </td>
             <td
               className={classnames({
-                'text-bold': role === currentRole,
+                'fw-bold': role === currentRole,
                 'shrink-col': true,
                 'text-nowrap': true,
               })}>
               {roleLabels[role]}
             </td>
-            <td className="small text-muted valign-middle">{roleDescriptions[role]}</td>
+            <td className="small text-body-secondary align-middle">{roleDescriptions[role]}</td>
           </tr>
         ))}
       </tbody>

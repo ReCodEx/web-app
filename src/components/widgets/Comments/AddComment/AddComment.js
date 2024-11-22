@@ -87,16 +87,14 @@ class AddComment extends Component {
               value={text}
             />
 
-            <InputGroup.Append>
-              <Button
-                type="submit"
-                variant={isPrivate ? 'success' : 'primary'}
-                disabled={text.length === 0 || !addComment}
-                onClick={this.addComment}
-                noShadow>
-                <FormattedMessage id="app.comments.addComment" defaultMessage="Send" />
-              </Button>
-            </InputGroup.Append>
+            <Button
+              type="submit"
+              variant={isPrivate ? 'success' : 'primary'}
+              disabled={text.length === 0 || !addComment}
+              onClick={this.addComment}
+              noShadow>
+              <FormattedMessage id="app.comments.addComment" defaultMessage="Send" />
+            </Button>
           </InputGroup>
 
           <Form.Text>
@@ -106,7 +104,7 @@ class AddComment extends Component {
               variant={isPrivate ? 'outline-success' : 'outline-warning'}
               disabled={!addComment}
               noShadow
-              className="mr-2">
+              className="me-2">
               {isPrivate ? <Icon icon="eye-slash" /> : <Icon icon="eye" />}
             </Button>
 

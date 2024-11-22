@@ -23,7 +23,7 @@ const ShadowAssignmentDetail = ({
     <Table responsive size="sm">
       <tbody>
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="text-center text-body-secondary shrink-col px-2">
             <Icon icon="cloud-upload-alt" />
           </td>
           <th>
@@ -41,7 +41,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="text-center text-body-secondary shrink-col px-2">
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
@@ -53,7 +53,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="text-center text-body-secondary shrink-col px-2">
             <DeadlineIcon />
           </td>
           <th>
@@ -71,7 +71,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="text-center text-body-secondary shrink-col px-2">
             <Icon icon={['far', 'copy']} />
           </td>
           <th>
@@ -83,7 +83,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="text-center text-body-secondary shrink-col px-2">
             <BonusIcon />
           </td>
           <th>
@@ -96,7 +96,7 @@ const ShadowAssignmentDetail = ({
 
         {permissionHints.update && (
           <tr>
-            <td className="text-center text-muted shrink-col px-2">
+            <td className="text-center text-body-secondary shrink-col px-2">
               <VisibleIcon />
             </td>
             <th>

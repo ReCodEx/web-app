@@ -139,7 +139,7 @@ class SolutionStatus extends Component {
           <Table responsive size="sm" className="mb-1">
             <tbody>
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="text-center text-body-secondary shrink-col px-2">
                   <UserIcon />
                 </td>
                 <th className="text-nowrap">
@@ -157,7 +157,7 @@ class SolutionStatus extends Component {
 
               {Boolean(submittedBy) && submittedBy !== authorId && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="text-center text-body-secondary shrink-col px-2">
                     <SupervisorIcon />
                   </td>
                   <th className="text-nowrap">
@@ -177,7 +177,7 @@ class SolutionStatus extends Component {
 
               {(referenceSolution || note.length > 0 || Boolean(editNote)) && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="text-center text-body-secondary shrink-col px-2">
                     <NoteIcon />
                   </td>
                   <th className="text-nowrap">
@@ -201,13 +201,13 @@ class SolutionStatus extends Component {
                     {referenceSolution || note.length > 0 ? (
                       note
                     ) : (
-                      <em className="text-muted small">
+                      <em className="text-body-secondary small">
                         <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
                       </em>
                     )}
 
                     {Boolean(editNote) && (
-                      <span className="float-right text-warning mx-2">
+                      <span className="float-end text-warning mx-2">
                         <EditIcon onClick={this.openEditDialog} />
                       </span>
                     )}
@@ -216,7 +216,7 @@ class SolutionStatus extends Component {
               )}
 
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="text-center text-body-secondary shrink-col px-2">
                   <Icon icon={['far', 'clock']} />
                 </td>
 
@@ -241,7 +241,7 @@ class SolutionStatus extends Component {
                       </Explanation>
                     </th>
                     <td>
-                      <span className="mr-2">
+                      <span className="me-2">
                         <OverlayTrigger
                           placement="bottom"
                           overlay={
@@ -270,7 +270,7 @@ class SolutionStatus extends Component {
                             ) : allowSecondDeadline && createdAt < secondDeadline ? (
                               <InvertIcon className="text-warning" />
                             ) : (
-                              <PastDeadlineIcon className="text-muted" />
+                              <PastDeadlineIcon className="text-body-secondary" />
                             )}
                           </span>
                         </OverlayTrigger>
@@ -281,7 +281,7 @@ class SolutionStatus extends Component {
                       {createdAt > firstDeadline && (
                         <>
                           <span className="px-1"> </span>
-                          <small className="text-muted">
+                          <small className="text-body-secondary">
                             ({moment.duration(firstDeadline - createdAt, 'seconds').humanize()}{' '}
                             <FormattedMessage id="app.solution.afterDeadline" defaultMessage="after the deadline" />)
                           </small>
@@ -294,7 +294,7 @@ class SolutionStatus extends Component {
 
               {Boolean(environment) && Boolean(environment.name) && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="text-center text-body-secondary shrink-col px-2">
                     <CodeIcon />
                   </td>
                   <th className="text-nowrap">
@@ -314,7 +314,7 @@ class SolutionStatus extends Component {
 
               {visibility !== null && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="text-center text-body-secondary shrink-col px-2">
                     <VisibleIcon visible={visibility > 0} />
                   </td>
                   <th>
@@ -360,7 +360,7 @@ class SolutionStatus extends Component {
               {!referenceSolution && (
                 <>
                   <tr>
-                    <td className="text-center text-muted shrink-col px-2">
+                    <td className="text-center text-body-secondary shrink-col px-2">
                       <PointsIcon />
                     </td>
                     <th className="text-nowrap">
@@ -426,7 +426,7 @@ class SolutionStatus extends Component {
                       )}
 
                       {evaluation && (
-                        <span className="float-right clickable text-primary mx-2" onClick={this.openExplainDialog}>
+                        <span className="float-end clickable text-primary mx-2" onClick={this.openExplainDialog}>
                           <small>
                             <FormattedMessage id="generic.explain" defaultMessage="explain" />
                           </small>
@@ -437,7 +437,7 @@ class SolutionStatus extends Component {
                   </tr>
 
                   <tr>
-                    <td className="text-center text-muted shrink-col px-2">
+                    <td className="text-center text-body-secondary shrink-col px-2">
                       <ReviewIcon review={review} reviewRequest={reviewRequest} />
                     </td>
                     <th className="text-nowrap">
@@ -461,7 +461,7 @@ class SolutionStatus extends Component {
                       {review && review.startedAt ? (
                         <DateTime unixts={review.closedAt || review.startedAt} />
                       ) : (
-                        <i className="text-muted">
+                        <i className="text-body-secondary">
                           {reviewRequest && (
                             <strong className="text-success">
                               <FormattedMessage id="app.solution.reviewRequested" defaultMessage="requested" />,{' '}
@@ -472,7 +472,7 @@ class SolutionStatus extends Component {
                       )}
 
                       {review && review.issues > 0 && (
-                        <small className="text-muted ml-3">
+                        <small className="text-body-secondary ms-3">
                           (
                           <FormattedMessage
                             id="app.solution.reviewIssuesCount"
@@ -494,7 +494,7 @@ class SolutionStatus extends Component {
                       )}
 
                       {important.lastReviewed && (
-                        <span className="small float-right mx-2">
+                        <span className="small float-end mx-2">
                           <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.lastReviewed.id)}>
                             <FormattedMessage id="app.solution.lastReviewed" defaultMessage="last reviewed" />
                             <LinkIcon gapLeft />
@@ -505,7 +505,7 @@ class SolutionStatus extends Component {
                   </tr>
 
                   <tr>
-                    <td className="text-center text-muted shrink-col px-2">
+                    <td className="text-center text-body-secondary shrink-col px-2">
                       <Icon icon="list-ol" />
                     </td>
                     <th className="text-nowrap">
@@ -527,7 +527,7 @@ class SolutionStatus extends Component {
 
                       {otherSolutions && otherSolutions.size > 1 && (
                         <span
-                          className="small float-right clickable text-primary mx-2"
+                          className="small float-end clickable text-primary mx-2"
                           onClick={this.openOtherSolutionsDialog}>
                           <FormattedMessage id="app.solution.allSolutions" defaultMessage="all solutions" />
                           <Icon icon="list-ul" gapLeft />
@@ -652,7 +652,7 @@ class SolutionStatus extends Component {
                 <>
                   <hr />
 
-                  <div className="text-muted mb-1">
+                  <div className="text-body-secondary mb-1">
                     <FormattedMessage
                       id="app.assignment.deadlinesGraphDialog.title"
                       defaultMessage="Visualization of points limits and corresponding deadlines"

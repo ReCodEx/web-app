@@ -43,7 +43,7 @@ const Comment = ({
         <span
           className={classnames({
             'direct-chat-name': true,
-            'float-right': right,
+            'float-end': right,
           })}>
           <Link to={USER_URI_FACTORY(user.id)}>{user.name}</Link>
         </span>
@@ -62,7 +62,7 @@ const Comment = ({
         {isFromCurrentUser && (
           <DeleteIcon
             gapLeft
-            className={classnames({ 'float-right': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
+            className={classnames({ 'float-end': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
             onClick={() => deleteComment(id)}
           />
         )}
@@ -91,7 +91,7 @@ const Comment = ({
               icon={isUpdating ? 'circle-notch' : isPrivate ? 'eye-slash' : 'eye'}
               onClick={() => setPrivacy(id, !isPrivate)}
               className={classnames({
-                'float-right': true,
+                'float-end': true,
                 [styles.iconButton]: true,
                 [styles.iconButtonLock]: !isPrivate,
                 [styles.iconButtonUnlock]: isPrivate,

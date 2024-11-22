@@ -96,7 +96,7 @@ const ExercisesListItem = ({
             </div>
           ))
         ) : (
-          <i className="text-muted">
+          <i className="text-body-secondary">
             <FormattedMessage id="app.exercisesListItem.noGroups" defaultMessage="no groups" />
           </i>
         )}
@@ -125,7 +125,7 @@ const ExercisesListItem = ({
       />
     </td>
 
-    <td className="text-right text-nowrap">
+    <td className="text-end text-nowrap">
       <TheButtonGroup>
         {showAssignButton && assignExercise && permissionHints.assign && (
           <AssignExerciseButton

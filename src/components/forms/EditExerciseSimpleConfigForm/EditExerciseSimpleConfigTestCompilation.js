@@ -87,7 +87,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                 defaultMessage="Compilation/Execution"
               />
             </h4>
-            <p className="text-muted small">
+            <p className="text-body-secondary small">
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.compilationInfo"
                 defaultMessage="Additional files that are added to compilation (in case of compiled environments) or execution (in case of interpreted environments)."
@@ -334,7 +334,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
             )}
           </InsetPanel>
         ) : (
-          <InsetPanel className="text-muted compilation-open" size="small" onClick={this.compilationOpen}>
+          <InsetPanel className="text-body-secondary compilation-open" size="small" onClick={this.compilationOpen}>
             <ExpandCollapseIcon isOpen={false} gapRight />
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.compilationTitle"

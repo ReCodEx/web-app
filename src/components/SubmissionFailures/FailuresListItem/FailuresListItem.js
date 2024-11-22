@@ -57,7 +57,7 @@ const FailuresListItem = ({
       <DateTime unixts={failure.resolvedAt} />
     </td>
     <td>{failure.resolutionNote ? <span>{failure.resolutionNote}</span> : <span>&mdash;</span>}</td>
-    <td className="text-right">{createActions && createActions(id)}</td>
+    <td className="text-end">{createActions && createActions(id)}</td>
   </tr>
 );
 

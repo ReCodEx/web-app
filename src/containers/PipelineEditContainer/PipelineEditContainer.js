@@ -669,7 +669,7 @@ class PipelineEditContainer extends Component {
                 <Icon
                   icon="th-list"
                   size="lg"
-                  className="valign-middle text-primary"
+                  className="align-middle text-primary"
                   timid={!this.state.showTable || this.state.showGraph}
                   largeGapRight
                   onClick={this.showAsTable}
@@ -688,7 +688,7 @@ class PipelineEditContainer extends Component {
                 <Icon
                   icon="project-diagram"
                   size="lg"
-                  className="valign-middle text-primary"
+                  className="align-middle text-primary"
                   timid={this.state.showTable || !this.state.showGraph}
                   largeGapRight
                   onClick={this.showAsGraph}
@@ -707,7 +707,7 @@ class PipelineEditContainer extends Component {
                 <Icon
                   icon="columns"
                   size="lg"
-                  className="valign-middle text-primary"
+                  className="align-middle text-primary"
                   timid={!this.state.showTable || !this.state.showGraph}
                   largeGapRight
                   onClick={this.showTableAndGraph}

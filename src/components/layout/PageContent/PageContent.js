@@ -10,10 +10,10 @@ const getMessage = (item, formatMessage) =>
   !item
     ? ''
     : typeof item === 'string'
-    ? item
-    : item.type === FormattedMessage
-    ? formatMessage(item.props, item.props.values || {})
-    : getMessage(item.children, formatMessage);
+      ? item
+      : item.type === FormattedMessage
+        ? formatMessage(item.props, item.props.values || {})
+        : getMessage(item.children, formatMessage);
 
 /**
  * Holds the main content of a page with the common structure for
@@ -22,20 +22,22 @@ const getMessage = (item, formatMessage) =>
  * which reflects these into the <head> section of the HTML document.
  */
 const PageContent = ({ intl: { formatMessage }, title = '', windowTitle = null, icon = null, children }) => (
-  <div className="content-wrapper pb-1">
+  <main className="app-main bg-body-tertiary pb-1">
     <Helmet title={getMessage(windowTitle || title, formatMessage)} />
     {(title || icon) && (
-      <div className="content-header">
-        <h1 className="m-0 px-3 text-dark">
-          {icon && <span className="mr-3 text-muted">{typeof icon === 'string' ? <Icon icon={icon} /> : icon}</span>}
+      <div className="app-content-header">
+        <h1 className="m-0 px-3 text-dark h3">
+          {icon && (
+            <span className="me-3 text-body-secondary">{typeof icon === 'string' ? <Icon icon={icon} /> : icon}</span>
+          )}
           {title}
         </h1>
       </div>
     )}
-    <section className="content">
+    <div className="app-content">
       <Container fluid>{children}</Container>
-    </section>
-  </div>
+    </div>
+  </main>
 );
 
 PageContent.propTypes = {

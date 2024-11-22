@@ -23,19 +23,19 @@ const ReferenceSolutionsTableRow = ({
   return (
     <tbody onClick={onClick} className={onClick ? 'clickable' : null}>
       <tr>
-        <td rowSpan={2} className="shrink-col pr-0">
+        <td rowSpan={2} className="shrink-col pe-0">
           <Icon icon="star" className="text-warning" />
         </td>
         <td colSpan={4} className="pb-1">
           {description || (
-            <i className="text-muted small">
+            <i className="text-body-secondary small">
               <FormattedMessage id="app.referenceSolutionTable.noDescription" defaultMessage="no description given" />
             </i>
           )}
         </td>
       </tr>
       <tr>
-        <td className="text-nowrap text-muted small pt-0">
+        <td className="text-nowrap text-body-secondary small pt-0">
           <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
         <td className="text-nowrap text-center shrink-col small pt-0">
@@ -76,7 +76,7 @@ const ReferenceSolutionsTableRow = ({
             </strong>
           )}
         </td>
-        <td className="text-nowrap text-muted small pt-0">
+        <td className="text-nowrap text-body-secondary small pt-0">
           <UsersNameContainer userId={authorId} isSimple listItem />
         </td>
       </tr>

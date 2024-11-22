@@ -15,7 +15,7 @@ const UsersList = ({ heading = null, users = [], createActions, ...rest }) => (
 
       {users.length === 0 && (
         <tr>
-          <td className="text-center text-muted">
+          <td className="text-center text-body-secondary">
             <FormattedMessage id="app.userList.noUsers" defaultMessage="No users match selected filters." />
           </td>
         </tr>

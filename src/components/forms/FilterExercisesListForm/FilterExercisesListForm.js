@@ -192,7 +192,7 @@ class FilterExercisesListForm extends Component {
 
                   {!this.isOpen() && (
                     <Col sm={12} md={2}>
-                      <div className="text-right" style={{ marginTop: '2rem' }}>
+                      <div className="text-end" style={{ marginTop: '2rem' }}>
                         <SubmitButton
                           id="setFilters"
                           handleSubmit={handleSubmit}
@@ -216,14 +216,14 @@ class FilterExercisesListForm extends Component {
                       <>
                         <Row className="mt-2">
                           <Col xs={false} sm="auto">
-                            <FormLabel className="mr-2">
+                            <FormLabel className="me-2">
                               <FormattedMessage
                                 id="app.filterExercisesListForm.archived"
                                 defaultMessage="Archived Status:"
                               />
                             </FormLabel>
                           </Col>
-                          <Col xs={12} sm className="text-muted">
+                          <Col xs={12} sm className="text-body-secondary">
                             <Field name="archived" component={RadioField} options={ARCHIVED_OPTIONS} />
                           </Col>
                         </Row>

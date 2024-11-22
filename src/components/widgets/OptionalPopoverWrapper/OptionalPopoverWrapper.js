@@ -30,8 +30,8 @@ const OptionalPopoverWrapper = ({
         {children}
         <Overlay show={Boolean(contents) && !hide && shown} target={ref.current} placement={placement}>
           <Popover id={popoverId}>
-            <Popover.Title>{title}</Popover.Title>
-            <Popover.Content>{contents}</Popover.Content>
+            <Popover.Header>{title}</Popover.Header>
+            <Popover.Body>{contents}</Popover.Body>
           </Popover>
         </Overlay>
       </span>

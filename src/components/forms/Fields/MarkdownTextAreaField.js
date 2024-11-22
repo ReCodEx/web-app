@@ -37,7 +37,7 @@ class MarkdownTextAreaField extends Component {
             </OnOffCheckbox>
           </Col>
           <Col sm={8}>
-            <Form.Text className="text-right">
+            <Form.Text className="text-end">
               <FormattedMessage
                 id="app.markdownTextArea.canUseMarkdown"
                 defaultMessage="You can use <a>markdown syntax</a> in this field."

@@ -60,7 +60,7 @@ const AssignmentMaxPoints = ({
     )}
 
     {currentPointsLimit !== null && (allowSecondDeadline || currentPointsLimit !== maxPointsBeforeFirstDeadline) && (
-      <small className="text-muted ml-3">
+      <small className="text-body-secondary ms-3">
         <FormattedMessage
           id="app.assignment.currentMaxPointsNote"
           defaultMessage="({currentPointsLimit} at the moment)"

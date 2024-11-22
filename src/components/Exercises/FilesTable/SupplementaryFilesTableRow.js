@@ -34,7 +34,7 @@ const SupplementaryFilesTableRow = ({
       <DateTime unixts={uploadedAt} showRelative />
     </td>
     {!viewOnly && (
-      <td className="text-right">
+      <td className="text-end">
         {removeFile &&
           (!isBeingUsed ? (
             <Confirm
@@ -46,7 +46,7 @@ const SupplementaryFilesTableRow = ({
                   defaultMessage="Are you sure you want to delete the file? This cannot be undone."
                 />
               }
-              className="float-right">
+              className="float-end">
               <Button size="xs" variant="danger">
                 <DeleteIcon gapRight />
                 <FormattedMessage id="generic.delete" defaultMessage="Delete" />
@@ -63,7 +63,7 @@ const SupplementaryFilesTableRow = ({
                   />
                 </Tooltip>
               }>
-              <em className="text-muted">
+              <em className="text-body-secondary">
                 <Icon icon="paperclip" gapRight className="text-success" />
                 <FormattedMessage id="generic.inUse" defaultMessage="in use" />
               </em>

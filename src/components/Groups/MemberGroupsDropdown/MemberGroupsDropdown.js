@@ -72,7 +72,7 @@ const MemberGroupsDropdown = ({ groupId = null, memberGroups }) => (
         (!memberGroups.student || memberGroups.student.length === 0) &&
         (!memberGroups.observer || memberGroups.observer.length === 0) && (
           <Dropdown.Item as="span" bsPrefix="dropdown-item">
-            <em className="text-center text-muted">
+            <em className="text-center text-body-secondary">
               <FormattedMessage
                 id="app.memberGroups.noGroups"
                 defaultMessage="there are no groups associated with you"

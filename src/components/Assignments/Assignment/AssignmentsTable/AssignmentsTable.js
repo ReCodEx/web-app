@@ -309,7 +309,7 @@ class AssignmentsTable extends Component {
                 assignmentsPreprocessedAll.length !== assignmentsPreprocessedCurrent.length && (
                   <tfoot>
                     <tr>
-                      <td colSpan={10} className="small text-muted text-center">
+                      <td colSpan={10} className="small text-body-secondary text-center">
                         {this.state.showAll ? (
                           <FormattedMessage
                             id="app.assignments.hidePastAssignments"
@@ -349,7 +349,7 @@ class AssignmentsTable extends Component {
                       <Icon
                         icon="arrow-turn-up"
                         transform={{ rotate: 90 }}
-                        className="text-muted"
+                        className="text-body-secondary"
                         largeGapLeft
                         largeGapRight
                       />
@@ -371,7 +371,7 @@ class AssignmentsTable extends Component {
                         </Button>
                       </TheButtonGroup>
 
-                      <TheButtonGroup className="ml-4">
+                      <TheButtonGroup className="ms-4">
                         {syncAssignment && (
                           <Button
                             variant="warning"

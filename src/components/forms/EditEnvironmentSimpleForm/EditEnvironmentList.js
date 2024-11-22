@@ -53,7 +53,7 @@ const EditEnvironmentList = ({
                           />
                         </Tooltip>
                       }>
-                      <Icon icon={['far', 'star']} smallGapLeft className="text-warning half-opaque" />
+                      <Icon icon={['far', 'star']} smallGapLeft className="text-warning opacity-50" />
                     </OverlayTrigger>
                   )}
                 </span>

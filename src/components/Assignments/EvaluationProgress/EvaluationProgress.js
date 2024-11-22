@@ -84,7 +84,7 @@ class EvaluationProgress extends Component {
                           'text-center': true,
                           'text-success': wasSuccessful,
                           'text-danger': !wasSuccessful,
-                          'text-bold': true,
+                          'fw-bold': true,
                         })}>
                         <EvaluationStatusText status={status} />
                       </td>

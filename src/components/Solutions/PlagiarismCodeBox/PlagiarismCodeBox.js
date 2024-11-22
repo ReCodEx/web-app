@@ -93,8 +93,8 @@ class PlagiarismCodeBox extends Component {
       this.state.selectedFragment !== null
         ? data[data.indexOf(this.state.selectedFragment) + 1] || null
         : data.length > 0
-        ? data[0]
-        : null;
+          ? data[0]
+          : null;
 
     this.setState({ selectedFragment });
   };
@@ -198,7 +198,7 @@ class PlagiarismCodeBox extends Component {
                 <>
                   <div>
                     {similarity && (
-                      <Badge variant={similarity > 0.8 ? 'danger' : 'warning'} className="mr-3">
+                      <Badge bg={similarity > 0.8 ? 'danger' : 'warning'} className="me-3">
                         {<FormattedNumber value={similarity * 100} maximumFractionDigits={1} />} %
                       </Badge>
                     )}
@@ -232,7 +232,7 @@ class PlagiarismCodeBox extends Component {
                       </OverlayTrigger>
                     )}
 
-                    <code className="text-bold">{name}</code>
+                    <code className="fw-bold">{name}</code>
 
                     {download && (
                       <DownloadIcon
@@ -247,7 +247,7 @@ class PlagiarismCodeBox extends Component {
                     )}
 
                     {authorId && (
-                      <small className="ml-2 text-muted">
+                      <small className="ms-2 text-body-secondary">
                         (<UsersNameContainer userId={authorId} isSimple noAutoload />)
                       </small>
                     )}
@@ -268,7 +268,7 @@ class PlagiarismCodeBox extends Component {
                         <span onClick={openSelectFileDialog} className="clickable">
                           <CodeCompareIcon className="text-primary" gapRight />
                           {sourceFilesCount > 1 && (
-                            <small className="text-muted">
+                            <small className="text-body-secondary">
                               (
                               <FormattedMessage
                                 id="app.solutionSourceCodes.adjustMappingFiles"
@@ -281,7 +281,7 @@ class PlagiarismCodeBox extends Component {
                         </span>
                       </OverlayTrigger>
                     ) : (
-                      <CodeCompareIcon className="text-muted ml-4 mr-3" />
+                      <CodeCompareIcon className="text-body-secondary ms-4 me-3" />
                     )}
                   </div>
 
@@ -316,7 +316,7 @@ class PlagiarismCodeBox extends Component {
                       </OverlayTrigger>
                     )}
 
-                    <code className="text-bold">
+                    <code className="fw-bold">
                       {selectedPlagiarismFile.solutionFile.name}
                       {selectedPlagiarismFile.fileEntry ? `/${selectedPlagiarismFile.fileEntry}` : ''}
                     </code>
@@ -339,7 +339,7 @@ class PlagiarismCodeBox extends Component {
                     )}
 
                     {sourceAuthorId && (
-                      <small className="ml-2 text-muted">
+                      <small className="ms-2 text-body-secondary">
                         (#{selectedPlagiarismFile.solution.attemptIndex},
                         <UsersNameContainer userId={sourceAuthorId} isSimple noAutoload />)
                       </small>
@@ -362,7 +362,7 @@ class PlagiarismCodeBox extends Component {
                           <SolutionResultsIcon gapLeft className="text-primary" timid />
                         </Link>
                       ) : (
-                        <SolutionResultsIcon gapLeft className="text-muted" timid />
+                        <SolutionResultsIcon gapLeft className="text-body-secondary" timid />
                       )}
                     </OverlayTrigger>
 
@@ -378,11 +378,11 @@ class PlagiarismCodeBox extends Component {
                           <GroupIcon gapLeft className="text-primary" timid />
                         </Link>
                       ) : (
-                        <GroupIcon gapLeft className="text-muted" timid />
+                        <GroupIcon gapLeft className="text-body-secondary" timid />
                       )}
                     </OverlayTrigger>
 
-                    <span className="ml-4">
+                    <span className="ms-4">
                       <OverlayTrigger
                         placement="left"
                         overlay={

@@ -24,7 +24,7 @@ const LocalizedGroupName = ({ entity, translations = false, intl: { locale } }) 
                 ))}
               </Tooltip>
             }>
-            <Icon icon={['far', 'flag']} className="text-muted" gapLeft />
+            <Icon icon={['far', 'flag']} className="text-body-secondary" gapLeft />
           </OverlayTrigger>
         </span>
       )}

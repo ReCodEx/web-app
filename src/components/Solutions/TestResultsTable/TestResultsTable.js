@@ -89,7 +89,7 @@ class TestResultsTable extends Component {
           <thead>
             <tr>
               <th />
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -101,12 +101,12 @@ class TestResultsTable extends Component {
                     </Tooltip>
                   }>
                   <span>
-                    <SuccessIcon smallGapRight className="text-muted" />/
-                    <FailureIcon smallGapLeft className="text-muted" />
+                    <SuccessIcon smallGapRight className="text-body-secondary" />/
+                    <FailureIcon smallGapLeft className="text-body-secondary" />
                   </span>
                 </OverlayTrigger>
               </th>
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -120,7 +120,7 @@ class TestResultsTable extends Component {
                   <Icon icon="balance-scale" />
                 </OverlayTrigger>
               </th>
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -137,7 +137,7 @@ class TestResultsTable extends Component {
                   </span>
                 </OverlayTrigger>
               </th>
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -154,7 +154,7 @@ class TestResultsTable extends Component {
                   </span>
                 </OverlayTrigger>
               </th>
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -169,7 +169,7 @@ class TestResultsTable extends Component {
                 </OverlayTrigger>
               </th>
               {(showJudgeLogStdout || (showJudgeLogStderr && !isJudgeLogMerged)) && (
-                <th className="text-right">
+                <th className="text-end">
                   {showLogButton && (
                     <Button
                       variant={allLogsClosed ? 'primary' : 'secondary'}

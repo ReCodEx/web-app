@@ -36,7 +36,7 @@ const AddUserContainer = ({ id, filters, createActions, user, rolesFilter = null
         limits={LIMITS}
         hideAllItems={!filters.search}
         hideAllMessage={
-          <div className="text-muted text-center">
+          <div className="text-body-secondary text-center">
             <FormattedMessage
               id="app.addUserContainer.emptyQuery"
               defaultMessage="No results. Enter a search query..."

@@ -149,7 +149,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
       'date',
       <FormattedMessage id="app.solutionsTable.submissionDate" defaultMessage="Date of submission" />,
       {
-        className: 'text-left',
+        className: 'text-start',
         comparator: ({ date: d1 }, { date: d2 }) => d2 - d1, // dates are implicitly in reversed order
         cellRenderer: (createdAt, idx) =>
           createdAt && <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
@@ -163,8 +163,8 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
           className={
             'text-nowrap' +
             (viewMode === VIEW_MODE_BEST && lastAttemptIndex && lastAttemptIndex !== attemptIndex
-              ? ' text-bold text-warning'
-              : ' text-muted')
+              ? ' fw-bold text-warning'
+              : ' text-body-secondary')
           }>
           {!lastAttemptIndex ? (
             <LoadingIcon />
@@ -185,7 +185,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
     }),
 
     new SortableTableColumnDescriptor('user', <FormattedMessage id="generic.nameOfPerson" defaultMessage="Name" />, {
-      className: 'text-left',
+      className: 'text-start',
       comparator: ({ user: u1, date: d1 }, { user: u2, date: d2 }) => nameComparator(u1, u2) || d2 - d1, // dates are implicitly in reversed order
       cellRenderer: user =>
         user && (
@@ -252,12 +252,12 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
     ),
 
     new SortableTableColumnDescriptor('note', <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />, {
-      className: 'small full-width',
-      headerClassName: 'text-left',
+      className: 'small w-100',
+      headerClassName: 'text-start',
     }),
 
     new SortableTableColumnDescriptor('actionButtons', '', {
-      className: 'text-right valign-middle text-nowrap',
+      className: 'text-end align-middle text-nowrap',
       cellRenderer: solution => (
         <TheButtonGroup>
           {solution.permissionHints && solution.permissionHints.viewDetail && (
@@ -473,7 +473,7 @@ class AssignmentSolutions extends Component {
                   {pendingReviews && pendingReviews.length > 0 && !group.archived && (
                     <Callout variant="warning">
                       <Row className="align-items-center">
-                        <Col className="pr-3 py-2">
+                        <Col className="pe-3 py-2">
                           <FormattedMessage
                             id="app.assignmentSolutions.pendingReviews"
                             defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected assignment. Remember that the review comments are visible to the author after a review is closed."
@@ -553,14 +553,14 @@ class AssignmentSolutions extends Component {
 
               <Col sm={false} md="auto" className="text-nowrap pt-2 mb-3">
                 <DropdownButton
-                  menuAlign="right"
+                  align="right"
                   title={
                     <>
                       <Icon icon="binoculars" gapRight />
                       {viewModes[this.state.viewMode] || ''}
                     </>
                   }
-                  className="elevation-2"
+                  className="shadow"
                   id="viewModeDropdown">
                   <Dropdown.Header>
                     <FormattedMessage
@@ -603,9 +603,9 @@ class AssignmentSolutions extends Component {
                                 <Box
                                   title={
                                     <>
-                                      <UserIcon gapRight className="text-muted" />
+                                      <UserIcon gapRight className="text-body-secondary" />
                                       {user.fullName}
-                                      <small className="ml-3 text-nowrap">
+                                      <small className="ms-3 text-nowrap">
                                         (
                                         <Link to={links.GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, user.id)}>
                                           <FormattedMessage
@@ -665,7 +665,7 @@ class AssignmentSolutions extends Component {
                           )}
                           openLinkGenerator={this.openLinkGenerator}
                           empty={
-                            <div className="text-center text-muted">
+                            <div className="text-center text-body-secondary">
                               <FormattedMessage
                                 id="app.assignmentSolutions.noSolutions"
                                 defaultMessage="There are currently no submitted solutions."

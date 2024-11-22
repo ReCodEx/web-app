@@ -30,7 +30,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
             localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0 ? lang : localeTabs[0].locale
           }
           id="localized-texts">
-          <Card>
+          <Card className="mb-3">
             <Card.Header>
               <Nav
                 variant="tabs"
@@ -73,7 +73,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                     {text.trim() !== '' && <Markdown source={text} />}
 
                     {!text.trim() && !link && (
-                      <Callout variant="warning" className="em-margin">
+                      <Callout variant="warning" className="m-3">
                         <FormattedMessage
                           id="app.localizedTexts.noText"
                           defaultMessage="There is no text nor link for given localization. The exercise is not fully specified yet."

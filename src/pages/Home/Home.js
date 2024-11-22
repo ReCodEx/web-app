@@ -74,7 +74,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
               <Row>
                 <Col xs={false} sm="auto">
                   <h3>
-                    <GroupIcon gapLeft gapRight fixedWidth className="text-muted" />
+                    <GroupIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
                   </h3>
                 </Col>
                 <Col xs={12} sm>
@@ -86,7 +86,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
                     <strong>
                       <UsersNameContainer userId={instance.adminId} isSimple />,
                     </strong>
-                    <a href={EXTERNAL_AUTH_HELPDESK_URL} className="ml-3">
+                    <a href={EXTERNAL_AUTH_HELPDESK_URL} className="ms-3">
                       <MailIcon gapRight />
                       <FormattedMessage
                         id="app.homepage.instance.techSupport"
@@ -110,7 +110,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <Row>
         <Col xs={false} sm="auto">
           <h3>
-            <GroupIcon gapLeft gapRight fixedWidth className="text-muted" />
+            <GroupIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
           </h3>
         </Col>
         <Col xs={12} sm>
@@ -140,7 +140,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
         <Row>
           <Col xs={false} sm="auto">
             <h3>
-              <ExerciseIcon gapLeft gapRight fixedWidth className="text-muted" />
+              <ExerciseIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
             </h3>
           </Col>
           <Col xs={12} sm>
@@ -186,7 +186,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <Row>
         <Col xs={false} sm="auto">
           <h3>
-            <AssignmentIcon gapLeft gapRight fixedWidth className="text-muted" />
+            <AssignmentIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
           </h3>
         </Col>
         <Col xs={12} sm>
@@ -215,7 +215,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <Row>
         <Col xs={false} sm="auto">
           <h3>
-            <CodeIcon gapLeft gapRight fixedWidth className="text-muted" />
+            <CodeIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
           </h3>
         </Col>
         <Col xs={12} sm>
@@ -245,7 +245,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
         <Row>
           <Col xs={false} sm="auto">
             <h3>
-              <ShadowAssignmentIcon gapLeft gapRight fixedWidth className="text-muted" />
+              <ShadowAssignmentIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
             </h3>
           </Col>
           <Col xs={12} sm>
@@ -277,16 +277,17 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
 
       <hr className="my-3" />
 
-      <h2>
-        <FormattedMessage id="app.homepage.acknowledgementTitle" defaultMessage="Acknowledgement" />
-      </h2>
-
       <Row className="pb-4">
         <Col className="align-self-center">
-          <FormattedMessage
-            id="app.homepage.acknowledgementContent"
-            defaultMessage="The initial creation of the project was supported by the Student Grant Program (SFG) of the Faculty of Mathematics and Physics, Charles University. Maintenance and further development is currently funded by School of Computer Science of the same institution."
-          />
+          <h3>
+            <FormattedMessage id="app.homepage.acknowledgementTitle" defaultMessage="Acknowledgement" />
+          </h3>
+          <p>
+            <FormattedMessage
+              id="app.homepage.acknowledgementContent"
+              defaultMessage="The initial creation of the project was supported by the Student Grant Program (SFG) of the Faculty of Mathematics and Physics, Charles University. Maintenance and further development is currently funded by School of Computer Science of the same institution."
+            />
+          </p>
         </Col>
         <Col xs={12} sm="auto">
           <Image src={`${URL_PATH_PREFIX}/public/matfyz_logo.png`} width={250} />

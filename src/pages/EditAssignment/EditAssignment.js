@@ -144,14 +144,14 @@ class EditAssignment extends Component {
 
               {!assignment.exerciseId && hasPermissions(assignment, 'update') && (
                 <Callout variant="warning">
-                  <h3 className="no-margin ">
+                  <h3 className="m-0 ">
                     <Icon icon="ghost" gapRight />
                     <FormattedMessage
                       id="app.assignment.exerciseDeleted"
                       defaultMessage="Corresponding exercise has been deleted."
                     />
                   </h3>
-                  <p className="halfem-margin-top">
+                  <p className="mt-2">
                     <FormattedMessage
                       id="app.assignment.exerciseDeletedInfo"
                       defaultMessage="The assignment may no longer be synchronized with the exercise and no more assignments of this exercise may be created."
@@ -208,7 +208,7 @@ class EditAssignment extends Component {
                         onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(assignment.groupId), { replace: true })}
                       />
                     </Col>
-                    <Col xs={12} sm className="text-muted">
+                    <Col xs={12} sm className="text-body-secondary">
                       <FormattedMessage
                         id="app.editAssignment.deleteAssignmentWarning"
                         defaultMessage="Deleting an assignment will remove all the students submissions and you will have to contact the administrator of ReCodEx if you wanted to restore the assignment in the future."

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Table, FormControl, FormLabel, InputGroup } from 'react-bootstrap';
+import { Table, FormSelect, FormLabel, InputGroup } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Button from '../../widgets/TheButton';
@@ -60,7 +60,7 @@ class EditExercisePipelinesTable extends Component {
 
           {!readOnly && (
             <tr>
-              <td colSpan={5} className="full-width">
+              <td colSpan={5} className="w-100">
                 <FormLabel>
                   <FormattedMessage
                     id="app.editExercisePipelines.availablePipelines"
@@ -69,8 +69,7 @@ class EditExercisePipelinesTable extends Component {
                   :
                 </FormLabel>
                 <InputGroup>
-                  <FormControl
-                    as="select"
+                  <FormSelect
                     onChange={e => this.setState({ selectedPipeline: e.target.value })}
                     value={this.state.selectedPipeline || ''}>
                     <option value={null} />
@@ -81,22 +80,20 @@ class EditExercisePipelinesTable extends Component {
                           {name}
                         </option>
                       ))}
-                  </FormControl>
-                  <InputGroup.Append>
-                    <Button
-                      onClick={() => {
-                        if (this.state.selectedPipeline) {
-                          fields.push(this.state.selectedPipeline);
-                          this.setState({ selectedPipeline: null });
-                        }
-                      }}
-                      variant="primary"
-                      disabled={!this.state.selectedPipeline}
-                      noShadow>
-                      <AddIcon gapRight />
-                      <FormattedMessage id="app.editExercisePipelines.addPipeline" defaultMessage="Add Pipeline" />
-                    </Button>
-                  </InputGroup.Append>
+                  </FormSelect>
+                  <Button
+                    onClick={() => {
+                      if (this.state.selectedPipeline) {
+                        fields.push(this.state.selectedPipeline);
+                        this.setState({ selectedPipeline: null });
+                      }
+                    }}
+                    variant="primary"
+                    disabled={!this.state.selectedPipeline}
+                    noShadow>
+                    <AddIcon gapRight />
+                    <FormattedMessage id="app.editExercisePipelines.addPipeline" defaultMessage="Add Pipeline" />
+                  </Button>
                 </InputGroup>
               </td>
             </tr>

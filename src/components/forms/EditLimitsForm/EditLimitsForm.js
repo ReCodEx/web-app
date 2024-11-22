@@ -162,7 +162,7 @@ class EditLimitsForm extends Component {
         )}
 
         {error && (
-          <div className="em-padding-horizontal">
+          <div className="px-3">
             <Callout variant="danger">{error}</Callout>
           </div>
         )}

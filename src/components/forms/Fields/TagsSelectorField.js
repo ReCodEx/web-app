@@ -26,7 +26,7 @@ const TagsSelectorField = ({ tags = [], fields, label = null }) => {
             style={getTagStyle(tag)}
             className={classnames({
               'tag-margin': true,
-              'halfem-padding': true,
+              'p-2': true,
               timid: active[tag] === undefined,
               clickable: true,
             })}

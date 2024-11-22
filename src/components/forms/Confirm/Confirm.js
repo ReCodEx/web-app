@@ -51,8 +51,8 @@ const Confirm = ({
       })}
       <Overlay target={showTarget} placement={placement} show={showTarget !== null}>
         <Popover id={id}>
-          <Popover.Title>{question}</Popover.Title>
-          <Popover.Content className="text-center">
+          <Popover.Header>{question}</Popover.Header>
+          <Popover.Body className="text-center">
             <TheButtonGroup>
               <Button
                 onClick={() => {
@@ -72,7 +72,7 @@ const Confirm = ({
                 {no}
               </Button>
             </TheButtonGroup>
-          </Popover.Content>
+          </Popover.Body>
         </Popover>
       </Overlay>
     </>

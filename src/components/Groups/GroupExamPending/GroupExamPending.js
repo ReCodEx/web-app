@@ -95,13 +95,13 @@ class GroupExamPending extends Component {
               {groupLock ? (
                 <>
                   <div className="mb-1">
-                    <strong className="mr-2">
+                    <strong className="me-2">
                       <FormattedMessage id="app.groupExams.endAtLong" defaultMessage="Exam ends at" />:
                     </strong>
                     <DateTime unixts={examEnd} showRelative />
                   </div>
 
-                  <div className="text-muted mb-1">
+                  <div className="text-body-secondary mb-1">
                     <FormattedMessage
                       id="app.groupExams.lockedStudentInfo"
                       defaultMessage="You may now see and submit solutions to exam assignments."
@@ -120,7 +120,7 @@ class GroupExamPending extends Component {
                   </div>
 
                   {ipLock && (
-                    <div className="text-muted mb-1">
+                    <div className="text-body-secondary mb-1">
                       <FormattedMessage
                         id="app.groupExams.ipLockInfo"
                         defaultMessage="Your actions are restricted to IP address [{ipLock}] until the exam lock expires. Contact your exam supervisor if you require relocation."
@@ -133,18 +133,18 @@ class GroupExamPending extends Component {
                 <table>
                   <tbody>
                     <tr>
-                      <td className="pr-5">
+                      <td className="pe-5">
                         <ExamLockButtonContainer groupId={id} size="lg" />
                       </td>
                       <td>
                         <div className="mb-1">
-                          <strong className="mr-2">
+                          <strong className="me-2">
                             <FormattedMessage id="app.groupExams.endAtLong" defaultMessage="Exam ends at" />:
                           </strong>
                           <DateTime unixts={examEnd} showRelative />
                         </div>
 
-                        <p className="text-muted small">
+                        <p className="text-body-secondary small">
                           <InfoIcon gapRight />
                           <FormattedMessage
                             id="app.groupExams.studentInfo"
@@ -169,7 +169,7 @@ class GroupExamPending extends Component {
               )}
 
               <hr className="mb-1" />
-              <div className="text-muted small">
+              <div className="text-body-secondary small">
                 <FormattedMessage
                   id="app.groupExams.timeAccuracyWarning"
                   defaultMessage="Your local system clock should be sufficiently synchronized or this component may not work properly."
@@ -180,13 +180,13 @@ class GroupExamPending extends Component {
             <table className="w-100">
               <tbody>
                 <tr>
-                  <td className="text-bold text-nowrap">
+                  <td className="fw-bold text-nowrap">
                     <FormattedMessage id="app.groupExams.beginAt" defaultMessage="Begins at" />:
                   </td>
                   <td className="px-2 py-1 text-nowrap">
                     <DateTime unixts={examBegin} showRelative />
                   </td>
-                  <td rowSpan={3} className="w-100 p-2 pl-5 text-muted">
+                  <td rowSpan={3} className="w-100 p-2 ps-5 text-body-secondary">
                     <p>
                       <InfoIcon gapRight />
                       <FormattedMessage
@@ -204,7 +204,7 @@ class GroupExamPending extends Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="text-bold text-nowrap">
+                  <td className="fw-bold text-nowrap">
                     <FormattedMessage id="app.groupExams.endAt" defaultMessage="Ends at" />:
                   </td>
                   <td className="px-2 py-1 text-nowrap">
@@ -212,7 +212,7 @@ class GroupExamPending extends Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="text-bold text-nowrap">
+                  <td className="fw-bold text-nowrap">
                     <FormattedMessage id="app.groupExams.locking" defaultMessage="Lock type" />:
                   </td>
                   <td className="px-2 py-1 text-nowrap">

@@ -40,7 +40,7 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
       <tbody>
         {showCpu && (
           <tr>
-            <td className="text-muted p-0">
+            <td className="text-body-secondary p-0">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -54,14 +54,14 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
                 <Icon icon="microchip" gapRight />
               </OverlayTrigger>
             </td>
-            <td className="text-left p-0 text-nowrap">
+            <td className="text-start p-0 text-nowrap">
               {tickOrCrossAndRatioOrValue(cpuTimeExceeded === false, cpuTimeRatio, cpuTime, prettyMs, 1000)}
             </td>
           </tr>
         )}
         {showWall && (
           <tr>
-            <td className="text-muted p-0">
+            <td className="text-body-secondary p-0">
               <OverlayTrigger
                 placement="top"
                 overlay={
@@ -75,7 +75,7 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
                 <Icon icon={['far', 'clock']} gapRight />
               </OverlayTrigger>
             </td>
-            <td className="text-left p-0 text-nowrap">
+            <td className="text-start p-0 text-nowrap">
               {tickOrCrossAndRatioOrValue(wallTimeExceeded === false, wallTimeRatio, wallTime, prettyMs, 1000)}
             </td>
           </tr>
@@ -189,12 +189,12 @@ const TestResultsTableRow = ({
           )}
         </>
       ) : (
-        !exitSignal && status !== 'SKIPPED' && <span className="text-muted">{exitCode}</span>
+        !exitSignal && status !== 'SKIPPED' && <span className="text-body-secondary">{exitCode}</span>
       )}
     </td>
 
     {(showJudgeLogStdout || showJudgeLogStderr) && (
-      <td className="text-right">
+      <td className="text-end">
         <TheButtonGroup>
           {toggleLogOpen && ((judgeLogStdout && showJudgeLogStdout) || (judgeLogStderr && showJudgeLogStderr)) && (
             <OverlayTrigger

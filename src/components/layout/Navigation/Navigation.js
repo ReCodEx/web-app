@@ -36,7 +36,7 @@ const NavigationLink = ({
   match = defaultLinkMatch,
 }) =>
   match(link, pathname, search) ? (
-    <strong className={className}>
+    <strong className={`text-success ${className}`}>
       {icon}
       {caption}
     </strong>
@@ -84,7 +84,7 @@ const Navigation = ({
   const onlyUser = Boolean(userId && !groupId && !exerciseId && !assignmentId && !shadowId);
 
   return (
-    <Card className="elevation-2">
+    <Card className="shadow-sm mb-3">
       <Card.Header>
         <Card.Title className={styles.title}>
           {userId && emphasizeUser && (
@@ -124,7 +124,7 @@ const Navigation = ({
                     <FormattedMessage id="app.navigation.assignment" defaultMessage="Assignment" />
                   </Tooltip>
                 }>
-                <AssignmentIcon gapRight className="text-muted" />
+                <AssignmentIcon gapRight className="text-body-secondary" />
               </OverlayTrigger>
               <AssignmentNameContainer assignmentId={assignmentId} noLink />
             </span>
@@ -139,7 +139,7 @@ const Navigation = ({
                     <FormattedMessage id="app.navigation.exercise" defaultMessage="Exercise" />
                   </Tooltip>
                 }>
-                <ExerciseIcon gapRight className="text-muted" />
+                <ExerciseIcon gapRight className="text-body-secondary" />
               </OverlayTrigger>
               <ExercisesNameContainer exerciseId={exerciseId} noLink />
             </span>
@@ -154,7 +154,7 @@ const Navigation = ({
                     <FormattedMessage id="app.navigation.shadowAssignment" defaultMessage="Shadow Assignment" />
                   </Tooltip>
                 }>
-                <ShadowAssignmentIcon gapRight className="text-muted" />
+                <ShadowAssignmentIcon gapRight className="text-body-secondary" />
               </OverlayTrigger>
               <ShadowAssignmentNameContainer shadowAssignmentId={shadowId} noLink />
             </span>
@@ -169,7 +169,7 @@ const Navigation = ({
                     <FormattedMessage id="app.navigation.pipeline" defaultMessage="Pipeline" />
                   </Tooltip>
                 }>
-                <PipelineIcon gapRight className="text-muted" />
+                <PipelineIcon gapRight className="text-body-secondary" />
               </OverlayTrigger>
               <PipelineNameContainer pipelineId={pipelineId} noLink />
             </span>

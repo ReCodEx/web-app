@@ -86,10 +86,10 @@ export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const PipelineStructureIcon = props => <Icon {...props} icon="sitemap" />;
 export const PlagiarismIcon = props => <Icon icon="person-circle-exclamation" {...props} />;
 export const PointsIcon = props => <Icon icon="comment-dollar" {...props} />;
-export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-muted" {...props} />;
+export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-body-secondary" {...props} />;
 export const PointsGraphIcon = props => <Icon icon={['far', 'chart-bar']} {...props} />;
 export const PointsInterpolationIcon = props => (
-  <Icon icon="long-arrow-alt-right" className="text-muted" transform={{ rotate: 33 }} {...props} />
+  <Icon icon="long-arrow-alt-right" className="text-body-secondary" transform={{ rotate: 33 }} {...props} />
 );
 export const RedoIcon = props => <Icon {...props} icon="redo-alt" />;
 export const ReferenceSolutionIcon = props => <Icon {...props} icon="book" />;
@@ -163,7 +163,7 @@ export const VisibleIcon = ({ visible = true, ...props }) =>
   visible ? (
     <Icon {...props} icon={['far', 'eye']} />
   ) : (
-    <Icon className="text-muted" {...props} icon={['far', 'eye-slash']} />
+    <Icon className="text-body-secondary" {...props} icon={['far', 'eye-slash']} />
   );
 export const WarningIcon = props => <Icon {...props} icon="exclamation-triangle" />;
 export const WorkingIcon = props => <Icon {...props} spin icon="cog" />;

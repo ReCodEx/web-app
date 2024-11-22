@@ -24,7 +24,7 @@ const SolutionReviewRequestButton = ({ id, onClck, reviewRequest = false, pendin
           {onBehalf && (
             <>
               <br />
-              <i className="text-muted">
+              <i className="text-body-secondary">
                 (
                 <FormattedMessage
                   id="app.solutionReviewRequest.confirmRequestDifferentUser"

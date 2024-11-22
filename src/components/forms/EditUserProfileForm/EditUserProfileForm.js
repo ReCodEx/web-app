@@ -166,7 +166,7 @@ const EditUserProfileForm = ({
         <h3>
           <FormattedMessage id="app.editUserProfile.passwordTitle" defaultMessage="Change your password" />
         </h3>
-        <p className="text-muted">
+        <p className="text-body-secondary">
           <FormattedMessage
             id="app.editUserProfile.passwordInstructions"
             defaultMessage="If you do not want to change your password leave these inputs blank."

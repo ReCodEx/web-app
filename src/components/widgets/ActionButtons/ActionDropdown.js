@@ -13,7 +13,7 @@ const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
 
   return (
     <Dropdown as="span">
-      <Dropdown.Toggle variant="warning" size="xs" ref={target} className={anyPending ? 'half-opaque' : ''}>
+      <Dropdown.Toggle variant="warning" size="xs" ref={target} className={anyPending ? 'opacity-50' : ''}>
         {anyPending ? <LoadingIcon gapRight={Boolean(label)} /> : <EditIcon gapRight={Boolean(label)} />}
         {label}
       </Dropdown.Toggle>
@@ -40,8 +40,8 @@ const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
 
       <Overlay target={target} placement={placement} show={target !== null && confirmAction !== null}>
         <Popover id={id}>
-          <Popover.Title>{confirmAction && confirmAction.confirm}</Popover.Title>
-          <Popover.Content className="text-center">
+          <Popover.Header>{confirmAction && confirmAction.confirm}</Popover.Header>
+          <Popover.Body className="text-center">
             <TheButtonGroup>
               <Button
                 onClick={() => {
@@ -63,7 +63,7 @@ const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
                 <FormattedMessage id="app.confirm.no" defaultMessage="No" />
               </Button>
             </TheButtonGroup>
-          </Popover.Content>
+          </Popover.Body>
         </Popover>
       </Overlay>
     </Dropdown>

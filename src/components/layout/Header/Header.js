@@ -10,7 +10,7 @@ import FetchManyResourceRenderer from '../../helpers/FetchManyResourceRenderer';
 import Icon, { GroupIcon, LoadingIcon, WarningIcon } from '../../icons';
 import { getConfigVar } from '../../../helpers/config.js';
 
-const SKIN = getConfigVar('SKIN') || 'green';
+const SKIN = getConfigVar('SKIN') || 'success';
 
 class Header extends Component {
   toggleSidebarSize = e => {
@@ -35,9 +35,9 @@ class Header extends Component {
     } = this.props;
 
     return (
-      <nav className={`main-header navbar navbar-expand navbar-dark navbar-${SKIN} elevation-2`}>
+      <nav className={`app-header navbar navbar-expand bg-${SKIN} shadow`} data-bs-theme="dark">
         <ClientOnly>
-          <ul className="navbar-nav full-width">
+          <ul className="navbar-nav w-100">
             <li className="nav-item">
               <a className="nav-link" data-widget="pushmenu" href="#" onClick={this.toggleSidebarSize}>
                 <Icon icon="bars" />
@@ -66,7 +66,7 @@ class Header extends Component {
           </ul>
         </ClientOnly>
 
-        <ul className="navbar-nav ml-auto">
+        <ul className="navbar-nav ms-auto">
           {isLoggedIn && <HeaderSystemMessagesContainer locale={currentLang} />}
           <HeaderNotificationsContainer />
           <HeaderLanguageSwitching availableLangs={availableLangs} currentLang={currentLang} setLang={setLang} />

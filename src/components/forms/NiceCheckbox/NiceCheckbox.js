@@ -35,12 +35,12 @@ const NiceCheckbox = ({
   const iconClass = error
     ? 'text-error'
     : warning
-    ? 'text-warning'
-    : dirty
-    ? 'text-primary'
-    : !checked
-    ? 'text-muted'
-    : undefined;
+      ? 'text-warning'
+      : dirty
+        ? 'text-primary'
+        : !checked
+          ? 'text-body-secondary'
+          : undefined;
 
   return (
     <FormCheck {...props} checked={checked} className="nice-checkbox-container">

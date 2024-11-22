@@ -14,7 +14,7 @@ const MaybeBonusAssignmentIcon = ({ id, isBonus, ...props }) =>
             <FormattedMessage id="app.maybeBonusAssignmentIcon.isBonus" defaultMessage="Is Bonus" />
           </Tooltip>
         }>
-        <BonusIcon {...props} className="text-muted" />
+        <BonusIcon {...props} className="text-body-secondary" />
       </OverlayTrigger>
     </span>
   );

@@ -13,13 +13,13 @@ const NotVerified = ({ userId, currentUserId }) => {
       placement="bottom"
       overlay={
         <Popover id={userId}>
-          <Popover.Title>
+          <Popover.Header>
             <FormattedMessage
               id="app.usersName.notVerified.title"
               defaultMessage="This account does not have a verified email address yet."
             />
-          </Popover.Title>
-          <Popover.Content>
+          </Popover.Header>
+          <Popover.Body>
             <p>
               <FormattedMessage
                 id="app.usersname.notVerified.description"
@@ -31,7 +31,7 @@ const NotVerified = ({ userId, currentUserId }) => {
                 <ResendVerificationEmail userId={userId} />
               </p>
             )}
-          </Popover.Content>
+          </Popover.Body>
         </Popover>
       }>
       <span>

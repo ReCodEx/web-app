@@ -88,7 +88,7 @@ class EditEnvironmentConfigForm extends Component {
           </datalist>
         )}
 
-        <p className="text-muted small em-padding-horizontal">
+        <p className="text-body-secondary small px-3">
           <InfoIcon gapRight />
           <FormattedMessage
             id="app.editEnvironmentConfig.selectedRuntimeInfo"
@@ -115,7 +115,7 @@ class EditEnvironmentConfigForm extends Component {
 
         {Boolean(selectedRuntimeId) && (
           <>
-            <p className="text-muted small em-padding-horizontal">
+            <p className="text-body-secondary small px-3">
               <InfoIcon gapRight />
               <FormattedMessage
                 id="app.editEnvironmentConfig.variablesInfo"
@@ -130,7 +130,7 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         {!selectedRuntimeId && (
-          <Callout variant="warning" className="em-margin-top">
+          <Callout variant="warning" className="mt-3">
             <FormattedMessage
               id="app.editEnvironmentConfig.noRuntimeSelected"
               defaultMessage="There must be a runtime environment selected before you can proceed with exercise configuration."
@@ -139,19 +139,19 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         {submitFailed && (
-          <Callout variant="danger" className="em-margin-top">
+          <Callout variant="danger" className="mt-3">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Callout>
         )}
 
         {error && (
-          <Callout variant="danger" className="em-margin-top">
+          <Callout variant="danger" className="mt-3">
             {error}
           </Callout>
         )}
 
         {warning && (
-          <Callout variant="warning" className="em-margin-top">
+          <Callout variant="warning" className="mt-3">
             {warning}
           </Callout>
         )}

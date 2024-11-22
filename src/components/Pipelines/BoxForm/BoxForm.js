@@ -80,7 +80,7 @@ class BoxForm extends Component {
               <FormattedMessage
                 id="app.pipelines.boxForm.titleEditting"
                 defaultMessage="Editting Box <strong>{editing}</strong>"
-                values={{ editing, strong: content => <strong className="ml-1">{content}</strong> }}
+                values={{ editing, strong: content => <strong className="ms-1">{content}</strong> }}
               />
             ) : (
               <FormattedMessage id="app.pipelines.boxForm.titleNew" defaultMessage="Add New Box" />
@@ -144,20 +144,20 @@ class BoxForm extends Component {
               {portsIn && portsIn.length > 0 && (
                 <Col xl={portsOut && portsOut.length > 0 ? 6 : 12}>
                   <h5>
-                    <InputIcon gapRight className="text-muted" />
+                    <InputIcon gapRight className="text-body-secondary" />
                     <FormattedMessage id="app.pipelines.boxForm.inputPorts" defaultMessage="Input ports" />
                   </h5>
                   <Table borderless size="sm">
                     <tbody>
                       {portsIn.map(port => (
                         <tr key={port.name}>
-                          <td className="text-nowrap pr-4 valign-middle">
+                          <td className="text-nowrap pe-4 align-middle">
                             <strong>{port.name}</strong>
                           </td>
-                          <td className="text-nowrap pr-4 valign-middle">
+                          <td className="text-nowrap pe-4 align-middle">
                             <code>{port.type}</code>
                           </td>
-                          <td className="full-width valign-middle">
+                          <td className="w-100 align-middle">
                             <Field
                               name={`portsIn.${encodeId(port.name)}`}
                               placeholder={formatMessage(messages.varPlaceholder)}
@@ -177,20 +177,20 @@ class BoxForm extends Component {
               {portsOut && portsOut.length > 0 && (
                 <Col xl={portsIn && portsIn.length > 0 ? 6 : 12}>
                   <h5>
-                    <OutputIcon gapRight className="text-muted" />
+                    <OutputIcon gapRight className="text-body-secondary" />
                     <FormattedMessage id="app.pipelines.boxForm.outputPorts" defaultMessage="Output ports" />
                   </h5>
                   <Table size="sm">
                     <tbody>
                       {portsOut.map(port => (
                         <tr key={port.name}>
-                          <td className="text-nowrap pr-4 valign-middle">
+                          <td className="text-nowrap pe-4 align-middle">
                             <strong>{port.name}</strong>
                           </td>
-                          <td className="text-nowrap pr-4 valign-middle">
+                          <td className="text-nowrap pe-4 align-middle">
                             <code>{port.type}</code>
                           </td>
-                          <td className="full-width valign-middle">
+                          <td className="w-100 align-middle">
                             <Field
                               name={`portsOut.${encodeId(port.name)}`}
                               placeholder={formatMessage(messages.varPlaceholder)}

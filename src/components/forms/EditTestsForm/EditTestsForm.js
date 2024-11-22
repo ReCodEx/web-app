@@ -145,7 +145,7 @@ class EditTestsForm extends Component {
               <Icon
                 icon={this.state.expanded ? 'compress' : 'expand'}
                 size="lg"
-                className="valign-middle"
+                className="align-middle"
                 onClick={this.toggleExpanded}
               />
             </OverlayTrigger>
@@ -158,9 +158,9 @@ class EditTestsForm extends Component {
             </Callout>
           )}
 
-          <Container fluid className="no-padding">
+          <Container fluid className="p-0">
             <Row className={style.relativeContainer}>
-              <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="no-padding">
+              <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="p-0">
                 <FieldArray
                   name="tests"
                   component={EditTestsTest}
@@ -244,13 +244,13 @@ class EditTestsForm extends Component {
                                 className={classnames({
                                   'bg-info': calc === calculator,
                                 })}>
-                                <td className="valign-middle shrink-col">
+                                <td className="align-middle shrink-col">
                                   <StandaloneRadioField name="calculator" value={calc} />
                                 </td>
                                 <td>
                                   <strong>{SCORE_CALCULATOR_CAPTIONS[calc]}</strong>
                                   <br />
-                                  <small className="text-muted">{SCORE_CALCULATOR_DESCRIPTIONS[calc]}</small>
+                                  <small className="text-body-secondary">{SCORE_CALCULATOR_DESCRIPTIONS[calc]}</small>
                                 </td>
                               </tr>
                             ))}
@@ -325,7 +325,7 @@ class EditTestsForm extends Component {
                   className={classnames({
                     'col-xs-6': this.state.expanded,
                     [style.rightPanel]: !this.state.expanded,
-                    'em-padding-left': true,
+                    'ps-3': true,
                   })}>
                   <ScoreConfigUniversalExpression ast={this.getAst()} tests={formValues.tests} editable={!readOnly} />
                 </div>

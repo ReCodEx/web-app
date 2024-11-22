@@ -27,7 +27,7 @@ const TermsListItem = ({ data, createActions }) => (
     <td>
       <DateTime unixts={data.advertiseUntil} showTime={false} isDeadline showRelative />
     </td>
-    <td className="text-right">{createActions && createActions(data.id, data)}</td>
+    <td className="text-end">{createActions && createActions(data.id, data)}</td>
   </tr>
 );
 

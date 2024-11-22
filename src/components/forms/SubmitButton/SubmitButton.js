@@ -91,10 +91,10 @@ class SubmitButton extends Component {
     return hasFailed && !submitting
       ? 'danger'
       : this.state.saved || submitting
-      ? 'success'
-      : invalid
-      ? 'warning'
-      : 'success';
+        ? 'success'
+        : invalid
+          ? 'warning'
+          : 'success';
   }
 
   isButtonDisabled() {
@@ -124,12 +124,10 @@ class SubmitButton extends Component {
         placement="top"
         overlay={
           <Popover id={`error-popover-${id}`}>
-            <Popover.Title className="bg-danger">
+            <Popover.Header className="bg-danger">
               <FormattedMessage id="app.submitButton.lastError.title" defaultMessage="An error occured" />
-            </Popover.Title>
-            <Popover.Content className="text-center">
-              {getErrorMessage(formatMessage)(this.state.lastError)}
-            </Popover.Content>
+            </Popover.Header>
+            <Popover.Body className="text-center">{getErrorMessage(formatMessage)(this.state.lastError)}</Popover.Body>
           </Popover>
         }>
         <Button

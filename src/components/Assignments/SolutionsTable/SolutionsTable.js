@@ -61,7 +61,7 @@ const SolutionsTable = ({
               )}
 
               {(!compact || showActionButtons) && (
-                <td className="text-right text-muted small">
+                <td className="text-end text-body-secondary small">
                   {assignmentSolversLoading ? (
                     <LoadingIcon />
                   ) : (

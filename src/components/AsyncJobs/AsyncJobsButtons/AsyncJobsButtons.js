@@ -8,7 +8,7 @@ import Icon, { LoadingIcon, RefreshIcon, WarningIcon } from '../../icons';
 
 const AsyncJobsButtons = ({ refresh, pingAction, pingStatus = null }) => {
   return (
-    <div className="em-margin-bottom em-margin-right">
+    <div className="mb-3 me-3">
       <TheButtonGroup>
         <Button onClick={refresh} variant="primary">
           <RefreshIcon gapRight />

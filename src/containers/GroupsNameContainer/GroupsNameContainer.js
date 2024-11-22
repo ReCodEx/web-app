@@ -37,7 +37,7 @@ class GroupsNameContainer extends Component {
       links = false,
       ancestorLinks = false,
       admins = false,
-      separator = <Icon icon="link" className="small half-opaque" largeGapLeft largeGapRight />,
+      separator = <Icon icon="link" className="small opacity-50" largeGapLeft largeGapRight />,
       showIcon = false,
       iconTooltip = null,
     } = this.props;
@@ -59,7 +59,7 @@ class GroupsNameContainer extends Component {
                 tooltipId={`groupIcon-${group.id}`}>
                 <GroupIcon
                   gapRight
-                  className="text-muted"
+                  className="text-body-secondary"
                   organizational={group.organizational}
                   archived={group.archived}
                   exam={group.exam}
@@ -93,7 +93,7 @@ class GroupsNameContainer extends Component {
             <GroupsName {...group} translations={translations} asLink={links && hasPermissions(group, 'viewDetail')} />
 
             {admins && group.primaryAdminsIds.length > 0 && (
-              <small className="half-opaque ml-3">
+              <small className="opacity-50 ms-3">
                 (
                 <em>
                   {group.primaryAdminsIds.map(id => (

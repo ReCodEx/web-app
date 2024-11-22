@@ -7,7 +7,7 @@ import { knownRoles, roleLabels, UserRoleIcon } from '../../helpers/usersRoles.j
 import StandaloneRadioInput from '../../forms/StandaloneRadioInput/StandaloneRadioInput.js';
 
 const EffectiveRoleSwitching = ({ effectiveRole, setEffectiveRole, updating = null }) => (
-  <Table hover className="no-margin">
+  <Table hover className="m-0">
     <tbody>
       {knownRoles.map(role => (
         <tr

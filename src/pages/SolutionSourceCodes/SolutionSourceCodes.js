@@ -276,7 +276,7 @@ class SolutionSourceCodes extends Component {
               canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               titlePrefix={
                 diffMode ? (
-                  <span className="text-muted mr-2 small">
+                  <span className="text-body-secondary me-2 small">
                     <FormattedMessage id="app.solutionSourceCodes.left" defaultMessage="Left side" />:
                   </span>
                 ) : null
@@ -285,7 +285,7 @@ class SolutionSourceCodes extends Component {
 
             {diffMode && (
               <>
-                <h4 className="text-muted text-center my-2">
+                <h4 className="text-body-secondary text-center my-2">
                   <FormattedMessage
                     id="app.solutionSourceCodes.isBeingComparedWith"
                     defaultMessage="... is being compared with ..."
@@ -313,7 +313,7 @@ class SolutionSourceCodes extends Component {
                   }
                   canViewUserProfile={hasPermissions(secondAssignment, 'viewAssignmentSolutions')}
                   titlePrefix={
-                    <span className="text-muted mr-2 small">
+                    <span className="text-body-secondary me-2 small">
                       <FormattedMessage id="app.solutionSourceCodes.right" defaultMessage="Right side" />:
                     </span>
                   }
@@ -539,7 +539,7 @@ class SolutionSourceCodes extends Component {
                                 </Modal.Header>
                                 <Modal.Body>
                                   <h5 className="mb-3">
-                                    <code className="mr-2">
+                                    <code className="me-2">
                                       {this.state.mappingDialogOpenFile && this.state.mappingDialogOpenFile.name}
                                     </code>{' '}
                                     <FormattedMessage
@@ -581,7 +581,7 @@ class SolutionSourceCodes extends Component {
                                               <CircleIcon selected={selected} />
                                             </td>
                                             <td>{file.name}</td>
-                                            <td className="shrink-col text-muted text-nowrap small">
+                                            <td className="shrink-col text-body-secondary text-nowrap small">
                                               {revertedIndex && revertedIndex[file.id] && (
                                                 <>
                                                   <CodeCompareIcon gapRight />

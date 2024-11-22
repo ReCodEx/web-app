@@ -15,7 +15,7 @@ const BrokerButtons = ({
 }) => {
   const pending = freezeActionStatus === resourceStatus.PENDING || unfreezeActionStatus === resourceStatus.PENDING;
   return (
-    <TheButtonGroup className="em-margin-bottom em-margin-right">
+    <TheButtonGroup className="mb-3 me-3">
       <Button onClick={refreshBrokerStats} variant="primary">
         <RefreshIcon gapRight />
         <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />

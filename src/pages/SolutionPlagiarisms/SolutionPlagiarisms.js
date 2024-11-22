@@ -166,10 +166,10 @@ class SolutionPlagiarisms extends Component {
                 canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               />
 
-              <Card className="elevation-2">
+              <Card className="shadow-sm mb-3">
                 <Card.Header>
                   <Card.Title>
-                    <UserIcon gapRight className="text-muted" />
+                    <UserIcon gapRight className="text-body-secondary" />
                     {!selectedSource || this.state.openSelection ? (
                       <FormattedMessage
                         id="app.solutionPlagiarisms.selectSuspectedSource"
@@ -184,7 +184,7 @@ class SolutionPlagiarisms extends Component {
 
                         {Object.keys(plagiarisms).length > 1 && (
                           <>
-                            <span className="text-muted ml-2">
+                            <span className="text-body-secondary ms-2">
                               {' '}
                               <FormattedMessage
                                 id="app.solutionPlagiarisms.suspectedSourcesAvailable"
@@ -192,7 +192,7 @@ class SolutionPlagiarisms extends Component {
                                 values={{ count: Object.keys(plagiarisms).length }}
                               />
                             </span>
-                            <span className="text-primary clickable ml-2" onClick={this.openPlagiarismSelection}>
+                            <span className="text-primary clickable ms-2" onClick={this.openPlagiarismSelection}>
                               {' '}
                               (
                               <FormattedMessage
@@ -218,14 +218,14 @@ class SolutionPlagiarisms extends Component {
                             className={'clickable' + (plagiarismSource === selectedSource ? ' table-primary' : '')}
                             onClick={() => this.selectPlagiarismSource(plagiarismSource)}>
                             <td className="text-nowrap">
-                              <Icon icon="person-dots-from-line" className="text-muted" />
+                              <Icon icon="person-dots-from-line" className="text-body-secondary" />
                             </td>
                             <td className="text-nowrap">
                               <strong>
                                 <UsersNameContainer userId={plagiarismSource} noAvatar noAutoload />
                               </strong>
                             </td>
-                            <td className="text-nowrap text-muted small">
+                            <td className="text-nowrap text-body-secondary small">
                               <FormattedMessage
                                 id="app.solutionPlagiarisms.selectSourceTable.files"
                                 defaultMessage="{count} {count, plural, one {file} other {files}}"
@@ -234,19 +234,19 @@ class SolutionPlagiarisms extends Component {
                             </td>
 
                             {plagiarisms[plagiarismSource].length === 0 ? (
-                              <td colSpan={2} className="text-nowrap text-muted small">
+                              <td colSpan={2} className="text-nowrap text-body-secondary small">
                                 {plagiarisms[plagiarismSource][0].similarity * 100} %
                               </td>
                             ) : (
                               <>
-                                <td className="text-nowrap text-muted small">
+                                <td className="text-nowrap text-body-secondary small">
                                   <FormattedMessage
                                     id="app.solutionPlagiarisms.selectSourceTable.max"
                                     defaultMessage="max"
                                   />
                                   : {Math.max(...plagiarisms[plagiarismSource].map(p => p.similarity)) * 100} %
                                 </td>
-                                <td className="text-nowrap text-muted small">
+                                <td className="text-nowrap text-body-secondary small">
                                   <FormattedMessage
                                     id="app.solutionPlagiarisms.selectSourceTable.avg"
                                     defaultMessage="average"
@@ -256,7 +256,7 @@ class SolutionPlagiarisms extends Component {
                               </>
                             )}
 
-                            <td className="full-width" />
+                            <td className="w-100" />
                           </tr>
                         ))}
                       </tbody>
@@ -267,7 +267,7 @@ class SolutionPlagiarisms extends Component {
                   <Card.Footer>
                     <UsersNameContainer userId={selectedSource} showExternalIdentifiers showEmail="icon" noAutoload />
 
-                    <span className="float-right text-muted">
+                    <span className="float-end text-body-secondary">
                       <FormattedMessage
                         id="app.solutionPlagiarisms.displayedOnRight"
                         defaultMessage="displayed on the right"

@@ -11,7 +11,7 @@ const SolutionReviewIcon = ({ id, review, isReviewer = false, placement = 'botto
     return null;
   }
 
-  const pendinColorClass = isReviewer ? 'text-danger fa-beat' : 'text-muted';
+  const pendinColorClass = isReviewer ? 'text-danger fa-beat' : 'text-body-secondary';
   const closedColorClass = review.issues > 0 ? 'text-warning' : 'text-success';
   const colorClass = !review.closedAt ? pendinColorClass : `${closedColorClass} half-gray`;
 

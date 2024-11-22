@@ -4,7 +4,7 @@ import { LoadingAvatar } from '../../Avatar';
 
 const UserPanelLoading = props => (
   <div className="user-panel mt-2 mb-2">
-    <div className="float-left mr-3">
+    <div className="float-start me-3">
       <LoadingAvatar {...props} />
     </div>
     <div className="text-light pt-2">

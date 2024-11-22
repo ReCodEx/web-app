@@ -99,7 +99,7 @@ class SourceCodeViewerContainer extends Component {
                   <>
                     <DropdownButton
                       size="sm"
-                      className="elevation-2 text-monospace"
+                      className="shadow font-monospace"
                       title={fileName}
                       variant="outline-secondary">
                       {preprocessFiles(files).map(f => (

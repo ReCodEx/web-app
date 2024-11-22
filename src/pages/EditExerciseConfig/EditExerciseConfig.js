@@ -311,10 +311,10 @@ class EditExerciseConfig extends Component {
                   <ExerciseButtons {...exercise} sendNotification={sendNotification} />
 
                   {hasPermissions(exercise, 'update') && isEmpoweredSupervisorRole(effectiveRole) && (
-                    <table className="em-margin-vertical">
+                    <table className="my-3">
                       <tbody>
                         <tr>
-                          <td className="valing-middle em-padding-right">
+                          <td className="valing-middle pe-3">
                             <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
                               {(config, environmentConfigs) => (
                                 <ResourceRenderer resourceArray={runtimeEnvironments}>
@@ -337,7 +337,7 @@ class EditExerciseConfig extends Component {
                               )}
                             </ResourceRenderer>
                           </td>
-                          <td className="em-padding-left small text-muted">
+                          <td className="ps-3 small text-body-secondary">
                             <InfoIcon gapRight />
                             {isSimple(exercise) ? (
                               <FormattedMessage
@@ -446,7 +446,7 @@ class EditExerciseConfig extends Component {
                                     defaultMessage="Selected Pipelines"
                                   />
                                 </h4>
-                                <ul className="em-padding-left">
+                                <ul className="ps-3">
                                   {environmentConfigs.length !== 1 && (
                                     <li>
                                       <FormattedMessage
@@ -479,7 +479,7 @@ class EditExerciseConfig extends Component {
                   )}
 
                   {hasPermissions(exercise, 'viewConfig') && (
-                    <div className="em-margin-vertical">
+                    <div className="my-3">
                       <Row>
                         <Col sm={12}>
                           <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>

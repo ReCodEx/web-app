@@ -27,21 +27,19 @@ class SimpleTextSearch extends Component {
           </FormLabel>
           <InputGroup>
             <FormControl id={id} type="text" value={this.state.query} onChange={this.queryChangeHandler} />
-            <InputGroup.Append>
-              <Button
-                variant="secondary"
-                type="submit"
-                onClick={e => {
-                  e.preventDefault();
-                  onSubmit(this.state.query);
-                }}
-                disabled={isLoading}
-                noShadow>
-                {isLoading && <LoadingIcon />}
-                {hasFailed && <WarningIcon />}
-                {!isLoading && !hasFailed && <SearchIcon />}
-              </Button>
-            </InputGroup.Append>
+            <Button
+              variant="secondary"
+              type="submit"
+              onClick={e => {
+                e.preventDefault();
+                onSubmit(this.state.query);
+              }}
+              disabled={isLoading}
+              noShadow>
+              {isLoading && <LoadingIcon />}
+              {hasFailed && <WarningIcon />}
+              {!isLoading && !hasFailed && <SearchIcon />}
+            </Button>
           </InputGroup>
         </FormGroup>
       </form>

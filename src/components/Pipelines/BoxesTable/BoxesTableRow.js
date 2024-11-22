@@ -122,7 +122,7 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
             <small
               className={classnames({
                 'text-danger': portTypeWrong,
-                'text-bold': selectedVariable && selectedVariable.name === port.value,
+                'fw-bold': selectedVariable && selectedVariable.name === port.value,
               })}>
               {port.value}
               {portTypeWrong && (
@@ -241,8 +241,8 @@ const BoxesTableRow = ({
         <td
           rowSpan={ports.length + 1}
           className={classnames({
-            'text-bold': primarySelection === box.name,
-            'text-italic': secondarySelections && secondarySelections[box.name],
+            'fw-bold': primarySelection === box.name,
+            'fst-italic': secondarySelections && secondarySelections[box.name],
           })}>
           {box.name}
         </td>
@@ -251,14 +251,14 @@ const BoxesTableRow = ({
             placement="bottom"
             overlay={
               <Popover id={`util-${box.type}`}>
-                <Popover.Title>
+                <Popover.Header>
                   {boxTypes[box.type] ? (
                     boxTypes[box.type].name
                   ) : (
                     <FormattedMessage id="app.pipelines.boxesTable.unknownType" defaultMessage="Unknown box type!" />
                   )}
-                </Popover.Title>
-                <Popover.Content>{getBoxTypeDescription(box.type)}</Popover.Content>
+                </Popover.Header>
+                <Popover.Body>{getBoxTypeDescription(box.type)}</Popover.Body>
               </Popover>
             }>
             <code className="small">

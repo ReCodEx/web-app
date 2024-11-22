@@ -69,7 +69,7 @@ const ShadowAssignmentsTableRow = ({
 
     {!isAdmin && <td>{getUserPointsNote(points, userId)}</td>}
 
-    <td className="text-right shrink-col text-nowrap">
+    <td className="text-end shrink-col text-nowrap">
       <TheButtonGroup>
         {permissionHints.update && (
           <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>

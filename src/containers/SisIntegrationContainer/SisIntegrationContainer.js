@@ -93,7 +93,7 @@ class SisIntegrationContainer extends Component {
         }
         unlimitedHeight>
         <div>
-          <p className="text-muted">
+          <p className="text-body-secondary">
             <FormattedMessage
               id="app.dashboard.sisGroupsStudentExplain"
               defaultMessage="SIS courses you are enrolled to in particular semesters and which have correspondig groups in ReCodEx."
@@ -116,7 +116,7 @@ class SisIntegrationContainer extends Component {
                     .map((term, i) => (
                       <div key={i}>
                         <hr />
-                        <h3 className="em-margin-bottom">
+                        <h3 className="mb-3">
                           <FormattedMessage id="app.sisIntegration.yearTerm" defaultMessage="Year and term:" />{' '}
                           {`${term.year}-${term.term}`}
                         </h3>
@@ -127,10 +127,10 @@ class SisIntegrationContainer extends Component {
                                 preprocessCourses(courses, groupsAccessor, locale).map(
                                   course =>
                                     course && (
-                                      <Card key={course.course.code}>
+                                      <Card key={course.course.code} className="mb-3">
                                         <Card.Header>{course && <CourseLabel {...course.course} />}</Card.Header>
                                         <Card.Body>
-                                          <Table className="no-margin">
+                                          <Table className="m-0">
                                             <tbody>
                                               {course.groups &&
                                                 course.groups.map((group, i) => (
@@ -143,7 +143,7 @@ class SisIntegrationContainer extends Component {
                                                         <UsersNameContainer key={id} userId={id} isSimple />
                                                       ))}
                                                     </td>
-                                                    <td className="text-right text-nowrap" style={{ width: '15%' }}>
+                                                    <td className="text-end text-nowrap" style={{ width: '15%' }}>
                                                       <span>
                                                         {group.privateData &&
                                                           group.privateData.students.includes(currentUserId) && (
