@@ -233,12 +233,12 @@ class GroupExamStatus extends Component {
                     variant="warning"
                     disabled={pending || this.state.changeImminent}
                     onClick={this.examModalOpen}>
-                    {pending ? <LoadingIcon gapRight /> : <EditIcon gapRight />}
+                    {pending ? <LoadingIcon gapRight={2} /> : <EditIcon gapRight={2} />}
                     <FormattedMessage id="app.groupExams.button.edit" defaultMessage="Edit Exam" />
                   </Button>
                 ) : (
                   <Button variant="success" disabled={pending} onClick={this.examModalOpen}>
-                    {pending ? <LoadingIcon gapRight /> : <ClockIcon gapRight />}
+                    {pending ? <LoadingIcon gapRight={2} /> : <ClockIcon gapRight={2} />}
                     <FormattedMessage id="app.groupExams.button.createNew" defaultMessage="Schedule New Exam" />
                   </Button>
                 )}
@@ -255,7 +255,7 @@ class GroupExamStatus extends Component {
                         defaultMessage="Do you really wish to terminate the exam immediately?"
                       />
                     }>
-                    {pending ? <LoadingIcon gapRight /> : <Icon icon={['far', 'hand']} gapRight />}
+                    {pending ? <LoadingIcon gapRight={2} /> : <Icon icon={['far', 'hand']} gapRight={2} />}
                     <FormattedMessage id="app.groupExams.button.terminate" defaultMessage="Terminate Now" />
                   </Button>
                 ) : (
@@ -273,7 +273,11 @@ class GroupExamStatus extends Component {
                               defaultMessage="Do you really wish to start the exam immediately?"
                             />
                           }>
-                          {pending ? <LoadingIcon gapRight /> : <Icon icon={['far', 'hand-point-right']} gapRight />}
+                          {pending ? (
+                            <LoadingIcon gapRight={2} />
+                          ) : (
+                            <Icon icon={['far', 'hand-point-right']} gapRight={2} />
+                          )}
                           <FormattedMessage id="app.groupExams.button.start" defaultMessage="Start Now" />
                         </Button>
                       )}
@@ -289,7 +293,7 @@ class GroupExamStatus extends Component {
                               defaultMessage="Do you really wish to cancel the scheduled exam?"
                             />
                           }>
-                          {pending ? <LoadingIcon gapRight /> : <BanIcon gapRight />}
+                          {pending ? <LoadingIcon gapRight={2} /> : <BanIcon gapRight={2} />}
                           <FormattedMessage id="app.groupExams.button.cancel" defaultMessage="Cancel Exam" />
                         </Button>
                       )}

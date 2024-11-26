@@ -93,7 +93,7 @@ class Instance extends Component {
                   <p>
                     <Link to={ADMIN_EDIT_INSTANCE_URI_FACTORY(instanceId)}>
                       <Button variant="warning">
-                        <EditIcon gapRight />
+                        <EditIcon gapRight={2} />
                         <FormattedMessage id="app.instance.edit" defaultMessage="Edit instance" />
                       </Button>
                     </Link>

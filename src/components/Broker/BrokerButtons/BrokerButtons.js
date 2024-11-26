@@ -17,7 +17,7 @@ const BrokerButtons = ({
   return (
     <TheButtonGroup className="mb-3 me-3">
       <Button onClick={refreshBrokerStats} variant="primary">
-        <RefreshIcon gapRight />
+        <RefreshIcon gapRight={2} />
         <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
       </Button>
 
@@ -35,11 +35,11 @@ const BrokerButtons = ({
           )
         }>
         {freezeActionStatus === resourceStatus.PENDING ? (
-          <LoadingIcon gapRight />
+          <LoadingIcon gapRight={2} />
         ) : freezeActionStatus === resourceStatus.FAILED ? (
-          <WarningIcon gapRight />
+          <WarningIcon gapRight={2} />
         ) : (
-          <Icon icon={['far', 'hand-paper']} gapRight />
+          <Icon icon={['far', 'hand-paper']} gapRight={2} />
         )}
         <FormattedMessage id="app.broker.freeze" defaultMessage="Freeze" />
       </Button>
@@ -58,11 +58,11 @@ const BrokerButtons = ({
           )
         }>
         {unfreezeActionStatus === resourceStatus.PENDING ? (
-          <LoadingIcon gapRight />
+          <LoadingIcon gapRight={2} />
         ) : unfreezeActionStatus === resourceStatus.FAILED ? (
-          <WarningIcon gapRight />
+          <WarningIcon gapRight={2} />
         ) : (
-          <Icon icon="sun" gapRight />
+          <Icon icon="sun" gapRight={2} />
         )}
 
         <FormattedMessage id="app.broker.unfreeze" defaultMessage="Unfreeze" />

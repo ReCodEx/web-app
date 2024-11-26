@@ -118,7 +118,7 @@ class Users extends Component {
                     navigate(DASHBOARD_URI);
                   })
                 }>
-                <TransferIcon gapRight />
+                <TransferIcon gapRight={2} />
                 <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
               </Button>
             )
@@ -126,7 +126,7 @@ class Users extends Component {
 
           <Link to={EDIT_USER_URI_FACTORY(id)}>
             <Button size="xs" variant="warning">
-              <SettingsIcon gapRight />
+              <SettingsIcon gapRight={2} />
               <FormattedMessage id="generic.settings" defaultMessage="Settings" />
             </Button>
           </Link>
@@ -184,7 +184,7 @@ class Users extends Component {
                   isSuperadminRole(effectiveRole) ? (
                     <div className="text-center">
                       <Button variant="success" onClick={this.openDialog}>
-                        <UserIcon gapRight />
+                        <UserIcon gapRight={2} />
                         <FormattedMessage id="app.users.createUser" defaultMessage="Create User" />
                       </Button>
 

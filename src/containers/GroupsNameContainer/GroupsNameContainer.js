@@ -10,7 +10,6 @@ import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { hasPermissions } from '../../helpers/common.js';
 import GroupsName from '../../components/Groups/GroupsName';
 import Icon, { GroupIcon, LoadingIcon } from '../../components/icons';
-import OptionalTooltipWrapper from '../../components/widgets/OptionalTooltipWrapper';
 import UsersNameContainer from '../UsersNameContainer';
 
 class GroupsNameContainer extends Component {
@@ -37,7 +36,7 @@ class GroupsNameContainer extends Component {
       links = false,
       ancestorLinks = false,
       admins = false,
-      separator = <Icon icon="link" className="small opacity-50" largeGapLeft largeGapRight />,
+      separator = <Icon icon="link" className="small opacity-50" gapLeft={3} gapRight={3} />,
       showIcon = false,
       iconTooltip = null,
     } = this.props;
@@ -46,25 +45,23 @@ class GroupsNameContainer extends Component {
         resource={group}
         loading={
           <span>
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </span>
         }>
         {group => (
           <>
             {showIcon && (
-              <OptionalTooltipWrapper
-                tooltip={iconTooltip && typeof iconTooltip === 'function' ? iconTooltip(group) : iconTooltip}
-                hide={!iconTooltip}
-                tooltipId={`groupIcon-${group.id}`}>
-                <GroupIcon
-                  gapRight
-                  className="text-body-secondary"
-                  organizational={group.organizational}
-                  archived={group.archived}
-                  exam={group.exam}
-                />
-              </OptionalTooltipWrapper>
+              <GroupIcon
+                gapRight={2}
+                className="text-body-secondary"
+                organizational={group.organizational}
+                archived={group.archived}
+                exam={group.exam}
+                tooltipId={`groupIcon-${group.id}`}
+                tooltipPlacement="bottom"
+                tooltip={iconTooltip && typeof iconTooltip === 'function' ? iconTooltip(group) : iconTooltip || null}
+              />
             )}
             {fullName &&
               group.parentGroupsIds

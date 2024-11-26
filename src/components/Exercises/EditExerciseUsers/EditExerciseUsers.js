@@ -24,8 +24,8 @@ const EditExerciseUsers = ({ exercise, instanceId }) => {
         <Table className="border-bottom mb-1">
           <tbody>
             <tr>
-              <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
-                <AuthorIcon fixedWidth gapLeft />
+              <td className="icon-col">
+                <AuthorIcon fixedWidth gapLeft={2} />
               </td>
               <th>
                 <FormattedMessage id="generic.author" defaultMessage="Author" />:
@@ -35,8 +35,8 @@ const EditExerciseUsers = ({ exercise, instanceId }) => {
               </td>
             </tr>
             <tr>
-              <td className="text-center text-body-secondary shrink-col ps-3 pe-3">
-                <AdminIcon fixedWidth gapLeft />
+              <td className="icon-col">
+                <AdminIcon fixedWidth gapLeft={2} />
               </td>
               <th>
                 <FormattedMessage id="app.exercise.admins" defaultMessage="Administrators" />:

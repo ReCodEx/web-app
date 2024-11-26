@@ -40,7 +40,7 @@ const PipelineExercisesList = ({
   if (!pipelineExercises || pipelineExercises === resourceStatus.PENDING) {
     return (
       <div className="text-center p-2">
-        <LoadingIcon gapRight />
+        <LoadingIcon gapRight={2} />
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </div>
     );
@@ -49,7 +49,7 @@ const PipelineExercisesList = ({
   if (pipelineExercises === resourceStatus.REJECTED) {
     return (
       <div className="text-center p-2">
-        <WarningIcon gapRight className="text-danger" />
+        <WarningIcon gapRight={2} className="text-danger" />
         <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
       </div>
     );
@@ -105,28 +105,28 @@ const PipelineExercisesList = ({
                 <TheButtonGroup>
                   <Link to={EXERCISE_URI_FACTORY(exercise.id)}>
                     <Button size="xs" variant="secondary">
-                      <DetailIcon gapRight />
+                      <DetailIcon gapRight={2} />
                       <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                     </Button>
                   </Link>
 
                   <Link to={EXERCISE_EDIT_URI_FACTORY(exercise.id)}>
                     <Button size="xs" variant="warning">
-                      <EditIcon gapRight />
+                      <EditIcon gapRight={2} />
                       <FormattedMessage id="app.exercises.listEdit" defaultMessage="Settings" />
                     </Button>
                   </Link>
 
                   <Link to={EXERCISE_EDIT_CONFIG_URI_FACTORY(exercise.id)}>
                     <Button size="xs" variant="warning">
-                      <TestsIcon gapRight />
+                      <TestsIcon gapRight={2} />
                       <FormattedMessage id="app.exercises.listEditConfig" defaultMessage="Tests" />
                     </Button>
                   </Link>
 
                   <Link to={EXERCISE_EDIT_LIMITS_URI_FACTORY(exercise.id)}>
                     <Button size="xs" variant="warning">
-                      <LimitsIcon gapRight />
+                      <LimitsIcon gapRight={2} />
                       <FormattedMessage id="app.exercises.listEditLimits" defaultMessage="Limits" />
                     </Button>
                   </Link>

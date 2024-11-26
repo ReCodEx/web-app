@@ -140,7 +140,7 @@ class Assignment extends Component {
             {!assignment.exerciseId && hasPermissions(assignment, 'update') && (
               <Callout variant="warning">
                 <h3 className="m-0 ">
-                  <Icon icon="ghost" gapRight />
+                  <Icon icon="ghost" gapRight={2} />
                   <FormattedMessage
                     id="app.assignment.exerciseDeleted"
                     defaultMessage="Corresponding exercise has been deleted."

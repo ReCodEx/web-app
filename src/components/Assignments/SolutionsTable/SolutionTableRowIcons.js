@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
@@ -10,6 +9,8 @@ import CommentsIcon from './CommentsIcon.js';
 import { PlagiarismIcon, ReviewRequestIcon } from '../../icons';
 
 import withLinks from '../../../helpers/withLinks.js';
+
+const FA_ANIMATION_2S_STYLE = { '--fa-animation-duration': '2s' };
 
 const SolutionTableRowIcons = ({
   id,
@@ -25,47 +26,47 @@ const SolutionTableRowIcons = ({
       <SolutionStatusIcon id={id} solution={solution} />
 
       {review ? (
-        <SolutionReviewIcon id={`review-${id}`} review={review} isReviewer={permissionHints.review || false} gapLeft />
+        <SolutionReviewIcon
+          id={`review-${id}`}
+          review={review}
+          isReviewer={permissionHints.review || false}
+          gapLeft={2}
+        />
       ) : (
         reviewRequest && (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`reviewRequest-${id}`}>
-                <FormattedMessage
-                  id="app.solution.reviewRequestNote"
-                  defaultMessage="The student has requested a code review for this solution."
-                />
-              </Tooltip>
-            }>
-            <ReviewRequestIcon
-              className="text-primary fa-bounce"
-              style={{ '--fa-animation-duration': '2s' }}
-              transform="down-3"
-              gapLeft
-            />
-          </OverlayTrigger>
+          <ReviewRequestIcon
+            className="text-primary fa-bounce"
+            style={FA_ANIMATION_2S_STYLE}
+            transform="down-3"
+            gapLeft={2}
+            tooltipId={`reviewRequest-${id}`}
+            tooltip={
+              <FormattedMessage
+                id="app.solution.reviewRequestNote"
+                defaultMessage="The student has requested a code review for this solution."
+              />
+            }
+          />
         )
       )}
 
       {Boolean(plagiarism) && permissionHints.viewDetectedPlagiarisms && (
         <Link to={SOLUTION_PLAGIARISMS_URI_FACTORY(assignmentId, id)}>
-          <OverlayTrigger
-            placement="right"
-            overlay={
-              <Tooltip id={id}>
-                <FormattedMessage
-                  id="app.solutionsTable.icons.suspectedPlagiarism"
-                  defaultMessage="Suspected plagiarism (similarities with other solutions were found)"
-                />
-              </Tooltip>
-            }>
-            <PlagiarismIcon className="text-danger fa-beat" gapLeft />
-          </OverlayTrigger>
+          <PlagiarismIcon
+            className="text-danger fa-beat"
+            gapLeft={2}
+            tooltipId={id}
+            tooltip={
+              <FormattedMessage
+                id="app.solutionsTable.icons.suspectedPlagiarism"
+                defaultMessage="Suspected plagiarism (similarities with other solutions were found)"
+              />
+            }
+          />
         </Link>
       )}
 
-      <CommentsIcon id={id} commentsStats={commentsStats} gapLeft />
+      <CommentsIcon id={id} commentsStats={commentsStats} gapLeft={2} />
     </>
   );
 };

@@ -135,7 +135,7 @@ class VariableForm extends Component {
                 dirty={dirty}
                 hasSuceeded={submitSucceeded}
                 reset={reset}
-                defaultIcon={<SaveIcon gapRight />}
+                defaultIcon={<SaveIcon gapRight={2} />}
                 messages={{
                   success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
                   submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
@@ -145,12 +145,12 @@ class VariableForm extends Component {
             )}
             {dirty && (
               <Button variant="danger" onClick={reset}>
-                <RefreshIcon gapRight />
+                <RefreshIcon gapRight={2} />
                 <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>
             )}
             <Button variant="secondary" onClick={onHide}>
-              <CloseIcon gapRight />
+              <CloseIcon gapRight={2} />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
           </TheButtonGroup>

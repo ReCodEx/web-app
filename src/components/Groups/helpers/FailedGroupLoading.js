@@ -5,7 +5,7 @@ import { WarningIcon } from '../../icons';
 const FailedGroupLoading = () => (
   <div>
     <p>
-      <WarningIcon gapRight />
+      <WarningIcon gapRight={2} />
       <FormattedMessage
         id="app.failedGroupDetail.msg"
         defaultMessage="Cannot load group detail. Please try again later."

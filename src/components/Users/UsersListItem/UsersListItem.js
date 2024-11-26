@@ -53,7 +53,7 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
   ) : (
     <tr>
       <td colSpan={(createActions ? 2 : 1) + Number(emailColumn) + Number(createdAtColumn)}>
-        <LoadingIcon gapRight />
+        <LoadingIcon gapRight={2} />
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </td>
     </tr>

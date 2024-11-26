@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Table, Accordion, Card, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
+import { Table, Accordion, Card, OverlayTrigger, Popover } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import Box from '../../components/widgets/Box';
@@ -275,19 +275,18 @@ class SisSupervisorGroupsContainer extends Component {
                                                             <tr>
                                                               <td className="shrink-col">
                                                                 {group.organizational && (
-                                                                  <OverlayTrigger
-                                                                    placement="bottom"
-                                                                    overlay={
-                                                                      <Tooltip
-                                                                        id={`hint:${course.course.code}:${group.id}`}>
-                                                                        <FormattedMessage
-                                                                          id="app.sisSupervisor.organizationalGroupWarning"
-                                                                          defaultMessage="Students cannot join organizational groups."
-                                                                        />
-                                                                      </Tooltip>
-                                                                    }>
-                                                                    <GroupIcon organizational gapRight />
-                                                                  </OverlayTrigger>
+                                                                  <GroupIcon
+                                                                    organizational
+                                                                    gapRight={2}
+                                                                    tooltipId={`hint:${course.course.code}:${group.id}`}
+                                                                    tooltipPlacement="bottom"
+                                                                    tooltip={
+                                                                      <FormattedMessage
+                                                                        id="app.sisSupervisor.organizationalGroupWarning"
+                                                                        defaultMessage="Students cannot join organizational groups."
+                                                                      />
+                                                                    }
+                                                                  />
                                                                 )}
                                                               </td>
                                                               <td>
@@ -321,7 +320,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                                     <Icon
                                                                                       icon={['far', 'star']}
                                                                                       className="text-body-secondary"
-                                                                                      gapLeft
+                                                                                      gapLeft={2}
                                                                                     />
                                                                                   )}
                                                                                 </li>
@@ -330,11 +329,13 @@ class SisSupervisorGroupsContainer extends Component {
                                                                         </Popover.Body>
                                                                       </Popover>
                                                                     }>
-                                                                    <Icon
-                                                                      icon="people-carry"
-                                                                      largeGapLeft
-                                                                      className="text-warning"
-                                                                    />
+                                                                    <span>
+                                                                      <Icon
+                                                                        icon="people-carry"
+                                                                        gapLeft={3}
+                                                                        className="text-warning"
+                                                                      />
+                                                                    </span>
                                                                   </OverlayTrigger>
                                                                 )}
                                                               </td>
@@ -348,7 +349,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                   {hasPermissions(group, 'update') && (
                                                                     <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
                                                                       <Button variant="warning" size="xs">
-                                                                        <EditIcon gapRight />
+                                                                        <EditIcon gapRight={2} />
                                                                         <FormattedMessage
                                                                           id="app.editGroup.titleShort"
                                                                           defaultMessage="Edit Group"
@@ -359,7 +360,7 @@ class SisSupervisorGroupsContainer extends Component {
 
                                                                   <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                                                     <Button variant="primary" size="xs">
-                                                                      <GroupIcon gapRight />
+                                                                      <GroupIcon gapRight={2} />
                                                                       <FormattedMessage
                                                                         id="app.group.info"
                                                                         defaultMessage="Group Info"
@@ -370,7 +371,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                   {hasPermissions(group, 'viewDetail') && (
                                                                     <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
                                                                       <Button variant="primary" size="xs">
-                                                                        <AssignmentsIcon gapRight />
+                                                                        <AssignmentsIcon gapRight={2} />
                                                                         <FormattedMessage
                                                                           id="app.group.assignments"
                                                                           defaultMessage="Assignments"
@@ -383,7 +384,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                                     hasPermissions(group, 'viewAssignments') && (
                                                                       <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
                                                                         <Button variant="primary" size="xs">
-                                                                          <StudentsIcon gapRight />
+                                                                          <StudentsIcon gapRight={2} />
                                                                           <FormattedMessage
                                                                             id="app.group.students"
                                                                             defaultMessage="Students"
@@ -424,9 +425,9 @@ class SisSupervisorGroupsContainer extends Component {
                                                                         course.course.code,
                                                                         group.id
                                                                       ) ? (
-                                                                        <LoadingIcon gapRight />
+                                                                        <LoadingIcon gapRight={2} />
                                                                       ) : (
-                                                                        <UnbindIcon gapRight />
+                                                                        <UnbindIcon gapRight={2} />
                                                                       )}
                                                                       <FormattedMessage
                                                                         id="app.group.unbind"
@@ -472,7 +473,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                         onClick={() =>
                                                           this.openCreateDialog(possibleParents, course, term)
                                                         }>
-                                                        <AddIcon gapRight />
+                                                        <AddIcon gapRight={2} />
                                                         <FormattedMessage
                                                           id="app.sisSupervisor.createGroupButton"
                                                           defaultMessage="Create New Group"
@@ -482,7 +483,7 @@ class SisSupervisorGroupsContainer extends Component {
                                                       <Button
                                                         variant="success"
                                                         onClick={() => this.openBindDialog(course, term)}>
-                                                        <BindIcon gapRight />
+                                                        <BindIcon gapRight={2} />
                                                         <FormattedMessage
                                                           id="app.sisSupervisor.bindGroupButton"
                                                           defaultMessage="Bind Existing Group"

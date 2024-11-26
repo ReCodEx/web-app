@@ -264,13 +264,13 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
             <>
               <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
                 <Button size="xs" variant="secondary">
-                  <DetailIcon gapRight />
+                  <DetailIcon gapRight={2} />
                   <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                 </Button>
               </Link>
               <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
                 <Button size="xs" variant="primary">
-                  <CodeFileIcon fixedWidth gapRight />
+                  <CodeFileIcon fixedWidth gapRight={2} />
                   <FormattedMessage id="generic.files" defaultMessage="Files" />
                 </Button>
               </Link>
@@ -486,9 +486,9 @@ class AssignmentSolutions extends Component {
                             onClick={() => this.closeReviews(pendingReviews)}
                             disabled={this.state.closingReviews}>
                             {this.state.closingReviews ? (
-                              <LoadingIcon gapRight />
+                              <LoadingIcon gapRight={2} />
                             ) : (
-                              <Icon icon="boxes-packing" gapRight />
+                              <Icon icon="boxes-packing" gapRight={2} />
                             )}
                             <FormattedMessage
                               id="app.reviewSolutionButtons.closePendingReviews"
@@ -509,7 +509,7 @@ class AssignmentSolutions extends Component {
                   {hasPermissions(assignment, 'viewAssignmentSolutions') && (
                     <a href="#" onClick={downloadBestSolutionsArchive(this.getArchiveFileName(assignment))}>
                       <Button variant="primary">
-                        <DownloadIcon gapRight />
+                        <DownloadIcon gapRight={2} />
                         <FormattedMessage
                           id="app.assignment.downloadBestSolutionsArchive"
                           defaultMessage="Download Bests"
@@ -523,7 +523,7 @@ class AssignmentSolutions extends Component {
                   )}
 
                   <Button variant="info" onClick={this.openDialog}>
-                    <ChatIcon gapRight />
+                    <ChatIcon gapRight={2} />
                     <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
                   </Button>
                 </TheButtonGroup>
@@ -553,15 +553,16 @@ class AssignmentSolutions extends Component {
 
               <Col sm={false} md="auto" className="text-nowrap pt-2 mb-3">
                 <DropdownButton
-                  align="right"
+                  align="end"
                   title={
                     <>
-                      <Icon icon="binoculars" gapRight />
+                      <Icon icon="binoculars" gapRight={2} />
                       {viewModes[this.state.viewMode] || ''}
                     </>
                   }
                   className="shadow"
-                  id="viewModeDropdown">
+                  id="viewModeDropdown"
+                  onSelect={this.viewModeSelectHandler}>
                   <Dropdown.Header>
                     <FormattedMessage
                       id="app.assignmentSolutions.viewModesTitle"
@@ -570,11 +571,7 @@ class AssignmentSolutions extends Component {
                   </Dropdown.Header>
                   <Dropdown.Divider />
                   {Object.keys(viewModes).map(viewMode => (
-                    <Dropdown.Item
-                      key={viewMode}
-                      eventKey={viewMode}
-                      active={viewMode === this.state.viewMode}
-                      onSelect={this.viewModeSelectHandler}>
+                    <Dropdown.Item key={viewMode} eventKey={viewMode} active={viewMode === this.state.viewMode}>
                       {viewModes[viewMode]}
                     </Dropdown.Item>
                   ))}
@@ -603,7 +600,7 @@ class AssignmentSolutions extends Component {
                                 <Box
                                   title={
                                     <>
-                                      <UserIcon gapRight className="text-body-secondary" />
+                                      <UserIcon gapRight={2} className="text-body-secondary" />
                                       {user.fullName}
                                       <small className="ms-3 text-nowrap">
                                         (

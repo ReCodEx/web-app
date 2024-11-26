@@ -156,7 +156,7 @@ class SisIntegrationContainer extends Component {
                                                                   : GROUP_ASSIGNMENTS_URI_FACTORY(group.id)
                                                               }>
                                                               <Button variant="primary" size="xs">
-                                                                <AssignmentsIcon gapRight />
+                                                                <AssignmentsIcon gapRight={2} />
                                                                 <FormattedMessage
                                                                   id="app.group.assignments"
                                                                   defaultMessage="Assignments"

@@ -74,7 +74,7 @@ class AddComment extends Component {
 
     return (
       <Form>
-        <FormGroup>
+        <FormGroup className="mb-3">
           <InputGroup>
             <FormControl
               as="textarea"

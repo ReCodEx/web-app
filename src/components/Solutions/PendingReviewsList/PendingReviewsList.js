@@ -76,7 +76,7 @@ class PendingReviewsList extends Component {
           solutionsState === resourceStatus.FULFILLED ? (
             <div className="text-center">
               <Button variant="success" onClick={this.closeAll} disabled={this.state.allPending}>
-                {this.state.allPending ? <LoadingIcon gapRight /> : <Icon icon="boxes-packing" gapRight />}
+                {this.state.allPending ? <LoadingIcon gapRight={2} /> : <Icon icon="boxes-packing" gapRight={2} />}
                 <FormattedMessage id="app.reviewSolutionButtons.closeAll" defaultMessage="Close All Open Reviews" />
               </Button>
             </div>
@@ -86,7 +86,7 @@ class PendingReviewsList extends Component {
         isOpen
         customIcons={
           solutionsState !== resourceStatus.PENDING &&
-          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} gapRight />
+          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} gapRight={2} />
         }>
         <>
           {solutionsState === resourceStatus.PENDING && (
@@ -97,7 +97,7 @@ class PendingReviewsList extends Component {
 
           {solutionsState === resourceStatus.FAILED && (
             <div className="text-center my-3">
-              <WarningIcon className="text-danger" gapRight />
+              <WarningIcon className="text-danger" gapRight={2} />
               <FormattedMessage
                 id="app.pendingReviewsList.failed"
                 defaultMessage="Loading of the open reviews failed. Please try refreshing this component later."
@@ -110,8 +110,8 @@ class PendingReviewsList extends Component {
               {Object.keys(solutions).map(groupId => (
                 <tbody key={groupId}>
                   <tr className="bg-light">
-                    <td className="shrink-col">
-                      <GroupIcon className="text-body-secondary" />
+                    <td className="icon-col">
+                      <GroupIcon />
                     </td>
                     <td colSpan={8}>
                       <GroupsNameContainer groupId={groupId} fullName translations links />
@@ -125,7 +125,7 @@ class PendingReviewsList extends Component {
                       <Icon
                         className="align-middle"
                         icon={!this.state[`group-${groupId}`] ? 'circle-chevron-down' : 'circle-chevron-left'}
-                        gapRight
+                        gapRight={2}
                         timid
                         onClick={() => this.toggleGroupOpened(groupId)}
                       />
@@ -222,9 +222,9 @@ class PendingReviewsList extends Component {
                                       disabled={updatingSelector(solution.id)}
                                       onClick={() => closeReview({ groupId, assignmentId, solutionId: solution.id })}>
                                       {updatingSelector(solution.id) ? (
-                                        <LoadingIcon gapRight />
+                                        <LoadingIcon gapRight={2} />
                                       ) : (
-                                        <Icon icon="boxes-packing" gapRight />
+                                        <Icon icon="boxes-packing" gapRight={2} />
                                       )}
                                       <FormattedMessage
                                         id="app.solution.actions.review.close"
@@ -237,13 +237,13 @@ class PendingReviewsList extends Component {
                                     <>
                                       <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
                                         <Button size="xs" variant="secondary">
-                                          <DetailIcon gapRight />
+                                          <DetailIcon gapRight={2} />
                                           <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                                         </Button>
                                       </Link>
                                       <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
                                         <Button size="xs" variant="primary">
-                                          <CodeFileIcon fixedWidth gapRight />
+                                          <CodeFileIcon fixedWidth gapRight={2} />
                                           <FormattedMessage id="generic.files" defaultMessage="Files" />
                                         </Button>
                                       </Link>

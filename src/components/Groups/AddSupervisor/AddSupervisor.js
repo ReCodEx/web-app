@@ -67,7 +67,7 @@ const AddSupervisor = ({
                   onClick={() => addAdmin(groupId, id)}
                   disabled={isMember}
                   variant={isMember ? 'secondary' : 'success'}>
-                  <AdminRoleIcon smallGapRight smallGapLeft fixedWidth />
+                  <AdminRoleIcon gapRight={1} gapLeft={1} fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
@@ -92,7 +92,7 @@ const AddSupervisor = ({
                   onClick={() => addSupervisor(groupId, id)}
                   disabled={isMember}
                   variant={isMember ? 'secondary' : 'success'}>
-                  <SupervisorIcon smallGapRight smallGapLeft fixedWidth />
+                  <SupervisorIcon gapRight={1} gapLeft={1} fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
@@ -117,7 +117,7 @@ const AddSupervisor = ({
                   onClick={() => addObserver(groupId, id)}
                   disabled={isMember}
                   variant={isMember ? 'secondary' : 'success'}>
-                  <ObserverIcon smallGapRight smallGapLeft fixedWidth />
+                  <ObserverIcon gapRight={1} gapLeft={1} fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}

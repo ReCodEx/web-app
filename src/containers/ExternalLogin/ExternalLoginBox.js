@@ -107,7 +107,13 @@ class ExternalLoginBox extends Component {
         footer={
           <div className="text-center">
             <Button variant="success" onClick={this.onClick} disabled={pending || loggedIn}>
-              {pending ? <LoadingIcon gapRight /> : loggedIn ? <SuccessIcon gapRight /> : <LinkIcon gapRight />}
+              {pending ? (
+                <LoadingIcon gapRight={2} />
+              ) : loggedIn ? (
+                <SuccessIcon gapRight={2} />
+              ) : (
+                <LinkIcon gapRight={2} />
+              )}
               {pending ? (
                 <FormattedMessage id="app.externalLogin.button.authenticating" defaultMessage="Authenticating..." />
               ) : loggedIn ? (

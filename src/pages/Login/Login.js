@@ -120,7 +120,7 @@ class Login extends Component {
                   <Callout variant="danger">
                     <p>{getErrorMessage(formatMessage)(userError)}</p>
                     <Button variant="danger" onClick={logout}>
-                      <Icon icon="sign-out-alt" gapRight />
+                      <Icon icon="sign-out-alt" gapRight={2} />
                       <FormattedMessage id="app.logout" defaultMessage="Logout" />
                     </Button>
                   </Callout>

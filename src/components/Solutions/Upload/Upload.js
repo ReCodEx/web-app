@@ -36,7 +36,7 @@ const Upload = ({
           <input {...getInputProps()} />
           <div className="mt-4">
             <Button variant="primary">
-              <UploadIcon gapRight />
+              <UploadIcon gapRight={2} />
               <FormattedMessage id="app.uploadFiles.addFileButton" defaultMessage="Select File(s) for Upload" />
             </Button>
           </div>

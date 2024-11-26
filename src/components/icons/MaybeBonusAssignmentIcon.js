@@ -2,20 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { BonusIcon } from './index.js';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const MaybeBonusAssignmentIcon = ({ id, isBonus, ...props }) =>
   isBonus && (
     <span>
-      <OverlayTrigger
-        placement="right"
-        overlay={
-          <Tooltip id={id}>
-            <FormattedMessage id="app.maybeBonusAssignmentIcon.isBonus" defaultMessage="Is Bonus" />
-          </Tooltip>
-        }>
-        <BonusIcon {...props} className="text-body-secondary" />
-      </OverlayTrigger>
+      <BonusIcon
+        {...props}
+        className="text-body-secondary"
+        tooltipId={id}
+        tooltip={<FormattedMessage id="app.maybeBonusAssignmentIcon.isBonus" defaultMessage="Is Bonus" />}
+      />
     </span>
   );
 

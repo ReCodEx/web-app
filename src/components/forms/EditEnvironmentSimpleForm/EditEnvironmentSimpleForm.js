@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
 import EditEnvironmentList from './EditEnvironmentList.js';
@@ -66,23 +66,20 @@ class EditEnvironmentSimpleForm extends Component {
         unlimitedHeight
         customIcons={
           !readOnly && selectedEnvs.length > 0 ? (
-            <OverlayTrigger
-              placement="left"
-              overlay={
-                <Tooltip id="expandToggleButton">
-                  <FormattedMessage
-                    id="app.editTestsForm.expandToggleTooltip"
-                    defaultMessage="Toggle compressed/expanded view"
-                  />
-                </Tooltip>
-              }>
-              <Icon
-                icon={this.state.expanded ? 'compress' : 'expand'}
-                size="lg"
-                className="align-middle"
-                onClick={this.toggleExpanded}
-              />
-            </OverlayTrigger>
+            <Icon
+              icon={this.state.expanded ? 'compress' : 'expand'}
+              size="lg"
+              className="align-middle"
+              onClick={this.toggleExpanded}
+              tooltipId="expandToggleButton"
+              tooltipPlacement="left"
+              tooltip={
+                <FormattedMessage
+                  id="app.editTestsForm.expandToggleTooltip"
+                  defaultMessage="Toggle compressed/expanded view"
+                />
+              }
+            />
           ) : null
         }>
         {!readOnly && (this.state.expanded || selectedEnvs.length === 0) ? (
@@ -122,7 +119,7 @@ class EditEnvironmentSimpleForm extends Component {
                 <TheButtonGroup>
                   {dirty && (
                     <Button type="reset" onClick={reset} variant={'danger'}>
-                      <RefreshIcon gapRight />
+                      <RefreshIcon gapRight={2} />
                       <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                     </Button>
                   )}

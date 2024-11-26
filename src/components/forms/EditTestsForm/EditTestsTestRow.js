@@ -40,12 +40,12 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, used = false, r
       <td className="align-middle text-end">
         {used ? (
           <em>
-            <Icon icon="paperclip" gapRight className="text-success" />
+            <Icon icon="paperclip" gapRight={2} className="text-success" />
             <FormattedMessage id="app.editTestsTest.testUsedInExpression" defaultMessage="used in expression" />
           </em>
         ) : (
           <Button onClick={onRemove} variant="danger" size="xs">
-            <RemoveIcon gapRight />
+            <RemoveIcon gapRight={2} />
             <FormattedMessage id="generic.remove" defaultMessage="Remove" />
           </Button>
         )}

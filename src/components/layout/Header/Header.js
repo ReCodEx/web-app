@@ -49,13 +49,13 @@ class Header extends Component {
                   fetchManyStatus={fetchManyGroupsStatus}
                   loading={
                     <span className="nav-link">
-                      <GroupIcon gapRight />
+                      <GroupIcon gapRight={2} />
                       <LoadingIcon />
                     </span>
                   }
                   failed={
                     <span className="nav-link">
-                      <GroupIcon gapRight />
+                      <GroupIcon gapRight={2} />
                       <WarningIcon />
                     </span>
                   }>

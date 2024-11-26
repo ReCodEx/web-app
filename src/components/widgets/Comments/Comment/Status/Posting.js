@@ -11,7 +11,7 @@ const Posting = ({ right }) => (
       'float-end': right,
       'float-start': !right,
     })}>
-    <LoadingIcon gapRight />
+    <LoadingIcon gapRight={2} />
     <FormattedMessage id="app.comments.publishing" defaultMessage="Publishing..." />
   </span>
 );

@@ -31,7 +31,7 @@ const EditHardwareGroupForm = ({
         <TheButtonGroup>
           {dirty && !submitting && !submitSucceeded && (
             <Button type="reset" onClick={reset} variant="danger">
-              <RefreshIcon gapRight />
+              <RefreshIcon gapRight={2} />
               <FormattedMessage id="generic.reset" defaultMessage="Reset" />
             </Button>
           )}
@@ -43,7 +43,7 @@ const EditHardwareGroupForm = ({
             hasSucceeded={submitSucceeded}
             hasFailed={submitFailed}
             invalid={invalid}
-            defaultIcon={<SaveIcon gapRight />}
+            defaultIcon={<SaveIcon gapRight={2} />}
             messages={{
               submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
               submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
@@ -54,7 +54,7 @@ const EditHardwareGroupForm = ({
       </div>
     }>
     <p className="text-body-secondary small">
-      <InfoIcon gapRight />
+      <InfoIcon gapRight={2} />
       <FormattedMessage
         id="app.editHardwareGroupForm.about"
         defaultMessage="Hardware group is a group of backend workers on which the exercise can be evaluated. The workers are bound to explicit hardware; thus, changing the hardware group of an exercise may affect the performance results. Furthermore, the workers in the group share configuration which implies the constraints for memory and time limits."

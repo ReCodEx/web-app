@@ -10,11 +10,11 @@ import Confirm from '../Confirm';
 import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 const getIcons = lruMemoize(defaultIcon => ({
-  submit: defaultIcon || <SendIcon gapRight />,
-  success: <SuccessIcon gapRight />,
-  submitting: <LoadingIcon gapRight />,
-  validating: <LoadingIcon gapRight />,
-  invalid: <WarningIcon gapRight />,
+  submit: defaultIcon || <SendIcon gapRight={2} />,
+  success: <SuccessIcon gapRight={2} />,
+  submitting: <LoadingIcon gapRight={2} />,
+  validating: <LoadingIcon gapRight={2} />,
+  invalid: <WarningIcon gapRight={2} />,
 }));
 
 const getMessages = lruMemoize(messages => {

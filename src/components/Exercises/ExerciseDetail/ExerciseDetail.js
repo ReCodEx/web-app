@@ -51,7 +51,7 @@ const ExerciseDetail = ({
   links: { EXERCISE_URI_FACTORY },
 }) => (
   <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding className={className}>
-    <Table responsive size="sm" className="mb-1">
+    <Table responsive size="sm" className="card-table">
       <tbody>
         <tr>
           <td className="text-center text-body-secondary shrink-col ps-3 pe-3">

@@ -47,7 +47,7 @@ class SisCreateGroupForm extends Component {
           {course && <CourseLabel {...course} groupsCount={courseGroupsCount} />}
           <hr />
           <InsetPanel className="small">
-            <InfoIcon gapRight />
+            <InfoIcon gapRight={2} />
             <FormattedMessage
               id="app.sisCreateGroupForm.info"
               defaultMessage="The newly created group will be placed right under selected parent group and it will be automatically bind to selected course (mentioned above). The name of the new group will be derived from the name of the course and its scheduling (you may change it later)."
@@ -103,7 +103,7 @@ class SisCreateGroupForm extends Component {
               />
 
               <Button variant="outline-secondary" onClick={onClose}>
-                <CloseIcon gapRight />
+                <CloseIcon gapRight={2} />
                 <FormattedMessage id="generic.close" defaultMessage="Close" />
               </Button>
             </TheButtonGroup>

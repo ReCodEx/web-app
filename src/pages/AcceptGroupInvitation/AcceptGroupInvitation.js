@@ -102,13 +102,13 @@ class AcceptGroupInvitation extends Component {
                             <TheButtonGroup>
                               <Link to={GROUP_INFO_URI_FACTORY(invitation.groupId)}>
                                 <Button variant="primary">
-                                  <GroupIcon gapRight />
+                                  <GroupIcon gapRight={2} />
                                   <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                 </Button>
                               </Link>
                               <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(invitation.groupId)}>
                                 <Button variant="primary">
-                                  <AssignmentsIcon gapRight />
+                                  <AssignmentsIcon gapRight={2} />
                                   <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                                 </Button>
                               </Link>
@@ -124,9 +124,9 @@ class AcceptGroupInvitation extends Component {
                               variant={acceptingStatus === resourceStatus.FAILED ? 'danger' : 'success'}
                               onClick={this.acceptInvitation}>
                               {acceptingStatus === resourceStatus.PENDING ? (
-                                <LoadingIcon gapRight />
+                                <LoadingIcon gapRight={2} />
                               ) : (
-                                <AcceptIcon gapRight />
+                                <AcceptIcon gapRight={2} />
                               )}
                               <FormattedMessage
                                 id="app.acceptGroupInvitation.acceptAndJoin"

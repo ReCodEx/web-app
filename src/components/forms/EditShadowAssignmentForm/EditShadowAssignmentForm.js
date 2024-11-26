@@ -58,7 +58,7 @@ const EditShadowAssignmentForm = ({
             hasFailed={submitFailed}
             handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
             asyncValidating={asyncValidating}
-            defaultIcon={<SaveIcon gapRight />}
+            defaultIcon={<SaveIcon gapRight={2} />}
             messages={{
               submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
               submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

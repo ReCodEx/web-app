@@ -20,13 +20,13 @@ const LocksTable = ({ locks }) =>
               <UsersNameContainer userId={lock.studentId} showEmail="icon" showExternalIdentifiers />
             </td>
             <td>
-              <LockIcon className="text-body-secondary" gapRight />
+              <LockIcon className="text-body-secondary" gapRight={2} />
               <DateTime unixts={lock.createdAt} showSeconds />
             </td>
             <td>
               {lock.unlockedAt && (
                 <>
-                  <UnlockIcon className="text-warning" gapRight />
+                  <UnlockIcon className="text-warning" gapRight={2} />
                   <DateTime unixts={lock.unlockedAt} showSeconds />
                 </>
               )}

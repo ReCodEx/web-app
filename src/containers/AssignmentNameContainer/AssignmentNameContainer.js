@@ -39,7 +39,7 @@ class AssignmentNameContainer extends Component {
         resource={assignment}
         loading={
           <>
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </>
         }>

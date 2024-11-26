@@ -41,7 +41,7 @@ const MenuAvatar = ({
           <RemoveUserIcon
             className="text-danger"
             timid
-            gapRight
+            gapRight={2}
             onClick={ev => {
               ev.stopPropagation();
               onRemove();

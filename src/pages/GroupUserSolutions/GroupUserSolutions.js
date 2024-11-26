@@ -202,13 +202,13 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
             <>
               <Link to={SOLUTION_DETAIL_URI_FACTORY(solution.assignmentId, solution.id)}>
                 <Button size="xs" variant="secondary">
-                  <DetailIcon gapRight />
+                  <DetailIcon gapRight={2} />
                   <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                 </Button>
               </Link>
               <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(solution.assignmentId, solution.id)}>
                 <Button size="xs" variant="primary">
-                  <CodeFileIcon fixedWidth gapRight />
+                  <CodeFileIcon fixedWidth gapRight={2} />
                   <FormattedMessage id="generic.files" defaultMessage="Files" />
                 </Button>
               </Link>
@@ -433,7 +433,11 @@ class GroupUserSolutions extends Component {
                       variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
                       onClick={() => this.closeReviews(pendingReviews)}
                       disabled={this.state.closingReviews}>
-                      {this.state.closingReviews ? <LoadingIcon gapRight /> : <Icon icon="boxes-packing" gapRight />}
+                      {this.state.closingReviews ? (
+                        <LoadingIcon gapRight={2} />
+                      ) : (
+                        <Icon icon="boxes-packing" gapRight={2} />
+                      )}
                       <FormattedMessage
                         id="app.reviewSolutionButtons.closePendingReviews"
                         defaultMessage="Close pending reviews"
@@ -482,7 +486,7 @@ class GroupUserSolutions extends Component {
                                   <Box
                                     title={
                                       <>
-                                        <AssignmentIcon gapRight className="text-body-secondary" />
+                                        <AssignmentIcon gapRight={2} className="text-body-secondary" />
                                         <LocalizedExerciseName
                                           entity={{ name: '??', localizedTexts: assignment.localizedTexts }}
                                         />

@@ -33,7 +33,7 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
               onClick={() => (sendResult !== null && sendResult !== true ? setSendResult(null) : setMessage(''))}
               disabled={sendResult !== null}
               ref={buttonTarget}>
-              {sendResult === true ? <LoadingIcon gapRight /> : <BellIcon gapRight />}
+              {sendResult === true ? <LoadingIcon gapRight={2} /> : <BellIcon gapRight={2} />}
               <FormattedMessage id="app.exercise.notificationButton" defaultMessage="Send Notification" />
             </Button>
           </TheButtonGroup>
@@ -44,7 +44,7 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
                 <Popover.Header>
                   {sendResult === false || sendResult < 0 ? (
                     <>
-                      <WarningIcon className="text-danger" gapRight />
+                      <WarningIcon className="text-danger" gapRight={2} />
                       <FormattedMessage
                         id="app.exercise.notificationButton.failedMessage"
                         defaultMessage="The operation has failed!"
@@ -92,7 +92,7 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
             />
           </InsetPanel>
 
-          <FormGroup controlId="message">
+          <FormGroup controlId="message" className="mb-3">
             <FormLabel>
               <FormattedMessage id="generic.message" defaultMessage="Message" />:
             </FormLabel>
@@ -111,11 +111,11 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
                   setMessage(null);
                 }
               }}>
-              <SendIcon gapRight />
+              <SendIcon gapRight={2} />
               <FormattedMessage id="generic.send" defaultMessage="Send" />
             </Button>
             <Button variant="secondary" onClick={() => setMessage(null)}>
-              <CloseIcon gapRight />
+              <CloseIcon gapRight={2} />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
           </TheButtonGroup>

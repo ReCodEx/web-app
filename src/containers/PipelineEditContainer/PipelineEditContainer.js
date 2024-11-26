@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
 import PipelineGraph from '../../components/Pipelines/PipelineGraph';
@@ -659,60 +659,51 @@ class PipelineEditContainer extends Component {
         customIcons={
           !this.state.pipelineStructureCoerced ? (
             <>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="pipelineTable">
-                    <FormattedMessage id="app.pipelineEditContainer.showAsTableIcon" defaultMessage="Show as table" />
-                  </Tooltip>
-                }>
-                <Icon
-                  icon="th-list"
-                  size="lg"
-                  className="align-middle text-primary"
-                  timid={!this.state.showTable || this.state.showGraph}
-                  largeGapRight
-                  onClick={this.showAsTable}
-                />
-              </OverlayTrigger>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="pipelineGraph">
-                    <FormattedMessage
-                      id="app.pipelineEditContainer.showAsGraphIcon"
-                      defaultMessage="Show as visual diagram"
-                    />
-                  </Tooltip>
-                }>
-                <Icon
-                  icon="project-diagram"
-                  size="lg"
-                  className="align-middle text-primary"
-                  timid={this.state.showTable || !this.state.showGraph}
-                  largeGapRight
-                  onClick={this.showAsGraph}
-                />
-              </OverlayTrigger>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="pipelineBoth">
-                    <FormattedMessage
-                      id="app.pipelineEditContainer.showAsBothIcon"
-                      defaultMessage="Show both data table and diagram"
-                    />
-                  </Tooltip>
-                }>
-                <Icon
-                  icon="columns"
-                  size="lg"
-                  className="align-middle text-primary"
-                  timid={!this.state.showTable || !this.state.showGraph}
-                  largeGapRight
-                  onClick={this.showTableAndGraph}
-                />
-              </OverlayTrigger>
+              <Icon
+                icon="th-list"
+                size="lg"
+                className="align-middle text-primary"
+                timid={!this.state.showTable || this.state.showGraph}
+                gapRight={3}
+                onClick={this.showAsTable}
+                tooltipId="pipelineTable"
+                tooltipPlacement="bottom"
+                tooltip={
+                  <FormattedMessage id="app.pipelineEditContainer.showAsTableIcon" defaultMessage="Show as table" />
+                }
+              />
+              <Icon
+                icon="project-diagram"
+                size="lg"
+                className="align-middle text-primary"
+                timid={this.state.showTable || !this.state.showGraph}
+                gapRight={3}
+                onClick={this.showAsGraph}
+                tooltipId="pipelineGraph"
+                tooltipPlacement="bottom"
+                tooltip={
+                  <FormattedMessage
+                    id="app.pipelineEditContainer.showAsGraphIcon"
+                    defaultMessage="Show as visual diagram"
+                  />
+                }
+              />
+              <Icon
+                icon="columns"
+                size="lg"
+                className="align-middle text-primary"
+                timid={!this.state.showTable || !this.state.showGraph}
+                gapRight={3}
+                onClick={this.showTableAndGraph}
+                tooltipId="pipelineBoth"
+                tooltipPlacement="bottom"
+                tooltip={
+                  <FormattedMessage
+                    id="app.pipelineEditContainer.showAsBothIcon"
+                    defaultMessage="Show both data table and diagram"
+                  />
+                }
+              />
             </>
           ) : null
         }
@@ -720,7 +711,7 @@ class PipelineEditContainer extends Component {
           this.state.pipelineStructureCoerced ? (
             <div className="text-center">
               <Button variant="warning" onClick={() => this.setState({ pipelineStructureCoerced: false })}>
-                <SuccessIcon gapRight />
+                <SuccessIcon gapRight={2} />
                 <FormattedMessage id="generic.accept" defaultMessage="Accept" />
               </Button>
             </div>
@@ -731,32 +722,32 @@ class PipelineEditContainer extends Component {
                   variant="primary"
                   onClick={this.undo}
                   disabled={this.state.submitting || this.state.history.length === 0}>
-                  <UndoIcon gapRight />
+                  <UndoIcon gapRight={2} />
                   <FormattedMessage id="generic.undo" defaultMessage="Undo" />
                 </Button>
                 <Button
                   variant="primary"
                   onClick={this.redo}
                   disabled={this.state.submitting || this.state.future.length === 0}>
-                  <RedoIcon gapRight />
+                  <RedoIcon gapRight={2} />
                   <FormattedMessage id="generic.redo" defaultMessage="Redo" />
                 </Button>
                 <Button
                   variant="danger"
                   onClick={this.reset}
                   disabled={this.state.submitting || this.state.history.length === 0}>
-                  <RefreshIcon gapRight />
+                  <RefreshIcon gapRight={2} />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
               </TheButtonGroup>
 
               <TheButtonGroup className={styles.mainButtonGroup}>
                 <Button variant="primary" onClick={() => this.openBoxForm()} disabled={this.state.submitting}>
-                  <Icon icon="box" gapRight />
+                  <Icon icon="box" gapRight={2} />
                   <FormattedMessage id="app.pipelineEditContainer.addBoxButton" defaultMessage="Add Box" />
                 </Button>
                 <Button variant="primary" onClick={() => this.openVariableForm()} disabled={this.state.submitting}>
-                  <Icon icon="dollar-sign" gapRight />
+                  <Icon icon="dollar-sign" gapRight={2} />
                   <FormattedMessage id="app.pipelineEditContainer.addVariableButton" defaultMessage="Add Variable" />
                 </Button>
               </TheButtonGroup>
@@ -766,13 +757,13 @@ class PipelineEditContainer extends Component {
                   variant="primary"
                   onClick={() => this.inputFileRef.current.click()}
                   disabled={this.state.submitting}>
-                  <UploadIcon gapRight />
+                  <UploadIcon gapRight={2} />
                   <FormattedMessage id="generic.import" defaultMessage="Import" />
                 </Button>
                 <input type="file" ref={this.inputFileRef} className="d-none" onChange={this.import} />
 
                 <Button variant="primary" onClick={this.export} disabled={this.state.submitting}>
-                  <DownloadIcon gapRight />
+                  <DownloadIcon gapRight={2} />
                   <FormattedMessage id="generic.export" defaultMessage="Export" />
                 </Button>
                 <SubmitButton
@@ -781,7 +772,7 @@ class PipelineEditContainer extends Component {
                   submitting={this.state.submitting}
                   hasFailed={this.state.submitError !== null}
                   invalid={this.state.version < pipeline.version || (this.state.errors && this.state.errors.length > 0)}
-                  defaultIcon={<SaveIcon gapRight />}
+                  defaultIcon={<SaveIcon gapRight={2} />}
                   messages={{
                     success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
                     submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
@@ -811,11 +802,11 @@ class PipelineEditContainer extends Component {
 
               <TheButtonGroup>
                 <Button variant="primary" onClick={this.acknowledgeNewVersion} disabled={this.state.submitting}>
-                  <Icon icon={['far', 'smile']} gapRight />
+                  <Icon icon={['far', 'smile']} gapRight={2} />
                   <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
                 </Button>
                 <Button variant="success" onClick={this.reload} disabled={this.state.submitting}>
-                  <UploadIcon gapRight />
+                  <UploadIcon gapRight={2} />
                   <FormattedMessage id="generic.load" defaultMessage="Load" />
                 </Button>
               </TheButtonGroup>

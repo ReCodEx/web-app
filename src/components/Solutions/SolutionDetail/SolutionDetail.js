@@ -140,7 +140,7 @@ class SolutionDetail extends Component {
                       </td>
                       <td>
                         <Button onClick={refreshSolutionEvaluations} variant="primary">
-                          <RefreshIcon gapRight />
+                          <RefreshIcon gapRight={2} />
                           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
                         </Button>
                       </td>

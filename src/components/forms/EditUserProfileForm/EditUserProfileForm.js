@@ -42,7 +42,7 @@ const EditUserProfileForm = ({
           hasFailed={submitFailed}
           asyncValidating={asyncValidating}
           tabIndex={9}
-          defaultIcon={<SaveIcon gapRight />}
+          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

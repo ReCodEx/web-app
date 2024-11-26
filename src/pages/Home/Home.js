@@ -53,12 +53,12 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
               />
             </p>
             <a href="https://github.com/ReCodEx" target="_blank" rel="noreferrer">
-              <Icon icon={['fab', 'github']} gapRight />
+              <Icon icon={['fab', 'github']} gapRight={2} />
               <FormattedMessage id="app.homepage.githubLink" defaultMessage="GitHub" />
             </a>
             ,
             <a href="https://github.com/ReCodEx/wiki/wiki" target="_blank" rel="noreferrer">
-              <Icon icon={['fab', 'wikipedia-w']} largeGapLeft gapRight />
+              <Icon icon={['fab', 'wikipedia-w']} gapLeft={3} gapRight={2} />
               <FormattedMessage id="app.homepage.wikiLink" defaultMessage="documentation in wiki" />
             </a>
           </div>
@@ -74,7 +74,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
               <Row>
                 <Col xs={false} sm="auto">
                   <h3>
-                    <GroupIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
+                    <GroupIcon gapLeft={2} gapRight={2} fixedWidth className="text-body-secondary" />
                   </h3>
                 </Col>
                 <Col xs={12} sm>
@@ -87,7 +87,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
                       <UsersNameContainer userId={instance.adminId} isSimple />,
                     </strong>
                     <a href={EXTERNAL_AUTH_HELPDESK_URL} className="ms-3">
-                      <MailIcon gapRight />
+                      <MailIcon gapRight={2} />
                       <FormattedMessage
                         id="app.homepage.instance.techSupport"
                         defaultMessage="Technical support contact"
@@ -110,7 +110,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <Row>
         <Col xs={false} sm="auto">
           <h3>
-            <GroupIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
+            <GroupIcon gapLeft={2} gapRight={2} fixedWidth className="text-body-secondary" />
           </h3>
         </Col>
         <Col xs={12} sm>
@@ -140,7 +140,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
         <Row>
           <Col xs={false} sm="auto">
             <h3>
-              <ExerciseIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
+              <ExerciseIcon gapLeft={2} gapRight={2} fixedWidth className="text-body-secondary" />
             </h3>
           </Col>
           <Col xs={12} sm>
@@ -186,7 +186,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <Row>
         <Col xs={false} sm="auto">
           <h3>
-            <AssignmentIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
+            <AssignmentIcon gapLeft={2} gapRight={2} fixedWidth className="text-body-secondary" />
           </h3>
         </Col>
         <Col xs={12} sm>
@@ -215,7 +215,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
       <Row>
         <Col xs={false} sm="auto">
           <h3>
-            <CodeIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
+            <CodeIcon gapLeft={2} gapRight={2} fixedWidth className="text-body-secondary" />
           </h3>
         </Col>
         <Col xs={12} sm>
@@ -245,7 +245,7 @@ const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
         <Row>
           <Col xs={false} sm="auto">
             <h3>
-              <ShadowAssignmentIcon gapLeft gapRight fixedWidth className="text-body-secondary" />
+              <ShadowAssignmentIcon gapLeft={2} gapRight={2} fixedWidth className="text-body-secondary" />
             </h3>
           </Col>
           <Col xs={12} sm>

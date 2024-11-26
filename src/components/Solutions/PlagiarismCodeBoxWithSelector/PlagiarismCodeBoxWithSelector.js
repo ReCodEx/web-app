@@ -83,7 +83,7 @@ class PlagiarismCodeBoxWithSelector extends Component {
             key={`${file.id}-loading`}
             title={
               <>
-                <LoadingIcon gapRight />
+                <LoadingIcon gapRight={2} />
                 <code>{file.name}</code>
               </>
             }
@@ -176,12 +176,12 @@ class PlagiarismCodeBoxWithSelector extends Component {
                   <TheButtonGroup>
                     {this.state.selectedFile !== null && this.state.switchTo && this.state.switchTo.length === 1 && (
                       <Button variant="success" onClick={() => this.selectFile(this.state.switchTo[0])}>
-                        <CodeCompareIcon gapRight />
+                        <CodeCompareIcon gapRight={2} />
                         <FormattedMessage id="generic.change" defaultMessage="Change" />
                       </Button>
                     )}
                     <Button variant="secondary" onClick={this.closeDialog}>
-                      <CloseIcon gapRight />
+                      <CloseIcon gapRight={2} />
                       <FormattedMessage id="generic.close" defaultMessage="Close" />
                     </Button>
                   </TheButtonGroup>

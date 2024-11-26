@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
@@ -30,11 +29,12 @@ const FailuresListItem = ({
         'bg-success': failure.resolvedAt,
         'bg-danger': !failure.resolvedAt,
       })}>
-      <OverlayTrigger placement="top" overlay={<Tooltip id={id}>{failure.type}</Tooltip>}>
-        <div>
-          {ERROR_ICONS[failure.type] ? <Icon icon={ERROR_ICONS[failure.type]} /> : <Icon icon="exclamation-circle" />}
-        </div>
-      </OverlayTrigger>
+      <Icon
+        icon={ERROR_ICONS[failure.type] || 'exclamation-circle'}
+        tooltipId={id}
+        tooltipPlacement="top"
+        tooltip={failure.type}
+      />
     </td>
     <td>{failure.description}</td>
     <td>

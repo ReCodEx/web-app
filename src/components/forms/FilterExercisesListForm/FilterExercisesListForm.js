@@ -145,8 +145,8 @@ class FilterExercisesListForm extends Component {
           <ResourceRenderer resource={authors} returnAsArray forceLoading={authorsLoading || tagsLoading} bulkyLoading>
             {authors => (
               <Container fluid>
-                <Row>
-                  <Col sm={12} md={this.isOpen() ? 6 : 4}>
+                <Row className="align-items-end">
+                  <Col sm={12} md={true}>
                     <Field
                       name="search"
                       component={TextField}
@@ -163,7 +163,7 @@ class FilterExercisesListForm extends Component {
                     />
                   </Col>
 
-                  <Col sm={12} md={6}>
+                  <Col sm={12} md={true}>
                     <Field
                       name="author"
                       component={SelectField}
@@ -191,8 +191,8 @@ class FilterExercisesListForm extends Component {
                   </Col>
 
                   {!this.isOpen() && (
-                    <Col sm={12} md={2}>
-                      <div className="text-end" style={{ marginTop: '2rem' }}>
+                    <Col sm={12} md="auto">
+                      <div className="text-end mb-3">
                         <SubmitButton
                           id="setFilters"
                           handleSubmit={handleSubmit}
@@ -229,12 +229,12 @@ class FilterExercisesListForm extends Component {
                         </Row>
 
                         <Row>
-                          <Col lg={12}>
+                          <Col>
                             <hr />
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col>
                             <FieldArray
                               name="tags"
                               tags={tags}
@@ -252,13 +252,13 @@ class FilterExercisesListForm extends Component {
                     )}
 
                     <Row>
-                      <Col lg={12}>
+                      <Col>
                         <hr />
                       </Col>
                     </Row>
 
                     <Row>
-                      <Col lg={12}>
+                      <Col>
                         <div className="mb-3">
                           <FormLabel>
                             <FormattedMessage
@@ -281,13 +281,13 @@ class FilterExercisesListForm extends Component {
                 )}
 
                 <Row>
-                  <Col lg={12}>
+                  <Col>
                     <hr />
                   </Col>
                 </Row>
 
                 <Row>
-                  <Col lg={12}>
+                  <Col>
                     <div className="mb-2 text-center">
                       {this.isOpen() ? (
                         <TheButtonGroup>
@@ -304,7 +304,7 @@ class FilterExercisesListForm extends Component {
                             }}
                           />
                           <Button onClick={this.toggleOpen} variant="secondary">
-                            <ExpandCollapseIcon isOpen={this.isOpen()} gapRight />
+                            <ExpandCollapseIcon isOpen={this.isOpen()} gapRight={2} />
                             <FormattedMessage
                               id="app.filterExercisesListForm.hideAdvancedFilters"
                               defaultMessage="Hide advanced filters..."
@@ -313,7 +313,7 @@ class FilterExercisesListForm extends Component {
                         </TheButtonGroup>
                       ) : (
                         <span className="small clickable" onClick={this.toggleOpen}>
-                          <ExpandCollapseIcon isOpen={this.isOpen()} gapRight />
+                          <ExpandCollapseIcon isOpen={this.isOpen()} gapRight={2} />
                           <FormattedMessage
                             id="app.filterExercisesListForm.showAllFilters"
                             defaultMessage="Show all filters..."

@@ -67,7 +67,7 @@ class GroupExamPending extends Component {
             defaultMessage="You are already locked for an exam in a different group (you can see this group in a read-only mode now)."
           />
           <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupLock)}>
-            <LinkIcon gapLeft className="text-primary" />
+            <LinkIcon gapLeft={2} className="text-primary" />
           </Link>
         </Callout>
       );
@@ -145,7 +145,7 @@ class GroupExamPending extends Component {
                         </div>
 
                         <p className="text-body-secondary small">
-                          <InfoIcon gapRight />
+                          <InfoIcon gapRight={2} />
                           <FormattedMessage
                             id="app.groupExams.studentInfo"
                             defaultMessage="You need to lock yourself in to see the exam assignments. When locked, your actions will be restricted to your current IP address."
@@ -188,14 +188,14 @@ class GroupExamPending extends Component {
                   </td>
                   <td rowSpan={3} className="w-100 p-2 ps-5 text-body-secondary">
                     <p>
-                      <InfoIcon gapRight />
+                      <InfoIcon gapRight={2} />
                       <FormattedMessage
                         id="app.groupExams.pending.teacherInfo"
                         defaultMessage="The exam assignments are currently visible only to students who have lock themselves in the group. "
                       />
                     </p>
                     <p>
-                      <InfoIcon gapRight />
+                      <InfoIcon gapRight={2} />
                       <FormattedMessage
                         id="app.groupExams.timeAccuracyWarning"
                         defaultMessage="Your local system clock should be sufficiently synchronized or this component may not work properly."

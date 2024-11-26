@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Icon, { CloseIcon, SwapIcon } from '../../icons';
@@ -94,57 +93,48 @@ const ExpressionNodePlaceholder = ({
     <li>
       <span className={style.placeholder}>
         {[FUNCTION_NODE, TEST_NODE, LITERAL_NODE].map(genericClass => (
-          <OverlayTrigger
+          <Icon
             key={genericClass}
-            placement="bottom"
-            overlay={
-              <Tooltip id={`${(node || parent).id}-add-${genericClass}`}>{ADD_NODE_TOOLTIPS[genericClass]}</Tooltip>
-            }>
-            <Icon
-              icon={ICONS[genericClass]}
-              className={ICONS_CSS_CLASSES[genericClass]}
-              gapLeft
-              gapRight
-              timid
-              onClick={() => editNode(node, parent, genericClass)}
-            />
-          </OverlayTrigger>
+            icon={ICONS[genericClass]}
+            className={ICONS_CSS_CLASSES[genericClass]}
+            gapLeft={2}
+            gapRight={2}
+            timid
+            onClick={() => editNode(node, parent, genericClass)}
+            tooltipId={`${(node || parent).id}-add-${genericClass}`}
+            tooltipPlacement="bottom"
+            tooltip={ADD_NODE_TOOLTIPS[genericClass]}
+          />
         ))}
 
         {selectedNodesCount > 0 && (node || parent).canCopyNodesHere(selecteNodeObjects) && (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`${(node || parent).id}-copy`}>
-                <FormattedMessage id="app.scoreConfigExpression.copy" defaultMessage="Copy selected node(s) here" />
-              </Tooltip>
-            }>
-            <Icon
-              icon={['far', 'copy']}
-              gapLeft
-              gapRight
-              timid
-              onClick={() => (node || parent).copyNodesHere(selecteNodeObjects)}
-            />
-          </OverlayTrigger>
+          <Icon
+            icon={['far', 'copy']}
+            gapLeft={2}
+            gapRight={2}
+            timid
+            onClick={() => (node || parent).copyNodesHere(selecteNodeObjects)}
+            tooltipId={`${(node || parent).id}-copy`}
+            tooltipPlacement="bottom"
+            tooltip={
+              <FormattedMessage id="app.scoreConfigExpression.copy" defaultMessage="Copy selected node(s) here" />
+            }
+          />
         )}
 
         {selectedNodesCount > 0 && !hasSelectedParent && (node || parent).canMoveNodesHere(selecteNodeObjects) && (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`${(node || parent).id}-move`}>
-                <FormattedMessage id="app.scoreConfigExpression.move" defaultMessage="Move selected node(s) here" />
-              </Tooltip>
-            }>
-            <Icon
-              icon="external-link-alt"
-              gapLeft
-              gapRight
-              timid
-              onClick={() => (node || parent).moveNodesHere(selecteNodeObjects)}
-            />
-          </OverlayTrigger>
+          <Icon
+            icon="external-link-alt"
+            gapLeft={2}
+            gapRight={2}
+            timid
+            onClick={() => (node || parent).moveNodesHere(selecteNodeObjects)}
+            tooltipId={`${(node || parent).id}-move`}
+            tooltipPlacement="bottom"
+            tooltip={
+              <FormattedMessage id="app.scoreConfigExpression.move" defaultMessage="Move selected node(s) here" />
+            }
+          />
         )}
       </span>
     </li>
@@ -184,7 +174,9 @@ const ExpressionNode = ({
           <span
             onClick={ev => selectNode && selectNode(node, ev.ctrlKey)}
             onDoubleClick={() => editNode && editNode(node)}>
-            {genericClass && <Icon icon={ICONS[genericClass]} className={ICONS_CSS_CLASSES[genericClass]} gapRight />}
+            {genericClass && (
+              <Icon icon={ICONS[genericClass]} className={ICONS_CSS_CLASSES[genericClass]} gapRight={2} />
+            )}
             {node.getCaption(testsIndex)}
           </span>
         </OptionalTooltipWrapper>
@@ -192,25 +184,20 @@ const ExpressionNode = ({
         {editNode && (
           <>
             {isSelected && selectedNodesCount === 1 && (
-              <>
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id={`${node.id}-injectParent`}>
-                      <FormattedMessage
-                        id="app.scoreConfigExpression.addNewParent"
-                        defaultMessage="Insert new parent (move the node one level down)"
-                      />
-                    </Tooltip>
-                  }>
-                  <Icon
-                    icon="sign-in-alt"
-                    className="text-success"
-                    gapLeft
-                    onClick={() => editNode(node, null, FUNCTION_NODE, true)}
+              <Icon
+                icon="sign-in-alt"
+                className="text-success"
+                gapLeft={2}
+                onClick={() => editNode(node, null, FUNCTION_NODE, true)}
+                tooltipId={`${node.id}-injectParent`}
+                tooltipPlacement="bottom"
+                tooltip={
+                  <FormattedMessage
+                    id="app.scoreConfigExpression.addNewParent"
+                    defaultMessage="Insert new parent (move the node one level down)"
                   />
-                </OverlayTrigger>
-              </>
+                }
+              />
             )}
 
             {isSelected &&
@@ -218,18 +205,20 @@ const ExpressionNode = ({
               node.getRealChildren().length > 0 &&
               getVacantChildrenPositions(node.getParent()) + 1 >= node.getRealChildren().length && (
                 <>
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={
-                      <Tooltip id={`${node.id}-remove`}>
-                        <FormattedMessage
-                          id="app.scoreConfigExpression.removeOnlyNode"
-                          defaultMessage="Remove only this node (children are moved upwards)"
-                        />
-                      </Tooltip>
-                    }>
-                    <Icon icon="sign-out-alt" className="text-danger" gapLeft onClick={() => node.remove()} />
-                  </OverlayTrigger>
+                  <Icon
+                    icon="sign-out-alt"
+                    className="text-danger"
+                    gapLeft={2}
+                    onClick={() => node.remove()}
+                    tooltipId={`${node.id}-remove`}
+                    tooltipPlacement="bottom"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.scoreConfigExpression.removeOnlyNode"
+                        defaultMessage="Remove only this node (children are moved upwards)"
+                      />
+                    }
+                  />
                 </>
               )}
 
@@ -238,31 +227,30 @@ const ExpressionNode = ({
               ancestorIndex && // ancestorIndex exists -> exactly one node is selected
               !ancestorIndex[node.id] && // node is not parent of selected node
               (selectedNode.getParent() !== node.getParent() || !node.getParent().isComutative()) && ( // node is not sibling, or the order of sbilings matter
-                <>
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={
-                      <Tooltip id={`${node.id}-swap`}>
-                        <FormattedMessage
-                          id="app.scoreConfigExpression.swapNodes"
-                          defaultMessage="Swap with selected node (including sub-trees)"
-                        />
-                      </Tooltip>
-                    }>
-                    <SwapIcon className="text-success" gapLeft onClick={() => node.swap(selectedNode)} />
-                  </OverlayTrigger>
-                </>
+                <SwapIcon
+                  className="text-success"
+                  gapLeft={2}
+                  onClick={() => node.swap(selectedNode)}
+                  tooltipId={`${node.id}-swap`}
+                  tooltipPlacement="bottom"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.scoreConfigExpression.swapNodes"
+                      defaultMessage="Swap with selected node (including sub-trees)"
+                    />
+                  }
+                />
               )}
 
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`${node.id}-removeTree`}>
-                  <FormattedMessage id="app.scoreConfigExpression.removeNode" defaultMessage="Remove this node" />
-                </Tooltip>
-              }>
-              <CloseIcon className="text-danger" gapLeft timid onClick={() => node.removeWholeSubtree()} />
-            </OverlayTrigger>
+            <CloseIcon
+              className="text-danger"
+              gapLeft={2}
+              timid
+              onClick={() => node.removeWholeSubtree()}
+              tooltipId={`${node.id}-removeTree`}
+              tooltipPlacement="bottom"
+              tooltip={<FormattedMessage id="app.scoreConfigExpression.removeNode" defaultMessage="Remove this node" />}
+            />
           </>
         )}
       </span>

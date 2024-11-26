@@ -128,7 +128,7 @@ class SubmitSolution extends Component {
         disabled={!canSubmit || !limitsOK}
         variant={hasFailed ? 'danger' : canSubmit ? 'success' : 'secondary'}
         {...btnProps}>
-        {hasFailed ? <WarningIcon gapRight /> : <SendIcon gapRight />}
+        {hasFailed ? <WarningIcon gapRight={2} /> : <SendIcon gapRight={2} />}
         {formatMessage(commonMessages.submitButton)}
       </Button>
     );
@@ -202,7 +202,7 @@ class SubmitSolution extends Component {
               {(!presubmitCountLimitOK || !presubmitSizeLimitOK) && (
                 <Callout variant={isReferenceSolution ? 'warning' : 'danger'}>
                   <h4>
-                    <WarningIcon gapRight />
+                    <WarningIcon gapRight={2} />
                     {formatMessage(commonMessages.limitsExceeded)}
                   </h4>
                   {!presubmitCountLimitOK && (
@@ -217,11 +217,11 @@ class SubmitSolution extends Component {
               )}
             </Col>
             <Col md={12} lg={6}>
-              <FormGroup>
+              <FormGroup className="mb-3">
                 <FormLabel>{formatMessage(commonMessages.runtimeEnvironment)}</FormLabel>
                 {isValidating ? (
                   <p>
-                    <LoadingIcon gapRight />
+                    <LoadingIcon gapRight={2} />
                     {formatMessage(commonMessages.validating)}
                   </p>
                 ) : !presubmitEnvironments ? (
@@ -267,7 +267,7 @@ class SubmitSolution extends Component {
                   attachedFiles.length > 1 &&
                   hasEntryPoint(presubmitVariables, selectedEnvironment)
               ) && (
-                <FormGroup>
+                <FormGroup className="mb-3">
                   <FormLabel className={selectedEntryPoint ? '' : 'text-danger'}>
                     {formatMessage(commonMessages.entryPoint)}
                   </FormLabel>
@@ -290,7 +290,7 @@ class SubmitSolution extends Component {
 
               <hr />
 
-              <FormGroup>
+              <FormGroup className="mb-3">
                 <FormLabel>{formatMessage(messages.noteLabel)}</FormLabel>
                 <FormControl onChange={e => saveNote(e.target.value)} value={note} type="text" maxLength={1024} />
               </FormGroup>
@@ -306,7 +306,7 @@ class SubmitSolution extends Component {
             <TheButtonGroup>
               {isSending && (
                 <Button type="submit" disabled={true} variant="success">
-                  <LoadingIcon gapRight />
+                  <LoadingIcon gapRight={2} />
                   {formatMessage(commonMessages.submitting)}
                 </Button>
               )}
@@ -314,12 +314,12 @@ class SubmitSolution extends Component {
               {!isSending && this.createSubmitButton()}
 
               <Button variant="outline-secondary" onClick={reset}>
-                <DeleteIcon gapRight />
+                <DeleteIcon gapRight={2} />
                 {formatMessage(commonMessages.resetForm)}
               </Button>
 
               <Button variant="outline-secondary" onClick={onClose}>
-                <CloseIcon gapRight />
+                <CloseIcon gapRight={2} />
                 {formatMessage(commonMessages.closeForm)}
               </Button>
             </TheButtonGroup>

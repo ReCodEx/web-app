@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
@@ -81,7 +81,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
         {this.state.compilationOpen === true || (this.state.compilationOpen === null && compilationInitiallyOpened) ? (
           <InsetPanel>
             <h4 className="compilation-close" onClick={this.compilationClose}>
-              <ExpandCollapseIcon isOpen={true} gapRight />
+              <ExpandCollapseIcon isOpen={true} gapRight={2} />
               <FormattedMessage
                 id="app.editExerciseSimpleConfigTests.compilationTitle"
                 defaultMessage="Compilation/Execution"
@@ -167,18 +167,16 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                               />
                                             </Explanation>
 
-                                            <OverlayTrigger
-                                              placement="right"
-                                              overlay={
-                                                <Tooltip id={`${test}.compile-args-warning.${env.id}`}>
-                                                  <FormattedMessage
-                                                    id="app.editExerciseSimpleConfigTests.compileArgsWarning"
-                                                    defaultMessage="Setting compilation arguments is potentially error-prone. Make sure you know how the pipelines and the workers are configured before adding any custom compilation arguments."
-                                                  />
-                                                </Tooltip>
-                                              }>
-                                              <WarningIcon className="text-warning" />
-                                            </OverlayTrigger>
+                                            <WarningIcon
+                                              className="text-warning"
+                                              tooltipId={`${test}.compile-args-warning.${env.id}`}
+                                              tooltip={
+                                                <FormattedMessage
+                                                  id="app.editExerciseSimpleConfigTests.compileArgsWarning"
+                                                  defaultMessage="Setting compilation arguments is potentially error-prone. Make sure you know how the pipelines and the workers are configured before adding any custom compilation arguments."
+                                                />
+                                              }
+                                            />
                                           </>
                                         }
                                       />
@@ -323,7 +321,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                     />
                   }>
                   <Button variant="primary" size="xs" disabled={Boolean(testErrors)}>
-                    <Icon icon="arrows-alt" gapRight />
+                    <Icon icon="arrows-alt" gapRight={2} />
                     <FormattedMessage
                       id="app.editExerciseConfigForm.smartFillCompilation"
                       defaultMessage="Smart Fill Compilation"
@@ -335,7 +333,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
           </InsetPanel>
         ) : (
           <InsetPanel className="text-body-secondary compilation-open" size="small" onClick={this.compilationOpen}>
-            <ExpandCollapseIcon isOpen={false} gapRight />
+            <ExpandCollapseIcon isOpen={false} gapRight={2} />
             <FormattedMessage
               id="app.editExerciseSimpleConfigTests.compilationTitle"
               defaultMessage="Compilation/Execution"

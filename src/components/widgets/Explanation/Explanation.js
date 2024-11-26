@@ -12,7 +12,9 @@ const Explanation = ({ id = null, title = null, children, placement = 'right' })
         <Popover.Body className="small">{children}</Popover.Body>
       </Popover>
     }>
-    <Icon icon={['far', 'question-circle']} className="text-body-secondary small" gapLeft gapRight />
+    <span>
+      <Icon icon={['far', 'question-circle']} className="text-body-secondary small" gapLeft={2} gapRight={2} />
+    </span>
   </OverlayTrigger>
 );
 Explanation.propTypes = {

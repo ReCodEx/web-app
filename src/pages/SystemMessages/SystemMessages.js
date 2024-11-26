@@ -113,7 +113,7 @@ class SystemMessages extends Component {
                               message: getMessageInitialValues(message),
                             });
                           }}>
-                          <EditIcon gapRight />
+                          <EditIcon gapRight={2} />
                           <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                         </Button>
                         <DeleteSystemMessageButtonContainer
@@ -127,7 +127,7 @@ class SystemMessages extends Component {
                   <hr className="m-0" />
                   <p className="mt-3 text-center">
                     <Button onClick={() => this.setState({ isOpen: true, createNew: true })} variant="success">
-                      <AddIcon gapRight />
+                      <AddIcon gapRight={2} />
                       <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
                     </Button>
                   </p>

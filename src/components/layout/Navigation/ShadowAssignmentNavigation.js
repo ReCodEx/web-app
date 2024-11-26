@@ -14,12 +14,12 @@ const ShadowAssignmentNavigation = ({ shadowId, groupId, canEdit = false, links 
       {
         caption: <FormattedMessage id="app.navigation.shadowAssignment" defaultMessage="Shadow Assignment" />,
         link: links.SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowId),
-        icon: <ShadowAssignmentIcon gapRight />,
+        icon: <ShadowAssignmentIcon gapRight={2} />,
       },
       canEdit && {
         caption: <FormattedMessage id="app.navigation.edit" defaultMessage="Edit" />,
         link: links.SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(shadowId),
-        icon: <EditIcon gapRight />,
+        icon: <EditIcon gapRight={2} />,
       },
       ...createGroupLinks(links, groupId, true) /* true = detail, no edit */,
     ]}

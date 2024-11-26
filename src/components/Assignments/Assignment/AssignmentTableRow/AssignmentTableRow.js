@@ -85,10 +85,10 @@ const AssignmentTableRow = ({
       ) : (
         <AssignmentIcon className="text-body-secondary" />
       )}
-      <MaybeBonusAssignmentIcon gapLeft id={id} isBonus={isBonus} />
+      <MaybeBonusAssignmentIcon gapLeft={2} id={id} isBonus={isBonus} />
 
       {(permissionHints.update || permissionHints.viewAssignmentSolutions) && exerciseSynchronizationInfo && (
-        <AssignmentSyncIcon id={id} syncInfo={exerciseSynchronizationInfo} gapLeft />
+        <AssignmentSyncIcon id={id} syncInfo={exerciseSynchronizationInfo} gapLeft={2} />
       )}
     </td>
 
@@ -158,12 +158,12 @@ const AssignmentTableRow = ({
                 </Tooltip>
               }>
               <Button size="xs" variant="info" onClick={discussionOpen}>
-                <ChatIcon smallGapLeft smallGapRight />
+                <ChatIcon gapLeft={1} gapRight={1} />
               </Button>
             </OverlayTrigger>
           ) : (
             <Button size="xs" variant="info" onClick={discussionOpen}>
-              <ChatIcon gapRight />
+              <ChatIcon gapRight={2} />
               <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
             </Button>
           ))}
@@ -178,7 +178,7 @@ const AssignmentTableRow = ({
                 </Tooltip>
               }>
               <Button size="xs" variant="primary">
-                <ResultsIcon smallGapLeft smallGapRight />
+                <ResultsIcon gapLeft={1} gapRight={1} />
               </Button>
             </OverlayTrigger>
           </Link>
@@ -194,7 +194,7 @@ const AssignmentTableRow = ({
                 </Tooltip>
               }>
               <Button size="xs" variant="warning">
-                <EditIcon smallGapLeft smallGapRight />
+                <EditIcon gapLeft={1} gapRight={1} />
               </Button>
             </OverlayTrigger>
           </Link>

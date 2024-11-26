@@ -41,7 +41,7 @@ const InstanceInfoTable = ({
       collapsable
       noPadding
       unlimitedHeight>
-      <Table>
+      <Table className="card-table">
         <tbody>
           <tr>
             <th>

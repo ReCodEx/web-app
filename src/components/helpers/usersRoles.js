@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { SuperadminIcon, EmpoweredSupervisorIcon, SupervisorIcon, SupervisorStudentIcon, UserIcon } from '../icons';
 
 export const STUDENT_ROLE = 'student';
@@ -127,13 +126,13 @@ roleIcon.propTypes = {
 };
 
 export const UserRoleIcon = ({ role, showTooltip = false, tooltipId = null, ...props }) =>
-  showTooltip ? (
-    <OverlayTrigger placement="bottom" overlay={<Tooltip id={tooltipId}>{roleLabels[role]}</Tooltip>}>
-      {roleIcon({ role, ...props })}
-    </OverlayTrigger>
-  ) : (
-    roleIcon({ role, ...props })
-  );
+  roleIcon({
+    role,
+    tooltipId,
+    tooltipPlacement: 'bottom',
+    tooltip: showTooltip ? roleLabels[role] : null,
+    ...props,
+  });
 
 UserRoleIcon.propTypes = {
   role: PropTypes.string.isRequired,

@@ -50,7 +50,7 @@ class EditLimitsForm extends Component {
               <TheButtonGroup>
                 {dirty && (
                   <Button type="reset" onClick={reset} variant="danger">
-                    <RefreshIcon gapRight />
+                    <RefreshIcon gapRight={2} />
                     <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>
                 )}
@@ -62,7 +62,7 @@ class EditLimitsForm extends Component {
                   hasSucceeded={submitSucceeded}
                   hasFailed={submitFailed}
                   handleSubmit={handleSubmit}
-                  defaultIcon={<SaveIcon gapRight />}
+                  defaultIcon={<SaveIcon gapRight={2} />}
                   messages={{
                     submit: <FormattedMessage id="app.editLimitsForm.submit" defaultMessage="Save Limits" />,
                     submitting: (
@@ -94,7 +94,7 @@ class EditLimitsForm extends Component {
             <Col lg={9}>
               <div>
                 <p className={styles.preciseTimeTooltip}>
-                  <InfoIcon gapRight />
+                  <InfoIcon gapRight={2} />
                   <FormattedMessage
                     id="app.editLimitsForm.preciseTimeTooltip"
                     defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."

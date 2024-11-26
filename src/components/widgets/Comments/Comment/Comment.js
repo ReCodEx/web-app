@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import withLinks from '../../../../helpers/withLinks.js';
@@ -37,7 +36,7 @@ const Comment = ({
     <div
       className={classnames({
         'direct-chat-msg': true,
-        right,
+        end: right,
       })}>
       <div className="direct-chat-info clearfix">
         <span
@@ -61,44 +60,41 @@ const Comment = ({
       <div className="direct-chat-text">
         {isFromCurrentUser && (
           <DeleteIcon
-            gapLeft
+            gapLeft={2}
             className={classnames({ 'float-end': true, [styles.iconButton]: true, [styles.iconButtonDelete]: true })}
             onClick={() => deleteComment(id)}
           />
         )}
         {isFromCurrentUser && setPrivacy && (
-          <OverlayTrigger
-            placement="left"
-            overlay={
-              <Tooltip id={id}>
-                {isPrivate ? (
+          <Icon
+            icon={isUpdating ? 'circle-notch' : isPrivate ? 'eye-slash' : 'eye'}
+            onClick={() => setPrivacy(id, !isPrivate)}
+            className={classnames({
+              'float-end': true,
+              [styles.iconButton]: true,
+              [styles.iconButtonLock]: !isPrivate,
+              [styles.iconButtonUnlock]: isPrivate,
+            })}
+            spin={isUpdating}
+            tooltipId={id}
+            tooltipPlacement="left"
+            tooltip={
+              isPrivate ? (
+                <FormattedMessage
+                  id="app.comments.onlyYouCanSeeThisComment"
+                  defaultMessage="Only you can see this comment"
+                />
+              ) : (
+                <>
                   <FormattedMessage
-                    id="app.comments.onlyYouCanSeeThisComment"
-                    defaultMessage="Only you can see this comment"
+                    id="app.comments.everyoneCanSeeThisComment"
+                    defaultMessage="This comment is visible to everyone who can see this thread."
                   />
-                ) : (
-                  <>
-                    <FormattedMessage
-                      id="app.comments.everyoneCanSeeThisComment"
-                      defaultMessage="This comment is visible to everyone who can see this thread."
-                    />
-                    {additionalPublicSwitchNote && <> {additionalPublicSwitchNote}</>}
-                  </>
-                )}
-              </Tooltip>
-            }>
-            <Icon
-              icon={isUpdating ? 'circle-notch' : isPrivate ? 'eye-slash' : 'eye'}
-              onClick={() => setPrivacy(id, !isPrivate)}
-              className={classnames({
-                'float-end': true,
-                [styles.iconButton]: true,
-                [styles.iconButtonLock]: !isPrivate,
-                [styles.iconButtonUnlock]: isPrivate,
-              })}
-              spin={isUpdating}
-            />
-          </OverlayTrigger>
+                  {additionalPublicSwitchNote && <> {additionalPublicSwitchNote}</>}
+                </>
+              )
+            }
+          />
         )}
         {text.split('\n').map((line, idx) => (
           <div key={idx} style={{ minHeight: '1em' }}>

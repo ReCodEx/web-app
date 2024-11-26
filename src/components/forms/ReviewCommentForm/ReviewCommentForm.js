@@ -140,7 +140,7 @@ const ReviewCommentForm = ({
 
             {onCancel && (
               <Button variant="secondary" size="sm" onClick={onCancel}>
-                <CloseIcon gapRight />
+                <CloseIcon gapRight={2} />
                 <FormattedMessage id="generic.cancel" defaultMessage="Cancel" />
               </Button>
             )}

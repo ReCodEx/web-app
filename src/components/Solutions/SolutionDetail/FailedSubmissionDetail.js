@@ -7,7 +7,7 @@ const FailedSubmissionDetail = () => (
   <Box
     title={
       <span>
-        <WarningIcon gapRight />
+        <WarningIcon gapRight={2} />
         <FormattedMessage
           id="app.failedSubmissionDetail.title"
           defaultMessage="Cannot load evaluation of the solution"

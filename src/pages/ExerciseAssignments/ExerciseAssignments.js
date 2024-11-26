@@ -230,7 +230,7 @@ class ExerciseAssignments extends Component {
                                   visibility={visibility}
                                   showSendNotification
                                   submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
-                                  defaultIcon={<SaveIcon gapRight />}
+                                  defaultIcon={<SaveIcon gapRight={2} />}
                                   mergeJudgeLogs={exercise.mergeJudgeLogs}
                                 />
                               </>

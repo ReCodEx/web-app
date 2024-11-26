@@ -57,7 +57,7 @@ class ReviewRequestsList extends Component {
         isOpen
         customIcons={
           solutionsState !== resourceStatus.PENDING &&
-          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} gapRight />
+          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} gapRight={2} />
         }>
         <>
           {solutionsState === resourceStatus.PENDING && (
@@ -68,7 +68,7 @@ class ReviewRequestsList extends Component {
 
           {solutionsState === resourceStatus.FAILED && (
             <div className="text-center my-3">
-              <WarningIcon className="text-danger" gapRight />
+              <WarningIcon className="text-danger" gapRight={2} />
               <FormattedMessage
                 id="app.reviewRequestsList.failed"
                 defaultMessage="Loading of the requested reviews failed. Please try refreshing this component later."
@@ -77,7 +77,7 @@ class ReviewRequestsList extends Component {
           )}
 
           {solutionsState === resourceStatus.FULFILLED && (
-            <Table hover className="mb-0">
+            <Table hover className="card-table">
               {Object.keys(solutions).map(groupId => (
                 <tbody key={groupId}>
                   <tr className="bg-light">
@@ -96,7 +96,7 @@ class ReviewRequestsList extends Component {
                       <Icon
                         className="align-middle"
                         icon={!this.state[`group-${groupId}`] ? 'circle-chevron-down' : 'circle-chevron-left'}
-                        gapRight
+                        gapRight={2}
                         timid
                         onClick={() => this.toggleGroupOpened(groupId)}
                       />
@@ -170,13 +170,13 @@ class ReviewRequestsList extends Component {
                                     <>
                                       <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
                                         <Button size="xs" variant="secondary">
-                                          <DetailIcon gapRight />
+                                          <DetailIcon gapRight={2} />
                                           <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                                         </Button>
                                       </Link>
                                       <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
                                         <Button size="xs" variant="primary">
-                                          <CodeFileIcon fixedWidth gapRight />
+                                          <CodeFileIcon fixedWidth gapRight={2} />
                                           <FormattedMessage id="generic.files" defaultMessage="Files" />
                                         </Button>
                                       </Link>

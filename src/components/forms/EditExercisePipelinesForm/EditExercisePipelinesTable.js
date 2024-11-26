@@ -91,7 +91,7 @@ class EditExercisePipelinesTable extends Component {
                     variant="primary"
                     disabled={!this.state.selectedPipeline}
                     noShadow>
-                    <AddIcon gapRight />
+                    <AddIcon gapRight={2} />
                     <FormattedMessage id="app.editExercisePipelines.addPipeline" defaultMessage="Add Pipeline" />
                   </Button>
                 </InputGroup>

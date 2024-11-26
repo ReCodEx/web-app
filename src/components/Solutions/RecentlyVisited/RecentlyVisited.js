@@ -73,7 +73,7 @@ const RecentlyVisited = ({ selectedId, secondSelectedId = null, onSelect = null 
             clearRecentlyVisitedSolutions();
             setRenderTrigger(renderTrigger + 1);
           }}>
-          <DeleteIcon gapRight />
+          <DeleteIcon gapRight={2} />
           <FormattedMessage id="app.solutions.recentlyVisited.clearCache" defaultMessage="Clear the cache" />
         </Button>
       </div>

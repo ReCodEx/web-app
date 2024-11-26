@@ -20,10 +20,10 @@ const ShadowAssignmentDetail = ({
   permissionHints,
 }) => (
   <Box title={<FormattedMessage id="generic.details" defaultMessage="Details" />} noPadding>
-    <Table responsive size="sm">
+    <Table size="sm" className="card-table">
       <tbody>
         <tr>
-          <td className="text-center text-body-secondary shrink-col px-2">
+          <td className="icon-col">
             <Icon icon="cloud-upload-alt" />
           </td>
           <th>
@@ -41,7 +41,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-body-secondary shrink-col px-2">
+          <td className="icon-col">
             <Icon icon={['far', 'clock']} />
           </td>
           <th>
@@ -53,7 +53,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-body-secondary shrink-col px-2">
+          <td className="icon-col">
             <DeadlineIcon />
           </td>
           <th>
@@ -71,7 +71,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-body-secondary shrink-col px-2">
+          <td className="icon-col">
             <Icon icon={['far', 'copy']} />
           </td>
           <th>
@@ -83,7 +83,7 @@ const ShadowAssignmentDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-body-secondary shrink-col px-2">
+          <td className="icon-col">
             <BonusIcon />
           </td>
           <th>
@@ -96,7 +96,7 @@ const ShadowAssignmentDetail = ({
 
         {permissionHints.update && (
           <tr>
-            <td className="text-center text-body-secondary shrink-col px-2">
+            <td className="icon-col">
               <VisibleIcon />
             </td>
             <th>

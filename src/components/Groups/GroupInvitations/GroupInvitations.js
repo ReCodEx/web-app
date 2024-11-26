@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classnames from 'classnames';
@@ -57,22 +57,23 @@ const GroupInvitations = ({
                       (copiedInvitation === invitation.id ? (
                         <Icon
                           icon="clipboard-check"
-                          gapLeft
+                          gapLeft={2}
                           className="text-success"
                           onClick={() => setCopiedInvitation(null)}
                         />
                       ) : (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id={invitation.id}>
+                        <CopyToClipboard text={uri} onCopy={() => setCopiedInvitation(invitation.id)}>
+                          <CopyIcon
+                            timid
+                            gapLeft={2}
+                            className="clickable"
+                            tooltipId={invitation.id}
+                            tooltipPlacement="bottom"
+                            tooltip={
                               <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
-                            </Tooltip>
-                          }>
-                          <CopyToClipboard text={uri} onCopy={() => setCopiedInvitation(invitation.id)}>
-                            <CopyIcon timid gapLeft className="clickable" />
-                          </CopyToClipboard>
-                        </OverlayTrigger>
+                            }
+                          />
+                        </CopyToClipboard>
                       ))}
                   </td>
                 </tr>
@@ -86,16 +87,19 @@ const GroupInvitations = ({
                   </td>
                   <td>
                     {invitation.note && (
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`note-${invitation.id}`}>
+                      <Icon
+                        icon={['far', 'comment-dots']}
+                        gapLeft={2}
+                        gapRight={2}
+                        tooltipId={`note-${invitation.id}`}
+                        tooltipPlacement="bottom"
+                        tooltip={
+                          <>
                             <FormattedMessage id="app.groupInvitationForm.note" defaultMessage="Note:" />{' '}
                             <strong>{invitation.note}</strong>
-                          </Tooltip>
-                        }>
-                        <Icon icon={['far', 'comment-dots']} gapLeft gapRight />
-                      </OverlayTrigger>
+                          </>
+                        }
+                      />
                     )}
                   </td>
 
@@ -104,7 +108,7 @@ const GroupInvitations = ({
                       <TheButtonGroup>
                         {editInvitation && (
                           <Button variant="warning" size="xs" onClick={() => editInvitation(invitation.id)}>
-                            <EditIcon gapRight />
+                            <EditIcon gapRight={2} />
                             <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                           </Button>
                         )}
@@ -121,7 +125,7 @@ const GroupInvitations = ({
                             }
                             confirmId={`delete-${invitation.id}`}
                             onClick={() => deleteInvitation(invitation.id)}>
-                            <DeleteIcon gapRight />
+                            <DeleteIcon gapRight={2} />
                             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                           </Button>
                         )}

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import { CheckboxField } from '../Fields';
@@ -32,29 +32,29 @@ const EditEnvironmentList = ({
                 <span>
                   {environment.longName}
 
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={
-                      <Tooltip id={`environment-${environment.id}`}>
-                        {environment.description} {environment.extensions}
-                      </Tooltip>
-                    }>
-                    <InfoIcon gapLeft className="text-primary" timid />
-                  </OverlayTrigger>
+                  <InfoIcon
+                    gapLeft={2}
+                    className="text-primary"
+                    timid
+                    tooltipId={`environment-${environment.id}`}
+                    tooltipPlacement="bottom"
+                    tooltip={`${environment.description} ${environment.extensions}`}
+                  />
 
                   {showExclusive && STANDALONE_ENVIRONMENTS.includes(environment.id) && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`environment-standalone-${environment.id}`}>
-                          <FormattedMessage
-                            id="app.editEnvironmentSimpleForm.exclusiveEnvironment"
-                            defaultMessage="Exclusive runtime environment"
-                          />
-                        </Tooltip>
-                      }>
-                      <Icon icon={['far', 'star']} smallGapLeft className="text-warning opacity-50" />
-                    </OverlayTrigger>
+                    <Icon
+                      icon={['far', 'star']}
+                      gapLeft={1}
+                      className="text-warning opacity-50"
+                      tooltipId={`environment-standalone-${environment.id}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.editEnvironmentSimpleForm.exclusiveEnvironment"
+                          defaultMessage="Exclusive runtime environment"
+                        />
+                      }
+                    />
                   )}
                 </span>
               }
@@ -71,19 +71,19 @@ const EditEnvironmentList = ({
             <TheButtonGroup>
               {Boolean(selectAllRuntimesHandler) && (
                 <Button onClick={selectAllRuntimesHandler} variant="primary" size="sm">
-                  <SquareIcon checked gapRight />
+                  <SquareIcon checked gapRight={2} />
                   <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
                 </Button>
               )}
               {Boolean(clearAllRuntimesHandler) && (
                 <Button onClick={clearAllRuntimesHandler} variant="primary" size="sm">
-                  <SquareIcon gapRight />
+                  <SquareIcon gapRight={2} />
                   <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
                 </Button>
               )}
               {Boolean(invertRuntimeSelectionHandler) && (
                 <Button onClick={invertRuntimeSelectionHandler} variant="primary" size="sm">
-                  <InvertIcon gapRight />
+                  <InvertIcon gapRight={2} />
                   <FormattedMessage id="generic.invertSelection" defaultMessage="Invert Selection" />
                 </Button>
               )}

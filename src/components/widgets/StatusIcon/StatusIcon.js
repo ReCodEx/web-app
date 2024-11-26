@@ -7,24 +7,24 @@ import Icon from '../../icons';
 const StatusIcon = ({ id, message, icon, placement = 'bottom', accepted = false }) => (
   <span>
     {accepted ? (
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id={id}>
-            <span>
-              {message}
-              <FormattedMessage
-                id="app.submissionStatus.accepted"
-                defaultMessage="This solution was marked by one of the supervisors as accepted."
-              />
-            </span>
-          </Tooltip>
-        }>
-        <Icon icon="circle-check" className="text-success" />
-      </OverlayTrigger>
+      <Icon
+        icon="circle-check"
+        className="text-success"
+        tooltipId={id}
+        tooltipPlacement={placement}
+        tooltip={
+          <span>
+            {message}
+            <FormattedMessage
+              id="app.submissionStatus.accepted"
+              defaultMessage="This solution was marked by one of the supervisors as accepted."
+            />
+          </span>
+        }
+      />
     ) : message ? (
-      <OverlayTrigger placement="bottom" overlay={<Tooltip id={id}>{message}</Tooltip>}>
-        {icon}
+      <OverlayTrigger placement={placement} overlay={<Tooltip id={id}>{message}</Tooltip>}>
+        <span>{icon}</span>
       </OverlayTrigger>
     ) : (
       icon

@@ -21,7 +21,7 @@ class SimpleTextSearch extends Component {
 
     return (
       <form>
-        <FormGroup>
+        <FormGroup className="mb-3">
           <FormLabel htmlFor={id}>
             <FormattedMessage id="generic.search" defaultMessage="Search" />:
           </FormLabel>

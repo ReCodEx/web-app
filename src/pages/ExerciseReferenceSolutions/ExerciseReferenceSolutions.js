@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
-import { Row, Col, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
@@ -63,38 +63,37 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
       className: 'text-nowrap text-body-secondary',
       cellRenderer: ({ visibility }) =>
         visibility > 1 ? (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id="promotedIcon">
-                <FormattedMessage
-                  id="app.referenceSolution.visibility.promoted"
-                  defaultMessage="The solution is promoted by the auhor of the exercise (recommended for reading to other supervisors)"
-                />
-              </Tooltip>
-            }>
-            <Icon icon="star" className="text-warning" />
-          </OverlayTrigger>
+          <Icon
+            icon="star"
+            className="text-warning"
+            tooltipId="promotedIcon"
+            tooltipPlacement="bottom"
+            tooltip={
+              <FormattedMessage
+                id="app.referenceSolution.visibility.promoted"
+                defaultMessage="The solution is promoted by the auhor of the exercise (recommended for reading to other supervisors)"
+              />
+            }
+          />
         ) : (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id="visibilityIcon">
-                {visibility > 0 ? (
-                  <FormattedMessage
-                    id="app.referenceSolution.visibility.public"
-                    defaultMessage="The solution is visible to all supervisors who can access this exercise."
-                  />
-                ) : (
-                  <FormattedMessage
-                    id="app.referenceSolution.visibility.private"
-                    defaultMessage="The solution is visible only to you."
-                  />
-                )}
-              </Tooltip>
-            }>
-            <VisibleIcon visible={visibility > 0} />
-          </OverlayTrigger>
+          <VisibleIcon
+            visible={visibility > 0}
+            tooltipId="visibilityIcon"
+            tooltipPlacement="bottom"
+            tooltip={
+              visibility > 0 ? (
+                <FormattedMessage
+                  id="app.referenceSolution.visibility.public"
+                  defaultMessage="The solution is visible to all supervisors who can access this exercise."
+                />
+              ) : (
+                <FormattedMessage
+                  id="app.referenceSolution.visibility.private"
+                  defaultMessage="The solution is visible only to you."
+                />
+              )
+            }
+          />
         ),
     }),
 
@@ -166,7 +165,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
         <TheButtonGroup>
           <Link to={REFERENCE_SOLUTION_URI_FACTORY(solution.exerciseId, solution.id)}>
             <Button size="xs" variant="secondary">
-              <DetailIcon gapRight />
+              <DetailIcon gapRight={2} />
               <FormattedMessage id="generic.detail" defaultMessage="Detail" />
             </Button>
           </Link>
@@ -186,7 +185,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
                 />
               }>
               <Button size="xs" variant="danger">
-                <DeleteIcon gapRight />
+                <DeleteIcon gapRight={2} />
                 <FormattedMessage id="generic.delete" defaultMessage="Delete" />
               </Button>
             </Confirm>
@@ -382,7 +381,7 @@ class ExerciseReferenceSolutions extends Component {
                       variant={exercise.isBroken ? 'secondary' : 'success'}
                       onClick={this.createReferenceSolution}
                       disabled={exercise.isBroken}>
-                      <SendIcon gapRight />
+                      <SendIcon gapRight={2} />
                       {exercise.isBroken ? (
                         <FormattedMessage
                           id="app.exercise.isBrokenShort"
@@ -402,13 +401,13 @@ class ExerciseReferenceSolutions extends Component {
                 <TheButtonGroup className="mb-3 text-nowrap">
                   {someFiltersOff(this.state) && (
                     <Button variant="success" onClick={this.resetFilters}>
-                      <Icon icon="list-ul" gapRight />
+                      <Icon icon="list-ul" gapRight={2} />
                       <FormattedMessage id="generic.showAll" defaultMessage="Show All" />
                     </Button>
                   )}
 
                   <Button variant="primary" onClick={this.openFilters}>
-                    <Icon icon="sliders" gapRight />
+                    <Icon icon="sliders" gapRight={2} />
                     <FormattedMessage
                       id="app.exerciseReferenceSolutions.filtersButton"
                       defaultMessage="Change Filters"
@@ -508,18 +507,18 @@ class ExerciseReferenceSolutions extends Component {
                       disabled={!this.state.showOthers}>
                       <FormattedMessage id="app.exerciseReferenceSolutions.filters.showMine" defaultMessage="Mine" />
                       {!this.state.showOthers && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="toggleShowPromoted">
-                              <FormattedMessage
-                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
-                                defaultMessage="At least one option from each group must be selected."
-                              />
-                            </Tooltip>
-                          }>
-                          <LockIcon gapLeft className="opacity-50" />
-                        </OverlayTrigger>
+                        <LockIcon
+                          gapLeft={2}
+                          className="opacity-50"
+                          tooltipId="toggleShowMine"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                              defaultMessage="At least one option from each group must be selected."
+                            />
+                          }
+                        />
                       )}
                     </OnOffCheckbox>
                   </Col>
@@ -535,18 +534,18 @@ class ExerciseReferenceSolutions extends Component {
                         defaultMessage="Others"
                       />
                       {!this.state.showMine && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="toggleShowPromoted">
-                              <FormattedMessage
-                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
-                                defaultMessage="At least one option from each group must be selected."
-                              />
-                            </Tooltip>
-                          }>
-                          <LockIcon gapLeft className="opacity-50" />
-                        </OverlayTrigger>
+                        <LockIcon
+                          gapLeft={2}
+                          className="opacity-50"
+                          tooltipId="toggleShowOthers"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                              defaultMessage="At least one option from each group must be selected."
+                            />
+                          }
+                        />
                       )}
                     </OnOffCheckbox>
                   </Col>
@@ -575,18 +574,18 @@ class ExerciseReferenceSolutions extends Component {
                         defaultMessage="100% correct"
                       />
                       {!this.state.showImperfect && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="toggleShowPromoted">
-                              <FormattedMessage
-                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
-                                defaultMessage="At least one option from each group must be selected."
-                              />
-                            </Tooltip>
-                          }>
-                          <LockIcon gapLeft className="opacity-50" />
-                        </OverlayTrigger>
+                        <LockIcon
+                          gapLeft={2}
+                          className="opacity-50"
+                          tooltipId="toggleShowCorrect"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                              defaultMessage="At least one option from each group must be selected."
+                            />
+                          }
+                        />
                       )}
                     </OnOffCheckbox>
                   </Col>
@@ -602,18 +601,18 @@ class ExerciseReferenceSolutions extends Component {
                         defaultMessage="Imperfect (less than 100% correct)"
                       />
                       {!this.state.showCorrect && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="toggleShowPromoted">
-                              <FormattedMessage
-                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
-                                defaultMessage="At least one option from each group must be selected."
-                              />
-                            </Tooltip>
-                          }>
-                          <LockIcon gapLeft className="opacity-50" />
-                        </OverlayTrigger>
+                        <LockIcon
+                          gapLeft={2}
+                          className="opacity-50"
+                          tooltipId="toggleShowImperfect"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                              defaultMessage="At least one option from each group must be selected."
+                            />
+                          }
+                        />
                       )}
                     </OnOffCheckbox>
                   </Col>
@@ -642,18 +641,18 @@ class ExerciseReferenceSolutions extends Component {
                         defaultMessage="Promoted"
                       />
                       {!this.state.showPublic && !this.state.showPrivate && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="toggleShowPromoted">
-                              <FormattedMessage
-                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
-                                defaultMessage="At least one option from each group must be selected."
-                              />
-                            </Tooltip>
-                          }>
-                          <LockIcon gapLeft className="opacity-50" />
-                        </OverlayTrigger>
+                        <LockIcon
+                          gapLeft={2}
+                          className="opacity-50"
+                          tooltipId="toggleShowPromoted"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                              defaultMessage="At least one option from each group must be selected."
+                            />
+                          }
+                        />
                       )}
                     </OnOffCheckbox>
                   </Col>
@@ -669,18 +668,18 @@ class ExerciseReferenceSolutions extends Component {
                         defaultMessage="Public"
                       />
                       {!this.state.showPromoted && !this.state.showPrivate && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="toggleShowPromoted">
-                              <FormattedMessage
-                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
-                                defaultMessage="At least one option from each group must be selected."
-                              />
-                            </Tooltip>
-                          }>
-                          <LockIcon gapLeft className="opacity-50" />
-                        </OverlayTrigger>
+                        <LockIcon
+                          gapLeft={2}
+                          className="opacity-50"
+                          tooltipId="toggleShowPublic"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                              defaultMessage="At least one option from each group must be selected."
+                            />
+                          }
+                        />
                       )}
                     </OnOffCheckbox>
                   </Col>
@@ -696,18 +695,18 @@ class ExerciseReferenceSolutions extends Component {
                         defaultMessage="Private"
                       />
                       {!this.state.showPublic && !this.state.showPromoted && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="toggleShowPromoted">
-                              <FormattedMessage
-                                id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
-                                defaultMessage="At least one option from each group must be selected."
-                              />
-                            </Tooltip>
-                          }>
-                          <LockIcon gapLeft className="opacity-50" />
-                        </OverlayTrigger>
+                        <LockIcon
+                          gapLeft={2}
+                          className="opacity-50"
+                          tooltipId="toggleShowPrivate"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.exerciseReferenceSolutions.filters.lastOneOfGroup"
+                              defaultMessage="At least one option from each group must be selected."
+                            />
+                          }
+                        />
                       )}
                     </OnOffCheckbox>
                   </Col>
@@ -718,12 +717,12 @@ class ExerciseReferenceSolutions extends Component {
                 <TheButtonGroup>
                   {someFiltersOff(this.state) && (
                     <Button variant="success" onClick={this.resetFilters}>
-                      <RefreshIcon gapRight />
+                      <RefreshIcon gapRight={2} />
                       <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                     </Button>
                   )}
                   <Button variant="secondary" onClick={this.closeFilters}>
-                    <CloseIcon gapRight />
+                    <CloseIcon gapRight={2} />
                     <FormattedMessage id="generic.close" defaultMessage="Close" />
                   </Button>
                 </TheButtonGroup>

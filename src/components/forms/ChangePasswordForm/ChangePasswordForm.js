@@ -33,7 +33,7 @@ const ChangePasswordForm = ({
           {!submitting ? (
             hasSucceeded ? (
               <>
-                <SuccessIcon gapRight />
+                <SuccessIcon gapRight={2} />
                 {firstTime ? (
                   <FormattedMessage
                     id="app.changePasswordForm.successFirstTime"
@@ -50,7 +50,7 @@ const ChangePasswordForm = ({
             )
           ) : (
             <>
-              <LoadingIcon gapRight />
+              <LoadingIcon gapRight={2} />
               {firstTime ? (
                 <FormattedMessage id="app.changePasswordForm.setting" defaultMessage="Setting..." />
               ) : (

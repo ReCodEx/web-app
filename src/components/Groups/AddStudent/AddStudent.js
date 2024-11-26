@@ -77,7 +77,7 @@ const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = f
           <hr />
           <div className="text-center">
             <Button size="sm" variant="primary" onClick={() => setDialogOpen(true)}>
-              <Icon icon="hand-holding-heart" gapRight />
+              <Icon icon="hand-holding-heart" gapRight={2} />
               <FormattedMessage id="app.addStudent.inviteButton" defaultMessage="Invite to Register" />
               ...
             </Button>

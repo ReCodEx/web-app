@@ -58,7 +58,7 @@ const CommentThread = ({
             ev.preventDefault();
             refresh();
           }}>
-          <RefreshIcon gapRight />
+          <RefreshIcon gapRight={2} />
           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
         </a>
       </p>

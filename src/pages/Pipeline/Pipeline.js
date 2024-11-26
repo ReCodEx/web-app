@@ -119,7 +119,7 @@ class Pipeline extends Component {
                     />
                   }>
                   <Button variant="success">
-                    <ForkIcon gapRight />
+                    <ForkIcon gapRight={2} />
                     <FormattedMessage id="app.pipeline.forkPipeline" defaultMessage="Duplicate Pipeline" />
                   </Button>
                 </Confirm>
@@ -139,11 +139,11 @@ class Pipeline extends Component {
                 </p>
                 <TheButtonGroup>
                   <Button variant="success" onClick={() => this.acknowledgeFork()}>
-                    <Icon icon={['far', 'smile']} gapRight />
+                    <Icon icon={['far', 'smile']} gapRight={2} />
                     <FormattedMessage id="generic.acknowledge" defaultMessage="Acknowledge" />
                   </Button>
                   <Button variant="primary" onClick={() => this.acknowledgeFork(pipeline.forkedFrom)}>
-                    <Icon icon="reply" gapRight />
+                    <Icon icon="reply" gapRight={2} />
                     <FormattedMessage id="app.pipeline.forkSuccess.backButton" defaultMessage="Back to original" />
                   </Button>
                 </TheButtonGroup>

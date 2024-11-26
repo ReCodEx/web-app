@@ -48,38 +48,38 @@ const AssignmentSolutionNavigation = ({
       {
         caption: <FormattedMessage id="app.navigation.solution" defaultMessage="Solution" />,
         link: links.SOLUTION_DETAIL_URI_FACTORY(assignmentId, solutionId),
-        icon: <SolutionResultsIcon gapRight />,
+        icon: <SolutionResultsIcon gapRight={2} />,
       },
       {
         caption: <FormattedMessage id="app.navigation.solutionFiles" defaultMessage="Submitted Files" />,
         link: links.SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solutionId),
-        icon: <CodeFileIcon gapRight />,
+        icon: <CodeFileIcon gapRight={2} />,
       },
       plagiarism && {
         caption: <FormattedMessage id="app.navigation.solutionPlagiarisms" defaultMessage="Similarities" />,
         link: links.SOLUTION_PLAGIARISMS_URI_FACTORY(assignmentId, solutionId),
-        icon: <PlagiarismIcon gapRight />,
+        icon: <PlagiarismIcon gapRight={2} />,
       },
       {
         caption: <FormattedMessage id="app.navigation.userSolution" defaultMessage="User Solutions" />,
         link: links.GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, userId),
-        icon: <UserIcon gapRight />,
+        icon: <UserIcon gapRight={2} />,
       },
       canViewSolutions && {
         caption: <FormattedMessage id="app.navigation.allSolutions" defaultMessage="All Solutions" />,
         link: links.ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignmentId),
-        icon: <ResultsIcon gapRight />,
+        icon: <ResultsIcon gapRight={2} />,
       },
       {
         caption: <FormattedMessage id="app.navigation.assignment" defaultMessage="Assignment" />,
         link: links.ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
-        icon: <AssignmentIcon gapRight />,
+        icon: <AssignmentIcon gapRight={2} />,
       },
       canViewExercise &&
         exerciseId && {
           caption: <FormattedMessage id="app.navigation.exercise" defaultMessage="Exercise" />,
           link: links.EXERCISE_URI_FACTORY(exerciseId),
-          icon: <ExerciseIcon gapRight />,
+          icon: <ExerciseIcon gapRight={2} />,
         },
       ...createGroupLinks(links, groupId, true) /* true = detail, no edit */,
     ]}
@@ -87,7 +87,7 @@ const AssignmentSolutionNavigation = ({
       canViewUserProfile && {
         caption: <FormattedMessage id="app.navigation.userProfile" defaultMessage="User's Profile" />,
         link: links.USER_URI_FACTORY(userId),
-        icon: <UserProfileIcon gapRight />,
+        icon: <UserProfileIcon gapRight={2} />,
       },
     ]}
   />

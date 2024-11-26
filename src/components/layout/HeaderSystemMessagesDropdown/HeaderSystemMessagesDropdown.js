@@ -43,11 +43,11 @@ const HeaderSystemMessagesDropdown = ({
       <Dropdown.Divider className="mb-0" />
 
       <div className={styles.messageList}>
-        <Table responsive hover className="m-0">
+        <Table responsive hover className="no-margin">
           <tbody>
             {systemMessages.map((message, idx) => (
               <tr key={idx}>
-                <td className={`text-${message.type} bg-${message.type} shrink-col align-middle text-center`}>
+                <td className={`text-${message.type} bg-${message.type} shrink-col valign-middle text-center`}>
                   <TypedMessageIcon type={message.type} size="lg" />
                 </td>
                 <td>

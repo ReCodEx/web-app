@@ -12,7 +12,7 @@ const Failed = ({ right, repost }) => (
       'float-start': !right,
     })}
     onClick={repost}>
-    <WarningIcon gapRight />
+    <WarningIcon gapRight={2} />
     <FormattedMessage id="app.comments.publishingFailed" defaultMessage="Publishing Failed" />
   </span>
 );

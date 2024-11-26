@@ -37,7 +37,7 @@ const ExercisesList = ({
               ) : (
                 <tr key={idx}>
                   <td colSpan={showGroups ? 8 : 7}>
-                    <LoadingIcon gapRight />
+                    <LoadingIcon gapRight={2} />
                     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
                   </td>
                 </tr>

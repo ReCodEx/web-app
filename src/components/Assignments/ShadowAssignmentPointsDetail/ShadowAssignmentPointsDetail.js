@@ -12,10 +12,10 @@ const ShadowAssignmentPointsDetail = ({ points = null, awardedAt = null, authorI
   <Box
     title={<FormattedMessage id="app.shadowAssignmentPointsDetail.title" defaultMessage="Awarded Points" />}
     noPadding>
-    <Table responsive size="sm">
+    <Table size="sm" className="card-table">
       <tbody>
         <tr>
-          <td className="text-center shrink-col ps-3 pe-3">
+          <td className="icon-col">
             <Icon icon={['far', 'star']} />
           </td>
           <th>
@@ -37,7 +37,7 @@ const ShadowAssignmentPointsDetail = ({ points = null, awardedAt = null, authorI
 
         {points !== null && (
           <tr>
-            <td className="text-center shrink-col ps-3 pe-3">
+            <td className="icon-col">
               <Icon icon={['far', 'clock']} />
             </td>
             <th>
@@ -49,7 +49,7 @@ const ShadowAssignmentPointsDetail = ({ points = null, awardedAt = null, authorI
 
         {Boolean(authorId) && (
           <tr>
-            <td className="text-center shrink-col ps-3 pe-3">
+            <td className="icon-col">
               <SupervisorIcon />
             </td>
             <th>
@@ -63,7 +63,7 @@ const ShadowAssignmentPointsDetail = ({ points = null, awardedAt = null, authorI
 
         {Boolean(note) && (
           <tr>
-            <td className="text-center shrink-col ps-3 pe-3">
+            <td className="icon-col">
               <Icon icon={['far', 'sticky-note']} />
             </td>
             <th>

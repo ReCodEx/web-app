@@ -5,7 +5,7 @@ import Box from '../../widgets/Box';
 
 const LoadingPipelineDetail = () => (
   <Box title={<FormattedMessage id="app.pipeline.title" defaultMessage="Pipeline Detail" />}>
-    <LoadingIcon gapRight />
+    <LoadingIcon gapRight={2} />
     <FormattedMessage id="app.pipeline.loadingDetail" defaultMessage="Loading pipeline detail" />
   </Box>
 );

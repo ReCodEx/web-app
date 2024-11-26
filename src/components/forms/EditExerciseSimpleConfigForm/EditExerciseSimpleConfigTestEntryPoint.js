@@ -57,7 +57,7 @@ const EditExerciseSimpleConfigTestEntryPoint = ({ smartFillEntryPoint, test, tes
                   />
                 }>
                 <Button variant="primary" disabled={Boolean(testErrors)}>
-                  <Icon icon="arrows-alt" gapRight />
+                  <Icon icon="arrows-alt" gapRight={2} />
                   <FormattedMessage
                     id="app.editExerciseConfigForm.smartFillEntryPoint"
                     defaultMessage="Smart Fill Entry Point"

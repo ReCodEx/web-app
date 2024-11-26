@@ -70,7 +70,7 @@ const ShadowAssignmentsTable = ({
           {shadowAssignments.some(isLoading) && (
             <tr>
               <td className="text-center p-3" colSpan={isAdmin ? 5 : 4}>
-                <LoadingIcon gapRight />
+                <LoadingIcon gapRight={2} />
                 <FormattedMessage
                   id="app.shadowAssignmentsTable.loading"
                   defaultMessage="Loading shadow assignments..."
