@@ -61,7 +61,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                               defaultMessage="The description is located beyond the realms of ReCodEx"
                             />
                           </h4>
-                          <Icon icon="link" gapRight />
+                          <Icon icon="link" gapRight={2} />
                           <a href={link} target="_blank" rel="noopener noreferrer">
                             {link}
                           </a>

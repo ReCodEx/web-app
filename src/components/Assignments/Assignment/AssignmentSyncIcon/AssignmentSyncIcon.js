@@ -34,7 +34,7 @@ const AssignmentSyncIcon = ({ id, syncInfo, ...props }) => {
 
             {!syncInfo.isSynchronizationPossible && (
               <p>
-                <WarningIcon className="text-danger" gapRight />
+                <WarningIcon className="text-danger" gapRight={2} />
                 <FormattedMessage
                   id="app.assignment.syncIsNotPossible"
                   defaultMessage="The exercise is not in a consistent state, synchronization is not possible at the moment."
@@ -44,7 +44,9 @@ const AssignmentSyncIcon = ({ id, syncInfo, ...props }) => {
           </Popover.Body>
         </Popover>
       }>
-      <WarningIcon {...props} className={syncInfo.isSynchronizationPossible ? 'text-warning' : 'text-danger'} />
+      <span>
+        <WarningIcon {...props} className={syncInfo.isSynchronizationPossible ? 'text-warning' : 'text-danger'} />
+      </span>
     </OverlayTrigger>
   ) : null;
 };

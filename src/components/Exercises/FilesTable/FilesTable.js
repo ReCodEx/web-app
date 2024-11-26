@@ -35,11 +35,11 @@ const FilesTable = ({
       <div className="text-center mb-3">
         <TheButtonGroup>
           <Button variant="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
-            <SaveIcon gapRight />
+            <SaveIcon gapRight={2} />
             <FormattedMessage id="app.filesTable.saveUploadedFilesButton" defaultMessage="Save Uploaded Files" />
           </Button>
           <Button variant="danger" onClick={resetUploads}>
-            <CloseIcon gapRight />
+            <CloseIcon gapRight={2} />
             <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
           </Button>
         </TheButtonGroup>
@@ -71,7 +71,7 @@ const FilesTable = ({
 
       {files.length === 0 && (
         <p className="text-center p-3">
-          <Icon icon={['far', 'folder-open']} gapRight />
+          <Icon icon={['far', 'folder-open']} gapRight={2} />
           <FormattedMessage id="app.filesTable.empty" defaultMessage="There are no saved files yet." />
         </p>
       )}
@@ -79,7 +79,7 @@ const FilesTable = ({
       {downloadArchive && files.length > 1 && (
         <div className="text-center">
           <Button variant="primary" onClick={downloadArchive}>
-            <ZipIcon gapRight />
+            <ZipIcon gapRight={2} />
             <FormattedMessage id="app.filesTable.downloadArchive" defaultMessage="Download all as ZIP archive" />
           </Button>
         </div>

@@ -21,13 +21,13 @@ const Confirm = ({
   question,
   yes = (
     <>
-      <SuccessIcon gapRight />
+      <SuccessIcon gapRight={2} />
       <FormattedMessage id="app.confirm.yes" defaultMessage="Yes" />
     </>
   ),
   no = (
     <>
-      <CloseIcon gapRight />
+      <CloseIcon gapRight={2} />
       <FormattedMessage id="app.confirm.no" defaultMessage="No" />
     </>
   ),

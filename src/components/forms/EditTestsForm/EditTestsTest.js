@@ -42,7 +42,7 @@ const EditTestsTest = ({ fields, calculator, testValues, usedTests, addNewTest, 
               <th className="align-middle text-end">
                 {fields.length < 99 && (
                   <Button onClick={addNewTest} variant="primary" size="xs">
-                    <AddIcon gapRight />
+                    <AddIcon gapRight={2} />
                     <FormattedMessage id="app.editTestsTest.add" defaultMessage="Add Test" />
                   </Button>
                 )}

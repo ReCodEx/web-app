@@ -21,7 +21,7 @@ const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false, intl:
           environments.map(env => <EnvironmentsListItem key={env.id} runtimeEnvironment={env} longNames={longNames} />)
         ) : (
           <i className="small text-body-secondary">
-            <WarningIcon gapRight />
+            <WarningIcon gapRight={2} />
             <FormattedMessage id="app.environmentsList.noEnvironments" defaultMessage="no runtime environments" />
           </i>
         )

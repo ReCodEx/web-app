@@ -70,7 +70,7 @@ class TabbedArrayField extends Component {
                                 fields.remove(fieldIdx);
                                 this.changeTab(Math.min(tabIdx, fields.length - 2));
                               }}>
-                              <CloseIcon gapLeft />
+                              <CloseIcon gapLeft={2} />
                             </Confirm>
                           )}
                         </Nav.Link>

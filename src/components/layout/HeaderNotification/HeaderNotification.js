@@ -55,7 +55,7 @@ class HeaderNotification extends Component {
               </span>
             </Tooltip>
           }>
-          <>
+          <span>
             <span
               className="fa"
               onMouseOver={() => this.setState({ hovering: true })}
@@ -68,18 +68,18 @@ class HeaderNotification extends Component {
                     e.preventDefault();
                     hide && hide(id);
                   }}>
-                  <DeleteIcon className="fa text-danger" smallGapRight fixedWidth />
+                  <DeleteIcon className="fa text-danger" gapRight={1} fixedWidth />
                 </span>
               ) : successful ? (
-                <SuccessIcon className="text-success" smallGapRight fixedWidth />
+                <SuccessIcon className="text-success" gapRight={1} fixedWidth />
               ) : (
-                <WarningIcon className="text-warning" smallGapRight fixedWidth />
+                <WarningIcon className="text-warning" gapRight={1} fixedWidth />
               )}
             </span>
             <span className="fa">
               <span className={styles.copy} ref={copy => (this.copy = copy)}>
                 <CopyToClipboard text={msg} onCopy={this.onCopy}>
-                  <CopyIcon gapRight fixedWidth />
+                  <CopyIcon gapRight={2} fixedWidth />
                 </CopyToClipboard>
               </span>
               <Overlay show={clickedCopy} container={this} target={() => this.copy} placement="bottom">
@@ -97,7 +97,7 @@ class HeaderNotification extends Component {
                 <Badge bg="secondary">{count}</Badge>
               </span>
             )}
-          </>
+          </span>
         </OverlayTrigger>
       </Dropdown.Item>
     );

@@ -66,7 +66,7 @@ class UserPanel extends Component {
             {small && <br />}
 
             <OverlayTrigger
-              placement="right"
+              placement="bottom"
               overlay={
                 <Tooltip id="tokenExpiration">
                   <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
@@ -83,14 +83,14 @@ class UserPanel extends Component {
                   e.preventDefault();
                   logout();
                 }}>
-                <Icon icon="sign-out-alt" className="text-danger" largeGapLeft={!small} gapRight={!small} />
+                <Icon icon="sign-out-alt" className="text-danger" gapLeft={small ? 0 : 3} gapRight={!small} />
                 {!small && <FormattedMessage id="app.logout" defaultMessage="Logout" />}
               </a>
             </OverlayTrigger>
             {small && <br />}
             {isSuperadminRole(user.privateData.role) && (
               <OverlayTrigger
-                placement="right"
+                placement="bottom"
                 overlay={
                   <Tooltip id="effectiveRole">
                     <FormattedMessage id="generic.effectiveRole" defaultMessage="Effective Role" />:{' '}
@@ -103,7 +103,12 @@ class UserPanel extends Component {
                     e.preventDefault();
                     this.openEffectiveRoleDialog();
                   }}>
-                  <UserRoleIcon role={effectiveRole} className="text-primary" largeGapLeft={!small} gapRight={!small} />
+                  <UserRoleIcon
+                    role={effectiveRole}
+                    className="text-primary"
+                    gapLeft={small ? 0 : 3}
+                    gapRight={!small}
+                  />
                   {!small && <FormattedMessage id="generic.role" defaultMessage="Role" />}
                 </a>
               </OverlayTrigger>

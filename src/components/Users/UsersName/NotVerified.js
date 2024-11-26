@@ -35,7 +35,7 @@ const NotVerified = ({ userId, currentUserId }) => {
         </Popover>
       }>
       <span>
-        <WarningIcon className="text-warning" gapLeft />
+        <WarningIcon className="text-warning" gapLeft={2} />
       </span>
     </OverlayTrigger>
   );

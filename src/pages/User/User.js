@@ -67,7 +67,7 @@ const MemberGroupsBox = withLinks(
                   {isStudent && (
                     <Link to={GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, userId)}>
                       <Button size="xs" variant="primary">
-                        <ResultsIcon gapRight />
+                        <ResultsIcon gapRight={2} />
                         <FormattedMessage id="app.groupUserSolutions.userSolutions" defaultMessage="User Solutions" />
                       </Button>
                     </Link>
@@ -75,21 +75,21 @@ const MemberGroupsBox = withLinks(
 
                   <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
                     <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
-                      <GroupIcon gapRight />
+                      <GroupIcon gapRight={2} />
                       <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                     </Button>
                   </Link>
 
                   <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
                     <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
-                      <AssignmentsIcon gapRight />
+                      <AssignmentsIcon gapRight={2} />
                       <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                     </Button>
                   </Link>
 
                   <Link to={GROUP_STUDENTS_URI_FACTORY(groupId)}>
                     <Button size="xs" variant={isStudent ? 'secondary' : 'primary'}>
-                      <StudentsIcon gapRight />
+                      <StudentsIcon gapRight={2} />
                       <FormattedMessage id="app.group.students" defaultMessage="Students" />
                     </Button>
                   </Link>
@@ -144,7 +144,7 @@ class User extends Component {
                 <TheButtonGroup>
                   {user.privateData.isAllowed && (
                     <Button variant="primary" onClick={() => takeOver(userId)}>
-                      <TransferIcon gapRight />
+                      <TransferIcon gapRight={2} />
                       <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
                     </Button>
                   )}
@@ -159,7 +159,7 @@ class User extends Component {
                 title={<FormattedMessage id="app.user.profileOverview" defaultMessage="Profile overview" />}
                 noPadding
                 unlimitedHeight>
-                <Table className="mb-1">
+                <Table className="card-table">
                   <tbody>
                     <tr>
                       <td className="text-nowrap text-body-secondary text-center ps-4">
@@ -211,9 +211,9 @@ class User extends Component {
                       <td className="w-100">
                         <a href={`mailto:${user.privateData.email}`}>{user.privateData.email}</a>
                         {user.isVerified ? (
-                          <SuccessIcon className="text-success" largeGapLeft />
+                          <SuccessIcon className="text-success" gapLeft={3} />
                         ) : (
-                          <WarningIcon className="text-warning" largeGapLeft />
+                          <WarningIcon className="text-warning" gapLeft={3} />
                         )}
                       </td>
                     </tr>
@@ -304,7 +304,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <UserIcon gapRight className="text-body-secondary" />
+                          <UserIcon gapRight={2} className="text-body-secondary" />
                           <FormattedMessage
                             id="app.user.studentOfGroups"
                             defaultMessage="Groups the user is student of"
@@ -321,7 +321,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <SuperadminIcon gapRight className="text-body-secondary" />
+                          <SuperadminIcon gapRight={2} className="text-body-secondary" />
                           <FormattedMessage id="app.user.adminOfGroups" defaultMessage="Groups the user administrate" />
                         </>
                       }
@@ -334,7 +334,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <SupervisorIcon gapRight className="text-body-secondary" />
+                          <SupervisorIcon gapRight={2} className="text-body-secondary" />
                           <FormattedMessage
                             id="app.user.supervisorOfGroups"
                             defaultMessage="Groups the user supervise"
@@ -350,7 +350,7 @@ class User extends Component {
                     <MemberGroupsBox
                       title={
                         <>
-                          <ObserverIcon gapRight className="text-body-secondary" />
+                          <ObserverIcon gapRight={2} className="text-body-secondary" />
                           <FormattedMessage id="app.user.observerOfGroups" defaultMessage="Groups the user observe" />
                         </>
                       }

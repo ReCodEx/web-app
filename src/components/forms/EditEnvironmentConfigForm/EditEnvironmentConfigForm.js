@@ -53,7 +53,7 @@ class EditEnvironmentConfigForm extends Component {
             <TheButtonGroup>
               {dirty && (
                 <Button type="reset" onClick={reset} variant="danger">
-                  <RefreshIcon gapRight />
+                  <RefreshIcon gapRight={2} />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
               )}
@@ -70,7 +70,7 @@ class EditEnvironmentConfigForm extends Component {
 
               {Boolean(selectedRuntimeId) && !hasDefaultVariables && (
                 <Button onClick={this.setDefaultVariables} variant="primary">
-                  <RefreshIcon gapRight />
+                  <RefreshIcon gapRight={2} />
                   <FormattedMessage
                     id="app.editEnvironmentConfig.setDefaultVariables"
                     defaultMessage="Set Default Variables"
@@ -89,7 +89,7 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         <p className="text-body-secondary small px-3">
-          <InfoIcon gapRight />
+          <InfoIcon gapRight={2} />
           <FormattedMessage
             id="app.editEnvironmentConfig.selectedRuntimeInfo"
             defaultMessage="In the advanced configuration, selected runtime environment is used only to ensure that the backend worker has necessary compilers, tools, or libraries required by the environment. Everything else (source files patterns, pipelines) is configured separately."
@@ -116,7 +116,7 @@ class EditEnvironmentConfigForm extends Component {
         {Boolean(selectedRuntimeId) && (
           <>
             <p className="text-body-secondary small px-3">
-              <InfoIcon gapRight />
+              <InfoIcon gapRight={2} />
               <FormattedMessage
                 id="app.editEnvironmentConfig.variablesInfo"
                 defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.[c,h]</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here."

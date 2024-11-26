@@ -48,7 +48,7 @@ const SupplementaryFilesTableRow = ({
               }
               className="float-end">
               <Button size="xs" variant="danger">
-                <DeleteIcon gapRight />
+                <DeleteIcon gapRight={2} />
                 <FormattedMessage id="generic.delete" defaultMessage="Delete" />
               </Button>
             </Confirm>
@@ -64,7 +64,7 @@ const SupplementaryFilesTableRow = ({
                 </Tooltip>
               }>
               <em className="text-body-secondary">
-                <Icon icon="paperclip" gapRight className="text-success" />
+                <Icon icon="paperclip" gapRight={2} className="text-success" />
                 <FormattedMessage id="generic.inUse" defaultMessage="in use" />
               </em>
             </OverlayTrigger>

@@ -83,7 +83,7 @@ class ArchiveTermGroups extends Component {
               {groups.length > 0 && (
                 <>
                   <Button variant="primary" onClick={this.checkAllGroups}>
-                    <SquareIcon checked gapRight />
+                    <SquareIcon checked gapRight={2} />
                     <FormattedMessage id="generic.selectAll" defaultMessage="Select All" />
                   </Button>
 
@@ -107,7 +107,7 @@ class ArchiveTermGroups extends Component {
               )}
 
               <Button variant="outline-secondary" onClick={onClose}>
-                <CloseIcon gapRight />
+                <CloseIcon gapRight={2} />
                 <FormattedMessage id="generic.close" defaultMessage="Close" />
               </Button>
             </TheButtonGroup>

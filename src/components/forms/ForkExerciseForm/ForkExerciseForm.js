@@ -88,7 +88,7 @@ const ForkExerciseForm = ({
     <div>
       {submitFailed && (
         <Callout variant="danger">
-          <WarningIcon gapRight />
+          <WarningIcon gapRight={2} />
           <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
         </Callout>
       )}
@@ -119,7 +119,7 @@ const ForkExerciseForm = ({
                     hasSucceeded={submitSucceeded}
                     hasFailed={submitFailed}
                     handleSubmit={handleSubmit}
-                    defaultIcon={<ForkIcon gapRight />}
+                    defaultIcon={<ForkIcon gapRight={2} />}
                     noShadow
                     confirmQuestion={
                       <FormattedMessage

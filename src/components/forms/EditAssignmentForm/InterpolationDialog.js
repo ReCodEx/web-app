@@ -75,7 +75,7 @@ const InterpolationDialog = ({
             <Container fluid>
               <Row>
                 <Col md={6}>
-                  <FormGroup controlId="interval" className={!interval ? 'text-danger' : ''}>
+                  <FormGroup controlId="interval" className={`mb-3 ${!interval ? 'text-danger' : ''}`}>
                     <FormLabel>
                       <FormattedMessage
                         id="app.editAssignmentForm.interpolationDialog.intervalLabel"
@@ -113,7 +113,7 @@ const InterpolationDialog = ({
                   </FormGroup>
                 </Col>
                 <Col md={6}>
-                  <FormGroup controlId="points">
+                  <FormGroup controlId="points" className="mb-3">
                     <FormLabel>
                       <FormattedMessage
                         id="app.editAssignmentForm.maxPointsInterpolationLimit"
@@ -151,11 +151,11 @@ const InterpolationDialog = ({
                 });
               }}
               disabled={!interval}>
-              <SendIcon gapRight />
+              <SendIcon gapRight={2} />
               <FormattedMessage id="generic.update" defaultMessage="Update" />
             </Button>
             <Button variant="secondary" onClick={() => setOpen(false)}>
-              <CloseIcon gapRight />
+              <CloseIcon gapRight={2} />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
           </TheButtonGroup>

@@ -25,7 +25,7 @@ const GroupNavigation = ({ group, userId = null, emails = null, links }) => {
         userId && {
           caption: <FormattedMessage id="app.navigation.userSolution" defaultMessage="User Solutions" />,
           link: links.GROUP_USER_SOLUTIONS_URI_FACTORY(group.id, userId),
-          icon: <UserIcon gapRight />,
+          icon: <UserIcon gapRight={2} />,
         },
         ...createGroupLinks(links, group.id, canViewDetail, canEdit, canSeeExams),
       ]}
@@ -33,13 +33,13 @@ const GroupNavigation = ({ group, userId = null, emails = null, links }) => {
         emails && {
           caption: <FormattedMessage id="app.group.mailtoAll" defaultMessage="Mail to All Students" />,
           href: `mailto:?bcc=${emails}`,
-          icon: <MailIcon gapRight />,
+          icon: <MailIcon gapRight={2} />,
         },
         userId &&
           canEdit && {
             caption: <FormattedMessage id="app.navigation.userProfile" defaultMessage="User's Profile" />,
             link: links.USER_URI_FACTORY(userId),
-            icon: <UserProfileIcon gapRight />,
+            icon: <UserProfileIcon gapRight={2} />,
           },
       ]}
     />

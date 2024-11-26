@@ -25,18 +25,18 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
           {!submitting ? (
             hasSucceeded ? (
               <span>
-                <SuccessIcon gapRight />
+                <SuccessIcon gapRight={2} />
                 <FormattedMessage id="app.loginForm.success" defaultMessage="You are successfully signed in" />
               </span>
             ) : (
               <span>
-                <SignInIcon gapRight />
+                <SignInIcon gapRight={2} />
                 <FormattedMessage id="app.loginForm.login" defaultMessage="Sign in" />
               </span>
             )
           ) : (
             <span>
-              <LoadingIcon gapRight />
+              <LoadingIcon gapRight={2} />
               <FormattedMessage id="app.loginForm.processing" defaultMessage="Signing in..." />
             </span>
           )}

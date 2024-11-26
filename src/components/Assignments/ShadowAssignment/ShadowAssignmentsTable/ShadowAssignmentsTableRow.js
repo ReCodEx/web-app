@@ -29,8 +29,8 @@ const ShadowAssignmentsTableRow = ({
 }) => (
   <tr onDoubleClick={doubleClickPush && (() => doubleClickPush(SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(id)))}>
     <td className="text-nowrap shrink-col">
-      {permissionHints.update && <VisibleIcon visible={isPublic} gapLeft gapRight />}
-      <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} gapLeft gapRight />
+      {permissionHints.update && <VisibleIcon visible={isPublic} gapLeft={2} gapRight={2} />}
+      <MaybeBonusAssignmentIcon id={id} isBonus={isBonus} gapLeft={2} gapRight={2} />
     </td>
 
     <td>
@@ -39,7 +39,7 @@ const ShadowAssignmentsTableRow = ({
           entity={{ localizedTexts }}
           noNameMessage={
             <i>
-              <WarningIcon className="text-warning" gapRight />
+              <WarningIcon className="text-warning" gapRight={2} />
               <FormattedMessage id="app.shadowAssignment.noName" defaultMessage="no name" />
             </i>
           }
@@ -74,7 +74,7 @@ const ShadowAssignmentsTableRow = ({
         {permissionHints.update && (
           <Link to={SHADOW_ASSIGNMENT_EDIT_URI_FACTORY(id)}>
             <Button size="xs" variant="warning">
-              <EditIcon gapRight />
+              <EditIcon gapRight={2} />
               <FormattedMessage id="generic.edit" defaultMessage="Edit" />
             </Button>
           </Link>

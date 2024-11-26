@@ -68,11 +68,11 @@ const AssignmentDetails = ({
       isOpen={isOpen}
       className={className}>
       <>
-        <Table responsive size="sm" className="mb-1">
+        <Table size="sm" className="card-table">
           <tbody>
             {permissionHints.update && (
               <tr>
-                <td className="text-center text-body-secondary shrink-col px-2">
+                <td className="icon-col">
                   <VisibleIcon />
                 </td>
                 <th>
@@ -86,7 +86,7 @@ const AssignmentDetails = ({
 
             {permissionHints.update && (
               <tr>
-                <td className="text-center text-body-secondary shrink-col px-2">
+                <td className="icon-col">
                   <Icon icon="plane-departure" />
                 </td>
                 <th>
@@ -106,7 +106,7 @@ const AssignmentDetails = ({
 
             {permissionHints.update && isPublic && visibleFrom && visibleFrom * 1000 > Date.now() && (
               <tr>
-                <td className="text-center text-body-secondary shrink-col px-2">
+                <td className="icon-col">
                   <Icon icon={['far', 'clock']} />
                 </td>
                 <th>
@@ -119,7 +119,7 @@ const AssignmentDetails = ({
             )}
 
             <tr>
-              <td className="text-center text-body-secondary shrink-col px-2">
+              <td className="icon-col">
                 <DeadlineIcon />
               </td>
               <th>
@@ -136,7 +136,7 @@ const AssignmentDetails = ({
                       <>
                         <br />
                         <Button variant="primary" onClick={() => setOpen(true)} size="xs" noShadow>
-                          <PointsGraphIcon gapRight />
+                          <PointsGraphIcon gapRight={2} />
                           <FormattedMessage id="app.assignment.deadlinesGraphButton" defaultMessage="Show Graph" />
                         </Button>
                       </>
@@ -166,7 +166,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-body-secondary shrink-col px-2">
+              <td className="icon-col">
                 <Icon icon="trophy" />
               </td>
               <th>
@@ -205,7 +205,7 @@ const AssignmentDetails = ({
 
             {isBonus && (
               <tr>
-                <td className="text-center text-body-secondary shrink-col px-2">
+                <td className="icon-col">
                   <BonusIcon />
                 </td>
                 <th>
@@ -218,7 +218,7 @@ const AssignmentDetails = ({
             )}
 
             <tr>
-              <td className="text-center text-body-secondary shrink-col px-2">
+              <td className="icon-col">
                 <Icon icon="percent" />
               </td>
               <th>
@@ -234,7 +234,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-body-secondary shrink-col px-2">
+              <td className="icon-col">
                 <CodeIcon />
               </td>
               <th>
@@ -252,9 +252,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-body-secondary shrink-col px-2">
-                {isStudent && canSubmit.canSubmit ? <SendIcon /> : <Icon icon="hashtag" />}
-              </td>
+              <td className="icon-col">{isStudent && canSubmit.canSubmit ? <SendIcon /> : <Icon icon="hashtag" />}</td>
               <th>
                 <FormattedMessage id="app.assignment.submissionsCountLimit" defaultMessage="Submission attempts" />:
                 <Explanation id="submissionsCountLimit">
@@ -301,7 +299,7 @@ const AssignmentDetails = ({
             </tr>
 
             <tr>
-              <td className="text-center text-body-secondary shrink-col px-2">
+              <td className="icon-col">
                 <Icon icon={['far', 'file-code']} />
               </td>
               <th>

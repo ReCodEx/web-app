@@ -79,7 +79,7 @@ const SupervisorsList = ({
     </Table>
   ) : (
     <div className="p-3 text-center">
-      <LoadingIcon gapRight />
+      <LoadingIcon gapRight={2} />
       <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
     </div>
   );

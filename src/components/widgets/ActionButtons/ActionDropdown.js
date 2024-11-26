@@ -26,9 +26,9 @@ const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
             disabled={action.pending}>
             <small>
               {action.pending ? (
-                <LoadingIcon gapRight />
+                <LoadingIcon gapRight={2} />
               ) : action.icon && (typeof action.icon === 'string' || Array.isArray(action.icon)) ? (
-                <Icon icon={action.icon} className={`text-${action.variant || 'success'}`} gapRight />
+                <Icon icon={action.icon} className={`text-${action.variant || 'success'}`} gapRight={2} />
               ) : (
                 action.icon
               )}
@@ -50,7 +50,7 @@ const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
                 }}
                 size="sm"
                 variant="success">
-                <SuccessIcon gapRight />
+                <SuccessIcon gapRight={2} />
                 <FormattedMessage id="app.confirm.yes" defaultMessage="Yes" />
               </Button>
               <Button
@@ -59,7 +59,7 @@ const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
                 }}
                 size="sm"
                 variant="danger">
-                <CloseIcon gapRight />
+                <CloseIcon gapRight={2} />
                 <FormattedMessage id="app.confirm.no" defaultMessage="No" />
               </Button>
             </TheButtonGroup>

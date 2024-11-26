@@ -29,18 +29,18 @@ const renderTitle = ({ locale, _enabled }) => (
     </OverlayTrigger>
 
     {!_enabled && (
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id={`editLocalizedTextForm-${locale}-disabled`}>
-            <FormattedMessage
-              id="app.editLocalizedTextForm.localizationTabDisabled"
-              defaultMessage="This locale is currently disabled."
-            />
-          </Tooltip>
-        }>
-        <WarningIcon gapLeft className="text-secondary" />
-      </OverlayTrigger>
+      <WarningIcon
+        gapLeft={2}
+        className="text-secondary"
+        tooltipId={`editLocalizedTextForm-${locale}-disabled`}
+        tooltipPlacement="bottom"
+        tooltip={
+          <FormattedMessage
+            id="app.editLocalizedTextForm.localizationTabDisabled"
+            defaultMessage="This locale is currently disabled."
+          />
+        }
+      />
     )}
   </span>
 );

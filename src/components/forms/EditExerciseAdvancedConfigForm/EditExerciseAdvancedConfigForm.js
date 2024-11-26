@@ -54,7 +54,7 @@ class EditExerciseAdvancedConfigForm extends Component {
               {dirty && (
                 <span>
                   <Button type="reset" onClick={reset} variant="danger">
-                    <RefreshIcon gapRight />
+                    <RefreshIcon gapRight={2} />
                     <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                   </Button>
                 </span>
@@ -68,7 +68,7 @@ class EditExerciseAdvancedConfigForm extends Component {
                 hasSucceeded={submitSucceeded}
                 hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
-                defaultIcon={<SaveIcon gapRight />}
+                defaultIcon={<SaveIcon gapRight={2} />}
                 messages={SUBMIT_BUTTON_MESSAGES}
               />
             </div>

@@ -101,7 +101,7 @@ const ResubmitAllSolutions = ({
                     {pendingJob && (
                       <p className="text-center">
                         <Button size="xs" variant="danger" onClick={() => abort(job.id)}>
-                          <AbortIcon gapRight />
+                          <AbortIcon gapRight={2} />
                           <FormattedMessage id="app.asyncJobs.abort" defaultMessage="Abort background job" />
                         </Button>
                       </p>
@@ -117,13 +117,13 @@ const ResubmitAllSolutions = ({
         <Confirm id={`confirm-${assignmentId}`} onConfirmed={resubmit} question={question}>
           <Button variant="danger" disabled={isFetchPending || Boolean(pendingJob)}>
             {pendingJob ? (
-              <WorkingIcon gapRight />
+              <WorkingIcon gapRight={2} />
             ) : isFetchPending ? (
-              <LoadingIcon gapRight />
+              <LoadingIcon gapRight={2} />
             ) : failedJob ? (
-              <WarningIcon gapRight />
+              <WarningIcon gapRight={2} />
             ) : (
-              <Icon icon="redo" gapRight />
+              <Icon icon="redo" gapRight={2} />
             )}
             <FormattedMessage id="app.resubmitSolution.resubmitAll" defaultMessage="Resubmit All" />
           </Button>

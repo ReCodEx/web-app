@@ -6,7 +6,7 @@ import { Table } from 'react-bootstrap';
 
 const StatsList = ({ stats }) => (
   <Box title={<FormattedMessage id="app.broker.stats" defaultMessage="Current Statistics" />} noPadding>
-    <Table responsive size="sm" hover>
+    <Table size="sm" hover className="card-table">
       <tbody>
         {Object.keys(stats).map(name => (
           <tr key={name}>

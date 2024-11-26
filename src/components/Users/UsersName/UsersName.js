@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { OverlayTrigger, Popover, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { lruMemoize } from 'reselect';
@@ -79,18 +79,17 @@ const UsersName = ({
             )}
             <span style={userNameStyle(size, large)}>
               {privateData && !privateData.isAllowed && (
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id={`ban-${id}`}>
-                      <FormattedMessage
-                        id="app.userName.userDeactivated"
-                        defaultMessage="The user account was deactivated. The user may not sign in."
-                      />
-                    </Tooltip>
-                  }>
-                  <BanIcon gapRight />
-                </OverlayTrigger>
+                <BanIcon
+                  gapRight={2}
+                  tooltipId={`ban-${id}`}
+                  tooltipPlacement="bottom"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.userName.userDeactivated"
+                      defaultMessage="The user account was deactivated. The user may not sign in."
+                    />
+                  }
+                />
               )}
 
               {link ? <Link to={resolveLink(link, id, USER_URI_FACTORY)}>{fullName}</Link> : <span>{fullName}</span>}
@@ -100,7 +99,7 @@ const UsersName = ({
                   role={privateData.role}
                   showTooltip
                   tooltipId={'user-role'}
-                  gapLeft
+                  gapLeft={2}
                   className="text-body-secondary opacity-50"
                 />
               )}
@@ -141,28 +140,30 @@ const UsersName = ({
                       </Popover.Body>
                     </Popover>
                   }>
-                  <CopyToClipboard
-                    text={Object.values(externalIds)
-                      .map(id => (Array.isArray(id) ? id.join(', ') : id))
-                      .join(', ')}>
-                    <Icon
-                      icon={['far', 'id-card']}
-                      gapLeft
-                      className="text-body-secondary opacity-50 clickable"
-                      style={{ '--fa-beat-scale': 1.5, '--fa-animation-duration': '0.3s' }}
-                      onClick={ev => {
-                        const style = 'fa-beat';
-                        const icon = ev.currentTarget;
-                        icon.classList.add(style);
-                        window.setTimeout(() => icon.classList.remove(style), 300);
-                      }}
-                    />
-                  </CopyToClipboard>
+                  <span>
+                    <CopyToClipboard
+                      text={Object.values(externalIds)
+                        .map(id => (Array.isArray(id) ? id.join(', ') : id))
+                        .join(', ')}>
+                      <Icon
+                        icon={['far', 'id-card']}
+                        gapLeft={2}
+                        className="text-body-secondary opacity-50 clickable"
+                        style={{ '--fa-beat-scale': 1.5, '--fa-animation-duration': '0.3s' }}
+                        onClick={ev => {
+                          const style = 'fa-beat';
+                          const icon = ev.currentTarget;
+                          icon.classList.add(style);
+                          window.setTimeout(() => icon.classList.remove(style), 300);
+                        }}
+                      />
+                    </CopyToClipboard>
+                  </span>
                 </OverlayTrigger>
               )}
               {privateData && privateData.email && showEmail === 'icon' && (
                 <a href={`mailto:${email}`}>
-                  <MailIcon gapLeft />
+                  <MailIcon gapLeft={2} />
                 </a>
               )}
               {privateData && privateData.email && showEmail === 'full' && (

@@ -69,7 +69,7 @@ class Archive extends Component {
             ev.stopPropagation();
             this.setState({ selectedGroup: selectedGroupId !== group.id ? group.id : null });
           }}>
-          <SuccessOrFailureIcon success={selectedGroupId !== group.id} gapRight />
+          <SuccessOrFailureIcon success={selectedGroupId !== group.id} gapRight={2} />
           {selectedGroupId !== group.id ? (
             <FormattedMessage id="app.group.setRoot" defaultMessage="Select" />
           ) : (
@@ -80,7 +80,7 @@ class Archive extends Component {
         {hasPermissions(group, 'viewDetail') && (
           <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
             <Button variant="primary" size="xs">
-              <GroupIcon gapRight />
+              <GroupIcon gapRight={2} />
               <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
             </Button>
           </Link>
@@ -89,7 +89,7 @@ class Archive extends Component {
         {hasPermissions(group, 'viewAssignments') && (
           <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
             <Button variant="primary" size="xs">
-              <AssignmentsIcon gapRight />
+              <AssignmentsIcon gapRight={2} />
               <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
             </Button>
           </Link>
@@ -98,7 +98,7 @@ class Archive extends Component {
         {!group.organizational && hasPermissions(group, 'viewAssignments') && (
           <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
             <Button variant="primary" size="xs">
-              <StudentsIcon gapRight />
+              <StudentsIcon gapRight={2} />
               <FormattedMessage id="app.group.students" defaultMessage="Students" />
             </Button>
           </Link>

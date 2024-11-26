@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Collapse from 'react-collapse';
 import { lruMemoize } from 'reselect';
 
@@ -59,7 +58,7 @@ const GroupsTreeNode = React.memo(
           <Icon
             icon={leafNode ? DEFAULT_ICON : alwaysVisible ? 'square' : isOpen ? 'minus-square' : 'plus-square'}
             className="text-body-secondary"
-            gapRight
+            gapRight={2}
             fixedWidth
           />
 
@@ -89,72 +88,71 @@ const GroupsTreeNode = React.memo(
             </span>
           )}
           {isExam(group) ? (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`${id}-pendingexam-tooltip`}>
-                  <FormattedMessage
-                    id="app.groupTree.treeViewLeaf.pendingExamTooltip"
-                    defaultMessage="The group is locked for an exam"
-                  />
-                </Tooltip>
-              }>
-              <GroupExamsIcon className="text-danger" gapLeft />
-            </OverlayTrigger>
+            <GroupExamsIcon
+              className="text-danger"
+              gapLeft={2}
+              tooltipId={`${id}-pendingexam-tooltip`}
+              tooltipPlacement="bottom"
+              tooltip={
+                <FormattedMessage
+                  id="app.groupTree.treeViewLeaf.pendingExamTooltip"
+                  defaultMessage="The group is locked for an exam"
+                />
+              }
+            />
           ) : (
             exam && (
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={`${id}-exam-tooltip`}>
-                    <FormattedMessage id="app.groupTree.treeViewLeaf.examTooltip" defaultMessage="Exam group" />
-                  </Tooltip>
-                }>
-                <GroupIcon exam={true} className="text-warning" gapLeft />
-              </OverlayTrigger>
+              <GroupIcon
+                exam={true}
+                className="text-warning"
+                gapLeft={2}
+                tooltipId={`${id}-exam-tooltip`}
+                tooltipPlacement="bottom"
+                tooltip={<FormattedMessage id="app.groupTree.treeViewLeaf.examTooltip" defaultMessage="Exam group" />}
+              />
             )
           )}
           {organizational && (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`${id}-organizational-tooltip`}>
-                  <FormattedMessage
-                    id="app.groupTree.treeViewLeaf.organizationalTooltip"
-                    defaultMessage="The group is organizational (it does not have any students or assignments)"
-                  />
-                </Tooltip>
-              }>
-              <GroupIcon organizational={true} className="text-body-secondary" gapLeft />
-            </OverlayTrigger>
+            <GroupIcon
+              organizational={true}
+              className="text-body-secondary"
+              gapLeft={2}
+              tooltipId={`${id}-organizational-tooltip`}
+              tooltipPlacement="bottom"
+              tooltip={
+                <FormattedMessage
+                  id="app.groupTree.treeViewLeaf.organizationalTooltip"
+                  defaultMessage="The group is organizational (it does not have any students or assignments)"
+                />
+              }
+            />
           )}
           {archived && (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`${id}-archived-tooltip`}>
-                  <FormattedMessage
-                    id="app.groupTree.treeViewLeaf.archivedTooltip"
-                    defaultMessage="The group is archived"
-                  />
-                </Tooltip>
-              }>
-              <GroupIcon archived={true} className="text-body-secondary" gapLeft />
-            </OverlayTrigger>
+            <GroupIcon
+              archived={true}
+              className="text-body-secondary"
+              gapLeft={2}
+              tooltipId={`${id}-archived-tooltip`}
+              tooltipPlacement="bottom"
+              tooltip={
+                <FormattedMessage
+                  id="app.groupTree.treeViewLeaf.archivedTooltip"
+                  defaultMessage="The group is archived"
+                />
+              }
+            />
           )}
           {isPublic && (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`${id}-public-tooltip`}>
-                  <FormattedMessage
-                    id="app.groupTree.treeViewLeaf.publicTooltip"
-                    defaultMessage="The group is public"
-                  />
-                </Tooltip>
-              }>
-              <Icon icon="eye" className="text-body-secondary" gapLeft />
-            </OverlayTrigger>
+            <Icon
+              icon="eye"
+              className="text-body-secondary"
+              gapLeft={2}
+              tooltipId={`${id}-public-tooltip`}
+              tooltipPlacement="bottom"
+              tooltip={
+                <FormattedMessage id="app.groupTree.treeViewLeaf.publicTooltip" defaultMessage="The group is public" />
+              }
+            />
           )}
 
           {buttonsCreator && (

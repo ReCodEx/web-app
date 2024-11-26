@@ -41,23 +41,20 @@ const CourseLabel = ({
   intl: { locale },
 }) => (
   <span style={MAIN_STYLE}>
-    <OverlayTrigger
-      placement="bottom"
-      overlay={
-        <Tooltip id={`course-tooltip-${code}`}>
-          {type === 'lecture' ? (
-            <FormattedMessage id="app.sisSupervisor.lecture" defaultMessage="Lecture" />
-          ) : (
-            <FormattedMessage id="app.sisSupervisor.lab" defaultMessage="Lab (seminar)" />
-          )}
-        </Tooltip>
-      }>
-      {type === 'lecture' ? (
-        <Icon icon="chalkboard-teacher" gapRight fixedWidth />
-      ) : (
-        <Icon icon="laptop" gapRight fixedWidth />
-      )}
-    </OverlayTrigger>
+    <Icon
+      icon={type === 'lecture' ? 'chalkboard-teacher' : 'laptop'}
+      gapRight={2}
+      fixedWidth
+      tooltipId={`course-tooltip-${code}`}
+      tooltipPlacement="bottom"
+      tooltip={
+        type === 'lecture' ? (
+          <FormattedMessage id="app.sisSupervisor.lecture" defaultMessage="Lecture" />
+        ) : (
+          <FormattedMessage id="app.sisSupervisor.lab" defaultMessage="Lab (seminar)" />
+        )
+      }
+    />
     {dayOfWeek !== null || time !== null || room !== null ? (
       <span className="text-nowrap" style={SCHEDULING_STYLE}>
         <strong>

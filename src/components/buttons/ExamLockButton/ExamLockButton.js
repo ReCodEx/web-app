@@ -10,7 +10,7 @@ const ExamLockButton = ({ pending, disabled = false, lockUserForExam, ...props }
     variant={disabled ? 'secondary' : 'warning'}
     onClick={lockUserForExam}
     disabled={pending || disabled}>
-    {pending ? <LoadingIcon gapRight /> : <UserLockIcon gapRight />}
+    {pending ? <LoadingIcon gapRight={2} /> : <UserLockIcon gapRight={2} />}
     <FormattedMessage id="app.groupExams.lockStudentButton" defaultMessage="Lock In" />
   </Button>
 );

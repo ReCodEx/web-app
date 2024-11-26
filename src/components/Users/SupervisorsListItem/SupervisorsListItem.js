@@ -41,7 +41,9 @@ const SupervisorsListItem = ({
                 </Popover.Body>
               </Popover>
             }>
-            <AdminRoleIcon />
+            <span>
+              <AdminRoleIcon />
+            </span>
           </OverlayTrigger>
         ) : type === 'supervisor' ? (
           <OverlayTrigger
@@ -61,7 +63,9 @@ const SupervisorsListItem = ({
                 </Popover.Body>
               </Popover>
             }>
-            <SupervisorIcon />
+            <span>
+              <SupervisorIcon />
+            </span>
           </OverlayTrigger>
         ) : type === 'observer' ? (
           <OverlayTrigger
@@ -81,7 +85,9 @@ const SupervisorsListItem = ({
                 </Popover.Body>
               </Popover>
             }>
-            <ObserverIcon />
+            <span>
+              <ObserverIcon />
+            </span>
           </OverlayTrigger>
         ) : (
           <UserIcon />
@@ -103,7 +109,7 @@ const SupervisorsListItem = ({
                   </Tooltip>
                 }>
                 <Button size="xs" onClick={() => addAdmin(groupId, id)} variant="warning" disabled={pendingMembership}>
-                  <AdminRoleIcon smallGapRight smallGapLeft fixedWidth />
+                  <AdminRoleIcon gapRight={1} gapLeft={1} fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
@@ -121,7 +127,7 @@ const SupervisorsListItem = ({
                   onClick={() => addSupervisor(groupId, id)}
                   variant="warning"
                   disabled={pendingMembership}>
-                  <SupervisorIcon smallGapRight smallGapLeft fixedWidth />
+                  <SupervisorIcon gapRight={1} gapLeft={1} fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
@@ -139,7 +145,7 @@ const SupervisorsListItem = ({
                   onClick={() => addObserver(groupId, id)}
                   variant="warning"
                   disabled={pendingMembership}>
-                  <ObserverIcon smallGapRight smallGapLeft fixedWidth />
+                  <ObserverIcon gapRight={1} gapLeft={1} fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}
@@ -157,7 +163,7 @@ const SupervisorsListItem = ({
                   onClick={() => removeMember(groupId, id)}
                   variant="danger"
                   disabled={pendingMembership}>
-                  <RemoveUserIcon smallGapRight smallGapLeft fixedWidth />
+                  <RemoveUserIcon gapRight={1} gapLeft={1} fixedWidth />
                 </Button>
               </OverlayTrigger>
             )}

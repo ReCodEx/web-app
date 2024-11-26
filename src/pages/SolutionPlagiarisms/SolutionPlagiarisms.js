@@ -169,7 +169,7 @@ class SolutionPlagiarisms extends Component {
               <Card className="shadow-sm mb-3">
                 <Card.Header>
                   <Card.Title>
-                    <UserIcon gapRight className="text-body-secondary" />
+                    <UserIcon gapRight={2} className="text-body-secondary" />
                     {!selectedSource || this.state.openSelection ? (
                       <FormattedMessage
                         id="app.solutionPlagiarisms.selectSuspectedSource"

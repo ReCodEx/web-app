@@ -880,13 +880,13 @@ class EditAssignmentForm extends Component {
             hasFailed={submitFailed}
             handleSubmit={handleSubmit(this.onSubmitWrapper)}
             asyncValidating={asyncValidating}
-            defaultIcon={<SaveIcon gapRight />}
+            defaultIcon={<SaveIcon gapRight={2} />}
             messages={submitButtonMessages}
           />
 
           {submitFailed && (
             <span className="ms-4 text-danger">
-              <WarningIcon gapRight />
+              <WarningIcon gapRight={2} />
               <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
             </span>
           )}

@@ -120,7 +120,7 @@ class GroupsTreeContainer extends Component {
       return (
         <Nav className="flex-column">
           <li>
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </li>
         </Nav>

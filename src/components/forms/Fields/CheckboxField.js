@@ -14,11 +14,9 @@ const CheckboxField = ({
   ...props
 }) => {
   const Component = onOff ? OnOffCheckbox : NiceCheckbox;
-   
+  const colorClass = error ? 'text-danger' : warning ? 'text-warning' : dirty && !ignoreDirty ? 'text-primary' : '';
   return (
-    <FormGroup
-      className={error ? 'text-danger' : warning ? 'text-warning' : dirty && !ignoreDirty ? 'text-primary' : undefined}
-      controlId={props.id || input.name}>
+    <FormGroup className={`mb-3 ${colorClass}`} controlId={props.id || input.name}>
       <Component
         {...props}
         {...input}

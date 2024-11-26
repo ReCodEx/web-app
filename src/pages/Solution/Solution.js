@@ -225,7 +225,7 @@ class Solution extends Component {
                     {hasPermissions(assignment, 'resubmitSubmissions') &&
                       !assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
                         <span>
-                          <WarningIcon largeGapLeft gapRight className="text-warning" />
+                          <WarningIcon gapLeft={3} gapRight={2} className="text-warning" />
                           <FormattedMessage
                             id="app.solution.environmentNotAllowedCannotResubmit"
                             defaultMessage="The assignment no longer supports the environment for which this solution was evaluated. Resubmission is not possible."
@@ -275,7 +275,7 @@ class Solution extends Component {
                     </>
                   )}
                   <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, solution.id)}>
-                    <LinkIcon largeGapLeft className="text-primary" />
+                    <LinkIcon gapLeft={3} className="text-primary" />
                   </Link>
                 </Callout>
               )}

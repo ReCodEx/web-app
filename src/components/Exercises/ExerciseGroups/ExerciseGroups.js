@@ -28,7 +28,7 @@ class ExerciseGroups extends Component {
           ev.stopPropagation();
           attachExerciseToGroup(groupId);
         }}>
-        {groupId === attachingGroupId ? <LoadingIcon gapRight /> : <Icon icon="paperclip" gapRight />}
+        {groupId === attachingGroupId ? <LoadingIcon gapRight={2} /> : <Icon icon="paperclip" gapRight={2} />}
         <FormattedMessage id="app.exercise.attach" defaultMessage="Attach" />
       </Button>
     );
@@ -45,7 +45,7 @@ class ExerciseGroups extends Component {
           ev.stopPropagation();
           detachExerciseFromGroup(groupId);
         }}>
-        {groupId === detachingGroupId ? <LoadingIcon gapRight /> : <Icon icon="unlink" gapRight />}
+        {groupId === detachingGroupId ? <LoadingIcon gapRight={2} /> : <Icon icon="unlink" gapRight={2} />}
         <FormattedMessage id="app.exercise.detach" defaultMessage="Detach" />
       </Button>
     );
@@ -66,7 +66,7 @@ class ExerciseGroups extends Component {
           showButtons ? (
             <div className="text-center">
               <Button variant="primary" onClick={this.openDialog}>
-                <Icon icon="paperclip" gapRight />
+                <Icon icon="paperclip" gapRight={2} />
                 <FormattedMessage id="app.exercise.manageGroupAttachments" defaultMessage="Manage Group Attachments" />
               </Button>
             </div>
@@ -74,7 +74,7 @@ class ExerciseGroups extends Component {
         }
         noPadding>
         <>
-          <Table hover className="mb-1">
+          <Table hover className="card-table">
             <tbody>
               {groupsIds.map(groupId => (
                 <tr key={groupId}>

@@ -114,7 +114,7 @@ const EditSystemMessageForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           handleSubmit={handleSubmit}
-          defaultIcon={<SaveIcon gapRight />}
+          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
@@ -124,7 +124,7 @@ const EditSystemMessageForm = ({
         />
 
         <Button variant="secondary" onClick={onClose}>
-          <CloseIcon gapRight />
+          <CloseIcon gapRight={2} />
           <FormattedMessage id="generic.close" defaultMessage="Close" />
         </Button>
       </TheButtonGroup>

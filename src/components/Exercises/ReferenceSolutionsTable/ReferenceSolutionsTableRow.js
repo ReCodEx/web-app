@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
 import Icon, { EvaluationFailedIcon, LoadingIcon } from '../../icons';
@@ -43,33 +42,30 @@ const ReferenceSolutionsTableRow = ({
         </td>
         <td className="text-nowrap text-center shrink-col pt-0">
           {!lastSubmission || (!lastSubmission.evaluation && !lastSubmission.failure) ? (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="evaluating">
-                  <FormattedMessage
-                    id="app.referenceSolutionTable.stillEvaluating"
-                    defaultMessage="Last submission is still evaluating"
-                  />
-                </Tooltip>
-              }>
-              <LoadingIcon />
-            </OverlayTrigger>
+            <LoadingIcon
+              tooltipId="evaluating"
+              tooltipPlacement="bottom"
+              tooltip={
+                <FormattedMessage
+                  id="app.referenceSolutionTable.stillEvaluating"
+                  defaultMessage="Last submission is still evaluating"
+                />
+              }
+            />
           ) : lastSubmission.failure ? (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id="failure">
-                  {lastSubmission.failure.description || (
-                    <FormattedMessage
-                      id="app.referenceSolutionTable.evaluationFailed"
-                      defaultMessage="Last evaluation failed"
-                    />
-                  )}
-                </Tooltip>
-              }>
-              <EvaluationFailedIcon className="text-danger" />
-            </OverlayTrigger>
+            <EvaluationFailedIcon
+              className="text-danger"
+              tooltipId="failure"
+              tooltipPlacement="bottom"
+              tooltip={
+                lastSubmission.failure.description || (
+                  <FormattedMessage
+                    id="app.referenceSolutionTable.evaluationFailed"
+                    defaultMessage="Last evaluation failed"
+                  />
+                )
+              }
+            />
           ) : (
             <strong className={lastSubmission.evaluation.score >= 1.0 ? 'text-success' : 'text-danger'}>
               <FormattedNumber style="percent" value={lastSubmission.evaluation.score} />

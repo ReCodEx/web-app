@@ -80,29 +80,29 @@ const SolutionFiles = ({
                   <FormattedMessage id="app.solutionFiles.noFiles" defaultMessage="No files were submitted." />
                 </div>
               ) : (
-                <Table hover responsive className="mb-1">
+                <Table hover className="card-table">
                   <tbody>
                     {preprocessFiles(files).map(file => (
                       <tr key={file.id}>
                         {file.parentId && (
                           <td className="text-nowrap shrink-col text-body-secondary pe-0">
-                            <Icon icon="level-up-alt" className="fa-rotate-90" gapLeft />
+                            <Icon icon="level-up-alt" className="fa-rotate-90" gapLeft={2} />
                           </td>
                         )}
                         <td className="text-nowrap shrink-col text-body-secondary">
                           {file.isEntryPoint ? (
-                            <OverlayTrigger
-                              placement="bottom"
-                              overlay={
-                                <Tooltip id={`entrypoint-${file.id}`}>
-                                  <FormattedMessage
-                                    id="app.solutionFiles.entryPoint"
-                                    defaultMessage="Execution entry point (bootstrap)"
-                                  />
-                                </Tooltip>
-                              }>
-                              <Icon icon="sign-in-alt" className="text-success" />
-                            </OverlayTrigger>
+                            <Icon
+                              icon="sign-in-alt"
+                              className="text-success"
+                              tooltipId={`entrypoint-${file.id}`}
+                              tooltipPlacement="bottom"
+                              tooltip={
+                                <FormattedMessage
+                                  id="app.solutionFiles.entryPoint"
+                                  defaultMessage="Execution entry point (bootstrap)"
+                                />
+                              }
+                            />
                           ) : file.name.toLowerCase().endsWith('.zip') ? (
                             <ZipIcon />
                           ) : (

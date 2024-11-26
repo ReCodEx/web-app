@@ -257,7 +257,7 @@ class EditGroup extends Component {
 
                         {group.parentGroupId === null && (
                           <div className="mt-1">
-                            <WarningIcon className="text-danger" gapRight />
+                            <WarningIcon className="text-danger" gapRight={2} />
                             <FormattedMessage
                               id="app.editGroup.cannotDeleteRootGroup"
                               defaultMessage="This is a so-called root group and it cannot be deleted."
@@ -267,7 +267,7 @@ class EditGroup extends Component {
 
                         {group.parentGroupId !== null && group.childGroups && group.childGroups.length > 0 && (
                           <div className="mt-1">
-                            <WarningIcon className="text-danger" gapRight />
+                            <WarningIcon className="text-danger" gapRight={2} />
                             <FormattedMessage
                               id="app.editGroup.cannotDeleteGroupWithSubgroups"
                               defaultMessage="Group with nested sub-groups cannot be deleted."

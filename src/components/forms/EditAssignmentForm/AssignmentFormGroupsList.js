@@ -24,12 +24,12 @@ const AssignmentFormGroupsList = ({ groups, groupsAccessor, isOpen, toggleOpenSt
         <Button size="xs" variant="primary" onClick={toggleOpenState}>
           {isOpen ? (
             <span>
-              <Icon icon="minus-square" gapRight />
+              <Icon icon="minus-square" gapRight={2} />
               <FormattedMessage id="app.multiAssignForm.showMyGroups" defaultMessage="Show My Groups Only" />
             </span>
           ) : (
             <span>
-              <Icon icon="plus-square" gapRight />
+              <Icon icon="plus-square" gapRight={2} />
               <FormattedMessage id="app.multiAssignForm.showAllGroups" defaultMessage="Show All Groups" />
             </span>
           )}

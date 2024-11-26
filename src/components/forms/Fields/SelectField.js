@@ -18,7 +18,7 @@ const SelectField = ({
   prepend = null,
   ...props
 }) => (
-  <FormGroup controlId={input.name} className={groupClassName}>
+  <FormGroup controlId={input.name} className={`mb-3 ${groupClassName}`}>
     {Boolean(label) && (
       <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
     )}
@@ -30,7 +30,6 @@ const SelectField = ({
         isInvalid={Boolean(error)}
         className={classnames({
           'form-control': true,
-          'w-100': true,
           [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
           [styles.active]: active,
           'border-danger': error,

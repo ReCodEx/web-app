@@ -45,10 +45,18 @@ a {
  * Padding Configurations
  */
 
-td.shrink-col,
-th.shrink-col {
+td.shrink-col, th.shrink-col {
   width: 0 !important;
   white-space: nowrap !important;
+}
+
+td.icon-col, th.icon-col {
+  width: 0 !important;
+  white-space: nowrap !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  color: var(--bs-secondary-color) !important;
+  text-align: center !important;
 }
 
 .full-width-modal div.modal-dialog {
@@ -125,7 +133,8 @@ table.table.tbody-hover tbody:hover th.selected {
  */
 
 :root {
-  --bs-box-shadow-sm: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1)
+  --bs-box-shadow-sm: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  --success: var(--bs-success);
 }
 
 .app-header {
@@ -186,8 +195,12 @@ a:focus {
   display: initial;
 }
 
-.card-body > .table-responsive > .table {
-  margin-bottom: 0;
+.card-table {
+  margin-bottom: 0.125rem !important;
+}
+
+.card-table *:last-child > tr:last-of-type > td, .card-table *:last-child > tr:last-of-type > th {
+  border-bottom: none;
 }
 
 /*
@@ -244,6 +257,7 @@ table.table tbody:first-child tr:first-child th {
 .callout {
   border-left-width: 50px;
   position: relative;
+  border-radius: 0.25rem;
 }
 
 .callout .callout-icon {
@@ -334,6 +348,7 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
   width: 20px;
   background-color: #eee;
   border-radius: 50%;
+  box-shadow: inset #ddd 0 0 0.1rem 0.1rem;
 }
 
 /* On mouse-over, add a gray background color */
@@ -342,9 +357,14 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
   box-shadow: #fe9 0 0 0.4em 0.1em;
 }
 
+.radio-container label:hover input ~ .radiomark:after {
+  background-color: #ccc;
+}
+
 /* When the radio button is checked, add a green background */
 .radio-container label input:checked ~ .radiomark {
-  background-color: var(--success);
+  background-color: var(--bs-success);
+  box-shadow: none;
 }
 
 /* On mouse-over, when the radio button is checked, add a darker green background */
@@ -366,10 +386,10 @@ select.form-control.is-invalid, .was-validated select.form-control:invalid { /* 
 
 /* Style the indicator (dot/circle) */
 .radio-container .radiomark:after {
-  top: 4px;
-  left: 4px;
-  width: 12px;
-  height: 12px;
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #eee;
 }

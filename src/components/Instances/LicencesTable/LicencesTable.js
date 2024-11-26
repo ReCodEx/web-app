@@ -19,7 +19,7 @@ const LicencesTable = ({ instance, licences }) => (
         &nbsp;
         <SuccessOrFailureIcon success={instance.hasValidLicence} />
       </p>
-      <Table size="sm" hover>
+      <Table size="sm" hover className="card-table">
         <thead>
           <tr>
             <th>

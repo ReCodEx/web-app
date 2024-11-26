@@ -100,7 +100,7 @@ class ResourceRenderer extends Component {
 
     return this.renderWrapped(
       <>
-        {!noIcons && <LoadingIcon gapRight />}
+        {!noIcons && <LoadingIcon gapRight={2} />}
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </>
     );
@@ -117,7 +117,7 @@ class ResourceRenderer extends Component {
 
     return this.renderWrapped(
       <>
-        {!noIcons && <WarningIcon className="text-danger" gapRight />}
+        {!noIcons && <WarningIcon className="text-danger" gapRight={2} />}
         <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
       </>
     );

@@ -27,7 +27,7 @@ const NotVerifiedEmailCallout = ({ userId, refreshUser }) => (
     <TheButtonGroup className="mb-2">
       <ResendVerificationEmail userId={userId} />
       <Button variant="outline-secondary" onClick={refreshUser}>
-        <RefreshIcon gapRight />
+        <RefreshIcon gapRight={2} />
         <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
       </Button>
     </TheButtonGroup>

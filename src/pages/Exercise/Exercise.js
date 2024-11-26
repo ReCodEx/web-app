@@ -148,7 +148,7 @@ class Exercise extends Component {
                           defaultMessage="The exercise is ready to be assigned. You may do this directly on the assignments page of selected group, or assign it simultaneously to multiple groups using form on Assignments page."
                         />
                         <Link to={EXERCISE_ASSIGNMENTS_URI_FACTORY(exercise.id)}>
-                          <LinkIcon gapLeft className="text-body-secondary" />
+                          <LinkIcon gapLeft={2} className="text-body-secondary" />
                         </Link>
                       </p>
                     </Callout>

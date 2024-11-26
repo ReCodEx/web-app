@@ -58,7 +58,7 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
                     size="xs"
                     variant={selected === String(exam.id) ? 'secondary' : 'primary'}
                     disabled={!linkFactory(exam.id)}>
-                    <VisibleIcon visible={selected !== String(exam.id)} className="text-light" gapRight />
+                    <VisibleIcon visible={selected !== String(exam.id)} className="text-light" gapRight={2} />
                     {selected === String(exam.id) ? (
                       <FormattedMessage id="app.groupExamsTable.unselectButton" defaultMessage="Unselect" />
                     ) : (

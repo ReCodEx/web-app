@@ -338,7 +338,7 @@ class EditExerciseConfig extends Component {
                             </ResourceRenderer>
                           </td>
                           <td className="ps-3 small text-body-secondary">
-                            <InfoIcon gapRight />
+                            <InfoIcon gapRight={2} />
                             {isSimple(exercise) ? (
                               <FormattedMessage
                                 id="app.editExerciseConfig.changeConfigAdvancedExplain"

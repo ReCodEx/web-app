@@ -51,7 +51,7 @@ const TestResultsTableLog = ({
                       variant="primary"
                       size="sm"
                       onClick={() => downloadString(`${testName}.log`, judgeLogStdout, 'text/plain;charset=utf-8')}>
-                      <DownloadIcon gapRight />
+                      <DownloadIcon gapRight={2} />
                       <FormattedMessage id="generic.download" defaultMessage="Download" />
                     </Button>
                     <CopyLogToClipboard log={judgeLogStdout} size="sm" />
@@ -93,7 +93,7 @@ const TestResultsTableLog = ({
                       onClick={() =>
                         downloadString(`${testName}.secondary.log`, judgeLogStderr, 'text/plain;charset=utf-8')
                       }>
-                      <DownloadIcon gapRight />
+                      <DownloadIcon gapRight={2} />
                       <FormattedMessage id="generic.download" defaultMessage="Download" />
                     </Button>
                     <CopyLogToClipboard log={judgeLogStderr} size="sm" />

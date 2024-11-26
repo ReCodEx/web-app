@@ -90,7 +90,7 @@ const FailureReport = ({ failure }) => (
           </p>
           {FAILURE_DETAILS[failure.type] ? (
             <p className="small text-body-secondary">
-              <InfoIcon gapRight />
+              <InfoIcon gapRight={2} />
               {FAILURE_DETAILS[failure.type]}
             </p>
           ) : null}

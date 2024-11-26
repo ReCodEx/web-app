@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip, Popover } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { AddIcon, BindIcon, UnbindIcon, InputIcon, OutputIcon, RemoveIcon, WarningIcon } from '../../icons';
@@ -63,41 +63,41 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
       <td className="small">
         <code className={classnames({ 'text-danger': port.isMissing })}>{port.name}</code>
         {!port.isMissing && !port.prescribedType && (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`badport-${tipId}`}>
-                <FormattedMessage
-                  id="app.pipelines.boxesTable.unknownPort"
-                  defaultMessage="This port is not present in the box descriptor."
-                />
-              </Tooltip>
-            }>
-            <WarningIcon gapLeft className="text-danger" />
-          </OverlayTrigger>
+          <WarningIcon
+            gapLeft={2}
+            className="text-danger"
+            tooltipId={`badport-${tipId}`}
+            tooltipPlacement="bottom"
+            tooltip={
+              <FormattedMessage
+                id="app.pipelines.boxesTable.unknownPort"
+                defaultMessage="This port is not present in the box descriptor."
+              />
+            }
+          />
         )}
       </td>
 
       <td className="small">
         <code className={classnames({ 'text-danger': port.isMissing })}>{port.type}</code>
         {!port.isMissing && port.prescribedType && port.prescribedType !== port.type && (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`badporttype-${tipId}`}>
-                <FormattedMessage
-                  id="app.pipelines.boxesTable.wrongPortType"
-                  defaultMessage="The type of this port is <code>{type}</code>, but <code>{descType}</code> is prescribed by the descriptor."
-                  values={{
-                    type: port.type,
-                    descType: port.prescribedType,
-                    code: content => <code>{content}</code>,
-                  }}
-                />
-              </Tooltip>
-            }>
-            <WarningIcon gapLeft className="text-danger" />
-          </OverlayTrigger>
+          <WarningIcon
+            gapLeft={2}
+            className="text-danger"
+            tooltipId={`badporttype-${tipId}`}
+            tooltipPlacement="bottom"
+            tooltip={
+              <FormattedMessage
+                id="app.pipelines.boxesTable.wrongPortType"
+                defaultMessage="The type of this port is <code>{type}</code>, but <code>{descType}</code> is prescribed by the descriptor."
+                values={{
+                  type: port.type,
+                  descType: port.prescribedType,
+                  code: content => <code>{content}</code>,
+                }}
+              />
+            }
+          />
         )}
       </td>
 
@@ -105,7 +105,7 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
         {port.isMissing ? (
           <em>
             <small>
-              <WarningIcon gapRight />
+              <WarningIcon gapRight={2} />
               <FormattedMessage
                 id="app.pipelines.boxesTable.portMissing"
                 defaultMessage="missing!"
@@ -126,46 +126,42 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
               })}>
               {port.value}
               {portTypeWrong && (
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id={`badvartype-${tipId}`}>
-                      <FormattedMessage
-                        id="app.pipelines.boxesTable.wrongVariableType"
-                        defaultMessage="Associated variable is of <code>{type}</code>, but <code>{descType}</code> type is required."
-                        values={{
-                          type: variables[port.value],
-                          descType: port.prescribedType,
-                          code: content => <code>{content}</code>,
-                        }}
-                      />
-                    </Tooltip>
-                  }>
-                  <WarningIcon gapLeft />
-                </OverlayTrigger>
+                <WarningIcon
+                  gapLeft={2}
+                  tooltipId={`badvartype-${tipId}`}
+                  tooltipPlacement="bottom"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.pipelines.boxesTable.wrongVariableType"
+                      defaultMessage="Associated variable is of <code>{type}</code>, but <code>{descType}</code> type is required."
+                      values={{
+                        type: variables[port.value],
+                        descType: port.prescribedType,
+                        code: content => <code>{content}</code>,
+                      }}
+                    />
+                  }
+                />
               )}
             </small>
 
             {assignVariable && !selectedVariable && !port.value && !portTypeWrong && (
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={`newvar-${tipId}`}>
-                    <FormattedMessage
-                      id="app.pipelines.boxesTable.createNewVariable"
-                      defaultMessage="Create new variable and associate it with this port."
-                    />
-                  </Tooltip>
-                }>
-                <AddIcon
-                  className="text-success"
-                  timid
-                  onClick={ev => {
-                    ev.stopPropagation();
-                    assignVariable(box.name, port.direction, port.name); // create new variable
-                  }}
-                />
-              </OverlayTrigger>
+              <AddIcon
+                className="text-success"
+                timid
+                onClick={ev => {
+                  ev.stopPropagation();
+                  assignVariable(box.name, port.direction, port.name); // create new variable
+                }}
+                tooltipId={`newvar-${tipId}`}
+                tooltipPlacement="bottom"
+                tooltip={
+                  <FormattedMessage
+                    id="app.pipelines.boxesTable.createNewVariable"
+                    defaultMessage="Create new variable and associate it with this port."
+                  />
+                }
+              />
             )}
           </>
         )}
@@ -263,7 +259,7 @@ const BoxesTableRow = ({
             }>
             <code className="small">
               {box.type}
-              {!boxTypes[box.type] && <WarningIcon className="text-danger" gapLeft />}
+              {!boxTypes[box.type] && <WarningIcon className="text-danger" gapLeft={2} />}
             </code>
           </OverlayTrigger>
         </td>

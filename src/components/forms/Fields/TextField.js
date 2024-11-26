@@ -16,7 +16,7 @@ const TextField = ({
   prepend = null,
   ...props
 }) => (
-  <FormGroup controlId={input.name} className={groupClassName}>
+  <FormGroup controlId={input.name} className={`mb-3 ${groupClassName}`}>
     {Boolean(label) && <FormLabel>{label}</FormLabel>}
     <InputGroup>
       {prepend || null}

@@ -78,7 +78,7 @@ class SourceCodeViewerContainer extends Component {
           <Modal show={show} onHide={onHide} dialogClassName={styles.modal} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
-                <LoadingIcon gapRight />
+                <LoadingIcon gapRight={2} />
                 <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
               </Modal.Title>
             </Modal.Header>
@@ -114,7 +114,7 @@ class SourceCodeViewerContainer extends Component {
                     </DropdownButton>
 
                     <Button size="sm" className="mx-2 " onClick={() => download(fileId, zipEntry)}>
-                      <DownloadIcon gapRight />
+                      <DownloadIcon gapRight={2} />
                       <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
                     </Button>
 

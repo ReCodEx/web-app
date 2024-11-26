@@ -9,7 +9,7 @@ const TermsListItem = ({ data, createActions }) => (
   <tr>
     <td>
       {data.beginning * 1000 <= Date.now() && Date.now() <= data.end * 1000 && (
-        <Icon icon={['far', 'lightbulb']} gapLeft gapRight />
+        <Icon icon={['far', 'lightbulb']} gapLeft={2} gapRight={2} />
       )}
     </td>
     <td>{data.year}</td>

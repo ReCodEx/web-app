@@ -153,7 +153,7 @@ class Dashboard extends Component {
                           <Col sm={12}>
                             <Callout variant="success">
                               <h4>
-                                <InfoIcon gapRight />
+                                <InfoIcon gapRight={2} />
                                 <FormattedMessage
                                   id="app.dashboard.studentNoGroupsTitle"
                                   defaultMessage="No Group Memberships"
@@ -171,7 +171,7 @@ class Dashboard extends Component {
                       ) : (
                         <div>
                           <h3 className="mt-4 mb-3">
-                            <GroupIcon gapLeft gapRight className="text-body-secondary" />
+                            <GroupIcon gapLeft={2} gapRight={2} className="text-body-secondary" />
                             <FormattedMessage id="app.dashboard.memberOf" defaultMessage="Groups you are a member of" />
                           </h3>
 
@@ -187,13 +187,13 @@ class Dashboard extends Component {
                                   <TheButtonGroup>
                                     <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
                                       <Button size="sm">
-                                        <GroupIcon gapRight />
+                                        <GroupIcon gapRight={2} />
                                         <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                       </Button>
                                     </Link>
                                     <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
                                       <Button size="sm">
-                                        <AssignmentsIcon gapRight />
+                                        <AssignmentsIcon gapRight={2} />
                                         <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                                       </Button>
                                     </Link>
@@ -260,7 +260,7 @@ class Dashboard extends Component {
                               />
 
                               <h3 className="mt-4 mb-3">
-                                <SupervisorIcon gapLeft gapRight className="text-body-secondary" />
+                                <SupervisorIcon gapLeft={2} gapRight={2} className="text-body-secondary" />
                                 <FormattedMessage
                                   id="app.dashboard.supervisorOf"
                                   defaultMessage="Groups managed by you (as admin or supervisor)"
@@ -279,19 +279,19 @@ class Dashboard extends Component {
                                       <TheButtonGroup>
                                         <Link to={GROUP_INFO_URI_FACTORY(groupId)}>
                                           <Button size="sm">
-                                            <GroupIcon gapRight />
+                                            <GroupIcon gapRight={2} />
                                             <FormattedMessage id="app.group.info" defaultMessage="Group Info" />
                                           </Button>
                                         </Link>
                                         <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
                                           <Button size="sm">
-                                            <AssignmentsIcon gapRight />
+                                            <AssignmentsIcon gapRight={2} />
                                             <FormattedMessage id="app.group.assignments" defaultMessage="Assignments" />
                                           </Button>
                                         </Link>
                                         <Link to={GROUP_STUDENTS_URI_FACTORY(groupId)}>
                                           <Button size="sm">
-                                            <StudentsIcon gapRight />
+                                            <StudentsIcon gapRight={2} />
                                             <FormattedMessage id="app.group.students" defaultMessage="Students" />
                                           </Button>
                                         </Link>

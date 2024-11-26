@@ -44,7 +44,7 @@ const EditSolutionNoteForm = ({
         hasSucceeded={submitSucceeded}
         hasFailed={submitFailed}
         invalid={invalid}
-        defaultIcon={<SaveIcon gapRight />}
+        defaultIcon={<SaveIcon gapRight={2} />}
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
           submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

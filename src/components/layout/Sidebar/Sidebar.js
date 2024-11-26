@@ -47,17 +47,17 @@ const Sidebar = ({
   return (
     <aside className={`app-sidebar bg-body-secondary shadow ${styles.mainSidebar}`} data-bs-theme="dark">
       <div className="sidebar-brand">
-        <Link to={HOME_URI} className="brand-link shadow">
+        <Link to={HOME_URI} className="brand-link shadow me-5">
           <>
             <img
               src={`${URL_PREFIX}/public/logo-bare.png`}
               alt="ReCodEx Logo"
-              className="pt-1 me-3 brand-image opacity-75 shadow"
+              className="pt-1 me-2 brand-image opacity-75 shadow"
             />
             <span className="brand-text">
               {pendingFetchOperations && (
                 <span className={styles.mainLoadingIcon}>
-                  <LoadingIcon gapRight />
+                  <LoadingIcon gapRight={2} />
                 </span>
               )}
               Re<b>CodEx</b>
@@ -67,108 +67,110 @@ const Sidebar = ({
       </div>
 
       <div className="sidebar-wrapper" data-overlayscrollbars="host">
-        <nav className="mt-2">
-          {!user && (
-            <ul
-              className="nav nav-pills sidebar-menu flex-column"
-              data-lte-toggle="treeview"
-              role="menu"
-              data-accordion="false">
-              <MenuTitle title="ReCodEx" />
-              <MenuItem
-                title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
-                icon="sign-in-alt"
-                currentPath={currentUrl}
-                link={LOGIN_URI}
-              />
-              <MenuItem
-                title={<FormattedMessage id="app.sidebar.menu.createAccount" defaultMessage="Create account" />}
-                isActive={false}
-                icon="user-plus"
-                currentPath={currentUrl}
-                link={REGISTRATION_URI}
-              />
-            </ul>
-          )}
-
-          {Boolean(user) && (
-            <>
-              <UserPanelContainer small={small} />
+        <div data-overlayscrollbars-viewport="scrollbarHidden">
+          <nav className="mt-2">
+            {!user && (
               <ul
                 className="nav nav-pills sidebar-menu flex-column"
                 data-lte-toggle="treeview"
                 role="menu"
                 data-accordion="false">
-                <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
+                <MenuTitle title="ReCodEx" />
                 <MenuItem
-                  title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
-                  icon="tachometer-alt"
+                  title={<FormattedMessage id="app.sidebar.menu.signIn" defaultMessage="Sign in" />}
+                  icon="sign-in-alt"
                   currentPath={currentUrl}
-                  link={DASHBOARD_URI}
+                  link={LOGIN_URI}
                 />
-
-                {instances &&
-                  instances.size > 0 &&
-                  instances
-                    .toArray()
-                    .filter(isReady)
-                    .map(getJsData)
-                    .map(({ id, name }) => (
-                      <MenuItem
-                        key={id}
-                        title={name}
-                        icon="university"
-                        currentPath={currentUrl}
-                        link={INSTANCE_URI_FACTORY(id)}
-                      />
-                    ))}
-
-                {isSupervisorRole(effectiveRole) && (
-                  <MenuItem
-                    title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
-                    icon="puzzle-piece"
-                    currentPath={currentUrl}
-                    link={EXERCISES_URI}
-                  />
-                )}
-
-                {isEmpoweredSupervisorRole(effectiveRole) && (
-                  <MenuItem
-                    title={<FormattedMessage id="app.sidebar.menu.pipelines" defaultMessage="Pipelines" />}
-                    icon="random"
-                    currentPath={currentUrl}
-                    link={PIPELINES_URI}
-                  />
-                )}
-
                 <MenuItem
-                  title={<FormattedMessage id="app.sidebar.menu.archive" defaultMessage="Archive" />}
-                  icon="archive"
+                  title={<FormattedMessage id="app.sidebar.menu.createAccount" defaultMessage="Create account" />}
+                  isActive={false}
+                  icon="user-plus"
                   currentPath={currentUrl}
-                  link={ARCHIVE_URI}
-                />
-
-                {Boolean(getExternalIdForCAS(user)) && (
-                  <MenuItem
-                    icon="id-badge"
-                    title={<FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration" />}
-                    currentPath={currentUrl}
-                    link={SIS_INTEGRATION_URI}
-                  />
-                )}
-
-                <MenuItem
-                  title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
-                  icon={['far', 'question-circle']}
-                  link={FAQ_URL}
-                  currentPath={currentUrl}
+                  link={REGISTRATION_URI}
                 />
               </ul>
-            </>
-          )}
+            )}
 
-          {isSuperadminRole(effectiveRole) && <Admin currentUrl={currentUrl} />}
-        </nav>
+            {Boolean(user) && (
+              <>
+                <UserPanelContainer small={small} />
+                <ul
+                  className="nav nav-pills sidebar-menu flex-column"
+                  data-lte-toggle="treeview"
+                  role="menu"
+                  data-accordion="false">
+                  <MenuTitle title={<FormattedMessage id="app.sidebar.menu.title" defaultMessage="Menu" />} />
+                  <MenuItem
+                    title={<FormattedMessage id="app.sidebar.menu.dashboard" defaultMessage="Dashboard" />}
+                    icon="tachometer-alt"
+                    currentPath={currentUrl}
+                    link={DASHBOARD_URI}
+                  />
+
+                  {instances &&
+                    instances.size > 0 &&
+                    instances
+                      .toArray()
+                      .filter(isReady)
+                      .map(getJsData)
+                      .map(({ id, name }) => (
+                        <MenuItem
+                          key={id}
+                          title={name}
+                          icon="university"
+                          currentPath={currentUrl}
+                          link={INSTANCE_URI_FACTORY(id)}
+                        />
+                      ))}
+
+                  {isSupervisorRole(effectiveRole) && (
+                    <MenuItem
+                      title={<FormattedMessage id="app.sidebar.menu.exercises" defaultMessage="Exercises" />}
+                      icon="puzzle-piece"
+                      currentPath={currentUrl}
+                      link={EXERCISES_URI}
+                    />
+                  )}
+
+                  {isEmpoweredSupervisorRole(effectiveRole) && (
+                    <MenuItem
+                      title={<FormattedMessage id="app.sidebar.menu.pipelines" defaultMessage="Pipelines" />}
+                      icon="random"
+                      currentPath={currentUrl}
+                      link={PIPELINES_URI}
+                    />
+                  )}
+
+                  <MenuItem
+                    title={<FormattedMessage id="app.sidebar.menu.archive" defaultMessage="Archive" />}
+                    icon="archive"
+                    currentPath={currentUrl}
+                    link={ARCHIVE_URI}
+                  />
+
+                  {Boolean(getExternalIdForCAS(user)) && (
+                    <MenuItem
+                      icon="id-badge"
+                      title={<FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration" />}
+                      currentPath={currentUrl}
+                      link={SIS_INTEGRATION_URI}
+                    />
+                  )}
+
+                  <MenuItem
+                    title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
+                    icon={['far', 'question-circle']}
+                    link={FAQ_URL}
+                    currentPath={currentUrl}
+                  />
+                </ul>
+              </>
+            )}
+
+            {isSuperadminRole(effectiveRole) && <Admin currentUrl={currentUrl} />}
+          </nav>
+        </div>
       </div>
     </aside>
   );

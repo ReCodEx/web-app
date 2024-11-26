@@ -28,7 +28,7 @@ const PipelineDetail = ({
     title={<FormattedMessage id="app.pipeline.properties" defaultMessage="Pipeline properties" />}
     noPadding
     unlimitedHeight>
-    <Table responsive size="sm" className="mb-1">
+    <Table responsive size="sm" className="card-table">
       <tbody>
         <tr>
           <td className="text-center shrink-col px-2 text-body-secondary">

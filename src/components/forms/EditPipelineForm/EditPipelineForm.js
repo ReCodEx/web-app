@@ -35,7 +35,7 @@ class EditPipelineForm extends Component {
               hasSucceeded={submitSucceeded}
               hasFailed={submitFailed}
               handleSubmit={handleSubmit}
-              defaultIcon={<SaveIcon gapRight />}
+              defaultIcon={<SaveIcon gapRight={2} />}
               messages={{
                 submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
                 submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

@@ -34,7 +34,7 @@ const AttachmentFilesTableRow = ({ id, name, size, uploadedAt, removeFile, links
           }
           className="float-end">
           <Button size="xs" variant="danger">
-            <DeleteIcon gapRight />
+            <DeleteIcon gapRight={2} />
             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
           </Button>
         </Confirm>

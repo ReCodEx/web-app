@@ -265,30 +265,27 @@ class ResultsTable extends Component {
                     }
                   />
                   {!isTeacher && user.id === loggedUser.id && hasPermissions(group, 'viewStats') && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="onlyShowMe">
-                          {showOnlyMe ? (
-                            <FormattedMessage
-                              id="app.resultsTable.cancelOnlyShowMe"
-                              defaultMessage="Show all students in the group"
-                            />
-                          ) : (
-                            <FormattedMessage
-                              id="app.resultsTable.onlyShowMe"
-                              defaultMessage="Hide everyone except for myself"
-                            />
-                          )}
-                        </Tooltip>
-                      }>
-                      <Icon
-                        icon={showOnlyMe ? 'users' : ['far', 'user-circle']}
-                        largeGapLeft
-                        className="text-success"
-                        onClick={this.toggleShowOnlyMe}
-                      />
-                    </OverlayTrigger>
+                    <Icon
+                      icon={showOnlyMe ? 'users' : ['far', 'user-circle']}
+                      gapLeft={3}
+                      className="text-success"
+                      onClick={this.toggleShowOnlyMe}
+                      tooltipId="onlyShowMe"
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        showOnlyMe ? (
+                          <FormattedMessage
+                            id="app.resultsTable.cancelOnlyShowMe"
+                            defaultMessage="Show all students in the group"
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.resultsTable.onlyShowMe"
+                            defaultMessage="Hide everyone except for myself"
+                          />
+                        )
+                      }
+                    />
                   )}
                 </>
               ),
@@ -512,7 +509,7 @@ class ResultsTable extends Component {
                   true // add BOM
                 )
               }>
-              <DownloadIcon gapRight />
+              <DownloadIcon gapRight={2} />
               <FormattedMessage id="app.groupResultsTable.downloadCSV" defaultMessage="Download results as CSV" />
             </Button>
           </div>

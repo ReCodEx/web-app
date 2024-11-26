@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import AssignmentStatusIcon from '../../Assignments/Assignment/AssignmentStatusIcon';
@@ -41,18 +41,18 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
                 <AssignmentStatusIcon id={e.id} submission={e} accepted={false} />
               </span>
               {e.isDebug && (
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id={`debug-mode-${e.id}`}>
-                      <FormattedMessage
-                        id="app.evaluationTable.evaluationIsDebug"
-                        defaultMessage="Evaluated in debug mode (complete logs and dumps)"
-                      />
-                    </Tooltip>
-                  }>
-                  <BugIcon gapLeft className="text-danger" />
-                </OverlayTrigger>
+                <BugIcon
+                  gapLeft={2}
+                  className="text-danger"
+                  tooltipId={`debug-mode-${e.id}`}
+                  tooltiPlacement="bottom"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.evaluationTable.evaluationIsDebug"
+                      defaultMessage="Evaluated in debug mode (complete logs and dumps)"
+                    />
+                  }
+                />
               )}
             </td>
             {e.evaluation && (

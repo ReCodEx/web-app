@@ -20,7 +20,7 @@ const formatArgs = args =>
 const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI_FACTORY } }) => (
   <Box title={<FormattedMessage id="app.asyncJobs.list.title" defaultMessage="Recent Jobs" />} noPadding>
     {asyncJobs && asyncJobs.length > 0 ? (
-      <Table responsive size="sm" hover className="mb-1">
+      <Table size="sm" hover className="card-table">
         <thead>
           <tr>
             <th />
@@ -148,7 +148,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                           defaultMessage="Do you really wish to abort selected background job?"
                         />
                       }>
-                      <AbortIcon className="text-danger" gapRight />
+                      <AbortIcon className="text-danger" gapRight={2} />
                     </Confirm>
                   )}
                 </td>

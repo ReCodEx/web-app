@@ -20,7 +20,7 @@ const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) => (
       'text-success': isOK,
       'text-danger': !isOK,
     })}>
-    <SuccessOrFailureIcon success={isOK} smallGapRight />
+    <SuccessOrFailureIcon success={isOK} gapRight={1} />
     <small>
       {hasValue(value) && '('}
       {(ratio || ratio === 0) && (
@@ -41,18 +41,18 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
         {showCpu && (
           <tr>
             <td className="text-body-secondary p-0">
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id="wall-time-icon">
-                    <FormattedMessage
-                      id="app.submissions.testResultsTable.cpuTimeExplain"
-                      defaultMessage="CPU time (total time the CPU was used by all threads)"
-                    />
-                  </Tooltip>
-                }>
-                <Icon icon="microchip" gapRight />
-              </OverlayTrigger>
+              <Icon
+                icon="microchip"
+                gapRight={2}
+                tooltipId="cpu-time-icon"
+                tooltipPlacement="top"
+                tooltip={
+                  <FormattedMessage
+                    id="app.submissions.testResultsTable.cpuTimeExplain"
+                    defaultMessage="CPU time (total time the CPU was used by all threads)"
+                  />
+                }
+              />
             </td>
             <td className="text-start p-0 text-nowrap">
               {tickOrCrossAndRatioOrValue(cpuTimeExceeded === false, cpuTimeRatio, cpuTime, prettyMs, 1000)}
@@ -62,18 +62,18 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
         {showWall && (
           <tr>
             <td className="text-body-secondary p-0">
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id="wall-time-icon">
-                    <FormattedMessage
-                      id="app.submissions.testResultsTable.wallTimeExplain"
-                      defaultMessage="Wall time (real-time measured by external clock)"
-                    />
-                  </Tooltip>
-                }>
-                <Icon icon={['far', 'clock']} gapRight />
-              </OverlayTrigger>
+              <Icon
+                icon={['far', 'clock']}
+                gapRight={2}
+                tooltipId="wall-time-icon"
+                tooltipPlacement="top"
+                tooltip={
+                  <FormattedMessage
+                    id="app.submissions.testResultsTable.wallTimeExplain"
+                    defaultMessage="Wall time (real-time measured by external clock)"
+                  />
+                }
+              />
             </td>
             <td className="text-start p-0 text-nowrap">
               {tickOrCrossAndRatioOrValue(wallTimeExceeded === false, wallTimeRatio, wallTime, prettyMs, 1000)}
@@ -168,7 +168,7 @@ const TestResultsTableRow = ({
             </Tooltip>
           }>
           <strong>
-            <Icon icon="satellite-dish" className="text-danger" gapRight />
+            <Icon icon="satellite-dish" className="text-danger" gapRight={2} />
             {exitSignal}
             {exitCode !== -1 && <br />}
           </strong>
@@ -177,7 +177,7 @@ const TestResultsTableRow = ({
 
       {exitCodeNative ? (
         <>
-          <SuccessOrFailureIcon success={exitCodeOk} gapRight />
+          <SuccessOrFailureIcon success={exitCodeOk} gapRight={2} />
           {exitCodeOk ? exitCode : exitCodeMapping(runtimeEnvironmentId, exitCode)}
           {(exitCode === 0) !== exitCodeOk && (
             <Explanation id={`exit-code-expl-${testName}`} placement="bottom">
@@ -210,9 +210,9 @@ const TestResultsTableRow = ({
               }>
               <Button variant={isLogOpen ? 'secondary' : 'primary'} size="xs" onClick={() => toggleLogOpen(testName)}>
                 {isLogOpen ? (
-                  <Icon icon="circle-chevron-up" fixedWidth smallGapLeft smallGapRight />
+                  <Icon icon="circle-chevron-up" fixedWidth gapLeft={1} gapRight={1} />
                 ) : (
-                  <Icon icon="circle-chevron-down" fixedWidth smallGapLeft smallGapRight />
+                  <Icon icon="circle-chevron-down" fixedWidth gapLeft={1} gapRight={1} />
                 )}
               </Button>
             </OverlayTrigger>
@@ -230,7 +230,7 @@ const TestResultsTableRow = ({
                 </Tooltip>
               }>
               <Button variant="primary" size="xs" onClick={() => openInModal(testName)}>
-                <Icon icon="expand" fixedWidth smallGapLeft smallGapRight />
+                <Icon icon="expand" fixedWidth gapLeft={1} gapRight={1} />
               </Button>
             </OverlayTrigger>
           )}

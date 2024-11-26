@@ -50,9 +50,9 @@ const AssignmentMaxPoints = ({
         }>
         <span>
           {maxPointsDeadlineInterpolation ? (
-            <PointsInterpolationIcon gapLeft smallGapRight />
+            <PointsInterpolationIcon gapLeft={2} gapRight={1} />
           ) : (
-            <PointsDecreasedIcon gapLeft smallGapRight />
+            <PointsDecreasedIcon gapLeft={2} gapRight={1} />
           )}
           {maxPointsBeforeSecondDeadline}
         </span>

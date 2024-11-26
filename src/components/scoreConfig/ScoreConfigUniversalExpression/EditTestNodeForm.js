@@ -106,11 +106,11 @@ class EditTestNodeForm extends Component {
         <div className="text-center">
           <TheButtonGroup>
             <Button onClick={this.save} variant="success" disabled={tests.length === 0 || !this.dirty()}>
-              <SaveIcon gapRight />
+              <SaveIcon gapRight={2} />
               <FormattedMessage id="generic.save" defaultMessage="Save" />
             </Button>
             <Button onClick={close} variant="outline-secondary">
-              <CloseIcon gapRight />
+              <CloseIcon gapRight={2} />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
           </TheButtonGroup>

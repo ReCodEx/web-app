@@ -82,7 +82,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                   />
                 }>
                 <Button variant="primary" size="sm" disabled={Boolean(testErrors)}>
-                  <Icon icon="arrows-alt" gapRight />
+                  <Icon icon="arrows-alt" gapRight={2} />
                   <FormattedMessage id="app.editExerciseConfigForm.rawFillTest" defaultMessage="Spread Test" />
                 </Button>
               </Confirm>
@@ -94,7 +94,7 @@ class EditExerciseAdvancedConfigTest extends Component {
             <tr className={styles.pipelineName}>
               <td colSpan={4}>
                 <h5>
-                  <PipelineIcon gapRight />
+                  <PipelineIcon gapRight={2} />
                   {safeGet(pipelines, [({ id }) => id === pipelineId, 'name'])}
                 </h5>
               </td>
@@ -110,7 +110,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                       />
                     }>
                     <Button variant="primary" size="xs" disabled={Boolean(safeGet(testErrors, [idx]))}>
-                      <Icon icon="arrows-alt" gapRight />
+                      <Icon icon="arrows-alt" gapRight={2} />
                       <FormattedMessage
                         id="app.editExerciseConfigForm.rawFillPipeline"
                         defaultMessage="Spread Pipeline"
@@ -148,7 +148,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                           variant="primary"
                           size="xs"
                           disabled={Boolean(safeGet(testErrors, [idx, encodeId(name)]))}>
-                          <Icon icon="arrows-alt" gapRight />
+                          <Icon icon="arrows-alt" gapRight={2} />
                           <FormattedMessage id="app.editExerciseConfigForm.rawFill" defaultMessage="Spread" />
                         </Button>
                       </Confirm>

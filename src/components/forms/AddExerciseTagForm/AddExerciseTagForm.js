@@ -41,7 +41,7 @@ const AddExerciseTagForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
-          defaultIcon={updatePending ? <LoadingIcon gapRight /> : <AddIcon gapRight />}
+          defaultIcon={updatePending ? <LoadingIcon gapRight={2} /> : <AddIcon gapRight={2} />}
           noShadow
           messages={{
             submit: <FormattedMessage id="app.addExerciseTagForm.submit" defaultMessage="Add Tag" />,

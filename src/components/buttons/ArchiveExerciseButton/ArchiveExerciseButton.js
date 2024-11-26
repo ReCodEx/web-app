@@ -10,7 +10,7 @@ const ArchiveExerciseButton = ({ archived, pending, disabled = false, setArchive
     variant={disabled ? 'secondary' : pending === false ? 'danger' : 'warning'}
     onClick={() => setArchived(!archived)}
     disabled={pending || disabled}>
-    {pending ? <LoadingIcon gapRight /> : <ArchiveIcon archived={archived} gapRight />}
+    {pending ? <LoadingIcon gapRight={2} /> : <ArchiveIcon archived={archived} gapRight={2} />}
     {archived ? (
       <FormattedMessage id="app.archiveExerciseButton.unset" defaultMessage="Excavate from Archive" />
     ) : (

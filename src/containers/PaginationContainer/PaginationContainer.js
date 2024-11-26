@@ -37,11 +37,11 @@ export const createSortingIcon = (colName, orderByColumn, orderByDescending, set
     <SortedIcon
       active={orderByColumn === colName}
       descending={orderByDescending}
-      gapLeft
+      gapLeft={2}
       onClick={() => setOrderBy(colName, orderByColumn === colName ? !orderByDescending : false)}
     />
   ) : (
-    <LoadingIcon gapLeft />
+    <LoadingIcon gapLeft={2} />
   );
 
 // Show label with actually displayed range info ...
@@ -287,7 +287,7 @@ class PaginationContainer extends Component {
           </div>
         ) : (
           <div className="text-center larger em-maring">
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </div>
         )}

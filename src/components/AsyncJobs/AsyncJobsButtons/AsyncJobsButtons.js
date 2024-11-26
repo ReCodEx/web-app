@@ -11,7 +11,7 @@ const AsyncJobsButtons = ({ refresh, pingAction, pingStatus = null }) => {
     <div className="mb-3 me-3">
       <TheButtonGroup>
         <Button onClick={refresh} variant="primary">
-          <RefreshIcon gapRight />
+          <RefreshIcon gapRight={2} />
           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
         </Button>
         <Button
@@ -20,12 +20,12 @@ const AsyncJobsButtons = ({ refresh, pingAction, pingStatus = null }) => {
           disabled={pingStatus === resourceStatus.PENDING}>
           {pingStatus ? (
             pingStatus === resourceStatus.PENDING ? (
-              <LoadingIcon gapRight />
+              <LoadingIcon gapRight={2} />
             ) : (
-              <WarningIcon gapRight />
+              <WarningIcon gapRight={2} />
             )
           ) : (
-            <Icon icon="table-tennis" gapRight />
+            <Icon icon="table-tennis" gapRight={2} />
           )}
           <FormattedMessage id="app.asyncJobs.ping" defaultMessage="Ping Worker" />
         </Button>

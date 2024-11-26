@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Icon, { PipelineIcon } from '../../icons';
@@ -24,94 +23,90 @@ const PipelinesListItem = ({
 }) => (
   <tr>
     <td className="text-nowrap shrink-col">
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id={`${id}-pipeline`}>
-            {author ? (
-              <FormattedMessage
-                id="app.pipelinesList.authoredPipelineIconTooltip"
-                defaultMessage="Authored pipeline which can be used in custom exercise configurations."
-              />
-            ) : (
-              <FormattedMessage
-                id="app.pipelinesList.universalPipelineIconTooltip"
-                defaultMessage="Universal pipeline which is used in common (simple) exercise configurations."
-              />
-            )}
-          </Tooltip>
-        }>
-        <PipelineIcon className={author ? 'text-body-secondary' : 'text-primary'} />
-      </OverlayTrigger>
+      <PipelineIcon
+        className={author ? 'text-body-secondary' : 'text-primary'}
+        tooltipId={`${id}-pipeline`}
+        tooltipPlacement="bottom"
+        tooltip={
+          author ? (
+            <FormattedMessage
+              id="app.pipelinesList.authoredPipelineIconTooltip"
+              defaultMessage="Authored pipeline which can be used in custom exercise configurations."
+            />
+          ) : (
+            <FormattedMessage
+              id="app.pipelinesList.universalPipelineIconTooltip"
+              defaultMessage="Universal pipeline which is used in common (simple) exercise configurations."
+            />
+          )
+        }
+      />
     </td>
 
     <td className="text-center shrink-col text-body-secondary">
       {parameters.isCompilationPipeline && (
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip id={`${id}-compilation`}>
-              <FormattedMessage id="app.pipelinesList.compilationIconTooltip" defaultMessage="Compilation pipeline" />
-            </Tooltip>
-          }>
-          <Icon icon="cogs" />
-        </OverlayTrigger>
+        <Icon
+          icon="cogs"
+          tooltipId={`${id}-compilation`}
+          tooltipPlacement="bottom"
+          tooltip={
+            <FormattedMessage id="app.pipelinesList.compilationIconTooltip" defaultMessage="Compilation pipeline" />
+          }
+        />
       )}
       {parameters.isExecutionPipeline && !parameters.judgeOnlyPipeline && (
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip id={`${id}-execution`}>
-              <FormattedMessage
-                id="app.pipelinesList.executionIconTooltip"
-                defaultMessage="Execution (testing) pipeline"
-              />
-            </Tooltip>
-          }>
-          <Icon icon="bolt" />
-        </OverlayTrigger>
+        <Icon
+          icon="bolt"
+          tooltipId={`${id}-execution`}
+          tooltipPlacement="bottom"
+          tooltip={
+            <FormattedMessage
+              id="app.pipelinesList.executionIconTooltip"
+              defaultMessage="Execution (testing) pipeline"
+            />
+          }
+        />
       )}
       {parameters.judgeOnlyPipeline && (
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip id={`${id}-judgeOnly`}>
-              <FormattedMessage id="app.pipelinesList.judgeOnlyIconTooltip" defaultMessage="Judge-only pipeline" />
-            </Tooltip>
-          }>
-          <Icon icon="balance-scale" />
-        </OverlayTrigger>
+        <Icon
+          icon="balance-scale"
+          tooltipId={`${id}-judgeOnly`}
+          tooltipPlacement="bottom"
+          tooltip={
+            <FormattedMessage id="app.pipelinesList.judgeOnlyIconTooltip" defaultMessage="Judge-only pipeline" />
+          }
+        />
       )}
     </td>
 
     <td className="text-center shrink-col text-body-secondary">
       {parameters.producesStdout && (
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip id={`${id}-stdout`}>
-              <FormattedMessage
-                id="app.pipelinesList.stdoutIconTooltip"
-                defaultMessage="Tested solution is expected to yield results to standard output"
-              />
-            </Tooltip>
-          }>
-          <Icon icon="align-left" gapRight />
-        </OverlayTrigger>
+        <Icon
+          icon="align-left"
+          gapRight={2}
+          tooltipId={`${id}-stdout`}
+          tooltipPlacement="bottom"
+          tooltip={
+            <FormattedMessage
+              id="app.pipelinesList.stdoutIconTooltip"
+              defaultMessage="Tested solution is expected to yield results to standard output"
+            />
+          }
+        />
       )}
       {parameters.producesFiles && (
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip id={`${id}-file`}>
-              <FormattedMessage
-                id="app.pipelinesList.fileIconTooltip"
-                defaultMessage="Tested solution is expected to yield results into a specific file"
-              />
-            </Tooltip>
-          }>
-          <Icon icon={['far', 'file-alt']} gapRight />
-        </OverlayTrigger>
+        <Icon
+          icon={['far', 'file-alt']}
+          gapRight={2}
+          tooltipId={`${id}-file`}
+          tooltipPlacement="bottom"
+          tooltip={
+            <FormattedMessage
+              id="app.pipelinesList.fileIconTooltip"
+              defaultMessage="Tested solution is expected to yield results into a specific file"
+            />
+          }
+        />
       )}
     </td>
 

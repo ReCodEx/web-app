@@ -32,7 +32,7 @@ const RelocateGroupForm = ({
   <div>
     {submitFailed && (
       <Callout variant="danger">
-        <WarningIcon gapRight />
+        <WarningIcon gapRight={2} />
         <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
       </Callout>
     )}
@@ -54,7 +54,7 @@ const RelocateGroupForm = ({
         <TheButtonGroup className="mb-3">
           {dirty && (
             <Button type="reset" onClick={reset} variant="danger">
-              <RefreshIcon gapRight />
+              <RefreshIcon gapRight={2} />
               <FormattedMessage id="generic.reset" defaultMessage="Reset" />
             </Button>
           )}
@@ -65,7 +65,7 @@ const RelocateGroupForm = ({
             hasSucceeded={submitSucceeded}
             hasFailed={submitFailed}
             handleSubmit={handleSubmit}
-            defaultIcon={<Icon icon="people-carry" gapRight />}
+            defaultIcon={<Icon icon="people-carry" gapRight={2} />}
             messages={{
               submit: <FormattedMessage id="app.relocateGroupForm.submit" defaultMessage="Relocate" />,
               submitting: <FormattedMessage id="app.relocateGroupForm.submitting" defaultMessage="Relocating..." />,

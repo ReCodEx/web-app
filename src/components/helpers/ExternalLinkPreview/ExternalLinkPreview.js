@@ -131,7 +131,7 @@ class ExternalLinkPreview extends Component {
 
         {pending && (
           <InsetPanel>
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </InsetPanel>
         )}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import Button from '../../widgets/TheButton';
@@ -54,7 +54,7 @@ class CalendarTokens extends Component {
     return (
       <>
         <p className="mt-4 mx-4 mb-2">
-          <InfoIcon gapRight className="text-body-secondary" />
+          <InfoIcon gapRight={2} className="text-body-secondary" />
           <FormattedMessage
             id="app.calendarTokens.explain"
             defaultMessage="ReCodEx API can feed iCal data to your calendar. It will export deadline events for all assignments in all groups related to you. Anyone with the iCal identifier will be able to read the calendar and the calendar is read-only. When activated, you will get a calendar URL in the following format."
@@ -93,21 +93,21 @@ class CalendarTokens extends Component {
                       <code className={calendar.expiredAt ? 'text-body-secondary' : ''}>{calendar.id}</code>
                       {!calendar.expiredAt &&
                         (this.state.copiedCalendar === calendar.id ? (
-                          <Icon icon="clipboard-check" gapLeft className="text-success" />
+                          <Icon icon="clipboard-check" gapLeft={2} className="text-success" />
                         ) : (
-                          <OverlayTrigger
-                            placement="right"
-                            overlay={
-                              <Tooltip id={calendar.id}>
+                          <CopyToClipboard
+                            text={`${baseUrl}${calendar.id}`}
+                            onCopy={() => this.calendarCopied(calendar.id)}>
+                            <CopyIcon
+                              timid
+                              gapLeft={2}
+                              className="clickable"
+                              tooltipId={calendar.id}
+                              tooltip={
                                 <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
-                              </Tooltip>
-                            }>
-                            <CopyToClipboard
-                              text={`${baseUrl}${calendar.id}`}
-                              onCopy={() => this.calendarCopied(calendar.id)}>
-                              <CopyIcon timid gapLeft className="clickable" />
-                            </CopyToClipboard>
-                          </OverlayTrigger>
+                              }
+                            />
+                          </CopyToClipboard>
                         ))}
                     </td>
 
@@ -126,20 +126,20 @@ class CalendarTokens extends Component {
                           size="xs"
                           onClick={() => setExpired(calendar.id)}
                           disabled={calendar.expiring || this.state.createPending}>
-                          <Icon icon={['far', 'calendar-xmark']} gapRight />
+                          <Icon icon={['far', 'calendar-xmark']} gapRight={2} />
                           <FormattedMessage id="app.calendarTokens.setExpired" defaultMessage="Set expired" />
-                          {calendar.expiring && <LoadingIcon gapLeft />}
+                          {calendar.expiring && <LoadingIcon gapLeft={2} />}
                         </Button>
                       )}
                       {calendar.expiring === false && (
                         <span>
-                          <WarningIcon className="text-danger" gapRight />
+                          <WarningIcon className="text-danger" gapRight={2} />
                           <FormattedMessage
                             id="app.calendarTokens.setExpiredFailed"
                             defaultMessage="operation failed"
                           />
                           {reload && !this.state.createPending && (
-                            <RefreshIcon gapLeft className="text-primary" onClick={reload} />
+                            <RefreshIcon gapLeft={2} className="text-primary" onClick={reload} />
                           )}
                         </span>
                       )}
@@ -165,13 +165,13 @@ class CalendarTokens extends Component {
               variant={activeCalendars ? 'warning' : 'success'}
               onClick={this.createButtonHandler}
               disabled={this.state.createPending}>
-              <Icon icon={['far', 'calendar-plus']} gapRight />
+              <Icon icon={['far', 'calendar-plus']} gapRight={2} />
               {activeCalendars ? (
                 <FormattedMessage id="app.calendarTokens.refresh" defaultMessage="Expire old and create a new one" />
               ) : (
                 <FormattedMessage id="app.calendarTokens.activate" defaultMessage="Activate calendar" />
               )}
-              {this.state.createPending && <LoadingIcon gapLeft />}
+              {this.state.createPending && <LoadingIcon gapLeft={2} />}
             </Button>
           </div>
         )}

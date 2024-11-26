@@ -7,10 +7,11 @@ import Icon, { EvaluationFailedIcon } from '../../../icons';
 const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestSolution = false }) => {
   if (!submission) {
     return (
-      <StatusIcon
-        id={id}
-        icon={<Icon icon="exclamation-triangle" className="text-danger" />}
-        message={
+      <Icon
+        icon="exclamation-triangle"
+        className="text-danger"
+        tooltipId={id}
+        tooltip={
           <FormattedMessage
             id="app.assignemntStatusIcon.solutionMissingSubmission"
             defaultMessage="The solution was not submitted for evaluation probably due to an error. You may need to resubmit it."
@@ -22,10 +23,11 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
 
   if (!submission.evaluation && !submission.failure) {
     return (
-      <StatusIcon
-        id={id}
-        icon={<Icon icon="cogs" className="text-warning" />}
-        message={
+      <Icon
+        icon="cogs"
+        className="text-warning"
+        tooltipId={id}
+        tooltip={
           <FormattedMessage
             id="app.assignemntStatusIcon.inProgress"
             defaultMessage="Assignment solution is being evaluated."
@@ -37,10 +39,10 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
 
   if (submission.failure) {
     return (
-      <StatusIcon
-        id={id}
-        icon={<EvaluationFailedIcon className="text-danger" />}
-        message={<FormattedMessage id="app.solutionStatusIcon.evaluationFailed" defaultMessage="Evaluation failed." />}
+      <EvaluationFailedIcon
+        className="text-danger"
+        tooltipId={id}
+        tooltip={<FormattedMessage id="app.solutionStatusIcon.evaluationFailed" defaultMessage="Evaluation failed." />}
       />
     );
   }
@@ -48,19 +50,27 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
   if (submission.evaluation.score >= 1.0) {
     return (
       <StatusIcon
-        id={id}
         accepted={accepted}
-        icon={<Icon icon={isBestSolution ? 'thumbs-up' : ['far', 'thumbs-up']} className="text-success" />}
-        message={
-          <>
-            <FormattedMessage id="app.assignemntStatusIcon.ok" defaultMessage="Assignment is successfully completed." />
-            {isBestSolution && !accepted && (
-              <FormattedMessage
-                id="app.assignemntStatusIcon.isBestSolution"
-                defaultMessage="This is the best solution of the author submitted so far."
-              />
-            )}
-          </>
+        icon={
+          <Icon
+            icon={isBestSolution ? 'thumbs-up' : ['far', 'thumbs-up']}
+            className="text-success"
+            tooltipId={id}
+            tooltip={
+              <>
+                <FormattedMessage
+                  id="app.assignemntStatusIcon.ok"
+                  defaultMessage="Assignment is successfully completed."
+                />
+                {isBestSolution && !accepted && (
+                  <FormattedMessage
+                    id="app.assignemntStatusIcon.isBestSolution"
+                    defaultMessage="This is the best solution of the author submitted so far."
+                  />
+                )}
+              </>
+            }
+          />
         }
       />
     );
@@ -68,22 +78,27 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
 
   return (
     <StatusIcon
-      id={id}
       accepted={accepted}
-      icon={<Icon icon={isBestSolution ? 'thumbs-down' : ['far', 'thumbs-down']} className="text-danger" />}
-      message={
-        <>
-          <FormattedMessage
-            id="app.assignemntStatusIcon.failed"
-            defaultMessage="No correct solution was submitted yet."
-          />
-          {isBestSolution && !accepted && (
-            <FormattedMessage
-              id="app.assignemntStatusIcon.isBestSolution"
-              defaultMessage="This is the best solution of the author submitted so far."
-            />
-          )}
-        </>
+      icon={
+        <Icon
+          icon={isBestSolution ? 'thumbs-down' : ['far', 'thumbs-down']}
+          className="text-danger"
+          tooltipId={id}
+          tooltip={
+            <>
+              <FormattedMessage
+                id="app.assignemntStatusIcon.failed"
+                defaultMessage="No correct solution was submitted yet."
+              />
+              {isBestSolution && !accepted && (
+                <FormattedMessage
+                  id="app.assignemntStatusIcon.isBestSolution"
+                  defaultMessage="This is the best solution of the author submitted so far."
+                />
+              )}
+            </>
+          }
+        />
       }
     />
   );

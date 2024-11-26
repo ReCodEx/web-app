@@ -55,9 +55,9 @@ export const EvaluationFailedIcon = props => <Icon {...props} icon="bomb" />;
 export const ExerciseIcon = props => <Icon {...props} icon="puzzle-piece" />;
 export const ExpandCollapseIcon = ({ isOpen = false, ...props }) =>
   isOpen ? (
-    <Icon icon={['far', 'minus-square']} gapRight {...props} />
+    <Icon icon={['far', 'minus-square']} gapRight={2} {...props} />
   ) : (
-    <Icon icon={['far', 'plus-square']} gapRight {...props} />
+    <Icon icon={['far', 'plus-square']} gapRight={2} {...props} />
   );
 export const FailureIcon = props => <Icon className="text-danger" {...props} icon="times" />;
 export const FaqIcon = props => <Icon {...props} icon={['far', 'question-circle']} />;

@@ -40,7 +40,7 @@ class DatetimeField extends Component {
     } = this.props;
 
     return (
-      <FormGroup controlId={input.name}>
+      <FormGroup controlId={input.name} className="mb-3">
         {Boolean(label) && (
           <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
         )}

@@ -128,7 +128,7 @@ class ShadowAssignmentPointsTable extends Component {
                       hasSucceeded={submitSucceeded}
                       hasFailed={submitFailed}
                       invalid={invalid}
-                      defaultIcon={<SaveIcon gapRight />}
+                      defaultIcon={<SaveIcon gapRight={2} />}
                       messages={{
                         submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
                         submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
@@ -136,7 +136,7 @@ class ShadowAssignmentPointsTable extends Component {
                       }}
                     />
                     <Button variant="danger" onClick={this.toggleMultiAwardMode}>
-                      <BanIcon gapRight />
+                      <BanIcon gapRight={2} />
                       <FormattedMessage id="generic.cancel" defaultMessage="Cancel" />
                     </Button>
                   </TheButtonGroup>
@@ -145,7 +145,7 @@ class ShadowAssignmentPointsTable extends Component {
             ) : (
               <div className="text-center">
                 <Button variant="primary" onClick={this.toggleMultiAwardMode}>
-                  <SquareIcon gapRight checked />
+                  <SquareIcon gapRight={2} checked />
                   <FormattedMessage
                     id="app.shadowAssignmentPointsTable.multiAwardButton"
                     defaultMessage="Award Points Collectively"
@@ -156,7 +156,7 @@ class ShadowAssignmentPointsTable extends Component {
           ) : null
         }>
         <>
-          <Table responsive hover className="mb-1">
+          <Table hover className="mb-0">
             <thead>
               <tr>
                 {this.state.multiAwardMode && <th />}
@@ -204,7 +204,7 @@ class ShadowAssignmentPointsTable extends Component {
                       {points === null ? (
                         permissionHints.createPoints && (
                           <Button variant="success" onClick={() => this.openDialog(student.id)} size="xs">
-                            <Icon gapRight icon={['far', 'star']} />
+                            <Icon gapRight={2} icon={['far', 'star']} />
                             <FormattedMessage
                               id="app.shadowAssignmentPointsTable.createPointsButton"
                               defaultMessage="Award Points"
@@ -215,7 +215,7 @@ class ShadowAssignmentPointsTable extends Component {
                         <TheButtonGroup>
                           {permissionHints.updatePoints && (
                             <Button variant="warning" onClick={() => this.openDialog(student.id, pointsId)} size="xs">
-                              <EditIcon gapRight />
+                              <EditIcon gapRight={2} />
                               <FormattedMessage
                                 id="app.shadowAssignmentPointsTable.updatePointsButton"
                                 defaultMessage="Edit"
@@ -234,7 +234,7 @@ class ShadowAssignmentPointsTable extends Component {
                                 />
                               }>
                               <Button variant="danger" size="xs">
-                                <DeleteIcon gapRight />
+                                <DeleteIcon gapRight={2} />
                                 <FormattedMessage id="generic.remove" defaultMessage="Remove" />
                               </Button>
                             </Confirm>

@@ -61,57 +61,60 @@ const UploadsTable = ({
               <tr key={'uploading-' + uploading.file.name}>
                 <td className="text-start align-middle text-nowrap">
                   {uploading.canceling || uploading.cancelRequested ? (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`cancelIco-${uploading.file.name}`}>
-                          <FormattedMessage
-                            id="app.uploadFiles.cancelIconTooltip"
-                            defaultMessage="Canceling the upload..."
-                          />
-                        </Tooltip>
-                      }>
-                      <CloseIcon className="faa-burst animated text-danger" gapRight fixedWidth />
-                    </OverlayTrigger>
+                    <CloseIcon
+                      className="faa-burst animated text-danger"
+                      gapRight={2}
+                      fixedWidth
+                      tooltipId={`cancelIco-${uploading.file.name}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.uploadFiles.cancelIconTooltip"
+                          defaultMessage="Canceling the upload..."
+                        />
+                      }
+                    />
                   ) : uploading.completing ? (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`completingIco-${uploading.file.name}`}>
-                          <FormattedMessage
-                            id="app.uploadFiles.completingIconTooltip"
-                            defaultMessage="The server is consolidating uploaded data..."
-                          />
-                        </Tooltip>
-                      }>
-                      <SuccessIcon className="text-success faa-pulse animated" gapRight fixedWidth />
-                    </OverlayTrigger>
+                    <SuccessIcon
+                      className="text-success faa-pulse animated"
+                      gapRight={2}
+                      fixedWidth
+                      tooltipId={`completingIco-${uploading.file.name}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.uploadFiles.completingIconTooltip"
+                          defaultMessage="The server is consolidating uploaded data..."
+                        />
+                      }
+                    />
                   ) : uploading.partialFile !== null ? (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`uploadIco-${uploading.file.name}`}>
-                          <FormattedMessage
-                            id="app.uploadFiles.uploadIconTooltip"
-                            defaultMessage="The file is being uploaded..."
-                          />
-                        </Tooltip>
-                      }>
-                      <UploadIcon className="faa-rising animated text-primary" gapRight fixedWidth />
-                    </OverlayTrigger>
+                    <UploadIcon
+                      className="faa-rising animated text-primary"
+                      gapRight={2}
+                      fixedWidth
+                      tooltipId={`uploadIco-${uploading.file.name}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.uploadFiles.uploadIconTooltip"
+                          defaultMessage="The file is being uploaded..."
+                        />
+                      }
+                    />
                   ) : (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`loadingIco-${uploading.file.name}`}>
-                          <FormattedMessage
-                            id="app.uploadFiles.loadingIconTooltip"
-                            defaultMessage="Initiating the file upload..."
-                          />
-                        </Tooltip>
-                      }>
-                      <LoadingIcon gapRight fixedWidth />
-                    </OverlayTrigger>
+                    <LoadingIcon
+                      gapRight={2}
+                      fixedWidth
+                      tooltipId={`loadingIco-${uploading.file.name}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.uploadFiles.loadingIconTooltip"
+                          defaultMessage="Initiating the file upload..."
+                        />
+                      }
+                    />
                   )}
                 </td>
                 <td className="font-monospace w-100">
@@ -164,7 +167,7 @@ const UploadsTable = ({
                         </Tooltip>
                       }>
                       <Button size="xs" variant="danger" onClick={() => doRequestUploadCancel(uploading.file.name)}>
-                        <CloseIcon smallGapLeft smallGapRight />
+                        <CloseIcon gapLeft={1} gapRight={1} />
                       </Button>
                     </OverlayTrigger>
                   )}
@@ -178,28 +181,29 @@ const UploadsTable = ({
             .map(failed => (
               <tr key={'failed-' + failed.file.name}>
                 <td className="text-start align-middle text-nowrap">
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={
-                      <Tooltip id={`failedIco-${failed.file.name}`}>
-                        {failed.error ? (
-                          getErrorMessage(formatMessage)(
-                            failed.error,
-                            <FormattedMessage
-                              id="app.uploadFiles.failedIconTooltip"
-                              defaultMessage="The file upload has failed!"
-                            />
-                          )
-                        ) : (
+                  <WarningIcon
+                    className="text-danger"
+                    gapRight={2}
+                    fixedWidth
+                    tooltipId={`failedIco-${failed.file.name}`}
+                    tooltipPlacement="bottom"
+                    tooltip={
+                      failed.error ? (
+                        getErrorMessage(formatMessage)(
+                          failed.error,
                           <FormattedMessage
                             id="app.uploadFiles.failedIconTooltip"
                             defaultMessage="The file upload has failed!"
                           />
-                        )}
-                      </Tooltip>
-                    }>
-                    <WarningIcon className="text-danger" gapRight fixedWidth />
-                  </OverlayTrigger>
+                        )
+                      ) : (
+                        <FormattedMessage
+                          id="app.uploadFiles.failedIconTooltip"
+                          defaultMessage="The file upload has failed!"
+                        />
+                      )
+                    }
+                  />
                 </td>
                 <td className="font-monospace w-100 text-danger">
                   <strong>
@@ -221,7 +225,7 @@ const UploadsTable = ({
                         </Tooltip>
                       }>
                       <Button size="xs" variant="primary" onClick={() => doRetryUploadFile(failed.file)}>
-                        <Icon smallGapLeft smallGapRight icon="sync" />
+                        <Icon gapLeft={1} gapRight={1} icon="sync" />
                       </Button>
                     </OverlayTrigger>
 
@@ -233,7 +237,7 @@ const UploadsTable = ({
                         </Tooltip>
                       }>
                       <Button size="xs" variant="danger" onClick={() => doRemoveFailedFile(failed.file.name)}>
-                        <DeleteIcon smallGapLeft smallGapRight />
+                        <DeleteIcon gapLeft={1} gapRight={1} />
                       </Button>
                     </OverlayTrigger>
                   </TheButtonGroup>
@@ -247,32 +251,35 @@ const UploadsTable = ({
             .map(uploaded => (
               <tr key={'uploaded-' + uploaded.name}>
                 <td className="text-start align-middle text-nowrap">
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={
-                      <Tooltip id={`successIco-${uploaded.name}`}>
-                        <FormattedMessage
-                          id="app.uploadFiles.successIconTooltip"
-                          defaultMessage="The file was uploaded to the server and is ready for subsequent processing."
-                        />
-                      </Tooltip>
-                    }>
-                    <SuccessIcon className="text-success" gapRight fixedWidth />
-                  </OverlayTrigger>
+                  <SuccessIcon
+                    className="text-success"
+                    gapRight={2}
+                    fixedWidth
+                    tooltipId={`successIco-${uploaded.name}`}
+                    tooltipPlacement="bottom"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.uploadFiles.successIconTooltip"
+                        defaultMessage="The file was uploaded to the server and is ready for subsequent processing."
+                      />
+                    }
+                  />
 
                   {existingFiles && existingFiles.has(uploaded.name) && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`overwriteIco-${uploaded.name}`}>
-                          <FormattedMessage
-                            id="app.uploadFiles.overwriteIconTooltip"
-                            defaultMessage="A file of the same name already exists. Its contents will be overwritten with this file."
-                          />
-                        </Tooltip>
-                      }>
-                      <Icon icon={['far', 'copy']} className="text-success text-warning" gapRight fixedWidth />
-                    </OverlayTrigger>
+                    <Icon
+                      icon={['far', 'copy']}
+                      className="text-success text-warning"
+                      gapRight={2}
+                      fixedWidth
+                      tooltipId={`overwriteIco-${uploaded.name}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.uploadFiles.overwriteIconTooltip"
+                          defaultMessage="A file of the same name already exists. Its contents will be overwritten with this file."
+                        />
+                      }
+                    />
                   )}
                 </td>
                 <td className="font-monospace w-100">{uploaded.name}</td>
@@ -286,7 +293,7 @@ const UploadsTable = ({
                       </Tooltip>
                     }>
                     <Button size="xs" variant="outline-danger" onClick={() => doRemoveFile(uploaded.name)}>
-                      <DeleteIcon smallGapLeft smallGapRight />
+                      <DeleteIcon gapLeft={1} gapRight={1} />
                     </Button>
                   </OverlayTrigger>
                 </td>
@@ -299,18 +306,19 @@ const UploadsTable = ({
             .map(removed => (
               <tr key={'removed' + removed.name}>
                 <td className="text-start align-middle text-nowrap">
-                  <OverlayTrigger
-                    placement="bottom"
-                    overlay={
-                      <Tooltip id={`removedIco-${removed.name}`}>
-                        <FormattedMessage
-                          id="app.uploadFiles.removedIconTooltip"
-                          defaultMessage="The file was uploaded but removed from the list. It will not be processed with other uploaded files."
-                        />
-                      </Tooltip>
-                    }>
-                    <DeleteIcon className="text-body-secondary" gapRight fixedWidth />
-                  </OverlayTrigger>
+                  <DeleteIcon
+                    className="text-body-secondary"
+                    gapRight={2}
+                    fixedWidth
+                    tooltipId={`removedIco-${removed.name}`}
+                    tooltipPlacement="bottom"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.uploadFiles.removedIconTooltip"
+                        defaultMessage="The file was uploaded but removed from the list. It will not be processed with other uploaded files."
+                      />
+                    }
+                  />
                 </td>
                 <td className="font-monospace w-100 text-body-secondary">
                   <strike>{removed.name}</strike>
@@ -328,7 +336,7 @@ const UploadsTable = ({
                       </Tooltip>
                     }>
                     <Button size="xs" variant="outline-success" onClick={() => doRestoreRemovedFile(removed.name)}>
-                      <Icon smallGapLeft smallGapRight icon="sync" />
+                      <Icon gapLeft={1} gapRight={1} icon="sync" />
                     </Button>
                   </OverlayTrigger>
                 </td>

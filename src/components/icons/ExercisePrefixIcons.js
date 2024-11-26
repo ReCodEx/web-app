@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import Icon, { ArchiveIcon } from './index.js';
 import DateTime from '../widgets/DateTime';
@@ -22,89 +21,79 @@ export const ExercisePrefixIcons = ({
 }) => (
   <span>
     {archivedAt && (
-      <span>
-        <OverlayTrigger
-          placement="right"
-          overlay={
-            <Tooltip id={id}>
-              <FormattedMessage
-                id="app.ExercisePrefixIcons.archivedAt"
-                defaultMessage="Archived at {archivedAt}."
-                values={{ archivedAt: <DateTime unixts={archivedAt} /> }}
-              />
-            </Tooltip>
-          }>
-          <ArchiveIcon {...props} className="text-info" gapRight />
-        </OverlayTrigger>
-      </span>
+      <ArchiveIcon
+        {...props}
+        className="text-info"
+        gapRight={2}
+        tooltipId={`ex-arch-${id}`}
+        tooltip={
+          <FormattedMessage
+            id="app.ExercisePrefixIcons.archivedAt"
+            defaultMessage="Archived at {archivedAt}."
+            values={{ archivedAt: <DateTime unixts={archivedAt} /> }}
+          />
+        }
+      />
     )}
 
     {!archivedAt && !isPublic && (
-      <span>
-        <OverlayTrigger
-          placement="right"
-          overlay={
-            <Tooltip id={id}>
-              <FormattedMessage
-                id="app.ExercisePrefixIcons.isPrivate"
-                defaultMessage="Exercise is private (visible only to author)."
-              />
-            </Tooltip>
-          }>
-          <PrivateIcon {...props} className="text-body-secondary" gapRight />
-        </OverlayTrigger>
-      </span>
+      <PrivateIcon
+        {...props}
+        className="text-body-secondary"
+        gapRight={2}
+        tooltipId={`ex-priv-${id}`}
+        tooltip={
+          <FormattedMessage
+            id="app.ExercisePrefixIcons.isPrivate"
+            defaultMessage="Exercise is private (visible only to author)."
+          />
+        }
+      />
     )}
 
     {!archivedAt && isLocked && (
-      <span>
-        <OverlayTrigger
-          placement="right"
-          overlay={
-            <Tooltip id={id}>
-              <FormattedMessage
-                id="app.ExercisePrefixIcons.isLocked"
-                defaultMessage="Exercise is locked by the author and cannot be assigned."
-              />
-            </Tooltip>
-          }>
-          <LockIcon {...props} className="text-warning" gapRight />
-        </OverlayTrigger>
-      </span>
+      <LockIcon
+        {...props}
+        className="text-warning"
+        gapRight={2}
+        tooltipId={`ex-lock-${id}`}
+        tooltip={
+          <FormattedMessage
+            id="app.ExercisePrefixIcons.isLocked"
+            defaultMessage="Exercise is locked by the author and cannot be assigned."
+          />
+        }
+      />
     )}
 
     {!archivedAt && isBroken && (
-      <span>
-        <OverlayTrigger
-          placement="right"
-          overlay={
-            <Tooltip id={id}>
-              <FormattedMessage
-                id="app.exercise.isBroken"
-                defaultMessage="Exercise configuration is incomplete and needs fixing."
-              />
-            </Tooltip>
-          }>
-          <NeedFixingIcon {...props} className="text-danger" gapRight />
-        </OverlayTrigger>
-      </span>
+      <NeedFixingIcon
+        {...props}
+        className="text-danger"
+        gapRight={2}
+        tooltipId={`ex-broke-${id}`}
+        tooltip={
+          <FormattedMessage
+            id="app.exercise.isBroken"
+            defaultMessage="Exercise configuration is incomplete and needs fixing."
+          />
+        }
+      />
     )}
 
     {!archivedAt && !isBroken && !hasReferenceSolutions && (
-      <span>
-        <OverlayTrigger
-          placement="right"
-          overlay={
-            <Tooltip id={id}>
-              <FormattedMessage
-                id="app.exercise.noRefSolutions"
-                defaultMessage="Exercise has no proof of concept. Exercise must get at least one reference solution before it can be assigned."
-              />
-            </Tooltip>
-          }>
-          <CheckRequiredIcon {...props} className="text-warning" gapRight />
-        </OverlayTrigger>
-      </span>
+      <CheckRequiredIcon
+        {...props}
+        className="text-warning"
+        gapRight={2}
+        tooltipId={`ex-noref-${id}`}
+        tooltip={
+          <FormattedMessage
+            id="app.exercise.noRefSolutions"
+            defaultMessage="Exercise has no proof of concept. Exercise must get at least one reference solution before it can be assigned."
+          />
+        }
+      />
     )}
   </span>
 );

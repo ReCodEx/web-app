@@ -37,7 +37,7 @@ class Page extends Component {
         <Callout
           variant="danger"
           className="large-icon p-4"
-          icon={failedIcons[major] || <WarningIcon className="text-danger" gapRight />}>
+          icon={failedIcons[major] || <WarningIcon className="text-danger" gapRight={2} />}>
           <h2>
             {getBaseErrorMessage(formatMessage)(
               error,
@@ -76,7 +76,7 @@ class Page extends Component {
       forceLoading = false,
       loadingTitle = (
         <span>
-          <LoadingIcon gapRight />
+          <LoadingIcon gapRight={2} />
           <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
         </span>
       ),

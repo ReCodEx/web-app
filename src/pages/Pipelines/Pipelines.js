@@ -82,7 +82,7 @@ class Pipelines extends Component {
                 onClick={() => {
                   this.newPipeline();
                 }}>
-                <AddIcon gapRight />
+                <AddIcon gapRight={2} />
                 <FormattedMessage id="app.pipelines.createNew" defaultMessage="Create New Pipeline" />
               </Button>
             </div>
@@ -115,7 +115,7 @@ class Pipelines extends Component {
                     <TheButtonGroup>
                       <Link to={PIPELINE_EDIT_URI_FACTORY(id)}>
                         <Button size="xs" variant="warning">
-                          <EditIcon gapRight />
+                          <EditIcon gapRight={2} />
                           <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                         </Button>
                       </Link>

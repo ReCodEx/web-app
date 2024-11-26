@@ -44,9 +44,9 @@ const dateTime = ({
         'text-body-secondary': isDeadline && isAfter(unixts),
       })}>
       {isDeadline && isAfter(unixts - deadlineAlertTime) && !isAfter(unixts) && (
-        <BellIcon className="faa-shake animated" gapRight />
+        <BellIcon className="faa-shake animated" gapRight={2} />
       )}
-      {isDeadline && isAfter(unixts) && <PastDeadlineIcon className="opacity-50" gapRight />}
+      {isDeadline && isAfter(unixts) && <PastDeadlineIcon className="opacity-50" gapRight={2} />}
       {showDate && (
         <span
           className={classnames({
@@ -121,7 +121,7 @@ const DateTime = ({
               })}
           </Tooltip>
         }>
-        {dateTime({ unixts, showDate, showTime, showRelative, ...props })}
+        <span>{dateTime({ unixts, showDate, showTime, showRelative, ...props })}</span>
       </OverlayTrigger>
     ) : (
       dateTime({ unixts, showDate, showTime, showRelative, ...props })

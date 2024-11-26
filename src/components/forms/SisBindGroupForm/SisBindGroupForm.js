@@ -43,7 +43,7 @@ const SisBindGroupForm = ({
       {course && <CourseLabel {...course} groupsCount={courseGroupsCount} />}
       <hr />
       <InsetPanel className="small">
-        <InfoIcon gapRight />
+        <InfoIcon gapRight={2} />
         <FormattedMessage
           id="app.sisBindGroupForm.info"
           defaultMessage="The selected course (mentioned above) will be bound to selected existing group. If you do not have an appropriate group yet, use 'Create group' button instead."
@@ -97,7 +97,7 @@ const SisBindGroupForm = ({
           />
 
           <Button variant="outline-secondary" onClick={onClose}>
-            <CloseIcon gapRight />
+            <CloseIcon gapRight={2} />
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>
         </TheButtonGroup>

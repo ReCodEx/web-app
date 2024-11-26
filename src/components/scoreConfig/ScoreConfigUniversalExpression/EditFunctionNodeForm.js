@@ -102,11 +102,11 @@ class EditFunctionNodeForm extends Component {
         <div className="text-center">
           <TheButtonGroup>
             <Button onClick={this.save} variant="success" disabled={!this.dirty()}>
-              <SaveIcon gapRight />
+              <SaveIcon gapRight={2} />
               <FormattedMessage id="generic.save" defaultMessage="Save" />
             </Button>
             <Button onClick={close} variant="outline-secondary">
-              <CloseIcon gapRight />
+              <CloseIcon gapRight={2} />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
           </TheButtonGroup>

@@ -144,7 +144,7 @@ class BoxForm extends Component {
               {portsIn && portsIn.length > 0 && (
                 <Col xl={portsOut && portsOut.length > 0 ? 6 : 12}>
                   <h5>
-                    <InputIcon gapRight className="text-body-secondary" />
+                    <InputIcon gapRight={2} className="text-body-secondary" />
                     <FormattedMessage id="app.pipelines.boxForm.inputPorts" defaultMessage="Input ports" />
                   </h5>
                   <Table borderless size="sm">
@@ -177,7 +177,7 @@ class BoxForm extends Component {
               {portsOut && portsOut.length > 0 && (
                 <Col xl={portsIn && portsIn.length > 0 ? 6 : 12}>
                   <h5>
-                    <OutputIcon gapRight className="text-body-secondary" />
+                    <OutputIcon gapRight={2} className="text-body-secondary" />
                     <FormattedMessage id="app.pipelines.boxForm.outputPorts" defaultMessage="Output ports" />
                   </h5>
                   <Table size="sm">
@@ -225,7 +225,7 @@ class BoxForm extends Component {
                   dirty={dirty}
                   hasSuceeded={submitSucceeded}
                   reset={reset}
-                  defaultIcon={<SaveIcon gapRight />}
+                  defaultIcon={<SaveIcon gapRight={2} />}
                   messages={{
                     success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
                     submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
@@ -235,12 +235,12 @@ class BoxForm extends Component {
               )}
               {dirty && (
                 <Button variant="danger" onClick={reset}>
-                  <RefreshIcon gapRight />
+                  <RefreshIcon gapRight={2} />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
               )}
               <Button variant="secondary" onClick={onHide}>
-                <CloseIcon gapRight />
+                <CloseIcon gapRight={2} />
                 <FormattedMessage id="generic.close" defaultMessage="Close" />
               </Button>
             </TheButtonGroup>

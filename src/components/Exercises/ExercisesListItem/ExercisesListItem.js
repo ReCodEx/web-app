@@ -146,7 +146,7 @@ const ExercisesListItem = ({
                 </Tooltip>
               }>
               <Button size="xs" variant="warning">
-                <EditIcon smallGapLeft smallGapRight />
+                <EditIcon gapLeft={1} gapRight={1} />
               </Button>
             </OverlayTrigger>
           </Link>
@@ -161,7 +161,7 @@ const ExercisesListItem = ({
                 </Tooltip>
               }>
               <Button size="xs" variant={permissionHints.setScoreConfig ? 'warning' : 'secondary'}>
-                <TestsIcon smallGapLeft smallGapRight />
+                <TestsIcon gapLeft={1} gapRight={1} />
               </Button>
             </OverlayTrigger>
           </Link>
@@ -176,7 +176,7 @@ const ExercisesListItem = ({
                 </Tooltip>
               }>
               <Button size="xs" variant={permissionHints.setLimits ? 'warning' : 'secondary'}>
-                <LimitsIcon smallGapLeft smallGapRight />
+                <LimitsIcon gapLeft={1} gapRight={1} />
               </Button>
             </OverlayTrigger>
           </Link>

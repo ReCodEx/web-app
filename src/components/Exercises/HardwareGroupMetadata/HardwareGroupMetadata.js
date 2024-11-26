@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import prettyMs from 'pretty-ms';
 
 import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
@@ -17,7 +17,7 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
       description={<h5 className="fw-bold">{hardwareGroup.name}</h5>}
       type="primary"
       unlimitedHeight>
-      <Table>
+      <Table className="card-table">
         <tbody>
           {Boolean(isSuperAdmin) && (
             <tr>
@@ -43,18 +43,17 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
             </th>
             <td>
               <span>
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip id="memory-icon">
-                      <FormattedMessage
-                        id="app.hardwareGroupMetadata.memoryOverlay"
-                        defaultMessage="Memory limit constraints"
-                      />
-                    </Tooltip>
-                  }>
-                  <Icon icon="braille" />
-                </OverlayTrigger>
+                <Icon
+                  icon="braille"
+                  tooltipId="memory-icon"
+                  tooltipPlacement="top"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.hardwareGroupMetadata.memoryOverlay"
+                      defaultMessage="Memory limit constraints"
+                    />
+                  }
+                />
                 &nbsp;&nbsp;
                 {prettyPrintBytes(constraints.memory.min * 1024)} ... {prettyPrintBytes(constraints.memory.max * 1024)}
               </span>
@@ -71,52 +70,49 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
               {constraints.cpuTimePerTest.min === constraints.wallTimePerTest.min &&
               constraints.cpuTimePerTest.max === constraints.wallTimePerTest.max ? (
                 <span className="text-nowrap">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id="time-test-icon">
-                        <FormattedMessage
-                          id="app.hardwareGroupMetadata.timeOverlay"
-                          defaultMessage="Both precise (CPU) and wall time limit constraints"
-                        />
-                      </Tooltip>
-                    }>
-                    <Icon icon={['far', 'clock']} />
-                  </OverlayTrigger>
+                  <Icon
+                    icon={['far', 'clock']}
+                    tooltipId="time-test-icon"
+                    tooltipPlacement="top"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.hardwareGroupMetadata.timeOverlay"
+                        defaultMessage="Both precise (CPU) and wall time limit constraints"
+                      />
+                    }
+                  />
                   &nbsp;&nbsp;
                   {prettyMs(constraints.cpuTimePerTest.min * 1000)} ...{' '}
                   {prettyMs(constraints.cpuTimePerTest.max * 1000)}
                 </span>
               ) : (
                 <span className="text-nowrap">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id="cpu-time-test-icon">
-                        <FormattedMessage
-                          id="app.hardwareGroupMetadata.cpuTimeOverlay"
-                          defaultMessage="Precise (CPU) time limit constraints"
-                        />
-                      </Tooltip>
-                    }>
-                    <Icon icon="microchip" />
-                  </OverlayTrigger>
+                  <Icon
+                    icon="microchip"
+                    tooltipId="cpu-time-test-icon"
+                    tooltipPlacement="top"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.hardwareGroupMetadata.cpuTimeOverlay"
+                        defaultMessage="Precise (CPU) time limit constraints"
+                      />
+                    }
+                  />
                   &nbsp;&nbsp;
                   {prettyMs(constraints.cpuTimePerTest.min * 1000)} ...{' '}
                   {prettyMs(constraints.cpuTimePerTest.max * 1000)}
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id="wall-time-test-icon">
-                        <FormattedMessage
-                          id="app.hardwareGroupMetadata.wallTimeOverlay"
-                          defaultMessage="Wall time limit constraints"
-                        />
-                      </Tooltip>
-                    }>
-                    <Icon icon={['far', 'clock']} />
-                  </OverlayTrigger>
+                  <Icon
+                    icon={['far', 'clock']}
+                    tooltipId="wall-time-test-icon"
+                    tooltipPlacement="top"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.hardwareGroupMetadata.wallTimeOverlay"
+                        defaultMessage="Wall time limit constraints"
+                      />
+                    }
+                  />
                   &nbsp;&nbsp;
                   {prettyMs(constraints.wallTimePerTest.min * 1000)} ...{' '}
                   {prettyMs(constraints.wallTimePerTest.max * 1000)}
@@ -135,52 +131,49 @@ const HardwareGroupMetadata = ({ hardwareGroup, isSuperAdmin = false }) => {
               {constraints.cpuTimePerExercise.min === constraints.wallTimePerExercise.min &&
               constraints.cpuTimePerExercise.max !== constraints.wallTimePerExercise.max ? (
                 <span className="text-nowrap">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id="time-test-icon">
-                        <FormattedMessage
-                          id="app.hardwareGroupMetadata.timeOverlay"
-                          defaultMessage="Both precise (CPU) and wall time limit constraints"
-                        />
-                      </Tooltip>
-                    }>
-                    <Icon icon={['far', 'clock']} />
-                  </OverlayTrigger>
+                  <Icon
+                    icon={['far', 'clock']}
+                    tooltipId="time-test-icon"
+                    tooltipPlacement="top"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.hardwareGroupMetadata.timeOverlay"
+                        defaultMessage="Both precise (CPU) and wall time limit constraints"
+                      />
+                    }
+                  />
                   &nbsp;&nbsp;
                   {prettyMs(constraints.cpuTimePerExercise.min * 1000)} ...{' '}
                   {prettyMs(constraints.cpuTimePerExercise.max * 1000)}
                 </span>
               ) : (
                 <span className="text-nowrap">
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id="cpu-time-test-icon">
-                        <FormattedMessage
-                          id="app.hardwareGroupMetadata.cpuTimeOverlay"
-                          defaultMessage="Precise (CPU) time limit constraints"
-                        />
-                      </Tooltip>
-                    }>
-                    <Icon icon="microchip" />
-                  </OverlayTrigger>
+                  <Icon
+                    icon="microchip"
+                    tooltipId="cpu-time-test-icon"
+                    tooltipPlacement="top"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.hardwareGroupMetadata.cpuTimeOverlay"
+                        defaultMessage="Precise (CPU) time limit constraints"
+                      />
+                    }
+                  />
                   &nbsp;&nbsp;
                   {prettyMs(constraints.cpuTimePerExercise.min * 1000)} ...{' '}
                   {prettyMs(constraints.cpuTimePerExercise.max * 1000)}
                   &nbsp;&nbsp;&nbsp;&nbsp;
-                  <OverlayTrigger
-                    placement="top"
-                    overlay={
-                      <Tooltip id="wall-time-test-icon">
-                        <FormattedMessage
-                          id="app.hardwareGroupMetadata.wallTimeOverlay"
-                          defaultMessage="Wall time limit constraints"
-                        />
-                      </Tooltip>
-                    }>
-                    <Icon icon={['far', 'clock']} />
-                  </OverlayTrigger>
+                  <Icon
+                    icon={['far', 'clock']}
+                    tooltipId="wall-time-test-icon"
+                    tooltipPlacement="top"
+                    tooltip={
+                      <FormattedMessage
+                        id="app.hardwareGroupMetadata.wallTimeOverlay"
+                        defaultMessage="Wall time limit constraints"
+                      />
+                    }
+                  />
                   &nbsp;&nbsp;
                   {prettyMs(constraints.wallTimePerExercise.min * 1000)} ...{' '}
                   {prettyMs(constraints.wallTimePerExercise.max * 1000)}

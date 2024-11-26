@@ -11,7 +11,7 @@ const FileSelectionTableRow = ({ file, idx, selected = false, selectFile }) => (
     className={selected ? 'table-primary' : 'clickable'}
     onClick={!selected && selectFile ? () => selectFile(idx) : null}>
     <td className="text-nowrap shrink-col">
-      <CodeFileIcon className="text-body-secondary" gapLeft gapRight />
+      <CodeFileIcon className="text-body-secondary" gapLeft={2} gapRight={2} />
     </td>
     <td>
       <code>

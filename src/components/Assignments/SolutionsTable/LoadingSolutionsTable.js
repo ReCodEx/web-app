@@ -4,7 +4,7 @@ import { LoadingIcon } from '../../icons';
 
 const LoadingSolutionsTable = () => (
   <div className="text-center p-3">
-    <LoadingIcon gapRight />
+    <LoadingIcon gapRight={2} />
     <FormattedMessage id="app.solutionsTable.loading" defaultMessage="Loading submitted solutions..." />
   </div>
 );

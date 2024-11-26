@@ -9,7 +9,7 @@ const LoadingCommentThread = () => (
   <CommentBox commentsCount={0} footer={<AddComment />}>
     <div>
       <p className="text-center">
-        <LoadingIcon gapRight />
+        <LoadingIcon gapRight={2} />
         <FormattedMessage id="app.comments.loadingCommentThread" defaultMessage="Loading comments..." />
       </p>
     </div>

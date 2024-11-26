@@ -10,7 +10,7 @@ const ExamUnlockButton = ({ pending, disabled = false, unlockUserForExam, ...pro
     variant={disabled ? 'secondary' : 'warning'}
     onClick={unlockUserForExam}
     disabled={pending || disabled}>
-    {pending ? <LoadingIcon gapRight /> : <UnlockIcon gapRight />}
+    {pending ? <LoadingIcon gapRight={2} /> : <UnlockIcon gapRight={2} />}
     <FormattedMessage id="app.groupExams.unlockStudentButton" defaultMessage="Unlock" />
   </Button>
 );
