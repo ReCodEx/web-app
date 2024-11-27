@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { FailedAvatar } from '../../Avatar';
 
 const UserPanelFailed = props => (
-  <div className="user-panel mt-2 pb-2 mb-2">
+  <>
     <div className="float-start me-2">
       <FailedAvatar {...props} />
     </div>
@@ -12,7 +12,7 @@ const UserPanelFailed = props => (
       <br />
       <FormattedMessage id="app.badge.failedLoadingInfo" defaultMessage="Please check your Internet connection." />
     </div>
-  </div>
+  </>
 );
 
 export default UserPanelFailed;

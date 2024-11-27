@@ -44,7 +44,7 @@ class Header extends Component {
               </a>
             </li>
             {fetchManyGroupsStatus && (
-              <li className="nav-item memberGroupsDropdownContainer">
+              <li className="nav-item memberGroupsDropdownContainer" data-bs-theme="light">
                 <FetchManyResourceRenderer
                   fetchManyStatus={fetchManyGroupsStatus}
                   loading={

@@ -18,7 +18,7 @@ const HeaderNotificationsDropdown = ({
   newNotifications,
   oldNotifications,
 }) => (
-  <Dropdown as="li" align="end" navbar className="nav-item">
+  <Dropdown as="li" align="end" navbar className="nav-item" data-bs-theme="light">
     <Dropdown.Toggle as="a" id="dropdown-header-notifications" bsPrefix="nav-link">
       {newNotifications.size === 0 ? (
         <Icon icon={['far', 'bell']} />

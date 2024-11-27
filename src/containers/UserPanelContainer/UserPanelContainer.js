@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import UserSwitchingContainer from '../../containers/UserSwitchingContainer';
-
 import UserPanel, { UserPanelLoading, UserPanelFailed } from '../../components/widgets/Sidebar/UserPanel';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
@@ -16,17 +14,14 @@ const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expira
     failed={<UserPanelFailed color="black" small={small} />}
     resource={user}>
     {user => (
-      <span>
-        <UserPanel
-          user={user}
-          effectiveRole={effectiveRole}
-          setEffectiveRole={restrictEffectiveRole}
-          logout={logout}
-          expiration={expiration}
-          small={small}
-        />
-        <UserSwitchingContainer open={true} />
-      </span>
+      <UserPanel
+        user={user}
+        effectiveRole={effectiveRole}
+        setEffectiveRole={restrictEffectiveRole}
+        logout={logout}
+        expiration={expiration}
+        small={small}
+      />
     )}
   </ResourceRenderer>
 );

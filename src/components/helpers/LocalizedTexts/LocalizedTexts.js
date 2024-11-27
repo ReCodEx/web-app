@@ -31,23 +31,23 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
           }
           id="localized-texts">
           <Card className="mb-3">
-            <Card.Header>
-              <Nav
-                variant="tabs"
-                defaultActiveKey={
-                  localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0
-                    ? lang
-                    : localeTabs[0].locale
-                }
-                className="nav-tabs-custom"
-                id="localized-texts">
-                {localeTabs.map(({ locale }) => (
-                  <Nav.Item key={locale}>
-                    <Nav.Link eventKey={locale}>{locale}</Nav.Link>
-                  </Nav.Item>
-                ))}
-              </Nav>
-            </Card.Header>
+            <Nav
+              variant="tabs"
+              defaultActiveKey={
+                localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0
+                  ? lang
+                  : localeTabs[0].locale
+              }
+              className="nav-tabs-custom px-2 pt-2"
+              id="localized-texts">
+              {localeTabs.map(({ locale }) => (
+                <Nav.Item key={locale}>
+                  <Nav.Link eventKey={locale} onClick={ev => ev.currentTarget.blur()}>
+                    {locale}
+                  </Nav.Link>
+                </Nav.Item>
+              ))}
+            </Nav>
             <Tab.Content>
               {localeTabs.map(({ locale, text, link = '', studentHint = null }) => (
                 <Tab.Pane key={locale} eventKey={locale}>

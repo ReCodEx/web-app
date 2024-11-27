@@ -126,6 +126,7 @@ table.table.tbody-hover tbody:hover th.selected {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: rgba(128, 128, 128, 0.1);
+  padding: 0.5rem;
 }
 
 /*
@@ -140,6 +141,10 @@ table.table.tbody-hover tbody:hover th.selected {
 .app-header {
   position: sticky;
   top: 0;
+}
+
+.sidebar-wrapper {
+  height: auto! important;
 }
 
 .img-circle { /* removed in 3.2->4.0 migration, back patch */

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { knownLocalesNames } from '../../../helpers/localizedData.js';
 
 const HeaderLanguageSwitching = ({ currentLang, availableLangs, setLang }) => (
-  <Dropdown as="li" align="end" className="nav-item">
+  <Dropdown as="li" align="end" className="nav-item" data-bs-theme="light">
     <Dropdown.Toggle as="a" id="dropdown-header-lang-switch" bsPrefix="nav-link">
       {currentLang}&nbsp;
     </Dropdown.Toggle>
