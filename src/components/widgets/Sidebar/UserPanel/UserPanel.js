@@ -43,77 +43,75 @@ class UserPanel extends Component {
 
     return (
       <>
-        <div className="user-panel mt-2 pb-2 mb-2">
-          <div className="text-center text-light">
-            {small ? (
-              <AvatarContainer
-                avatarUrl={user.avatarUrl}
-                fullName={user.fullName}
-                firstName={user.name.firstName}
-                size={small ? 32 : 42}
-              />
-            ) : (
-              <UserName currentUserId={user.id} {...user} />
-            )}
-          </div>
+        <div className="text-center text-light">
+          {small ? (
+            <AvatarContainer
+              avatarUrl={user.avatarUrl}
+              fullName={user.fullName}
+              firstName={user.name.firstName}
+              size={small ? 32 : 42}
+            />
+          ) : (
+            <UserName currentUserId={user.id} {...user} />
+          )}
+        </div>
 
-          <div className="small text-center mt-1">
-            <Link to={EDIT_USER_URI_FACTORY(user.id)}>
-              <Icon icon="edit" className="text-warning" gapRight={!small} />
-              {!small && <FormattedMessage id="generic.settings" defaultMessage="Settings" />}
-            </Link>
+        <div className="small text-center mt-1">
+          <Link to={EDIT_USER_URI_FACTORY(user.id)}>
+            <Icon icon="edit" className="text-warning" gapRight={small ? 0 : 1} />
+            {!small && <FormattedMessage id="generic.settings" defaultMessage="Settings" />}
+          </Link>
 
-            {small && <br />}
+          {small && <br />}
 
+          <OverlayTrigger
+            placement="bottom"
+            overlay={
+              <Tooltip id="tokenExpiration">
+                <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
+                <FormattedRelativeTime
+                  value={(expiration - Date.now()) / 1000}
+                  numeric="auto"
+                  updateIntervalInSeconds={1000000}
+                />
+              </Tooltip>
+            }>
+            <a
+              href="#"
+              onClick={e => {
+                e.preventDefault();
+                logout();
+              }}>
+              <Icon icon="sign-out-alt" className="text-danger" gapLeft={small ? 0 : 2} gapRight={small ? 0 : 1} />
+              {!small && <FormattedMessage id="app.logout" defaultMessage="Logout" />}
+            </a>
+          </OverlayTrigger>
+          {small && <br />}
+          {isSuperadminRole(user.privateData.role) && (
             <OverlayTrigger
               placement="bottom"
               overlay={
-                <Tooltip id="tokenExpiration">
-                  <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
-                  <FormattedRelativeTime
-                    value={(expiration - Date.now()) / 1000}
-                    numeric="auto"
-                    updateIntervalInSeconds={1000000}
-                  />
+                <Tooltip id="effectiveRole">
+                  <FormattedMessage id="generic.effectiveRole" defaultMessage="Effective Role" />:{' '}
+                  {roleLabels[effectiveRole]}
                 </Tooltip>
               }>
               <a
                 href="#"
                 onClick={e => {
                   e.preventDefault();
-                  logout();
+                  this.openEffectiveRoleDialog();
                 }}>
-                <Icon icon="sign-out-alt" className="text-danger" gapLeft={small ? 0 : 3} gapRight={!small} />
-                {!small && <FormattedMessage id="app.logout" defaultMessage="Logout" />}
+                <UserRoleIcon
+                  role={effectiveRole}
+                  className="text-primary"
+                  gapLeft={small ? 0 : 2}
+                  gapRight={small ? 0 : 1}
+                />
+                {!small && <FormattedMessage id="generic.role" defaultMessage="Role" />}
               </a>
             </OverlayTrigger>
-            {small && <br />}
-            {isSuperadminRole(user.privateData.role) && (
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="effectiveRole">
-                    <FormattedMessage id="generic.effectiveRole" defaultMessage="Effective Role" />:{' '}
-                    {roleLabels[effectiveRole]}
-                  </Tooltip>
-                }>
-                <a
-                  href="#"
-                  onClick={e => {
-                    e.preventDefault();
-                    this.openEffectiveRoleDialog();
-                  }}>
-                  <UserRoleIcon
-                    role={effectiveRole}
-                    className="text-primary"
-                    gapLeft={small ? 0 : 3}
-                    gapRight={!small}
-                  />
-                  {!small && <FormattedMessage id="generic.role" defaultMessage="Role" />}
-                </a>
-              </OverlayTrigger>
-            )}
-          </div>
+          )}
         </div>
 
         {isSuperadminRole(user.privateData.role) && (

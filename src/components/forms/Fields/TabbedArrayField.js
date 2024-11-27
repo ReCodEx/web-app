@@ -54,31 +54,29 @@ class TabbedArrayField extends Component {
         {fields.length > 0 && (
           <Tab.Container id={id} defaultActiveKey={defaultIndex}>
             <Card className="mb-3">
-              <Card.Header>
-                <Nav variant="tabs" className="nav-tabs-custom" id="localized-texts">
-                  {indices.map((fieldIdx, tabIdx) => {
-                    const fieldData = fields.get(fieldIdx);
-                    return (
-                      <Nav.Item key={tabIdx}>
-                        <Nav.Link eventKey={tabIdx}>
-                          {renderTitle(fieldData)}
-                          {removableTabs && (
-                            <Confirm
-                              id={`${id}-remove-${fieldIdx}`}
-                              question={removeQuestion}
-                              onConfirmed={() => {
-                                fields.remove(fieldIdx);
-                                this.changeTab(Math.min(tabIdx, fields.length - 2));
-                              }}>
-                              <CloseIcon gapLeft={2} />
-                            </Confirm>
-                          )}
-                        </Nav.Link>
-                      </Nav.Item>
-                    );
-                  })}
-                </Nav>
-              </Card.Header>
+              <Nav variant="tabs" className="nav-tabs-custom px-2 pt-2" id="localized-texts">
+                {indices.map((fieldIdx, tabIdx) => {
+                  const fieldData = fields.get(fieldIdx);
+                  return (
+                    <Nav.Item key={tabIdx}>
+                      <Nav.Link eventKey={tabIdx} onClick={ev => ev.currentTarget.blur()}>
+                        {renderTitle(fieldData)}
+                        {removableTabs && (
+                          <Confirm
+                            id={`${id}-remove-${fieldIdx}`}
+                            question={removeQuestion}
+                            onConfirmed={() => {
+                              fields.remove(fieldIdx);
+                              this.changeTab(Math.min(tabIdx, fields.length - 2));
+                            }}>
+                            <CloseIcon gapLeft={2} />
+                          </Confirm>
+                        )}
+                      </Nav.Link>
+                    </Nav.Item>
+                  );
+                })}
+              </Nav>
 
               <Tab.Content>
                 {indices.map((fieldIdx, tabIdx) => {

@@ -61,7 +61,7 @@ const SolutionsTableRow = ({
     <tbody
       onClick={!selected && onSelect ? () => onSelect(id) : null}
       onDoubleClick={
-        !onSelect && doubleclickAction && (() => doubleclickAction(SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)))
+        !onSelect && doubleclickAction ? () => doubleclickAction(SOLUTION_DETAIL_URI_FACTORY(assignmentId, id)) : null
       }>
       <tr
         id={id}

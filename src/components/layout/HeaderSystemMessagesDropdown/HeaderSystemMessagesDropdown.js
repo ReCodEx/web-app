@@ -20,7 +20,7 @@ const HeaderSystemMessagesDropdown = ({
   acceptActiveMessages,
   unacceptActiveMessages,
 }) => (
-  <Dropdown as="li" align="end" navbar className="nav-item">
+  <Dropdown as="li" align="end" navbar className="nav-item" data-bs-theme="light">
     <Dropdown.Toggle as="a" id="dropdown-header-system-messages" bsPrefix="nav-link">
       <MailIcon />
       {systemMessages.length > 0 && (

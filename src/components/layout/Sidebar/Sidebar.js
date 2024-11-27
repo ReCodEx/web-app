@@ -5,8 +5,9 @@ import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
 
-import Admin from './Admin.js';
 import UserPanelContainer from '../../../containers/UserPanelContainer';
+import UserSwitchingContainer from '../../../containers/UserSwitchingContainer';
+
 import MenuTitle from '../../widgets/Sidebar/MenuTitle';
 import MenuItem from '../../widgets/Sidebar/MenuItem';
 import { LoadingIcon } from '../../icons';
@@ -15,6 +16,7 @@ import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '.
 import withLinks from '../../../helpers/withLinks.js';
 import { getExternalIdForCAS } from '../../../helpers/cas.js';
 import { getConfigVar } from '../../../helpers/config.js';
+import Admin from './Admin.js';
 
 import * as styles from './sidebar.less';
 
@@ -47,12 +49,12 @@ const Sidebar = ({
   return (
     <aside className={`app-sidebar bg-body-secondary shadow ${styles.mainSidebar}`} data-bs-theme="dark">
       <div className="sidebar-brand">
-        <Link to={HOME_URI} className="brand-link shadow me-5">
+        <Link to={HOME_URI} className="brand-link me-5">
           <>
             <img
               src={`${URL_PREFIX}/public/logo-bare.png`}
               alt="ReCodEx Logo"
-              className="pt-1 me-2 brand-image opacity-75 shadow"
+              className="pt-1 me-2 brand-image opacity-75"
             />
             <span className="brand-text">
               {pendingFetchOperations && (
@@ -66,7 +68,11 @@ const Sidebar = ({
         </Link>
       </div>
 
-      <div className="sidebar-wrapper" data-overlayscrollbars="host">
+      <div className="sticky-top shadow border-bottom bg-body-secondary py-2">
+        <UserPanelContainer small={small} />
+      </div>
+
+      <div className="sidebar-wrapper">
         <div data-overlayscrollbars-viewport="scrollbarHidden">
           <nav className="mt-2">
             {!user && (
@@ -94,7 +100,8 @@ const Sidebar = ({
 
             {Boolean(user) && (
               <>
-                <UserPanelContainer small={small} />
+                <UserSwitchingContainer open={true} />
+
                 <ul
                   className="nav nav-pills sidebar-menu flex-column"
                   data-lte-toggle="treeview"
