@@ -18,7 +18,7 @@ import { getExternalIdForCAS } from '../../../helpers/cas.js';
 import { getConfigVar } from '../../../helpers/config.js';
 import Admin from './Admin.js';
 
-import * as styles from './sidebar.less';
+import './sidebar.css';
 
 const URL_PREFIX = getConfigVar('URL_PATH_PREFIX');
 
@@ -30,7 +30,6 @@ const Sidebar = ({
   effectiveRole = null,
   currentUrl,
   instances,
-  small = false,
   links: {
     HOME_URI,
     FAQ_URL,
@@ -47,7 +46,7 @@ const Sidebar = ({
   const user = getUserData(loggedInUser);
 
   return (
-    <aside className={`app-sidebar bg-body-secondary shadow ${styles.mainSidebar}`} data-bs-theme="dark">
+    <aside className="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
       <div className="sidebar-brand">
         <Link to={HOME_URI} className="brand-link me-5">
           <>
@@ -58,7 +57,7 @@ const Sidebar = ({
             />
             <span className="brand-text">
               {pendingFetchOperations && (
-                <span className={styles.mainLoadingIcon}>
+                <span className="brand-loading">
                   <LoadingIcon gapRight={2} />
                 </span>
               )}
@@ -69,7 +68,7 @@ const Sidebar = ({
       </div>
 
       <div className="sticky-top shadow border-bottom bg-body-secondary py-2">
-        <UserPanelContainer small={small} />
+        <UserPanelContainer />
       </div>
 
       <div className="sidebar-wrapper">
@@ -189,7 +188,6 @@ Sidebar.propTypes = {
   effectiveRole: PropTypes.string,
   currentUrl: PropTypes.string,
   instances: ImmutablePropTypes.list,
-  small: PropTypes.bool,
   links: PropTypes.object,
 };
 

@@ -7,7 +7,7 @@ const UserPanelLoading = props => (
     <div className="float-start me-3">
       <LoadingAvatar {...props} />
     </div>
-    <div className="text-light pt-2">
+    <div className="text-light pt-2 sidebar-up-hide-collapsed">
       <p>
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </p>

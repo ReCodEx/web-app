@@ -7,7 +7,7 @@ const UserPanelFailed = props => (
     <div className="float-start me-2">
       <FailedAvatar {...props} />
     </div>
-    <div className="small text-light">
+    <div className="small text-light sidebar-up-hide-collapsed">
       <FormattedMessage id="app.badge.failedLoading" defaultMessage="Failed to load the data" />
       <br />
       <FormattedMessage id="app.badge.failedLoadingInfo" defaultMessage="Please check your Internet connection." />
