@@ -8,8 +8,9 @@ import UserName from '../../../Users/UsersName';
 import EffectiveRoleSwitching from '../../../Users/EffectiveRoleSwitching';
 import withLinks from '../../../../helpers/withLinks.js';
 import Icon from '../../../icons';
-import AvatarContainer from '../../../../containers/AvatarContainer/AvatarContainer.js';
 import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../../helpers/usersRoles.js';
+
+import './userPanel.css';
 
 class UserPanel extends Component {
   state = { effectiveRoleDialogOpened: false, effectiveRoleUpdating: null };
@@ -37,80 +38,80 @@ class UserPanel extends Component {
       effectiveRole,
       expiration,
       logout,
-      small = false,
       links: { EDIT_USER_URI_FACTORY },
     } = this.props;
 
     return (
       <>
-        <div className="text-center text-light">
-          {small ? (
-            <AvatarContainer
-              avatarUrl={user.avatarUrl}
-              fullName={user.fullName}
-              firstName={user.name.firstName}
-              size={small ? 32 : 42}
-            />
-          ) : (
-            <UserName currentUserId={user.id} {...user} />
-          )}
+        <div className="text-center text-light sidebar-up-hide-collapsed">
+          <UserName currentUserId={user.id} {...user} />
         </div>
 
         <div className="small text-center mt-1">
-          <Link to={EDIT_USER_URI_FACTORY(user.id)}>
-            <Icon icon="edit" className="text-warning" gapRight={small ? 0 : 1} />
-            {!small && <FormattedMessage id="generic.settings" defaultMessage="Settings" />}
-          </Link>
+          <span className="sidebar-up-collapsed-block">
+            <Link to={EDIT_USER_URI_FACTORY(user.id)}>
+              <Icon icon="edit" className="text-warning sidebar-up-collapse-gaps" gapRight={1} />
+              <span className="sidebar-up-hide-collapsed">
+                <FormattedMessage id="generic.settings" defaultMessage="Settings" />
+              </span>
+            </Link>
+          </span>
 
-          {small && <br />}
-
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id="tokenExpiration">
-                <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
-                <FormattedRelativeTime
-                  value={(expiration - Date.now()) / 1000}
-                  numeric="auto"
-                  updateIntervalInSeconds={1000000}
-                />
-              </Tooltip>
-            }>
-            <a
-              href="#"
-              onClick={e => {
-                e.preventDefault();
-                logout();
-              }}>
-              <Icon icon="sign-out-alt" className="text-danger" gapLeft={small ? 0 : 2} gapRight={small ? 0 : 1} />
-              {!small && <FormattedMessage id="app.logout" defaultMessage="Logout" />}
-            </a>
-          </OverlayTrigger>
-          {small && <br />}
-          {isSuperadminRole(user.privateData.role) && (
+          <span className="sidebar-up-collapsed-block">
             <OverlayTrigger
               placement="bottom"
               overlay={
-                <Tooltip id="effectiveRole">
-                  <FormattedMessage id="generic.effectiveRole" defaultMessage="Effective Role" />:{' '}
-                  {roleLabels[effectiveRole]}
+                <Tooltip id="tokenExpiration">
+                  <FormattedMessage id="app.badge.sessionExpiration" defaultMessage="Session expiration:" />{' '}
+                  <FormattedRelativeTime
+                    value={(expiration - Date.now()) / 1000}
+                    numeric="auto"
+                    updateIntervalInSeconds={1000000}
+                  />
                 </Tooltip>
               }>
               <a
                 href="#"
                 onClick={e => {
                   e.preventDefault();
-                  this.openEffectiveRoleDialog();
+                  logout();
                 }}>
-                <UserRoleIcon
-                  role={effectiveRole}
-                  className="text-primary"
-                  gapLeft={small ? 0 : 2}
-                  gapRight={small ? 0 : 1}
-                />
-                {!small && <FormattedMessage id="generic.role" defaultMessage="Role" />}
+                <Icon icon="sign-out-alt" className="text-danger sidebar-up-collapse-gaps" gapLeft={2} gapRight={1} />
+                <span className="sidebar-up-hide-collapsed">
+                  <FormattedMessage id="app.logout" defaultMessage="Logout" />
+                </span>
               </a>
             </OverlayTrigger>
+          </span>
+
+          {isSuperadminRole(user.privateData.role) && (
+            <span className="sidebar-up-collapsed-block">
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id="effectiveRole">
+                    <FormattedMessage id="generic.effectiveRole" defaultMessage="Effective Role" />:{' '}
+                    {roleLabels[effectiveRole]}
+                  </Tooltip>
+                }>
+                <a
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    this.openEffectiveRoleDialog();
+                  }}>
+                  <UserRoleIcon
+                    role={effectiveRole}
+                    className="text-primary sidebar-up-collapse-gaps"
+                    gapLeft={2}
+                    gapRight={1}
+                  />
+                  <span className="sidebar-up-hide-collapsed">
+                    <FormattedMessage id="generic.role" defaultMessage="Role" />
+                  </span>
+                </a>
+              </OverlayTrigger>
+            </span>
           )}
         </div>
 
@@ -146,7 +147,6 @@ UserPanel.propTypes = {
   setEffectiveRole: PropTypes.func.isRequired,
   logout: PropTypes.func,
   expiration: PropTypes.number.isRequired,
-  small: PropTypes.bool,
   links: PropTypes.object,
 };
 

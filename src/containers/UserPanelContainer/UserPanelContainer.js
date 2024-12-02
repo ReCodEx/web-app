@@ -8,11 +8,8 @@ import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/
 import { accessTokenExpiration } from '../../redux/selectors/auth.js';
 import { logout, restrictEffectiveRole } from '../../redux/modules/auth.js';
 
-const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration, logout, small = false }) => (
-  <ResourceRenderer
-    loading={<UserPanelLoading small={small} />}
-    failed={<UserPanelFailed color="black" small={small} />}
-    resource={user}>
+const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration, logout }) => (
+  <ResourceRenderer loading={<UserPanelLoading />} failed={<UserPanelFailed color="black" />} resource={user}>
     {user => (
       <UserPanel
         user={user}
@@ -20,7 +17,6 @@ const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expira
         setEffectiveRole={restrictEffectiveRole}
         logout={logout}
         expiration={expiration}
-        small={small}
       />
     )}
   </ResourceRenderer>
@@ -32,7 +28,6 @@ UserPanelContainer.propTypes = {
   expiration: PropTypes.number.isRequired,
   logout: PropTypes.func.isRequired,
   restrictEffectiveRole: PropTypes.func.isRequired,
-  small: PropTypes.bool,
   links: PropTypes.object,
 };
 
