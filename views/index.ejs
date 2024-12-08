@@ -76,7 +76,7 @@
       <%= ((new Date()).getMonth() === 3 && (new Date()).getDate() === 1) ? 'Loudím' : 'Loading' %>...
     </div>
 
-    <div id="root">
+    <div id="root" class="<%= ((new Date()).getMonth() === 11 && (new Date()).getDate() > 19) ? 'recodexmas' : '' %>">
       <%- html %>
     </div>
     <% if (reduxState) { %>
@@ -87,6 +87,7 @@
 
     <script>
       window.__RECODEX_CONFIG__ = <%- config %>;
+      <%= ((new Date()).getMonth() === 11 && (new Date()).getDate() > 19) ? 'window.recodexmas = true;' : '' %>
     </script>
     <script src="<%= bundle %>"></script>
     <script>
