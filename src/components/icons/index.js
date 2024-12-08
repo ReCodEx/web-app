@@ -19,8 +19,8 @@ export const AdressIcon = props => <Icon {...props} icon="at" />;
 export const ArchiveIcon = ({ archived = false, ...props }) => (
   <Icon {...props} icon={archived ? 'dolly' : 'boxes-packing'} />
 );
-export const AssignmentIcon = props => <Icon {...props} icon="laptop-code" />;
-export const AssignmentsIcon = props => <Icon {...props} icon="tasks" />;
+export const AssignmentIcon = props => <Icon {...props} icon={window && window.recodexmas ? 'gift' : 'laptop-code'} />;
+export const AssignmentsIcon = props => <Icon {...props} icon={window && window.recodexmas ? 'gifts' : 'tasks'} />;
 export const AuthorIcon = props => <Icon {...props} icon="user-pen" />;
 export const BanIcon = props => <Icon {...props} icon="ban" />;
 export const BellIcon = props => <Icon {...props} icon={['far', 'bell']} />;
@@ -73,7 +73,15 @@ export const InstanceIcon = props => <Icon {...props} icon="university" />;
 export const InvertIcon = props => <Icon {...props} icon="yin-yang" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
 export const LinkIcon = props => <Icon {...props} icon="share-square" />;
-export const LoadingIcon = props => <Icon {...props} icon="spinner" pulse style={{ opacity: 0.8 }} />;
+export const LoadingIcon = ({ className = '', ...props }) => (
+  <Icon
+    {...props}
+    icon={window && window.recodexmas ? ['far', 'snowflake'] : 'spinner'}
+    pulse={!(window && window.recodexmas)}
+    spin={window && window.recodexmas}
+    className={'opacity-75 ' + className}
+  />
+);
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export { LockIcon };
 export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
@@ -156,7 +164,7 @@ export const UnbindIcon = props => <Icon {...props} icon={['far', 'hand-scissors
 export const UndoIcon = props => <Icon {...props} icon="undo-alt" />;
 export const UnlockIcon = props => <Icon {...props} icon="unlock" />;
 export const UploadIcon = props => <Icon {...props} icon="cloud-upload-alt" />;
-export const UserIcon = props => <Icon {...props} icon={['far', 'user']} />;
+export const UserIcon = props => <Icon {...props} icon={window && window.recodexmas ? 'snowman' : ['far', 'user']} />;
 export const UserLockIcon = props => <Icon {...props} icon="user-lock" />;
 export const UserProfileIcon = props => <Icon {...props} icon={['far', 'address-card']} />;
 export const VisibleIcon = ({ visible = true, ...props }) =>
@@ -185,6 +193,10 @@ GroupIcon.propTypes = {
   organizational: PropTypes.bool,
   archived: PropTypes.bool,
   exam: PropTypes.bool,
+};
+
+LoadingIcon.propTypes = {
+  className: PropTypes.string,
 };
 
 ReviewIcon.propTypes = {

@@ -50,11 +50,15 @@ const Sidebar = ({
       <div className="sidebar-brand">
         <Link to={HOME_URI} className="brand-link me-5">
           <>
-            <img
-              src={`${URL_PREFIX}/public/logo-bare.png`}
-              alt="ReCodEx Logo"
-              className="pt-1 me-2 brand-image opacity-75"
-            />
+            {window && window.recodexmas ? (
+              <span className="me-1 brand-image fs-2">🎄</span>
+            ) : (
+              <img
+                src={`${URL_PREFIX}/public/logo-bare.png`}
+                alt="ReCodEx Logo"
+                className="pt-1 me-2 brand-image opacity-75"
+              />
+            )}
             <span className="brand-text">
               {pendingFetchOperations && (
                 <span className="brand-loading">
@@ -67,9 +71,11 @@ const Sidebar = ({
         </Link>
       </div>
 
-      <div className="sticky-top shadow border-bottom bg-body-secondary py-2">
-        <UserPanelContainer />
-      </div>
+      {Boolean(loggedInUser) && (
+        <div className="sticky-top shadow border-bottom bg-body-secondary py-2">
+          <UserPanelContainer />
+        </div>
+      )}
 
       <div className="sidebar-wrapper">
         <div data-overlayscrollbars-viewport="scrollbarHidden">
