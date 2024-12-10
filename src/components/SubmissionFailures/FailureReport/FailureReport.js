@@ -64,7 +64,7 @@ const FAILURE_DETAILS = {
 const FailureReport = ({ failure }) => (
   <>
     <Callout variant="danger" icon={<EvaluationFailedIcon />}>
-      <span className="small float-right">
+      <span className="small float-end">
         (<DateTime unixts={failure.createdAt} />)
       </span>
       <h4>
@@ -89,8 +89,8 @@ const FailureReport = ({ failure }) => (
             )}
           </p>
           {FAILURE_DETAILS[failure.type] ? (
-            <p className="small text-muted">
-              <InfoIcon gapRight />
+            <p className="small text-body-secondary">
+              <InfoIcon gapRight={2} />
               {FAILURE_DETAILS[failure.type]}
             </p>
           ) : null}
@@ -112,7 +112,7 @@ const FailureReport = ({ failure }) => (
 
     {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
       <Callout variant="success" icon="fire-extinguisher">
-        <span className="small float-right">
+        <span className="small float-end">
           (<DateTime unixts={failure.resolvedAt} />)
         </span>
         <h4>

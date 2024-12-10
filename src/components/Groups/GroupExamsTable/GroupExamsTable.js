@@ -35,7 +35,7 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
       <tbody>
         {sortExams(exams).map((exam, idx) => (
           <tr key={exam.id} className={selected === String(exam.id) ? 'table-primary' : ''}>
-            <td className="text-bold">#{idx + 1}</td>
+            <td className="fw-bold">#{idx + 1}</td>
             <td>
               <DateTime unixts={exam.begin} showSeconds />
             </td>
@@ -52,13 +52,13 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
               </em>
             </td>
             {linkFactory && (
-              <td className="text-right">
+              <td className="text-end">
                 <Link to={linkFactory(exam.id) || ''}>
                   <Button
                     size="xs"
                     variant={selected === String(exam.id) ? 'secondary' : 'primary'}
                     disabled={!linkFactory(exam.id)}>
-                    <VisibleIcon visible={selected !== String(exam.id)} className="text-light" gapRight />
+                    <VisibleIcon visible={selected !== String(exam.id)} className="text-light" gapRight={2} />
                     {selected === String(exam.id) ? (
                       <FormattedMessage id="app.groupExamsTable.unselectButton" defaultMessage="Unselect" />
                     ) : (
@@ -73,7 +73,7 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
       </tbody>
     </Table>
   ) : (
-    <div className="text-center text-muted p-2">
+    <div className="text-center text-body-secondary p-2">
       <em>
         <FormattedMessage
           id="app.groupExamsTable.noPreviousExams"

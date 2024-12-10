@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import classnames from 'classnames';
 
@@ -20,30 +19,30 @@ const SourceCodeComment = ({
   restrictCommentAuthor = null,
 }) => {
   return (
-    <div className={classnames({ issue: comment.issue, 'half-opaque': comment.removing })}>
+    <div className={classnames({ issue: comment.issue, 'opacity-50': comment.removing })}>
       <span className="icon">
         {comment.issue ? (
-          <OverlayTrigger
-            placement="bottom"
-            overlay={
-              <Tooltip id={`issue-${comment.id}`}>
-                {authorView ? (
-                  <FormattedMessage
-                    id="app.sourceCodeViewer.issueTooltipForAuthor"
-                    defaultMessage="This comment is marked as an issue, which means you are expected to fix it in your next submission."
-                  />
-                ) : (
-                  <FormattedMessage
-                    id="app.sourceCodeViewer.issueTooltip"
-                    defaultMessage="This comment is marked as an issue, which means the author is expected to fix it in the next submission."
-                  />
-                )}
-              </Tooltip>
-            }>
-            <WarningIcon className="text-danger" gapRight />
-          </OverlayTrigger>
+          <WarningIcon
+            className="text-danger"
+            gapRight={2}
+            tooltipId={`issue-${comment.id}`}
+            tooltipPlacement="bottom"
+            tooltip={
+              authorView ? (
+                <FormattedMessage
+                  id="app.sourceCodeViewer.issueTooltipForAuthor"
+                  defaultMessage="This comment is marked as an issue, which means you are expected to fix it in your next submission."
+                />
+              ) : (
+                <FormattedMessage
+                  id="app.sourceCodeViewer.issueTooltip"
+                  defaultMessage="This comment is marked as an issue, which means the author is expected to fix it in the next submission."
+                />
+              )
+            }
+          />
         ) : (
-          <Icon icon={['far', 'comment']} className="almost-transparent" gapRight />
+          <Icon icon={['far', 'comment']} className="opacity-25" gapRight={2} />
         )}
       </span>
 
@@ -55,25 +54,27 @@ const SourceCodeComment = ({
           {startEditting &&
             !comment.removing &&
             (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
-              <EditIcon className="text-warning" gapRight onClick={() => startEditting(comment)} />
+              <EditIcon className="text-warning" gapRight={2} onClick={() => startEditting(comment)} />
             )}
-          {removeComment && !comment.removing && (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
-            <Confirm
-              id={`delcfrm-${comment.id}`}
-              onConfirmed={() => removeComment(comment.id)}
-              question={
-                <FormattedMessage
-                  id="app.sourceCodeViewer.deleteCommentConfirm"
-                  defaultMessage="Do you really wish to remove this comment? This operation cannot be undone."
-                />
-              }>
-              <DeleteIcon className="text-danger" gapRight />
-            </Confirm>
-          )}
+          {removeComment &&
+            !comment.removing &&
+            (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
+              <Confirm
+                id={`delcfrm-${comment.id}`}
+                onConfirmed={() => removeComment(comment.id)}
+                question={
+                  <FormattedMessage
+                    id="app.sourceCodeViewer.deleteCommentConfirm"
+                    defaultMessage="Do you really wish to remove this comment? This operation cannot be undone."
+                  />
+                }>
+                <DeleteIcon className="text-danger" gapRight={2} />
+              </Confirm>
+            )}
         </span>
       </small>
 
-      <small className="float-right mr-2">
+      <small className="float-end me-2">
         <DateTime unixts={comment.createdAt} showRelative />
       </small>
       <Markdown source={comment.text} />

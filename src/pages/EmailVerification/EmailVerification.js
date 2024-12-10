@@ -88,7 +88,7 @@ class EmailVerification extends Component {
                 <div>
                   {getVerificationStatus(decodedToken.sub) === 'FULFILLED' && (
                     <p>
-                      <SuccessIcon className="text-success" gapRight />
+                      <SuccessIcon className="text-success" gapRight={2} />
                       <FormattedMessage
                         id="app.emailVerification.verified"
                         defaultMessage="The email address has been verified."
@@ -98,7 +98,7 @@ class EmailVerification extends Component {
 
                   {getVerificationStatus(decodedToken.sub) === 'FAILED' && (
                     <p>
-                      <FailureIcon gapRight />
+                      <FailureIcon gapRight={2} />
                       <FormattedMessage
                         id="app.emailVerification.failed"
                         defaultMessage="The email address cannot be verified."
@@ -108,7 +108,7 @@ class EmailVerification extends Component {
 
                   {getVerificationStatus(decodedToken.sub) === 'PENDING' && (
                     <p>
-                      <LoadingIcon gapRight />
+                      <LoadingIcon gapRight={2} />
                       <FormattedMessage
                         id="app.emailVerification.waiting"
                         defaultMessage="The email address is being verified."

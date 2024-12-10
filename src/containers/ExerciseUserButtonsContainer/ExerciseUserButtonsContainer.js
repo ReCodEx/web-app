@@ -39,7 +39,7 @@ const ExerciseUserButtonsContainer = ({
             size={size}
             onClick={setAuthor}
             disabled={Boolean(setAuthorStatus)}>
-            {setAuthorStatus === false && <WarningIcon fixedWidth smallGapRight />}
+            {setAuthorStatus === false && <WarningIcon fixedWidth gapRight={1} />}
             {setAuthorStatus ? <LoadingIcon fixedWidth /> : <AuthorIcon fixedWidth />}
           </Button>
         </OverlayTrigger>
@@ -68,7 +68,7 @@ const ExerciseUserButtonsContainer = ({
             size={size}
             onClick={isAdmin ? removeAdmin : addAdmin}
             disabled={Boolean(setAdminsStatus)}>
-            {setAdminsStatus === false && <WarningIcon fixedWidth smallGapRight />}
+            {setAdminsStatus === false && <WarningIcon fixedWidth gapRight={1} />}
             {setAdminsStatus ? (
               <LoadingIcon fixedWidth />
             ) : isAdmin ? (

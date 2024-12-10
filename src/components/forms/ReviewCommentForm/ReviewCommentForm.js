@@ -39,9 +39,9 @@ const ReviewCommentForm = ({
       <Row>
         <Col>
           {authorId && createdAt && (
-            <small className="float-right">
+            <small className="float-end">
               <UsersNameContainer userId={authorId} showEmail="icon" />
-              <span className="ml-3">
+              <span className="ms-3">
                 <DateTime unixts={createdAt} showRelative />
               </span>
             </small>
@@ -140,7 +140,7 @@ const ReviewCommentForm = ({
 
             {onCancel && (
               <Button variant="secondary" size="sm" onClick={onCancel}>
-                <CloseIcon gapRight />
+                <CloseIcon gapRight={2} />
                 <FormattedMessage id="generic.cancel" defaultMessage="Cancel" />
               </Button>
             )}

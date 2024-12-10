@@ -22,7 +22,7 @@ const DeadlinesGraphDialog = ({ deadlines, maxPointsBeforeFirstDeadline, maxPoin
     <>
       {!trivial && (
         <Button variant="primary" onClick={() => setOpen(true)} disabled={!valid} size="sm" className="mt-2">
-          <PointsGraphIcon gapRight />
+          <PointsGraphIcon gapRight={2} />
           <FormattedMessage id="app.editAssignmentForm.deadlinesGraphDialog.button" defaultMessage="Deadlines Graph" />
         </Button>
       )}

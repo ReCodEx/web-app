@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import classnames from 'classnames';
@@ -47,32 +47,33 @@ const GroupInvitations = ({
               <tbody
                 key={invitation.id}
                 className={classnames({
-                  'text-muted': hasExpired,
+                  'text-body-secondary': hasExpired,
                   'table-warning': selected === invitation.id,
                 })}>
                 <tr>
                   <td colSpan={editInvitation || deleteInvitation ? 5 : 4}>
-                    <code className={hasExpired ? 'text-muted small' : 'small'}>{uri}</code>
+                    <code className={hasExpired ? 'text-body-secondary small' : 'small'}>{uri}</code>
                     {!hasExpired &&
                       (copiedInvitation === invitation.id ? (
                         <Icon
                           icon="clipboard-check"
-                          gapLeft
+                          gapLeft={2}
                           className="text-success"
                           onClick={() => setCopiedInvitation(null)}
                         />
                       ) : (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id={invitation.id}>
+                        <CopyToClipboard text={uri} onCopy={() => setCopiedInvitation(invitation.id)}>
+                          <CopyIcon
+                            timid
+                            gapLeft={2}
+                            className="clickable"
+                            tooltipId={invitation.id}
+                            tooltipPlacement="bottom"
+                            tooltip={
                               <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
-                            </Tooltip>
-                          }>
-                          <CopyToClipboard text={uri} onCopy={() => setCopiedInvitation(invitation.id)}>
-                            <CopyIcon timid gapLeft className="clickable" />
-                          </CopyToClipboard>
-                        </OverlayTrigger>
+                            }
+                          />
+                        </CopyToClipboard>
                       ))}
                   </td>
                 </tr>
@@ -86,25 +87,28 @@ const GroupInvitations = ({
                   </td>
                   <td>
                     {invitation.note && (
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`note-${invitation.id}`}>
+                      <Icon
+                        icon={['far', 'comment-dots']}
+                        gapLeft={2}
+                        gapRight={2}
+                        tooltipId={`note-${invitation.id}`}
+                        tooltipPlacement="bottom"
+                        tooltip={
+                          <>
                             <FormattedMessage id="app.groupInvitationForm.note" defaultMessage="Note:" />{' '}
                             <strong>{invitation.note}</strong>
-                          </Tooltip>
-                        }>
-                        <Icon icon={['far', 'comment-dots']} gapLeft gapRight />
-                      </OverlayTrigger>
+                          </>
+                        }
+                      />
                     )}
                   </td>
 
                   {(editInvitation || deleteInvitation) && (
-                    <td className="text-nowrap text-right shrink-col">
+                    <td className="text-nowrap text-end shrink-col">
                       <TheButtonGroup>
                         {editInvitation && (
                           <Button variant="warning" size="xs" onClick={() => editInvitation(invitation.id)}>
-                            <EditIcon gapRight />
+                            <EditIcon gapRight={2} />
                             <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                           </Button>
                         )}
@@ -121,7 +125,7 @@ const GroupInvitations = ({
                             }
                             confirmId={`delete-${invitation.id}`}
                             onClick={() => deleteInvitation(invitation.id)}>
-                            <DeleteIcon gapRight />
+                            <DeleteIcon gapRight={2} />
                             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                           </Button>
                         )}
@@ -134,7 +138,7 @@ const GroupInvitations = ({
           })}
         </Table>
       ) : (
-        <div className="text-center text-muted mb-3">
+        <div className="text-center text-body-secondary mb-3">
           <FormattedMessage
             id="app.groupInvitations.noInvitations"
             defaultMessage="There are currently no invitations."

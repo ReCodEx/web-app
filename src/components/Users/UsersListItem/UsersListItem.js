@@ -48,12 +48,12 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
         </td>
       )}
 
-      {createActions && <td className="text-right">{createActions(user)}</td>}
+      {createActions && <td className="text-end">{createActions(user)}</td>}
     </tr>
   ) : (
     <tr>
       <td colSpan={(createActions ? 2 : 1) + Number(emailColumn) + Number(createdAtColumn)}>
-        <LoadingIcon gapRight />
+        <LoadingIcon gapRight={2} />
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </td>
     </tr>

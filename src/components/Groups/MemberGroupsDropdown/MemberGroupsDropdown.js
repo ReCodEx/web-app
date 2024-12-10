@@ -34,7 +34,7 @@ const DropdownFragment = withLinks(
 const MemberGroupsDropdown = ({ groupId = null, memberGroups }) => (
   <Dropdown>
     <Dropdown.Toggle as="span" bsPrefix="nav-link memberGroupsDropdownToggle" id="hearder-group-dropdown">
-      <GroupIcon largeGapRight />
+      <GroupIcon gapRight={3} />
       {groupId && <GroupsNameContainer groupId={groupId} fullName />}
     </Dropdown.Toggle>
 
@@ -43,28 +43,28 @@ const MemberGroupsDropdown = ({ groupId = null, memberGroups }) => (
         groupId={groupId}
         groups={memberGroups.admin}
         title={<FormattedMessage id="app.memberGroups.asAdmin" defaultMessage="Groups you administer" />}
-        icon={<AdminRoleIcon gapRight />}
+        icon={<AdminRoleIcon gapRight={2} />}
       />
 
       <DropdownFragment
         groupId={groupId}
         groups={memberGroups.supervisor}
         title={<FormattedMessage id="app.memberGroups.asSupervisor" defaultMessage="Groups you supervise" />}
-        icon={<SupervisorIcon gapRight />}
+        icon={<SupervisorIcon gapRight={2} />}
       />
 
       <DropdownFragment
         groupId={groupId}
         groups={memberGroups.student}
         title={<FormattedMessage id="app.memberGroups.asStudent" defaultMessage="Groups you are member of" />}
-        icon={<UserIcon gapRight />}
+        icon={<UserIcon gapRight={2} />}
       />
 
       <DropdownFragment
         groupId={groupId}
         groups={memberGroups.observer}
         title={<FormattedMessage id="app.memberGroups.asObserver" defaultMessage="Groups you observe" />}
-        icon={<ObserverIcon gapRight />}
+        icon={<ObserverIcon gapRight={2} />}
       />
 
       {(!memberGroups.admin || memberGroups.admin.length === 0) &&
@@ -72,7 +72,7 @@ const MemberGroupsDropdown = ({ groupId = null, memberGroups }) => (
         (!memberGroups.student || memberGroups.student.length === 0) &&
         (!memberGroups.observer || memberGroups.observer.length === 0) && (
           <Dropdown.Item as="span" bsPrefix="dropdown-item">
-            <em className="text-center text-muted">
+            <em className="text-center text-body-secondary">
               <FormattedMessage
                 id="app.memberGroups.noGroups"
                 defaultMessage="there are no groups associated with you"

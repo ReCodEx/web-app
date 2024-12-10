@@ -63,7 +63,7 @@ class CreateExerciseForm extends Component {
 
           {submitFailed && (
             <Callout variant="danger">
-              <WarningIcon gapRight />
+              <WarningIcon gapRight={2} />
               <FormattedMessage id="generic.creationFailed" defaultMessage="Creation failed. Please try again later." />
             </Callout>
           )}

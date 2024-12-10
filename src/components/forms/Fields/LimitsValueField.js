@@ -8,7 +8,7 @@ import * as styles from './EditLimitsField.less';
 const LimitsValueField = ({ input, prettyPrint, ...props }) => (
   <span className={styles.limitsFieldWrapper}>
     <TextField {...props} input={input} />
-    <b className={`${styles.limitsValue} text-muted`}>{prettyPrint(input.value)}</b>
+    <b className={`${styles.limitsValue} text-body-secondary`}>{prettyPrint(input.value)}</b>
   </span>
 );
 

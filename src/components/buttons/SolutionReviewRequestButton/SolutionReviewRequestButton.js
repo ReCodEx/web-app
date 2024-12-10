@@ -24,7 +24,7 @@ const SolutionReviewRequestButton = ({ id, onClck, reviewRequest = false, pendin
           {onBehalf && (
             <>
               <br />
-              <i className="text-muted">
+              <i className="text-body-secondary">
                 (
                 <FormattedMessage
                   id="app.solutionReviewRequest.confirmRequestDifferentUser"
@@ -38,7 +38,13 @@ const SolutionReviewRequestButton = ({ id, onClck, reviewRequest = false, pendin
       )
     }>
     <Button variant={reviewRequest ? 'danger' : 'primary'} disabled={pending}>
-      {pending ? <LoadingIcon gapRight /> : reviewRequest ? <BanIcon gapRight /> : <ReviewRequestIcon gapRight />}
+      {pending ? (
+        <LoadingIcon gapRight={2} />
+      ) : reviewRequest ? (
+        <BanIcon gapRight={2} />
+      ) : (
+        <ReviewRequestIcon gapRight={2} />
+      )}
       {reviewRequest ? (
         <FormattedMessage id="app.solutionReviewRequest.cancel" defaultMessage="Cancel Review Request" />
       ) : (

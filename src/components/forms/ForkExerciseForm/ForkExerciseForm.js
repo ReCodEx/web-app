@@ -51,10 +51,10 @@ const ForkExerciseForm = ({
   if (forkStatus === forkStatuses.FULFILLED) {
     return (
       <Callout variant="success">
-        <table className="full-width">
+        <table className="w-100">
           <tbody>
             <tr>
-              <td className="valign-middle">
+              <td className="align-middle">
                 <p>
                   <FormattedMessage
                     id="app.forkExerciseForm.successMessage"
@@ -62,7 +62,7 @@ const ForkExerciseForm = ({
                   />
                 </p>
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 <TheButtonGroup>
                   <Button variant="primary" onClick={viewForkedExercise}>
                     <FormattedMessage
@@ -88,7 +88,7 @@ const ForkExerciseForm = ({
     <div>
       {submitFailed && (
         <Callout variant="danger">
-          <WarningIcon gapRight />
+          <WarningIcon gapRight={2} />
           <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
         </Callout>
       )}
@@ -103,7 +103,7 @@ const ForkExerciseForm = ({
                 ignoreDirty
                 addEmptyOption={true}
                 emptyOptionCaption={formatMessage(messages.emptyOption)}
-                groupClassName="full-width"
+                groupClassName="w-100"
                 options={groups
                   .filter(group => hasPermissions(group, 'createExercise'))
                   .map(group => ({
@@ -119,7 +119,7 @@ const ForkExerciseForm = ({
                     hasSucceeded={submitSucceeded}
                     hasFailed={submitFailed}
                     handleSubmit={handleSubmit}
-                    defaultIcon={<ForkIcon gapRight />}
+                    defaultIcon={<ForkIcon gapRight={2} />}
                     noShadow
                     confirmQuestion={
                       <FormattedMessage

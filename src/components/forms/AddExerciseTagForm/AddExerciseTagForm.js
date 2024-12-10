@@ -30,7 +30,7 @@ const AddExerciseTagForm = ({
       name="tag"
       component={TextField}
       ignoreDirty
-      groupClassName="full-width"
+      groupClassName="w-100"
       list="knownExerciseTags"
       maxLength={16}
       append={
@@ -41,7 +41,7 @@ const AddExerciseTagForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
-          defaultIcon={updatePending ? <LoadingIcon gapRight /> : <AddIcon gapRight />}
+          defaultIcon={updatePending ? <LoadingIcon gapRight={2} /> : <AddIcon gapRight={2} />}
           noShadow
           messages={{
             submit: <FormattedMessage id="app.addExerciseTagForm.submit" defaultMessage="Add Tag" />,

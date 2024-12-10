@@ -141,7 +141,7 @@ class EditShadowAssignment extends Component {
                         onDeleted={() => navigate(GROUP_ASSIGNMENTS_URI_FACTORY(this.groupId), { replace: true })}
                       />
                     </Col>
-                    <Col xs={12} sm className="text-muted">
+                    <Col xs={12} sm className="text-body-secondary">
                       <FormattedMessage
                         id="app.editShadowAssignment.deleteAssignmentWarning"
                         defaultMessage="Deleting shadow assignment will remove all student points as well."

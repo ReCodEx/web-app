@@ -34,7 +34,7 @@ const FilterSystemMessagesForm = ({
         </Col>
 
         <Col sm={3} md={2}>
-          <div className="text-right">
+          <div className="text-end">
             <SubmitButton
               id="setFilters"
               handleSubmit={handleSubmit}

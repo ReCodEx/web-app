@@ -30,7 +30,7 @@ class ShadowAssignmentsTableContainer extends Component {
         resource={shadowAssignments}
         loading={
           <div className="text-center p-2">
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </div>
         }>

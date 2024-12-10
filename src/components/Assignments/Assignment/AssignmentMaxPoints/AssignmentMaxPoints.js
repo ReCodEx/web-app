@@ -50,9 +50,9 @@ const AssignmentMaxPoints = ({
         }>
         <span>
           {maxPointsDeadlineInterpolation ? (
-            <PointsInterpolationIcon gapLeft smallGapRight />
+            <PointsInterpolationIcon gapLeft={2} gapRight={1} />
           ) : (
-            <PointsDecreasedIcon gapLeft smallGapRight />
+            <PointsDecreasedIcon gapLeft={2} gapRight={1} />
           )}
           {maxPointsBeforeSecondDeadline}
         </span>
@@ -60,7 +60,7 @@ const AssignmentMaxPoints = ({
     )}
 
     {currentPointsLimit !== null && (allowSecondDeadline || currentPointsLimit !== maxPointsBeforeFirstDeadline) && (
-      <small className="text-muted ml-3">
+      <small className="text-body-secondary ms-3">
         <FormattedMessage
           id="app.assignment.currentMaxPointsNote"
           defaultMessage="({currentPointsLimit} at the moment)"

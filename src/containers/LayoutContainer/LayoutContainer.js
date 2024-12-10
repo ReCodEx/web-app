@@ -20,7 +20,6 @@ import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 import { canUseDOM } from '../../helpers/common.js';
 
 import 'admin-lte/dist/css/adminlte.min.css';
-import 'admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css';
 
 const ADDITIONAL_INTL_FORMATS = {
   time: {

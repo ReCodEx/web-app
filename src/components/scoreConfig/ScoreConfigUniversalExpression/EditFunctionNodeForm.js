@@ -78,7 +78,7 @@ class EditFunctionNodeForm extends Component {
                 className={classnames({
                   'bg-info': node && !pushDown && node.getType() === astClass.type,
                 })}>
-                <td className="valign-middle shrink-col">
+                <td className="align-middle shrink-col">
                   <StandaloneRadioField
                     name="nodeFunction"
                     value={astClass.type}
@@ -102,11 +102,11 @@ class EditFunctionNodeForm extends Component {
         <div className="text-center">
           <TheButtonGroup>
             <Button onClick={this.save} variant="success" disabled={!this.dirty()}>
-              <SaveIcon gapRight />
+              <SaveIcon gapRight={2} />
               <FormattedMessage id="generic.save" defaultMessage="Save" />
             </Button>
             <Button onClick={close} variant="outline-secondary">
-              <CloseIcon gapRight />
+              <CloseIcon gapRight={2} />
               <FormattedMessage id="generic.close" defaultMessage="Close" />
             </Button>
           </TheButtonGroup>

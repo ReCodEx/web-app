@@ -85,7 +85,7 @@ class ResourceRenderer extends Component {
   renderWrapped = (content, extraClasses = '') => {
     const { bulkyLoading } = this.props;
     return bulkyLoading ? (
-      <p className={`text-center larger em-padding ${extraClasses}`}>{content}</p>
+      <p className={`text-center larger p-3 ${extraClasses}`}>{content}</p>
     ) : (
       <span className={extraClasses}>{content}</span>
     );
@@ -100,7 +100,7 @@ class ResourceRenderer extends Component {
 
     return this.renderWrapped(
       <>
-        {!noIcons && <LoadingIcon gapRight />}
+        {!noIcons && <LoadingIcon gapRight={2} />}
         <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
       </>
     );
@@ -117,7 +117,7 @@ class ResourceRenderer extends Component {
 
     return this.renderWrapped(
       <>
-        {!noIcons && <WarningIcon className="text-danger" gapRight />}
+        {!noIcons && <WarningIcon className="text-danger" gapRight={2} />}
         <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
       </>
     );

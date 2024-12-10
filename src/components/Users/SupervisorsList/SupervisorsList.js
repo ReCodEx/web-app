@@ -67,7 +67,7 @@ const SupervisorsList = ({
 
         {primaryAdmins.length === 0 && supervisors.length === 0 && observers.length === 0 && (
           <tr>
-            <td className="text-center text-muted">
+            <td className="text-center text-body-secondary">
               <FormattedMessage
                 id="app.membersList.noMembers"
                 defaultMessage="The group has no supervisors or admins."
@@ -79,7 +79,7 @@ const SupervisorsList = ({
     </Table>
   ) : (
     <div className="p-3 text-center">
-      <LoadingIcon gapRight />
+      <LoadingIcon gapRight={2} />
       <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
     </div>
   );

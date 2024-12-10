@@ -53,7 +53,7 @@ const SolutionStatusIcon = ({
     message = <FormattedMessage id="app.solutionStatusIcon.evaluationFailed" defaultMessage="Evaluation failed." />;
   } else if (!lastSubmission.evaluation) {
     // special case - evaluation in progress
-    icon = <Icon {...props} icon="gear" className="text-muted fa-spin" />;
+    icon = <Icon {...props} icon="gear" className="text-body-secondary fa-spin" />;
     message = (
       <FormattedMessage
         id="app.solutionStatusIcon.evaluationPending"
@@ -63,9 +63,9 @@ const SolutionStatusIcon = ({
   } else if (lastSubmission.evaluation.initFailed) {
     // special case - compilation
     icon = (
-      <span className="fa-layers fa-fw mr-1">
-        <Icon {...props} icon="gears" className="text-muted" transform="shrink-4" />
-        <BanIcon className="text-danger almost-opaque" transform="flip-h grow-3" />
+      <span className="fa-layers fa-fw me-1">
+        <Icon {...props} icon="gears" className="text-body-secondary" transform="shrink-4" />
+        <BanIcon className="text-danger opacity-75" transform="flip-h grow-3" />
       </span>
     );
     message = (
@@ -81,33 +81,33 @@ const SolutionStatusIcon = ({
     const faType = isBestSolution ? 'fas' : 'far';
     const color =
       maxPoints === 0 && !accepted
-        ? 'muted'
+        ? 'body-secondary'
         : actualPoints >= maxPointsEver
-        ? 'success'
-        : actualPoints <= 0
-        ? 'danger'
-        : 'warning';
+          ? 'success'
+          : actualPoints <= 0
+            ? 'danger'
+            : 'warning';
 
     icon = (
-      <span className="fa-layers fa-fw mr-1">
+      <span className="fa-layers fa-fw me-1">
         <Icon {...props} icon={[faType, handType]} className={`text-${color}`} transform="grow-3" />
 
         {(bonusPoints !== 0 || overriddenPoints !== null) && (
           <>
-            <Icon icon="comment" className="text-light half-opaque" transform="shrink-2 right-10 up-7" />
-            <PointsIcon className="text-warning almost-opaque" transform="shrink-4 right-10 up-7" />
+            <Icon icon="comment" className="text-light opacity-50" transform="shrink-2 right-10 up-7" />
+            <PointsIcon className="text-warning opacity-75" transform="shrink-4 right-10 up-7" />
           </>
         )}
 
         {(accepted || pastDeadline > 0) && (
-          <Icon icon="circle" className="text-light half-opaque" transform="shrink-3 right-9 down-7" />
+          <Icon icon="circle" className="text-light opacity-50" transform="shrink-3 right-9 down-7" />
         )}
-        {accepted && <AcceptedIcon className="text-success almost-opaque" transform="shrink-5 right-9 down-7" />}
+        {accepted && <AcceptedIcon className="text-success opacity-75" transform="shrink-5 right-9 down-7" />}
         {!accepted && pastDeadline >= 2 && (
-          <PastDeadlineIcon className="text-muted almost-opaque" transform="shrink-5 right-9 down-7" />
+          <PastDeadlineIcon className="text-body-secondary opacity-75" transform="shrink-5 right-9 down-7" />
         )}
         {!accepted && pastDeadline === 1 && (
-          <DeadlineIcon className="text-muted almost-opaque" transform="shrink-5 right-9 down-7" />
+          <DeadlineIcon className="text-body-secondary opacity-75" transform="shrink-5 right-9 down-7" />
         )}
       </span>
     );

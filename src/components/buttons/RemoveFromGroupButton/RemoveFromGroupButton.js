@@ -16,7 +16,7 @@ const RemoveFromGroupButton = ({ onClick, ...props }) => (
       />
     }>
     <Button {...props} variant="warning">
-      <Icon icon="user-times" gapRight />
+      <Icon icon="user-times" gapRight={2} />
       <FormattedMessage id="app.groups.removeFromGroup" defaultMessage="Remove from group" />
     </Button>
   </Confirm>

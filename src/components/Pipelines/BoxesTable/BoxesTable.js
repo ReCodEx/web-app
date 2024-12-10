@@ -33,7 +33,7 @@ const BoxesTable = ({
   return (
     <Table
       className={classnames({
-        'half-opaque': pending,
+        'opacity-50': pending,
         'tbody-hover': boxes.length > 0 && !pending,
       })}
       size="sm">
@@ -77,7 +77,7 @@ const BoxesTable = ({
       {boxes.length === 0 && (
         <tbody>
           <tr>
-            <td colSpan={7} className="text-center text-muted small">
+            <td colSpan={7} className="text-center text-body-secondary small">
               <em>
                 <FormattedMessage
                   id="app.pipelines.boxesTable.noBoxes"

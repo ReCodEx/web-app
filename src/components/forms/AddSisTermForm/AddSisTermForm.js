@@ -44,7 +44,7 @@ const AddSisTermForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          defaultIcon={<SaveIcon gapRight />}
+          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="app.addSisTermForm.submit" defaultMessage="Save new term" />,
             submitting: <FormattedMessage id="app.addSisTermForm.processing" defaultMessage="Saving..." />,

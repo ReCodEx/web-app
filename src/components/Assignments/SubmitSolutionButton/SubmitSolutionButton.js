@@ -6,9 +6,9 @@ import Icon, { CodeFileIcon } from '../../icons';
 
 const SubmitSolutionButton = ({ disabled = false, onClick }) => (
   <Button variant="success" disabled={disabled} onClick={onClick}>
-    <span className="fa-layers fa-fw mr-2">
+    <span className="fa-layers fa-fw me-2">
       <CodeFileIcon transform="grow-2" />
-      <Icon icon="share" className="almost-opaque" transform="shrink-4 right-7 up-8" />
+      <Icon icon="share" className="opacity-75" transform="shrink-4 right-7 up-8" />
     </span>
     <FormattedMessage id="app.solutionsTable.submitNewSolution" defaultMessage="Submit New Solution" />
   </Button>

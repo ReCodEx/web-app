@@ -276,7 +276,7 @@ class SolutionSourceCodes extends Component {
               canViewUserProfile={hasPermissions(assignment, 'viewAssignmentSolutions')}
               titlePrefix={
                 diffMode ? (
-                  <span className="text-muted mr-2 small">
+                  <span className="text-body-secondary me-2 small">
                     <FormattedMessage id="app.solutionSourceCodes.left" defaultMessage="Left side" />:
                   </span>
                 ) : null
@@ -285,13 +285,13 @@ class SolutionSourceCodes extends Component {
 
             {diffMode && (
               <>
-                <h4 className="text-muted text-center my-2">
+                <h4 className="text-body-secondary text-center my-2">
                   <FormattedMessage
                     id="app.solutionSourceCodes.isBeingComparedWith"
                     defaultMessage="... is being compared with ..."
                   />
 
-                  <SwapIcon largeGapLeft className="text-primary" timid onClick={this.swapSolutions} />
+                  <SwapIcon gapLeft={3} className="text-primary" timid onClick={this.swapSolutions} />
                 </h4>
 
                 <AssignmentSolutionNavigation
@@ -313,7 +313,7 @@ class SolutionSourceCodes extends Component {
                   }
                   canViewUserProfile={hasPermissions(secondAssignment, 'viewAssignmentSolutions')}
                   titlePrefix={
-                    <span className="text-muted mr-2 small">
+                    <span className="text-body-secondary me-2 small">
                       <FormattedMessage id="app.solutionSourceCodes.right" defaultMessage="Right side" />:
                     </span>
                   }
@@ -348,7 +348,7 @@ class SolutionSourceCodes extends Component {
                   <Col sm="auto" className="mb-3">
                     <TheButtonGroup>
                       <Button variant="primary" onClick={this.openDiffDialog}>
-                        <CodeCompareIcon gapRight />
+                        <CodeCompareIcon gapRight={2} />
                         {diffMode ? (
                           <FormattedMessage
                             id="app.solutionSourceCodes.diffButtonChange"
@@ -361,7 +361,7 @@ class SolutionSourceCodes extends Component {
 
                       {diffMode && (
                         <Button variant="danger" onClick={() => this.selectDiffSolution(null)}>
-                          <StopIcon gapRight />
+                          <StopIcon gapRight={2} />
                           <FormattedMessage
                             id="app.solutionSourceCodes.cancelDiffButton"
                             defaultMessage="Compare mode off"
@@ -539,7 +539,7 @@ class SolutionSourceCodes extends Component {
                                 </Modal.Header>
                                 <Modal.Body>
                                   <h5 className="mb-3">
-                                    <code className="mr-2">
+                                    <code className="me-2">
                                       {this.state.mappingDialogOpenFile && this.state.mappingDialogOpenFile.name}
                                     </code>{' '}
                                     <FormattedMessage
@@ -581,10 +581,10 @@ class SolutionSourceCodes extends Component {
                                               <CircleIcon selected={selected} />
                                             </td>
                                             <td>{file.name}</td>
-                                            <td className="shrink-col text-muted text-nowrap small">
+                                            <td className="shrink-col text-body-secondary text-nowrap small">
                                               {revertedIndex && revertedIndex[file.id] && (
                                                 <>
-                                                  <CodeCompareIcon gapRight />
+                                                  <CodeCompareIcon gapRight={2} />
                                                   {revertedIndex[file.id].name}
                                                 </>
                                               )}
@@ -598,7 +598,7 @@ class SolutionSourceCodes extends Component {
                                   {this.state.diffMappings && !isEmptyObject(this.state.diffMappings) && (
                                     <div className="text-center">
                                       <Button variant="danger" onClick={this.resetDiffMappings}>
-                                        <RefreshIcon gapRight />
+                                        <RefreshIcon gapRight={2} />
                                         <FormattedMessage
                                           id="app.solutionSourceCodes.mappingModal.resetButton"
                                           defaultMessage="Reset mapping"

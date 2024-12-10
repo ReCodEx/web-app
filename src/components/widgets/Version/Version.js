@@ -5,11 +5,11 @@ import DateTime from '../DateTime';
 
 const Version = ({ version, createdAt, updatedAt }) => (
   <span>
-    <span className="em-padding-right">
+    <span className="pe-3">
       v<FormattedNumber value={version} />
     </span>
     {updatedAt !== createdAt && (
-      <small className="text-muted">
+      <small className="text-body-secondary">
         <FormattedMessage id="generic.lastUpdatedAt" defaultMessage="updated" />{' '}
         <DateTime unixts={updatedAt} showRelative />
       </small>

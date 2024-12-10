@@ -19,7 +19,7 @@ const StudentsListItem = ({
       <td>
         <UsersNameContainer userId={id} link={groupId && GROUP_USER_SOLUTIONS_URI_FACTORY(groupId, id)} listItem />
       </td>
-      <td className="valign-middle">
+      <td className="align-middle">
         {stats && (
           <ProgressBar
             className="progress-xs"
@@ -37,7 +37,7 @@ const StudentsListItem = ({
               values={{ gained: stats.points.gained, total: totalPoints }}
             />
             {Boolean(stats.points.limit && stats.points.total && stats.points.limit !== stats.points.total) && (
-              <small className="ml-2 text-muted">
+              <small className="ms-2 text-body-secondary">
                 {' '}
                 <FormattedMessage
                   id="app.studentsList.statsPointsLimit"

@@ -309,7 +309,7 @@ class AssignmentsTable extends Component {
                 assignmentsPreprocessedAll.length !== assignmentsPreprocessedCurrent.length && (
                   <tfoot>
                     <tr>
-                      <td colSpan={10} className="small text-muted text-center">
+                      <td colSpan={10} className="small text-body-secondary text-center">
                         {this.state.showAll ? (
                           <FormattedMessage
                             id="app.assignments.hidePastAssignments"
@@ -349,9 +349,9 @@ class AssignmentsTable extends Component {
                       <Icon
                         icon="arrow-turn-up"
                         transform={{ rotate: 90 }}
-                        className="text-muted"
-                        largeGapLeft
-                        largeGapRight
+                        className="text-body-secondary"
+                        gapLeft={3}
+                        gapRight={3}
                       />
 
                       <TheButtonGroup>
@@ -359,26 +359,30 @@ class AssignmentsTable extends Component {
                           variant="primary"
                           size="sm"
                           onClick={this.selectAllAssignments(assignmentsPreprocessedAll)}>
-                          <SquareIcon checked gapRight />
+                          <SquareIcon checked gapRight={2} />
                           <FormattedMessage id="app.assignments.selectAll" defaultMessage="Select All" />
                         </Button>
                         <Button
                           variant="primary"
                           size="sm"
                           onClick={this.invertSelectedAssignments(assignmentsPreprocessedAll)}>
-                          <InvertIcon gapRight />
+                          <InvertIcon gapRight={2} />
                           <FormattedMessage id="app.assignments.invertSelection" defaultMessage="Invert" />
                         </Button>
                       </TheButtonGroup>
 
-                      <TheButtonGroup className="ml-4">
+                      <TheButtonGroup className="ms-4">
                         {syncAssignment && (
                           <Button
                             variant="warning"
                             size="sm"
                             disabled={this.state.pendingAction || !this.state.multiSync}
                             onClick={this.syncSelectedAssignments}>
-                            {this.state.pendingAction === 'sync' ? <LoadingIcon gapRight /> : <RefreshIcon gapRight />}
+                            {this.state.pendingAction === 'sync' ? (
+                              <LoadingIcon gapRight={2} />
+                            ) : (
+                              <RefreshIcon gapRight={2} />
+                            )}
                             <FormattedMessage id="app.assignments.syncAllButton" defaultMessage="Sync with Exercise" />
                           </Button>
                         )}
@@ -390,9 +394,9 @@ class AssignmentsTable extends Component {
                             disabled={this.state.pendingAction || !this.state.multiVisible}
                             onClick={() => this.visibleSelectedAssignments(assignmentsPreprocessedAll)}>
                             {this.state.pendingAction === 'visible' ? (
-                              <LoadingIcon gapRight />
+                              <LoadingIcon gapRight={2} />
                             ) : (
-                              <VisibleIcon gapRight />
+                              <VisibleIcon gapRight={2} />
                             )}
                             <FormattedMessage id="app.assignments.showAllButton" defaultMessage="Set Visible" />
                           </Button>
@@ -405,9 +409,9 @@ class AssignmentsTable extends Component {
                             disabled={this.state.pendingAction || !this.state.multiHide}
                             onClick={() => this.hideSelectedAssignments(assignmentsPreprocessedAll)}>
                             {this.state.pendingAction === 'hide' ? (
-                              <LoadingIcon gapRight />
+                              <LoadingIcon gapRight={2} />
                             ) : (
-                              <VisibleIcon visible={false} gapRight />
+                              <VisibleIcon visible={false} gapRight={2} />
                             )}
                             <FormattedMessage id="app.assignments.hideAllButton" defaultMessage="Set Hidden" />
                           </Button>
@@ -426,7 +430,11 @@ class AssignmentsTable extends Component {
                               />
                             }
                             onClick={this.deleteSelectedAssignments}>
-                            {this.state.pendingAction === 'delete' ? <LoadingIcon gapRight /> : <DeleteIcon gapRight />}
+                            {this.state.pendingAction === 'delete' ? (
+                              <LoadingIcon gapRight={2} />
+                            ) : (
+                              <DeleteIcon gapRight={2} />
+                            )}
                             <FormattedMessage id="app.assignments.deleteAllButton" defaultMessage="Delete" />
                           </Button>
                         )}

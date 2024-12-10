@@ -19,7 +19,7 @@ const getDescription = (localizedTexts, locale) => {
   return description ? (
     <Markdown source={description} />
   ) : (
-    <p className="small text-muted text-center well well-sm">
+    <p className="small text-body-secondary text-center well well-sm">
       <FormattedMessage
         id="app.groupDetail.noDescription"
         defaultMessage="The group has no description in any language."

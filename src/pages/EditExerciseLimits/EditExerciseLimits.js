@@ -211,7 +211,7 @@ class EditExerciseLimits extends Component {
                     ) && (
                       <div>
                         {exercise.hardwareGroups.length > 0 && (
-                          <div className="text-center text-muted em-margin-bottom">
+                          <div className="text-center text-body-secondary mb-3">
                             &nbsp;
                             <Icon icon="arrow-down" />
                             &nbsp;

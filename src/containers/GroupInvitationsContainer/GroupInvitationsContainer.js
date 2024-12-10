@@ -113,7 +113,7 @@ class GroupInvitationsContainer extends Component {
 
                 <div className="text-center p-3">
                   <Button variant="success" onClick={() => this.openDialog()}>
-                    <AddIcon gapRight />
+                    <AddIcon gapRight={2} />
                     <FormattedMessage id="app.groupInvitations.newButton" defaultMessage="New invitation" />
                   </Button>
                 </div>

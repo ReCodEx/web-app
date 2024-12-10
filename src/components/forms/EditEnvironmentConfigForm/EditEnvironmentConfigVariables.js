@@ -36,7 +36,7 @@ const VARIABLE_TYPES_OPTIONS = [
 const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
   <div>
     {fields.length > 0 && (
-      <table className="full-width">
+      <table className="w-100">
         <thead>
           <tr>
             <th width="40%">
@@ -59,7 +59,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
         <tbody>
           {fields.map((field, index) => (
             <tr key={index}>
-              <td className="valign-top">
+              <td className="align-top">
                 <Field
                   name={`${field}.name`}
                   component={TextField}
@@ -69,7 +69,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                   groupClassName="mb-1"
                 />
               </td>
-              <td className="valign-top">
+              <td className="align-top">
                 <Field
                   name={`${field}.value`}
                   component={TextField}
@@ -79,7 +79,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                   groupClassName="mb-1"
                 />
               </td>
-              <td className="valign-top">
+              <td className="align-top">
                 <Field
                   name={`${field}.type`}
                   component={SelectField}
@@ -112,7 +112,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
 
     <div className="text-center">
       {fields.length === 0 && (
-        <span className="pr-3">
+        <span className="pe-3">
           {noItems || (
             <FormattedMessage
               id="app.editEnvironmentConfig.noVariables"

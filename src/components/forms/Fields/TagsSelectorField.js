@@ -23,16 +23,17 @@ const TagsSelectorField = ({ tags = [], fields, label = null }) => {
         {tags.sort().map(tag => (
           <Badge
             key={tag}
+            bg={null}
             style={getTagStyle(tag)}
             className={classnames({
               'tag-margin': true,
-              'halfem-padding': true,
+              'p-2': true,
               timid: active[tag] === undefined,
               clickable: true,
             })}
             onClick={() => (active[tag] === undefined ? fields.push(tag) : fields.remove(active[tag]))}>
             {tag}
-            {active[tag] === undefined ? <AddIcon gapLeft /> : <CloseIcon gapLeft />}
+            {active[tag] === undefined ? <AddIcon gapLeft={2} /> : <CloseIcon gapLeft={2} />}
           </Badge>
         ))}
       </div>

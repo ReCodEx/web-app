@@ -68,7 +68,7 @@ const EditGroupForm = ({
           <TheButtonGroup>
             {dirty && (
               <Button type="reset" onClick={reset} variant="danger">
-                <RefreshIcon gapRight />
+                <RefreshIcon gapRight={2} />
                 <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>
             )}

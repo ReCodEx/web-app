@@ -19,17 +19,17 @@ const UserNavigation = ({
       isLoggedInUser && {
         caption: <FormattedMessage id="app.navigation.dashboard" defaultMessage="Dashboard" />,
         link: DASHBOARD_URI,
-        icon: <DashboardIcon gapRight />,
+        icon: <DashboardIcon gapRight={2} />,
       },
       canViewDetail && {
         caption: <FormattedMessage id="app.navigation.user" defaultMessage="User" />,
         link: USER_URI_FACTORY(userId),
-        icon: <UserIcon gapRight />,
+        icon: <UserIcon gapRight={2} />,
       },
       canEdit && {
         caption: <FormattedMessage id="app.navigation.edit" defaultMessage="Edit" />,
         link: EDIT_USER_URI_FACTORY(userId),
-        icon: <EditIcon gapRight />,
+        icon: <EditIcon gapRight={2} />,
       },
     ]}
   />

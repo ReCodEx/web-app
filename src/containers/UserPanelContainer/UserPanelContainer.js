@@ -2,31 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import UserSwitchingContainer from '../../containers/UserSwitchingContainer';
-
 import UserPanel, { UserPanelLoading, UserPanelFailed } from '../../components/widgets/Sidebar/UserPanel';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import { loggedInUserSelector, getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
 import { accessTokenExpiration } from '../../redux/selectors/auth.js';
 import { logout, restrictEffectiveRole } from '../../redux/modules/auth.js';
 
-const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration, logout, small = false }) => (
-  <ResourceRenderer
-    loading={<UserPanelLoading small={small} />}
-    failed={<UserPanelFailed color="black" small={small} />}
-    resource={user}>
+const UserPanelContainer = ({ user, effectiveRole, restrictEffectiveRole, expiration, logout }) => (
+  <ResourceRenderer loading={<UserPanelLoading />} failed={<UserPanelFailed color="black" />} resource={user}>
     {user => (
-      <span>
-        <UserPanel
-          user={user}
-          effectiveRole={effectiveRole}
-          setEffectiveRole={restrictEffectiveRole}
-          logout={logout}
-          expiration={expiration}
-          small={small}
-        />
-        <UserSwitchingContainer open={true} />
-      </span>
+      <UserPanel
+        user={user}
+        effectiveRole={effectiveRole}
+        setEffectiveRole={restrictEffectiveRole}
+        logout={logout}
+        expiration={expiration}
+      />
     )}
   </ResourceRenderer>
 );
@@ -37,7 +28,6 @@ UserPanelContainer.propTypes = {
   expiration: PropTypes.number.isRequired,
   logout: PropTypes.func.isRequired,
   restrictEffectiveRole: PropTypes.func.isRequired,
-  small: PropTypes.bool,
   links: PropTypes.object,
 };
 

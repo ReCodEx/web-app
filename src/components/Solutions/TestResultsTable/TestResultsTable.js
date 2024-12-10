@@ -89,7 +89,7 @@ class TestResultsTable extends Component {
           <thead>
             <tr>
               <th />
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -101,26 +101,25 @@ class TestResultsTable extends Component {
                     </Tooltip>
                   }>
                   <span>
-                    <SuccessIcon smallGapRight className="text-muted" />/
-                    <FailureIcon smallGapLeft className="text-muted" />
+                    <SuccessIcon gapRight={1} className="text-body-secondary" />/
+                    <FailureIcon gapLeft={1} className="text-body-secondary" />
                   </span>
                 </OverlayTrigger>
               </th>
-              <th className="text-center text-nowrap text-muted">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip id="correctness">
-                      <FormattedMessage
-                        id="app.submissions.testResultsTable.correctness"
-                        defaultMessage="Correctness of the result (verdict of the judge)"
-                      />
-                    </Tooltip>
-                  }>
-                  <Icon icon="balance-scale" />
-                </OverlayTrigger>
+              <th className="text-center text-nowrap text-body-secondary">
+                <Icon
+                  icon="balance-scale"
+                  tooltipId="correctness"
+                  tooltipPlacement="top"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.correctness"
+                      defaultMessage="Correctness of the result (verdict of the judge)"
+                    />
+                  }
+                />
               </th>
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -132,12 +131,12 @@ class TestResultsTable extends Component {
                     </Tooltip>
                   }>
                   <span>
-                    <Icon icon="thermometer-half" gapRight />
+                    <Icon icon="thermometer-half" gapRight={2} />
                     <Icon icon="memory" />
                   </span>
                 </OverlayTrigger>
               </th>
-              <th className="text-center text-nowrap text-muted">
+              <th className="text-center text-nowrap text-body-secondary">
                 <OverlayTrigger
                   placement="top"
                   overlay={
@@ -149,27 +148,26 @@ class TestResultsTable extends Component {
                     </Tooltip>
                   }>
                   <span>
-                    <Icon icon="thermometer-half" gapRight />
+                    <Icon icon="thermometer-half" gapRight={2} />
                     <Icon icon="running" />
                   </span>
                 </OverlayTrigger>
               </th>
-              <th className="text-center text-nowrap text-muted">
-                <OverlayTrigger
-                  placement="top"
-                  overlay={
-                    <Tooltip id="exitCode">
-                      <FormattedMessage
-                        id="app.submissions.testResultsTable.exitCode"
-                        defaultMessage="Exit code (possibly translated into error message if translation is available)"
-                      />
-                    </Tooltip>
-                  }>
-                  <Icon icon="power-off" />
-                </OverlayTrigger>
+              <th className="text-center text-nowrap text-body-secondary">
+                <Icon
+                  icon="power-off"
+                  tooltipId="exitCode"
+                  tooltipPlacement="top"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.submissions.testResultsTable.exitCode"
+                      defaultMessage="Exit code (possibly translated into error message if translation is available)"
+                    />
+                  }
+                />
               </th>
               {(showJudgeLogStdout || (showJudgeLogStderr && !isJudgeLogMerged)) && (
-                <th className="text-right">
+                <th className="text-end">
                   {showLogButton && (
                     <Button
                       variant={allLogsClosed ? 'primary' : 'secondary'}
@@ -262,7 +260,7 @@ class TestResultsTable extends Component {
                           'text/plain;charset=utf-8'
                         )
                       }>
-                      <DownloadIcon gapRight />
+                      <DownloadIcon gapRight={2} />
                       <FormattedMessage id="generic.download" defaultMessage="Download" />
                     </Button>
                     <CopyLogToClipboard log={this.getFirstLog(getResult(results, this.state.logModal))} />
@@ -270,7 +268,7 @@ class TestResultsTable extends Component {
                 )}
 
                 <Button variant="secondary" onClick={this.closeLogModal}>
-                  <CloseIcon gapRight />
+                  <CloseIcon gapRight={2} />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
               </TheButtonGroup>

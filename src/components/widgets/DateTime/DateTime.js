@@ -40,13 +40,13 @@ const dateTime = ({
         'text-nowrap': noWrap,
         'text-warning': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts - deadlineDangerTime),
         'text-danger': isDeadline && isAfter(unixts - deadlineDangerTime) && !isAfter(unixts),
-        'text-bold': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts),
-        'text-muted': isDeadline && isAfter(unixts),
+        'fw-bold': isDeadline && isAfter(unixts - deadlineWarningTime) && !isAfter(unixts),
+        'text-body-secondary': isDeadline && isAfter(unixts),
       })}>
       {isDeadline && isAfter(unixts - deadlineAlertTime) && !isAfter(unixts) && (
-        <BellIcon className="faa-shake animated" gapRight />
+        <BellIcon className="faa-shake animated" gapRight={2} />
       )}
-      {isDeadline && isAfter(unixts) && <PastDeadlineIcon className="half-opaque" gapRight />}
+      {isDeadline && isAfter(unixts) && <PastDeadlineIcon className="opacity-50" gapRight={2} />}
       {showDate && (
         <span
           className={classnames({
@@ -121,7 +121,7 @@ const DateTime = ({
               })}
           </Tooltip>
         }>
-        {dateTime({ unixts, showDate, showTime, showRelative, ...props })}
+        <span>{dateTime({ unixts, showDate, showTime, showRelative, ...props })}</span>
       </OverlayTrigger>
     ) : (
       dateTime({ unixts, showDate, showTime, showRelative, ...props })

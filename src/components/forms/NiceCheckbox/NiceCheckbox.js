@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormCheck, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormCheck } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { SquareIcon, WarningIcon } from '../../icons';
@@ -21,26 +21,24 @@ const NiceCheckbox = ({
 }) => {
   const warningIcon =
     error || warning ? (
-      <OverlayTrigger
-        placement="bottom"
-        overlay={
-          <Tooltip id={name} className="wider-tooltip">
-            {error || warning}
-          </Tooltip>
-        }>
-        <WarningIcon gapLeft className={error ? 'text-danger' : 'text-warning'} />
-      </OverlayTrigger>
+      <WarningIcon
+        gapLeft={2}
+        className={error ? 'text-danger' : 'text-warning'}
+        tooltipId={name}
+        tooltipPlacement="bottom"
+        tooltip={error || warning}
+      />
     ) : null;
 
   const iconClass = error
     ? 'text-error'
     : warning
-    ? 'text-warning'
-    : dirty
-    ? 'text-primary'
-    : !checked
-    ? 'text-muted'
-    : undefined;
+      ? 'text-warning'
+      : dirty
+        ? 'text-primary'
+        : !checked
+          ? 'text-body-secondary'
+          : undefined;
 
   return (
     <FormCheck {...props} checked={checked} className="nice-checkbox-container">

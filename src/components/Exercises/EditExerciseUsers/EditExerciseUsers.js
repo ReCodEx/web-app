@@ -24,8 +24,8 @@ const EditExerciseUsers = ({ exercise, instanceId }) => {
         <Table className="border-bottom mb-1">
           <tbody>
             <tr>
-              <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
-                <AuthorIcon fixedWidth gapLeft />
+              <td className="icon-col">
+                <AuthorIcon fixedWidth gapLeft={2} />
               </td>
               <th>
                 <FormattedMessage id="generic.author" defaultMessage="Author" />:
@@ -35,8 +35,8 @@ const EditExerciseUsers = ({ exercise, instanceId }) => {
               </td>
             </tr>
             <tr>
-              <td className="text-center text-muted shrink-col em-padding-left em-padding-right">
-                <AdminIcon fixedWidth gapLeft />
+              <td className="icon-col">
+                <AdminIcon fixedWidth gapLeft={2} />
               </td>
               <th>
                 <FormattedMessage id="app.exercise.admins" defaultMessage="Administrators" />:
@@ -51,13 +51,13 @@ const EditExerciseUsers = ({ exercise, instanceId }) => {
                 {exercise.adminsIds.map(id => (
                   <div key={id} className="mb-2">
                     <UsersNameContainer userId={id} showEmail="icon" link />
-                    <span className="float-right mr-2">
+                    <span className="float-end me-2">
                       <ExerciseUserButtonsContainer userId={id} exercise={exercise} />
                     </span>
                   </div>
                 ))}
                 {exercise.adminsIds.length === 0 && (
-                  <em className="small text-muted">
+                  <em className="small text-body-secondary">
                     <FormattedMessage id="app.exercise.noAdmins" defaultMessage="no administrators appointed" />
                   </em>
                 )}

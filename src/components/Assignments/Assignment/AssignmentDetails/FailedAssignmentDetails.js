@@ -7,7 +7,7 @@ const FailedAssignmentDetails = () => (
   <Box
     title={
       <span>
-        <WarningIcon gapRight />
+        <WarningIcon gapRight={2} />
         <FormattedMessage id="app.assignment.error" defaultMessage="Exercise assignment could not be loaded." />
       </span>
     }

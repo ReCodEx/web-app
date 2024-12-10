@@ -61,7 +61,7 @@ const EditTerm = ({
         hasSucceeded={submitSucceeded}
         hasFailed={submitFailed}
         invalid={invalid}
-        defaultIcon={<SaveIcon gapRight />}
+        defaultIcon={<SaveIcon gapRight={2} />}
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
           submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
@@ -70,7 +70,7 @@ const EditTerm = ({
       />
 
       <Button variant="outline-secondary" onClick={onClose}>
-        <CloseIcon gapRight />
+        <CloseIcon gapRight={2} />
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
     </Modal.Footer>

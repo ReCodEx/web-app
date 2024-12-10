@@ -25,7 +25,7 @@ class CopyLogToClipboard extends Component {
     return (
       <CopyToClipboard text={log} onCopy={this.logCopied}>
         <Button variant="success" {...props} disabled={this.state.logCopied}>
-          {this.state.logCopied ? <Icon icon="clipboard-check" gapRight /> : <CopyIcon gapRight />}
+          {this.state.logCopied ? <Icon icon="clipboard-check" gapRight={2} /> : <CopyIcon gapRight={2} />}
           <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
         </Button>
       </CopyToClipboard>

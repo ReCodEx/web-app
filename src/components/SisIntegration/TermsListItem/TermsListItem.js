@@ -9,7 +9,7 @@ const TermsListItem = ({ data, createActions }) => (
   <tr>
     <td>
       {data.beginning * 1000 <= Date.now() && Date.now() <= data.end * 1000 && (
-        <Icon icon={['far', 'lightbulb']} gapLeft gapRight />
+        <Icon icon={['far', 'lightbulb']} gapLeft={2} gapRight={2} />
       )}
     </td>
     <td>{data.year}</td>
@@ -27,7 +27,7 @@ const TermsListItem = ({ data, createActions }) => (
     <td>
       <DateTime unixts={data.advertiseUntil} showTime={false} isDeadline showRelative />
     </td>
-    <td className="text-right">{createActions && createActions(data.id, data)}</td>
+    <td className="text-end">{createActions && createActions(data.id, data)}</td>
   </tr>
 );
 

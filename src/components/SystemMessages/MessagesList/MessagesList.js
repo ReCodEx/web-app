@@ -45,7 +45,7 @@ class MessagesList extends Component {
         {
           comparator: ({ visibleFrom: f1 }, { visibleFrom: f2 }) => f2 - f1,
           cellRenderer: visibleFrom => visibleFrom && <DateTime unixts={visibleFrom} />,
-          className: 'valign-middle',
+          className: 'align-middle',
         }
       ),
 
@@ -55,19 +55,19 @@ class MessagesList extends Component {
         {
           comparator: ({ visibleTo: t1 }, { visibleTo: t2 }) => t2 - t1,
           cellRenderer: visibleTo => visibleTo && <DateTime unixts={visibleTo} />,
-          className: 'valign-middle',
+          className: 'align-middle',
         }
       ),
 
       new SortableTableColumnDescriptor('authorId', <FormattedMessage id="generic.author" defaultMessage="Author" />, {
         cellRenderer: authorId => authorId && <UsersNameContainer userId={authorId} size={8} />,
-        className: 'valign-middle',
+        className: 'align-middle',
       }),
 
       new SortableTableColumnDescriptor('role', <FormattedMessage id="generic.role" defaultMessage="Role" />, {
         comparator: ({ role: r1 }, { role: r2 }) => Number(rolePriorities[r2]) - Number(rolePriorities[r1]),
         cellRenderer: role => role && roleLabels[role],
-        className: 'valign-middle',
+        className: 'align-middle',
       }),
 
       new SortableTableColumnDescriptor(
@@ -75,12 +75,12 @@ class MessagesList extends Component {
         <FormattedMessage id="app.systemMessagesList.type" defaultMessage="Type" />,
         {
           cellRenderer: type => type && <TypedMessageIcon type={type} className={`text-${type}`} />,
-          className: 'text-center valign-middle',
+          className: 'text-center align-middle',
         }
       ),
 
       new SortableTableColumnDescriptor('buttons', '', {
-        className: 'text-right valign-middle',
+        className: 'text-end align-middle',
       }),
     ];
 
@@ -103,14 +103,14 @@ class MessagesList extends Component {
           }}
           initialValues={{ showAll: this.state.showAll }}
         />
-        <hr className="no-margin" />
+        <hr className="m-0" />
         <SortableTable
           hover
           columns={this.prepareColumnDescriptors(locale)}
           defaultOrder="visibleTo"
           data={prepareData(systemMessages, this.state.showAll, renderActions)}
           empty={
-            <div className="text-center text-muted">
+            <div className="text-center text-body-secondary">
               <FormattedMessage
                 id="app.systemMessagesList.noMessages"
                 defaultMessage="There are currently no system messages."

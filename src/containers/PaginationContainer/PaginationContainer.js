@@ -37,17 +37,17 @@ export const createSortingIcon = (colName, orderByColumn, orderByDescending, set
     <SortedIcon
       active={orderByColumn === colName}
       descending={orderByDescending}
-      gapLeft
+      gapLeft={2}
       onClick={() => setOrderBy(colName, orderByColumn === colName ? !orderByDescending : false)}
     />
   ) : (
-    <LoadingIcon gapLeft />
+    <LoadingIcon gapLeft={2} />
   );
 
 // Show label with actually displayed range info ...
 export const showRangeInfo = (offset, limit, totalCount) =>
   totalCount > limit && (
-    <div className="text-muted text-right small">
+    <div className="text-body-secondary text-end small">
       <FormattedMessage
         id="app.paginationContainer.showingRange"
         defaultMessage="showing {offset}{nbsp}-{nbsp}{offsetEnd} (of{nbsp}{totalCount})"
@@ -266,7 +266,7 @@ class PaginationContainer extends Component {
                   </Col>
                   {totalCount > limit && (
                     <Col md={9}>
-                      <div className="float-right">
+                      <div className="float-end">
                         <PaginationButtons
                           prev
                           next
@@ -287,7 +287,7 @@ class PaginationContainer extends Component {
           </div>
         ) : (
           <div className="text-center larger em-maring">
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </div>
         )}

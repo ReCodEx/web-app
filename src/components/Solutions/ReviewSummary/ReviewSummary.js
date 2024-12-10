@@ -101,7 +101,7 @@ class ReviewSummary extends Component {
           {reviewComments.length === 0 && addComment && !this.state.add && (
             <div className="text-center p-3">
               <Button onClick={this.startCreation} size="sm" variant="success">
-                <AddIcon gapRight />
+                <AddIcon gapRight={2} />
                 <FormattedMessage id="generic.create" defaultMessage="Create" />
               </Button>
             </div>

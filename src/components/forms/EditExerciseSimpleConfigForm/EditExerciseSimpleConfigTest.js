@@ -204,7 +204,7 @@ class EditExerciseSimpleConfigTest extends Component {
                 />
               }>
               <Button variant="primary" disabled={Boolean(testErrors)}>
-                <Icon icon="arrows-alt" gapRight />
+                <Icon icon="arrows-alt" gapRight={2} />
                 <FormattedMessage id="app.editExerciseConfigForm.smartFillAll" defaultMessage="Smart Fill All" />
               </Button>
             </Confirm>

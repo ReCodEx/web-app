@@ -50,8 +50,8 @@ export const transformSubmittedData = ({ beginImmediately, endRelative, begin, e
       ? beginTs + timeToSeconds(length)
       : null
     : moment.isMoment(end)
-    ? end.unix()
-    : null;
+      ? end.unix()
+      : null;
   return { begin: beginTs, end: endTs, strict };
 };
 
@@ -206,7 +206,7 @@ const ExamForm = ({
         />
         {onCancel && (
           <Button onClick={onCancel} variant="secondary">
-            <CloseIcon gapRight />
+            <CloseIcon gapRight={2} />
             <FormattedMessage id="generic.close" defaultMessage="Close" />
           </Button>
         )}

@@ -10,11 +10,11 @@ import Confirm from '../Confirm';
 import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 const getIcons = lruMemoize(defaultIcon => ({
-  submit: defaultIcon || <SendIcon gapRight />,
-  success: <SuccessIcon gapRight />,
-  submitting: <LoadingIcon gapRight />,
-  validating: <LoadingIcon gapRight />,
-  invalid: <WarningIcon gapRight />,
+  submit: defaultIcon || <SendIcon gapRight={2} />,
+  success: <SuccessIcon gapRight={2} />,
+  submitting: <LoadingIcon gapRight={2} />,
+  validating: <LoadingIcon gapRight={2} />,
+  invalid: <WarningIcon gapRight={2} />,
 }));
 
 const getMessages = lruMemoize(messages => {
@@ -91,10 +91,10 @@ class SubmitButton extends Component {
     return hasFailed && !submitting
       ? 'danger'
       : this.state.saved || submitting
-      ? 'success'
-      : invalid
-      ? 'warning'
-      : 'success';
+        ? 'success'
+        : invalid
+          ? 'warning'
+          : 'success';
   }
 
   isButtonDisabled() {
@@ -124,12 +124,10 @@ class SubmitButton extends Component {
         placement="top"
         overlay={
           <Popover id={`error-popover-${id}`}>
-            <Popover.Title className="bg-danger">
+            <Popover.Header className="bg-danger">
               <FormattedMessage id="app.submitButton.lastError.title" defaultMessage="An error occured" />
-            </Popover.Title>
-            <Popover.Content className="text-center">
-              {getErrorMessage(formatMessage)(this.state.lastError)}
-            </Popover.Content>
+            </Popover.Header>
+            <Popover.Body className="text-center">{getErrorMessage(formatMessage)(this.state.lastError)}</Popover.Body>
           </Popover>
         }>
         <Button

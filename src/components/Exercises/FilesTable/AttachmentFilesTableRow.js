@@ -32,9 +32,9 @@ const AttachmentFilesTableRow = ({ id, name, size, uploadedAt, removeFile, links
               defaultMessage="Are you sure you want to delete the file? This cannot be undone."
             />
           }
-          className="float-right">
+          className="float-end">
           <Button size="xs" variant="danger">
-            <DeleteIcon gapRight />
+            <DeleteIcon gapRight={2} />
             <FormattedMessage id="generic.delete" defaultMessage="Delete" />
           </Button>
         </Confirm>

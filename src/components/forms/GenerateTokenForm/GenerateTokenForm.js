@@ -100,14 +100,14 @@ const GenerateTokenForm = ({
                     </Tooltip>
                   }>
                   <Button variant="secondary" disabled>
-                    <Icon icon="clipboard-check" gapRight fixedWidth />
+                    <Icon icon="clipboard-check" gapRight={2} fixedWidth />
                     <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
                   </Button>
                 </OverlayTrigger>
               ) : (
                 <CopyToClipboard text={lastToken} onCopy={() => setCopied(true)}>
                   <Button variant="info">
-                    <CopyIcon gapRight fixedWidth />
+                    <CopyIcon gapRight={2} fixedWidth />
                     <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
                   </Button>
                 </CopyToClipboard>

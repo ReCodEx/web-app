@@ -38,7 +38,7 @@ class ExercisesNameContainer extends Component {
         resource={exercise}
         loading={
           <>
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </>
         }>

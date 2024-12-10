@@ -37,7 +37,7 @@ class EditExercisePipelinesForm extends Component {
             <TheButtonGroup>
               {dirty && (
                 <Button type="reset" onClick={reset} variant="danger">
-                  <RefreshIcon gapRight />
+                  <RefreshIcon gapRight={2} />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
               )}
@@ -57,19 +57,19 @@ class EditExercisePipelinesForm extends Component {
         <FieldArray name="pipelines" component={EditExercisePipelinesTable} pipelines={pipelines} readOnly={readOnly} />
 
         {submitFailed && (
-          <Callout variant="danger" className="em-margin">
+          <Callout variant="danger" className="m-3">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Callout>
         )}
 
         {error && (
-          <Callout variant="danger" className="em-margin">
+          <Callout variant="danger" className="m-3">
             {error}
           </Callout>
         )}
 
         {warning && (
-          <Callout variant="warning" className="em-margin">
+          <Callout variant="warning" className="m-3">
             {warning}
           </Callout>
         )}

@@ -11,9 +11,9 @@ const bsStyles = {
 };
 
 const icons = {
-  [resourceStatus.PENDING]: <LoadingIcon gapRight />,
-  [resourceStatus.FULFILLED]: <SuccessIcon gapRight />,
-  [resourceStatus.FAILED]: <FailureIcon gapRight />,
+  [resourceStatus.PENDING]: <LoadingIcon gapRight={2} />,
+  [resourceStatus.FULFILLED]: <SuccessIcon gapRight={2} />,
+  [resourceStatus.FAILED]: <FailureIcon gapRight={2} />,
 };
 
 const messages = defineMessages({
@@ -37,7 +37,7 @@ const ResendEmailVerification = ({ resend, state, intl: { formatMessage }, ...pr
       onClick={state !== resourceStatus.PENDING ? resend : undefined}
       variant={bsStyles[state] || 'primary'}
       {...props}>
-      {icons[state] || <MailIcon gapRight />}
+      {icons[state] || <MailIcon gapRight={2} />}
       {messages[state] ? (
         formatMessage(messages[state])
       ) : (

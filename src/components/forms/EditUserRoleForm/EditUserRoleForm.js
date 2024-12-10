@@ -34,7 +34,7 @@ const EditUserRoleForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          defaultIcon={<SaveIcon gapRight />}
+          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
@@ -49,7 +49,7 @@ const EditUserRoleForm = ({
       </Callout>
     )}
 
-    <Table hover className="no-margin">
+    <Table hover className="card-table">
       <tbody>
         {knownRoles.map(role => (
           <tr
@@ -66,13 +66,13 @@ const EditUserRoleForm = ({
             </td>
             <td
               className={classnames({
-                'text-bold': role === currentRole,
+                'fw-bold': role === currentRole,
                 'shrink-col': true,
                 'text-nowrap': true,
               })}>
               {roleLabels[role]}
             </td>
-            <td className="small text-muted valign-middle">{roleDescriptions[role]}</td>
+            <td className="small text-body-secondary align-middle">{roleDescriptions[role]}</td>
           </tr>
         ))}
       </tbody>

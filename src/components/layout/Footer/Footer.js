@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 const Footer = ({ version }) => (
-  <footer className="main-footer">
-    <div className="float-right hidden-xs">
+  <footer className="app-footer">
+    <div className="float-end hidden-xs">
       <FormattedMessage
         id="app.footer.version"
         defaultMessage="<strong>Version</strong> {version} (<a>changelog</a>)"

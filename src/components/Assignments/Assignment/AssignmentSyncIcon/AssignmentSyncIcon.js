@@ -13,13 +13,13 @@ const AssignmentSyncIcon = ({ id, syncInfo, ...props }) => {
       placement="bottom"
       overlay={
         <Popover id={`assginmentsync-${id}`}>
-          <Popover.Title>
+          <Popover.Header>
             <FormattedMessage
               id="app.assignment.syncRequiredTitle"
               defaultMessage="The exercise data are newer than assignment data"
             />
-          </Popover.Title>
-          <Popover.Content>
+          </Popover.Header>
+          <Popover.Body>
             <p>
               <FormattedMessage
                 id="app.assignment.syncRequired"
@@ -34,17 +34,19 @@ const AssignmentSyncIcon = ({ id, syncInfo, ...props }) => {
 
             {!syncInfo.isSynchronizationPossible && (
               <p>
-                <WarningIcon className="text-danger" gapRight />
+                <WarningIcon className="text-danger" gapRight={2} />
                 <FormattedMessage
                   id="app.assignment.syncIsNotPossible"
                   defaultMessage="The exercise is not in a consistent state, synchronization is not possible at the moment."
                 />
               </p>
             )}
-          </Popover.Content>
+          </Popover.Body>
         </Popover>
       }>
-      <WarningIcon {...props} className={syncInfo.isSynchronizationPossible ? 'text-warning' : 'text-danger'} />
+      <span>
+        <WarningIcon {...props} className={syncInfo.isSynchronizationPossible ? 'text-warning' : 'text-danger'} />
+      </span>
     </OverlayTrigger>
   ) : null;
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -36,7 +36,7 @@ const NavigationLink = ({
   match = defaultLinkMatch,
 }) =>
   match(link, pathname, search) ? (
-    <strong className={className}>
+    <strong className={`text-success ${className}`}>
       {icon}
       {caption}
     </strong>
@@ -84,7 +84,7 @@ const Navigation = ({
   const onlyUser = Boolean(userId && !groupId && !exerciseId && !assignmentId && !shadowId);
 
   return (
-    <Card className="elevation-2">
+    <Card className="shadow-sm mb-3">
       <Card.Header>
         <Card.Title className={styles.title}>
           {userId && emphasizeUser && (
@@ -117,60 +117,52 @@ const Navigation = ({
 
           {assignmentId && (
             <span>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="assignmentIconTooltip">
-                    <FormattedMessage id="app.navigation.assignment" defaultMessage="Assignment" />
-                  </Tooltip>
-                }>
-                <AssignmentIcon gapRight className="text-muted" />
-              </OverlayTrigger>
+              <AssignmentIcon
+                gapRight={2}
+                className="text-body-secondary"
+                tooltipId="assignmentIconTooltip"
+                tooltipPlacement="bottom"
+                tooltip={<FormattedMessage id="app.navigation.assignment" defaultMessage="Assignment" />}
+              />
               <AssignmentNameContainer assignmentId={assignmentId} noLink />
             </span>
           )}
 
           {exerciseId && (
             <span>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="exerciseIconTooltip">
-                    <FormattedMessage id="app.navigation.exercise" defaultMessage="Exercise" />
-                  </Tooltip>
-                }>
-                <ExerciseIcon gapRight className="text-muted" />
-              </OverlayTrigger>
+              <ExerciseIcon
+                gapRight={2}
+                className="text-body-secondary"
+                tooltipId="exerciseIconTooltip"
+                tooltipPlacement="bottom"
+                tooltip={<FormattedMessage id="app.navigation.exercise" defaultMessage="Exercise" />}
+              />
               <ExercisesNameContainer exerciseId={exerciseId} noLink />
             </span>
           )}
 
           {shadowId && (
             <span>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="shadowIconTooltip">
-                    <FormattedMessage id="app.navigation.shadowAssignment" defaultMessage="Shadow Assignment" />
-                  </Tooltip>
-                }>
-                <ShadowAssignmentIcon gapRight className="text-muted" />
-              </OverlayTrigger>
+              <ShadowAssignmentIcon
+                gapRight={2}
+                className="text-body-secondary"
+                tooltipId="shadowIconTooltip"
+                tooltipPlacement="bottom"
+                tooltip={<FormattedMessage id="app.navigation.shadowAssignment" defaultMessage="Shadow Assignment" />}
+              />
               <ShadowAssignmentNameContainer shadowAssignmentId={shadowId} noLink />
             </span>
           )}
 
           {pipelineId && (
             <span>
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id="pipelineIconTooltip">
-                    <FormattedMessage id="app.navigation.pipeline" defaultMessage="Pipeline" />
-                  </Tooltip>
-                }>
-                <PipelineIcon gapRight className="text-muted" />
-              </OverlayTrigger>
+              <PipelineIcon
+                gapRight={2}
+                className="text-body-secondary"
+                tooltipId="pipelineIconTooltip"
+                tooltipPlacement="bottom"
+                tooltip={<FormattedMessage id="app.navigation.pipeline" defaultMessage="Pipeline" />}
+              />
               <PipelineNameContainer pipelineId={pipelineId} noLink />
             </span>
           )}

@@ -1,0 +1,21 @@
+.app-sidebar {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.app-sidebar .brand-loading {
+  position: absolute;
+  right: 1em;
+}
+
+.sidebar-collapse .app-sidebar:not(:hover) .brand-link {
+  margin-right: 0!important;
+}
+
+.sidebar-collapse .app-sidebar:not(:hover) .brand-image {
+  margin-right: 0!important;
+}
+
+.sidebar-collapse .app-sidebar:not(:hover) .brand-text {
+  display: none;
+}

@@ -1,35 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classnames from 'classnames';
 import * as style from './Icon.less';
 
 const Icon = ({
-  smallGapLeft = false,
-  smallGapRight = false,
-  gapLeft = false,
-  gapRight = false,
-  largeGapLeft = false,
-  largeGapRight = false,
+  gapLeft = -1,
+  gapRight = -1,
   disabled = false,
   timid = false,
   className = [],
   onClick,
   onDoubleClick,
+  tooltip = null,
+  tooltipId = null,
+  tooltipPlacement = 'right',
   ...props
 }) => {
   const passedClassNames = typeof className === 'string' ? { [className]: true } : className;
-  return (
+  const gapLeftNum = typeof gapLeft === 'number' ? gapLeft : gapLeft ? 2 : -1;
+  const gapRightNum = typeof gapRight === 'number' ? gapRight : gapRight ? 2 : -1;
+  return tooltip ? (
+    <OverlayTrigger placement={tooltipPlacement} overlay={<Tooltip id={tooltipId}>{tooltip}</Tooltip>}>
+      <span
+        className={classnames({
+          [`ms-${gapLeftNum}`]: gapLeftNum >= 0 && gapLeftNum <= 5,
+          [`me-${gapRightNum}`]: gapRightNum >= 0 && gapRightNum <= 5,
+        })}>
+        <FontAwesomeIcon
+          {...props}
+          className={classnames({
+            ...passedClassNames,
+            [style.disabled]: disabled,
+            timid,
+            clickable: Boolean(onClick || onDoubleClick),
+          })}
+          onClick={onClick}
+          onDoubleClick={onDoubleClick}
+        />
+      </span>
+    </OverlayTrigger>
+  ) : (
     <FontAwesomeIcon
       {...props}
       className={classnames({
         ...passedClassNames,
-        [style.smallGapLeft]: smallGapLeft,
-        [style.smallGapRight]: smallGapRight,
-        [style.gapLeft]: gapLeft,
-        [style.gapRight]: gapRight,
-        [style.largeGapLeft]: largeGapLeft,
-        [style.largeGapRight]: largeGapRight,
+        [`ms-${gapLeftNum}`]: gapLeftNum >= 0 && gapLeftNum <= 5,
+        [`me-${gapRightNum}`]: gapRightNum >= 0 && gapRightNum <= 5,
         [style.disabled]: disabled,
         timid,
         clickable: Boolean(onClick || onDoubleClick),
@@ -42,16 +60,15 @@ const Icon = ({
 
 Icon.propTypes = {
   className: PropTypes.any,
-  smallGapLeft: PropTypes.bool,
-  smallGapRight: PropTypes.bool,
-  gapLeft: PropTypes.bool,
-  gapRight: PropTypes.bool,
-  largeGapLeft: PropTypes.bool,
-  largeGapRight: PropTypes.bool,
+  gapLeft: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  gapRight: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   disabled: PropTypes.bool,
   timid: PropTypes.bool,
   onClick: PropTypes.func,
   onDoubleClick: PropTypes.func,
+  tooltip: PropTypes.any,
+  tooltipId: PropTypes.string,
+  tooltipPlacement: PropTypes.string,
 };
 
 export default Icon;

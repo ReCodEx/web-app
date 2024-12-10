@@ -28,7 +28,7 @@ const LockedStudentsTable = ({ groupId, lockedStudents, currentUser, intl: { loc
                 listItem
               />
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <ExamUnlockButtonContainer groupId={groupId} userId={student.id} size="xs" />
             </td>
           </tr>
@@ -36,7 +36,7 @@ const LockedStudentsTable = ({ groupId, lockedStudents, currentUser, intl: { loc
       </tbody>
     </Table>
   ) : (
-    <div className="text-center text-muted p-4">
+    <div className="text-center text-body-secondary p-4">
       <em>
         <FormattedMessage
           id="app.lockedStudentsTable.noLockedStudents"

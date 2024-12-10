@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import classnames from 'classnames';
+import { Modal } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
 import ExpressionNode from './ExpressionNode.js';
@@ -180,107 +179,77 @@ class ScoreConfigUniversalExpression extends Component {
       <>
         {editable && (
           <span className={style.iconBar}>
-            <OverlayTrigger
-              placement="left"
-              overlay={
-                <Tooltip id="undo">
-                  <FormattedMessage id="generic.undo" defaultMessage="Undo" />
-                </Tooltip>
-              }>
-              <UndoIcon
-                fixedWidth
-                size="lg"
-                className={classnames({
-                  'halfem-margin-vertical': true,
-                  'em-margin-horizontal': true,
-                  'text-primary': true,
-                })}
-                disabled={!ast.canUndo()}
-                onClick={() => ast.undo()}
-              />
-            </OverlayTrigger>
+            <UndoIcon
+              fixedWidth
+              size="lg"
+              className="my-2 mx-3 text-primary"
+              disabled={!ast.canUndo()}
+              onClick={() => ast.undo()}
+              tooltipId="undo"
+              tooltipPlacement="left"
+              tooltip={<FormattedMessage id="generic.undo" defaultMessage="Undo" />}
+            />
 
             <br />
 
-            <OverlayTrigger
-              placement="left"
-              overlay={
-                <Tooltip id="redo">
-                  <FormattedMessage id="generic.redo" defaultMessage="Redo" />
-                </Tooltip>
-              }>
-              <RedoIcon
-                fixedWidth
-                size="lg"
-                className={classnames({
-                  'halfem-margin-vertical': true,
-                  'em-margin-horizontal': true,
-                  'text-primary': true,
-                })}
-                disabled={!ast.canRedo()}
-                onClick={() => ast.redo()}
-              />
-            </OverlayTrigger>
+            <RedoIcon
+              fixedWidth
+              size="lg"
+              className="my-2 mx-3 text-primary"
+              disabled={!ast.canRedo()}
+              onClick={() => ast.redo()}
+              tooltipId="redo"
+              tooltipPlacement="left"
+              tooltip={<FormattedMessage id="generic.redo" defaultMessage="Redo" />}
+            />
 
             <br />
 
-            <OverlayTrigger
-              placement="left"
-              overlay={
-                <Tooltip id="optimizeDialog">
-                  <FormattedMessage
-                    id="app.scoreConfigExpression.openOptimizeDialog"
-                    defaultMessage="Optimize the tree"
-                  />
-                </Tooltip>
-              }>
-              <Icon
-                icon="air-freshener"
-                fixedWidth
-                size="lg"
-                className="halfem-margin-vertical em-margin-horizontal text-warning"
-                disabled={!ast.isValid()}
-                onClick={this.openOptimizationDialog}
-              />
-            </OverlayTrigger>
+            <Icon
+              icon="air-freshener"
+              fixedWidth
+              size="lg"
+              className="my-2 mx-3 text-warning"
+              disabled={!ast.isValid()}
+              onClick={this.openOptimizationDialog}
+              tooltipId="optimizeDialog"
+              tooltipPlacement="left"
+              tooltip={
+                <FormattedMessage
+                  id="app.scoreConfigExpression.openOptimizeDialog"
+                  defaultMessage="Optimize the tree"
+                />
+              }
+            />
 
             <br />
 
-            <OverlayTrigger
-              placement="left"
-              overlay={
-                <Tooltip id="infoDialog">
-                  <FormattedMessage
-                    id="app.scoreConfigExpression.openInfoDialog"
-                    defaultMessage="Open quick reference"
-                  />
-                </Tooltip>
-              }>
-              <InfoIcon
-                fixedWidth
-                size="lg"
-                className="halfem-margin-vertical em-margin-horizontal text-muted"
-                onClick={this.openHelpDialog}
-              />
-            </OverlayTrigger>
+            <InfoIcon
+              fixedWidth
+              size="lg"
+              className="my-2 mx-3 text-body-secondary"
+              onClick={this.openHelpDialog}
+              tooltipId="infoDialog"
+              tooltipPlacement="left"
+              tooltip={
+                <FormattedMessage id="app.scoreConfigExpression.openInfoDialog" defaultMessage="Open quick reference" />
+              }
+            />
 
             <br />
 
-            <OverlayTrigger
-              placement="left"
-              overlay={
-                <Tooltip id="debugDialog">
-                  <FormattedMessage id="app.scoreConfigExpression.openDebugDialog" defaultMessage="Open debug log" />
-                </Tooltip>
-              }>
-              <Icon
-                icon="flask"
-                fixedWidth
-                size="lg"
-                className="halfem-margin-vertical em-margin-horizontal text-danger"
-                onClick={this.openDebugDialog}
-              />
-            </OverlayTrigger>
+            <Icon
+              icon="flask"
+              fixedWidth
+              size="lg"
+              className="my-2 mx-3 text-danger"
+              onClick={this.openDebugDialog}
+              tooltipId="debugDialog"
+              tooltipPlacement="left"
+              tooltip={
+                <FormattedMessage id="app.scoreConfigExpression.openDebugDialog" defaultMessage="Open debug log" />
+              }
+            />
           </span>
         )}
 
@@ -385,7 +354,7 @@ class ScoreConfigUniversalExpression extends Component {
             <Modal.Footer>
               <div className="text-center">
                 <Button onClick={this.closeDialog} variant="outline-secondary">
-                  <CloseIcon gapRight />
+                  <CloseIcon gapRight={2} />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
               </div>
@@ -414,7 +383,7 @@ class ScoreConfigUniversalExpression extends Component {
               <table>
                 <tbody>
                   <tr>
-                    <td className="em-padding valign-middle">
+                    <td className="p-3 align-middle">
                       <Button onClick={() => this.performOptimizations(removeConstantExpressions)} variant="success">
                         <FormattedMessage
                           id="app.scoreConfigExpression.optimize.removeConstantsButton"
@@ -422,7 +391,7 @@ class ScoreConfigUniversalExpression extends Component {
                         />
                       </Button>
                     </td>
-                    <td className="em-padding valign-middle text-muted small">
+                    <td className="p-3 align-middle text-body-secondary small">
                       <FormattedMessage
                         id="app.scoreConfigExpression.optimize.removeConstantsInfo"
                         defaultMessage="All constant sub-expressions (sub-trees) are evaluated and replaced with numeric literal nodes."
@@ -430,7 +399,7 @@ class ScoreConfigUniversalExpression extends Component {
                     </td>
                   </tr>
                   <tr>
-                    <td className="em-padding valign-middle">
+                    <td className="p-3 align-middle">
                       <Button onClick={() => this.performOptimizations(optimize)} variant="success">
                         <FormattedMessage
                           id="app.scoreConfigExpression.optimize.optimizeButton"
@@ -438,7 +407,7 @@ class ScoreConfigUniversalExpression extends Component {
                         />
                       </Button>
                     </td>
-                    <td className="em-padding valign-middle text-muted small">
+                    <td className="p-3 align-middle text-body-secondary small">
                       <FormattedMessage
                         id="app.scoreConfigExpression.optimize.optimizeInfo"
                         defaultMessage="Perform basic set of optimizations which simplify the tree but have no effect on the result (removing double negtion, removing 0 from sum() and 1 from mul(), etc.)."
@@ -446,7 +415,7 @@ class ScoreConfigUniversalExpression extends Component {
                     </td>
                   </tr>
                   <tr>
-                    <td className="em-padding valign-middle">
+                    <td className="p-3 align-middle">
                       <Button
                         onClick={() => this.performOptimizations(removeConstantExpressions, optimize)}
                         variant="success">
@@ -456,7 +425,7 @@ class ScoreConfigUniversalExpression extends Component {
                         />
                       </Button>
                     </td>
-                    <td className="em-padding valign-middle text-muted small">
+                    <td className="p-3 align-middle text-body-secondary small">
                       <FormattedMessage
                         id="app.scoreConfigExpression.optimize.allInfo"
                         defaultMessage="Perform all optimizations mentioned above in the correct order."
@@ -469,7 +438,7 @@ class ScoreConfigUniversalExpression extends Component {
             <Modal.Footer>
               <div className="text-center">
                 <Button onClick={this.closeDialog} variant="outline-secondary">
-                  <CloseIcon gapRight />
+                  <CloseIcon gapRight={2} />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
               </div>
@@ -493,7 +462,7 @@ class ScoreConfigUniversalExpression extends Component {
               </p>
               <pre className="small">
                 <CopyIcon
-                  className="float-right"
+                  className="float-end"
                   size="2x"
                   onClick={ev => {
                     let node = ev.target;
@@ -515,7 +484,7 @@ class ScoreConfigUniversalExpression extends Component {
             <Modal.Footer>
               <div className="text-center">
                 <Button onClick={this.closeDialog} variant="outline-secondary">
-                  <CloseIcon gapRight />
+                  <CloseIcon gapRight={2} />
                   <FormattedMessage id="generic.close" defaultMessage="Close" />
                 </Button>
               </div>

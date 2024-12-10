@@ -6,7 +6,7 @@ import Button from '../../widgets/TheButton';
 
 const ExamGroupButton = ({ exam, pending, disabled = false, setExamFlag, ...props }) => (
   <Button {...props} variant={disabled ? 'secondary' : 'warning'} onClick={setExamFlag} disabled={pending || disabled}>
-    {pending ? <LoadingIcon gapRight /> : <GroupIcon exam={!exam} gapRight />}
+    {pending ? <LoadingIcon gapRight={2} /> : <GroupIcon exam={!exam} gapRight={2} />}
     {exam ? (
       <FormattedMessage id="app.groupTypeButton.regular" defaultMessage="Regular" />
     ) : (

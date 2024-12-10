@@ -53,7 +53,7 @@ class EditEnvironmentConfigForm extends Component {
             <TheButtonGroup>
               {dirty && (
                 <Button type="reset" onClick={reset} variant="danger">
-                  <RefreshIcon gapRight />
+                  <RefreshIcon gapRight={2} />
                   <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                 </Button>
               )}
@@ -70,7 +70,7 @@ class EditEnvironmentConfigForm extends Component {
 
               {Boolean(selectedRuntimeId) && !hasDefaultVariables && (
                 <Button onClick={this.setDefaultVariables} variant="primary">
-                  <RefreshIcon gapRight />
+                  <RefreshIcon gapRight={2} />
                   <FormattedMessage
                     id="app.editEnvironmentConfig.setDefaultVariables"
                     defaultMessage="Set Default Variables"
@@ -88,8 +88,8 @@ class EditEnvironmentConfigForm extends Component {
           </datalist>
         )}
 
-        <p className="text-muted small em-padding-horizontal">
-          <InfoIcon gapRight />
+        <p className="text-body-secondary small px-3">
+          <InfoIcon gapRight={2} />
           <FormattedMessage
             id="app.editEnvironmentConfig.selectedRuntimeInfo"
             defaultMessage="In the advanced configuration, selected runtime environment is used only to ensure that the backend worker has necessary compilers, tools, or libraries required by the environment. Everything else (source files patterns, pipelines) is configured separately."
@@ -115,8 +115,8 @@ class EditEnvironmentConfigForm extends Component {
 
         {Boolean(selectedRuntimeId) && (
           <>
-            <p className="text-muted small em-padding-horizontal">
-              <InfoIcon gapRight />
+            <p className="text-body-secondary small px-3">
+              <InfoIcon gapRight={2} />
               <FormattedMessage
                 id="app.editEnvironmentConfig.variablesInfo"
                 defaultMessage="These variables cover the submitted files and how they are associated with pipeline inputs. Each value may hold a file name or a wildcard (e.g., <code>solution.cpp</code>, <code>*.py</code>, <code>my-*.[c,h]</code>). Only <code>file</code> and <code>file[]</code> variables are allowed here."
@@ -130,7 +130,7 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         {!selectedRuntimeId && (
-          <Callout variant="warning" className="em-margin-top">
+          <Callout variant="warning" className="mt-3">
             <FormattedMessage
               id="app.editEnvironmentConfig.noRuntimeSelected"
               defaultMessage="There must be a runtime environment selected before you can proceed with exercise configuration."
@@ -139,19 +139,19 @@ class EditEnvironmentConfigForm extends Component {
         )}
 
         {submitFailed && (
-          <Callout variant="danger" className="em-margin-top">
+          <Callout variant="danger" className="mt-3">
             <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
           </Callout>
         )}
 
         {error && (
-          <Callout variant="danger" className="em-margin-top">
+          <Callout variant="danger" className="mt-3">
             {error}
           </Callout>
         )}
 
         {warning && (
-          <Callout variant="warning" className="em-margin-top">
+          <Callout variant="warning" className="mt-3">
             {warning}
           </Callout>
         )}

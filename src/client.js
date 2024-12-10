@@ -11,9 +11,6 @@ import { getToken, getInstanceId } from './redux/middleware/authMiddleware.js';
 import { getLang } from './redux/middleware/langMiddleware.js';
 import App from './containers/App/index.js';
 
-import 'admin-lte/plugins/jquery/jquery.min.js';
-import 'admin-lte/plugins/jquery-ui/jquery-ui.min.js';
-import 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js';
 import 'admin-lte/dist/js/adminlte.js';
 
 // Patch for ACE editor (it has complex loading)
@@ -42,20 +39,20 @@ import 'ace-builds/src-noconflict/keybinding-vim.js';
 /*
  * This is an ugly hack that deals with deprecated warnings generated in console log by obsolete
  * Overlay and OverlayTrigger components.
- * TODO: Remove after upgrading to react-bootstrap 2.0 and AdminLTE 4 (hopefully, the warnings will disapear).
+ * TODO FIXME: Remove after upgrading to react-bootstrap 2.0 and AdminLTE 4 (hopefully, the warnings will disapear).
  */
-const consoleError = console.error; // eslint-disable-line no-console
-console.error /* eslint-disable-line no-console */ = (msg, ...rest) => {
-  if (typeof msg === 'string') {
-    if (msg.startsWith('Warning: findDOMNode is deprecated and will be removed in the next major release.')) {
-      return;
-    }
-    if (msg.includes('Support for defaultProps will be removed')) {
-      return;
-    }
-  }
-  consoleError(msg, ...rest);
-};
+// const consoleError = console.error; // eslint-disable-line no-console
+// console.error /* eslint-disable-line no-console */ = (msg, ...rest) => {
+//   if (typeof msg === 'string') {
+//     if (msg.startsWith('Warning: findDOMNode is deprecated and will be removed in the next major release.')) {
+//       return;
+//     }
+//     if (msg.includes('Support for defaultProps will be removed')) {
+//       return;
+//     }
+//   }
+//   consoleError(msg, ...rest);
+// };
 
 // override of worker paths, so they load properly
 const ACE_CDN_PREFIX = 'https://cdn.jsdelivr.net/npm/ace-builds@1.4.12/src-noconflict/';

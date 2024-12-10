@@ -1,0 +1,12 @@
+.sidebar-collapse .app-sidebar:not(:hover) .sidebar-up-collapse-gaps {
+  margin-left: 0!important;
+  margin-right: 0!important;
+}
+
+.sidebar-collapse .app-sidebar:not(:hover) .sidebar-up-hide-collapsed {
+  display: none;
+}
+
+.sidebar-collapse .app-sidebar:not(:hover) .sidebar-up-collapsed-block {
+  display: block;
+}

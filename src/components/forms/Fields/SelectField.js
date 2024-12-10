@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, FormControl, FormLabel, InputGroup } from 'react-bootstrap';
+import { Form, FormGroup, FormSelect, FormLabel, InputGroup } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import * as styles from './commonStyles.less';
@@ -18,19 +18,18 @@ const SelectField = ({
   prepend = null,
   ...props
 }) => (
-  <FormGroup controlId={input.name} className={groupClassName}>
+  <FormGroup controlId={input.name} className={`mb-3 ${groupClassName}`}>
     {Boolean(label) && (
       <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
     )}
     <InputGroup>
-      <FormControl
+      {prepend || null}
+      <FormSelect
         {...input}
         {...props}
-        as="select"
         isInvalid={Boolean(error)}
         className={classnames({
           'form-control': true,
-          'full-width': true,
           [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
           [styles.active]: active,
           'border-danger': error,
@@ -46,9 +45,8 @@ const SelectField = ({
             {name}
           </option>
         ))}
-      </FormControl>
-      {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
-      {append && <InputGroup.Append>{append}</InputGroup.Append>}
+      </FormSelect>
+      {append || null}
     </InputGroup>
 
     {error && <Form.Text className="text-danger"> {error} </Form.Text>}

@@ -10,7 +10,7 @@ const ArchiveGroupButton = ({ archived, pending, disabled = false, setArchived, 
     variant={disabled ? 'secondary' : 'info'}
     onClick={setArchived(!archived)}
     disabled={pending || disabled}>
-    {pending ? <LoadingIcon gapRight /> : <ArchiveIcon archived={archived} gapRight />}
+    {pending ? <LoadingIcon gapRight={2} /> : <ArchiveIcon archived={archived} gapRight={2} />}
     {archived === true ? (
       shortLabels ? (
         <FormattedMessage id="app.archiveGroupButton.unsetShort" defaultMessage="Excavate" />

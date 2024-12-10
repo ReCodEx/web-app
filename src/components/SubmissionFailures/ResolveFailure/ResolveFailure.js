@@ -67,7 +67,7 @@ const ResolveFailure = ({
       />
 
       <Button variant="outline-secondary" onClick={onClose}>
-        <CloseIcon gapRight />
+        <CloseIcon gapRight={2} />
         <FormattedMessage id="generic.close" defaultMessage="Close" />
       </Button>
     </Modal.Footer>

@@ -22,10 +22,10 @@ const EvaluationDetail = ({
     noPadding={true}
     collapsable={true}
     isOpen={true}>
-    <Table responsive size="sm" className="mb-1">
+    <Table responsive size="sm" className="card-table">
       <tbody>
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="icon-col">
             <Icon icon={['far', 'clock']} />
           </td>
           <th className="text-nowrap">
@@ -43,7 +43,7 @@ const EvaluationDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="icon-col">
             <Icon icon="cogs" />
           </td>
           <th className="text-nowrap">
@@ -61,7 +61,7 @@ const EvaluationDetail = ({
         </tr>
 
         <tr>
-          <td className="text-center text-muted shrink-col px-2">
+          <td className="icon-col">
             <Icon icon="percent" />
           </td>
           <th className="text-nowrap">
@@ -82,11 +82,11 @@ const EvaluationDetail = ({
               <FormattedNumber style="percent" maximumFractionDigits={3} value={evaluation.score} />
             </b>
             {showScoreDetail && (
-              <span className="float-right clickable text-primary mx-2" onClick={showScoreDetail}>
+              <span className="float-end clickable text-primary mx-2" onClick={showScoreDetail}>
                 <small>
                   <FormattedMessage id="generic.explain" defaultMessage="explain" />
                 </small>
-                <Icon icon="calculator" gapLeft />
+                <Icon icon="calculator" gapLeft={2} />
               </span>
             )}
           </td>
@@ -94,7 +94,7 @@ const EvaluationDetail = ({
 
         {!referenceSolution && maxPoints !== null && (
           <tr>
-            <td className="text-center text-muted shrink-col px-2">
+            <td className="icon-col">
               <Icon icon={['far', 'star']} />
             </td>
             <th className="text-nowrap">
@@ -120,7 +120,7 @@ const EvaluationDetail = ({
 
         {viewResumbissions && (
           <tr>
-            <td className="text-center text-muted shrink-col px-2">
+            <td className="icon-col">
               <BugIcon />
             </td>
             <th className="text-nowrap">

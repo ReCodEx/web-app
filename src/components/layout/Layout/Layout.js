@@ -30,7 +30,8 @@ const Layout = ({
 }) => (
   <div
     className={classnames({
-      wrapper: true,
+      'app-wrapper': true,
+      'sidebar-expand-lg': true,
       'sidebar-mini': true,
       'sidebar-collapse': sidebarIsCollapsed,
       'sidebar-open': sidebarIsOpen,
@@ -53,7 +54,6 @@ const Layout = ({
     />
     <SidebarContainer
       isCollapsed={sidebarIsCollapsed}
-      small={!sidebarIsOpen && sidebarIsCollapsed} // does not always work, but is good enough
       currentUrl={currentUrl}
       pendingFetchOperations={pendingFetchOperations}
     />

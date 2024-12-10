@@ -24,23 +24,23 @@ const AssignmentNavigation = ({
       {
         caption: <FormattedMessage id="app.navigation.assignment" defaultMessage="Assignment" />,
         link: links.ASSIGNMENT_DETAIL_URI_FACTORY(assignmentId),
-        icon: <AssignmentIcon gapRight />,
+        icon: <AssignmentIcon gapRight={2} />,
       },
       canViewSolutions && {
         caption: <FormattedMessage id="app.navigation.allSolutions" defaultMessage="All Solutions" />,
         link: links.ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignmentId),
-        icon: <ResultsIcon gapRight />,
+        icon: <ResultsIcon gapRight={2} />,
       },
       canEdit && {
         caption: <FormattedMessage id="app.navigation.edit" defaultMessage="Edit" />,
         link: links.ASSIGNMENT_EDIT_URI_FACTORY(assignmentId),
-        icon: <EditIcon gapRight />,
+        icon: <EditIcon gapRight={2} />,
       },
       canViewExercise &&
         exerciseId && {
           caption: <FormattedMessage id="app.navigation.exercise" defaultMessage="Exercise" />,
           link: links.EXERCISE_URI_FACTORY(exerciseId),
-          icon: <ExerciseIcon gapRight />,
+          icon: <ExerciseIcon gapRight={2} />,
         },
       ...createGroupLinks(links, groupId, true) /* true = detail, no edit */,
     ]}

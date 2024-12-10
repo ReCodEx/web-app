@@ -8,11 +8,11 @@ const Failed = ({ right, repost }) => (
   <span
     className={classnames({
       'direct-chat-timestamp': true,
-      'float-right': right,
-      'float-left': !right,
+      'float-end': right,
+      'float-start': !right,
     })}
     onClick={repost}>
-    <WarningIcon gapRight />
+    <WarningIcon gapRight={2} />
     <FormattedMessage id="app.comments.publishingFailed" defaultMessage="Publishing Failed" />
   </span>
 );

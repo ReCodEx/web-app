@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
-import { FormLabel, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { FormLabel } from 'react-bootstrap';
 import classnames from 'classnames';
 import { WarningIcon } from '../../icons';
 
 import 'react-toggle/style.css';
-import './OnOffCheckbox.css';  
+import './OnOffCheckbox.css';
 
 const OnOffCheckbox = ({
   children,
@@ -30,15 +30,13 @@ const OnOffCheckbox = ({
     <span className="onOffCheckboxLabelText">
       {children}
       {Boolean(error || warning) && (
-        <OverlayTrigger
-          placement="bottom"
-          overlay={
-            <Tooltip id={`${id}-tooltip`} className="wider-tooltip">
-              {error || warning}
-            </Tooltip>
-          }>
-          <WarningIcon gapLeft className={error ? 'text-danger' : 'text-warning'} />
-        </OverlayTrigger>
+        <WarningIcon
+          gapLeft={2}
+          className={error ? 'text-danger' : 'text-warning'}
+          tooltipId={`${id}-tooltip`}
+          tooltipPlacement="bottom"
+          tooltip={error || warning}
+        />
       )}
     </span>
   </FormLabel>

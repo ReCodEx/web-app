@@ -45,14 +45,14 @@ const FilterUsersListForm = ({
         <Row>
           <Col sm={9} md={10}>
             {knownRoles.map(role => (
-              <span key={`${role}-${locale}`} className="text-nowrap float-left em-padding-right">
+              <span key={`${role}-${locale}`} className="text-nowrap float-start pe-3">
                 <Field name={`roles.${role}`} component={CheckboxField} label={roleLabelsPlural[role]} />
               </span>
             ))}
           </Col>
 
           <Col sm={3} md={2}>
-            <div className="text-right">
+            <div className="text-end">
               <SubmitButton
                 id="setFilters"
                 handleSubmit={handleSubmit}

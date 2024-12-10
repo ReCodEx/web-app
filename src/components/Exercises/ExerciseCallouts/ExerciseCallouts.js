@@ -237,7 +237,7 @@ const ExerciseCallouts = ({
               defaultMessage="A reference solution can be added on the exercise detail page."
             />
             <Link to={`${links.EXERCISE_URI_FACTORY(id)}#reference-solutions`}>
-              <LinkIcon gapLeft />
+              <LinkIcon gapLeft={2} />
             </Link>
           </p>
         )}

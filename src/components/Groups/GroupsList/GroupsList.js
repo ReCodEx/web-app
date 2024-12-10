@@ -28,7 +28,7 @@ const GroupsList = ({ groups = [], renderButtons = () => null, ...props }) => (
                   asLink
                 />
               </td>
-              <td className="text-right">{renderButtons(id)}</td>
+              <td className="text-end">{renderButtons(id)}</td>
             </tr>
           ))}
         </tbody>

@@ -51,14 +51,14 @@ const CommentThread = ({
         </p>
       )}
 
-      <p className="text-center small text-muted">
+      <p className="text-center small text-body-secondary">
         <a
           href="#"
           onClick={ev => {
             ev.preventDefault();
             refresh();
           }}>
-          <RefreshIcon gapRight />
+          <RefreshIcon gapRight={2} />
           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
         </a>
       </p>

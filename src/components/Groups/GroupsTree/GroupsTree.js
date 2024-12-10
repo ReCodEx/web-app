@@ -30,7 +30,7 @@ const defaultButtonsCreator = (
           }>
           <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
             <Button variant="warning" size="xs">
-              <EditIcon smallGapLeft smallGapRight />
+              <EditIcon gapLeft={1} gapRight={1} />
             </Button>
           </Link>
         </OverlayTrigger>
@@ -62,7 +62,7 @@ const defaultButtonsCreator = (
           }>
           <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
             <Button variant="primary" size="xs">
-              <AssignmentsIcon smallGapLeft smallGapRight />
+              <AssignmentsIcon gapLeft={1} gapRight={1} />
             </Button>
           </Link>
         </OverlayTrigger>
@@ -78,7 +78,7 @@ const defaultButtonsCreator = (
           }>
           <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
             <Button variant="primary" size="xs">
-              <StudentsIcon smallGapLeft smallGapRight />
+              <StudentsIcon gapLeft={1} gapRight={1} />
             </Button>
           </Link>
         </OverlayTrigger>

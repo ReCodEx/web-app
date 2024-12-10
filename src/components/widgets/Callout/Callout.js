@@ -18,7 +18,7 @@ const Callout = ({ children, className = '', variant = 'info', icon = null }) =>
   }
 
   return (
-    <div className={`${className} callout callout-${variant}`}>
+    <div className={`${className} callout callout-${variant} mb-3 shadow-sm`}>
       <span className="callout-icon text-white">{icon}</span>
       {children}
     </div>

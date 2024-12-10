@@ -57,7 +57,7 @@ const assignmentCellRendererCreator = lruMemoize((rawAssignments, locale) => {
         </span>
       </OverlayTrigger>
 
-      {points && points.accepted && <Icon icon="circle-check" className={`text-green ${styles.accepted}`} />}
+      {points && points.accepted && <Icon icon="circle-check" className={`text-success ${styles.accepted}`} />}
       {points && points.reviewRequest && <ReviewRequestIcon className={`text-primary ${styles.reviewRequest}`} />}
     </>
   );
@@ -247,7 +247,7 @@ class ResultsTable extends Component {
           {
             headerSuffix: <FormattedMessage id="app.groupResultsTable.maxPointsRow" defaultMessage="Max points:" />,
             headerSuffixClassName: styles.maxPointsRow,
-            className: 'text-left',
+            className: 'text-start',
             comparator: showOnlyMe ? null : ({ user: u1 }, { user: u2 }) => nameComparator(u1, u2),
             cellRenderer: user =>
               user && (
@@ -265,30 +265,27 @@ class ResultsTable extends Component {
                     }
                   />
                   {!isTeacher && user.id === loggedUser.id && hasPermissions(group, 'viewStats') && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id="onlyShowMe">
-                          {showOnlyMe ? (
-                            <FormattedMessage
-                              id="app.resultsTable.cancelOnlyShowMe"
-                              defaultMessage="Show all students in the group"
-                            />
-                          ) : (
-                            <FormattedMessage
-                              id="app.resultsTable.onlyShowMe"
-                              defaultMessage="Hide everyone except for myself"
-                            />
-                          )}
-                        </Tooltip>
-                      }>
-                      <Icon
-                        icon={showOnlyMe ? 'users' : ['far', 'user-circle']}
-                        largeGapLeft
-                        className="text-success"
-                        onClick={this.toggleShowOnlyMe}
-                      />
-                    </OverlayTrigger>
+                    <Icon
+                      icon={showOnlyMe ? 'users' : ['far', 'user-circle']}
+                      gapLeft={3}
+                      className="text-success"
+                      onClick={this.toggleShowOnlyMe}
+                      tooltipId="onlyShowMe"
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        showOnlyMe ? (
+                          <FormattedMessage
+                            id="app.resultsTable.cancelOnlyShowMe"
+                            defaultMessage="Show all students in the group"
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.resultsTable.onlyShowMe"
+                            defaultMessage="Hide everyone except for myself"
+                          />
+                        )
+                      }
+                    />
                   )}
                 </>
               ),
@@ -390,7 +387,7 @@ class ResultsTable extends Component {
             <>
               {stats.hasLimit && stats.passesLimit && <AcceptedIcon className="text-success" />}
               {stats.hasLimit && !stats.passesLimit && (
-                <Icon icon={['far', 'circle-xmark']} className="text-muted half-opaque" />
+                <Icon icon={['far', 'circle-xmark']} className="text-body-secondary opacity-50" />
               )}
             </>
           ),
@@ -401,7 +398,7 @@ class ResultsTable extends Component {
         columns.push(
           new SortableTableColumnDescriptor('buttons', '', {
             headerSuffixClassName: styles.maxPointsRow,
-            className: 'text-right',
+            className: 'text-end',
           })
         );
       }
@@ -485,14 +482,14 @@ class ResultsTable extends Component {
           defaultOrder="user"
           data={this.prepareData(assignments, shadowAssignments, users, stats, this.state.showOnlyMe)}
           empty={
-            <div className="text-center text-muted">
+            <div className="text-center text-body-secondary">
               <FormattedMessage
                 id="app.groupResultsTableRow.noStudents"
                 defaultMessage="There are currently no students in the group."
               />
             </div>
           }
-          className="hover mb-0"
+          className="mb-0"
         />
         {(isAdmin || isSupervisor || isObserver) && (
           <div className="text-center">
@@ -512,7 +509,7 @@ class ResultsTable extends Component {
                   true // add BOM
                 )
               }>
-              <DownloadIcon gapRight />
+              <DownloadIcon gapRight={2} />
               <FormattedMessage id="app.groupResultsTable.downloadCSV" defaultMessage="Download results as CSV" />
             </Button>
           </div>

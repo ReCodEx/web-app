@@ -248,7 +248,7 @@ class GroupAssignments extends Component {
                             hasPermissions(data, 'createShadowAssignment') ? (
                               <div className="text-center">
                                 <Button onClick={this.createShadowAssignment} variant="success">
-                                  <AddIcon gapRight />
+                                  <AddIcon gapRight={2} />
                                   <FormattedMessage
                                     id="app.groupDetail.newShadowAssignment"
                                     defaultMessage="New Shadow Assignment"
@@ -283,7 +283,7 @@ class GroupAssignments extends Component {
                         hasPermissions(data, 'createExercise') && !data.archived ? (
                           <div className="text-center">
                             <Button variant="success" onClick={this.createGroupExercise}>
-                              <AddIcon gapRight />
+                              <AddIcon gapRight={2} />
                               <FormattedMessage
                                 id="app.group.createExercise"
                                 defaultMessage="Create Exercise in Group"

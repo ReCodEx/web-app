@@ -40,11 +40,12 @@ class DatetimeField extends Component {
     } = this.props;
 
     return (
-      <FormGroup controlId={input.name}>
+      <FormGroup controlId={input.name} className="mb-3">
         {Boolean(label) && (
           <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
         )}
         <InputGroup>
+          {prepend || null}
           <UserUIDataContext.Consumer>
             {({ dateFormatOverride = null }) => (
               <Datetime
@@ -66,8 +67,7 @@ class DatetimeField extends Component {
               />
             )}
           </UserUIDataContext.Consumer>
-          {prepend && <InputGroup.Prepend>{prepend}</InputGroup.Prepend>}
-          {append && <InputGroup.Append>{append}</InputGroup.Append>}
+          {append || null}
         </InputGroup>
 
         {error && <Form.Text className="text-danger">{error}</Form.Text>}

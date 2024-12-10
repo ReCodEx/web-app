@@ -32,19 +32,17 @@ const ExpandingInputFilesField = ({
   }
 
   return (
-    <table className="full-width">
+    <table className="w-100">
       <thead>
         <tr>
-          <th className="half-width">{Boolean(leftLabel) && <FormLabel>{leftLabel}</FormLabel>}</th>
-          {fields.length > 0 && (
-            <th className="half-width">{Boolean(rightLabel) && <FormLabel>{rightLabel}</FormLabel>}</th>
-          )}
+          <th className="w-50">{Boolean(leftLabel) && <FormLabel>{leftLabel}</FormLabel>}</th>
+          {fields.length > 0 && <th className="w-50">{Boolean(rightLabel) && <FormLabel>{rightLabel}</FormLabel>}</th>}
         </tr>
       </thead>
       <tbody>
         {fields.map((field, index) => (
           <tr key={index}>
-            <td className="valign-top">
+            <td className="align-top">
               <Field
                 name={`${field}.file`}
                 component={SelectField}
@@ -57,7 +55,7 @@ const ExpandingInputFilesField = ({
               />
             </td>
 
-            <td className="valign-top">
+            <td className="align-top">
               <Field
                 name={`${field}.name`}
                 component={TextField}
@@ -91,10 +89,10 @@ const ExpandingInputFilesField = ({
         {(fields.length === 0 || !readOnly) && (
           <tr>
             <td
-              className={fields.length === 0 ? 'text-muted small' : 'text-center small'}
+              className={fields.length === 0 ? 'text-body-secondary small' : 'text-center small'}
               colSpan={fields.length === 0 ? 1 : 2}>
               {fields.length === 0 && (
-                <span className="pr-3">
+                <span className="pe-3">
                   {noItems || (
                     <FormattedMessage
                       id="app.expandingInputFilesField.noFiles"

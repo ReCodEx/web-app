@@ -27,7 +27,7 @@ const getState = resource => {
 };
 
 const stateIcons = captionAsTooltip => {
-  const iconProps = { smallGapLeft: captionAsTooltip, smallGapRight: captionAsTooltip, gapRight: !captionAsTooltip };
+  const iconProps = { gapLeft: captionAsTooltip ? 1 : 0, gapRight: captionAsTooltip ? 1 : 2 };
   return {
     [states.DELETED]: <SuccessIcon {...iconProps} />,
     [states.LOADING]: <LoadingIcon {...iconProps} />,

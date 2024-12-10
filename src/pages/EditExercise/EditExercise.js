@@ -193,7 +193,7 @@ class EditExercise extends Component {
                         <Col xs={false} sm="auto">
                           <ArchiveExerciseButtonContainer id={exercise.id} size="lg" className="m-2" />
                         </Col>
-                        <Col xs={12} sm className="text-muted">
+                        <Col xs={12} sm className="text-body-secondary">
                           <FormattedMessage
                             id="app.editExercise.archiveExplain"
                             defaultMessage="Archived exercises are not listed by default, cannot be modified, and cannot be assigned. Exercise archive status has no impact on existing assignments. The archiving of exercises is not directly related to group archiving (although they share a similar purpose)."
@@ -222,7 +222,7 @@ class EditExercise extends Component {
                             onDeleted={() => navigate(EXERCISES_URI, { replace: true })}
                           />
                         </Col>
-                        <Col xs={12} sm className="text-muted">
+                        <Col xs={12} sm className="text-body-secondary">
                           <FormattedMessage
                             id="app.editExercise.deleteExerciseWarning"
                             defaultMessage="Deletion of an exercise will not affect any existing assignments nor their solutions, except they could not be synchronized anymore. However, the deletion will effectively remove the exercise from all groups of residence."

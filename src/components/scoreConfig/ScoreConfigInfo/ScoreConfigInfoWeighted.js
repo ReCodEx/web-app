@@ -67,7 +67,7 @@ const ScoreConfigInfoWeighted = ({ scoreConfig, testResults }) => {
               <th>{testsSum}</th>
               <th>
                 {weightsSum}
-                <span className="float-right">= {totalScore}</span>
+                <span className="float-end">= {totalScore}</span>
               </th>
             </tr>
           </tfoot>

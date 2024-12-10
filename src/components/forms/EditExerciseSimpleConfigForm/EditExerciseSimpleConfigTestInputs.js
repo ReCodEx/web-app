@@ -68,7 +68,7 @@ const EditExerciseSimpleConfigTestInputs = ({
             />
           }>
           <Button variant={'primary'} size="xs" disabled={Boolean(testErrors)}>
-            <Icon icon="arrows-alt" gapRight />
+            <Icon icon="arrows-alt" gapRight={2} />
             <FormattedMessage id="app.editExerciseConfigForm.smartFillInput" defaultMessage="Smart Fill Inputs" />
           </Button>
         </Confirm>

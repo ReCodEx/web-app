@@ -3,35 +3,35 @@
 }
 
 .react-toggle--checked .react-toggle-track {
-  background-color: var(--success);
+  background-color: var(--bs-success);
 }
 
 .text-warning .react-toggle .react-toggle-thumb:not(:hover) {
-  border-color: var(--warning);
+  border-color: var(--bs-warning);
 }
 
 .text-warning .react-toggle--checked .react-toggle-track {
-  background-color: var(--warning);
+  background-color: var(--bs-warning);
 }
 
 .text-danger .react-toggle .react-toggle-thumb:not(:hover) {
-  border-color: var(--danger);
+  border-color: var(--bs-danger);
 }
 
 .text-danger .react-toggle--checked .react-toggle-track {
-  background-color: var(--danger);
+  background-color: var(--bs-danger);
 }
 
 .onOffCheckboxLabel {
   cursor: pointer;
-  margin: 0;
+  margin: 0 !important;
   white-space: nowrap;
 }
 
 .onOffCheckboxLabelDisabled {
   cursor: not-allowed;
   color: gray;
-  margin: 0;
+  margin: 0 !important;
   white-space: nowrap;
 }
 

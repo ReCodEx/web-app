@@ -235,7 +235,7 @@ class EditExerciseSimpleConfigForm extends Component {
                 <TheButtonGroup>
                   {dirty && (
                     <Button type="reset" onClick={reset} variant="danger">
-                      <RefreshIcon gapRight />
+                      <RefreshIcon gapRight={2} />
                       <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                     </Button>
                   )}
@@ -248,7 +248,7 @@ class EditExerciseSimpleConfigForm extends Component {
                     hasSucceeded={submitSucceeded}
                     hasFailed={submitFailed}
                     handleSubmit={handleSubmit}
-                    defaultIcon={<SaveIcon gapRight />}
+                    defaultIcon={<SaveIcon gapRight={2} />}
                     messages={SUBMIT_BUTTON_MESSAGES}
                   />
                 </TheButtonGroup>

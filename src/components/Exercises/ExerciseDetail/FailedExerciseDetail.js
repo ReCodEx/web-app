@@ -5,7 +5,7 @@ import { WarningIcon } from '../../icons';
 const FailedExerciseDetail = () => (
   <div>
     <p>
-      <WarningIcon gapRight />
+      <WarningIcon gapRight={2} />
       <FormattedMessage
         id="app.exercises.failedDetail"
         defaultMessage="Loading the details of the exercise failed. Please make sure you are connected to the Internet and try again later."

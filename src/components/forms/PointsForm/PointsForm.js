@@ -54,12 +54,12 @@ const PointsForm = ({
       <Row>
         <Col sm={12}>
           <p>
-            <strong className="mr-2">
+            <strong className="me-2">
               <FormattedMessage id="app.pointsForm.scoredPoints" defaultMessage="Scored points from last evaluation" />:
             </strong>
             {scoredPoints !== null ? scoredPoints : '-'} / {maxPoints}
             {maxPointsEver !== maxPoints && (
-              <small className="ml-3 text-muted">
+              <small className="ms-3 text-body-secondary">
                 <FormattedMessage
                   id="app.pointsForm.maxPointsEver"
                   defaultMessage="(max. points limit regardless deadlines is {maxPointsEver})"

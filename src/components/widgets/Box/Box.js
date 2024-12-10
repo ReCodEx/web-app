@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Collapse from 'react-collapse';
-import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import Icon from '../../icons';
@@ -76,6 +76,7 @@ class Box extends Component {
       <Card
         id={id}
         className={classnames({
+          'mb-3': true,
           'card-outline': !solid && type && type.length > 0,
           [`card-${type}`]: type && type.length > 0,
           [className]: className.length > 0,
@@ -85,25 +86,27 @@ class Box extends Component {
             {title}
 
             <span className="whenTargetted text-warning">
-              <OverlayTrigger
-                placement="bottom"
-                overlay={
-                  <Tooltip id={`highlighter-${id}`}>
-                    <FormattedMessage
-                      id="app.box.highlighterExplanation"
-                      defaultMessage="This box is highlighted. Click to restore."
-                    />
-                  </Tooltip>
-                }>
-                <Icon icon="highlighter" gapLeft timid onClick={this.removeUrlHash} />
-              </OverlayTrigger>
+              <Icon
+                icon="highlighter"
+                gapLeft={2}
+                timid
+                onClick={this.removeUrlHash}
+                tooltipId={`highlighter-${id}`}
+                tooltipPlacement="bottom"
+                tooltip={
+                  <FormattedMessage
+                    id="app.box.highlighterExplanation"
+                    defaultMessage="This box is highlighted. Click to restore."
+                  />
+                }
+              />
             </span>
           </Card.Title>
 
           {customIcons && <span className={styles.customIcons}>{customIcons}</span>}
 
           {collapsable && !customIcons && (
-            <div className="card-tools mr-1">
+            <div className="card-tools me-1">
               <Icon icon={isOpen ? 'minus' : 'plus'} onClick={this.toggleDetails} />
             </div>
           )}
@@ -112,7 +115,7 @@ class Box extends Component {
         <Collapse isOpened={!collapsable || isOpen}>
           <Card.Body
             className={classnames({
-              'no-padding': noPadding,
+              'p-0': noPadding,
               [styles.extraPadding]: !noPadding && extraPadding,
               [styles.limited]: !unlimitedHeight,
               [styles.unlimited]: unlimitedHeight,

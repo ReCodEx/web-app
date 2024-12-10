@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import { Modal, Table, Container, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Modal, Table, Container, Row, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import EditTestsTest from './EditTestsTest.js';
@@ -132,23 +132,20 @@ class EditTestsForm extends Component {
         unlimitedHeight
         customIcons={
           calculator === UNIVERSAL_ID ? (
-            <OverlayTrigger
-              placement="left"
-              overlay={
-                <Tooltip id="expandToggleButton">
-                  <FormattedMessage
-                    id="app.editTestsForm.expandToggleTooltip"
-                    defaultMessage="Toggle compressed/expanded view"
-                  />
-                </Tooltip>
-              }>
-              <Icon
-                icon={this.state.expanded ? 'compress' : 'expand'}
-                size="lg"
-                className="valign-middle"
-                onClick={this.toggleExpanded}
-              />
-            </OverlayTrigger>
+            <Icon
+              icon={this.state.expanded ? 'compress' : 'expand'}
+              size="lg"
+              className="align-middle"
+              onClick={this.toggleExpanded}
+              tooltipId="expandToggleButton"
+              tooltipPlacement="left"
+              tooltip={
+                <FormattedMessage
+                  id="app.editTestsForm.expandToggleTooltip"
+                  defaultMessage="Toggle compressed/expanded view"
+                />
+              }
+            />
           ) : null
         }>
         <>
@@ -158,9 +155,9 @@ class EditTestsForm extends Component {
             </Callout>
           )}
 
-          <Container fluid className="no-padding">
+          <Container fluid className="p-0">
             <Row className={style.relativeContainer}>
-              <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="no-padding">
+              <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="p-0">
                 <FieldArray
                   name="tests"
                   component={EditTestsTest}
@@ -175,7 +172,7 @@ class EditTestsForm extends Component {
                     <TheButtonGroup>
                       {(dirty || (this.getAst() && this.getAst().canUndo())) && !submitting && (
                         <Button type="reset" onClick={this.reset} variant="danger">
-                          <RefreshIcon gapRight />
+                          <RefreshIcon gapRight={2} />
                           <FormattedMessage id="generic.reset" defaultMessage="Reset" />
                         </Button>
                       )}
@@ -188,7 +185,7 @@ class EditTestsForm extends Component {
                         dirty={dirty}
                         hasFailed={submitFailed}
                         handleSubmit={handleSubmit}
-                        defaultIcon={<SaveIcon gapRight />}
+                        defaultIcon={<SaveIcon gapRight={2} />}
                         disabled={formValues.tests.length === 0}
                         messages={{
                           submit: <FormattedMessage id="app.editTestsForm.submit" defaultMessage="Save Tests" />,
@@ -209,7 +206,7 @@ class EditTestsForm extends Component {
                           }
                           hide={!dirty}>
                           <Button onClick={this.openDialog} variant={dirty ? 'secondary' : 'primary'} disabled={dirty}>
-                            <Icon icon="calculator" gapRight />
+                            <Icon icon="calculator" gapRight={2} />
                             <FormattedMessage
                               id="app.editTestsForm.changeCalculator"
                               defaultMessage="Scoring Algorithm"
@@ -244,13 +241,13 @@ class EditTestsForm extends Component {
                                 className={classnames({
                                   'bg-info': calc === calculator,
                                 })}>
-                                <td className="valign-middle shrink-col">
+                                <td className="align-middle shrink-col">
                                   <StandaloneRadioField name="calculator" value={calc} />
                                 </td>
                                 <td>
                                   <strong>{SCORE_CALCULATOR_CAPTIONS[calc]}</strong>
                                   <br />
-                                  <small className="text-muted">{SCORE_CALCULATOR_DESCRIPTIONS[calc]}</small>
+                                  <small className="text-body-secondary">{SCORE_CALCULATOR_DESCRIPTIONS[calc]}</small>
                                 </td>
                               </tr>
                             ))}
@@ -259,7 +256,7 @@ class EditTestsForm extends Component {
 
                         {formValues && formValues.calculator === UNIFORM_ID && formValues.calculator !== calculator && (
                           <p className="text-warning text-center">
-                            <WarningIcon gapRight />
+                            <WarningIcon gapRight={2} />
                             <FormattedMessage
                               id="app.editTestsForm.changeCalculatorModal.warningUniform"
                               defaultMessage="Current algorithm configuration will be removed."
@@ -269,7 +266,7 @@ class EditTestsForm extends Component {
 
                         {formValues && formValues.calculator === WEIGHTED_ID && calculator === UNIVERSAL_ID && (
                           <p className="text-warning text-center">
-                            <WarningIcon gapRight />
+                            <WarningIcon gapRight={2} />
                             <FormattedMessage
                               id="app.editTestsForm.changeCalculatorModal.warningUniversalToWeighted"
                               defaultMessage="Transformation of generic expression into weighted average may cause some reductions in the configuration."
@@ -309,7 +306,7 @@ class EditTestsForm extends Component {
                               }}
                             />
                             <Button onClick={this.closeDialog} variant="outline-secondary">
-                              <CloseIcon gapRight />
+                              <CloseIcon gapRight={2} />
                               <FormattedMessage id="generic.close" defaultMessage="Close" />
                             </Button>
                           </TheButtonGroup>
@@ -325,7 +322,7 @@ class EditTestsForm extends Component {
                   className={classnames({
                     'col-xs-6': this.state.expanded,
                     [style.rightPanel]: !this.state.expanded,
-                    'em-padding-left': true,
+                    'ps-3': true,
                   })}>
                   <ScoreConfigUniversalExpression ast={this.getAst()} tests={formValues.tests} editable={!readOnly} />
                 </div>

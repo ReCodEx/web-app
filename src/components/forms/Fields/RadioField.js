@@ -4,7 +4,7 @@ import { Form, FormGroup, FormCheck } from 'react-bootstrap';
 import classnames from 'classnames';
 
 const RadioField = ({ input, meta: { error, warning, dirty }, ignoreDirty = false, options }) => (
-  <FormGroup controlId={input.name}>
+  <FormGroup controlId={input.name} className="mb-3">
     {options.map(({ key, name }, idx) => (
       <FormCheck type="radio" className="radio-container" key={`radio${idx}-${key}`}>
         <label

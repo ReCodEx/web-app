@@ -8,14 +8,14 @@ const hasFailed = status => status === 'FAILED';
 
 const defaultLoading = noIcons => (
   <span>
-    {!noIcons && <LoadingIcon gapRight />}
+    {!noIcons && <LoadingIcon gapRight={2} />}
     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
   </span>
 );
 
 const defaultFailed = noIcons => (
   <span>
-    {!noIcons && <WarningIcon gapRight />}
+    {!noIcons && <WarningIcon gapRight={2} />}
     <FormattedMessage id="app.resourceRenderer.loadingFailed" defaultMessage="Loading failed." />
   </span>
 );
@@ -35,10 +35,10 @@ const FetchManyResourceRenderer = ({
       ? null
       : loading
     : hasFailed(fetchManyStatus)
-    ? hiddenUntilReady
-      ? null
-      : failed
-    : ready(); // display all ready items
+      ? hiddenUntilReady
+        ? null
+        : failed
+      : ready(); // display all ready items
 };
 
 FetchManyResourceRenderer.propTypes = {

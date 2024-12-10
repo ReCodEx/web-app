@@ -23,7 +23,7 @@ const difficultyCaptions = {
 
 const DifficultyIcon = ({ difficulty }) => (
   <span className={difficultyClassNames[difficulty] || 'text-success'}>
-    <Icon icon={['far', difficultyIcons[difficulty] || 'smile']} smallGapRight />
+    <Icon icon={['far', difficultyIcons[difficulty] || 'smile']} gapRight={1} />
     <small>
       {difficultyCaptions[difficulty] || (
         <FormattedMessage id="app.exercises.difficultyIcon.unknown" defaultMessage="Unknown" />

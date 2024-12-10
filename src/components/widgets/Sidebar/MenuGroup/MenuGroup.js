@@ -36,7 +36,7 @@ class MenuGroup extends Component {
           'menu-open': isActive,
         })}>
         <a href="#" className="nav-link">
-          <Icon icon={icon} gapRight fixedWidth className="nav-icon small" />
+          <Icon icon={icon} gapRight={2} fixedWidth className="nav-icon small" />
           <p className="sidebarMenuItem">
             <Icon icon="angle-left" className="sidebarArrowIcon right" />
             {notificationsCount > 0 && <span className="right badge badge-primary">{notificationsCount}</span>}

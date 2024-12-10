@@ -37,7 +37,7 @@ const ExercisesList = ({
               ) : (
                 <tr key={idx}>
                   <td colSpan={showGroups ? 8 : 7}>
-                    <LoadingIcon gapRight />
+                    <LoadingIcon gapRight={2} />
                     <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
                   </td>
                 </tr>
@@ -46,7 +46,7 @@ const ExercisesList = ({
 
             {exercises.length === 0 && (
               <tr>
-                <td className="text-center text-muted" colSpan={showGroups ? 8 : 7}>
+                <td className="text-center text-body-secondary" colSpan={showGroups ? 8 : 7}>
                   <FormattedMessage
                     id="app.exercisesList.empty"
                     defaultMessage="No exercises match selected filters."

@@ -30,24 +30,24 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
             localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0 ? lang : localeTabs[0].locale
           }
           id="localized-texts">
-          <Card>
-            <Card.Header>
-              <Nav
-                variant="tabs"
-                defaultActiveKey={
-                  localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0
-                    ? lang
-                    : localeTabs[0].locale
-                }
-                className="nav-tabs-custom"
-                id="localized-texts">
-                {localeTabs.map(({ locale }) => (
-                  <Nav.Item key={locale}>
-                    <Nav.Link eventKey={locale}>{locale}</Nav.Link>
-                  </Nav.Item>
-                ))}
-              </Nav>
-            </Card.Header>
+          <Card className="mb-3">
+            <Nav
+              variant="tabs"
+              defaultActiveKey={
+                localeTabs.find(({ locale }) => locale === lang) || localeTabs.length === 0
+                  ? lang
+                  : localeTabs[0].locale
+              }
+              className="nav-tabs-custom px-2 pt-2"
+              id="localized-texts">
+              {localeTabs.map(({ locale }) => (
+                <Nav.Item key={locale}>
+                  <Nav.Link eventKey={locale} onClick={ev => ev.currentTarget.blur()}>
+                    {locale}
+                  </Nav.Link>
+                </Nav.Item>
+              ))}
+            </Nav>
             <Tab.Content>
               {localeTabs.map(({ locale, text, link = '', studentHint = null }) => (
                 <Tab.Pane key={locale} eventKey={locale}>
@@ -61,7 +61,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                               defaultMessage="The description is located beyond the realms of ReCodEx"
                             />
                           </h4>
-                          <Icon icon="link" gapRight />
+                          <Icon icon="link" gapRight={2} />
                           <a href={link} target="_blank" rel="noopener noreferrer">
                             {link}
                           </a>
@@ -73,7 +73,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                     {text.trim() !== '' && <Markdown source={text} />}
 
                     {!text.trim() && !link && (
-                      <Callout variant="warning" className="em-margin">
+                      <Callout variant="warning" className="m-3">
                         <FormattedMessage
                           id="app.localizedTexts.noText"
                           defaultMessage="There is no text nor link for given localization. The exercise is not fully specified yet."

@@ -93,8 +93,8 @@ class PlagiarismCodeBox extends Component {
       this.state.selectedFragment !== null
         ? data[data.indexOf(this.state.selectedFragment) + 1] || null
         : data.length > 0
-        ? data[0]
-        : null;
+          ? data[0]
+          : null;
 
     this.setState({ selectedFragment });
   };
@@ -171,7 +171,7 @@ class PlagiarismCodeBox extends Component {
             key={`${id}-loading`}
             title={
               <>
-                <LoadingIcon gapRight />
+                <LoadingIcon gapRight={2} />
                 <code>{name}</code>
               </>
             }
@@ -198,45 +198,46 @@ class PlagiarismCodeBox extends Component {
                 <>
                   <div>
                     {similarity && (
-                      <Badge variant={similarity > 0.8 ? 'danger' : 'warning'} className="mr-3">
+                      <Badge bg={similarity > 0.8 ? 'danger' : 'warning'} className="me-3">
                         {<FormattedNumber value={similarity * 100} maximumFractionDigits={1} />} %
                       </Badge>
                     )}
                     {content.malformedCharacters && (
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`${id}-malformed`}>
-                            <FormattedMessage
-                              id="app.solutionSourceCodes.malformedTooltip"
-                              defaultMessage="The file is not a valid UTF-8 text file so it cannot be properly displayed as a source code."
-                            />
-                          </Tooltip>
-                        }>
-                        <WarningIcon className="text-danger" gapRight />
-                      </OverlayTrigger>
+                      <WarningIcon
+                        className="text-danger"
+                        gapRight={2}
+                        tooltipId={`${id}-malformed`}
+                        tooltipPlacement="bottom"
+                        tooltip={
+                          <FormattedMessage
+                            id="app.solutionSourceCodes.malformedTooltip"
+                            defaultMessage="The file is not a valid UTF-8 text file so it cannot be properly displayed as a source code."
+                          />
+                        }
+                      />
                     )}
 
                     {content.tooLarge && (
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`${id}-tooLarge`}>
-                            <FormattedMessage
-                              id="app.solutionSourceCodes.tooLargeTooltip"
-                              defaultMessage="The file is too large for code preview and it was cropped."
-                            />
-                          </Tooltip>
-                        }>
-                        <Icon icon="scissors" className="text-warning" gapRight />
-                      </OverlayTrigger>
+                      <Icon
+                        icon="scissors"
+                        className="text-warning"
+                        gapRight={2}
+                        tooltipId={`${id}-tooLarge`}
+                        tooltipPlacement="bottom"
+                        tooltip={
+                          <FormattedMessage
+                            id="app.solutionSourceCodes.tooLargeTooltip"
+                            defaultMessage="The file is too large for code preview and it was cropped."
+                          />
+                        }
+                      />
                     )}
 
-                    <code className="text-bold">{name}</code>
+                    <code className="fw-bold">{name}</code>
 
                     {download && (
                       <DownloadIcon
-                        gapLeft
+                        gapLeft={2}
                         timid
                         className="text-primary"
                         onClick={ev => {
@@ -247,7 +248,7 @@ class PlagiarismCodeBox extends Component {
                     )}
 
                     {authorId && (
-                      <small className="ml-2 text-muted">
+                      <small className="ms-2 text-body-secondary">
                         (<UsersNameContainer userId={authorId} isSimple noAutoload />)
                       </small>
                     )}
@@ -266,9 +267,9 @@ class PlagiarismCodeBox extends Component {
                           </Tooltip>
                         }>
                         <span onClick={openSelectFileDialog} className="clickable">
-                          <CodeCompareIcon className="text-primary" gapRight />
+                          <CodeCompareIcon className="text-primary" gapRight={2} />
                           {sourceFilesCount > 1 && (
-                            <small className="text-muted">
+                            <small className="text-body-secondary">
                               (
                               <FormattedMessage
                                 id="app.solutionSourceCodes.adjustMappingFiles"
@@ -281,49 +282,50 @@ class PlagiarismCodeBox extends Component {
                         </span>
                       </OverlayTrigger>
                     ) : (
-                      <CodeCompareIcon className="text-muted ml-4 mr-3" />
+                      <CodeCompareIcon className="text-body-secondary ms-4 me-3" />
                     )}
                   </div>
 
                   <div>
                     {secondContent.malformedCharacters && (
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`${id}-malformed2`}>
-                            <FormattedMessage
-                              id="app.solutionSourceCodes.malformedTooltip"
-                              defaultMessage="The file is not a valid UTF-8 text file so it cannot be properly displayed as a source code."
-                            />
-                          </Tooltip>
-                        }>
-                        <WarningIcon className="text-danger" gapRight />
-                      </OverlayTrigger>
+                      <WarningIcon
+                        className="text-danger"
+                        gapRight={2}
+                        tooltipId={`${id}-malformed2`}
+                        tooltipPlacement="bottom"
+                        tooltip={
+                          <FormattedMessage
+                            id="app.solutionSourceCodes.malformedTooltip"
+                            defaultMessage="The file is not a valid UTF-8 text file so it cannot be properly displayed as a source code."
+                          />
+                        }
+                      />
                     )}
 
                     {secondContent.tooLarge && (
-                      <OverlayTrigger
-                        placement="bottom"
-                        overlay={
-                          <Tooltip id={`${id}-tooLarge2`}>
-                            <FormattedMessage
-                              id="app.solutionSourceCodes.tooLargeTooltip"
-                              defaultMessage="The file is too large for code preview and it was cropped."
-                            />
-                          </Tooltip>
-                        }>
-                        <Icon icon="scissors" className="text-warning" gapRight />
-                      </OverlayTrigger>
+                      <Icon
+                        icon="scissors"
+                        className="text-warning"
+                        gapRight={2}
+                        tooltipId={`${id}-tooLarge2`}
+                        tooltipPlacement="bottom"
+                        tooltip={
+                          <FormattedMessage
+                            id="app.solutionSourceCodes.tooLargeTooltip"
+                            defaultMessage="The file is too large for code preview and it was cropped."
+                          />
+                        }
+                      />
                     )}
 
-                    <code className="text-bold">
+                    <code className="fw-bold">
                       {selectedPlagiarismFile.solutionFile.name}
                       {selectedPlagiarismFile.fileEntry ? `/${selectedPlagiarismFile.fileEntry}` : ''}
                     </code>
 
                     {download && (
                       <DownloadIcon
-                        gapLeft
+                        gapLeft={2}
                         timid
                         className="text-primary"
                         onClick={ev => {
@@ -339,7 +341,7 @@ class PlagiarismCodeBox extends Component {
                     )}
 
                     {sourceAuthorId && (
-                      <small className="ml-2 text-muted">
+                      <small className="ms-2 text-body-secondary">
                         (#{selectedPlagiarismFile.solution.attemptIndex},
                         <UsersNameContainer userId={sourceAuthorId} isSimple noAutoload />)
                       </small>
@@ -359,53 +361,58 @@ class PlagiarismCodeBox extends Component {
                             selectedPlagiarismFile.assignment.id,
                             selectedPlagiarismFile.solution.id
                           )}>
-                          <SolutionResultsIcon gapLeft className="text-primary" timid />
+                          <SolutionResultsIcon gapLeft={2} className="text-primary" timid />
                         </Link>
                       ) : (
-                        <SolutionResultsIcon gapLeft className="text-muted" timid />
+                        <span>
+                          <SolutionResultsIcon gapLeft={2} className="text-body-secondary" timid />
+                        </span>
                       )}
                     </OverlayTrigger>
 
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`${id}-groupIcon`}>
-                          <GroupsNameContainer groupId={selectedPlagiarismFile.groupId} fullName admins />
-                        </Tooltip>
-                      }>
-                      {selectedPlagiarismFile.assignment.canViewDetail ? (
-                        <Link to={GROUP_STUDENTS_URI_FACTORY(selectedPlagiarismFile.groupId)}>
-                          <GroupIcon gapLeft className="text-primary" timid />
-                        </Link>
-                      ) : (
-                        <GroupIcon gapLeft className="text-muted" timid />
-                      )}
-                    </OverlayTrigger>
+                    {selectedPlagiarismFile.assignment.canViewDetail ? (
+                      <Link to={GROUP_STUDENTS_URI_FACTORY(selectedPlagiarismFile.groupId)}>
+                        <GroupIcon
+                          gapLeft={2}
+                          className="text-primary"
+                          timid
+                          tooltipId={`${id}-groupIcon`}
+                          tooltipPlacement="bottom"
+                          tooltip={<GroupsNameContainer groupId={selectedPlagiarismFile.groupId} fullName admins />}
+                        />
+                      </Link>
+                    ) : (
+                      <GroupIcon
+                        gapLeft={2}
+                        className="text-body-secondary"
+                        timid
+                        tooltipId={`${id}-groupIcon`}
+                        tooltipPlacement="bottom"
+                        tooltip={<GroupsNameContainer groupId={selectedPlagiarismFile.groupId} fullName admins />}
+                      />
+                    )}
 
-                    <span className="ml-4">
-                      <OverlayTrigger
-                        placement="left"
-                        overlay={
-                          <Tooltip id={`${id}-fullWidthIcon`}>
-                            {this.state.fullWidth ? (
-                              <FormattedMessage
-                                id="app.solutionSourceCodes.restrictWidthTooltip"
-                                defaultMessage="Restrict the width of each column to the half of the screen."
-                              />
-                            ) : (
-                              <FormattedMessage
-                                id="app.solutionSourceCodes.fullWidthTooltip"
-                                defaultMessage="Enable full width of each column even if the box exceeds the screen width."
-                              />
-                            )}
-                          </Tooltip>
-                        }>
-                        {this.state.fullWidth ? (
-                          <Icon icon="arrows-left-right-to-line" timid onClick={this.toggleFullWidth} />
-                        ) : (
-                          <Icon icon="arrows-left-right" timid onClick={this.toggleFullWidth} />
-                        )}
-                      </OverlayTrigger>
+                    <span className="ms-4">
+                      <Icon
+                        icon={this.state.fullWidth ? 'arrows-left-right-to-line' : 'arrows-left-right'}
+                        timid
+                        onClick={this.toggleFullWidth}
+                        tooltipId={`${id}-fullWidthIcon`}
+                        tooltipPlacement="left"
+                        tooltip={
+                          this.state.fullWidth ? (
+                            <FormattedMessage
+                              id="app.solutionSourceCodes.restrictWidthTooltip"
+                              defaultMessage="Restrict the width of each column to the half of the screen."
+                            />
+                          ) : (
+                            <FormattedMessage
+                              id="app.solutionSourceCodes.fullWidthTooltip"
+                              defaultMessage="Enable full width of each column even if the box exceeds the screen width."
+                            />
+                          )
+                        }
+                      />
                     </span>
                   </div>
                 </>

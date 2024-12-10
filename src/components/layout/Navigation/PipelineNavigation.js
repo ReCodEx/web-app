@@ -18,17 +18,17 @@ const PipelineNavigation = ({
       canViewDetail && {
         caption: <FormattedMessage id="app.navigation.pipeline" defaultMessage="Pipeline" />,
         link: PIPELINE_URI_FACTORY(pipelineId),
-        icon: <PipelineIcon gapRight />,
+        icon: <PipelineIcon gapRight={2} />,
       },
       canEdit && {
         caption: <FormattedMessage id="app.navigation.edit" defaultMessage="Edit" />,
         link: PIPELINE_EDIT_URI_FACTORY(pipelineId),
-        icon: <EditIcon gapRight />,
+        icon: <EditIcon gapRight={2} />,
       },
       canEdit && {
         caption: <FormattedMessage id="app.navigation.pipelineStructure" defaultMessage="Structure" />,
         link: PIPELINE_EDIT_STRUCT_URI_FACTORY(pipelineId),
-        icon: <PipelineStructureIcon gapRight />,
+        icon: <PipelineStructureIcon gapRight={2} />,
       },
     ]}
   />

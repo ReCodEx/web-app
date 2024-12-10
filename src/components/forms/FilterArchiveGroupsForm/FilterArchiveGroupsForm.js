@@ -55,7 +55,7 @@ const FilterArchiveGroupsForm = ({
               }
             />
           </Col>
-          <Col sm={12} md={2} className="text-right align-self-center">
+          <Col sm={12} md={2} className="text-end align-self-center">
             <SubmitButton
               id="setFilters"
               handleSubmit={handleSubmit}

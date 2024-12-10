@@ -77,7 +77,7 @@ const EditShadowAssignmentPointsForm = ({
             label={<FormattedMessage id="app.editShadowAssignmentPointsForm.awardedAt" defaultMessage="Awarded at:" />}
             append={
               <Button variant="primary" noShadow onClick={() => change('awardedAt', moment().startOf('minute'))}>
-                <Icon icon="history" gapRight />
+                <Icon icon="history" gapRight={2} />
                 <FormattedMessage id="app.editShadowAssignmentPointsForm.setNow" defaultMessage="Now" />
               </Button>
             }
@@ -105,7 +105,7 @@ const EditShadowAssignmentPointsForm = ({
       <TheButtonGroup>
         {dirty && (
           <Button type="reset" onClick={reset} variant={'danger'}>
-            <RefreshIcon gapRight />
+            <RefreshIcon gapRight={2} />
             <FormattedMessage id="generic.reset" defaultMessage="Reset" />
           </Button>
         )}
@@ -117,7 +117,7 @@ const EditShadowAssignmentPointsForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          defaultIcon={<SaveIcon gapRight />}
+          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
@@ -127,7 +127,7 @@ const EditShadowAssignmentPointsForm = ({
 
         {onRemovePoints && (
           <Button onClick={onRemovePoints} variant="danger">
-            <DeleteIcon gapRight />
+            <DeleteIcon gapRight={2} />
             <FormattedMessage
               id="app.editShadowAssignmentPointsForm.removePoints"
               defaultMessage="Remove Points Record"

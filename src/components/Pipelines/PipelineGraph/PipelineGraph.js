@@ -271,7 +271,7 @@ const PipelineGraph = ({
     }, [boxes, variables, utilization, selectedBox, selectedVariable]);
 
     return (
-      <InsetPanel className={`m-0 p-0 ${pending ? 'half-opaque' : ''}`}>
+      <InsetPanel className={`m-0 p-0 ${pending ? 'opacity-50' : ''}`}>
         {canUseDOM && svg ? (
           <div
             className={styles.pipelineGraph}

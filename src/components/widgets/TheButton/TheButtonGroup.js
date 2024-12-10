@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './styles.css';
 
 const TheButtonGroup = ({ children, noShadow = false, vertical = false, className = '' }) => {
-  const classNames = ['theButtonGroup', noShadow ? '' : 'elevation-2', vertical ? 'vertical' : '', className];
+  const classNames = ['theButtonGroup', noShadow ? '' : 'shadow-sm', vertical ? 'vertical' : '', className];
   return <div className={classNames.filter(c => c).join(' ')}>{children}</div>;
 };
 

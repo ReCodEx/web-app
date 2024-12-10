@@ -70,7 +70,7 @@ class EditExerciseAdvancedConfigTest extends Component {
           <td colSpan={4}>
             <h3>{testName}</h3>
           </td>
-          <td className="shrink-col text-right">
+          <td className="shrink-col text-end">
             {Boolean(rawFill) && !readOnly && (
               <Confirm
                 id="rawFill-all"
@@ -82,7 +82,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                   />
                 }>
                 <Button variant="primary" size="sm" disabled={Boolean(testErrors)}>
-                  <Icon icon="arrows-alt" gapRight />
+                  <Icon icon="arrows-alt" gapRight={2} />
                   <FormattedMessage id="app.editExerciseConfigForm.rawFillTest" defaultMessage="Spread Test" />
                 </Button>
               </Confirm>
@@ -94,11 +94,11 @@ class EditExerciseAdvancedConfigTest extends Component {
             <tr className={styles.pipelineName}>
               <td colSpan={4}>
                 <h5>
-                  <PipelineIcon gapRight />
+                  <PipelineIcon gapRight={2} />
                   {safeGet(pipelines, [({ id }) => id === pipelineId, 'name'])}
                 </h5>
               </td>
-              <td className="shrink-col text-right">
+              <td className="shrink-col text-end">
                 {Boolean(rawFill) && !readOnly && (
                   <Confirm
                     id={`rawFill-${idx}`}
@@ -110,7 +110,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                       />
                     }>
                     <Button variant="primary" size="xs" disabled={Boolean(safeGet(testErrors, [idx]))}>
-                      <Icon icon="arrows-alt" gapRight />
+                      <Icon icon="arrows-alt" gapRight={2} />
                       <FormattedMessage
                         id="app.editExerciseConfigForm.rawFillPipeline"
                         defaultMessage="Spread Pipeline"
@@ -130,10 +130,10 @@ class EditExerciseAdvancedConfigTest extends Component {
                     <code>{type}</code>
                   </td>
                   <td>{this.createField(`${test}[${idx}].${encodeId(name)}`, type)}</td>
-                  <td className="text-muted small">
+                  <td className="text-body-secondary small">
                     {/* TODO -- description once additional metadata are added to pipelines */}
                   </td>
-                  <td className="shrink-col text-right">
+                  <td className="shrink-col text-end">
                     {Boolean(rawFill) && !readOnly && (
                       <Confirm
                         id={`rawFill-${idx}-${name}`}
@@ -148,7 +148,7 @@ class EditExerciseAdvancedConfigTest extends Component {
                           variant="primary"
                           size="xs"
                           disabled={Boolean(safeGet(testErrors, [idx, encodeId(name)]))}>
-                          <Icon icon="arrows-alt" gapRight />
+                          <Icon icon="arrows-alt" gapRight={2} />
                           <FormattedMessage id="app.editExerciseConfigForm.rawFill" defaultMessage="Spread" />
                         </Button>
                       </Confirm>

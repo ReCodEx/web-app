@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import { Table, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
 
@@ -20,6 +20,44 @@ const prepareSelectionIndex = lruMemoize(
     )
 );
 
+const getIconTooltip = (portsIn, portsOut) =>
+  portsOut > 1 ? (
+    <FormattedMessage
+      id="app.pipelines.variablesTable.tooManyOutputsAttached"
+      defaultMessage="Variable is attached to more than one output port!"
+    />
+  ) : portsIn && portsOut ? (
+    <FormattedMessage
+      id="app.pipelines.variablesTable.interconnectingVariable"
+      defaultMessage="An interconnecting variable"
+    />
+  ) : portsIn ? (
+    <FormattedMessage id="app.pipelines.variablesTable.inputVariable" defaultMessage="An input variable" />
+  ) : portsOut ? (
+    <FormattedMessage id="app.pipelines.variablesTable.outputVariable" defaultMessage="An output variable" />
+  ) : (
+    <FormattedMessage id="app.pipelines.variablesTable.unused" defaultMessage="This variable is not used in any box" />
+  );
+
+const getIcon = (portsIn, portsOut, tooltipId) => {
+  const props = {
+    tooltipId,
+    tooltipPosition: 'bottom',
+    tooltip: getIconTooltip(portsIn, portsOut),
+  };
+  return portsOut > 1 ? (
+    <WarningIcon className="text-danger" {...props} />
+  ) : portsIn && portsOut ? (
+    <TransferIcon className="text-body-secondary" {...props} />
+  ) : portsIn ? (
+    <InputIcon className="text-primary" {...props} />
+  ) : portsOut ? (
+    <OutputIcon className="text-success" {...props} />
+  ) : (
+    <WarningIcon className="text-warning" {...props} />
+  );
+};
+
 const VariablesTable = ({
   variables,
   utilization = null,
@@ -34,7 +72,7 @@ const VariablesTable = ({
   const secondarySelectionsIndexed = secondarySelections && prepareSelectionIndex(secondarySelections);
 
   return (
-    <Table hover={variables.length > 0 && !pending} className={pending ? 'half-opaque' : ''} size="sm">
+    <Table hover={variables.length > 0 && !pending} className={pending ? 'opacity-50' : ''} size="sm">
       <thead>
         <tr>
           {utilization && <th />}
@@ -66,60 +104,13 @@ const VariablesTable = ({
                   [styles.primarySelection]: primarySelection === variable.name,
                   [styles.secondarySelection]: secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
                 })}>
-                {utilization && (
-                  <td className="shrink-col">
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`util-${variable.name}`}>
-                          {portsOut > 1 ? (
-                            <FormattedMessage
-                              id="app.pipelines.variablesTable.tooManyOutputsAttached"
-                              defaultMessage="Variable is attached to more than one output port!"
-                            />
-                          ) : portsIn && portsOut ? (
-                            <FormattedMessage
-                              id="app.pipelines.variablesTable.interconnectingVariable"
-                              defaultMessage="An interconnecting variable"
-                            />
-                          ) : portsIn ? (
-                            <FormattedMessage
-                              id="app.pipelines.variablesTable.inputVariable"
-                              defaultMessage="An input variable"
-                            />
-                          ) : portsOut ? (
-                            <FormattedMessage
-                              id="app.pipelines.variablesTable.outputVariable"
-                              defaultMessage="An output variable"
-                            />
-                          ) : (
-                            <FormattedMessage
-                              id="app.pipelines.variablesTable.unused"
-                              defaultMessage="This variable is not used in any box"
-                            />
-                          )}
-                        </Tooltip>
-                      }>
-                      {portsOut > 1 ? (
-                        <WarningIcon className="text-danger" />
-                      ) : portsIn && portsOut ? (
-                        <TransferIcon className="text-muted" />
-                      ) : portsIn ? (
-                        <InputIcon className="text-primary" />
-                      ) : portsOut ? (
-                        <OutputIcon className="text-success" />
-                      ) : (
-                        <WarningIcon className="text-warning" />
-                      )}
-                    </OverlayTrigger>
-                  </td>
-                )}
+                {utilization && <td className="shrink-col">{getIcon(portsIn, portsOut, `util-${variable.name}`)}</td>}
 
                 <td
                   className={classnames({
                     'text-danger': portsOut > 1,
-                    'text-bold': primarySelection === variable.name,
-                    'text-italic': secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
+                    'fw-bold': primarySelection === variable.name,
+                    'fst-italic': secondarySelectionsIndexed && secondarySelectionsIndexed[variable.name],
                   })}>
                   {variable.name}
                 </td>
@@ -128,18 +119,18 @@ const VariablesTable = ({
                 </td>
                 <td>
                   {!isVariableValueValid(variable) && (
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`util-${variable.name}`}>
-                          <FormattedMessage
-                            id="app.pipelines.variablesTable.wrongValueType"
-                            defaultMessage="Variable value has a different type than declared."
-                          />
-                        </Tooltip>
-                      }>
-                      <WarningIcon gapLeft className="text-danger float-right m-1" />
-                    </OverlayTrigger>
+                    <WarningIcon
+                      gapLeft={2}
+                      className="text-danger float-end m-1"
+                      tooltipId={`util-${variable.name}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.pipelines.variablesTable.wrongValueType"
+                          defaultMessage="Variable value has a different type than declared."
+                        />
+                      }
+                    />
                   )}
 
                   {Array.isArray(variable.value) ? (
@@ -172,7 +163,7 @@ const VariablesTable = ({
 
         {variables.length === 0 && (
           <tr>
-            <td colSpan={7} className="text-center text-muted small">
+            <td colSpan={7} className="text-center text-body-secondary small">
               <em>
                 <FormattedMessage
                   id="app.pipelines.variablesTable.noVariables"

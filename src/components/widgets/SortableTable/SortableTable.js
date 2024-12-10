@@ -117,12 +117,12 @@ class SortableTable extends Component {
                           <SortedIcon
                             active={sortColumn === column.id}
                             descending={!ascendant}
-                            gapLeft
+                            gapLeft={2}
                             onClick={() => this.orderBy(column.id)}
                           />
 
                           {sortColumn === column.id && !defaultOrder && (
-                            <CloseIcon smallGapLeft timid className="text-danger" onClick={() => this.orderBy(null)} />
+                            <CloseIcon gapLeft={1} timid className="text-danger" onClick={() => this.orderBy(null)} />
                           )}
                         </span>
                       )}

@@ -260,7 +260,7 @@ class SisIntegration extends Component {
                                           size="xs"
                                           variant="success"
                                           onClick={() => this.openPlantDialog(data, groups)}>
-                                          <Icon icon="seedling" gapRight />
+                                          <Icon icon="seedling" gapRight={2} />
                                           <FormattedMessage
                                             id="app.sisIntegration.plantButton"
                                             defaultMessage="Plant"
@@ -271,14 +271,14 @@ class SisIntegration extends Component {
                                         size="xs"
                                         variant="primary"
                                         onClick={() => this.openArchiveDialog(data, groups)}>
-                                        <ArchiveIcon gapRight />
+                                        <ArchiveIcon gapRight={2} />
                                         <FormattedMessage
                                           id="app.archiveGroupButton.setShort"
                                           defaultMessage="Archive"
                                         />
                                       </Button>
                                       <Button size="xs" variant="warning" onClick={() => this.openEditDialog(id, data)}>
-                                        <EditIcon gapRight />
+                                        <EditIcon gapRight={2} />
                                         <FormattedMessage id="generic.edit" defaultMessage="Edit" />
                                       </Button>
                                       <Confirm
@@ -291,7 +291,7 @@ class SisIntegration extends Component {
                                           />
                                         }>
                                         <Button size="xs" variant="danger">
-                                          <DeleteIcon gapRight />
+                                          <DeleteIcon gapRight={2} />
                                           <FormattedMessage id="generic.delete" defaultMessage="Delete" />
                                         </Button>
                                       </Confirm>

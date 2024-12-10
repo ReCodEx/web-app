@@ -118,7 +118,7 @@ class ExternalLinkPreview extends Component {
     return url !== null ? (
       <div>
         {text && (
-          <OnOffCheckbox checked={isMarkdown} onChange={this.toggleIsMarkdown} className="float-right">
+          <OnOffCheckbox checked={isMarkdown} onChange={this.toggleIsMarkdown} className="float-end">
             <FormattedMessage id="app.externalLinkPreview.showAsMarkdown" defaultMessage="Show as markdown" />
           </OnOffCheckbox>
         )}
@@ -131,7 +131,7 @@ class ExternalLinkPreview extends Component {
 
         {pending && (
           <InsetPanel>
-            <LoadingIcon gapRight />
+            <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </InsetPanel>
         )}

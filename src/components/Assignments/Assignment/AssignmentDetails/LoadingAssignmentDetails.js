@@ -8,7 +8,7 @@ const LoadingAssignmentDetails = () => (
   <Box
     title={
       <span>
-        <LoadingIcon gapRight />
+        <LoadingIcon gapRight={2} />
         <FormattedMessage id="app.assignment.loading" defaultMessage="Loading exercise assignment..." />
       </span>
     }

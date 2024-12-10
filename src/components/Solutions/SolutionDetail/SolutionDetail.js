@@ -132,7 +132,7 @@ class SolutionDetail extends Component {
                 <table>
                   <tbody>
                     <tr>
-                      <td width="100%" className="em-padding-right">
+                      <td width="100%" className="pe-3">
                         <FormattedMessage
                           id="app.submissionEvaluation.noEvaluationYet"
                           defaultMessage="The evaluation is not available yet. Click the refresh button for an update."
@@ -140,7 +140,7 @@ class SolutionDetail extends Component {
                       </td>
                       <td>
                         <Button onClick={refreshSolutionEvaluations} variant="primary">
-                          <RefreshIcon gapRight />
+                          <RefreshIcon gapRight={2} />
                           <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
                         </Button>
                       </td>

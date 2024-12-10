@@ -48,6 +48,15 @@ const getImportantSolutions = lruMemoize((solutions, selectedSolutionId) => {
   return { selectedIdx, accepted, best, lastReviewed };
 });
 
+const createDeadlineIcon = (createdAt, firstDeadline, secondDeadline, props) =>
+  createdAt < firstDeadline ? (
+    <Icon icon={['far', 'circle-check']} className="text-success" {...props} />
+  ) : secondDeadline && createdAt < secondDeadline ? (
+    <InvertIcon className="text-warning" {...props} />
+  ) : (
+    <PastDeadlineIcon className="text-body-secondary" {...props} />
+  );
+
 class SolutionStatus extends Component {
   state = { editDialogOpen: false, explainDialogOpen: false, otherSolutionsDialogOpen: false };
 
@@ -136,10 +145,10 @@ class SolutionStatus extends Component {
           noPadding={true}
           collapsable={true}
           isOpen={true}>
-          <Table responsive size="sm" className="mb-1">
+          <Table size="sm" className="card-table">
             <tbody>
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="icon-col">
                   <UserIcon />
                 </td>
                 <th className="text-nowrap">
@@ -157,7 +166,7 @@ class SolutionStatus extends Component {
 
               {Boolean(submittedBy) && submittedBy !== authorId && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="icon-col">
                     <SupervisorIcon />
                   </td>
                   <th className="text-nowrap">
@@ -177,7 +186,7 @@ class SolutionStatus extends Component {
 
               {(referenceSolution || note.length > 0 || Boolean(editNote)) && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="icon-col">
                     <NoteIcon />
                   </td>
                   <th className="text-nowrap">
@@ -201,13 +210,13 @@ class SolutionStatus extends Component {
                     {referenceSolution || note.length > 0 ? (
                       note
                     ) : (
-                      <em className="text-muted small">
+                      <em className="text-body-secondary small">
                         <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
                       </em>
                     )}
 
                     {Boolean(editNote) && (
-                      <span className="float-right text-warning mx-2">
+                      <span className="float-end text-warning mx-2">
                         <EditIcon onClick={this.openEditDialog} />
                       </span>
                     )}
@@ -216,7 +225,7 @@ class SolutionStatus extends Component {
               )}
 
               <tr>
-                <td className="text-center text-muted shrink-col px-2">
+                <td className="icon-col">
                   <Icon icon={['far', 'clock']} />
                 </td>
 
@@ -241,39 +250,28 @@ class SolutionStatus extends Component {
                       </Explanation>
                     </th>
                     <td>
-                      <span className="mr-2">
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="deadlineInfo">
-                              {createdAt < firstDeadline ? (
-                                <FormattedMessage
-                                  id="app.solution.submittedBeforeFirstDeadline"
-                                  defaultMessage="The solution was submitted before the deadline"
-                                />
-                              ) : allowSecondDeadline && createdAt < secondDeadline ? (
-                                <FormattedMessage
-                                  id="app.solution.submittedBeforeSecondDeadline"
-                                  defaultMessage="The solution was submitted after the first but still before the second deadline"
-                                />
-                              ) : (
-                                <FormattedMessage
-                                  id="app.solution.submittedAfterDeadlines"
-                                  defaultMessage="The solution was submitted after the deadline"
-                                />
-                              )}
-                            </Tooltip>
-                          }>
-                          <span>
-                            {createdAt < firstDeadline ? (
-                              <Icon icon={['far', 'circle-check']} className="text-success" />
+                      <span className="me-2">
+                        {createDeadlineIcon(createdAt, firstDeadline, allowSecondDeadline ? secondDeadline : null, {
+                          tooltipId: 'deadlineInfo',
+                          tooltipPlacement: 'bottom',
+                          tooltip:
+                            createdAt < firstDeadline ? (
+                              <FormattedMessage
+                                id="app.solution.submittedBeforeFirstDeadline"
+                                defaultMessage="The solution was submitted before the deadline"
+                              />
                             ) : allowSecondDeadline && createdAt < secondDeadline ? (
-                              <InvertIcon className="text-warning" />
+                              <FormattedMessage
+                                id="app.solution.submittedBeforeSecondDeadline"
+                                defaultMessage="The solution was submitted after the first but still before the second deadline"
+                              />
                             ) : (
-                              <PastDeadlineIcon className="text-muted" />
-                            )}
-                          </span>
-                        </OverlayTrigger>
+                              <FormattedMessage
+                                id="app.solution.submittedAfterDeadlines"
+                                defaultMessage="The solution was submitted after the deadline"
+                              />
+                            ),
+                        })}
                       </span>
 
                       <DateTime unixts={createdAt} />
@@ -281,7 +279,7 @@ class SolutionStatus extends Component {
                       {createdAt > firstDeadline && (
                         <>
                           <span className="px-1"> </span>
-                          <small className="text-muted">
+                          <small className="text-body-secondary">
                             ({moment.duration(firstDeadline - createdAt, 'seconds').humanize()}{' '}
                             <FormattedMessage id="app.solution.afterDeadline" defaultMessage="after the deadline" />)
                           </small>
@@ -294,7 +292,7 @@ class SolutionStatus extends Component {
 
               {Boolean(environment) && Boolean(environment.name) && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="icon-col">
                     <CodeIcon />
                   </td>
                   <th className="text-nowrap">
@@ -314,7 +312,7 @@ class SolutionStatus extends Component {
 
               {visibility !== null && (
                 <tr>
-                  <td className="text-center text-muted shrink-col px-2">
+                  <td className="icon-col">
                     <VisibleIcon visible={visibility > 0} />
                   </td>
                   <th>
@@ -360,7 +358,7 @@ class SolutionStatus extends Component {
               {!referenceSolution && (
                 <>
                   <tr>
-                    <td className="text-center text-muted shrink-col px-2">
+                    <td className="icon-col">
                       <PointsIcon />
                     </td>
                     <th className="text-nowrap">
@@ -383,61 +381,64 @@ class SolutionStatus extends Component {
                       </b>
 
                       {accepted && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="accepted">
-                              <FormattedMessage
-                                id="app.solutionStatusIcon.accepted"
-                                defaultMessage="The solution was marked as accepted."
-                              />
-                            </Tooltip>
-                          }>
-                          <AcceptedIcon largeGapLeft largeGapRight className="text-success" />
-                        </OverlayTrigger>
+                        <AcceptedIcon
+                          gapLeft={3}
+                          gapRight={3}
+                          className="text-success"
+                          tooltipId="accepted"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.solutionStatusIcon.accepted"
+                              defaultMessage="The solution was marked as accepted."
+                            />
+                          }
+                        />
                       )}
                       {important.accepted && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="another-accepted">
-                              <FormattedMessage
-                                id="app.solution.anotherAcceptedWarning"
-                                defaultMessage="Another solution has been marked as accepted. Points of this solution are not taken into account."
-                              />
-                            </Tooltip>
-                          }>
-                          <WarningIcon largeGapLeft largeGapRight className="text-warning" />
-                        </OverlayTrigger>
+                        <WarningIcon
+                          gapLeft={3}
+                          gapRight={3}
+                          className="text-warning"
+                          tooltipId="another-accepted"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.solution.anotherAcceptedWarning"
+                              defaultMessage="Another solution has been marked as accepted. Points of this solution are not taken into account."
+                            />
+                          }
+                        />
                       )}
                       {!important.accepted && important.best && (
-                        <OverlayTrigger
-                          placement="bottom"
-                          overlay={
-                            <Tooltip id="best">
-                              <FormattedMessage
-                                id="app.solution.anotherBestWarning"
-                                defaultMessage="Another solution is considered as the best (i.e., it has gained more points or it has the same points but it was submitted later)."
-                              />
-                            </Tooltip>
-                          }>
-                          <WarningIcon largeGapLeft largeGapRight className="text-warning" />
-                        </OverlayTrigger>
+                        <WarningIcon
+                          gapLeft={3}
+                          gapRight={3}
+                          className="text-warning"
+                          tooltipId="best"
+                          tooltipPlacement="bottom"
+                          tooltip={
+                            <FormattedMessage
+                              id="app.solution.anotherBestWarning"
+                              defaultMessage="Another solution is considered as the best (i.e., it has gained more points or it has the same points but it was submitted later)."
+                            />
+                          }
+                        />
                       )}
 
                       {evaluation && (
-                        <span className="float-right clickable text-primary mx-2" onClick={this.openExplainDialog}>
+                        <span className="float-end clickable text-primary mx-2" onClick={this.openExplainDialog}>
                           <small>
                             <FormattedMessage id="generic.explain" defaultMessage="explain" />
                           </small>
-                          <Icon icon="calculator" gapLeft />
+                          <Icon icon="calculator" gapLeft={2} />
                         </span>
                       )}
                     </td>
                   </tr>
 
                   <tr>
-                    <td className="text-center text-muted shrink-col px-2">
+                    <td className="icon-col">
                       <ReviewIcon review={review} reviewRequest={reviewRequest} />
                     </td>
                     <th className="text-nowrap">
@@ -461,7 +462,7 @@ class SolutionStatus extends Component {
                       {review && review.startedAt ? (
                         <DateTime unixts={review.closedAt || review.startedAt} />
                       ) : (
-                        <i className="text-muted">
+                        <i className="text-body-secondary">
                           {reviewRequest && (
                             <strong className="text-success">
                               <FormattedMessage id="app.solution.reviewRequested" defaultMessage="requested" />,{' '}
@@ -472,7 +473,7 @@ class SolutionStatus extends Component {
                       )}
 
                       {review && review.issues > 0 && (
-                        <small className="text-muted ml-3">
+                        <small className="text-body-secondary ms-3">
                           (
                           <FormattedMessage
                             id="app.solution.reviewIssuesCount"
@@ -487,17 +488,17 @@ class SolutionStatus extends Component {
                         <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
                           <ReviewIcon
                             review={review}
-                            gapLeft
+                            gapLeft={2}
                             className={review.issues > 0 ? 'text-warning' : 'text-success'}
                           />
                         </Link>
                       )}
 
                       {important.lastReviewed && (
-                        <span className="small float-right mx-2">
+                        <span className="small float-end mx-2">
                           <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, important.lastReviewed.id)}>
                             <FormattedMessage id="app.solution.lastReviewed" defaultMessage="last reviewed" />
-                            <LinkIcon gapLeft />
+                            <LinkIcon gapLeft={2} />
                           </Link>
                         </span>
                       )}
@@ -505,7 +506,7 @@ class SolutionStatus extends Component {
                   </tr>
 
                   <tr>
-                    <td className="text-center text-muted shrink-col px-2">
+                    <td className="icon-col">
                       <Icon icon="list-ol" />
                     </td>
                     <th className="text-nowrap">
@@ -527,10 +528,10 @@ class SolutionStatus extends Component {
 
                       {otherSolutions && otherSolutions.size > 1 && (
                         <span
-                          className="small float-right clickable text-primary mx-2"
+                          className="small float-end clickable text-primary mx-2"
                           onClick={this.openOtherSolutionsDialog}>
                           <FormattedMessage id="app.solution.allSolutions" defaultMessage="all solutions" />
-                          <Icon icon="list-ul" gapLeft />
+                          <Icon icon="list-ul" gapLeft={2} />
                         </span>
                       )}
                     </td>
@@ -582,7 +583,7 @@ class SolutionStatus extends Component {
                     <>
                       {pointsPercentualThreshold > 0 && (
                         <p className="larger">
-                          <SuccessIcon className="text-success" largeGapRight fixedWidth />
+                          <SuccessIcon className="text-success" gapRight={3} fixedWidth />
                           <FormattedMessage
                             id="app.solution.pointsExplainDialog.correctnessAboveThreshold"
                             defaultMessage="The solution correctness is above threshold."
@@ -590,7 +591,7 @@ class SolutionStatus extends Component {
                         </p>
                       )}
                       <p className="larger">
-                        <Icon icon="calculator" largeGapRight fixedWidth className="text-primary" />
+                        <Icon icon="calculator" gapRight={3} fixedWidth className="text-primary" />
                         <FormattedMessage
                           id="app.solution.pointsExplainDialog.calculationDescription"
                           defaultMessage="The actual points are computed from the points limit (depicted below) proportionally to the solution correctness:"
@@ -618,7 +619,7 @@ class SolutionStatus extends Component {
                     </>
                   ) : (
                     <p className="larger">
-                      <FailureIcon largeGapRight fixedWidth />
+                      <FailureIcon gapRight={3} fixedWidth />
                       <FormattedMessage
                         id="app.solution.pointsExplainDialog.correctnessBelowThreshold"
                         defaultMessage="The solution correcntess is below threshold. No points are granted."
@@ -628,7 +629,7 @@ class SolutionStatus extends Component {
 
                   {Boolean(bonusPoints) && (
                     <p className="larger">
-                      <Icon icon="hand-holding-usd" largeGapRight fixedWidth className="text-success" />
+                      <Icon icon="hand-holding-usd" gapRight={3} fixedWidth className="text-success" />
                       <FormattedMessage
                         id="app.solution.pointsExplainDialog.bonusPoints"
                         defaultMessage="A supervisor has granted additional <strong>{bonusPoints}</strong> bonus {bonusPoints, plural, one {point} other {points}}."
@@ -639,7 +640,7 @@ class SolutionStatus extends Component {
                 </>
               ) : (
                 <p className="larger">
-                  <Icon icon={['far', 'hand-point-right']} largeGapRight fixedWidth className="text-danger" />
+                  <Icon icon={['far', 'hand-point-right']} gapRight={3} fixedWidth className="text-danger" />
                   <FormattedMessage
                     id="app.solution.pointsExplainDialog.overriddenPoints"
                     defaultMessage="A supervisor has manually overridden the points to <strong>{overriddenPoints}</strong> (and {bonusPoints} {bonusPoints, plural, one {point} other {points}})."
@@ -652,7 +653,7 @@ class SolutionStatus extends Component {
                 <>
                   <hr />
 
-                  <div className="text-muted mb-1">
+                  <div className="text-body-secondary mb-1">
                     <FormattedMessage
                       id="app.assignment.deadlinesGraphDialog.title"
                       defaultMessage="Visualization of points limits and corresponding deadlines"

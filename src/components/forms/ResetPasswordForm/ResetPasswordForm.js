@@ -20,7 +20,7 @@ const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSuc
           {!submitting ? (
             hasSucceeded ? (
               <span>
-                <SuccessIcon gapRight />
+                <SuccessIcon gapRight={2} />
                 <FormattedMessage id="app.resetPassword.success" defaultMessage="Processing was finished." />
               </span>
             ) : (
@@ -28,7 +28,7 @@ const ResetPasswordForm = ({ submitting, handleSubmit, hasFailed = false, hasSuc
             )
           ) : (
             <span>
-              <LoadingIcon gapRight />
+              <LoadingIcon gapRight={2} />
               <FormattedMessage id="app.resetPassword.processing" defaultMessage="Resetting your password..." />
             </span>
           )}

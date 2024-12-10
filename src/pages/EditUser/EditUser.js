@@ -140,14 +140,14 @@ class EditUser extends Component {
                 <TheButtonGroup>
                   {!data.privateData.isLocal && (
                     <Button variant="warning" onClick={makeLocalLogin}>
-                      <LocalIcon gapRight />
+                      <LocalIcon gapRight={2} />
                       <FormattedMessage id="app.editUser.makeLocal" defaultMessage="Create local account" />
                     </Button>
                   )}
 
                   {isSuperAdmin && data.id !== loggedUserId && data.privateData.isAllowed && (
                     <Button variant="primary" onClick={() => takeOver(data.id)}>
-                      <TransferIcon gapRight />
+                      <TransferIcon gapRight={2} />
                       <FormattedMessage id="app.users.takeOver" defaultMessage="Login as" />
                     </Button>
                   )}

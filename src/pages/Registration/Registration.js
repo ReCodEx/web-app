@@ -99,7 +99,7 @@ class Registration extends Component {
                         <TheButtonGroup>
                           <Link to={LOGIN_URI}>
                             <Button variant="primary">
-                              <SignInIcon gapRight />
+                              <SignInIcon gapRight={2} />
                               <FormattedMessage
                                 id="app.registration.external.gotoSignin"
                                 defaultMessage="Sign-in Page"
@@ -110,7 +110,7 @@ class Registration extends Component {
                           <a href={EXTERNAL_AUTH_HELPDESK_URL}>
                             {EXTERNAL_AUTH_HELPDESK_URL.startsWith('mailto:') ? (
                               <Button variant="warning">
-                                <MailIcon gapRight />
+                                <MailIcon gapRight={2} />
                                 <FormattedMessage
                                   id="app.registration.external.mail"
                                   defaultMessage="Contact Support"
@@ -118,7 +118,7 @@ class Registration extends Component {
                               </Button>
                             ) : (
                               <Button variant="primary">
-                                <LinkIcon gapRight />
+                                <LinkIcon gapRight={2} />
                                 <FormattedMessage
                                   id="app.registration.external.link"
                                   defaultMessage="Visit Help Page"

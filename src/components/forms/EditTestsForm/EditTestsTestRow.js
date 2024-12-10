@@ -35,17 +35,17 @@ const EditTestsTestRow = ({ test, onRemove, calculator, percent, used = false, r
         />
       </td>
     )}
-    {calculator !== UNIVERSAL_ID && <td className="text-center valign-middle">{percent}</td>}
+    {calculator !== UNIVERSAL_ID && <td className="text-center align-middle">{percent}</td>}
     {!readOnly && (
-      <td className="valign-middle text-right">
+      <td className="align-middle text-end">
         {used ? (
           <em>
-            <Icon icon="paperclip" gapRight className="text-success" />
+            <Icon icon="paperclip" gapRight={2} className="text-success" />
             <FormattedMessage id="app.editTestsTest.testUsedInExpression" defaultMessage="used in expression" />
           </em>
         ) : (
           <Button onClick={onRemove} variant="danger" size="xs">
-            <RemoveIcon gapRight />
+            <RemoveIcon gapRight={2} />
             <FormattedMessage id="generic.remove" defaultMessage="Remove" />
           </Button>
         )}

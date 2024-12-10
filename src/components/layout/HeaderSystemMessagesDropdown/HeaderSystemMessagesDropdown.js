@@ -20,7 +20,7 @@ const HeaderSystemMessagesDropdown = ({
   acceptActiveMessages,
   unacceptActiveMessages,
 }) => (
-  <Dropdown as="li" alignRight navbar className="nav-item">
+  <Dropdown as="li" align="end" navbar className="nav-item" data-bs-theme="light">
     <Dropdown.Toggle as="a" id="dropdown-header-system-messages" bsPrefix="nav-link">
       <MailIcon />
       {systemMessages.length > 0 && (
@@ -52,7 +52,7 @@ const HeaderSystemMessagesDropdown = ({
                 </td>
                 <td>
                   <Markdown source={getLocalizedText(message, locale)} />
-                  <small className="text-muted text-nowrap float-right">
+                  <small className="text-body-secondary text-nowrap float-end">
                     <UsersNameContainer userId={message.authorId} isSimple />
                     &nbsp;
                     <DateTime

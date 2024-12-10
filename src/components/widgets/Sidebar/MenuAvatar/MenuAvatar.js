@@ -34,14 +34,14 @@ const MenuAvatar = ({
         altClassName="sidebarAvatar"
       />
       <span className="sidebarMenuItem text-nowrap sidebarEllipsis">{title}</span>
-      {notificationsCount > 0 && <small className="label float-right bg-yellow">{notificationsCount}</small>}
+      {notificationsCount > 0 && <small className="label float-end bg-warning">{notificationsCount}</small>}
 
       {onRemove && (
         <span className="sidebarAvatarRemoveIcon">
           <RemoveUserIcon
             className="text-danger"
             timid
-            gapRight
+            gapRight={2}
             onClick={ev => {
               ev.stopPropagation();
               onRemove();

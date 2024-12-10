@@ -107,7 +107,7 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
       'date',
       <FormattedMessage id="app.solutionsTable.submissionDate" defaultMessage="Date of submission" />,
       {
-        className: 'text-left',
+        className: 'text-start',
         comparator: ({ date: d1 }, { date: d2 }) => d2 - d1, // dates are implicitly in reversed order
         cellRenderer: (createdAt, idx) =>
           createdAt && <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
@@ -118,7 +118,7 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
       'assignment',
       <FormattedMessage id="app.solutionsTable.assignment" defaultMessage="Assignment" />,
       {
-        className: 'text-left',
+        className: 'text-start',
         comparator: ({ assignment: a1, date: d1 }, { assignment: a2, date: d2 }) =>
           assignmentsComparator(a1, a2) || d2 - d1, // dates are implicitly in reversed order
         cellRenderer: assignment =>
@@ -190,25 +190,25 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
     ),
 
     new SortableTableColumnDescriptor('note', <FormattedMessage id="app.solutionsTable.note" defaultMessage="Note" />, {
-      className: 'small full-width',
-      headerClassName: 'text-left',
+      className: 'small w-100',
+      headerClassName: 'text-start',
     }),
 
     new SortableTableColumnDescriptor('actionButtons', '', {
-      className: 'text-right valign-middle text-nowrap',
+      className: 'text-end align-middle text-nowrap',
       cellRenderer: solution => (
         <TheButtonGroup>
           {solution.permissionHints && solution.permissionHints.viewDetail && (
             <>
               <Link to={SOLUTION_DETAIL_URI_FACTORY(solution.assignmentId, solution.id)}>
                 <Button size="xs" variant="secondary">
-                  <DetailIcon gapRight />
+                  <DetailIcon gapRight={2} />
                   <FormattedMessage id="generic.detail" defaultMessage="Detail" />
                 </Button>
               </Link>
               <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(solution.assignmentId, solution.id)}>
                 <Button size="xs" variant="primary">
-                  <CodeFileIcon fixedWidth gapRight />
+                  <CodeFileIcon fixedWidth gapRight={2} />
                   <FormattedMessage id="generic.files" defaultMessage="Files" />
                 </Button>
               </Link>
@@ -421,7 +421,7 @@ class GroupUserSolutions extends Component {
             {pendingReviews && pendingReviews.length > 0 && !group.archived && (
               <Callout variant="warning">
                 <Row className="align-items-center">
-                  <Col className="pr-3 py-2">
+                  <Col className="pe-3 py-2">
                     <FormattedMessage
                       id="app.groupUserSolutions.pendingReviews"
                       defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected user. Remember that the review comments are visible to the author after a review is closed."
@@ -433,7 +433,11 @@ class GroupUserSolutions extends Component {
                       variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
                       onClick={() => this.closeReviews(pendingReviews)}
                       disabled={this.state.closingReviews}>
-                      {this.state.closingReviews ? <LoadingIcon gapRight /> : <Icon icon="boxes-packing" gapRight />}
+                      {this.state.closingReviews ? (
+                        <LoadingIcon gapRight={2} />
+                      ) : (
+                        <Icon icon="boxes-packing" gapRight={2} />
+                      )}
                       <FormattedMessage
                         id="app.reviewSolutionButtons.closePendingReviews"
                         defaultMessage="Close pending reviews"
@@ -444,9 +448,9 @@ class GroupUserSolutions extends Component {
               </Callout>
             )}
 
-            <div className="text-right text-nowrap py-2">
+            <div className="text-end text-nowrap py-2">
               <OnOffCheckbox
-                className="text-left mr-3"
+                className="text-start me-3"
                 checked={this.state.groupByAssignmentsCheckbox}
                 disabled={this.state.onlyBestSolutionsCheckbox}
                 name="groupByAssignmentsCheckbox"
@@ -457,7 +461,7 @@ class GroupUserSolutions extends Component {
                 />
               </OnOffCheckbox>
               <OnOffCheckbox
-                className="text-left mr-3"
+                className="text-start me-3"
                 checked={this.state.onlyBestSolutionsCheckbox}
                 name="onlyBestSolutionsCheckbox"
                 onChange={this.checkboxClickHandler}>
@@ -482,12 +486,12 @@ class GroupUserSolutions extends Component {
                                   <Box
                                     title={
                                       <>
-                                        <AssignmentIcon gapRight className="text-muted" />
+                                        <AssignmentIcon gapRight={2} className="text-body-secondary" />
                                         <LocalizedExerciseName
                                           entity={{ name: '??', localizedTexts: assignment.localizedTexts }}
                                         />
 
-                                        <small className="ml-3 text-nowrap">
+                                        <small className="ms-3 text-nowrap">
                                           (
                                           {hasPermissions(assignment, 'viewAssignmentSolutions') ? (
                                             <Link to={links.ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)}>
@@ -547,7 +551,7 @@ class GroupUserSolutions extends Component {
                                 this.state.onlyBestSolutionsCheckbox
                               )}
                               empty={
-                                <div className="text-center text-muted">
+                                <div className="text-center text-body-secondary">
                                   <FormattedMessage
                                     id="app.groupUserSolutions.noSolutions"
                                     defaultMessage="The user has not submitted any solutions yet."

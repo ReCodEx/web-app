@@ -19,7 +19,7 @@ const ResultArchiveInfoBox = ({ id, intl: { formatMessage } }) => (
     icon={['far', 'file-archive']}
     title={formatMessage(messages.title)}
     description={formatMessage(messages.description)}
-    color="green"
+    color="success"
   />
 );
 

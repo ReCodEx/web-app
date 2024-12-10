@@ -24,7 +24,7 @@ const ReferenceSolutionNavigation = ({
       {
         caption: <FormattedMessage id="app.navigation.referenceSolution" defaultMessage="Solution Detail" />,
         link: links.REFERENCE_SOLUTION_URI_FACTORY(exerciseId, solutionId),
-        icon: <ReferenceSolutionIcon gapRight />,
+        icon: <ReferenceSolutionIcon gapRight={2} />,
       },
       ...createExerciseLinks(links, exerciseId, canEdit, canViewTests, canViewLimits, canViewAssignments),
     ]}
