@@ -1,5 +1,5 @@
 /* eslint no-console: "off" */
-import fs from 'fs';
+import fs from 'node:fs';
 import { extract } from '@formatjs/cli-lib';
 import { globSync } from 'glob';
 import 'colors';
