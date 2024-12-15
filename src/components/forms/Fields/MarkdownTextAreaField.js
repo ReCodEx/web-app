@@ -36,8 +36,8 @@ class MarkdownTextAreaField extends Component {
               <FormattedMessage id="app.markdownTextArea.showPreview" defaultMessage="Preview" />
             </OnOffCheckbox>
           </Col>
-          <Col sm={8}>
-            <Form.Text className="text-end">
+          <Col sm={8} className="text-end">
+            <Form.Text>
               <FormattedMessage
                 id="app.markdownTextArea.canUseMarkdown"
                 defaultMessage="You can use <a>markdown syntax</a> in this field."
@@ -54,18 +54,12 @@ class MarkdownTextAreaField extends Component {
         </Row>
 
         {showPreview && (
-          <div className="mt-3">
-            <h6>
-              <FormattedMessage id="app.markdownTextArea.preview" defaultMessage="Preview:" />
-            </h6>
-            <div className={styles.preview}>
+          <div className="mt-1">
+            <div className={`${styles.preview} ${value.length === 0 ? styles.previewEmpty : ''}`}>
               {value.length === 0 && (
-                <p>
-                  <small>
-                    (
-                    <FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
-                  </small>
-                </p>
+                <>
+                  (<FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
+                </>
               )}
               <Markdown source={value} />
             </div>
