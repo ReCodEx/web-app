@@ -83,7 +83,7 @@ const actionsTemplates = {
 };
 
 // known actions list is kept separately since keys in actionsTemplates are not guaranteed to keep any ordering
-const knownActions = [
+const allKnownActions = [
   'accept',
   'unaccept',
   'zeroPoints',
@@ -107,6 +107,7 @@ const SolutionActions = ({
   captionAsTooltip = false,
   size = undefined,
   dropdown = false,
+  knownActions = allKnownActions,
   setAccepted = null,
   setReviewState = null,
   deleteReview = null,
@@ -204,6 +205,7 @@ SolutionActions.propTypes = {
   captionAsTooltip: PropTypes.bool,
   size: PropTypes.string,
   dropdown: PropTypes.bool,
+  knownActions: PropTypes.array,
   setAccepted: PropTypes.func,
   setReviewState: PropTypes.func,
   deleteReview: PropTypes.func,
