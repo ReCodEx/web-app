@@ -9,7 +9,6 @@ import GroupsNameContainer from '../../../containers/GroupsNameContainer';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import AssignmentNameContainer from '../../../containers/AssignmentNameContainer';
 import SolutionActionsContainer from '../../../containers/SolutionActionsContainer';
-import DeleteSolutionButtonContainer from '../../../containers/DeleteSolutionButtonContainer';
 import DateTime from '../../widgets/DateTime';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Box from '../../widgets/Box';
@@ -166,6 +165,11 @@ class ReviewRequestsList extends Component {
 
                               <td className="shrink-col text-end">
                                 <TheButtonGroup>
+                                  {solution.permissionHints &&
+                                    (solution.permissionHints.setFlag || solution.permissionHints.review) && (
+                                      <SolutionActionsContainer id={solution.id} knownActions={['open']} size="xs" />
+                                    )}
+
                                   {solution.permissionHints && solution.permissionHints.viewDetail && (
                                     <>
                                       <Link to={SOLUTION_DETAIL_URI_FACTORY(assignmentId, solution.id)}>
@@ -181,15 +185,6 @@ class ReviewRequestsList extends Component {
                                         </Button>
                                       </Link>
                                     </>
-                                  )}
-
-                                  {solution.permissionHints &&
-                                    (solution.permissionHints.setFlag || solution.permissionHints.review) && (
-                                      <SolutionActionsContainer id={solution.id} showAllButtons dropdown />
-                                    )}
-
-                                  {solution.permissionHints && solution.permissionHints.delete && (
-                                    <DeleteSolutionButtonContainer id={solution.id} groupId={groupId} size="xs" />
                                   )}
                                 </TheButtonGroup>
                               </td>

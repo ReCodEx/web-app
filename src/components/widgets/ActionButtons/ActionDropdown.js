@@ -12,7 +12,7 @@ const ActionDropdown = ({ id, actions, label, placement = 'bottom' }) => {
   const anyPending = actions.some(a => a.pending);
 
   return (
-    <Dropdown as="span">
+    <Dropdown as="span" drop="down">
       <Dropdown.Toggle variant="warning" size="xs" ref={target} className={anyPending ? 'opacity-50' : ''}>
         {anyPending ? <LoadingIcon gapRight={Boolean(label)} /> : <EditIcon gapRight={Boolean(label)} />}
         {label}
