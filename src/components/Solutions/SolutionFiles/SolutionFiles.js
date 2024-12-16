@@ -10,13 +10,14 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Callout from '../../widgets/Callout';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Box from '../../widgets/Box';
-import Icon, { CodeFileIcon, DownloadIcon, ZipIcon } from '../../icons';
+import Icon, { CodeFileIcon, DownloadIcon, WarningIcon, ZipIcon } from '../../icons';
 import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 
 const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
 
 const preprocessZipEntries = ({ zipEntries, ...file }) => {
   if (zipEntries) {
+    file.zipEntriesBadNames = zipEntries.reduce((bad, { name }) => bad || name.includes('\\'), false);
     file.zipEntries = zipEntries
       .filter(({ name, size }) => !(name.endsWith('/') || name.endsWith('\\')) || size !== 0)
       .map(({ name, size }) => ({ name, size, id: `${file.id}/${name}`, parentId: file.id }))
@@ -121,6 +122,20 @@ const SolutionFiles = ({
                             }>
                             {file.name}
                           </code>
+
+                          {file.zipEntriesBadNames && (
+                            <WarningIcon
+                              gapLeft
+                              className="text-danger"
+                              tooltipId={`${file.id}-badEntries`}
+                              tooltip={
+                                <FormattedMessage
+                                  id="app.solutionFiles.badZipEntryNames"
+                                  defaultMessage="Some of the ZIP entry names are invalid."
+                                />
+                              }
+                            />
+                          )}
                         </td>
                         <td className="small text-nowrap">{prettyPrintBytes(file.size)}</td>
 
@@ -180,7 +195,7 @@ const SolutionFiles = ({
                           <FormattedMessage id="app.solutionFiles.total" defaultMessage="Total:" />
                         </em>
                       </td>
-                      <td className="small text-body-secondary">
+                      <td className="small text-body-secondary text-nowrap">
                         <em>{prettyPrintBytes(filesSize)}</em>
                       </td>
                       <td className="text-nowrap shrink-col text-end">
