@@ -18,7 +18,7 @@ const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
 const preprocessZipEntries = ({ zipEntries, ...file }) => {
   if (zipEntries) {
     file.zipEntries = zipEntries
-      .filter(({ name, size }) => !name.endsWith('/') || size !== 0)
+      .filter(({ name, size }) => !(name.endsWith('/') || name.endsWith('\\')) || size !== 0)
       .map(({ name, size }) => ({ name, size, id: `${file.id}/${name}`, parentId: file.id }))
       .sort(nameComparator);
   }
