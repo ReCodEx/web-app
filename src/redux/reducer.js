@@ -39,7 +39,6 @@ import referenceSolutionEvaluations from './modules/referenceSolutionEvaluations
 import registration from './modules/registration.js';
 import runtimeEnvironments from './modules/runtimeEnvironments.js';
 import shadowAssignments from './modules/shadowAssignments.js';
-import sidebar from './modules/sidebar.js';
 import sisPossibleParents from './modules/sisPossibleParents.js';
 import sisStatus from './modules/sisStatus.js';
 import sisSubscribedGroups from './modules/sisSubscribedGroups.js';
@@ -100,7 +99,6 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   registration,
   runtimeEnvironments,
   shadowAssignments,
-  sidebar,
   sisPossibleParents,
   sisSubscribedGroups,
   sisSupervisedCourses,

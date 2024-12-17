@@ -5,9 +5,7 @@ import { IntlProvider } from 'react-intl';
 import moment from 'moment';
 
 import { setLang } from '../../redux/modules/app.js';
-import { toggleSize, toggleVisibility, collapse, unroll } from '../../redux/modules/sidebar.js';
 import { getLang, anyPendingFetchOperations } from '../../redux/selectors/app.js';
-import { isVisible, isCollapsed } from '../../redux/selectors/sidebar.js';
 import { isLoggedIn } from '../../redux/selectors/auth.js';
 import { getLoggedInUserSettings, getLoggedInUserUiData } from '../../redux/selectors/users.js';
 import { groupsLoggedUserIsMemberSelector, fetchManyGroupsStatus } from '../../redux/selectors/groups.js';
@@ -50,9 +48,17 @@ class LayoutContainer extends Component {
     }
   }
 
+  setInitialSidebarState = open => {
+    const bootstrapCompactViewWidth = 991; // this may change with different versions of bootstrap
+    if (window && window.document.body.clientWidth > bootstrapCompactViewWidth) {
+      window.document.body.classList.remove(open === false ? 'sidebar-open' : 'sidebar-collapse');
+      window.document.body.classList.add(open === false ? 'sidebar-collapse' : 'sidebar-open');
+    }
+  };
+
   componentDidMount() {
-    this.resizeSidebarToDefault(this.props);
     if (canUseDOM) {
+      this.setInitialSidebarState(this.props.userUIData.openedSidebar);
       this.newPageLoading = true;
       this.pageHeight = -1;
       this._scrollTargetToView();
@@ -60,38 +66,24 @@ class LayoutContainer extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      (prevProps.userUIData.openedSidebar === undefined && this.props.userUIData.openedSidebar !== undefined) ||
-      (prevProps.userUIData.openedSidebar !== undefined &&
-        prevProps.userUIData.openedSidebar !== this.props.userUIData.openedSidebar)
-    ) {
-      this.resizeSidebarToDefault(this.props);
-    }
+    if (canUseDOM) {
+      if (
+        (prevProps.userUIData.openedSidebar === undefined && this.props.userUIData.openedSidebar !== undefined) ||
+        (prevProps.userUIData.openedSidebar !== undefined &&
+          prevProps.userUIData.openedSidebar !== this.props.userUIData.openedSidebar)
+      ) {
+        this.setInitialSidebarState(this.props.userUIData.openedSidebar);
+      }
 
-    if (canUseDOM && this.newPageLoading) {
-      this._scrollTargetToView();
+      if (this.newPageLoading) {
+        this._scrollTargetToView();
+      }
     }
 
     if (!this.props.pendingFetchOperations) {
       this.newPageLoading = false;
     }
   }
-
-  resizeSidebarToDefault({ collapse, unroll, userUIData }) {
-    // open or hide the sidebar based on user's settings
-    const shouldBeOpen = this.getDefaultOpenedSidebar(userUIData);
-    shouldBeOpen ? unroll() : collapse();
-  }
-
-  getDefaultOpenedSidebar = userUIData =>
-    userUIData && typeof userUIData.openedSidebar !== 'undefined' ? userUIData.openedSidebar : true;
-
-  maybeHideSidebar = e => {
-    const { sidebarIsOpen, toggleVisibility } = this.props;
-    if (sidebarIsOpen) {
-      toggleVisibility();
-    }
-  };
 
   /**
    * Get messages for the given language or the deafult - English
@@ -109,10 +101,6 @@ class LayoutContainer extends Component {
       lang,
       location: { pathname, search },
       isLoggedIn,
-      sidebarIsCollapsed,
-      sidebarIsOpen,
-      toggleSize,
-      toggleVisibility,
       pendingFetchOperations,
       userUIData,
       setLang,
@@ -130,11 +118,6 @@ class LayoutContainer extends Component {
             <UrlContext.Provider value={{ lang }}>
               <Layout
                 isLoggedIn={isLoggedIn}
-                sidebarIsCollapsed={sidebarIsCollapsed}
-                sidebarIsOpen={sidebarIsOpen}
-                toggleSize={toggleSize}
-                toggleVisibility={toggleVisibility}
-                onCloseSidebar={this.maybeHideSidebar}
                 lang={lang}
                 setLang={setLang}
                 availableLangs={Object.keys(messages)}
@@ -155,10 +138,6 @@ class LayoutContainer extends Component {
 
 LayoutContainer.propTypes = {
   lang: PropTypes.string,
-  toggleSize: PropTypes.func.isRequired,
-  toggleVisibility: PropTypes.func.isRequired,
-  collapse: PropTypes.func.isRequired,
-  unroll: PropTypes.func.isRequired,
   setLang: PropTypes.func.isRequired,
   pendingFetchOperations: PropTypes.bool,
   isLoggedIn: PropTypes.bool,
@@ -177,8 +156,6 @@ export default withRouter(
     (state, { location: { pathname, search } }) => ({
       lang: getLang(state),
       isLoggedIn: isLoggedIn(state),
-      sidebarIsCollapsed: isCollapsed(state),
-      sidebarIsOpen: isVisible(state),
       pendingFetchOperations: anyPendingFetchOperations(state),
       userSettings: getLoggedInUserSettings(state),
       userUIData: getLoggedInUserUiData(state),
@@ -187,10 +164,6 @@ export default withRouter(
       fetchManyGroupsStatus: fetchManyGroupsStatus(state),
     }),
     dispatch => ({
-      toggleVisibility: () => dispatch(toggleVisibility()),
-      toggleSize: () => dispatch(toggleSize()),
-      collapse: () => dispatch(collapse()),
-      unroll: () => dispatch(unroll()),
       setLang: lang => {
         dispatch(setLang(lang));
         window.location.reload();

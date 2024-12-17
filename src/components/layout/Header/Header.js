@@ -13,14 +13,11 @@ import { getConfigVar } from '../../../helpers/config.js';
 const SKIN = getConfigVar('SKIN') || 'success';
 
 class Header extends Component {
-  toggleSidebarSize = e => {
+  toggleSidebar = e => {
     e.preventDefault();
-    this.props.toggleSidebarSize();
-  };
-
-  toggleSidebarVisibility = e => {
-    e.preventDefault();
-    this.props.toggleSidebarVisibility();
+    // flip AdminLTE body classes
+    window.document.body.classList.toggle('sidebar-collapse');
+    window.document.body.classList.toggle('sidebar-open');
   };
 
   render() {
@@ -36,41 +33,43 @@ class Header extends Component {
 
     return (
       <nav className={`app-header navbar navbar-expand bg-${SKIN} shadow`} data-bs-theme="dark">
-        <ClientOnly>
-          <ul className="navbar-nav w-100">
-            <li className="nav-item">
-              <a className="nav-link" data-widget="pushmenu" href="#" onClick={this.toggleSidebarSize}>
-                <Icon icon="bars" />
-              </a>
-            </li>
-            {fetchManyGroupsStatus && (
-              <li className="nav-item memberGroupsDropdownContainer" data-bs-theme="light">
-                <FetchManyResourceRenderer
-                  fetchManyStatus={fetchManyGroupsStatus}
-                  loading={
-                    <span className="nav-link">
-                      <GroupIcon gapRight={2} />
-                      <LoadingIcon />
-                    </span>
-                  }
-                  failed={
-                    <span className="nav-link">
-                      <GroupIcon gapRight={2} />
-                      <WarningIcon />
-                    </span>
-                  }>
-                  {() => <MemberGroupsDropdown groupId={relatedGroupId} memberGroups={memberGroups} />}
-                </FetchManyResourceRenderer>
+        <div className="container-fluid">
+          <ClientOnly>
+            <ul className="navbar-nav w-100">
+              <li className="nav-item">
+                <a className="nav-link" data-widget="pushmenu" href="#" onClick={this.toggleSidebar}>
+                  <Icon icon="bars" />
+                </a>
               </li>
-            )}
-          </ul>
-        </ClientOnly>
+              {fetchManyGroupsStatus && (
+                <li className="nav-item memberGroupsDropdownContainer" data-bs-theme="light">
+                  <FetchManyResourceRenderer
+                    fetchManyStatus={fetchManyGroupsStatus}
+                    loading={
+                      <span className="nav-link">
+                        <GroupIcon gapRight={2} />
+                        <LoadingIcon />
+                      </span>
+                    }
+                    failed={
+                      <span className="nav-link">
+                        <GroupIcon gapRight={2} />
+                        <WarningIcon />
+                      </span>
+                    }>
+                    {() => <MemberGroupsDropdown groupId={relatedGroupId} memberGroups={memberGroups} />}
+                  </FetchManyResourceRenderer>
+                </li>
+              )}
+            </ul>
+          </ClientOnly>
 
-        <ul className="navbar-nav ms-auto">
-          {isLoggedIn && <HeaderSystemMessagesContainer locale={currentLang} />}
-          <HeaderNotificationsContainer />
-          <HeaderLanguageSwitching availableLangs={availableLangs} currentLang={currentLang} setLang={setLang} />
-        </ul>
+          <ul className="navbar-nav ms-auto">
+            {isLoggedIn && <HeaderSystemMessagesContainer locale={currentLang} />}
+            <HeaderNotificationsContainer />
+            <HeaderLanguageSwitching availableLangs={availableLangs} currentLang={currentLang} setLang={setLang} />
+          </ul>
+        </div>
       </nav>
     );
   }
@@ -78,8 +77,6 @@ class Header extends Component {
 
 Header.propTypes = {
   isLoggedIn: PropTypes.bool,
-  toggleSidebarSize: PropTypes.func.isRequired,
-  toggleSidebarVisibility: PropTypes.func.isRequired,
   currentLang: PropTypes.string.isRequired,
   setLang: PropTypes.func.isRequired,
   availableLangs: PropTypes.array,

@@ -143,6 +143,14 @@ table.table.tbody-hover tbody:hover th.selected {
   top: 0;
 }
 
+@media (max-width: 991px) {
+  .app-header {
+    position: static;
+    top: auto;
+  }
+}
+
+
 .sidebar-wrapper {
   height: auto! important;
 }
