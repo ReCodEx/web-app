@@ -133,9 +133,9 @@ class ReviewRequestsList extends Component {
 
                               <td className="text-center text-nowrap align-middle">
                                 {solution.lastSubmission.evaluation ? (
-                                  <strong className="text-success">
+                                  <span className={`${solution.isBestSolution ? 'fw-bold' : ''}`}>
                                     <FormattedNumber style="percent" value={solution.lastSubmission.evaluation.score} />
-                                  </strong>
+                                  </span>
                                 ) : (
                                   <span className="text-danger">-</span>
                                 )}
@@ -143,13 +143,13 @@ class ReviewRequestsList extends Component {
 
                               <td className="text-center text-nowrap align-middle">
                                 {solution.lastSubmission.evaluation ? (
-                                  <strong className="text-success">
+                                  <span className={`${solution.isBestSolution ? 'fw-bold' : ''}`}>
                                     <Points
                                       points={solution.actualPoints}
                                       bonusPoints={solution.bonusPoints}
                                       maxPoints={solution.maxPoints}
                                     />
-                                  </strong>
+                                  </span>
                                 ) : (
                                   <span className="text-danger">-</span>
                                 )}
