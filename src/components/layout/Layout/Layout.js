@@ -22,9 +22,10 @@ const Layout = ({
   memberGroups,
   fetchManyGroupsStatus,
 }) => {
-  const darkMode = true;  // TODO: this should be based on user settings
+  // TODO: this should be based on user settings
+  const colorMode = localStorage.getItem('colorMode') ?? 'light';
   return (
-  <div className="app-wrapper overflow-visible text-body bg-body" data-bs-theme={darkMode ? 'dark' : 'light'}>
+  <div className="app-wrapper overflow-visible text-body bg-body" data-bs-theme={colorMode}>
     <Helmet defaultTitle={`${title}`} titleTemplate={`%s | ${title}`} />
     <Header
       isLoggedIn={isLoggedIn}

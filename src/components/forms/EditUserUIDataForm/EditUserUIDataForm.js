@@ -10,6 +10,7 @@ import { SaveIcon } from '../../icons';
 import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField, NumericTextField } from '../Fields';
+import OnOffCheckbox from '../OnOffCheckbox';
 
 const defaultPagesCaptions = defineMessages({
   dashboard: {
@@ -51,6 +52,7 @@ const EditUserUIDataForm = ({
   invalid,
   intl: { formatMessage },
 }) => (
+  <>
   <FormBox
     title={<FormattedMessage id="app.editUserUIData.title" defaultMessage="Visual Settings" />}
     type={submitSucceeded ? 'success' : undefined}
@@ -180,6 +182,14 @@ const EditUserUIDataForm = ({
       }
     />
   </FormBox>
+  {/* TODO: this is a temporary workaround (saving dark mode to local storage). It should be properly saved to the user UI data. */}
+  <div>
+      <OnOffCheckbox name="darkMode" 
+        onChange={(event) => {
+          localStorage.setItem('colorMode', event.target.checked ? 'dark' : 'light');
+        }}>Dark Mode</OnOffCheckbox>
+  </div>
+  </>
 );
 
 EditUserUIDataForm.propTypes = {
