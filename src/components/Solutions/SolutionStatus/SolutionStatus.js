@@ -4,10 +4,10 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
-import classnames from 'classnames';
 import { lruMemoize } from 'reselect';
 import moment from 'moment';
 
+import Points from '../../Assignments/SolutionsTable/Points.js';
 import EditSolutionNoteForm from '../../forms/EditSolutionNoteForm';
 import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
@@ -370,15 +370,8 @@ class SolutionStatus extends Component {
                         />
                       </Explanation>
                     </th>
-                    <td
-                      className={classnames({
-                        'text-danger': actualPoints + bonusPoints <= 0,
-                        'text-success': actualPoints + bonusPoints > 0,
-                      })}>
-                      <b>
-                        {actualPoints || 0}
-                        {bonusPoints !== 0 ? (bonusPoints >= 0 ? '+' : '') + bonusPoints : ''} / {maxPoints}
-                      </b>
+                    <td>
+                      <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} wideFormat />
 
                       {accepted && (
                         <AcceptedIcon
@@ -485,13 +478,15 @@ class SolutionStatus extends Component {
                       )}
 
                       {review && review.closedAt && (
-                        <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
-                          <ReviewIcon
-                            review={review}
-                            gapLeft={2}
-                            className={review.issues > 0 ? 'text-warning' : 'text-success'}
-                          />
-                        </Link>
+                        <span className="small float-end mx-2">
+                          <Link to={SOLUTION_SOURCE_CODES_URI_FACTORY(assignmentId, id)}>
+                            <ReviewIcon
+                              review={review}
+                              gapLeft={2}
+                              className={review.issues > 0 ? 'text-warning' : 'text-success'}
+                            />
+                          </Link>
+                        </span>
                       )}
 
                       {important.lastReviewed && (

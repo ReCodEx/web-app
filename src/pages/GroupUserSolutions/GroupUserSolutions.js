@@ -146,13 +146,13 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
         headerClassName: 'text-nowrap',
         comparator: ({ validity: v1, date: d1 }, { validity: v2, date: d2 }) =>
           (v2 === null ? -1 : v2) - (v1 === null ? -1 : v1) || d2 - d1, // values are implicitly form the best to the worst
-        cellRenderer: validity =>
+        cellRenderer: (validity, _1, _2, rowData) =>
           validity !== null ? (
-            <strong className="text-success">
+            <span className={`${rowData?.icon?.isBestSolution ? 'fw-bold' : ''}`}>
               <FormattedNumber style="percent" value={validity} />
-            </strong>
+            </span>
           ) : (
-            <span className="text-danger">-</span>
+            <span className="text-danger">&ndash;</span>
           ),
       }
     ),
@@ -168,13 +168,13 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
           const points2 = p2.actualPoints === null ? 0 : p2.bonusPoints + p2.actualPoints;
           return points2 - points1 || d2 - d1;
         },
-        cellRenderer: points =>
+        cellRenderer: (points, _1, _2, rowData) =>
           points.actualPoints !== null ? (
-            <strong className="text-success">
+            <span className={`${rowData?.icon?.isBestSolution ? 'fw-bold' : ''}`}>
               <Points points={points.actualPoints} bonusPoints={points.bonusPoints} maxPoints={points.maxPoints} />
-            </strong>
+            </span>
           ) : (
-            <span className="text-danger">-</span>
+            <span className="text-danger">&ndash;</span>
           ),
       }
     ),

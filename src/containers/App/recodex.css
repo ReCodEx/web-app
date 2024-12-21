@@ -216,6 +216,11 @@ a:focus {
   border-bottom: none;
 }
 
+.card-body table.card-table.table tbody > tr > td:last-of-type
+{
+  padding-right: 0.5rem;
+}
+
 /*
  * Bootstrap Enhancements
  */

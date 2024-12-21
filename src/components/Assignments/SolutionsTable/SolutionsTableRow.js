@@ -94,21 +94,21 @@ const SolutionsTableRow = ({
 
         <td className="text-center text-nowrap align-middle">
           {lastSubmission.evaluation ? (
-            <strong className="text-success">
+            <span className={`${solution.isBestSolution ? 'fw-bold' : ''}`}>
               <FormattedNumber style="percent" value={lastSubmission.evaluation.score} />
-            </strong>
+            </span>
           ) : (
-            <span className="text-danger">-</span>
+            <span className="text-danger">&ndash;</span>
           )}
         </td>
 
         <td className="text-center text-nowrap align-middle">
           {lastSubmission.evaluation ? (
-            <strong className="text-success">
+            <span className={`${solution.isBestSolution ? 'fw-bold' : ''}`}>
               <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} />
-            </strong>
+            </span>
           ) : (
-            <span className="text-danger">-</span>
+            <span className="text-danger">&ndash;</span>
           )}
         </td>
 
@@ -194,6 +194,7 @@ const SolutionsTableRow = ({
 SolutionsTableRow.propTypes = {
   id: PropTypes.string.isRequired,
   solution: PropTypes.shape({
+    isBestSolution: PropTypes.bool,
     attemptIndex: PropTypes.number.isRequired,
     note: PropTypes.any.isRequired,
     maxPoints: PropTypes.number.isRequired,
