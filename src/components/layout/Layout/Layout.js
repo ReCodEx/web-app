@@ -21,8 +21,10 @@ const Layout = ({
   relatedGroupId,
   memberGroups,
   fetchManyGroupsStatus,
-}) => (
-  <div className="app-wrapper overflow-visible">
+}) => {
+  const darkMode = true;  // TODO: this should be based on user settings
+  return (
+  <div className="app-wrapper overflow-visible text-body bg-body" data-bs-theme={darkMode ? 'dark' : 'light'}>
     <Helmet defaultTitle={`${title}`} titleTemplate={`%s | ${title}`} />
     <Header
       isLoggedIn={isLoggedIn}
@@ -39,6 +41,7 @@ const Layout = ({
     <Footer version={process.env.VERSION} />
   </div>
 );
+};
 
 Layout.propTypes = {
   isLoggedIn: PropTypes.bool,

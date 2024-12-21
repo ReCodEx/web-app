@@ -27,7 +27,7 @@ const PageContent = ({ intl: { formatMessage }, title = '', windowTitle = null, 
       <Helmet title={getMessage(windowTitle || title, formatMessage)} />
       {(title || icon) && (
         <div className="app-content-header">
-          <h1 className="m-0 px-3 text-dark h3">
+          <h1 className="m-0 px-3 text-body h3">
             {icon && (
               <span className="me-3 text-body-secondary">{typeof icon === 'string' ? <Icon icon={icon} /> : icon}</span>
             )}
