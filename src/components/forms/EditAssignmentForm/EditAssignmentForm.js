@@ -294,6 +294,41 @@ class EditAssignmentForm extends Component {
     this.props.change('maxPointsBeforeSecondDeadline', maxPointsBeforeSecondDeadline);
   };
 
+  selectAllGroups = () => {
+    this.clearAllGroups(); // clears really all
+
+    const {
+      change,
+      groups,
+      userId,
+      groupsAccessor,
+      intl: { locale },
+    } = this.props;
+
+    // checks only those visible
+    const visibleGroups = this.state.open
+      ? getAllGroups(groups, groupsAccessor, locale)
+      : getUserGroups(groups, userId, groupsAccessor, locale);
+
+    visibleGroups.forEach(group => {
+      change(`groups.id${group.id}`, true);
+    });
+  };
+
+  clearAllGroups = () => {
+    const {
+      change,
+      groups,
+      groupsAccessor,
+      intl: { locale },
+    } = this.props;
+
+    const visibleGroups = getAllGroups(groups, groupsAccessor, locale);
+    visibleGroups.forEach(group => {
+      change(`groups.id${group.id}`, false);
+    });
+  };
+
   /**
    * Wraps the onSubmit callback passed from the parent component.
    * (note that submitHandler in which this function is used is redux-form internal routine to handle submits)
@@ -376,6 +411,8 @@ class EditAssignmentForm extends Component {
                 ? this.toggleOpenState
                 : null
             }
+            selectAllGroupsHandler={this.selectAllGroups}
+            clearAllGroupsHandler={this.clearAllGroups}
           />
         )}
 
