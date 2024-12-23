@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '.
 import withLinks from '../../../helpers/withLinks.js';
 import { getExternalIdForCAS } from '../../../helpers/cas.js';
 import { getConfigVar } from '../../../helpers/config.js';
+import { EMPTY_ARRAY } from '../../../helpers/common.js';
 import Admin from './Admin.js';
 
 import './sidebar.css';
@@ -24,12 +25,45 @@ const URL_PREFIX = getConfigVar('URL_PATH_PREFIX');
 
 const getUserData = lruMemoize(user => getJsData(user));
 
+const processInstances = lruMemoize(instances =>
+  instances && instances.size > 0 ? instances.toArray().filter(isReady).map(getJsData) : EMPTY_ARRAY
+);
+
+const _getCaption = (caption, locale) =>
+  typeof caption === 'string'
+    ? caption
+    : caption && typeof caption === 'object'
+      ? caption[locale] || caption.en || caption[Object.keys(caption)[0]]
+      : '??';
+
+const getExtensions = lruMemoize((instances, locale) => {
+  const exts = [];
+  processInstances(instances).forEach(({ id, extensions = {} }) =>
+    Object.keys(extensions).forEach(extension =>
+      exts.push({ extension, caption: _getCaption(extensions[extension], locale), instance: id })
+    )
+  );
+  exts.sort((a, b) => a.caption.localeCompare(b.caption));
+  return exts;
+});
+
+const extensionClickHandler = lruMemoize(fetchExtensionUrl => ev => {
+  ev.preventDefault();
+  if (window) {
+    const extension = ev.currentTarget.dataset.extension;
+    const instance = ev.currentTarget.dataset.instance;
+    const locale = ev.currentTarget.dataset.locale;
+    fetchExtensionUrl(extension, instance, locale).then(({ value: url }) => window.location.assign(url));
+  }
+});
+
 const Sidebar = ({
   pendingFetchOperations,
   loggedInUser,
   effectiveRole = null,
   currentUrl,
   instances,
+  fetchExtensionUrl,
   links: {
     HOME_URI,
     FAQ_URL,
@@ -42,6 +76,7 @@ const Sidebar = ({
     ARCHIVE_URI,
     SIS_INTEGRATION_URI,
   },
+  intl: { locale },
 }) => {
   const user = getUserData(loggedInUser);
 
@@ -120,21 +155,15 @@ const Sidebar = ({
                     link={DASHBOARD_URI}
                   />
 
-                  {instances &&
-                    instances.size > 0 &&
-                    instances
-                      .toArray()
-                      .filter(isReady)
-                      .map(getJsData)
-                      .map(({ id, name }) => (
-                        <MenuItem
-                          key={id}
-                          title={name}
-                          icon="university"
-                          currentPath={currentUrl}
-                          link={INSTANCE_URI_FACTORY(id)}
-                        />
-                      ))}
+                  {processInstances(instances).map(({ id, name }) => (
+                    <MenuItem
+                      key={id}
+                      title={name}
+                      icon="university"
+                      currentPath={currentUrl}
+                      link={INSTANCE_URI_FACTORY(id)}
+                    />
+                  ))}
 
                   {isSupervisorRole(effectiveRole) && (
                     <MenuItem
@@ -181,6 +210,26 @@ const Sidebar = ({
             )}
 
             {isSuperadminRole(effectiveRole) && <Admin currentUrl={currentUrl} />}
+
+            {getExtensions(instances, locale).length > 0 && (
+              <ul
+                className="nav nav-pills sidebar-menu flex-column"
+                data-lte-toggle="treeview"
+                role="menu"
+                data-accordion="false">
+                <MenuTitle title={<FormattedMessage id="app.sidebar.menu.extensions" defaultMessage="Extensions" />} />
+
+                {getExtensions(instances, locale).map(({ extension, caption, instance }) => (
+                  <MenuItem
+                    key={extension}
+                    title={caption}
+                    icon="share-from-square"
+                    linkData={{ extension, instance, locale }}
+                    onClick={extensionClickHandler(fetchExtensionUrl)}
+                  />
+                ))}
+              </ul>
+            )}
           </nav>
         </div>
       </div>
@@ -194,7 +243,9 @@ Sidebar.propTypes = {
   effectiveRole: PropTypes.string,
   currentUrl: PropTypes.string,
   instances: ImmutablePropTypes.list,
+  fetchExtensionUrl: PropTypes.func.isRequired,
   links: PropTypes.object,
+  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default withLinks(Sidebar);
+export default withLinks(injectIntl(Sidebar));

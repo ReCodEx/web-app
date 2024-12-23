@@ -145,6 +145,20 @@ export const objectMap = (obj, fnc) => {
 };
 
 /**
+ * Implementation of map() function for objects applied on keys only.
+ * Create a copy of an object where each key is transformed using given function.
+ * @param {object} obj Object being copied (used as template).
+ * @param {function} fnc Mapping function for keys
+ */
+export const objectKeyMap = (obj, fnc) => {
+  const res = {};
+  for (const key in obj) {
+    res[fnc(key)] = obj[key];
+  }
+  return res;
+};
+
+/**
  * Search object by values and return corresponding key.
  * @param {Object} obj object to be searched
  * @param {*} predicate either a value being searched or a function that tests each value and returns true if match is found
