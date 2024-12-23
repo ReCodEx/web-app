@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import Sidebar from '../../components/layout/Sidebar/Sidebar.js';
+import { fetchExtensionUrl } from '../../redux/modules/app.js';
 import { loggedInUserMemberOfInstances } from '../../redux/selectors/instances.js';
 import {
   loggedInUserSelector,
@@ -7,9 +8,14 @@ import {
   getLoggedInUserEffectiveRole,
 } from '../../redux/selectors/users.js';
 
-export default connect(state => ({
-  loggedInUser: loggedInUserSelector(state),
-  effectiveRole: getLoggedInUserEffectiveRole(state),
-  instances: loggedInUserMemberOfInstances(state),
-  notifications: notificationsSelector(state),
-}))(Sidebar);
+export default connect(
+  state => ({
+    loggedInUser: loggedInUserSelector(state),
+    effectiveRole: getLoggedInUserEffectiveRole(state),
+    instances: loggedInUserMemberOfInstances(state),
+    notifications: notificationsSelector(state),
+  }),
+  dispatch => ({
+    fetchExtensionUrl: (extension, instance, locale) => dispatch(fetchExtensionUrl(extension, instance, locale)),
+  })
+)(Sidebar);

@@ -1749,6 +1749,7 @@
   "app.sidebar.menu.createAccount": "Create account",
   "app.sidebar.menu.dashboard": "Dashboard",
   "app.sidebar.menu.exercises": "Exercises",
+  "app.sidebar.menu.extensions": "Extensions",
   "app.sidebar.menu.faq": "FAQ",
   "app.sidebar.menu.pipelines": "Pipelines",
   "app.sidebar.menu.signIn": "Sign in",
