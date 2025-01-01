@@ -21,11 +21,10 @@ const Layout = ({
   relatedGroupId,
   memberGroups,
   fetchManyGroupsStatus,
+  colorTheme,
 }) => {
-  // TODO: this should be based on user settings
-  const colorMode = localStorage.getItem('colorMode') ?? 'light';
   return (
-  <div className="app-wrapper overflow-visible text-body bg-body" data-bs-theme={colorMode}>
+  <div className="app-wrapper overflow-visible text-body bg-body" data-bs-theme={colorTheme}>
     <Helmet defaultTitle={`${title}`} titleTemplate={`%s | ${title}`} />
     <Header
       isLoggedIn={isLoggedIn}
@@ -56,6 +55,7 @@ Layout.propTypes = {
   relatedGroupId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
   fetchManyGroupsStatus: PropTypes.string,
+  colorTheme: PropTypes.string,
 };
 
 export default Layout;
