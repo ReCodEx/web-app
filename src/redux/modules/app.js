@@ -22,11 +22,11 @@ export const setLang = createAction(actionTypes.SET_LANG, lang => ({
 export const newPendingFetchOperation = createAction(actionTypes.NEW_PENDING_FETCH_OPERATION);
 export const completedFetchOperation = createAction(actionTypes.COMPLETED_FETCH_OPERATION);
 
-export const fetchExtensionUrl = (extension, instance, locale) =>
+export const fetchExtensionUrl = (extension, instance, locale, returnUrl = '') =>
   createApiAction({
     type: actionTypes.EXTENSION_URL,
     method: 'GET',
-    endpoint: `/extensions/${extension}/${instance}?locale=${locale}`,
+    endpoint: `/extensions/${encodeURIComponent(extension)}/${encodeURIComponent(instance)}?locale=${encodeURIComponent(locale)}&return=${encodeURIComponent(returnUrl)}`,
     meta: { extension, instance, locale },
   });
 
