@@ -16,6 +16,7 @@ export default connect(
     notifications: notificationsSelector(state),
   }),
   dispatch => ({
-    fetchExtensionUrl: (extension, instance, locale) => dispatch(fetchExtensionUrl(extension, instance, locale)),
+    fetchExtensionUrl: (extension, instance, locale, returnUrl = '') =>
+      dispatch(fetchExtensionUrl(extension, instance, locale, returnUrl)),
   })
 )(Sidebar);

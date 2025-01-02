@@ -53,7 +53,10 @@ const extensionClickHandler = lruMemoize(fetchExtensionUrl => ev => {
     const extension = ev.currentTarget.dataset.extension;
     const instance = ev.currentTarget.dataset.instance;
     const locale = ev.currentTarget.dataset.locale;
-    fetchExtensionUrl(extension, instance, locale).then(({ value: url }) => window.location.assign(url));
+    const returnUrl = window.location.href;
+    fetchExtensionUrl(extension, instance, locale, returnUrl).then(
+      ({ value: url }) => url && window.location.assign(url)
+    );
   }
 });
 
