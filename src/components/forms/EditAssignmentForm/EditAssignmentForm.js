@@ -726,7 +726,7 @@ class EditAssignmentForm extends Component {
                       <Explanation id="canViewJudgeLogsExplanation">
                         <FormattedMessage
                           id="app.editAssignmentForm.canViewJudgeLogsExplanation"
-                          defaultMessage="If set, judge logs are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desriable for some categories of exercises."
+                          defaultMessage="If set, judge logs are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desirable for some categories of exercises."
                         />
                       </Explanation>
                     </span>
@@ -739,7 +739,7 @@ class EditAssignmentForm extends Component {
                       <Explanation id="canViewJudgeStdoutExplanation">
                         <FormattedMessage
                           id="app.editAssignmentForm.canViewJudgeStdoutExplanation"
-                          defaultMessage="If set, judge primary logs (stdout) are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desriable for some categories of exercises."
+                          defaultMessage="If set, judge primary logs (stdout) are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desirable for some categories of exercises."
                         />
                       </Explanation>
                     </span>
@@ -763,7 +763,7 @@ class EditAssignmentForm extends Component {
                       <Explanation id="canViewJudgeStderrExplanation" placement="top">
                         <FormattedMessage
                           id="app.editAssignmentForm.canViewJudgeStderrExplanation"
-                          defaultMessage="If set, judge secondary logs (stderr) are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desriable for some categories of exercises."
+                          defaultMessage="If set, judge secondary logs (stderr) are visible to students. Please note that publishing the logs also provides means for the students to access the inputs which may not be desirable for some categories of exercises."
                         />
                       </Explanation>
                     </span>
