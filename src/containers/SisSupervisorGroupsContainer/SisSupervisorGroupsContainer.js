@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Table, Accordion, Card, OverlayTrigger, Popover } from 'react-bootstrap';
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
+import AccordionContext from 'react-bootstrap/AccordionContext';
 import { Link } from 'react-router-dom';
 
 import Box from '../../components/widgets/Box';
@@ -49,6 +51,27 @@ import { unique, arrayToObject, hasPermissions, safeGet } from '../../helpers/co
 const filterGroupsForBinding = (groups, alreadyBoundGroups) => {
   const bound = arrayToObject(alreadyBoundGroups);
   return groups.filter(group => !bound[group.id] && !group.organizational && !group.archived);
+};
+
+const MyAccordionButton = ({ children, eventKey }) => {
+  const { activeEventKey } = useContext(AccordionContext);
+  const decoratedOnClick = useAccordionButton(eventKey);
+  const isCurrentEventKey = activeEventKey === eventKey;
+
+  return (
+    <div onClick={decoratedOnClick} className="clickable position-relative">
+      <Icon
+        className="float-end opacity-25 position-absolute end-0 top-50 translate-middle-y"
+        icon={isCurrentEventKey ? 'circle-chevron-down' : 'circle-chevron-left'}
+      />
+      {children}
+    </div>
+  );
+};
+
+MyAccordionButton.propTypes = {
+  children: PropTypes.any,
+  eventKey: PropTypes.string.isRequired,
 };
 
 class SisSupervisorGroupsContainer extends Component {
@@ -229,13 +252,13 @@ class SisSupervisorGroupsContainer extends Component {
                                     .map(course => (
                                       <Card key={course.course.code} className="card-light mb-3">
                                         <Card.Header>
-                                          <Accordion.Button as="div" eventKey={course.course.code}>
+                                          <MyAccordionButton eventKey={course.course.code}>
                                             {course && (
                                               <small>
                                                 <CourseLabel {...course.course} groupsCount={course.groups.length} />
                                               </small>
                                             )}
-                                          </Accordion.Button>
+                                          </MyAccordionButton>
                                         </Card.Header>
 
                                         <Accordion.Collapse eventKey={course.course.code}>
@@ -345,14 +368,21 @@ class SisSupervisorGroupsContainer extends Component {
                                                                 ))}
                                                               </td>
                                                               <td className="text-end">
-                                                                <TheButtonGroup>
+                                                                <TheButtonGroup className="text-nowrap">
                                                                   {hasPermissions(group, 'update') && (
                                                                     <Link to={GROUP_EDIT_URI_FACTORY(group.id)}>
                                                                       <Button variant="warning" size="xs">
-                                                                        <EditIcon gapRight={2} />
-                                                                        <FormattedMessage
-                                                                          id="app.editGroup.titleShort"
-                                                                          defaultMessage="Edit Group"
+                                                                        <EditIcon
+                                                                          gapLeft={1}
+                                                                          gapRight={1}
+                                                                          tooltipId={`edit/${course.course.code}/${group.id}`}
+                                                                          tooltipPlacement="bottom"
+                                                                          tooltip={
+                                                                            <FormattedMessage
+                                                                              id="app.editGroup.titleShort"
+                                                                              defaultMessage="Edit Group"
+                                                                            />
+                                                                          }
                                                                         />
                                                                       </Button>
                                                                     </Link>
@@ -360,10 +390,17 @@ class SisSupervisorGroupsContainer extends Component {
 
                                                                   <Link to={GROUP_INFO_URI_FACTORY(group.id)}>
                                                                     <Button variant="primary" size="xs">
-                                                                      <GroupIcon gapRight={2} />
-                                                                      <FormattedMessage
-                                                                        id="app.group.info"
-                                                                        defaultMessage="Group Info"
+                                                                      <GroupIcon
+                                                                        gapLeft={1}
+                                                                        gapRight={1}
+                                                                        tooltipId={`info/${course.course.code}/${group.id}`}
+                                                                        tooltipPlacement="bottom"
+                                                                        tooltip={
+                                                                          <FormattedMessage
+                                                                            id="app.group.info"
+                                                                            defaultMessage="Group Info"
+                                                                          />
+                                                                        }
                                                                       />
                                                                     </Button>
                                                                   </Link>
@@ -371,10 +408,17 @@ class SisSupervisorGroupsContainer extends Component {
                                                                   {hasPermissions(group, 'viewDetail') && (
                                                                     <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(group.id)}>
                                                                       <Button variant="primary" size="xs">
-                                                                        <AssignmentsIcon gapRight={2} />
-                                                                        <FormattedMessage
-                                                                          id="app.group.assignments"
-                                                                          defaultMessage="Assignments"
+                                                                        <AssignmentsIcon
+                                                                          gapLeft={1}
+                                                                          gapRight={1}
+                                                                          tooltipId={`assignments/${course.course.code}/${group.id}`}
+                                                                          tooltipPlacement="bottom"
+                                                                          tooltip={
+                                                                            <FormattedMessage
+                                                                              id="app.group.assignments"
+                                                                              defaultMessage="Assignments"
+                                                                            />
+                                                                          }
                                                                         />
                                                                       </Button>
                                                                     </Link>
@@ -384,10 +428,17 @@ class SisSupervisorGroupsContainer extends Component {
                                                                     hasPermissions(group, 'viewAssignments') && (
                                                                       <Link to={GROUP_STUDENTS_URI_FACTORY(group.id)}>
                                                                         <Button variant="primary" size="xs">
-                                                                          <StudentsIcon gapRight={2} />
-                                                                          <FormattedMessage
-                                                                            id="app.group.students"
-                                                                            defaultMessage="Students"
+                                                                          <StudentsIcon
+                                                                            gapLeft={1}
+                                                                            gapRight={1}
+                                                                            tooltipId={`students/${course.course.code}/${group.id}`}
+                                                                            tooltipPlacement="bottom"
+                                                                            tooltip={
+                                                                              <FormattedMessage
+                                                                                id="app.group.students"
+                                                                                defaultMessage="Students"
+                                                                              />
+                                                                            }
                                                                           />
                                                                         </Button>
                                                                       </Link>
