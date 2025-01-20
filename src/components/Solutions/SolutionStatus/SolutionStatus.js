@@ -211,7 +211,7 @@ class SolutionStatus extends Component {
                       note
                     ) : (
                       <em className="text-body-secondary small">
-                        <FormattedMessage id="app.solution.emptyNote" defaultMessage="empty" />
+                        <FormattedMessage id="generic.empty" defaultMessage="empty" />
                       </em>
                     )}
 

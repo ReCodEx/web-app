@@ -86,6 +86,7 @@ class SourceCodeViewer extends React.Component {
   linesRenderer = ({ rows, stylesheet, useInlineStyles }) => {
     const {
       id,
+      name,
       authorView = false,
       updateComment = null,
       removeComment = null,
@@ -118,6 +119,8 @@ class SourceCodeViewer extends React.Component {
                     onCancel={this.closeForms}
                     onSubmit={this.editComment}
                     showSuppressor={this.props.reviewClosed}
+                    fileName={name}
+                    lineNumber={lineNumber}
                   />
                 ) : (
                   <SourceCodeComment
@@ -138,6 +141,8 @@ class SourceCodeViewer extends React.Component {
                   onCancel={this.closeForms}
                   onSubmit={this.createNewComment}
                   showSuppressor={this.props.reviewClosed}
+                  fileName={name}
+                  lineNumber={lineNumber}
                 />
               )}
             </div>
