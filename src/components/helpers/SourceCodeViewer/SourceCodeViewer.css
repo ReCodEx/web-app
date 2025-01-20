@@ -103,11 +103,11 @@ pre .sourceCodeViewerComments, code .sourceCodeViewerComments {
   border-top-color:#f9e0e0;
 }
 
-.sourceCodeViewerComments > div > .recodex-markdown-container p {
+.recodex-markdown-container p {
   margin-bottom: 0.5rem;
 }
 
-.sourceCodeViewerComments > div > .recodex-markdown-container p:last-child {
+.recodex-markdown-container p:last-child {
   margin-bottom: 0.2rem;
 }
 
