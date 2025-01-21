@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderSystemMessagesContainer from '../../../containers/HeaderSystemMessagesContainer';
 import HeaderLanguageSwitching from '../HeaderLanguageSwitching';
+import HeaderQRCodeDropdown from '../HeaderQRCodeDropdown';
 import MemberGroupsDropdown from '../../Groups/MemberGroupsDropdown';
 import ClientOnly from '../../helpers/ClientOnly';
 import FetchManyResourceRenderer from '../../helpers/FetchManyResourceRenderer';
@@ -65,6 +66,7 @@ class Header extends Component {
           </ClientOnly>
 
           <ul className="navbar-nav ms-auto">
+            <HeaderQRCodeDropdown />
             {isLoggedIn && <HeaderSystemMessagesContainer locale={currentLang} />}
             <HeaderNotificationsContainer />
             <HeaderLanguageSwitching availableLangs={availableLangs} currentLang={currentLang} setLang={setLang} />
