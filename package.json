@@ -79,6 +79,7 @@
     "react-immutable-proptypes": "^2.2.0",
     "react-intl": "6.8.9",
     "react-motion": "^0.5.2",
+    "react-qr-code": "^2.0.15",
     "react-redux": "^9.2.0",
     "react-router": "^6.28.0",
     "react-router-dom": "^6.28.0",
