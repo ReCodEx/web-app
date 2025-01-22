@@ -6,6 +6,7 @@
   "app.ExercisePrefixIcons.archivedAt": "Archivováno v {archivedAt}.",
   "app.ExercisePrefixIcons.isLocked": "Úloha je zamčena autorem a nemůže být zadávána",
   "app.ExercisePrefixIcons.isPrivate": "Úloha je soukromá (viditelná pouze autorovi).",
+  "app.QRCodeDropdown.title": "QR kód s odkazem na aktuální stránku",
   "app.acceptGroupInvitation.acceptAndJoin": "Přijmout pozvání do skupiny",
   "app.acceptGroupInvitation.alreadyMember": "Již jste členem odpovídající skupiny.",
   "app.acceptGroupInvitation.expireAt": "Pozvánka pozbyde platnosti v",
