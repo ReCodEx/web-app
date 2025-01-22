@@ -1754,7 +1754,7 @@
   "app.sidebar.menu.admin.instances": "Instances",
   "app.sidebar.menu.admin.messages": "System Messages",
   "app.sidebar.menu.admin.server": "Server Management",
-  "app.sidebar.menu.admin.sis": "SIS Integration",
+  "app.sidebar.menu.admin.sis": "SIS Integration [old]",
   "app.sidebar.menu.admin.users": "Users",
   "app.sidebar.menu.archive": "Archive",
   "app.sidebar.menu.createAccount": "Create account",

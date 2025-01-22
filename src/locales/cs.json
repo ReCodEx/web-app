@@ -1754,7 +1754,7 @@
   "app.sidebar.menu.admin.instances": "Instance",
   "app.sidebar.menu.admin.messages": "Systémové zprávy",
   "app.sidebar.menu.admin.server": "Správa serveru",
-  "app.sidebar.menu.admin.sis": "SIS integrace",
+  "app.sidebar.menu.admin.sis": "SIS integrace [stará]",
   "app.sidebar.menu.admin.users": "Uživatelé",
   "app.sidebar.menu.archive": "Archiv",
   "app.sidebar.menu.createAccount": "Zaregistrovat se",

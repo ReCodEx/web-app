@@ -196,7 +196,9 @@ const Sidebar = ({
                   {Boolean(getExternalIdForCAS(user)) && (
                     <MenuItem
                       icon="id-badge"
-                      title={<FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration" />}
+                      title={
+                        <FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration [old]" />
+                      }
                       currentPath={currentUrl}
                       link={SIS_INTEGRATION_URI}
                     />
