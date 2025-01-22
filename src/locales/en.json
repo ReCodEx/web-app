@@ -6,6 +6,7 @@
   "app.ExercisePrefixIcons.archivedAt": "Archived at {archivedAt}.",
   "app.ExercisePrefixIcons.isLocked": "Exercise is locked by the author and cannot be assigned.",
   "app.ExercisePrefixIcons.isPrivate": "Exercise is private (visible only to author).",
+  "app.QRCodeDropdown.title": "QR code link to current page",
   "app.acceptGroupInvitation.acceptAndJoin": "Accept invitation and join the group",
   "app.acceptGroupInvitation.alreadyMember": "You are already a member of the corresponding group.",
   "app.acceptGroupInvitation.expireAt": "Invitation expires at",

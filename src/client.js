@@ -36,24 +36,6 @@ import 'ace-builds/src-noconflict/mode-scala.js';
 import 'ace-builds/src-noconflict/mode-typescript.js';
 import 'ace-builds/src-noconflict/keybinding-vim.js';
 
-/*
- * This is an ugly hack that deals with deprecated warnings generated in console log by obsolete
- * Overlay and OverlayTrigger components.
- * TODO FIXME: Remove after upgrading to react-bootstrap 2.0 and AdminLTE 4 (hopefully, the warnings will disapear).
- */
-// const consoleError = console.error; // eslint-disable-line no-console
-// console.error /* eslint-disable-line no-console */ = (msg, ...rest) => {
-//   if (typeof msg === 'string') {
-//     if (msg.startsWith('Warning: findDOMNode is deprecated and will be removed in the next major release.')) {
-//       return;
-//     }
-//     if (msg.includes('Support for defaultProps will be removed')) {
-//       return;
-//     }
-//   }
-//   consoleError(msg, ...rest);
-// };
-
 // override of worker paths, so they load properly
 const ACE_CDN_PREFIX = 'https://cdn.jsdelivr.net/npm/ace-builds@1.4.12/src-noconflict/';
 ace.config.set('basePath', ACE_CDN_PREFIX);
