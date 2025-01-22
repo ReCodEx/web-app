@@ -10,9 +10,9 @@ const Footer = ({ version }) => (
         defaultMessage="<strong>Version</strong> {version} (<a>changelog</a>)"
         values={{
           version,
-          strong: text => <strong>{text}</strong>,
+          strong: text => <strong key="version">{text}</strong>,
           a: caption => (
-            <a href="https://github.com/ReCodEx/wiki/wiki/Changelog" target="_blank" rel="noreferrer">
+            <a key="link" href="https://github.com/ReCodEx/wiki/wiki/Changelog" target="_blank" rel="noreferrer">
               {caption}
             </a>
           ),
@@ -24,7 +24,7 @@ const Footer = ({ version }) => (
       defaultMessage="Copyright © 2016-{year} <a>ReCodEx</a>. All rights reserved."
       values={{
         a: caption => (
-          <a href="http://github.com/recodex" target="_blank" rel="noreferrer">
+          <a key="link" href="http://github.com/recodex" target="_blank" rel="noreferrer">
             {caption}
           </a>
         ),
