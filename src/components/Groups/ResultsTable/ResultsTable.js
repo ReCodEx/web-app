@@ -385,8 +385,8 @@ class ResultsTable extends Component {
           headerSuffixClassName: styles.maxPointsRow,
           cellRenderer: stats => (
             <>
-              {stats.hasLimit && stats.passesLimit && <AcceptedIcon className="text-success" />}
-              {stats.hasLimit && !stats.passesLimit && (
+              {stats && stats.hasLimit && stats.passesLimit && <AcceptedIcon className="text-success" />}
+              {stats && stats.hasLimit && !stats.passesLimit && (
                 <Icon icon={['far', 'circle-xmark']} className="text-body-secondary opacity-50" />
               )}
             </>
