@@ -21,24 +21,26 @@ const getMessage = (item, formatMessage) =>
  * The component passes the title and description to the Helmet library
  * which reflects these into the <head> section of the HTML document.
  */
-const PageContent = ({ intl: { formatMessage }, title = '', windowTitle = null, icon = null, children }) => (
-  <main className="app-main bg-body-tertiary pb-1">
-    <Helmet title={getMessage(windowTitle || title, formatMessage)} />
-    {(title || icon) && (
-      <div className="app-content-header">
-        <h1 className="m-0 px-3 text-dark h3">
-          {icon && (
-            <span className="me-3 text-body-secondary">{typeof icon === 'string' ? <Icon icon={icon} /> : icon}</span>
-          )}
-          {title}
-        </h1>
+const PageContent = ({ intl: { formatMessage }, title = '', windowTitle = null, icon = null, children }) => {
+  return (
+    <main className="app-main bg-body-tertiary pb-1">
+      <Helmet title={getMessage(windowTitle || title, formatMessage)} />
+      {(title || icon) && (
+        <div className="app-content-header">
+          <h1 className="m-0 px-3 text-dark h3">
+            {icon && (
+              <span className="me-3 text-body-secondary">{typeof icon === 'string' ? <Icon icon={icon} /> : icon}</span>
+            )}
+            {title}
+          </h1>
+        </div>
+      )}
+      <div className="app-content">
+        <Container fluid>{children}</Container>
       </div>
-    )}
-    <div className="app-content">
-      <Container fluid>{children}</Container>
-    </div>
-  </main>
-);
+    </main>
+  );
+};
 
 PageContent.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),

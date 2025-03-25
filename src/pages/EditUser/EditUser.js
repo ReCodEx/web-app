@@ -13,7 +13,9 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import { LocalIcon, TransferIcon, EditUserIcon } from '../../components/icons';
 import { isStudentRole } from '../../components/helpers/usersRoles.js';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
-import EditUserProfileForm from '../../components/forms/EditUserProfileForm';
+import EditUserProfileForm, {
+  prepareInitialValues as prepareUserProfileValues,
+} from '../../components/forms/EditUserProfileForm';
 import EditUserSettingsForm from '../../components/forms/EditUserSettingsForm';
 import EditUserUIDataForm, {
   EDITOR_FONT_SIZE_MIN,
@@ -21,7 +23,9 @@ import EditUserUIDataForm, {
   EDITOR_FONT_SIZE_DEFAULT,
 } from '../../components/forms/EditUserUIDataForm';
 import GenerateTokenForm, { initialValues } from '../../components/forms/GenerateTokenForm';
-import EditUserRoleForm from '../../components/forms/EditUserRoleForm';
+import EditUserRoleForm, {
+  prepareInitialValues as prepareUserRoleValues,
+} from '../../components/forms/EditUserRoleForm';
 import CalendarTokens from '../../components/Users/CalendarTokens';
 import Box from '../../components/widgets/Box';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
@@ -44,6 +48,8 @@ import {
   setUserCalendarExpired,
 } from '../../redux/modules/userCalendars.js';
 import { getUserCalendars } from '../../redux/selectors/userCalendars.js';
+import { EMPTY_OBJ } from '../../helpers/common.js';
+import OnlyMounted from '../../components/widgets/OnlyMounted/OnlyMounted.js';
 
 const prepareNumber = (number, min, max, defaultValue) => {
   number = Number(number);
@@ -78,10 +84,16 @@ const prepareUserUIDataInitialValues = lruMemoize(
 );
 
 class EditUser extends Component {
+  constructor(props) {
+    super(props);
+    this.user = null;
+  }
+
   static loadAsync = ({ userId }, dispatch) =>
     Promise.all([dispatch(fetchUserIfNeeded(userId)), dispatch(fetchUserCalendarsIfNeeded(userId))]);
 
   componentDidMount() {
+    this.setState({ mounted: true });
     this.props.loadAsync();
   }
 
@@ -163,48 +175,47 @@ class EditUser extends Component {
 
             <Row>
               <Col lg={6}>
-                <EditUserProfileForm
-                  onSubmit={formData => this.updateProfile(formData, isSuperAdmin || !data.privateData.isExternal)}
-                  initialValues={{
-                    firstName: data.name.firstName,
-                    lastName: data.name.lastName,
-                    titlesBeforeName: data.name.titlesBeforeName,
-                    titlesAfterName: data.name.titlesAfterName,
-                    email: data.privateData.email,
-                    passwordStrength: null,
-                    gravatarUrlEnabled: data.avatarUrl !== null,
-                  }}
-                  allowChangePassword={data.privateData.isLocal}
-                  emptyLocalPassword={data.privateData.emptyLocalPassword}
-                  canForceChangePassword={isSuperAdmin && data.id !== loggedUserId}
-                  disabledNameChange={data.privateData.isExternal && !isSuperAdmin}
-                />
+                <OnlyMounted>
+                  <EditUserProfileForm
+                    onSubmit={formData => this.updateProfile(formData, isSuperAdmin || !data.privateData.isExternal)}
+                    initialValues={prepareUserProfileValues(data)}
+                    allowChangePassword={data.privateData.isLocal}
+                    emptyLocalPassword={data.privateData.emptyLocalPassword}
+                    canForceChangePassword={isSuperAdmin && data.id !== loggedUserId}
+                    disabledNameChange={data.privateData.isExternal && !isSuperAdmin}
+                  />
+                </OnlyMounted>
               </Col>
 
               {data.id === loggedUserId && (
                 <Col lg={6}>
                   {data.privateData.settings && (
-                    <EditUserSettingsForm
-                      onSubmit={updateSettings}
-                      user={data}
-                      initialValues={data.privateData.settings}
-                    />
+                    <OnlyMounted>
+                      <EditUserSettingsForm
+                        onSubmit={updateSettings}
+                        user={data}
+                        initialValues={data.privateData.settings}
+                      />
+                    </OnlyMounted>
                   )}
-
-                  <EditUserUIDataForm
-                    onSubmit={updateUIData}
-                    initialValues={prepareUserUIDataInitialValues(data.privateData.uiData || {})}
-                  />
+                  <OnlyMounted>
+                    <EditUserUIDataForm
+                      onSubmit={updateUIData}
+                      initialValues={prepareUserUIDataInitialValues(data.privateData.uiData || EMPTY_OBJ)}
+                    />
+                  </OnlyMounted>
                 </Col>
               )}
 
               {isSuperAdmin && data.id !== loggedUserId && data.privateData && (
                 <Col lg={6}>
-                  <EditUserRoleForm
-                    currentRole={data.privateData.role}
-                    initialValues={{ role: data.privateData.role }}
-                    onSubmit={this.setRole}
-                  />
+                  <OnlyMounted>
+                    <EditUserRoleForm
+                      currentRole={data.privateData.role}
+                      initialValues={prepareUserRoleValues(data)}
+                      onSubmit={this.setRole}
+                    />
+                  </OnlyMounted>
                 </Col>
               )}
             </Row>
@@ -232,7 +243,9 @@ class EditUser extends Component {
 
                 <Row>
                   <Col lg={12}>
-                    <GenerateTokenForm onSubmit={generateToken} initialValues={initialValues} lastToken={lastToken} />
+                    <OnlyMounted>
+                      <GenerateTokenForm onSubmit={generateToken} initialValues={initialValues} lastToken={lastToken} />
+                    </OnlyMounted>
                   </Col>
                 </Row>
               </>

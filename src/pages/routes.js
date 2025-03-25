@@ -227,7 +227,7 @@ export const match = (urlPath, isLoggedIn) => {
   return { redirect, ...match, loadAsync };
 };
 
-export const buildRoutes = (urlPath, isLoggedIn) => {
+export const buildRoutes = lruMemoize((urlPath, isLoggedIn) => {
   return (
     <Routes>
       {routesDescriptors.map(routeObj => {
@@ -240,7 +240,7 @@ export const buildRoutes = (urlPath, isLoggedIn) => {
       })}
     </Routes>
   );
-};
+});
 
 export const pathHasCustomLoadGroups = lruMemoize(urlPath => {
   const routeObj = routesDescriptors.find(({ route }) => matchPath(route, urlPath) !== null);

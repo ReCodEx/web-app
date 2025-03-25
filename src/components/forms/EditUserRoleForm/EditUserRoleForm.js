@@ -4,6 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm } from 'redux-form';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
+import { lruMemoize } from 'reselect';
 
 import { knownRoles, roleLabels, roleDescriptions, UserRoleIcon } from '../../helpers/usersRoles.js';
 import Callout from '../../widgets/Callout';
@@ -11,6 +12,8 @@ import FormBox from '../../widgets/FormBox';
 import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 import StandaloneRadioField from '../Fields/StandaloneRadioField.js';
+
+export const prepareInitialValues = lruMemoize(user => ({ role: user.privateData.role }));
 
 const EditUserRoleForm = ({
   currentRole = null,
