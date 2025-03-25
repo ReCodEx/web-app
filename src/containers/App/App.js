@@ -37,8 +37,6 @@ const reloadIsRequired = (...statuses) =>
   statuses.includes(resourceStatus.FAILED) && !statuses.includes(resourceStatus.PENDING);
 
 class App extends Component {
-  static ignoreNextLocationChangeFlag = false;
-
   static loadAsync =
     customLoadGroups =>
     (params, dispatch, { userId }) =>
@@ -154,6 +152,7 @@ class App extends Component {
 
   render() {
     const { userId, instanceId } = this.props;
+
     return userId && !instanceId ? (
       <div
         style={{

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, change } from 'redux-form';
+import { lruMemoize } from 'reselect';
 import isEmail from 'validator/lib/isEmail.js';
 
 import FormBox from '../../widgets/FormBox';
@@ -11,6 +12,16 @@ import Explanation from '../../widgets/Explanation';
 import { SaveIcon } from '../../icons';
 import { validateRegistrationData } from '../../../redux/modules/users.js';
 import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
+
+export const prepareInitialValues = lruMemoize(user => ({
+  firstName: user.name.firstName,
+  lastName: user.name.lastName,
+  titlesBeforeName: user.name.titlesBeforeName,
+  titlesAfterName: user.name.titlesAfterName,
+  email: user.privateData.email,
+  passwordStrength: null,
+  gravatarUrlEnabled: user.avatarUrl !== null,
+}));
 
 const EditUserProfileForm = ({
   submitting,
