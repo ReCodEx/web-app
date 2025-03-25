@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
-import { OverlayTrigger, Tooltip, Row, Col } from 'react-bootstrap';
+import { Overlay, Tooltip, Row, Col } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import FormBox from '../../widgets/FormBox';
@@ -80,6 +80,8 @@ const GenerateTokenForm = ({
   intl: { formatMessage },
 }) => {
   const [copied, setCopied] = useState(false);
+  const btnTarget = useRef(null);
+
   return (
     <FormBox
       title={<FormattedMessage id="app.generateTokenForm.title" defaultMessage="Generate Application Token" />}
@@ -87,31 +89,27 @@ const GenerateTokenForm = ({
       footer={
         <div className="text-center">
           <TheButtonGroup>
-            {lastToken &&
-              (copied ? (
-                <OverlayTrigger
-                  trigger={['hover', 'focus', 'click']}
-                  defaultShow={true}
-                  placement="bottom"
-                  onToggle={shown => !shown && setCopied(false)}
-                  overlay={
-                    <Tooltip id={lastToken}>
-                      <FormattedMessage id="app.generateTokenForm.copied" defaultMessage="Copied!" />
-                    </Tooltip>
-                  }>
-                  <Button variant="secondary" disabled>
-                    <Icon icon="clipboard-check" gapRight={2} fixedWidth />
-                    <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
-                  </Button>
-                </OverlayTrigger>
-              ) : (
-                <CopyToClipboard text={lastToken} onCopy={() => setCopied(true)}>
-                  <Button variant="info">
-                    <CopyIcon gapRight={2} fixedWidth />
+            {lastToken && (
+              <>
+                <CopyToClipboard text={lastToken} onCopy={() => setCopied(!copied)}>
+                  <Button variant={copied ? 'secondary' : 'info'} ref={btnTarget}>
+                    {copied ? (
+                      <Icon icon="clipboard-check" gapRight={2} fixedWidth />
+                    ) : (
+                      <CopyIcon gapRight={2} fixedWidth />
+                    )}
                     <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
                   </Button>
                 </CopyToClipboard>
-              ))}
+                <Overlay target={btnTarget.current} show={copied} placement="bottom">
+                  {props => (
+                    <Tooltip id="token-copied" {...props}>
+                      <FormattedMessage id="app.generateTokenForm.copied" defaultMessage="Copied!" />
+                    </Tooltip>
+                  )}
+                </Overlay>
+              </>
+            )}
 
             <SubmitButton
               id="generateToken"
