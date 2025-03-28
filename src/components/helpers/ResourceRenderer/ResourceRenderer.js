@@ -53,8 +53,17 @@ const shallowResourcesEqual = (oldResources, newResources) => {
  * for the loaded state.
  */
 class ResourceRenderer extends Component {
+  state = { mounted: false };
   oldResources = null;
   oldData = null;
+
+  componentDidMount() {
+    this.setState({ mounted: true });
+  }
+
+  componentWillUnmount() {
+    this.setState({ mounted: false });
+  }
 
   returnAsArray = () => {
     const { returnAsArray = null, resourceArray = null } = this.props;
@@ -148,11 +157,11 @@ class ResourceRenderer extends Component {
     const isReloading =
       stillLoading && !forceLoading && resourcesLength > 0 && resources.every(res => res && isReadyOrReloading(res));
 
-    if (isReloading && this.oldData !== null) {
+    if (this.state.mounted && isReloading && this.oldData !== null) {
       return this.renderFromCache();
     }
 
-    return stillLoading
+    return !this.state.mounted || stillLoading
       ? hiddenUntilReady
         ? null
         : this.renderLoading()

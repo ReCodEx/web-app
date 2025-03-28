@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+/**
+ * This component is a hack to prevent rendering of the children when the component is not mounted.
+ * This is useful when the component has side effects that should not be executed when the component is not mounted.
+ * Currently all ReduxForm have side effects (initialization) that take place during the first render and it slows down transitions between pages
+ * (when the re-rendering of the old page is triggered by not-mounted renders of the new page).
+ */
 class OnlyMounted extends Component {
   state = { mounted: false };
 

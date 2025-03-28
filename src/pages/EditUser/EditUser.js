@@ -49,7 +49,6 @@ import {
 } from '../../redux/modules/userCalendars.js';
 import { getUserCalendars } from '../../redux/selectors/userCalendars.js';
 import { EMPTY_OBJ } from '../../helpers/common.js';
-import OnlyMounted from '../../components/widgets/OnlyMounted/OnlyMounted.js';
 
 const prepareNumber = (number, min, max, defaultValue) => {
   number = Number(number);
@@ -175,47 +174,39 @@ class EditUser extends Component {
 
             <Row>
               <Col lg={6}>
-                <OnlyMounted>
-                  <EditUserProfileForm
-                    onSubmit={formData => this.updateProfile(formData, isSuperAdmin || !data.privateData.isExternal)}
-                    initialValues={prepareUserProfileValues(data)}
-                    allowChangePassword={data.privateData.isLocal}
-                    emptyLocalPassword={data.privateData.emptyLocalPassword}
-                    canForceChangePassword={isSuperAdmin && data.id !== loggedUserId}
-                    disabledNameChange={data.privateData.isExternal && !isSuperAdmin}
-                  />
-                </OnlyMounted>
+                <EditUserProfileForm
+                  onSubmit={formData => this.updateProfile(formData, isSuperAdmin || !data.privateData.isExternal)}
+                  initialValues={prepareUserProfileValues(data)}
+                  allowChangePassword={data.privateData.isLocal}
+                  emptyLocalPassword={data.privateData.emptyLocalPassword}
+                  canForceChangePassword={isSuperAdmin && data.id !== loggedUserId}
+                  disabledNameChange={data.privateData.isExternal && !isSuperAdmin}
+                />
               </Col>
 
               {data.id === loggedUserId && (
                 <Col lg={6}>
                   {data.privateData.settings && (
-                    <OnlyMounted>
-                      <EditUserSettingsForm
-                        onSubmit={updateSettings}
-                        user={data}
-                        initialValues={data.privateData.settings}
-                      />
-                    </OnlyMounted>
-                  )}
-                  <OnlyMounted>
-                    <EditUserUIDataForm
-                      onSubmit={updateUIData}
-                      initialValues={prepareUserUIDataInitialValues(data.privateData.uiData || EMPTY_OBJ)}
+                    <EditUserSettingsForm
+                      onSubmit={updateSettings}
+                      user={data}
+                      initialValues={data.privateData.settings}
                     />
-                  </OnlyMounted>
+                  )}
+                  <EditUserUIDataForm
+                    onSubmit={updateUIData}
+                    initialValues={prepareUserUIDataInitialValues(data.privateData.uiData || EMPTY_OBJ)}
+                  />
                 </Col>
               )}
 
               {isSuperAdmin && data.id !== loggedUserId && data.privateData && (
                 <Col lg={6}>
-                  <OnlyMounted>
-                    <EditUserRoleForm
-                      currentRole={data.privateData.role}
-                      initialValues={prepareUserRoleValues(data)}
-                      onSubmit={this.setRole}
-                    />
-                  </OnlyMounted>
+                  <EditUserRoleForm
+                    currentRole={data.privateData.role}
+                    initialValues={prepareUserRoleValues(data)}
+                    onSubmit={this.setRole}
+                  />
                 </Col>
               )}
             </Row>
@@ -243,9 +234,7 @@ class EditUser extends Component {
 
                 <Row>
                   <Col lg={12}>
-                    <OnlyMounted>
-                      <GenerateTokenForm onSubmit={generateToken} initialValues={initialValues} lastToken={lastToken} />
-                    </OnlyMounted>
+                    <GenerateTokenForm onSubmit={generateToken} initialValues={initialValues} lastToken={lastToken} />
                   </Col>
                 </Row>
               </>
