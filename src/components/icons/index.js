@@ -74,13 +74,7 @@ export const InvertIcon = props => <Icon {...props} icon="yin-yang" />;
 export const LimitsIcon = props => <Icon {...props} icon="business-time" />;
 export const LinkIcon = props => <Icon {...props} icon="share-square" />;
 export const LoadingIcon = ({ className = '', ...props }) => (
-  <Icon
-    {...props}
-    icon={window && window.recodexmas ? ['far', 'snowflake'] : 'spinner'}
-    pulse={!(window && window.recodexmas)}
-    spin={window && window.recodexmas}
-    className={'opacity-75 ' + className}
-  />
+  <Icon {...props} icon="leaf" spin className={'opacity-75 ' + className} />
 );
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export { LockIcon };

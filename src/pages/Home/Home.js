@@ -15,6 +15,7 @@ import Icon, {
   HomeIcon,
   MailIcon,
   ShadowAssignmentIcon,
+  LinkIcon,
 } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Markdown from '../../components/widgets/Markdown';
@@ -25,6 +26,7 @@ import { getConfigVar, URL_PATH_PREFIX } from '../../helpers/config.js';
 import { getLocalizedName, getLocalizedDescription } from '../../helpers/localizedData.js';
 
 import * as styles from './Home.less';
+import Callout from '../../components/widgets/Callout';
 
 const BASIC_HTML = {
   strong: content => <strong>{content}</strong>,
@@ -36,6 +38,23 @@ const EXTERNAL_AUTH_HELPDESK_URL = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
 const Home = ({ effectiveRole, instance = null, intl: { locale } }) => (
   <PageContent icon={<HomeIcon />} title={<FormattedMessage id="app.homepage.title" defaultMessage="Home Page" />}>
     <div>
+      <Callout variant="success" icon="leaf">
+        <h2>
+          <FormattedMessage id="app.eco.title" defaultMessage="Announcing new green initiative" />
+        </h2>
+        <p>
+          <FormattedMessage
+            id="app.eco.description"
+            defaultMessage="ReCodEx will rename to rECOdex and we have outlined a plan how to make it more ecological."
+          />
+          <br />
+          <a href="https://github.com/ReCodEx/wiki/wiki/rECOdex-Green-Initiative" target="_blank" rel="noreferrer">
+            <FormattedMessage id="app.eco.link" defaultMessage="For more details, click here..." />
+            <LinkIcon gapLeft />
+          </a>
+        </p>
+      </Callout>
+
       <hr />
       <Row>
         <Col lg={12} xl={6}>

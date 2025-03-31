@@ -103,7 +103,7 @@ const Sidebar = ({
                   <LoadingIcon gapRight={2} />
                 </span>
               )}
-              Re<b>CodEx</b>
+              r<b className="text-success">ECO</b>dex
             </span>
           </>
         </Link>

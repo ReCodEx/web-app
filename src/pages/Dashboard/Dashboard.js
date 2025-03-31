@@ -49,6 +49,7 @@ import {
   AssignmentsIcon,
   SupervisorIcon,
   StudentsIcon,
+  LinkIcon,
 } from '../../components/icons';
 import { isSupervisorRole } from '../../components/helpers/usersRoles.js';
 import withLinks from '../../helpers/withLinks.js';
@@ -138,6 +139,26 @@ class Dashboard extends Component {
         {user => (
           <div>
             <UserNavigation userId={user.id} canEdit isLoggedInUser />
+
+            <Callout variant="success" icon="leaf">
+              <h2>
+                <FormattedMessage id="app.eco.title" defaultMessage="Announcing new green initiative" />
+              </h2>
+              <p>
+                <FormattedMessage
+                  id="app.eco.description"
+                  defaultMessage="ReCodEx will rename to rECOdex and we have outlined a plan how to make it more ecological."
+                />
+                <br />
+                <a
+                  href="https://github.com/ReCodEx/wiki/wiki/rECOdex-Green-Initiative"
+                  target="_blank"
+                  rel="noreferrer">
+                  <FormattedMessage id="app.eco.link" defaultMessage="For more details, click here..." />
+                  <LinkIcon gapLeft />
+                </a>
+              </p>
+            </Callout>
 
             {user && !user.isVerified && (
               <NotVerifiedEmailCallout userId={user.id} refreshUser={() => refreshUser(user.id)} />
