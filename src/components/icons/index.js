@@ -92,6 +92,7 @@ export const OutputIcon = props => <Icon {...props} icon="sign-out-alt" />;
 export const PastDeadlineIcon = props => <Icon {...props} icon="skull" />;
 export const PipelineIcon = props => <Icon {...props} icon="random" />;
 export const PipelineStructureIcon = props => <Icon {...props} icon="sitemap" />;
+export const PlagiarismCheckedIcon = props => <Icon icon="person-circle-check" {...props} />;
 export const PlagiarismIcon = props => <Icon icon="person-circle-exclamation" {...props} />;
 export const PointsIcon = props => <Icon icon="comment-dollar" {...props} />;
 export const PointsDecreasedIcon = props => <Icon icon="level-down-alt" className="text-body-secondary" {...props} />;

@@ -31,6 +31,7 @@ const dateTime = ({
   showSeconds = false,
   showRelative = isDeadline,
   noWrap = true,
+  compact = false,
 }) => {
   const { dateFormatOverride = null } = useContext(UserUIDataContext);
 
@@ -58,17 +59,14 @@ const dateTime = ({
             <FormattedDate value={unixts * 1000} />
           )}
 
-          {(showTime || showRelative) && <span className="px-1"> </span>}
+          {(showTime || showRelative) && <span className={compact ? '' : 'px-1'}> </span>}
         </span>
       )}
 
       {showTime && (
-        <span
-          className={classnames({
-            'text-nowrap': true,
-          })}>
+        <span className="text-nowrap">
           <FormattedTime value={unixts * 1000} format={showSeconds ? '24hourWithSeconds' : '24hour'} />
-          {showRelative && <span className="px-1"> </span>}
+          {showRelative && <span className={compact ? '' : 'px-1'}> </span>}
         </span>
       )}
 
@@ -143,6 +141,7 @@ dateTime.propTypes = {
   deadlineDangerTime: PropTypes.number,
   deadlineAlertTime: PropTypes.number,
   noWrap: PropTypes.bool,
+  compact: PropTypes.bool,
 };
 
 DateTime.propTypes = {
