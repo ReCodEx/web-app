@@ -42,12 +42,12 @@ const ReviewCommentSnippetDialog = ({
       <tbody>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(i => (
           <tr key={i} className={text && text === snippets[`snippet${i}`] ? 'table-success' : ''}>
-            <th>#{i}</th>
+            <th className={!snippets[`snippet${i}`] && 'text-muted opacity-50'}>#{i}</th>
             <td className="w-100 small align-middle">
               {snippets[`snippet${i}`] ? (
                 <Markdown source={snippets[`snippet${i}`]} />
               ) : (
-                <i className="text-muted opacity-50">
+                <i className="text-muted opacity-25">
                   <FormattedMessage id="generic.empty" defaultMessage="empty" />
                 </i>
               )}
