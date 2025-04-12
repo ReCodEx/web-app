@@ -48,6 +48,7 @@ class SourceCodeField extends Component {
         }
       }
       ev.stopPropagation();
+      ev.preventDefault();
     }
   };
 
