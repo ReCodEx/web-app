@@ -11,11 +11,13 @@ import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
 import DeletePipelineButtonContainer from '../../containers/DeletePipelineButtonContainer';
 import PageContent from '../../components/layout/PageContent';
 import Box from '../../components/widgets/Box';
+import OnlyMounted from '../../components/widgets/OnlyMounted';
+import PipelinesList from '../../components/Pipelines/PipelinesList';
+import { AddIcon, EditIcon, PipelineIcon } from '../../components/icons';
+
 import { canEditPipeline } from '../../redux/selectors/users.js';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
-import { AddIcon, EditIcon, PipelineIcon } from '../../components/icons';
 import { create as createPipeline } from '../../redux/modules/pipelines.js';
-import PipelinesList from '../../components/Pipelines/PipelinesList';
 
 import withLinks from '../../helpers/withLinks.js';
 import { withRouterProps } from '../../helpers/withRouter.js';
@@ -72,61 +74,68 @@ class Pipelines extends Component {
       <PageContent
         icon={<PipelineIcon />}
         title={<FormattedMessage id="app.pipelines.title" defaultMessage="List of All Pipelines" />}>
-        <Box
-          title={<FormattedMessage id="app.pipelines.listTitle" defaultMessage="Pipelines" />}
-          footer={
-            <div className="text-center">
-              <Button
-                variant="success"
-                size="sm"
-                onClick={() => {
-                  this.newPipeline();
-                }}>
-                <AddIcon gapRight={2} />
-                <FormattedMessage id="app.pipelines.createNew" defaultMessage="Create New Pipeline" />
-              </Button>
-            </div>
-          }
-          unlimitedHeight>
-          <PaginationContainer
-            id="pipelines-all"
-            endpoint="pipelines"
-            defaultOrderBy="name"
-            filtersCreator={(filters, setFilters) => (
-              <SimpleTextSearch
-                query={filters.search || ''}
-                isLoading={setFilters === null}
-                onSubmit={submitHandler(setFilters)}
-              />
-            )}>
-            {({ data, offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy, reload }) => (
-              <PipelinesList
-                pipelines={data}
-                heading={this.headingCreator({
-                  offset,
-                  limit,
-                  totalCount,
-                  orderByColumn,
-                  orderByDescending,
-                  setOrderBy,
-                })}
-                createActions={id =>
-                  isAuthorOfPipeline(id) && (
-                    <TheButtonGroup>
-                      <Link to={PIPELINE_EDIT_URI_FACTORY(id)}>
-                        <Button size="xs" variant="warning">
-                          <EditIcon gapRight={2} />
-                          <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                        </Button>
-                      </Link>
-                      <DeletePipelineButtonContainer id={id} size="xs" resourceless={true} onDeleted={() => reload()} />
-                    </TheButtonGroup>
-                  )
-                }
-              />
-            )}
-          </PaginationContainer>
-        </Box>
+        <OnlyMounted>
+          <Box
+            title={<FormattedMessage id="app.pipelines.listTitle" defaultMessage="Pipelines" />}
+            footer={
+              <div className="text-center">
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => {
+                    this.newPipeline();
+                  }}>
+                  <AddIcon gapRight={2} />
+                  <FormattedMessage id="app.pipelines.createNew" defaultMessage="Create New Pipeline" />
+                </Button>
+              </div>
+            }
+            unlimitedHeight>
+            <PaginationContainer
+              id="pipelines-all"
+              endpoint="pipelines"
+              defaultOrderBy="name"
+              filtersCreator={(filters, setFilters) => (
+                <SimpleTextSearch
+                  query={filters.search || ''}
+                  isLoading={setFilters === null}
+                  onSubmit={submitHandler(setFilters)}
+                />
+              )}>
+              {({ data, offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy, reload }) => (
+                <PipelinesList
+                  pipelines={data}
+                  heading={this.headingCreator({
+                    offset,
+                    limit,
+                    totalCount,
+                    orderByColumn,
+                    orderByDescending,
+                    setOrderBy,
+                  })}
+                  createActions={id =>
+                    isAuthorOfPipeline(id) && (
+                      <TheButtonGroup>
+                        <Link to={PIPELINE_EDIT_URI_FACTORY(id)}>
+                          <Button size="xs" variant="warning">
+                            <EditIcon gapRight={2} />
+                            <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                          </Button>
+                        </Link>
+                        <DeletePipelineButtonContainer
+                          id={id}
+                          size="xs"
+                          resourceless={true}
+                          onDeleted={() => reload()}
+                        />
+                      </TheButtonGroup>
+                    )
+                  }
+                />
+              )}
+            </PaginationContainer>
+          </Box>
+        </OnlyMounted>
       </PageContent>
     );
   }

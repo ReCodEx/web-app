@@ -15,6 +15,7 @@ import { ExerciseIcon } from '../../components/icons';
 import { create as createExercise } from '../../redux/modules/exercises.js';
 import { notArchivedGroupsSelector, groupDataAccessorSelector } from '../../redux/selectors/groups.js';
 
+import OnlyMounted from '../../components/widgets/OnlyMounted';
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData.js';
 import { hasPermissions } from '../../helpers/common.js';
 import withLinks from '../../helpers/withLinks.js';
@@ -53,7 +54,7 @@ const Exercises = ({
     <PageContent
       icon={<ExerciseIcon />}
       title={<FormattedMessage id="app.exercises.title" defaultMessage="List of All Exercises" />}>
-      <>
+      <OnlyMounted>
         <Box title={<FormattedMessage id="app.exercises.listTitle" defaultMessage="Exercises" />} unlimitedHeight>
           <ExercisesListContainer id="exercises-all" showGroups />
         </Box>
@@ -67,7 +68,7 @@ const Exercises = ({
             />
           )}
         </ResourceRenderer>
-      </>
+      </OnlyMounted>
     </PageContent>
   );
 };
