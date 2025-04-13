@@ -33,7 +33,7 @@ const DropdownFragment = withLinks(
 
 const MemberGroupsDropdown = ({ groupId = null, memberGroups }) => (
   <Dropdown>
-    <Dropdown.Toggle as="span" bsPrefix="nav-link memberGroupsDropdownToggle" id="hearder-group-dropdown">
+    <Dropdown.Toggle as="span" bsPrefix="nav-link memberGroupsDropdownToggle" id="header-group-dropdown">
       <GroupIcon gapRight={3} />
       {groupId && <GroupsNameContainer groupId={groupId} fullName />}
     </Dropdown.Toggle>
