@@ -55,6 +55,17 @@ Object.keys(KNOWN_ACE_WORKERS).forEach(key => {
 window.Prism = window.Prism || {};
 window.Prism.manual = true;
 
+window.addEventListener(
+  'unhandledrejection',
+  ev => {
+    if (ev?.reason?.name === 'AbortError') {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+    }
+  },
+  true
+);
+
 // load the initial state form the server - if any
 let state;
 const ini = window.__INITIAL_STATE__;

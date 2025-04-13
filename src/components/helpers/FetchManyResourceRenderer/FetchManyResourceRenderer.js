@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../../icons';
+import { resourceStatus } from '../../../redux/helpers/resourceManager';
 
-const isLoading = status => status === 'PENDING';
-const hasFailed = status => status === 'FAILED';
+const isLoading = status => status === resourceStatus.PENDING || status === resourceStatus.ABORTED;
+const hasFailed = status => status === resourceStatus.FAILED;
 
 const defaultLoading = noIcons => (
   <span>
