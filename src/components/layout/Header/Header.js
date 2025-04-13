@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 import HeaderNotificationsContainer from '../../../containers/HeaderNotificationsContainer';
 import HeaderSystemMessagesContainer from '../../../containers/HeaderSystemMessagesContainer';
@@ -53,10 +55,26 @@ class Header extends Component {
                       </span>
                     }
                     failed={
-                      <span className="nav-link">
-                        <GroupIcon gapRight={2} />
-                        <WarningIcon />
-                      </span>
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          as="span"
+                          bsPrefix="nav-link memberGroupsDropdownToggle"
+                          id="header-group-dropdown">
+                          <GroupIcon gapRight={2} />
+                          <WarningIcon />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Header bsPrefix="dropdown-header">
+                            <small className="text-muted">
+                              <FormattedMessage
+                                id="app.resourceRenderer.loadingFailed"
+                                defaultMessage="Loading failed."
+                              />
+                            </small>
+                          </Dropdown.Header>
+                        </Dropdown.Menu>
+                      </Dropdown>
                     }>
                     {() => <MemberGroupsDropdown groupId={relatedGroupId} memberGroups={memberGroups} />}
                   </FetchManyResourceRenderer>
