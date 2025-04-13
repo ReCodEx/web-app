@@ -69,6 +69,7 @@
   "app.apiErrorCodes.400-101": "The credentials are not valid.",
   "app.apiErrorCodes.400-104": "User was correctly authenticated, but there is no corresponding account in ReCodEx.",
   "app.apiErrorCodes.400-105": "Attempt to register a new user failed since external authenticator did not provide a role. The external user identity may not have required attributes.",
+  "app.apiErrorCodes.400-110": "A user with the same email address already exists.",
   "app.apiErrorCodes.400-501": "The group is archived, it cannot be modified.",
   "app.apiErrorCodes.401": "User not authenticated",
   "app.apiErrorCodes.403": "Insufficient privileges",
