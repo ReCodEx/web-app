@@ -41,18 +41,21 @@ export const apiCall = (
   meta: { endpoint, ...meta },
 });
 
-const middleware = ({ dispatch, getState }) => next => action => {
-  switch (action && action.type) {
-    case CALL_API:
-      if (!action.request) {
-        throw new Error('API middleware requires request data in the action');
-      }
+const middleware =
+  ({ dispatch, getState }) =>
+  next =>
+  action => {
+    // skip anything but API calls
+    if (action?.type !== CALL_API) {
+      return next(action);
+    }
 
-      action = apiCall(action.request, dispatch, getState);
-      break;
-  }
+    if (!action.request) {
+      throw new Error('API middleware requires request data in the action');
+    }
 
-  return next(action);
-};
+    action = apiCall(action.request, dispatch, getState);
+    return next(action);
+  };
 
 export default middleware;

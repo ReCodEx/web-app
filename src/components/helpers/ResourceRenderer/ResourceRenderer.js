@@ -10,6 +10,7 @@ import {
   isLoading,
   isReadyOrReloading,
   hasFailed,
+  hasAborted,
   isPosting,
   isDeleting,
   isDeleted,
@@ -153,7 +154,12 @@ class ResourceRenderer extends Component {
 
     const resources = this.getResources();
     const resourcesLength = (resources && (List.isList(resources) ? resources.size : resources.length)) || 0;
-    const stillLoading = !resources || resources.find(res => !res) || resources.some(isLoading) || forceLoading;
+    const stillLoading =
+      !resources ||
+      forceLoading ||
+      resources.find(res => !res) ||
+      resources.some(isLoading) ||
+      resources.some(hasAborted);
     const isReloading =
       stillLoading && !forceLoading && resourcesLength > 0 && resources.every(res => res && isReadyOrReloading(res));
 

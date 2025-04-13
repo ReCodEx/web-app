@@ -4,6 +4,8 @@ import { resourceStatus } from './status.js';
 
 export const initialState = fromJS({ resources: {}, fetchManyStatus: {} });
 
+const isAbortError = error => error?.name === 'AbortError';
+
 const reducerFactory = (actionTypes, id = 'id') => ({
   [actionTypes.FETCH_PENDING]: (state, { meta }) =>
     meta.allowReload && state.getIn(['resources', meta[id], 'state']) === resourceStatus.FULFILLED
@@ -11,7 +13,10 @@ const reducerFactory = (actionTypes, id = 'id') => ({
       : state.setIn(['resources', meta[id]], createRecord()),
 
   [actionTypes.FETCH_REJECTED]: (state, { meta, payload: error }) =>
-    state.setIn(['resources', meta[id]], createRecord({ state: resourceStatus.FAILED, error })),
+    state.setIn(
+      ['resources', meta[id]],
+      createRecord({ state: isAbortError(error) ? resourceStatus.ABORTED : resourceStatus.FAILED, error })
+    ),
 
   [actionTypes.FETCH_FULFILLED]: (state, { meta, payload: data }) =>
     state.setIn(['resources', meta[id]], createRecord({ state: resourceStatus.FULFILLED, data })),
@@ -34,8 +39,8 @@ const reducerFactory = (actionTypes, id = 'id') => ({
         : resourceStatus.PENDING
     ),
 
-  [actionTypes.FETCH_MANY_REJECTED]: (state, { meta: { endpoint } }) =>
-    state.setIn(['fetchManyStatus', endpoint], resourceStatus.FAILED),
+  [actionTypes.FETCH_MANY_REJECTED]: (state, { meta: { endpoint }, payload: error }) =>
+    state.setIn(['fetchManyStatus', endpoint], isAbortError(error) ? resourceStatus.ABORTED : resourceStatus.FAILED),
 
   [actionTypes.FETCH_MANY_FULFILLED]: (state, { meta: { endpoint }, payload }) =>
     payload

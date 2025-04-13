@@ -185,7 +185,7 @@ export const createApiCallPromise = (
 };
 
 /**
- * A specific error means that there is a problem with the Internet connectin or the server is down.
+ * A specific error means that there is a problem with the Internet connecting or the server is down.
  * @param {Object} err The error description
  * @param {Function} dispatch
  */
@@ -220,7 +220,7 @@ const processResponse = (call, dispatch) =>
     })
     .then(({ success = true, error = null, payload = {} }) => {
       if (!success) {
-        if (error && error.message && (!error.code || !error.code.startsWith('4'))) {
+        if (error && error.message && (!error.code || !String(error.code).startsWith('4'))) {
           dispatch && dispatch(addNotification(`Server response: ${error.message}`, false));
         }
         return Promise.reject(error || new Error('The API call was not successful.'));

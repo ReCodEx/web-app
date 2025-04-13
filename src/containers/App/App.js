@@ -34,7 +34,8 @@ import './recodex.css';
 library.add(regularIcons, solidIcons, brandIcons);
 
 const reloadIsRequired = (...statuses) =>
-  statuses.includes(resourceStatus.FAILED) && !statuses.includes(resourceStatus.PENDING);
+  (statuses.includes(resourceStatus.FAILED) || statuses.includes(resourceStatus.ABORTED)) &&
+  !statuses.includes(resourceStatus.PENDING);
 
 class App extends Component {
   static loadAsync =

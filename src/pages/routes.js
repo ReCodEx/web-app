@@ -85,7 +85,7 @@ const r = (basePath, component, linkName = '', auth = undefined) => {
 
   /*
    * The abort of pending requests was shifted to unmount callback (since new router took away history.listen).
-   * Top-level components are unmountend only when the page navigates to a different top-level component.
+   * Top-level components are unmounted only when the page navigates to a different top-level component.
    */
   const rootComponent = unwrap(component);
   if (rootComponent && rootComponent.prototype) {

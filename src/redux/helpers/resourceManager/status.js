@@ -10,6 +10,7 @@ export const resourceStatus = {
   RELOADING: 'RELOADING', // similar to pending, but the old record data are still available whilst being re-fetched
   UPDATING: 'UPDATING', // similar to reloading, but some modification is in progress
   FAILED: 'FAILED',
+  ABORTED: 'ABORTED',
   FULFILLED: 'FULFILLED',
   POSTING: 'POSTING',
   DELETING: 'DELETING',
@@ -21,7 +22,7 @@ export const isLoadingState = state =>
 
 /**
  * @param {Object} item The item
- * @return {boolean} True when the item is loading or reloaing.
+ * @return {boolean} True when the item is loading or reloading.
  */
 export const isLoading = item => !item || isLoadingState(item.get('state'));
 
@@ -60,6 +61,12 @@ export const isDeleted = item => !item || item.get('state') === resourceStatus.D
  * @return {boolean} True when the item could not be loaded, written, updated or deleted.
  */
 export const hasFailed = item => Boolean(item) && item.get('state') === resourceStatus.FAILED;
+
+/**
+ * @param {Object} item The item
+ * @return {boolean} True when the item could not be loaded, written, updated or deleted.
+ */
+export const hasAborted = item => Boolean(item) && item.get('state') === resourceStatus.ABORTED;
 
 /**
  * Return error object { message, code, ... } of a failed resource.

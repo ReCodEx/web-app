@@ -17,7 +17,10 @@ const middleware = (noDOM, verbose, fullException) => store => next => action =>
     if (fullException) console.error(e);
     throw e;
   }
+
   if (verbose) {
+    logger('Result:');
+    logger(res);
     logger('State After Action ' + actionType);
     logger(store.getState().groups);
     logger('--------------------');
