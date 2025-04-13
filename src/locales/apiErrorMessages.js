@@ -30,6 +30,10 @@ const apiErrorCodes = defineMessages({
     defaultMessage:
       'Attempt to register a new user failed since external authenticator did not provide a role. The external user identity may not have required attributes.',
   },
+  '400-110': {
+    id: 'app.apiErrorCodes.400-110',
+    defaultMessage: 'A user with the same email address already exists.',
+  },
   '400-501': {
     id: 'app.apiErrorCodes.400-501',
     defaultMessage: 'The group is archived, it cannot be modified.',

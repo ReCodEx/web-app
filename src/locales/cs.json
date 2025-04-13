@@ -69,6 +69,7 @@
   "app.apiErrorCodes.400-101": "Nesprávné přihlašovací údaje.",
   "app.apiErrorCodes.400-104": "Uživatel byl korektně ověřen, ale nemá žádný odpovídající účet v ReCodExu.",
   "app.apiErrorCodes.400-105": "Pokus o zavedení nového účtu selhal, protože externí autentizační služba nedodala uživatelskou roli. Externí uživatelská identita pravděpodobně nemá potřebné atributy.",
+  "app.apiErrorCodes.400-110": "Uživatel s touto e-mailovou adresou již existuje.",
   "app.apiErrorCodes.400-501": "Skupina byla archivována a není možné ji měnit.",
   "app.apiErrorCodes.401": "Uživatel není ověřen",
   "app.apiErrorCodes.403": "Nedostatečná oprávnění",
