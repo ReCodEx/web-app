@@ -180,27 +180,22 @@ const validate = ({ firstName, lastName, email, password, passwordConfirm }) => 
   return errors;
 };
 
-const asyncValidate = ({ email }, dispatch) => {
-  return new Promise((resolve, reject) =>
-    dispatch(validateRegistrationData(email))
-      .then(res => res.value)
-      .then(({ usernameIsFree }) => {
-        if (!usernameIsFree) {
-          const errors = {
-            email: (
-              <FormattedMessage
-                id="app.createUserForm.validation.emailTaken"
-                defaultMessage="This email address is already taken by someone else."
-              />
-            ),
-          };
-          throw errors;
-        }
-      })
-      .then(resolve())
-      .catch(errors => reject(errors))
-  );
-};
+const asyncValidate = ({ email }, dispatch) =>
+  dispatch(validateRegistrationData(email))
+    .then(res => res.value)
+    .then(({ usernameIsFree }) => {
+      if (!usernameIsFree) {
+        const errors = {
+          email: (
+            <FormattedMessage
+              id="app.createUserForm.validation.emailTaken"
+              defaultMessage="This email address is already taken by someone else."
+            />
+          ),
+        };
+        throw errors;
+      }
+    });
 
 export default reduxForm({
   form: 'invite-user',
