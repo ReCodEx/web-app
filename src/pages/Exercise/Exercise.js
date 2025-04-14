@@ -192,7 +192,7 @@ class Exercise extends Component {
                                   />
                                 ) : (
                                   <FormattedMessage
-                                    id="app.exercise.submitReferenceSoution"
+                                    id="app.exercise.submitReferenceSolution"
                                     defaultMessage="New Reference Solution"
                                   />
                                 )}

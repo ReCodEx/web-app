@@ -105,6 +105,7 @@ class MessagesList extends Component {
         />
         <hr className="m-0" />
         <SortableTable
+          id="MessageList"
           hover
           columns={this.prepareColumnDescriptors(locale)}
           defaultOrder="visibleTo"

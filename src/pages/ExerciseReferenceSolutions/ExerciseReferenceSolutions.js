@@ -71,7 +71,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
             tooltip={
               <FormattedMessage
                 id="app.referenceSolution.visibility.promoted"
-                defaultMessage="The solution is promoted by the auhor of the exercise (recommended for reading to other supervisors)"
+                defaultMessage="The solution is promoted by the author of the exercise (recommended for reading to other supervisors)"
               />
             }
           />
@@ -389,7 +389,7 @@ class ExerciseReferenceSolutions extends Component {
                         />
                       ) : (
                         <FormattedMessage
-                          id="app.exercise.submitReferenceSoution"
+                          id="app.exercise.submitReferenceSolution"
                           defaultMessage="New Reference Solution"
                         />
                       )}
@@ -446,6 +446,7 @@ class ExerciseReferenceSolutions extends Component {
                           unlimitedHeight>
                           <>
                             <SortableTable
+                              id="ReferenceSolutions"
                               hover
                               columns={prepareTableColumnDescriptors(userId, locale, links, deleteReferenceSolution)}
                               defaultOrder="createdAt"

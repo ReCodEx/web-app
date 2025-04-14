@@ -423,7 +423,7 @@ class ResultsTable extends Component {
         total: userStats && userStats.points,
         passed: userStats,
         buttons: renderActions && hasPermissions(group, 'update') ? renderActions(user.id) : '',
-        // actually 'update' is not the right premission, but its sufficiently close :)
+        // actually 'update' is not the right permission, but its sufficiently close :)
       };
 
       assignments.forEach(assignment => {
@@ -470,6 +470,7 @@ class ResultsTable extends Component {
     return (
       <>
         <SortableTable
+          id="ResultsTable"
           hover
           columns={this.prepareColumnDescriptors(
             assignments,

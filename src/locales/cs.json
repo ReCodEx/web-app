@@ -811,7 +811,7 @@
   "app.exercise.runtimes": "Běhová prostředí",
   "app.exercise.solutionFilesLimitExplanation": "Maximální počet odevzdaných souborů v řešení. Uživatelům není dovoleno odevzdávat řešení, která překračují tento limit. Limit se neaplikuje pokud není vyplněn.",
   "app.exercise.solutionSizeLimitExplanation": "Maximální celková velikost všech souborů v řešení. Uživatelům není dovoleno odevzdávat řešení, která překračují tento limit. Limit se neaplikuje pokud není vyplněn.",
-  "app.exercise.submitReferenceSoution": "Nové referenční řešení",
+  "app.exercise.submitReferenceSolution": "Nové referenční řešení",
   "app.exercise.title": "Podrobnosti úlohy",
   "app.exercise.validationErrors.config": "Konfigurace testů není kompletní, což se typicky stane, pokud přidáte test nebo smažete soubor",
   "app.exercise.validationErrors.limits": "Paměťové nebo časové limity nejsou správně nastaveny",
