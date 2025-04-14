@@ -105,7 +105,7 @@ class GroupStudents extends Component {
     const {
       group,
       groupsAccessor,
-      invitableGroups,
+      groupsToInvite,
       students,
       loggedUser,
       effectiveRole,
@@ -262,7 +262,7 @@ class GroupStudents extends Component {
               )}
 
               {
-                // unfortunatelly, this cannot be covered by permission hints at the moment, since addStudent involes both student and group
+                // unfortunately, this cannot be covered by permission hints at the moment, since addStudent involves both student and group
                 !data.organizational &&
                   !data.archived &&
                   (hasPermissions(data, 'inviteStudents') || hasPermissions(data, 'editInvitations')) && (
@@ -274,7 +274,7 @@ class GroupStudents extends Component {
                             isOpen>
                             <AddStudent
                               instanceId={data.privateData.instanceId}
-                              groups={invitableGroups}
+                              groups={groupsToInvite}
                               groupsAccessor={groupsAccessor}
                               groupId={data.id}
                               canSearch={
@@ -316,7 +316,7 @@ GroupStudents.propTypes = {
   group: ImmutablePropTypes.map,
   currentUser: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  invitableGroups: ImmutablePropTypes.map,
+  groupsToInvite: ImmutablePropTypes.map,
   instance: ImmutablePropTypes.map,
   students: PropTypes.array,
   assignments: ImmutablePropTypes.list,
@@ -343,7 +343,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
   return {
     group: groupSelector(state, groupId),
     groupsAccessor: groupDataAccessorSelector(state),
-    invitableGroups: loggedUserCanInviteToGroupsSelector(state),
+    groupsToInvite: loggedUserCanInviteToGroupsSelector(state),
     userId,
     loggedUser: loggedInUserSelector(state),
     effectiveRole: getLoggedInUserEffectiveRole(state),
