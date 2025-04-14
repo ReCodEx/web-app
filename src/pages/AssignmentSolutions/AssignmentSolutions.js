@@ -668,6 +668,7 @@ class AssignmentSolutions extends Component {
                         unlimitedHeight
                         noPadding>
                         <SortableTable
+                          id={`AssignmentSolutions.${this.state.viewMode}`}
                           hover
                           columns={prepareTableColumnDescriptors(
                             loggedUserId,

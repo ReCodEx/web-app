@@ -541,6 +541,7 @@ class GroupUserSolutions extends Component {
                             unlimitedHeight
                             noPadding>
                             <SortableTable
+                              id="GroupUserSolutions"
                               hover
                               columns={prepareTableColumnDescriptors(assignments, groupId, locale, links)}
                               defaultOrder="date"

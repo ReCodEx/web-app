@@ -7,6 +7,9 @@ import { lruMemoize } from 'reselect';
 import { UserUIDataContext } from '../../../helpers/contexts.js';
 import { CloseIcon, SortedIcon } from '../../icons';
 import withRouter, { withRouterProps } from '../../../helpers/withRouter.js';
+import { storageGetItem, storageSetItem } from '../../../helpers/localStorage.js';
+
+const localStorageKeyPrefix = 'SortableTable';
 
 class SortableTable extends Component {
   constructor(props) {
@@ -14,7 +17,27 @@ class SortableTable extends Component {
     this.state = { sortColumn: props.defaultOrder || null, ascendant: true };
   }
 
-  // Default row rendering fucntion (if the user does not provide custom function)
+  setSortColumnFromLocalStorage = () => {
+    const key = `${localStorageKeyPrefix}[${this.props.id}].order`;
+    const order = storageGetItem(key, null);
+    if (order) {
+      const ascendant = order[0] === '+';
+      const sortColumn = order.substring(1);
+      this.setState({ sortColumn, ascendant });
+    }
+  };
+
+  componentDidMount() {
+    this.setSortColumnFromLocalStorage();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.id !== this.props.id) {
+      this.setSortColumnFromLocalStorage();
+    }
+  }
+
+  // Default row rendering function (if the user does not provide custom function)
   defaultRowRenderer = (row, idx, columns, openLinkGenerator = null) => {
     const { navigate } = this.props;
     const doubleClickLink = openLinkGenerator && openLinkGenerator(row, idx);
@@ -44,17 +67,24 @@ class SortableTable extends Component {
 
   // Change internal state that holds sorting parameters.
   orderBy = colId => {
-    const { columns } = this.props;
-    const { sortColumn, ascendant } = this.state;
+    const { id, columns } = this.props;
+    let { sortColumn, ascendant } = this.state;
     const column = columns && columns.find(({ id }) => id === colId);
+    const key = `${localStorageKeyPrefix}[${id}].order`;
 
     if (!colId || !column) {
-      this.setState({ sortColumn: null, ascendant: true });
+      sortColumn = null;
+      ascendant = true;
     } else if (colId === sortColumn) {
-      this.setState({ ascendant: !ascendant });
+      ascendant = !ascendant;
     } else {
-      this.setState({ sortColumn: colId, ascendant: true });
+      sortColumn = colId;
+      ascendant = true;
     }
+
+    const order = sortColumn ? `${ascendant ? '+' : '-'}${sortColumn}` : null;
+    storageSetItem(key, order);
+    this.setState({ sortColumn, ascendant });
   };
 
   // Helper function that actually sorts the data according to internal state
@@ -158,6 +188,7 @@ class SortableTable extends Component {
 }
 
 SortableTable.propTypes = {
+  id: PropTypes.string.isRequired,
   columns: PropTypes.array.isRequired,
   defaultOrder: PropTypes.string,
   data: PropTypes.array,
