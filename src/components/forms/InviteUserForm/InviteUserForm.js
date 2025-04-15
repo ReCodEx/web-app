@@ -2,17 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
+import { Table } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail.js';
 
 import SubmitButton from '../SubmitButton';
+import UsersName from '../../Users/UsersName';
 import Callout from '../../widgets/Callout';
+import Explanation from '../../widgets/Explanation';
 import { validateRegistrationData } from '../../../redux/modules/users.js';
 import { TextField, CheckboxField } from '../Fields';
+import { WarningIcon } from '../../icons';
+
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
+import { EMPTY_ARRAY } from '../../../helpers/common.js';
 
 const InviteUserForm = ({
   groups,
   groupsAccessor,
+  matchingUsers = EMPTY_ARRAY,
   submitting,
   handleSubmit,
   onSubmit,
@@ -22,6 +29,7 @@ const InviteUserForm = ({
   asyncValidating,
   invalid,
   reset,
+  change,
   intl: { locale },
 }) => (
   <div>
@@ -70,6 +78,52 @@ const InviteUserForm = ({
       label={<FormattedMessage id="app.editUserProfile.titlesAfterName" defaultMessage="Suffix Title:" />}
     />
 
+    {matchingUsers && matchingUsers.length > 0 && (
+      <>
+        <hr />
+        <h5>
+          <WarningIcon className="text-warning" gapRight={2} />
+          <FormattedMessage
+            id="app.inviteUserForm.matchingUsers"
+            defaultMessage="There are existing users of the same name"
+          />
+          :
+        </h5>
+
+        <Table bordered>
+          <tbody>
+            {matchingUsers.map(user => (
+              <tr key={user.id}>
+                <td>
+                  <UsersName {...user} showEmail="full" showExternalIdentifiers showRoleIcon />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+
+        <Field
+          name="ignoreNameCollision"
+          component={CheckboxField}
+          onOff
+          label={
+            <span>
+              <FormattedMessage
+                id="app.inviteUserForm.ignoreNameCollision"
+                defaultMessage="The user I am inviting does not match any of the existing users"
+              />
+              <Explanation id="ignoreNameCollisionExplanation">
+                <FormattedMessage
+                  id="app.inviteUserForm.ignoreNameCollisionExplanation"
+                  defaultMessage="Please, make sure the listed students are not the same person as the one you are inviting to prevent duplicate accounts in the system."
+                />
+              </Explanation>
+            </span>
+          }
+        />
+      </>
+    )}
+
     <hr />
 
     {groups.map(group => (
@@ -92,7 +146,17 @@ const InviteUserForm = ({
     <div className="text-center">
       <SubmitButton
         id="inviteUser"
-        handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
+        resetTimeout={0}
+        handleSubmit={handleSubmit(data =>
+          onSubmit(data).then(success => {
+            if (success) {
+              reset();
+            } else {
+              // a hack so the change takes place after the whole submit process is completed
+              window.setTimeout(() => change('ignoreNameCollision', false), 0);
+            }
+          })
+        )}
         submitting={submitting}
         dirty={dirty}
         invalid={invalid}
@@ -102,7 +166,6 @@ const InviteUserForm = ({
         messages={{
           submit: <FormattedMessage id="app.inviteUserForm.invite" defaultMessage="Invite" />,
           submitting: <FormattedMessage id="app.inviteUserForm.inviting" defaultMessage="Inviting..." />,
-          success: <FormattedMessage id="app.inviteUserForm.invited" defaultMessage="Invited" />,
         }}
       />
     </div>
@@ -112,6 +175,7 @@ const InviteUserForm = ({
 InviteUserForm.propTypes = {
   groups: PropTypes.array.isRequired,
   groupsAccessor: PropTypes.func.isRequired,
+  matchingUsers: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   asyncValidate: PropTypes.func.isRequired,
@@ -122,10 +186,11 @@ InviteUserForm.propTypes = {
   asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   invalid: PropTypes.bool,
   reset: PropTypes.func,
+  change: PropTypes.func,
   intl: PropTypes.object.isRequired,
 };
 
-const validate = ({ firstName, lastName, email, password, passwordConfirm }) => {
+const validate = ({ firstName, lastName, email, ignoreNameCollision }, { matchingUsers }) => {
   const errors = {};
 
   if (!firstName) {
@@ -177,6 +242,14 @@ const validate = ({ firstName, lastName, email, password, passwordConfirm }) => 
     );
   }
 
+  if (matchingUsers && matchingUsers.length > 0 && !ignoreNameCollision) {
+    errors.ignoreNameCollision = (
+      <FormattedMessage
+        id="app.inviteUserForm.validation.ignoreNameCollision"
+        defaultMessage="Please check the list of existing users and confirm that the invited user is a new user."
+      />
+    );
+  }
   return errors;
 };
 
