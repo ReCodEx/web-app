@@ -11,9 +11,10 @@ import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupBut
 import AddUserContainer from '../../../containers/AddUserContainer';
 import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
-import Icon from '../../icons';
+import Icon, { SuccessIcon } from '../../icons';
 
-import { arrayToObject } from '../../../helpers/common.js';
+import { arrayToObject, EMPTY_ARRAY } from '../../../helpers/common.js';
+import Callout from '../../widgets/Callout/Callout.js';
 
 const prepareInviteUserInitialValues = lruMemoize((groups, groupId) => ({
   titlesBeforeName: '',
@@ -26,16 +27,18 @@ const prepareInviteUserInitialValues = lruMemoize((groups, groupId) => ({
     group => `id${group.id}`,
     group => group.id === groupId
   ),
+  ignoreNameCollision: undefined,
 }));
 
 const prepareInviteOnSubmitHandler = lruMemoize(
-  (inviteUser, setDialogOpen, instanceId) =>
-    ({ email, titlesBeforeName, firstName, lastName, titlesAfterName, groups }) => {
+  (inviteUser, setMatchingUsers, setUserInvited, instanceId) =>
+    ({ email, titlesBeforeName, firstName, lastName, titlesAfterName, groups, ignoreNameCollision }) => {
       email = email.trim();
       firstName = firstName.trim();
       lastName = lastName.trim();
       titlesBeforeName = titlesBeforeName.trim() || undefined;
       titlesAfterName = titlesAfterName.trim() || undefined;
+      ignoreNameCollision = Boolean(ignoreNameCollision);
 
       const groupIds = Object.keys(groups)
         .filter(key => groups[key])
@@ -48,13 +51,26 @@ const prepareInviteOnSubmitHandler = lruMemoize(
         lastName,
         titlesAfterName,
         instanceId,
+        ignoreNameCollision,
         groups: groupIds,
-      }).then(() => setDialogOpen(false));
+      }).then(({ value }) => {
+        if (value === 'OK') {
+          setUserInvited(true);
+          setMatchingUsers(EMPTY_ARRAY);
+          return true;
+        } else {
+          setMatchingUsers(value);
+          return false;
+        }
+      });
     }
 );
 
 const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = false, inviteUser = null }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [userInvited, setUserInvited] = useState(true);
+  const [matchingUsers, setMatchingUsers] = useState(EMPTY_ARRAY);
+
   return (
     <>
       {canSearch ? (
@@ -76,7 +92,14 @@ const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = f
         <>
           <hr />
           <div className="text-center">
-            <Button size="sm" variant="primary" onClick={() => setDialogOpen(true)}>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={() => {
+                setUserInvited(false);
+                setMatchingUsers(EMPTY_ARRAY);
+                setDialogOpen(true);
+              }}>
               <Icon icon="hand-holding-heart" gapRight={2} />
               <FormattedMessage id="app.addStudent.inviteButton" defaultMessage="Invite to Register" />
               ...
@@ -98,16 +121,34 @@ const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = f
                 />
               </InsetPanel>
 
-              <ResourceRenderer resourceArray={groups}>
-                {groups => (
-                  <InviteUserForm
-                    onSubmit={prepareInviteOnSubmitHandler(inviteUser, setDialogOpen, instanceId)}
-                    initialValues={prepareInviteUserInitialValues(groups, groupId)}
-                    groups={groups}
-                    groupsAccessor={groupsAccessor}
-                  />
-                )}
-              </ResourceRenderer>
+              {userInvited ? (
+                <Callout variant="success" className="mb-4">
+                  <p>
+                    <FormattedMessage
+                      id="app.addStudent.inviteDialog.userInvited"
+                      defaultMessage="An invitation was sent to the specified email address. The user must accept it to complete the registration process."
+                    />
+                  </p>
+                  <div className="text-end">
+                    <Button onClick={() => setDialogOpen(false)} variant="success">
+                      <SuccessIcon gapRight={2} />
+                      <FormattedMessage id="generic.close" defaultMessage="Close" />
+                    </Button>
+                  </div>
+                </Callout>
+              ) : (
+                <ResourceRenderer resourceArray={groups}>
+                  {groups => (
+                    <InviteUserForm
+                      onSubmit={prepareInviteOnSubmitHandler(inviteUser, setMatchingUsers, setUserInvited, instanceId)}
+                      initialValues={prepareInviteUserInitialValues(groups, groupId)}
+                      groups={groups}
+                      groupsAccessor={groupsAccessor}
+                      matchingUsers={matchingUsers}
+                    />
+                  )}
+                </ResourceRenderer>
+              )}
             </Modal.Body>
           </Modal>
         </>

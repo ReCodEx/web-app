@@ -47,7 +47,7 @@ class SubmitButton extends Component {
   }
 
   submit = () => {
-    const { handleSubmit, onSubmit = null } = this.props;
+    const { handleSubmit, onSubmit = null, resetTimeout = 2000 } = this.props;
 
     // reset button internal state
     this.setState({ saved: false, lastError: null });
@@ -57,8 +57,12 @@ class SubmitButton extends Component {
     return handleSubmit().then(
       res => {
         if (!this.unmounted) {
-          this.setState({ saved: true });
-          this.resetAfterSomeTime = window.setTimeout(this.reset, 2000);
+          if (resetTimeout > 0) {
+            this.setState({ saved: true });
+            this.resetAfterSomeTime = window.setTimeout(this.reset, resetTimeout);
+          } else {
+            this.reset();
+          }
         } else {
           const { reset } = this.props;
           reset && reset(); // the redux form must be still reset
@@ -182,6 +186,7 @@ SubmitButton.propTypes = {
   confirmQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   noShadow: PropTypes.bool,
   size: PropTypes.string,
+  resetTimeout: PropTypes.number,
   intl: PropTypes.object,
 };
 
