@@ -168,7 +168,17 @@ export default withLinks(
     dispatch => ({
       loadAsync: () => Promise.all([dispatch(fetchInstances())]),
       createAccount: ({ firstName, lastName, email, password, passwordConfirm, instanceId }) =>
-        dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId)),
+        dispatch(
+          createAccount({
+            firstName,
+            lastName,
+            email,
+            password,
+            passwordConfirm,
+            instanceId,
+            ignoreNameCollision: true,
+          })
+        ),
       createExternalAccount:
         (authType = 'secondary') =>
         ({ instanceId, serviceId, ...credentials }) =>
