@@ -2105,6 +2105,7 @@
   "app.userName.userDeactivated": "The user account was deactivated. The user may not sign in.",
   "app.userSwitching.loginAs": "Login as",
   "app.users.createUser": "Create User",
+  "app.users.createUser.userCreated": "The user account was created.",
   "app.users.listTitle": "Users",
   "app.users.takeOver": "Login as",
   "app.users.title": "List of All Users",
