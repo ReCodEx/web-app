@@ -2105,6 +2105,7 @@
   "app.userName.userDeactivated": "Uživatelský účet byl deaktivován. Uživatel se nemůže přihlásit.",
   "app.userSwitching.loginAs": "Přihlásit jako",
   "app.users.createUser": "Vytvořit uživatele",
+  "app.users.createUser.userCreated": "Uživatelský účet byl vytvořen.",
   "app.users.listTitle": "Uživatelé",
   "app.users.takeOver": "Přihlásit jako",
   "app.users.title": "Seznam všech uživatelů",

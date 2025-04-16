@@ -7,7 +7,7 @@ import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
-import { SettingsIcon, TransferIcon, BanIcon, UserIcon } from '../../components/icons';
+import { SettingsIcon, TransferIcon, BanIcon, SuccessIcon, UserIcon } from '../../components/icons';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import DeleteUserButtonContainer from '../../containers/DeleteUserButtonContainer';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
@@ -32,6 +32,7 @@ import { knownRoles, isSupervisorRole, isStudentRole, isSuperadminRole } from '.
 import withLinks from '../../helpers/withLinks.js';
 import { withRouterProps } from '../../helpers/withRouter.js';
 import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
+import { EMPTY_ARRAY } from '../../helpers/common.js';
 
 const filterInitialValues = lruMemoize(({ search = '', roles = [] }) => {
   const initials = { search, roles: {} };
@@ -57,15 +58,16 @@ const createUserInitialValues = {
   email: '',
   password: '',
   passwordConfirm: '',
+  ignoreNameCollision: undefined,
 };
 
 const PAGINATION_CONTAINER_ID = 'users-all';
 const PAGINATION_CONTAINER_ENDPOINT = 'users';
 
 class Users extends Component {
-  state = { dialogOpen: false };
+  state = { dialogOpen: false, userCreated: false, matchingUsers: EMPTY_ARRAY };
 
-  openDialog = () => this.setState({ dialogOpen: true });
+  openDialog = () => this.setState({ dialogOpen: true, userCreated: false, matchingUsers: EMPTY_ARRAY });
 
   closeDialog = () => this.setState({ dialogOpen: false });
 
@@ -147,9 +149,15 @@ class Users extends Component {
       intl: { locale },
     } = this.props;
 
-    return createUser(data, instanceId).then(() => {
-      this.closeDialog();
-      return reloadPagination(locale);
+    return createUser(data, instanceId).then(({ value: { user, usersWithSameName = null } }) => {
+      if (user) {
+        this.setState({ userCreated: true, matchingUsers: EMPTY_ARRAY });
+        reloadPagination(locale);
+        return true;
+      } else {
+        this.setState({ matchingUsers: usersWithSameName });
+        return false;
+      }
     });
   };
 
@@ -195,10 +203,28 @@ class Users extends Component {
                           </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                          <CreateUserForm
-                            onSubmit={this.createNewUserAccount}
-                            initialValues={createUserInitialValues}
-                          />
+                          {this.state.userCreated ? (
+                            <Callout variant="success" className="mb-4">
+                              <p>
+                                <FormattedMessage
+                                  id="app.users.createUser.userCreated"
+                                  defaultMessage="The user account was created."
+                                />
+                              </p>
+                              <div className="text-end">
+                                <Button onClick={this.closeDialog} variant="success">
+                                  <SuccessIcon gapRight={2} />
+                                  <FormattedMessage id="generic.close" defaultMessage="Close" />
+                                </Button>
+                              </div>
+                            </Callout>
+                          ) : (
+                            <CreateUserForm
+                              onSubmit={this.createNewUserAccount}
+                              initialValues={createUserInitialValues}
+                              matchingUsers={this.state.matchingUsers}
+                            />
+                          )}
                         </Modal.Body>
                       </Modal>
                     </div>
@@ -263,8 +289,13 @@ export default withLinks(
     },
     dispatch => ({
       takeOver: userId => dispatch(takeOver(userId)),
-      createUser: ({ firstName, lastName, email, password, passwordConfirm }, instanceId) =>
-        dispatch(createAccount(firstName, lastName, email, password, passwordConfirm, instanceId, true)), // true = skip auth changes
+      createUser: ({ firstName, lastName, email, password, passwordConfirm, ignoreNameCollision }, instanceId) =>
+        dispatch(
+          createAccount(
+            { firstName, lastName, email, password, passwordConfirm, ignoreNameCollision, instanceId },
+            true // create by superadmin
+          )
+        ), // true = skip auth changes
       reloadPagination: locale =>
         dispatch(fetchPaginated(PAGINATION_CONTAINER_ID, PAGINATION_CONTAINER_ENDPOINT)(locale, null, null, true)), // true = force invalidate
     })

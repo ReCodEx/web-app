@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { Table } from 'react-bootstrap';
 import { reduxForm, Field, change } from 'redux-form';
 import isEmail from 'validator/lib/isEmail.js';
 
 import SubmitButton from '../SubmitButton';
 import Callout from '../../widgets/Callout';
+import Explanation from '../../widgets/Explanation';
+import UsersName from '../../Users/UsersName';
+import { WarningIcon } from '../../icons';
 import { validateRegistrationData } from '../../../redux/modules/users.js';
-import { TextField, PasswordField, PasswordStrength } from '../Fields';
+import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
 
 const CreateUserForm = ({
+  matchingUsers,
   submitting,
   handleSubmit,
   onSubmit,
@@ -19,6 +24,7 @@ const CreateUserForm = ({
   asyncValidating,
   invalid,
   reset,
+  change,
 }) => (
   <div>
     <Field
@@ -69,6 +75,54 @@ const CreateUserForm = ({
       label={<FormattedMessage id="app.changePasswordForm.passwordCheck" defaultMessage="New Password (again):" />}
     />
 
+    {matchingUsers && matchingUsers.length > 0 && (
+      <>
+        <hr />
+        <h5>
+          <WarningIcon className="text-warning" gapRight={2} />
+          <FormattedMessage
+            id="app.inviteUserForm.matchingUsers"
+            defaultMessage="There are existing users of the same name"
+          />
+          :
+        </h5>
+
+        <Table bordered>
+          <tbody>
+            {matchingUsers.map(user => (
+              <tr key={user.id}>
+                <td>
+                  <UsersName {...user} showEmail="full" showExternalIdentifiers showRoleIcon />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+
+        <Field
+          name="ignoreNameCollision"
+          component={CheckboxField}
+          onOff
+          label={
+            <span>
+              <FormattedMessage
+                id="app.inviteUserForm.ignoreNameCollision"
+                defaultMessage="The user I am inviting does not match any of the existing users"
+              />
+              <Explanation id="ignoreNameCollisionExplanation">
+                <FormattedMessage
+                  id="app.inviteUserForm.ignoreNameCollisionExplanation"
+                  defaultMessage="Please, make sure the listed students are not the same person as the one you are inviting to prevent duplicate accounts in the system."
+                />
+              </Explanation>
+            </span>
+          }
+        />
+      </>
+    )}
+
+    <hr />
+
     {submitFailed && (
       <Callout variant="danger">
         <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
@@ -78,7 +132,17 @@ const CreateUserForm = ({
     <div className="text-center">
       <SubmitButton
         id="createUser"
-        handleSubmit={handleSubmit(data => onSubmit(data).then(reset))}
+        handleSubmit={handleSubmit(data =>
+          onSubmit(data).then(success => {
+            if (success) {
+              reset();
+            } else {
+              // a hack so the change takes place after the whole submit process is completed
+              window.setTimeout(() => change('ignoreNameCollision', false), 0);
+            }
+          })
+        )}
+        resetTimeout={0}
         submitting={submitting}
         dirty={dirty}
         invalid={invalid}
@@ -88,7 +152,6 @@ const CreateUserForm = ({
         messages={{
           submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
           submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
-          success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
         }}
       />
     </div>
@@ -96,6 +159,7 @@ const CreateUserForm = ({
 );
 
 CreateUserForm.propTypes = {
+  matchingUsers: PropTypes.array,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   asyncValidate: PropTypes.func.isRequired,
@@ -107,9 +171,13 @@ CreateUserForm.propTypes = {
   invalid: PropTypes.bool,
   pristine: PropTypes.bool,
   reset: PropTypes.func,
+  change: PropTypes.func,
 };
 
-const validate = ({ firstName, lastName, email, password, passwordConfirm }) => {
+const validate = (
+  { firstName, lastName, email, password, passwordConfirm, ignoreNameCollision },
+  { matchingUsers }
+) => {
   const errors = {};
 
   if (!firstName) {
@@ -188,40 +256,40 @@ const validate = ({ firstName, lastName, email, password, passwordConfirm }) => 
     );
   }
 
+  if (matchingUsers && matchingUsers.length > 0 && !ignoreNameCollision) {
+    errors.ignoreNameCollision = (
+      <FormattedMessage
+        id="app.inviteUserForm.validation.ignoreNameCollision"
+        defaultMessage="Please check the list of existing users and confirm that the invited user is a new user."
+      />
+    );
+  }
   return errors;
 };
 
 const asyncValidate = ({ email, password = '' }, dispatch) => {
-  if (password === '') {
-    dispatch(change('create-user', 'passwordStrength', null));
-    return Promise.resolve();
+  if (!password) {
+    dispatch(change('create-user', 'passwordStrength', undefined));
   }
 
-  return new Promise((resolve, reject) =>
-    dispatch(validateRegistrationData(email, password))
-      .then(res => res.value)
-      .then(({ usernameIsFree, passwordScore }) => {
-        const errors = {};
-        if (!usernameIsFree) {
-          errors.email = (
+  return dispatch(validateRegistrationData(email, password))
+    .then(res => res.value)
+    .then(({ usernameIsFree, passwordScore }) => {
+      dispatch(change('create-user', 'passwordStrength', passwordScore));
+
+      if (!usernameIsFree) {
+        const errors = {
+          email: (
             <FormattedMessage
               id="app.createUserForm.validation.emailTaken"
               defaultMessage="This email address is already taken by someone else."
             />
-          );
-        }
-
-        dispatch(change('create-user', 'passwordStrength', passwordScore));
-
-        if (Object.keys(errors).length > 0) {
-          throw errors;
-        }
-      })
-      .then(resolve())
-      .catch(errors => reject(errors))
-  );
+          ),
+        };
+        throw errors;
+      }
+    });
 };
-
 export default reduxForm({
   form: 'create-user',
   validate,
