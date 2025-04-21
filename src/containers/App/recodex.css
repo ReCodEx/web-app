@@ -263,7 +263,11 @@ a:focus {
  * Bootstrap Enhancements
  */
 code {
-  color: #072;
+  color: var(--success);
+}
+
+[data-bs-theme=dark] code {
+  color: var(--bs-success-text-emphasis);
 }
 
 .recodex-markdown-container code {
@@ -271,7 +275,11 @@ code {
 }
 
 .recodex-markdown-container code:not(pre > code) {
-  color: #072;
+  color: var(--success);
+}
+
+[data-bs-theme=dark] .recodex-markdown-container code:not(pre > code) {
+  color: var(--bs-success-text-emphasis);
 }
 
 .wider-tooltip {
