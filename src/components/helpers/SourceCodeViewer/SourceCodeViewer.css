@@ -156,3 +156,61 @@ pre .sourceCodeViewerComments, code .sourceCodeViewerComments {
 .sourceCodeViewer.addComment .scvAddButton:hover::before {
   opacity: 1;
 }
+
+[data-bs-theme=dark] {
+  .sourceCodeViewer span[data-line] .linenumber {
+    background-color: #2b3035;
+    color: #b0b0b0;
+  }
+  
+  .sourceCodeViewer span[data-line]:hover, .sourceCodeViewer span[data-line]:hover * {
+    background-color: #2b3035;
+  }
+  
+  .sourceCodeViewer span[data-line]:hover .linenumber {
+    background-color: #343a40;
+  }
+  
+  .sourceCodeViewer span[data-line-active] {
+    background-color: #333c1a;
+  }
+  
+  .sourceCodeViewer span[data-line-active] .linenumber {
+    background-color: #495c1a;
+  }
+  
+  .sourceCodeViewer span[data-line-active]:hover, .sourceCodeViewer span[data-line-active]:hover * {
+    background-color: #3d4420;
+  }
+  
+  .sourceCodeViewer span[data-line-active]:hover .linenumber {
+    background-color: #5a6b1a;
+  }
+  
+  .sourceCodeViewerComments {
+    background-color: #2b3035;
+  }
+  
+  .sourceCodeViewerComments > div {
+    border: 1px solid #343a40;
+    background-color: var(--bs-card-bg);
+  }
+  
+  .sourceCodeViewerComments > div.issue {
+    background-color: #3a2323;
+  }
+  
+  .sourceCodeViewerComments > div.commentForm {
+    background-color: #23271a;
+  }
+
+  /* Markdown overrides */
+  
+  .sourceCodeViewerComments > div > .recodex-markdown-container {
+    border-top: 1px solid #343a40;
+  }
+  
+  .sourceCodeViewerComments > div.issue > .recodex-markdown-container {
+    border-top-color: #4a2a2a;
+  }
+}
