@@ -18,6 +18,7 @@ export const ENV_NODEJS_ID = 'node-linux';
 export const ENV_PHP_ID = 'php-linux';
 export const ENV_PROLOG_ID = 'prolog';
 export const ENV_PYTHON3_ID = 'python3';
+export const ENV_PYSPARK_ID = 'pyspark';
 export const ENV_RUST_ID = 'rust';
 export const ENV_CARGO_ID = 'rust-cargo';
 export const ENV_SCALA_ID = 'scala';
@@ -45,6 +46,7 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_PHP_ID,
   ENV_PROLOG_ID,
   ENV_PYTHON3_ID,
+  ENV_PYSPARK_ID,
   ENV_RUST_ID,
   ENV_CARGO_ID,
   ENV_SCALA_ID,
@@ -55,7 +57,13 @@ const SIMPLE_FORM_ENVIRONMENTS = [
  * List of environments that must stand alone
  * (exercise must be configured solely for this environment).
  */
-export const STANDALONE_ENVIRONMENTS = [ENV_ARDUINO_ID, ENV_DATA_ONLY_ID, ENV_PROLOG_ID, ENV_HASKELL_ID];
+export const STANDALONE_ENVIRONMENTS = [
+  ENV_ARDUINO_ID,
+  ENV_DATA_ONLY_ID,
+  ENV_PROLOG_ID,
+  ENV_HASKELL_ID,
+  ENV_PYSPARK_ID,
+];
 
 const SIMPLE_FORM_ENVIRONMENTS_INDEX = createIndex(SIMPLE_FORM_ENVIRONMENTS);
 
@@ -64,7 +72,7 @@ export const onlySimpleEnvironments = lruMemoize(environments =>
 );
 
 /**
- * Prepare inital values for the EditEnvironmentSimpleForm of the exercise.
+ * Prepare initial values for the EditEnvironmentSimpleForm of the exercise.
  * @param {*} environmentConfigs
  */
 export const getSimpleEnvironmentsInitValues = environmentConfigs => {
@@ -87,7 +95,7 @@ export const getFirstEnvironmentId = environmentConfigs =>
   safeGet(environmentConfigs, [0, 'runtimeEnvironmentId'], null);
 
 /**
- * Prepare inital values for EditEnvironmentForm used in advanced configuration.
+ * Prepare initial values for EditEnvironmentForm used in advanced configuration.
  * Note that advanced config allows only one environment. If multiple environments are defined, only the first is loaded.
  * @param {*} environmentConfigs
  */
