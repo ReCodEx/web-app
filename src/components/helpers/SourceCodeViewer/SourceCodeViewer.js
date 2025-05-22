@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Prism as SyntaxHighlighter, createElement } from 'react-syntax-highlighter';
 import { lruMemoize } from 'reselect';
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import 'prismjs/themes/prism.css';
+import { prism, okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import ReviewCommentForm, { newCommentFormInitialValues } from '../../forms/ReviewCommentForm';
 import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting.js';
 import { getFileExtensionLC, canUseDOM } from '../../../helpers/common.js';
+import { UserUIDataContext } from '../../../helpers/contexts.js';
 
 import SourceCodeComment from './SourceCodeComment.js';
 import './SourceCodeViewer.css';
@@ -161,19 +161,23 @@ class SourceCodeViewer extends React.Component {
   render() {
     const { name, content = '', addComment } = this.props;
     return canUseDOM ? (
-      <SyntaxHighlighter
-        language={getPrismModeFromExtension(getFileExtensionLC(name))}
-        style={vs}
-        className={addComment && !this.state.activeLine ? 'sourceCodeViewer addComment' : 'sourceCodeViewer'}
-        showLineNumbers={true}
-        showInlineLineNumbers={true}
-        wrapLines={true}
-        wrapLongLines={false}
-        useInlineStyles={false}
-        lineProps={this.linePropsGenerator}
-        renderer={this.linesRenderer}>
-        {content}
-      </SyntaxHighlighter>
+      <UserUIDataContext.Consumer>
+        {({ darkTheme = false }) => (
+          <SyntaxHighlighter
+            language={getPrismModeFromExtension(getFileExtensionLC(name))}
+            style={darkTheme ? okaidia : prism}
+            className={addComment && !this.state.activeLine ? 'sourceCodeViewer addComment' : 'sourceCodeViewer'}
+            showLineNumbers={true}
+            showInlineLineNumbers={true}
+            wrapLines={true}
+            wrapLongLines={false}
+            useInlineStyles={true}
+            lineProps={this.linePropsGenerator}
+            renderer={this.linesRenderer}
+            customStyle={{ padding: '0em', margin: '0em', lineHeight: '1.2', background: 'none', fontSize: '0.9em' }}>
+            {content}
+          </SyntaxHighlighter>)}
+      </UserUIDataContext.Consumer>
     ) : (
       <></>
     );
