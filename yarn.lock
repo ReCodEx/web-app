@@ -12847,23 +12847,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^7.5.2":
-  version: 7.5.2
-  resolution: "react-router@npm:7.5.2"
-  dependencies:
-    cookie: ^1.0.1
-    set-cookie-parser: ^2.6.0
-    turbo-stream: 2.4.0
-  peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-  checksum: cc8c9729c4adc79c82ab9435594dffcdf0659d555d5da0f6f530d4e8d19f1c0bcd08f1b4fc8df8ca6ce021b6fa3da87f01498f55b36b1821a5c8da3bb69955a0
-  languageName: node
-  linkType: hard
-
 "react-side-effect@npm:^2.1.0":
   version: 2.1.2
   resolution: "react-side-effect@npm:2.1.2"
@@ -13086,7 +13069,6 @@ __metadata:
     react-motion: ^0.5.2
     react-qr-code: ^2.0.15
     react-redux: ^9.2.0
-    react-router: ^7.5.2
     react-router-dom: ^7.4.0
     react-syntax-highlighter: ^15.6.1
     react-toggle: 4.1.3
