@@ -5,12 +5,24 @@
   border-bottom: 2px solid #ddd;
 }
 
+[data-bs-theme=dark] .configRow {
+  border-bottom: 2px solid var(--bs-secondary-border-subtle);
+}
+
 .configRow:nth-child(1) {
   background-color: #f4fcf4 !important;
 }
 
+[data-bs-theme=dark] .configRow:nth-child(1) {
+  background-color: #2b352c !important;
+}
+
 .configRow:nth-child(odd) {
   background-color: #F9F9F9;
+}
+
+[data-bs-theme=dark] .configRow:nth-child(odd) {
+  background-color: var(--bs-tertiary-bg);
 }
 
 .compilation {

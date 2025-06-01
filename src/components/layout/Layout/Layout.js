@@ -21,8 +21,10 @@ const Layout = ({
   relatedGroupId,
   memberGroups,
   fetchManyGroupsStatus,
-}) => (
-  <div className="app-wrapper overflow-visible">
+  colorTheme,
+}) => {
+  return (
+  <div className="app-wrapper overflow-visible text-body bg-body" data-bs-theme={colorTheme}>
     <Helmet defaultTitle={`${title}`} titleTemplate={`%s | ${title}`} />
     <Header
       isLoggedIn={isLoggedIn}
@@ -39,6 +41,7 @@ const Layout = ({
     <Footer version={process.env.VERSION} />
   </div>
 );
+};
 
 Layout.propTypes = {
   isLoggedIn: PropTypes.bool,
@@ -52,6 +55,7 @@ Layout.propTypes = {
   relatedGroupId: PropTypes.string,
   memberGroups: PropTypes.object.isRequired,
   fetchManyGroupsStatus: PropTypes.string,
+  colorTheme: PropTypes.string,
 };
 
 export default Layout;
