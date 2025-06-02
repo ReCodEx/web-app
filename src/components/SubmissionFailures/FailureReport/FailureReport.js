@@ -56,7 +56,7 @@ const FAILURE_DETAILS = {
   soft_config_error: (
     <FormattedMessage
       id="app.submissionEvaluation.evaluationFailed.softConfigErrorDetails"
-      defaultMessage="This type of error often occurs if the submission contains inapropriate files. Please consult the assignments specification to verify that you have submitted expected files and these files are properly named."
+      defaultMessage="This type of error often occurs if the submission contains inappropriate files. Please consult the assignments specification to verify that you have submitted expected files and these files are properly named."
     />
   ),
 };

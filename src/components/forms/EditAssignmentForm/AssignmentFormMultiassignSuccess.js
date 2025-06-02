@@ -27,7 +27,7 @@ const AssignmentFormMultiassignSuccess = ({
       <p>
         <FormattedMessage
           id="app.multiAssignForm.successDescription"
-          defaultMessage="The exercise was successfuly assigned to the following groups."
+          defaultMessage="The exercise was successfully assigned to the following groups."
         />
       </p>
     </Callout>

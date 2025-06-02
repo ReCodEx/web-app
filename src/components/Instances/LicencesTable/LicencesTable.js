@@ -8,12 +8,12 @@ import Box from '../../widgets/Box';
 import DateTime from '../../widgets/DateTime';
 
 const LicencesTable = ({ instance, licences }) => (
-  <Box title={<FormattedMessage id="app.instance.licencesTitle" defaultMessage="Licences" />}>
+  <Box title={<FormattedMessage id="app.instance.licensesTitle" defaultMessage="Licenses" />}>
     <>
       <p>
         <FormattedMessage
-          id="app.instance.hasValidLicence"
-          defaultMessage="{name} has a valid licence: "
+          id="app.instance.hasValidLicense"
+          defaultMessage="{name} has a valid license: "
           values={{ name: instance.name }}
         />
         &nbsp;
@@ -23,13 +23,13 @@ const LicencesTable = ({ instance, licences }) => (
         <thead>
           <tr>
             <th>
-              <FormattedMessage id="app.licencesTable.note" defaultMessage="Note" />
+              <FormattedMessage id="app.licensesTable.note" defaultMessage="Note" />
             </th>
             <th>
-              <FormattedMessage id="app.licencesTable.isValid" defaultMessage="Without revocation" />
+              <FormattedMessage id="app.licensesTable.isValid" defaultMessage="Without revocation" />
             </th>
             <th>
-              <FormattedMessage id="app.licencesTable.validUntil" defaultMessage="Valid until" />
+              <FormattedMessage id="app.licensesTable.validUntil" defaultMessage="Valid until" />
             </th>
           </tr>
         </thead>
@@ -51,7 +51,7 @@ const LicencesTable = ({ instance, licences }) => (
           {licences.length === 0 && (
             <tr>
               <td colSpan={3}>
-                <FormattedMessage id="app.licencesTable.noLicences" defaultMessage="There are no licences." />
+                <FormattedMessage id="app.licensesTable.noLicenses" defaultMessage="There are no licenses." />
               </td>
             </tr>
           )}

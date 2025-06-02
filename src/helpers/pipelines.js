@@ -201,8 +201,8 @@ const validateNamesAreSet = (boxes, variables, errors) => {
   if (new Set(boxNames).size !== boxNames.length) {
     errors.push(
       <FormattedMessage
-        id="app.pipelines.validation.someBoxesHaveDuplicitNames"
-        defaultMessage="Some boxes have duplicit names."
+        id="app.pipelines.validation.someBoxesHaveDuplicateNames"
+        defaultMessage="Some boxes have duplicate names."
       />
     );
   }
@@ -219,8 +219,8 @@ const validateNamesAreSet = (boxes, variables, errors) => {
   if (new Set(varNames).size !== varNames.length) {
     errors.push(
       <FormattedMessage
-        id="app.pipelines.validation.someVariablesHaveDuplicitNames"
-        defaultMessage="Some variables have duplicit names."
+        id="app.pipelines.validation.someVariablesHaveDuplicateNames"
+        defaultMessage="Some variables have duplicate names."
       />
     );
   }

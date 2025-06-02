@@ -132,7 +132,7 @@ class ReviewCommentForm extends Component {
                 {createdAt === null ? (
                   <FormattedMessage id="app.reviewCommentForm.labelNew" defaultMessage="Create new comment:" />
                 ) : (
-                  <FormattedMessage id="app.reviewCommentForm.labelEdit" defaultMessage="Modify existing commment:" />
+                  <FormattedMessage id="app.reviewCommentForm.labelEdit" defaultMessage="Modify existing comment:" />
                 )}
               </FormLabel>
               <Field

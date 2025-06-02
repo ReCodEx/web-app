@@ -46,13 +46,13 @@ export const roleDescriptions = {
   [STUDENT_ROLE]: (
     <FormattedMessage
       id="app.roles.description.student"
-      defaultMessage="Student is the least priviledged user who can see only groups he/she is member of and solve assignments inside these groups."
+      defaultMessage="Student is the least privileged user who can see only groups he/she is member of and solve assignments inside these groups."
     />
   ),
   [SUPERVISOR_STUDENT_ROLE]: (
     <FormattedMessage
       id="app.roles.description.supervisorStudent"
-      defaultMessage="A hybrid role, which combines supervisor and student. This role is almost as priviledged as regular supervisor, but the user is also expected to be a student. The role typically covers students nearing the completion of their study programme or graduate students who help T.A. first-year courses whilst attending advanced courses."
+      defaultMessage="A hybrid role, which combines supervisor and student. This role is almost as privileged as regular supervisor, but the user is also expected to be a student. The role typically covers students nearing the completion of their study programme or graduate students who help T.A. first-year courses whilst attending advanced courses."
     />
   ),
   [SUPERVISOR_ROLE]: (
@@ -64,7 +64,7 @@ export const roleDescriptions = {
   [EMPOWERED_SUPERVISOR_ROLE]: (
     <FormattedMessage
       id="app.roles.description.empoweredSupervisor"
-      defaultMessage="A more priviledged version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines."
+      defaultMessage="A more privileged version of supervisor who is also capable of creating custom pipelines and configure exercises using these pipelines."
     />
   ),
   [SUPERADMIN_ROLE]: (

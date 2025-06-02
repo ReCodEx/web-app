@@ -96,7 +96,7 @@ class GroupInvitationsContainer extends Component {
             <InsetPanel size="sm" className="small">
               <FormattedMessage
                 id="app.groupInvitations.explain"
-                defaultMessage="Invitations are immutable links which can be sent to students by alternate communication channels. Any registred student can use a valid invitation link to join the corresponding group."
+                defaultMessage="Invitations are immutable links which can be sent to students by alternate communication channels. Any registered student can use a valid invitation link to join the corresponding group."
               />
             </InsetPanel>
 

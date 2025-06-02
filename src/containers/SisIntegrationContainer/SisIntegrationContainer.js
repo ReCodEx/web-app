@@ -96,7 +96,7 @@ class SisIntegrationContainer extends Component {
           <p className="text-body-secondary">
             <FormattedMessage
               id="app.dashboard.sisGroupsStudentExplain"
-              defaultMessage="SIS courses you are enrolled to in particular semesters and which have correspondig groups in ReCodEx."
+              defaultMessage="SIS courses you are enrolled to in particular semesters and which have corresponding groups in ReCodEx."
             />
           </p>
           <ResourceRenderer resource={sisStatus}>

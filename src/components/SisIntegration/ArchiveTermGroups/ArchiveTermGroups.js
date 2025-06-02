@@ -70,7 +70,7 @@ class ArchiveTermGroups extends Component {
             <Callout variant="danger">
               <FormattedMessage
                 id="app.archiveSisTerm.failed"
-                defaultMessage="Archivation failed. Some of the groups may not have been archived."
+                defaultMessage="Archiving failed. Some of the groups may not have been archived."
               />
             </Callout>
           )}

@@ -86,7 +86,7 @@ const HeaderSystemMessagesDropdown = ({
             {systemMessages.length === 0 && totalMessagesCount > 0 && (
               <a href="#" onClick={unacceptActiveMessages}>
                 <FormattedMessage
-                  id="app.systemMessages.unacceptActiveMessages"
+                  id="app.systemMessages.markUnread"
                   defaultMessage="Show all messages (mark them as unread)"
                 />
               </a>

@@ -19,7 +19,7 @@ const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) =>
           <FormattedMessage id="app.instancesTable.admin" defaultMessage="Admin" />
         </th>
         <th>
-          <FormattedMessage id="app.instancesTable.validLicence" defaultMessage="Has valid licence" />
+          <FormattedMessage id="app.instancesTable.validLicense" defaultMessage="Has valid license" />
         </th>
       </tr>
     </thead>

@@ -335,7 +335,7 @@ class SolutionStatus extends Component {
                       {visibility <= 0 && (
                         <FormattedMessage
                           id="app.referenceSolutionDetail.visibility.privateExplanation"
-                          defaultMessage="Private solutions are visible only to their author. Experimental and temporary submissions should be kept private so other suprevisors are not overwhelmed with abundance of irrelevant source codes."
+                          defaultMessage="Private solutions are visible only to their author. Experimental and temporary submissions should be kept private so other supervisors are not overwhelmed with abundance of irrelevant source codes."
                         />
                       )}
                       {visibility === 1 && (
@@ -366,7 +366,7 @@ class SolutionStatus extends Component {
                       <Explanation id="scoredPoints">
                         <FormattedMessage
                           id="app.solution.explanations.scoredPoints"
-                          defaultMessage="Points awarded to this soluion and current points limit that was vaild at the time the solution was uploaded. Click the explanation link for more details about the scoring process."
+                          defaultMessage="Points awarded to this solution and current points limit that was valid at the time the solution was uploaded. Click the explanation link for more details about the scoring process."
                         />
                       </Explanation>
                     </th>
@@ -617,7 +617,7 @@ class SolutionStatus extends Component {
                       <FailureIcon gapRight={3} fixedWidth />
                       <FormattedMessage
                         id="app.solution.pointsExplainDialog.correctnessBelowThreshold"
-                        defaultMessage="The solution correcntess is below threshold. No points are granted."
+                        defaultMessage="The solution correctness is below threshold. No points are granted."
                       />
                     </p>
                   )}

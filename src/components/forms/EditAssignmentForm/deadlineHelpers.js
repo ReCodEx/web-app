@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 /**
- * Verify that deadline and point inputs are vaild.
+ * Verify that deadline and point inputs are valid.
  */
 export const deadlinesAndPontsAreValid = ({
   firstDeadline,

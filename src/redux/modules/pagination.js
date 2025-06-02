@@ -156,7 +156,7 @@ export default handleActions(
         return state;
       }
 
-      // If important change occured or data are invalid, reset data cache ...
+      // If important change occurred or data are invalid, reset data cache ...
       const totalCountNum = Number(totalCount);
       if (
         forceInvalidate ||

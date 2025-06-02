@@ -12,7 +12,7 @@ const Admin = ({
   links: { ADMIN_INSTANCES_URI, USERS_URI, FAILURES_URI, SERVER_MANAGEMENT_URI, MESSAGES_URI },
 }) => (
   <ul className="nav nav-pills sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-    <MenuTitle title={<FormattedMessage id="app.sudebar.menu.admin.title" defaultMessage="Administration" />} />
+    <MenuTitle title={<FormattedMessage id="app.sidebar.menu.admin.title" defaultMessage="Administration" />} />
     <MenuItem
       icon="university"
       title={<FormattedMessage id="app.sidebar.menu.admin.instances" defaultMessage="Instances" />}

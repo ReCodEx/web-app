@@ -120,7 +120,7 @@ const warn = ({ pipelines }) => {
     warnings._warning = (
       <FormattedMessage
         id="app.editExercisePipelinesForm.validation.duplicatePipelineWarning"
-        defaultMessage="Some pipelines are selected multiple times. Although such configuration is possilbe, it is very uncommon. Make sure you have selected the right pipelines."
+        defaultMessage="Some pipelines are selected multiple times. Although such configuration is possible, it is very uncommon. Make sure you have selected the right pipelines."
       />
     );
   }

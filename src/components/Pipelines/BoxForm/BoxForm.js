@@ -78,8 +78,8 @@ class BoxForm extends Component {
           <h5>
             {editing ? (
               <FormattedMessage
-                id="app.pipelines.boxForm.titleEditting"
-                defaultMessage="Editting Box <strong>{editing}</strong>"
+                id="app.pipelines.boxForm.titleEditing"
+                defaultMessage="Editing Box <strong>{editing}</strong>"
                 values={{ editing, strong: content => <strong className="ms-1">{content}</strong> }}
               />
             ) : (
@@ -287,7 +287,7 @@ const validate = (
   if (name && name.trim() !== editing && boxes && boxes.find(v => v.name === name.trim())) {
     errors.name = (
       <FormattedMessage
-        id="app.pipelines.boxForm.duplicitName"
+        id="app.pipelines.boxForm.duplicateName"
         defaultMessage="This name is already taken by another box."
       />
     );

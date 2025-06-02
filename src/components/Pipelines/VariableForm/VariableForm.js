@@ -45,8 +45,8 @@ class VariableForm extends Component {
           <h5>
             {editing ? (
               <FormattedMessage
-                id="app.pipelines.variableForm.titleEditting"
-                defaultMessage="Editting Variable <strong>{editing}</strong>"
+                id="app.pipelines.variableForm.titleEditing"
+                defaultMessage="Editing Variable <strong>{editing}</strong>"
                 values={{ editing, strong: content => <strong className="ms-1">{content}</strong> }}
               />
             ) : (
@@ -191,7 +191,7 @@ const validate = ({ name, type, external, value }, { variables, editing, dirty }
   if (name && name.trim() !== editing && variables && variables.find(v => v.name === name.trim())) {
     errors.name = (
       <FormattedMessage
-        id="app.pipelines.variableForm.duplicitName"
+        id="app.pipelines.variableForm.duplicateName"
         defaultMessage="This name is already taken by another variable."
       />
     );
@@ -233,7 +233,7 @@ const warn = ({ name, external, value }) => {
     if (value && value.trim().startsWith('$')) {
       warnings.value = (
         <FormattedMessage
-          id="app.pipelines.variableForm.externalIdentifierDuplicitDollar"
+          id="app.pipelines.variableForm.externalIdentifierDuplicateDollar"
           defaultMessage="The dollar sign $ is added automatically to external references."
         />
       );

@@ -47,7 +47,7 @@ const commonMessages = defineMessages({
   emptyNoteSubmitConfirm: {
     id: 'app.submitSolution.emptyNoteSubmitConfirm',
     defaultMessage:
-      'The description is empty. Reference solutions are strongly encouraged to be labeled with relevant descriptions. Do you rellay wish to proceed with submit?',
+      'The description is empty. Reference solutions are strongly encouraged to be labeled with relevant descriptions. Do you really wish to proceed with submit?',
   },
   resetForm: {
     id: 'generic.reset',
@@ -58,12 +58,12 @@ const commonMessages = defineMessages({
     defaultMessage: 'Close',
   },
   instructions: {
-    id: 'app.submistSolution.instructions',
+    id: 'app.submitSolution.instructions',
     defaultMessage:
       'You must attach at least one file with source code and wait, until all your files are uploaded to the server. If there is a problem uploading any of the files, check the name of the file. The name MUST NOT contain non-standard characters (like UTF-8 ones). Then try to upload it again.',
   },
   submissionRejected: {
-    id: 'app.submistSolution.submitFailed',
+    id: 'app.submitSolution.submitFailed',
     defaultMessage:
       'Submission was rejected by the server. This usually means you have uploaded incorrect files - do your files have name with ASCII characters only and proper file type extensions? If you cannot submit the solution and there is no obvious reason, contact your supervisor to sort things out.',
   },

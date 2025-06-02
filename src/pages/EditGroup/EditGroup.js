@@ -175,7 +175,7 @@ class EditGroup extends Component {
                             <td className="text-body-secondary small p-2">
                               <FormattedMessage
                                 id="app.editGroup.examExplain"
-                                defaultMessage="Exam groups work the same as regular groups internally. The exam flag is mainly an idicator for the users and it may also affect the way how the group is listed or when it is archived. This indicator is completely independent of the Exam terms which can be set on a so named page."
+                                defaultMessage="Exam groups work the same as regular groups internally. The exam flag is mainly an indicator for the users and it may also affect the way how the group is listed or when it is archived. This indicator is completely independent of the Exam terms which can be set on a so named page."
                               />
                             </td>
                           </tr>

@@ -16,7 +16,7 @@ const validateFileName = value =>
   !value || value.trim() === '' ? (
     <FormattedMessage
       id="app.editExerciseAdvancedConfigForm.validation.emptyFileName"
-      defaultMessage="Please, fill in a vaild file name."
+      defaultMessage="Please, fill in a valid file name."
     />
   ) : undefined;
 

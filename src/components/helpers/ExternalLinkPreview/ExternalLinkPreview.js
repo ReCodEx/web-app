@@ -51,7 +51,7 @@ class ExternalLinkPreview extends Component {
             error: (
               <FormattedMessage
                 id="app.externalLinkPreview.httpFailed"
-                defaultMessage="Unable to download the refered content. The link may be invalid."
+                defaultMessage="Unable to download the referred content. The link may be invalid."
               />
             ),
           });
@@ -86,7 +86,7 @@ class ExternalLinkPreview extends Component {
               error: (
                 <FormattedMessage
                   id="app.externalLinkPreview.readingTextFailed"
-                  defaultMessage="Internal error occured. We are stating this in passive voice to avoid any responsibility."
+                  defaultMessage="Internal error occurred. We are stating this in passive voice to avoid any responsibility."
                 />
               ),
             })

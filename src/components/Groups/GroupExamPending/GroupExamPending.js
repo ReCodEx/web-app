@@ -235,7 +235,7 @@ class GroupExamPending extends Component {
                       {examLockStrict ? (
                         <FormattedMessage
                           id="app.groupExams.lockStrictExplanation"
-                          defaultMessage="Users taking the exam will not be allowed to access any other group, not even for reading (so thet are cut of source codes they submitted before the exam)."
+                          defaultMessage="Users taking the exam will not be allowed to access any other group, not even for reading (so that are cut of source codes they submitted before the exam)."
                         />
                       ) : (
                         <FormattedMessage

@@ -76,7 +76,7 @@ const PipelineExercisesList = ({
               {pipelineExercises.size > 5 && (
                 <small className="text-body-secondary">
                   <FormattedMessage
-                    id="app.pipelineExercisessList.totalCount"
+                    id="app.pipelineExercisesList.totalCount"
                     defaultMessage="Total exercises: {count}"
                     values={{ count: pipelineExercises.size }}
                   />
@@ -140,7 +140,7 @@ const PipelineExercisesList = ({
           <tr>
             <td className="text-center text-body-secondary" colSpan={3}>
               <FormattedMessage
-                id="app.pipelineExercisessList.empty"
+                id="app.pipelineExercisesList.empty"
                 defaultMessage="There are no exercises using this pipeline at the moment."
               />
             </td>
@@ -160,7 +160,7 @@ const PipelineExercisesList = ({
                     ev.preventDefault();
                   }}>
                   <FormattedMessage
-                    id="app.pipelineExercisessList.collapse"
+                    id="app.pipelineExercisesList.collapse"
                     defaultMessage="Collapse the list and show only short preview."
                   />
                 </a>
@@ -172,7 +172,7 @@ const PipelineExercisesList = ({
                     ev.preventDefault();
                   }}>
                   <FormattedMessage
-                    id="app.pipelineExercisessList.expand"
+                    id="app.pipelineExercisesList.expand"
                     defaultMessage="Expand the list and show all {count} exercises."
                     values={{ count: pipelineExercises.size }}
                   />

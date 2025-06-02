@@ -222,11 +222,11 @@ const AssignmentDetails = ({
                 <Icon icon="percent" />
               </td>
               <th>
-                <FormattedMessage id="app.assignment.corectnessThreshold" defaultMessage="Correctness threshold" />:
-                <Explanation id="corectnessThreshold">
+                <FormattedMessage id="app.assignment.correctnessThreshold" defaultMessage="Correctness threshold" />:
+                <Explanation id="correctnessThreshold">
                   <FormattedMessage
-                    id="app.assignment.corectnessThresholdExplanation"
-                    defaultMessage="Minimal correctness of solutions required for awardnig any points. Solutions below this threshold are granted no points."
+                    id="app.assignment.correctnessThresholdExplanation"
+                    defaultMessage="Minimal correctness of solutions required for awarding any points. Solutions below this threshold are granted no points."
                   />
                 </Explanation>
               </th>

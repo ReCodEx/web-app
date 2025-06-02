@@ -99,7 +99,7 @@ export default defineMessages({
   },
   m31: {
     id: 'app.randomMessages.m31',
-    defaultMessage: 'Powering up crystall ball auxiliary device',
+    defaultMessage: 'Powering up crystal ball auxiliary device',
   },
   m32: {
     id: 'app.randomMessages.m32',
@@ -135,6 +135,6 @@ export const extraMessages = defineMessages({
   error: {
     id: 'app.randomMessages.error',
     defaultMessage:
-      'Unexpected error during communication with server occured. We cannot show you actual progress of the evaluation, but do not worry. The results will be available as well after evaluation finishes.',
+      'Unexpected error during communication with server occurred. We cannot show you actual progress of the evaluation, but do not worry. The results will be available as well after evaluation finishes.',
   },
 });

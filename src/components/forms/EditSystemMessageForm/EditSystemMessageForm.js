@@ -203,7 +203,7 @@ const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
     errors.role = (
       <FormattedMessage
         id="app.editSystemMessageForm.validation.roleEmpty"
-        defaultMessage="Base user role of the notification muset be set."
+        defaultMessage="Base user role of the notification must be set."
       />
     );
   }
