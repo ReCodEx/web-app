@@ -119,13 +119,13 @@ const EditUserUIDataForm = ({
       label={
         <>
           <FormattedMessage
-            id="app.editUserUIData.openOnDoubleclick"
+            id="app.editUserUIData.openOnDoubleClick"
             defaultMessage="In listings, use double click to open item details"
           />
           <Explanation id="assigned-at" placement="bottom">
             <FormattedMessage
-              id="app.editUserUIData.openOnDoubleclick.explain"
-              defaultMessage="For the listing that show items with buttons or links leading to item detials, a double click (anywhere on the listing row) will be used as a shortcut for that button or link."
+              id="app.editUserUIData.openOnDoubleClick.explain"
+              defaultMessage="For the listing that show items with buttons or links leading to item details, a double click (anywhere on the listing row) will be used as a shortcut for that button or link."
             />
           </Explanation>
         </>

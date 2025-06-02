@@ -13,7 +13,7 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
         tooltipId={id}
         tooltip={
           <FormattedMessage
-            id="app.assignemntStatusIcon.solutionMissingSubmission"
+            id="app.assignmentStatusIcon.solutionMissingSubmission"
             defaultMessage="The solution was not submitted for evaluation probably due to an error. You may need to resubmit it."
           />
         }
@@ -29,7 +29,7 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
         tooltipId={id}
         tooltip={
           <FormattedMessage
-            id="app.assignemntStatusIcon.inProgress"
+            id="app.assignmentStatusIcon.inProgress"
             defaultMessage="Assignment solution is being evaluated."
           />
         }
@@ -59,12 +59,12 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
             tooltip={
               <>
                 <FormattedMessage
-                  id="app.assignemntStatusIcon.ok"
+                  id="app.assignmentStatusIcon.ok"
                   defaultMessage="Assignment is successfully completed."
                 />
                 {isBestSolution && !accepted && (
                   <FormattedMessage
-                    id="app.assignemntStatusIcon.isBestSolution"
+                    id="app.assignmentStatusIcon.isBestSolution"
                     defaultMessage="This is the best solution of the author submitted so far."
                   />
                 )}
@@ -87,12 +87,12 @@ const AssignmentStatusIcon = ({ id, submission = null, accepted = false, isBestS
           tooltip={
             <>
               <FormattedMessage
-                id="app.assignemntStatusIcon.failed"
+                id="app.assignmentStatusIcon.failed"
                 defaultMessage="No correct solution was submitted yet."
               />
               {isBestSolution && !accepted && (
                 <FormattedMessage
-                  id="app.assignemntStatusIcon.isBestSolution"
+                  id="app.assignmentStatusIcon.isBestSolution"
                   defaultMessage="This is the best solution of the author submitted so far."
                 />
               )}

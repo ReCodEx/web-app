@@ -250,7 +250,7 @@ const validate = (
   if (password !== passwordConfirm) {
     errors.passwordConfirm = (
       <FormattedMessage
-        id="app.editUserProfile.validation.passwordsDontMatch"
+        id="app.editUserProfile.validation.passwordsNotMatch"
         defaultMessage="Passwords do not match."
       />
     );

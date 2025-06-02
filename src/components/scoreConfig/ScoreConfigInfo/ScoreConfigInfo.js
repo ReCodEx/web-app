@@ -49,7 +49,7 @@ const ScoreConfigInfo = ({ scoreConfig, testResults, canResubmit = false }) => {
             <p>
               <FormattedMessage
                 id="app.scoreConfigInfo.missingButCanResubmit"
-                defaultMessage="You may resubmit the solution and then the current correctness algorithm from the configuration of the assignment will be attached to the new submission (and incidently visible in this dialog)."
+                defaultMessage="You may resubmit the solution and then the current correctness algorithm from the configuration of the assignment will be attached to the new submission (and incidentally visible in this dialog)."
               />
             </p>
           )}

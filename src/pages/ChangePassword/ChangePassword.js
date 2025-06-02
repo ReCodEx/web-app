@@ -64,7 +64,7 @@ class ChangePassword extends Component {
   componentDidUpdate = () => this.checkIfIsDone(this.props);
 
   /**
-   * Check if the operation was not carried out successfuly and redirect the user to the next step if so.
+   * Check if the operation was not carried out successfully and redirect the user to the next step if so.
    */
   checkIfIsDone = props => {
     const { hasSucceeded } = props;

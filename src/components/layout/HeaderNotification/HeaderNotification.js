@@ -85,8 +85,8 @@ class HeaderNotification extends Component {
               <Overlay show={clickedCopy} container={this} target={() => this.copy} placement="bottom">
                 <Tooltip id={`clicked-copy-${id}`}>
                   <FormattedMessage
-                    id="app.headerNotification.copiedToClippboard"
-                    defaultMessage="Copied to clippboard."
+                    id="app.headerNotification.copiedToClipboard"
+                    defaultMessage="Copied to clipboard."
                   />
                 </Tooltip>
               </Overlay>

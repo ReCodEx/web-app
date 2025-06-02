@@ -122,7 +122,7 @@ class SolutionDetail extends Component {
               <Callout variant="danger" icon={<WarningIcon />}>
                 <FormattedMessage
                   id="app.submissionEvaluation.noEvaluationsWhatSoEver"
-                  defaultMessage="There are no submission evaluations. This is higly unusual, since the solution is submitted for evaluation as soon as it is created. Check the configuration of the exercise and try to resubmit this solution again."
+                  defaultMessage="There are no submission evaluations. This is highly unusual, since the solution is submitted for evaluation as soon as it is created. Check the configuration of the exercise and try to resubmit this solution again."
                 />
               </Callout>
             )}
@@ -156,7 +156,7 @@ class SolutionDetail extends Component {
               <Callout variant="warning">
                 <FormattedMessage
                   id="app.evaluationDetail.notActualEvaluation"
-                  defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluaton of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom."
+                  defaultMessage="This is not the last evaluation. Please note, that the solution is scored by the evaluation of the last submission. You may change the selection of the evaluation being displayed in the table at the bottom."
                 />
               </Callout>
             )}

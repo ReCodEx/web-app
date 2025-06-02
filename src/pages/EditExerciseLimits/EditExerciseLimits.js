@@ -163,7 +163,7 @@ class EditExerciseLimits extends Component {
                     <p>
                       <FormattedMessage
                         id="app.editExerciseLimits.multiHwGroups"
-                        defaultMessage="The exercise uses complex configuration of multiple hardware groups. Editting the limits using this form may simplify this configuration. Proceed at your own risk."
+                        defaultMessage="The exercise uses complex configuration of multiple hardware groups. Editing the limits using this form may simplify this configuration. Proceed at your own risk."
                       />
                     </p>
                   </Callout>
@@ -262,7 +262,7 @@ class EditExerciseLimits extends Component {
                     </h4>
                     <FormattedMessage
                       id="app.editExerciseLimits.missingSomething"
-                      defaultMessage="The limits can be set only when the exercise configuration is complete. The tests, runtime environments, and a hardware group must be properly set aprior to setting limits."
+                      defaultMessage="The limits can be set only when the exercise configuration is complete. The tests, runtime environments, and a hardware group must be properly set a priori to setting limits."
                     />
                   </Callout>
                 )}

@@ -216,7 +216,7 @@ class EditUser extends Component {
                 <Row>
                   <Col lg={12}>
                     <Box
-                      title={<FormattedMessage id="app.editUser.icalTitle" defaultMessage="Deadlines Export to iCal" />}
+                      title={<FormattedMessage id="app.editUser.iCalTitle" defaultMessage="Deadlines Export to iCal" />}
                       noPadding
                       unlimitedHeight>
                       <ResourceRenderer resource={calendars}>

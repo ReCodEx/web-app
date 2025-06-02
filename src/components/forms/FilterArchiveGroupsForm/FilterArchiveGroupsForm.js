@@ -48,7 +48,7 @@ const FilterArchiveGroupsForm = ({
                 <span>
                   <FormattedMessage
                     id="app.filterArchiveGroupsForm.showAll"
-                    defaultMessage="Show also nonarchived groups"
+                    defaultMessage="Show also non-archived groups"
                   />
                   :
                 </span>

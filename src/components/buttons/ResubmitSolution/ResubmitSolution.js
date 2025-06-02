@@ -19,7 +19,7 @@ const ResubmitSolution = ({ id, resubmit, progressObserverId, isDebug }) => (
       <Icon icon="redo" gapRight={2} />
       {isDebug && <FormattedMessage id="app.resubmitSolution.resubmitDebug" defaultMessage="Resubmit (debug mode)" />}
       {!isDebug && (
-        <FormattedMessage id="app.resubmitSolution.resubmitNondebug" defaultMessage="Resubmit (normal mode)" />
+        <FormattedMessage id="app.resubmitSolution.resubmitNormal" defaultMessage="Resubmit (normal mode)" />
       )}
     </Button>
   </Confirm>

@@ -203,7 +203,7 @@ const validate = ({ limits }, { constraints, environments }) => {
     errors._error = (
       <FormattedMessage
         id="app.editLimitsForm.validation.totalTime"
-        defaultMessage="The time limits for some environments ({environments}) are violating the total alowed time per exercise constraint. Please, make sure that the total sum of the time limits is within the constraints of the selected hardware group."
+        defaultMessage="The time limits for some environments ({environments}) are violating the total allowed time per exercise constraint. Please, make sure that the total sum of the time limits is within the constraints of the selected hardware group."
         values={{
           environments: brokenEnvironments
             .map(env => environments.find(({ id }) => encodeId(id) === env))

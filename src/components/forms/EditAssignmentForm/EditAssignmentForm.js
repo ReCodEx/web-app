@@ -507,7 +507,7 @@ class EditAssignmentForm extends Component {
                             <Explanation id="secondDeadlineExplanation">
                               <FormattedMessage
                                 id="app.editAssignmentForm.secondDeadlineExplanation"
-                                defaultMessage="Second deadline is for late solutions which are still awarded some points. Solutions submitted after the second deadline are granted no poionts."
+                                defaultMessage="Second deadline is for late solutions which are still awarded some points. Solutions submitted after the second deadline are granted no points."
                               />
                             </Explanation>
                           </>
@@ -599,12 +599,12 @@ class EditAssignmentForm extends Component {
                 label={
                   <>
                     <FormattedMessage
-                      id="app.editAssignmentForm.pointsPercentualThreshold"
+                      id="app.editAssignmentForm.pointsPercentThreshold"
                       defaultMessage="Minimal required correctness [%]:"
                     />
                     <Explanation id="pointsPercentualThresholdExplanation">
                       <FormattedMessage
-                        id="app.editAssignmentForm.pointsPercentualThresholdExplanation"
+                        id="app.editAssignmentForm.pointsPercentThresholdExplanation"
                         defaultMessage="Minimal solution correctness (expressed in percents) that is required for regular scoring. Solutions below this threshold always gets zero points."
                       />
                     </Explanation>
@@ -1069,7 +1069,7 @@ const warn = (
       warnings.maxPointsBeforeSecondDeadline = (
         <FormattedMessage
           id="app.editAssignmentForm.warnings.secondLimitIsGreaterThanFirstLimit"
-          defaultMessage="The limit is greater than the first limit which is quite unusal."
+          defaultMessage="The limit is greater than the first limit which is quite unusual."
         />
       );
     } else if (maxPointsBeforeSecondDeadline === 0) {
@@ -1091,7 +1091,7 @@ const warn = (
   if (canViewJudgeStdout) {
     warnings.canViewJudgeStdout = (
       <FormattedMessage
-        id="app.editAssignmentForm.warninigs.canViewJudgeLogs"
+        id="app.editAssignmentForm.warnings.canViewJudgeLogs"
         defaultMessage="Allowing the students to see judge logs has its security risks. In case of simple exercises, the students may use this channel to retrieve the test inputs and expected outputs and design a trivial solution which embeds the correct outputs directly into the source code. Use this option wisely."
       />
     );
@@ -1100,7 +1100,7 @@ const warn = (
   if (canViewJudgeStderr) {
     warnings.canViewJudgeStderr = (
       <FormattedMessage
-        id="app.editAssignmentForm.warninigs.canViewJudgeLogs"
+        id="app.editAssignmentForm.warnings.canViewJudgeLogs"
         defaultMessage="Allowing the students to see judge logs has its security risks. In case of simple exercises, the students may use this channel to retrieve the test inputs and expected outputs and design a trivial solution which embeds the correct outputs directly into the source code. Use this option wisely."
       />
     );
@@ -1115,7 +1115,7 @@ const warn = (
           warnings,
           ['groups', key],
           <FormattedMessage
-            id="app.editAssignmentForm.warninigs.alreadyAssigned"
+            id="app.editAssignmentForm.warnings.alreadyAssigned"
             defaultMessage="The exercise has been already assigned in this group."
           />
         );
@@ -1126,7 +1126,7 @@ const warn = (
     if (alreadyAssigned) {
       warnings._warning = (
         <FormattedMessage
-          id="app.editAssignmentForm.warninigs.alreadyAssignedGlobal"
+          id="app.editAssignmentForm.warnings.alreadyAssignedGlobal"
           defaultMessage="The exercise has been already assigned in some of the selected groups. It will be assigned again."
         />
       );

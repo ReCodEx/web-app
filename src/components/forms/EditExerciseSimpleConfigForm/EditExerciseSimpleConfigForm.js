@@ -136,7 +136,7 @@ const validateFileList = (data, errors, path, pairs, existingFiles, emptyError, 
   });
 
   if (files.length > 1) {
-    // check for duplicit names/entries
+    // check for duplicate names/entries
     const nameIndex = createIndex(
       files.map(entry => (pairs ? ((entry && entry.name) || '').trim() : (entry || '').trim())).filter(name => name)
     );

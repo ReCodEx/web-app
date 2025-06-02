@@ -15,12 +15,12 @@ const NotVerifiedEmailCallout = ({ userId, refreshUser }) => (
     <p>
       <FormattedMessage
         id="app.editUser.emailStillNotVerified"
-        defaultMessage="Your email addres has not been verified yet. ReCodEx needs to rely on vaild addresses since many notifications are sent via email. You may send yourself a validation email using the button below and then use a link from that email to verify its acceptance. Please validate your address as soon as possible."
+        defaultMessage="Your email address has not been verified yet. ReCodEx needs to rely on valid addresses since many notifications are sent via email. You may send yourself a validation email using the button below and then use a link from that email to verify its acceptance. Please validate your address as soon as possible."
       />
     </p>
     <p>
       <FormattedMessage
-        id="app.editUser.isEmailAlreadyVefiried"
+        id="app.editUser.isEmailAlreadyVerified"
         defaultMessage="If you have just verified your email and still see the message, please refresh the page."
       />
     </p>

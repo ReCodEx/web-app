@@ -54,7 +54,7 @@ const ChangePasswordForm = ({
               {firstTime ? (
                 <FormattedMessage id="app.changePasswordForm.setting" defaultMessage="Setting..." />
               ) : (
-                <FormattedMessage id="app.changePasswordForm.changning" defaultMessage="Changing..." />
+                <FormattedMessage id="app.changePasswordForm.changing" defaultMessage="Changing..." />
               )}
             </>
           )}
@@ -119,7 +119,7 @@ const validate = ({ password, passwordCheck }) => {
   if (!passwordCheck || passwordCheck !== password) {
     errors.passwordCheck = (
       <FormattedMessage
-        id="app.changePasswordForm.validation.passwordsDontMatch"
+        id="app.changePasswordForm.validation.passwordsNotMatch"
         defaultMessage="Passwords do not match."
       />
     );

@@ -163,7 +163,7 @@ const EditExerciseForm = ({
           <Explanation id="mergeJudgeLogsExplanation">
             <FormattedMessage
               id="app.exercise.mergeJudgeLogsExplanation"
-              defaultMessage="The merge flag indicates whether primary (stdout) and secondary (stderr) judge logs are are concatenated in one log (which should be default for built-in judges). If the logs are separated, the visibility of each part may be controlled idividually in assignments. That might be helpful if you need to pass two separate logs from a custom judge (e.g., one is for students and one is for supervisors)."
+              defaultMessage="The merge flag indicates whether primary (stdout) and secondary (stderr) judge logs are are concatenated in one log (which should be default for built-in judges). If the logs are separated, the visibility of each part may be controlled individually in assignments. That might be helpful if you need to pass two separate logs from a custom judge (e.g., one is for students and one is for supervisors)."
             />
           </Explanation>
         </span>

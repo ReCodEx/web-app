@@ -410,7 +410,7 @@ class ScoreConfigUniversalExpression extends Component {
                     <td className="p-3 align-middle text-body-secondary small">
                       <FormattedMessage
                         id="app.scoreConfigExpression.optimize.optimizeInfo"
-                        defaultMessage="Perform basic set of optimizations which simplify the tree but have no effect on the result (removing double negtion, removing 0 from sum() and 1 from mul(), etc.)."
+                        defaultMessage="Perform basic set of optimizations which simplify the tree but have no effect on the result (removing double negation, removing 0 from sum() and 1 from mul(), etc.)."
                       />
                     </td>
                   </tr>
@@ -457,7 +457,7 @@ class ScoreConfigUniversalExpression extends Component {
               <p>
                 <FormattedMessage
                   id="app.scoreConfigExpression.debug.explain"
-                  defaultMessage="The custom expression algorithm is still in experimental phase. If you experience any trouble, please send the log below (along with the problem desription, URL, and errors from JavaScript console) to ReCodEx developers."
+                  defaultMessage="The custom expression algorithm is still in experimental phase. If you experience any trouble, please send the log below (along with the problem description, URL, and errors from JavaScript console) to ReCodEx developers."
                 />
               </p>
               <pre className="small">

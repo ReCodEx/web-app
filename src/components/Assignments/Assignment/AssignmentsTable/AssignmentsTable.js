@@ -262,7 +262,7 @@ class AssignmentsTable extends Component {
                         {showGroups ? (
                           <FormattedMessage
                             id="app.assignmentsTable.noAssignmentsInAnyGroup"
-                            defaultMessage="This exercise has no assigments in any of the groups you can see."
+                            defaultMessage="This exercise has no assignments in any of the groups you can see."
                           />
                         ) : (
                           <FormattedMessage

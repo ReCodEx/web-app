@@ -69,7 +69,7 @@ const EvaluationDetail = ({
             <Explanation id="correctness">
               <FormattedMessage
                 id="app.evaluationDetail.explanations.correctness"
-                defaultMessage="Overall correctness of the solution. There are multiple options how the correcntess of solution is computed from the test results. Use the explanation link to see how the correctness was computed."
+                defaultMessage="Overall correctness of the solution. There are multiple options how the correctness of solution is computed from the test results. Use the explanation link to see how the correctness was computed."
               />
             </Explanation>
           </th>

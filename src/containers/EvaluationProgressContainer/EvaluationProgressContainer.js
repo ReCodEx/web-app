@@ -204,7 +204,7 @@ class EvaluationProgressContainer extends Component {
             text: (
               <FormattedMessage
                 id="app.evaluationProgress.noWebSockets"
-                defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be estabelished or was lost. The evaluation has already started and you will be able to see the results soon."
+                defaultMessage="Your browser does not support realtime progress monitoring or the connection to the server could not be established or was lost. The evaluation has already started and you will be able to see the results soon."
               />
             ),
           }),

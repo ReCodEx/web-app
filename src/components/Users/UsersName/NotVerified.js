@@ -22,7 +22,7 @@ const NotVerified = ({ userId, currentUserId }) => {
           <Popover.Body>
             <p>
               <FormattedMessage
-                id="app.usersname.notVerified.description"
+                id="app.usersName.notVerified.description"
                 defaultMessage="This user has not verified his/her email address via an activation link he has received to his email address."
               />
             </p>

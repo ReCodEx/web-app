@@ -210,7 +210,7 @@ const validate = ({ firstName, lastName, email, password, passwordConfirm, insta
   if (password !== passwordConfirm) {
     errors.passwordConfirm = (
       <FormattedMessage
-        id="app.registrationForm.validation.passwordDontMatch"
+        id="app.registrationForm.validation.passwordNotMatch"
         defaultMessage="Passwords do not match."
       />
     );

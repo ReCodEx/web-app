@@ -292,7 +292,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                         <Explanation id={`${test}.exec-targets-explanation`}>
                                           <FormattedMessage
                                             id="app.editExerciseSimpleConfigTests.successExitCodesExplanation"
-                                            defaultMessage="List of exit codes that are accepted as successful completion of tested solution. Exit codes are separated by commas, ranges of codes may be specifed using dash '-' (e.g., '1, 3, 5-7'). Zero is the default accepted exit code."
+                                            defaultMessage="List of exit codes that are accepted as successful completion of tested solution. Exit codes are separated by commas, ranges of codes may be specified using dash '-' (e.g., '1, 3, 5-7'). Zero is the default accepted exit code."
                                           />
                                         </Explanation>
                                       </>

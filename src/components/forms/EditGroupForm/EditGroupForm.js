@@ -250,7 +250,7 @@ const EditGroupForm = ({
                 <>
                   <FormattedMessage
                     id="app.createGroup.hasThreshold"
-                    defaultMessage="Students require cetrain number of points to complete the course"
+                    defaultMessage="Students require certain number of points to complete the course"
                   />
                   <Explanation id="hasThreshold">
                     <FormattedMessage

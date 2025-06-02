@@ -34,7 +34,7 @@ export const SCORE_CALCULATOR_DESCRIPTIONS = {
   [UNIVERSAL_ID]: (
     <FormattedMessage
       id="app.scoreCalculators.universal.description"
-      defaultMessage="The correcntess is computed by a custom expression that takes test results as inputs."
+      defaultMessage="The correctness is computed by a custom expression that takes test results as inputs."
     />
   ),
 };
@@ -100,7 +100,9 @@ const areWeightsTheSame = weights => {
 };
 
 // tmp function used for config cnostruction
-const _node = (type, valueName = 'children') => value => ({ type, [valueName]: value });
+const _node =
+  (type, valueName = 'children') =>
+  value => ({ type, [valueName]: value });
 const _avg = _node('avg');
 const _div = _node('div');
 const _mul = _node('mul');

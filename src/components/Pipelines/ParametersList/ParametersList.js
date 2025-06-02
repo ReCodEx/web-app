@@ -40,7 +40,7 @@ const pipelineParams = {
   hasSuccessExitCodes: (
     <FormattedMessage
       id="app.pipelineParams.hasSuccessExitCodes"
-      defaultMessage="Configurable exit-codes that are accepted as a success when tested soution is executed"
+      defaultMessage="Configurable exit-codes that are accepted as a success when tested solution is executed"
     />
   ),
 };

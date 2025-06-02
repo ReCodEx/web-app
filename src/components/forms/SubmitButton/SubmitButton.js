@@ -129,7 +129,7 @@ class SubmitButton extends Component {
         overlay={
           <Popover id={`error-popover-${id}`}>
             <Popover.Header className="bg-danger">
-              <FormattedMessage id="app.submitButton.lastError.title" defaultMessage="An error occured" />
+              <FormattedMessage id="app.submitButton.lastError.title" defaultMessage="An error occurred" />
             </Popover.Header>
             <Popover.Body className="text-center">{getErrorMessage(formatMessage)(this.state.lastError)}</Popover.Body>
           </Popover>

@@ -12,7 +12,7 @@ import Button from '../../widgets/TheButton';
 const EditExerciseSimpleConfigTestExecArgs = ({ smartFillArgs, test, testErrors, readOnly = false }) => (
   <>
     <h4>
-      <FormattedMessage id="app.editExerciseSimpleConfigTests.cmdlineTitle" defaultMessage="Command Line" />
+      <FormattedMessage id="app.editExerciseSimpleConfigTests.commandlineTitle" defaultMessage="Command Line" />
     </h4>
 
     <FieldArray

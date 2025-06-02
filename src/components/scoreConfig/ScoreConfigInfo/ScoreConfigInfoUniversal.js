@@ -31,7 +31,7 @@ const ScoreConfigInfoUniversal = ({ scoreConfig, testResults }) => (
     <p>
       <FormattedMessage
         id="app.scoreCalculators.universal.description"
-        defaultMessage="The correcntess is computed by a custom expression that takes test results as inputs."
+        defaultMessage="The correctness is computed by a custom expression that takes test results as inputs."
       />
     </p>
 

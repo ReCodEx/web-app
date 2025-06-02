@@ -60,7 +60,7 @@ const ReviewCommentSnippetDialog = ({
                     <Tooltip id="useButton">
                       <FormattedMessage
                         id="app.reviewCommentSnippetDialog.useButtonTooltip"
-                        defaultMessage="Replace the selected comment with this sinppet."
+                        defaultMessage="Replace the selected comment with this snippet."
                       />
                     </Tooltip>
                   }>
@@ -79,7 +79,7 @@ const ReviewCommentSnippetDialog = ({
                     <Tooltip id="setButton">
                       <FormattedMessage
                         id="app.reviewCommentSnippetDialog.setButtonTooltip"
-                        defaultMessage="Replace this sinppet with the selected comment."
+                        defaultMessage="Replace this snippet with the selected comment."
                       />
                     </Tooltip>
                   }>
