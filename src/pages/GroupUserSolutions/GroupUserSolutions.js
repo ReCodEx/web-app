@@ -405,18 +405,23 @@ class GroupUserSolutions extends Component {
               linkFactory={links.GROUP_EDIT_URI_FACTORY}
             />
 
-            {plagiarisms && plagiarisms.length > 0 && (
-              <Callout variant="danger" icon={<PlagiarismIcon />}>
-                <FormattedMessage
-                  id="app.assignmentSolutions.plagiarismsDetected.assignments"
-                  defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (of {assignments} {assignments, plural, one {assignment} other {assignments}}) with detected similarities. Such solutions may be plagiarisms."
-                  values={{
-                    count: plagiarisms.length,
-                    assignments: getPlagiarismUniqueAssignments(plagiarisms).length,
-                  }}
-                />
-              </Callout>
-            )}
+            <FetchManyResourceRenderer fetchManyStatus={fetchSolutionsStatus} loading={null} failed={null}>
+              {() =>
+                plagiarisms &&
+                plagiarisms.length > 0 && (
+                  <Callout variant="danger" icon={<PlagiarismIcon />}>
+                    <FormattedMessage
+                      id="app.assignmentSolutions.plagiarismsDetected.assignments"
+                      defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (of {assignments} {assignments, plural, one {assignment} other {assignments}}) with detected similarities. Such solutions may be plagiarisms."
+                      values={{
+                        count: plagiarisms.length,
+                        assignments: getPlagiarismUniqueAssignments(plagiarisms).length,
+                      }}
+                    />
+                  </Callout>
+                )
+              }
+            </FetchManyResourceRenderer>
 
             {pendingReviews && pendingReviews.length > 0 && !group.archived && (
               <Callout variant="warning">
