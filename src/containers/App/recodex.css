@@ -234,11 +234,11 @@ a:focus {
 }
 
 
-.whenTargetted {
+.whenTargeted {
   display: none;
 }
 
-:target .whenTargetted {
+:target .whenTargeted {
   display: initial;
 }
 

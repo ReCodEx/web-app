@@ -159,17 +159,30 @@ class GroupExams extends Component {
                 <Col xs={12}>
                   <Box
                     title={
-                      this.state.examInProgress ? (
-                        <FormattedMessage
-                          id="app.groupExams.studentsBoxTitle"
-                          defaultMessage="Participating students"
-                        />
-                      ) : (
-                        <FormattedMessage
-                          id="app.groupExams.locksBoxTitle"
-                          defaultMessage="Recorded student locking events"
-                        />
-                      )
+                      <>
+                        {this.state.examInProgress ? (
+                          <FormattedMessage
+                            id="app.groupExams.studentsBoxTitle"
+                            defaultMessage="Participating students"
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="app.groupExams.locksBoxTitle"
+                            defaultMessage="Recorded student locking events"
+                          />
+                        )}
+                      </>
+                    }
+                    customIcons={
+                      this.state.examInProgress && lockedStudents && lockedStudents.length >= 0 ? (
+                        <small className="text-body-secondary opacity-50 me-3">
+                          <FormattedMessage
+                            id="app.groupExams.studentsCount"
+                            defaultMessage="({count, plural, one {# student} other {# students}})"
+                            values={{ count: lockedStudents ? lockedStudents.length : 0 }}
+                          />
+                        </small>
+                      ) : null
                     }
                     noPadding
                     unlimitedHeight>

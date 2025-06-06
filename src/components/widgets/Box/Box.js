@@ -85,7 +85,7 @@ class Box extends Component {
           <Card.Title className={flexTitle ? 'd-flex justify-content-between float-none' : null}>
             {title}
 
-            <span className="whenTargetted text-warning">
+            <span className="whenTargeted text-warning">
               <Icon
                 icon="highlighter"
                 gapLeft={2}
