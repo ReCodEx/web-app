@@ -461,39 +461,46 @@ class AssignmentSolutions extends Component {
                     linkFactory={links.GROUP_EDIT_URI_FACTORY}
                   />
 
-                  {plagiarisms && plagiarisms.length > 0 ? (
-                    <Callout variant="danger" icon={<PlagiarismIcon />}>
-                      <FormattedMessage
-                        id="app.assignmentSolutions.plagiarismsDetected.authors"
-                        defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (from {authors} {authors, plural, one {author} other {unique authors}}) with detected similarities. Such solutions may be plagiarisms."
-                        values={{ count: plagiarisms.length, authors: getPlagiarismUniqueAuthors(plagiarisms).length }}
-                      />
-                      {assignment.plagiarismCheckedAt && (
-                        <>
-                          <br />
+                  <FetchManyResourceRenderer fetchManyStatus={fetchManyStatus} loading={null} failed={null}>
+                    {() =>
+                      plagiarisms && plagiarisms.length > 0 ? (
+                        <Callout variant="danger" icon={<PlagiarismIcon />}>
                           <FormattedMessage
-                            id="app.assignmentSolutions.plagiarismsDetected.time"
-                            defaultMessage="The latest plagiarism check ended at {date}."
+                            id="app.assignmentSolutions.plagiarismsDetected.authors"
+                            defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (from {authors} {authors, plural, one {author} other {unique authors}}) with detected similarities. Such solutions may be plagiarisms."
                             values={{
-                              date: <DateTime unixts={assignment.plagiarismCheckedAt} compact />,
+                              count: plagiarisms.length,
+                              authors: getPlagiarismUniqueAuthors(plagiarisms).length,
                             }}
                           />
-                        </>
-                      )}
-                    </Callout>
-                  ) : (
-                    assignment.plagiarismCheckedAt && (
-                      <Callout variant="success" icon={<PlagiarismCheckedIcon />}>
-                        <FormattedMessage
-                          id="app.assignmentSolutions.plagiarismsChecked"
-                          defaultMessage="These assignment solutions were checked for plagiarisms at {date}. No similarities found."
-                          values={{
-                            date: <DateTime unixts={assignment.plagiarismCheckedAt} compact />,
-                          }}
-                        />
-                      </Callout>
-                    )
-                  )}
+                          {assignment.plagiarismCheckedAt && (
+                            <>
+                              <br />
+                              <FormattedMessage
+                                id="app.assignmentSolutions.plagiarismsDetected.time"
+                                defaultMessage="The latest plagiarism check ended at {date}."
+                                values={{
+                                  date: <DateTime unixts={assignment.plagiarismCheckedAt} compact />,
+                                }}
+                              />
+                            </>
+                          )}
+                        </Callout>
+                      ) : (
+                        assignment.plagiarismCheckedAt && (
+                          <Callout variant="success" icon={<PlagiarismCheckedIcon />}>
+                            <FormattedMessage
+                              id="app.assignmentSolutions.plagiarismsChecked"
+                              defaultMessage="These assignment solutions were checked for plagiarisms at {date}. No similarities found."
+                              values={{
+                                date: <DateTime unixts={assignment.plagiarismCheckedAt} compact />,
+                              }}
+                            />
+                          </Callout>
+                        )
+                      )
+                    }
+                  </FetchManyResourceRenderer>
 
                   {pendingReviews && pendingReviews.length > 0 && !group.archived && (
                     <Callout variant="warning">
