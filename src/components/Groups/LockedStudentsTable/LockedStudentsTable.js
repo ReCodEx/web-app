@@ -5,6 +5,7 @@ import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
 import UsersName from '../../Users/UsersName';
+import IpAddress from '../../widgets/IpAddress/IpAddress';
 import ExamUnlockButtonContainer from '../../../containers/ExamUnlockButtonContainer';
 import { createUserNameComparator } from '../../helpers/users.js';
 
@@ -28,7 +29,7 @@ const LockedStudentsTable = ({ groupId, lockedStudents, currentUser, intl: { loc
                 listItem
               />
             </td>
-            <td>{student.privateData?.ipLock && <code>{student.privateData.ipLock}</code>}</td>
+            <td>{student.privateData?.ipLock && <IpAddress ip={student.privateData.ipLock} />}</td>
             <td className="text-end">
               <ExamUnlockButtonContainer groupId={groupId} userId={student.id} size="xs" />
             </td>
