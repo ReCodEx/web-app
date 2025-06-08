@@ -17,17 +17,18 @@ const LockedStudentsTable = ({ groupId, lockedStudents, currentUser, intl: { loc
   lockedStudents && lockedStudents.length > 0 ? (
     <Table className="m-0" hover>
       <tbody>
-        {sortStudents(lockedStudents).map(student => (
+        {sortStudents(lockedStudents, locale).map(student => (
           <tr key={student.id}>
             <td>
               <UsersName
                 {...student}
                 currentUserId={currentUser.id}
-                showEmail="full"
+                showEmail="icon"
                 showExternalIdentifiers
                 listItem
               />
             </td>
+            <td>{student.privateData?.ipLock && <code>{student.privateData.ipLock}</code>}</td>
             <td className="text-end">
               <ExamUnlockButtonContainer groupId={groupId} userId={student.id} size="xs" />
             </td>

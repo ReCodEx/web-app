@@ -13,6 +13,7 @@ import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning';
 import GroupExamsTable from '../../components/Groups/GroupExamsTable';
 import GroupExamStatus from '../../components/Groups/GroupExamStatus';
 import LockedStudentsTable from '../../components/Groups/LockedStudentsTable';
+import NotLockedStudentsTable from '../../components/Groups/NotLockedStudentsTable';
 import LocksTable from '../../components/Groups/LocksTable';
 import { GroupExamsIcon } from '../../components/icons';
 
@@ -22,7 +23,7 @@ import { fetchByIds } from '../../redux/modules/users.js';
 import { addNotification } from '../../redux/modules/notifications.js';
 import { groupSelector, groupDataAccessorSelector, groupTypePendingChange } from '../../redux/selectors/groups.js';
 import { groupExamLocksSelector } from '../../redux/selectors/groupExamLocks.js';
-import { lockedStudentsOfGroupSelector } from '../../redux/selectors/usersGroups.js';
+import { lockedStudentsOfGroupSelector, notLockedStudentsOfGroupSelector } from '../../redux/selectors/usersGroups.js';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users.js';
 import { getJsData } from '../../redux/helpers/resourceManager';
@@ -105,6 +106,7 @@ class GroupExams extends Component {
       params: { examId = null },
       group,
       lockedStudents,
+      notLockedStudents,
       groupExamLocks,
       currentUser,
       groupsAccessor,
@@ -154,52 +156,89 @@ class GroupExams extends Component {
               </Col>
             </Row>
 
-            {(examId || this.state.examInProgress) && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
+            {this.state.examInProgress && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
               <Row>
-                <Col xs={12}>
+                <Col xs={12} xl={6}>
                   <Box
                     title={
-                      <>
-                        {this.state.examInProgress ? (
-                          <FormattedMessage
-                            id="app.groupExams.studentsBoxTitle"
-                            defaultMessage="Participating students"
-                          />
-                        ) : (
-                          <FormattedMessage
-                            id="app.groupExams.locksBoxTitle"
-                            defaultMessage="Recorded student locking events"
-                          />
-                        )}
-                      </>
+                      <FormattedMessage id="app.groupExams.studentsBoxTitle" defaultMessage="Participating students" />
                     }
                     customIcons={
-                      this.state.examInProgress && lockedStudents && lockedStudents.length >= 0 ? (
+                      lockedStudents && lockedStudents.length >= 2 ? (
                         <small className="text-body-secondary opacity-50 me-3">
                           <FormattedMessage
                             id="app.groupExams.studentsCount"
                             defaultMessage="({count, plural, one {# student} other {# students}})"
-                            values={{ count: lockedStudents ? lockedStudents.length : 0 }}
+                            values={{ count: lockedStudents?.length || 0 }}
                           />
                         </small>
                       ) : null
                     }
                     noPadding
                     unlimitedHeight>
-                    {this.state.examInProgress ? (
-                      <LockedStudentsTable
-                        groupId={group.id}
-                        lockedStudents={lockedStudents}
-                        currentUser={currentUser}
-                      />
-                    ) : (
-                      groupExamLocks && (
-                        <ResourceRenderer resource={groupExamLocks} bulkyLoading>
-                          {locks => <LocksTable locks={locks} />}
-                        </ResourceRenderer>
-                      )
-                    )}
+                    <LockedStudentsTable groupId={group.id} lockedStudents={lockedStudents} currentUser={currentUser} />
                   </Box>
+                </Col>
+                <Col xs={12} xl={6}>
+                  <Box
+                    title={
+                      <FormattedMessage
+                        id="app.groupExams.remainingStudentsBoxTitle"
+                        defaultMessage="Remaining students (not locked yet)"
+                      />
+                    }
+                    customIcons={
+                      notLockedStudents && notLockedStudents.length >= 2 ? (
+                        <small className="text-body-secondary opacity-50 me-3">
+                          <FormattedMessage
+                            id="app.groupExams.studentsCount"
+                            defaultMessage="({count, plural, one {# student} other {# students}})"
+                            values={{ count: notLockedStudents?.length || 0 }}
+                          />
+                        </small>
+                      ) : null
+                    }
+                    noPadding
+                    unlimitedHeight>
+                    <NotLockedStudentsTable
+                      groupId={group.id}
+                      notLockedStudents={notLockedStudents}
+                      currentUser={currentUser}
+                    />
+                  </Box>
+                </Col>
+              </Row>
+            )}
+
+            {examId && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
+              <Row>
+                <Col xs={12}>
+                  <ResourceRenderer resource={groupExamLocks} bulkyLoading>
+                    {locks => (
+                      <Box
+                        title={
+                          <FormattedMessage
+                            id="app.groupExams.locksBoxTitle"
+                            defaultMessage="Recorded student locking events"
+                          />
+                        }
+                        customIcons={
+                          locks && locks.length >= 2 ? (
+                            <small className="text-body-secondary opacity-50 me-3">
+                              <FormattedMessage
+                                id="app.groupExams.studentsCount"
+                                defaultMessage="({count, plural, one {# student} other {# students}})"
+                                values={{ count: locks?.length || 0 }}
+                              />
+                            </small>
+                          ) : null
+                        }
+                        noPadding
+                        unlimitedHeight>
+                        {locks && <LocksTable locks={locks} />}
+                      </Box>
+                    )}
+                  </ResourceRenderer>
                 </Col>
               </Row>
             )}
@@ -219,6 +258,7 @@ GroupExams.propTypes = {
   group: ImmutablePropTypes.map,
   currentUser: ImmutablePropTypes.map,
   lockedStudents: PropTypes.array,
+  notLockedStudents: PropTypes.array,
   groupsAccessor: PropTypes.func.isRequired,
   isSuperAdmin: PropTypes.bool,
   examBeginImmediately: PropTypes.bool,
@@ -241,6 +281,7 @@ export default withLinks(
       group: groupSelector(state, groupId),
       groupsAccessor: groupDataAccessorSelector(state),
       lockedStudents: lockedStudentsOfGroupSelector(state, groupId),
+      notLockedStudents: notLockedStudentsOfGroupSelector(state, groupId),
       userId: loggedInUserIdSelector(state),
       currentUser: loggedInUserSelector(state),
       isSuperAdmin: isLoggedAsSuperAdmin(state),
