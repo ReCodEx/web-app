@@ -90,6 +90,16 @@ export const lockedStudentsOfGroupSelector = createSelector(
   }
 );
 
+export const notLockedStudentsOfGroupSelector = createSelector(
+  [readyUsersDataSelector, getParam, getState],
+  (users, groupId, state) => {
+    const studentIds = studentsIdsOfGroup(groupId)(state);
+    const studentsIndex = new Set(studentIds);
+    const now = Date.now() / 1000;
+    return users.filter(user => !isStudentLocked(user, groupId, now) && studentsIndex.has(user.id));
+  }
+);
+
 // quite inefficient methods for filtering relevant groups (use carefully, maybe we will replace them in the future)
 export const studentOfSelector = userId =>
   createSelector(groupsSelector, groups =>

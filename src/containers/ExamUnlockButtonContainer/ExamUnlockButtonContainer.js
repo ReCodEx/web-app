@@ -7,7 +7,6 @@ import { lruMemoize } from 'reselect';
 import ExamUnlockButton from '../../components/buttons/ExamUnlockButton';
 import { unlockStudentFromExam } from '../../redux/modules/groups.js';
 import { groupPendingUserUnlock } from '../../redux/selectors/groups.js';
-import { loggedInUserSelector } from '../../redux/selectors/users.js';
 import { getErrorMessage } from '../../locales/apiErrorMessages.js';
 import { addNotification } from '../../redux/modules/notifications.js';
 
@@ -45,7 +44,6 @@ ExamUnlockButtonContainer.propTypes = {
 
 const mapStateToProps = (state, { groupId }) => ({
   pending: groupPendingUserUnlock(state, groupId),
-  currentUser: loggedInUserSelector(state),
 });
 
 const mapDispatchToProps = (dispatch, { groupId, userId }) => ({

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { UnlockIcon, LoadingIcon } from '../../icons';
 import Button from '../../widgets/TheButton';
 
-const ExamUnlockButton = ({ pending, disabled = false, unlockUserForExam, ...props }) => (
+const ExamUnlockButton = ({ pending = false, disabled = false, unlockUserForExam, ...props }) => (
   <Button
     {...props}
     variant={disabled ? 'secondary' : 'warning'}
@@ -16,7 +16,7 @@ const ExamUnlockButton = ({ pending, disabled = false, unlockUserForExam, ...pro
 );
 
 ExamUnlockButton.propTypes = {
-  pending: PropTypes.bool.isRequired,
+  pending: PropTypes.bool,
   disabled: PropTypes.bool,
   unlockUserForExam: PropTypes.func.isRequired,
 };
