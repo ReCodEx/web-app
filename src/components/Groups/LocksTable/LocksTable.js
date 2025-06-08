@@ -6,6 +6,7 @@ import { lruMemoize } from 'reselect';
 
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import DateTime from '../../widgets/DateTime';
+import IpAddress from '../../widgets/IpAddress/IpAddress';
 import { LockIcon, UnlockIcon } from '../../icons';
 
 const sortLocks = lruMemoize(locks => [...locks].sort(({ createdAt: c1 }, { createdAt: c2 }) => c1 - c2));
@@ -31,9 +32,7 @@ const LocksTable = ({ locks }) =>
                 </>
               )}
             </td>
-            <td className="shrink-col text-nowrap">
-              <code>{lock.remoteAddr}</code>
-            </td>
+            <td className="shrink-col text-nowrap">{lock.remoteAddr && <IpAddress ip={lock.remoteAddr} />}</td>
           </tr>
         ))}
       </tbody>
