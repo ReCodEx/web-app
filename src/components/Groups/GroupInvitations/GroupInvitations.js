@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import UsersNameContainer from '../../../containers/UsersNameContainer';
 import DateTime from '../../widgets/DateTime';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
-import Icon, { CopyIcon, DeleteIcon, EditIcon } from '../../icons';
+import Icon, { CopyIcon, CopySuccessIcon, DeleteIcon, EditIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks.js';
 
 const GroupInvitations = ({
@@ -55,8 +55,7 @@ const GroupInvitations = ({
                     <code className={hasExpired ? 'text-body-secondary small' : 'small'}>{uri}</code>
                     {!hasExpired &&
                       (copiedInvitation === invitation.id ? (
-                        <Icon
-                          icon="clipboard-check"
+                        <CopySuccessIcon
                           gapLeft={2}
                           className="text-success"
                           onClick={() => setCopiedInvitation(null)}

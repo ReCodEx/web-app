@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import Button from '../../widgets/TheButton';
-import Icon, { CopyIcon } from '../../icons';
+import { CopyIcon, CopySuccessIcon } from '../../icons';
 
 class CopyLogToClipboard extends Component {
   state = { logCopied: false };
@@ -25,7 +25,7 @@ class CopyLogToClipboard extends Component {
     return (
       <CopyToClipboard text={log} onCopy={this.logCopied}>
         <Button variant="success" {...props} disabled={this.state.logCopied}>
-          {this.state.logCopied ? <Icon icon="clipboard-check" gapRight={2} /> : <CopyIcon gapRight={2} />}
+          {this.state.logCopied ? <CopySuccessIcon gapRight={2} /> : <CopyIcon gapRight={2} />}
           <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
         </Button>
       </CopyToClipboard>

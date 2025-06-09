@@ -11,7 +11,7 @@ import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField } from '../Fields';
-import Icon, { CopyIcon } from '../../icons';
+import { CopyIcon, CopySuccessIcon } from '../../icons';
 import { objectMap } from '../../../helpers/common.js';
 
 import './GenerateTokenForm.css';
@@ -93,11 +93,7 @@ const GenerateTokenForm = ({
               <>
                 <CopyToClipboard text={lastToken} onCopy={() => setCopied(!copied)}>
                   <Button variant={copied ? 'secondary' : 'info'} ref={btnTarget}>
-                    {copied ? (
-                      <Icon icon="clipboard-check" gapRight={2} fixedWidth />
-                    ) : (
-                      <CopyIcon gapRight={2} fixedWidth />
-                    )}
+                    {copied ? <CopySuccessIcon gapRight={2} fixedWidth /> : <CopyIcon gapRight={2} fixedWidth />}
                     <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
                   </Button>
                 </CopyToClipboard>

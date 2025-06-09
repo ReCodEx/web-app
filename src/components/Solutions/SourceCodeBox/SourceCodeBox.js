@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
 import Prism from 'prismjs';
 
 import Box from '../../widgets/Box';
 import SourceCodeViewer from '../../helpers/SourceCodeViewer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
-import Icon, { CodeCompareIcon, DownloadIcon, LoadingIcon, WarningIcon } from '../../icons';
+import Icon, { CopyIcon, CopySuccessIcon, CodeCompareIcon, DownloadIcon, LoadingIcon, WarningIcon } from '../../icons';
 
 import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting.js';
 import { getFileExtensionLC, simpleScalarMemoize } from '../../../helpers/common.js';
@@ -46,6 +47,7 @@ const SourceCodeBox = ({
   isOpen = true,
 }) => {
   const res = fileContentsSelector(parentId, entryName);
+  const [clipboardCopied, setClipboardCopied] = useState(false);
   return (
     <ResourceRenderer
       key={id}
@@ -115,11 +117,49 @@ const SourceCodeBox = ({
                   gapLeft={2}
                   timid
                   className="text-primary"
+                  tooltipId={`${id}-download`}
+                  tooltipPlacement="bottom"
+                  tooltip={
+                    <FormattedMessage
+                      id="app.solutionSourceCodes.downloadTooltip"
+                      defaultMessage="Download the file."
+                    />
+                  }
                   onClick={ev => {
                     ev.stopPropagation();
                     download(parentId, entryName);
                   }}
                 />
+              )}
+
+              {!content.tooLarge && !content.malformedCharacters && !diffMode && (
+                <>
+                  {clipboardCopied ? (
+                    <CopySuccessIcon gapLeft={2} className="text-success" />
+                  ) : (
+                    <CopyToClipboard
+                      text={content.content}
+                      onCopy={() => {
+                        setClipboardCopied(true);
+                        window.setTimeout(() => setClipboardCopied(false), 1000);
+                      }}>
+                      <CopyIcon
+                        gapLeft={2}
+                        timid
+                        className="text-primary"
+                        tooltipId={`${id}-clipboard`}
+                        tooltipPlacement="bottom"
+                        tooltip={
+                          <FormattedMessage
+                            id="app.solutionSourceCodes.clipboardTooltip"
+                            defaultMessage="Copy file content to clipboard."
+                          />
+                        }
+                        onClick={ev => ev.stopPropagation()}
+                      />
+                    </CopyToClipboard>
+                  )}
+                </>
               )}
 
               {diffMode && (

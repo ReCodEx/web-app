@@ -20,7 +20,7 @@ const actionTypes = {
 
 const archivedPromises = {};
 
-// The similarSolutionId is a ACL-check requirement if conent is fetched because a likely plagiarism is detected
+// The similarSolutionId is a ACL-check requirement if content is fetched because a likely plagiarism is detected
 // (similarSolutionId is the ID of the source/main solution accessible by current user)
 export const fetchContentIfNeeded =
   (id, entry = null, similarSolutionId = null) =>
