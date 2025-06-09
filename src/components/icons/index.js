@@ -37,6 +37,7 @@ export const CodeFileIcon = props => <Icon {...props} icon={['far', 'file-code']
 export const CodeIcon = props => <Icon {...props} icon="code" />;
 export const CodeCompareIcon = props => <Icon {...props} icon="code-compare" />;
 export const CopyIcon = props => <Icon {...props} icon={['far', 'clipboard']} />;
+export const CopySuccessIcon = props => <Icon {...props} icon="clipboard-check" />;
 export const ChatIcon = props => <Icon {...props} icon={['far', 'comments']} />;
 export const DashboardIcon = props => <Icon {...props} icon="tachometer-alt" />;
 export const DeadlineIcon = props => <Icon {...props} icon="hourglass-half" />;

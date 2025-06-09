@@ -7,7 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import InsetPanel from '../../widgets/InsetPanel';
-import Icon, { CopyIcon, InfoIcon, LoadingIcon, WarningIcon, RefreshIcon } from '../../icons';
+import Icon, { CopyIcon, CopySuccessIcon, InfoIcon, LoadingIcon, WarningIcon, RefreshIcon } from '../../icons';
 
 import { API_BASE } from '../../../helpers/config.js';
 
@@ -93,7 +93,7 @@ class CalendarTokens extends Component {
                       <code className={calendar.expiredAt ? 'text-body-secondary' : ''}>{calendar.id}</code>
                       {!calendar.expiredAt &&
                         (this.state.copiedCalendar === calendar.id ? (
-                          <Icon icon="clipboard-check" gapLeft={2} className="text-success" />
+                          <CopySuccessIcon gapLeft={2} className="text-success" />
                         ) : (
                           <CopyToClipboard
                             text={`${baseUrl}${calendar.id}`}
