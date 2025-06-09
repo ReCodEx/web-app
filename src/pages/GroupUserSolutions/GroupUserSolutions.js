@@ -14,6 +14,7 @@ import Page from '../../components/layout/Page';
 import { GroupNavigation } from '../../components/layout/Navigation';
 import Icon, {
   AssignmentIcon,
+  BanIcon,
   DetailIcon,
   CodeFileIcon,
   LoadingIcon,
@@ -64,6 +65,7 @@ import { compareAssignmentsReverted } from '../../components/helpers/assignments
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage.js';
 import { getLocalizedName } from '../../helpers/localizedData.js';
 import withLinks from '../../helpers/withLinks.js';
+import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 import { safeGet, identity, hasPermissions, unique } from '../../helpers/common.js';
 
 /**
@@ -302,11 +304,16 @@ const getPlagiarismUniqueAssignments = lruMemoize(plagiarisms =>
 const localStorageStateKey = 'GroupUserSolutions.state';
 
 class GroupUserSolutions extends Component {
-  static loadAsync = ({ groupId, userId }, dispatch) =>
+  static loadAsync = ({ groupId, userId }, dispatch, navigate, { GROUP_STUDENTS_URI_FACTORY, DASHBOARD_URI }) =>
     Promise.all([
       dispatch(fetchUserIfNeeded(userId)),
-      dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) =>
-        Promise.all(
+      dispatch(fetchGroupIfNeeded(groupId)).then(({ value: group }) => {
+        if (group?.privateData?.students?.find(sid => sid === userId) === undefined) {
+          navigate(hasPermissions(group, 'viewAssignments') ? GROUP_STUDENTS_URI_FACTORY(groupId) : DASHBOARD_URI);
+          return Promise.resolve();
+        }
+
+        return Promise.all(
           hasPermissions(group, 'viewAssignments')
             ? [
                 dispatch(fetchAssignmentsForGroup(groupId)),
@@ -314,8 +321,8 @@ class GroupUserSolutions extends Component {
                 dispatch(fetchAssignmentSolversIfNeeded({ groupId, userId })),
               ]
             : []
-        )
-      ),
+        );
+      }),
       dispatch(fetchRuntimeEnvironments()),
     ]);
 
@@ -393,192 +400,207 @@ class GroupUserSolutions extends Component {
         title={
           <FormattedMessage id="app.groupUserSolutions.title" defaultMessage="All Submissions of Selected User" />
         }>
-        {(group, currentUser) => (
-          <div>
-            {group.privateData && <GroupNavigation group={group} userId={userId} />}
+        {(group, currentUser) =>
+          hasPermissions(group, 'viewAssignments') ? (
+            <div>
+              {group.privateData && <GroupNavigation group={group} userId={userId} />}
 
-            {group.privateData && <GroupExamPending {...group} currentUser={currentUser} />}
+              {group.privateData && <GroupExamPending {...group} currentUser={currentUser} />}
 
-            <GroupArchivedWarning
-              {...group}
-              groupsDataAccessor={groupsAccessor}
-              linkFactory={links.GROUP_EDIT_URI_FACTORY}
-            />
+              <GroupArchivedWarning
+                {...group}
+                groupsDataAccessor={groupsAccessor}
+                linkFactory={links.GROUP_EDIT_URI_FACTORY}
+              />
 
-            <FetchManyResourceRenderer fetchManyStatus={fetchSolutionsStatus} loading={null} failed={null}>
-              {() =>
-                plagiarisms &&
-                plagiarisms.length > 0 && (
-                  <Callout variant="danger" icon={<PlagiarismIcon />}>
-                    <FormattedMessage
-                      id="app.assignmentSolutions.plagiarismsDetected.assignments"
-                      defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (of {assignments} {assignments, plural, one {assignment} other {assignments}}) with detected similarities. Such solutions may be plagiarisms."
-                      values={{
-                        count: plagiarisms.length,
-                        assignments: getPlagiarismUniqueAssignments(plagiarisms).length,
-                      }}
-                    />
-                  </Callout>
-                )
-              }
-            </FetchManyResourceRenderer>
-
-            {pendingReviews &&
-              pendingReviews.length > 0 &&
-              !group.archived &&
-              hasPermissions(pendingReviews[0], 'review') && (
-                <Callout variant="warning">
-                  <Row className="align-items-center">
-                    <Col className="pe-3 py-2">
+              <FetchManyResourceRenderer fetchManyStatus={fetchSolutionsStatus} loading={null} failed={null}>
+                {() =>
+                  plagiarisms &&
+                  plagiarisms.length > 0 && (
+                    <Callout variant="danger" icon={<PlagiarismIcon />}>
                       <FormattedMessage
-                        id="app.groupUserSolutions.pendingReviews"
-                        defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected user. Remember that the review comments are visible to the author after a review is closed."
-                        values={{ count: pendingReviews.length }}
+                        id="app.assignmentSolutions.plagiarismsDetected.assignments"
+                        defaultMessage="There {count, plural, one {is} other {are}} {count} {count, plural, one {solution} other {solutions}} (of {assignments} {assignments, plural, one {assignment} other {assignments}}) with detected similarities. Such solutions may be plagiarisms."
+                        values={{
+                          count: plagiarisms.length,
+                          assignments: getPlagiarismUniqueAssignments(plagiarisms).length,
+                        }}
                       />
-                    </Col>
-                    <Col xl="auto">
-                      <Button
-                        variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
-                        onClick={() => this.closeReviews(pendingReviews)}
-                        disabled={this.state.closingReviews}>
-                        {this.state.closingReviews ? (
-                          <LoadingIcon gapRight={2} />
-                        ) : (
-                          <Icon icon="boxes-packing" gapRight={2} />
-                        )}
+                    </Callout>
+                  )
+                }
+              </FetchManyResourceRenderer>
+
+              {pendingReviews &&
+                pendingReviews.length > 0 &&
+                !group.archived &&
+                hasPermissions(pendingReviews[0], 'review') && (
+                  <Callout variant="warning">
+                    <Row className="align-items-center">
+                      <Col className="pe-3 py-2">
                         <FormattedMessage
-                          id="app.reviewSolutionButtons.closePendingReviews"
-                          defaultMessage="Close pending reviews"
+                          id="app.groupUserSolutions.pendingReviews"
+                          defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected user. Remember that the review comments are visible to the author after a review is closed."
+                          values={{ count: pendingReviews.length }}
                         />
-                      </Button>
-                    </Col>
-                  </Row>
-                </Callout>
-              )}
+                      </Col>
+                      <Col xl="auto">
+                        <Button
+                          variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
+                          onClick={() => this.closeReviews(pendingReviews)}
+                          disabled={this.state.closingReviews}>
+                          {this.state.closingReviews ? (
+                            <LoadingIcon gapRight={2} />
+                          ) : (
+                            <Icon icon="boxes-packing" gapRight={2} />
+                          )}
+                          <FormattedMessage
+                            id="app.reviewSolutionButtons.closePendingReviews"
+                            defaultMessage="Close pending reviews"
+                          />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Callout>
+                )}
 
-            <div className="text-end text-nowrap py-2">
-              <OnOffCheckbox
-                className="text-start me-3"
-                checked={this.state.groupByAssignmentsCheckbox}
-                disabled={this.state.onlyBestSolutionsCheckbox}
-                name="groupByAssignmentsCheckbox"
-                onChange={this.checkboxClickHandler}>
-                <FormattedMessage
-                  id="app.groupUserSolutions.groupByAssignmentsCheckbox"
-                  defaultMessage="Group by assignments"
-                />
-              </OnOffCheckbox>
-              <OnOffCheckbox
-                className="text-start me-3"
-                checked={this.state.onlyBestSolutionsCheckbox}
-                name="onlyBestSolutionsCheckbox"
-                onChange={this.checkboxClickHandler}>
-                <FormattedMessage
-                  id="app.groupUserSolutions.onlyBestSolutionsCheckbox"
-                  defaultMessage="Best solutions only"
-                />
-              </OnOffCheckbox>
-            </div>
+              <div className="text-end text-nowrap py-2">
+                <OnOffCheckbox
+                  className="text-start me-3"
+                  checked={this.state.groupByAssignmentsCheckbox}
+                  disabled={this.state.onlyBestSolutionsCheckbox}
+                  name="groupByAssignmentsCheckbox"
+                  onChange={this.checkboxClickHandler}>
+                  <FormattedMessage
+                    id="app.groupUserSolutions.groupByAssignmentsCheckbox"
+                    defaultMessage="Group by assignments"
+                  />
+                </OnOffCheckbox>
+                <OnOffCheckbox
+                  className="text-start me-3"
+                  checked={this.state.onlyBestSolutionsCheckbox}
+                  name="onlyBestSolutionsCheckbox"
+                  onChange={this.checkboxClickHandler}>
+                  <FormattedMessage
+                    id="app.groupUserSolutions.onlyBestSolutionsCheckbox"
+                    defaultMessage="Best solutions only"
+                  />
+                </OnOffCheckbox>
+              </div>
 
-            <ResourceRenderer resource={assignments} returnAsArray>
-              {assignments => (
-                <FetchManyResourceRenderer fetchManyStatus={fetchSolutionsStatus}>
-                  {() => (
-                    <FetchManyResourceRenderer fetchManyStatus={fetchRuntimesStatus}>
-                      {() =>
-                        this.state.groupByAssignmentsCheckbox && !this.state.onlyBestSolutionsCheckbox ? (
-                          <div>
-                            {assignments.sort(compareAssignmentsReverted).map(assignment => (
-                              <Row key={assignment.id}>
-                                <Col sm={12}>
-                                  <Box
-                                    title={
-                                      <>
-                                        <AssignmentIcon gapRight={2} className="text-body-secondary" />
-                                        <LocalizedExerciseName
-                                          entity={{ name: '??', localizedTexts: assignment.localizedTexts }}
-                                        />
+              <ResourceRenderer resource={assignments} returnAsArray>
+                {assignments => (
+                  <FetchManyResourceRenderer fetchManyStatus={fetchSolutionsStatus}>
+                    {() => (
+                      <FetchManyResourceRenderer fetchManyStatus={fetchRuntimesStatus}>
+                        {() =>
+                          this.state.groupByAssignmentsCheckbox && !this.state.onlyBestSolutionsCheckbox ? (
+                            <div>
+                              {assignments.sort(compareAssignmentsReverted).map(assignment => (
+                                <Row key={assignment.id}>
+                                  <Col sm={12}>
+                                    <Box
+                                      title={
+                                        <>
+                                          <AssignmentIcon gapRight={2} className="text-body-secondary" />
+                                          <LocalizedExerciseName
+                                            entity={{ name: '??', localizedTexts: assignment.localizedTexts }}
+                                          />
 
-                                        <small className="ms-3 text-nowrap">
-                                          (
-                                          {hasPermissions(assignment, 'viewAssignmentSolutions') ? (
-                                            <Link to={links.ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)}>
-                                              <FormattedMessage
-                                                id="app.groupUserSolutions.allAssignmentSolutions"
-                                                defaultMessage="all assignment solutions"
-                                              />
-                                            </Link>
-                                          ) : (
-                                            <Link to={links.ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)}>
-                                              <FormattedMessage
-                                                id="app.groupUserSolutions.assignmentDetail"
-                                                defaultMessage="assignment detail"
-                                              />
-                                            </Link>
-                                          )}
-                                          )
-                                        </small>
-                                      </>
-                                    }
-                                    collapsable
-                                    isOpen
-                                    noPadding
-                                    unlimitedHeight>
-                                    <SolutionsTable
-                                      solutions={getAssignmentSolutionsSorted(assignment.id)}
-                                      assignmentId={assignment.id}
-                                      groupId={groupId}
-                                      runtimeEnvironments={assignmentEnvironmentsSelector(assignment.id).map(getJsData)}
-                                      noteMaxlen={160}
-                                      assignmentSolversLoading={assignmentSolversLoading}
-                                      assignmentSolver={assignmentSolverSelector(assignment.id, userId)}
-                                    />
-                                  </Box>
-                                </Col>
-                              </Row>
-                            ))}
-                          </div>
-                        ) : (
-                          <Box
-                            title={
-                              <FormattedMessage
-                                id="app.groupUserSolutions.userSolutions"
-                                defaultMessage="User Solutions"
-                              />
-                            }
-                            unlimitedHeight
-                            noPadding>
-                            <SortableTable
-                              id="GroupUserSolutions"
-                              hover
-                              columns={prepareTableColumnDescriptors(assignments, groupId, locale, links)}
-                              defaultOrder="date"
-                              data={prepareTableData(
-                                assignments,
-                                getAssignmentSolutions,
-                                getRuntime,
-                                this.state.onlyBestSolutionsCheckbox
-                              )}
-                              empty={
-                                <div className="text-center text-body-secondary">
-                                  <FormattedMessage
-                                    id="app.groupUserSolutions.noSolutions"
-                                    defaultMessage="The user has not submitted any solutions yet."
-                                  />
-                                </div>
+                                          <small className="ms-3 text-nowrap">
+                                            (
+                                            {hasPermissions(assignment, 'viewAssignmentSolutions') ? (
+                                              <Link to={links.ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)}>
+                                                <FormattedMessage
+                                                  id="app.groupUserSolutions.allAssignmentSolutions"
+                                                  defaultMessage="all assignment solutions"
+                                                />
+                                              </Link>
+                                            ) : (
+                                              <Link to={links.ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)}>
+                                                <FormattedMessage
+                                                  id="app.groupUserSolutions.assignmentDetail"
+                                                  defaultMessage="assignment detail"
+                                                />
+                                              </Link>
+                                            )}
+                                            )
+                                          </small>
+                                        </>
+                                      }
+                                      collapsable
+                                      isOpen
+                                      noPadding
+                                      unlimitedHeight>
+                                      <SolutionsTable
+                                        solutions={getAssignmentSolutionsSorted(assignment.id)}
+                                        assignmentId={assignment.id}
+                                        groupId={groupId}
+                                        runtimeEnvironments={assignmentEnvironmentsSelector(assignment.id).map(
+                                          getJsData
+                                        )}
+                                        noteMaxlen={160}
+                                        assignmentSolversLoading={assignmentSolversLoading}
+                                        assignmentSolver={assignmentSolverSelector(assignment.id, userId)}
+                                      />
+                                    </Box>
+                                  </Col>
+                                </Row>
+                              ))}
+                            </div>
+                          ) : (
+                            <Box
+                              title={
+                                <FormattedMessage
+                                  id="app.groupUserSolutions.userSolutions"
+                                  defaultMessage="User Solutions"
+                                />
                               }
-                              className="mb-0"
-                            />
-                          </Box>
-                        )
-                      }
-                    </FetchManyResourceRenderer>
-                  )}
-                </FetchManyResourceRenderer>
-              )}
-            </ResourceRenderer>
-          </div>
-        )}
+                              unlimitedHeight
+                              noPadding>
+                              <SortableTable
+                                id="GroupUserSolutions"
+                                hover
+                                columns={prepareTableColumnDescriptors(assignments, groupId, locale, links)}
+                                defaultOrder="date"
+                                data={prepareTableData(
+                                  assignments,
+                                  getAssignmentSolutions,
+                                  getRuntime,
+                                  this.state.onlyBestSolutionsCheckbox
+                                )}
+                                empty={
+                                  <div className="text-center text-body-secondary">
+                                    <FormattedMessage
+                                      id="app.groupUserSolutions.noSolutions"
+                                      defaultMessage="The user has not submitted any solutions yet."
+                                    />
+                                  </div>
+                                }
+                                className="mb-0"
+                              />
+                            </Box>
+                          )
+                        }
+                      </FetchManyResourceRenderer>
+                    )}
+                  </FetchManyResourceRenderer>
+                )}
+              </ResourceRenderer>
+            </div>
+          ) : (
+            <Row>
+              <Col sm={12}>
+                <Callout variant="warning" className="larger" icon={<BanIcon />}>
+                  <FormattedMessage
+                    id="generic.accessDenied"
+                    defaultMessage="You do not have permissions to see this page. If you got to this page via a seemingly legitimate link or button, please report a bug."
+                  />
+                </Callout>
+              </Col>
+            </Row>
+          )
+        }
       </Page>
     );
   }
@@ -603,31 +625,34 @@ GroupUserSolutions.propTypes = {
   closeReview: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
+  navigate: withRouterProps.navigate,
 };
 
-export default withLinks(
-  connect(
-    (state, { params: { groupId, userId } }) => {
-      return {
-        groupId,
-        userId,
-        group: groupSelector(state, groupId),
-        currentUser: loggedInUserSelector(state),
-        groupsAccessor: groupDataAccessorSelector(state),
-        assignments: groupsAssignmentsSelector(state, groupId),
-        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-        fetchSolutionsStatus: fetchManyGroupStudentsSolutionsStatus(state)(groupId, userId),
-        fetchRuntimesStatus: fetchRuntimeEnvironmentsStatus(state),
-        getAssignmentSolutions: assignmentId => getUserSolutions(state)(userId, assignmentId),
-        getAssignmentSolutionsSorted: assignmentId => getUserSolutionsSortedData(state)(userId, assignmentId),
-        getRuntime: runtimeEnvironmentSelector(state),
-        assignmentSolversLoading: isAssignmentSolversLoading(state),
-        assignmentSolverSelector: getAssignmentSolverSelector(state),
-      };
-    },
-    (dispatch, { params: { groupId, userId } }) => ({
-      loadAsync: () => GroupUserSolutions.loadAsync({ groupId, userId }, dispatch),
-      closeReview: id => dispatch(setSolutionReviewState(id, true)),
-    })
-  )(injectIntl(GroupUserSolutions))
+export default withRouter(
+  withLinks(
+    connect(
+      (state, { params: { groupId, userId } }) => {
+        return {
+          groupId,
+          userId,
+          group: groupSelector(state, groupId),
+          currentUser: loggedInUserSelector(state),
+          groupsAccessor: groupDataAccessorSelector(state),
+          assignments: groupsAssignmentsSelector(state, groupId),
+          assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
+          fetchSolutionsStatus: fetchManyGroupStudentsSolutionsStatus(state)(groupId, userId),
+          fetchRuntimesStatus: fetchRuntimeEnvironmentsStatus(state),
+          getAssignmentSolutions: assignmentId => getUserSolutions(state)(userId, assignmentId),
+          getAssignmentSolutionsSorted: assignmentId => getUserSolutionsSortedData(state)(userId, assignmentId),
+          getRuntime: runtimeEnvironmentSelector(state),
+          assignmentSolversLoading: isAssignmentSolversLoading(state),
+          assignmentSolverSelector: getAssignmentSolverSelector(state),
+        };
+      },
+      (dispatch, { params: { groupId, userId }, navigate, links }) => ({
+        loadAsync: () => GroupUserSolutions.loadAsync({ groupId, userId }, dispatch, navigate, links),
+        closeReview: id => dispatch(setSolutionReviewState(id, true)),
+      })
+    )(injectIntl(GroupUserSolutions))
+  )
 );
