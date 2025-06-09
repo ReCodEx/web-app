@@ -423,35 +423,38 @@ class GroupUserSolutions extends Component {
               }
             </FetchManyResourceRenderer>
 
-            {pendingReviews && pendingReviews.length > 0 && !group.archived && (
-              <Callout variant="warning">
-                <Row className="align-items-center">
-                  <Col className="pe-3 py-2">
-                    <FormattedMessage
-                      id="app.groupUserSolutions.pendingReviews"
-                      defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected user. Remember that the review comments are visible to the author after a review is closed."
-                      values={{ count: pendingReviews.length }}
-                    />
-                  </Col>
-                  <Col xl="auto">
-                    <Button
-                      variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
-                      onClick={() => this.closeReviews(pendingReviews)}
-                      disabled={this.state.closingReviews}>
-                      {this.state.closingReviews ? (
-                        <LoadingIcon gapRight={2} />
-                      ) : (
-                        <Icon icon="boxes-packing" gapRight={2} />
-                      )}
+            {pendingReviews &&
+              pendingReviews.length > 0 &&
+              !group.archived &&
+              hasPermissions(pendingReviews[0], 'review') && (
+                <Callout variant="warning">
+                  <Row className="align-items-center">
+                    <Col className="pe-3 py-2">
                       <FormattedMessage
-                        id="app.reviewSolutionButtons.closePendingReviews"
-                        defaultMessage="Close pending reviews"
+                        id="app.groupUserSolutions.pendingReviews"
+                        defaultMessage="There {count, plural, one {is} other {are}} {count} pending {count, plural, one {review} other {reviews}} among the solutions of the selected user. Remember that the review comments are visible to the author after a review is closed."
+                        values={{ count: pendingReviews.length }}
                       />
-                    </Button>
-                  </Col>
-                </Row>
-              </Callout>
-            )}
+                    </Col>
+                    <Col xl="auto">
+                      <Button
+                        variant={this.state.closingReviewsFailed ? 'danger' : 'success'}
+                        onClick={() => this.closeReviews(pendingReviews)}
+                        disabled={this.state.closingReviews}>
+                        {this.state.closingReviews ? (
+                          <LoadingIcon gapRight={2} />
+                        ) : (
+                          <Icon icon="boxes-packing" gapRight={2} />
+                        )}
+                        <FormattedMessage
+                          id="app.reviewSolutionButtons.closePendingReviews"
+                          defaultMessage="Close pending reviews"
+                        />
+                      </Button>
+                    </Col>
+                  </Row>
+                </Callout>
+              )}
 
             <div className="text-end text-nowrap py-2">
               <OnOffCheckbox
