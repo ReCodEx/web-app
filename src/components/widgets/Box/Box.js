@@ -59,7 +59,7 @@ class Box extends Component {
       title,
       flexTitle = false,
       description = null,
-      type = 'light',
+      type = null,
       solid = false,
       collapsable = false,
       noPadding = false,

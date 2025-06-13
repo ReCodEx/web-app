@@ -250,7 +250,7 @@ class SisSupervisorGroupsContainer extends Component {
                                         ) || a.course.code.localeCompare(b.course.code, locale)
                                     )
                                     .map(course => (
-                                      <Card key={course.course.code} className="card-light mb-3">
+                                      <Card key={course.course.code} className="mb-3">
                                         <Card.Header>
                                           <MyAccordionButton eventKey={course.course.code}>
                                             {course && (
