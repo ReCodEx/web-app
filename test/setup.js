@@ -15,7 +15,6 @@ register('./test/loader.js', pathToFileURL('./'));
 
 global.document = new JSDOM('<!doctype html><html><body></body></html>');
 global.window = global.document.window;
-global.navigator = global.window.navigator;
 
 class FormData {
   _data = {};
