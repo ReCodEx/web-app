@@ -22,11 +22,20 @@
 }
 
 .bonusPoints {
-  color: green;
+  color: var(--bs-success);
 }
 
 .malusPoints {
-  color: red;
+  color: var(--bs-danger);
+}
+
+[data-bs-theme="dark"] {
+  .bonusPoints {
+    color: var(--bs-success-text-emphasis);
+  }
+  .malusPoints {
+    color: var(--bs-danger-text-emphasis);
+  }
 }
 
 .maxPointsRow {

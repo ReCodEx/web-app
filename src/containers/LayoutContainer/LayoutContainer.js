@@ -125,7 +125,8 @@ class LayoutContainer extends Component {
                 pendingFetchOperations={pendingFetchOperations}
                 relatedGroupId={relatedGroupId}
                 memberGroups={memberGroups}
-                fetchManyGroupsStatus={fetchManyGroupsStatus}>
+                fetchManyGroupsStatus={fetchManyGroupsStatus}
+                colorTheme={userUIData.darkTheme ? 'dark' : 'light' /* TODO: we might want to add a new option for global color theme, 'darkTheme' was originally used only for text editors */}>
                 {buildRoutes(pathname + search, isLoggedIn)}
               </Layout>
             </UrlContext.Provider>

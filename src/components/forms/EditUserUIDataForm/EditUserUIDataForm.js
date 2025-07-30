@@ -10,6 +10,7 @@ import { SaveIcon } from '../../icons';
 import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField, NumericTextField } from '../Fields';
+import OnOffCheckbox from '../OnOffCheckbox';
 
 const defaultPagesCaptions = defineMessages({
   dashboard: {
