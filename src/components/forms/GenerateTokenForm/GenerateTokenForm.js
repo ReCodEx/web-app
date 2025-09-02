@@ -34,6 +34,16 @@ const scopes = [
   },
 ];
 
+const superAdminScopes = [
+  ...scopes,
+  {
+    name: (
+      <FormattedMessage id="app.generateTokenForm.scope.group-external" defaultMessage="External groups management" />
+    ),
+    key: 'group-external',
+  },
+];
+
 const HOUR_SEC = 3600;
 const DAY_SEC = 24 * HOUR_SEC;
 const WEEK_SEC = 7 * DAY_SEC;
@@ -70,6 +80,7 @@ export const initialValues = {
 };
 
 const GenerateTokenForm = ({
+  isSuperAdmin = false,
   error,
   submitting,
   handleSubmit,
@@ -135,7 +146,7 @@ const GenerateTokenForm = ({
           <Field
             name="scope"
             component={SelectField}
-            options={scopes}
+            options={isSuperAdmin ? superAdminScopes : scopes}
             label={<FormattedMessage id="app.generateTokenForm.scope" defaultMessage="Scope:" />}
             ignoreDirty
           />
@@ -196,6 +207,7 @@ const GenerateTokenForm = ({
 };
 
 GenerateTokenForm.propTypes = {
+  isSuperAdmin: PropTypes.bool,
   error: PropTypes.any,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
