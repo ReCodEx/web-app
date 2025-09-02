@@ -1047,6 +1047,7 @@
   "app.generateTokenForm.lastToken": "Last Token:",
   "app.generateTokenForm.month": "1 Month",
   "app.generateTokenForm.scope": "Scope:",
+  "app.generateTokenForm.scope.group-external": "External groups management",
   "app.generateTokenForm.scope.master": "Master (all operations, default)",
   "app.generateTokenForm.scope.plagiarism": "Plagiarism detection",
   "app.generateTokenForm.scope.readAll": "Read-only",

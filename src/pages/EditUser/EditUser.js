@@ -234,7 +234,12 @@ class EditUser extends Component {
 
                 <Row>
                   <Col lg={12}>
-                    <GenerateTokenForm onSubmit={generateToken} initialValues={initialValues} lastToken={lastToken} />
+                    <GenerateTokenForm
+                      onSubmit={generateToken}
+                      initialValues={initialValues}
+                      lastToken={lastToken}
+                      isSuperAdmin={isSuperAdmin}
+                    />
                   </Col>
                 </Row>
               </>
