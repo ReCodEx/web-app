@@ -53,14 +53,8 @@ class EditGroup extends Component {
   }
 
   getInitialValues = lruMemoize(
-    ({
-      localizedTexts,
-      externalId,
-      public: isPublic,
-      privateData: { publicStats, threshold, pointsLimit, detaining },
-    }) => ({
+    ({ localizedTexts, public: isPublic, privateData: { publicStats, threshold, pointsLimit, detaining } }) => ({
       localizedTexts: getLocalizedTextsInitialValues(localizedTexts, EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT),
-      externalId,
       isPublic,
       publicStats,
       detaining,
@@ -330,20 +324,11 @@ export default withLinks(
       reset: () => dispatch(reset('editGroup')),
       loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
       reload: () => dispatch(fetchGroup(groupId)),
-      editGroup: ({
-        localizedTexts,
-        externalId,
-        isPublic,
-        publicStats,
-        detaining,
-        hasThreshold,
-        threshold,
-        pointsLimit,
-      }) =>
+      editGroup: ({ localizedTexts, isPublic, publicStats, detaining, hasThreshold, threshold, pointsLimit }) =>
         dispatch(
           editGroup(groupId, {
             localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-            externalId,
+            externalId: '',
             isPublic,
             publicStats,
             detaining,

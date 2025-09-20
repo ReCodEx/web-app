@@ -12,7 +12,7 @@ import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { RefreshIcon } from '../../icons';
 
-import { TextField, CheckboxField, NumericTextField } from '../Fields';
+import { CheckboxField, NumericTextField } from '../Fields';
 import { getLocalizedTextsInitialValues, validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
 
 export const EDIT_GROUP_FORM_LOCALIZED_TEXTS_DEFAULT = {
@@ -108,18 +108,7 @@ const EditGroupForm = ({
     <Container fluid>
       {isSuperAdmin && (
         <Row className="align-items-end">
-          <Col lg={6}>
-            <Field
-              name="externalId"
-              tabIndex={10}
-              component={TextField}
-              maxLength={255}
-              required
-              ignoreDirty={createNew}
-              label={<FormattedMessage id="app.createGroup.externalId" defaultMessage="External ID of the group:" />}
-            />
-          </Col>
-          <Col lg={6}>
+          <Col lg={12}>
             <Field
               name="isPublic"
               tabIndex={20}
