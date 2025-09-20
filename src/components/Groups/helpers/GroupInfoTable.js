@@ -29,7 +29,7 @@ const getDescription = (localizedTexts, locale) => {
 };
 
 const GroupInfoTable = ({
-  group: { externalId, organizational, localizedTexts, public: isPublic = false, privateData },
+  group: { organizational, localizedTexts, public: isPublic = false, privateData },
   isAdmin,
   locale,
 }) => (
@@ -96,20 +96,6 @@ const GroupInfoTable = ({
               </td>
             </tr>
           )}
-          {Boolean(externalId) && (
-            <tr>
-              <th>
-                <FormattedMessage
-                  id="app.groupDetail.externalId"
-                  defaultMessage="External identification of the group"
-                />
-                :
-              </th>
-              <td>
-                <code>{externalId}</code>
-              </td>
-            </tr>
-          )}
 
           {privateData &&
             privateData.bindings &&
@@ -153,7 +139,6 @@ const GroupInfoTable = ({
 
 GroupInfoTable.propTypes = {
   group: PropTypes.shape({
-    externalId: PropTypes.string,
     parentGroupId: PropTypes.string,
     threshold: PropTypes.number,
     public: PropTypes.bool.isRequired,
