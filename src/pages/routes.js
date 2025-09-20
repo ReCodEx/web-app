@@ -44,7 +44,6 @@ import Registration from './Registration';
 import ResetPassword from './ResetPassword';
 import ServerManagement from './ServerManagement';
 import ShadowAssignment from './ShadowAssignment';
-import SisIntegration from './SisIntegration';
 import Solution from './Solution';
 import SolutionPlagiarisms from './SolutionPlagiarisms';
 import SolutionSourceCodes from './SolutionSourceCodes';
@@ -181,7 +180,6 @@ const routesDescriptors = [
   r('app/user/:userId/edit', EditUser, 'EDIT_USER_URI_FACTORY', true),
   r('app/submission-failures', SubmissionFailures, 'FAILURES_URI', true),
   r('app/system-messages', SystemMessages, 'MESSAGES_URI', true),
-  r('app/sis-integration', SisIntegration, 'SIS_INTEGRATION_URI', true),
   r('app/archive', Archive, 'ARCHIVE_URI', true),
   r('app/server', ServerManagement, 'SERVER_MANAGEMENT_URI', true),
   r('admin/instances', Instances, 'ADMIN_INSTANCES_URI', true),

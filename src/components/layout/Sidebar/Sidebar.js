@@ -14,7 +14,6 @@ import { LoadingIcon } from '../../icons';
 import { isReady, getJsData } from '../../../redux/helpers/resourceManager';
 import { isSupervisorRole, isEmpoweredSupervisorRole, isSuperadminRole } from '../../helpers/usersRoles.js';
 import withLinks from '../../../helpers/withLinks.js';
-import { getExternalIdForCAS } from '../../../helpers/cas.js';
 import { getConfigVar } from '../../../helpers/config.js';
 import { EMPTY_ARRAY } from '../../../helpers/common.js';
 import Admin from './Admin.js';
@@ -192,17 +191,6 @@ const Sidebar = ({
                     currentPath={currentUrl}
                     link={ARCHIVE_URI}
                   />
-
-                  {Boolean(getExternalIdForCAS(user)) && (
-                    <MenuItem
-                      icon="id-badge"
-                      title={
-                        <FormattedMessage id="app.sidebar.menu.admin.sis" defaultMessage="SIS Integration [old]" />
-                      }
-                      currentPath={currentUrl}
-                      link={SIS_INTEGRATION_URI}
-                    />
-                  )}
 
                   <MenuItem
                     title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
