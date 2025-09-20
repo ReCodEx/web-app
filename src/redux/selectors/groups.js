@@ -170,3 +170,5 @@ export const getGroupsAdmins = groups => {
   groups.forEach(group => group && group.primaryAdminsIds && group.primaryAdminsIds.forEach(id => ids.add(id)));
   return Array.from(ids);
 };
+
+export const groupAttributesSelector = (state, groupId) => state.groups.getIn(['attributes', groupId], null);
