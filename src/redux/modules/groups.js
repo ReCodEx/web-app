@@ -39,6 +39,7 @@ export const additionalActionTypes = {
   ...createActionsWithPostfixes('LOCK_STUDENT_EXAM', 'recodex/groups'),
   ...createActionsWithPostfixes('UNLOCK_STUDENT_EXAM', 'recodex/groups'),
   ...createActionsWithPostfixes('RELOCATE', 'recodex/groups'),
+  ...createActionsWithPostfixes('GET_ATTRIBUTES', 'recodex/groups'),
 };
 
 export const loadGroup = actions.pushResource;
@@ -162,6 +163,14 @@ export const relocateGroup = (groupId, newParentId) =>
     type: additionalActionTypes.RELOCATE,
     method: 'POST',
     endpoint: `/groups/${groupId}/relocate/${newParentId}`,
+  });
+
+export const getGroupAttributes = groupId =>
+  createApiAction({
+    type: additionalActionTypes.GET_ATTRIBUTES,
+    method: 'GET',
+    endpoint: `/group-attributes/${groupId}`,
+    meta: { groupId },
   });
 
 /*
@@ -322,6 +331,15 @@ const reducer = handleActions(
         (state, data) => state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
         state
       ),
+
+    [additionalActionTypes.GET_ATTRIBUTES_PENDING]: (state, { meta: { groupId } }) =>
+      state.setIn(['attributes', groupId], createRecord()),
+
+    [additionalActionTypes.GET_ATTRIBUTES_FULFILLED]: (state, { meta: { groupId }, payload: data }) =>
+      state.setIn(['attributes', groupId], createRecord({ state: resourceStatus.FULFILLED, data })),
+
+    [additionalActionTypes.GET_ATTRIBUTES_REJECTED]: (state, { meta: { groupId }, payload: error }) =>
+      state.setIn(['attributes', groupId], createRecord({ state: resourceStatus.FAILED, error })),
 
     [additionalActionTypes.SET_EXAM_FLAG_PENDING]: (state, { meta: { groupId } }) =>
       state.setIn(['resources', groupId, 'pending-group-type'], true),
