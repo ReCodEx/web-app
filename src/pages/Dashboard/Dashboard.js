@@ -162,7 +162,7 @@ class Dashboard extends Component {
                               <p>
                                 <FormattedMessage
                                   id="app.dashboard.studentNoGroups"
-                                  defaultMessage="You are not a member of any group yet. A group supervisor may add you into his/her group, or you can use other mechanisms (like the dialog on the SIS integration page) to join some groups that apply to you."
+                                  defaultMessage="You are not a member of any group yet. Please, follow the guidelines provided by your educational institution about how to join a group."
                                 />
                               </p>
                             </Callout>
@@ -233,7 +233,7 @@ class Dashboard extends Component {
                               <p>
                                 <FormattedMessage
                                   id="app.dashboard.supervisorNoGroups"
-                                  defaultMessage="You are currently not supervising any groups. An administrator may create a group for you or you can use other mechanisms (like the dialog on the SIS integration page) to create groups for your students."
+                                  defaultMessage="You are currently not supervising any groups."
                                 />
                               </p>
                             </Callout>

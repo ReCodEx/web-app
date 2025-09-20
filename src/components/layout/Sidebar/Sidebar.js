@@ -76,7 +76,6 @@ const Sidebar = ({
     EXERCISES_URI,
     PIPELINES_URI,
     ARCHIVE_URI,
-    SIS_INTEGRATION_URI,
   },
   intl: { locale },
 }) => {

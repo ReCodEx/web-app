@@ -13,9 +13,6 @@ import {
   additionalActionTypes as additionalInvitationsActionTypes,
 } from './groupInvitations.js';
 import { actionTypes as shadowAssignmentsActionTypes } from './shadowAssignments.js';
-import { actionTypes as sisSupervisedCoursesActionTypes } from './sisSupervisedCoursesTypes.js';
-import { actionTypes as sisSubscribedCoursesActionTypes } from './sisSubscribedGroups.js';
-import { actionTypes as sisPossibleParentsActionTypes } from './sisPossibleParents.js';
 import { selectedInstanceId } from '../selectors/auth.js';
 
 import { objectMap, arrayToObject } from '../../helpers/common.js';
@@ -423,50 +420,6 @@ const reducer = handleActions(
         groups.map(group =>
           group.updateIn(['data', 'privateData', 'shadowAssignments'], assignments =>
             assignments.filter(id => id !== shadowAssignmentId)
-          )
-        )
-      ),
-
-    [sisSupervisedCoursesActionTypes.CREATE_FULFILLED]: (state, { payload: data }) =>
-      state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
-
-    [sisSupervisedCoursesActionTypes.BIND_FULFILLED]: (state, { payload: data }) =>
-      state.setIn(['resources', data.id], createRecord({ state: resourceStatus.FULFILLED, data })),
-
-    [sisSupervisedCoursesActionTypes.UNBIND_FULFILLED]: (state, { meta: { courseId, groupId } }) =>
-      state.updateIn(['resources', groupId, 'data', 'privateData', 'bindings', 'sis'], bindings =>
-        bindings.filter(binding => binding !== courseId)
-      ),
-
-    [sisSupervisedCoursesActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
-      state.update('resources', oldGroups =>
-        oldGroups.merge(
-          arrayToObject(
-            groups,
-            o => o.id,
-            data => createRecord({ state: resourceStatus.FULFILLED, data })
-          )
-        )
-      ),
-
-    [sisSubscribedCoursesActionTypes.FETCH_FULFILLED]: (state, { payload: { groups } }) =>
-      state.update('resources', oldGroups =>
-        oldGroups.merge(
-          arrayToObject(
-            groups,
-            o => o.id,
-            data => createRecord({ state: resourceStatus.FULFILLED, data })
-          )
-        )
-      ),
-
-    [sisPossibleParentsActionTypes.FETCH_FULFILLED]: (state, { payload: groups }) =>
-      state.update('resources', oldGroups =>
-        oldGroups.merge(
-          arrayToObject(
-            groups,
-            o => o.id,
-            data => createRecord({ state: resourceStatus.FULFILLED, data })
           )
         )
       ),
