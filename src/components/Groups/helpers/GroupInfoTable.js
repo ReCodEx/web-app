@@ -8,11 +8,6 @@ import Callout from '../../widgets/Callout';
 import Markdown from '../../widgets/Markdown';
 import { SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData.js';
-import { objectMap, identity } from '../../../helpers/common.js';
-
-const knownBindingProviderLabels = {
-  sis: <FormattedMessage id="app.groupDetail.bindings.sis" defaultMessage="SIS UK scheduling event codes" />,
-};
 
 const getDescription = (localizedTexts, locale) => {
   const description = getLocalizedDescription({ localizedTexts }, locale);
@@ -96,33 +91,6 @@ const GroupInfoTable = ({
               </td>
             </tr>
           )}
-
-          {privateData &&
-            privateData.bindings &&
-            Object.values(
-              objectMap(privateData.bindings, (codes, provider) =>
-                codes && codes.length > 0 ? (
-                  <tr key={`bindings-${provider}`}>
-                    <th>
-                      {knownBindingProviderLabels[provider] || (
-                        <FormattedMessage
-                          id="app.groupDetail.bindings.genericProvider"
-                          defaultMessage='External binding to "{provider}"'
-                        />
-                      )}
-                      :
-                    </th>
-                    <td>
-                      {codes.map(code => (
-                        <div key={`bindings-${provider}-${code}`}>
-                          <code>{code}</code>
-                        </div>
-                      ))}
-                    </td>
-                  </tr>
-                ) : null
-              )
-            ).filter(identity)}
         </tbody>
       </Table>
     </Box>
@@ -148,7 +116,6 @@ GroupInfoTable.propTypes = {
       threshold: PropTypes.number,
       pointsLimit: PropTypes.number,
       publicStats: PropTypes.bool.isRequired,
-      bindings: PropTypes.object,
     }),
   }),
   isAdmin: PropTypes.bool,
