@@ -1045,6 +1045,7 @@
   "app.groupAssignments.groupExercises": "Úlohy k zadání ve skupině",
   "app.groupDetail.assignments": "Zadané úlohy",
   "app.groupDetail.description": "Popis skupiny",
+  "app.groupDetail.externalAttributes": "Externí atributy:",
   "app.groupDetail.hasPublicStats": "Studenti smí vidět body ostatních studentů",
   "app.groupDetail.isPublic": "Tuto skupinu vidí každý (a může se do ní přihlásit)",
   "app.groupDetail.loading": "Načítání dat skupiny...",

@@ -14,11 +14,17 @@ import {
   addSupervisor,
   addObserver,
   removeMember,
+  fetchGroupAttributes,
 } from '../../redux/modules/groups.js';
 import { fetchByIds, fetchUser } from '../../redux/modules/users.js';
 import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import { isLoggedAsSuperAdmin, loggedInUserSelector } from '../../redux/selectors/users.js';
-import { groupSelector, groupDataAccessorSelector, groupsSelector } from '../../redux/selectors/groups.js';
+import {
+  groupSelector,
+  groupDataAccessorSelector,
+  groupsSelector,
+  groupAttributesSelector,
+} from '../../redux/selectors/groups.js';
 import {
   primaryAdminsOfGroupSelector,
   supervisorsOfGroupSelector,
@@ -55,6 +61,7 @@ class GroupInfo extends Component {
       .then(res => res.value)
       .then(group =>
         Promise.all([
+          hasPermissions(group, 'viewPublicDetail') ? dispatch(fetchGroupAttributes(groupId)) : Promise.resolve(),
           dispatch(fetchByIds(safeGet(group, ['primaryAdminsIds']) || [])),
           dispatch(fetchByIds(safeGet(group, ['privateData', 'supervisors']) || [])),
           dispatch(fetchByIds(safeGet(group, ['privateData', 'observers']) || [])),
@@ -109,6 +116,7 @@ class GroupInfo extends Component {
       isOrganizational,
       isExam,
       pendingMemberships,
+      externalAttributes,
       addAdmin,
       addSupervisor,
       addObserver,
@@ -175,6 +183,7 @@ class GroupInfo extends Component {
                     supervisors={supervisors}
                     isAdmin={isAdminOrSuperadmin}
                     groups={groups}
+                    externalAttributes={externalAttributes}
                     locale={locale}
                   />
                 )}
@@ -294,6 +303,13 @@ GroupInfo.propTypes = {
   isSupervisor: PropTypes.bool,
   isSuperAdmin: PropTypes.bool,
   isStudent: PropTypes.bool,
+  hasThreshold: PropTypes.bool,
+  threshold: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  isOrganizational: PropTypes.bool,
+  isExam: PropTypes.bool,
+  pendingMemberships: ImmutablePropTypes.list,
+  externalAttributes: ImmutablePropTypes.map,
   addSubgroup: PropTypes.func,
   loadAsync: PropTypes.func,
   refetchUsers: PropTypes.func.isRequired,
@@ -301,12 +317,6 @@ GroupInfo.propTypes = {
   addSupervisor: PropTypes.func.isRequired,
   addObserver: PropTypes.func.isRequired,
   removeMember: PropTypes.func.isRequired,
-  hasThreshold: PropTypes.bool,
-  threshold: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  isOrganizational: PropTypes.bool,
-  isExam: PropTypes.bool,
-  pendingMemberships: ImmutablePropTypes.list,
   links: PropTypes.object,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
@@ -336,6 +346,7 @@ const mapStateToProps = (state, { params: { groupId } }) => {
     isOrganizational: addSubgroupFormSelector(state, 'isOrganizational'),
     isExam: addSubgroupFormSelector(state, 'isExam'),
     pendingMemberships: pendingMembershipsSelector(state, groupId),
+    externalAttributes: groupAttributesSelector(state, groupId),
   };
 };
 

@@ -1045,6 +1045,7 @@
   "app.groupAssignments.groupExercises": "Exercises for Assignment in the Group",
   "app.groupDetail.assignments": "Assignments",
   "app.groupDetail.description": "Group Description",
+  "app.groupDetail.externalAttributes": "External Attributes:",
   "app.groupDetail.hasPublicStats": "Students can see progress of other students",
   "app.groupDetail.isPublic": "Everyone can see and join this group",
   "app.groupDetail.loading": "Loading group data...",
