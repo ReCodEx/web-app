@@ -165,7 +165,7 @@ export const relocateGroup = (groupId, newParentId) =>
     endpoint: `/groups/${groupId}/relocate/${newParentId}`,
   });
 
-export const getGroupAttributes = groupId =>
+export const fetchGroupAttributes = groupId =>
   createApiAction({
     type: additionalActionTypes.GET_ATTRIBUTES,
     method: 'GET',
@@ -227,6 +227,11 @@ export const unlockStudentFromExam = (groupId, userId) =>
 /**
  * Reducer
  */
+
+const sortAttributes = attributes =>
+  attributes.sort(
+    (a, b) => a.service.localeCompare(b.service) || a.key.localeCompare(b.key) || a.value.localeCompare(b.value)
+  );
 
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
@@ -335,8 +340,11 @@ const reducer = handleActions(
     [additionalActionTypes.GET_ATTRIBUTES_PENDING]: (state, { meta: { groupId } }) =>
       state.setIn(['attributes', groupId], createRecord()),
 
-    [additionalActionTypes.GET_ATTRIBUTES_FULFILLED]: (state, { meta: { groupId }, payload: data }) =>
-      state.setIn(['attributes', groupId], createRecord({ state: resourceStatus.FULFILLED, data })),
+    [additionalActionTypes.GET_ATTRIBUTES_FULFILLED]: (state, { meta: { groupId }, payload }) =>
+      state.setIn(
+        ['attributes', groupId],
+        createRecord({ state: resourceStatus.FULFILLED, data: sortAttributes(payload) })
+      ),
 
     [additionalActionTypes.GET_ATTRIBUTES_REJECTED]: (state, { meta: { groupId }, payload: error }) =>
       state.setIn(['attributes', groupId], createRecord({ state: resourceStatus.FAILED, error })),

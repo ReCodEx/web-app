@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Table } from 'react-bootstrap';
 
 import Box from '../../widgets/Box';
 import Callout from '../../widgets/Callout';
 import Markdown from '../../widgets/Markdown';
-import { SuccessOrFailureIcon } from '../../icons';
+import { InstanceIcon, SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData.js';
+import ResourceRenderer from '../../helpers/ResourceRenderer/ResourceRenderer.js';
 
 const getDescription = (localizedTexts, locale) => {
   const description = getLocalizedDescription({ localizedTexts }, locale);
@@ -25,6 +27,7 @@ const getDescription = (localizedTexts, locale) => {
 
 const GroupInfoTable = ({
   group: { organizational, localizedTexts, public: isPublic = false, privateData },
+  externalAttributes,
   isAdmin,
   locale,
 }) => (
@@ -36,63 +39,100 @@ const GroupInfoTable = ({
       collapsable
       noPadding
       unlimitedHeight>
-      <Table>
-        <tbody>
-          {!organizational && privateData && (
-            <tr>
-              <th>
-                <FormattedMessage
-                  id="app.groupDetail.hasPublicStats"
-                  defaultMessage="Students can see progress of other students"
-                />
-                :
-              </th>
-              <td>
-                <SuccessOrFailureIcon success={privateData.publicStats} />
-              </td>
-            </tr>
-          )}
-          {!organizational && (
-            <tr>
-              <th>
-                <FormattedMessage id="app.groupDetail.isPublic" defaultMessage="Everyone can see and join this group" />
-                :
-              </th>
-              <td>
-                <SuccessOrFailureIcon success={isPublic} />
-              </td>
-            </tr>
-          )}
-          {privateData && Boolean(privateData.threshold) && !organizational && (
-            <tr>
-              <th>
-                <FormattedMessage
-                  id="app.groupDetail.threshold"
-                  defaultMessage="Minimum percent of the total points count needed to complete the course"
-                />
-                :
-              </th>
-              <td>
-                <FormattedNumber value={privateData.threshold} style="percent" />
-              </td>
-            </tr>
-          )}
-          {privateData && Boolean(privateData.pointsLimit) && !organizational && (
-            <tr>
-              <th>
-                <FormattedMessage
-                  id="app.groupDetail.pointsLimit"
-                  defaultMessage="Minimal amount of points needed to complete the course"
-                />
-                :
-              </th>
-              <td>
-                <FormattedNumber value={privateData.pointsLimit} />
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+      <>
+        <Table>
+          <tbody>
+            {!organizational && privateData && (
+              <tr>
+                <th>
+                  <FormattedMessage
+                    id="app.groupDetail.hasPublicStats"
+                    defaultMessage="Students can see progress of other students"
+                  />
+                  :
+                </th>
+                <td>
+                  <SuccessOrFailureIcon success={privateData.publicStats} />
+                </td>
+              </tr>
+            )}
+            {!organizational && (
+              <tr>
+                <th>
+                  <FormattedMessage
+                    id="app.groupDetail.isPublic"
+                    defaultMessage="Everyone can see and join this group"
+                  />
+                  :
+                </th>
+                <td>
+                  <SuccessOrFailureIcon success={isPublic} />
+                </td>
+              </tr>
+            )}
+            {privateData && Boolean(privateData.threshold) && !organizational && (
+              <tr>
+                <th>
+                  <FormattedMessage
+                    id="app.groupDetail.threshold"
+                    defaultMessage="Minimum percent of the total points count needed to complete the course"
+                  />
+                  :
+                </th>
+                <td>
+                  <FormattedNumber value={privateData.threshold} style="percent" />
+                </td>
+              </tr>
+            )}
+            {privateData && Boolean(privateData.pointsLimit) && !organizational && (
+              <tr>
+                <th>
+                  <FormattedMessage
+                    id="app.groupDetail.pointsLimit"
+                    defaultMessage="Minimal amount of points needed to complete the course"
+                  />
+                  :
+                </th>
+                <td>
+                  <FormattedNumber value={privateData.pointsLimit} />
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+
+        {externalAttributes && (
+          <ResourceRenderer resource={externalAttributes}>
+            {attributes => (
+              <Table borderless>
+                <thead>
+                  <tr>
+                    <th colSpan="3">
+                      <FormattedMessage id="app.groupDetail.externalAttributes" defaultMessage="External Attributes:" />
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {attributes.map(({ id, service, key, value }) => (
+                    <tr key={id}>
+                      <td className="shrink-col text-nowrap">
+                        <InstanceIcon gapLeft gapRight className="text-muted" />
+                        <code>{service}</code>
+                      </td>
+                      <td className="shrink-col text-nowrap">
+                        <code>{key}</code>
+                      </td>
+                      <td>
+                        <code>{value}</code>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </ResourceRenderer>
+        )}
+      </>
     </Box>
     {isPublic && isAdmin && (
       <Callout variant="warning">
@@ -118,6 +158,7 @@ GroupInfoTable.propTypes = {
       publicStats: PropTypes.bool.isRequired,
     }),
   }),
+  externalAttributes: ImmutablePropTypes.map,
   isAdmin: PropTypes.bool,
   locale: PropTypes.string.isRequired,
 };
