@@ -11,6 +11,9 @@ import { InstanceIcon, SuccessOrFailureIcon } from '../../icons';
 import { getLocalizedDescription } from '../../../helpers/localizedData.js';
 import ResourceRenderer from '../../helpers/ResourceRenderer/ResourceRenderer.js';
 
+import { getConfigVar } from '../../../helpers/config.js';
+import InsetPanel from '../../widgets/InsetPanel/InsetPanel.js';
+
 const getDescription = (localizedTexts, locale) => {
   const description = getLocalizedDescription({ localizedTexts }, locale);
   return description ? (
@@ -25,6 +28,34 @@ const getDescription = (localizedTexts, locale) => {
   );
 };
 
+const EXTERNAL_ATTRIBUTES = getConfigVar('EXTERNAL_ATTRIBUTES', {});
+
+const getLocalizedLabel = (label, locale) => {
+  if (typeof label === 'object') {
+    if (locale in label) {
+      return label[locale];
+    }
+    if ('en' in label) {
+      return label.en;
+    }
+    const keys = Object.keys(label);
+    if (keys.length > 0) {
+      return label[keys[0]];
+    }
+  }
+  return typeof label === 'string' ? label : null;
+};
+
+const translateAttributeService = (service, locale) => {
+  const name = EXTERNAL_ATTRIBUTES[service]?.NAME;
+  return (name && getLocalizedLabel(name, locale)) || null;
+};
+
+const translateAttributeKey = (service, key, locale) => {
+  const name = EXTERNAL_ATTRIBUTES[service]?.KEYS[key];
+  return (name && getLocalizedLabel(name, locale)) || null;
+};
+
 const GroupInfoTable = ({
   group: { organizational, localizedTexts, public: isPublic = false, privateData },
   externalAttributes,
@@ -34,12 +65,12 @@ const GroupInfoTable = ({
   <div>
     <Box
       title={<FormattedMessage id="app.groupDetail.description" defaultMessage="Group Description" />}
-      description={getDescription(localizedTexts, locale)}
       type="primary"
       collapsable
       noPadding
       unlimitedHeight>
       <>
+        <InsetPanel className="m-3">{getDescription(localizedTexts, locale)}</InsetPanel>
         <Table>
           <tbody>
             {!organizational && privateData && (
@@ -104,10 +135,10 @@ const GroupInfoTable = ({
         {externalAttributes && (
           <ResourceRenderer resource={externalAttributes}>
             {attributes => (
-              <Table borderless>
+              <Table borderless size="sm">
                 <thead>
                   <tr>
-                    <th colSpan="3">
+                    <th colSpan={5}>
                       <FormattedMessage id="app.groupDetail.externalAttributes" defaultMessage="External Attributes:" />
                     </th>
                   </tr>
@@ -117,11 +148,13 @@ const GroupInfoTable = ({
                     <tr key={id}>
                       <td className="shrink-col text-nowrap">
                         <InstanceIcon gapLeft gapRight className="text-muted" />
-                        <code>{service}</code>
+                        {translateAttributeService(service, locale) || <code>{service}</code>}
                       </td>
+                      <td className="text-center shrink-col opacity-50 small">❭</td>
                       <td className="shrink-col text-nowrap">
-                        <code>{key}</code>
+                        {translateAttributeKey(service, key, locale) || <code>{key}</code>}
                       </td>
+                      <td className="text-center shrink-col opacity-50 small">❭</td>
                       <td>
                         <code>{value}</code>
                       </td>
