@@ -32,6 +32,7 @@ class UsersNameContainer extends Component {
       noAvatar = false,
       currentUser,
       isSimple = false,
+      simpleClassName = '',
       showEmail = null,
       showExternalIdentifiers = false,
       showRoleIcon = false,
@@ -45,7 +46,7 @@ class UsersNameContainer extends Component {
         failed={isSimple ? <FailureIcon /> : <FailedUsersName size={size} />}>
         {(user, currentUser) =>
           isSimple ? (
-            <span className="simpleName text-nowrap">
+            <span className={`${simpleClassName} simpleName text-nowrap`}>
               {user.name.firstName} {user.name.lastName}
             </span>
           ) : (
@@ -76,6 +77,7 @@ UsersNameContainer.propTypes = {
   link: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.bool]),
   noAvatar: PropTypes.bool,
   isSimple: PropTypes.bool,
+  simpleClassName: PropTypes.string,
   showEmail: PropTypes.string,
   showExternalIdentifiers: PropTypes.bool,
   showRoleIcon: PropTypes.bool,

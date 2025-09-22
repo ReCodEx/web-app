@@ -11,6 +11,7 @@ import Icon, { GroupIcon, GroupExamsIcon, LoadingIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks.js';
 import { isRegularObject } from '../../../helpers/common.js';
 import { isExam } from '../../../helpers/groups.js';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 /**
  * Assemble the right CSS classes for the list item.
@@ -30,7 +31,22 @@ const prepareClassList = lruMemoize((clickable, archived) => {
 
 const DEFAULT_ICON = ['far', 'square'];
 
-const clickEventDisipator = ev => ev.stopPropagation();
+const clickEventDissipator = ev => ev.stopPropagation();
+
+const adminsList = (primaryAdmins, autoloadAuthors, simpleClassName = '') =>
+  primaryAdmins.map(admin => (
+    <React.Fragment key={isRegularObject(admin) ? admin.id : admin}>
+      {isRegularObject(admin) ? (
+        <span className={`${simpleClassName} simpleName text-nowrap`}>
+          {admin.firstName} {admin.lastName}
+        </span>
+      ) : autoloadAuthors ? (
+        <UsersNameContainer userId={admin} isSimple simpleClassName={simpleClassName} />
+      ) : (
+        <LoadingIcon />
+      )}
+    </React.Fragment>
+  ));
 
 const GroupsTreeNode = React.memo(
   ({ group, selectedGroupId = null, autoloadAuthors = false, isExpanded = false, buttonsCreator, links }) => {
@@ -69,21 +85,32 @@ const GroupsTreeNode = React.memo(
           {primaryAdmins && primaryAdmins.length > 0 && (
             <span className="ps-2">
               (
-              <em className="small">
-                {primaryAdmins.map(admin => (
-                  <React.Fragment key={isRegularObject(admin) ? admin.id : admin}>
-                    {isRegularObject(admin) ? (
-                      <span className="simpleName text-nowrap">
-                        {admin.firstName} {admin.lastName}
-                      </span>
-                    ) : autoloadAuthors ? (
-                      <UsersNameContainer userId={admin} isSimple />
-                    ) : (
-                      <LoadingIcon />
-                    )}
-                  </React.Fragment>
-                ))}
-              </em>
+              {primaryAdmins.length > 2 ? (
+                <OverlayTrigger
+                  placement="bottom"
+                  overlay={
+                    <Popover id={`admins-${id}`}>
+                      <Popover.Header>
+                        <FormattedMessage
+                          id="app.groupTree.treeViewLeaf.adminPopover.title"
+                          defaultMessage="Group administrators"
+                        />
+                        :
+                      </Popover.Header>
+                      <Popover.Body>{adminsList(primaryAdmins, autoloadAuthors, 'd-block')}</Popover.Body>
+                    </Popover>
+                  }>
+                  <em className="small">
+                    <FormattedMessage
+                      id="app.groupTree.treeViewLeaf.adminsCount"
+                      defaultMessage="{count} {count, plural, one {admin} other {admins}}"
+                      values={{ count: primaryAdmins.length }}
+                    />
+                  </em>
+                </OverlayTrigger>
+              ) : (
+                <em className="small">{adminsList(primaryAdmins, autoloadAuthors)}</em>
+              )}
               )
             </span>
           )}
@@ -156,7 +183,7 @@ const GroupsTreeNode = React.memo(
           )}
 
           {buttonsCreator && (
-            <span className="float-end" onClick={clickEventDisipator}>
+            <span className="float-end" onClick={clickEventDissipator}>
               {buttonsCreator(group, selectedGroupId, links)}
             </span>
           )}
