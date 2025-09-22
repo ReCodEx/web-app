@@ -14,15 +14,7 @@ import BoxForm, { newBoxInitialData } from '../../components/Pipelines/BoxForm';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import SubmitButton from '../../components/forms/SubmitButton';
 import Callout from '../../components/widgets/Callout';
-import Icon, {
-  RefreshIcon,
-  SaveIcon,
-  DownloadIcon,
-  UploadIcon,
-  SuccessIcon,
-  UndoIcon,
-  RedoIcon,
-} from '../../components/icons';
+import Icon, { RefreshIcon, DownloadIcon, UploadIcon, SuccessIcon, UndoIcon, RedoIcon } from '../../components/icons';
 
 import {
   getVariablesUtilization,
@@ -772,7 +764,6 @@ class PipelineEditContainer extends Component {
                   submitting={this.state.submitting}
                   hasFailed={this.state.submitError !== null}
                   invalid={this.state.version < pipeline.version || (this.state.errors && this.state.errors.length > 0)}
-                  defaultIcon={<SaveIcon gapRight={2} />}
                   messages={{
                     success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
                     submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,

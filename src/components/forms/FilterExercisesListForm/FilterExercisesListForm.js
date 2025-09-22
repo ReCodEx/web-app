@@ -9,8 +9,8 @@ import { lruMemoize } from 'reselect';
 
 import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises.js';
 import {
-  getAllExericsesAuthors,
-  getAllExericsesAuthorsIsLoading,
+  getAllExercisesAuthors,
+  getAllExercisesAuthorsIsLoading,
   getExercisesAuthorsOfGroup,
   getExercisesAuthorsOfGroupIsLoading,
 } from '../../../redux/selectors/exercisesAuthors.js';
@@ -21,7 +21,7 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SubmitButton from '../SubmitButton';
 import { TextField, RadioField, SelectField, TagsSelectorField } from '../Fields';
 import { identity, safeGet } from '../../../helpers/common.js';
-import { ExpandCollapseIcon } from '../../icons';
+import { ExpandCollapseIcon, SendIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
@@ -200,6 +200,7 @@ class FilterExercisesListForm extends Component {
                           hasFailed={submitFailed}
                           invalid={invalid}
                           disabled={onSubmit === null}
+                          defaultIcon={<SendIcon gapRight={2} />}
                           messages={{
                             submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
                             success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
@@ -352,10 +353,10 @@ FilterExercisesListForm.propTypes = {
 
 export default connect((state, { rootGroup = null, form }) => ({
   loggedUserId: loggedInUserIdSelector(state),
-  authors: rootGroup ? getExercisesAuthorsOfGroup(rootGroup)(state) : getAllExericsesAuthors(state),
+  authors: rootGroup ? getExercisesAuthorsOfGroup(rootGroup)(state) : getAllExercisesAuthors(state),
   authorsLoading: rootGroup
     ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
-    : getAllExericsesAuthorsIsLoading(state),
+    : getAllExercisesAuthorsIsLoading(state),
   tags: getExerciseTags(state),
   tagsLoading: getExerciseTagsLoading(state),
   envValueSelector: name => formValueSelector(form)(state, name),

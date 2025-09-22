@@ -14,7 +14,7 @@ import Box from '../../widgets/Box';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import OptionalTooltipWrapper from '../../widgets/OptionalTooltipWrapper';
-import Icon, { CloseIcon, SaveIcon, RefreshIcon, WarningIcon } from '../../icons';
+import Icon, { CloseIcon, SendIcon, RefreshIcon, WarningIcon } from '../../icons';
 import {
   UNIFORM_ID,
   WEIGHTED_ID,
@@ -185,7 +185,6 @@ class EditTestsForm extends Component {
                         dirty={dirty}
                         hasFailed={submitFailed}
                         handleSubmit={handleSubmit}
-                        defaultIcon={<SaveIcon gapRight={2} />}
                         disabled={formValues.tests.length === 0}
                         messages={{
                           submit: <FormattedMessage id="app.editTestsForm.submit" defaultMessage="Save Tests" />,
@@ -284,6 +283,7 @@ class EditTestsForm extends Component {
                               hasSucceeded={submitSucceeded}
                               handleSubmit={handleSubmit}
                               onSubmit={this.closeDialog}
+                              defaultIcon={<SendIcon gapRight={2} />}
                               messages={{
                                 submit: (
                                   <FormattedMessage

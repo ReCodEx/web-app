@@ -10,7 +10,7 @@ import FormBox from '../../widgets/FormBox';
 import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
-import { RefreshIcon } from '../../icons';
+import { RefreshIcon, SendIcon } from '../../icons';
 
 import { CheckboxField, NumericTextField } from '../Fields';
 import { getLocalizedTextsInitialValues, validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
@@ -80,6 +80,7 @@ const EditGroupForm = ({
               hasSucceeded={submitSucceeded}
               hasFailed={submitFailed}
               invalid={invalid}
+              defaultIcon={createNew ? <SendIcon gapRight={2} /> : null}
               messages={{
                 submit: createNew ? (
                   <FormattedMessage id="app.editGroupForm.createGroup" defaultMessage="Create Group" />

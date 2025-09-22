@@ -7,7 +7,6 @@ import { Form } from 'react-bootstrap';
 import SubmitButton from '../SubmitButton';
 import { TextField } from '../Fields';
 import Callout from '../../widgets/Callout';
-import { SaveIcon } from '../../icons';
 
 const EditSolutionNoteForm = ({
   onSubmit,
@@ -44,7 +43,6 @@ const EditSolutionNoteForm = ({
         hasSucceeded={submitSucceeded}
         hasFailed={submitFailed}
         invalid={invalid}
-        defaultIcon={<SaveIcon gapRight={2} />}
         messages={{
           submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
           submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

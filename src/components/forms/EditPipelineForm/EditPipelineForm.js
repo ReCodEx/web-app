@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import { TextField, MarkdownTextAreaField, CheckboxField } from '../Fields';
-import { SaveIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 
@@ -35,7 +34,6 @@ class EditPipelineForm extends Component {
               hasSucceeded={submitSucceeded}
               hasFailed={submitFailed}
               handleSubmit={handleSubmit}
-              defaultIcon={<SaveIcon gapRight={2} />}
               messages={{
                 submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
                 submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

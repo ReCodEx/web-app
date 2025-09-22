@@ -8,6 +8,7 @@ import SubmitButton from '../SubmitButton';
 import { TextField, CheckboxField } from '../Fields';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
+import { SendIcon } from '../../icons';
 
 const FilterArchiveGroupsForm = ({
   onSubmit,
@@ -63,6 +64,7 @@ const FilterArchiveGroupsForm = ({
               hasFailed={submitFailed}
               invalid={invalid}
               dirty={dirty}
+              defaultIcon={<SendIcon gapRight={2} />}
               messages={{
                 submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
                 success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,

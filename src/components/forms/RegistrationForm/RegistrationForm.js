@@ -7,6 +7,7 @@ import isEmail from 'validator/lib/isEmail.js';
 import { eventAggregator } from '../../../helpers/eventAggregator.js';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
+import { SendIcon } from '../../icons';
 import { EmailField, TextField, PasswordField, PasswordStrength, SelectField, CheckboxField } from '../Fields';
 import { validateRegistrationData } from '../../../redux/modules/users.js';
 import SubmitButton from '../SubmitButton';
@@ -37,6 +38,7 @@ const RegistrationForm = ({
           dirty={anyTouched}
           asyncValidating={asyncValidating}
           invalid={invalid || instances.length === 0}
+          defaultIcon={<SendIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="app.registrationForm.createAccount" defaultMessage="Create account" />,
             submitting: <FormattedMessage id="app.registrationForm.processing" defaultMessage="Creating account..." />,

@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
+import { SendIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField } from '../Fields';
 
@@ -25,7 +26,7 @@ const AddLicenceForm = ({
     footer={
       <div className="text-center">
         <SubmitButton
-          id="addLicence"
+          id="addLicense"
           handleSubmit={handleSubmit}
           dirty={anyTouched}
           submitting={submitting}
@@ -33,6 +34,7 @@ const AddLicenceForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           asyncValidating={asyncValidating}
+          defaultIcon={<SendIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="app.addLicense.set" defaultMessage="Add license" />,
             submitting: <FormattedMessage id="app.addLicense.processing" defaultMessage="Adding..." />,

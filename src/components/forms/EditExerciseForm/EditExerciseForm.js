@@ -14,7 +14,6 @@ import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises.js';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
 import Explanation from '../../widgets/Explanation';
-import { SaveIcon } from '../../icons';
 import withLinks from '../../../helpers/withLinks.js';
 
 const messages = defineMessages({
@@ -72,7 +71,6 @@ const EditExerciseForm = ({
           hasFailed={submitFailed}
           handleSubmit={handleSubmit}
           asyncValidating={asyncValidating}
-          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

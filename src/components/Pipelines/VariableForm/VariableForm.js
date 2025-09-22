@@ -10,7 +10,7 @@ import { Modal } from 'react-bootstrap';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import SubmitButton from '../../forms/SubmitButton';
-import { CloseIcon, SaveIcon, RefreshIcon } from '../../../components/icons';
+import { CloseIcon, RefreshIcon } from '../../../components/icons';
 import { KNOWN_DATA_TYPES, isArrayType } from '../../../helpers/pipelines.js';
 
 export const newVariableInitialData = {
@@ -133,9 +133,8 @@ class VariableForm extends Component {
                 submitting={submitting}
                 invalid={invalid}
                 dirty={dirty}
-                hasSuceeded={submitSucceeded}
+                hasSucceeded={submitSucceeded}
                 reset={reset}
-                defaultIcon={<SaveIcon gapRight={2} />}
                 messages={{
                   success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
                   submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,

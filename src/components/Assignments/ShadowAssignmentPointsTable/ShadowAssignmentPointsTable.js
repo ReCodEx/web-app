@@ -16,7 +16,7 @@ import SubmitButton from '../../forms/SubmitButton';
 import DateTime from '../../widgets/DateTime';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Confirm from '../../forms/Confirm';
-import Icon, { BanIcon, EditIcon, DeleteIcon, SaveIcon, SquareIcon } from '../../icons';
+import Icon, { BanIcon, EditIcon, DeleteIcon, SquareIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users.js';
 import { arrayToObject, safeGet } from '../../../helpers/common.js';
 import withLinks from '../../../helpers/withLinks.js';
@@ -128,7 +128,6 @@ class ShadowAssignmentPointsTable extends Component {
                       hasSucceeded={submitSucceeded}
                       hasFailed={submitFailed}
                       invalid={invalid}
-                      defaultIcon={<SaveIcon gapRight={2} />}
                       messages={{
                         submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
                         submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

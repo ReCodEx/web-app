@@ -10,7 +10,7 @@ import { TextField, SelectField } from '../../forms/Fields';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../../forms/SubmitButton';
-import { CloseIcon, SaveIcon, RefreshIcon, InputIcon, OutputIcon } from '../../../components/icons';
+import { CloseIcon, RefreshIcon, InputIcon, OutputIcon } from '../../../components/icons';
 import { encodeId, safeSet } from '../../../helpers/common.js';
 import { getBoxTypeDescription } from '../comments.js';
 
@@ -223,9 +223,8 @@ class BoxForm extends Component {
                   submitting={submitting}
                   invalid={invalid}
                   dirty={dirty}
-                  hasSuceeded={submitSucceeded}
+                  hasSucceeded={submitSucceeded}
                   reset={reset}
-                  defaultIcon={<SaveIcon gapRight={2} />}
                   messages={{
                     success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
                     submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,

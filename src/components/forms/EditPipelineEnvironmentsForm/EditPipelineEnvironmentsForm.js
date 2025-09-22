@@ -4,7 +4,6 @@ import { reduxForm } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 
 import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList.js';
-import { SaveIcon } from '../../icons';
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
@@ -32,7 +31,6 @@ class EditPipelineEnvironmentsForm extends Component {
               hasSucceeded={submitSucceeded}
               hasFailed={submitFailed}
               handleSubmit={handleSubmit}
-              defaultIcon={<SaveIcon gapRight={2} />}
               messages={{
                 submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
                 submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

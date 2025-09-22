@@ -12,7 +12,7 @@ import { ExerciseNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
-import { AssignmentsIcon, LockIcon, CheckRequiredIcon, SaveIcon } from '../../components/icons';
+import { AssignmentsIcon, LockIcon, CheckRequiredIcon } from '../../components/icons';
 import ExerciseCallouts, { exerciseCalloutsAreVisible } from '../../components/Exercises/ExerciseCallouts';
 import ExerciseButtons from '../../components/Exercises/ExerciseButtons';
 import AssignmentsTable from '../../components/Assignments/Assignment/AssignmentsTable';
@@ -230,7 +230,6 @@ class ExerciseAssignments extends Component {
                                   visibility={visibility}
                                   showSendNotification
                                   submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
-                                  defaultIcon={<SaveIcon gapRight={2} />}
                                   mergeJudgeLogs={exercise.mergeJudgeLogs}
                                 />
                               </>

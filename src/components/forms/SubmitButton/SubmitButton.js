@@ -5,12 +5,12 @@ import { Popover, OverlayTrigger } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
 import Button from '../../widgets/TheButton';
-import { SendIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
+import { SaveIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
 import Confirm from '../Confirm';
 import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 const getIcons = lruMemoize(defaultIcon => ({
-  submit: defaultIcon || <SendIcon gapRight={2} />,
+  submit: defaultIcon || <SaveIcon gapRight={2} />,
   success: <SuccessIcon gapRight={2} />,
   submitting: <LoadingIcon gapRight={2} />,
   validating: <LoadingIcon gapRight={2} />,

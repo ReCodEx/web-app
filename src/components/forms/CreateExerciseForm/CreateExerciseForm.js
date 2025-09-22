@@ -7,7 +7,7 @@ import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import { SelectField } from '../Fields';
 import SubmitButton from '../SubmitButton';
-import { WarningIcon } from '../../../components/icons';
+import { SendIcon, WarningIcon } from '../../../components/icons';
 
 import withLinks from '../../../helpers/withLinks.js';
 
@@ -52,6 +52,7 @@ class CreateExerciseForm extends Component {
                 hasFailed={submitFailed}
                 handleSubmit={handleSubmit}
                 noShadow
+                defaultIcon={<SendIcon gapRight={2} />}
                 messages={{
                   submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
                   submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,

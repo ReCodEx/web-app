@@ -10,6 +10,7 @@ import { knownRoles, roleLabelsPlural } from '../../helpers/usersRoles.js';
 import { identity } from '../../../helpers/common.js';
 import InsetPanel from '../../widgets/InsetPanel';
 import Callout from '../../widgets/Callout';
+import { SendIcon } from '../../icons';
 
 const FilterUsersListForm = ({
   onSubmit = identity,
@@ -60,6 +61,7 @@ const FilterUsersListForm = ({
                 hasFailed={submitFailed}
                 invalid={invalid}
                 disabled={onSubmit === null}
+                defaultIcon={<SendIcon gapRight={2} />}
                 messages={{
                   submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
                   success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,

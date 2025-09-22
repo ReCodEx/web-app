@@ -9,7 +9,7 @@ import SubmitButton from '../SubmitButton';
 import Callout from '../../widgets/Callout';
 import Explanation from '../../widgets/Explanation';
 import UsersName from '../../Users/UsersName';
-import { WarningIcon } from '../../icons';
+import { SendIcon, WarningIcon } from '../../icons';
 import { validateRegistrationData } from '../../../redux/modules/users.js';
 import { TextField, PasswordField, PasswordStrength, CheckboxField } from '../Fields';
 
@@ -149,6 +149,7 @@ const CreateUserForm = ({
         hasSucceeded={submitSucceeded}
         hasFailed={submitFailed}
         asyncValidating={asyncValidating}
+        defaultIcon={<SendIcon gapRight={2} />}
         messages={{
           submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
           submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,

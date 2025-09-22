@@ -10,7 +10,7 @@ import SubmitButton from '../SubmitButton';
 import { TextField, DatetimeField, NumericTextField } from '../Fields';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import Icon, { RefreshIcon, DeleteIcon, SaveIcon } from '../../icons';
+import Icon, { RefreshIcon, DeleteIcon } from '../../icons';
 
 export const getPointsFormInitialValues = lruMemoize((userPoints, awardeeId) => {
   return userPoints
@@ -117,7 +117,6 @@ const EditShadowAssignmentPointsForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
-          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
