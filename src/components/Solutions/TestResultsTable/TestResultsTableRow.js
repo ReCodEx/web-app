@@ -195,7 +195,7 @@ const TestResultsTableRow = ({
 
     {(showJudgeLogStdout || showJudgeLogStderr) && (
       <td className="text-end">
-        <TheButtonGroup>
+        <TheButtonGroup className="text-nowrap">
           {toggleLogOpen && ((judgeLogStdout && showJudgeLogStdout) || (judgeLogStderr && showJudgeLogStderr)) && (
             <OverlayTrigger
               placement="top"
