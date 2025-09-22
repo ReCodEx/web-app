@@ -1128,6 +1128,8 @@
   "app.groupStudents.privateStats": "The admin of the group has restricted the access to the results of students. Therefore, you can see only your own results, not the results of other students.",
   "app.groupStudents.studentsResultsTable": "Students and Their Results",
   "app.groupStudents.title": "Group Students",
+  "app.groupTree.treeViewLeaf.adminPopover.title": "Group administrators",
+  "app.groupTree.treeViewLeaf.adminsCount": "{count} {count, plural, one {admin} other {admins}}",
   "app.groupTree.treeViewLeaf.archivedTooltip": "The group is archived",
   "app.groupTree.treeViewLeaf.examTooltip": "Exam group",
   "app.groupTree.treeViewLeaf.organizationalTooltip": "The group is organizational (it does not have any students or assignments)",

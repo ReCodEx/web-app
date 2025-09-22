@@ -1128,6 +1128,8 @@
   "app.groupStudents.privateStats": "Administrátor skupiny omezil přístup k výsledkům studentů. Z toho důvodu můžete vidět pouze vlastní výsledky, nikoli výsledky ostatních studentů.",
   "app.groupStudents.studentsResultsTable": "Studenti a jejich výsledky",
   "app.groupStudents.title": "Studenti ve skupině",
+  "app.groupTree.treeViewLeaf.adminPopover.title": "Administrátoři skupiny",
+  "app.groupTree.treeViewLeaf.adminsCount": "{count} {count, plural, one {administrátor} =2 {administrátoři} =3 {administrátoři} =4 {administrátoři} other {administrátorů}}",
   "app.groupTree.treeViewLeaf.archivedTooltip": "Tato skupina byla odsunuta do archivu",
   "app.groupTree.treeViewLeaf.examTooltip": "Zkoušková skupina",
   "app.groupTree.treeViewLeaf.organizationalTooltip": "Skupina je organizační (nemá žádné studenty ani zadané úlohy)",

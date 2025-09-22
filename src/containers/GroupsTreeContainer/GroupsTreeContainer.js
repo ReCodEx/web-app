@@ -68,7 +68,7 @@ const prepareGroupObject = (
 };
 
 /**
- * Prepares plain-js datastructure that could be fed to GroupsTree component.
+ * Prepares plain-js data structure that could be fed to GroupsTree component.
  * With memoization, this is basically a higher-level selector that creates hiarchial augmented group objects.
  */
 const prepareGroupsTree = lruMemoize(
