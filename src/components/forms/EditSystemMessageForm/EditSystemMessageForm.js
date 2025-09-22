@@ -12,7 +12,7 @@ import Callout from '../../widgets/Callout';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
 import withLinks from '../../../helpers/withLinks.js';
-import { CloseIcon, SaveIcon } from '../../icons';
+import { CloseIcon } from '../../icons';
 import { roleLabelsSimpleMessages } from '../../helpers/usersRoles.js';
 
 const typeOptions = [
@@ -114,7 +114,6 @@ const EditSystemMessageForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           handleSubmit={handleSubmit}
-          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

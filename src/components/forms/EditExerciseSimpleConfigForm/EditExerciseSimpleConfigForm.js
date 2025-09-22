@@ -8,7 +8,7 @@ import { lruMemoize } from 'reselect';
 import FormBox from '../../widgets/FormBox';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { RefreshIcon, SaveIcon } from '../../icons';
+import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
 import EditExerciseSimpleConfigTest from './EditExerciseSimpleConfigTest.js';
@@ -82,7 +82,7 @@ const nonDefaultSuccessExitCodes = obj => {
  */
 const validateFileExists = (data, errors, path, existingFiles) => {
   if (!existingFiles) {
-    return; // safeguard if the suplementary files are not loaded yet
+    return; // safeguard if the supplementary files are not loaded yet
   }
 
   let target = safeGet(data, path);
@@ -248,7 +248,6 @@ class EditExerciseSimpleConfigForm extends Component {
                     hasSucceeded={submitSucceeded}
                     hasFailed={submitFailed}
                     handleSubmit={handleSubmit}
-                    defaultIcon={<SaveIcon gapRight={2} />}
                     messages={SUBMIT_BUTTON_MESSAGES}
                   />
                 </TheButtonGroup>

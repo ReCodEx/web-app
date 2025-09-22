@@ -5,7 +5,6 @@ import { reduxForm, Field } from 'redux-form';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
-import { SaveIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, LanguageSelectField } from '../Fields';
 import { isStudentRole, isSupervisorRole } from '../../helpers/usersRoles.js';
@@ -32,7 +31,6 @@ const EditUserSettingsForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           dirty={dirty}
-          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

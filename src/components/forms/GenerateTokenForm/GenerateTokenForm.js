@@ -11,7 +11,7 @@ import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField } from '../Fields';
-import { CopyIcon, CopySuccessIcon } from '../../icons';
+import { CopyIcon, CopySuccessIcon, SendIcon } from '../../icons';
 import { objectMap } from '../../../helpers/common.js';
 
 import './GenerateTokenForm.css';
@@ -125,6 +125,7 @@ const GenerateTokenForm = ({
               hasSucceeded={submitSucceeded}
               hasFailed={submitFailed}
               invalid={invalid}
+              defaultIcon={<SendIcon gapRight={2} />}
               messages={{
                 submit: <FormattedMessage id="app.generateTokenForm.generate" defaultMessage="Generate" />,
                 submitting: <FormattedMessage id="app.generateTokenForm.generating" defaultMessage="Generating..." />,

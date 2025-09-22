@@ -7,7 +7,7 @@ import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { InfoIcon, SaveIcon, RefreshIcon } from '../../icons';
+import { InfoIcon, RefreshIcon } from '../../icons';
 
 import { SelectField } from '../Fields';
 
@@ -43,7 +43,6 @@ const EditHardwareGroupForm = ({
             hasSucceeded={submitSucceeded}
             hasFailed={submitFailed}
             invalid={invalid}
-            defaultIcon={<SaveIcon gapRight={2} />}
             messages={{
               submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
               submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

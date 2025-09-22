@@ -11,7 +11,7 @@ import Callout from '../../widgets/Callout';
 import Explanation from '../../widgets/Explanation';
 import { validateRegistrationData } from '../../../redux/modules/users.js';
 import { TextField, CheckboxField } from '../Fields';
-import { WarningIcon } from '../../icons';
+import { SendIcon, WarningIcon } from '../../icons';
 
 import { getGroupCanonicalLocalizedName } from '../../../helpers/localizedData.js';
 import { EMPTY_ARRAY } from '../../../helpers/common.js';
@@ -163,6 +163,7 @@ const InviteUserForm = ({
         hasSucceeded={submitSucceeded}
         hasFailed={submitFailed}
         asyncValidating={asyncValidating}
+        defaultIcon={<SendIcon gapRight={2} />}
         messages={{
           submit: <FormattedMessage id="app.inviteUserForm.invite" defaultMessage="Invite" />,
           submitting: <FormattedMessage id="app.inviteUserForm.inviting" defaultMessage="Inviting..." />,

@@ -6,7 +6,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { lruMemoize } from 'reselect';
 
-import { SaveIcon, WarningIcon } from '../../icons';
+import { WarningIcon } from '../../icons';
 import { DatetimeField, CheckboxField, RadioField, NumericTextField } from '../Fields';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
@@ -917,7 +917,6 @@ class EditAssignmentForm extends Component {
             hasFailed={submitFailed}
             handleSubmit={handleSubmit(this.onSubmitWrapper)}
             asyncValidating={asyncValidating}
-            defaultIcon={<SaveIcon gapRight={2} />}
             messages={submitButtonMessages}
           />
 

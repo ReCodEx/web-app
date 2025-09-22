@@ -6,7 +6,6 @@ import { lruMemoize } from 'reselect';
 
 import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
-import { SaveIcon } from '../../icons';
 import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
 import { CheckboxField, SelectField, NumericTextField } from '../Fields';
@@ -64,7 +63,6 @@ const EditUserUIDataForm = ({
           hasFailed={submitFailed}
           invalid={invalid}
           dirty={dirty}
-          defaultIcon={<SaveIcon gapRight={2} />}
           messages={{
             submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
             submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,

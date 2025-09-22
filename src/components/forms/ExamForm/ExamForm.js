@@ -9,7 +9,7 @@ import Callout from '../../widgets/Callout';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
-import { CloseIcon } from '../../icons';
+import { CloseIcon, SendIcon } from '../../icons';
 
 import { TextField, CheckboxField, DatetimeField } from '../Fields';
 
@@ -194,6 +194,7 @@ const ExamForm = ({
           hasSucceeded={submitSucceeded}
           hasFailed={submitFailed}
           invalid={invalid}
+          defaultIcon={createNew ? <SendIcon gapRight={2} /> : null}
           messages={{
             submit: createNew ? (
               <FormattedMessage id="app.editGroup.examButton" defaultMessage="Create Exam" />

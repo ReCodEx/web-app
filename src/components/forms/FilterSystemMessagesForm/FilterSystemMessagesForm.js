@@ -6,6 +6,7 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 
 import SubmitButton from '../SubmitButton';
 import { CheckboxField } from '../Fields';
+import { SendIcon } from '../../icons';
 import { identity } from '../../../helpers/common.js';
 
 const FilterSystemMessagesForm = ({
@@ -42,6 +43,7 @@ const FilterSystemMessagesForm = ({
               hasFailed={submitFailed}
               invalid={invalid}
               disabled={onSubmit === null}
+              defaultIcon={<SendIcon gapRight={2} />}
               messages={{
                 submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
                 success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
