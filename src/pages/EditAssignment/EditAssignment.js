@@ -241,7 +241,6 @@ EditAssignment.propTypes = {
   visibility: PropTypes.string,
   visibleFrom: PropTypes.object,
   canViewLimitRatios: PropTypes.bool,
-  allowVisibleFrom: PropTypes.bool,
   exerciseSync: PropTypes.func.isRequired,
   validateAssignment: PropTypes.func.isRequired,
   links: PropTypes.object,
@@ -262,7 +261,6 @@ export default withLinks(
         hasNotificationAsyncJob: hasPendingNotificationAsyncJob(state, assignmentId),
         deadlines: editAssignmentFormSelector(state, 'deadlines'),
         visibility: editAssignmentFormSelector(state, 'visibility'),
-        allowVisibleFrom: editAssignmentFormSelector(state, 'allowVisibleFrom'),
         visibleFrom: editAssignmentFormSelector(state, 'visibleFrom'),
         canViewLimitRatios: editAssignmentFormSelector(state, 'canViewLimitRatios'),
       };

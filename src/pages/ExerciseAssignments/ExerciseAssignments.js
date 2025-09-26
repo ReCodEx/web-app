@@ -123,6 +123,7 @@ class ExerciseAssignments extends Component {
       groupsAccessor,
       deadlines,
       visibility,
+      canViewLimitRatios,
       syncAssignment,
       editAssignment,
       deleteAssignment,
@@ -231,6 +232,7 @@ class ExerciseAssignments extends Component {
                                   showSendNotification
                                   submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
                                   mergeJudgeLogs={exercise.mergeJudgeLogs}
+                                  canViewLimitRatios={canViewLimitRatios}
                                 />
                               </>
                             )}
@@ -261,6 +263,7 @@ ExerciseAssignments.propTypes = {
   groupsAccessor: PropTypes.func.isRequired,
   deadlines: PropTypes.string,
   visibility: PropTypes.string,
+  canViewLimitRatios: PropTypes.bool,
   intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
@@ -284,6 +287,7 @@ export default connect(
       groupsAccessor: groupDataAccessorSelector(state),
       deadlines: multiAssignFormSelector(state, 'deadlines'),
       visibility: multiAssignFormSelector(state, 'visibility'),
+      canViewLimitRatios: multiAssignFormSelector(state, 'canViewLimitRatios'),
     };
   },
   (dispatch, { params: { exerciseId } }) => ({
