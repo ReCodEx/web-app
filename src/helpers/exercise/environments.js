@@ -6,6 +6,7 @@ export const ENV_BASH_ID = 'bash';
 export const ENV_C_GCC_ID = 'c-gcc-linux';
 export const ENV_CPP_GCC_ID = 'cxx-gcc-linux';
 export const ENV_CS_DOTNET_CORE_ID = 'cs-dotnet-core';
+export const ENV_CS_DOTNET_PROJECT_ID = 'cs-dotnet-project';
 export const ENV_DATA_ONLY_ID = 'data-linux';
 export const ENV_FREEPASCAL_ID = 'freepascal-linux';
 export const ENV_GO_ID = 'go';
@@ -34,6 +35,7 @@ const SIMPLE_FORM_ENVIRONMENTS = [
   ENV_C_GCC_ID,
   ENV_CPP_GCC_ID,
   ENV_CS_DOTNET_CORE_ID,
+  ENV_CS_DOTNET_PROJECT_ID,
   ENV_DATA_ONLY_ID,
   ENV_FREEPASCAL_ID,
   ENV_GO_ID,
