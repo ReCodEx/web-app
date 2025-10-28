@@ -21,7 +21,8 @@ const app = new Express();
 app.set('view engine', 'ejs');
 app.use(urlPrefix, Express.static(path.join(__dirname, '../public')));
 
-app.get('*', (req, res) => {
+app.get('*splat', (req, res) => {
+  // 'splat' is the name of the * wildcard (new in Express 5.x)
   res.render('index', {
     html: '',
     head: {

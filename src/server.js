@@ -25,7 +25,7 @@ import '@formatjs/intl-relativetimeformat/locale-data/cs.js';
 
 /**
  * Init server-side rendering of the app using Express with
- * some basic middleware for tempaltes and static file serving.
+ * some basic middleware for templates and static file serving.
  */
 
 function getFileName(pattern, addPrefix = '') {
@@ -76,7 +76,8 @@ const renderPage = (res, store = null, html = '') => {
   });
 };
 
-app.get('*', (req, res) => {
+// 'splat' is the name of the * wildcard (new in Express 5.x)
+app.get('*splat', (req, res) => {
   // Extract the accessToken from the cookies for authenticated API requests from the server.
   const token = req.cookies[TOKEN_COOKIES_KEY]; // undefined === the user is not logged in
   const instanceId = req.cookies[INSTANCEID_COOKIES_KEY] || null; // Selected instance
