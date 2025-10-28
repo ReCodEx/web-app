@@ -95,7 +95,7 @@
     "reselect": "^5.1.1",
     "serialize-javascript": "^6.0.2",
     "statuscode": "0.0.0",
-    "validator": "^13.15.0",
+    "validator": "^13.15.20",
     "viz.js": "^2.1.2"
   },
   "devDependencies": {
