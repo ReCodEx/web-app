@@ -2060,17 +2060,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/compat@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@eslint/compat@npm:1.4.0"
+"@eslint/compat@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@eslint/compat@npm:1.4.1"
   dependencies:
-    "@eslint/core": ^0.16.0
+    "@eslint/core": ^0.17.0
   peerDependencies:
     eslint: ^8.40 || 9
   peerDependenciesMeta:
     eslint:
       optional: true
-  checksum: 090882a61e3c8fa1911ff796f9cf13ed645139760cdecb2444dcb6c75a0d2f2a379e62b1e83586a13ece2280ed8a3acea9cc125acb99bc68012575918ac8f26d
+  checksum: 2389344cf1fe6b34f14977cb449ab24214e3342cdf99fc045896bb1063343e6009765ee3ca0bf7b893e94b476bb569ddf4d5e79a957054a246d610355acbbb75
   languageName: node
   linkType: hard
 
@@ -2100,6 +2100,15 @@ __metadata:
   dependencies:
     "@types/json-schema": ^7.0.15
   checksum: 5c08dbf08aa27a6e057003a05a29f483038b70e59f9ac7af26938d0fa4627383c95768e2154835260607de34975e8f407c10762af9a005ed348cd8039cc6aede
+  languageName: node
+  linkType: hard
+
+"@eslint/core@npm:^0.17.0":
+  version: 0.17.0
+  resolution: "@eslint/core@npm:0.17.0"
+  dependencies:
+    "@types/json-schema": ^7.0.15
+  checksum: ff9b5b4987f0bae4f2a4cfcdc7ae584ad3b0cb58526ca562fb281d6837700a04c7f3c86862e95126462318f33f60bf38e1cb07ed0e2449532d4b91cd5f4ab1f2
   languageName: node
   linkType: hard
 
@@ -8083,15 +8092,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-mock@npm:^12.5.5":
-  version: 12.5.5
-  resolution: "fetch-mock@npm:12.5.5"
+"fetch-mock@npm:^12.5.6":
+  version: 12.5.6
+  resolution: "fetch-mock@npm:12.5.6"
   dependencies:
     "@types/glob-to-regexp": ^0.4.4
     dequal: ^2.0.3
     glob-to-regexp: ^0.4.1
     regexparam: ^3.0.0
-  checksum: 6208561b601e0aead7e8abcb6a4b9ad59679c185f20ffe47105f7126c30646169ff7bae3cc728b0581b9b74d2800dc45320aec4f554992b5618f9b2a816937dc
+  checksum: 8c9463ede3c64c86cbca12d22ff4c124e74135213b480d806d1ffff77fb123682ab4782bb7dab5bdab569bb3d81a948cafdecd6d3022cbe06d23f06d6db14ace
   languageName: node
   linkType: hard
 
@@ -13303,21 +13312,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^7.9.4":
-  version: 7.9.4
-  resolution: "react-router-dom@npm:7.9.4"
+"react-router-dom@npm:^7.9.5":
+  version: 7.9.5
+  resolution: "react-router-dom@npm:7.9.5"
   dependencies:
-    react-router: 7.9.4
+    react-router: 7.9.5
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: 56d7c10ce8c26d88fd92afb55d90f737ddee0ccd9715105444a62d31687a06f1b0b22c4a6047a4b896cf5f97d297b1036bedece65646b126c40b3e107d19a9a0
+  checksum: 199cadb472a32e797a9ee53b7e36e0a2f78c781fd4d4006109f069161a3dfdf5c95ebfeaad563a683f9d094319901c3b8f2c587cd686cba7d6eac412a04a0290
   languageName: node
   linkType: hard
 
-"react-router@npm:7.9.4, react-router@npm:^7.9.4":
-  version: 7.9.4
-  resolution: "react-router@npm:7.9.4"
+"react-router@npm:7.9.5, react-router@npm:^7.9.5":
+  version: 7.9.5
+  resolution: "react-router@npm:7.9.5"
   dependencies:
     cookie: ^1.0.1
     set-cookie-parser: ^2.6.0
@@ -13327,7 +13336,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 2a33bc2203f5fe1fd24858d246c5590c4920a429490986e36af19de0580c7a162fbfb0c675bc2be2ee535d965e08f8e9d28009ee9ddf9df2b7a236e6e2dc8a33
+  checksum: 931b4f476422c50f7da924cc506914386592959935133ac8aa84e603a619f4e182d369fdef974644d1b191602e9f90eb815d20a1183124704273a95e6ab60518
   languageName: node
   linkType: hard
 
@@ -13458,7 +13467,7 @@ __metadata:
     "@babel/preset-react": ^7.28.5
     "@babel/register": ^7.28.3
     "@babel/runtime": ^7.28.4
-    "@eslint/compat": ^1.4.0
+    "@eslint/compat": ^1.4.1
     "@eslint/eslintrc": ^3.3.1
     "@eslint/js": ^9.38.0
     "@formatjs/cli-lib": ^6.6.6
@@ -13510,7 +13519,7 @@ __metadata:
     eslint-plugin-standard: ^5.0.0
     esm: ^3.2.25
     express: ^5.1.0
-    fetch-mock: ^12.5.5
+    fetch-mock: ^12.5.6
     file-loader: ^6.2.0
     file-saver: ^2.0.5
     flat: ^6.0.1
@@ -13553,8 +13562,8 @@ __metadata:
     react-intl-translations-manager: ^5.0.3
     react-qr-code: ^2.0.18
     react-redux: ^9.2.0
-    react-router: ^7.9.4
-    react-router-dom: ^7.9.4
+    react-router: ^7.9.5
+    react-router-dom: ^7.9.5
     react-syntax-highlighter: ^16.1.0
     react-toggle: 4.1.3
     redux: ^5.0.1
