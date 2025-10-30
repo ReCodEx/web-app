@@ -48,16 +48,17 @@ export const createSortingIcon = (colName, orderByColumn, orderByDescending, set
 export const showRangeInfo = (offset, limit, totalCount) =>
   totalCount > limit && (
     <div className="text-body-secondary text-end small">
-      <FormattedMessage
-        id="app.paginationContainer.showingRange"
-        defaultMessage="showing {offset}{nbsp}-{nbsp}{offsetEnd} (of{nbsp}{totalCount})"
-        values={{
-          offset: offset + 1,
-          offsetEnd: Math.min(offset + limit, totalCount),
-          totalCount,
-          nbsp: <>&nbsp;</>,
-        }}
-      />
+      <FormattedMessage id="app.paginationContainer.showingRange" defaultMessage="showing" />{' '}
+      <span className="text-nowrap">
+        {offset + 1}. &ndash; {Math.min(offset + limit, totalCount)}.
+      </span>{' '}
+      <span className="text-nowrap">
+        <FormattedMessage
+          id="app.paginationContainer.showingRangeOf"
+          defaultMessage="(of {totalCount})"
+          values={{ totalCount }}
+        />
+      </span>
     </div>
   );
 
@@ -257,9 +258,13 @@ class PaginationContainer extends Component {
                     {this.showLimitsButtons() && (
                       <Pagination size="small">
                         {limits
-                          .map((l, idx) =>
-                            idx < 1 || totalCount > limits[idx - 1] || l === limit ? this.createLimitButton(l) : null
-                          )
+                          .map((l, idx) => (
+                            <React.Fragment key={idx}>
+                              {idx < 1 || totalCount > limits[idx - 1] || l === limit
+                                ? this.createLimitButton(l)
+                                : null}
+                            </React.Fragment>
+                          ))
                           .filter(identity)}
                       </Pagination>
                     )}
@@ -286,7 +291,7 @@ class PaginationContainer extends Component {
             )}
           </div>
         ) : (
-          <div className="text-center larger em-maring">
+          <div className="text-center larger m-5">
             <LoadingIcon gapRight={2} />
             <FormattedMessage id="generic.loading" defaultMessage="Loading..." />
           </div>
