@@ -7974,15 +7974,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-mock@npm:12.5.5":
-  version: 12.5.5
-  resolution: "fetch-mock@npm:12.5.5"
+"fetch-mock@npm:12.6.0":
+  version: 12.6.0
+  resolution: "fetch-mock@npm:12.6.0"
   dependencies:
     "@types/glob-to-regexp": ^0.4.4
     dequal: ^2.0.3
     glob-to-regexp: ^0.4.1
     regexparam: ^3.0.0
-  checksum: 6208561b601e0aead7e8abcb6a4b9ad59679c185f20ffe47105f7126c30646169ff7bae3cc728b0581b9b74d2800dc45320aec4f554992b5618f9b2a816937dc
+  checksum: 7705aaa6ab149f59e10e9e0794175e31c3b6c52eb0aab22522a4d7689a1ff0e3a85b9f76a2079adfd23d515e4db228e9ab7d4293f5c4cfee157cd9f858e14ae1
   languageName: node
   linkType: hard
 
@@ -13261,7 +13261,7 @@ __metadata:
     eslint-plugin-react: ^7.37.5
     eslint-plugin-standard: ^5.0.0
     express: ^5.1.0
-    fetch-mock: 12.5.5
+    fetch-mock: 12.6.0
     file-loader: ^6.2.0
     file-saver: ^2.0.5
     flat: ^6.0.1
