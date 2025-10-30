@@ -61,7 +61,7 @@ export default [{
         'import/ignore': ['node_modules', '.less$'],
 
         react: {
-            version: '18.3.1',
+            version: '19.2.0',
         },
     },
 

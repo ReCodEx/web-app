@@ -25,14 +25,19 @@ const gitRevisionPlugin = new GitRevisionPlugin({
 });
 
 export default {
-  devtool: process.env.NODE_ENV === 'development' ? 'eval-source-map' : 'none',
+  // switch the source map generation when debugging
+  // note, we used 'eval-source-map' before, but since webpack 5.100, it breaks the build
+  // (causes 'SyntaxError: redeclaration of function normalize')
+  // devtool: 'inline-source-map',
+  devtool: false, // turn it off completely
+
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '..', 'public'),
     publicPath: '/public/',
   },
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   resolve: {
     alias: {
       moment: 'moment/moment.js',
