@@ -91,7 +91,7 @@ const encodeBody = (body, method, encodeAsMultipart) => {
   return undefined; // other methods do not have a body
 };
 
-let requestAbortController = canUseDOM && 'AbortController' in window ? new window.AbortController() : null;
+let requestAbortController = canUseDOM && 'AbortController' in globalThis ? new globalThis.AbortController() : null;
 
 export const createRequest = (endpoint, query = {}, method, headers, body, uploadFiles) =>
   fetch(getUrl(assembleEndpoint(endpoint, query)), {
@@ -105,7 +105,7 @@ export const abortAllPendingRequests = () => {
   if (requestAbortController) {
     requestAbortController.abort();
   }
-  requestAbortController = canUseDOM && 'AbortController' in window ? new window.AbortController() : null;
+  requestAbortController = canUseDOM && 'AbortController' in globalThis ? new globalThis.AbortController() : null;
 };
 
 export const getHeaders = (headers, accessToken, skipContentType) => {

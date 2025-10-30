@@ -10,7 +10,7 @@ export const EMPTY_FNC = () => {};
 export const identity = x => x;
 
 /**
- * Safe getter to traverse compex object/array structures.
+ * Safe getter to traverse complex object/array structures.
  * @param {*} obj the root of the structure being traversed (object, array)
  * @param {Array} path sequence of steps, each step is either an explicit key or a function;
  *                     function can be only used in arrays and they are applied as .find() callbacks
@@ -116,7 +116,7 @@ export const unique = arr => [...new Set(arr)];
 
 /**
  * Get an array of strings, return object where keys are that strings
- * and values are lists of indices refering to the positions in original array.
+ * and values are lists of indices referring to the positions in original array.
  */
 export const createIndex = arr => {
   const index = {};
@@ -162,7 +162,7 @@ export const objectKeyMap = (obj, fnc) => {
  * Search object by values and return corresponding key.
  * @param {Object} obj object to be searched
  * @param {*} predicate either a value being searched or a function that tests each value and returns true if match is found
- * @returns {string|number} key of the first matchinng value (beware the order of search is implementation specific)
+ * @returns {string|number} key of the first matching value (beware the order of search is implementation specific)
  */
 export const objectFind = (obj, predicate) =>
   Object.keys(obj).find(typeof predicate === 'function' ? key => predicate(obj[key]) : key => obj[key] === predicate);
@@ -215,14 +215,14 @@ const _defaultComparator = (a, b) => {
  * @param {function} comparator Comparator that determines ordering. Same as in case of sort() method.
  * @return Smallest (the first) item of the array in given ordering.
  */
-export const getFirstItemInOrder = (arr, comarator = _defaultComparator) => {
+export const getFirstItemInOrder = (arr, comparator = _defaultComparator) => {
   if (!arr || !Array.isArray(arr) || arr.length === 0) {
     return null;
   }
 
   let res = arr[0];
   arr.forEach((item, idx) => {
-    if (idx > 0 && comarator(res, item) > 0) {
+    if (idx > 0 && comparator(res, item) > 0) {
       res = item;
     }
   });
