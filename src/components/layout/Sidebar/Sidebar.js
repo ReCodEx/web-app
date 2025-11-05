@@ -21,6 +21,7 @@ import Admin from './Admin.js';
 import './sidebar.css';
 
 const URL_PREFIX = getConfigVar('URL_PATH_PREFIX');
+const FAQ_FOR_ANON = getConfigVar('FAQ_FOR_ANON') || false;
 
 const getUserData = lruMemoize(user => getJsData(user));
 
@@ -136,6 +137,15 @@ const Sidebar = ({
                   currentPath={currentUrl}
                   link={REGISTRATION_URI}
                 />
+
+                {FAQ_FOR_ANON && (
+                  <MenuItem
+                    title={<FormattedMessage id="app.sidebar.menu.faq" defaultMessage="FAQ" />}
+                    icon={['far', 'question-circle']}
+                    link={FAQ_URL}
+                    currentPath={currentUrl}
+                  />
+                )}
               </ul>
             )}
 

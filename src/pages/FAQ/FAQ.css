@@ -1,0 +1,24 @@
+.recodex-faq h1, .recodex-faq h2 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.1rem;
+  border-bottom: 1px solid #ddd;
+}
+.recodex-faq blockquote {
+  margin: 0.25rem 0 0.1rem;
+  color: #353;
+  position: relative;
+  padding-left: 0.75rem;
+}
+
+.recodex-faq blockquote:before {
+  content: "⟩";
+  font-size: 1rem;
+  line-height: 1.25rem;
+  vertical-align: top;
+  margin-right: 0.25rem;
+  color: #999;
+  position: absolute;
+  left: 0.05rem;
+  top: 0;
+}
