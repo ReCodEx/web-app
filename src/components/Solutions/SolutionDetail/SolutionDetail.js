@@ -17,9 +17,9 @@ import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SolutionFiles from '../SolutionFiles';
 import EvaluationDetail from '../EvaluationDetail';
 import CompilationLogs from '../CompilationLogs';
-import { RefreshIcon, WarningIcon } from '../../icons';
+import { WarningIcon } from '../../icons';
 import FailureReport from '../../SubmissionFailures/FailureReport';
-import Button from '../../widgets/TheButton';
+import RefreshButton from '../../buttons/RefreshButton/RefreshButton';
 import Callout from '../../widgets/Callout';
 
 import { isStudentLocked } from '../../helpers/exams.js';
@@ -139,10 +139,7 @@ class SolutionDetail extends Component {
                         />
                       </td>
                       <td>
-                        <Button onClick={refreshSolutionEvaluations} variant="primary">
-                          <RefreshIcon gapRight={2} />
-                          <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
-                        </Button>
+                        <RefreshButton onClick={refreshSolutionEvaluations} variant="primary" />
                       </td>
                     </tr>
                   </tbody>

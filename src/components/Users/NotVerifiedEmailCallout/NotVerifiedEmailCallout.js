@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import ResendVerificationEmail from '../../../containers/ResendVerificationEmailContainer';
+import RefreshButton from '../../buttons/RefreshButton/RefreshButton';
 import Callout from '../../widgets/Callout';
-import Button, { TheButtonGroup } from '../../widgets/TheButton';
-import { RefreshIcon } from '../../icons';
+import { TheButtonGroup } from '../../widgets/TheButton';
 
 const NotVerifiedEmailCallout = ({ userId, refreshUser }) => (
   <Callout variant="warning">
@@ -26,10 +26,7 @@ const NotVerifiedEmailCallout = ({ userId, refreshUser }) => (
     </p>
     <TheButtonGroup className="mb-2">
       <ResendVerificationEmail userId={userId} />
-      <Button variant="outline-secondary" onClick={refreshUser}>
-        <RefreshIcon gapRight={2} />
-        <FormattedMessage id="generic.refresh" defaultMessage="Refresh" />
-      </Button>
+      <RefreshButton onClick={refreshUser} variant="outline-secondary" />
     </TheButtonGroup>
   </Callout>
 );

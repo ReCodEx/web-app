@@ -44,7 +44,7 @@ const localStorageAvailable = () => {
 /**
  * Wrapper for local storage writer.
  * @param {string} key
- * @param {*} value value must be serializabe into JSON; if null or undedined is passed, the item is removed
+ * @param {*} value value must be serializable into JSON; if null or undefined is passed, the item is removed
  */
 export const storageSetItem = (key, value) => {
   const prefixedKey = `${PERSISTENT_TOKENS_KEY_PREFIX}${key}`;
@@ -93,7 +93,7 @@ const listenKeyMatch = (eventKey, key) =>
 
 /**
  * Register callback which is triggered when the value is changed in local storage.
- * @param {string|null} key which changes are observerd, null to observe all changes
+ * @param {string|null} key which changes are observed, null to observe all changes
  * @param {Function} callback invoked with every change: (newVal [, oldVal [, key]]) => {}
  * @returns {string|null} identifier of the listener, null if no listener was registered
  */
@@ -112,6 +112,7 @@ export const listenForChanges = (key, callback) => {
   };
   window.addEventListener('storage', listener);
   listeners[id] = listener;
+  return id;
 };
 
 /**
