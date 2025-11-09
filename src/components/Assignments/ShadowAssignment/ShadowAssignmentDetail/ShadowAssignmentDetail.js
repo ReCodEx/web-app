@@ -48,7 +48,7 @@ const ShadowAssignmentDetail = ({
             <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:
           </th>
           <td>
-            <DateTime unixts={createdAt} />
+            <DateTime unixTs={createdAt} />
           </td>
         </tr>
 
@@ -66,7 +66,7 @@ const ShadowAssignmentDetail = ({
             </Explanation>
           </th>
           <td>
-            <DateTime unixts={deadline} isDeadline />
+            <DateTime unixTs={deadline} isDeadline />
           </td>
         </tr>
 

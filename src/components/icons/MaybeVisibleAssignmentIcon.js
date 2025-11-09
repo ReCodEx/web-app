@@ -30,7 +30,7 @@ const MaybeVisibleAssignmentIcon = ({ id, isPublic, visibleFrom = null }) => {
               id="app.maybePublicIcon.visibleFrom"
               defaultMessage="Visible from {date}"
               values={{
-                date: <DateTime unixts={visibleFrom} showRelative />,
+                date: <DateTime unixTs={visibleFrom} showRelative />,
               }}
             />
           }

@@ -38,7 +38,7 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
           {user.privateData && user.privateData.createdAt && (
             <span className="small">
               <DateTime
-                unixts={user.privateData.createdAt}
+                unixTs={user.privateData.createdAt}
                 showTime={false}
                 showOverlay
                 overlayTooltipId={`createdat-${user.id}`}

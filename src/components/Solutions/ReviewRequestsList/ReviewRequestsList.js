@@ -127,7 +127,7 @@ class ReviewRequestsList extends Component {
                               <td>
                                 <strong>#{solution.attemptIndex} </strong>
                                 <small className="ms-2 text-body-secondary">
-                                  (<DateTime unixts={solution.createdAt} />)
+                                  (<DateTime unixTs={solution.createdAt} />)
                                 </small>
                               </td>
 

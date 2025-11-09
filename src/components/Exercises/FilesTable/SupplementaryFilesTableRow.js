@@ -31,7 +31,7 @@ const SupplementaryFilesTableRow = ({
     </td>
     <td>{prettyPrintBytes(size)}</td>
     <td>
-      <DateTime unixts={uploadedAt} showRelative />
+      <DateTime unixTs={uploadedAt} showRelative />
     </td>
     {!viewOnly && (
       <td className="text-end">

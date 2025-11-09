@@ -26,14 +26,14 @@ const SolutionReviewIcon = ({ id, review, isReviewer = false, placement = 'botto
           <FormattedMessage
             id="app.solutionReviewIcon.tooltip.startedAt"
             defaultMessage="The review was started at {started} and has not been closed yet."
-            values={{ started: <DateTime unixts={review.startedAt} /> }}
+            values={{ started: <DateTime unixTs={review.startedAt} /> }}
           />
         ) : (
           <>
             <FormattedMessage
               id="app.solutionReviewIcon.tooltip.closedAt"
               defaultMessage="The review was closed at {closed}, the comments are available on the submitted files page."
-              values={{ closed: <DateTime unixts={review.closedAt} /> }}
+              values={{ closed: <DateTime unixTs={review.closedAt} /> }}
             />{' '}
             {review.issues > 0 ? (
               <FormattedMessage

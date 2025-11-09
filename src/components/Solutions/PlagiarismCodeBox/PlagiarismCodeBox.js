@@ -352,7 +352,7 @@ class PlagiarismCodeBox extends Component {
                       overlay={
                         <Tooltip id={`${id}-solutionIcon`}>
                           #{selectedPlagiarismFile.solution.attemptIndex} (
-                          <DateTime unixts={selectedPlagiarismFile.solution.createdAt} />)
+                          <DateTime unixTs={selectedPlagiarismFile.solution.createdAt} />)
                         </Tooltip>
                       }>
                       {selectedPlagiarismFile.solution.canViewDetail ? (

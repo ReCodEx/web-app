@@ -15,7 +15,7 @@ const Posted = ({ id, right, postedAt }) => (
       'float-start': !right,
     })}>
     <DateTime
-      unixts={postedAt}
+      unixTs={postedAt}
       showRelative
       showDate={false}
       showTime={false}

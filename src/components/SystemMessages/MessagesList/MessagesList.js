@@ -44,7 +44,7 @@ class MessagesList extends Component {
         <FormattedMessage id="app.systemMessagesList.visibleFrom" defaultMessage="Visible From" />,
         {
           comparator: ({ visibleFrom: f1 }, { visibleFrom: f2 }) => f2 - f1,
-          cellRenderer: visibleFrom => visibleFrom && <DateTime unixts={visibleFrom} />,
+          cellRenderer: visibleFrom => visibleFrom && <DateTime unixTs={visibleFrom} />,
           className: 'align-middle',
         }
       ),
@@ -54,7 +54,7 @@ class MessagesList extends Component {
         <FormattedMessage id="app.systemMessagesList.visibleTo" defaultMessage="Visible To" />,
         {
           comparator: ({ visibleTo: t1 }, { visibleTo: t2 }) => t2 - t1,
-          cellRenderer: visibleTo => visibleTo && <DateTime unixts={visibleTo} />,
+          cellRenderer: visibleTo => visibleTo && <DateTime unixTs={visibleTo} />,
           className: 'align-middle',
         }
       ),

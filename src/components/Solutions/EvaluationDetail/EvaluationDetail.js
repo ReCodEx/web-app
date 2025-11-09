@@ -38,7 +38,7 @@ const EvaluationDetail = ({
             </Explanation>
           </th>
           <td>
-            <DateTime unixts={evaluation.evaluatedAt} showRelative showSeconds />
+            <DateTime unixTs={evaluation.evaluatedAt} showRelative showSeconds />
           </td>
         </tr>
 

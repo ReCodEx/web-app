@@ -235,7 +235,7 @@ class SolutionStatus extends Component {
                       <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />:
                     </th>
                     <td>
-                      <DateTime unixts={createdAt} showRelative />
+                      <DateTime unixTs={createdAt} showRelative />
                     </td>
                   </>
                 ) : (
@@ -274,7 +274,7 @@ class SolutionStatus extends Component {
                         })}
                       </span>
 
-                      <DateTime unixts={createdAt} />
+                      <DateTime unixTs={createdAt} />
 
                       {createdAt > firstDeadline && (
                         <>
@@ -453,7 +453,7 @@ class SolutionStatus extends Component {
                     </th>
                     <td>
                       {review && review.startedAt ? (
-                        <DateTime unixts={review.closedAt || review.startedAt} />
+                        <DateTime unixTs={review.closedAt || review.startedAt} />
                       ) : (
                         <i className="text-body-secondary">
                           {reviewRequest && (

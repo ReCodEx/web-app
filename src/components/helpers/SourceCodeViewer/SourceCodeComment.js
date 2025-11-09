@@ -75,7 +75,7 @@ const SourceCodeComment = ({
       </small>
 
       <small className="float-end me-2">
-        <DateTime unixts={comment.createdAt} showRelative />
+        <DateTime unixTs={comment.createdAt} showRelative />
       </small>
       <Markdown source={comment.text} />
     </div>

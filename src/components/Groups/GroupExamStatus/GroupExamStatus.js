@@ -159,7 +159,7 @@ class GroupExamStatus extends Component {
                     <FormattedMessage id="app.groupExams.beginAt" defaultMessage="Begins at" />:
                   </td>
                   <td className="p-2">
-                    <DateTime unixts={group.privateData.examBegin} showRelative />
+                    <DateTime unixTs={group.privateData.examBegin} showRelative />
                   </td>
                 </tr>
                 <tr>
@@ -167,7 +167,7 @@ class GroupExamStatus extends Component {
                     <FormattedMessage id="app.groupExams.endAt" defaultMessage="Ends at" />:
                   </td>
                   <td className="p-2">
-                    <DateTime unixts={group.privateData.examEnd} showRelative />
+                    <DateTime unixTs={group.privateData.examEnd} showRelative />
                   </td>
                 </tr>
 

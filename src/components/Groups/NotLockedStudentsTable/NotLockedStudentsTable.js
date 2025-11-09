@@ -44,7 +44,7 @@ const NotLockedStudentsTable = ({ notLockedStudents, currentUser, intl: { locale
                       />
                     }
                   />
-                  <DateTime unixts={student.privateData.lastAuthenticationAt} showSeconds />
+                  <DateTime unixTs={student.privateData.lastAuthenticationAt} showSeconds />
                 </>
               )}
             </td>

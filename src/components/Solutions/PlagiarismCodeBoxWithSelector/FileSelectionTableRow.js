@@ -33,7 +33,7 @@ const FileSelectionTableRow = ({ file, idx, selected = false, selectFile }) => (
       <strong>#{file.solution.attemptIndex}</strong>
     </td>
     <td>
-      (<DateTime unixts={file.solution.createdAt} />)
+      (<DateTime unixTs={file.solution.createdAt} />)
     </td>
     <td className="small">
       <GroupsNameContainer groupId={file.groupId} admins />

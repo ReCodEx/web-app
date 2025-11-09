@@ -109,17 +109,17 @@ const ExercisesListItem = ({
 
     <td className="text-nowrap">
       <DateTime
-        unixts={createdAt}
+        unixTs={createdAt}
         showOverlay
         showTime={false}
         overlayTooltipId={`created-tooltip-${id}`}
         customTooltip={
           <span>
             <FormattedMessage id="generic.created" defaultMessage="Created" />
-            : <DateTime unixts={createdAt} noWrap={false} />
+            : <DateTime unixTs={createdAt} noWrap={false} />
             <br />
             <FormattedMessage id="generic.updated" defaultMessage="Updated" />
-            : <DateTime unixts={updatedAt} noWrap={false} />
+            : <DateTime unixTs={updatedAt} noWrap={false} />
           </span>
         }
       />

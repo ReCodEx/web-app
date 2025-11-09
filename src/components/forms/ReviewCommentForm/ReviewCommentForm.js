@@ -123,7 +123,7 @@ class ReviewCommentForm extends Component {
                 <small className="float-end">
                   <UsersNameContainer userId={authorId} showEmail="icon" />
                   <span className="ms-3">
-                    <DateTime unixts={createdAt} showRelative />
+                    <DateTime unixTs={createdAt} showRelative />
                   </span>
                 </small>
               )}

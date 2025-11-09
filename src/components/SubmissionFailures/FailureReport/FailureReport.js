@@ -65,7 +65,7 @@ const FailureReport = ({ failure }) => (
   <>
     <Callout variant="danger" icon={<EvaluationFailedIcon />}>
       <span className="small float-end">
-        (<DateTime unixts={failure.createdAt} />)
+        (<DateTime unixTs={failure.createdAt} />)
       </span>
       <h4>
         <FormattedMessage
@@ -113,7 +113,7 @@ const FailureReport = ({ failure }) => (
     {Boolean(typeof failure === 'object' && failure.resolvedAt && failure.resolutionNote) && (
       <Callout variant="success" icon="fire-extinguisher">
         <span className="small float-end">
-          (<DateTime unixts={failure.resolvedAt} />)
+          (<DateTime unixTs={failure.resolvedAt} />)
         </span>
         <h4>
           <FormattedMessage

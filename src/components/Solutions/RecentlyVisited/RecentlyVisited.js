@@ -60,7 +60,7 @@ const RecentlyVisited = ({ selectedId, secondSelectedId = null, onSelect = null 
               </td>
               <td>#{attemptIndex}</td>
               <td>
-                <DateTime unixts={createdAt} />
+                <DateTime unixTs={createdAt} />
               </td>
             </tr>
           ))}

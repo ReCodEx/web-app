@@ -43,7 +43,7 @@ const ShadowAssignmentPointsDetail = ({ points = null, awardedAt = null, authorI
             <th>
               <FormattedMessage id="app.shadowAssignmentPointsDetail.awardedAt" defaultMessage="Awarded at" />:
             </th>
-            <td>{awardedAt !== null ? <DateTime unixts={awardedAt} showRelative /> : <span>&mdash;</span>}</td>
+            <td>{awardedAt !== null ? <DateTime unixTs={awardedAt} showRelative /> : <span>&mdash;</span>}</td>
           </tr>
         )}
 

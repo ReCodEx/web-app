@@ -19,7 +19,7 @@ const AttachmentFilesTableRow = ({ id, name, size, uploadedAt, removeFile, links
     </td>
     <td>{prettyPrintBytes(size)}</td>
     <td>
-      <DateTime unixts={uploadedAt} showRelative />
+      <DateTime unixTs={uploadedAt} showRelative />
     </td>
     <td>
       {removeFile && (

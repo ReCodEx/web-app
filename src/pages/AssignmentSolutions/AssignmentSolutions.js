@@ -154,7 +154,7 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
         className: 'text-start',
         comparator: ({ date: d1 }, { date: d2 }) => d2 - d1, // dates are implicitly in reversed order
         cellRenderer: (createdAt, idx) =>
-          createdAt && <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
+          createdAt && <DateTime unixTs={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
       }
     ),
 
@@ -482,7 +482,7 @@ class AssignmentSolutions extends Component {
                                   id="app.assignmentSolutions.plagiarismsDetected.time"
                                   defaultMessage="The latest plagiarism check ended at {date}."
                                   values={{
-                                    date: <DateTime unixts={assignment.plagiarismCheckedAt} compact />,
+                                    date: <DateTime unixTs={assignment.plagiarismCheckedAt} compact />,
                                   }}
                                 />
                               </>
@@ -495,7 +495,7 @@ class AssignmentSolutions extends Component {
                                 id="app.assignmentSolutions.plagiarismsChecked"
                                 defaultMessage="These assignment solutions were checked for plagiarisms at {date}. No similarities found."
                                 values={{
-                                  date: <DateTime unixts={assignment.plagiarismCheckedAt} compact />,
+                                  date: <DateTime unixTs={assignment.plagiarismCheckedAt} compact />,
                                 }}
                               />
                             </Callout>

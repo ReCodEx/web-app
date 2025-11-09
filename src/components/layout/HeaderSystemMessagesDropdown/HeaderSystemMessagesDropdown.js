@@ -56,7 +56,7 @@ const HeaderSystemMessagesDropdown = ({
                     <UsersNameContainer userId={message.authorId} isSimple />
                     &nbsp;
                     <DateTime
-                      unixts={message.visibleFrom}
+                      unixTs={message.visibleFrom}
                       showDate={false}
                       showTime={false}
                       showRelative={true}

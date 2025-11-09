@@ -25,8 +25,8 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
               id="app.assignment.syncRequired"
               defaultMessage="Exercise was updated at <strong>{exerciseUpdated}</strong>, but the assignment was synchronized with the exercise at <strong>{assignmentUpdated}</strong>!"
               values={{
-                exerciseUpdated: <DateTime unixts={syncInfo.updatedAt.exercise} emptyPlaceholder="??" />,
-                assignmentUpdated: <DateTime unixts={syncInfo.updatedAt.assignment} emptyPlaceholder="??" />,
+                exerciseUpdated: <DateTime unixTs={syncInfo.updatedAt.exercise} emptyPlaceholder="??" />,
+                assignmentUpdated: <DateTime unixTs={syncInfo.updatedAt.assignment} emptyPlaceholder="??" />,
                 strong: contents => <strong>{contents}</strong>,
               }}
             />
