@@ -226,7 +226,7 @@ class User extends Component {
                         <FormattedMessage id="app.user.accountCreatedAt" defaultMessage="Account Created At:" />
                       </td>
                       <td className="w-100">
-                        <DateTime unixts={user.privateData.createdAt} showRelative />
+                        <DateTime unixTs={user.privateData.createdAt} showRelative />
                       </td>
                     </tr>
 
@@ -238,7 +238,7 @@ class User extends Component {
                         <FormattedMessage id="app.user.lastAuthenticationAt" defaultMessage="Last Authentication At:" />
                       </td>
                       <td className="w-100">
-                        <DateTime unixts={user.privateData.lastAuthenticationAt} showRelative />
+                        <DateTime unixTs={user.privateData.lastAuthenticationAt} showRelative />
                       </td>
                     </tr>
 

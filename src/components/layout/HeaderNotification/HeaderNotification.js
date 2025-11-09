@@ -49,7 +49,7 @@ class HeaderNotification extends Component {
           overlay={
             <Tooltip id={`notification-${id}-tooltip`}>
               <span>
-                <DateTime unixts={Math.round(time / 1000)} />
+                <DateTime unixTs={Math.round(time / 1000)} />
                 <br />
                 {msg}
               </span>

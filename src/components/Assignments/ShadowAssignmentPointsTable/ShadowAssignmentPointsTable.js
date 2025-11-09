@@ -197,7 +197,7 @@ class ShadowAssignmentPointsTable extends Component {
                       />
                     </td>
                     <td className="text-center text-nowrap">{points !== null ? points : <span>&mdash;</span>}</td>
-                    <td>{awardedAt && <DateTime unixts={awardedAt} showRelative />}</td>
+                    <td>{awardedAt && <DateTime unixTs={awardedAt} showRelative />}</td>
                     <td>{safeGet(studentPoints, [student.id, 'note'], null)}</td>
                     <td className="shrink-col text-nowrap text-end">
                       {points === null ? (

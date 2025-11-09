@@ -28,7 +28,7 @@ const ScoreConfigInfo = ({ scoreConfig, testResults, canResubmit = false }) => {
           <p className="small text-end text-nowrap text-body-secondary pe-3">
             <FormattedMessage id="app.scoreConfigInfo.createdAt" defaultMessage="Configured at" />
             :&nbsp;
-            <DateTime unixts={scoreConfig.createdAt} showRelative />
+            <DateTime unixTs={scoreConfig.createdAt} showRelative />
           </p>
         </>
       ) : (

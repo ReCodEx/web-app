@@ -37,10 +37,10 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
           <tr key={exam.id} className={selected === String(exam.id) ? 'table-primary' : ''}>
             <td className="fw-bold">#{idx + 1}</td>
             <td>
-              <DateTime unixts={exam.begin} showSeconds />
+              <DateTime unixTs={exam.begin} showSeconds />
             </td>
             <td>
-              <DateTime unixts={exam.end} showSeconds />
+              <DateTime unixTs={exam.end} showSeconds />
             </td>
             <td>
               <em>

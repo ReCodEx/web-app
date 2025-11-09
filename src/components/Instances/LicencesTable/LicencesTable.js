@@ -43,7 +43,7 @@ const LicencesTable = ({ instance, licences }) => (
                   <SuccessOrFailureIcon success={isValid} />
                 </td>
                 <td>
-                  <DateTime unixts={validUntil} showTime={false} showRelative isDeadline />
+                  <DateTime unixTs={validUntil} showTime={false} showRelative isDeadline />
                 </td>
               </tr>
             ))}

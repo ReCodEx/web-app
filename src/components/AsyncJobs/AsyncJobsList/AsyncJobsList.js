@@ -63,10 +63,10 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                   )}
                 </td>
                 <td className="small text-nowrap align-baseline">
-                  <DateTime unixts={job.createdAt} showDate={false} showSeconds showOverlay />
+                  <DateTime unixTs={job.createdAt} showDate={false} showSeconds showOverlay />
                 </td>
                 <td className="small text-nowrap align-baseline">
-                  <DateTime unixts={job.scheduledAt} emptyPlaceholder="-" />
+                  <DateTime unixTs={job.scheduledAt} emptyPlaceholder="-" />
                 </td>
                 <td className="small text-nowrap align-baseline">
                   {job.startedAt ? (
@@ -78,7 +78,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                             <FormattedMessage id="app.asyncJobs.list.processInfo" defaultMessage="Processing info" />
                           </Popover.Header>
                           <Popover.Body>
-                            <DateTime unixts={job.startedAt} showSeconds showRelative />
+                            <DateTime unixTs={job.startedAt} showSeconds showRelative />
                             <br />
                             <FormattedMessage id="app.asyncJobs.list.worker" defaultMessage="Worker" />:{' '}
                             <code>{job.workerId}</code>
@@ -89,7 +89,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                       }>
                       {
                         <span>
-                          <DateTime unixts={job.startedAt} showDate={false} showSeconds />
+                          <DateTime unixTs={job.startedAt} showDate={false} showSeconds />
                         </span>
                       }
                     </OverlayTrigger>
@@ -98,7 +98,7 @@ const AsyncJobsList = ({ asyncJobs, abort = null, links: { ASSIGNMENT_DETAIL_URI
                   )}
                 </td>
                 <td className="small text-nowrap align-baseline">
-                  <DateTime unixts={job.finishedAt} emptyPlaceholder="-" showDate={false} showSeconds showOverlay />
+                  <DateTime unixTs={job.finishedAt} emptyPlaceholder="-" showDate={false} showSeconds showOverlay />
                 </td>
                 <td className="align-baseline">
                   {job.arguments && Object.keys(job.arguments).length > 0 ? (

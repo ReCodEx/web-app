@@ -79,10 +79,10 @@ const GroupInvitations = ({
                 <tr>
                   <td>{invitation.hostId && <UsersNameContainer userId={invitation.hostId} isSimple />}</td>
                   <td>
-                    <DateTime unixts={invitation.createdAt} />
+                    <DateTime unixTs={invitation.createdAt} />
                   </td>
                   <td>
-                    <DateTime unixts={invitation.expireAt} isDeadline />
+                    <DateTime unixTs={invitation.expireAt} isDeadline />
                   </td>
                   <td>
                     {invitation.note && (

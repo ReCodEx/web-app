@@ -122,7 +122,7 @@ const PipelinesListItem = ({
 
     {showCreatedAt && (
       <td>
-        <DateTime unixts={createdAt} showRelative />
+        <DateTime unixTs={createdAt} showRelative />
       </td>
     )}
 

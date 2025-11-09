@@ -101,7 +101,7 @@ const InterpolationDialog = ({
                       <FormText className="text-primary">
                         <strong className="me-2">Computed second deadline:</strong>
                         <DateTime
-                          unixts={extrapolateSecondDeadline(
+                          unixTs={extrapolateSecondDeadline(
                             firstDeadline,
                             maxPointsBeforeFirstDeadline,
                             interval,

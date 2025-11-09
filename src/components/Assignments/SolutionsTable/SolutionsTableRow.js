@@ -89,7 +89,7 @@ const SolutionsTableRow = ({
         </td>
 
         <td className="text-nowrap align-middle">
-          <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
+          <DateTime unixTs={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
 
         <td className="text-center text-nowrap align-middle">

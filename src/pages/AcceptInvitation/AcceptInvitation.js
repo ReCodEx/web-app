@@ -67,7 +67,7 @@ const AcceptInvitation = ({ acceptInvitation, links: { DASHBOARD_URI } }) => {
                   <FormattedMessage id="app.acceptInvitation.invitationCreated" defaultMessage="Invitation created" />:
                 </th>
                 <td>
-                  <DateTime unixts={token.iat} showRelative />
+                  <DateTime unixTs={token.iat} showRelative />
                 </td>
               </tr>
 
@@ -76,7 +76,7 @@ const AcceptInvitation = ({ acceptInvitation, links: { DASHBOARD_URI } }) => {
                   <FormattedMessage id="app.acceptInvitation.expireAt" defaultMessage="Token will expire at" />:
                 </th>
                 <td>
-                  <DateTime unixts={token.exp} showRelative isDeadline={!isValid} />
+                  <DateTime unixTs={token.exp} showRelative isDeadline={!isValid} />
                 </td>
               </tr>
             </tbody>

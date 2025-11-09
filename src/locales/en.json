@@ -2081,6 +2081,7 @@
   "generic.import": "Import",
   "generic.inUse": "in use",
   "generic.invertSelection": "Invert Selection",
+  "generic.justNow": "just now",
   "generic.lastUpdatedAt": "updated",
   "generic.load": "Load",
   "generic.loading": "Loading...",

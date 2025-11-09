@@ -48,11 +48,11 @@ const ShadowAssignmentsTableRow = ({
     </td>
 
     <td className="text-nowrap">
-      <DateTime unixts={createdAt} />
+      <DateTime unixTs={createdAt} />
     </td>
 
     <td className="text-nowrap">
-      <DateTime unixts={deadline} isDeadline />
+      <DateTime unixTs={deadline} isDeadline />
     </td>
 
     <td className="text-center">

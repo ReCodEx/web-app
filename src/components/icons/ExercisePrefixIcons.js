@@ -30,7 +30,7 @@ export const ExercisePrefixIcons = ({
           <FormattedMessage
             id="app.ExercisePrefixIcons.archivedAt"
             defaultMessage="Archived at {archivedAt}."
-            values={{ archivedAt: <DateTime unixts={archivedAt} /> }}
+            values={{ archivedAt: <DateTime unixTs={archivedAt} /> }}
           />
         }
       />

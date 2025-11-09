@@ -184,7 +184,7 @@ class AcceptGroupInvitation extends Component {
                                 :
                               </th>
                               <td>
-                                <DateTime unixts={invitation.expireAt} isDeadline showRelative />
+                                <DateTime unixTs={invitation.expireAt} isDeadline showRelative />
                               </td>
                             </tr>
                           </tbody>

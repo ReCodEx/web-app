@@ -99,7 +99,7 @@ const AssignmentDetails = ({
                   </Explanation>
                 </th>
                 <td>
-                  <DateTime unixts={createdAt} showRelative />
+                  <DateTime unixTs={createdAt} showRelative />
                 </td>
               </tr>
             )}
@@ -113,7 +113,7 @@ const AssignmentDetails = ({
                   <FormattedMessage id="app.assignment.visibleFrom" defaultMessage="Visible from" />:
                 </th>
                 <td>
-                  <DateTime unixts={visibleFrom} showRelative />
+                  <DateTime unixTs={visibleFrom} showRelative />
                 </td>
               </tr>
             )}
@@ -155,11 +155,11 @@ const AssignmentDetails = ({
                 )}
               </th>
               <td>
-                <DateTime unixts={firstDeadline} isDeadline showRelative />
+                <DateTime unixTs={firstDeadline} isDeadline showRelative />
                 {allowSecondDeadline && (
                   <>
                     <br />
-                    <DateTime unixts={secondDeadline} isDeadline showRelative />
+                    <DateTime unixTs={secondDeadline} isDeadline showRelative />
                   </>
                 )}
               </td>

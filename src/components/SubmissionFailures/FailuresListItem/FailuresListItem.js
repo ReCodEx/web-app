@@ -51,10 +51,10 @@ const FailuresListItem = ({
       {failure.assignmentSolutionId === null && failure.referenceSolutionId === null && <span>&mdash;</span>}
     </td>
     <td>
-      <DateTime unixts={failure.createdAt} />
+      <DateTime unixTs={failure.createdAt} />
     </td>
     <td>
-      <DateTime unixts={failure.resolvedAt} />
+      <DateTime unixTs={failure.resolvedAt} />
     </td>
     <td>{failure.resolutionNote ? <span>{failure.resolutionNote}</span> : <span>&mdash;</span>}</td>
     <td className="text-end">{createActions && createActions(id)}</td>

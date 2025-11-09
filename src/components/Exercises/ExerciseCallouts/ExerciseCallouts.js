@@ -198,7 +198,7 @@ const ExerciseCallouts = ({
         <FormattedMessage
           id="app.exercise.archivedDetailed"
           defaultMessage="The exercise was placed into an archived state (at {archivedAt}). Archived exercises are not listed by default, cannot be modified, and cannot be assigned."
-          values={{ archivedAt: <DateTime unixts={archivedAt} /> }}
+          values={{ archivedAt: <DateTime unixTs={archivedAt} /> }}
         />
       </Callout>
     )}

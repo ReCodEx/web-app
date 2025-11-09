@@ -98,7 +98,7 @@ class GroupExamPending extends Component {
                     <strong className="me-2">
                       <FormattedMessage id="app.groupExams.endAtLong" defaultMessage="Exam ends at" />:
                     </strong>
-                    <DateTime unixts={examEnd} showRelative />
+                    <DateTime unixTs={examEnd} showRelative />
                   </div>
 
                   <div className="text-body-secondary mb-1">
@@ -141,7 +141,7 @@ class GroupExamPending extends Component {
                           <strong className="me-2">
                             <FormattedMessage id="app.groupExams.endAtLong" defaultMessage="Exam ends at" />:
                           </strong>
-                          <DateTime unixts={examEnd} showRelative />
+                          <DateTime unixTs={examEnd} showRelative />
                         </div>
 
                         <p className="text-body-secondary small">
@@ -184,7 +184,7 @@ class GroupExamPending extends Component {
                     <FormattedMessage id="app.groupExams.beginAt" defaultMessage="Begins at" />:
                   </td>
                   <td className="px-2 py-1 text-nowrap">
-                    <DateTime unixts={examBegin} showRelative />
+                    <DateTime unixTs={examBegin} showRelative />
                   </td>
                   <td rowSpan={3} className="w-100 p-2 ps-5 text-body-secondary">
                     <p>
@@ -208,7 +208,7 @@ class GroupExamPending extends Component {
                     <FormattedMessage id="app.groupExams.endAt" defaultMessage="Ends at" />:
                   </td>
                   <td className="px-2 py-1 text-nowrap">
-                    <DateTime unixts={examEnd} showRelative />
+                    <DateTime unixTs={examEnd} showRelative />
                   </td>
                 </tr>
                 <tr>

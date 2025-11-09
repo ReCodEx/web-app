@@ -35,7 +35,7 @@ const ReferenceSolutionsTableRow = ({
       </tr>
       <tr>
         <td className="text-nowrap text-body-secondary small pt-0">
-          <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
+          <DateTime unixTs={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
         <td className="text-nowrap text-center shrink-col small pt-0">
           {rte ? <EnvironmentsListItem runtimeEnvironment={rte} /> : '-'}

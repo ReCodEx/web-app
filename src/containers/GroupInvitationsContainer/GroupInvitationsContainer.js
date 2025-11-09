@@ -146,7 +146,7 @@ class GroupInvitationsContainer extends Component {
                           <div className="mt-1">
                             <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:{' '}
                             <strong>
-                              <DateTime unixts={this.invitation.createdAt} />
+                              <DateTime unixTs={this.invitation.createdAt} />
                             </strong>
                           </div>
                           <div className="mt-1">

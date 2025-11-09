@@ -112,11 +112,11 @@ class CalendarTokens extends Component {
                     </td>
 
                     <td className="text-nowrap px-3">
-                      <DateTime unixts={calendar.createdAt} />
+                      <DateTime unixTs={calendar.createdAt} />
                     </td>
 
                     <td className="text-nowrap px-3">
-                      <DateTime unixts={calendar.expiredAt} />
+                      <DateTime unixTs={calendar.expiredAt} />
                     </td>
 
                     <td className="text-nowrap px-3">

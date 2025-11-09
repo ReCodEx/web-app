@@ -11,7 +11,7 @@ const Version = ({ version, createdAt, updatedAt }) => (
     {updatedAt !== createdAt && (
       <small className="text-body-secondary">
         <FormattedMessage id="generic.lastUpdatedAt" defaultMessage="updated" />{' '}
-        <DateTime unixts={updatedAt} showRelative />
+        <DateTime unixTs={updatedAt} showRelative />
       </small>
     )}
   </span>

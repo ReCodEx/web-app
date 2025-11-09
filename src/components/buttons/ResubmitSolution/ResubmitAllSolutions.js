@@ -62,20 +62,20 @@ const ResubmitAllSolutions = ({
                   <div className="small">
                     <p>
                       <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:{' '}
-                      <DateTime unixts={job.createdAt} showRelative />
+                      <DateTime unixTs={job.createdAt} showRelative />
                     </p>
 
                     {pendingJob && (
                       <p>
                         <FormattedMessage id="generic.startedAt" defaultMessage="Started at" />:{' '}
-                        <DateTime unixts={job.startedAt} emptyPlaceholder="-" showRelative />
+                        <DateTime unixTs={job.startedAt} emptyPlaceholder="-" showRelative />
                       </p>
                     )}
 
                     {!pendingJob && (
                       <p>
                         <FormattedMessage id="generic.finishedAt" defaultMessage="Finished at" />:{' '}
-                        <DateTime unixts={job.finishedAt} showRelative />
+                        <DateTime unixTs={job.finishedAt} showRelative />
                       </p>
                     )}
                     {!pendingJob && (

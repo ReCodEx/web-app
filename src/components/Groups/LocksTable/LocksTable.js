@@ -22,13 +22,13 @@ const LocksTable = ({ locks }) =>
             </td>
             <td>
               <LockIcon className="text-body-secondary" gapRight={2} />
-              <DateTime unixts={lock.createdAt} showSeconds />
+              <DateTime unixTs={lock.createdAt} showSeconds />
             </td>
             <td>
               {lock.unlockedAt && (
                 <>
                   <UnlockIcon className="text-warning" gapRight={2} />
-                  <DateTime unixts={lock.unlockedAt} showSeconds />
+                  <DateTime unixTs={lock.unlockedAt} showSeconds />
                 </>
               )}
             </td>

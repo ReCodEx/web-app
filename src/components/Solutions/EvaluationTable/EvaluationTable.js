@@ -57,7 +57,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
             </td>
             {e.evaluation && (
               <td>
-                <DateTime unixts={e.evaluation.evaluatedAt} showRelative showSeconds />
+                <DateTime unixTs={e.evaluation.evaluatedAt} showRelative showSeconds />
               </td>
             )}
             {e.evaluation && (

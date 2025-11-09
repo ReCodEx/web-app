@@ -157,7 +157,7 @@ class PendingReviewsList extends Component {
                               <td>
                                 <strong>#{solution.attemptIndex} </strong>
                                 <small className="ms-2 text-body-secondary">
-                                  (<DateTime unixts={solution.createdAt} />)
+                                  (<DateTime unixTs={solution.createdAt} />)
                                 </small>
                               </td>
 
@@ -207,7 +207,7 @@ class PendingReviewsList extends Component {
                                   <span>
                                     <ReviewIcon review={solution.review} className="text-danger me-2" />
                                     <small>
-                                      <DateTime unixts={solution.review.startedAt} />
+                                      <DateTime unixTs={solution.review.startedAt} />
                                     </small>
                                   </span>
                                 </OverlayTrigger>

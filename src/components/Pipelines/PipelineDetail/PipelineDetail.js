@@ -98,7 +98,7 @@ const PipelineDetail = ({
             <FormattedMessage id="generic.createdAt" defaultMessage="Created at" />:
           </th>
           <td>
-            <DateTime unixts={createdAt} showRelative />
+            <DateTime unixTs={createdAt} showRelative />
           </td>
         </tr>
 

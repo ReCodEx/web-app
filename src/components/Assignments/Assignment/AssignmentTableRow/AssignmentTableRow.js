@@ -128,12 +128,12 @@ const AssignmentTableRow = ({
       </td>
     )}
     <td className="text-nowrap">
-      <DateTime unixts={firstDeadline} isDeadline />
+      <DateTime unixTs={firstDeadline} isDeadline />
     </td>
 
     {showSecondDeadline && (
       <td className="text-nowrap">
-        <DateTime unixts={allowSecondDeadline ? secondDeadline : null} isDeadline />
+        <DateTime unixTs={allowSecondDeadline ? secondDeadline : null} isDeadline />
       </td>
     )}
 

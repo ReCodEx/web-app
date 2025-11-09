@@ -112,7 +112,7 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
         className: 'text-start',
         comparator: ({ date: d1 }, { date: d2 }) => d2 - d1, // dates are implicitly in reversed order
         cellRenderer: (createdAt, idx) =>
-          createdAt && <DateTime unixts={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
+          createdAt && <DateTime unixTs={createdAt} showOverlay overlayTooltipId={`datetime-${idx}`} />,
       }
     ),
 
