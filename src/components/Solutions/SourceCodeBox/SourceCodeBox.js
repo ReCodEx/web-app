@@ -48,6 +48,7 @@ const SourceCodeBox = ({
 }) => {
   const res = fileContentsSelector(parentId, entryName);
   const [clipboardCopied, setClipboardCopied] = useState(false);
+  const [onlyComments, setOnlyComments] = useState(false);
   return (
     <ResourceRenderer
       key={id}
@@ -239,7 +240,31 @@ const SourceCodeBox = ({
           noPadding
           unlimitedHeight
           collapsable
-          isOpen={!content.malformedCharacters}>
+          isOpen={!content.malformedCharacters}
+          customIcons={
+            reviewClosed && reviewComments && reviewComments.length > 0 ? (
+              <Icon
+                icon={onlyComments ? 'list-ul' : ['far', 'comment-dots']}
+                className="text-primary"
+                onClick={() => setOnlyComments(!onlyComments)}
+                tooltipId={`${id}-toggleComments`}
+                tooltipPlacement="bottom"
+                tooltip={
+                  onlyComments ? (
+                    <FormattedMessage
+                      id="app.solutionSourceCodes.showAllCode"
+                      defaultMessage="Show all lines of code"
+                    />
+                  ) : (
+                    <FormattedMessage
+                      id="app.solutionSourceCodes.showOnlyComments"
+                      defaultMessage="Show only comments and related code"
+                    />
+                  )
+                }
+              />
+            ) : null
+          }>
           {content.malformedCharacters ? (
             <pre>{content.content}</pre>
           ) : secondContent && !secondContent.malformedCharacters ? (
@@ -265,6 +290,7 @@ const SourceCodeBox = ({
               updateComment={updateComment}
               removeComment={removeComment}
               reviewClosed={reviewClosed}
+              onlyComments={reviewClosed && onlyComments}
             />
           )}
         </Box>

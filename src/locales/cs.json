@@ -1865,6 +1865,8 @@
   "app.solutionSourceCodes.reviewPendingNeedsClosing": "Vezměte prosím na vědomí, že komentáře v kódu nejsou viditelné autorovi řešení, dokud revizi neuzavřete. Při uzavření bude také autorovi odeslán email s oznámením.",
   "app.solutionSourceCodes.reviewSummary.title": "Shrnutí revize",
   "app.solutionSourceCodes.right": "Napravo",
+  "app.solutionSourceCodes.showAllCode": "Zobrazit všechny řádky kódu",
+  "app.solutionSourceCodes.showOnlyComments": "Zobrazit pouze komentáře a související kód",
   "app.solutionSourceCodes.title": "Přehled odevzdaných zdrojových souborů řešení",
   "app.solutionSourceCodes.titleDiff": "Srovnání zdrojových souborů dvou řešení",
   "app.solutionSourceCodes.tooLargeTooltip": "Soubor je příliš velký pro zobrazení náhledu, a proto byl oříznut.",

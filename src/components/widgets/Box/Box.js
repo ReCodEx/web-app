@@ -81,7 +81,7 @@ class Box extends Component {
           [`card-${type}`]: type && type.length > 0,
           [className]: className.length > 0,
         })}>
-        <Card.Header onClick={this.toggleDetails}>
+        <Card.Header onClick={!customIcons ? this.toggleDetails : null}>
           <Card.Title className={flexTitle ? 'd-flex justify-content-between float-none' : null}>
             {title}
 
@@ -103,11 +103,10 @@ class Box extends Component {
             </span>
           </Card.Title>
 
-          {customIcons && <span className={styles.customIcons}>{customIcons}</span>}
-
-          {collapsable && !customIcons && (
+          {(collapsable || customIcons) && (
             <div className="card-tools me-1">
-              <Icon icon={isOpen ? 'minus' : 'plus'} onClick={this.toggleDetails} />
+              {customIcons}
+              {collapsable && <Icon icon={isOpen ? 'minus' : 'plus'} gapLeft onClick={this.toggleDetails} />}
             </div>
           )}
         </Card.Header>
