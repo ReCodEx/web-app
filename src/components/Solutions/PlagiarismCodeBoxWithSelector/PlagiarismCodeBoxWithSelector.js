@@ -197,7 +197,7 @@ class PlagiarismCodeBoxWithSelector extends Component {
         solutionId={solutionId}
         download={download}
         fileContentsSelector={fileContentsSelector}
-        collapseable
+        collapsable
         isOpen={false}
         titleSuffix={
           <small className="text-body-secondary ms-3">

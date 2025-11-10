@@ -14,7 +14,7 @@ import './SourceCodeViewer.css';
 const SourceCodeComment = ({
   comment,
   authorView = false,
-  startEditting = null,
+  startEditing = null,
   removeComment = null,
   restrictCommentAuthor = null,
 }) => {
@@ -51,10 +51,10 @@ const SourceCodeComment = ({
         <span className="actions">
           {comment.removing && <LoadingIcon />}
 
-          {startEditting &&
+          {startEditing &&
             !comment.removing &&
             (!restrictCommentAuthor || restrictCommentAuthor === comment.author) && (
-              <EditIcon className="text-warning" gapRight={2} onClick={() => startEditting(comment)} />
+              <EditIcon className="text-warning" gapRight={2} onClick={() => startEditing(comment)} />
             )}
           {removeComment &&
             !comment.removing &&
@@ -84,7 +84,7 @@ const SourceCodeComment = ({
 
 SourceCodeComment.propTypes = {
   comment: PropTypes.object.isRequired,
-  startEditting: PropTypes.func,
+  startEditing: PropTypes.func,
   removeComment: PropTypes.func,
   authorView: PropTypes.bool,
   restrictCommentAuthor: PropTypes.string,

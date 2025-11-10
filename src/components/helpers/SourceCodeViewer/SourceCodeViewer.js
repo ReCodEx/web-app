@@ -30,6 +30,23 @@ const groupCommentsByLine = lruMemoize(comments => {
   return res;
 });
 
+/**
+ * Compute index of visible lines (+-2 lines around existing comments).
+ * @param {Object} comments - The comments object (keys are line numbers)
+ * @returns {Object} - The object where keys are line numbers to be visible, values are true.
+ *                     Disabled lines are not present (so their value is undefined).
+ */
+const getVisibleLines = lruMemoize(comments => {
+  const lines = {};
+  Object.keys(comments).forEach(line => {
+    const lineNum = parseInt(line);
+    for (let i = lineNum - 2; i <= lineNum + 2; ++i) {
+      lines[i] = true;
+    }
+  });
+  return lines;
+});
+
 class SourceCodeViewer extends React.Component {
   state = { activeLine: null, newComment: null, editComment: null, editInitialValues: null };
 
@@ -44,7 +61,7 @@ class SourceCodeViewer extends React.Component {
     }
   };
 
-  startEditting = ({ id, line, text, issue }) => {
+  startEditing = ({ id, line, text, issue }) => {
     this.setState({
       editComment: id,
       activeLine: line,
@@ -72,7 +89,7 @@ class SourceCodeViewer extends React.Component {
     text = text.trim();
     if (!text || !this.state.editComment) {
       this.closeForms();
-      return Promise.resove();
+      return Promise.resolve();
     }
 
     return updateComment({
@@ -91,10 +108,30 @@ class SourceCodeViewer extends React.Component {
       updateComment = null,
       removeComment = null,
       restrictCommentAuthor = null,
+      onlyComments = false,
     } = this.props;
     const comments = groupCommentsByLine(this.props.comments || []);
+    const visibleLines = onlyComments ? getVisibleLines(comments) : null;
+
+    let lastLineVisible = true; // used to properly display gaps (first hidden line after visible lines renders it)
+
     return rows.map((node, i) => {
       const lineNumber = i + 1;
+
+      // handle line hiding in onlyComments mode
+      if (visibleLines && !visibleLines[lineNumber]) {
+        if (lastLineVisible) {
+          lastLineVisible = false;
+          return (
+            <div key={`empty${lineNumber}`} className="p-2 text-center text-muted bg-light">
+              ...
+            </div>
+          );
+        }
+        return null;
+      }
+
+      lastLineVisible = true;
       return (
         <React.Fragment key={`cfrag${lineNumber}`}>
           {createElement({
@@ -128,7 +165,7 @@ class SourceCodeViewer extends React.Component {
                     comment={comment}
                     authorView={authorView}
                     restrictCommentAuthor={restrictCommentAuthor}
-                    startEditting={updateComment ? this.startEditting : null}
+                    startEditing={updateComment ? this.startEditing : null}
                     removeComment={removeComment}
                   />
                 )
@@ -155,7 +192,7 @@ class SourceCodeViewer extends React.Component {
   linePropsGenerator = lineNumber => ({
     'data-line': lineNumber,
     'data-line-active': this.state.activeLine && this.state.activeLine === lineNumber ? '1' : undefined,
-    onDoubleClick: this.props.addComment ? this.lineClickHandler : undefined,
+    onDoubleClick: this.props.addComment && !this.props.onlyComments ? this.lineClickHandler : undefined,
   });
 
   render() {
@@ -164,7 +201,11 @@ class SourceCodeViewer extends React.Component {
       <SyntaxHighlighter
         language={getPrismModeFromExtension(getFileExtensionLC(name))}
         style={vs}
-        className={addComment && !this.state.activeLine ? 'sourceCodeViewer addComment' : 'sourceCodeViewer'}
+        className={
+          addComment && !this.props.onlyComments && !this.state.activeLine
+            ? 'sourceCodeViewer addComment'
+            : 'sourceCodeViewer'
+        }
         showLineNumbers={true}
         showInlineLineNumbers={true}
         wrapLines={true}
@@ -192,6 +233,7 @@ SourceCodeViewer.propTypes = {
   authorView: PropTypes.bool,
   restrictCommentAuthor: PropTypes.string,
   reviewClosed: PropTypes.bool,
+  onlyComments: PropTypes.bool,
 };
 
 export default SourceCodeViewer;

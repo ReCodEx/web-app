@@ -56,7 +56,7 @@ class ReviewRequestsList extends Component {
         isOpen
         customIcons={
           solutionsState !== resourceStatus.PENDING &&
-          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} gapRight={2} />
+          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} />
         }>
         <>
           {solutionsState === resourceStatus.PENDING && (
@@ -80,8 +80,8 @@ class ReviewRequestsList extends Component {
               {Object.keys(solutions).map(groupId => (
                 <tbody key={groupId}>
                   <tr className="bg-light">
-                    <td className="shrink-col">
-                      <GroupIcon className="text-body-secondary" />
+                    <td className="icon-col">
+                      <GroupIcon />
                     </td>
                     <td colSpan={7}>
                       <GroupsNameContainer groupId={groupId} fullName translations links />

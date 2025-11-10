@@ -86,7 +86,7 @@ class PendingReviewsList extends Component {
         isOpen
         customIcons={
           solutionsState !== resourceStatus.PENDING &&
-          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} gapRight={2} />
+          refresh && <RefreshIcon className="text-primary" timid onClick={refresh} />
         }>
         <>
           {solutionsState === resourceStatus.PENDING && (
@@ -106,7 +106,7 @@ class PendingReviewsList extends Component {
           )}
 
           {solutionsState === resourceStatus.FULFILLED && (
-            <Table hover className="mb-0">
+            <Table hover className="card-table">
               {Object.keys(solutions).map(groupId => (
                 <tbody key={groupId}>
                   <tr className="bg-light">

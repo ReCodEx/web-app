@@ -26,7 +26,7 @@ class ReviewSummary extends Component {
     }).then(this.close);
   };
 
-  startEditting = ({ id, text, issue }) => {
+  startEditing = ({ id, text, issue }) => {
     this.setState({ edit: id, editInitialValues: { text, issue, suppressNotification: false } });
   };
 
@@ -82,7 +82,7 @@ class ReviewSummary extends Component {
                 comment={comment}
                 authorView={authorView}
                 restrictCommentAuthor={restrictCommentAuthor}
-                startEditting={updateComment ? this.startEditting : null}
+                startEditing={updateComment ? this.startEditing : null}
                 removeComment={removeComment}
               />
             )
