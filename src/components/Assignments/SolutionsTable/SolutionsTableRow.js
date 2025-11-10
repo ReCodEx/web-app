@@ -30,6 +30,7 @@ const SolutionsTableRow = ({
   selected = false,
   highlighted = false,
   showActionButtons = true,
+  showActionLinks = true,
   doubleclickAction = null,
   onSelect = null,
   links: { SOLUTION_DETAIL_URI_FACTORY, SOLUTION_SOURCE_CODES_URI_FACTORY },
@@ -121,16 +122,16 @@ const SolutionsTableRow = ({
         </td>
 
         {!compact && (
-          <td className="small" width="100%" colSpan={showActionButtons ? 1 : 2}>
+          <td className="small" width="100%" colSpan={showActionButtons || showActionLinks ? 1 : 2}>
             {noteElement}
           </td>
         )}
 
-        {showActionButtons && (
+        {(showActionButtons || showActionLinks) && (
           <td className="text-end align-middle text-nowrap" rowSpan={splitOnTwoLines ? 2 : 1}>
             {!selected && (
               <TheButtonGroup>
-                {permissionHints && permissionHints.viewDetail && (
+                {showActionLinks && permissionHints && permissionHints.viewDetail && (
                   <>
                     <OptionalTooltipWrapper
                       tooltip={<FormattedMessage id="generic.detail" defaultMessage="Detail" />}
@@ -158,11 +159,11 @@ const SolutionsTableRow = ({
                   </>
                 )}
 
-                {permissionHints && (permissionHints.setFlag || permissionHints.review) && (
+                {showActionButtons && permissionHints && (permissionHints.setFlag || permissionHints.review) && (
                   <SolutionActionsContainer id={id} captionAsTooltip={compact} showAllButtons dropdown />
                 )}
 
-                {permissionHints && permissionHints.delete && (
+                {showActionButtons && permissionHints && permissionHints.delete && (
                   <DeleteSolutionButtonContainer id={id} groupId={groupId} size="xs" captionAsTooltip={compact} />
                 )}
               </TheButtonGroup>
@@ -217,6 +218,7 @@ SolutionsTableRow.propTypes = {
   selected: PropTypes.bool,
   highlighted: PropTypes.bool,
   showActionButtons: PropTypes.bool,
+  showActionLinks: PropTypes.bool,
   doubleclickAction: PropTypes.func,
   onSelect: PropTypes.func,
   links: PropTypes.object,
