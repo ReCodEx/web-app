@@ -658,7 +658,7 @@ class AssignmentSolutions extends Component {
                                       assignmentId={assignmentId}
                                       groupId={assignment.groupId}
                                       runtimeEnvironments={runtimes}
-                                      noteMaxlen={160}
+                                      noteMaxLength={160}
                                       assignmentSolversLoading={assignmentSolversLoading}
                                       assignmentSolver={assignmentSolverSelector(assignmentId, user.id)}
                                     />

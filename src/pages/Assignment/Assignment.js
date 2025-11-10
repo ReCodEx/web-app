@@ -254,7 +254,7 @@ class Assignment extends Component {
                               assignmentId={assignment.id}
                               groupId={assignment.groupId}
                               runtimeEnvironments={runtimes}
-                              noteMaxlen={64}
+                              noteMaxLength={64}
                               compact
                               assignmentSolversLoading={assignmentSolversLoading}
                               assignmentSolver={assignmentSolverSelector(assignment.id, userId || loggedInUserId)}

@@ -25,7 +25,7 @@ const SolutionsTableRow = ({
   assignmentId,
   solution,
   runtimeEnvironment = null,
-  noteMaxlen = null,
+  noteMaxLength = null,
   compact = false,
   selected = false,
   highlighted = false,
@@ -48,11 +48,11 @@ const SolutionsTableRow = ({
   const trimmedNote = note && note.trim();
   const hasNote = Boolean(trimmedNote);
   const noteElement =
-    !hasNote || noteMaxlen === null || trimmedNote.length <= noteMaxlen ? (
+    !hasNote || noteMaxLength === null || trimmedNote.length <= noteMaxLength ? (
       trimmedNote
     ) : (
       <OverlayTrigger placement="left" overlay={<Tooltip id={id}>{trimmedNote}</Tooltip>}>
-        <span>{trimmedNote.substr(0, noteMaxlen - 3).trim()}&hellip;</span>
+        <span>{trimmedNote.substr(0, noteMaxLength - 3).trim()}&hellip;</span>
       </OverlayTrigger>
     );
   const splitOnTwoLines = hasNote && compact;
@@ -212,7 +212,7 @@ SolutionsTableRow.propTypes = {
   assignmentId: PropTypes.string.isRequired,
   groupId: PropTypes.string.isRequired,
   runtimeEnvironment: PropTypes.object,
-  noteMaxlen: PropTypes.number,
+  noteMaxLength: PropTypes.number,
   compact: PropTypes.bool.isRequired,
   selected: PropTypes.bool,
   highlighted: PropTypes.bool,

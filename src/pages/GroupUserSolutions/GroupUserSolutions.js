@@ -539,7 +539,7 @@ class GroupUserSolutions extends Component {
                                         runtimeEnvironments={assignmentEnvironmentsSelector(assignment.id).map(
                                           getJsData
                                         )}
-                                        noteMaxlen={160}
+                                        noteMaxLength={160}
                                         assignmentSolversLoading={assignmentSolversLoading}
                                         assignmentSolver={assignmentSolverSelector(assignment.id, userId)}
                                       />

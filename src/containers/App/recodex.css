@@ -169,6 +169,12 @@ button:focus {
   outline: 3px solid #6af!important;
 }
 
+.nav-tabs > .nav-item > button.nav-link:focus {
+  filter: none;
+  outline: none !important;
+  box-shadow: 0 -3px 2px 1px #e8f0ff!important;
+}
+
 a:focus {
   filter: contrast(120%) brightness(80%);
   text-shadow: 1px 1px 3px #666;
