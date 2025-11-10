@@ -28,6 +28,7 @@ const SolutionsTable = ({
   assignmentSolver = null,
   assignmentSolversLoading = false,
   showActionButtons = true,
+  showActionLinks = true,
   onSelect = null,
 }) => {
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const SolutionsTable = ({
                 </th>
               )}
 
-              {(!compact || showActionButtons) && (
+              {(!compact || showActionButtons || showActionLinks) && (
                 <td className="text-end text-body-secondary small">
                   {assignmentSolversLoading ? (
                     <LoadingIcon />
@@ -140,6 +141,7 @@ const SolutionsTable = ({
                   selected={id === selected}
                   highlighted={highlightsIndex.has(id)}
                   showActionButtons={showActionButtons}
+                  showActionLinks={showActionLinks}
                   onSelect={onSelect}
                   doubleclickAction={openOnDoubleclick ? navigate : null}
                 />
@@ -164,6 +166,7 @@ SolutionsTable.propTypes = {
   assignmentSolver: ImmutablePropTypes.map,
   assignmentSolversLoading: PropTypes.bool,
   showActionButtons: PropTypes.bool,
+  showActionLinks: PropTypes.bool,
   onSelect: PropTypes.func,
 };
 
