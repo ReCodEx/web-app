@@ -663,7 +663,7 @@ class SolutionSourceCodes extends Component {
                           assignmentId={assignmentId}
                           groupId={assignment.groupId}
                           runtimeEnvironments={runtimes}
-                          noteMaxlen={32}
+                          noteMaxLength={32}
                           selected={solution.id}
                           highlights={secondSolutionId ? wrapInArray(secondSolutionId) : EMPTY_ARRAY}
                           showActionButtons={false}

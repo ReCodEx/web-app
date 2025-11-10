@@ -550,7 +550,7 @@ class ResultsTable extends Component {
                         assignmentId={this.state.dialogAssignmentId}
                         groupId={group.id}
                         runtimeEnvironments={runtimeEnvironments}
-                        noteMaxlen={64}
+                        noteMaxLength={64}
                         compact
                       />
                     )}

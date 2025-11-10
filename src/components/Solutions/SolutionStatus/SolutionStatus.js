@@ -700,7 +700,7 @@ class SolutionStatus extends Component {
                 assignmentId={assignmentId}
                 groupId={groupId}
                 runtimeEnvironments={runtimeEnvironments}
-                noteMaxlen={32}
+                noteMaxLength={32}
                 selected={id}
                 assignmentSolversLoading={assignmentSolversLoading}
                 assignmentSolver={assignmentSolver}

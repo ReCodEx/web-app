@@ -21,7 +21,7 @@ const SolutionsTable = ({
   groupId,
   solutions,
   runtimeEnvironments,
-  noteMaxlen = null,
+  noteMaxLength = null,
   compact = false,
   selected = null,
   highlights = EMPTY_ARRAY,
@@ -135,7 +135,7 @@ const SolutionsTable = ({
                   solution={solution}
                   assignmentId={assignmentId}
                   groupId={groupId}
-                  noteMaxlen={noteMaxlen}
+                  noteMaxLength={noteMaxLength}
                   compact={compact}
                   selected={id === selected}
                   highlighted={highlightsIndex.has(id)}
@@ -157,7 +157,7 @@ SolutionsTable.propTypes = {
   groupId: PropTypes.string.isRequired,
   solutions: ImmutablePropTypes.list.isRequired,
   runtimeEnvironments: PropTypes.array,
-  noteMaxlen: PropTypes.number,
+  noteMaxLength: PropTypes.number,
   compact: PropTypes.bool,
   selected: PropTypes.string,
   highlights: PropTypes.array,
