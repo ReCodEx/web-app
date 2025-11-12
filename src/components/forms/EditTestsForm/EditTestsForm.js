@@ -157,7 +157,7 @@ class EditTestsForm extends Component {
 
           <Container fluid className="p-0">
             <Row className={style.relativeContainer}>
-              <Col xs={calculator === UNIVERSAL_ID ? 6 : 12} className="p-0">
+              <Col lg={calculator === UNIVERSAL_ID ? 6 : 12} className="p-0">
                 <FieldArray
                   name="tests"
                   component={EditTestsTest}
@@ -320,7 +320,7 @@ class EditTestsForm extends Component {
               {calculator === UNIVERSAL_ID && formValues && formValues.config && (
                 <div
                   className={classnames({
-                    'col-xs-6': this.state.expanded,
+                    'col-lg-6': this.state.expanded,
                     [style.rightPanel]: !this.state.expanded,
                     'ps-3': true,
                   })}>
