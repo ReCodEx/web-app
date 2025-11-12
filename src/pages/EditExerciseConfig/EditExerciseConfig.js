@@ -40,7 +40,7 @@ import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
 import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables.js';
-import { getExercisePielinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables.js';
+import { getExercisePipelinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables.js';
 import {
   getSupplementaryFilesForExercise,
   fetchSupplementaryFilesForExerciseStatus,
@@ -166,7 +166,7 @@ class EditExerciseConfig extends Component {
     }
   };
 
-  scoreConfigExtraData = null; // data kept oustide redux-form (for technical reasons) but required for submission
+  scoreConfigExtraData = null; // data kept outside redux-form (for technical reasons) but required for submission
 
   registerScoreConfigExtraData = data => {
     this.scoreConfigExtraData = data;
@@ -623,7 +623,7 @@ export default withRouter(
           exerciseTests: exerciseTestsSelector(exerciseId)(state),
           pipelines: pipelinesSelector(state),
           environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
-          pipelinesVariables: getExercisePielinesVariablesJS(exerciseId)(state),
+          pipelinesVariables: getExercisePipelinesVariablesJS(exerciseId)(state),
           supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),
           supplementaryFilesStatus: fetchSupplementaryFilesForExerciseStatus(state)(exerciseId),
         };
