@@ -27,6 +27,7 @@ import {
   fetchSolutionIfNeeded,
   fetchUsersSolutions,
   setNote,
+  fetchAssignmentSolvers,
   fetchAssignmentSolversIfNeeded,
 } from '../../redux/modules/solutions.js';
 import { fetchAssignmentSolutionFilesIfNeeded } from '../../redux/modules/solutionFiles.js';
@@ -112,7 +113,7 @@ class Solution extends Component {
       submitting,
       canSubmit,
       initCanSubmit,
-      reloadCanSubmit,
+      reloadAfterSubmit,
       params: { assignmentId },
       evaluations,
       runtimeEnvironments,
@@ -209,7 +210,7 @@ class Solution extends Component {
                                   id={assignment.id}
                                   onSubmit={submitSolution}
                                   presubmitValidation={presubmitSolution}
-                                  afterEvaluationStarts={reloadCanSubmit}
+                                  afterEvaluationStarts={() => reloadAfterSubmit(currentUser.id)}
                                   onReset={initCanSubmit}
                                   isOpen={submitting}
                                   solutionFilesLimit={assignment.solutionFilesLimit}
@@ -341,7 +342,7 @@ Solution.propTypes = {
   refreshSolutionEvaluations: PropTypes.func.isRequired,
   download: PropTypes.func.isRequired,
   initCanSubmit: PropTypes.func.isRequired,
-  reloadCanSubmit: PropTypes.func.isRequired,
+  reloadAfterSubmit: PropTypes.func.isRequired,
   intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
@@ -378,6 +379,10 @@ export default connect(
       ),
     download: (id, entry = null) => dispatch(download(id, entry)),
     initCanSubmit: userId => () => dispatch(init(userId, params.assignmentId)),
-    reloadCanSubmit: () => dispatch(canSubmit(params.assignmentId)),
+    reloadAfterSubmit: userId =>
+      Promise.all([
+        dispatch(canSubmit(params.assignmentId)),
+        dispatch(fetchAssignmentSolvers({ assignmentId: params.assignmentId, userId })),
+      ]),
   })
 )(injectIntl(withLinks(Solution)));
