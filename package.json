@@ -52,7 +52,7 @@
     "file-saver": "^2.0.5",
     "flat": "^6.0.1",
     "font-awesome-animation": "^1.1.1",
-    "glob": "^11.0.3",
+    "glob": "^11.1.0",
     "highlight.js": "^11.11.1",
     "immutable": "^5.1.4",
     "jwt-decode": "^4.0.0",
