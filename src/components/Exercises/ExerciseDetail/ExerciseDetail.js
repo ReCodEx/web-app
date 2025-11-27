@@ -22,7 +22,7 @@ import Icon, {
   TagIcon,
   VisibleIcon,
 } from '../../icons';
-import { getLocalizedDescription } from '../../../helpers/localizedData.js';
+import { getLocalizedDescription, replaceLinkKeysWithUrls } from '../../../helpers/localizedData.js';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import EnvironmentsList from '../../helpers/EnvironmentsList';
 import Version from '../../widgets/Version/Version.js';
@@ -33,13 +33,13 @@ const ExerciseDetail = ({
   authorId,
   adminsIds = [],
   groupsIds = [],
-  description = '',
   difficulty,
   createdAt,
   updatedAt,
   version,
   forkedFrom = null,
   localizedTexts,
+  localizedTextsLinks,
   runtimeEnvironments,
   tags,
   isPublic,
@@ -105,7 +105,9 @@ const ExerciseDetail = ({
             </span>
           </th>
           <td>
-            <Markdown source={getLocalizedDescription({ description, localizedTexts }, locale)} />
+            <Markdown
+              source={replaceLinkKeysWithUrls(getLocalizedDescription({ localizedTexts }, locale), localizedTextsLinks)}
+            />
           </td>
         </tr>
 
@@ -276,17 +278,16 @@ const ExerciseDetail = ({
 
 ExerciseDetail.propTypes = {
   id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   authorId: PropTypes.string.isRequired,
   adminsIds: PropTypes.array,
   groupsIds: PropTypes.array,
   difficulty: PropTypes.string.isRequired,
-  description: PropTypes.string,
   createdAt: PropTypes.number.isRequired,
   updatedAt: PropTypes.number.isRequired,
   version: PropTypes.number.isRequired,
   forkedFrom: PropTypes.object,
   localizedTexts: PropTypes.array.isRequired,
+  localizedTextsLinks: PropTypes.object,
   runtimeEnvironments: PropTypes.array.isRequired,
   tags: PropTypes.array.isRequired,
   isPublic: PropTypes.bool.isRequired,

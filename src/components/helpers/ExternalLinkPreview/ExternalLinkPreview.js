@@ -7,6 +7,7 @@ import { LoadingIcon } from '../../icons';
 import Markdown from '../../widgets/Markdown';
 import InsetPanel from '../../widgets/InsetPanel';
 import Callout from '../../widgets/Callout';
+import { replaceLinkKeysWithUrls } from '../../../helpers/localizedData.js';
 
 class ExternalLinkPreview extends Component {
   state = {
@@ -115,6 +116,7 @@ class ExternalLinkPreview extends Component {
 
   render() {
     const { url, pending, error, text, isMarkdown } = this.state;
+    const { localizedTextsLinks } = this.props;
     return url !== null ? (
       <div>
         {text && (
@@ -138,7 +140,15 @@ class ExternalLinkPreview extends Component {
 
         {error && <Callout variant="warning">{error}</Callout>}
 
-        {text && <div>{isMarkdown ? <Markdown source={text} /> : <pre style={{ marginTop: '20px' }}>{text}</pre>}</div>}
+        {text && (
+          <div>
+            {isMarkdown ? (
+              <Markdown source={replaceLinkKeysWithUrls(text, localizedTextsLinks)} />
+            ) : (
+              <pre className="mt-3">{replaceLinkKeysWithUrls(text, localizedTextsLinks)}</pre>
+            )}
+          </div>
+        )}
       </div>
     ) : (
       <div />
@@ -148,6 +158,7 @@ class ExternalLinkPreview extends Component {
 
 ExternalLinkPreview.propTypes = {
   url: PropTypes.string.isRequired,
+  localizedTextsLinks: PropTypes.object,
 };
 
 export default ExternalLinkPreview;
