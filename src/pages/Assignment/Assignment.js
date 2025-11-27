@@ -170,7 +170,10 @@ class Assignment extends Component {
 
                     {assignment.localizedTexts.length > 0 && (
                       <div>
-                        <LocalizedTexts locales={assignment.localizedTexts} />
+                        <LocalizedTexts
+                          locales={assignment.localizedTexts}
+                          localizedTextsLinks={assignment.localizedTextsLinks}
+                        />
                       </div>
                     )}
                   </Col>

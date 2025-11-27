@@ -1,6 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { API_BASE } from './config.js';
+
 export const knownLocalesNames = {
   cs: 'Čeština',
   en: 'English',
@@ -97,7 +99,7 @@ export const transformLocalizedTextsFormData = formData => {
 
 /**
  * Global template for localizedTexts validation.
- * Internal validation for different sets of properties is injedted as function.
+ * Internal validation for different sets of properties is injected as function.
  * @param errors {object} redux-form validation error object, where errors are collected
  * @param formData {array} localizedTexts form data
  * @param internalValidation {function} injected internal validator called on every enabled localized text
@@ -118,7 +120,7 @@ export const validateLocalizedTextsFormData = (errors, formData, internalValidat
     );
   }
 
-  // Internally validate all enabled verisons...
+  // Internally validate all enabled versions...
   const localizedTextsErrors = [];
   let localizedTextsErrorsCount = 0;
   formData
@@ -135,4 +137,17 @@ export const validateLocalizedTextsFormData = (errors, formData, internalValidat
   }
 
   return errors;
+};
+
+export const replaceLinkKeysWithUrls = (text, linksMap) => {
+  if (!linksMap) {
+    return text;
+  }
+
+  let replacedText = text;
+  Object.keys(linksMap).forEach(linkKey => {
+    const url = API_BASE + '/uploaded-files/link/' + linksMap[linkKey];
+    replacedText = replacedText.replaceAll(`%%${linkKey}%%`, url);
+  });
+  return replacedText;
 };

@@ -8,12 +8,12 @@ import Icon from '../../icons';
 import Markdown from '../../widgets/Markdown';
 import Callout from '../../widgets/Callout';
 import InsetPanel from '../../widgets/InsetPanel';
-import { knownLocales } from '../../../helpers/localizedData.js';
+import { knownLocales, replaceLinkKeysWithUrls } from '../../../helpers/localizedData.js';
 import { UrlContext } from '../../../helpers/contexts.js';
 
 import './LocalizedTexts.css';
 
-const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
+const LocalizedTexts = ({ locales = [], noLocalesMessage = null, localizedTextsLinks = null }) => {
   const localeTabs = knownLocales
     .map(locale => locales.find(l => l.locale === locale))
     .filter(tabData => tabData && (tabData.text || tabData.link || tabData.studentHint));
@@ -70,7 +70,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                       </div>
                     )}
 
-                    {text.trim() !== '' && <Markdown source={text} />}
+                    {text.trim() !== '' && <Markdown source={replaceLinkKeysWithUrls(text, localizedTextsLinks)} />}
 
                     {!text.trim() && !link && (
                       <Callout variant="warning" className="m-3">
@@ -87,7 +87,7 @@ const LocalizedTexts = ({ locales = [], noLocalesMessage = null }) => {
                       <h4>
                         <FormattedMessage id="app.localizedTexts.studentHintHeading" defaultMessage="Hint" />
                       </h4>
-                      <Markdown source={studentHint} />
+                      <Markdown source={replaceLinkKeysWithUrls(studentHint, localizedTextsLinks)} />
                     </Card.Footer>
                   )}
                 </Tab.Pane>
@@ -108,6 +108,7 @@ LocalizedTexts.propTypes = {
     })
   ),
   noLocalesMessage: PropTypes.any,
+  localizedTextsLinks: PropTypes.object,
 };
 
 export default LocalizedTexts;

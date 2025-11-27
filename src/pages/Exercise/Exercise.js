@@ -161,7 +161,14 @@ class Exercise extends Component {
             <Row>
               <Col xl={6}>
                 <ExerciseDetail {...exercise} forkedFrom={forkedFrom} locale={locale} className="d-flex d-xl-none" />
-                <div>{exercise.localizedTexts.length > 0 && <LocalizedTexts locales={exercise.localizedTexts} />}</div>
+                <div>
+                  {exercise.localizedTexts.length > 0 && (
+                    <LocalizedTexts
+                      locales={exercise.localizedTexts}
+                      localizedTextsLinks={exercise.localizedTextsLinks}
+                    />
+                  )}
+                </div>
               </Col>
               <Col xl={6}>
                 <ExerciseDetail {...exercise} forkedFrom={forkedFrom} locale={locale} className="d-none d-xl-flex" />
