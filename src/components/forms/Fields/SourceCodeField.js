@@ -74,7 +74,7 @@ class SourceCodeField extends Component {
       ...props
     } = this.props;
     return (
-      <FormGroup controlId={input.name} className="mb-3">
+      <FormGroup controlId={input.name} className="mb-1">
         {Boolean(label) && (
           <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
         )}

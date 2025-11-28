@@ -151,6 +151,7 @@ class EditExercise extends Component {
                     <EditExerciseForm
                       initialValues={prepareInitialValues(exercise)}
                       onSubmit={this.editExerciseSubmitHandler}
+                      localizedTextsLinks={exercise.localizedTextsLinks}
                     />
                   </Col>
                   <Col lg={6}>

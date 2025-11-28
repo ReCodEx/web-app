@@ -14,11 +14,12 @@ const isURL = url => {
   ) : null;
 };
 
-const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) => (
+const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled, previewPreprocessor }) => (
   <>
     <Field
       name={`${prefix}.text`}
       component={MarkdownTextAreaField}
+      previewPreprocessor={previewPreprocessor}
       disabled={!enabled}
       label={
         <FormattedMessage
@@ -47,6 +48,7 @@ const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled }) => (
 SharedExerciseAssignmentLocalizedFields.propTypes = {
   prefix: PropTypes.string.isRequired,
   enabled: PropTypes.bool.isRequired,
+  previewPreprocessor: PropTypes.func,
 };
 
 export default SharedExerciseAssignmentLocalizedFields;

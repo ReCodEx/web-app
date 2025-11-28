@@ -187,6 +187,7 @@ class EditAssignment extends Component {
                       showSendNotification={showSendNotification(assignment, visibility, visibleFrom)}
                       mergeJudgeLogs={assignment.mergeJudgeLogs}
                       canViewLimitRatios={canViewLimitRatios}
+                      localizedTextsLinks={assignment.localizedTextsLinks}
                     />
                   )}
                 </ResourceRenderer>

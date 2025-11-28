@@ -12,7 +12,7 @@ import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises.js';
-import { validateLocalizedTextsFormData } from '../../../helpers/localizedData.js';
+import { validateLocalizedTextsFormData, replaceLinkKeysWithUrls } from '../../../helpers/localizedData.js';
 import Explanation from '../../widgets/Explanation';
 import withLinks from '../../../helpers/withLinks.js';
 
@@ -37,7 +37,12 @@ const difficultyOptions = lruMemoize(formatMessage => [
   { key: 'hard', name: formatMessage(messages.hard) },
 ]);
 
+const previewPreprocessor = lruMemoize(
+  localizedTextsLinks => text => replaceLinkKeysWithUrls(text, localizedTextsLinks)
+);
+
 const EditExerciseForm = ({
+  localizedTextsLinks,
   initialValues: exercise,
   error,
   dirty,
@@ -86,7 +91,12 @@ const EditExerciseForm = ({
       </Callout>
     )}
 
-    <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="exercise" />
+    <FieldArray
+      name="localizedTexts"
+      component={LocalizedTextsFormField}
+      fieldType="exercise"
+      previewPreprocessor={previewPreprocessor(localizedTextsLinks)}
+    />
 
     <Field
       name="difficulty"
@@ -209,6 +219,7 @@ const EditExerciseForm = ({
 );
 
 EditExerciseForm.propTypes = {
+  localizedTextsLinks: PropTypes.object,
   error: PropTypes.any,
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
