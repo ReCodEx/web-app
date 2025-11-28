@@ -14,6 +14,7 @@ const TextField = ({
   ignoreDirty = false,
   append = null,
   prepend = null,
+  className = '',
   ...props
 }) => (
   <FormGroup controlId={input.name} className={`mb-3 ${groupClassName}`}>
@@ -26,13 +27,17 @@ const TextField = ({
         isInvalid={Boolean(error)}
         type={type}
         value={Array.isArray(value) ? value[0] : value}
-        className={classnames({
-          'form-control': true,
-          [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-          [styles.active]: active,
-          'text-danger': error,
-          'border-warning': !error && warning,
-        })}
+        className={
+          classnames({
+            'form-control': true,
+            [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+            [styles.active]: active,
+            'text-danger': error,
+            'border-warning': !error && warning,
+          }) +
+          ' ' +
+          (className || '')
+        }
       />
       {append || null}
     </InputGroup>
@@ -58,6 +63,7 @@ TextField.propTypes = {
   ignoreDirty: PropTypes.bool,
   append: PropTypes.element,
   prepend: PropTypes.element,
+  className: PropTypes.string,
 };
 
 export default TextField;

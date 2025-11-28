@@ -59,9 +59,48 @@ td.icon-col, th.icon-col {
   text-align: center !important;
 }
 
-.full-width-modal div.modal-dialog {
+.full-width-modal div.modal-dialog, div.modal-dialog.full-width-modal {
   max-width: 95vw;
 }
+
+.full-screen-modal {
+  position: absolute !important;
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  top: 1vmax;
+  bottom: 1vmax;
+  left: 1vmax;
+  right: 1vmax;
+  margin: 0 !important;
+}
+
+.full-screen-modal .modal-content {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1vmax;
+}
+
+.full-screen-modal .modal-content > div:nth-child(2) {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-screen-modal .modal-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0!important;
+}
+
+.full-screen-modal .modal-body > *:last-child {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
 
 .third-width {
   width: 33%;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
+import { Form, FormControl, FormLabel } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import * as styles from './commonStyles.less';
@@ -12,9 +12,10 @@ const TextAreaField = ({
   label = null,
   children,
   ignoreDirty = false,
+  className = '',
   ...props
 }) => (
-  <FormGroup controlId={input.name} className="mb-3">
+  <>
     {Boolean(label) && (
       <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
     )}
@@ -24,18 +25,22 @@ const TextAreaField = ({
       as="textarea"
       rows={8}
       isInvalid={Boolean(error)}
-      className={classnames({
-        'form-control': true,
-        [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
-        [styles.active]: active,
-        'border-danger': error,
-        'border-warning': !error && warning,
-      })}
+      className={
+        classnames({
+          'form-control': true,
+          [styles.dirty]: dirty && !ignoreDirty && !error && !warning,
+          [styles.active]: active,
+          'border-danger': error,
+          'border-warning': !error && warning,
+        }) +
+        ' ' +
+        (className || '')
+      }
     />
     {error && <Form.Text className="text-danger"> {error} </Form.Text>}
     {!error && warning && <Form.Text className="text-warning"> {warning} </Form.Text>}
     {children}
-  </FormGroup>
+  </>
 );
 
 TextAreaField.propTypes = {
@@ -52,6 +57,7 @@ TextAreaField.propTypes = {
     warning: PropTypes.any,
   }).isRequired,
   ignoreDirty: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default TextAreaField;

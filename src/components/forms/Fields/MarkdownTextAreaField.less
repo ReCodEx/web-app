@@ -12,3 +12,41 @@
   text-align: center;
   padding-bottom: 0.75rem;
 }
+
+.clickable {
+  cursor: pointer;
+  position: relative;
+}
+
+.clickable:hover {
+  background: #eeeee0;
+  border-color: #eec;
+  box-shadow: 0 0 3px #ffa;
+}
+
+.clickable .editIcon {
+  position: absolute;
+  text-rendering: auto;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  opacity: 0;
+}
+.clickable:hover .editIcon{
+  opacity: 0.3;
+}
+
+.editorToggle {
+  margin-top: 0.20rem;
+  position: absolute;
+  right: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.textAreaModal {
+  margin: 0;
+  resize: none;
+  height: calc(90vh - 6rem);
+}
