@@ -5,6 +5,7 @@ import { Field } from 'redux-form';
 
 import InsetPanel from '../../widgets/InsetPanel';
 import { MarkdownTextAreaField, CheckboxField } from '../Fields';
+import { PREVIEW_INLINE } from '../Fields/MarkdownTextAreaField.js';
 
 const LocalizedSystemMessageFormField = ({ prefix, data: enabled }) => (
   <InsetPanel>
@@ -23,7 +24,7 @@ const LocalizedSystemMessageFormField = ({ prefix, data: enabled }) => (
     <Field
       name={`${prefix}.text`}
       component={MarkdownTextAreaField}
-      inlineMarkdownPreview
+      preview={PREVIEW_INLINE}
       disabled={!enabled}
       label={
         <FormattedMessage

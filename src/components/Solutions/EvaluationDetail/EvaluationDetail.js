@@ -13,7 +13,7 @@ const EvaluationDetail = ({
   evaluation,
   maxPoints = null,
   isDebug,
-  viewResumbissions = false,
+  viewResubmissions = false,
   showScoreDetail = null,
   referenceSolution = false,
 }) => (
@@ -118,7 +118,7 @@ const EvaluationDetail = ({
           </tr>
         )}
 
-        {viewResumbissions && (
+        {viewResubmissions && (
           <tr>
             <td className="icon-col">
               <BugIcon />
@@ -146,7 +146,7 @@ EvaluationDetail.propTypes = {
   evaluation: PropTypes.object,
   maxPoints: PropTypes.number,
   isDebug: PropTypes.bool.isRequired,
-  viewResumbissions: PropTypes.bool,
+  viewResubmissions: PropTypes.bool,
   showScoreDetail: PropTypes.func,
   referenceSolution: PropTypes.bool,
 };

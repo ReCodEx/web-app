@@ -1,57 +1,88 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { Form, Row, Col, Modal } from 'react-bootstrap';
+import { Form, FormLabel, Row, Col, Modal } from 'react-bootstrap';
 
+import TextAreaField from './TextAreaField.js';
 import Markdown from '../../widgets/Markdown';
 import Icon from '../../icons';
 import SourceCodeField from './SourceCodeField.js';
 import OnOffCheckbox from '../OnOffCheckbox';
 import * as styles from './MarkdownTextAreaField.less';
 
+export const PREVIEW_INLINE = 'inline';
+export const PREVIEW_MODAL = 'modal';
+export const PREVIEW_FIRST = 'first';
+
 class MarkdownTextAreaField extends Component {
   state = {
-    showPreview: this.props.showPreview || false,
+    show: this.props.show || false,
+    editor: true,
   };
 
   shouldComponentUpdate() {
     return true;
   }
 
-  toggleShowPreview = e => {
-    this.setState({ showPreview: !this.state.showPreview });
+  toggleShowState = () => {
+    this.setState({ show: !this.state.show });
   };
 
-  showPreview = () => {
-    this.setState({ showPreview: true });
+  showDialog = () => {
+    this.setState({ show: true });
   };
 
-  hidePreview = () => {
-    this.setState({ showPreview: false });
+  hideDialog = () => {
+    this.setState({ show: false });
+  };
+
+  toggleEditorState = () => {
+    this.setState({ editor: !this.state.editor });
   };
 
   render() {
     const {
+      meta: { error, warning },
+      label = null,
       input: { name, value },
       disabled,
-      hideMarkdownPreview = false,
-      inlineMarkdownPreview = false,
+      preview = PREVIEW_MODAL,
       previewPreprocessor = null,
     } = this.props;
-    const { showPreview } = this.state;
+    const { show, editor } = this.state;
     return (
       <div>
-        <SourceCodeField {...this.props} mode="markdown" readOnly={disabled} />
-        {!hideMarkdownPreview && (
+        {preview !== PREVIEW_FIRST ? (
+          <SourceCodeField {...this.props} mode="markdown" readOnly={disabled} />
+        ) : (
+          <>
+            {Boolean(label) && (
+              <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
+            )}
+            <div
+              className={`${styles.preview} ${value.length === 0 ? styles.previewEmpty : ''} ${styles.clickable} mb-3`}
+              onDoubleClick={this.showDialog}>
+              <Icon icon="pencil" className={styles.editIcon} />
+              {value.length === 0 && (
+                <>
+                  (<FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
+                </>
+              )}
+              <Markdown source={previewPreprocessor ? previewPreprocessor(value) : value} />
+            </div>
+          </>
+        )}
+
+        {(preview === true || preview === PREVIEW_MODAL || preview === PREVIEW_INLINE) && (
           <>
             <Row className="mb-3">
               <Col sm={4}>
-                {inlineMarkdownPreview ? (
-                  <OnOffCheckbox name={`${name}.togglePreview`} checked={showPreview} onChange={this.toggleShowPreview}>
+                {preview === PREVIEW_INLINE ? (
+                  <OnOffCheckbox name={`${name}.togglePreview`} checked={show} onChange={this.toggleShowState}>
                     <FormattedMessage id="app.markdownTextArea.showPreviewCheckbox" defaultMessage="Preview" />
                   </OnOffCheckbox>
                 ) : (
-                  <strong className="text-primary timid clickable mb-2" onClick={this.showPreview}>
+                  <strong className="text-primary timid clickable mb-2" onClick={this.showDialog}>
                     <Icon icon="eye" gapRight />
                     <FormattedMessage id="app.markdownTextArea.showPreviewButton" defaultMessage="Show preview" />
                   </strong>
@@ -73,42 +104,74 @@ class MarkdownTextAreaField extends Component {
                 </Form.Text>
               </Col>
             </Row>
-
-            {showPreview && inlineMarkdownPreview && (
-              <div className={`mb-5 ${styles.preview} ${value.length === 0 ? styles.previewEmpty : ''}`}>
-                {value.length === 0 && (
-                  <>
-                    (<FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
-                  </>
-                )}
-                <Markdown source={previewPreprocessor ? previewPreprocessor(value) : value} />
-              </div>
-            )}
-
-            {!inlineMarkdownPreview && (
-              <Modal show={showPreview} backdrop="static" onHide={this.hidePreview} size="xl">
-                <Modal.Header closeButton>
-                  <Modal.Title>
-                    <FormattedMessage
-                      id="app.markdownTextArea.markdownPreviewModal.title"
-                      defaultMessage="Markdown preview"
-                    />
-                  </Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                  <div className={`${styles.preview} ${value.length === 0 ? styles.previewEmpty : ''}`}>
-                    {value.length === 0 && (
-                      <>
-                        (<FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
-                      </>
-                    )}
-                    <Markdown source={previewPreprocessor ? previewPreprocessor(value) : value} />
-                  </div>
-                </Modal.Body>
-              </Modal>
-            )}
           </>
+        )}
+
+        {show && preview === PREVIEW_INLINE && (
+          <div className={`mb-5 ${styles.preview} ${value.length === 0 ? styles.previewEmpty : ''}`}>
+            {value.length === 0 && (
+              <>
+                (<FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
+              </>
+            )}
+            <Markdown source={previewPreprocessor ? previewPreprocessor(value) : value} />
+          </div>
+        )}
+
+        {(preview === true || preview === PREVIEW_MODAL || preview === PREVIEW_FIRST) && (
+          <Modal
+            show={show}
+            backdrop="static"
+            onHide={this.hideDialog}
+            onEscapeKeyDown={this.hideDialog}
+            size="xl"
+            scrollable={preview !== PREVIEW_FIRST || editor}
+            dialogClassName={preview === PREVIEW_FIRST ? 'full-width-modal' : ''}>
+            <Modal.Header closeButton className="position-relative">
+              <Modal.Title>
+                {preview === PREVIEW_FIRST ? (
+                  <>{label}</>
+                ) : (
+                  <FormattedMessage
+                    id="app.markdownTextArea.markdownPreviewModal.title"
+                    defaultMessage="Markdown preview"
+                  />
+                )}
+              </Modal.Title>
+
+              {preview === PREVIEW_FIRST && (
+                <span className={styles.editorToggle}>
+                  <OnOffCheckbox name={`${name}.toggleEditor`} checked={editor} onChange={this.toggleEditorState}>
+                    <FormattedMessage id="app.markdownTextArea.showAceEditor" defaultMessage="Editor" />
+                  </OnOffCheckbox>
+                </span>
+              )}
+            </Modal.Header>
+
+            <Modal.Body className={preview === PREVIEW_FIRST && !editor ? 'p-1' : ''}>
+              {preview !== PREVIEW_FIRST ? (
+                <div className={`${styles.preview} ${value.length === 0 ? styles.previewEmpty : ''}`}>
+                  {value.length === 0 && (
+                    <>
+                      (<FormattedMessage id="app.markdownTextArea.empty" defaultMessage="Empty" />)
+                    </>
+                  )}
+                  <Markdown source={previewPreprocessor ? previewPreprocessor(value) : value} />
+                </div>
+              ) : editor ? (
+                <SourceCodeField
+                  {...this.props}
+                  label={null}
+                  mode="markdown"
+                  readOnly={disabled}
+                  minLines={25}
+                  maxLines={Infinity}
+                />
+              ) : (
+                <TextAreaField {...this.props} label={null} rows={null} className={styles.textAreaModal} />
+              )}
+            </Modal.Body>
+          </Modal>
         )}
       </div>
     );
@@ -116,14 +179,18 @@ class MarkdownTextAreaField extends Component {
 }
 
 MarkdownTextAreaField.propTypes = {
-  showPreview: PropTypes.string,
+  meta: PropTypes.shape({
+    error: PropTypes.any,
+    warning: PropTypes.any,
+  }),
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  show: PropTypes.string,
   input: PropTypes.shape({
     name: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
   }).isRequired,
   disabled: PropTypes.bool,
-  hideMarkdownPreview: PropTypes.bool,
-  inlineMarkdownPreview: PropTypes.bool,
+  preview: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   previewPreprocessor: PropTypes.func,
 };
 

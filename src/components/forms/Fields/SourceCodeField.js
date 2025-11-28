@@ -83,6 +83,10 @@ class SourceCodeField extends Component {
             <UserUIDataContext.Consumer>
               {({ vimMode = false, darkTheme = true, editorFontSize = 16 }) => (
                 <AceEditor
+                  width="100%"
+                  height="100%"
+                  minLines={5}
+                  maxLines={20}
                   {...props}
                   {...input}
                   mode={getAceModeFromExtension(mode)}
@@ -90,10 +94,6 @@ class SourceCodeField extends Component {
                   name={input.name}
                   tabIndex={tabIndex}
                   keyboardHandler={vimMode ? 'vim' : undefined}
-                  width="100%"
-                  height="100%"
-                  minLines={5}
-                  maxLines={20}
                   readOnly={readOnly}
                   fontSize={editorFontSize}
                   onBlur={this.blurHandler}

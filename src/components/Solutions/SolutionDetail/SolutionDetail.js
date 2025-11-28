@@ -163,7 +163,7 @@ class SolutionDetail extends Component {
                 evaluation={evaluation}
                 maxPoints={maxPoints}
                 isDebug={isDebug}
-                viewResumbissions={permissionHints.viewResubmissions}
+                viewResubmissions={permissionHints.viewResubmissions}
                 showScoreDetail={this.openScoreDialog}
                 referenceSolution={referenceSolution}
               />

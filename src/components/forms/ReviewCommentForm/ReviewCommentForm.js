@@ -140,7 +140,7 @@ class ReviewCommentForm extends Component {
                 component={MarkdownTextAreaField}
                 validate={textValidator}
                 focus
-                hideMarkdownPreview
+                preview={false}
                 getSnippet={this.getSnippet}
                 setSnippet={this.setSnippet}
                 commands={ACE_COMMANDS}
