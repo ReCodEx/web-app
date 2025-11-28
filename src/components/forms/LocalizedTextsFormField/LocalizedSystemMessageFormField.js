@@ -23,6 +23,7 @@ const LocalizedSystemMessageFormField = ({ prefix, data: enabled }) => (
     <Field
       name={`${prefix}.text`}
       component={MarkdownTextAreaField}
+      inlineMarkdownPreview
       disabled={!enabled}
       label={
         <FormattedMessage

@@ -8,14 +8,19 @@ import SharedExerciseAssignmentLocalizedFields from './SharedExerciseAssignmentL
 import { MarkdownTextAreaField } from '../Fields';
 import InsetPanel from '../../widgets/InsetPanel';
 
-const LocalizedExerciseFormField = ({ prefix, data: enabled, ignoreDirty = false }) => (
+const LocalizedExerciseFormField = ({ prefix, data: enabled, previewPreprocessor, ignoreDirty = false }) => (
   <InsetPanel>
     <SharedLocalizedFields prefix={prefix} enabled={enabled} ignoreDirty={ignoreDirty} />
-    <SharedExerciseAssignmentLocalizedFields prefix={prefix} enabled={enabled} />
+    <SharedExerciseAssignmentLocalizedFields
+      prefix={prefix}
+      enabled={enabled}
+      previewPreprocessor={previewPreprocessor}
+    />
 
     <Field
       name={`${prefix}.description`}
       component={MarkdownTextAreaField}
+      previewPreprocessor={previewPreprocessor}
       disabled={!enabled}
       label={
         <FormattedMessage
@@ -31,6 +36,7 @@ LocalizedExerciseFormField.propTypes = {
   prefix: PropTypes.string.isRequired,
   data: PropTypes.bool.isRequired,
   ignoreDirty: PropTypes.bool,
+  previewPreprocessor: PropTypes.func,
 };
 
 export default LocalizedExerciseFormField;

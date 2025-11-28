@@ -233,6 +233,7 @@ class ExerciseAssignments extends Component {
                                   submitButtonMessages={SUBMIT_BUTTON_MESSAGES}
                                   mergeJudgeLogs={exercise.mergeJudgeLogs}
                                   canViewLimitRatios={canViewLimitRatios}
+                                  localizedTextsLinks={exercise.localizedTextsLinks}
                                 />
                               </>
                             )}

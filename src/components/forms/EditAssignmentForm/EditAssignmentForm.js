@@ -21,6 +21,7 @@ import {
   getLocalizedTextsInitialValues,
   validateLocalizedTextsFormData,
   transformLocalizedTextsFormData,
+  replaceLinkKeysWithUrls,
 } from '../../../helpers/localizedData.js';
 import { safeGet, safeSet, EMPTY_ARRAY, hasPermissions } from '../../../helpers/common.js';
 import DeadlinesGraphDialog from './DeadlinesGraphDialog.js';
@@ -36,6 +37,10 @@ const sanitizeInputNumber = (value, defValue) => {
   const intValue = Number.parseInt(value);
   return Number.isNaN(intValue) ? defValue : intValue;
 };
+
+const previewPreprocessor = lruMemoize(
+  localizedTextsLinks => text => replaceLinkKeysWithUrls(text, localizedTextsLinks)
+);
 
 /**
  * Create initial values for the form. It expects one object as input argument.
@@ -351,6 +356,7 @@ class EditAssignmentForm extends Component {
       groups,
       editTexts = false,
       groupsAccessor = null,
+      localizedTextsLinks,
       initialValues: assignment,
       dirty,
       submitting,
@@ -899,7 +905,12 @@ class EditAssignmentForm extends Component {
               />
             </Callout>
 
-            <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="assignment" />
+            <FieldArray
+              name="localizedTexts"
+              component={LocalizedTextsFormField}
+              fieldType="assignment"
+              previewPreprocessor={previewPreprocessor(localizedTextsLinks)}
+            />
           </>
         )}
 
@@ -938,6 +949,7 @@ EditAssignmentForm.propTypes = {
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func,
   alreadyAssignedGroups: PropTypes.array,
+  localizedTextsLinks: PropTypes.object,
   initialValues: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
