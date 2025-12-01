@@ -271,6 +271,7 @@ class GroupStudents extends Component {
                         <Col xl={6}>
                           <Box
                             title={<FormattedMessage id="app.groupStudents.addStudent" defaultMessage="Add Student" />}
+                            unlimitedHeight
                             isOpen>
                             <AddStudent
                               instanceId={data.privateData.instanceId}

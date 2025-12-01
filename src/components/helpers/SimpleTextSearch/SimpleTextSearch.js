@@ -17,16 +17,26 @@ class SimpleTextSearch extends Component {
   }
 
   render() {
-    const { id = 'simpleTextSearch', onSubmit, isLoading, hasFailed } = this.props;
+    const { id = 'simpleTextSearch', label, onSubmit, isLoading, hasFailed, placeholder = null } = this.props;
 
     return (
       <form>
         <FormGroup className="mb-3">
           <FormLabel htmlFor={id}>
-            <FormattedMessage id="generic.search" defaultMessage="Search" />:
+            {label || (
+              <>
+                <FormattedMessage id="generic.search" defaultMessage="Search" />:
+              </>
+            )}
           </FormLabel>
           <InputGroup>
-            <FormControl id={id} type="text" value={this.state.query} onChange={this.queryChangeHandler} />
+            <FormControl
+              id={id}
+              type="text"
+              value={this.state.query}
+              onChange={this.queryChangeHandler}
+              placeholder={placeholder}
+            />
             <Button
               variant="secondary"
               type="submit"
@@ -53,6 +63,8 @@ SimpleTextSearch.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   hasFailed: PropTypes.bool,
+  placeholder: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.elementType]),
 };
 
 export default SimpleTextSearch;

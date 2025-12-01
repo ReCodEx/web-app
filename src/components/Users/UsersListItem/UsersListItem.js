@@ -17,7 +17,7 @@ const createEmailLink = user => {
 const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, createActions, loggedUserId = '' }) =>
   user ? (
     <tr>
-      <td>
+      <td className="px-1 text-secondary">
         {user.privateData && <UserRoleIcon showTooltip tooltipId={`role-${user.id}`} role={user.privateData.role} />}
       </td>
       <td>
@@ -48,7 +48,7 @@ const UsersListItem = ({ user, emailColumn = false, createdAtColumn = false, cre
         </td>
       )}
 
-      {createActions && <td className="text-end">{createActions(user)}</td>}
+      {createActions && <td className="text-end pe-1">{createActions(user)}</td>}
     </tr>
   ) : (
     <tr>
