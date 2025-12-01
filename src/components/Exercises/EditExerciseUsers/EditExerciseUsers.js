@@ -17,16 +17,17 @@ const ROLES_FILTER = knownRoles.filter(isSupervisorRole);
 const EditExerciseUsers = ({ exercise, instanceId }) => {
   return (
     <Box
-      type="warning"
-      title={<FormattedMessage id="app.editExercise.manageUsers" defaultMessage="Manage related users" />}
-      noPadding>
+      type={exercise.permissionHints.changeAuthor || exercise.permissionHints.updateAdmins ? 'warning' : undefined}
+      title={<FormattedMessage id="app.editExercise.authorAndAdminsTitle" defaultMessage="Author and Administrators" />}
+      noPadding
+      unlimitedHeight>
       <>
         <Table className="border-bottom mb-1">
           <tbody>
             <tr>
-              <td className="icon-col">
-                <AuthorIcon fixedWidth gapLeft={2} />
-              </td>
+              <th className="icon-col">
+                <AuthorIcon fixedWidth gapLeft={2} className="text-success" />
+              </th>
               <th>
                 <FormattedMessage id="generic.author" defaultMessage="Author" />:
               </th>
@@ -35,9 +36,9 @@ const EditExerciseUsers = ({ exercise, instanceId }) => {
               </td>
             </tr>
             <tr>
-              <td className="icon-col">
+              <th className="icon-col">
                 <AdminIcon fixedWidth gapLeft={2} />
-              </td>
+              </th>
               <th>
                 <FormattedMessage id="app.exercise.admins" defaultMessage="Administrators" />:
                 <Explanation id="admins">
@@ -67,7 +68,7 @@ const EditExerciseUsers = ({ exercise, instanceId }) => {
         </Table>
 
         {(exercise.permissionHints.changeAuthor || exercise.permissionHints.updateAdmins) && (
-          <div className="m-3 mt-1">
+          <div className="m-3">
             <AddUserContainer
               instanceId={instanceId}
               id={`add-exercise-user-${exercise.id}`}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
-import { Modal } from 'react-bootstrap';
+import { Modal, Row, Col } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -11,7 +11,7 @@ import LeaveJoinGroupButtonContainer from '../../../containers/LeaveJoinGroupBut
 import AddUserContainer from '../../../containers/AddUserContainer';
 import Button from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
-import Icon, { SuccessIcon } from '../../icons';
+import Icon, { InfoIcon, SuccessIcon } from '../../icons';
 
 import { arrayToObject, EMPTY_ARRAY } from '../../../helpers/common.js';
 import Callout from '../../widgets/Callout/Callout.js';
@@ -90,21 +90,32 @@ const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = f
 
       {inviteUser && (
         <>
-          <hr />
-          <div className="text-center">
-            <Button
-              size="sm"
-              variant="primary"
-              onClick={() => {
-                setUserInvited(false);
-                setMatchingUsers(EMPTY_ARRAY);
-                setDialogOpen(true);
-              }}>
-              <Icon icon="hand-holding-heart" gapRight={2} />
-              <FormattedMessage id="app.addStudent.inviteButton" defaultMessage="Invite to Register" />
-              ...
-            </Button>
-          </div>
+          <InsetPanel className="mb-1 mt-3">
+            <Row>
+              <Col xs={12} sm>
+                <small className="text-secondary">
+                  <InfoIcon gapRight={2} />
+                  <FormattedMessage
+                    id="app.addStudent.inviteExplanation"
+                    defaultMessage="If the student you want to add is not registered yet, you can send them an invitation link. It will allow them to register and automatically join this group."
+                  />
+                </small>
+              </Col>
+              <Col xs={false} sm="auto" className="align-self-center">
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    setUserInvited(false);
+                    setMatchingUsers(EMPTY_ARRAY);
+                    setDialogOpen(true);
+                  }}>
+                  <Icon icon="hand-holding-heart" gapRight={2} />
+                  <FormattedMessage id="app.addStudent.inviteButton" defaultMessage="Invite to Register" />
+                  ...
+                </Button>
+              </Col>
+            </Row>
+          </InsetPanel>
 
           <Modal show={dialogOpen} backdrop="static" onHide={() => setDialogOpen(false)} size="xl">
             <Modal.Header closeButton>

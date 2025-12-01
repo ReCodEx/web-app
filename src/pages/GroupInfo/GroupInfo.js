@@ -229,6 +229,7 @@ class GroupInfo extends Component {
 
                 {isAdminOrSuperadmin && !data.archived && (
                   <Box
+                    unlimitedHeight
                     title={
                       <FormattedMessage id="app.group.adminsView.addSupervisor" defaultMessage="Add Supervisor" />
                     }>

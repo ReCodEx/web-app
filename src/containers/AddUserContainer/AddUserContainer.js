@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { lruMemoize } from 'reselect';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
 import PaginationContainer from '../PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
@@ -11,7 +12,6 @@ import UsersList from '../../components/Users/UsersList';
 import { loggedInUserSelector } from '../../redux/selectors/users.js';
 import { getPaginationFilters } from '../../redux/selectors/pagination.js';
 import { EMPTY_OBJ } from '../../helpers/common.js';
-import { FormattedMessage } from 'react-intl';
 
 const LIMITS = [10];
 
@@ -26,7 +26,14 @@ const submitHandler = lruMemoize((rolesFilter, setFilters) => search => {
   return setFilters(filters);
 });
 
-const AddUserContainer = ({ id, filters, createActions, user, rolesFilter = null }) => (
+const messages = defineMessages({
+  emptyQueryPlaceholder: {
+    id: 'app.addUserContainer.emptyQuery',
+    defaultMessage: 'Enter a name or its part...',
+  },
+});
+
+const AddUserContainer = ({ id, filters, createActions, user, rolesFilter = null, intl: { formatMessage } }) => (
   <ResourceRenderer resource={user}>
     {user => (
       <PaginationContainer
@@ -35,19 +42,18 @@ const AddUserContainer = ({ id, filters, createActions, user, rolesFilter = null
         defaultOrderBy="name"
         limits={LIMITS}
         hideAllItems={!filters.search}
-        hideAllMessage={
-          <div className="text-body-secondary text-center">
-            <FormattedMessage
-              id="app.addUserContainer.emptyQuery"
-              defaultMessage="No results. Enter a search query..."
-            />
-          </div>
-        }
+        hideAllMessage={null}
         filtersCreator={(filters, setFilters) => (
           <SimpleTextSearch
             query={filters.search || ''}
             isLoading={setFilters === null}
             onSubmit={submitHandler(rolesFilter, setFilters)}
+            label={
+              <>
+                <FormattedMessage id="app.addUserContainer.searchUser" defaultMessage="Search user" />:
+              </>
+            }
+            placeholder={formatMessage(messages.emptyQueryPlaceholder)}
           />
         )}>
         {({ data }) => {
@@ -65,6 +71,7 @@ AddUserContainer.propTypes = {
   rolesFilter: PropTypes.array,
   user: ImmutablePropTypes.map.isRequired,
   filters: PropTypes.object.isRequired,
+  intl: PropTypes.object,
 };
 
 export default connect((state, { id }) => {
@@ -72,4 +79,4 @@ export default connect((state, { id }) => {
     user: loggedInUserSelector(state),
     filters: getPaginationFilters(id)(state) || EMPTY_OBJ,
   };
-})(AddUserContainer);
+})(injectIntl(AddUserContainer));

@@ -109,6 +109,7 @@
   "app.homepage.githubLink",
   "app.homepage.title",
   "app.instancesTable.admin",
+  "app.markdownTextArea.showAceEditor",
   "app.navigation.pipeline",
   "app.passwordStrength.ok",
   "app.passwordStrength.unknown",
@@ -160,6 +161,5 @@
   "app.systemMessagesList.text",
   "generic.detail",
   "generic.email",
-  "generic.role",
-  "app.markdownTextArea.showAceEditor"
+  "generic.role"
 ]

@@ -157,6 +157,13 @@ class EditExercise extends Component {
                   <Col lg={6}>
                     <AttachmentFilesTableContainer exercise={exercise} />
 
+                    {safeGet(loggedUser, ['privateData', 'instancesIds', 0]) && (
+                      <EditExerciseUsers
+                        exercise={exercise}
+                        instanceId={safeGet(loggedUser, ['privateData', 'instancesIds', 0])}
+                      />
+                    )}
+
                     <ExerciseGroups
                       showButtons
                       groupsIds={exercise.groupsIds}
@@ -170,14 +177,6 @@ class EditExercise extends Component {
                     <Box title={<FormattedMessage id="app.editExercise.editTags" defaultMessage="Edit Tags" />}>
                       <ExercisesTagsEditContainer exerciseId={exercise.id} />
                     </Box>
-
-                    {exercise.permissionHints.changeAuthor &&
-                      safeGet(loggedUser, ['privateData', 'instancesIds', 0]) && (
-                        <EditExerciseUsers
-                          exercise={exercise}
-                          instanceId={safeGet(loggedUser, ['privateData', 'instancesIds', 0])}
-                        />
-                      )}
                   </Col>
                 </Row>
               )}
