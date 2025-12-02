@@ -94,8 +94,8 @@ const reducer = handleActions(
 
     [additionalActionTypes.UPDATE_FILE_LINK_FULFILLED]: (state, { meta: { exerciseId, linkId }, payload }) =>
       state
-        .setIn(['resources', exerciseId, 'data', linkId], fromJS(payload))
-        .deleteIn(['resources', exerciseId, 'operation']),
+        .deleteIn(['resources', exerciseId, 'operation'])
+        .setIn(['resources', exerciseId, 'data', linkId], fromJS(payload)),
 
     // file link removal
     [actionTypes.REMOVE_FILE_LINK_PENDING]: (state, { meta: { exerciseId, linkId } }) =>
@@ -110,7 +110,7 @@ const reducer = handleActions(
         .setIn(['resources', exerciseId, 'operation', 'error'], fromJS(error)),
 
     [actionTypes.REMOVE_FILE_LINK_FULFILLED]: (state, { meta: { exerciseId, linkId } }) =>
-      state.deleteIn(['resources', exerciseId, 'data', linkId]).deleteIn(['resources', exerciseId, 'operation']),
+      state.deleteIn(['resources', exerciseId, 'operation']).deleteIn(['resources', exerciseId, 'data', linkId]),
   }),
   initialState
 );
