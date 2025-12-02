@@ -5,28 +5,21 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
 import FilesTableContainer from '../FilesTableContainer';
-import { SupplementaryFilesTableHeaderRow, SupplementaryFilesTableRow } from '../../components/Exercises/FilesTable';
+import { ExerciseFilesTableHeaderRow, ExerciseFilesTableRow } from '../../components/Exercises/FilesTable';
 
 import {
-  fetchSupplementaryFilesForPipeline,
+  fetchExerciseFilesForPipeline,
   addPipelineFiles,
   removePipelineFile,
 } from '../../redux/modules/pipelineFiles.js';
-import { downloadSupplementaryFile } from '../../redux/modules/files.js';
+import { download } from '../../redux/modules/files.js';
 
-import { getSupplementaryFilesForPipeline } from '../../redux/selectors/pipelineFiles.js';
+import { getExerciseFilesForPipeline } from '../../redux/selectors/pipelineFiles.js';
 
-const PipelineFilesTableContainer = ({
-  pipeline,
-  supplementaryFiles,
-  loadFiles,
-  addFiles,
-  removeFile,
-  downloadFile,
-}) => (
+const PipelineFilesTableContainer = ({ pipeline, exerciseFiles, loadFiles, addFiles, removeFile, downloadFile }) => (
   <FilesTableContainer
     uploadId={`pipeline-files-${pipeline.id}`}
-    files={supplementaryFiles}
+    files={exerciseFiles}
     loadFiles={loadFiles}
     addFiles={addFiles}
     removeFile={removeFile}
@@ -35,20 +28,20 @@ const PipelineFilesTableContainer = ({
     description={
       <FormattedMessage
         id="app.pipelineFilesTable.description"
-        defaultMessage="Supplementary files are files which can be referenced as remote file in pipeline configuration."
+        defaultMessage="Additional files which can be referenced as remote file in pipeline configuration."
       />
     }
-    HeaderComponent={SupplementaryFilesTableHeaderRow}
-    RowComponent={SupplementaryFilesTableRow}
+    HeaderComponent={ExerciseFilesTableHeaderRow}
+    RowComponent={ExerciseFilesTableRow}
   />
 );
 
 PipelineFilesTableContainer.propTypes = {
   pipeline: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    supplementaryFilesIds: PropTypes.array.isRequired,
+    filesIds: PropTypes.array.isRequired,
   }).isRequired,
-  supplementaryFiles: ImmutablePropTypes.map,
+  exerciseFiles: ImmutablePropTypes.map,
   loadFiles: PropTypes.func.isRequired,
   addFiles: PropTypes.func.isRequired,
   removeFile: PropTypes.func.isRequired,
@@ -58,16 +51,16 @@ PipelineFilesTableContainer.propTypes = {
 export default connect(
   (state, { pipeline }) => {
     return {
-      supplementaryFiles: getSupplementaryFilesForPipeline(pipeline.id)(state),
+      exerciseFiles: getExerciseFilesForPipeline(pipeline.id)(state),
     };
   },
   (dispatch, { pipeline }) => ({
-    loadFiles: () => dispatch(fetchSupplementaryFilesForPipeline(pipeline.id)),
+    loadFiles: () => dispatch(fetchExerciseFilesForPipeline(pipeline.id)),
     addFiles: files => dispatch(addPipelineFiles(pipeline.id, files)),
     removeFile: id => dispatch(removePipelineFile(pipeline.id, id)),
     downloadFile: (ev, id) => {
       ev.preventDefault();
-      dispatch(downloadSupplementaryFile(id));
+      dispatch(download(id));
     },
   })
 )(PipelineFilesTableContainer);

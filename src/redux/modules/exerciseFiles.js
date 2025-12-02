@@ -3,7 +3,7 @@ import factory, { initialState, createRecord, resourceStatus } from '../helpers/
 import { createApiAction } from '../middleware/apiMiddleware.js';
 import { downloadHelper } from '../helpers/api/download.js';
 
-const resourceName = 'supplementaryFiles';
+const resourceName = 'exerciseFiles';
 const { actions, reduceActions } = factory({ resourceName });
 
 /**
@@ -11,43 +11,43 @@ const { actions, reduceActions } = factory({ resourceName });
  */
 
 export const actionTypes = {
-  ADD_FILES: 'recodex/supplementaryFiles/ADD_FILES',
-  ADD_FILES_PENDING: 'recodex/supplementaryFiles/ADD_FILES_PENDING',
-  ADD_FILES_FULFILLED: 'recodex/supplementaryFiles/ADD_FILES_FULFILLED',
-  ADD_FILES_REJECTED: 'recodex/supplementaryFiles/ADD_FILES_REJECTED',
-  REMOVE_FILE: 'recodex/supplementaryFiles/REMOVE_FILE',
-  REMOVE_FILE_FULFILLED: 'recodex/supplementaryFiles/REMOVE_FILE_FULFILLED',
-  DOWNLOAD_SUPPLEMENTARY_ARCHIVE: 'recodex/supplementaryFiles/DOWNLOAD_SUPPLEMENTARY_ARCHIVE',
+  ADD_FILES: 'recodex/exerciseFiles/ADD_FILES',
+  ADD_FILES_PENDING: 'recodex/exerciseFiles/ADD_FILES_PENDING',
+  ADD_FILES_FULFILLED: 'recodex/exerciseFiles/ADD_FILES_FULFILLED',
+  ADD_FILES_REJECTED: 'recodex/exerciseFiles/ADD_FILES_REJECTED',
+  REMOVE_FILE: 'recodex/exerciseFiles/REMOVE_FILE',
+  REMOVE_FILE_FULFILLED: 'recodex/exerciseFiles/REMOVE_FILE_FULFILLED',
+  DOWNLOAD_EXERCISE_FILES_ARCHIVE: 'recodex/exerciseFiles/DOWNLOAD_EXERCISE_FILES_ARCHIVE',
 };
 
-export const fetchSupplementaryFilesForExerciseEndpoint = exerciseId => `/exercises/${exerciseId}/supplementary-files`;
+export const fetchFilesForExerciseEndpoint = exerciseId => `/exercises/${exerciseId}/files`;
 
-export const fetchSupplementaryFilesForExercise = exerciseId =>
+export const fetchFilesForExercise = exerciseId =>
   actions.fetchMany({
-    endpoint: fetchSupplementaryFilesForExerciseEndpoint(exerciseId),
+    endpoint: fetchFilesForExerciseEndpoint(exerciseId),
   });
 
-export const addSupplementaryFiles = (exerciseId, files) =>
+export const addExerciseFiles = (exerciseId, files) =>
   createApiAction({
     type: actionTypes.ADD_FILES,
-    endpoint: `/exercises/${exerciseId}/supplementary-files`,
+    endpoint: `/exercises/${exerciseId}/files`,
     method: 'POST',
     body: { files: files.map(({ id }) => id) },
     meta: { exerciseId },
   });
 
-export const removeSupplementaryFile = (exerciseId, fileId) =>
+export const removeExerciseFile = (exerciseId, fileId) =>
   createApiAction({
     type: actionTypes.REMOVE_FILE,
-    endpoint: `/exercises/${exerciseId}/supplementary-files/${fileId}`,
+    endpoint: `/exercises/${exerciseId}/files/${fileId}`,
     method: 'DELETE',
     meta: { exerciseId, fileId },
   });
 
-export const downloadSupplementaryArchive = downloadHelper({
-  actionType: actionTypes.DOWNLOAD_SUPPLEMENTARY_ARCHIVE,
+export const downloadExerciseFilesArchive = downloadHelper({
+  actionType: actionTypes.DOWNLOAD_EXERCISE_FILES_ARCHIVE,
   fetch: null,
-  endpoint: id => `/exercises/${id}/supplementary-files/download-archive`,
+  endpoint: id => `/exercises/${id}/files/download-archive`,
   fileNameSelector: (id, state) => `${id}.zip`,
   contentType: 'application/zip',
 });

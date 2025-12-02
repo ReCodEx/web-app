@@ -26,7 +26,7 @@ const validateExpectedOutput = value =>
 
 const EditExerciseSimpleConfigTestOutput = ({
   smartFillOutput,
-  supplementaryFiles,
+  exerciseFiles,
   test,
   testErrors,
   useOutFile,
@@ -67,7 +67,7 @@ const EditExerciseSimpleConfigTestOutput = ({
     <Field
       name={`${test}.expected-output`}
       component={SelectField}
-      options={supplementaryFiles}
+      options={exerciseFiles}
       addEmptyOption={true}
       validate={validateExpectedOutput}
       disabled={readOnly}
@@ -99,7 +99,7 @@ const EditExerciseSimpleConfigTestOutput = ({
 
 EditExerciseSimpleConfigTestOutput.propTypes = {
   smartFillOutput: PropTypes.func,
-  supplementaryFiles: PropTypes.array.isRequired,
+  exerciseFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   useOutFile: PropTypes.bool,

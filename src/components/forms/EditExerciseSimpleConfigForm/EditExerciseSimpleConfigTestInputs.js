@@ -11,7 +11,7 @@ import Confirm from '../../forms/Confirm';
 const EditExerciseSimpleConfigTestInputs = ({
   change,
   smartFillInputs,
-  supplementaryFiles,
+  exerciseFiles,
   test,
   testErrors,
   showInputFiles = false,
@@ -27,7 +27,7 @@ const EditExerciseSimpleConfigTestInputs = ({
       <Field
         name={`${test}.stdin-file`}
         component={SelectField}
-        options={supplementaryFiles}
+        options={exerciseFiles}
         addEmptyOption={true}
         disabled={readOnly}
         label={<FormattedMessage id="app.editExerciseSimpleConfigTests.inputStdin" defaultMessage="Std. input:" />}
@@ -38,7 +38,7 @@ const EditExerciseSimpleConfigTestInputs = ({
       <FieldArray
         name={`${test}.input-files`}
         component={ExpandingInputFilesField}
-        options={supplementaryFiles}
+        options={exerciseFiles}
         change={change}
         readOnly={readOnly}
         leftLabel={
@@ -80,7 +80,7 @@ const EditExerciseSimpleConfigTestInputs = ({
 EditExerciseSimpleConfigTestInputs.propTypes = {
   change: PropTypes.func.isRequired,
   smartFillInputs: PropTypes.func,
-  supplementaryFiles: PropTypes.array.isRequired,
+  exerciseFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   showInputFiles: PropTypes.bool,

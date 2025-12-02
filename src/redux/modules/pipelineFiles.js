@@ -18,15 +18,15 @@ export const actionTypes = {
   REMOVE_FILE_FULFILLED: 'recodex/pipelineFiles/REMOVE_FILE_FULFILLED',
 };
 
-export const fetchSupplementaryFilesForPipeline = pipelineId =>
+export const fetchExerciseFilesForPipeline = pipelineId =>
   actions.fetchMany({
-    endpoint: `/pipelines/${pipelineId}/supplementary-files`,
+    endpoint: `/pipelines/${pipelineId}/exercise-files`,
   });
 
 export const addPipelineFiles = (pipelineId, files) =>
   createApiAction({
     type: actionTypes.ADD_FILES,
-    endpoint: `/pipelines/${pipelineId}/supplementary-files`,
+    endpoint: `/pipelines/${pipelineId}/exercise-files`,
     method: 'POST',
     body: { files: files.map(({ id }) => id) },
     meta: { pipelineId },
@@ -35,7 +35,7 @@ export const addPipelineFiles = (pipelineId, files) =>
 export const removePipelineFile = (pipelineId, fileId) =>
   createApiAction({
     type: actionTypes.REMOVE_FILE,
-    endpoint: `/pipelines/${pipelineId}/supplementary-files/${fileId}`,
+    endpoint: `/pipelines/${pipelineId}/exercise-files/${fileId}`,
     method: 'DELETE',
     meta: { pipelineId, fileId },
   });

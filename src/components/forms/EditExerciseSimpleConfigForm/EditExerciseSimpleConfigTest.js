@@ -51,7 +51,7 @@ class EditExerciseSimpleConfigTest extends Component {
       extraFiles,
       compilationInitiallyOpened,
       smartFill,
-      supplementaryFiles,
+      exerciseFiles,
       test,
       testErrors,
       testName,
@@ -101,7 +101,7 @@ class EditExerciseSimpleConfigTest extends Component {
             extraFiles={extraFiles}
             compilationInitiallyOpened={compilationInitiallyOpened}
             smartFillCompilation={smartFill ? smartFill.compilation : null}
-            supplementaryFiles={supplementaryFiles}
+            exerciseFiles={exerciseFiles}
             test={test}
             testErrors={testErrors}
             readOnly={readOnly}
@@ -127,7 +127,7 @@ class EditExerciseSimpleConfigTest extends Component {
               <EditExerciseSimpleConfigTestInputs
                 change={change}
                 smartFillInputs={smartFill ? smartFill.input : null}
-                supplementaryFiles={supplementaryFiles}
+                exerciseFiles={exerciseFiles}
                 test={test}
                 testErrors={testErrors}
                 showInputFiles={showInputsFiles}
@@ -142,7 +142,7 @@ class EditExerciseSimpleConfigTest extends Component {
               <EditExerciseSimpleConfigTestExtraFiles
                 change={change}
                 smartFillExtraFiles={smartFill ? smartFill.extraFiles : null}
-                supplementaryFiles={supplementaryFiles}
+                exerciseFiles={exerciseFiles}
                 test={test}
                 testErrors={testErrors}
                 environmentId={environmentWithOverride}
@@ -166,7 +166,7 @@ class EditExerciseSimpleConfigTest extends Component {
             <Col md={6} lg={lgColSpan}>
               <EditExerciseSimpleConfigTestOutput
                 smartFillOutput={smartFill ? smartFill.output : null}
-                supplementaryFiles={supplementaryFiles}
+                exerciseFiles={exerciseFiles}
                 test={test}
                 testErrors={testErrors}
                 useOutFile={useOutFile}
@@ -180,7 +180,7 @@ class EditExerciseSimpleConfigTest extends Component {
             <Col md={6} lg={lgColSpan}>
               <EditExerciseSimpleConfigTestJudge
                 smartFillJudge={smartFill ? smartFill.judge : null}
-                supplementaryFiles={supplementaryFiles}
+                exerciseFiles={exerciseFiles}
                 test={test}
                 testErrors={testErrors}
                 useCustomJudge={useCustomJudge}
@@ -223,7 +223,7 @@ EditExerciseSimpleConfigTest.propTypes = {
   extraFiles: PropTypes.object,
   compilationInitiallyOpened: PropTypes.bool,
   smartFill: PropTypes.object,
-  supplementaryFiles: PropTypes.array.isRequired,
+  exerciseFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   testName: PropTypes.string.isRequired,

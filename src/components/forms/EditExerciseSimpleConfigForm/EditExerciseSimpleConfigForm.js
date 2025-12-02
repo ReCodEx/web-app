@@ -32,7 +32,7 @@ import {
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs.js';
 import { encodeNumId, createIndex, safeSet, safeGet, deepReduce } from '../../../helpers/common.js';
 
-const supplementaryFilesOptions = lruMemoize((files, locale) =>
+const filesOptions = lruMemoize((files, locale) =>
   files
     .sort((a, b) => a.name.localeCompare(b.name, locale))
     .filter((item, pos, arr) => arr.indexOf(item) === pos) // WTF?
@@ -82,7 +82,7 @@ const nonDefaultSuccessExitCodes = obj => {
  */
 const validateFileExists = (data, errors, path, existingFiles) => {
   if (!existingFiles) {
-    return; // safeguard if the supplementary files are not loaded yet
+    return; // safeguard if the exercise files are not loaded yet
   }
 
   let target = safeGet(data, path);
@@ -161,8 +161,8 @@ const validateFileList = (data, errors, path, pairs, existingFiles, emptyError, 
 
 class EditExerciseSimpleConfigForm extends Component {
   componentDidUpdate(prevProps) {
-    if (prevProps.supplementaryFiles !== this.props.supplementaryFiles) {
-      // enforce re-validation if supplementary files have changed
+    if (prevProps.exerciseFiles !== this.props.exerciseFiles) {
+      // enforce re-validation if exercise files have changed
       this.props.change('_validationHack', Date.now());
     }
   }
@@ -180,7 +180,7 @@ class EditExerciseSimpleConfigForm extends Component {
       dirty,
       formValues,
       formErrors,
-      supplementaryFiles,
+      exerciseFiles,
       environmentsWithEntryPoints,
       exercise,
       exerciseTests,
@@ -282,10 +282,10 @@ class EditExerciseSimpleConfigForm extends Component {
                     key={idx}
                     smartFill={
                       idx === 0 && exerciseTests.length > 1
-                        ? smartFill(test.id, exerciseTests, supplementaryFiles)
+                        ? smartFill(test.id, exerciseTests, exerciseFiles)
                         : undefined
                     }
-                    supplementaryFiles={supplementaryFilesOptions(supplementaryFiles, locale)}
+                    exerciseFiles={filesOptions(exerciseFiles, locale)}
                     test={'config.' + encodeNumId(test.id)}
                     testErrors={formErrors && formErrors[encodeNumId(test.id)]}
                     testName={test.name}
@@ -316,7 +316,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   invalid: PropTypes.bool,
   formValues: PropTypes.object,
   formErrors: PropTypes.object,
-  supplementaryFiles: PropTypes.array,
+  exerciseFiles: PropTypes.array,
   exercise: PropTypes.object,
   exerciseTests: PropTypes.array,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
@@ -325,9 +325,9 @@ EditExerciseSimpleConfigForm.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
-const validate = (formData, { exercise, supplementaryFiles }) => {
+const validate = (formData, { exercise, exerciseFiles }) => {
   const errors = {};
-  const existingFiles = createFilesNamesIndex(supplementaryFiles);
+  const existingFiles = createFilesNamesIndex(exerciseFiles);
 
   for (const testKey in formData.config) {
     const test = formData.config[testKey];
@@ -502,7 +502,7 @@ export default connect(
     form: FORM_NAME,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-    immutableProps: ['formValues', 'supplementaryFiles', 'exerciseTests', 'handleSubmit'],
+    immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
     validate,
     warn,
   })(injectIntl(EditExerciseSimpleConfigForm))

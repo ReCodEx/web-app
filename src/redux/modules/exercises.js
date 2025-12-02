@@ -8,7 +8,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { createApiAction } from '../middleware/apiMiddleware.js';
 
-import { actionTypes as supplementaryFilesActionTypes } from './supplementaryFiles.js';
+import { actionTypes as exerciseFilesActionTypes } from './exerciseFiles.js';
 import { actionTypes as attachmentFilesActionTypes } from './attachmentFiles.js';
 import { actionTypes as paginationActionTypes } from './pagination.js';
 
@@ -228,8 +228,8 @@ const reducer = handleActions(
 
     // Files ...
 
-    [supplementaryFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { exerciseId } }) =>
-      state.hasIn(['resources', exerciseId]) ? updateFiles(state, exerciseId, files, 'supplementaryFilesIds') : state,
+    [exerciseFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { exerciseId } }) =>
+      state.hasIn(['resources', exerciseId]) ? updateFiles(state, exerciseId, files, 'filesIds') : state,
 
     [attachmentFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { exerciseId } }) =>
       state.hasIn(['resources', exerciseId]) ? updateFiles(state, exerciseId, files, 'attachmentFilesIds') : state,

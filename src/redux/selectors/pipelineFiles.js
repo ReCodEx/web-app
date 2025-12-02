@@ -13,9 +13,9 @@ export const createGetPipelineFiles = ids =>
     pipelineFiles.filter(isReady).filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
   );
 
-export const getSupplementaryFilesForPipeline = lruMemoize(pipelineId =>
+export const getExerciseFilesForPipeline = lruMemoize(pipelineId =>
   createSelector([getPipeline(pipelineId), pipelineFilesSelector], (pipeline, pipelineFiles) => {
-    const ids = pipeline && pipeline.getIn(['data', 'supplementaryFilesIds']);
+    const ids = pipeline && pipeline.getIn(['data', 'filesIds']);
     return ids && pipelineFiles
       ? pipelineFiles.filter(isReady).filter(file => ids.indexOf(file.getIn(['data', 'id'])) >= 0)
       : EMPTY_MAP;

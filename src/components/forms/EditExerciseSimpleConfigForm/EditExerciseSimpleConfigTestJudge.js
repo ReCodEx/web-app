@@ -58,7 +58,7 @@ const validateCustomJudge = value =>
 
 const EditExerciseSimpleConfigTestJudge = ({
   smartFillJudge,
-  supplementaryFiles,
+  exerciseFiles,
   test,
   testErrors,
   useCustomJudge,
@@ -91,7 +91,7 @@ const EditExerciseSimpleConfigTestJudge = ({
       <Field
         name={`${test}.custom-judge`}
         component={SelectField}
-        options={supplementaryFiles}
+        options={exerciseFiles}
         addEmptyOption={true}
         validate={validateCustomJudge}
         disabled={readOnly}
@@ -192,7 +192,7 @@ const EditExerciseSimpleConfigTestJudge = ({
 
 EditExerciseSimpleConfigTestJudge.propTypes = {
   smartFillJudge: PropTypes.func,
-  supplementaryFiles: PropTypes.array.isRequired,
+  exerciseFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   useCustomJudge: PropTypes.bool,

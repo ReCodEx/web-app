@@ -33,7 +33,7 @@ class EditExerciseAdvancedConfigForm extends Component {
       invalid,
       dirty,
       formErrors,
-      supplementaryFiles,
+      exerciseFiles,
       exerciseTests,
       rawFill,
       readOnly = false,
@@ -92,7 +92,7 @@ class EditExerciseAdvancedConfigForm extends Component {
                   key={idx}
                   pipelines={pipelines}
                   pipelinesVariables={pipelinesVariables}
-                  supplementaryFiles={supplementaryFiles}
+                  exerciseFiles={exerciseFiles}
                   testName={test.name}
                   test={'config.' + encodeNumId(test.id)}
                   testErrors={formErrors && formErrors[encodeNumId(test.id)]}
@@ -122,7 +122,7 @@ EditExerciseAdvancedConfigForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   formErrors: PropTypes.object,
-  supplementaryFiles: PropTypes.array,
+  exerciseFiles: PropTypes.array,
   rawFill: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
   intl: PropTypes.object.isRequired,
@@ -149,6 +149,6 @@ export default connect(
     form: FORM_NAME,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-    immutableProps: ['formValues', 'supplementaryFiles', 'exerciseTests', 'handleSubmit'],
+    immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
   })(injectIntl(EditExerciseAdvancedConfigForm))
 );

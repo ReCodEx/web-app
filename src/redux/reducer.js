@@ -13,6 +13,7 @@ import emailVerification from './modules/emailVerification.js';
 import evaluationProgress from './modules/evaluationProgress.js';
 import exerciseConfigs from './modules/exerciseConfigs.js';
 import exerciseEnvironmentConfigs from './modules/exerciseEnvironmentConfigs.js';
+import exerciseFiles from './modules/exerciseFiles.js';
 import exercisePipelinesVariables from './modules/exercisePipelinesVariables.js';
 import exerciseScoreConfig from './modules/exerciseScoreConfig.js';
 import exerciseTests from './modules/exerciseTests.js';
@@ -46,7 +47,6 @@ import stats from './modules/stats.js';
 import submission from './modules/submission.js';
 import submissionEvaluations from './modules/submissionEvaluations.js';
 import submissionFailures from './modules/submissionFailures.js';
-import supplementaryFiles from './modules/supplementaryFiles.js';
 import upload from './modules/upload.js';
 import userCalendars from './modules/userCalendars.js';
 import users from './modules/users.js';
@@ -68,6 +68,7 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   evaluationProgress,
   exerciseConfigs,
   exerciseEnvironmentConfigs,
+  exerciseFiles,
   exercisePipelinesVariables,
   exerciseScoreConfig,
   exerciseTests,
@@ -101,7 +102,6 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   submission,
   submissionEvaluations,
   submissionFailures,
-  supplementaryFiles,
   systemMessages,
   upload,
   userCalendars,
