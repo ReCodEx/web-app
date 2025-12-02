@@ -14,11 +14,12 @@ import evaluationProgress from './modules/evaluationProgress.js';
 import exerciseConfigs from './modules/exerciseConfigs.js';
 import exerciseEnvironmentConfigs from './modules/exerciseEnvironmentConfigs.js';
 import exerciseFiles from './modules/exerciseFiles.js';
+import exerciseFilesLinks from './modules/exerciseFilesLinks.js';
 import exercisePipelinesVariables from './modules/exercisePipelinesVariables.js';
 import exerciseScoreConfig from './modules/exerciseScoreConfig.js';
 import exerciseTests from './modules/exerciseTests.js';
 import exercises from './modules/exercises.js';
-import exercisesAuthors from './modules/exercisesAuthors.js';
+import exerciseAuthors from './modules/exerciseAuthors.js';
 import files from './modules/files.js';
 import filesContent from './modules/filesContent.js';
 import groups from './modules/groups.js';
@@ -69,11 +70,12 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   exerciseConfigs,
   exerciseEnvironmentConfigs,
   exerciseFiles,
+  exerciseFilesLinks,
   exercisePipelinesVariables,
   exerciseScoreConfig,
   exerciseTests,
   exercises,
-  exercisesAuthors,
+  exerciseAuthors,
   files,
   filesContent,
   groups,

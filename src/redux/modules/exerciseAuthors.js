@@ -5,10 +5,10 @@ import { createRecord, resourceStatus, defaultNeedsRefetching, isLoading, getJsD
 import { selectedInstanceId } from '../selectors/auth.js';
 
 export const actionTypes = {
-  FETCH: 'recodex/exercisesAuthors/FETCH',
-  FETCH_PENDING: 'recodex/exercisesAuthors/FETCH_PENDING',
-  FETCH_FULFILLED: 'recodex/exercisesAuthors/FETCH_FULFILLED',
-  FETCH_REJECTED: 'recodex/exercisesAuthors/FETCH_REJECTED',
+  FETCH: 'recodex/exerciseAuthors/FETCH',
+  FETCH_PENDING: 'recodex/exerciseAuthors/FETCH_PENDING',
+  FETCH_FULFILLED: 'recodex/exerciseAuthors/FETCH_FULFILLED',
+  FETCH_REJECTED: 'recodex/exerciseAuthors/FETCH_REJECTED',
 };
 
 const createInitialState = (instanceId = null) =>
@@ -26,7 +26,7 @@ const fakeResult = item => ({
 
 const archivedPromises = {};
 
-export const fetchExercisesAuthors =
+export const fetchExerciseAuthors =
   (groupId = null) =>
   (dispatch, getState) => {
     const instanceId = selectedInstanceId(getState());
@@ -45,12 +45,12 @@ export const fetchExercisesAuthors =
     return archivedPromises[groupId];
   };
 
-export const fetchExercisesAuthorsIfNeeded = groupId => (dispatch, getState) => {
-  const item = getState().exercisesAuthors.getIn(itemPath(groupId));
+export const fetchExerciseAuthorsIfNeeded = groupId => (dispatch, getState) => {
+  const item = getState().exerciseAuthors.getIn(itemPath(groupId));
   if (!defaultNeedsRefetching(item)) {
     return fakeResult(item);
   }
-  return item && isLoading(item) ? archivedPromises[groupId] : fetchExercisesAuthors(groupId)(dispatch, getState);
+  return item && isLoading(item) ? archivedPromises[groupId] : fetchExerciseAuthors(groupId)(dispatch, getState);
 };
 
 /*
