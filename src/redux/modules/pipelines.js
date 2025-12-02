@@ -87,7 +87,7 @@ export const fetchPipelineExercises = id =>
 const reducer = handleActions(
   Object.assign({}, reduceActions, {
     [pipelineFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { pipelineId } }) =>
-      state.hasIn(['resources', pipelineId]) ? updateFiles(state, pipelineId, files, 'supplementaryFilesIds') : state,
+      state.hasIn(['resources', pipelineId]) ? updateFiles(state, pipelineId, files, 'filesIds') : state,
 
     [additionalActionTypes.SET_ENVIRONMENTS_FULFILLED]: (state, { payload }) =>
       state.setIn(

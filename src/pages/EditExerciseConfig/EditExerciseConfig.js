@@ -9,7 +9,7 @@ import { lruMemoize } from 'reselect';
 import Page from '../../components/layout/Page';
 import { ExerciseNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import SupplementaryFilesTableContainer from '../../containers/SupplementaryFilesTableContainer';
+import ExerciseFilesTableContainer from '../../containers/ExerciseFilesTableContainer';
 import EditTestsForm from '../../components/forms/EditTestsForm';
 import EditExerciseSimpleConfigForm from '../../components/forms/EditExerciseSimpleConfigForm';
 import EditExerciseAdvancedConfigForm from '../../components/forms/EditExerciseAdvancedConfigForm';
@@ -41,10 +41,7 @@ import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironment
 import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
 import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables.js';
 import { getExercisePipelinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables.js';
-import {
-  getSupplementaryFilesForExercise,
-  fetchSupplementaryFilesForExerciseStatus,
-} from '../../redux/selectors/supplementaryFiles.js';
+import { getFilesForExercise, fetchFilesForExerciseStatus } from '../../redux/selectors/exerciseFiles.js';
 import { isLoadingState } from '../../redux/helpers/resourceManager/status.js';
 
 import withLinks from '../../helpers/withLinks.js';
@@ -279,8 +276,8 @@ class EditExerciseConfig extends Component {
       pipelines,
       environmentsWithEntryPoints,
       pipelinesVariables,
-      supplementaryFiles,
-      supplementaryFilesStatus,
+      exerciseFiles,
+      exerciseFilesStatus,
       sendNotification,
     } = this.props;
 
@@ -399,7 +396,7 @@ class EditExerciseConfig extends Component {
                                 )}
                               </Col>
                               <Col lg={6}>
-                                <SupplementaryFilesTableContainer
+                                <ExerciseFilesTableContainer
                                   exercise={exercise}
                                   usedFiles={extractUsedFilesFromConfig(config)}
                                 />
@@ -485,8 +482,8 @@ class EditExerciseConfig extends Component {
                           <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
                             {(config, envConfig) => (
                               <ResourceRenderer
-                                resourceArray={supplementaryFiles}
-                                forceLoading={isLoadingState(supplementaryFilesStatus)}>
+                                resourceArray={exerciseFiles}
+                                forceLoading={isLoadingState(exerciseFilesStatus)}>
                                 {files =>
                                   tests.length > 0 ? (
                                     isSimple(exercise) ? (
@@ -496,7 +493,7 @@ class EditExerciseConfig extends Component {
                                         exercise={exercise}
                                         exerciseTests={tests}
                                         environmentsWithEntryPoints={environmentsWithEntryPoints}
-                                        supplementaryFiles={files}
+                                        exerciseFiles={files}
                                         onSubmit={this.transformAndSendConfigValuesCreator(
                                           transformSimpleConfigValues,
                                           pipelines,
@@ -512,7 +509,7 @@ class EditExerciseConfig extends Component {
                                         exerciseTests={tests}
                                         pipelines={pipelines}
                                         pipelinesVariables={pipelinesVariables}
-                                        supplementaryFiles={files}
+                                        exerciseFiles={files}
                                         initialValues={getAdvancedConfigInitValues(
                                           config,
                                           getFirstEnvironmentId(envConfig),
@@ -588,8 +585,8 @@ EditExerciseConfig.propTypes = {
   exercisePipelines: ImmutablePropTypes.map,
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   pipelinesVariables: PropTypes.array,
-  supplementaryFiles: ImmutablePropTypes.map,
-  supplementaryFilesStatus: PropTypes.string,
+  exerciseFiles: ImmutablePropTypes.map,
+  exerciseFilesStatus: PropTypes.string,
   links: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
@@ -624,8 +621,8 @@ export default withRouter(
           pipelines: pipelinesSelector(state),
           environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
           pipelinesVariables: getExercisePipelinesVariablesJS(exerciseId)(state),
-          supplementaryFiles: getSupplementaryFilesForExercise(exerciseId)(state),
-          supplementaryFilesStatus: fetchSupplementaryFilesForExerciseStatus(state)(exerciseId),
+          exerciseFiles: getFilesForExercise(exerciseId)(state),
+          exerciseFilesStatus: fetchFilesForExerciseStatus(state)(exerciseId),
         };
       },
       (dispatch, { params: { exerciseId } }) => ({

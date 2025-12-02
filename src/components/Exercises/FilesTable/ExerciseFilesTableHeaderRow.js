@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-const SupplementaryFilesTableHeaderRow = ({ viewOnly }) => (
+const ExerciseFilesTableHeaderRow = ({ viewOnly }) => (
   <tr>
     <th>
       <FormattedMessage id="app.uploadFiles.fileName" defaultMessage="File Name" />
@@ -17,8 +17,8 @@ const SupplementaryFilesTableHeaderRow = ({ viewOnly }) => (
   </tr>
 );
 
-SupplementaryFilesTableHeaderRow.propTypes = {
+ExerciseFilesTableHeaderRow.propTypes = {
   viewOnly: PropTypes.bool,
 };
 
-export default SupplementaryFilesTableHeaderRow;
+export default ExerciseFilesTableHeaderRow;

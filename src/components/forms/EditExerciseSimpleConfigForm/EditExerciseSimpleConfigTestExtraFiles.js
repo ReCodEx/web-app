@@ -11,7 +11,7 @@ import Confirm from '../../forms/Confirm';
 const EditExerciseSimpleConfigTestExtraFiles = ({
   change,
   smartFillExtraFiles,
-  supplementaryFiles,
+  exerciseFiles,
   test,
   testErrors,
   environmentId,
@@ -25,7 +25,7 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
     <FieldArray
       name={`${test}.extra-files.${environmentId}`}
       component={ExpandingInputFilesField}
-      options={supplementaryFiles}
+      options={exerciseFiles}
       change={change}
       readOnly={readOnly}
       leftLabel={
@@ -72,7 +72,7 @@ const EditExerciseSimpleConfigTestExtraFiles = ({
 EditExerciseSimpleConfigTestExtraFiles.propTypes = {
   change: PropTypes.func.isRequired,
   smartFillExtraFiles: PropTypes.func,
-  supplementaryFiles: PropTypes.array.isRequired,
+  exerciseFiles: PropTypes.array.isRequired,
   test: PropTypes.string.isRequired,
   testErrors: PropTypes.object,
   environmentId: PropTypes.string.isRequired,

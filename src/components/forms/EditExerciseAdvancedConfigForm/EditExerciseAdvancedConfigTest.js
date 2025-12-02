@@ -20,20 +20,20 @@ const validateFileName = value =>
     />
   ) : undefined;
 
-const prepareFilesOptions = lruMemoize((supplementaryFiles, locale) => {
-  const supplementaryFilesOptions = unique(supplementaryFiles.map(({ name }) => name))
+const prepareFilesOptions = lruMemoize((exerciseFiles, locale) => {
+  const filesOptions = unique(exerciseFiles.map(({ name }) => name))
     .sort((a, b) => a.localeCompare(b, locale))
     .map(name => ({
       key: name,
       name,
     }));
-  return supplementaryFilesOptions;
+  return filesOptions;
 });
 
 class EditExerciseAdvancedConfigTest extends Component {
   createField = (name, type) => {
     const {
-      supplementaryFiles,
+      exerciseFiles,
       readOnly = false,
       intl: { locale },
     } = this.props;
@@ -43,7 +43,7 @@ class EditExerciseAdvancedConfigTest extends Component {
     const commonProps = { name };
     if (baseType === 'remote-file') {
       commonProps.addEmptyOption = true;
-      commonProps.options = prepareFilesOptions(supplementaryFiles, locale);
+      commonProps.options = prepareFilesOptions(exerciseFiles, locale);
     } else {
       commonProps.maxLength = 64;
       if (type === 'file') {
@@ -166,7 +166,7 @@ class EditExerciseAdvancedConfigTest extends Component {
 EditExerciseAdvancedConfigTest.propTypes = {
   testName: PropTypes.string.isRequired,
   test: PropTypes.string.isRequired,
-  supplementaryFiles: PropTypes.array.isRequired,
+  exerciseFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
   pipelines: PropTypes.array.isRequired,
   pipelinesVariables: PropTypes.array,

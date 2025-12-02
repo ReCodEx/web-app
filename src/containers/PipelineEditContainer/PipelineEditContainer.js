@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -977,7 +976,6 @@ PipelineEditContainer.propTypes = {
       variables: PropTypes.array.isRequired,
     }),
   }).isRequired,
-  supplementaryFiles: ImmutablePropTypes.map,
   boxTypes: PropTypes.object.isRequired,
   editPipeline: PropTypes.func.isRequired,
   reloadPipeline: PropTypes.func.isRequired,

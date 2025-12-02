@@ -44,14 +44,6 @@ export const download = (fileId, entry = null, saveAs = null, similarSolutionId 
     contentType: 'application/octet-stream',
   })(fileId, entry && entry.split('/').pop());
 
-export const downloadSupplementaryFile = downloadHelper({
-  endpoint: id => `/uploaded-files/supplementary-file/${id}/download`,
-  fetch: fetchFileIfNeeded,
-  actionType: actionTypes.DOWNLOAD,
-  fileNameSelector: (id, state) => getJsData(getFile(id)(state)).name,
-  contentType: 'application/octet-stream',
-});
-
 /**
  * Reducer
  */

@@ -9,7 +9,7 @@ import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import Confirm from '../../../components/forms/Confirm';
 import Icon, { DeleteIcon } from '../../../components/icons';
 
-const SupplementaryFilesTableRow = ({
+const ExerciseFilesTableRow = ({
   id,
   name,
   size,
@@ -42,7 +42,7 @@ const SupplementaryFilesTableRow = ({
               onConfirmed={() => removeFile(id)}
               question={
                 <FormattedMessage
-                  id="app.supplementaryFiles.deleteConfirm"
+                  id="app.exerciseFiles.deleteConfirm"
                   defaultMessage="Are you sure you want to delete the file? This cannot be undone."
                 />
               }
@@ -58,7 +58,7 @@ const SupplementaryFilesTableRow = ({
               overlay={
                 <Tooltip id={`cannot-delete-${id}`}>
                   <FormattedMessage
-                    id="app.supplementaryFiles.cannotDeleteExplain"
+                    id="app.exerciseFiles.cannotDeleteExplain"
                     defaultMessage="The file cannot be deleted since it is being used in the configuration."
                   />
                 </Tooltip>
@@ -74,7 +74,7 @@ const SupplementaryFilesTableRow = ({
   </tr>
 );
 
-SupplementaryFilesTableRow.propTypes = {
+ExerciseFilesTableRow.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
@@ -85,4 +85,4 @@ SupplementaryFilesTableRow.propTypes = {
   isBeingUsed: PropTypes.bool,
 };
 
-export default SupplementaryFilesTableRow;
+export default ExerciseFilesTableRow;

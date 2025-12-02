@@ -69,7 +69,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
       change,
       exercise,
       smartFillCompilation,
-      supplementaryFiles,
+      exerciseFiles,
       test,
       testErrors,
       intl,
@@ -120,7 +120,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                       <FieldArray
                                         name={`${test}.jar-files.${env.id}`}
                                         component={ExpandingSelectField}
-                                        options={supplementaryFiles}
+                                        options={exerciseFiles}
                                         label={
                                           <FormattedMessage
                                             id="app.editExerciseSimpleConfigTests.jarFiles"
@@ -198,7 +198,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                                   <FieldArray
                                     name={`${test}.extra-files.${env.id}`}
                                     component={ExpandingInputFilesField}
-                                    options={supplementaryFiles}
+                                    options={exerciseFiles}
                                     change={change}
                                     leftLabel={
                                       <FormattedMessage
@@ -348,7 +348,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
 EditExerciseSimpleConfigTestCompilation.propTypes = {
   exercise: PropTypes.object,
   test: PropTypes.string.isRequired,
-  supplementaryFiles: PropTypes.array.isRequired,
+  exerciseFiles: PropTypes.array.isRequired,
   exerciseTests: PropTypes.array,
   extraFiles: PropTypes.object,
   compilationInitiallyOpened: PropTypes.bool,
