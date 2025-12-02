@@ -11,7 +11,7 @@ import { createApiAction } from '../middleware/apiMiddleware.js';
 
 import { actionTypes as emailVerificationActionTypes } from './emailVerification.js';
 import { actionTypes as paginationActionTypes } from './pagination.js';
-import { actionTypes as exercisesAuthorsActionTypes } from './exercisesAuthors.js';
+import { actionTypes as exercisesAuthorsActionTypes } from './exerciseAuthors.js';
 import { actionTypes as registrationActionTypes } from './registration.js';
 import { actionTypes as authActionTypes } from './authTypes.js';
 import { additionalActionTypes as groupActionTypes } from './groups.js';

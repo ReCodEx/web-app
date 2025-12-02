@@ -9,7 +9,7 @@ import PaginationContainer, { createSortingIcon, showRangeInfo } from '../Pagina
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import ExercisesList from '../../components/Exercises/ExercisesList';
 import FilterExercisesListForm from '../../components/forms/FilterExercisesListForm';
-import { fetchExercisesAuthorsIfNeeded } from '../../redux/modules/exercisesAuthors.js';
+import { fetchExerciseAuthorsIfNeeded } from '../../redux/modules/exerciseAuthors.js';
 import { create as assignExercise } from '../../redux/modules/assignments.js';
 import { fetchTags } from '../../redux/modules/exercises.js';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
@@ -72,13 +72,13 @@ class ExercisesListContainer extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.rootGroup !== prevProps.rootGroup) {
-      this.props.fetchExercisesAuthorsIfNeeded(this.props.rootGroup);
+      this.props.fetchExerciseAuthorsIfNeeded(this.props.rootGroup);
       this.props.fetchTags();
     }
   }
 
-  static loadData = ({ rootGroup, fetchExercisesAuthorsIfNeeded, fetchTags, fetchRuntimeEnvironments }) =>
-    Promise.all([fetchExercisesAuthorsIfNeeded(rootGroup), fetchTags(), fetchRuntimeEnvironments()]);
+  static loadData = ({ rootGroup, fetchExerciseAuthorsIfNeeded, fetchTags, fetchRuntimeEnvironments }) =>
+    Promise.all([fetchExerciseAuthorsIfNeeded(rootGroup), fetchTags(), fetchRuntimeEnvironments()]);
 
   headingCreator = ({ offset, limit, totalCount, orderByColumn, orderByDescending, setOrderBy }) => {
     const { showGroups } = this.props;
@@ -181,7 +181,7 @@ ExercisesListContainer.propTypes = {
   rootGroup: PropTypes.string,
   showGroups: PropTypes.bool,
   showAssignButton: PropTypes.bool,
-  fetchExercisesAuthorsIfNeeded: PropTypes.func.isRequired,
+  fetchExerciseAuthorsIfNeeded: PropTypes.func.isRequired,
   fetchTags: PropTypes.func.isRequired,
   runtimeEnvironments: ImmutablePropTypes.map.isRequired,
   assignExercise: PropTypes.func.isRequired,
@@ -197,7 +197,7 @@ export default withRouter(
         runtimeEnvironments: runtimeEnvironmentsSelector(state),
       }),
       (dispatch, { rootGroup = null }) => ({
-        fetchExercisesAuthorsIfNeeded: groupId => dispatch(fetchExercisesAuthorsIfNeeded(groupId || null)),
+        fetchExerciseAuthorsIfNeeded: groupId => dispatch(fetchExerciseAuthorsIfNeeded(groupId || null)),
         fetchTags: () => dispatch(fetchTags()),
         fetchRuntimeEnvironments: () => dispatch(fetchRuntimeEnvironments()),
         assignExercise: exerciseId => dispatch(assignExercise(rootGroup, exerciseId)),

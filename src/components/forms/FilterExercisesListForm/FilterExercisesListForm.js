@@ -9,11 +9,11 @@ import { lruMemoize } from 'reselect';
 
 import { getExerciseTags, getExerciseTagsLoading } from '../../../redux/selectors/exercises.js';
 import {
-  getAllExercisesAuthors,
-  getAllExercisesAuthorsIsLoading,
-  getExercisesAuthorsOfGroup,
-  getExercisesAuthorsOfGroupIsLoading,
-} from '../../../redux/selectors/exercisesAuthors.js';
+  getAllExerciseAuthors,
+  getAllExerciseAuthorsIsLoading,
+  getExerciseAuthorsOfGroup,
+  getExerciseAuthorsOfGroupIsLoading,
+} from '../../../redux/selectors/exerciseAuthors.js';
 import { loggedInUserIdSelector } from '../../../redux/selectors/auth.js';
 
 import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentList.js';
@@ -353,10 +353,10 @@ FilterExercisesListForm.propTypes = {
 
 export default connect((state, { rootGroup = null, form }) => ({
   loggedUserId: loggedInUserIdSelector(state),
-  authors: rootGroup ? getExercisesAuthorsOfGroup(rootGroup)(state) : getAllExercisesAuthors(state),
+  authors: rootGroup ? getExerciseAuthorsOfGroup(rootGroup)(state) : getAllExerciseAuthors(state),
   authorsLoading: rootGroup
-    ? getExercisesAuthorsOfGroupIsLoading(rootGroup)(state)
-    : getAllExercisesAuthorsIsLoading(state),
+    ? getExerciseAuthorsOfGroupIsLoading(rootGroup)(state)
+    : getAllExerciseAuthorsIsLoading(state),
   tags: getExerciseTags(state),
   tagsLoading: getExerciseTagsLoading(state),
   envValueSelector: name => formValueSelector(form)(state, name),
