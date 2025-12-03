@@ -8,6 +8,7 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { CloseIcon, SaveIcon, ZipIcon } from '../../icons';
 
 import UploadContainer from '../../../containers/UploadContainer';
+import InsetPanel from '../../widgets/InsetPanel';
 
 const indexFileNames = lruMemoize(files => new Set(files.map(file => file.name)));
 
@@ -26,10 +27,15 @@ const FilesTable = ({
   RowComponent,
   intl,
   viewOnly = false,
+  noRemove = false,
   downloadArchive,
 }) => (
   <div>
-    {description && <p>{description}</p>}
+    {description && (
+      <InsetPanel size="sm" className="small">
+        {description}
+      </InsetPanel>
+    )}
     {!viewOnly && <UploadContainer id={uploadId} existingFiles={indexFileNames(files)} />}
     {!viewOnly && newFiles && newFiles.length > 0 && (
       <div className="text-center mb-3">
@@ -58,7 +64,7 @@ const FilesTable = ({
               .map((fileData, i) => (
                 <RowComponent
                   {...fileData}
-                  removeFile={removeFile}
+                  removeFile={noRemove ? null : removeFile}
                   downloadFile={downloadFile}
                   viewOnly={viewOnly}
                   isBeingUsed={usedFiles && usedFiles.has(fileData.name)}
@@ -103,6 +109,7 @@ FilesTable.propTypes = {
   RowComponent: PropTypes.func.isRequired,
   intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   viewOnly: PropTypes.bool,
+  noRemove: PropTypes.bool,
   downloadArchive: PropTypes.func,
 };
 

@@ -1,158 +1,213 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { Table, Modal } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { lruMemoize } from 'reselect';
 
-import { Table } from 'react-bootstrap';
+import ExerciseFilesTableContainer from '../../../containers/ExerciseFilesTableContainer';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { AddIcon, DeleteIcon, DownloadIcon, EditIcon, LoadingIcon, WarningIcon, VisibleIcon } from '../../icons';
 import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import { UserRoleIcon } from '../../helpers/usersRoles.js';
 import Explanation from '../../widgets/Explanation';
+import { getFileLinkUrl } from '../../../helpers/localizedData.js';
 
 const sortLinks = lruMemoize(links => links.slice().sort((a, b) => a.key.localeCompare(b.key)));
 
-const FilesLinksTable = ({ exercise, links, files = null }) => (
-  <div>
-    {links.length > 0 && (
-      <Table responsive hover>
-        <thead>
-          <tr>
-            <th className="shrink-col text-center">
-              <Explanation id="role-explanation" placement="bottom" gapLeft={false} gapRight={false}>
-                <FormattedMessage
-                  id="app.filesLinksTable.header.roleExplanation"
-                  defaultMessage="Minimal user role required to access the file via this link. If no role is specified, the file is accessible to all users (even without login)."
-                />
-              </Explanation>
-            </th>
-            <th>
-              <FormattedMessage id="app.filesLinksTable.header.key" defaultMessage="Key" />
-              <Explanation id="key-explanation" placement="bottom">
-                <FormattedMessage
-                  id="app.filesLinksTable.header.keyExplanation"
-                  defaultMessage="A user-specified identifier used to reference the file link in the exercise texts (specification, description)."
-                />
-              </Explanation>
-            </th>
-            <th>
-              <FormattedMessage id="app.filesLinksTable.header.file" defaultMessage="Target file" />
-            </th>
-            <th>
-              <FormattedMessage id="app.filesLinksTable.header.saveAs" defaultMessage="Save as" />
-              <Explanation id="saveAs-explanation" placement="bottom">
-                <FormattedMessage
-                  id="app.filesLinksTable.header.saveAsExplanation"
-                  defaultMessage="The name under which the file will be offered for download when accessed via this link. If empty, the original file name will be used."
-                />
-              </Explanation>
-            </th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {sortLinks(links).map(link => (
-            <tr key={link.id}>
-              <td className="shrink-col text-center">
-                {link.requiredRole ? (
-                  <UserRoleIcon role={link.requiredRole} />
-                ) : (
-                  <VisibleIcon
-                    className="text-primary"
-                    tooltip={
-                      <FormattedMessage
-                        id="app.filesLinksTable.visibleToAll"
-                        defaultMessage="Visible to all users (without login)"
-                      />
-                    }
-                    tooltipId={`visible-${link.id}`}
-                    tooltipPlacement="bottom"
+const FilesLinksTable = ({ exercise, links, files = null }) => {
+  const [filesOpen, setFilesOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const [editLinkId, setEditLinkId] = useState(null);
+
+  return (
+    <div>
+      {links.length > 0 && (
+        <Table responsive hover>
+          <thead>
+            <tr>
+              <th className="shrink-col text-center">
+                <Explanation id="role-explanation" placement="bottom" gapLeft={false} gapRight={false}>
+                  <FormattedMessage
+                    id="app.filesLinksTable.header.roleExplanation"
+                    defaultMessage="Minimal user role required to access the file via this link. If no role is specified, the file is accessible to all users (even without login)."
                   />
-                )}
-              </td>
-              <td>
-                <CopyToClipboard text={`%%${link.key}%%`}>
-                  <code
-                    className="clickable"
-                    onClick={ev => {
-                      const style = 'opacity-50';
-                      const elem = ev.currentTarget;
-                      elem.classList.add(style);
-                      window.setTimeout(() => elem.classList.remove(style), 300);
-                    }}>
-                    {link.key}
-                  </code>
-                </CopyToClipboard>
-              </td>
-              <td>
-                {files === null ? (
-                  <LoadingIcon />
-                ) : files === false || !files[link.exerciseFileId] ? (
-                  <WarningIcon />
-                ) : (
-                  <>
-                    {files[link.exerciseFileId].name}{' '}
-                    <small className="text-muted">({prettyPrintBytes(files[link.exerciseFileId].size)})</small>
-                  </>
-                )}
-              </td>
-              <td>{link.saveName}</td>
-              <td className="shrink-col text-nowrap">
-                <TheButtonGroup>
-                  <Button variant="primary" size="xs">
-                    <DownloadIcon
-                      fixedWidth
-                      tooltip={<FormattedMessage id="generic.download" defaultMessage="Download" />}
-                      tooltipId={`download-${link.id}`}
-                      tooltipPlacement="bottom"
-                    />
-                  </Button>
-                  <Button variant="warning" size="xs">
-                    <EditIcon
-                      fixedWidth
-                      tooltip={<FormattedMessage id="generic.edit" defaultMessage="Edit" />}
-                      tooltipId={`edit-${link.id}`}
-                      tooltipPlacement="bottom"
-                    />
-                  </Button>
-                  <Button variant="danger" size="xs">
-                    <DeleteIcon
-                      fixedWidth
-                      tooltip={<FormattedMessage id="generic.delete" defaultMessage="Delete" />}
-                      tooltipId={`delete-${link.id}`}
-                      tooltipPlacement="bottom"
-                    />
-                  </Button>
-                </TheButtonGroup>
-              </td>
+                </Explanation>
+              </th>
+              <th>
+                <FormattedMessage id="app.filesLinksTable.header.key" defaultMessage="Key" />
+                <Explanation id="key-explanation" placement="bottom">
+                  <FormattedMessage
+                    id="app.filesLinksTable.header.keyExplanation"
+                    defaultMessage="A user-specified identifier used to reference the file link in the exercise texts (specification, description)."
+                  />
+                </Explanation>
+              </th>
+              <th>
+                <FormattedMessage id="app.filesLinksTable.header.file" defaultMessage="Target file" />
+              </th>
+              <th>
+                <FormattedMessage id="app.filesLinksTable.header.saveAs" defaultMessage="Save as" />
+                <Explanation id="saveAs-explanation" placement="bottom">
+                  <FormattedMessage
+                    id="app.filesLinksTable.header.saveAsExplanation"
+                    defaultMessage="The name under which the file will be offered for download when accessed via this link. If empty, the original file name will be used."
+                  />
+                </Explanation>
+              </th>
+              <th />
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    )}
+          </thead>
+          <tbody>
+            {sortLinks(links).map(link => (
+              <tr key={link.id}>
+                <td className="shrink-col text-center">
+                  {link.requiredRole ? (
+                    <UserRoleIcon role={link.requiredRole} />
+                  ) : (
+                    <VisibleIcon
+                      className="text-primary"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.filesLinksTable.visibleToAll"
+                          defaultMessage="Visible to all users (without login)"
+                        />
+                      }
+                      tooltipId={`visible-${link.id}`}
+                      tooltipPlacement="bottom"
+                    />
+                  )}
+                </td>
+                <td>
+                  <CopyToClipboard text={`%%${link.key}%%`}>
+                    <code
+                      className="clickable"
+                      onClick={ev => {
+                        const style = 'opacity-50';
+                        const elem = ev.currentTarget;
+                        elem.classList.add(style);
+                        window.setTimeout(() => elem.classList.remove(style), 300);
+                      }}>
+                      {link.key}
+                    </code>
+                  </CopyToClipboard>
+                </td>
+                <td>
+                  {files === null ? (
+                    <LoadingIcon />
+                  ) : files === false || !files[link.exerciseFileId] ? (
+                    <WarningIcon />
+                  ) : (
+                    <>
+                      {files[link.exerciseFileId].name}{' '}
+                      <small className="text-muted">({prettyPrintBytes(files[link.exerciseFileId].size)})</small>
+                    </>
+                  )}
+                </td>
+                <td>{link.saveName}</td>
+                <td className="shrink-col text-nowrap">
+                  <TheButtonGroup>
+                    <Button variant="primary" size="xs" href={getFileLinkUrl(link.id)}>
+                      <DownloadIcon
+                        fixedWidth
+                        tooltip={<FormattedMessage id="generic.download" defaultMessage="Download" />}
+                        tooltipId={`download-${link.id}`}
+                        tooltipPlacement="bottom"
+                      />
+                    </Button>
+                    <Button
+                      variant="warning"
+                      size="xs"
+                      onClick={() => {
+                        setFormOpen(true);
+                        setEditLinkId(link.id);
+                      }}>
+                      <EditIcon
+                        fixedWidth
+                        tooltip={<FormattedMessage id="generic.edit" defaultMessage="Edit" />}
+                        tooltipId={`edit-${link.id}`}
+                        tooltipPlacement="bottom"
+                      />
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size="xs"
+                      confirm={
+                        <FormattedMessage
+                          id="app.filesLinksTable.deleteLinkConfirm"
+                          defaultMessage="Are you sure you want to delete this file link? This cannot be undone."
+                        />
+                      }
+                      confirmId={`delete-link-${link.id}`}
+                      onClick={() => {
+                        /* deletion handler */
+                      }}>
+                      <DeleteIcon
+                        fixedWidth
+                        tooltip={<FormattedMessage id="generic.delete" defaultMessage="Delete" />}
+                        tooltipId={`delete-${link.id}`}
+                        tooltipPlacement="bottom"
+                      />
+                    </Button>
+                  </TheButtonGroup>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
 
-    {links.length === 0 && (
-      <p className="text-center p-3">
-        <Icon icon={['far', 'folder-open']} gapRight={2} />
-        <FormattedMessage id="app.filesLinksTable.empty" defaultMessage="There are no file links yet." />
-      </p>
-    )}
+      {links.length === 0 && (
+        <p className="text-center p-3">
+          <Icon icon={['far', 'folder-open']} gapRight={2} />
+          <FormattedMessage id="app.filesLinksTable.empty" defaultMessage="There are no file links yet." />
+        </p>
+      )}
 
-    <div className="text-center">
-      <TheButtonGroup>
-        <Button variant="primary">
-          <Icon icon="folder-tree" gapRight={2} />
-          <FormattedMessage id="app.filesLinksTable.manageExerciseFiles" defaultMessage="Manage Exercise Files" />
-        </Button>
-        <Button variant="success">
-          <AddIcon gapRight={2} />
-          <FormattedMessage id="app.filesLinksTable.addLink" defaultMessage="Add Link" />
-        </Button>
-      </TheButtonGroup>
+      <div className="text-center">
+        <TheButtonGroup>
+          <Button variant="primary" onClick={() => setFilesOpen(true)}>
+            <Icon icon="folder-tree" gapRight={2} />
+            <FormattedMessage id="app.filesLinksTable.manageExerciseFiles" defaultMessage="Manage Exercise Files" />
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => {
+              setFormOpen(true);
+              setEditLinkId(null);
+            }}>
+            <AddIcon gapRight={2} />
+            <FormattedMessage id="app.filesLinksTable.addLink" defaultMessage="Add Link" />
+          </Button>
+        </TheButtonGroup>
+      </div>
+
+      <Modal show={filesOpen} backdrop="static" size="xl" onHide={() => setFilesOpen(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <FormattedMessage id="app.filesLinksTable.manageExerciseFiles" defaultMessage="Manage Exercise Files" />
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ExerciseFilesTableContainer exercise={exercise} noBox noRemove />
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={formOpen} backdrop="static" size="xl" onHide={() => setFormOpen(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {editLinkId ? (
+              <FormattedMessage id="app.filesLinksTable.editFormTitle" defaultMessage="Edit File Link" />
+            ) : (
+              <FormattedMessage id="app.filesLinksTable.addFormTitle" defaultMessage="Add File Link" />
+            )}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>TODO FORM</Modal.Body>
+      </Modal>
     </div>
-  </div>
-);
+  );
+};
 
 FilesLinksTable.propTypes = {
   exercise: PropTypes.shape({

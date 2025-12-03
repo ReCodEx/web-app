@@ -139,6 +139,8 @@ export const validateLocalizedTextsFormData = (errors, formData, internalValidat
   return errors;
 };
 
+export const getFileLinkUrl = linkId => API_BASE + '/uploaded-files/link/' + linkId;
+
 export const replaceLinkKeysWithUrls = (text, linksMap) => {
   if (!linksMap) {
     return text;
@@ -146,7 +148,7 @@ export const replaceLinkKeysWithUrls = (text, linksMap) => {
 
   let replacedText = text;
   Object.keys(linksMap).forEach(linkKey => {
-    const url = API_BASE + '/uploaded-files/link/' + linksMap[linkKey];
+    const url = getFileLinkUrl(linksMap[linkKey]);
     replacedText = replacedText.replaceAll(`%%${linkKey}%%`, url);
   });
   return replacedText;

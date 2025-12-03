@@ -15,6 +15,7 @@ import {
 } from '../../redux/modules/exerciseFiles.js';
 import { download } from '../../redux/modules/files.js';
 import { getFilesForExercise, fetchFilesForExerciseStatus } from '../../redux/selectors/exerciseFiles.js';
+import { InfoIcon } from '../../components/icons/index.js';
 
 const ExerciseFilesTableContainer = ({
   exercise,
@@ -39,10 +40,13 @@ const ExerciseFilesTableContainer = ({
     downloadFile={downloadFile}
     title={<FormattedMessage id="app.exerciseFilesTable.title" defaultMessage="Exercise Files" />}
     description={
-      <FormattedMessage
-        id="app.exerciseFilesTable.description"
-        defaultMessage="Exercise files are files which can be used in exercise configuration (as input files, expected output files, extra compilation files, custom judges, ...)."
-      />
+      <>
+        <InfoIcon gapRight={2} className="opacity-50" />
+        <FormattedMessage
+          id="app.exerciseFilesTable.description"
+          defaultMessage="Exercise files can be used in exercise configuration (as input files, expected output files, extra compilation files, custom judges, ...). Links to exercise files can also be created and then used in exercise texts (specification for students, description)."
+        />
+      </>
     }
     HeaderComponent={ExerciseFilesTableHeaderRow}
     RowComponent={ExerciseFilesTableRow}

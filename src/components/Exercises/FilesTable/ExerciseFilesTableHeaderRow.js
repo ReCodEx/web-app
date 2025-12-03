@@ -13,7 +13,7 @@ const ExerciseFilesTableHeaderRow = ({ viewOnly }) => (
     <th>
       <FormattedMessage id="generic.uploadedAt" defaultMessage="Uploaded at" />
     </th>
-    {!viewOnly && <th />}
+    {!viewOnly && <th className="shrink-col" />}
   </tr>
 );
 
