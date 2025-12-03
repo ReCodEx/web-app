@@ -20,6 +20,8 @@ export const resourceStatus = {
 export const isLoadingState = state =>
   state === resourceStatus.PENDING || state === resourceStatus.RELOADING || state === resourceStatus.UPDATING;
 
+export const isFailedState = state => state === resourceStatus.FAILED;
+
 /**
  * @param {Object} item The item
  * @return {boolean} True when the item is loading or reloading.
