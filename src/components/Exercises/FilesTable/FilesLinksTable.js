@@ -6,6 +6,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { lruMemoize } from 'reselect';
 
 import ExerciseFilesTableContainer from '../../../containers/ExerciseFilesTableContainer';
+import ExerciseFileLinkForm, { initialValues } from '../../forms/ExerciseFileLinkForm';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { AddIcon, DeleteIcon, DownloadIcon, EditIcon, LoadingIcon, WarningIcon, VisibleIcon } from '../../icons';
 import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
@@ -18,7 +19,7 @@ const sortLinks = lruMemoize(links => links.slice().sort((a, b) => a.key.localeC
 const FilesLinksTable = ({ exercise, links, files = null }) => {
   const [filesOpen, setFilesOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
-  const [editLinkId, setEditLinkId] = useState(null);
+  const [editLink, setEditLink] = useState(null);
 
   return (
     <div>
@@ -39,7 +40,7 @@ const FilesLinksTable = ({ exercise, links, files = null }) => {
                 <Explanation id="key-explanation" placement="bottom">
                   <FormattedMessage
                     id="app.filesLinksTable.header.keyExplanation"
-                    defaultMessage="A user-specified identifier used to reference the file link in the exercise texts (specification, description)."
+                    defaultMessage="A user-specified identifier used to reference the file link in the exercise texts (specification, description). Substring '%%key%%' is replaced by the link URL when the exercise text is rendered."
                   />
                 </Explanation>
               </th>
@@ -118,9 +119,10 @@ const FilesLinksTable = ({ exercise, links, files = null }) => {
                     <Button
                       variant="warning"
                       size="xs"
+                      disabled={!files}
                       onClick={() => {
                         setFormOpen(true);
-                        setEditLinkId(link.id);
+                        setEditLink(link);
                       }}>
                       <EditIcon
                         fixedWidth
@@ -172,9 +174,10 @@ const FilesLinksTable = ({ exercise, links, files = null }) => {
           </Button>
           <Button
             variant="success"
+            disabled={!files}
             onClick={() => {
               setFormOpen(true);
-              setEditLinkId(null);
+              setEditLink(null);
             }}>
             <AddIcon gapRight={2} />
             <FormattedMessage id="app.filesLinksTable.addLink" defaultMessage="Add Link" />
@@ -193,17 +196,28 @@ const FilesLinksTable = ({ exercise, links, files = null }) => {
         </Modal.Body>
       </Modal>
 
-      <Modal show={formOpen} backdrop="static" size="xl" onHide={() => setFormOpen(false)}>
+      <Modal show={formOpen && Boolean(files)} backdrop="static" size="xl" onHide={() => setFormOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {editLinkId ? (
+            {editLink ? (
               <FormattedMessage id="app.filesLinksTable.editFormTitle" defaultMessage="Edit File Link" />
             ) : (
               <FormattedMessage id="app.filesLinksTable.addFormTitle" defaultMessage="Add File Link" />
             )}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>TODO FORM</Modal.Body>
+        <Modal.Body>
+          {Boolean(files) && (
+            <ExerciseFileLinkForm
+              onSubmit={() => {}}
+              initialValues={editLink || initialValues}
+              links={links}
+              files={files}
+              createNew={!editLink}
+              close={() => setFormOpen(false)}
+            />
+          )}
+        </Modal.Body>
       </Modal>
     </div>
   );
@@ -216,7 +230,7 @@ FilesLinksTable.propTypes = {
     permissionHints: PropTypes.object.isRequired,
   }).isRequired,
   links: PropTypes.array.isRequired,
-  files: PropTypes.array,
+  files: PropTypes.object,
 };
 
 export default injectIntl(FilesLinksTable);
