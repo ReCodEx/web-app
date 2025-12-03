@@ -27,9 +27,13 @@ class FilesTableContainer extends Component {
   };
 
   render() {
-    const { title, isOpen = true, files, fetchFilesStatus, ...restProps } = this.props;
+    const { noBox = false, title, isOpen = true, files, fetchFilesStatus, ...restProps } = this.props;
 
-    return (
+    return noBox ? (
+      <ResourceRenderer resourceArray={files} forceLoading={fetchFilesStatus && isLoadingState(fetchFilesStatus)}>
+        {filesJs => <FilesTable files={filesJs} {...restProps} />}
+      </ResourceRenderer>
+    ) : (
       <Box title={title} collapsable isOpen={isOpen} unlimitedHeight>
         <ResourceRenderer resourceArray={files} forceLoading={fetchFilesStatus && isLoadingState(fetchFilesStatus)}>
           {filesJs => <FilesTable files={filesJs} {...restProps} />}
@@ -40,6 +44,7 @@ class FilesTableContainer extends Component {
 }
 
 FilesTableContainer.propTypes = {
+  noBox: PropTypes.bool,
   uploadId: PropTypes.string.isRequired,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   isOpen: PropTypes.bool,

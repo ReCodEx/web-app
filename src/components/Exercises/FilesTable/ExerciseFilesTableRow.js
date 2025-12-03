@@ -31,10 +31,10 @@ const ExerciseFilesTableRow = ({
     </td>
     <td>{prettyPrintBytes(size)}</td>
     <td>
-      <DateTime unixTs={uploadedAt} showRelative />
+      <DateTime unixTs={uploadedAt} showOverlay overlayProps={{ showDate: false, showTime: false }} />
     </td>
     {!viewOnly && (
-      <td className="text-end">
+      <td className="shrink-col text-nowrap">
         {removeFile &&
           (!isBeingUsed ? (
             <Confirm
