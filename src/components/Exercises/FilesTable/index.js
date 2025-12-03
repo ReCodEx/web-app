@@ -5,3 +5,4 @@ export { default as ExerciseFilesTableRow } from './ExerciseFilesTableRow.js';
 export { default as ExerciseFilesTableHeaderRow } from './ExerciseFilesTableHeaderRow.js';
 export { default as AttachmentFilesTableRow } from './AttachmentFilesTableRow.js';
 export { default as AttachmentFilesTableHeaderRow } from './AttachmentFilesTableHeaderRow.js';
+export { default as FilesLinksTable } from './FilesLinksTable.js';

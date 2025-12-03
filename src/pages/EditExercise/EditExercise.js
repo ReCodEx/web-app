@@ -11,6 +11,7 @@ import Page from '../../components/layout/Page';
 import { ExerciseNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
+import ExerciseFilesLinksContainer from '../../containers/ExerciseFilesLinksContainer';
 import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
 import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
 import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
@@ -155,6 +156,8 @@ class EditExercise extends Component {
                     />
                   </Col>
                   <Col lg={6}>
+                    <ExerciseFilesLinksContainer exercise={exercise} />
+
                     <AttachmentFilesTableContainer exercise={exercise} />
 
                     {safeGet(loggedUser, ['privateData', 'instancesIds', 0]) && (

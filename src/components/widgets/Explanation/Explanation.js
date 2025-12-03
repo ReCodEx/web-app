@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import Icon from '../../icons';
 
-const Explanation = ({ id = null, title = null, children, placement = 'right' }) => (
+const Explanation = ({ id = null, title = null, children, placement = 'right', gapLeft = 2, gapRight = 2 }) => (
   <OverlayTrigger
     placement={placement}
     overlay={
@@ -13,7 +13,12 @@ const Explanation = ({ id = null, title = null, children, placement = 'right' })
       </Popover>
     }>
     <span>
-      <Icon icon={['far', 'question-circle']} className="text-body-secondary small" gapLeft={2} gapRight={2} />
+      <Icon
+        icon={['far', 'question-circle']}
+        className="text-body-secondary small"
+        gapLeft={gapLeft}
+        gapRight={gapRight}
+      />
     </span>
   </OverlayTrigger>
 );
@@ -22,6 +27,8 @@ Explanation.propTypes = {
   title: PropTypes.any,
   children: PropTypes.any.isRequired,
   placement: PropTypes.string,
+  gapLeft: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  gapRight: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
 };
 
 export default Explanation;
