@@ -455,7 +455,7 @@
   "app.editExerciseForm.isLocked": "Úloha je zamčená",
   "app.editExerciseForm.isPublic": "Úloha je veřejná",
   "app.editExerciseForm.medium": "Průměrné",
-  "app.editExerciseForm.mergeJudgeLogs": "Spojit logy sudího do jednoho",
+  "app.editExerciseForm.mergeJudgeLogs": "Spojit logy sudího",
   "app.editExerciseForm.solutionFilesLimit": "Max. počet souborů řešení:",
   "app.editExerciseForm.solutionSizeLimit": "Max. velikost řešení [KiB]:",
   "app.editExerciseForm.title": "Upravit nastavení úlohy {name}",

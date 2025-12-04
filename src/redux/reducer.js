@@ -4,7 +4,6 @@ import { reducer as formReducer } from 'redux-form';
 import app from './modules/app.js';
 import assignments from './modules/assignments.js';
 import asyncJobs from './modules/asyncJobs.js';
-import attachmentFiles from './modules/attachmentFiles.js';
 import auth, { actionTypes as authActionTypes } from './modules/auth.js';
 import boxes from './modules/boxes.js';
 import canSubmitModule from './modules/canSubmit.js'; // because of a named export 'canSubmit'
@@ -59,7 +58,6 @@ const createRecodexReducers = (token, instanceId, lang) => ({
   app: app(lang),
   assignments,
   asyncJobs,
-  attachmentFiles,
   auth: auth(token, instanceId),
   boxes,
   broker,

@@ -12,7 +12,6 @@ import { ExerciseNavigation } from '../../components/layout/Navigation';
 import Box from '../../components/widgets/Box';
 import EditExerciseForm from '../../components/forms/EditExerciseForm';
 import ExerciseFilesLinksContainer from '../../containers/ExerciseFilesLinksContainer';
-import AttachmentFilesTableContainer from '../../containers/AttachmentFilesTableContainer';
 import ExerciseGroups from '../../components/Exercises/ExerciseGroups';
 import ExercisesTagsEditContainer from '../../containers/ExercisesTagsEditContainer';
 import DeleteExerciseButtonContainer from '../../containers/DeleteExerciseButtonContainer';
@@ -148,17 +147,15 @@ class EditExercise extends Component {
 
               {exercise.permissionHints.update && (
                 <Row>
-                  <Col lg={6}>
+                  <Col xxl={6}>
                     <EditExerciseForm
                       initialValues={prepareInitialValues(exercise)}
                       onSubmit={this.editExerciseSubmitHandler}
                       localizedTextsLinks={exercise.localizedTextsLinks}
                     />
                   </Col>
-                  <Col lg={6}>
+                  <Col xxl={6}>
                     <ExerciseFilesLinksContainer exercise={exercise} />
-
-                    <AttachmentFilesTableContainer exercise={exercise} />
 
                     {safeGet(loggedUser, ['privateData', 'instancesIds', 0]) && (
                       <EditExerciseUsers
@@ -186,7 +183,7 @@ class EditExercise extends Component {
 
               {exercise.permissionHints.archive && (
                 <Row>
-                  <Col lg={12}>
+                  <Col xxl={12}>
                     <Box
                       type="warning"
                       title={
@@ -210,7 +207,7 @@ class EditExercise extends Component {
 
               {exercise.permissionHints.remove && (
                 <Row>
-                  <Col lg={12}>
+                  <Col xxl={12}>
                     <Box
                       type="danger"
                       title={
