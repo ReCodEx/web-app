@@ -29,6 +29,7 @@ const FilesTable = ({
   viewOnly = false,
   noRemove = false,
   downloadArchive,
+  ...restProps
 }) => (
   <div>
     {description && (
@@ -56,13 +57,14 @@ const FilesTable = ({
       {files.length > 0 && (
         <Table responsive>
           <thead>
-            <HeaderComponent viewOnly={viewOnly} />
+            <HeaderComponent {...restProps} viewOnly={viewOnly} />
           </thead>
           <tbody>
             {files
               .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
               .map((fileData, i) => (
                 <RowComponent
+                  {...restProps}
                   {...fileData}
                   removeFile={noRemove ? null : removeFile}
                   downloadFile={downloadFile}

@@ -7,7 +7,7 @@ import Button from '../../widgets/TheButton';
 import DateTime from '../../widgets/DateTime';
 import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import Confirm from '../../../components/forms/Confirm';
-import Icon, { DeleteIcon } from '../../../components/icons';
+import Icon, { DeleteIcon, LinkIcon } from '../../../components/icons';
 
 const ExerciseFilesTableRow = ({
   id,
@@ -18,6 +18,7 @@ const ExerciseFilesTableRow = ({
   removeFile,
   viewOnly,
   isBeingUsed = false,
+  linkedFilesIds,
 }) => (
   <tr>
     <td>
@@ -28,6 +29,20 @@ const ExerciseFilesTableRow = ({
       ) : (
         <span>{name}</span>
       )}
+      {linkedFilesIds?.has(id) && (
+        <LinkIcon
+          className="text-warning"
+          gapLeft={2}
+          tooltipId={`linked-${id}`}
+          tooltipPlacement="bottom"
+          tooltip={
+            <FormattedMessage
+              id="app.exerciseFiles.linkedFile"
+              defaultMessage="This file has been made accessible via a link."
+            />
+          }
+        />
+      )}
     </td>
     <td>{prettyPrintBytes(size)}</td>
     <td>
@@ -36,7 +51,34 @@ const ExerciseFilesTableRow = ({
     {!viewOnly && (
       <td className="shrink-col text-nowrap">
         {removeFile &&
-          (!isBeingUsed ? (
+          (isBeingUsed || linkedFilesIds?.has(id) ? (
+            <OverlayTrigger
+              placement="bottom"
+              overlay={
+                <Tooltip id={`cannot-delete-${id}`}>
+                  {isBeingUsed ? (
+                    <FormattedMessage
+                      id="app.exerciseFiles.cannotDeleteUsedExplain"
+                      defaultMessage="The file cannot be deleted since it is being used in the configuration."
+                    />
+                  ) : (
+                    <FormattedMessage
+                      id="app.exerciseFiles.cannotDeleteLinkedExplain"
+                      defaultMessage="The file cannot be deleted since it has an associated download link."
+                    />
+                  )}
+                </Tooltip>
+              }>
+              <em className="text-body-secondary">
+                {isBeingUsed ? (
+                  <Icon icon="paperclip" gapRight={2} className="text-success" />
+                ) : (
+                  <LinkIcon className="text-success" gapRight={2} />
+                )}
+                <FormattedMessage id="generic.inUse" defaultMessage="in use" />
+              </em>
+            </OverlayTrigger>
+          ) : (
             <Confirm
               id={id}
               onConfirmed={() => removeFile(id)}
@@ -52,22 +94,6 @@ const ExerciseFilesTableRow = ({
                 <FormattedMessage id="generic.delete" defaultMessage="Delete" />
               </Button>
             </Confirm>
-          ) : (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`cannot-delete-${id}`}>
-                  <FormattedMessage
-                    id="app.exerciseFiles.cannotDeleteExplain"
-                    defaultMessage="The file cannot be deleted since it is being used in the configuration."
-                  />
-                </Tooltip>
-              }>
-              <em className="text-body-secondary">
-                <Icon icon="paperclip" gapRight={2} className="text-success" />
-                <FormattedMessage id="generic.inUse" defaultMessage="in use" />
-              </em>
-            </OverlayTrigger>
           ))}
       </td>
     )}
@@ -83,6 +109,7 @@ ExerciseFilesTableRow.propTypes = {
   removeFile: PropTypes.func,
   viewOnly: PropTypes.bool,
   isBeingUsed: PropTypes.bool,
+  linkedFilesIds: PropTypes.instanceOf(Set),
 };
 
 export default ExerciseFilesTableRow;

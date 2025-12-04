@@ -34,29 +34,27 @@ import {
   fetchExerciseConfigIfNeeded,
   setExerciseConfig,
 } from '../../redux/modules/exerciseConfigs.js';
-import { getExercise } from '../../redux/selectors/exercises.js';
-import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs.js';
-import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
-import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
 import { fetchExercisePipelinesVariables } from '../../redux/modules/exercisePipelinesVariables.js';
-import { getExercisePipelinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables.js';
-import { getFilesForExercise, fetchFilesForExerciseStatus } from '../../redux/selectors/exerciseFiles.js';
-import { isLoadingState } from '../../redux/helpers/resourceManager/status.js';
-
-import withLinks from '../../helpers/withLinks.js';
-import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs.js';
 import {
   fetchExerciseEnvironmentConfig,
   fetchExerciseEnvironmentConfigIfNeeded,
   setExerciseEnvironmentConfig,
 } from '../../redux/modules/exerciseEnvironmentConfigs.js';
-import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig.js';
 import { fetchScoreConfigIfNeeded, setScoreConfig } from '../../redux/modules/exerciseScoreConfig.js';
 import { fetchExerciseTestsIfNeeded, setExerciseTests } from '../../redux/modules/exerciseTests.js';
-import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests.js';
 import { fetchPipelines } from '../../redux/modules/pipelines.js';
+import { exerciseTestsSelector } from '../../redux/selectors/exerciseTests.js';
 import { pipelinesSelector, getPipelinesEnvironmentsWhichHasEntryPoint } from '../../redux/selectors/pipelines.js';
+import { exerciseScoreConfigSelector } from '../../redux/selectors/exerciseScoreConfig.js';
+import { exerciseEnvironmentConfigSelector } from '../../redux/selectors/exerciseEnvironmentConfigs.js';
+import { getExercisePipelinesVariablesJS } from '../../redux/selectors/exercisePipelinesVariables.js';
+import { getFilesForExercise, fetchFilesForExerciseStatus } from '../../redux/selectors/exerciseFiles.js';
+import { runtimeEnvironmentsSelector } from '../../redux/selectors/runtimeEnvironments.js';
+import { getExercise } from '../../redux/selectors/exercises.js';
+import { exerciseConfigSelector } from '../../redux/selectors/exerciseConfigs.js';
+import { getLoggedInUserEffectiveRole } from '../../redux/selectors/users.js';
+import { isLoadingState } from '../../redux/helpers/resourceManager/status.js';
 
 import {
   getTestsInitValues,
@@ -89,6 +87,7 @@ import {
 import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles.js';
 import { hasPermissions, safeGet } from '../../helpers/common.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
+import withLinks from '../../helpers/withLinks.js';
 
 class EditExerciseConfig extends Component {
   componentDidMount() {
