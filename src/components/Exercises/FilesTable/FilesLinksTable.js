@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { Table, Modal } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -9,17 +10,35 @@ import ExerciseFilesTableContainer from '../../../containers/ExerciseFilesTableC
 import ExerciseFileLinkForm, { initialValues } from '../../forms/ExerciseFileLinkForm';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Icon, { AddIcon, DeleteIcon, DownloadIcon, EditIcon, LoadingIcon, WarningIcon, VisibleIcon } from '../../icons';
+import Callout from '../../widgets/Callout/Callout.js';
+import Explanation from '../../widgets/Explanation';
 import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import { UserRoleIcon } from '../../helpers/usersRoles.js';
-import Explanation from '../../widgets/Explanation';
 import { getFileLinkUrl } from '../../../helpers/localizedData.js';
+import { resourceStatus } from '../../../redux/helpers/resourceManager';
+import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 const sortLinks = lruMemoize(links => links.slice().sort((a, b) => a.key.localeCompare(b.key)));
 
-const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink, deleteLink }) => {
+const FilesLinksTable = ({
+  exercise,
+  links,
+  files = null,
+  operation,
+  createLink,
+  updateLink,
+  deleteLink,
+  intl: { formatMessage },
+}) => {
   const [filesOpen, setFilesOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editLink, setEditLink] = useState(null);
+
+  const operationPending = operation && operation.get('state') === resourceStatus.PENDING;
+  const operationFailed = operation && operation.get('state') === resourceStatus.FAILED;
+  const operationError = operationFailed ? operation.get('error')?.toJS() : null;
+  const operationType = operation && operation.get('type');
+  const operationLinkId = operation && operation.get('linkId');
 
   return (
     <div>
@@ -64,7 +83,7 @@ const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink
               <tr key={link.id}>
                 <td className="shrink-col text-center">
                   {link.requiredRole ? (
-                    <UserRoleIcon role={link.requiredRole} />
+                    <UserRoleIcon role={link.requiredRole} showTooltip tooltipId={`visibility-${link.id}`} />
                   ) : (
                     <VisibleIcon
                       className="text-primary"
@@ -74,7 +93,7 @@ const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink
                           defaultMessage="Visible to all users (without login)"
                         />
                       }
-                      tooltipId={`visible-${link.id}`}
+                      tooltipId={`visibility-${link.id}`}
                       tooltipPlacement="bottom"
                     />
                   )}
@@ -121,17 +140,21 @@ const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink
                       <Button
                         variant="warning"
                         size="xs"
-                        disabled={!files}
+                        disabled={!files || operationPending}
                         onClick={() => {
                           setFormOpen(true);
                           setEditLink(link);
                         }}>
-                        <EditIcon
-                          fixedWidth
-                          tooltip={<FormattedMessage id="generic.edit" defaultMessage="Edit" />}
-                          tooltipId={`edit-${link.id}`}
-                          tooltipPlacement="bottom"
-                        />
+                        {operationPending && operationType === 'update' && operationLinkId === link.id ? (
+                          <LoadingIcon />
+                        ) : (
+                          <EditIcon
+                            fixedWidth
+                            tooltip={<FormattedMessage id="generic.edit" defaultMessage="Edit" />}
+                            tooltipId={`edit-${link.id}`}
+                            tooltipPlacement="bottom"
+                          />
+                        )}
                       </Button>
                     )}
 
@@ -139,6 +162,7 @@ const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink
                       <Button
                         variant="danger"
                         size="xs"
+                        disabled={operationPending}
                         confirm={
                           <FormattedMessage
                             id="app.filesLinksTable.deleteLinkConfirm"
@@ -147,12 +171,16 @@ const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink
                         }
                         confirmId={`delete-link-${link.id}`}
                         onClick={() => deleteLink(link.id)}>
-                        <DeleteIcon
-                          fixedWidth
-                          tooltip={<FormattedMessage id="generic.delete" defaultMessage="Delete" />}
-                          tooltipId={`delete-${link.id}`}
-                          tooltipPlacement="bottom"
-                        />
+                        {operationPending && operationType === 'remove' && operationLinkId === link.id ? (
+                          <LoadingIcon />
+                        ) : (
+                          <DeleteIcon
+                            fixedWidth
+                            tooltip={<FormattedMessage id="generic.delete" defaultMessage="Delete" />}
+                            tooltipId={`delete-${link.id}`}
+                            tooltipPlacement="bottom"
+                          />
+                        )}
                       </Button>
                     )}
                   </TheButtonGroup>
@@ -170,9 +198,11 @@ const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink
         </p>
       )}
 
+      {operationError && <Callout variant="danger">{getErrorMessage(formatMessage)(operationError)}</Callout>}
+
       <div className="text-center">
         <TheButtonGroup>
-          <Button variant="primary" onClick={() => setFilesOpen(true)}>
+          <Button variant="primary" disabled={operationPending} onClick={() => setFilesOpen(true)}>
             <Icon icon="folder-tree" gapRight={2} />
             <FormattedMessage id="app.filesLinksTable.manageExerciseFiles" defaultMessage="Manage Exercise Files" />
           </Button>
@@ -180,12 +210,12 @@ const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink
           {Boolean(createLink) && (
             <Button
               variant="success"
-              disabled={!files}
+              disabled={!files || operationPending}
               onClick={() => {
                 setFormOpen(true);
                 setEditLink(null);
               }}>
-              <AddIcon gapRight={2} />
+              {operationPending && operationType === 'create' ? <LoadingIcon gapRight={2} /> : <AddIcon gapRight={2} />}
               <FormattedMessage id="app.filesLinksTable.addLink" defaultMessage="Add Link" />
             </Button>
           )}
@@ -238,9 +268,11 @@ FilesLinksTable.propTypes = {
   }).isRequired,
   links: PropTypes.array.isRequired,
   files: PropTypes.object,
+  operation: ImmutablePropTypes.map,
   createLink: PropTypes.func,
   updateLink: PropTypes.func,
   deleteLink: PropTypes.func,
+  intl: PropTypes.object,
 };
 
 export default injectIntl(FilesLinksTable);

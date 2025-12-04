@@ -17,7 +17,7 @@ import {
   removeExerciseFileLink,
 } from '../../redux/modules/exerciseFilesLinks.js';
 import { getFilesForExercise, fetchFilesForExerciseStatus } from '../../redux/selectors/exerciseFiles.js';
-import { getExerciseFilesLinks } from '../../redux/selectors/exerciseFilesLinks.js';
+import { getExerciseFilesLinks, getExerciseFilesLinksOperation } from '../../redux/selectors/exerciseFilesLinks.js';
 import { isFailedState, isLoadingState } from '../../redux/helpers/resourceManager/status.js';
 import { objectMap } from '../../helpers/common.js';
 
@@ -48,6 +48,7 @@ class ExerciseFilesLinksContainer extends Component {
     const {
       exercise,
       exerciseFilesLinks,
+      exerciseFilesLinksOperation,
       exerciseFiles,
       exerciseFilesStatus,
       createLink,
@@ -67,6 +68,7 @@ class ExerciseFilesLinksContainer extends Component {
               exercise={exercise}
               links={Object.values(links)}
               files={extractExerciseFiles(exerciseFiles, exerciseFilesStatus)}
+              operation={exerciseFilesLinksOperation}
               createLink={createLink}
               updateLink={updateLink}
               deleteLink={deleteLink}
@@ -86,6 +88,7 @@ ExerciseFilesLinksContainer.propTypes = {
     permissionHints: PropTypes.object.isRequired,
   }).isRequired,
   exerciseFilesLinks: ImmutablePropTypes.map,
+  exerciseFilesLinksOperation: ImmutablePropTypes.map,
   exerciseFiles: ImmutablePropTypes.map,
   exerciseFilesStatus: PropTypes.string,
   loadLinks: PropTypes.func.isRequired,
@@ -104,6 +107,7 @@ export default connect(
   (state, { exercise }) => {
     return {
       exerciseFilesLinks: getExerciseFilesLinks(state, exercise.id),
+      exerciseFilesLinksOperation: getExerciseFilesLinksOperation(state, exercise.id),
       exerciseFiles: getFilesForExercise(exercise.id)(state),
       exerciseFilesStatus: fetchFilesForExerciseStatus(state)(exercise.id),
     };
