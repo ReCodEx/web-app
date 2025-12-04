@@ -455,7 +455,7 @@
   "app.editExerciseForm.isLocked": "Exercise is locked",
   "app.editExerciseForm.isPublic": "Exercise is public",
   "app.editExerciseForm.medium": "Medium",
-  "app.editExerciseForm.mergeJudgeLogs": "Merge judge logs in one",
+  "app.editExerciseForm.mergeJudgeLogs": "Merge judge logs",
   "app.editExerciseForm.solutionFilesLimit": "Solution files limit:",
   "app.editExerciseForm.solutionSizeLimit": "Solution total size [KiB] limit:",
   "app.editExerciseForm.title": "Edit exercise {name}",

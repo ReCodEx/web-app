@@ -9,7 +9,6 @@ import factory, {
 import { createApiAction } from '../middleware/apiMiddleware.js';
 
 import { actionTypes as exerciseFilesActionTypes } from './exerciseFiles.js';
-import { actionTypes as attachmentFilesActionTypes } from './attachmentFiles.js';
 import { actionTypes as paginationActionTypes } from './pagination.js';
 
 import { arrayToObject, unique } from '../../helpers/common.js';
@@ -230,9 +229,6 @@ const reducer = handleActions(
 
     [exerciseFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { exerciseId } }) =>
       state.hasIn(['resources', exerciseId]) ? updateFiles(state, exerciseId, files, 'filesIds') : state,
-
-    [attachmentFilesActionTypes.ADD_FILES_FULFILLED]: (state, { payload: files, meta: { exerciseId } }) =>
-      state.hasIn(['resources', exerciseId]) ? updateFiles(state, exerciseId, files, 'attachmentFilesIds') : state,
 
     // Attach exercise group ...
 
