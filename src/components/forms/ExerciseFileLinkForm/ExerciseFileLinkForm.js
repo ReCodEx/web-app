@@ -62,6 +62,7 @@ export const initialValues = {
 const ExerciseFileLinkForm = ({
   createNew = false,
   files,
+  onSubmit,
   error,
   warning,
   submitting,
@@ -101,9 +102,10 @@ const ExerciseFileLinkForm = ({
             name="exerciseFileId"
             component={SelectField}
             options={prepareFileOptions(files)}
-            addEmptyOption
-            label={<FormattedMessage id="app.exerciseFileLinkForm.targetFile" defaultMessage="Target file:" />}
+            addEmptyOption={createNew}
+            disabled={!createNew}
             ignoreDirty={createNew}
+            label={<FormattedMessage id="app.exerciseFileLinkForm.targetFile" defaultMessage="Target file:" />}
           />
         </Col>
 
@@ -175,7 +177,7 @@ const ExerciseFileLinkForm = ({
 
           <SubmitButton
             id="saveLink"
-            handleSubmit={handleSubmit}
+            handleSubmit={handleSubmit(data => onSubmit(data).then(() => close && close()))}
             submitting={submitting}
             hasSucceeded={submitSucceeded}
             hasFailed={submitFailed}

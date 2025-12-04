@@ -9,8 +9,13 @@ import { FilesLinksTable } from '../../components/Exercises/FilesTable';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import Box from '../../components/widgets/Box';
 
-import { fetchFilesForExercise, addExerciseFiles, removeExerciseFile } from '../../redux/modules/exerciseFiles.js';
-import { fetchExerciseFileLinksIfNeeded } from '../../redux/modules/exerciseFilesLinks.js';
+import { fetchFilesForExercise } from '../../redux/modules/exerciseFiles.js';
+import {
+  fetchExerciseFileLinksIfNeeded,
+  createExerciseFileLink,
+  updateExerciseFileLink,
+  removeExerciseFileLink,
+} from '../../redux/modules/exerciseFilesLinks.js';
 import { getFilesForExercise, fetchFilesForExerciseStatus } from '../../redux/selectors/exerciseFiles.js';
 import { getExerciseFilesLinks } from '../../redux/selectors/exerciseFilesLinks.js';
 import { isFailedState, isLoadingState } from '../../redux/helpers/resourceManager/status.js';
@@ -40,7 +45,16 @@ class ExerciseFilesLinksContainer extends Component {
   }
 
   render() {
-    const { exercise, exerciseFilesLinks, exerciseFiles, exerciseFilesStatus, ...props } = this.props;
+    const {
+      exercise,
+      exerciseFilesLinks,
+      exerciseFiles,
+      exerciseFilesStatus,
+      createLink,
+      updateLink,
+      deleteLink,
+      ...props
+    } = this.props;
 
     return (
       <Box
@@ -53,6 +67,9 @@ class ExerciseFilesLinksContainer extends Component {
               exercise={exercise}
               links={Object.values(links)}
               files={extractExerciseFiles(exerciseFiles, exerciseFilesStatus)}
+              createLink={createLink}
+              updateLink={updateLink}
+              deleteLink={deleteLink}
               {...props}
             />
           )}
@@ -73,6 +90,14 @@ ExerciseFilesLinksContainer.propTypes = {
   exerciseFilesStatus: PropTypes.string,
   loadLinks: PropTypes.func.isRequired,
   loadFiles: PropTypes.func.isRequired,
+  createLink: PropTypes.func.isRequired,
+  updateLink: PropTypes.func.isRequired,
+  deleteLink: PropTypes.func.isRequired,
+};
+
+const processLinkBody = ({ key, exerciseFileId, saveName, requiredRole }, update = false) => {
+  const common = { key, saveName: saveName || null, requiredRole: requiredRole || null };
+  return update ? common : { ...common, exerciseFileId };
 };
 
 export default connect(
@@ -86,7 +111,9 @@ export default connect(
   (dispatch, { exercise }) => ({
     loadLinks: () => dispatch(fetchExerciseFileLinksIfNeeded(exercise.id)),
     loadFiles: () => dispatch(fetchFilesForExercise(exercise.id)),
-    addFiles: files => dispatch(addExerciseFiles(exercise.id, files)),
-    removeFile: id => dispatch(removeExerciseFile(exercise.id, id)),
+    createLink: data => dispatch(createExerciseFileLink(exercise.id, processLinkBody(data, false))),
+    updateLink: ({ id, ...data }) =>
+      dispatch(updateExerciseFileLink(exercise.id, id, processLinkBody(data, true /* update */))),
+    deleteLink: linkId => dispatch(removeExerciseFileLink(exercise.id, linkId)),
   })
 )(ExerciseFilesLinksContainer);

@@ -30,9 +30,9 @@ export const additionalActionTypes = {
 export const fetchExerciseFileLinks = actions.fetchResource;
 export const fetchExerciseFileLinksIfNeeded = actions.fetchOneIfNeeded;
 
-export const addExerciseFileLink = (exerciseId, body) =>
+export const createExerciseFileLink = (exerciseId, body) =>
   createApiAction({
-    type: actionTypes.CREATE_FILE_LINK,
+    type: additionalActionTypes.CREATE_FILE_LINK,
     endpoint: `/exercises/${exerciseId}/file-links`,
     method: 'POST',
     body,
@@ -41,7 +41,7 @@ export const addExerciseFileLink = (exerciseId, body) =>
 
 export const updateExerciseFileLink = (exerciseId, linkId, body) =>
   createApiAction({
-    type: actionTypes.UPDATE_FILE_LINK,
+    type: additionalActionTypes.UPDATE_FILE_LINK,
     endpoint: `/exercises/${exerciseId}/file-links/${linkId}`,
     method: 'POST',
     body,
@@ -50,7 +50,7 @@ export const updateExerciseFileLink = (exerciseId, linkId, body) =>
 
 export const removeExerciseFileLink = (exerciseId, linkId) =>
   createApiAction({
-    type: actionTypes.REMOVE_FILE_LINK,
+    type: additionalActionTypes.REMOVE_FILE_LINK,
     endpoint: `/exercises/${exerciseId}/file-links/${linkId}`,
     method: 'DELETE',
     meta: { exerciseId, linkId },
@@ -98,18 +98,18 @@ const reducer = handleActions(
         .setIn(['resources', exerciseId, 'data', linkId], fromJS(payload)),
 
     // file link removal
-    [actionTypes.REMOVE_FILE_LINK_PENDING]: (state, { meta: { exerciseId, linkId } }) =>
+    [additionalActionTypes.REMOVE_FILE_LINK_PENDING]: (state, { meta: { exerciseId, linkId } }) =>
       state.setIn(
         ['resources', exerciseId, 'operation'],
         fromJS({ type: 'remove', linkId, state: resourceStatus.PENDING })
       ),
 
-    [actionTypes.REMOVE_FILE_LINK_REJECTED]: (state, { meta: { exerciseId }, payload: error }) =>
+    [additionalActionTypes.REMOVE_FILE_LINK_REJECTED]: (state, { meta: { exerciseId }, payload: error }) =>
       state
         .setIn(['resources', exerciseId, 'operation', 'state'], resourceStatus.FAILED)
         .setIn(['resources', exerciseId, 'operation', 'error'], fromJS(error)),
 
-    [actionTypes.REMOVE_FILE_LINK_FULFILLED]: (state, { meta: { exerciseId, linkId } }) =>
+    [additionalActionTypes.REMOVE_FILE_LINK_FULFILLED]: (state, { meta: { exerciseId, linkId } }) =>
       state.deleteIn(['resources', exerciseId, 'operation']).deleteIn(['resources', exerciseId, 'data', linkId]),
   }),
   initialState

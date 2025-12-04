@@ -16,7 +16,7 @@ import { getFileLinkUrl } from '../../../helpers/localizedData.js';
 
 const sortLinks = lruMemoize(links => links.slice().sort((a, b) => a.key.localeCompare(b.key)));
 
-const FilesLinksTable = ({ exercise, links, files = null }) => {
+const FilesLinksTable = ({ exercise, links, files = null, createLink, updateLink, deleteLink }) => {
   const [filesOpen, setFilesOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editLink, setEditLink] = useState(null);
@@ -116,41 +116,45 @@ const FilesLinksTable = ({ exercise, links, files = null }) => {
                         tooltipPlacement="bottom"
                       />
                     </Button>
-                    <Button
-                      variant="warning"
-                      size="xs"
-                      disabled={!files}
-                      onClick={() => {
-                        setFormOpen(true);
-                        setEditLink(link);
-                      }}>
-                      <EditIcon
-                        fixedWidth
-                        tooltip={<FormattedMessage id="generic.edit" defaultMessage="Edit" />}
-                        tooltipId={`edit-${link.id}`}
-                        tooltipPlacement="bottom"
-                      />
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="xs"
-                      confirm={
-                        <FormattedMessage
-                          id="app.filesLinksTable.deleteLinkConfirm"
-                          defaultMessage="Are you sure you want to delete this file link? This cannot be undone."
+
+                    {Boolean(updateLink) && (
+                      <Button
+                        variant="warning"
+                        size="xs"
+                        disabled={!files}
+                        onClick={() => {
+                          setFormOpen(true);
+                          setEditLink(link);
+                        }}>
+                        <EditIcon
+                          fixedWidth
+                          tooltip={<FormattedMessage id="generic.edit" defaultMessage="Edit" />}
+                          tooltipId={`edit-${link.id}`}
+                          tooltipPlacement="bottom"
                         />
-                      }
-                      confirmId={`delete-link-${link.id}`}
-                      onClick={() => {
-                        /* deletion handler */
-                      }}>
-                      <DeleteIcon
-                        fixedWidth
-                        tooltip={<FormattedMessage id="generic.delete" defaultMessage="Delete" />}
-                        tooltipId={`delete-${link.id}`}
-                        tooltipPlacement="bottom"
-                      />
-                    </Button>
+                      </Button>
+                    )}
+
+                    {Boolean(deleteLink) && (
+                      <Button
+                        variant="danger"
+                        size="xs"
+                        confirm={
+                          <FormattedMessage
+                            id="app.filesLinksTable.deleteLinkConfirm"
+                            defaultMessage="Are you sure you want to delete this file link? This cannot be undone."
+                          />
+                        }
+                        confirmId={`delete-link-${link.id}`}
+                        onClick={() => deleteLink(link.id)}>
+                        <DeleteIcon
+                          fixedWidth
+                          tooltip={<FormattedMessage id="generic.delete" defaultMessage="Delete" />}
+                          tooltipId={`delete-${link.id}`}
+                          tooltipPlacement="bottom"
+                        />
+                      </Button>
+                    )}
                   </TheButtonGroup>
                 </td>
               </tr>
@@ -172,16 +176,19 @@ const FilesLinksTable = ({ exercise, links, files = null }) => {
             <Icon icon="folder-tree" gapRight={2} />
             <FormattedMessage id="app.filesLinksTable.manageExerciseFiles" defaultMessage="Manage Exercise Files" />
           </Button>
-          <Button
-            variant="success"
-            disabled={!files}
-            onClick={() => {
-              setFormOpen(true);
-              setEditLink(null);
-            }}>
-            <AddIcon gapRight={2} />
-            <FormattedMessage id="app.filesLinksTable.addLink" defaultMessage="Add Link" />
-          </Button>
+
+          {Boolean(createLink) && (
+            <Button
+              variant="success"
+              disabled={!files}
+              onClick={() => {
+                setFormOpen(true);
+                setEditLink(null);
+              }}>
+              <AddIcon gapRight={2} />
+              <FormattedMessage id="app.filesLinksTable.addLink" defaultMessage="Add Link" />
+            </Button>
+          )}
         </TheButtonGroup>
       </div>
 
@@ -209,7 +216,7 @@ const FilesLinksTable = ({ exercise, links, files = null }) => {
         <Modal.Body>
           {Boolean(files) && (
             <ExerciseFileLinkForm
-              onSubmit={() => {}}
+              onSubmit={editLink ? updateLink : createLink}
               initialValues={editLink || initialValues}
               links={links}
               files={files}
@@ -231,6 +238,9 @@ FilesLinksTable.propTypes = {
   }).isRequired,
   links: PropTypes.array.isRequired,
   files: PropTypes.object,
+  createLink: PropTypes.func,
+  updateLink: PropTypes.func,
+  deleteLink: PropTypes.func,
 };
 
 export default injectIntl(FilesLinksTable);

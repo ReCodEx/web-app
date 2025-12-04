@@ -1011,7 +1011,7 @@
   "app.filesLinksTable.empty": "Zatím zde nejsou žádné odkazy na soubory.",
   "app.filesLinksTable.header.file": "Cílový soubor",
   "app.filesLinksTable.header.key": "Klíč",
-  "app.filesLinksTable.header.keyExplanation": "Uživatelem specifikovaný identifikátor používaný k vytváření odkazů na stažení souboru v textech úlohy (specifikace, popis). Při zobrazení textu úlohy je podřetězec '%%key%%' nahrazen odpovídajícím URL odkazem.",
+  "app.filesLinksTable.header.keyExplanation": "Uživatelem specifikovaný identifikátor používaný v textech úlohy (specifikace, popis) jako odkaz na soubor. Při zobrazení textu úlohy je podřetězec '%%key%%' nahrazen odpovídající URL adresou.",
   "app.filesLinksTable.header.roleExplanation": "Minimální uživatelská role požadovaná pro přístup k souboru přes tento odkaz. Pokud není role specifikována, soubor je přístupný všem uživatelům (i bez přihlášení).",
   "app.filesLinksTable.header.saveAs": "Uložit jako",
   "app.filesLinksTable.header.saveAsExplanation": "Jméno, pod kterým bude soubor nabídnut ke stažení při přístupu přes tento odkaz. Pokud je prázdné, použije se původní jméno souboru.",
