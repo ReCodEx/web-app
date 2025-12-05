@@ -62,6 +62,7 @@ export const initialValues = {
 const ExerciseFileLinkForm = ({
   createNew = false,
   files,
+  unusedKeys,
   onSubmit,
   error,
   warning,
@@ -78,11 +79,20 @@ const ExerciseFileLinkForm = ({
     <Form method="POST">
       <Row>
         <Col lg={12} xl={6}>
+          {unusedKeys && unusedKeys.length > 0 && (
+            <datalist id="unusedKeysDataList">
+              {unusedKeys.map(key => (
+                <option key={key}>{key}</option>
+              ))}
+            </datalist>
+          )}
+
           <Field
             name="key"
             component={TextField}
             maxLength={16}
             ignoreDirty={createNew}
+            list={unusedKeys && unusedKeys.length > 0 ? 'unusedKeysDataList' : null}
             label={
               <>
                 <FormattedMessage id="app.exerciseFileLinkForm.key" defaultMessage="Key:" />
@@ -203,6 +213,7 @@ ExerciseFileLinkForm.propTypes = {
   createNew: PropTypes.bool,
   links: PropTypes.array.isRequired,
   files: PropTypes.object.isRequired,
+  unusedKeys: PropTypes.array,
   error: PropTypes.any,
   warning: PropTypes.any,
   handleSubmit: PropTypes.func.isRequired,
