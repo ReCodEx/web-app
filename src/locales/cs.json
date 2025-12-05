@@ -454,7 +454,7 @@
   "app.editExerciseForm.mergeJudgeLogs": "Spojit logy sudího",
   "app.editExerciseForm.solutionFilesLimit": "Max. počet souborů řešení:",
   "app.editExerciseForm.solutionSizeLimit": "Max. velikost řešení [KiB]:",
-  "app.editExerciseForm.title": "Upravit nastavení úlohy {name}",
+  "app.editExerciseForm.title": "Texty a nastavení úlohy",
   "app.editExerciseForm.validation.difficulty": "Prosíme vyberte obtížnost úlohy.",
   "app.editExerciseForm.validation.emptyName": "Prosíme vyplňte název úlohy.",
   "app.editExerciseForm.validation.versionDiffers": "Někdo změnil tuto úlohu v průběhu její editace. Prosíme obnovte tuto stránku a proveďte své změny znovu.",

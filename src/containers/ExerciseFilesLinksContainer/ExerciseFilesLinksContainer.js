@@ -11,7 +11,7 @@ import Box from '../../components/widgets/Box';
 
 import { fetchFilesForExercise } from '../../redux/modules/exerciseFiles.js';
 import {
-  fetchExerciseFileLinksIfNeeded,
+  fetchExerciseFilesLinksIfNeeded,
   createExerciseFileLink,
   updateExerciseFileLink,
   removeExerciseFileLink,
@@ -113,7 +113,7 @@ export default connect(
     };
   },
   (dispatch, { exercise }) => ({
-    loadLinks: () => dispatch(fetchExerciseFileLinksIfNeeded(exercise.id)),
+    loadLinks: () => dispatch(fetchExerciseFilesLinksIfNeeded(exercise.id)),
     loadFiles: () => dispatch(fetchFilesForExercise(exercise.id)),
     createLink: data => dispatch(createExerciseFileLink(exercise.id, processLinkBody(data, false))),
     updateLink: ({ id, ...data }) =>

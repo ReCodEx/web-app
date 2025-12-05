@@ -16,7 +16,7 @@ import {
   downloadExerciseFilesArchive,
 } from '../../redux/modules/exerciseFiles.js';
 import { download } from '../../redux/modules/files.js';
-import { fetchExerciseFileLinks, fetchExerciseFileLinksIfNeeded } from '../../redux/modules/exerciseFilesLinks.js';
+import { fetchExerciseFilesLinks, fetchExerciseFilesLinksIfNeeded } from '../../redux/modules/exerciseFilesLinks.js';
 import { getFilesForExercise, fetchFilesForExerciseStatus } from '../../redux/selectors/exerciseFiles.js';
 import { getExerciseFilesLinks } from '../../redux/selectors/exerciseFilesLinks.js';
 
@@ -96,10 +96,10 @@ export default connect(
     loadFiles: () =>
       Promise.all([
         dispatch(fetchFilesForExercise(exercise.id)),
-        dispatch(fetchExerciseFileLinksIfNeeded(exercise.id)),
+        dispatch(fetchExerciseFilesLinksIfNeeded(exercise.id)),
       ]),
     addFiles: files =>
-      dispatch(addExerciseFiles(exercise.id, files)).then(() => dispatch(fetchExerciseFileLinks(exercise.id))),
+      dispatch(addExerciseFiles(exercise.id, files)).then(() => dispatch(fetchExerciseFilesLinks(exercise.id))),
     removeFile: id => dispatch(removeExerciseFile(exercise.id, id)),
     downloadFile: (ev, id) => {
       ev.preventDefault();
