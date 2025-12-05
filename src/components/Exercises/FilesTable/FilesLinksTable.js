@@ -18,7 +18,23 @@ import { getFileLinkUrl } from '../../../helpers/localizedData.js';
 import { resourceStatus } from '../../../redux/helpers/resourceManager';
 import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
-const sortLinks = lruMemoize(links => links.slice().sort((a, b) => a.key.localeCompare(b.key)));
+const sortLinks = lruMemoize((links, locale) => links.slice().sort((a, b) => a.key.localeCompare(b.key, locale)));
+
+const getKeysUsedInText = lruMemoize(localizedTexts => {
+  const usedKeys = new Set();
+  const regex = /%%([-A-Za-z0-9_]+)%%/g;
+  localizedTexts.forEach(({ text, description }) => {
+    Array.from(text.matchAll(regex)).forEach(([_, key]) => usedKeys.add(key));
+    Array.from(description.matchAll(regex)).forEach(([_, key]) => usedKeys.add(key));
+  });
+  return usedKeys;
+});
+
+const getUnusedKeys = lruMemoize((links, keysInText, locale) => {
+  const unusedKeys = new Set(keysInText);
+  links.forEach(({ key }) => unusedKeys.delete(key));
+  return Array.from(unusedKeys).sort((a, b) => a.localeCompare(b, locale));
+});
 
 const FilesLinksTable = ({
   exercise,
@@ -28,7 +44,7 @@ const FilesLinksTable = ({
   createLink,
   updateLink,
   deleteLink,
-  intl: { formatMessage },
+  intl: { locale, formatMessage },
 }) => {
   const [filesOpen, setFilesOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
@@ -39,6 +55,9 @@ const FilesLinksTable = ({
   const operationError = operationFailed ? operation.get('error')?.toJS() : null;
   const operationType = operation && operation.get('type');
   const operationLinkId = operation && operation.get('linkId');
+
+  const keysInText = getKeysUsedInText(exercise.localizedTexts);
+  const unusedKeys = getUnusedKeys(links, keysInText, locale);
 
   return (
     <div>
@@ -79,7 +98,7 @@ const FilesLinksTable = ({
             </tr>
           </thead>
           <tbody>
-            {sortLinks(links).map(link => (
+            {sortLinks(links, locale).map(link => (
               <tr key={link.id}>
                 <td className="shrink-col text-center">
                   {link.requiredRole ? (
@@ -111,6 +130,22 @@ const FilesLinksTable = ({
                       {link.key}
                     </code>
                   </CopyToClipboard>
+
+                  {!keysInText.has(link.key) && (
+                    <Icon
+                      icon="link-slash"
+                      gapLeft={2}
+                      className="text-muted"
+                      tooltipId={`unused-${link.id}`}
+                      tooltipPlacement="bottom"
+                      tooltip={
+                        <FormattedMessage
+                          id="app.filesLinksTable.notUsedInText"
+                          defaultMessage="This key is not used in any exercise text."
+                        />
+                      }
+                    />
+                  )}
                 </td>
                 <td>
                   {files === null ? (
@@ -198,6 +233,21 @@ const FilesLinksTable = ({
         </p>
       )}
 
+      {unusedKeys.length > 0 && (
+        <Callout variant="secondary" className="py-2">
+          <FormattedMessage
+            id="app.filesLinksTable.unusedKeysNotification"
+            defaultMessage="The following keys are defined in the texts but have no corresponding file link:"
+          />{' '}
+          {unusedKeys.map((key, idx) => (
+            <React.Fragment key={key}>
+              {idx > 0 && ', '}
+              <code>{key}</code>
+            </React.Fragment>
+          ))}
+        </Callout>
+      )}
+
       {operationError && <Callout variant="danger">{getErrorMessage(formatMessage)(operationError)}</Callout>}
 
       <div className="text-center">
@@ -251,6 +301,7 @@ const FilesLinksTable = ({
               links={links}
               files={files}
               createNew={!editLink}
+              unusedKeys={unusedKeys}
               close={() => setFormOpen(false)}
             />
           )}
@@ -265,6 +316,14 @@ FilesLinksTable.propTypes = {
     id: PropTypes.string.isRequired,
     filesIds: PropTypes.array.isRequired,
     permissionHints: PropTypes.object.isRequired,
+    localizedTexts: PropTypes.arrayOf(
+      PropTypes.shape({
+        locale: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+      })
+    ).isRequired,
   }).isRequired,
   links: PropTypes.array.isRequired,
   files: PropTypes.object,

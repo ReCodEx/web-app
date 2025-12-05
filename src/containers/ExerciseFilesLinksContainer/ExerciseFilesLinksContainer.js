@@ -86,6 +86,14 @@ ExerciseFilesLinksContainer.propTypes = {
     id: PropTypes.string.isRequired,
     filesIds: PropTypes.array.isRequired,
     permissionHints: PropTypes.object.isRequired,
+    localizedTexts: PropTypes.arrayOf(
+      PropTypes.shape({
+        locale: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+      })
+    ).isRequired,
   }).isRequired,
   exerciseFilesLinks: ImmutablePropTypes.map,
   exerciseFilesLinksOperation: ImmutablePropTypes.map,
