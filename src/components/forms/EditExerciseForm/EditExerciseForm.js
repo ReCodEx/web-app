@@ -11,7 +11,6 @@ import Callout from '../../widgets/Callout';
 import FormBox from '../../widgets/FormBox';
 import SubmitButton from '../SubmitButton';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
-import { LocalizedExerciseName } from '../../helpers/LocalizedNames';
 import { validateExercise } from '../../../redux/modules/exercises.js';
 import { validateLocalizedTextsFormData, replaceLinkKeysWithUrls } from '../../../helpers/localizedData.js';
 import Explanation from '../../widgets/Explanation';
@@ -44,7 +43,6 @@ const previewPreprocessor = lruMemoize(
 
 const EditExerciseForm = ({
   localizedTextsLinks,
-  initialValues: exercise,
   error,
   dirty,
   submitting,
@@ -57,13 +55,7 @@ const EditExerciseForm = ({
 }) => (
   <FormBox
     id="texts-form"
-    title={
-      <FormattedMessage
-        id="app.editExerciseForm.title"
-        defaultMessage="Edit exercise {name}"
-        values={{ name: <LocalizedExerciseName entity={exercise} /> }}
-      />
-    }
+    title={<FormattedMessage id="app.editExerciseForm.title" defaultMessage="Texts and Settings of The Exercise" />}
     succeeded={submitSucceeded}
     dirty={dirty}
     footer={

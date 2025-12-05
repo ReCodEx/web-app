@@ -454,7 +454,7 @@
   "app.editExerciseForm.mergeJudgeLogs": "Merge judge logs",
   "app.editExerciseForm.solutionFilesLimit": "Solution files limit:",
   "app.editExerciseForm.solutionSizeLimit": "Solution total size [KiB] limit:",
-  "app.editExerciseForm.title": "Edit exercise {name}",
+  "app.editExerciseForm.title": "Texts and Settings of The Exercise",
   "app.editExerciseForm.validation.difficulty": "Please select the difficulty of the exercise.",
   "app.editExerciseForm.validation.emptyName": "Please fill the name of the exercise.",
   "app.editExerciseForm.validation.versionDiffers": "Somebody has changed the exercise while you have been editing it. Please reload the page and apply your changes once more.",

@@ -9,7 +9,7 @@ import factory, {
 } from '../helpers/resourceManager';
 import { arrayToObject } from '../../helpers/common.js';
 
-const resourceName = 'exerciseFileLinks';
+const resourceName = 'exerciseFilesLinks';
 const { actions, actionTypes, reduceActions } = factory({
   resourceName,
   apiEndpointFactory: id => `/exercises/${id}/file-links`,
@@ -22,13 +22,13 @@ const { actions, actionTypes, reduceActions } = factory({
 export { actionTypes };
 
 export const additionalActionTypes = {
-  ...createActionsWithPostfixes('CREATE_FILE_LINK', 'recodex/exerciseFileLinks'),
-  ...createActionsWithPostfixes('UPDATE_FILE_LINK', 'recodex/exerciseFileLinks'),
-  ...createActionsWithPostfixes('REMOVE_FILE_LINK', 'recodex/exerciseFileLinks'),
+  ...createActionsWithPostfixes('CREATE_FILE_LINK', 'recodex/exerciseFilesLinks'),
+  ...createActionsWithPostfixes('UPDATE_FILE_LINK', 'recodex/exerciseFilesLinks'),
+  ...createActionsWithPostfixes('REMOVE_FILE_LINK', 'recodex/exerciseFilesLinks'),
 };
 
-export const fetchExerciseFileLinks = actions.fetchResource;
-export const fetchExerciseFileLinksIfNeeded = actions.fetchOneIfNeeded;
+export const fetchExerciseFilesLinks = actions.fetchResource;
+export const fetchExerciseFilesLinksIfNeeded = actions.fetchOneIfNeeded;
 
 export const createExerciseFileLink = (exerciseId, body) =>
   createApiAction({

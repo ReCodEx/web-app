@@ -229,7 +229,7 @@ const FilesLinksTable = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ExerciseFilesTableContainer exercise={exercise} exerciseFilesLinks={links} noBox noRemove />
+          <ExerciseFilesTableContainer exercise={exercise} noBox noRemove />
         </Modal.Body>
       </Modal>
 
