@@ -77,16 +77,18 @@ export const getGroupCanonicalLocalizedName = (group, groupsAccessor, locale, se
  * @param {object} defaults Default values for each locale (used as template for undefined locales
  *  + define editable properties of the locales).
  */
-export const getLocalizedTextsInitialValues = (localizedTexts, defaults) => {
-  return knownLocales.map(locale => {
-    const text = localizedTexts.find(t => t.locale === locale);
-    const res = {
-      locale,
-      _enabled: Boolean(text),
-    };
-    Object.keys(defaults).forEach(prop => (res[prop] = (text && text[prop]) || defaults[prop]));
-    return res;
-  });
+export const getLocalizedTextsInitialValues = (localizedTexts, defaults, onlyEnabled = false) => {
+  return knownLocales
+    .map(locale => {
+      const text = localizedTexts.find(t => t.locale === locale);
+      const res = {
+        locale,
+        _enabled: Boolean(text),
+      };
+      Object.keys(defaults).forEach(prop => (res[prop] = (text && text[prop]) || defaults[prop]));
+      return res;
+    })
+    .filter(({ _enabled }) => !onlyEnabled || _enabled);
 };
 
 /**

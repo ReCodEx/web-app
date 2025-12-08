@@ -5,7 +5,7 @@ import Explanation from '../widgets/Explanation';
 
 const syncMessages = {
   files: <FormattedMessage id="app.assignment.syncExerciseFiles" defaultMessage="Exercise files" />,
-  attachmentFiles: <FormattedMessage id="app.assignment.syncAttachmentFiles" defaultMessage="Text attachment files" />,
+  fileLinks: <FormattedMessage id="app.assignment.syncFileLinks" defaultMessage="Files links" />,
   exerciseTests: <FormattedMessage id="app.assignment.syncExerciseTests" defaultMessage="Exercise tests" />,
   localizedTexts: <FormattedMessage id="app.assignment.syncLocalizedTexts" defaultMessage="Localized texts" />,
   configurationType: (

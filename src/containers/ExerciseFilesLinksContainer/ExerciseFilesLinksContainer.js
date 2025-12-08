@@ -59,7 +59,7 @@ class ExerciseFilesLinksContainer extends Component {
 
     return (
       <Box
-        title={<FormattedMessage id="app.fileLinksTable.boxTitle" defaultMessage="Exercise File Links" />}
+        title={<FormattedMessage id="app.filesLinksTable.boxTitle" defaultMessage="Exercise File Links" />}
         collapsable
         unlimitedHeight>
         <ResourceRenderer resource={exerciseFilesLinks}>

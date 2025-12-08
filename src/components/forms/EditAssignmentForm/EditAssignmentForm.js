@@ -19,17 +19,13 @@ import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation
 import {
   getGroupCanonicalLocalizedName,
   getLocalizedTextsInitialValues,
-  validateLocalizedTextsFormData,
   transformLocalizedTextsFormData,
   replaceLinkKeysWithUrls,
 } from '../../../helpers/localizedData.js';
-import { safeGet, safeSet, EMPTY_ARRAY, hasPermissions } from '../../../helpers/common.js';
+import { safeGet, safeSet, EMPTY_ARRAY, hasPermissions, arrayToObject } from '../../../helpers/common.js';
 import DeadlinesGraphDialog from './DeadlinesGraphDialog.js';
 
 const localizedTextDefaults = {
-  name: '',
-  text: '',
-  link: '',
   studentHint: '',
 };
 
@@ -76,7 +72,8 @@ export const prepareInitialValues = lruMemoize(
     hasNotificationAsyncJob = false
   ) => ({
     groups,
-    localizedTexts: localizedTexts && getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults),
+    localizedTexts:
+      localizedTexts && getLocalizedTextsInitialValues(localizedTexts, localizedTextDefaults, true /* only enabled */),
     firstDeadline: firstDeadline !== undefined ? moment.unix(firstDeadline) : moment().add(2, 'weeks').endOf('day'),
     maxPointsBeforeFirstDeadline: sanitizeInputNumber(maxPointsBeforeFirstDeadline, 10),
     secondDeadline: secondDeadline
@@ -167,7 +164,11 @@ export const transformSubmittedData = ({
       .map(id => id.replace(/^id/, ''));
   }
   if (localizedTexts) {
-    res.localizedTexts = transformLocalizedTextsFormData(localizedTexts);
+    res.localizedStudentHints = arrayToObject(
+      transformLocalizedTextsFormData(localizedTexts),
+      ({ locale }) => locale,
+      ({ studentHint = '' }) => studentHint
+    );
   }
   if (allowSecondDeadline) {
     res.secondDeadline = moment(secondDeadline).unix();
@@ -354,7 +355,6 @@ class EditAssignmentForm extends Component {
     const {
       userId,
       groups,
-      editTexts = false,
       groupsAccessor = null,
       localizedTextsLinks,
       initialValues: assignment,
@@ -894,25 +894,14 @@ class EditAssignmentForm extends Component {
           </Row>
         </Container>
 
-        {editTexts && (
-          <>
-            <hr />
+        <hr />
 
-            <Callout variant="info" icon={<WarningIcon />}>
-              <FormattedMessage
-                id="app.editAssignmentForm.localized.assignmentSyncInfo"
-                defaultMessage="Please note that the localized texts (name and complete description) are overwritten by the most recent data from the exercise when update of the assignment is invoked (if the exercise has been modified after the assignment). The only exception is the hint for students which is associated only with the assignment."
-              />
-            </Callout>
-
-            <FieldArray
-              name="localizedTexts"
-              component={LocalizedTextsFormField}
-              fieldType="assignment"
-              previewPreprocessor={previewPreprocessor(localizedTextsLinks)}
-            />
-          </>
-        )}
+        <FieldArray
+          name="localizedTexts"
+          component={LocalizedTextsFormField}
+          fieldType="assignmentHints"
+          previewPreprocessor={previewPreprocessor(localizedTextsLinks)}
+        />
 
         {error && <Callout variant="danger">{error}</Callout>}
 
@@ -945,7 +934,6 @@ class EditAssignmentForm extends Component {
 
 EditAssignmentForm.propTypes = {
   userId: PropTypes.string.isRequired,
-  editTexts: PropTypes.bool,
   groups: PropTypes.array,
   groupsAccessor: PropTypes.func,
   alreadyAssignedGroups: PropTypes.array,
@@ -985,7 +973,7 @@ const validate = (
     visibleFrom,
     deadlines,
   },
-  { groupsAccessor, editTexts = false, intl: { formatMessage } }
+  { groupsAccessor, intl: { formatMessage } }
 ) => {
   const errors = {};
 
@@ -999,31 +987,6 @@ const validate = (
         defaultMessage="Please select one or more groups to assign exercise."
       />
     );
-  }
-
-  if (editTexts) {
-    validateLocalizedTextsFormData(errors, localizedTexts, ({ name, text, link }) => {
-      const textErrors = {};
-      if (!name.trim()) {
-        textErrors.name = (
-          <FormattedMessage
-            id="app.editAssignmentForm.validation.emptyName"
-            defaultMessage="Please fill the name of the assignment."
-          />
-        );
-      }
-
-      if (!text.trim() && !link.trim()) {
-        textErrors.text = (
-          <FormattedMessage
-            id="app.editAssignmentForm.validation.localizedText.text"
-            defaultMessage="Please fill the description or provide an external link below."
-          />
-        );
-      }
-
-      return textErrors;
-    });
   }
 
   validateTwoDeadlines(errors, formatMessage, firstDeadline, secondDeadline, deadlines !== 'single');
