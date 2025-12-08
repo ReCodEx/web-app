@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { TabbedArrayField } from '../Fields';
-import LocalizedAssignmentFormField from './LocalizedAssignmentFormField.js';
+import LocalizedAssignmentExerciseTextsFormField from './LocalizedAssignmentExerciseTextsFormField.js';
+import LocalizedAssignmentHintsFormField from './LocalizedAssignmentHintsFormField.js';
 import LocalizedShadowAssignmentFormField from './LocalizedShadowAssignmentFormField.js';
 import LocalizedExerciseFormField from './LocalizedExerciseFormField.js';
 import LocalizedGroupFormField from './LocalizedGroupFormField.js';
@@ -13,7 +14,8 @@ import { WarningIcon } from '../../icons';
 import { knownLocalesNames } from '../../../helpers/localizedData.js';
 
 const fieldTypes = {
-  assignment: LocalizedAssignmentFormField,
+  assignmentExercise: LocalizedAssignmentExerciseTextsFormField,
+  assignmentHints: LocalizedAssignmentHintsFormField,
   shadowAssignment: LocalizedShadowAssignmentFormField,
   exercise: LocalizedExerciseFormField,
   group: LocalizedGroupFormField,

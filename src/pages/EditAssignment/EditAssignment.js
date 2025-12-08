@@ -17,7 +17,6 @@ import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import Icon, { EditAssignmentIcon } from '../../components/icons';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import { LocalizedExerciseName } from '../../components/helpers/LocalizedNames';
 
 import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import {
@@ -162,13 +161,7 @@ class EditAssignment extends Component {
 
               <Box
                 title={
-                  <FormattedMessage
-                    id="app.editAssignmentForm.title"
-                    defaultMessage="Edit Assignment — {name}"
-                    values={{
-                      name: <LocalizedExerciseName entity={assignment} />,
-                    }}
-                  />
+                  <FormattedMessage id="app.editAssignmentForm.title" defaultMessage="Edit Assignment Properties" />
                 }
                 unlimitedHeight>
                 <ResourceRenderer resourceArray={runtimeEnvironments}>
@@ -176,7 +169,6 @@ class EditAssignment extends Component {
                     <EditAssignmentForm
                       form="editAssignment"
                       userId={userId}
-                      editTexts
                       initialValues={
                         assignment ? prepareEditFormInitialValues(assignment, hasNotificationAsyncJob) : {}
                       }
