@@ -327,6 +327,7 @@
   "app.editAssignmentForm.localized.description": "Short description for supervisors:",
   "app.editAssignmentForm.localized.descriptionExplanation": "This descriptions is visible only to supervisors and should briefly summarize the exercise. You can use exercise file link keys in the text (%%link-key%%) which will be replaced with proper URLs for file downloads in after Markdown rendering.",
   "app.editAssignmentForm.localized.link": "Link to an external complete description:",
+  "app.editAssignmentForm.localized.linkExplanation": "An URL pointing to an external Markdown document containing the complete exercise description. If the document is accessible in the cross-site mode, ReCodEx will use it to download and render the description seamlessly. If you wish to emphasize, this is a link and visualize it as such, consider using a Markdown link in the 'Complete description' field above.",
   "app.editAssignmentForm.localized.studentHint": "Additional hints for students:",
   "app.editAssignmentForm.localized.studentHintExplanation": "These hints are assignment-specific and they do not synchronize with the exercise texts. However, only localizations that are enabled in the exercise specification are available for hints.",
   "app.editAssignmentForm.localized.urlValidation": "Given string is not a valid URL.",

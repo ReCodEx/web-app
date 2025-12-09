@@ -80,7 +80,7 @@ class ExerciseAssignments extends Component {
   }
 
   multiAssignFormInitialValues = lruMemoize(
-    (visibleGroups, runtimeEnvironments, solutionFilesLimit, solutionSizeLimit) => {
+    (visibleGroups, runtimeEnvironments, solutionFilesLimit, solutionSizeLimit, localizedTexts) => {
       const groups = visibleGroups.reduce((acc, { id }) => {
         acc[`id${id}`] = false;
         return acc;
@@ -97,6 +97,7 @@ class ExerciseAssignments extends Component {
         groups,
         runtimeEnvironmentIds: Object.keys(enabledRuntime),
         enabledRuntime,
+        localizedTexts,
       });
     }
   );
@@ -106,8 +107,8 @@ class ExerciseAssignments extends Component {
 
     return Promise.all(
       formData.groups.map(groupId => {
-        return assignExercise(groupId).then(({ value: { id, localizedTexts, version } }) =>
-          editAssignment(id, Object.assign({}, { localizedTexts, version }, formData))
+        return assignExercise(groupId).then(({ value: { id, version } }) =>
+          editAssignment(id, Object.assign({}, { version }, formData))
         );
       })
     );
@@ -220,7 +221,8 @@ class ExerciseAssignments extends Component {
                                     assignableGroups,
                                     exercise.runtimeEnvironments,
                                     exercise.solutionFilesLimit,
-                                    exercise.solutionSizeLimit
+                                    exercise.solutionSizeLimit,
+                                    exercise.localizedTexts
                                   )}
                                   onSubmit={this.assignExercise}
                                   groups={assignableGroups}
