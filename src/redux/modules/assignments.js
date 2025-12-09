@@ -52,6 +52,9 @@ export const create = (groupId, exerciseId) => actions.addResource({ groupId, ex
 export const editAssignment = actions.updateResource;
 export const deleteAssignment = actions.removeResource;
 
+export const editAssignmentLocalizedTexts = (id, body) =>
+  actions.updateResource(id, body, `/exercise-assignments/${id}/localized-texts`);
+
 export const validateAssignment = (id, version) =>
   createApiAction({
     type: additionalActionTypes.VALIDATE_ASSIGNMENT,
