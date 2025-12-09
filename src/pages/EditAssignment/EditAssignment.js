@@ -12,6 +12,9 @@ import { AssignmentNavigation } from '../../components/layout/Navigation';
 import EditAssignmentForm, {
   prepareInitialValues as prepareEditFormInitialValues,
 } from '../../components/forms/EditAssignmentForm';
+import EditAssignmentLocalizedTextsForm, {
+  prepareInitialValues as prepareEditLocalizedTextsInitialValues,
+} from '../../components/forms/EditAssignmentLocalizedTextsForm';
 import DeleteAssignmentButtonContainer from '../../containers/DeleteAssignmentButtonContainer';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
@@ -22,6 +25,7 @@ import { loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import {
   fetchAssignment,
   editAssignment,
+  editAssignmentLocalizedTexts,
   syncWithExercise,
   validateAssignment,
   fetchAssignmentAsyncJobs,
@@ -90,6 +94,28 @@ class EditAssignment extends Component {
         }
       })
       .then(() => editAssignment({ ...formData, version }));
+  };
+
+  editLocalizedTextsSubmitHandler = formData => {
+    const { assignment, editAssignmentLocalizedTexts, validateAssignment } = this.props;
+    const version = assignment.getIn(['data', 'version']);
+
+    // validate assignment version
+    return validateAssignment(version)
+      .then(res => res.value)
+      .then(({ versionIsUpToDate }) => {
+        if (versionIsUpToDate === false) {
+          throw new SubmissionError({
+            _error: (
+              <FormattedMessage
+                id="app.editAssignment.validation.versionDiffers"
+                defaultMessage="Somebody has changed the assignment while you have been editing it. Please reload the page and apply your changes once more."
+              />
+            ),
+          });
+        }
+      })
+      .then(() => editAssignmentLocalizedTexts({ ...formData, version }));
   };
 
   render() {
@@ -185,6 +211,26 @@ class EditAssignment extends Component {
                 </ResourceRenderer>
               </Box>
 
+              <Box
+                title={
+                  <FormattedMessage
+                    id="app.editAssignmentLocalizedTextsForm.title"
+                    defaultMessage="Override Localized Texts for the Assignment"
+                  />
+                }
+                unlimitedHeight
+                collapsable
+                isOpen={false}>
+                <ResourceRenderer resourceArray={runtimeEnvironments}>
+                  {envs => (
+                    <EditAssignmentLocalizedTextsForm
+                      form="editAssignmentLocalizedTexts"
+                      initialValues={assignment ? prepareEditLocalizedTextsInitialValues(assignment) : {}}
+                      onSubmit={this.editLocalizedTextsSubmitHandler}
+                    />
+                  )}
+                </ResourceRenderer>
+              </Box>
               <br />
               {assignment.permissionHints.remove && (
                 <Box
@@ -230,6 +276,7 @@ EditAssignment.propTypes = {
   asyncJobsLoading: PropTypes.bool,
   hasNotificationAsyncJob: PropTypes.bool,
   editAssignment: PropTypes.func.isRequired,
+  editAssignmentLocalizedTexts: PropTypes.func.isRequired,
   deadlines: PropTypes.string,
   visibility: PropTypes.string,
   visibleFrom: PropTypes.object,
@@ -263,6 +310,10 @@ export default withLinks(
       loadAsync: () => EditAssignment.loadAsync({ assignmentId }, dispatch),
       editAssignment: data =>
         dispatch(editAssignment(assignmentId, data)).then(() => dispatch(fetchAssignmentAsyncJobs(assignmentId))),
+      editAssignmentLocalizedTexts: data =>
+        dispatch(editAssignmentLocalizedTexts(assignmentId, data)).then(() =>
+          dispatch(fetchAssignmentAsyncJobs(assignmentId))
+        ),
       exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
       validateAssignment: version => dispatch(validateAssignment(assignmentId, version)),
     })
