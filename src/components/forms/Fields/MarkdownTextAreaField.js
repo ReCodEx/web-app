@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Form, FormLabel, Row, Col, Modal } from 'react-bootstrap';
+import classnames from 'classnames';
 
 import TextAreaField from './TextAreaField.js';
 import Markdown from '../../widgets/Markdown';
@@ -42,7 +43,7 @@ class MarkdownTextAreaField extends Component {
 
   render() {
     const {
-      meta: { error, warning },
+      meta: { dirty, error, warning },
       label = null,
       input: { name, value },
       disabled,
@@ -60,8 +61,15 @@ class MarkdownTextAreaField extends Component {
               <FormLabel className={error ? 'text-danger' : warning ? 'text-warning' : undefined}>{label}</FormLabel>
             )}
             <div
-              className={`${styles.preview} ${value.length === 0 ? styles.previewEmpty : ''} ${styles.clickable} mb-3`}
-              onDoubleClick={this.showDialog}>
+              className={classnames({
+                [styles.preview]: true,
+                [styles.previewEmpty]: value.length === 0,
+                [styles.clickable]: !disabled,
+                [styles.disabled]: disabled,
+                [styles.dirty]: dirty,
+                'mb-3': true,
+              })}
+              onDoubleClick={disabled ? null : this.showDialog}>
               <Icon icon="pencil" className={styles.editIcon} />
               {value.length === 0 && (
                 <>
@@ -180,6 +188,7 @@ class MarkdownTextAreaField extends Component {
 
 MarkdownTextAreaField.propTypes = {
   meta: PropTypes.shape({
+    dirty: PropTypes.bool,
     error: PropTypes.any,
     warning: PropTypes.any,
   }),

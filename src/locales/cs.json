@@ -327,6 +327,7 @@
   "app.editAssignmentForm.localized.description": "Krátký popis pro vedoucí:",
   "app.editAssignmentForm.localized.descriptionExplanation": "Tento krátký popis je viditelný pouze pro vedoucí a měl by stručně shrnovat úlohu. V textu můžete použít klíčové identifikátory odkazů na soubory úlohy (%%link-key%%), které budou po vykreslení Markdownu nahrazeny správnými URL pro stažení souborů.",
   "app.editAssignmentForm.localized.link": "Odkaz na externí (kompletní) zadání:",
+  "app.editAssignmentForm.localized.linkExplanation": "URL odkazující na externí Markdown dokument obsahující kompletní popis úlohy. Pokud je dokument stažitelný z cizích stránek (cross-origin), ReCodEx jej stáhne a vykreslí namísto interního textu. Pokud naopak chcete zdůraznit, že se jedná o externí odkaz a vizualizovat jej jako takový, zvažte použití Markdown odkazu v poli 'Kompletní zadání' výše.",
   "app.editAssignmentForm.localized.studentHint": "Dodatečná nápověda pro studenty:",
   "app.editAssignmentForm.localized.studentHintExplanation": "Tato nápověda je svázána výhradně se zadanou úlohou a není tedy ovlivněna synchronizací s původní úlohou. Nicméně v tomto formuláři jsou dostupné pouze lokalizace, které jsou povoleny v zadání úlohy.",
   "app.editAssignmentForm.localized.urlValidation": "Daný řetězec neobsahuje platné URL.",

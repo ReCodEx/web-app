@@ -4,11 +4,11 @@ import { reduxForm, FieldArray } from 'redux-form';
 import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
-import { WarningIcon } from '../../icons';
+import { RefreshIcon, WarningIcon } from '../../icons';
 import LocalizedTextsFormField from '../LocalizedTextsFormField';
 import SubmitButton from '../SubmitButton';
-import Explanation from '../../widgets/Explanation';
 import Callout from '../../widgets/Callout';
+import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import {
   getLocalizedTextsInitialValues,
   validateLocalizedTextsFormData,
@@ -64,6 +64,7 @@ class EditAssignmentLocalizedTextsForm extends Component {
       dirty,
       submitting,
       handleSubmit,
+      reset,
       submitFailed,
       submitSucceeded,
       asyncValidating = false,
@@ -93,17 +94,25 @@ class EditAssignmentLocalizedTextsForm extends Component {
         {warning && !error && <Callout variant="warning">{warning}</Callout>}
 
         <div className="text-center">
-          <SubmitButton
-            id="editAssignmentLocalizedTextsForm"
-            invalid={invalid}
-            submitting={submitting}
-            dirty={dirty}
-            hasSucceeded={submitSucceeded}
-            hasFailed={submitFailed}
-            handleSubmit={handleSubmit(this.onSubmitWrapper)}
-            asyncValidating={asyncValidating}
-            messages={submitButtonMessages}
-          />
+          <TheButtonGroup>
+            {dirty && (
+              <Button type="reset" onClick={reset} variant="danger">
+                <RefreshIcon gapRight={2} />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+              </Button>
+            )}
+            <SubmitButton
+              id="editAssignmentLocalizedTextsForm"
+              invalid={invalid}
+              submitting={submitting}
+              dirty={dirty}
+              hasSucceeded={submitSucceeded}
+              hasFailed={submitFailed}
+              handleSubmit={handleSubmit(this.onSubmitWrapper)}
+              asyncValidating={asyncValidating}
+              messages={submitButtonMessages}
+            />
+          </TheButtonGroup>
 
           {submitFailed && (
             <span className="ms-4 text-danger">

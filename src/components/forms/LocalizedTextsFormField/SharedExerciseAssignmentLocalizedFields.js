@@ -47,10 +47,18 @@ const SharedExerciseAssignmentLocalizedFields = ({ prefix, enabled, previewPrepr
       maxLength={1024}
       disabled={!enabled}
       label={
-        <FormattedMessage
-          id="app.editAssignmentForm.localized.link"
-          defaultMessage="Link to an external complete description:"
-        />
+        <>
+          <FormattedMessage
+            id="app.editAssignmentForm.localized.link"
+            defaultMessage="Link to an external complete description:"
+          />
+          <Explanation id="exercise-link-explanation">
+            <FormattedMessage
+              id="app.editAssignmentForm.localized.linkExplanation"
+              defaultMessage="An URL pointing to an external Markdown document containing the complete exercise description. If the document is accessible in the cross-site mode, ReCodEx will use it to download and render the description seamlessly. If you wish to emphasize, this is a link and visualize it as such, consider using a Markdown link in the 'Complete description' field above."
+            />
+          </Explanation>
+        </>
       }
       validate={isURL}
     />
