@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
-import Button from '../../../widgets/TheButton';
+import Button, { TheButtonGroup } from '../../../widgets/TheButton';
 import Callout from '../../../widgets/Callout';
 import DateTime from '../../../widgets/DateTime';
 import { getSyncMessages } from '../../../helpers/assignments.js';
+import { SYNC_OPTIONS_ALL, SYNC_OPTIONS_TEXTS, SYNC_OPTIONS_CONFIG } from '../../../../redux/modules/assignments.js';
 
 const AssignmentSync = ({ syncInfo, exerciseSync }) => {
   const messages = getSyncMessages(syncInfo);
@@ -39,9 +40,41 @@ const AssignmentSync = ({ syncInfo, exerciseSync }) => {
             <ul>{messages}</ul>
           </div>
           <p>
-            <Button variant="primary" onClick={exerciseSync} disabled={!syncInfo.isSynchronizationPossible}>
-              <FormattedMessage id="app.assignment.syncButton" defaultMessage="Update Assignment" />
-            </Button>
+            <TheButtonGroup>
+              {(syncInfo.localizedTexts?.upToDate === false || syncInfo.fileLinks?.upToDate === false) && (
+                <Button
+                  variant="primary"
+                  onClick={() => exerciseSync(SYNC_OPTIONS_TEXTS)}
+                  disabled={!syncInfo.isSynchronizationPossible}>
+                  <FormattedMessage id="app.assignment.syncTextsButton" defaultMessage="Update Texts" />
+                </Button>
+              )}
+
+              {(syncInfo.files?.upToDate === false ||
+                syncInfo.exerciseTests?.upToDate === false ||
+                syncInfo.configurationType?.upToDate === false ||
+                syncInfo.scoreConfig?.upToDate === false ||
+                syncInfo.exerciseConfig?.upToDate === false ||
+                syncInfo.runtimeEnvironments?.upToDate === false ||
+                syncInfo.exerciseEnvironmentConfigs?.upToDate === false ||
+                syncInfo.hardwareGroups?.upToDate === false ||
+                syncInfo.limits?.upToDate === false ||
+                syncInfo.mergeJudgeLogs?.upToDate === false) && (
+                <Button
+                  variant="primary"
+                  onClick={() => exerciseSync(SYNC_OPTIONS_CONFIG)}
+                  disabled={!syncInfo.isSynchronizationPossible}>
+                  <FormattedMessage id="app.assignment.syncConfigButton" defaultMessage="Update Configuration" />
+                </Button>
+              )}
+
+              <Button
+                variant="primary"
+                onClick={() => exerciseSync(SYNC_OPTIONS_ALL)}
+                disabled={!syncInfo.isSynchronizationPossible}>
+                <FormattedMessage id="app.assignment.syncAllButton" defaultMessage="Update Whole Assignment" />
+              </Button>
+            </TheButtonGroup>
 
             {!syncInfo.isSynchronizationPossible && (
               <span style={{ marginLeft: '2em' }} className="text-body-secondary">

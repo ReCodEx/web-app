@@ -9,7 +9,7 @@ import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import OptionalPopoverWrapper from '../../components/widgets/OptionalPopoverWrapper';
 
-import { fetchAssignmentIfNeeded, syncWithExercise } from '../../redux/modules/assignments.js';
+import { fetchAssignmentIfNeeded, syncWithExercise, SYNC_OPTIONS_ALL } from '../../redux/modules/assignments.js';
 import { canSubmit } from '../../redux/modules/canSubmit.js';
 import {
   init,
@@ -342,7 +342,7 @@ export default injectIntl(
     (dispatch, { params: { assignmentId } }) => ({
       init: userId => () => dispatch(init(userId, assignmentId)),
       loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
-      exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+      exerciseSync: (syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(assignmentId, syncOptions)),
       reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
       reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
     })
