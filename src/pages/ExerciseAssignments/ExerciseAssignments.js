@@ -27,6 +27,7 @@ import {
   editAssignment,
   deleteAssignment,
   syncWithExercise,
+  SYNC_OPTIONS_ALL,
   fetchExerciseAssignments,
 } from '../../redux/modules/assignments.js';
 import { exerciseSelector } from '../../redux/selectors/exercises.js';
@@ -296,7 +297,7 @@ export default connect(
   (dispatch, { params: { exerciseId } }) => ({
     loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
     assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
-    syncAssignment: id => dispatch(syncWithExercise(id)),
+    syncAssignment: (id, syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(id, syncOptions)),
     editAssignment: (id, body) => dispatch(editAssignment(id, body)),
     deleteAssignment: id => dispatch(deleteAssignment(id)),
     sendNotification: message => dispatch(sendNotification(exerciseId, message)),

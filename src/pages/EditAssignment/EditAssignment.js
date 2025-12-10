@@ -27,6 +27,7 @@ import {
   editAssignment,
   editAssignmentLocalizedTexts,
   syncWithExercise,
+  SYNC_OPTIONS_ALL,
   validateAssignment,
   fetchAssignmentAsyncJobs,
 } from '../../redux/modules/assignments.js';
@@ -227,6 +228,7 @@ class EditAssignment extends Component {
                       form="editAssignmentLocalizedTexts"
                       initialValues={assignment ? prepareEditLocalizedTextsInitialValues(assignment) : {}}
                       onSubmit={this.editLocalizedTextsSubmitHandler}
+                      localizedTextsLinks={assignment.localizedTextsLinks}
                     />
                   )}
                 </ResourceRenderer>
@@ -314,7 +316,7 @@ export default withLinks(
         dispatch(editAssignmentLocalizedTexts(assignmentId, data)).then(() =>
           dispatch(fetchAssignmentAsyncJobs(assignmentId))
         ),
-      exerciseSync: () => dispatch(syncWithExercise(assignmentId)),
+      exerciseSync: (syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(assignmentId, syncOptions)),
       validateAssignment: version => dispatch(validateAssignment(assignmentId, version)),
     })
   )(EditAssignment)

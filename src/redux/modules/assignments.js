@@ -63,11 +63,26 @@ export const validateAssignment = (id, version) =>
     body: { version },
   });
 
-export const syncWithExercise = assignmentId =>
+export const SYNC_OPTIONS_ALL = [];
+export const SYNC_OPTIONS_TEXTS = ['localizedTexts', 'fileLinks'];
+export const SYNC_OPTIONS_CONFIG = [
+  'configurationType',
+  'exerciseConfig',
+  'exerciseEnvironmentConfigs',
+  'exerciseTests',
+  'files',
+  'hardwareGroups',
+  'limits',
+  'mergeJudgeLogs',
+  'runtimeEnvironments',
+  'scoreConfig',
+];
+export const syncWithExercise = (assignmentId, syncOptions = SYNC_OPTIONS_ALL) =>
   createApiAction({
     type: additionalActionTypes.SYNC_ASSIGNMENT,
     endpoint: `/exercise-assignments/${assignmentId}/sync-exercise`,
     method: 'POST',
+    body: { syncOptions },
     meta: { assignmentId },
   });
 
