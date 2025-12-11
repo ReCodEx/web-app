@@ -172,7 +172,7 @@ class ReviewCommentForm extends Component {
                     values={{
                       code: s => (
                         <code>
-                          <b>{s}</b>
+                          <b>{Array.isArray(s) ? s.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>) : s}</b>
                         </code>
                       ),
                     }}

@@ -10,10 +10,16 @@ const Footer = ({ version }) => (
         defaultMessage="<strong>Version</strong> {version} (<a>changelog</a>)"
         values={{
           version,
-          strong: text => <strong key="version">{text}</strong>,
-          a: caption => (
+          strong: text => (
+            <strong key="version">
+              {Array.isArray(text) ? text.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>) : text}
+            </strong>
+          ),
+          a: contents => (
             <a key="link" href="https://github.com/ReCodEx/wiki/wiki/Changelog" target="_blank" rel="noreferrer">
-              {caption}
+              {Array.isArray(contents)
+                ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                : contents}
             </a>
           ),
         }}
@@ -23,9 +29,9 @@ const Footer = ({ version }) => (
       id="app.footer.copyright"
       defaultMessage="Copyright © 2016-{year} <a>ReCodEx</a>. All rights reserved."
       values={{
-        a: caption => (
+        a: contents => (
           <a key="link" href="http://github.com/recodex" target="_blank" rel="noreferrer">
-            {caption}
+            {Array.isArray(contents) ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>) : contents}
           </a>
         ),
         year: Math.max(new Date().getFullYear(), 2018),

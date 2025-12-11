@@ -102,9 +102,11 @@ class MarkdownTextAreaField extends Component {
                     id="app.markdownTextArea.canUseMarkdown"
                     defaultMessage="You can use <a>markdown syntax</a> in this field."
                     values={{
-                      a: caption => (
+                      a: contents => (
                         <a href="https://github.com/ReCodEx/wiki/wiki/Markdown" target="_blank" rel="noreferrer">
-                          {caption}
+                          {Array.isArray(contents)
+                            ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                            : contents}
                         </a>
                       ),
                     }}

@@ -138,7 +138,13 @@ class ExternalLoginBox extends Component {
                 id="app.externalLogin.help"
                 defaultMessage="In case of any problems, <a>contact the support</a>."
                 values={{
-                  a: caption => <a href={helpUrl}>{caption}</a>,
+                  a: contents => (
+                    <a href={helpUrl}>
+                      {Array.isArray(contents)
+                        ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                        : contents}
+                    </a>
+                  ),
                 }}
               />
             </p>

@@ -253,7 +253,13 @@ const validatePortVariable = (boxName, ports, portName, port, variablesIndex, er
           ports,
           portName,
           variable,
-          code: content => <code>{content}</code>,
+          code: contents => (
+            <code>
+              {Array.isArray(contents)
+                ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                : contents}
+            </code>
+          ),
         }}
       />
     );
@@ -270,7 +276,13 @@ const validatePortVariable = (boxName, ports, portName, port, variablesIndex, er
           variable,
           portType: port.type,
           varType: variablesIndex[variable].type,
-          code: content => <code>{content}</code>,
+          code: contents => (
+            <code>
+              {Array.isArray(contents)
+                ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                : contents}
+            </code>
+          ),
         }}
       />
     );
@@ -300,7 +312,13 @@ const validateBoxPorts = (box, boxType, ports, variablesIndex, errors) => {
             boxName: box.name,
             ports,
             portName,
-            code: content => <code>{content}</code>,
+            code: contents => (
+              <code>
+                {Array.isArray(contents)
+                  ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                  : contents}
+              </code>
+            ),
           }}
         />
       );
@@ -317,7 +335,13 @@ const validateBoxPorts = (box, boxType, ports, variablesIndex, errors) => {
               portName,
               type: port.type,
               typeDef: portDef.type,
-              code: content => <code>{content}</code>,
+              code: contents => (
+                <code>
+                  {Array.isArray(contents)
+                    ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                    : contents}
+                </code>
+              ),
             }}
           />
         );
@@ -349,7 +373,13 @@ const validateBoxes = (boxes, variables, boxTypes, errors) => {
           values={{
             name: box.name || '??',
             type: box.type,
-            code: content => <code>{content}</code>,
+            code: contents => (
+              <code>
+                {Array.isArray(contents)
+                  ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                  : contents}
+              </code>
+            ),
           }}
         />
       );
@@ -379,7 +409,13 @@ const validateVariables = (variables, boxes, errors) => {
           values={{
             name: variable.name || '??',
             type: variable.type,
-            code: content => <code>{content}</code>,
+            code: contents => (
+              <code>
+                {Array.isArray(contents)
+                  ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                  : contents}
+              </code>
+            ),
           }}
         />
       );
@@ -391,7 +427,13 @@ const validateVariables = (variables, boxes, errors) => {
           values={{
             name: variable.name || '??',
             type: variable.type,
-            code: content => <code>{content}</code>,
+            code: contents => (
+              <code>
+                {Array.isArray(contents)
+                  ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                  : contents}
+              </code>
+            ),
           }}
         />
       );
@@ -404,7 +446,13 @@ const validateVariables = (variables, boxes, errors) => {
           defaultMessage="Variable <code>{name}</code> is attached to more than one output port."
           values={{
             name: variable.name || '??',
-            code: content => <code>{content}</code>,
+            code: contents => (
+              <code>
+                {Array.isArray(contents)
+                  ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                  : contents}
+              </code>
+            ),
           }}
         />
       );
