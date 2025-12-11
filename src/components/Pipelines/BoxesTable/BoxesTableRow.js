@@ -93,7 +93,13 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
                 values={{
                   type: port.type,
                   descType: port.prescribedType,
-                  code: content => <code>{content}</code>,
+                  code: contents => (
+                    <code>
+                      {Array.isArray(contents)
+                        ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                        : contents}
+                    </code>
+                  ),
                 }}
               />
             }
@@ -112,7 +118,13 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
                 values={{
                   type: port.type,
                   descType: port.prescribedType,
-                  code: content => <code>{content}</code>,
+                  code: contents => (
+                    <code>
+                      {Array.isArray(contents)
+                        ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                        : contents}
+                    </code>
+                  ),
                 }}
               />
             </small>
@@ -137,7 +149,13 @@ const BoxesTablePortsFragment = ({ box, port, variables, selectedVariable, assig
                       values={{
                         type: variables[port.value],
                         descType: port.prescribedType,
-                        code: content => <code>{content}</code>,
+                        code: contents => (
+                          <code>
+                            {Array.isArray(contents)
+                              ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                              : contents}
+                          </code>
+                        ),
                       }}
                     />
                   }

@@ -91,9 +91,11 @@ class EditEnvironmentSimpleForm extends Component {
                     id="app.editEnvironmentSimpleForm.linkToWiki"
                     defaultMessage="Select all runtime environments the exercise should support. You may find more information about the environments at our <a>wiki page</a>."
                     values={{
-                      a: caption => (
+                      a: contents => (
                         <a href={environmentsHelpUrl} target="_blank" rel="noreferrer">
-                          {caption}
+                          {Array.isArray(contents)
+                            ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                            : contents}
                         </a>
                       ),
                     }}

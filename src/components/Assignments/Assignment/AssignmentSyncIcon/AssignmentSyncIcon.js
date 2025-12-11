@@ -27,7 +27,13 @@ const AssignmentSyncIcon = ({ id, syncInfo, ...props }) => {
                 values={{
                   exerciseUpdated: <DateTime unixTs={syncInfo.updatedAt.exercise} emptyPlaceholder="??" />,
                   assignmentUpdated: <DateTime unixTs={syncInfo.updatedAt.assignment} emptyPlaceholder="??" />,
-                  strong: contents => <strong>{contents}</strong>,
+                  strong: contents => (
+                    <strong key="strong">
+                      {Array.isArray(contents)
+                        ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                        : contents}
+                    </strong>
+                  ),
                 }}
               />
             </p>

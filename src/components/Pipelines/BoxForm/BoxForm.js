@@ -80,7 +80,16 @@ class BoxForm extends Component {
               <FormattedMessage
                 id="app.pipelines.boxForm.titleEditing"
                 defaultMessage="Editing Box <strong>{editing}</strong>"
-                values={{ editing, strong: content => <strong className="ms-1">{content}</strong> }}
+                values={{
+                  editing,
+                  strong: contents => (
+                    <strong key="strong" className="ms-1">
+                      {Array.isArray(contents)
+                        ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                        : contents}
+                    </strong>
+                  ),
+                }}
               />
             ) : (
               <FormattedMessage id="app.pipelines.boxForm.titleNew" defaultMessage="Add New Box" />
@@ -314,7 +323,13 @@ const validate = (
               values={{
                 type: variable.type,
                 descType: boxType[ports][portName].type,
-                code: content => <code>{content}</code>,
+                code: contents => (
+                  <code>
+                    {Array.isArray(contents)
+                      ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                      : contents}
+                  </code>
+                ),
               }}
             />
           );

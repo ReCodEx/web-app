@@ -316,9 +316,11 @@ class AssignmentsTable extends Component {
                             defaultMessage="Total {count} {count, plural, one {assignment} other {assignments}} {count, plural, one {is past its} other {are past their}} deadline. <a>Hide old assignments.</a>"
                             values={{
                               count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
-                              a: content => (
+                              a: contents => (
                                 <a href="" onClick={this.hideOldAssignments}>
-                                  {content}
+                                  {Array.isArray(contents)
+                                    ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                                    : contents}
                                 </a>
                               ),
                             }}
@@ -329,9 +331,11 @@ class AssignmentsTable extends Component {
                             defaultMessage="There {count, plural, one {is} other {are}} {count} hidden {count, plural, one {assignment} other {assignments}} which {count, plural, one {is past its} other {are past their}} deadline. <a>Show all.</a>"
                             values={{
                               count: assignmentsPreprocessedAll.length - assignmentsPreprocessedCurrent.length,
-                              a: content => (
+                              a: contents => (
                                 <a href="" onClick={this.showAllAssignments}>
-                                  {content}
+                                  {Array.isArray(contents)
+                                    ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                                    : contents}
                                 </a>
                               ),
                             }}

@@ -628,7 +628,16 @@ class SolutionStatus extends Component {
                       <FormattedMessage
                         id="app.solution.pointsExplainDialog.bonusPoints"
                         defaultMessage="A supervisor has granted additional <strong>{bonusPoints}</strong> bonus {bonusPoints, plural, one {point} other {points}}."
-                        values={{ bonusPoints, strong: contents => <strong>{contents}</strong> }}
+                        values={{
+                          bonusPoints,
+                          strong: contents => (
+                            <strong key="strong">
+                              {Array.isArray(contents)
+                                ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                                : contents}
+                            </strong>
+                          ),
+                        }}
                       />
                     </p>
                   )}
@@ -639,7 +648,17 @@ class SolutionStatus extends Component {
                   <FormattedMessage
                     id="app.solution.pointsExplainDialog.overriddenPoints"
                     defaultMessage="A supervisor has manually overridden the points to <strong>{overriddenPoints}</strong> (and {bonusPoints} {bonusPoints, plural, one {point} other {points}})."
-                    values={{ overriddenPoints, bonusPoints, strong: contents => <strong>{contents}</strong> }}
+                    values={{
+                      overriddenPoints,
+                      bonusPoints,
+                      strong: contents => (
+                        <strong key="strong">
+                          {Array.isArray(contents)
+                            ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                            : contents}
+                        </strong>
+                      ),
+                    }}
                   />
                 </p>
               )}

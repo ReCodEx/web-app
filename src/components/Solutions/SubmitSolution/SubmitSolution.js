@@ -244,9 +244,11 @@ class SubmitSolution extends Component {
                           id="app.submitSolution.linkToWiki"
                           defaultMessage="Select the right environment, under which you wish to submit your solution. You may find more information about the environments at our <a>wiki page</a>."
                           values={{
-                            a: caption => (
+                            a: contents => (
                               <a href={environmentsHelpUrl} target="_blank" rel="noreferrer">
-                                {caption}
+                                {Array.isArray(contents)
+                                  ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                                  : contents}
                               </a>
                             ),
                           }}

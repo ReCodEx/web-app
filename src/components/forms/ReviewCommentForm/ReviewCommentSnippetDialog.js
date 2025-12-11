@@ -122,9 +122,13 @@ const ReviewCommentSnippetDialog = ({
         id="app.reviewCommentSnippetDialog.help"
         defaultMessage="The snippets above can be inserted into the comments. When editing, <code>Ctrl+[num]</code> inserts snippet from slot #num (where num is 0-9). <code>Ctrl+Alt+[num]</code> replaces the snippet #num with the currently selected text of the comment (or with the whole comment, if no part is selected)."
         values={{
-          code: s => (
+          code: contents => (
             <code>
-              <b>{s}</b>
+              <b>
+                {Array.isArray(contents)
+                  ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                  : contents}
+              </b>
             </code>
           ),
         }}

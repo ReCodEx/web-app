@@ -27,9 +27,21 @@ import { getLocalizedName, getLocalizedDescription } from '../../helpers/localiz
 import * as styles from './Home.less';
 
 const BASIC_HTML = {
-  strong: content => <strong>{content}</strong>,
-  em: content => <em>{content}</em>,
-  code: content => <code>{content}</code>,
+  strong: contents => (
+    <strong key="strong">
+      {Array.isArray(contents) ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>) : contents}
+    </strong>
+  ),
+  em: contents => (
+    <em key="em">
+      {Array.isArray(contents) ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>) : contents}
+    </em>
+  ),
+  code: contents => (
+    <code key="code">
+      {Array.isArray(contents) ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>) : contents}
+    </code>
+  ),
 };
 const EXTERNAL_AUTH_HELPDESK_URL = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
 

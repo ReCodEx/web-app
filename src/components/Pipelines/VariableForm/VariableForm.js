@@ -47,7 +47,16 @@ class VariableForm extends Component {
               <FormattedMessage
                 id="app.pipelines.variableForm.titleEditing"
                 defaultMessage="Editing Variable <strong>{editing}</strong>"
-                values={{ editing, strong: content => <strong className="ms-1">{content}</strong> }}
+                values={{
+                  editing,
+                  strong: contents => (
+                    <strong key="strong" className="ms-1">
+                      {Array.isArray(contents)
+                        ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                        : contents}
+                    </strong>
+                  ),
+                }}
               />
             ) : (
               <FormattedMessage id="app.pipelines.variableForm.titleNew" defaultMessage="Add New Variable" />

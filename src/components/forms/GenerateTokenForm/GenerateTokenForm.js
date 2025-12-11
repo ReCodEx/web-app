@@ -232,7 +232,13 @@ const validate = ({ scope, expiration }) => {
         id="app.generateTokenForm.validate.expirationTooLong"
         defaultMessage="The <i>Master</i> scope has restricted maximal expiration time to one week at the moment."
         values={{
-          i: text => <i>{text}</i>,
+          i: contents => (
+            <i>
+              {Array.isArray(contents)
+                ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                : contents}
+            </i>
+          ),
         }}
       />
     );

@@ -555,7 +555,13 @@ class SolutionSourceCodes extends Component {
                                         defaultMessage="Select a file from second solution that will be compared with ''<code>{name}</code>'' file from the first solution. Note that changing a mapping between two files may affect how other files are mapped."
                                         values={{
                                           name: this.state.mappingDialogOpenFile.name,
-                                          code: content => <code>{content}</code>,
+                                          code: contents => (
+                                            <code>
+                                              {Array.isArray(contents)
+                                                ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                                                : contents}
+                                            </code>
+                                          ),
                                         }}
                                       />
                                     )}
