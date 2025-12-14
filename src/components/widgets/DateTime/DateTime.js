@@ -13,7 +13,7 @@ import { knownLocales } from '../../../helpers/localizedData.js';
 import * as styles from './DateTime.less';
 
 const isAfter = (unixTime, now = Date.now() / 1000) => {
-  return unixTime < Date.now();
+  return unixTime < now;
 };
 
 const getLocalizedIntlDateFormatter = lruMemoize(locale =>
