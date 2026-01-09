@@ -13043,7 +13043,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:7.11.0, react-router@npm:^7.11.0":
+"react-router@npm:7.11.0":
   version: 7.11.0
   resolution: "react-router@npm:7.11.0"
   dependencies:
@@ -13056,6 +13056,22 @@ __metadata:
     react-dom:
       optional: true
   checksum: e244302ab79f93cc4f19995d1957d2be5a09a09d642db6ab7e87ea82674937146ba10579b15b9ae4839332e231d396433acbae26b5e75a0fc0e6b13395d3f158
+  languageName: node
+  linkType: hard
+
+"react-router@npm:^7.12.0":
+  version: 7.12.0
+  resolution: "react-router@npm:7.12.0"
+  dependencies:
+    cookie: ^1.0.1
+    set-cookie-parser: ^2.6.0
+  peerDependencies:
+    react: ">=18"
+    react-dom: ">=18"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: f59b399a968cdd9254b711be74e35e1ae365e00a7c908e22a5d80a45ef3ff6ecaf5add40b31ecedfdbe1f82455bb451e0d3b053d64fa2dfb9364af0942c88ea6
   languageName: node
   linkType: hard
 
@@ -13278,7 +13294,7 @@ __metadata:
     react-intl-translations-manager: ^5.0.3
     react-qr-code: ^2.0.18
     react-redux: ^9.2.0
-    react-router: ^7.11.0
+    react-router: ^7.12.0
     react-router-dom: ^7.11.0
     react-syntax-highlighter: ^16.1.0
     react-toggle: 4.1.3
