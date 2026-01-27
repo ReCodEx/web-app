@@ -272,7 +272,7 @@ const FilesLinksTable = ({
         </TheButtonGroup>
       </div>
 
-      <Modal show={filesOpen} backdrop="static" size="xl" onHide={() => setFilesOpen(false)}>
+      <Modal show={filesOpen} size="xl" onHide={() => setFilesOpen(false)} onEscapeKeyDown={() => setFilesOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage id="app.filesLinksTable.manageExerciseFiles" defaultMessage="Manage Exercise Files" />
@@ -283,7 +283,11 @@ const FilesLinksTable = ({
         </Modal.Body>
       </Modal>
 
-      <Modal show={formOpen && Boolean(files)} backdrop="static" size="xl" onHide={() => setFormOpen(false)}>
+      <Modal
+        show={formOpen && Boolean(files)}
+        size="xl"
+        onHide={() => setFormOpen(false)}
+        onEscapeKeyDown={() => setFormOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title>
             {editLink ? (

@@ -334,7 +334,7 @@ const AssignmentDetails = ({
         </Table>
 
         {(maxPointsBeforeFirstDeadline !== 0 || (allowSecondDeadline && maxPointsBeforeSecondDeadline !== 0)) && (
-          <Modal show={open} backdrop="static" onHide={() => setOpen(false)} size="xl">
+          <Modal show={open} onHide={() => setOpen(false)} onEscapeKeyDown={() => setOpen(false)} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage

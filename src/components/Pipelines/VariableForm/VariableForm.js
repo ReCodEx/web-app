@@ -40,7 +40,7 @@ class VariableForm extends Component {
     } = this.props;
 
     return (
-      <Modal show={show} onHide={onHide} keyboard size="lg">
+      <Modal show={show} onHide={onHide} onEscapeKeyDown={onHide} size="lg">
         <Modal.Header closeButton>
           <h5>
             {editing ? (

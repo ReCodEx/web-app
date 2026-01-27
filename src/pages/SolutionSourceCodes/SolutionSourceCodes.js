@@ -526,8 +526,8 @@ class SolutionSourceCodes extends Component {
                             {diffMode && secondFiles && (
                               <Modal
                                 show={this.state.mappingDialogOpenFile !== null}
-                                backdrop="static"
                                 onHide={this.closeDialogs}
+                                onEscapeKeyDown={this.closeDialogs}
                                 size="xl">
                                 <Modal.Header closeButton>
                                   <Modal.Title>
@@ -637,7 +637,11 @@ class SolutionSourceCodes extends Component {
               />
             )}
 
-            <Modal show={this.state.diffDialogOpen} backdrop="static" onHide={this.closeDialogs} size="xl">
+            <Modal
+              show={this.state.diffDialogOpen}
+              onHide={this.closeDialogs}
+              onEscapeKeyDown={this.closeDialogs}
+              size="xl">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage

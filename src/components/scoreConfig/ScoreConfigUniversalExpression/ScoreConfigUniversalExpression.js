@@ -270,8 +270,8 @@ class ScoreConfigUniversalExpression extends Component {
               <Modal
                 key={genericClass}
                 show={this.state[`${genericClass}DialogOpen`]}
-                backdrop="static"
                 onHide={this.closeDialog}
+                onEscapeKeyDown={this.closeDialog}
                 size="large">
                 <Modal.Header closeButton>
                   <Modal.Title>{EDIT_FORMS_TITLES[genericClass]}</Modal.Title>
@@ -290,7 +290,11 @@ class ScoreConfigUniversalExpression extends Component {
           })}
 
         {editable && (
-          <Modal show={this.state.helpDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal
+            show={this.state.helpDialogOpen}
+            onHide={this.closeDialog}
+            onEscapeKeyDown={this.closeDialog}
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -363,7 +367,11 @@ class ScoreConfigUniversalExpression extends Component {
         )}
 
         {editable && (
-          <Modal show={this.state.optimizationDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal
+            show={this.state.optimizationDialogOpen}
+            onHide={this.closeDialog}
+            onEscapeKeyDown={this.closeDialog}
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -447,7 +455,11 @@ class ScoreConfigUniversalExpression extends Component {
         )}
 
         {editable && (
-          <Modal show={this.state.debugDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal
+            show={this.state.debugDialogOpen}
+            onHide={this.closeDialog}
+            onEscapeKeyDown={this.closeDialog}
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage id="app.scoreConfigExpression.debug.title" defaultMessage="Debug Log" />

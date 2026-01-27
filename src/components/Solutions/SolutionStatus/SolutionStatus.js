@@ -538,7 +538,11 @@ class SolutionStatus extends Component {
         </Box>
 
         {Boolean(editNote) && (
-          <Modal show={this.state.editDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal
+            show={this.state.editDialogOpen}
+            onHide={this.closeDialog}
+            onEscapeKeyDown={this.closeDialog}
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 {referenceSolution ? (
@@ -561,7 +565,11 @@ class SolutionStatus extends Component {
         )}
 
         {!referenceSolution && evaluation && (
-          <Modal show={this.state.explainDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal
+            show={this.state.explainDialogOpen}
+            onHide={this.closeDialog}
+            onEscapeKeyDown={this.closeDialog}
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage
@@ -704,7 +712,11 @@ class SolutionStatus extends Component {
         )}
 
         {assignmentSolverSelector && (
-          <Modal show={this.state.otherSolutionsDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal
+            show={this.state.otherSolutionsDialogOpen}
+            onHide={this.closeDialog}
+            onEscapeKeyDown={this.closeDialog}
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage

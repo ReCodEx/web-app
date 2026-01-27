@@ -95,7 +95,7 @@ class ExerciseGroups extends Component {
           </Table>
 
           {showButtons && (
-            <Modal show={this.state.dialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+            <Modal show={this.state.dialogOpen} onHide={this.closeDialog} onEscapeKeyDown={this.closeDialog} size="xl">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage

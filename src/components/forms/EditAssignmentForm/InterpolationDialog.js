@@ -54,7 +54,7 @@ const InterpolationDialog = ({
         <Icon icon="calculator" />
       </Button>
 
-      <Modal show={open && valid} backdrop="static" onHide={() => setOpen(false)} size="xl">
+      <Modal show={open && valid} onHide={() => setOpen(false)} onEscapeKeyDown={() => setOpen(false)} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage

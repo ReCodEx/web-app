@@ -452,7 +452,11 @@ class AssignmentsTable extends Component {
         </UserUIDataContext.Consumer>
 
         {!noDiscussion && (
-          <Modal show={this.state.dialogAssignment !== null} backdrop="static" onHide={this.closeDialog} size="xl">
+          <Modal
+            show={this.state.dialogAssignment !== null}
+            onHide={this.closeDialog}
+            onEscapeKeyDown={this.closeDialog}
+            size="xl">
             {this.state.dialogAssignment && (
               <CommentThreadContainer
                 threadId={this.state.dialogAssignment.id}

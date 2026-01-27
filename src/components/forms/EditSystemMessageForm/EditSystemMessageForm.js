@@ -42,7 +42,7 @@ const EditSystemMessageForm = ({
   createNew = false,
   intl: { formatMessage },
 }) => (
-  <Modal show={isOpen} backdrop="static" size="lg" onHide={onClose}>
+  <Modal show={isOpen} size="lg" onHide={onClose} onEscapeKeyDown={onClose}>
     <Modal.Header closeButton>
       <Modal.Title>
         {createNew ? (

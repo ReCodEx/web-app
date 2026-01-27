@@ -29,7 +29,7 @@ const ResolveFailure = ({
   invalid,
   reset,
 }) => (
-  <Modal show={isOpen} backdrop="static" onHide={onClose} size="xl">
+  <Modal show={isOpen} onHide={onClose} onEscapeKeyDown={onClose} size="xl">
     <Modal.Header closeButton>
       <Modal.Title>
         <FormattedMessage id="app.submissionFailures.resolveTitle" defaultMessage="Resolve Failure" />

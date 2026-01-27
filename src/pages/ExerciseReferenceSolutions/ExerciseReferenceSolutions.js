@@ -483,7 +483,11 @@ class ExerciseReferenceSolutions extends Component {
               </Col>
             </Row>
 
-            <Modal show={this.state.filtersOpen} onHide={this.closeFilters} size="lg">
+            <Modal
+              show={this.state.filtersOpen}
+              onHide={this.closeFilters}
+              onEscapeKeyDown={this.closeFilters}
+              size="lg">
               <Modal.Header closeButton>
                 <Modal.Title>
                   <FormattedMessage
