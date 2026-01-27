@@ -117,7 +117,11 @@ const AddStudent = ({ groups, groupsAccessor, groupId, instanceId, canSearch = f
             </Row>
           </InsetPanel>
 
-          <Modal show={dialogOpen} backdrop="static" onHide={() => setDialogOpen(false)} size="xl">
+          <Modal
+            show={dialogOpen}
+            onHide={() => setDialogOpen(false)}
+            onEscapeKeyDown={() => setDialogOpen(false)}
+            size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <FormattedMessage id="app.addStudent.inviteDialog.title" defaultMessage="Send invitation to ReCodEx" />

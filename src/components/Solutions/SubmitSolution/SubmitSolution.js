@@ -186,7 +186,7 @@ class SubmitSolution extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose} size="xl">
+      <Modal show={isOpen} onHide={onClose} onEscapeKeyDown={onClose} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>{formatMessage(messages.title)}</Modal.Title>
         </Modal.Header>
@@ -263,11 +263,11 @@ class SubmitSolution extends Component {
 
               {Boolean(
                 !isValidating &&
-                  presubmitVariables &&
-                  presubmitVariables.length > 0 &&
-                  attachedFiles &&
-                  attachedFiles.length > 1 &&
-                  hasEntryPoint(presubmitVariables, selectedEnvironment)
+                presubmitVariables &&
+                presubmitVariables.length > 0 &&
+                attachedFiles &&
+                attachedFiles.length > 1 &&
+                hasEntryPoint(presubmitVariables, selectedEnvironment)
               ) && (
                 <FormGroup className="mb-3">
                   <FormLabel className={selectedEntryPoint ? '' : 'text-danger'}>

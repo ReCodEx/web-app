@@ -563,7 +563,11 @@ class AssignmentSolutions extends Component {
                     </Button>
                   </TheButtonGroup>
 
-                  <Modal show={this.state.assignmentDialogOpen} backdrop="static" onHide={this.closeDialog} size="xl">
+                  <Modal
+                    show={this.state.assignmentDialogOpen}
+                    onHide={this.closeDialog}
+                    onEscapeKeyDown={this.closeDialog}
+                    size="xl">
                     <CommentThreadContainer
                       threadId={assignment.id}
                       title={

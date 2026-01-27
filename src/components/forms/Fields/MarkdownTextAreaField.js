@@ -131,7 +131,6 @@ class MarkdownTextAreaField extends Component {
         {(preview === true || preview === PREVIEW_MODAL || preview === PREVIEW_FIRST) && (
           <Modal
             show={show}
-            backdrop="static"
             onHide={this.hideDialog}
             onEscapeKeyDown={this.hideDialog}
             size="xl"

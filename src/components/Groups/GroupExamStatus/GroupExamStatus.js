@@ -350,7 +350,11 @@ class GroupExamStatus extends Component {
         </Callout>
 
         {hasPermissions(group, 'setExamPeriod') && (
-          <Modal size="xl" show={this.state.examModal} onHide={this.examModalClose}>
+          <Modal
+            size="xl"
+            show={this.state.examModal}
+            onHide={this.examModalClose}
+            onEscapeKeyDown={this.examModalClose}>
             <Modal.Header closeButton>
               <Modal.Title>
                 {this.state.hasExam ? (

@@ -75,7 +75,7 @@ class SourceCodeViewerContainer extends Component {
     return (
       <ResourceRenderer
         loading={
-          <Modal show={show} onHide={onHide} dialogClassName={styles.modal} size="xl">
+          <Modal show={show} onHide={onHide} onEscapeKeyDown={onHide} dialogClassName={styles.modal} size="xl">
             <Modal.Header closeButton>
               <Modal.Title>
                 <LoadingIcon gapRight={2} />
@@ -92,7 +92,7 @@ class SourceCodeViewerContainer extends Component {
         }
         resource={content}>
         {content => (
-          <Modal show={show} onHide={onHide} dialogClassName={styles.modal} size="xl">
+          <Modal show={show} onHide={onHide} onEscapeKeyDown={onHide} dialogClassName={styles.modal} size="xl">
             <Modal.Header closeButton>
               <ResourceRenderer resource={files}>
                 {files => (

@@ -74,7 +74,7 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
         </Col>
       </Row>
 
-      <Modal show={message !== null} backdrop="static" onHide={() => setMessage(null)} size="xl">
+      <Modal show={message !== null} onHide={() => setMessage(null)} onEscapeKeyDown={() => setMessage(null)} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage
