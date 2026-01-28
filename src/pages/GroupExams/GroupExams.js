@@ -210,7 +210,7 @@ class GroupExams extends Component {
               </Row>
             )}
 
-            {examId && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
+            {examId && !this.state.examInProgress && hasPermissions(group, 'viewStudents', 'setExamPeriod') && (
               <Row>
                 <Col xs={12}>
                   <ResourceRenderer resource={groupExamLocks} bulkyLoading>
@@ -295,8 +295,12 @@ export default withLinks(
       loadGroupExamLocks: () => dispatch(fetchGroupExamLocksIfNeeded(groupId, examId)),
       reload: () => dispatch(fetchGroup(groupId)),
       addNotification: (...args) => dispatch(addNotification(...args)),
-      setExamPeriod: (begin, end, strict) => dispatch(setExamPeriod(groupId, begin, end, strict)),
-      removeExamPeriod: () => dispatch(removeExamPeriod(groupId)),
+      setExamPeriod: (begin, end, strict) =>
+        dispatch(setExamPeriod(groupId, begin, end, strict)).then(() =>
+          GroupExams.loadAsync({ groupId, examId }, dispatch)
+        ),
+      removeExamPeriod: () =>
+        dispatch(removeExamPeriod(groupId)).then(() => GroupExams.loadAsync({ groupId, examId }, dispatch)),
     })
   )(GroupExams)
 );
