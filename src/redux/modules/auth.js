@@ -26,12 +26,12 @@ export const takeOver = userId =>
     meta: { service: LOCAL_LOGIN },
   });
 
-export const login = (username, password) =>
+export const login = (username, password, expiration = null) =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
     endpoint: '/login',
-    body: { username, password },
+    body: { username, password, expiration },
     meta: { service: LOCAL_LOGIN },
   });
 

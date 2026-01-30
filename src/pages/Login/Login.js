@@ -30,6 +30,7 @@ import { withRouterProps } from '../../helpers/withRouter.js';
 const EXTERNAL_AUTH_URL = getConfigVar('EXTERNAL_AUTH_URL');
 const EXTERNAL_AUTH_SERVICE_ID = getConfigVar('EXTERNAL_AUTH_SERVICE_ID');
 const EXTERNAL_AUTH_HELPDESK_URL = getConfigVar('EXTERNAL_AUTH_HELPDESK_URL');
+const SHORT_SESSION = getConfigVar('SHORT_SESSION');
 
 class Login extends Component {
   /**
@@ -77,12 +78,12 @@ class Login extends Component {
   /**
    * Log the user in (by given credentials) and then perform the redirect.
    */
-  loginAndRedirect = credentials => {
+  loginAndRedirect = ({ short, ...credentials }) => {
     const {
       login,
       intl: { formatMessage },
     } = this.props;
-    return login(credentials)
+    return login(credentials, short && SHORT_SESSION ? SHORT_SESSION * 60 : null)
       .then(this.redirectAfterLogin)
       .catch(error => {
         // Translate fetch response error into form error message...
@@ -155,8 +156,9 @@ class Login extends Component {
                   lg={{ span: 4, offset: external ? 1 : 4 }}
                   md={{ span: 6, offset: external ? 0 : 3 }}
                   sm={{ span: 10, offset: 2 }}
-                  xs={{ spna: 12, offset: 0 }}>
-                  <LoginForm onSubmit={this.loginAndRedirect} />
+                  xs={{ span: 12, offset: 0 }}>
+                  <LoginForm onSubmit={this.loginAndRedirect} shortSession={SHORT_SESSION} />
+
                   <p className="text-center">
                     <FormattedMessage
                       id="app.login.cannotRememberPassword"
@@ -215,7 +217,7 @@ export default withLinks(
       loggedInUser: loggedInUserSelector(state),
     }),
     dispatch => ({
-      login: ({ email, password }) => dispatch(login(email, password)),
+      login: ({ email, password }, expiration) => dispatch(login(email, password, expiration)),
       logout: () => dispatch(logout()),
       reset: () => {
         dispatch(reset('login'));

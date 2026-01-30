@@ -85,6 +85,7 @@ Sample content of this file is following:
   "PERSISTENT_TOKENS_KEY_PREFIX": "recodex",
   "ENVIRONMENTS_INFO_URL": "https://github.com/ReCodEx/wiki/wiki/Runtime-Environments",
   "ALLOW_LOCAL_REGISTRATION": false,
+  "SHORT_SESSION": 15,
   "EXTERNAL_AUTH_URL": "https://some.other.domain/cas/",
   "EXTERNAL_AUTH_SERVICE_ID": "id-from-core-api",
   "EXTERNAL_AUTH_NAME": {
@@ -105,6 +106,7 @@ Meaning of individual values:
 * `PERSISTENT_TOKENS_KEY_PREFIX` - Prefix used for security token identifiers (in cookies or in local storage). If you run multiple ReCodEx instances on the same domain, it might be necessary to give each instance different prefix.
 * `ENVIRONMENTS_INFO_URL` - Link to a web page where individual runtime environments are explained (default refers to our wiki).
 * `ALLOW_LOCAL_REGISTRATION` - Allows or disables different forms for registration. Note that this configuration should match which registration types are supported by the API.
+* `SHORT_SESSION` - Default expiration time (in minutes) of short sessions (if supported by the API). If set to `0` (or omitted), short sessions are disabled.
 * `EXTERNAL_AUTH_URL` - URL of external authentication service (that implements [ReCodEx protocol](https://github.com/ReCodEx/wiki/wiki/External-Authenticators)).
 * `EXTERNAL_AUTH_SERVICE_ID` - Identifier (name) of the external authenticator as specified in core-api configuration (and in database).
 * `EXTERNAL_AUTH_NAME` - Caption (string) or object with localized captions (keys are locales) of the service (will be displayed in UI).

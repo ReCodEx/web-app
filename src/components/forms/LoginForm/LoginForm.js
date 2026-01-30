@@ -8,9 +8,18 @@ import { SignInIcon, SuccessIcon, LoadingIcon } from '../../icons';
 import FormBox from '../../widgets/FormBox';
 import Button from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
-import { EmailField, PasswordField } from '../Fields';
+import Explanation from '../../widgets/Explanation';
+import { CheckboxField, EmailField, PasswordField } from '../Fields';
 
-const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting, hasSucceeded, error }) => (
+const LoginForm = ({
+  shortSession = null,
+  invalid,
+  handleSubmit,
+  submitFailed: hasFailed,
+  submitting,
+  hasSucceeded,
+  error,
+}) => (
   <FormBox
     title={<FormattedMessage id="app.loginForm.title" defaultMessage="Sign-in by Local Account" />}
     type={hasSucceeded ? 'success' : undefined}
@@ -61,10 +70,32 @@ const LoginForm = ({ invalid, handleSubmit, submitFailed: hasFailed, submitting,
       tabIndex={2}
       label={<FormattedMessage id="app.loginForm.password" defaultMessage="Password:" />}
     />
+
+    {Boolean(shortSession) && shortSession !== 0 && (
+      <Field
+        name="short"
+        required
+        component={CheckboxField}
+        ignoreDirty
+        tabIndex={3}
+        label={
+          <>
+            <FormattedMessage id="app.loginForm.short" defaultMessage="Short session" /> ({shortSession} min)
+            <Explanation id="loginForm.shortSession">
+              <FormattedMessage
+                id="app.loginForm.short.explanation"
+                defaultMessage="Use short session on public computers to reduce the risk of unauthorized access to your account (if you forget to log out)."
+              />
+            </Explanation>
+          </>
+        }
+      />
+    )}
   </FormBox>
 );
 
 LoginForm.propTypes = {
+  shortSession: PropTypes.number,
   onSubmit: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool,
