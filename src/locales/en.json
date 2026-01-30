@@ -1271,6 +1271,8 @@
   "app.loginForm.login": "Sign in",
   "app.loginForm.password": "Password:",
   "app.loginForm.processing": "Signing in...",
+  "app.loginForm.short": "Short session",
+  "app.loginForm.short.explanation": "Use short session on public computers to reduce the risk of unauthorized access to your account (if you forget to log out).",
   "app.loginForm.success": "You are successfully signed in",
   "app.loginForm.title": "Sign-in by Local Account",
   "app.loginForm.validation.emailIsNotAnEmail": "E-mail address is not valid.",

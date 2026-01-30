@@ -1271,6 +1271,8 @@
   "app.loginForm.login": "Přihlásit se",
   "app.loginForm.password": "Heslo:",
   "app.loginForm.processing": "Ověřují se přihlašovací údaje...",
+  "app.loginForm.short": "Krátká doba expirace relace",
+  "app.loginForm.short.explanation": "Použijte krátkou expiraci relace na veřejných počítačích, abyste snížili riziko neoprávněného přístupu k vašemu účtu (pokud se zapomenete odhlásit).",
   "app.loginForm.success": "Přihlášení bylo úspěšné",
   "app.loginForm.title": "Přihlásit se lokálním účtem",
   "app.loginForm.validation.emailIsNotAnEmail": "E-mailová adresa není zadána správně.",
