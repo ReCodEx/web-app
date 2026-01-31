@@ -85,6 +85,7 @@ export const LoadingIcon = ({ className = '', ...props }) => (
 );
 export const LocalIcon = props => <Icon {...props} icon="thumbtack" />;
 export { LockIcon };
+export const LogoutIcon = props => <Icon {...props} icon="sign-out-alt" />;
 export const MailIcon = props => <Icon {...props} icon={defaultMessageIcon} />;
 export { NeedFixingIcon };
 export const NoteIcon = props => <Icon {...props} icon={['far', 'sticky-note']} />;
