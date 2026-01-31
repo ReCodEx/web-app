@@ -7,7 +7,7 @@ import { Tooltip, OverlayTrigger, Modal } from 'react-bootstrap';
 import UserName from '../../../Users/UsersName';
 import EffectiveRoleSwitching from '../../../Users/EffectiveRoleSwitching';
 import withLinks from '../../../../helpers/withLinks.js';
-import Icon from '../../../icons';
+import { EditIcon, LogoutIcon } from '../../../icons';
 import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../../helpers/usersRoles.js';
 
 import './userPanel.css';
@@ -50,7 +50,7 @@ class UserPanel extends Component {
         <div className="small text-center mt-1">
           <span className="sidebar-up-collapsed-block">
             <Link to={EDIT_USER_URI_FACTORY(user.id)}>
-              <Icon icon="edit" className="text-warning sidebar-up-collapse-gaps" gapRight={1} />
+              <EditIcon className="text-warning sidebar-up-collapse-gaps" gapRight={1} />
               <span className="sidebar-up-hide-collapsed">
                 <FormattedMessage id="generic.settings" defaultMessage="Settings" />
               </span>
@@ -76,7 +76,7 @@ class UserPanel extends Component {
                   e.preventDefault();
                   logout();
                 }}>
-                <Icon icon="sign-out-alt" className="text-danger sidebar-up-collapse-gaps" gapLeft={2} gapRight={1} />
+                <LogoutIcon className="text-danger sidebar-up-collapse-gaps" gapLeft={2} gapRight={1} />
                 <span className="sidebar-up-hide-collapsed">
                   <FormattedMessage id="app.logout" defaultMessage="Logout" />
                 </span>

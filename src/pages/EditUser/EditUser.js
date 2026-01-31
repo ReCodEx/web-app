@@ -10,7 +10,7 @@ import Page from '../../components/layout/Page';
 import { UserNavigation } from '../../components/layout/Navigation';
 import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
-import { LocalIcon, TransferIcon, EditUserIcon } from '../../components/icons';
+import { EditUserIcon, LoadingIcon, LocalIcon, LogoutIcon, TransferIcon } from '../../components/icons';
 import { isStudentRole } from '../../components/helpers/usersRoles.js';
 import AllowUserButtonContainer from '../../containers/AllowUserButtonContainer';
 import EditUserProfileForm, {
@@ -38,9 +38,11 @@ import {
   updateUIData,
   makeLocalLogin,
   setRole,
+  invalidateTokens,
 } from '../../redux/modules/users.js';
 import { getUser, isLoggedAsSuperAdmin } from '../../redux/selectors/users.js';
-import { generateToken, takeOver } from '../../redux/modules/auth.js';
+import { generateToken, takeOver, logout } from '../../redux/modules/auth.js';
+import { addNotification } from '../../redux/modules/notifications.js';
 import { lastGeneratedToken, loggedInUserIdSelector } from '../../redux/selectors/auth.js';
 import {
   fetchUserCalendarsIfNeeded,
@@ -88,6 +90,8 @@ class EditUser extends Component {
     this.user = null;
   }
 
+  state = { invalidateTokensInProgress: false };
+
   static loadAsync = ({ userId }, dispatch) =>
     Promise.all([dispatch(fetchUserIfNeeded(userId)), dispatch(fetchUserCalendarsIfNeeded(userId))]);
 
@@ -112,6 +116,31 @@ class EditUser extends Component {
   setRole = ({ role }) => {
     const { setRole } = this.props;
     return setRole(role);
+  };
+
+  invalidateTokens = async () => {
+    const {
+      params: { userId },
+      loggedUserId,
+      invalidateTokens,
+      logout,
+      addNotification,
+    } = this.props;
+
+    this.setState({ invalidateTokensInProgress: true });
+
+    try {
+      await invalidateTokens();
+    } catch (e) {
+      addNotification(e.message, false);
+      this.setState({ invalidateTokensInProgress: false });
+      return;
+    }
+
+    if (userId === loggedUserId) {
+      await logout();
+    }
+    this.setState({ invalidateTokensInProgress: false });
   };
 
   render() {
@@ -146,8 +175,8 @@ class EditUser extends Component {
               />
             )}
 
-            {data && (!data.privateData.isLocal || (isSuperAdmin && data.id !== loggedUserId)) && (
-              <div className="mb-3">
+            {data && (isSuperAdmin || data.id === loggedUserId) && (
+              <div className="mb-3 d-flex justify-content-between">
                 <TheButtonGroup>
                   {!data.privateData.isLocal && (
                     <Button variant="warning" onClick={makeLocalLogin}>
@@ -164,6 +193,29 @@ class EditUser extends Component {
                   )}
 
                   {isSuperAdmin && data.id !== loggedUserId && <AllowUserButtonContainer id={data.id} />}
+                </TheButtonGroup>
+
+                <TheButtonGroup>
+                  {data.privateData.isAllowed && (
+                    <Button
+                      variant="danger"
+                      disabled={this.state.invalidateTokensInProgress}
+                      confirmId="invalidateTokens"
+                      confirm={
+                        <FormattedMessage
+                          id="app.users.logoutEverywhereConfirm"
+                          defaultMessage="This operation will invalidate all access tokens of the user generated before this moment. Are you sure you want to proceed?"
+                        />
+                      }
+                      onClick={this.invalidateTokens}>
+                      {this.state.invalidateTokensInProgress ? (
+                        <LoadingIcon gapRight={2} />
+                      ) : (
+                        <LogoutIcon gapRight={2} />
+                      )}
+                      <FormattedMessage id="app.users.logoutEverywhere" defaultMessage="Logout From All Sessions" />
+                    </Button>
+                  )}
                 </TheButtonGroup>
               </div>
             )}
@@ -269,6 +321,9 @@ EditUser.propTypes = {
   takeOver: PropTypes.func.isRequired,
   createCalendar: PropTypes.func.isRequired,
   setCalendarExpired: PropTypes.func.isRequired,
+  invalidateTokens: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -307,5 +362,8 @@ export default connect(
     takeOver: userId => dispatch(takeOver(userId)),
     createCalendar: () => dispatch(createUserCalendar(userId)),
     setCalendarExpired: calendarId => dispatch(setUserCalendarExpired(userId, calendarId)),
+    invalidateTokens: () => dispatch(invalidateTokens(userId)),
+    logout: () => dispatch(logout()),
+    addNotification: (msg, successful) => dispatch(addNotification(msg, successful)),
   })
 )(EditUser);

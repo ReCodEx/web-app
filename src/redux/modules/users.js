@@ -27,6 +27,7 @@ export const additionalActionTypes = {
   ...createActionsWithPostfixes('SET_IS_ALLOWED', 'recodex/users'),
   ...createActionsWithPostfixes('INVITE_USER', 'recodex/users'),
   ...createActionsWithPostfixes('ACCEPT_INVITATION', 'recodex/users'),
+  ...createActionsWithPostfixes('INVALIDATE_TOKENS', 'recodex/users'),
 };
 
 const resourceName = 'users';
@@ -111,6 +112,14 @@ export const acceptInvitation = (password, token) =>
     endpoint: '/users/accept-invitation',
     method: 'POST',
     body: { token, password, passwordConfirm: password },
+  });
+
+export const invalidateTokens = id =>
+  createApiAction({
+    type: additionalActionTypes.INVALIDATE_TOKENS,
+    endpoint: `/users/${id}/invalidate-tokens`,
+    method: 'POST',
+    meta: { id },
   });
 
 /**

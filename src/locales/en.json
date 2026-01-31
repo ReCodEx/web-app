@@ -2076,6 +2076,8 @@
   "app.users.createUser": "Create User",
   "app.users.createUser.userCreated": "The user account was created.",
   "app.users.listTitle": "Users",
+  "app.users.logoutEverywhere": "Logout From All Sessions",
+  "app.users.logoutEverywhereConfirm": "This operation will invalidate all access tokens of the user generated before this moment. Are you sure you want to proceed?",
   "app.users.takeOver": "Login as",
   "app.users.title": "List of All Users",
   "app.users.userCreatedAt": "User created",
