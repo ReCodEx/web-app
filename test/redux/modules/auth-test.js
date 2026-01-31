@@ -30,7 +30,7 @@ describe('Authentication', () => {
         type: actionTypes.LOGIN,
         method: 'POST',
         endpoint: '/login',
-        body: { username: 'usr', password: 'pwd' },
+        body: { username: 'usr', password: 'pwd', expiration: null },
         meta: { service: LOCAL_LOGIN },
       });
     });
@@ -45,6 +45,7 @@ describe('Authentication', () => {
         endpoint: `/login/${serviceId}`,
         body: {
           token,
+          expiration: null,
         },
         meta: { service: serviceId, popupWindow: null },
       });
