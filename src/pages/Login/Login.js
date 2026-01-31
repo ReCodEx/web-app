@@ -182,6 +182,7 @@ class Login extends Component {
                       service={EXTERNAL_AUTH_SERVICE_ID}
                       helpUrl={EXTERNAL_AUTH_HELPDESK_URL}
                       afterLogin={this.redirectAfterLogin}
+                      shortSessionConfig={SHORT_SESSION}
                     />
                   </Col>
                 )}

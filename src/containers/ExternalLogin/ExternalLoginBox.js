@@ -6,7 +6,10 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
+import Explanation from '../../components/widgets/Explanation';
 import { LinkIcon, LoadingIcon, SuccessIcon } from '../../components/icons';
+import NiceCheckbox from '../../components/forms/NiceCheckbox';
+
 import { externalLogin, externalLoginFailed, statusTypes } from '../../redux/modules/auth.js';
 import { statusSelector, loginErrorSelector } from '../../redux/selectors/auth.js';
 import { hasErrorMessage, getErrorMessage } from '../../locales/apiErrorMessages.js';
@@ -17,7 +20,7 @@ export const openPopupWindow = url =>
     : null;
 
 class ExternalLoginBox extends Component {
-  state = { pending: false, lastError: null };
+  state = { pending: false, lastError: null, short: false };
 
   constructor(props) {
     super(props);
@@ -25,14 +28,19 @@ class ExternalLoginBox extends Component {
     this.pollPopupClosed = null;
   }
 
+  setShort = () => {
+    this.setState({ short: !this.state.short });
+  };
+
   // Handle the messages from our popup window...
   messageHandler = e => {
+    const { shortSessionConfig, login } = this.props;
     const token = e.data; // the message should be the external JWT token
 
     if (token !== null && e.source === this.popupWindow && this.popupWindow !== null) {
       // cancel the window and the interval
       this.popupWindow.postMessage('received', e.origin);
-      this.props.login(token, this.popupWindow, error => {
+      login(token, this.state.short && shortSessionConfig ? shortSessionConfig * 60 : null, this.popupWindow, error => {
         if (hasErrorMessage(error)) {
           this.setState({ lastError: error });
         }
@@ -93,6 +101,7 @@ class ExternalLoginBox extends Component {
     const {
       name,
       helpUrl,
+      shortSessionConfig = null,
       loginStatus,
       loginError,
       intl: { formatMessage },
@@ -150,6 +159,18 @@ class ExternalLoginBox extends Component {
             </p>
           )}
 
+          {shortSessionConfig && shortSessionConfig > 0 && (
+            <NiceCheckbox name="external.short" checked={this.state.short} onChange={this.setShort}>
+              <FormattedMessage id="app.loginForm.short" defaultMessage="Short session" /> ({shortSessionConfig} min)
+              <Explanation id="loginForm.shortSession">
+                <FormattedMessage
+                  id="app.loginForm.short.explanation"
+                  defaultMessage="Use short session on public computers to reduce the risk of unauthorized access to your account (if you forget to log out)."
+                />
+              </Explanation>
+            </NiceCheckbox>
+          )}
+
           {!pending && (loginStatus === statusTypes.LOGIN_FAILED || this.state.lastError) && (
             <Callout variant="danger" className="mt-3">
               {loginError || this.state.lastError ? (
@@ -170,6 +191,7 @@ ExternalLoginBox.propTypes = {
   url: PropTypes.string.isRequired,
   service: PropTypes.string.isRequired,
   helpUrl: PropTypes.string,
+  shortSessionConfig: PropTypes.number,
   loginStatus: PropTypes.string,
   loginError: PropTypes.object,
   login: PropTypes.func.isRequired,
@@ -184,8 +206,8 @@ export default connect(
     loginError: loginErrorSelector(state, service),
   }),
   (dispatch, { service, afterLogin = null }) => ({
-    login: (token, popupWindow, errorHandler = null) => {
-      const promise = dispatch(externalLogin(service, token, popupWindow));
+    login: (token, expiration, popupWindow, errorHandler = null) => {
+      const promise = dispatch(externalLogin(service, token, expiration, popupWindow));
       return (afterLogin ? promise.then(afterLogin) : promise).catch(e => errorHandler && errorHandler(e));
     },
     fail: () => dispatch(externalLoginFailed(service)),

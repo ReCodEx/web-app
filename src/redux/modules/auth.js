@@ -62,12 +62,12 @@ export const validatePasswordStrength = password =>
     body: { password },
   });
 
-export const externalLogin = (service, token, popupWindow = null) =>
+export const externalLogin = (service, token, expiration = null, popupWindow = null) =>
   createApiAction({
     type: actionTypes.LOGIN,
     method: 'POST',
     endpoint: `/login/${service}`,
-    body: { token },
+    body: { token, expiration },
     meta: { service, popupWindow },
   });
 
