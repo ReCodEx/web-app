@@ -28,8 +28,8 @@ export default {
   // switch the source map generation when debugging
   // note, we used 'eval-source-map' before, but since webpack 5.100, it breaks the build
   // (causes 'SyntaxError: redeclaration of function normalize')
-  devtool: 'inline-source-map',
-  //devtool: false, // turn it off completely
+  // devtool: 'inline-source-map',
+  devtool: false, // turn it off completely
 
   entry: path.join(__dirname, '..', 'src/client.js'),
   output: {
