@@ -4,11 +4,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Dropdown, DropdownButton, Modal } from 'react-bootstrap';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { lruMemoize } from 'reselect';
 
 import Button from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
-import { DownloadIcon, LoadingIcon } from '../../components/icons';
+import { CopyIcon, CopySuccessIcon, DownloadIcon, LoadingIcon } from '../../components/icons';
 import { download } from '../../redux/modules/files.js';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent.js';
 import { getFilesContent } from '../../redux/selectors/files.js';
@@ -40,6 +41,8 @@ const preprocessFiles = lruMemoize(files =>
 );
 
 class SourceCodeViewerContainer extends Component {
+  state = { clipboardCopied: false };
+
   componentDidMount() {
     const { fileId, loadAsync } = this.props;
     if (fileId !== null) {
@@ -99,7 +102,7 @@ class SourceCodeViewerContainer extends Component {
                   <>
                     <DropdownButton
                       size="sm"
-                      className="shadow font-monospace"
+                      className="shadow font-monospace me-2"
                       title={fileName}
                       variant="outline-secondary">
                       {preprocessFiles(files).map(f => (
@@ -113,10 +116,22 @@ class SourceCodeViewerContainer extends Component {
                       ))}
                     </DropdownButton>
 
-                    <Button size="sm" className="mx-2 " onClick={() => download(fileId, zipEntry)}>
+                    <Button size="sm" className="me-2" onClick={() => download(fileId, zipEntry)}>
                       <DownloadIcon gapRight={2} />
                       <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
                     </Button>
+
+                    <CopyToClipboard
+                      text={content.content}
+                      onCopy={() => {
+                        this.setState({ clipboardCopied: true });
+                        window.setTimeout(() => this.setState({ clipboardCopied: false }), 2000);
+                      }}>
+                      <Button size="sm" className="me-2">
+                        {this.state.clipboardCopied ? <CopySuccessIcon gapRight={2} /> : <CopyIcon gapRight={2} />}
+                        <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
+                      </Button>
+                    </CopyToClipboard>
 
                     {files.length > 0 && (
                       <DownloadSolutionArchiveContainer

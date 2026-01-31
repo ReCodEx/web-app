@@ -145,7 +145,7 @@ const SolutionFiles = ({
                               <OverlayTrigger
                                 placement="bottom"
                                 overlay={
-                                  <Tooltip id={`openfile-${file.id}`}>
+                                  <Tooltip id={`open-file-${file.id}`}>
                                     <FormattedMessage
                                       id="app.solutionFiles.openButton"
                                       defaultMessage="Open preview in dialog"
