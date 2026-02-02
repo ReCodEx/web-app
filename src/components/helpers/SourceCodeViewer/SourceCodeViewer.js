@@ -7,7 +7,7 @@ import 'prismjs/themes/prism.css';
 
 import ReviewCommentForm, { newCommentFormInitialValues } from '../../forms/ReviewCommentForm';
 import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting.js';
-import { getFileExtensionLC, canUseDOM } from '../../../helpers/common.js';
+import { getFileExtensionLC, canUseDOM, EMPTY_OBJ } from '../../../helpers/common.js';
 
 import SourceCodeComment from './SourceCodeComment.js';
 import './SourceCodeViewer.css';
@@ -196,10 +196,17 @@ class SourceCodeViewer extends React.Component {
   });
 
   render() {
-    const { name, content = '', addComment } = this.props;
+    const { name, content = '', addComment, highlightOverrides = EMPTY_OBJ } = this.props;
+
+    const extension = getFileExtensionLC(name);
+    const language =
+      highlightOverrides[extension] !== undefined
+        ? highlightOverrides[extension]
+        : getPrismModeFromExtension(extension);
+
     return canUseDOM ? (
       <SyntaxHighlighter
-        language={getPrismModeFromExtension(getFileExtensionLC(name))}
+        language={language}
         style={vs}
         className={
           addComment && !this.props.onlyComments && !this.state.activeLine
@@ -234,6 +241,7 @@ SourceCodeViewer.propTypes = {
   restrictCommentAuthor: PropTypes.string,
   reviewClosed: PropTypes.bool,
   onlyComments: PropTypes.bool,
+  highlightOverrides: PropTypes.object,
 };
 
 export default SourceCodeViewer;

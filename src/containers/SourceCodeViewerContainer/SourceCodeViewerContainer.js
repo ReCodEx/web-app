@@ -121,17 +121,19 @@ class SourceCodeViewerContainer extends Component {
                       <FormattedMessage id="app.sourceCodeViewer.downloadButton" defaultMessage="Download file" />
                     </Button>
 
-                    <CopyToClipboard
-                      text={content.content}
-                      onCopy={() => {
-                        this.setState({ clipboardCopied: true });
-                        window.setTimeout(() => this.setState({ clipboardCopied: false }), 2000);
-                      }}>
-                      <Button size="sm" className="me-2">
-                        {this.state.clipboardCopied ? <CopySuccessIcon gapRight={2} /> : <CopyIcon gapRight={2} />}
-                        <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
-                      </Button>
-                    </CopyToClipboard>
+                    {!content.tooLarge && !content.malformedCharacters && (
+                      <CopyToClipboard
+                        text={content.content}
+                        onCopy={() => {
+                          this.setState({ clipboardCopied: true });
+                          window.setTimeout(() => this.setState({ clipboardCopied: false }), 2000);
+                        }}>
+                        <Button size="sm" className="me-2">
+                          {this.state.clipboardCopied ? <CopySuccessIcon gapRight={2} /> : <CopyIcon gapRight={2} />}
+                          <FormattedMessage id="generic.copyToClipboard" defaultMessage="Copy to clipboard" />
+                        </Button>
+                      </CopyToClipboard>
+                    )}
 
                     {files.length > 0 && (
                       <DownloadSolutionArchiveContainer
