@@ -156,3 +156,7 @@ pre .sourceCodeViewerComments, code .sourceCodeViewerComments {
 .sourceCodeViewer.addComment .scvAddButton:hover::before {
   opacity: 1;
 }
+
+.popover.highlighting-selector {
+  --bs-popover-max-width: 400px;
+}

@@ -58,18 +58,18 @@ import { loggedUserIsPrimaryAdminOfSelector } from '../../redux/selectors/usersG
 
 import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage.js';
 import { isSupervisorRole } from '../../components/helpers/usersRoles.js';
-import { hasPermissions, hasOneOfPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common.js';
-import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions.js';
-
 import { isStudentLocked } from '../../components/helpers/exams.js';
 import withLinks from '../../helpers/withLinks.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
+import { hasPermissions, hasOneOfPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common.js';
+import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions.js';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 
 const wrapInArray = lruMemoize(entry => [entry]);
 
 const localStorageDiffMappingsKey = 'SolutionSourceCodes.diffMappings.';
+const localStorageHighlightOverridesKey = 'SolutionSourceCodes.highlightOverrides';
 
 class SolutionSourceCodes extends Component {
   state = {
@@ -78,6 +78,7 @@ class SolutionSourceCodes extends Component {
     mappingDialogDiffWith: null,
     diffMappings: {},
     commentsOpen: false,
+    highlightOverrides: {},
   };
 
   static loadAsync = ({ solutionId, assignmentId, secondSolutionId }, dispatch) =>
@@ -122,10 +123,12 @@ class SolutionSourceCodes extends Component {
 
     const lsKey = this.getDiffMappingsLocalStorageKey();
     if (lsKey) {
-      this.setState({
-        diffMappings: storageGetItem(lsKey, {}),
-      });
+      this.setState({ diffMappings: storageGetItem(lsKey, {}) });
     }
+
+    this.setState({
+      highlightOverrides: storageGetItem(localStorageHighlightOverridesKey, {}),
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -137,10 +140,12 @@ class SolutionSourceCodes extends Component {
 
       const lsKey = this.getDiffMappingsLocalStorageKey();
       if (lsKey) {
-        this.setState({
-          diffMappings: storageGetItem(lsKey, {}),
-        });
+        this.setState({ diffMappings: storageGetItem(lsKey, {}) });
       }
+
+      this.setState({
+        highlightOverrides: storageGetItem(localStorageHighlightOverridesKey, {}),
+      });
     }
   }
 
@@ -211,6 +216,15 @@ class SolutionSourceCodes extends Component {
     if (lsKey) {
       storageRemoveItem(lsKey);
     }
+  };
+
+  setHighlightOverride = (extension, mode) => {
+    const { [extension]: _, ...newOverrides } = this.state.highlightOverrides;
+    if (mode || mode === '') {
+      newOverrides[extension] = mode;
+    }
+    this.setState({ highlightOverrides: newOverrides });
+    storageSetItem(localStorageHighlightOverridesKey, newOverrides);
   };
 
   render() {
@@ -520,6 +534,8 @@ class SolutionSourceCodes extends Component {
                                 removeComment={
                                   canUpdateComments && hasPermissions(solution, 'review') ? removeComment : null
                                 }
+                                highlightOverrides={this.state.highlightOverrides}
+                                setHighlightOverride={this.setHighlightOverride}
                               />
                             ))}
 

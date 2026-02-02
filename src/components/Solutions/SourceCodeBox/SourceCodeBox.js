@@ -6,12 +6,12 @@ import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
 import Prism from 'prismjs';
 
 import Box from '../../widgets/Box';
-import SourceCodeViewer from '../../helpers/SourceCodeViewer';
+import SourceCodeViewer, { SourceCodeHighlightingSelector } from '../../helpers/SourceCodeViewer';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { CopyIcon, CopySuccessIcon, CodeCompareIcon, DownloadIcon, LoadingIcon, WarningIcon } from '../../icons';
 
 import { getPrismModeFromExtension } from '../../helpers/syntaxHighlighting.js';
-import { getFileExtensionLC, simpleScalarMemoize } from '../../../helpers/common.js';
+import { getFileExtensionLC, simpleScalarMemoize, EMPTY_OBJ } from '../../../helpers/common.js';
 
 const normalizeLineEndings = simpleScalarMemoize(content => content.replaceAll('\r', ''));
 
@@ -45,10 +45,15 @@ const SourceCodeBox = ({
   reviewClosed = false,
   collapsable = false,
   isOpen = true,
+  highlightOverrides = EMPTY_OBJ,
+  setHighlightOverride = null,
 }) => {
   const res = fileContentsSelector(parentId, entryName);
   const [clipboardCopied, setClipboardCopied] = useState(false);
   const [onlyComments, setOnlyComments] = useState(false);
+
+  const fileExtension = getFileExtensionLC(name);
+
   return (
     <ResourceRenderer
       key={id}
@@ -111,7 +116,7 @@ const SourceCodeBox = ({
                 />
               )}
 
-              <code>{name}</code>
+              <code className="me-2">{name}</code>
 
               {download && (
                 <DownloadIcon
@@ -161,6 +166,17 @@ const SourceCodeBox = ({
                     </CopyToClipboard>
                   )}
                 </>
+              )}
+
+              {setHighlightOverride && (
+                <SourceCodeHighlightingSelector
+                  id={`${id}-highlighting`}
+                  extension={fileExtension}
+                  initialMode={highlightOverrides[fileExtension]}
+                  onChange={setHighlightOverride}
+                  timid
+                  gapLeft={2}
+                />
               )}
 
               {diffMode && (
@@ -273,7 +289,7 @@ const SourceCodeBox = ({
                 oldValue={normalizeLineEndings(content.content)}
                 newValue={normalizeLineEndings(secondContent.content)}
                 splitView={true}
-                renderContent={diffViewHighlightSyntax(getPrismModeFromExtension(getFileExtensionLC(name)))}
+                renderContent={diffViewHighlightSyntax(getPrismModeFromExtension(fileExtension))}
                 compareMethod={DiffMethod.WORDS_WITH_SPACE}
               />
             </div>
@@ -291,6 +307,7 @@ const SourceCodeBox = ({
               removeComment={removeComment}
               reviewClosed={reviewClosed}
               onlyComments={reviewClosed && onlyComments}
+              highlightOverrides={highlightOverrides}
             />
           )}
         </Box>
@@ -319,6 +336,8 @@ SourceCodeBox.propTypes = {
   reviewClosed: PropTypes.bool,
   collapsable: PropTypes.bool,
   isOpen: PropTypes.bool,
+  highlightOverrides: PropTypes.object,
+  setHighlightOverride: PropTypes.func,
 };
 
 export default SourceCodeBox;
