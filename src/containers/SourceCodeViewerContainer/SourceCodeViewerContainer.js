@@ -14,9 +14,15 @@ import { download } from '../../redux/modules/files.js';
 import { fetchContentIfNeeded } from '../../redux/modules/filesContent.js';
 import { getFilesContent } from '../../redux/selectors/files.js';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import SourceCodeViewer from '../../components/helpers/SourceCodeViewer';
+import SourceCodeViewer, {
+  SourceCodeHighlightingSelector,
+  localStorageHighlightOverridesKey,
+} from '../../components/helpers/SourceCodeViewer';
+
 import DownloadSolutionArchiveContainer from '../DownloadSolutionArchiveContainer';
 import UsersNameContainer from '../UsersNameContainer';
+import { getFileExtensionLC } from '../../helpers/common.js';
+import { storageGetItem, storageSetItem } from '../../helpers/localStorage.js';
 
 import * as styles from './sourceCode.less';
 
@@ -41,12 +47,15 @@ const preprocessFiles = lruMemoize(files =>
 );
 
 class SourceCodeViewerContainer extends Component {
-  state = { clipboardCopied: false };
+  state = { clipboardCopied: false, highlightOverrides: {} };
 
   componentDidMount() {
     const { fileId, loadAsync } = this.props;
     if (fileId !== null) {
       loadAsync();
+      this.setState({
+        highlightOverrides: storageGetItem(localStorageHighlightOverridesKey, {}),
+      });
     }
   }
 
@@ -56,8 +65,20 @@ class SourceCodeViewerContainer extends Component {
       (this.props.fileId !== prevProps.fileId || this.props.zipEntry !== prevProps.zipEntry)
     ) {
       this.props.loadAsync();
+      this.setState({
+        highlightOverrides: storageGetItem(localStorageHighlightOverridesKey, {}),
+      });
     }
   }
+
+  setHighlightOverride = (extension, mode) => {
+    const { [extension]: _, ...newOverrides } = this.state.highlightOverrides;
+    if (mode || mode === '') {
+      newOverrides[extension] = mode;
+    }
+    this.setState({ highlightOverrides: newOverrides });
+    storageSetItem(localStorageHighlightOverridesKey, newOverrides);
+  };
 
   render() {
     const {
@@ -74,6 +95,8 @@ class SourceCodeViewerContainer extends Component {
       isReference = false,
       submittedBy = null,
     } = this.props;
+
+    const fileExtension = getFileExtensionLC(fileName);
 
     return (
       <ResourceRenderer
@@ -95,7 +118,13 @@ class SourceCodeViewerContainer extends Component {
         }
         resource={content}>
         {content => (
-          <Modal show={show} onHide={onHide} onEscapeKeyDown={onHide} dialogClassName={styles.modal} size="xl">
+          <Modal
+            show={show}
+            onHide={onHide}
+            onEscapeKeyDown={onHide}
+            dialogClassName={styles.modal}
+            size="xl"
+            enforceFocus={false}>
             <Modal.Header closeButton>
               <ResourceRenderer resource={files}>
                 {files => (
@@ -115,6 +144,17 @@ class SourceCodeViewerContainer extends Component {
                         </Dropdown.Item>
                       ))}
                     </DropdownButton>
+
+                    <SourceCodeHighlightingSelector
+                      id="highlighting"
+                      fullButton
+                      size="sm"
+                      className="me-2"
+                      variant="outline-secondary"
+                      extension={fileExtension}
+                      initialMode={this.state.highlightOverrides[fileExtension]}
+                      onChange={this.setHighlightOverride}
+                    />
 
                     <Button size="sm" className="me-2" onClick={() => download(fileId, zipEntry)}>
                       <DownloadIcon gapRight={2} />
@@ -180,7 +220,13 @@ class SourceCodeViewerContainer extends Component {
               {content.malformedCharacters ? (
                 <pre className="border-top">{content.content}</pre>
               ) : (
-                <SourceCodeViewer id={fileId} content={content.content} name={fileName} solutionId={solutionId} />
+                <SourceCodeViewer
+                  id={fileId}
+                  content={content.content}
+                  name={fileName}
+                  solutionId={solutionId}
+                  highlightOverrides={this.state.highlightOverrides}
+                />
               )}
               <div className="border-top pt-1 bg-light rounded-bottom"></div>
             </Modal.Body>
