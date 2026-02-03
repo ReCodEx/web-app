@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Overlay, Popover, FormSelect, ButtonGroup } from 'react-bootstrap';
@@ -7,6 +7,8 @@ import Button from '../../widgets/TheButton';
 import Icon, { CloseIcon, RefreshIcon, SaveIcon } from '../../icons';
 
 import { getPrismModeFromExtension, PRISM_SUPPORTED_LANGUAGES } from '../../helpers/syntaxHighlighting.js';
+
+export const localStorageHighlightOverridesKey = 'SourceCodeViewer.highlightOverrides';
 
 const SourceCodeHighlightingSelector = ({
   id,
@@ -21,15 +23,23 @@ const SourceCodeHighlightingSelector = ({
   const [visible, setVisible] = useState(false);
   const [selectedMode, setSelectedMode] = useState(initialMode !== null ? initialMode : defaultMode);
 
+  useEffect(() => {
+    setSelectedMode(initialMode !== null ? initialMode : defaultMode);
+  }, [initialMode, extension]);
+
   const clickHandler = ev => {
     ev.stopPropagation();
     setVisible(!visible);
   };
 
+  const changeHandler = ev => {
+    setSelectedMode(ev.target.value);
+  };
+
   return (
     <>
       {fullButton ? (
-        <Button variant="secondary" size="xs" {...props} onClick={clickHandler} ref={target}>
+        <Button {...props} onClick={clickHandler} ref={target}>
           <Icon icon="highlighter" gapRight={2} />
           {(initialMode !== null ? initialMode : defaultMode) || (
             <FormattedMessage id="app.solutionSourceCodes.noHighlighting" defaultMessage="no highlighting" />
@@ -41,7 +51,7 @@ const SourceCodeHighlightingSelector = ({
 
       <Overlay target={target.current} show={visible} placement="bottom">
         {props => (
-          <Popover id={id} onClick={e => e.stopPropagation()} className="highlighting-selector" {...props}>
+          <Popover id={id} onClick={ev => ev.stopPropagation()} className="highlighting-selector" {...props}>
             <Popover.Header>
               {extension ? (
                 <>
@@ -59,7 +69,7 @@ const SourceCodeHighlightingSelector = ({
               )}
             </Popover.Header>
             <Popover.Body className="text-center">
-              <FormSelect onChange={e => setSelectedMode(e.target.value)} value={selectedMode}>
+              <FormSelect onChange={changeHandler} value={selectedMode}>
                 <option value="" className={selectedMode === '' ? 'fw-bold text-primary' : 'fw-italic text-muted'}>
                   [<FormattedMessage id="app.solutionSourceCodes.noHighlighting" defaultMessage="no highlighting" />]
                   {defaultMode === '' && (

@@ -27,6 +27,7 @@ import ReviewSummary from '../../components/Solutions/ReviewSummary';
 import RecentlyVisited from '../../components/Solutions/RecentlyVisited';
 import { registerSolutionVisit } from '../../components/Solutions/RecentlyVisited/functions.js';
 import Callout from '../../components/widgets/Callout';
+import { localStorageHighlightOverridesKey } from '../../components/helpers/SourceCodeViewer';
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import SolutionReviewRequestButtonContainer from '../../containers/SolutionReviewRequestButtonContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
@@ -69,7 +70,6 @@ const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || nu
 const wrapInArray = lruMemoize(entry => [entry]);
 
 const localStorageDiffMappingsKey = 'SolutionSourceCodes.diffMappings.';
-const localStorageHighlightOverridesKey = 'SolutionSourceCodes.highlightOverrides';
 
 class SolutionSourceCodes extends Component {
   state = {
