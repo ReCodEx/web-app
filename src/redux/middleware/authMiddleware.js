@@ -27,8 +27,13 @@ export const storeToken = accessToken => {
       localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY, accessToken);
     }
 
-    // @todo: expire after 'exp' in the token
-    cookies.set(TOKEN_COOKIES_KEY, accessToken, { expires: 14 }); // expires after 14 days
+    const decodedToken = decode(accessToken);
+    if (decodedToken && isTokenValid(decodedToken)) {
+      const expDate = new Date(decodedToken.exp * 1000);
+      cookies.set(TOKEN_COOKIES_KEY, accessToken, { expires: expDate }); // expires with token expiration
+    } else {
+      cookies.erase(TOKEN_COOKIES_KEY);
+    }
   }
 };
 
