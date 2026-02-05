@@ -139,8 +139,8 @@ export const selectInstance = createAction(actionTypes.SELECT_INSTANCE, instance
 
 /**
  * Authentication reducer.
- * @param  {string} accessToken An access token to initialise the reducer
- * @return {function} The initialised reducer
+ * @param  {string} accessToken An access token to initialize the reducer
+ * @return {function} The initialized reducer
  */
 const auth = (accessToken, instanceId, now = Date.now()) => {
   const decodedToken = decodeAndValidateAccessToken(accessToken, now);
@@ -168,7 +168,7 @@ const auth = (accessToken, instanceId, now = Date.now()) => {
 
       [actionTypes.LOGIN_FULFILLED]: (state, { payload: { accessToken, user }, meta: { service, popupWindow } }) => {
         closeAuthPopupWindow(popupWindow);
-        return state.getIn(['status', service]) === statusTypes.LOGGING_IN // this should prevent re-login, when explicit logout ocurred whilst refreshing token
+        return state.getIn(['status', service]) === statusTypes.LOGGING_IN // this should prevent re-login, when explicit logout occurred whilst refreshing token
           ? state
               .setIn(['status', service], statusTypes.LOGGED_IN)
               .deleteIn(['errors', service])

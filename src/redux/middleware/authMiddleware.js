@@ -8,6 +8,7 @@ import { setLang } from '../modules/app.js';
 import { CALL_API } from './apiMiddleware.js';
 import { safeGet, canUseDOM } from '../../helpers/common.js';
 import { getConfigVar } from '../../helpers/config.js';
+import { decode, isTokenValid } from '../helpers/token';
 
 const PERSISTENT_TOKENS_KEY_PREFIX = getConfigVar('PERSISTENT_TOKENS_KEY_PREFIX') || 'recodex';
 
@@ -65,6 +66,19 @@ export const getToken = () => {
   }
 
   return null;
+};
+
+const checkAccessTokenCookie = token => {
+  const cookieToken = cookies.get(TOKEN_COOKIES_KEY);
+  const decodedCookieToken = cookieToken && decode(cookieToken);
+  if (!decodedCookieToken || !isTokenValid(decodedCookieToken)) {
+    const decodedToken = token && decode(token);
+    if (decodedToken && isTokenValid(decodedToken)) {
+      storeToken(token);
+    } else {
+      removeToken();
+    }
+  }
 };
 
 /**
@@ -154,6 +168,8 @@ const middleware = store => next => action => {
           action.request.accessToken = token;
         }
       }
+
+      checkAccessTokenCookie(action.request.accessToken);
 
       break;
   }
