@@ -13416,7 +13416,7 @@ __metadata:
     redux-storage-decorator-filter: ^1.1.8
     redux-storage-engine-localstorage: ^1.1.4
     reselect: ^5.1.1
-    serialize-javascript: ^7.0.2
+    serialize-javascript: ^7.0.3
     statuscode: 0.0.0
     strip-loader: ^0.1.2
     style-loader: ^4.0.0
@@ -14314,10 +14314,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serialize-javascript@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "serialize-javascript@npm:7.0.2"
-  checksum: be75d292bc9e6113a32edef09c1c8e5cd5cf8787b2c345250bd88618255b66919f715ac387a88c1d84bdab7f1c355f3f1bf80ae0f770b19a1eeef09832c41901
+"serialize-javascript@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "serialize-javascript@npm:7.0.3"
+  checksum: c54f78f4123663dbca132e89885426fff2ccf20dbb862c14641f1c1cbdb5552f1ce48881cf51496aef563bde8af1765687e87043f194a1f887617ce8a02ff80d
   languageName: node
   linkType: hard
 
