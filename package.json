@@ -87,7 +87,7 @@
     "redux-storage-decorator-filter": "^1.1.8",
     "redux-storage-engine-localstorage": "^1.1.4",
     "reselect": "^5.1.1",
-    "serialize-javascript": "^7.0.2",
+    "serialize-javascript": "^7.0.3",
     "statuscode": "0.0.0",
     "validator": "^13.15.26",
     "viz.js": "^2.1.2"
