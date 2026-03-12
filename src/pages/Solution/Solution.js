@@ -200,26 +200,29 @@ class Solution extends Component {
                         )}
 
                       {isStudent && (
-                        <ResourceRenderer resource={canSubmit}>
-                          {canSubmitObj =>
-                            canSubmitObj.canSubmit && (
-                              <>
-                                <SubmitSolutionButton onClick={initCanSubmit(assignment.id)} />
-                                <SubmitSolutionContainer
-                                  userId={currentUser.id}
-                                  id={assignment.id}
-                                  onSubmit={submitSolution}
-                                  presubmitValidation={presubmitSolution}
-                                  afterEvaluationStarts={() => reloadAfterSubmit(currentUser.id)}
-                                  onReset={initCanSubmit}
-                                  isOpen={submitting}
-                                  solutionFilesLimit={assignment.solutionFilesLimit}
-                                  solutionSizeLimit={assignment.solutionSizeLimit}
-                                />
-                              </>
-                            )
-                          }
-                        </ResourceRenderer>
+                        <>
+                          <ResourceRenderer resource={canSubmit}>
+                            {canSubmitObj =>
+                              canSubmitObj.canSubmit && (
+                                <>
+                                  <SubmitSolutionButton onClick={initCanSubmit(assignment.id)} />
+                                </>
+                              )
+                            }
+                          </ResourceRenderer>
+
+                          <SubmitSolutionContainer
+                            userId={currentUser.id}
+                            id={assignment.id}
+                            onSubmit={submitSolution}
+                            presubmitValidation={presubmitSolution}
+                            afterEvaluationStarts={() => reloadAfterSubmit(currentUser.id)}
+                            onReset={initCanSubmit}
+                            isOpen={submitting}
+                            solutionFilesLimit={assignment.solutionFilesLimit}
+                            solutionSizeLimit={assignment.solutionSizeLimit}
+                          />
+                        </>
                       )}
                     </TheButtonGroup>
 
