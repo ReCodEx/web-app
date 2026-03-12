@@ -223,19 +223,6 @@ class Assignment extends Component {
                             )}
                           </ResourceRenderer>
                         </p>
-                        {canSubmitObj.canSubmit && (
-                          <SubmitSolutionContainer
-                            userId={loggedInUserId}
-                            id={assignment.id}
-                            onSubmit={submitSolution}
-                            presubmitValidation={presubmitSolution}
-                            afterEvaluationStarts={this.reloadAfterSubmit}
-                            onReset={init}
-                            isOpen={submitting}
-                            solutionFilesLimit={assignment.solutionFilesLimit}
-                            solutionSizeLimit={assignment.solutionSizeLimit}
-                          />
-                        )}
                       </div>
                     )}
 
@@ -288,6 +275,18 @@ class Assignment extends Component {
                 </Row>
               )}
             </ResourceRenderer>
+
+            <SubmitSolutionContainer
+              userId={loggedInUserId}
+              id={assignment.id}
+              onSubmit={submitSolution}
+              presubmitValidation={presubmitSolution}
+              afterEvaluationStarts={this.reloadAfterSubmit}
+              onReset={init}
+              isOpen={submitting}
+              solutionFilesLimit={assignment.solutionFilesLimit}
+              solutionSizeLimit={assignment.solutionSizeLimit}
+            />
           </div>
         )}
       </Page>

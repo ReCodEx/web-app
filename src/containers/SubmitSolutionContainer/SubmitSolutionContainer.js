@@ -49,7 +49,7 @@ class SubmitSolutionContainer extends Component {
     if (presubmitEnvironments && presubmitEnvironments.length > 0) {
       let newEnv = state.selectedEnvironment;
       if (newEnv && !presubmitEnvironments.find(e => e.id === newEnv)) {
-        newEnv = null; // selected env is not availabe anymore
+        newEnv = null; // selected env is not available anymore
       }
       if (!newEnv) {
         newEnv = presubmitEnvironments[0].id;
