@@ -112,10 +112,26 @@ const validateFileExists = (data, errors, path, existingFiles) => {
   }
 };
 
-const validateFileEntryNotEmpty = (data, errors, path, emptyError) => {
+const validateFileName = (
+  data,
+  errors,
+  path,
+  emptyError = (
+    <FormattedMessage id="app.expandingInputFilesField.validateEmpty" defaultMessage="This value must not be empty." />
+  )
+) => {
   const name = safeGet(data, path);
   if (!name || name.trim() === '') {
     safeSet(errors, path, emptyError);
+  } else if (!name.match(/^[-a-zA-Z0-9_+.,@()%!# ]+$/) || name.trim() === '.' || name.trim() === '..') {
+    safeSet(
+      errors,
+      path,
+      <FormattedMessage
+        id="app.editExerciseConfigForm.validation.fileNameCharacters"
+        defaultMessage="File name must not contain dangerous characters (e.g. path separators)."
+      />
+    );
   }
 };
 
@@ -128,10 +144,10 @@ const validateFileList = (data, errors, path, pairs, existingFiles, emptyError, 
   // check empty names
   files.forEach((_, idx) => {
     if (pairs) {
-      validateFileEntryNotEmpty(data, errors, [...path, idx, 'file'], emptyError);
-      validateFileEntryNotEmpty(data, errors, [...path, idx, 'name'], emptyError);
+      validateFileName(data, errors, [...path, idx, 'file'], emptyError);
+      validateFileName(data, errors, [...path, idx, 'name'], emptyError);
     } else {
-      validateFileEntryNotEmpty(data, errors, [...path, idx], emptyError);
+      validateFileName(data, errors, [...path, idx], emptyError);
     }
   });
 
@@ -411,6 +427,10 @@ const validate = (formData, { exercise, exerciseFiles }) => {
     validateFileExists(formData, errors, ['config', testKey, 'jar-files', ENV_JAVA_ID], existingFiles);
     if (test.useCustomJudge) {
       validateFileExists(formData, errors, ['config', testKey, 'custom-judge'], existingFiles);
+    }
+
+    if (test.useOutFile) {
+      validateFileName(formData, errors, ['config', testKey, 'actual-output']);
     }
   }
 

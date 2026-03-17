@@ -310,7 +310,7 @@ class EditExerciseConfig extends Component {
                     <table className="my-3">
                       <tbody>
                         <tr>
-                          <td className="valing-middle pe-3">
+                          <td className="pe-3">
                             <ResourceRenderer resource={[exerciseConfig, exerciseEnvironmentConfig]}>
                               {(config, environmentConfigs) => (
                                 <ResourceRenderer resourceArray={runtimeEnvironments}>
