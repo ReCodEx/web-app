@@ -112,20 +112,22 @@ const referenceSolutionMessages = defineMessages({
 });
 
 class SubmitSolution extends Component {
+  canSubmit = () => {
+    const { canSubmit, presubmitCountLimitOK, presubmitSizeLimitOK, isReferenceSolution } = this.props;
+    // ref. solution ignores limits
+    return Boolean(canSubmit && (isReferenceSolution || (presubmitCountLimitOK && presubmitSizeLimitOK)));
+  };
+
   _createSubmitButton = (btnProps = {}) => {
     const {
-      canSubmit,
-      presubmitCountLimitOK,
-      presubmitSizeLimitOK,
-      isReferenceSolution,
       hasFailed,
       intl: { formatMessage },
     } = this.props;
-    const limitsOK = isReferenceSolution || (presubmitCountLimitOK && presubmitSizeLimitOK); // ref. solution ignores limits
+    const canSubmit = this.canSubmit();
     return (
       <Button
         type="submit"
-        disabled={!canSubmit || !limitsOK}
+        disabled={!canSubmit}
         variant={hasFailed ? 'danger' : canSubmit ? 'success' : 'secondary'}
         {...btnProps}>
         {hasFailed ? <WarningIcon gapRight={2} /> : <SendIcon gapRight={2} />}
@@ -155,6 +157,21 @@ class SubmitSolution extends Component {
       })
     );
   };
+
+  keyUpHandler = ev => {
+    const { submitSolution, isOpen, isSending } = this.props;
+    if (isOpen && !isSending && ev.key === 'Enter' && this.canSubmit()) {
+      submitSolution();
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener('keyup', this.keyUpHandler);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keyup', this.keyUpHandler);
+  }
 
   render() {
     const {
@@ -315,12 +332,14 @@ class SubmitSolution extends Component {
 
               {!isSending && this.createSubmitButton()}
 
-              <Button variant="outline-secondary" onClick={reset}>
-                <DeleteIcon gapRight={2} />
-                {formatMessage(commonMessages.resetForm)}
-              </Button>
+              {((attachedFiles && attachedFiles.length > 0) || note.trim().length > 0) && (
+                <Button variant="danger" onClick={reset}>
+                  <DeleteIcon gapRight={2} />
+                  {formatMessage(commonMessages.resetForm)}
+                </Button>
+              )}
 
-              <Button variant="outline-secondary" onClick={onClose}>
+              <Button variant="secondary" onClick={onClose}>
                 <CloseIcon gapRight={2} />
                 {formatMessage(commonMessages.closeForm)}
               </Button>
