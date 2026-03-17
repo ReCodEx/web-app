@@ -66,6 +66,7 @@ const EditShadowAssignmentPointsForm = ({
             maxLength={6}
             validateMin={-10000}
             validateMax={10000}
+            autoFocus
             label={<FormattedMessage id="app.editShadowAssignmentPointsForm.points" defaultMessage="Points:" />}
           />
         </Col>
