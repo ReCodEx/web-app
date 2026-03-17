@@ -255,8 +255,8 @@ const SourceCodeBox = ({
           }
           noPadding
           unlimitedHeight
-          collapsable
-          isOpen={!content.malformedCharacters}
+          collapsable={collapsable}
+          isOpen={isOpen && !content.malformedCharacters}
           customIcons={
             reviewClosed && reviewComments && reviewComments.length > 0 ? (
               <Icon
