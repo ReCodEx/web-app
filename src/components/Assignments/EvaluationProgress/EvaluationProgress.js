@@ -46,7 +46,7 @@ class EvaluationProgress extends Component {
     } = this.props;
 
     return (
-      <Modal show={isOpen} backdrop="static" onHide={onClose} size="lg">
+      <Modal show={isOpen} backdrop="static" onHide={onClose} onEscapeKeyDown={onClose} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>
             <FormattedMessage id="app.evaluationProgress.title" defaultMessage="Solution is being evaluated" />
