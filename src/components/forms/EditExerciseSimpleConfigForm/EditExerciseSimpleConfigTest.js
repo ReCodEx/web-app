@@ -66,7 +66,7 @@ class EditExerciseSimpleConfigTest extends Component {
       .find(env => Boolean(overrides[env]));
     const override = environmentWithOverride ? overrides[environmentWithOverride] : {};
 
-    // Prepare showFlags combining defaults with overrided for given environment
+    // Prepare showFlags combining defaults with overridden for given environment
     const {
       showCompilation = true, // compilation block (per-env extra files and entry points)
       showInputs = true, // input data module (input files + stdin)
