@@ -512,6 +512,8 @@ class SolutionSourceCodes extends Component {
                               <SourceCodeBox
                                 key={file.id}
                                 {...file}
+                                isOpen={files?.length <= 5}
+                                collapsable
                                 solutionId={solution.id}
                                 download={download}
                                 fileContentsSelector={fileContentsSelector}
