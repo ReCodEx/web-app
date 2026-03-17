@@ -63,7 +63,13 @@ import { isStudentLocked } from '../../components/helpers/exams.js';
 import withLinks from '../../helpers/withLinks.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 import { hasPermissions, hasOneOfPermissions, isEmptyObject, EMPTY_ARRAY } from '../../helpers/common.js';
-import { preprocessFiles, associateFilesForDiff, getRevertedMapping, groupReviewCommentPerFile } from './functions.js';
+import {
+  filesCanBeDisplayed,
+  preprocessFiles,
+  associateFilesForDiff,
+  getRevertedMapping,
+  groupReviewCommentPerFile,
+} from './functions.js';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 
@@ -101,11 +107,11 @@ class SolutionSourceCodes extends Component {
       dispatch(fetchSolutionReviewIfNeeded(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId))
-        .then(res => preprocessFiles(res.value))
+        .then(res => (filesCanBeDisplayed(res.value) ? preprocessFiles(res.value) : []))
         .then(files => Promise.all(files.map(file => dispatch(fetchContentIfNeeded(...fileNameAndEntry(file)))))),
       secondSolutionId && secondSolutionId !== solutionId
         ? dispatch(fetchAssignmentSolutionFilesIfNeeded(secondSolutionId))
-            .then(res => preprocessFiles(res.value))
+            .then(res => (filesCanBeDisplayed(res.value) ? preprocessFiles(res.value) : []))
             .then(files => Promise.all(files.map(file => dispatch(fetchContentIfNeeded(...fileNameAndEntry(file))))))
         : Promise.resolve(),
     ]);
@@ -471,6 +477,9 @@ class SolutionSourceCodes extends Component {
                           secondFiles,
                           this.state.diffMappings
                         );
+                        const canDisplayFiles = filesCanBeDisplayed(files);
+                        const canDisplaySecondFiles = filesCanBeDisplayed(secondFiles);
+
                         const revertedIndex = files && secondFiles && getRevertedMapping(files);
                         const groupedReviewComments =
                           !diffMode && hasPermissions(solution, 'viewReview')
@@ -508,40 +517,61 @@ class SolutionSourceCodes extends Component {
                               />
                             )}
 
-                            {files.map(file => (
-                              <SourceCodeBox
-                                key={file.id}
-                                {...file}
-                                isOpen={files?.length <= 5}
-                                collapsable
-                                solutionId={solution.id}
-                                download={download}
-                                fileContentsSelector={fileContentsSelector}
-                                diffMode={diffMode}
-                                adjustDiffMapping={this.openMappingDialog}
-                                authorView={solution.authorId === loggedUserId}
-                                restrictCommentAuthor={isPrimaryAdminOf(assignment.groupId) ? null : loggedUserId}
-                                reviewClosed={Boolean(solution.review && solution.review.closedAt)}
-                                reviewComments={
-                                  !diffMode && hasPermissions(solution, 'viewReview')
-                                    ? groupedReviewComments[file.name]
-                                    : null
-                                }
-                                addComment={
-                                  canUpdateComments && hasPermissions(solution, 'addReviewComment') ? addComment : null
-                                }
-                                updateComment={
-                                  canUpdateComments && hasPermissions(solution, 'review') ? updateComment : null
-                                }
-                                removeComment={
-                                  canUpdateComments && hasPermissions(solution, 'review') ? removeComment : null
-                                }
-                                highlightOverrides={this.state.highlightOverrides}
-                                setHighlightOverride={this.setHighlightOverride}
-                              />
-                            ))}
+                            {!canDisplayFiles && (
+                              <Callout variant="warning">
+                                <FormattedMessage
+                                  id="app.solutionSourceCodes.cannotDisplayFiles"
+                                  defaultMessage="The source code files of this solution cannot be displayed, since there are too many or they are too large."
+                                />
+                              </Callout>
+                            )}
 
-                            {diffMode && secondFiles && (
+                            {diffMode && canDisplayFiles && !canDisplaySecondFiles && (
+                              <Callout variant="danger">
+                                <FormattedMessage
+                                  id="app.solutionSourceCodes.cannotDisplaySecondFiles"
+                                  defaultMessage="Unable to compare files since the second set of files is too large."
+                                />
+                              </Callout>
+                            )}
+
+                            {canDisplayFiles &&
+                              files.map(file => (
+                                <SourceCodeBox
+                                  key={file.id}
+                                  {...file}
+                                  isOpen={files?.length <= 5}
+                                  collapsable
+                                  solutionId={solution.id}
+                                  download={download}
+                                  fileContentsSelector={fileContentsSelector}
+                                  diffMode={diffMode && canDisplaySecondFiles}
+                                  adjustDiffMapping={this.openMappingDialog}
+                                  authorView={solution.authorId === loggedUserId}
+                                  restrictCommentAuthor={isPrimaryAdminOf(assignment.groupId) ? null : loggedUserId}
+                                  reviewClosed={Boolean(solution.review && solution.review.closedAt)}
+                                  reviewComments={
+                                    !diffMode && hasPermissions(solution, 'viewReview')
+                                      ? groupedReviewComments[file.name]
+                                      : null
+                                  }
+                                  addComment={
+                                    canUpdateComments && hasPermissions(solution, 'addReviewComment')
+                                      ? addComment
+                                      : null
+                                  }
+                                  updateComment={
+                                    canUpdateComments && hasPermissions(solution, 'review') ? updateComment : null
+                                  }
+                                  removeComment={
+                                    canUpdateComments && hasPermissions(solution, 'review') ? removeComment : null
+                                  }
+                                  highlightOverrides={this.state.highlightOverrides}
+                                  setHighlightOverride={this.setHighlightOverride}
+                                />
+                              ))}
+
+                            {diffMode && secondFiles && canDisplaySecondFiles && (
                               <Modal
                                 show={this.state.mappingDialogOpenFile !== null}
                                 onHide={this.closeDialogs}
