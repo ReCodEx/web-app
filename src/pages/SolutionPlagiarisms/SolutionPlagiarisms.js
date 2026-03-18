@@ -36,7 +36,7 @@ import { hasPermissions, unique, avg } from '../../helpers/common.js';
 import withLinks from '../../helpers/withLinks.js';
 import withRouter from '../../helpers/withRouter.js';
 
-import { preprocessFiles } from '../SolutionSourceCodes/functions.js';
+import { preprocessFiles } from '../../helpers/solutionFiles.js';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 const fileFullId = file => (file.parentId || file.id) + '/' + (file.entryName || '');
