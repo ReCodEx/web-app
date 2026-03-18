@@ -31,6 +31,7 @@ import { localStorageHighlightOverridesKey } from '../../components/helpers/Sour
 import SolutionActionsContainer from '../../containers/SolutionActionsContainer';
 import SolutionReviewRequestButtonContainer from '../../containers/SolutionReviewRequestButtonContainer';
 import CommentThreadContainer from '../../containers/CommentThreadContainer';
+import DownloadSolutionArchiveContainer from '../../containers/DownloadSolutionArchiveContainer';
 
 import { fetchRuntimeEnvironments } from '../../redux/modules/runtimeEnvironments.js';
 import { fetchAssignmentIfNeeded } from '../../redux/modules/assignments.js';
@@ -69,7 +70,7 @@ import {
   associateFilesForDiff,
   getRevertedMapping,
   groupReviewCommentPerFile,
-} from './functions.js';
+} from '../../helpers/solutionFiles.js';
 
 const fileNameAndEntry = file => [file.parentId || file.id, file.entryName || null];
 
@@ -107,11 +108,13 @@ class SolutionSourceCodes extends Component {
       dispatch(fetchSolutionReviewIfNeeded(solutionId)),
       dispatch(fetchAssignmentIfNeeded(assignmentId)),
       dispatch(fetchAssignmentSolutionFilesIfNeeded(solutionId))
-        .then(res => (filesCanBeDisplayed(res.value) ? preprocessFiles(res.value) : []))
+        .then(res => preprocessFiles(res.value))
+        .then(files => (filesCanBeDisplayed(files) ? files : []))
         .then(files => Promise.all(files.map(file => dispatch(fetchContentIfNeeded(...fileNameAndEntry(file)))))),
       secondSolutionId && secondSolutionId !== solutionId
         ? dispatch(fetchAssignmentSolutionFilesIfNeeded(secondSolutionId))
-            .then(res => (filesCanBeDisplayed(res.value) ? preprocessFiles(res.value) : []))
+            .then(res => preprocessFiles(res.value))
+            .then(files => (filesCanBeDisplayed(files) ? files : []))
             .then(files => Promise.all(files.map(file => dispatch(fetchContentIfNeeded(...fileNameAndEntry(file))))))
         : Promise.resolve(),
     ]);
@@ -519,9 +522,17 @@ class SolutionSourceCodes extends Component {
 
                             {!canDisplayFiles && (
                               <Callout variant="warning">
-                                <FormattedMessage
-                                  id="app.solutionSourceCodes.cannotDisplayFiles"
-                                  defaultMessage="The source code files of this solution cannot be displayed, since there are too many or they are too large."
+                                <p>
+                                  <FormattedMessage
+                                    id="app.solutionSourceCodes.cannotDisplayFiles"
+                                    defaultMessage="The source code files of this solution cannot be displayed, since there are too many or they are too large."
+                                  />
+                                </p>
+                                <DownloadSolutionArchiveContainer
+                                  solutionId={solutionId}
+                                  attemptIndex={solution.attemptIndex}
+                                  authorId={solution.authorId}
+                                  isReference={false}
                                 />
                               </Callout>
                             )}
