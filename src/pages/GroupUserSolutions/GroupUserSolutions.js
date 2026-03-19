@@ -563,6 +563,7 @@ class GroupUserSolutions extends Component {
                                 hover
                                 columns={prepareTableColumnDescriptors(assignments, groupId, locale, links)}
                                 defaultOrder="date"
+                                maxAmount={100}
                                 data={prepareTableData(
                                   assignments,
                                   getAssignmentSolutions,

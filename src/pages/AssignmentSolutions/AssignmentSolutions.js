@@ -693,6 +693,7 @@ class AssignmentSolutions extends Component {
                               links
                             )}
                             defaultOrder="date"
+                            maxAmount={100}
                             data={prepareTableData(
                               assignmentSolutions,
                               getStudents(group.id),

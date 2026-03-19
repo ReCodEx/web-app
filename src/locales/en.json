@@ -1949,6 +1949,7 @@
   "app.solutionsTable.submissionDate": "Date of submission",
   "app.solutionsTable.submitNewSolution": "Submit New Solution",
   "app.solutionsTable.title": "Submitted Solutions",
+  "app.sortableTable.showingEntries": "showing entries {from} – {to} of {total}",
   "app.sourceCodeViewer.deleteCommentConfirm": "Do you really wish to remove this comment? This operation cannot be undone.",
   "app.sourceCodeViewer.downloadButton": "Download file",
   "app.sourceCodeViewer.incompleteWarning": "The selected source file is too large. Only a leading part of the file is displayed here. Use the download button to get the whole file.",
