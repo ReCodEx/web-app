@@ -10,7 +10,7 @@ import { isStudentLocked } from '../../components/helpers/exams.js';
 const getState = state => state;
 const getParam = (_, id) => id;
 
-// users of type in particualar groups
+// users of type in particular groups
 const usersIdsOfGroup = (type, groupId) =>
   createSelector(groupSelectorCreator(groupId), group =>
     group && isReady(group) ? group.getIn(['data', 'privateData', type], EMPTY_LIST).toArray() : []
