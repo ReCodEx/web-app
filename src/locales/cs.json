@@ -1949,6 +1949,7 @@
   "app.solutionsTable.submissionDate": "Datum odevzdání",
   "app.solutionsTable.submitNewSolution": "Odevzdat nové řešení",
   "app.solutionsTable.title": "Odevzdaná řešení",
+  "app.sortableTable.showingEntries": "zobrazuji položky {from} – {to} z {total}",
   "app.sourceCodeViewer.deleteCommentConfirm": "Opravdu si přejete odstranit tento komentář? Tuto operaci nelze vrátit.",
   "app.sourceCodeViewer.downloadButton": "Stáhnout soubor",
   "app.sourceCodeViewer.incompleteWarning": "Zdrojový soubor je příliš velký, a proto zde nemůže být zobrazen. Použijte tlačítko 'Stáhnout soubor', pokud si jej chcete prohlédnout celý.",
