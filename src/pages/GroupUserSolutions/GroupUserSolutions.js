@@ -230,6 +230,10 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
   return columns;
 });
 
+const getSolutionsCount = lruMemoize((assignments, getAssignmentSolutions) =>
+  assignments.reduce((acc, assignment) => acc + (getAssignmentSolutions(assignment.id)?.size || 0), 0)
+);
+
 const prepareTableData = lruMemoize((assignments, getAssignmentSolutions, getRuntime, onlyBestSolutionsCheckbox) => {
   const res = [];
   assignments.forEach(assignment =>
@@ -529,7 +533,10 @@ class GroupUserSolutions extends Component {
                                         </>
                                       }
                                       collapsable
-                                      isOpen
+                                      isOpen={
+                                        assignments.length <= 50 &&
+                                        getSolutionsCount(assignments, getAssignmentSolutions) <= 200
+                                      }
                                       noPadding
                                       unlimitedHeight>
                                       <SolutionsTable

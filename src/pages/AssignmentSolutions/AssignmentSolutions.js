@@ -633,7 +633,7 @@ class AssignmentSolutions extends Component {
                                 a.name.lastName.localeCompare(b.name.lastName, locale) ||
                                 a.name.firstName.localeCompare(b.name.firstName, locale)
                             )
-                            .map(user => (
+                            .map((user, _, students) => (
                               <Row key={user.id}>
                                 <Col sm={12}>
                                   <Box
@@ -654,7 +654,7 @@ class AssignmentSolutions extends Component {
                                       </>
                                     }
                                     collapsable
-                                    isOpen
+                                    isOpen={students.length <= 50 && (assignmentSolutions?.size ?? 0) <= 200}
                                     noPadding
                                     unlimitedHeight>
                                     <SolutionsTable
