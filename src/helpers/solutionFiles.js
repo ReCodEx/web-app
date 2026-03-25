@@ -8,8 +8,9 @@ const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
  */
 const preprocessZipEntries = ({ zipEntries, ...file }) => {
   if (zipEntries) {
+    file.zipEntriesBadNames = zipEntries.reduce((bad, { name }) => bad || name.includes('\\'), false);
     file.zipEntries = zipEntries
-      .filter(({ name, size }) => !name.endsWith('/') || size !== 0)
+      .filter(({ name, size }) => !(name.endsWith('/') || name.endsWith('\\') || size === 0))
       .map(({ name, size }) => ({
         entryName: name,
         name: `${file.name}#${name}`,
@@ -25,12 +26,13 @@ const preprocessZipEntries = ({ zipEntries, ...file }) => {
 /**
  * Preprocess zip entries, consolidate, and sort by names.
  */
-export const preprocessFiles = lruMemoize(files =>
-  files
-    .sort(nameComparator)
-    .map(preprocessZipEntries)
-    .reduce((acc, file) => [...acc, ...(file.zipEntries || [file])], [])
-);
+export const preprocessFiles = lruMemoize((files, keepZipFiles = false) => {
+  const reducer = keepZipFiles
+    ? (acc, file) => [...acc, file, ...(file.zipEntries || [])]
+    : (acc, file) => [...acc, ...(file.zipEntries || [file]), file];
+
+  return files.sort(nameComparator).map(preprocessZipEntries).reduce(reducer, []);
+});
 
 export const filesCanBeDisplayed = files =>
   files &&

@@ -28,7 +28,7 @@ const SolutionFiles = ({
     <ResourceRenderer resource={files}>
       {files => {
         const filesSize = files.reduce((acc, { size }) => acc + size, 0);
-        const processedFiles = preprocessFiles(files);
+        const processedFiles = preprocessFiles(files, true); // true = keep zip files as well
         const canDisplayFiles = processedFiles.length <= 50;
 
         return (
@@ -104,7 +104,7 @@ const SolutionFiles = ({
                                       ? 'text-success fw-bold'
                                       : ''
                                 }>
-                                {file.name}
+                                {file.entryName || file.name}
                               </code>
 
                               {file.zipEntriesBadNames && (
@@ -138,7 +138,11 @@ const SolutionFiles = ({
                                     }>
                                     <Button
                                       onClick={() =>
-                                        openFile(file.parentId || file.id, file.name, file.parentId ? file.name : null)
+                                        openFile(
+                                          file.parentId || file.id,
+                                          file.entryName || file.name,
+                                          file.parentId ? file.entryName : null
+                                        )
                                       }
                                       size="xs"
                                       variant="secondary">
@@ -160,7 +164,7 @@ const SolutionFiles = ({
                                     }>
                                     <Button
                                       onClick={() =>
-                                        download(file.parentId || file.id, file.parentId ? file.name : null)
+                                        download(file.parentId || file.id, file.parentId ? file.entryName : null)
                                       }
                                       size="xs"
                                       variant="primary">
