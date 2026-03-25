@@ -29,7 +29,7 @@ const preprocessZipEntries = ({ zipEntries, ...file }) => {
 export const preprocessFiles = lruMemoize((files, keepZipFiles = false) => {
   const reducer = keepZipFiles
     ? (acc, file) => [...acc, file, ...(file.zipEntries || [])]
-    : (acc, file) => [...acc, ...(file.zipEntries || [file]), file];
+    : (acc, file) => [...acc, ...(file.zipEntries || [file])];
 
   return files.sort(nameComparator).map(preprocessZipEntries).reduce(reducer, []);
 });
