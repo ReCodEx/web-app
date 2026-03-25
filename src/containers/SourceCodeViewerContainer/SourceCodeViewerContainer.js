@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { Dropdown, DropdownButton, Modal } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { lruMemoize } from 'reselect';
 
 import Button from '../../components/widgets/TheButton';
 import Callout from '../../components/widgets/Callout';
@@ -23,28 +22,9 @@ import DownloadSolutionArchiveContainer from '../DownloadSolutionArchiveContaine
 import UsersNameContainer from '../UsersNameContainer';
 import { getFileExtensionLC } from '../../helpers/common.js';
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage.js';
+import { preprocessFiles } from '../../helpers/solutionFiles.js';
 
 import * as styles from './sourceCode.less';
-
-const nameComparator = (a, b) => a.name.localeCompare(b.name, 'en');
-
-const preprocessZipEntries = ({ zipEntries, ...file }) => {
-  if (zipEntries) {
-    file.zipEntries = zipEntries
-      .filter(({ name, size }) => !name.endsWith('/') || size !== 0)
-      .map(({ name, size }) => ({ name, size, id: `${file.id}/${name}`, parentId: file.id }))
-      .sort(nameComparator);
-  }
-  return file;
-};
-
-const preprocessFiles = lruMemoize(files =>
-  files
-    .sort(nameComparator)
-    .map(preprocessZipEntries)
-    .reduce((acc, file) => [...acc, file, ...(file.zipEntries || [])], [])
-    .filter(file => !file.name.toLowerCase().endsWith('.zip'))
-);
 
 class SourceCodeViewerContainer extends Component {
   state = { clipboardCopied: false, highlightOverrides: {} };
@@ -138,9 +118,11 @@ class SourceCodeViewerContainer extends Component {
                         <Dropdown.Item
                           key={`${f.id}/${f.name}`}
                           href="#"
-                          selected={f.id === fileId || (f.parentId === fileId && f.name === fileName)}
-                          onClick={() => openAnotherFile(f.parentId || f.id, f.name, f.parentId ? f.name : null)}>
-                          {f.name}
+                          selected={f.id === fileId || (f.parentId === fileId && (f.entryName || f.name) === fileName)}
+                          onClick={() =>
+                            openAnotherFile(f.parentId || f.id, f.entryName || f.name, f.parentId ? f.entryName : null)
+                          }>
+                          {f.entryName || f.name}
                         </Dropdown.Item>
                       ))}
                     </DropdownButton>
