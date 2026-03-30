@@ -37,8 +37,8 @@ export const preprocessFiles = lruMemoize((files, keepZipFiles = false) => {
 export const filesCanBeDisplayed = files =>
   files &&
   files?.length >= 0 &&
-  files.length <= 20 &&
-  files.map(({ size }) => size).reduce((a, b) => a + b, 0) < 1024 * 1024; // max 20 files and max total size 1MB
+  files.length <= 32 &&
+  files.map(({ size }) => size).reduce((a, b) => a + b, 0) < 1024 * 1024; // max 32 files and max total size 1MB
 
 /**
  * @param {Array} files of the main solution
