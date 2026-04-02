@@ -11155,9 +11155,9 @@ __metadata:
   linkType: hard
 
 "lodash.unset@npm:^4.1.0":
-  version: 4.5.2
-  resolution: "lodash.unset@npm:4.5.2"
-  checksum: 53b2a79c20e7c8c604ccfd82c7ad5caa28876171a323c5dc4d6d745d42bc43f4827c24526d877484bf64284104dffa4dd34e0c363d49fd84bd398c259001ac3f
+  version: 4.18.0
+  resolution: "lodash.unset@npm:4.18.0"
+  checksum: a36ea6a59d530f7f48cbcbd59aedfd6af99386288e4a2ca97aabfc204ee70c75742de832d7da759d2719bd9cd72323ae65e347d8154c2717338773914039b507
   languageName: node
   linkType: hard
 
