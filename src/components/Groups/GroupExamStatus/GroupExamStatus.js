@@ -17,6 +17,7 @@ import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 
 import { isStudentRole } from '../../helpers/usersRoles.js';
 import { hasPermissions, shallowCompare } from '../../../helpers/common.js';
+import { LOCK_TYPE, LOCK_TITLE, LOCK_EXPLANATION, LOCKED_STUDENT_INFO } from '../helpers/groupExamMessages.js';
 
 const REFRESH_INTERVAL = 1; // [s]
 
@@ -122,7 +123,7 @@ class GroupExamStatus extends Component {
       pending,
       removeExamPeriod,
       currentUser: {
-        privateData: { ipLock, groupLock, isGroupLockStrict, role },
+        privateData: { ipLock, groupLock, groupLockType, role },
       },
     } = this.props;
     const isStudent = isStudentRole(role);
@@ -174,37 +175,15 @@ class GroupExamStatus extends Component {
                 {!isStudent && (
                   <tr>
                     <td className="fw-bold">
-                      <FormattedMessage id="app.groupExams.locking" defaultMessage="Lock type" />:
+                      <FormattedMessage id="app.groupExams.lockType" defaultMessage="Access limit" />:
                     </td>
                     <td className="p-2">
-                      <em>
-                        {group.privateData.examLockStrict ? (
-                          <FormattedMessage id="app.groupExams.lockStrict" defaultMessage="strict" />
-                        ) : (
-                          <FormattedMessage id="app.groupExams.lockRegular" defaultMessage="regular" />
-                        )}
-                      </em>
-                      <Explanation
-                        id="lock-explain"
-                        title={
-                          group.privateData.examLockStrict ? (
-                            <FormattedMessage id="app.groupExams.lockStrictTitle" defaultMessage="Strict lock" />
-                          ) : (
-                            <FormattedMessage id="app.groupExams.lockRegularTitle" defaultMessage="Regular lock" />
-                          )
-                        }>
-                        {group.privateData.examLockStrict ? (
-                          <FormattedMessage
-                            id="app.groupExams.lockStrictExplanation"
-                            defaultMessage="Users taking the exam will not be allowed to access any other group, not even for reading (so that are cut of source codes they submitted before the exam)."
-                          />
-                        ) : (
-                          <FormattedMessage
-                            id="app.groupExams.lockRegularExplanation"
-                            defaultMessage="Users taking the exam will be able to access other groups in read-only mode (for instance to utilize pieces of previously submitted code)."
-                          />
-                        )}
-                      </Explanation>
+                      <em>{LOCK_TYPE[group.privateData.examLockType] || '???'}</em>
+                      {LOCK_EXPLANATION[group.privateData.examLockType] ? (
+                        <Explanation id="lock-explain" title={LOCK_TITLE[group.privateData.examLockType] || ''}>
+                          {LOCK_EXPLANATION[group.privateData.examLockType] || ''}
+                        </Explanation>
+                      ) : null}
                     </td>
                   </tr>
                 )}
@@ -321,17 +300,7 @@ class GroupExamStatus extends Component {
                       id="app.groupExams.lockedStudentInfo"
                       defaultMessage="You may now see and submit solutions to exam assignments."
                     />{' '}
-                    {isGroupLockStrict ? (
-                      <FormattedMessage
-                        id="app.groupExams.lockedStudentInfoStrict"
-                        defaultMessage="You may not access any other groups until the exam lock expires."
-                      />
-                    ) : (
-                      <FormattedMessage
-                        id="app.groupExams.lockedStudentInfoRegular"
-                        defaultMessage="You may access other groups in read-only mode until the exam lock expires."
-                      />
-                    )}
+                    {LOCKED_STUDENT_INFO[groupLockType] || ''}
                   </div>
                 </>
               ) : (
@@ -379,7 +348,7 @@ class GroupExamStatus extends Component {
                     ? prepareExamInitValues(
                         group.privateData.examBegin,
                         group.privateData.examEnd,
-                        group.privateData.examLockStrict || false
+                        group.privateData.examLockType || 'visible'
                       )
                     : prepareExamInitValues()
                 }
@@ -404,14 +373,14 @@ GroupExamStatus.propTypes = {
     privateData: PropTypes.shape({
       examBegin: PropTypes.number,
       examEnd: PropTypes.number,
-      examLockStrict: PropTypes.bool,
+      examLockType: PropTypes.string,
     }).isRequired,
   }).isRequired,
   currentUser: PropTypes.shape({
     privateData: PropTypes.shape({
       ipLock: PropTypes.string,
       groupLock: PropTypes.string,
-      isGroupLockStrict: PropTypes.bool,
+      groupLockType: PropTypes.string,
       role: PropTypes.string,
     }).isRequired,
   }).isRequired,
