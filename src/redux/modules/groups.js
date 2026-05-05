@@ -379,7 +379,7 @@ const reducer = handleActions(
         .deleteIn(['resources', groupId, 'pending-exam-period'])
         .setIn(['resources', groupId, 'data', 'privateData', 'examBegin'], null)
         .setIn(['resources', groupId, 'data', 'privateData', 'examEnd'], null)
-        .setIn(['resources', groupId, 'data', 'privateData', 'examLockStrict'], null),
+        .setIn(['resources', groupId, 'data', 'privateData', 'examLockType'], null),
 
     [additionalActionTypes.REMOVE_EXAM_PERIOD_REJECTED]: (state, { meta: { groupId } }) =>
       state.deleteIn(['resources', groupId, 'pending-exam-period']),
