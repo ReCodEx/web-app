@@ -10,6 +10,7 @@ import DateTime from '../../widgets/DateTime';
 import Explanation from '../../widgets/Explanation';
 
 import { isStudentRole } from '../../helpers/usersRoles.js';
+import { STUDENT_INFO, LOCK_TYPE, LOCK_TITLE, LOCK_EXPLANATION } from '../helpers/groupExamMessages.js';
 import withLinks from '../../../helpers/withLinks.js';
 
 const REFRESH_INTERVAL = 1; // [s]
@@ -51,7 +52,7 @@ class GroupExamPending extends Component {
   render() {
     const {
       id,
-      privateData: { examBegin, examEnd, examLockStrict },
+      privateData: { examBegin, examEnd, examLockType },
       currentUser: {
         privateData: { groupLock, isGroupLockStrict, ipLock, role },
       },
@@ -150,17 +151,7 @@ class GroupExamPending extends Component {
                             id="app.groupExams.studentInfo"
                             defaultMessage="You need to lock yourself in to see the exam assignments. When locked, your actions will be restricted to your current IP address."
                           />{' '}
-                          {examLockStrict ? (
-                            <FormattedMessage
-                              id="app.groupExams.studentInfoStrict"
-                              defaultMessage="Furthermore, you will not be able to access other groups until the exam lock expires."
-                            />
-                          ) : (
-                            <FormattedMessage
-                              id="app.groupExams.studentInfoRegular"
-                              defaultMessage="Furthermore, you will be able to access other groups in a read-only mode until the exam lock expires."
-                            />
-                          )}
+                          {STUDENT_INFO[examLockType] || ''}
                         </p>
                       </td>
                     </tr>
@@ -213,37 +204,15 @@ class GroupExamPending extends Component {
                 </tr>
                 <tr>
                   <td className="fw-bold text-nowrap">
-                    <FormattedMessage id="app.groupExams.locking" defaultMessage="Lock type" />:
+                    <FormattedMessage id="app.groupExams.lockType" defaultMessage="Access limit" />:
                   </td>
                   <td className="px-2 py-1 text-nowrap">
-                    <em>
-                      {examLockStrict ? (
-                        <FormattedMessage id="app.groupExams.lockStrict" defaultMessage="strict" />
-                      ) : (
-                        <FormattedMessage id="app.groupExams.lockRegular" defaultMessage="regular" />
-                      )}
-                    </em>
-                    <Explanation
-                      id="lock-explain"
-                      title={
-                        examLockStrict ? (
-                          <FormattedMessage id="app.groupExams.lockStrictTitle" defaultMessage="Strict lock" />
-                        ) : (
-                          <FormattedMessage id="app.groupExams.lockRegularTitle" defaultMessage="Regular lock" />
-                        )
-                      }>
-                      {examLockStrict ? (
-                        <FormattedMessage
-                          id="app.groupExams.lockStrictExplanation"
-                          defaultMessage="Users taking the exam will not be allowed to access any other group, not even for reading (so that are cut of source codes they submitted before the exam)."
-                        />
-                      ) : (
-                        <FormattedMessage
-                          id="app.groupExams.lockRegularExplanation"
-                          defaultMessage="Users taking the exam will be able to access other groups in read-only mode (for instance to utilize pieces of previously submitted code)."
-                        />
-                      )}
-                    </Explanation>
+                    <em>{LOCK_TYPE[examLockType] || '???'}</em>
+                    {LOCK_EXPLANATION[examLockType] ? (
+                      <Explanation id="lock-explain" title={LOCK_TITLE[examLockType] || ''}>
+                        {LOCK_EXPLANATION[examLockType] || ''}
+                      </Explanation>
+                    ) : null}
                   </td>
                 </tr>
               </tbody>
@@ -260,7 +229,7 @@ GroupExamPending.propTypes = {
   privateData: PropTypes.shape({
     examBegin: PropTypes.number,
     examEnd: PropTypes.number,
-    examLockStrict: PropTypes.bool,
+    examLockType: PropTypes.string,
   }).isRequired,
   archived: PropTypes.bool,
   currentUser: PropTypes.shape({

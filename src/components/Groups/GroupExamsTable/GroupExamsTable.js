@@ -8,6 +8,7 @@ import { lruMemoize } from 'reselect';
 import DateTime from '../../widgets/DateTime';
 import Button from '../../widgets/TheButton';
 import { VisibleIcon } from '../../icons';
+import { LOCK_TYPE } from '../helpers/groupExamMessages.js';
 
 const sortExams = lruMemoize(exams => {
   const sorted = [...exams];
@@ -43,13 +44,7 @@ const GroupExamsTable = ({ exams = null, selected = null, linkFactory = null }) 
               <DateTime unixTs={exam.end} showSeconds />
             </td>
             <td>
-              <em>
-                {exam.strict ? (
-                  <FormattedMessage id="app.groupExams.lockStrict" defaultMessage="strict" />
-                ) : (
-                  <FormattedMessage id="app.groupExams.lockRegular" defaultMessage="regular" />
-                )}
-              </em>
+              <em>{LOCK_TYPE[exam.type] || '???'}</em>
             </td>
             {linkFactory && (
               <td className="text-end">
