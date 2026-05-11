@@ -295,8 +295,8 @@ export default withLinks(
       loadGroupExamLocks: () => dispatch(fetchGroupExamLocksIfNeeded(groupId, examId)),
       reload: () => dispatch(fetchGroup(groupId)),
       addNotification: (...args) => dispatch(addNotification(...args)),
-      setExamPeriod: (begin, end, strict) =>
-        dispatch(setExamPeriod(groupId, begin, end, strict)).then(() =>
+      setExamPeriod: (begin, end, type) =>
+        dispatch(setExamPeriod(groupId, begin, end, type)).then(() =>
           GroupExams.loadAsync({ groupId, examId }, dispatch)
         ),
       removeExamPeriod: () =>

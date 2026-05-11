@@ -186,10 +186,10 @@ export const setExamFlag = (groupId, value = true) =>
     meta: { groupId },
   });
 
-export const setExamPeriod = (groupId, begin, end = null, strict = undefined) => {
+export const setExamPeriod = (groupId, begin, end = null, type = undefined) => {
   const body = { begin, end };
-  if (strict !== undefined && strict !== null) {
-    body.strict = strict;
+  if (type !== undefined && type !== null) {
+    body.type = type;
   }
   return createApiAction({
     type: additionalActionTypes.SET_EXAM_PERIOD,

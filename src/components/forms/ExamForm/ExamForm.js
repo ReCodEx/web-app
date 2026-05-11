@@ -10,8 +10,18 @@ import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Explanation from '../../widgets/Explanation';
 import SubmitButton from '../SubmitButton';
 import { CloseIcon, SendIcon } from '../../icons';
+import { TextField, CheckboxField, RadioField, DatetimeField } from '../Fields';
+import { LOCK_TITLE, LOCK_EXPLANATION } from '../../Groups/helpers/groupExamMessages.js';
 
-import { TextField, CheckboxField, DatetimeField } from '../Fields';
+const TYPE_OPTIONS = ['visible', 'reviewed', 'accepted', 'restricted'].map(key => ({
+  key,
+  name: (
+    <>
+      {LOCK_TITLE[key]}
+      <Explanation id={`lockTypeExplanation-${key}`}>{LOCK_EXPLANATION[key]}</Explanation>
+    </>
+  ),
+}));
 
 export const secondsToTime = seconds => {
   if (seconds < 0) {
@@ -34,16 +44,16 @@ export const timeToSeconds = timeStr => {
   return !isNaN(hours) && !isNaN(minutes) ? hours * 3600 + minutes * 60 : null;
 };
 
-export const prepareInitValues = (begin = null, end = null, strict = false) => ({
+export const prepareInitValues = (begin = null, end = null, type = 'visible') => ({
   beginImmediately: false,
   endRelative: false,
   begin: begin ? moment.unix(begin) : moment().add(2, 'hour').startOf('hour'),
   end: end ? moment.unix(end) : begin ? moment.unix(begin).add(2, 'hour') : moment().add(4, 'hour').startOf('hour'),
-  strict,
+  type,
   length: begin && end ? secondsToTime(end - begin) : '2:00',
 });
 
-export const transformSubmittedData = ({ beginImmediately, endRelative, begin, end, length, strict = false }) => {
+export const transformSubmittedData = ({ beginImmediately, endRelative, begin, end, length, type = 'visible' }) => {
   const beginTs = beginImmediately ? Math.ceil(Date.now() / 1000) : moment.isMoment(begin) ? begin.unix() : null;
   const endTs = endRelative
     ? beginTs && timeToSeconds(length)
@@ -52,7 +62,7 @@ export const transformSubmittedData = ({ beginImmediately, endRelative, begin, e
     : moment.isMoment(end)
       ? end.unix()
       : null;
-  return { begin: beginTs, end: endTs, strict };
+  return { begin: beginTs, end: endTs, type };
 };
 
 const ExamForm = ({
@@ -158,32 +168,28 @@ const ExamForm = ({
         <Row>
           <Col xs={12}>
             <hr />
-            <Field
-              name="strict"
-              tabIndex={5}
-              component={CheckboxField}
-              ignoreDirty
-              onOff
-              label={
-                <>
-                  <FormattedMessage id="app.examForm.strict" defaultMessage="Strict lock" />
-                  <Explanation id="strictLockExplanation">
-                    <FormattedMessage
-                      id="app.examForm.strictLockExplanation"
-                      defaultMessage="During the exam, students will be required to lock themselves in the group. When locked, access to all other groups is restricted. In case of regular locks, other groups are read-only. If the lock is strict, the groups may not be accessed at all. Use strict locking when the students are to be prevented from utilizing pieced of previously submitted code."
-                    />
-                  </Explanation>
-                </>
-              }
-            />
+            <h5>
+              <FormattedMessage
+                id="app.examForm.lockTypeTitle"
+                defaultMessage="Access limitations for locked students"
+              />
+            </h5>
+            <Field name="type" tabIndex={5} component={RadioField} options={TYPE_OPTIONS} ignoreDirty />
           </Col>
         </Row>
       )}
+
+      {error && dirty && (
+        <Row>
+          <Col xs={12}>
+            <Callout variant="danger">{error}</Callout>
+          </Col>
+        </Row>
+      )}
+
+      <hr />
     </Container>
 
-    {error && dirty && <Callout variant="danger">{error}</Callout>}
-
-    <hr />
     <div className="text-center">
       <TheButtonGroup>
         <SubmitButton

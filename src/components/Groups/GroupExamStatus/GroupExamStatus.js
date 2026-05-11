@@ -49,9 +49,9 @@ class GroupExamStatus extends Component {
   };
 
   examFormSubmit = data => {
-    const { begin, end, strict } = transformExamData(data);
+    const { begin, end, type } = transformExamData(data);
     const { examInProgress } = this.state;
-    return this.props.setExamPeriod(examInProgress ? null : begin, end, examInProgress ? null : strict).then(res => {
+    return this.props.setExamPeriod(examInProgress ? null : begin, end, examInProgress ? null : type).then(res => {
       this.examModalClose();
       return Promise.resolve(res);
     });

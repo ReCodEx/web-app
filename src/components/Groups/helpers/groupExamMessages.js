@@ -97,3 +97,33 @@ export const LOCKED_STUDENT_INFO = {
     />
   ),
 };
+
+export const LOCKED_ELSEWHERE_STUDENT_INFO = {
+  accepted: (
+    <FormattedMessage
+      id="app.groupExams.lockedElsewhereStudentInfo.accepted"
+      defaultMessage="Your access is limited to accepted solutions only."
+    />
+  ),
+  reviewed: (
+    <FormattedMessage
+      id="app.groupExams.lockedElsewhereStudentInfo.reviewed"
+      defaultMessage="Your access is limited to accepted and reviewed solutions only."
+    />
+  ),
+};
+
+export const STUDENT_SOLUTIONS_RESTRICTIONS = {
+  accepted: (
+    <FormattedMessage
+      id="app.groupExams.studentSolutionsRestrictions.accepted"
+      defaultMessage="showing only accepted solutions"
+    />
+  ),
+  reviewed: (
+    <FormattedMessage
+      id="app.groupExams.studentSolutionsRestrictions.reviewed"
+      defaultMessage="showing only accepted and reviewed solutions"
+    />
+  ),
+};

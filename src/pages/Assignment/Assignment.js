@@ -8,8 +8,10 @@ import { Col, Row } from 'react-bootstrap';
 import Box from '../../components/widgets/Box';
 import Callout from '../../components/widgets/Callout';
 import OptionalPopoverWrapper from '../../components/widgets/OptionalPopoverWrapper';
+import GroupExamPending from '../../components/Groups/GroupExamPending';
 
 import { fetchAssignmentIfNeeded, syncWithExercise, SYNC_OPTIONS_ALL } from '../../redux/modules/assignments.js';
+import { fetchGroupIfNeeded } from '../../redux/modules/groups.js';
 import { canSubmit } from '../../redux/modules/canSubmit.js';
 import {
   init,
@@ -38,13 +40,14 @@ import {
 } from '../../redux/selectors/solutions.js';
 import { loggedUserIsStudentOfSelector } from '../../redux/selectors/usersGroups.js';
 import { loggedInUserSelector } from '../../redux/selectors/users.js';
+import { groupSelector } from '../../redux/selectors/groups.js';
 
 import Page from '../../components/layout/Page';
 import { AssignmentNavigation } from '../../components/layout/Navigation';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import AssignmentDetails from '../../components/Assignments/Assignment/AssignmentDetails';
-import Icon, { AssignmentIcon } from '../../components/icons';
+import Icon, { AssignmentIcon, WarningIcon } from '../../components/icons';
 import LocalizedTexts from '../../components/helpers/LocalizedTexts';
 import SubmitSolutionButton from '../../components/Assignments/SubmitSolutionButton';
 import SubmitSolutionContainer from '../../containers/SubmitSolutionContainer';
@@ -55,6 +58,7 @@ import CommentThreadContainer from '../../containers/CommentThreadContainer';
 import LoadingSolutionsTable from '../../components/Assignments/SolutionsTable/LoadingSolutionsTable.js';
 import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsTable/FailedLoadingSolutionsTable.js';
 import { isStudentLocked } from '../../components/helpers/exams.js';
+import { STUDENT_SOLUTIONS_RESTRICTIONS } from '../../components/Groups/helpers/groupExamMessages.js';
 import { hasPermissions } from '../../helpers/common.js';
 
 const getReason = ({ lockedReason }, locale) =>
@@ -65,7 +69,9 @@ const getReason = ({ lockedReason }, locale) =>
 class Assignment extends Component {
   static loadAsync = ({ assignmentId }, dispatch, { userId }) =>
     Promise.all([
-      dispatch(fetchAssignmentIfNeeded(assignmentId)),
+      dispatch(fetchAssignmentIfNeeded(assignmentId))
+        .then(res => res.value)
+        .then(assignment => dispatch(fetchGroupIfNeeded(assignment.groupId))),
       dispatch(fetchRuntimeEnvironments()),
       dispatch(canSubmit(assignmentId)),
       dispatch(fetchUsersSolutions(userId, assignmentId)),
@@ -108,6 +114,7 @@ class Assignment extends Component {
       fetchManyStatus,
       assignmentSolversLoading,
       assignmentSolverSelector,
+      getGroup,
       intl: { locale },
     } = this.props;
 
@@ -133,6 +140,10 @@ class Assignment extends Component {
               }
             />
 
+            <ResourceRenderer resource={getGroup(assignment.groupId)}>
+              {group => group.privateData && <GroupExamPending {...group} currentUser={currentUser} />}
+            </ResourceRenderer>
+
             {assignment.exerciseId && hasPermissions(assignment, 'update') && (
               <AssignmentSync syncInfo={assignment.exerciseSynchronizationInfo} exerciseSync={exerciseSync} />
             )}
@@ -155,8 +166,8 @@ class Assignment extends Component {
               </Callout>
             )}
 
-            <ResourceRenderer resource={[canSubmit, ...runtimeEnvironments]}>
-              {(canSubmitObj, ...runtimes) => (
+            <ResourceRenderer resource={[canSubmit, getGroup(assignment.groupId), ...runtimeEnvironments]}>
+              {(canSubmitObj, group, ...runtimes) => (
                 <Row>
                   <Col xl={6}>
                     <AssignmentDetails
@@ -229,7 +240,19 @@ class Assignment extends Component {
                     {(isStudentOf(assignment.groupId) ||
                       (userId && hasPermissions(assignment, 'viewAssignmentSolutions'))) && ( // includes superadmin
                       <Box
-                        title={<FormattedMessage id="app.solutionsTable.title" defaultMessage="Submitted Solutions" />}
+                        title={
+                          <>
+                            <FormattedMessage id="app.solutionsTable.title" defaultMessage="Submitted Solutions" />
+                            {currentUser?.privateData?.groupLock &&
+                              STUDENT_SOLUTIONS_RESTRICTIONS[currentUser?.privateData?.groupLockType] && (
+                                <small className="ms-3 text-muted">
+                                  <WarningIcon gapRight={1} className="text-warning" />
+                                  {STUDENT_SOLUTIONS_RESTRICTIONS[currentUser?.privateData?.groupLockType]}
+                                  <WarningIcon gapLeft={1} className="text-warning" />
+                                </small>
+                              )}
+                          </>
+                        }
                         collapsable
                         isOpen
                         noPadding
@@ -314,6 +337,7 @@ Assignment.propTypes = {
   fetchManyStatus: PropTypes.string,
   assignmentSolversLoading: PropTypes.bool,
   assignmentSolverSelector: PropTypes.func.isRequired,
+  getGroup: PropTypes.func.isRequired,
   reloadCanSubmit: PropTypes.func.isRequired,
   reloadSolvers: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
@@ -336,6 +360,7 @@ export default injectIntl(
         fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
         assignmentSolversLoading: isAssignmentSolversLoading(state),
         assignmentSolverSelector: getAssignmentSolverSelector(state),
+        getGroup: id => groupSelector(state, id),
       };
     },
     (dispatch, { params: { assignmentId } }) => ({
