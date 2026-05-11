@@ -11,7 +11,7 @@ const RadioField = ({ input, meta: { error, warning, dirty }, ignoreDirty = fals
           className={classnames({
             'form-check-label': true,
             'text-danger': error && input.value === key,
-            'text-warninig': !error && warning && input.value === key,
+            'text-warning': !error && warning && input.value === key,
             'text-primary': dirty && !ignoreDirty && input.value === key,
           })}>
           <input type="radio" name={input.name} value={key} checked={input.value === key} onChange={input.onChange} />

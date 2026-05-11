@@ -16,6 +16,7 @@ import {
   LOCK_EXPLANATION,
   STUDENT_INFO,
   LOCKED_STUDENT_INFO,
+  LOCKED_ELSEWHERE_STUDENT_INFO,
 } from '../helpers/groupExamMessages.js';
 import withLinks from '../../../helpers/withLinks.js';
 
@@ -73,6 +74,7 @@ class GroupExamPending extends Component {
             id="app.groupExams.lockedElsewhere"
             defaultMessage="You are already locked for an exam in a different group (you can see this group in a read-only mode now)."
           />
+          {LOCKED_ELSEWHERE_STUDENT_INFO[groupLockType] ? <> {LOCKED_ELSEWHERE_STUDENT_INFO[groupLockType]}</> : null}{' '}
           <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupLock)}>
             <LinkIcon gapLeft={2} className="text-primary" />
           </Link>
