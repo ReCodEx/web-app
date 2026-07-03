@@ -13702,7 +13702,7 @@ __metadata:
     webpack: 5.105.4
     webpack-cli: ^6.0.1
     webpack-dev-middleware: ^7.4.5
-    webpack-dev-server: ^5.2.3
+    webpack-dev-server: ^5.2.5
     webpack-isomorphic-tools: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -16272,9 +16272,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^5.2.3":
-  version: 5.2.3
-  resolution: "webpack-dev-server@npm:5.2.3"
+"webpack-dev-server@npm:^5.2.5":
+  version: 5.2.5
+  resolution: "webpack-dev-server@npm:5.2.5"
   dependencies:
     "@types/bonjour": ^3.5.13
     "@types/connect-history-api-fallback": ^1.5.4
@@ -16313,7 +16313,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 2b7f2096529945f578e86966d9a0994b0a87b82e3bb3a7cd1ccea2fb81aa95724473a88c9b2033ae3d2f799d13330342948ea77638029d10c8c0c746aac545f7
+  checksum: 349719d0487a5672f65a7427d54afc9f8ddc6b695042641ed9f468cb5a3c90866e16a236ecdb2ac62d2a922712f9c1296b8805b7ec0880f6a3f5c4280785f200
   languageName: node
   linkType: hard
 
