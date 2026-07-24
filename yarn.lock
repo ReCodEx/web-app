@@ -9790,10 +9790,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immutable@npm:^5.1.5":
-  version: 5.1.5
-  resolution: "immutable@npm:5.1.5"
-  checksum: 6aa0ed4ba7eac225982fea7adbee16e939744e9d20bf15e0f5d4561d7fa2fe69aee6e63ccdb0dffa22e012f6a690ee5359783471ecd0782de6125f2214de3dd8
+"immutable@npm:^5.1.8":
+  version: 5.1.8
+  resolution: "immutable@npm:5.1.8"
+  checksum: cb394ef6c51c45d0cf3f3527dad18f62b0a26db4b1d76402ee8e67c38b8658964020d2ee846ae58ddb6090ea2fd2e8cfa774b70f442ce0cb606aefa06dddb890
   languageName: node
   linkType: hard
 
@@ -13647,7 +13647,7 @@ __metadata:
     globals: ^17.4.0
     highlight.js: ^11.11.1
     image-webpack-loader: ^8.1.0
-    immutable: ^5.1.5
+    immutable: ^5.1.8
     isomorphic-style-loader: ^5.4.0
     jsdom: ^27.4.0
     json-loader: ^0.5.7
