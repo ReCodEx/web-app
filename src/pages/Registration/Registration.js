@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset, startAsyncValidation } from 'redux-form';
 import { lruMemoize } from 'reselect';
@@ -64,8 +64,8 @@ class Registration extends Component {
       instances,
       createAccount,
       links: { LOGIN_URI },
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     const EXTERNAL_AUTH_NAME = getConfigVarLocalized('EXTERNAL_AUTH_NAME', locale);
     const showExternalInfo = Boolean(!ALLOW_LOCAL_REGISTRATION && EXTERNAL_AUTH_NAME && EXTERNAL_AUTH_HELPDESK_URL);
@@ -156,7 +156,6 @@ Registration.propTypes = {
   reset: PropTypes.func.isRequired,
   triggerAsyncValidation: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: PropTypes.object,
 };
 
 export default withLinks(
@@ -189,5 +188,5 @@ export default withLinks(
         dispatch(reset('external-registration'));
       },
     })
-  )(injectIntl(Registration))
+  )(Registration)
 );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Table, Modal } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { lruMemoize } from 'reselect';
@@ -36,16 +36,8 @@ const getUnusedKeys = lruMemoize((links, keysInText, locale) => {
   return Array.from(unusedKeys).sort((a, b) => a.localeCompare(b, locale));
 });
 
-const FilesLinksTable = ({
-  exercise,
-  links,
-  files = null,
-  operation,
-  createLink,
-  updateLink,
-  deleteLink,
-  intl: { locale, formatMessage },
-}) => {
+const FilesLinksTable = ({ exercise, links, files = null, operation, createLink, updateLink, deleteLink }) => {
+  const { locale, formatMessage } = useIntl();
   const [filesOpen, setFilesOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [editLink, setEditLink] = useState(null);
@@ -335,7 +327,6 @@ FilesLinksTable.propTypes = {
   createLink: PropTypes.func,
   updateLink: PropTypes.func,
   deleteLink: PropTypes.func,
-  intl: PropTypes.object,
 };
 
-export default injectIntl(FilesLinksTable);
+export default FilesLinksTable;

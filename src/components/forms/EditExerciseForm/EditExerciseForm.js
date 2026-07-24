@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
-import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import { SelectField, CheckboxField, NumericTextField } from '../Fields';
@@ -51,184 +51,186 @@ const EditExerciseForm = ({
   submitSucceeded,
   invalid,
   asyncValidating,
-  intl: { formatMessage },
-}) => (
-  <FormBox
-    id="texts-form"
-    title={<FormattedMessage id="app.editExerciseForm.title" defaultMessage="Texts and Settings of The Exercise" />}
-    succeeded={submitSucceeded}
-    dirty={dirty}
-    footer={
-      <div className="text-center">
-        <SubmitButton
-          id="editExercise"
-          invalid={invalid}
-          submitting={submitting}
-          dirty={dirty}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          handleSubmit={handleSubmit}
-          asyncValidating={asyncValidating}
-          messages={{
-            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-            validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
-          }}
-        />
-      </div>
-    }>
-    {submitFailed && (
-      <Callout variant="danger">
-        <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-      </Callout>
-    )}
+}) => {
+  const { formatMessage } = useIntl();
+  return (
+    <FormBox
+      id="texts-form"
+      title={<FormattedMessage id="app.editExerciseForm.title" defaultMessage="Texts and Settings of The Exercise" />}
+      succeeded={submitSucceeded}
+      dirty={dirty}
+      footer={
+        <div className="text-center">
+          <SubmitButton
+            id="editExercise"
+            invalid={invalid}
+            submitting={submitting}
+            dirty={dirty}
+            hasSucceeded={submitSucceeded}
+            hasFailed={submitFailed}
+            handleSubmit={handleSubmit}
+            asyncValidating={asyncValidating}
+            messages={{
+              submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+              success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+              validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
+            }}
+          />
+        </div>
+      }>
+      {submitFailed && (
+        <Callout variant="danger">
+          <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
+        </Callout>
+      )}
 
-    <FieldArray
-      name="localizedTexts"
-      component={LocalizedTextsFormField}
-      fieldType="exercise"
-      previewPreprocessor={previewPreprocessor(localizedTextsLinks)}
-    />
+      <FieldArray
+        name="localizedTexts"
+        component={LocalizedTextsFormField}
+        fieldType="exercise"
+        previewPreprocessor={previewPreprocessor(localizedTextsLinks)}
+      />
 
-    <Row className="align-items-end">
-      <Col sm={12} md={6}>
-        <NumericTextField
-          name="solutionFilesLimit"
-          validateMin={1}
-          validateMax={100}
-          maxLength={3}
-          nullable
-          label={
-            <span>
-              <FormattedMessage id="app.editExerciseForm.solutionFilesLimit" defaultMessage="Solution files limit:" />
-              <Explanation id="solutionFilesLimitExplanation">
-                <FormattedMessage
-                  id="app.exercise.solutionFilesLimitExplanation"
-                  defaultMessage="Maximal number of files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
-                />
-                <hr />
-                <strong>
+      <Row className="align-items-end">
+        <Col sm={12} md={6}>
+          <NumericTextField
+            name="solutionFilesLimit"
+            validateMin={1}
+            validateMax={100}
+            maxLength={3}
+            nullable
+            label={
+              <span>
+                <FormattedMessage id="app.editExerciseForm.solutionFilesLimit" defaultMessage="Solution files limit:" />
+                <Explanation id="solutionFilesLimitExplanation">
                   <FormattedMessage
-                    id="app.exercise.defaultValueForAssignment"
-                    defaultMessage="This is a default (recommended) value for assignments, but each assignment of this exercise may set it individually. Modifications of this value are not synchronized with already created assignments."
+                    id="app.exercise.solutionFilesLimitExplanation"
+                    defaultMessage="Maximal number of files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
                   />
-                </strong>
-              </Explanation>
-            </span>
-          }
-        />
-      </Col>
+                  <hr />
+                  <strong>
+                    <FormattedMessage
+                      id="app.exercise.defaultValueForAssignment"
+                      defaultMessage="This is a default (recommended) value for assignments, but each assignment of this exercise may set it individually. Modifications of this value are not synchronized with already created assignments."
+                    />
+                  </strong>
+                </Explanation>
+              </span>
+            }
+          />
+        </Col>
 
-      <Col sm={12} md={6}>
-        <NumericTextField
-          name="solutionSizeLimit"
-          validateMin={1}
-          validateMax={128 * 1024}
-          maxLength={6}
-          nullable
-          label={
-            <span>
-              <FormattedMessage
-                id="app.editExerciseForm.solutionSizeLimit"
-                defaultMessage="Solution total size [KiB] limit:"
-              />
-              <Explanation id="solutionSizeLimitExplanation">
+        <Col sm={12} md={6}>
+          <NumericTextField
+            name="solutionSizeLimit"
+            validateMin={1}
+            validateMax={128 * 1024}
+            maxLength={6}
+            nullable
+            label={
+              <span>
                 <FormattedMessage
-                  id="app.exercise.solutionSizeLimitExplanation"
-                  defaultMessage="Maximal total size of all files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
+                  id="app.editExerciseForm.solutionSizeLimit"
+                  defaultMessage="Solution total size [KiB] limit:"
                 />
-                <hr />
-                <strong>
+                <Explanation id="solutionSizeLimitExplanation">
                   <FormattedMessage
-                    id="app.exercise.defaultValueForAssignment"
-                    defaultMessage="This is a default (recommended) value for assignments, but each assignment of this exercise may set it individually. Modifications of this value are not synchronized with already created assignments."
+                    id="app.exercise.solutionSizeLimitExplanation"
+                    defaultMessage="Maximal total size of all files submitted in a solution. The users are not allowed to submit solutions that exceed this limit. If empty, no limit is applied."
                   />
-                </strong>
-              </Explanation>
-            </span>
-          }
-        />
-      </Col>
+                  <hr />
+                  <strong>
+                    <FormattedMessage
+                      id="app.exercise.defaultValueForAssignment"
+                      defaultMessage="This is a default (recommended) value for assignments, but each assignment of this exercise may set it individually. Modifications of this value are not synchronized with already created assignments."
+                    />
+                  </strong>
+                </Explanation>
+              </span>
+            }
+          />
+        </Col>
 
-      <Col sm={12} md={6}>
-        <Field
-          name="difficulty"
-          component={SelectField}
-          options={difficultyOptions(formatMessage)}
-          addEmptyOption={true}
-          label={
-            <>
-              <FormattedMessage id="app.editExerciseForm.difficulty" defaultMessage="Difficulty" />:
-            </>
-          }
-        />
-      </Col>
+        <Col sm={12} md={6}>
+          <Field
+            name="difficulty"
+            component={SelectField}
+            options={difficultyOptions(formatMessage)}
+            addEmptyOption={true}
+            label={
+              <>
+                <FormattedMessage id="app.editExerciseForm.difficulty" defaultMessage="Difficulty" />:
+              </>
+            }
+          />
+        </Col>
 
-      <Col sm={12} md={6}>
-        <Field
-          name="mergeJudgeLogs"
-          component={CheckboxField}
-          onOff
-          label={
-            <span>
-              <FormattedMessage id="app.editExerciseForm.mergeJudgeLogs" defaultMessage="Merge judge logs" />
-              <Explanation id="mergeJudgeLogsExplanation">
-                <FormattedMessage
-                  id="app.exercise.mergeJudgeLogsExplanation"
-                  defaultMessage="The merge flag indicates whether primary (stdout) and secondary (stderr) judge logs are are concatenated in one log (which should be default for built-in judges). If the logs are separated, the visibility of each part may be controlled individually in assignments. That might be helpful if you need to pass two separate logs from a custom judge (e.g., one is for students and one is for supervisors)."
-                />
-              </Explanation>
-            </span>
-          }
-        />
-      </Col>
-    </Row>
+        <Col sm={12} md={6}>
+          <Field
+            name="mergeJudgeLogs"
+            component={CheckboxField}
+            onOff
+            label={
+              <span>
+                <FormattedMessage id="app.editExerciseForm.mergeJudgeLogs" defaultMessage="Merge judge logs" />
+                <Explanation id="mergeJudgeLogsExplanation">
+                  <FormattedMessage
+                    id="app.exercise.mergeJudgeLogsExplanation"
+                    defaultMessage="The merge flag indicates whether primary (stdout) and secondary (stderr) judge logs are are concatenated in one log (which should be default for built-in judges). If the logs are separated, the visibility of each part may be controlled individually in assignments. That might be helpful if you need to pass two separate logs from a custom judge (e.g., one is for students and one is for supervisors)."
+                  />
+                </Explanation>
+              </span>
+            }
+          />
+        </Col>
+      </Row>
 
-    <hr />
+      <hr />
 
-    <Row>
-      <Col sm={12} md={6}>
-        <Field
-          name="isPublic"
-          component={CheckboxField}
-          onOff
-          label={
-            <span>
-              <FormattedMessage id="app.editExerciseForm.isPublic" defaultMessage="Exercise is public" />
-              <Explanation id="isPublicExplanation">
-                <FormattedMessage
-                  id="app.exercise.isPublicExplanation"
-                  defaultMessage="Public exercise is visible to all supervisors in its home groups and respective nested groups. Private (not public) exercise is visible to the author only."
-                />
-              </Explanation>
-            </span>
-          }
-        />
-      </Col>
-      <Col sm={12} md={6}>
-        <Field
-          name="isLocked"
-          component={CheckboxField}
-          onOff
-          label={
-            <span>
-              <FormattedMessage id="app.editExerciseForm.isLocked" defaultMessage="Exercise is locked" />
-              <Explanation id="isLockedExplanation">
-                <FormattedMessage
-                  id="app.exercise.isLockedExplanation"
-                  defaultMessage="Locked exercises cannot be assigned in groups. It is recommended to keep the assignment locked until it is properly tested by reference solutions, especially if it is also public."
-                />
-              </Explanation>
-            </span>
-          }
-        />
-      </Col>
-    </Row>
+      <Row>
+        <Col sm={12} md={6}>
+          <Field
+            name="isPublic"
+            component={CheckboxField}
+            onOff
+            label={
+              <span>
+                <FormattedMessage id="app.editExerciseForm.isPublic" defaultMessage="Exercise is public" />
+                <Explanation id="isPublicExplanation">
+                  <FormattedMessage
+                    id="app.exercise.isPublicExplanation"
+                    defaultMessage="Public exercise is visible to all supervisors in its home groups and respective nested groups. Private (not public) exercise is visible to the author only."
+                  />
+                </Explanation>
+              </span>
+            }
+          />
+        </Col>
+        <Col sm={12} md={6}>
+          <Field
+            name="isLocked"
+            component={CheckboxField}
+            onOff
+            label={
+              <span>
+                <FormattedMessage id="app.editExerciseForm.isLocked" defaultMessage="Exercise is locked" />
+                <Explanation id="isLockedExplanation">
+                  <FormattedMessage
+                    id="app.exercise.isLockedExplanation"
+                    defaultMessage="Locked exercises cannot be assigned in groups. It is recommended to keep the assignment locked until it is properly tested by reference solutions, especially if it is also public."
+                  />
+                </Explanation>
+              </span>
+            }
+          />
+        </Col>
+      </Row>
 
-    {error && dirty && <Callout variant="danger">{error}</Callout>}
-  </FormBox>
-);
+      {error && dirty && <Callout variant="danger">{error}</Callout>}
+    </FormBox>
+  );
+};
 
 EditExerciseForm.propTypes = {
   localizedTextsLinks: PropTypes.object,
@@ -236,7 +238,6 @@ EditExerciseForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   values: PropTypes.object,
   handleSubmit: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
   submitFailed: PropTypes.bool,
@@ -331,5 +332,5 @@ export default withLinks(
     shouldAsyncValidate,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-  })(injectIntl(EditExerciseForm))
+  })(EditExerciseForm)
 );

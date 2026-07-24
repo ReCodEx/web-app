@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import Box from '../../widgets/Box';
 import TestResultsTable from '../TestResultsTable';
 import { lruMemoize } from 'reselect';
@@ -17,25 +17,27 @@ const TestResults = ({
   isJudgeLogStdoutPublic = null,
   isJudgeLogStderrPublic = null,
   isJudgeLogMerged = true,
-  intl: { locale },
-}) => (
-  <Box
-    title={<FormattedMessage id="app.submission.evaluation.title.testResults" defaultMessage="Test Results" />}
-    noPadding
-    collapsable
-    isOpen
-    unlimitedHeight>
-    <TestResultsTable
-      results={getSortedTestResults(evaluation, locale)}
-      runtimeEnvironmentId={runtimeEnvironmentId}
-      showJudgeLogStdout={showJudgeLogStdout}
-      showJudgeLogStderr={showJudgeLogStderr}
-      isJudgeLogStdoutPublic={isJudgeLogStdoutPublic}
-      isJudgeLogStderrPublic={isJudgeLogStderrPublic}
-      isJudgeLogMerged={isJudgeLogMerged}
-    />
-  </Box>
-);
+}) => {
+  const { locale } = useIntl();
+  return (
+    <Box
+      title={<FormattedMessage id="app.submission.evaluation.title.testResults" defaultMessage="Test Results" />}
+      noPadding
+      collapsable
+      isOpen
+      unlimitedHeight>
+      <TestResultsTable
+        results={getSortedTestResults(evaluation, locale)}
+        runtimeEnvironmentId={runtimeEnvironmentId}
+        showJudgeLogStdout={showJudgeLogStdout}
+        showJudgeLogStderr={showJudgeLogStderr}
+        isJudgeLogStdoutPublic={isJudgeLogStdoutPublic}
+        isJudgeLogStderrPublic={isJudgeLogStderrPublic}
+        isJudgeLogMerged={isJudgeLogMerged}
+      />
+    </Box>
+  );
+};
 
 TestResults.propTypes = {
   evaluation: PropTypes.object.isRequired,
@@ -45,7 +47,6 @@ TestResults.propTypes = {
   isJudgeLogStdoutPublic: PropTypes.bool,
   isJudgeLogStderrPublic: PropTypes.bool,
   isJudgeLogMerged: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(TestResults);
+export default TestResults;

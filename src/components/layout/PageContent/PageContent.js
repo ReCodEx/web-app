@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Container } from 'react-bootstrap';
 
 import Icon from '../../icons';
@@ -21,7 +21,8 @@ const getMessage = (item, formatMessage) =>
  * The component passes the title and description to the Helmet library
  * which reflects these into the <head> section of the HTML document.
  */
-const PageContent = ({ intl: { formatMessage }, title = '', windowTitle = null, icon = null, children }) => {
+const PageContent = ({ title = '', windowTitle = null, icon = null, children }) => {
+  const { formatMessage } = useIntl();
   return (
     <main className="app-main bg-body-tertiary pb-1">
       <Helmet title={getMessage(windowTitle || title, formatMessage)} />
@@ -48,7 +49,6 @@ PageContent.propTypes = {
   icon: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   children: PropTypes.element,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(PageContent);
+export default PageContent;

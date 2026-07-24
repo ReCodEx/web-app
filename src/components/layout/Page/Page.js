@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import PageContent from '../PageContent';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
@@ -18,12 +18,8 @@ const failedIcons = {
 
 class Page extends Component {
   defaultFailedPage = errors => {
-    const {
-      title = '',
-      windowTitle = null,
-      icon = null,
-      intl: { formatMessage },
-    } = this.props;
+    const { title = '', windowTitle = null, icon = null } = this.props;
+    const { formatMessage } = useIntl();
 
     const error = errors[0] || null;
     const [major] = getErrorCodeStructured(error);
@@ -128,7 +124,6 @@ Page.propTypes = {
   windowTitle: PropTypes.oneOfType([PropTypes.func, PropTypes.string, PropTypes.element]),
   icon: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.string]),
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
-  intl: PropTypes.object,
 };
 
-export default injectIntl(Page);
+export default Page;

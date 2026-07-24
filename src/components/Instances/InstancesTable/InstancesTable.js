@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { SuccessOrFailureIcon } from '../../icons';
@@ -8,45 +8,47 @@ import UsersNameContainer from '../../../containers/UsersNameContainer';
 
 import withLinks from '../../../helpers/withLinks.js';
 
-const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY }, intl }) => (
-  <Table hover>
-    <thead>
-      <tr>
-        <th>
-          <FormattedMessage id="generic.name" defaultMessage="Name" />
-        </th>
-        <th>
-          <FormattedMessage id="app.instancesTable.admin" defaultMessage="Admin" />
-        </th>
-        <th>
-          <FormattedMessage id="app.instancesTable.validLicense" defaultMessage="Has valid license" />
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      {instances
-        .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-        .map(({ id, name, adminId, hasValidLicence }) => (
-          <tr key={id}>
-            <td>
-              <Link to={INSTANCE_URI_FACTORY(id)}>{name}</Link>
-            </td>
-            <td>
-              <UsersNameContainer userId={adminId} listItem />
-            </td>
-            <td>
-              <SuccessOrFailureIcon success={hasValidLicence} />
-            </td>
-          </tr>
-        ))}
-    </tbody>
-  </Table>
-);
+const InstancesTable = ({ instances, links: { INSTANCE_URI_FACTORY } }) => {
+  const { locale } = useIntl();
+  return (
+    <Table hover>
+      <thead>
+        <tr>
+          <th>
+            <FormattedMessage id="generic.name" defaultMessage="Name" />
+          </th>
+          <th>
+            <FormattedMessage id="app.instancesTable.admin" defaultMessage="Admin" />
+          </th>
+          <th>
+            <FormattedMessage id="app.instancesTable.validLicense" defaultMessage="Has valid license" />
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {instances
+          .sort((a, b) => a.name.localeCompare(b.name, locale))
+          .map(({ id, name, adminId, hasValidLicence }) => (
+            <tr key={id}>
+              <td>
+                <Link to={INSTANCE_URI_FACTORY(id)}>{name}</Link>
+              </td>
+              <td>
+                <UsersNameContainer userId={adminId} listItem />
+              </td>
+              <td>
+                <SuccessOrFailureIcon success={hasValidLicence} />
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </Table>
+  );
+};
 
 InstancesTable.propTypes = {
   instances: PropTypes.array.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default injectIntl(withLinks(InstancesTable));
+export default withLinks(InstancesTable);

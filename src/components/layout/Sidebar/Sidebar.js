@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import { Link } from 'react-router-dom';
 
@@ -78,8 +78,8 @@ const Sidebar = ({
     PIPELINES_URI,
     ARCHIVE_URI,
   },
-  intl: { locale },
 }) => {
+  const { locale } = useIntl();
   const user = getUserData(loggedInUser);
 
   return (
@@ -247,7 +247,6 @@ Sidebar.propTypes = {
   instances: ImmutablePropTypes.list,
   fetchExtensionUrl: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default withLinks(injectIntl(Sidebar));
+export default withLinks(Sidebar);

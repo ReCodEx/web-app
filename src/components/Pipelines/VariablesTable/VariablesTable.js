@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
@@ -67,8 +67,8 @@ const VariablesTable = ({
   editVariable = null,
   removeVariable = null,
   pending = false,
-  intl: { locale },
 }) => {
+  const { locale } = useIntl();
   const secondarySelectionsIndexed = secondarySelections && prepareSelectionIndex(secondarySelections);
 
   return (
@@ -187,7 +187,6 @@ VariablesTable.propTypes = {
   editVariable: PropTypes.func,
   removeVariable: PropTypes.func,
   pending: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default injectIntl(VariablesTable);
+export default VariablesTable;

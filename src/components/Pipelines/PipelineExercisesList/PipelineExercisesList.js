@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
@@ -27,7 +27,6 @@ const preprocessExercises = lruMemoize((exercises, locale, offset = 0, limit = 1
 
 const PipelineExercisesList = ({
   pipelineExercises = null,
-  intl: { locale },
   links: {
     EXERCISE_URI_FACTORY,
     EXERCISE_EDIT_URI_FACTORY,
@@ -35,6 +34,7 @@ const PipelineExercisesList = ({
     EXERCISE_EDIT_LIMITS_URI_FACTORY,
   },
 }) => {
+  const { locale } = useIntl();
   const [fullView, setFullView] = useState(false);
 
   if (!pipelineExercises || pipelineExercises === resourceStatus.PENDING) {
@@ -188,8 +188,7 @@ const PipelineExercisesList = ({
 
 PipelineExercisesList.propTypes = {
   pipelineExercises: PropTypes.any,
-  intl: PropTypes.object.isRequired,
   links: PropTypes.object,
 };
 
-export default withLinks(injectIntl(PipelineExercisesList));
+export default withLinks(PipelineExercisesList);

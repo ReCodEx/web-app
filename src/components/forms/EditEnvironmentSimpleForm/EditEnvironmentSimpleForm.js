@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -52,8 +52,8 @@ class EditEnvironmentSimpleForm extends Component {
       error,
       runtimeEnvironments,
       readOnly = false,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     const selectedEnvs = getSelectedEnvs(initialValues, runtimeEnvironments, locale);
 
@@ -207,7 +207,6 @@ EditEnvironmentSimpleForm.propTypes = {
   initialValues: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
   readOnly: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
 const validate = (formData, { runtimeEnvironments }) => {
@@ -216,15 +215,15 @@ const validate = (formData, { runtimeEnvironments }) => {
     return errors; // This is actually a hack (reduxForm fails to re-validate after re-initialization)
   }
 
-  const allowedEnvrionmentsCount = Object.values(formData).filter(value => value === true || value === 'true').length;
-  if (allowedEnvrionmentsCount === 0) {
+  const allowedEnvironmentsCount = Object.values(formData).filter(value => value === true || value === 'true').length;
+  if (allowedEnvironmentsCount === 0) {
     errors._error = (
       <FormattedMessage
         id="app.editEnvironmentSimpleForm.validation.environments"
         defaultMessage="Please add at least one runtime environment."
       />
     );
-  } else if (allowedEnvrionmentsCount > 1) {
+  } else if (allowedEnvironmentsCount > 1) {
     const standaloneEnvs = STANDALONE_ENVIRONMENTS.filter(envId => formData[envId]).map(envId => {
       const env = runtimeEnvironments.find(({ id }) => id === envId);
       return env && env.name;
@@ -249,4 +248,4 @@ export default reduxForm({
   enableReinitialize: true,
   keepDirtyOnReinitialize: false,
   validate,
-})(injectIntl(EditEnvironmentSimpleForm));
+})(EditEnvironmentSimpleForm);

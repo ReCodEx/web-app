@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -126,9 +126,9 @@ class Solution extends Component {
       assignmentSolversLoading,
       assignmentSolverSelector,
       isStudent = false,
-      intl: { locale },
       links: { SOLUTION_SOURCE_CODES_URI_FACTORY },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -346,7 +346,6 @@ Solution.propTypes = {
   download: PropTypes.func.isRequired,
   initCanSubmit: PropTypes.func.isRequired,
   reloadAfterSubmit: PropTypes.func.isRequired,
-  intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
 
@@ -388,4 +387,4 @@ export default connect(
         dispatch(fetchAssignmentSolvers({ assignmentId: params.assignmentId, userId })),
       ]),
   })
-)(injectIntl(withLinks(Solution)));
+)(withLinks(Solution));

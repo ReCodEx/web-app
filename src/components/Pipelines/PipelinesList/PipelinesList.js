@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'react-bootstrap';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import PipelinesListItem from '../PipelinesListItem';
 import { identity } from '../../../helpers/common.js';
 
-const PipelinesList = ({ pipelines = [], heading = null, createActions, intl: { locale } }) => (
+const PipelinesList = ({ pipelines = [], heading = null, createActions }) => (
   <Table hover>
     {Boolean(heading) && <thead>{heading}</thead>}
 
@@ -41,7 +41,6 @@ PipelinesList.propTypes = {
   pipelines: PropTypes.array,
   heading: PropTypes.any,
   createActions: PropTypes.func,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(PipelinesList);
+export default PipelinesList;

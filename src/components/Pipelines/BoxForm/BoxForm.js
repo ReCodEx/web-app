@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Modal, Table, Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field, formValueSelector } from 'redux-form';
@@ -67,8 +67,8 @@ class BoxForm extends Component {
       submitting = false,
       reset,
       onHide,
-      intl: { formatMessage },
     } = this.props;
+    const { formatMessage } = useIntl();
 
     const { portsIn, portsOut } = preparePortsOfSelectedBoxType(selectedType && boxTypes[selectedType]);
 
@@ -276,7 +276,6 @@ BoxForm.propTypes = {
   invalid: PropTypes.bool,
   dirty: PropTypes.bool,
   submitting: PropTypes.bool,
-  intl: PropTypes.object,
 };
 
 const validate = (
@@ -420,5 +419,5 @@ export default connect(mapStateToProps)(
     keepDirtyOnReinitialize: false,
     validate,
     warn,
-  })(injectIntl(BoxForm))
+  })(BoxForm)
 );

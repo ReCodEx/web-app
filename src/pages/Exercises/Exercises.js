@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -35,13 +35,8 @@ const prepareGroupOptions = lruMemoize((groups, groupsAccessor, locale) =>
     .sort((a, b) => a.name.localeCompare(b.name, locale))
 );
 
-const Exercises = ({
-  groups,
-  groupsAccessor,
-  createGroupExercise,
-  links: { EXERCISE_EDIT_URI_FACTORY },
-  intl: { locale },
-}) => {
+const Exercises = ({ groups, groupsAccessor, createGroupExercise, links: { EXERCISE_EDIT_URI_FACTORY } }) => {
+  const { locale } = useIntl();
   const navigate = useNavigate();
   const createExercise = ({ groupId }) => {
     createGroupExercise(groupId).then(({ value: exercise }) => {
@@ -76,7 +71,6 @@ const Exercises = ({
 Exercises.propTypes = {
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: PropTypes.object,
   links: PropTypes.object.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
 };
@@ -90,5 +84,5 @@ export default withLinks(
     dispatch => ({
       createGroupExercise: groupId => dispatch(createExercise({ groupId })),
     })
-  )(injectIntl(Exercises))
+  )(Exercises)
 );

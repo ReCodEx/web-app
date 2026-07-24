@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -116,8 +116,8 @@ class SubmitButton extends Component {
       noShadow = false,
       size,
       messages = {},
-      intl: { formatMessage },
     } = this.props;
+    const { formatMessage } = useIntl();
 
     const buttonState = this.getButtonState();
     const icons = getIcons(defaultIcon);
@@ -187,7 +187,6 @@ SubmitButton.propTypes = {
   noShadow: PropTypes.bool,
   size: PropTypes.string,
   resetTimeout: PropTypes.number,
-  intl: PropTypes.object,
 };
 
-export default injectIntl(SubmitButton);
+export default SubmitButton;

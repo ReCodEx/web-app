@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { lruMemoize } from 'reselect';
 
@@ -79,8 +79,8 @@ class ReferenceSolution extends Component {
       deleteEvaluation,
       scoreConfigSelector,
       fetchScoreConfigIfNeeded,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -186,31 +186,28 @@ ReferenceSolution.propTypes = {
   fetchStatus: PropTypes.string,
   scoreConfigSelector: PropTypes.func,
   evaluations: ImmutablePropTypes.map,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(
-  connect(
-    (state, { params: { exerciseId, referenceSolutionId } }) => ({
-      currentUser: loggedInUserSelector(state),
-      referenceSolution: getReferenceSolution(state, referenceSolutionId),
-      files: getSolutionFiles(state, referenceSolutionId),
-      exercise: getExercise(exerciseId)(state),
-      evaluations: evaluationsForReferenceSolutionSelector(state, referenceSolutionId),
-      fetchStatus: fetchManyStatus(referenceSolutionId)(state),
-      scoreConfigSelector: referenceSubmissionScoreConfigSelector(state),
-    }),
-    (dispatch, { params }) => ({
-      loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
-      fetchScoreConfigIfNeeded: submissionId => dispatch(fetchReferenceSubmissionScoreConfigIfNeeded(submissionId)),
-      editNote: note => dispatch(setDescription(params.referenceSolutionId, note)),
-      refreshSolutionEvaluations: () => {
-        dispatch(fetchReferenceSolution(params.referenceSolutionId));
-        dispatch(fetchReferenceSolutionEvaluationsForSolution(params.referenceSolutionId));
-      },
-      deleteEvaluation: evaluationId =>
-        dispatch(deleteReferenceSolutionEvaluation(params.referenceSolutionId, evaluationId)),
-      download: (id, entry = null) => dispatch(download(id, entry)),
-    })
-  )(ReferenceSolution)
-);
+export default connect(
+  (state, { params: { exerciseId, referenceSolutionId } }) => ({
+    currentUser: loggedInUserSelector(state),
+    referenceSolution: getReferenceSolution(state, referenceSolutionId),
+    files: getSolutionFiles(state, referenceSolutionId),
+    exercise: getExercise(exerciseId)(state),
+    evaluations: evaluationsForReferenceSolutionSelector(state, referenceSolutionId),
+    fetchStatus: fetchManyStatus(referenceSolutionId)(state),
+    scoreConfigSelector: referenceSubmissionScoreConfigSelector(state),
+  }),
+  (dispatch, { params }) => ({
+    loadAsync: () => ReferenceSolution.loadAsync(params, dispatch),
+    fetchScoreConfigIfNeeded: submissionId => dispatch(fetchReferenceSubmissionScoreConfigIfNeeded(submissionId)),
+    editNote: note => dispatch(setDescription(params.referenceSolutionId, note)),
+    refreshSolutionEvaluations: () => {
+      dispatch(fetchReferenceSolution(params.referenceSolutionId));
+      dispatch(fetchReferenceSolutionEvaluationsForSolution(params.referenceSolutionId));
+    },
+    deleteEvaluation: evaluationId =>
+      dispatch(deleteReferenceSolutionEvaluation(params.referenceSolutionId, evaluationId)),
+    download: (id, entry = null) => dispatch(download(id, entry)),
+  })
+)(ReferenceSolution);

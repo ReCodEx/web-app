@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Nav } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -110,10 +110,9 @@ class GroupsTreeContainer extends Component {
       instance,
       groups,
       users,
-      intl: { locale },
       ...props
     } = this.props;
-
+    const { locale } = useIntl();
     const rootGroupId = instance && instance.getIn(['data', 'rootGroupId'], null);
 
     if (!isReady(groups.get(selectedGroupId || rootGroupId))) {
@@ -158,11 +157,10 @@ GroupsTreeContainer.propTypes = {
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
   users: ImmutablePropTypes.map,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default connect((state, { showArchived }) => ({
   instance: selectedInstance(state),
   groups: showArchived ? groupsSelector(state) : notArchivedGroupsSelector(state),
   users: usersSelector(state),
-}))(injectIntl(GroupsTreeContainer));
+}))(GroupsTreeContainer);

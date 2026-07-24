@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { resendVerificationEmail } from '../../redux/modules/emailVerification.js';
 import { resendingStatusSelector } from '../../redux/selectors/emailVerification.js';
@@ -14,7 +13,6 @@ ResendVerificationEmailContainer.propTypes = {
   userId: PropTypes.string.isRequired,
   state: PropTypes.string,
   resend: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
 export default connect(
@@ -24,4 +22,4 @@ export default connect(
   (dispatch, { userId }) => ({
     resend: () => dispatch(resendVerificationEmail(userId)),
   })
-)(injectIntl(ResendVerificationEmailContainer));
+)(ResendVerificationEmailContainer);

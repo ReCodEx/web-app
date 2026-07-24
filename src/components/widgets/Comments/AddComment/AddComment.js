@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
+import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 import { Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
 
 import Button from '../../TheButton';
@@ -66,11 +66,8 @@ class AddComment extends Component {
 
   render() {
     const { text, isPrivate } = this.state;
-    const {
-      addComment,
-      additionalPublicSwitchNote = null,
-      intl: { formatMessage },
-    } = this.props;
+    const { addComment, additionalPublicSwitchNote = null } = this.props;
+    const { formatMessage } = useIntl();
 
     return (
       <Form>
@@ -82,7 +79,7 @@ class AddComment extends Component {
               style={textareaStyle}
               disabled={!addComment}
               onChange={this.handleTextareaChange}
-              onInput={this.handleTextareInput}
+              onInput={this.handleTextareaInput}
               placeholder={formatMessage(messages.placeholder)}
               value={text}
             />
@@ -134,7 +131,6 @@ class AddComment extends Component {
 AddComment.propTypes = {
   addComment: PropTypes.func,
   additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(AddComment);
+export default AddComment;

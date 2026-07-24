@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -38,11 +38,8 @@ class ShadowAssignment extends Component {
   }
 
   render() {
-    const {
-      shadowAssignment,
-      loggedUserId,
-      intl: { locale },
-    } = this.props;
+    const { shadowAssignment, loggedUserId } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -96,7 +93,6 @@ ShadowAssignment.propTypes = {
   loggedUserId: PropTypes.string,
   group: PropTypes.func,
   loadAsync: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
 export default connect(
@@ -109,4 +105,4 @@ export default connect(
   (dispatch, { params: { shadowId } }) => ({
     loadAsync: () => ShadowAssignment.loadAsync({ shadowId }, dispatch),
   })
-)(injectIntl(ShadowAssignment));
+)(ShadowAssignment);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Icon from '../../icons/Icon.js';
 import { getConfigVar } from '../../../helpers/config.js';
@@ -24,8 +24,9 @@ const getIpLabel = (ip, locale) => {
 };
 
 // Inset panel replaces old <Well> component from bootstrap 3
-const IpAddress = ({ ip, intl: { locale }, ...props }) =>
-  KNOWN_IPS[ip] ? (
+const IpAddress = ({ ip, ...props }) => {
+  const { locale } = useIntl();
+  return KNOWN_IPS[ip] ? (
     <OverlayTrigger
       placement="bottom"
       overlay={
@@ -40,10 +41,10 @@ const IpAddress = ({ ip, intl: { locale }, ...props }) =>
   ) : (
     <code {...props}>{ip}</code>
   );
+};
 
 IpAddress.propTypes = {
   ip: PropTypes.string.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(IpAddress);
+export default IpAddress;

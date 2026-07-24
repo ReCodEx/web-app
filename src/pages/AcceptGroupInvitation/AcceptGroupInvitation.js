@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -68,8 +68,8 @@ class AcceptGroupInvitation extends Component {
       loggedUserId,
       effectiveRole,
       links: { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY },
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return isStudentRole(effectiveRole) ? (
       <Page
@@ -255,7 +255,6 @@ AcceptGroupInvitation.propTypes = {
   effectiveRole: PropTypes.string,
   loadAsync: PropTypes.func.isRequired,
   acceptInvitation: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   links: PropTypes.object,
   navigate: withRouterProps.navigate,
   params: PropTypes.shape({ invitationId: PropTypes.string }).isRequired,
@@ -275,6 +274,6 @@ export default withRouter(
         loadAsync: () => AcceptGroupInvitation.loadAsync({ invitationId }, dispatch),
         acceptInvitation: () => dispatch(acceptGroupInvitation(invitationId)),
       })
-    )(injectIntl(AcceptGroupInvitation))
+    )(AcceptGroupInvitation)
   )
 );

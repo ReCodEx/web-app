@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AssignmentSyncIcon from '../AssignmentSyncIcon';
@@ -55,7 +55,6 @@ const AssignmentTableRow = ({
   setSelected = null,
   selected = false,
   doubleClickPush = null,
-  intl: { locale },
   links: {
     ASSIGNMENT_DETAIL_URI_FACTORY,
     ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY,
@@ -63,148 +62,152 @@ const AssignmentTableRow = ({
     ASSIGNMENT_SOLUTIONS_URI_FACTORY,
     GROUP_ASSIGNMENTS_URI_FACTORY,
   },
-}) => (
-  <tr
-    onDoubleClick={
-      doubleClickPush &&
-      !setSelected &&
-      (() =>
-        doubleClickPush(
-          userId ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId) : ASSIGNMENT_DETAIL_URI_FACTORY(id)
-        ))
-    }>
-    {setSelected && (
+}) => {
+  const { locale } = useIntl();
+  return (
+    <tr
+      onDoubleClick={
+        doubleClickPush &&
+        !setSelected &&
+        (() =>
+          doubleClickPush(
+            userId ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId) : ASSIGNMENT_DETAIL_URI_FACTORY(id)
+          ))
+      }>
+      {setSelected && (
+        <td className="text-nowrap shrink-col">
+          <NiceCheckbox name={id} checked={selected} onChange={setSelected} />
+        </td>
+      )}
+
       <td className="text-nowrap shrink-col">
-        <NiceCheckbox name={id} checked={selected} onChange={setSelected} />
-      </td>
-    )}
+        {permissionHints.update || permissionHints.viewAssignmentSolutions ? (
+          <MaybeVisibleAssignmentIcon id={id} isPublic={isPublic} visibleFrom={visibleFrom} />
+        ) : (
+          <AssignmentIcon className="text-body-secondary" />
+        )}
+        <MaybeBonusAssignmentIcon gapLeft={2} id={id} isBonus={isBonus} />
 
-    <td className="text-nowrap shrink-col">
-      {permissionHints.update || permissionHints.viewAssignmentSolutions ? (
-        <MaybeVisibleAssignmentIcon id={id} isPublic={isPublic} visibleFrom={visibleFrom} />
-      ) : (
-        <AssignmentIcon className="text-body-secondary" />
+        {(permissionHints.update || permissionHints.viewAssignmentSolutions) && exerciseSynchronizationInfo && (
+          <AssignmentSyncIcon id={id} syncInfo={exerciseSynchronizationInfo} gapLeft={2} />
+        )}
+      </td>
+
+      {showNames && (
+        <td>
+          <Link
+            to={userId ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId) : ASSIGNMENT_DETAIL_URI_FACTORY(id)}>
+            <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
+          </Link>
+        </td>
       )}
-      <MaybeBonusAssignmentIcon gapLeft={2} id={id} isBonus={isBonus} />
 
-      {(permissionHints.update || permissionHints.viewAssignmentSolutions) && exerciseSynchronizationInfo && (
-        <AssignmentSyncIcon id={id} syncInfo={exerciseSynchronizationInfo} gapLeft={2} />
+      {showGroups && groupsAccessor && (
+        <td>
+          <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
+            {getGroupCanonicalLocalizedName(groupId, groupsAccessor, locale)}
+          </Link>
+        </td>
       )}
-    </td>
 
-    {showNames && (
-      <td>
-        <Link to={userId ? ASSIGNMENT_DETAIL_SPECIFIC_USER_URI_FACTORY(id, userId) : ASSIGNMENT_DETAIL_URI_FACTORY(id)}>
-          <LocalizedExerciseName entity={{ name: '??', localizedTexts }} />
-        </Link>
-      </td>
-    )}
+      {runtimeEnvironments && (
+        <td>
+          <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
+            {runtimes => <EnvironmentsList runtimeEnvironments={runtimes} />}
+          </ResourceRenderer>
+        </td>
+      )}
 
-    {showGroups && groupsAccessor && (
-      <td>
-        <Link to={GROUP_ASSIGNMENTS_URI_FACTORY(groupId)}>
-          {getGroupCanonicalLocalizedName(groupId, groupsAccessor, locale)}
-        </Link>
-      </td>
-    )}
-
-    {runtimeEnvironments && (
-      <td>
-        <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
-          {runtimes => <EnvironmentsList runtimeEnvironments={runtimes} />}
-        </ResourceRenderer>
-      </td>
-    )}
-
-    {!isAdmin && stats && (
-      <td className="text-center text-nowrap">
-        {stats.points && stats.points.gained !== null ? (
-          <span>
-            {stats.points.gained}
-            {stats.points.bonus > 0 && <span style={{ color: 'green' }}>+{stats.points.bonus}</span>}
-            {stats.points.bonus < 0 && <span style={{ color: 'red' }}>{stats.points.bonus}</span>}
-          </span>
-        ) : null}
-      </td>
-    )}
-    <td className="text-nowrap">
-      <DateTime unixTs={firstDeadline} isDeadline />
-    </td>
-
-    {showSecondDeadline && (
+      {!isAdmin && stats && (
+        <td className="text-center text-nowrap">
+          {stats.points && stats.points.gained !== null ? (
+            <span>
+              {stats.points.gained}
+              {stats.points.bonus > 0 && <span style={{ color: 'green' }}>+{stats.points.bonus}</span>}
+              {stats.points.bonus < 0 && <span style={{ color: 'red' }}>{stats.points.bonus}</span>}
+            </span>
+          ) : null}
+        </td>
+      )}
       <td className="text-nowrap">
-        <DateTime unixTs={allowSecondDeadline ? secondDeadline : null} isDeadline />
+        <DateTime unixTs={firstDeadline} isDeadline />
       </td>
-    )}
 
-    <td className="text-center text-nowrap shrink-col">
-      <AssignmentMaxPoints
-        allowSecondDeadline={allowSecondDeadline}
-        maxPointsDeadlineInterpolation={maxPointsDeadlineInterpolation}
-        maxPointsBeforeFirstDeadline={maxPointsBeforeFirstDeadline}
-        maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
-      />
-    </td>
+      {showSecondDeadline && (
+        <td className="text-nowrap">
+          <DateTime unixTs={allowSecondDeadline ? secondDeadline : null} isDeadline />
+        </td>
+      )}
 
-    <td className="text-end text-nowrap align-middle">
-      <TheButtonGroup>
-        {discussionOpen &&
-          (permissionHints.viewAssignmentSolutions || permissionHints.update || permissionHints.remove ? (
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`discussion-${id}`}>
-                  <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
-                </Tooltip>
-              }>
+      <td className="text-center text-nowrap shrink-col">
+        <AssignmentMaxPoints
+          allowSecondDeadline={allowSecondDeadline}
+          maxPointsDeadlineInterpolation={maxPointsDeadlineInterpolation}
+          maxPointsBeforeFirstDeadline={maxPointsBeforeFirstDeadline}
+          maxPointsBeforeSecondDeadline={maxPointsBeforeSecondDeadline}
+        />
+      </td>
+
+      <td className="text-end text-nowrap align-middle">
+        <TheButtonGroup>
+          {discussionOpen &&
+            (permissionHints.viewAssignmentSolutions || permissionHints.update || permissionHints.remove ? (
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`discussion-${id}`}>
+                    <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
+                  </Tooltip>
+                }>
+                <Button size="xs" variant="info" onClick={discussionOpen}>
+                  <ChatIcon gapLeft={1} gapRight={1} />
+                </Button>
+              </OverlayTrigger>
+            ) : (
               <Button size="xs" variant="info" onClick={discussionOpen}>
-                <ChatIcon gapLeft={1} gapRight={1} />
+                <ChatIcon gapRight={2} />
+                <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
               </Button>
-            </OverlayTrigger>
-          ) : (
-            <Button size="xs" variant="info" onClick={discussionOpen}>
-              <ChatIcon gapRight={2} />
-              <FormattedMessage id="generic.discussion" defaultMessage="Discussion" />
-            </Button>
-          ))}
+            ))}
 
-        {permissionHints.viewAssignmentSolutions && (
-          <Link to={ASSIGNMENT_SOLUTIONS_URI_FACTORY(id)}>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`results-${id}`}>
-                  <FormattedMessage id="generic.results" defaultMessage="Results" />
-                </Tooltip>
-              }>
-              <Button size="xs" variant="primary">
-                <ResultsIcon gapLeft={1} gapRight={1} />
-              </Button>
-            </OverlayTrigger>
-          </Link>
-        )}
+          {permissionHints.viewAssignmentSolutions && (
+            <Link to={ASSIGNMENT_SOLUTIONS_URI_FACTORY(id)}>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`results-${id}`}>
+                    <FormattedMessage id="generic.results" defaultMessage="Results" />
+                  </Tooltip>
+                }>
+                <Button size="xs" variant="primary">
+                  <ResultsIcon gapLeft={1} gapRight={1} />
+                </Button>
+              </OverlayTrigger>
+            </Link>
+          )}
 
-        {permissionHints.update && (
-          <Link to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
-            <OverlayTrigger
-              placement="bottom"
-              overlay={
-                <Tooltip id={`edit-${id}`}>
-                  <FormattedMessage id="generic.edit" defaultMessage="Edit" />
-                </Tooltip>
-              }>
-              <Button size="xs" variant="warning">
-                <EditIcon gapLeft={1} gapRight={1} />
-              </Button>
-            </OverlayTrigger>
-          </Link>
-        )}
+          {permissionHints.update && (
+            <Link to={ASSIGNMENT_EDIT_URI_FACTORY(id)}>
+              <OverlayTrigger
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`edit-${id}`}>
+                    <FormattedMessage id="generic.edit" defaultMessage="Edit" />
+                  </Tooltip>
+                }>
+                <Button size="xs" variant="warning">
+                  <EditIcon gapLeft={1} gapRight={1} />
+                </Button>
+              </OverlayTrigger>
+            </Link>
+          )}
 
-        {permissionHints.remove && <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />}
-      </TheButtonGroup>
-    </td>
-  </tr>
-);
+          {permissionHints.remove && <DeleteAssignmentButtonContainer id={id} size="xs" captionAsTooltip />}
+        </TheButtonGroup>
+      </td>
+    </tr>
+  );
+};
 
 AssignmentTableRow.propTypes = {
   item: PropTypes.shape({
@@ -238,7 +241,6 @@ AssignmentTableRow.propTypes = {
   groupsAccessor: PropTypes.func,
   discussionOpen: PropTypes.func,
   links: PropTypes.object,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(withLinks(AssignmentTableRow));
+export default withLinks(AssignmentTableRow);

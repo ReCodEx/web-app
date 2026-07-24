@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import Markdown from '../../components/widgets/Markdown';
@@ -18,9 +17,7 @@ class FAQ extends Component {
   };
 
   fetchFaq = () => {
-    const {
-      intl: { locale },
-    } = this.props;
+    const { locale } = useIntl();
 
     const url =
       typeof FAQ_MD_URI === 'string'
@@ -77,8 +74,4 @@ class FAQ extends Component {
   }
 }
 
-FAQ.propTypes = {
-  intl: PropTypes.object.isRequired,
-};
-
-export default injectIntl(FAQ);
+export default FAQ;

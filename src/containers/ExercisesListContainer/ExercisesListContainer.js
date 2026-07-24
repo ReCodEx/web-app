@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import PaginationContainer, { createSortingIcon, showRangeInfo } from '../PaginationContainer';
@@ -185,7 +185,6 @@ ExercisesListContainer.propTypes = {
   fetchTags: PropTypes.func.isRequired,
   runtimeEnvironments: ImmutablePropTypes.map.isRequired,
   assignExercise: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
   links: PropTypes.object.isRequired,
   navigate: withRouterProps.navigate,
 };
@@ -202,6 +201,6 @@ export default withRouter(
         fetchRuntimeEnvironments: () => dispatch(fetchRuntimeEnvironments()),
         assignExercise: exerciseId => dispatch(assignExercise(rootGroup, exerciseId)),
       })
-    )(injectIntl(ExercisesListContainer))
+    )(ExercisesListContainer)
   )
 );

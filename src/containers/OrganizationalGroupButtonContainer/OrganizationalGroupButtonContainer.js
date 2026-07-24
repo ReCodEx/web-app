@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import OrganizationalGroupButton from '../../components/buttons/OrganizationalGroupButton';
@@ -19,31 +19,28 @@ const setOrganizationalHandlingErrors = lruMemoize(
     })
 );
 
-const OrganizationalGroupButtonContainer = ({
-  group,
-  pending,
-  setOrganizational,
-  addNotification,
-  intl: { formatMessage },
-  ...props
-}) => (
-  <ResourceRenderer resource={group}>
-    {({ exam, organizational, privateData: { students, assignments }, permissionHints }) => (
-      <OrganizationalGroupButton
-        organizational={organizational}
-        pending={pending}
-        setOrganizational={setOrganizationalHandlingErrors(
-          organizational,
-          setOrganizational,
-          addNotification,
-          formatMessage
-        )}
-        disabled={!permissionHints.setOrganizational || exam || students.length > 0 || assignments.length > 0}
-        {...props}
-      />
-    )}
-  </ResourceRenderer>
-);
+const OrganizationalGroupButtonContainer = ({ group, pending, setOrganizational, addNotification, ...props }) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <ResourceRenderer resource={group}>
+      {({ exam, organizational, privateData: { students, assignments }, permissionHints }) => (
+        <OrganizationalGroupButton
+          organizational={organizational}
+          pending={pending}
+          setOrganizational={setOrganizationalHandlingErrors(
+            organizational,
+            setOrganizational,
+            addNotification,
+            formatMessage
+          )}
+          disabled={!permissionHints.setOrganizational || exam || students.length > 0 || assignments.length > 0}
+          {...props}
+        />
+      )}
+    </ResourceRenderer>
+  );
+};
 
 OrganizationalGroupButtonContainer.propTypes = {
   id: PropTypes.string.isRequired,
@@ -51,7 +48,6 @@ OrganizationalGroupButtonContainer.propTypes = {
   pending: PropTypes.bool.isRequired,
   setOrganizational: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
 const mapStateToProps = (state, { id }) => ({
@@ -64,4 +60,4 @@ const mapDispatchToProps = (dispatch, { id }) => ({
   addNotification: (...args) => dispatch(addNotification(...args)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(OrganizationalGroupButtonContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(OrganizationalGroupButtonContainer);

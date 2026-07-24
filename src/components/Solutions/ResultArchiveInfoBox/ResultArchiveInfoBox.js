@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
+import { useIntl, defineMessages } from 'react-intl';
 import { SimpleInfoBox } from '../../widgets/InfoBox';
 
 const messages = defineMessages({
@@ -14,18 +14,20 @@ const messages = defineMessages({
   },
 });
 
-const ResultArchiveInfoBox = ({ id, intl: { formatMessage } }) => (
-  <SimpleInfoBox
-    icon={['far', 'file-archive']}
-    title={formatMessage(messages.title)}
-    description={formatMessage(messages.description)}
-    color="success"
-  />
-);
+const ResultArchiveInfoBox = ({ id }) => {
+  const { formatMessage } = useIntl();
+  return (
+    <SimpleInfoBox
+      icon={['far', 'file-archive']}
+      title={formatMessage(messages.title)}
+      description={formatMessage(messages.description)}
+      color="success"
+    />
+  );
+};
 
 ResultArchiveInfoBox.propTypes = {
   id: PropTypes.string.isRequired,
-  intl: PropTypes.shape({ formatMessage: PropTypes.func.isRequired }).isRequired,
 };
 
-export default injectIntl(ResultArchiveInfoBox);
+export default ResultArchiveInfoBox;

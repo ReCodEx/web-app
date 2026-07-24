@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
 import { lruMemoize } from 'reselect';
@@ -130,8 +130,8 @@ class ExerciseAssignments extends Component {
       editAssignment,
       deleteAssignment,
       sendNotification,
-      intl: { formatMessage },
     } = this.props;
+    const { formatMessage } = useIntl();
 
     return (
       <Page
@@ -268,7 +268,6 @@ ExerciseAssignments.propTypes = {
   deadlines: PropTypes.string,
   visibility: PropTypes.string,
   canViewLimitRatios: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   assignExercise: PropTypes.func.isRequired,
   syncAssignment: PropTypes.func.isRequired,
@@ -302,4 +301,4 @@ export default connect(
     deleteAssignment: id => dispatch(deleteAssignment(id)),
     sendNotification: message => dispatch(sendNotification(exerciseId, message)),
   })
-)(injectIntl(ExerciseAssignments));
+)(ExerciseAssignments);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
 import { Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
@@ -127,8 +127,8 @@ class FilterExercisesListForm extends Component {
       submitSucceeded = false,
       invalid,
       change,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Form method="POST" onSubmit={onSubmit}>
@@ -348,7 +348,6 @@ FilterExercisesListForm.propTypes = {
   envValueSelector: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
   loggedUserId: PropTypes.string.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
 export default connect((state, { rootGroup = null, form }) => ({
@@ -361,10 +360,8 @@ export default connect((state, { rootGroup = null, form }) => ({
   tagsLoading: getExerciseTagsLoading(state),
   envValueSelector: name => formValueSelector(form)(state, name),
 }))(
-  injectIntl(
-    reduxForm({
-      enableReinitialize: true,
-      keepDirtyOnReinitialize: false,
-    })(FilterExercisesListForm)
-  )
+  reduxForm({
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+  })(FilterExercisesListForm)
 );

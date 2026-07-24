@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Container, Row, Col, Pagination } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -101,9 +101,7 @@ class PaginationContainer extends Component {
     }
 
     if (
-      (this.props.intl.locale !== prevProps.intl.locale ||
-        prevProps.id !== this.props.id ||
-        prevProps.endpoint !== this.props.endpoint) &&
+      (prevProps.id !== this.props.id || prevProps.endpoint !== this.props.endpoint) &&
       !this.props.hideAllItems &&
       !this.props.isPending
     ) {
@@ -123,12 +121,8 @@ class PaginationContainer extends Component {
    * Rendering function that creates one limit button for given limit (amount of rows).
    */
   createLimitButton = amount => {
-    const {
-      offset,
-      limit,
-      intl: { locale },
-      setPage,
-    } = this.props;
+    const { offset, limit, setPage } = this.props;
+    const { locale } = useIntl();
     return (
       <Pagination.Item
         key={amount}
@@ -159,11 +153,8 @@ class PaginationContainer extends Component {
    * Handling function for page selection event.
    */
   handlePagination = page => {
-    const {
-      limit,
-      intl: { locale },
-      setPage,
-    } = this.props;
+    const { limit, setPage } = this.props;
+    const { locale } = useIntl();
     return setPage(locale, (page - 1) * limit, limit);
   };
 
@@ -171,10 +162,8 @@ class PaginationContainer extends Component {
    * Handler passed to filters creator. It updates the pagination filters and reloads the page.
    */
   setFilters = filters => {
-    const {
-      intl: { locale },
-      setPaginationFilters,
-    } = this.props;
+    const { setPaginationFilters } = this.props;
+    const { locale } = useIntl();
     return setPaginationFilters(filters, locale);
   };
 
@@ -182,10 +171,8 @@ class PaginationContainer extends Component {
    * Method passed to children data rendering function, so it can use this for sorting icons in table heading.
    */
   setOrderBy = (orderBy, descending) => {
-    const {
-      intl: { locale },
-      setPaginationOrderBy,
-    } = this.props;
+    const { setPaginationOrderBy } = this.props;
+    const { locale } = useIntl();
     return setPaginationOrderBy(encodeOrderBy(orderBy, descending), locale);
   };
 
@@ -194,12 +181,8 @@ class PaginationContainer extends Component {
    * Reload is required when item is deleted for instance.
    */
   reload = () => {
-    const {
-      id,
-      endpoint,
-      intl: { locale },
-      reload,
-    } = this.props;
+    const { id, endpoint, reload } = this.props;
+    const { locale } = useIntl();
     return reload(id, endpoint, locale);
   };
 
@@ -326,7 +309,6 @@ PaginationContainer.propTypes = {
   setPaginationOrderBy: PropTypes.func.isRequired,
   setPaginationFilters: PropTypes.func.isRequired,
   fetchPaginated: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
 export default connect(
@@ -359,4 +341,4 @@ export default connect(
     },
     fetchPaginated: (locale, offset, limit) => dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)),
   })
-)(injectIntl(PaginationContainer));
+)(PaginationContainer);

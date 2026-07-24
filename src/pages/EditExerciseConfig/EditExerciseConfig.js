@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { lruMemoize } from 'reselect';
@@ -251,11 +251,12 @@ class EditExerciseConfig extends Component {
   });
 
   renderTestsAndScoreBox(exercise, tests, scoreConfig) {
+    const { locale } = useIntl();
     return (
       <EditTestsForm
         calculator={scoreConfig && scoreConfig.calculator}
         readOnly={!hasPermissions(exercise, 'setScoreConfig')}
-        initialValues={getTestsInitValues(tests, scoreConfig, this.props.intl.locale)}
+        initialValues={getTestsInitValues(tests, scoreConfig, locale)}
         onSubmit={this.transformAndSendTestsValues(scoreConfig && scoreConfig.calculator)}
         registerExtraData={this.registerScoreConfigExtraData}
       />
@@ -587,7 +588,6 @@ EditExerciseConfig.propTypes = {
   exerciseFiles: ImmutablePropTypes.map,
   exerciseFilesStatus: PropTypes.string,
   links: PropTypes.object.isRequired,
-  intl: PropTypes.object.isRequired,
   loadAsync: PropTypes.func.isRequired,
   fetchPipelinesVariables: PropTypes.func.isRequired,
   setExerciseConfigType: PropTypes.func.isRequired,
@@ -646,6 +646,6 @@ export default withRouter(
         invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
         sendNotification: message => dispatch(sendNotification(exerciseId, message)),
       })
-    )(injectIntl(EditExerciseConfig))
+    )(EditExerciseConfig)
   )
 );

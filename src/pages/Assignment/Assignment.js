@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
@@ -115,8 +115,8 @@ class Assignment extends Component {
       assignmentSolversLoading,
       assignmentSolverSelector,
       getGroup,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -340,35 +340,32 @@ Assignment.propTypes = {
   getGroup: PropTypes.func.isRequired,
   reloadCanSubmit: PropTypes.func.isRequired,
   reloadSolvers: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(
-  connect(
-    (state, { params: { assignmentId, userId = null } }) => {
-      const loggedInUserId = loggedInUserIdSelector(state);
-      return {
-        assignment: getAssignment(state, assignmentId),
-        submitting: isSubmitting(state),
-        runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
-        userId,
-        loggedInUserId,
-        currentUser: loggedInUserSelector(state),
-        isStudentOf: loggedUserIsStudentOfSelector(state),
-        canSubmit: canSubmitSolution(assignmentId)(state),
-        solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
-        fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
-        assignmentSolversLoading: isAssignmentSolversLoading(state),
-        assignmentSolverSelector: getAssignmentSolverSelector(state),
-        getGroup: id => groupSelector(state, id),
-      };
-    },
-    (dispatch, { params: { assignmentId } }) => ({
-      init: userId => () => dispatch(init(userId, assignmentId)),
-      loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
-      exerciseSync: (syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(assignmentId, syncOptions)),
-      reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
-      reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
-    })
-  )(Assignment)
-);
+export default connect(
+  (state, { params: { assignmentId, userId = null } }) => {
+    const loggedInUserId = loggedInUserIdSelector(state);
+    return {
+      assignment: getAssignment(state, assignmentId),
+      submitting: isSubmitting(state),
+      runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
+      userId,
+      loggedInUserId,
+      currentUser: loggedInUserSelector(state),
+      isStudentOf: loggedUserIsStudentOfSelector(state),
+      canSubmit: canSubmitSolution(assignmentId)(state),
+      solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
+      fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
+      assignmentSolversLoading: isAssignmentSolversLoading(state),
+      assignmentSolverSelector: getAssignmentSolverSelector(state),
+      getGroup: id => groupSelector(state, id),
+    };
+  },
+  (dispatch, { params: { assignmentId } }) => ({
+    init: userId => () => dispatch(init(userId, assignmentId)),
+    loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
+    exerciseSync: (syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(assignmentId, syncOptions)),
+    reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
+    reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
+  })
+)(Assignment);

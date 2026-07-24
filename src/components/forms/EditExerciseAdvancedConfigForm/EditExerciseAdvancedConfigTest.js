@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import Button from '../../widgets/TheButton';
@@ -32,11 +32,8 @@ const prepareFilesOptions = lruMemoize((exerciseFiles, locale) => {
 
 class EditExerciseAdvancedConfigTest extends Component {
   createField = (name, type) => {
-    const {
-      exerciseFiles,
-      readOnly = false,
-      intl: { locale },
-    } = this.props;
+    const { exerciseFiles, readOnly = false } = this.props;
+    const { locale } = useIntl();
     const isArray = type.endsWith('[]');
     const baseType = isArray ? type.substring(0, type.length - 2) : type;
 
@@ -173,7 +170,6 @@ EditExerciseAdvancedConfigTest.propTypes = {
   testErrors: PropTypes.array,
   rawFill: PropTypes.object,
   readOnly: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(EditExerciseAdvancedConfigTest);
+export default EditExerciseAdvancedConfigTest;

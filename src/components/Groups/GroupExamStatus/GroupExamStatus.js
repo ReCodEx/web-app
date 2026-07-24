@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 
 import ExamForm, {
@@ -58,11 +58,9 @@ class GroupExamStatus extends Component {
   };
 
   removeExam = () => {
-    const {
-      removeExamPeriod,
-      addNotification,
-      intl: { formatMessage },
-    } = this.props;
+    const { removeExamPeriod, addNotification } = this.props;
+    const { formatMessage } = useIntl();
+
     addNotification('kuk');
     removeExamPeriod().catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);
@@ -70,23 +68,18 @@ class GroupExamStatus extends Component {
   };
 
   startNow = () => {
-    const {
-      group,
-      setExamPeriod,
-      addNotification,
-      intl: { formatMessage },
-    } = this.props;
+    const { group, setExamPeriod, addNotification } = this.props;
+    const { formatMessage } = useIntl();
+
     setExamPeriod(Math.round(Date.now() / 1000), group.privateData.examEnd).catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);
     });
   };
 
   terminateNow = () => {
-    const {
-      setExamPeriod,
-      addNotification,
-      intl: { formatMessage },
-    } = this.props;
+    const { setExamPeriod, addNotification } = this.props;
+    const { formatMessage } = useIntl();
+
     setExamPeriod(null, Math.round(Date.now() / 1000)).catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);
     });
@@ -390,7 +383,6 @@ GroupExamStatus.propTypes = {
   setExamPeriod: PropTypes.func.isRequired,
   removeExamPeriod: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
-export default injectIntl(GroupExamStatus);
+export default GroupExamStatus;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Card, Tab, Nav } from 'react-bootstrap';
 
 import Confirm from '../Confirm';
@@ -10,11 +10,8 @@ import InsetPanel from '../../widgets/InsetPanel';
 
 class TabbedArrayField extends Component {
   prepareFieldsIndices = () => {
-    const {
-      fields,
-      tabComparator = null,
-      intl: { locale: currentLocale },
-    } = this.props;
+    const { fields, tabComparator = null } = this.props;
+    const { locale: currentLocale } = useIntl();
 
     const texts = [...Array(fields.length).keys()].map((_, i) => ({ field: fields.get(i), i }));
     if (tabComparator) {
@@ -115,7 +112,6 @@ TabbedArrayField.propTypes = {
   ContentComponent: PropTypes.any,
   emptyMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   removeQuestion: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(TabbedArrayField);
+export default TabbedArrayField;

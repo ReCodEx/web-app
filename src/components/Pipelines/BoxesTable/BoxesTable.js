@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 import classnames from 'classnames';
@@ -25,9 +25,9 @@ const BoxesTable = ({
   selectedVariable = null,
   removeBox = null,
   pending = false,
-  intl: { locale },
   ...rowProps
 }) => {
+  const { locale } = useIntl();
   const selectionIndex = secondarySelections && prepareSelectionIndex(secondarySelections);
   const variable = selectedVariable && variables && variables.find(v => v.name === selectedVariable);
   return (
@@ -99,7 +99,6 @@ BoxesTable.propTypes = {
   secondarySelections: PropTypes.array,
   selectedVariable: PropTypes.string,
   pending: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default injectIntl(BoxesTable);
+export default BoxesTable;

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import Icon from '../../icons';
 import { getLocalizedName, getOtherLocalizedNames } from '../../../helpers/localizedData.js';
 
-const LocalizedExerciseName = ({ entity, noNameMessage = '??', intl: { locale } }) => {
+const LocalizedExerciseName = ({ entity, noNameMessage = '??' }) => {
+  const { locale } = useIntl();
   const otherNames = getOtherLocalizedNames(entity, locale);
   const name = getLocalizedName(entity, locale);
   return name ? (
@@ -35,7 +36,6 @@ const LocalizedExerciseName = ({ entity, noNameMessage = '??', intl: { locale } 
 LocalizedExerciseName.propTypes = {
   entity: PropTypes.object,
   noNameMessage: PropTypes.any,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default injectIntl(LocalizedExerciseName);
+export default LocalizedExerciseName;

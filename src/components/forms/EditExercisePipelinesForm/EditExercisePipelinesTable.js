@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Table, FormSelect, FormLabel, InputGroup } from 'react-bootstrap';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '../../widgets/TheButton';
 import PipelinesListItem from '../../Pipelines/PipelinesListItem';
@@ -46,12 +46,8 @@ class EditExercisePipelinesTable extends Component {
   };
 
   render() {
-    const {
-      fields,
-      pipelines,
-      readOnly = false,
-      intl: { locale },
-    } = this.props;
+    const { fields, pipelines, readOnly = false } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Table>
@@ -108,7 +104,6 @@ EditExercisePipelinesTable.propTypes = {
   readOnly: PropTypes.bool,
   fields: PropTypes.object.isRequired,
   pipelines: PropTypes.array,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(EditExercisePipelinesTable);
+export default EditExercisePipelinesTable;

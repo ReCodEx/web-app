@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import moment from 'moment';
 
@@ -183,9 +183,9 @@ class AssignmentsTable extends Component {
       syncAssignment = null,
       editAssignment = null,
       deleteAssignment = null,
-      intl: { locale },
       navigate,
     } = this.props;
+    const { locale } = useIntl();
     const someAssignmentsAreLoading = assignments.some(isLoading);
     const assignmentsPreprocessedAll = assignments
       .toArray()
@@ -499,8 +499,7 @@ AssignmentsTable.propTypes = {
   syncAssignment: PropTypes.func,
   editAssignment: PropTypes.func,
   deleteAssignment: PropTypes.func,
-  intl: PropTypes.object.isRequired,
   navigate: withRouterProps.navigate,
 };
 
-export default withRouter(injectIntl(AssignmentsTable));
+export default withRouter(AssignmentsTable);

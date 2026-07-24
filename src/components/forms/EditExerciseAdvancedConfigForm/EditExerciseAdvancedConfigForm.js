@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -37,8 +37,8 @@ class EditExerciseAdvancedConfigForm extends Component {
       exerciseTests,
       rawFill,
       readOnly = false,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <FormBox
@@ -125,7 +125,6 @@ EditExerciseAdvancedConfigForm.propTypes = {
   exerciseFiles: PropTypes.array,
   rawFill: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
 const FORM_NAME = 'editExerciseAdvancedConfig';
@@ -150,5 +149,5 @@ export default connect(
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
     immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
-  })(injectIntl(EditExerciseAdvancedConfigForm))
+  })(EditExerciseAdvancedConfigForm)
 );

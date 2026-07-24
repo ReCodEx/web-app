@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -40,96 +40,99 @@ const EditSystemMessageForm = ({
   isOpen,
   onClose,
   createNew = false,
-  intl: { formatMessage },
-}) => (
-  <Modal show={isOpen} size="lg" onHide={onClose} onEscapeKeyDown={onClose}>
-    <Modal.Header closeButton>
-      <Modal.Title>
-        {createNew ? (
-          <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
-        ) : (
-          <FormattedMessage id="app.editSystemMessageForm.title" defaultMessage="Edit System Message" />
+}) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <Modal show={isOpen} size="lg" onHide={onClose} onEscapeKeyDown={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>
+          {createNew ? (
+            <FormattedMessage id="app.systemMessages.newSystemMessage" defaultMessage="New System Message" />
+          ) : (
+            <FormattedMessage id="app.editSystemMessageForm.title" defaultMessage="Edit System Message" />
+          )}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {submitFailed && (
+          <Callout variant="danger">
+            <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
+          </Callout>
         )}
-      </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      {submitFailed && (
-        <Callout variant="danger">
-          <FormattedMessage id="generic.savingFailed" defaultMessage="Saving failed. Please try again later." />
-        </Callout>
-      )}
 
-      <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="systemMessage" />
+        <FieldArray name="localizedTexts" component={LocalizedTextsFormField} fieldType="systemMessage" />
 
-      <Field
-        name="type"
-        component={SelectField}
-        options={typeOptions}
-        label={<FormattedMessage id="app.editSystemMessageForm.type" defaultMessage="Type of the notification." />}
-      />
-
-      <Field
-        name="role"
-        component={SelectField}
-        options={getRoleOptions(formatMessage)}
-        label={
-          <FormattedMessage
-            id="app.editSystemMessageForm.role"
-            defaultMessage="Users with this role and its children can see notification."
-          />
-        }
-      />
-
-      <Field
-        name="visibleFrom"
-        component={DatetimeField}
-        label={
-          <FormattedMessage
-            id="app.editSystemMessageForm.visibleFrom"
-            defaultMessage="Date from which is notification visible."
-          />
-        }
-      />
-
-      <Field
-        name="visibleTo"
-        component={DatetimeField}
-        label={
-          <FormattedMessage
-            id="app.editSystemMessageForm.visibleTo"
-            defaultMessage="Date to which is notification visible."
-          />
-        }
-      />
-
-      {error && dirty && <Callout variant="danger">{error}</Callout>}
-    </Modal.Body>
-    <Modal.Footer>
-      <TheButtonGroup>
-        <SubmitButton
-          id="editSystemMessage"
-          invalid={invalid}
-          submitting={submitting}
-          dirty={dirty}
-          hasSucceeded={submitSucceeded}
-          hasFailed={submitFailed}
-          handleSubmit={handleSubmit}
-          messages={{
-            submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-            submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-            success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-            validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
-          }}
+        <Field
+          name="type"
+          component={SelectField}
+          options={typeOptions}
+          label={<FormattedMessage id="app.editSystemMessageForm.type" defaultMessage="Type of the notification." />}
         />
 
-        <Button variant="secondary" onClick={onClose}>
-          <CloseIcon gapRight={2} />
-          <FormattedMessage id="generic.close" defaultMessage="Close" />
-        </Button>
-      </TheButtonGroup>
-    </Modal.Footer>
-  </Modal>
-);
+        <Field
+          name="role"
+          component={SelectField}
+          options={getRoleOptions(formatMessage)}
+          label={
+            <FormattedMessage
+              id="app.editSystemMessageForm.role"
+              defaultMessage="Users with this role and its children can see notification."
+            />
+          }
+        />
+
+        <Field
+          name="visibleFrom"
+          component={DatetimeField}
+          label={
+            <FormattedMessage
+              id="app.editSystemMessageForm.visibleFrom"
+              defaultMessage="Date from which is notification visible."
+            />
+          }
+        />
+
+        <Field
+          name="visibleTo"
+          component={DatetimeField}
+          label={
+            <FormattedMessage
+              id="app.editSystemMessageForm.visibleTo"
+              defaultMessage="Date to which is notification visible."
+            />
+          }
+        />
+
+        {error && dirty && <Callout variant="danger">{error}</Callout>}
+      </Modal.Body>
+      <Modal.Footer>
+        <TheButtonGroup>
+          <SubmitButton
+            id="editSystemMessage"
+            invalid={invalid}
+            submitting={submitting}
+            dirty={dirty}
+            hasSucceeded={submitSucceeded}
+            hasFailed={submitFailed}
+            handleSubmit={handleSubmit}
+            messages={{
+              submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+              submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
+              success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+              validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
+            }}
+          />
+
+          <Button variant="secondary" onClick={onClose}>
+            <CloseIcon gapRight={2} />
+            <FormattedMessage id="generic.close" defaultMessage="Close" />
+          </Button>
+        </TheButtonGroup>
+      </Modal.Footer>
+    </Modal>
+  );
+};
 
 EditSystemMessageForm.propTypes = {
   error: PropTypes.any,
@@ -143,7 +146,6 @@ EditSystemMessageForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   createNew: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ localizedTexts, type, role, visibleFrom, visibleTo }) => {
@@ -216,5 +218,5 @@ export default withLinks(
     validate,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-  })(injectIntl(EditSystemMessageForm))
+  })(EditSystemMessageForm)
 );

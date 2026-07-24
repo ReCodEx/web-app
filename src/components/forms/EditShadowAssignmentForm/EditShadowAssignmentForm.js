@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Callout from '../../widgets/Callout';
@@ -202,11 +202,9 @@ const validate = ({ localizedTexts }) => {
   return errors;
 };
 
-export default injectIntl(
-  reduxForm({
-    form: 'editShadowAssignment',
-    validate,
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-  })(EditShadowAssignmentForm)
-);
+export default reduxForm({
+  form: 'editShadowAssignment',
+  validate,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+})(EditShadowAssignmentForm);
