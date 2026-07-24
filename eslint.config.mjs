@@ -81,7 +81,7 @@ export default [{
         'no-unused-vars': 2,
         'no-alert': 2,
         'no-labels': 2,
-        'babel/semi': [2, 'always'],
+        '@/semi': [2, 'always'],
         'standard/computed-property-even-spacing': 0,
         'space-before-function-paren': 0,
     },
