@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import SortableTable, { SortableTableColumnDescriptor } from '../../widgets/SortableTable';
@@ -88,11 +88,8 @@ class MessagesList extends Component {
   });
 
   render() {
-    const {
-      systemMessages,
-      renderActions,
-      intl: { locale },
-    } = this.props;
+    const { systemMessages, renderActions } = this.props;
+    const { locale } = useIntl();
 
     return (
       <>
@@ -126,8 +123,7 @@ class MessagesList extends Component {
 
 MessagesList.propTypes = {
   systemMessages: PropTypes.array.isRequired,
-  intl: PropTypes.object.isRequired,
   renderActions: PropTypes.func,
 };
 
-export default injectIntl(MessagesList);
+export default MessagesList;

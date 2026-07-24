@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
+import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Overlay, Tooltip, Row, Col } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -88,8 +88,8 @@ const GenerateTokenForm = ({
   submitSucceeded = false,
   invalid,
   lastToken,
-  intl: { formatMessage },
 }) => {
+  const { formatMessage } = useIntl();
   const [copied, setCopied] = useState(false);
   const btnTarget = useRef(null);
 
@@ -217,7 +217,6 @@ GenerateTokenForm.propTypes = {
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   lastToken: PropTypes.string,
-  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ scope, expiration }) => {
@@ -246,11 +245,9 @@ const validate = ({ scope, expiration }) => {
   return errors;
 };
 
-export default injectIntl(
-  reduxForm({
-    form: 'generate-token',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    validate,
-  })(GenerateTokenForm)
-);
+export default reduxForm({
+  form: 'generate-token',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+  validate,
+})(GenerateTokenForm);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
 import { EMPTY_ARRAY } from '../../../helpers/common.js';
@@ -49,7 +49,8 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
   };
 
   getPossibleEntryPoints = envId => {
-    const { extraFiles, environmentsWithEntryPoints, intl } = this.props;
+    const { extraFiles, environmentsWithEntryPoints } = this.props;
+    const { locale } = useIntl();
     if (!environmentsWithEntryPoints.includes(envId)) {
       return EMPTY_ARRAY;
     }
@@ -61,7 +62,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
         key: name,
         name,
       }))
-      .sort((a, b) => a.name.localeCompare(b.name, intl.locale));
+      .sort((a, b) => a.name.localeCompare(b.name, locale));
   };
 
   render() {
@@ -72,10 +73,11 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
       exerciseFiles,
       test,
       testErrors,
-      intl,
       readOnly = false,
       compilationInitiallyOpened = false,
     } = this.props;
+    const { locale } = useIntl();
+
     return (
       <>
         {this.state.compilationOpen === true || (this.state.compilationOpen === null && compilationInitiallyOpened) ? (
@@ -98,7 +100,7 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
                 <tbody>
                   <tr>
                     {exercise.runtimeEnvironments
-                      .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
+                      .sort((a, b) => a.name.localeCompare(b.name, locale))
                       .map(env => {
                         const possibleEntryPoints = this.getPossibleEntryPoints(env.id);
                         return (
@@ -359,7 +361,6 @@ EditExerciseSimpleConfigTestCompilation.propTypes = {
   smartFillCompilation: PropTypes.func,
   change: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(EditExerciseSimpleConfigTestCompilation);
+export default EditExerciseSimpleConfigTestCompilation;

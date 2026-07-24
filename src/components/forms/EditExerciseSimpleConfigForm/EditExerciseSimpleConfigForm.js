@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
@@ -202,8 +202,8 @@ class EditExerciseSimpleConfigForm extends Component {
       exerciseTests,
       smartFill,
       readOnly = false,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     const dataOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_DATA_ONLY_ID));
     const prologOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_PROLOG_ID));
@@ -338,7 +338,6 @@ EditExerciseSimpleConfigForm.propTypes = {
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
 const validate = (formData, { exercise, exerciseFiles }) => {
@@ -525,5 +524,5 @@ export default connect(
     immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
     validate,
     warn,
-  })(injectIntl(EditExerciseSimpleConfigForm))
+  })(EditExerciseSimpleConfigForm)
 );

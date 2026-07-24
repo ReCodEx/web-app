@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../../icons';
 import EnvironmentsListItem from './EnvironmentsListItem.js';
 
-const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false, intl: { locale } }) => {
+const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false }) => {
+  const { locale } = useIntl();
   const environments =
     runtimeEnvironments &&
     runtimeEnvironments
@@ -14,6 +15,7 @@ const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false, intl:
           ? (a, b) => a.longName.localeCompare(b.longName, locale)
           : (a, b) => a.name.localeCompare(b.name, locale)
       );
+
   return (
     <span>
       {environments !== null ? (
@@ -35,7 +37,6 @@ const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false, intl:
 EnvironmentsList.propTypes = {
   runtimeEnvironments: PropTypes.array,
   longNames: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default injectIntl(EnvironmentsList);
+export default EnvironmentsList;

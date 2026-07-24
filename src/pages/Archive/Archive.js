@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -112,10 +112,8 @@ class Archive extends Component {
   };
 
   render() {
-    const {
-      instance,
-      intl: { locale },
-    } = this.props;
+    const { instance } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -168,7 +166,6 @@ Archive.propTypes = {
   links: PropTypes.object.isRequired,
   instanceId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
-  intl: PropTypes.object,
 };
 
 export default withLinks(
@@ -182,5 +179,5 @@ export default withLinks(
     dispatch => ({
       loadAsync: instanceId => Archive.loadAsync({}, dispatch, { instanceId }),
     })
-  )(injectIntl(Archive))
+  )(Archive)
 );

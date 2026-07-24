@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 
@@ -300,20 +300,18 @@ class ResultsTable extends Component {
         columns.push(
           new SortableTableColumnDescriptor(
             assignment.id,
-            (
-              <div className={styles.verticalText}>
-                <div>
-                  <Link
-                    to={
-                      isTeacher
-                        ? ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)
-                        : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
-                    }>
-                    <LocalizedExerciseName entity={assignment} />
-                  </Link>
-                </div>
+            <div className={styles.verticalText}>
+              <div>
+                <Link
+                  to={
+                    isTeacher
+                      ? ASSIGNMENT_SOLUTIONS_URI_FACTORY(assignment.id)
+                      : ASSIGNMENT_DETAIL_URI_FACTORY(assignment.id)
+                  }>
+                  <LocalizedExerciseName entity={assignment} />
+                </Link>
               </div>
-            ),
+            </div>,
             {
               headerClassName: 'text-center',
               className: `text-center ${styles.pointsCell}`,
@@ -341,15 +339,13 @@ class ResultsTable extends Component {
         columns.push(
           new SortableTableColumnDescriptor(
             shadowAssignment.id,
-            (
-              <div className={styles.verticalText}>
-                <div>
-                  <Link to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowAssignment.id)}>
-                    <LocalizedExerciseName entity={shadowAssignment} />
-                  </Link>
-                </div>
+            <div className={styles.verticalText}>
+              <div>
+                <Link to={SHADOW_ASSIGNMENT_DETAIL_URI_FACTORY(shadowAssignment.id)}>
+                  <LocalizedExerciseName entity={shadowAssignment} />
+                </Link>
               </div>
-            ),
+            </div>,
             {
               className: 'text-center',
               headerSuffix: shadowAssignment.maxPoints,
@@ -459,8 +455,8 @@ class ResultsTable extends Component {
       userSolutionsSelector,
       userSolutionsStatusSelector,
       runtimeEnvironments,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     const isAdmin = isSuperadmin || (group.privateData && group.privateData.admins.includes(loggedUser.id));
     const isSupervisor = group.privateData && group.privateData.supervisors.includes(loggedUser.id);
@@ -590,8 +586,7 @@ ResultsTable.propTypes = {
   fetchUsersSolutions: PropTypes.func.isRequired,
   setShadowPoints: PropTypes.func.isRequired,
   removeShadowPoints: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
   links: PropTypes.object,
 };
 
-export default withLinks(injectIntl(ResultsTable));
+export default withLinks(ResultsTable);

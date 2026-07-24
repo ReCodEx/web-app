@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { lruMemoize } from 'reselect';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import PaginationContainer from '../PaginationContainer';
 import SimpleTextSearch from '../../components/helpers/SimpleTextSearch';
@@ -33,36 +33,40 @@ const messages = defineMessages({
   },
 });
 
-const AddUserContainer = ({ id, filters, createActions, user, rolesFilter = null, intl: { formatMessage } }) => (
-  <ResourceRenderer resource={user}>
-    {user => (
-      <PaginationContainer
-        id={id}
-        endpoint="users"
-        defaultOrderBy="name"
-        limits={LIMITS}
-        hideAllItems={!filters.search}
-        hideAllMessage={null}
-        filtersCreator={(filters, setFilters) => (
-          <SimpleTextSearch
-            query={filters.search || ''}
-            isLoading={setFilters === null}
-            onSubmit={submitHandler(rolesFilter, setFilters)}
-            label={
-              <>
-                <FormattedMessage id="app.addUserContainer.searchUser" defaultMessage="Search user" />:
-              </>
-            }
-            placeholder={formatMessage(messages.emptyQueryPlaceholder)}
-          />
-        )}>
-        {({ data }) => {
-          return <UsersList users={data} loggedUserId={user.id} createActions={createActions} />;
-        }}
-      </PaginationContainer>
-    )}
-  </ResourceRenderer>
-);
+const AddUserContainer = ({ id, filters, createActions, user, rolesFilter = null }) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <ResourceRenderer resource={user}>
+      {user => (
+        <PaginationContainer
+          id={id}
+          endpoint="users"
+          defaultOrderBy="name"
+          limits={LIMITS}
+          hideAllItems={!filters.search}
+          hideAllMessage={null}
+          filtersCreator={(filters, setFilters) => (
+            <SimpleTextSearch
+              query={filters.search || ''}
+              isLoading={setFilters === null}
+              onSubmit={submitHandler(rolesFilter, setFilters)}
+              label={
+                <>
+                  <FormattedMessage id="app.addUserContainer.searchUser" defaultMessage="Search user" />:
+                </>
+              }
+              placeholder={formatMessage(messages.emptyQueryPlaceholder)}
+            />
+          )}>
+          {({ data }) => {
+            return <UsersList users={data} loggedUserId={user.id} createActions={createActions} />;
+          }}
+        </PaginationContainer>
+      )}
+    </ResourceRenderer>
+  );
+};
 
 AddUserContainer.propTypes = {
   id: PropTypes.string.isRequired,
@@ -71,7 +75,6 @@ AddUserContainer.propTypes = {
   rolesFilter: PropTypes.array,
   user: ImmutablePropTypes.map.isRequired,
   filters: PropTypes.object.isRequired,
-  intl: PropTypes.object,
 };
 
 export default connect((state, { id }) => {
@@ -79,4 +82,4 @@ export default connect((state, { id }) => {
     user: loggedInUserSelector(state),
     filters: getPaginationFilters(id)(state) || EMPTY_OBJ,
   };
-})(injectIntl(AddUserContainer));
+})(AddUserContainer);

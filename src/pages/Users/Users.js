@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
@@ -142,12 +142,8 @@ class Users extends Component {
   });
 
   createNewUserAccount = data => {
-    const {
-      instanceId,
-      createUser,
-      reloadPagination,
-      intl: { locale },
-    } = this.props;
+    const { instanceId, createUser, reloadPagination } = this.props;
+    const { locale } = useIntl();
 
     return createUser(data, instanceId).then(({ value: { user, usersWithSameName = null } }) => {
       if (user) {
@@ -277,7 +273,6 @@ Users.propTypes = {
   createUser: PropTypes.func.isRequired,
   reloadPagination: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: PropTypes.object.isRequired,
   navigate: withRouterProps.navigate,
 };
 
@@ -303,5 +298,5 @@ export default withLinks(
       reloadPagination: locale =>
         dispatch(fetchPaginated(PAGINATION_CONTAINER_ID, PAGINATION_CONTAINER_ENDPOINT)(locale, null, null, true)), // true = force invalidate
     })
-  )(injectIntl(Users))
+  )(Users)
 );

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import Icon from '../../icons';
 import { getLocalizedName, getOtherLocalizedNames } from '../../../helpers/localizedData.js';
 
-const LocalizedGroupName = ({ entity, translations = false, intl: { locale } }) => {
+const LocalizedGroupName = ({ entity, translations = false }) => {
+  const { locale } = useIntl();
   const otherNames = getOtherLocalizedNames(entity, locale);
   return (
     <>
@@ -32,7 +33,6 @@ const LocalizedGroupName = ({ entity, translations = false, intl: { locale } }) 
 LocalizedGroupName.propTypes = {
   entity: PropTypes.object,
   translations: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default injectIntl(LocalizedGroupName);
+export default LocalizedGroupName;

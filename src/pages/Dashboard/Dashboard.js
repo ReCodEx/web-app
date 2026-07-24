@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -339,7 +339,6 @@ Dashboard.propTypes = {
   openReviewUpdating: PropTypes.func.isRequired,
   closeReview: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 export default withLinks(
@@ -378,5 +377,5 @@ export default withLinks(
           dispatch(removePendingReview(userId, groupId, assignmentId, solutionId))
         ),
     })
-  )(injectIntl(Dashboard))
+  )(Dashboard)
 );

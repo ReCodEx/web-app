@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { reduxForm } from 'redux-form';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
@@ -92,10 +92,8 @@ EditUserRoleForm.propTypes = {
   invalid: PropTypes.bool,
 };
 
-export default injectIntl(
-  reduxForm({
-    form: 'user-role',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-  })(EditUserRoleForm)
-);
+export default reduxForm({
+  form: 'user-role',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+})(EditUserRoleForm);

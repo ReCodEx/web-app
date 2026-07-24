@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import { Table } from 'react-bootstrap';
@@ -25,76 +25,78 @@ const FilesTable = ({
   uploadId,
   HeaderComponent,
   RowComponent,
-  intl,
   viewOnly = false,
   noRemove = false,
   downloadArchive,
   ...restProps
-}) => (
-  <div>
-    {description && (
-      <InsetPanel size="sm" className="small">
-        {description}
-      </InsetPanel>
-    )}
-    {!viewOnly && <UploadContainer id={uploadId} existingFiles={indexFileNames(files)} />}
-    {!viewOnly && newFiles && newFiles.length > 0 && (
-      <div className="text-center mb-3">
-        <TheButtonGroup>
-          <Button variant="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
-            <SaveIcon gapRight={2} />
-            <FormattedMessage id="app.filesTable.saveUploadedFilesButton" defaultMessage="Save Uploaded Files" />
-          </Button>
-          <Button variant="danger" onClick={resetUploads}>
-            <CloseIcon gapRight={2} />
-            <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
-          </Button>
-        </TheButtonGroup>
-      </div>
-    )}
-
+}) => {
+  const { locale } = useIntl();
+  return (
     <div>
-      {files.length > 0 && (
-        <Table responsive>
-          <thead>
-            <HeaderComponent {...restProps} viewOnly={viewOnly} />
-          </thead>
-          <tbody>
-            {files
-              .sort((a, b) => a.name.localeCompare(b.name, intl.locale))
-              .map((fileData, i) => (
-                <RowComponent
-                  {...restProps}
-                  {...fileData}
-                  removeFile={noRemove ? null : removeFile}
-                  downloadFile={downloadFile}
-                  viewOnly={viewOnly}
-                  isBeingUsed={usedFiles && usedFiles.has(fileData.name)}
-                  key={i}
-                />
-              ))}
-          </tbody>
-        </Table>
+      {description && (
+        <InsetPanel size="sm" className="small">
+          {description}
+        </InsetPanel>
       )}
-
-      {files.length === 0 && (
-        <p className="text-center p-3">
-          <Icon icon={['far', 'folder-open']} gapRight={2} />
-          <FormattedMessage id="app.filesTable.empty" defaultMessage="There are no saved files yet." />
-        </p>
-      )}
-
-      {downloadArchive && files.length > 1 && (
-        <div className="text-center">
-          <Button variant="primary" onClick={downloadArchive}>
-            <ZipIcon gapRight={2} />
-            <FormattedMessage id="app.filesTable.downloadArchive" defaultMessage="Download all as ZIP archive" />
-          </Button>
+      {!viewOnly && <UploadContainer id={uploadId} existingFiles={indexFileNames(files)} />}
+      {!viewOnly && newFiles && newFiles.length > 0 && (
+        <div className="text-center mb-3">
+          <TheButtonGroup>
+            <Button variant="success" disabled={!canSubmit} onClick={() => addFiles(newFiles)}>
+              <SaveIcon gapRight={2} />
+              <FormattedMessage id="app.filesTable.saveUploadedFilesButton" defaultMessage="Save Uploaded Files" />
+            </Button>
+            <Button variant="danger" onClick={resetUploads}>
+              <CloseIcon gapRight={2} />
+              <FormattedMessage id="generic.clearAll" defaultMessage="Clear All" />
+            </Button>
+          </TheButtonGroup>
         </div>
       )}
+
+      <div>
+        {files.length > 0 && (
+          <Table responsive>
+            <thead>
+              <HeaderComponent {...restProps} viewOnly={viewOnly} />
+            </thead>
+            <tbody>
+              {files
+                .sort((a, b) => a.name.localeCompare(b.name, locale))
+                .map((fileData, i) => (
+                  <RowComponent
+                    {...restProps}
+                    {...fileData}
+                    removeFile={noRemove ? null : removeFile}
+                    downloadFile={downloadFile}
+                    viewOnly={viewOnly}
+                    isBeingUsed={usedFiles && usedFiles.has(fileData.name)}
+                    key={i}
+                  />
+                ))}
+            </tbody>
+          </Table>
+        )}
+
+        {files.length === 0 && (
+          <p className="text-center p-3">
+            <Icon icon={['far', 'folder-open']} gapRight={2} />
+            <FormattedMessage id="app.filesTable.empty" defaultMessage="There are no saved files yet." />
+          </p>
+        )}
+
+        {downloadArchive && files.length > 1 && (
+          <div className="text-center">
+            <Button variant="primary" onClick={downloadArchive}>
+              <ZipIcon gapRight={2} />
+              <FormattedMessage id="app.filesTable.downloadArchive" defaultMessage="Download all as ZIP archive" />
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 FilesTable.propTypes = {
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
@@ -109,10 +111,9 @@ FilesTable.propTypes = {
   downloadFile: PropTypes.func,
   HeaderComponent: PropTypes.func.isRequired,
   RowComponent: PropTypes.func.isRequired,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
   viewOnly: PropTypes.bool,
   noRemove: PropTypes.bool,
   downloadArchive: PropTypes.func,
 };
 
-export default injectIntl(FilesTable);
+export default FilesTable;

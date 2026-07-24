@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, FormattedNumber, injectIntl } from 'react-intl';
+import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
@@ -354,8 +354,8 @@ class ExerciseReferenceSolutions extends Component {
       deleteReferenceSolution,
       reload,
       links,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -747,7 +747,6 @@ ExerciseReferenceSolutions.propTypes = {
   runtimeEnvironments: ImmutablePropTypes.map,
   referenceSolutions: ImmutablePropTypes.map,
   userSelector: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
   submitting: PropTypes.bool,
   links: PropTypes.object,
   loadAsync: PropTypes.func.isRequired,
@@ -780,6 +779,6 @@ export default withRouter(
         deleteReferenceSolution: solutionId =>
           dispatch(deleteReferenceSolution(solutionId)).then(() => dispatch(reloadExercise(exerciseId))),
       })
-    )(injectIntl(ExerciseReferenceSolutions))
+    )(ExerciseReferenceSolutions)
   )
 );

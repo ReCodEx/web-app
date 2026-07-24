@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
@@ -41,8 +41,8 @@ const ForkExerciseForm = ({
   groupsAccessor,
   forkedExerciseId,
   links: { EXERCISE_URI_FACTORY },
-  intl: { locale, formatMessage },
 }) => {
+  const { locale, formatMessage } = useIntl();
   const navigate = useNavigate();
   const viewForkedExercise = () => {
     navigate(EXERCISE_URI_FACTORY(forkedExerciseId));
@@ -157,7 +157,6 @@ ForkExerciseForm.propTypes = {
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
   groupsAccessor: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
 const validate = ({ groupId }) => {
@@ -185,6 +184,6 @@ export default withLinks(
     reduxForm({
       form: 'forkExercise',
       validate,
-    })(injectIntl(ForkExerciseForm))
+    })(ForkExerciseForm)
   )
 );

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
@@ -516,9 +516,7 @@ class PipelineEditContainer extends Component {
    * Read a JSON file in hidden file-input, parse it, and load it as the pipeline (if it checks out).
    */
   import = () => {
-    const {
-      intl: { formatMessage },
-    } = this.props;
+    const { formatMessage } = useIntl();
     const files = this.inputFileRef.current.files;
     if (files.length === 1) {
       files[0].text().then(
@@ -979,7 +977,6 @@ PipelineEditContainer.propTypes = {
   boxTypes: PropTypes.object.isRequired,
   editPipeline: PropTypes.func.isRequired,
   reloadPipeline: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
 export default connect(
@@ -1001,4 +998,4 @@ export default connect(
       ),
     reloadPipeline: () => dispatch(reloadPipeline(pipeline.id)),
   })
-)(injectIntl(PipelineEditContainer));
+)(PipelineEditContainer);

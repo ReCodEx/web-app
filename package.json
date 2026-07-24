@@ -20,7 +20,7 @@
     "test": "mocha --recursive --timeout 2000 --require ./test/setup.js --require mock-local-storage",
     "test:mocha": "mocha --recursive --timeout 2000 --require @babel/register --require ./test/setup.js --require mock-local-storage",
     "test:watch": "mocha --recursive --timeout 2000 --require @babel/register --require ./test/setup.js --require mock-local-storage --watch --reporter nyan",
-    "dev": "yarn babel-node bin/dev.js --v8-options=--max-old-space-size=4096",
+    "dev": "babel-node bin/dev.js --v8-options=--max-old-space-size=4096",
     "start": "node bin/server.mjs",
     "deploy": "mkdir -p ./prod && mkdir -p ./prod/etc && cp -rf ./views ./prod && cp -rf ./bin ./prod && cp -n ./etc/env.json.example ./prod/etc/env.json && rm -rf ./prod/public && cp -rf ./public ./prod",
     "manageTranslations": "babel-node bin/manageTranslations.js",

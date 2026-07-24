@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector } from 'redux-form';
@@ -81,8 +81,8 @@ class EditGroup extends Component {
       instanceId,
       reload,
       links: { GROUP_INFO_URI_FACTORY, INSTANCE_URI_FACTORY, GROUP_EDIT_URI_FACTORY },
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -300,7 +300,6 @@ EditGroup.propTypes = {
   isSuperAdmin: PropTypes.bool,
   editGroup: PropTypes.func.isRequired,
   relocateGroup: PropTypes.func.isRequired,
-  intl: PropTypes.object,
   navigate: withRouterProps.navigate,
 };
 
@@ -338,5 +337,5 @@ export default withLinks(
         ),
       relocateGroup: ({ groupId: newParentId }) => dispatch(relocateGroup(groupId, newParentId)),
     })
-  )(injectIntl(EditGroup))
+  )(EditGroup)
 );

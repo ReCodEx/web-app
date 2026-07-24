@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Modal, Form, FormGroup, FormLabel, FormControl, Row, Col } from 'react-bootstrap';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
@@ -119,11 +119,10 @@ class SubmitSolution extends Component {
   };
 
   _createSubmitButton = (btnProps = {}) => {
-    const {
-      hasFailed,
-      intl: { formatMessage },
-    } = this.props;
+    const { hasFailed } = this.props;
+    const { formatMessage } = useIntl();
     const canSubmit = this.canSubmit();
+
     return (
       <Button
         type="submit"
@@ -137,12 +136,9 @@ class SubmitSolution extends Component {
   };
 
   createSubmitButton = () => {
-    const {
-      isReferenceSolution,
-      note,
-      submitSolution,
-      intl: { formatMessage },
-    } = this.props;
+    const { isReferenceSolution, note, submitSolution } = this.props;
+    const { formatMessage } = useIntl();
+
     return isReferenceSolution && note.trim().length === 0 ? (
       <Confirm
         id={'ref-solution-submit'}
@@ -199,8 +195,8 @@ class SubmitSolution extends Component {
       saveNote,
       isReferenceSolution,
       messages,
-      intl: { formatMessage },
     } = this.props;
+    const { formatMessage } = useIntl();
 
     return (
       <Modal show={isOpen} onHide={onClose} onEscapeKeyDown={onClose} size="xl">
@@ -382,15 +378,12 @@ SubmitSolution.propTypes = {
   isReferenceSolution: PropTypes.bool,
   attachedFiles: PropTypes.array,
   messages: PropTypes.object.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(
-  connect(
-    (state, { uploadId, isReferenceSolution = false }) => ({
-      attachedFiles: uploadedFilesSelector(state, uploadId),
-      messages: isReferenceSolution ? referenceSolutionMessages : submissionMessages,
-    }),
-    () => ({})
-  )(SubmitSolution)
-);
+export default connect(
+  (state, { uploadId, isReferenceSolution = false }) => ({
+    attachedFiles: uploadedFilesSelector(state, uploadId),
+    messages: isReferenceSolution ? referenceSolutionMessages : submissionMessages,
+  }),
+  () => ({})
+)(SubmitSolution);

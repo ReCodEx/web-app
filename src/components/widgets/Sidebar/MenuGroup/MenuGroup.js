@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import classnames from 'classnames';
 
 import MenuItem from '../MenuItem';
@@ -14,16 +14,8 @@ import '../Sidebar.css';
 
 class MenuGroup extends Component {
   render() {
-    const {
-      title,
-      icon = 'th',
-      items,
-      createLink,
-      currentPath,
-      notifications,
-      isActive = false,
-      intl: { locale },
-    } = this.props;
+    const { title, icon = 'th', items, createLink, currentPath, notifications, isActive = false } = this.props;
+    const { locale } = useIntl();
 
     const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
     const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
@@ -81,7 +73,6 @@ MenuGroup.propTypes = {
   createLink: PropTypes.func.isRequired,
   notifications: PropTypes.object,
   isActive: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default injectIntl(MenuGroup);
+export default MenuGroup;

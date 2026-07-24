@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, formValues } from 'redux-form';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { lruMemoize } from 'reselect';
@@ -303,13 +303,8 @@ class EditAssignmentForm extends Component {
   selectAllGroups = () => {
     this.clearAllGroups(); // clears really all
 
-    const {
-      change,
-      groups,
-      userId,
-      groupsAccessor,
-      intl: { locale },
-    } = this.props;
+    const { change, groups, userId, groupsAccessor } = this.props;
+    const { locale } = useIntl();
 
     // checks only those visible
     const visibleGroups = this.state.open
@@ -322,13 +317,8 @@ class EditAssignmentForm extends Component {
   };
 
   clearAllGroups = () => {
-    const {
-      change,
-      groups,
-      groupsAccessor,
-      intl: { locale },
-    } = this.props;
-
+    const { change, groups, groupsAccessor } = this.props;
+    const { locale } = useIntl();
     const visibleGroups = getAllGroups(groups, groupsAccessor, locale);
     visibleGroups.forEach(group => {
       change(`groups.id${group.id}`, false);
@@ -374,9 +364,8 @@ class EditAssignmentForm extends Component {
       showSendNotification,
       submitButtonMessages = SUBMIT_BUTTON_MESSAGES_DEFAULT,
       mergeJudgeLogs,
-      intl: { locale },
     } = this.props;
-
+    const { locale } = useIntl();
     const DeadlinesGraphDialogWithValues = formValues({
       firstDeadline: 'firstDeadline',
       secondDeadline: 'secondDeadline',
@@ -958,7 +947,6 @@ EditAssignmentForm.propTypes = {
   showSendNotification: PropTypes.bool,
   submitButtonMessages: PropTypes.object,
   mergeJudgeLogs: PropTypes.bool.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
 const validate = (
@@ -973,8 +961,9 @@ const validate = (
     visibleFrom,
     deadlines,
   },
-  { groupsAccessor, intl: { formatMessage } }
+  { groupsAccessor }
 ) => {
+  const { formatMessage } = useIntl();
   const errors = {};
 
   if (
@@ -1018,8 +1007,9 @@ const warn = (
     canViewJudgeStdout,
     canViewJudgeStderr,
   },
-  { groupsAccessor, intl: { formatMessage }, alreadyAssignedGroups = [] }
+  { groupsAccessor, alreadyAssignedGroups = [] }
 ) => {
+  const { formatMessage } = useIntl();
   const warnings = {};
 
   if (deadlines !== 'single' && !validateDeadline({}, formatMessage, firstDeadline, 'firstDeadline', null)) {
@@ -1110,11 +1100,9 @@ const warn = (
   return warnings;
 };
 
-export default injectIntl(
-  reduxForm({
-    validate,
-    warn,
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-  })(EditAssignmentForm)
-);
+export default reduxForm({
+  validate,
+  warn,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+})(EditAssignmentForm);

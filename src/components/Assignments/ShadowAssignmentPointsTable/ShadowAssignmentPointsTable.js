@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import { Container, Row, Col, Table, Modal } from 'react-bootstrap';
 
@@ -65,9 +65,9 @@ class ShadowAssignmentPointsTable extends Component {
       submitSucceeded = false,
       invalid,
       warning,
-      intl: { locale },
       links: { GROUP_USER_SOLUTIONS_URI_FACTORY },
     } = this.props;
+    const { locale } = useIntl();
     const studentPoints = arrayToObject(points, ({ awardeeId }) => awardeeId);
     const nameComparator = createUserNameComparator(locale);
 
@@ -291,7 +291,6 @@ ShadowAssignmentPointsTable.propTypes = {
   submitting: PropTypes.bool,
   invalid: PropTypes.bool,
   warning: PropTypes.any,
-  intl: PropTypes.object.isRequired,
   links: PropTypes.object,
 };
 
@@ -319,5 +318,5 @@ export default withLinks(
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
     warn,
-  })(injectIntl(ShadowAssignmentPointsTable))
+  })(ShadowAssignmentPointsTable)
 );

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Modal, DropdownButton, Dropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
+import { useIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -381,10 +381,8 @@ class AssignmentSolutions extends Component {
   }
 
   getArchiveFileName = assignment => {
-    const {
-      assignmentId,
-      intl: { locale: pageLocale },
-    } = this.props;
+    const { assignmentId } = this.props;
+    const { locale: pageLocale } = useIntl();
     const name =
       assignment &&
       safeGet(assignment, ['localizedTexts', ({ locale }) => locale === pageLocale, 'name'], assignment.name);
@@ -426,9 +424,9 @@ class AssignmentSolutions extends Component {
       assignmentSolversLoading,
       assignmentSolverSelector,
       assignmentSolvers,
-      intl: { locale },
       links,
     } = this.props;
+    const { locale } = useIntl();
 
     const pendingReviews = getPendingReviewSolutions(assignmentSolutions);
     const plagiarisms = getPlagiarisms(assignmentSolutions);
@@ -755,7 +753,6 @@ AssignmentSolutions.propTypes = {
   assignmentSolverSelector: PropTypes.func.isRequired,
   assignmentSolvers: ImmutablePropTypes.map,
   closeReview: PropTypes.func.isRequired,
-  intl: PropTypes.object,
   links: PropTypes.object.isRequired,
 };
 
@@ -795,5 +792,5 @@ export default withLinks(
       },
       closeReview: id => dispatch(setSolutionReviewState(id, true)),
     })
-  )(injectIntl(AssignmentSolutions))
+  )(AssignmentSolutions)
 );

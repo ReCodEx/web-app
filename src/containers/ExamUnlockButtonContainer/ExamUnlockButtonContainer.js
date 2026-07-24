@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import ExamUnlockButton from '../../components/buttons/ExamUnlockButton';
@@ -23,15 +23,18 @@ const ExamUnlockButtonContainer = ({
   pending = null,
   unlockStudentFromExam,
   addNotification,
-  intl: { formatMessage },
   ...props
-}) => (
-  <ExamUnlockButton
-    {...props}
-    pending={pending}
-    unlockUserForExam={unlockStudentHandlingErrors(unlockStudentFromExam, addNotification, formatMessage)}
-  />
-);
+}) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <ExamUnlockButton
+      {...props}
+      pending={pending}
+      unlockUserForExam={unlockStudentHandlingErrors(unlockStudentFromExam, addNotification, formatMessage)}
+    />
+  );
+};
 
 ExamUnlockButtonContainer.propTypes = {
   groupId: PropTypes.string.isRequired,
@@ -39,7 +42,6 @@ ExamUnlockButtonContainer.propTypes = {
   pending: PropTypes.string,
   unlockStudentFromExam: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
 const mapStateToProps = (state, { groupId }) => ({
@@ -51,4 +53,4 @@ const mapDispatchToProps = (dispatch, { groupId, userId }) => ({
   addNotification: (...args) => dispatch(addNotification(...args)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ExamUnlockButtonContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(ExamUnlockButtonContainer);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import { Container, Row, Col, Form } from 'react-bootstrap';
 
@@ -18,62 +18,64 @@ const FilterUsersListForm = ({
   submitFailed = false,
   submitSucceeded = false,
   invalid,
-  intl: { locale },
-}) => (
-  <Form method="POST" onSubmit={onSubmit}>
-    <InsetPanel size="sm">
-      {submitFailed && (
-        <Callout variant="danger">
-          <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
-        </Callout>
-      )}
+}) => {
+  const { locale } = useIntl();
+  return (
+    <Form method="POST" onSubmit={onSubmit}>
+      <InsetPanel size="sm">
+        {submitFailed && (
+          <Callout variant="danger">
+            <FormattedMessage id="generic.operationFailed" defaultMessage="Operation failed. Please try again later." />
+          </Callout>
+        )}
 
-      <Container fluid>
-        <Row>
-          <Col sm={12}>
-            <Field
-              name="search"
-              component={TextField}
-              maxLength={255}
-              label={
-                <span>
-                  <FormattedMessage id="app.filterUsersListForm.searchName" defaultMessage="Search by name" />:
-                </span>
-              }
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={9} md={10}>
-            {knownRoles.map(role => (
-              <span key={`${role}-${locale}`} className="text-nowrap float-start pe-3">
-                <Field name={`roles.${role}`} component={CheckboxField} label={roleLabelsPlural[role]} />
-              </span>
-            ))}
-          </Col>
-
-          <Col sm={3} md={2}>
-            <div className="text-end">
-              <SubmitButton
-                id="setFilters"
-                handleSubmit={handleSubmit}
-                hasSucceeded={submitSucceeded}
-                hasFailed={submitFailed}
-                invalid={invalid}
-                disabled={onSubmit === null}
-                defaultIcon={<SendIcon gapRight={2} />}
-                messages={{
-                  submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
-                  success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
-                }}
+        <Container fluid>
+          <Row>
+            <Col sm={12}>
+              <Field
+                name="search"
+                component={TextField}
+                maxLength={255}
+                label={
+                  <span>
+                    <FormattedMessage id="app.filterUsersListForm.searchName" defaultMessage="Search by name" />:
+                  </span>
+                }
               />
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </InsetPanel>
-  </Form>
-);
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={9} md={10}>
+              {knownRoles.map(role => (
+                <span key={`${role}-${locale}`} className="text-nowrap float-start pe-3">
+                  <Field name={`roles.${role}`} component={CheckboxField} label={roleLabelsPlural[role]} />
+                </span>
+              ))}
+            </Col>
+
+            <Col sm={3} md={2}>
+              <div className="text-end">
+                <SubmitButton
+                  id="setFilters"
+                  handleSubmit={handleSubmit}
+                  hasSucceeded={submitSucceeded}
+                  hasFailed={submitFailed}
+                  invalid={invalid}
+                  disabled={onSubmit === null}
+                  defaultIcon={<SendIcon gapRight={2} />}
+                  messages={{
+                    submit: <FormattedMessage id="generic.setFilters" defaultMessage="Set Filters" />,
+                    success: <FormattedMessage id="generic.filtersSet" defaultMessage="Filters Set" />,
+                  }}
+                />
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </InsetPanel>
+    </Form>
+  );
+};
 
 FilterUsersListForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
@@ -81,13 +83,10 @@ FilterUsersListForm.propTypes = {
   submitFailed: PropTypes.bool,
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(
-  reduxForm({
-    form: 'filterUsersList',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-  })(FilterUsersListForm)
-);
+export default reduxForm({
+  form: 'filterUsersList',
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: false,
+})(FilterUsersListForm);

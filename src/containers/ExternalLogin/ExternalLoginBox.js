@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
@@ -98,14 +98,8 @@ class ExternalLoginBox extends Component {
   componentWillUnmount = this.dispose;
 
   render() {
-    const {
-      name,
-      helpUrl,
-      shortSessionConfig = null,
-      loginStatus,
-      loginError,
-      intl: { formatMessage },
-    } = this.props;
+    const { name, helpUrl, shortSessionConfig = null, loginStatus, loginError } = this.props;
+    const { formatMessage } = useIntl();
 
     const pending = this.state.pending || loginStatus === statusTypes.LOGGING_IN;
     const loggedIn = loginStatus === statusTypes.LOGGED_IN;
@@ -197,7 +191,6 @@ ExternalLoginBox.propTypes = {
   login: PropTypes.func.isRequired,
   fail: PropTypes.func.isRequired,
   afterLogin: PropTypes.func.isRequired,
-  intl: PropTypes.object,
 };
 
 export default connect(
@@ -212,4 +205,4 @@ export default connect(
     },
     fail: () => dispatch(externalLoginFailed(service)),
   })
-)(injectIntl(ExternalLoginBox));
+)(ExternalLoginBox);

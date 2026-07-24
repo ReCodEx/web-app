@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
+import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 
 import Callout from '../../widgets/Callout';
@@ -20,16 +20,8 @@ const messages = defineMessages({
 
 class CreateExerciseForm extends Component {
   render() {
-    const {
-      submitting,
-      handleSubmit,
-      submitFailed,
-      submitSucceeded,
-      invalid,
-      groups,
-      intl: { formatMessage },
-    } = this.props;
-
+    const { submitting, handleSubmit, submitFailed, submitSucceeded, invalid, groups } = this.props;
+    const { formatMessage } = useIntl();
     return (
       <FormBox
         title={<FormattedMessage id="app.createExerciseForm.title" defaultMessage="Create New Exercise" />}
@@ -81,7 +73,6 @@ CreateExerciseForm.propTypes = {
   invalid: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   groups: PropTypes.array.isRequired,
-  intl: PropTypes.object,
   links: PropTypes.object,
 };
 const validate = ({ groupId }) => {
@@ -104,5 +95,5 @@ export default withLinks(
     validate,
     enableReinitialize: true,
     keepDirtyOnReinitialize: false,
-  })(injectIntl(CreateExerciseForm))
+  })(CreateExerciseForm)
 );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
@@ -113,7 +113,6 @@ class Exercise extends Component {
       runtimeEnvironments,
       submitting,
       referenceSolutions,
-      intl: { locale },
       groups,
       groupsAccessor,
       reload,
@@ -121,7 +120,7 @@ class Exercise extends Component {
       sendNotification,
       links: { EXERCISE_ASSIGNMENTS_URI_FACTORY, EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY },
     } = this.props;
-
+    const { locale } = useIntl();
     const { forkId } = this.state;
 
     return (
@@ -303,7 +302,6 @@ Exercise.propTypes = {
   forkedFrom: ImmutablePropTypes.map,
   runtimeEnvironments: ImmutablePropTypes.map,
   referenceSolutions: ImmutablePropTypes.map,
-  intl: PropTypes.object.isRequired,
   submitting: PropTypes.bool,
   links: PropTypes.object,
   groups: ImmutablePropTypes.map,
@@ -341,6 +339,6 @@ export default withRouter(
         forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),
         sendNotification: message => dispatch(sendNotification(exerciseId, message)),
       })
-    )(injectIntl(Exercise))
+    )(Exercise)
   )
 );

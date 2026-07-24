@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
 import {
@@ -122,8 +122,8 @@ class GroupInfo extends Component {
       addObserver,
       removeMember,
       links: { GROUP_INFO_URI_FACTORY },
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     const isAdminOrSuperadmin = isAdmin || isSuperAdmin;
 
@@ -319,7 +319,6 @@ GroupInfo.propTypes = {
   addObserver: PropTypes.func.isRequired,
   removeMember: PropTypes.func.isRequired,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const addSubgroupFormSelector = formValueSelector('addSubgroup');
@@ -375,4 +374,4 @@ const mapDispatchToProps = (dispatch, { params }) => ({
   removeMember: (userId, groupId) => dispatch(removeMember(userId, groupId)),
 });
 
-export default withLinks(connect(mapStateToProps, mapDispatchToProps)(injectIntl(GroupInfo)));
+export default withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupInfo));

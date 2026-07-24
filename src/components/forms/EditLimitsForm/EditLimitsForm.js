@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Container, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
 import classnames from 'classnames';
 
@@ -33,8 +33,8 @@ class EditLimitsForm extends Component {
       submitSucceeded,
       invalid,
       error,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <FormBox
@@ -187,7 +187,6 @@ EditLimitsForm.propTypes = {
   submitSucceeded: PropTypes.bool,
   invalid: PropTypes.bool,
   error: PropTypes.any,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const validate = ({ limits }, { constraints, environments }) => {
@@ -222,4 +221,4 @@ export default reduxForm({
   keepDirtyOnReinitialize: false,
   immutableProps: ['environments', 'tests', 'cloneHorizontally', 'cloneVertically', 'cloneAll', 'handleSubmit'],
   validate,
-})(injectIntl(EditLimitsForm));
+})(EditLimitsForm);

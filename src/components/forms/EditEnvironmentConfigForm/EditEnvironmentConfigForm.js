@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables.js';
 import FormBox from '../../widgets/FormBox';
@@ -38,8 +38,8 @@ class EditEnvironmentConfigForm extends Component {
       invalid,
       error,
       warning,
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <FormBox
@@ -183,7 +183,6 @@ EditEnvironmentConfigForm.propTypes = {
   invalid: PropTypes.bool,
   error: PropTypes.any,
   warning: PropTypes.any,
-  intl: PropTypes.object.isRequired,
 };
 
 const validate = ({ environmentId, variables }) => {
@@ -301,5 +300,5 @@ export default connect((state, { runtimeEnvironments }) => {
     keepDirtyOnReinitialize: false,
     validate,
     warn,
-  })(injectIntl(EditEnvironmentConfigForm))
+  })(EditEnvironmentConfigForm)
 );

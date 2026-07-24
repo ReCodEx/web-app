@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { reset, SubmissionError } from 'redux-form';
@@ -53,7 +53,7 @@ class Login extends Component {
     // Reset the login form (so it is fresh for next time)
     reset();
 
-    let url = null;
+    let url;
     if (redirect) {
       url = Buffer.from(decodeURIComponent(redirect), 'base64').toString();
     } else {
@@ -79,10 +79,9 @@ class Login extends Component {
    * Log the user in (by given credentials) and then perform the redirect.
    */
   loginAndRedirect = ({ short, ...credentials }) => {
-    const {
-      login,
-      intl: { formatMessage },
-    } = this.props;
+    const { login } = this.props;
+    const { formatMessage } = useIntl();
+
     return login(credentials, short && SHORT_SESSION ? SHORT_SESSION * 60 : null)
       .then(this.redirectAfterLogin)
       .catch(error => {
@@ -105,8 +104,8 @@ class Login extends Component {
       logout,
       params: { redirect = null },
       links: { RESET_PASSWORD_URI },
-      intl: { locale, formatMessage },
     } = this.props;
+    const { locale, formatMessage } = useIntl();
 
     const external = EXTERNAL_AUTH_URL && EXTERNAL_AUTH_SERVICE_ID;
     const userError = getError(loggedInUser);
@@ -206,7 +205,6 @@ Login.propTypes = {
   logout: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
-  intl: PropTypes.object,
   navigate: withRouterProps.navigate,
 };
 
@@ -224,5 +222,5 @@ export default withLinks(
         dispatch(reset('login'));
       },
     })
-  )(injectIntl(Login))
+  )(Login)
 );

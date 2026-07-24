@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -14,8 +14,10 @@ const sortStudents = lruMemoize((notLockedStudents, locale) => {
   return sorted.sort(createUserNameComparator(locale));
 });
 
-const NotLockedStudentsTable = ({ notLockedStudents, currentUser, intl: { locale } }) =>
-  notLockedStudents && notLockedStudents.length > 0 ? (
+const NotLockedStudentsTable = ({ notLockedStudents, currentUser }) => {
+  const { locale } = useIntl();
+
+  return notLockedStudents && notLockedStudents.length > 0 ? (
     <Table className="m-0" hover>
       <tbody>
         {sortStudents(notLockedStudents, locale).map(student => (
@@ -62,13 +64,13 @@ const NotLockedStudentsTable = ({ notLockedStudents, currentUser, intl: { locale
       </em>
     </div>
   );
+};
 
 NotLockedStudentsTable.propTypes = {
   notLockedStudents: PropTypes.array,
   currentUser: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }),
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(NotLockedStudentsTable);
+export default NotLockedStudentsTable;

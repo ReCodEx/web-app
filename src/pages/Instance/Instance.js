@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -69,8 +69,8 @@ class Instance extends Component {
       isOrganizational,
       isExam,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY },
-      intl: { locale },
     } = this.props;
+    const { locale } = useIntl();
 
     return (
       <Page
@@ -179,7 +179,6 @@ Instance.propTypes = {
   pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isOrganizational: PropTypes.bool,
   isExam: PropTypes.bool,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
 const addGroupFormSelector = formValueSelector('addGroup');
@@ -220,5 +219,5 @@ export default withLinks(
       loadAsync: () => Instance.loadAsync({ instanceId }, dispatch),
       refreshUser: userId => dispatch(fetchUser(userId)),
     })
-  )(injectIntl(Instance))
+  )(Instance)
 );

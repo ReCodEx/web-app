@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import PageContent from '../../components/layout/PageContent';
@@ -62,13 +62,8 @@ class SystemMessages extends Component {
   }
 
   render() {
-    const {
-      fetchStatus,
-      createMessage,
-      editMessage,
-      systemMessages,
-      intl: { locale },
-    } = this.props;
+    const { fetchStatus, createMessage, editMessage, systemMessages } = this.props;
+    const { locale } = useIntl();
 
     return (
       <FetchManyResourceRenderer
@@ -159,7 +154,6 @@ SystemMessages.propTypes = {
   createMessage: PropTypes.func,
   editMessage: PropTypes.func,
   systemMessages: PropTypes.array.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
 export default connect(
@@ -172,4 +166,4 @@ export default connect(
     createMessage: data => dispatch(createMessage(transformMessageFormData(data))),
     editMessage: (id, data) => dispatch(editMessage(id, transformMessageFormData(data))),
   })
-)(injectIntl(SystemMessages));
+)(SystemMessages);

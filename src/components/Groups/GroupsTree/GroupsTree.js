@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -116,7 +116,6 @@ GroupsTree.propTypes = {
   isExpanded: PropTypes.bool,
   buttonsCreator: PropTypes.func,
   links: PropTypes.object,
-  intl: PropTypes.shape({ locale: PropTypes.string.isRequired }).isRequired,
 };
 
-export default withLinks(injectIntl(GroupsTree));
+export default withLinks(GroupsTree);

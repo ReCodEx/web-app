@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -73,10 +73,9 @@ class EvaluationProgressContainer extends Component {
   };
 
   onError = () => {
-    const {
-      addMessage,
-      intl: { formatMessage },
-    } = this.props;
+    const { addMessage } = this.props;
+    const { formatMessage } = useIntl();
+
     addMessage({
       wasSuccessful: false,
       status: 'SKIPPED',
@@ -87,10 +86,8 @@ class EvaluationProgressContainer extends Component {
 
   onMessage = msg => {
     const data = JSON.parse(msg.data);
-    const {
-      addMessage,
-      intl: { formatMessage },
-    } = this.props;
+    const { addMessage } = this.props;
+    const { formatMessage } = useIntl();
 
     switch (data.command) {
       case 'TASK':
@@ -112,11 +109,14 @@ class EvaluationProgressContainer extends Component {
     command,
     task_state = 'OK', // eslint-disable-line camelcase
     text = null,
-  }) => ({
-    wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
-    text: text || this.props.intl.formatMessage(this.getRandomMessage()),
-    status: task_state, // eslint-disable-line camelcase
-  });
+  }) => {
+    const { formatMessage } = useIntl();
+    return {
+      wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
+      text: text || formatMessage(this.getRandomMessage()),
+      status: task_state, // eslint-disable-line camelcase
+    };
+  };
 
   getRandomMessage = () => {
     if (!this.availableMessages || this.availableMessages.length === 0) {
@@ -239,7 +239,6 @@ EvaluationProgressContainer.propTypes = {
   failedTask: PropTypes.func.isRequired,
   goToEvaluationDetails: PropTypes.func,
   messages: ImmutablePropTypes.list,
-  intl: PropTypes.object.isRequired,
   dropObserver: PropTypes.func.isRequired,
   onUserClose: PropTypes.func,
   onFinish: PropTypes.func,
@@ -265,4 +264,4 @@ export default connect(
     addMessage,
     dropObserver,
   }
-)(injectIntl(EvaluationProgressContainer));
+)(EvaluationProgressContainer);

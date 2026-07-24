@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
+import { useIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -390,9 +390,9 @@ class GroupUserSolutions extends Component {
       fetchRuntimesStatus,
       assignmentSolversLoading,
       assignmentSolverSelector,
-      intl: { locale },
       links,
     } = this.props;
+    const { locale } = useIntl();
 
     const pendingReviews = getPendingReviewSolutions(assignments, getAssignmentSolutions);
     const plagiarisms = getPlagiarisms(assignments, getAssignmentSolutions);
@@ -631,7 +631,6 @@ GroupUserSolutions.propTypes = {
   assignmentSolverSelector: PropTypes.func.isRequired,
   loadAsync: PropTypes.func.isRequired,
   closeReview: PropTypes.func.isRequired,
-  intl: PropTypes.object,
   links: PropTypes.object.isRequired,
   navigate: withRouterProps.navigate,
 };
@@ -661,6 +660,6 @@ export default withRouter(
         loadAsync: () => GroupUserSolutions.loadAsync({ groupId, userId }, dispatch, navigate, links),
         closeReview: id => dispatch(setSolutionReviewState(id, true)),
       })
-    )(injectIntl(GroupUserSolutions))
+    )(GroupUserSolutions)
   )
 );
