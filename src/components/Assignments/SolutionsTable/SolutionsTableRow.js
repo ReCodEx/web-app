@@ -106,7 +106,12 @@ const SolutionsTableRow = ({
         <td className="text-center text-nowrap align-middle">
           {lastSubmission.evaluation ? (
             <span className={`${solution.isBestSolution ? 'fw-bold' : ''}`}>
-              <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} />
+              <Points
+                points={actualPoints}
+                bonusPoints={bonusPoints}
+                maxPoints={maxPoints}
+                tooltipId={`points-${id}`}
+              />
             </span>
           ) : (
             <span className="text-danger">&ndash;</span>
@@ -115,7 +120,7 @@ const SolutionsTableRow = ({
 
         <td className="text-center text-nowrap align-middle">
           {runtimeEnvironment ? (
-            <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames={!compact} />
+            <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames={!compact} idPrefix={id} />
           ) : (
             '-'
           )}

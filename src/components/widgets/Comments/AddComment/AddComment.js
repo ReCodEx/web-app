@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { Form, FormGroup, FormControl, InputGroup } from 'react-bootstrap';
 
 import Button from '../../TheButton';
 import Icon from '../../../icons';
 import { safeGet } from '../../../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../../../helpers/withIntl.js';
 
 const messages = defineMessages({
   placeholder: {
@@ -66,8 +67,11 @@ class AddComment extends Component {
 
   render() {
     const { text, isPrivate } = this.state;
-    const { addComment, additionalPublicSwitchNote = null } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      addComment,
+      additionalPublicSwitchNote = null,
+      intl: { formatMessage },
+    } = this.props;
 
     return (
       <Form>
@@ -131,6 +135,7 @@ class AddComment extends Component {
 AddComment.propTypes = {
   addComment: PropTypes.func,
   additionalPublicSwitchNote: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  intl: withIntlProps.isRequired,
 };
 
-export default AddComment;
+export default withIntl(AddComment);

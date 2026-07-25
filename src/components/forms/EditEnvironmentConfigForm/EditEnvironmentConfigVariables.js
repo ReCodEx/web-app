@@ -90,7 +90,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
                     <OverlayTrigger
                       placement="top"
                       overlay={
-                        <Tooltip id={Date.now()}>
+                        <Tooltip id={`${field}-removeTooltip`}>
                           <FormattedMessage
                             id="app.editEnvironmentConfig.tooltip.remove"
                             defaultMessage="Remove this variable."
@@ -124,7 +124,7 @@ const EditEnvironmentConfigVariables = ({ fields, noItems = null }) => (
       <OverlayTrigger
         placement="right"
         overlay={
-          <Tooltip id={Date.now()}>
+          <Tooltip id={`${fields.name}-appendTooltip`}>
             <FormattedMessage id="app.editEnvironmentConfig.tooltip.add" defaultMessage="Add another variable." />
           </Tooltip>
         }>

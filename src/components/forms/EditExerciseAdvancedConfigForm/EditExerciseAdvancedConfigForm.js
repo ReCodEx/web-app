@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -12,12 +12,14 @@ import Callout from '../../widgets/Callout';
 import { RefreshIcon } from '../../icons';
 import SubmitButton from '../SubmitButton';
 
-import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest.js';
-import { encodeNumId } from '../../../helpers/common.js';
-import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config.js';
 import { advancedExerciseConfigFormFill } from '../../../redux/modules/exerciseConfigs.js';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs.js';
 
+import { encodeNumId } from '../../../helpers/common.js';
+import { SUBMIT_BUTTON_MESSAGES } from '../../../helpers/exercise/config.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
+
+import EditExerciseAdvancedConfigTest from './EditExerciseAdvancedConfigTest.js';
 import * as styles from './EditExerciseAdvancedConfig.less';
 
 class EditExerciseAdvancedConfigForm extends Component {
@@ -37,8 +39,8 @@ class EditExerciseAdvancedConfigForm extends Component {
       exerciseTests,
       rawFill,
       readOnly = false,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <FormBox
@@ -125,29 +127,32 @@ EditExerciseAdvancedConfigForm.propTypes = {
   exerciseFiles: PropTypes.array,
   rawFill: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
+  intl: withIntlProps.intl,
 };
 
 const FORM_NAME = 'editExerciseAdvancedConfig';
 
-export default connect(
-  (state, { exerciseId }) => {
-    return {
-      formErrors: exerciseConfigFormErrors(state, FORM_NAME),
-    };
-  },
-  dispatch => ({
-    rawFill: (testId, tests) => ({
-      all: () => dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests)),
-      pipeline: pipelineIdx => () => dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx)),
-      variable: (pipelineIdx, variableName) => () =>
-        dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx, variableName)),
-    }),
-  })
-)(
-  reduxForm({
-    form: FORM_NAME,
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
-  })(EditExerciseAdvancedConfigForm)
+export default withIntl(
+  connect(
+    (state, { exerciseId }) => {
+      return {
+        formErrors: exerciseConfigFormErrors(state, FORM_NAME),
+      };
+    },
+    dispatch => ({
+      rawFill: (testId, tests) => ({
+        all: () => dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests)),
+        pipeline: pipelineIdx => () => dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx)),
+        variable: (pipelineIdx, variableName) => () =>
+          dispatch(advancedExerciseConfigFormFill(FORM_NAME, testId, tests, pipelineIdx, variableName)),
+      }),
+    })
+  )(
+    reduxForm({
+      form: FORM_NAME,
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+      immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
+    })(EditExerciseAdvancedConfigForm)
+  )
 );

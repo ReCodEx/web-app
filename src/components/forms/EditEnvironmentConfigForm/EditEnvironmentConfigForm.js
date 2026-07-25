@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import EditEnvironmentConfigVariables from './EditEnvironmentConfigVariables.js';
 import FormBox from '../../widgets/FormBox';
@@ -11,8 +11,10 @@ import SubmitButton from '../SubmitButton';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
 import { InfoIcon, RefreshIcon } from '../../icons';
+
 import { compareVariablesForEquality } from '../../../helpers/exercise/environments.js';
 import { safeGet, safeSet } from '../../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 class EditEnvironmentConfigForm extends Component {
   setDefaultVariables = () => {
@@ -38,8 +40,8 @@ class EditEnvironmentConfigForm extends Component {
       invalid,
       error,
       warning,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <FormBox
@@ -183,6 +185,7 @@ EditEnvironmentConfigForm.propTypes = {
   invalid: PropTypes.bool,
   error: PropTypes.any,
   warning: PropTypes.any,
+  intl: withIntlProps.intl,
 };
 
 const validate = ({ environmentId, variables }) => {
@@ -281,24 +284,26 @@ const warn = ({ variables }, { possibleVariables = null }) => {
   return warnings;
 };
 
-export default connect((state, { runtimeEnvironments }) => {
-  const values = getFormValues('editEnvironmentConfig')(state);
-  const selectedRuntimeId = values && values.environmentId;
-  const defaultVariables = selectedRuntimeId
-    ? safeGet(runtimeEnvironments, [({ id }) => id === selectedRuntimeId, 'defaultVariables'])
-    : null;
+export default withIntl(
+  connect((state, { runtimeEnvironments }) => {
+    const values = getFormValues('editEnvironmentConfig')(state);
+    const selectedRuntimeId = values && values.environmentId;
+    const defaultVariables = selectedRuntimeId
+      ? safeGet(runtimeEnvironments, [({ id }) => id === selectedRuntimeId, 'defaultVariables'])
+      : null;
 
-  return {
-    selectedRuntimeId,
-    defaultVariables,
-    hasDefaultVariables: Boolean(defaultVariables) && compareVariablesForEquality(values.variables, defaultVariables),
-  };
-})(
-  reduxForm({
-    form: 'editEnvironmentConfig',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    validate,
-    warn,
-  })(EditEnvironmentConfigForm)
+    return {
+      selectedRuntimeId,
+      defaultVariables,
+      hasDefaultVariables: Boolean(defaultVariables) && compareVariablesForEquality(values.variables, defaultVariables),
+    };
+  })(
+    reduxForm({
+      form: 'editEnvironmentConfig',
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+      validate,
+      warn,
+    })(EditEnvironmentConfigForm)
+  )
 );

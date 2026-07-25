@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Viz from 'viz.js';
 import { Module, render } from 'viz.js/lite.render.js';
+import { lruMemoize } from 'reselect';
 
 import InsetPanel from '../../widgets/InsetPanel';
 import { LoadingIcon } from '../../icons';
@@ -9,13 +10,13 @@ import { isExternalReference } from '../../../helpers/pipelines.js';
 import { canUseDOM } from '../../../helpers/common.js';
 import * as styles from '../styles.less';
 
-// string sanitizations
+// string sanitization
 const normalizeDotId = id => (id || '').replace(/[^-a-zA-Z0-9_]/, '');
 const normalizeDotRecordString = str => (str || '').replace(/[|{}"']/, '');
 const normalizeDotString = str => (str || '').replace('"', '&quot;');
 
 /**
- * Special sanitization for variable value (also ensures max. lengh by ellipsis).
+ * Special sanitization for variable value (also ensures max. length by ellipsis).
  * @param {string} str
  * @returns {string}
  */
@@ -139,9 +140,9 @@ const renderEdge = ({ from, to, label }) => {
  * @param {Object} utilization
  * @param {string|null} selectedBox
  * @param {string|null} selectedVariable
- * @returns {Object} containg dot (string),
+ * @returns {Object} containing dot (string),
  */
-const prepareGraphForRendering = (boxes, variables, utilization, selectedBox, selectedVariable) => {
+const prepareGraphForRendering = lruMemoize((boxes, variables, utilization, selectedBox, selectedVariable) => {
   // preprocess and index boxes (ids must be safe and unique)
   const boxIndex = {};
   const boxIds = {};
@@ -209,7 +210,7 @@ const prepareGraphForRendering = (boxes, variables, utilization, selectedBox, se
     '}',
   ].join('\n');
   return { dot, boxIds, variableIds };
-};
+});
 
 /**
  * Renders serialized dot graph into svg.
@@ -230,7 +231,7 @@ const startRenderingToSvg = dot => {
  */
 const preprocessClickEvent = (ev, boxIds, variableIds) => {
   let id = ev.target;
-  id = id && id.closest('g.node.clickable'); // neares group parent representing box or variable
+  id = id && id.closest('g.node.clickable'); // nearest group parent representing box or variable
   id = id && id.querySelector('title'); // group title holds the dot id
   id = id && id.textContent;
 
@@ -251,24 +252,22 @@ const PipelineGraph = ({
   editVariable = null,
   pending = false,
 }) => {
-  if (canUseDOM) {
-    const [svg, setSvg] = useState(null);
-    const [boxIds, setBoxIds] = useState(null);
-    const [variableIds, setVariableIds] = useState(null);
+  const [svg, setSvg] = useState(null);
+  const [dotCache, setDotCache] = useState(null);
 
-    useEffect(() => {
-      setSvg(null);
-      const { dot, boxIds, variableIds } = prepareGraphForRendering(
-        boxes,
-        variables,
-        utilization,
-        selectedBox,
-        selectedVariable
-      );
-      setBoxIds(boxIds);
-      setVariableIds(variableIds);
+  if (canUseDOM) {
+    const { dot, boxIds, variableIds } = prepareGraphForRendering(
+      boxes,
+      variables,
+      utilization,
+      selectedBox,
+      selectedVariable
+    );
+
+    if (dot !== dotCache) {
+      setDotCache(dot);
       startRenderingToSvg(dot).then(result => setSvg(result));
-    }, [boxes, variables, utilization, selectedBox, selectedVariable]);
+    }
 
     return (
       <InsetPanel className={`m-0 p-0 ${pending ? 'opacity-50' : ''}`}>

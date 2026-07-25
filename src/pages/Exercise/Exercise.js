@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
@@ -45,6 +45,7 @@ import { notArchivedGroupsSelector, groupDataAccessorSelector, getGroupsAdmins }
 
 import { hasPermissions } from '../../helpers/common.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 
 export const FORK_EXERCISE_FORM_INITIAL_VALUES = {
@@ -119,8 +120,8 @@ class Exercise extends Component {
       forkExercise,
       sendNotification,
       links: { EXERCISE_ASSIGNMENTS_URI_FACTORY, EXERCISE_REFERENCE_SOLUTIONS_URI_FACTORY },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
     const { forkId } = this.state;
 
     return (
@@ -314,31 +315,34 @@ Exercise.propTypes = {
   navigate: withRouterProps.navigate,
   location: withRouterProps.location,
   params: PropTypes.shape({ exerciseId: PropTypes.string }).isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default withRouter(
-  withLinks(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        const userId = loggedInUserIdSelector(state);
-        return {
-          userId,
-          exercise: exerciseSelector(exerciseId)(state),
-          forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
-          runtimeEnvironments: runtimeEnvironmentsSelector(state),
-          submitting: isSubmitting(state),
-          referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          groups: notArchivedGroupsSelector(state),
-          groupsAccessor: groupDataAccessorSelector(state),
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
-        reload: () => dispatch(reloadExercise(exerciseId)),
-        initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
-        forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),
-        sendNotification: message => dispatch(sendNotification(exerciseId, message)),
-      })
-    )(Exercise)
+export default withIntl(
+  withRouter(
+    withLinks(
+      connect(
+        (state, { params: { exerciseId } }) => {
+          const userId = loggedInUserIdSelector(state);
+          return {
+            userId,
+            exercise: exerciseSelector(exerciseId)(state),
+            forkedFrom: exerciseForkedFromSelector(exerciseId)(state),
+            runtimeEnvironments: runtimeEnvironmentsSelector(state),
+            submitting: isSubmitting(state),
+            referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+            groups: notArchivedGroupsSelector(state),
+            groupsAccessor: groupDataAccessorSelector(state),
+          };
+        },
+        (dispatch, { params: { exerciseId } }) => ({
+          loadAsync: userId => Exercise.loadAsync({ exerciseId }, dispatch, { userId }),
+          reload: () => dispatch(reloadExercise(exerciseId)),
+          initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
+          forkExercise: (forkId, data) => dispatch(forkExercise(exerciseId, forkId, data)),
+          sendNotification: message => dispatch(sendNotification(exerciseId, message)),
+        })
+      )(Exercise)
+    )
   )
 );

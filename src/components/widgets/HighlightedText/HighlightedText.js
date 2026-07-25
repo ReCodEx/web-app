@@ -1,22 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// For the time being, highlighed text is handled by simple style (may be changed in the future)
+// For the time being, highlighted text is handled by simple style (may be changed in the future)
 const HIGHLIGH_STYLE = {
   backgroundColor: 'yellow',
 };
 
 /**
- * Split the stirng in tokens which are complete decomposition of the original
+ * Split the string in tokens which are complete decomposition of the original
  * (when joined by empty string, we get the original). Even tokens are matches, odd ones comprise the rest.
- * @param {string} str stirng to be decomposed
+ * @param {string} str string to be decomposed
  * @param {string} regex regular expression that match highlighted parts (without separator or flags)
  * @returns {string[]} array of tokens
  */
 const splitHighlightedTokens = (str, regex) => {
   const regexObj = new RegExp(regex, 'gd');
   const res = [];
-  let match = null;
+  let match;
   let lastIdx = 0; // index of first unprocessed character
   while ((match = regexObj.exec(str))) {
     const [startIdx, endIdx] = match.indices[0];

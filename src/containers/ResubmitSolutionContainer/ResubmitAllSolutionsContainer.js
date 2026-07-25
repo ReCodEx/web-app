@@ -33,6 +33,10 @@ const ResubmitAllSolutionsContainer = ({
       ) {
         // start fetch right away
         fetchStatus();
+
+        // the following line updates state, which can potentially cause repetitive re-renders
+        // but it is fine! the update is within a condition guard, the linter just does not see it
+        /* eslint-disable-next-line react-hooks/set-state-in-effect */
         setLastTimeFetchStarted(new Date());
       } else if (pendingJob || failedJob) {
         // postpone next fetch
@@ -43,7 +47,7 @@ const ResubmitAllSolutionsContainer = ({
         };
       }
     }
-  }, [assignmentId, isFetchPending]);
+  }, [assignmentId, isFetchPending, lastTimeFetchStarted, pendingJob, failedJob, fetchStatus]);
 
   return (
     <ResubmitAllSolutions

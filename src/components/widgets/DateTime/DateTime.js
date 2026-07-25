@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FormattedDate, FormattedTime, FormattedRelativeTime, FormattedMessage } from 'react-intl';
@@ -12,7 +12,7 @@ import { knownLocales } from '../../../helpers/localizedData.js';
 
 import * as styles from './DateTime.less';
 
-const isAfter = (unixTime, now = Date.now() / 1000) => {
+const isAfter = (unixTime, now) => {
   return unixTime < now;
 };
 
@@ -20,7 +20,7 @@ const getLocalizedIntlDateFormatter = lruMemoize(locale =>
   locale && knownLocales.includes(locale) ? new Intl.DateTimeFormat(locale) : null
 );
 
-const dateTime = ({
+const DateTimeInternal = ({
   unixTs,
   isDeadline = false,
   deadlineWarningTime = 3600 * 24 * 7, // a week
@@ -34,7 +34,7 @@ const dateTime = ({
   compact = false,
 }) => {
   const { dateFormatOverride = null } = useContext(UserUIDataContext);
-  const now = Date.now() / 1000;
+  const [now] = useState(() => Date.now() / 1000);
 
   return (
     <span
@@ -108,7 +108,7 @@ const DateTime = ({
         overlay={
           <Tooltip id={overlayTooltipId}>
             {customTooltip ||
-              dateTime({
+              DateTimeInternal({
                 ...props,
                 unixTs,
                 showDate: true,
@@ -121,10 +121,10 @@ const DateTime = ({
               })}
           </Tooltip>
         }>
-        <span>{dateTime({ unixTs, showDate, showTime, showRelative, ...props })}</span>
+        <span>{DateTimeInternal({ unixTs, showDate, showTime, showRelative, ...props })}</span>
       </OverlayTrigger>
     ) : (
-      dateTime({ unixTs, showDate, showTime, showRelative, ...props })
+      DateTimeInternal({ unixTs, showDate, showTime, showRelative, ...props })
     )
   ) : emptyPlaceholder !== null ? (
     emptyPlaceholder
@@ -132,7 +132,7 @@ const DateTime = ({
     <span>&mdash;</span>
   );
 
-dateTime.propTypes = {
+DateTimeInternal.propTypes = {
   unixTs: PropTypes.number.isRequired,
   showDate: PropTypes.bool,
   showTime: PropTypes.bool,

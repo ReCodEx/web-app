@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -66,6 +66,7 @@ import { hasPermissions, hasOneOfPermissions } from '../../helpers/common.js';
 import { LinkIcon, PlagiarismIcon, ReviewRequestIcon, SolutionResultsIcon, WarningIcon } from '../../components/icons';
 
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 const assignmentHasRuntime = lruMemoize(
   (assignment, runtimeId) =>
@@ -127,8 +128,8 @@ class Solution extends Component {
       assignmentSolverSelector,
       isStudent = false,
       links: { SOLUTION_SOURCE_CODES_URI_FACTORY },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <Page
@@ -347,44 +348,49 @@ Solution.propTypes = {
   initCanSubmit: PropTypes.func.isRequired,
   reloadAfterSubmit: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  (state, { params: { solutionId, assignmentId } }) => ({
-    solution: getSolution(state, solutionId),
-    files: getSolutionFiles(state, solutionId),
-    userSolutionsSelector: getUserSolutionsSortedData(state),
-    currentUser: loggedInUserSelector(state),
-    submitting: isSubmitting(state),
-    canSubmit: canSubmitSolution(assignmentId)(state),
-    assignment: getAssignment(state, assignmentId),
-    evaluations: evaluationsForSubmissionSelector(state, solutionId),
-    runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
-    fetchStatus: fetchManyStatus(solutionId)(state),
-    scoreConfigSelector: assignmentSubmissionScoreConfigSelector(state),
-    assignmentSolversLoading: isAssignmentSolversLoading(state),
-    assignmentSolverSelector: getAssignmentSolverSelector(state),
-    isStudent: isLoggedAsStudent(state),
-  }),
-  (dispatch, { params }) => ({
-    loadAsync: () => Solution.loadAsync(params, dispatch),
-    fetchScoreConfigIfNeeded: submissionId => dispatch(fetchAssignmentSubmissionScoreConfigIfNeeded(submissionId)),
-    editNote: note => dispatch(setNote(params.solutionId, note)),
-    refreshSolutionEvaluations: () =>
-      Promise.all([
-        dispatch(fetchSolution(params.solutionId)),
-        dispatch(fetchSubmissionEvaluationsForSolution(params.solutionId)),
-      ]),
-    deleteEvaluation: evaluationId =>
-      dispatch(deleteSubmissionEvaluation(params.solutionId, evaluationId)).then(() =>
-        dispatch(fetchSolutionIfNeeded(params.solutionId))
-      ),
-    download: (id, entry = null) => dispatch(download(id, entry)),
-    initCanSubmit: userId => () => dispatch(init(userId, params.assignmentId)),
-    reloadAfterSubmit: userId =>
-      Promise.all([
-        dispatch(canSubmit(params.assignmentId)),
-        dispatch(fetchAssignmentSolvers({ assignmentId: params.assignmentId, userId })),
-      ]),
-  })
-)(withLinks(Solution));
+export default withLinks(
+  withIntl(
+    connect(
+      (state, { params: { solutionId, assignmentId } }) => ({
+        solution: getSolution(state, solutionId),
+        files: getSolutionFiles(state, solutionId),
+        userSolutionsSelector: getUserSolutionsSortedData(state),
+        currentUser: loggedInUserSelector(state),
+        submitting: isSubmitting(state),
+        canSubmit: canSubmitSolution(assignmentId)(state),
+        assignment: getAssignment(state, assignmentId),
+        evaluations: evaluationsForSubmissionSelector(state, solutionId),
+        runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
+        fetchStatus: fetchManyStatus(solutionId)(state),
+        scoreConfigSelector: assignmentSubmissionScoreConfigSelector(state),
+        assignmentSolversLoading: isAssignmentSolversLoading(state),
+        assignmentSolverSelector: getAssignmentSolverSelector(state),
+        isStudent: isLoggedAsStudent(state),
+      }),
+      (dispatch, { params }) => ({
+        loadAsync: () => Solution.loadAsync(params, dispatch),
+        fetchScoreConfigIfNeeded: submissionId => dispatch(fetchAssignmentSubmissionScoreConfigIfNeeded(submissionId)),
+        editNote: note => dispatch(setNote(params.solutionId, note)),
+        refreshSolutionEvaluations: () =>
+          Promise.all([
+            dispatch(fetchSolution(params.solutionId)),
+            dispatch(fetchSubmissionEvaluationsForSolution(params.solutionId)),
+          ]),
+        deleteEvaluation: evaluationId =>
+          dispatch(deleteSubmissionEvaluation(params.solutionId, evaluationId)).then(() =>
+            dispatch(fetchSolutionIfNeeded(params.solutionId))
+          ),
+        download: (id, entry = null) => dispatch(download(id, entry)),
+        initCanSubmit: userId => () => dispatch(init(userId, params.assignmentId)),
+        reloadAfterSubmit: userId =>
+          Promise.all([
+            dispatch(canSubmit(params.assignmentId)),
+            dispatch(fetchAssignmentSolvers({ assignmentId: params.assignmentId, userId })),
+          ]),
+      })
+    )(Solution)
+  )
+);

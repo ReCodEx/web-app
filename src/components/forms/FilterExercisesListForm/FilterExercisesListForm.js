@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { reduxForm, Field, FieldArray, formValueSelector } from 'redux-form';
 import { Container, Row, Col, Form, FormLabel } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
@@ -20,11 +20,13 @@ import EditEnvironmentList from '../EditEnvironmentSimpleForm/EditEnvironmentLis
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import SubmitButton from '../SubmitButton';
 import { TextField, RadioField, SelectField, TagsSelectorField } from '../Fields';
-import { identity, safeGet } from '../../../helpers/common.js';
 import { ExpandCollapseIcon, SendIcon } from '../../icons';
 import InsetPanel from '../../widgets/InsetPanel';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import Callout from '../../widgets/Callout';
+
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
+import { identity, safeGet } from '../../../helpers/common.js';
 
 const RTE_PREFIX = 'runtimeEnvironments.';
 
@@ -127,8 +129,8 @@ class FilterExercisesListForm extends Component {
       submitSucceeded = false,
       invalid,
       change,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <Form method="POST" onSubmit={onSubmit}>
@@ -348,20 +350,23 @@ FilterExercisesListForm.propTypes = {
   envValueSelector: PropTypes.func.isRequired,
   runtimeEnvironments: PropTypes.array.isRequired,
   loggedUserId: PropTypes.string.isRequired,
+  intl: withIntlProps.isRequired,
 };
 
-export default connect((state, { rootGroup = null, form }) => ({
-  loggedUserId: loggedInUserIdSelector(state),
-  authors: rootGroup ? getExerciseAuthorsOfGroup(rootGroup)(state) : getAllExerciseAuthors(state),
-  authorsLoading: rootGroup
-    ? getExerciseAuthorsOfGroupIsLoading(rootGroup)(state)
-    : getAllExerciseAuthorsIsLoading(state),
-  tags: getExerciseTags(state),
-  tagsLoading: getExerciseTagsLoading(state),
-  envValueSelector: name => formValueSelector(form)(state, name),
-}))(
-  reduxForm({
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-  })(FilterExercisesListForm)
+export default withIntl(
+  connect((state, { rootGroup = null, form }) => ({
+    loggedUserId: loggedInUserIdSelector(state),
+    authors: rootGroup ? getExerciseAuthorsOfGroup(rootGroup)(state) : getAllExerciseAuthors(state),
+    authorsLoading: rootGroup
+      ? getExerciseAuthorsOfGroupIsLoading(rootGroup)(state)
+      : getAllExerciseAuthorsIsLoading(state),
+    tags: getExerciseTags(state),
+    tagsLoading: getExerciseTagsLoading(state),
+    envValueSelector: name => formValueSelector(form)(state, name),
+  }))(
+    reduxForm({
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+    })(FilterExercisesListForm)
+  )
 );

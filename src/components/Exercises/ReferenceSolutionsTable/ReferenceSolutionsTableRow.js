@@ -38,7 +38,7 @@ const ReferenceSolutionsTableRow = ({
           <DateTime unixTs={createdAt} showOverlay overlayTooltipId={`datetime-${id}`} />
         </td>
         <td className="text-nowrap text-center shrink-col small pt-0">
-          {rte ? <EnvironmentsListItem runtimeEnvironment={rte} /> : '-'}
+          {rte ? <EnvironmentsListItem runtimeEnvironment={rte} idPrefix={id} /> : '-'}
         </td>
         <td className="text-nowrap text-center shrink-col pt-0">
           {!lastSubmission || (!lastSubmission.evaluation && !lastSubmission.failure) ? (

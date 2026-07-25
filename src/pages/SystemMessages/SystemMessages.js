@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 
 import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import PageContent from '../../components/layout/PageContent';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
-import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages.js';
-import { fetchManyStatus, readySystemMessagesSelector } from '../../redux/selectors/systemMessages.js';
 import Box from '../../components/widgets/Box/Box.js';
 import { AddIcon, EditIcon, LoadingIcon, WarningIcon } from '../../components/icons';
 import EditSystemMessageForm from '../../components/forms/EditSystemMessageForm/EditSystemMessageForm.js';
-import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData.js';
-import moment from 'moment';
 import MessagesList from '../../components/SystemMessages/MessagesList/MessagesList.js';
 import DeleteSystemMessageButtonContainer from '../../containers/DeleteSystemMessageButtonContainer';
+
+import { fetchAllMessages, createMessage, editMessage } from '../../redux/modules/systemMessages.js';
+import { fetchManyStatus, readySystemMessagesSelector } from '../../redux/selectors/systemMessages.js';
+
+import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from '../../helpers/localizedData.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 const localizedTextDefaults = {
   text: '',
@@ -62,8 +65,13 @@ class SystemMessages extends Component {
   }
 
   render() {
-    const { fetchStatus, createMessage, editMessage, systemMessages } = this.props;
-    const { locale } = useIntl();
+    const {
+      fetchStatus,
+      createMessage,
+      editMessage,
+      systemMessages,
+      intl: { locale },
+    } = this.props;
 
     return (
       <FetchManyResourceRenderer
@@ -154,16 +162,19 @@ SystemMessages.propTypes = {
   createMessage: PropTypes.func,
   editMessage: PropTypes.func,
   systemMessages: PropTypes.array.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  state => ({
-    fetchStatus: fetchManyStatus(state),
-    systemMessages: readySystemMessagesSelector(state),
-  }),
-  dispatch => ({
-    loadAsync: () => SystemMessages.loadAsync({}, dispatch),
-    createMessage: data => dispatch(createMessage(transformMessageFormData(data))),
-    editMessage: (id, data) => dispatch(editMessage(id, transformMessageFormData(data))),
-  })
-)(SystemMessages);
+export default withIntl(
+  connect(
+    state => ({
+      fetchStatus: fetchManyStatus(state),
+      systemMessages: readySystemMessagesSelector(state),
+    }),
+    dispatch => ({
+      loadAsync: () => SystemMessages.loadAsync({}, dispatch),
+      createMessage: data => dispatch(createMessage(transformMessageFormData(data))),
+      editMessage: (id, data) => dispatch(editMessage(id, transformMessageFormData(data))),
+    })
+  )(SystemMessages)
+);

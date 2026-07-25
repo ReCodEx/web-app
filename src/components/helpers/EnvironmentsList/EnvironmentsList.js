@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { LoadingIcon, WarningIcon } from '../../icons';
 import EnvironmentsListItem from './EnvironmentsListItem.js';
 
-const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false }) => {
+const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false, idPrefix = '' }) => {
   const { locale } = useIntl();
   const environments =
     runtimeEnvironments &&
@@ -20,7 +20,9 @@ const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false }) => 
     <span>
       {environments !== null ? (
         environments.length > 0 ? (
-          environments.map(env => <EnvironmentsListItem key={env.id} runtimeEnvironment={env} longNames={longNames} />)
+          environments.map(env => (
+            <EnvironmentsListItem key={env.id} runtimeEnvironment={env} longNames={longNames} idPrefix={idPrefix} />
+          ))
         ) : (
           <i className="small text-body-secondary">
             <WarningIcon gapRight={2} />
@@ -37,6 +39,7 @@ const EnvironmentsList = ({ runtimeEnvironments = null, longNames = false }) => 
 EnvironmentsList.propTypes = {
   runtimeEnvironments: PropTypes.array,
   longNames: PropTypes.bool,
+  idPrefix: PropTypes.string,
 };
 
 export default EnvironmentsList;

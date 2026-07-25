@@ -38,7 +38,7 @@ const ExerciseButtons = ({ id, archivedAt = null, permissionHints = null, sendNo
             </Button>
           </TheButtonGroup>
 
-          <Overlay target={buttonTarget.current} show={sendResult !== null && sendResult !== true} placement="bottom">
+          <Overlay target={buttonTarget} show={sendResult !== null && sendResult !== true} placement="bottom">
             {props => (
               <Popover id={id} {...props}>
                 <Popover.Header>

@@ -2,6 +2,7 @@ import fs from 'fs';
 import { safeGet, canUseDOM } from './common.js';
 
 export const getConfigVar = name => {
+  /* eslint-disable no-useless-assignment */
   let MY_VAR = '';
   if (canUseDOM) {
     MY_VAR = safeGet(window, ['__RECODEX_CONFIG__', name], '');

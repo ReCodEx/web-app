@@ -42,7 +42,7 @@ const getIconTooltip = (portsIn, portsOut) =>
 const getIcon = (portsIn, portsOut, tooltipId) => {
   const props = {
     tooltipId,
-    tooltipPosition: 'bottom',
+    tooltipPlacement: 'bottom',
     tooltip: getIconTooltip(portsIn, portsOut),
   };
   return portsOut > 1 ? (

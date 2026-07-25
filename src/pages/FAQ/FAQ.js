@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../../components/layout/PageContent';
 import Markdown from '../../components/widgets/Markdown';
@@ -8,6 +8,7 @@ import { getConfigVar } from '../../helpers/config.js';
 import Callout from '../../components/widgets/Callout/Callout.js';
 
 import './FAQ.css';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 const FAQ_MD_URI = getConfigVar('FAQ_URI') || 'https://raw.githubusercontent.com/wiki/ReCodEx/wiki/FAQ.md';
 
@@ -17,7 +18,9 @@ class FAQ extends Component {
   };
 
   fetchFaq = () => {
-    const { locale } = useIntl();
+    const {
+      intl: { locale },
+    } = this.props;
 
     const url =
       typeof FAQ_MD_URI === 'string'
@@ -74,4 +77,8 @@ class FAQ extends Component {
   }
 }
 
-export default FAQ;
+FAQ.propTypes = {
+  intl: withIntlProps.intl,
+};
+
+export default withIntl(FAQ);

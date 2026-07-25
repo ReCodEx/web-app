@@ -36,7 +36,7 @@ const ExpandingSelectField = ({
                     <OverlayTrigger
                       placement="top"
                       overlay={
-                        <Tooltip id={Date.now()}>
+                        <Tooltip id={`${field}-moveDownTooltip`}>
                           <FormattedMessage
                             id="app.expandingTextField.tooltip.moveDown"
                             defaultMessage="Swap with item below."
@@ -51,7 +51,7 @@ const ExpandingSelectField = ({
                     <OverlayTrigger
                       placement="top"
                       overlay={
-                        <Tooltip id={Date.now()}>
+                        <Tooltip id={`${field}-addTooltip`}>
                           <FormattedMessage
                             id="app.expandingTextField.tooltip.add"
                             defaultMessage="Append a new item."
@@ -67,7 +67,7 @@ const ExpandingSelectField = ({
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip id={Date.now()}>
+                      <Tooltip id={`${field}-removeTooltip`}>
                         <FormattedMessage
                           id="app.expandingTextField.tooltip.remove"
                           defaultMessage="Remove this item from the list."
@@ -99,7 +99,7 @@ const ExpandingSelectField = ({
           <OverlayTrigger
             placement="right"
             overlay={
-              <Tooltip id={Date.now()}>
+              <Tooltip id={`${fields.name}-appendTooltip`}>
                 <FormattedMessage id="app.expandingTextField.tooltip.add" defaultMessage="Append a new item." />
               </Tooltip>
             }>

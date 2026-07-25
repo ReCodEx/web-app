@@ -14,7 +14,7 @@ const ReviewCommentSnippetDialog = ({
   text,
   fileName = null,
   lineNumber = null,
-  useSnippet,
+  insertSnippet,
   setSnippet,
   ...snippets
 }) => (
@@ -67,7 +67,7 @@ const ReviewCommentSnippetDialog = ({
                   <Button
                     size="xs"
                     variant="success"
-                    onClick={() => useSnippet(i)}
+                    onClick={() => insertSnippet(i)}
                     disabled={!snippets[`snippet${i}`] || snippets[`snippet${i}`] === text}>
                     <Icon icon="pen-to-square" gapLeft={1} gapRight={1} />
                   </Button>
@@ -153,7 +153,7 @@ ReviewCommentSnippetDialog.propTypes = {
   fileName: PropTypes.string,
   lineNumber: PropTypes.number,
   closeDialog: PropTypes.func.isRequired,
-  useSnippet: PropTypes.func.isRequired,
+  insertSnippet: PropTypes.func.isRequired,
   setSnippet: PropTypes.func.isRequired,
 };
 

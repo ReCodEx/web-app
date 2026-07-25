@@ -108,7 +108,7 @@ const GenerateTokenForm = ({
                     <FormattedMessage id="app.generateTokenForm.copyToClipboard" defaultMessage="Copy to Clipboard" />
                   </Button>
                 </CopyToClipboard>
-                <Overlay target={btnTarget.current} show={copied} placement="bottom">
+                <Overlay target={btnTarget} show={copied} placement="bottom">
                   {props => (
                     <Tooltip id="token-copied" {...props}>
                       <FormattedMessage id="app.generateTokenForm.copied" defaultMessage="Copied!" />

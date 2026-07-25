@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -22,7 +22,9 @@ import { fetchByIds } from '../../redux/modules/users.js';
 import { selectedInstanceId } from '../../redux/selectors/auth.js';
 import { selectedInstance } from '../../redux/selectors/instances.js';
 import { getGroupsAdmins } from '../../redux/selectors/groups.js';
+
 import { hasPermissions } from '../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 // lowercase and remove accents and this kind of stuff
 const normalizeString = str =>
@@ -112,8 +114,10 @@ class Archive extends Component {
   };
 
   render() {
-    const { instance } = this.props;
-    const { locale } = useIntl();
+    const {
+      instance,
+      intl: { locale },
+    } = this.props;
 
     return (
       <Page
@@ -166,18 +170,21 @@ Archive.propTypes = {
   links: PropTypes.object.isRequired,
   instanceId: PropTypes.string.isRequired,
   instance: ImmutablePropTypes.map,
+  intl: withIntlProps.intl,
 };
 
-export default withLinks(
-  connect(
-    state => {
-      return {
-        instanceId: selectedInstanceId(state),
-        instance: selectedInstance(state),
-      };
-    },
-    dispatch => ({
-      loadAsync: instanceId => Archive.loadAsync({}, dispatch, { instanceId }),
-    })
-  )(Archive)
+export default withIntl(
+  withLinks(
+    connect(
+      state => {
+        return {
+          instanceId: selectedInstanceId(state),
+          instance: selectedInstance(state),
+        };
+      },
+      dispatch => ({
+        loadAsync: instanceId => Archive.loadAsync({}, dispatch, { instanceId }),
+      })
+    )(Archive)
+  )
 );

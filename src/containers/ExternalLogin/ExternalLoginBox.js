@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Button from '../../components/widgets/TheButton';
 import Box from '../../components/widgets/Box';
@@ -13,6 +13,8 @@ import NiceCheckbox from '../../components/forms/NiceCheckbox';
 import { externalLogin, externalLoginFailed, statusTypes } from '../../redux/modules/auth.js';
 import { statusSelector, loginErrorSelector } from '../../redux/selectors/auth.js';
 import { hasErrorMessage, getErrorMessage } from '../../locales/apiErrorMessages.js';
+
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 export const openPopupWindow = url =>
   typeof window !== 'undefined'
@@ -98,8 +100,14 @@ class ExternalLoginBox extends Component {
   componentWillUnmount = this.dispose;
 
   render() {
-    const { name, helpUrl, shortSessionConfig = null, loginStatus, loginError } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      name,
+      helpUrl,
+      shortSessionConfig = null,
+      loginStatus,
+      loginError,
+      intl: { formatMessage },
+    } = this.props;
 
     const pending = this.state.pending || loginStatus === statusTypes.LOGGING_IN;
     const loggedIn = loginStatus === statusTypes.LOGGED_IN;
@@ -191,18 +199,21 @@ ExternalLoginBox.propTypes = {
   login: PropTypes.func.isRequired,
   fail: PropTypes.func.isRequired,
   afterLogin: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  (state, { service }) => ({
-    loginStatus: statusSelector(service)(state),
-    loginError: loginErrorSelector(state, service),
-  }),
-  (dispatch, { service, afterLogin = null }) => ({
-    login: (token, expiration, popupWindow, errorHandler = null) => {
-      const promise = dispatch(externalLogin(service, token, expiration, popupWindow));
-      return (afterLogin ? promise.then(afterLogin) : promise).catch(e => errorHandler && errorHandler(e));
-    },
-    fail: () => dispatch(externalLoginFailed(service)),
-  })
-)(ExternalLoginBox);
+export default withIntl(
+  connect(
+    (state, { service }) => ({
+      loginStatus: statusSelector(service)(state),
+      loginError: loginErrorSelector(state, service),
+    }),
+    (dispatch, { service, afterLogin = null }) => ({
+      login: (token, expiration, popupWindow, errorHandler = null) => {
+        const promise = dispatch(externalLogin(service, token, expiration, popupWindow));
+        return (afterLogin ? promise.then(afterLogin) : promise).catch(e => errorHandler && errorHandler(e));
+      },
+      fail: () => dispatch(externalLoginFailed(service)),
+    })
+  )(ExternalLoginBox)
+);

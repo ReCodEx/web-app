@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { reset, startAsyncValidation } from 'redux-form';
 import { lruMemoize } from 'reselect';
@@ -23,6 +23,7 @@ import { hasSucceeded } from '../../redux/selectors/registration.js';
 
 import { getConfigVar, getConfigVarLocalized } from '../../helpers/config.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 // Configuration properties
 const ALLOW_LOCAL_REGISTRATION = getConfigVar('ALLOW_LOCAL_REGISTRATION');
@@ -64,8 +65,8 @@ class Registration extends Component {
       instances,
       createAccount,
       links: { LOGIN_URI },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     const EXTERNAL_AUTH_NAME = getConfigVarLocalized('EXTERNAL_AUTH_NAME', locale);
     const showExternalInfo = Boolean(!ALLOW_LOCAL_REGISTRATION && EXTERNAL_AUTH_NAME && EXTERNAL_AUTH_HELPDESK_URL);
@@ -156,37 +157,40 @@ Registration.propTypes = {
   reset: PropTypes.func.isRequired,
   triggerAsyncValidation: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default withLinks(
-  connect(
-    state => ({
-      instances: publicInstancesSelector(state),
-      hasSucceeded: hasSucceeded(state),
-    }),
-    dispatch => ({
-      loadAsync: () => Promise.all([dispatch(fetchInstances())]),
-      createAccount: ({ firstName, lastName, email, password, passwordConfirm, instanceId }) =>
-        dispatch(
-          createAccount({
-            firstName,
-            lastName,
-            email,
-            password,
-            passwordConfirm,
-            instanceId,
-            ignoreNameCollision: true,
-          })
-        ),
-      createExternalAccount:
-        (authType = 'secondary') =>
-        ({ instanceId, serviceId, ...credentials }) =>
-          dispatch(createExternalAccount(instanceId, serviceId, credentials, authType)),
-      triggerAsyncValidation: () => dispatch(startAsyncValidation('registration')),
-      reset: () => {
-        dispatch(reset('registration'));
-        dispatch(reset('external-registration'));
-      },
-    })
-  )(Registration)
+export default withIntl(
+  withLinks(
+    connect(
+      state => ({
+        instances: publicInstancesSelector(state),
+        hasSucceeded: hasSucceeded(state),
+      }),
+      dispatch => ({
+        loadAsync: () => Promise.all([dispatch(fetchInstances())]),
+        createAccount: ({ firstName, lastName, email, password, passwordConfirm, instanceId }) =>
+          dispatch(
+            createAccount({
+              firstName,
+              lastName,
+              email,
+              password,
+              passwordConfirm,
+              instanceId,
+              ignoreNameCollision: true,
+            })
+          ),
+        createExternalAccount:
+          (authType = 'secondary') =>
+          ({ instanceId, serviceId, ...credentials }) =>
+            dispatch(createExternalAccount(instanceId, serviceId, credentials, authType)),
+        triggerAsyncValidation: () => dispatch(startAsyncValidation('registration')),
+        reset: () => {
+          dispatch(reset('registration'));
+          dispatch(reset('external-registration'));
+        },
+      })
+    )(Registration)
+  )
 );

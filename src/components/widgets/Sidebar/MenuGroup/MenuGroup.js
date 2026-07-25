@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { useIntl } from 'react-intl';
@@ -12,57 +12,54 @@ import Icon from '../../../icons';
 
 import '../Sidebar.css';
 
-class MenuGroup extends Component {
-  render() {
-    const { title, icon = 'th', items, createLink, currentPath, notifications, isActive = false } = this.props;
-    const { locale } = useIntl();
+const MenuGroup = ({ title, icon = 'th', items, createLink, currentPath, notifications, isActive = false }) => {
+  const { locale } = useIntl();
 
-    const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
-    const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
+  const itemsNotificationsCount = item => notifications[item.getIn(['data', 'id'])];
+  const notificationsCount = items.reduce((acc, item) => acc + itemsNotificationsCount(item), 0);
 
-    return (
-      <li
-        className={classnames({
-          'nav-item': true,
-          'menu-is-opening': isActive,
-          'menu-open': isActive,
-        })}>
-        <a href="#" className="nav-link">
-          <Icon icon={icon} gapRight={2} fixedWidth className="nav-icon small" />
-          <p className="sidebarMenuItem">
-            <Icon icon="angle-left" className="sidebarArrowIcon right" />
-            {notificationsCount > 0 && <span className="right badge badge-primary">{notificationsCount}</span>}
-            {title}
-          </p>
-        </a>
+  return (
+    <li
+      className={classnames({
+        'nav-item': true,
+        'menu-is-opening': isActive,
+        'menu-open': isActive,
+      })}>
+      <a href="#" className="nav-link">
+        <Icon icon={icon} gapRight={2} fixedWidth className="nav-icon small" />
+        <p className="sidebarMenuItem">
+          <Icon icon="angle-left" className="sidebarArrowIcon right" />
+          {notificationsCount > 0 && <span className="right badge badge-primary">{notificationsCount}</span>}
+          {title}
+        </p>
+      </a>
 
-        <ul className="nav nav-treeview sidebarDropdown">
-          {items.map((item, key) =>
-            isLoading(item) ? (
-              <LoadingMenuItem key={key} />
-            ) : (
-              <MenuItem
-                key={key}
-                title={getLocalizedName(
-                  {
-                    name: item.getIn(['data', 'name']),
-                    localizedTexts: item.getIn(['data', 'localizedTexts']).toJS(),
-                  },
-                  locale
-                )}
-                icon="users"
-                currentPath={currentPath}
-                notificationsCount={itemsNotificationsCount(item)}
-                link={createLink(item)}
-                small={true}
-              />
-            )
-          )}
-        </ul>
-      </li>
-    );
-  }
-}
+      <ul className="nav nav-treeview sidebarDropdown">
+        {items.map((item, key) =>
+          isLoading(item) ? (
+            <LoadingMenuItem key={key} />
+          ) : (
+            <MenuItem
+              key={key}
+              title={getLocalizedName(
+                {
+                  name: item.getIn(['data', 'name']),
+                  localizedTexts: item.getIn(['data', 'localizedTexts']).toJS(),
+                },
+                locale
+              )}
+              icon="users"
+              currentPath={currentPath}
+              notificationsCount={itemsNotificationsCount(item)}
+              link={createLink(item)}
+              small={true}
+            />
+          )
+        )}
+      </ul>
+    </li>
+  );
+};
 
 MenuGroup.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,

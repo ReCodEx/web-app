@@ -4,12 +4,12 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
-import LicencesTable from '../../components/Instances/LicencesTable';
+import LicensesTable from '../../components/Instances/LicensesTable';
 
 import { fetchInstanceLincences } from '../../redux/modules/licences.js';
 import { getLicencesOfInstance } from '../../redux/selectors/licences.js';
 
-class LicencesTableContainer extends Component {
+class LicensesTableContainer extends Component {
   componentDidMount() {
     this.props.loadAsync(this.props.instance.id);
   }
@@ -21,26 +21,26 @@ class LicencesTableContainer extends Component {
   }
 
   render() {
-    const { licences, instance } = this.props;
+    const { licenses, instance } = this.props;
     return (
-      <ResourceRenderer resource={licences}>
-        {list => <LicencesTable licences={list} instance={instance} />}
+      <ResourceRenderer resource={licenses}>
+        {list => <LicensesTable licenses={list} instance={instance} />}
       </ResourceRenderer>
     );
   }
 }
 
-LicencesTableContainer.propTypes = {
+LicensesTableContainer.propTypes = {
   instance: PropTypes.object.isRequired,
-  licences: ImmutablePropTypes.map,
+  licenses: ImmutablePropTypes.map,
   loadAsync: PropTypes.func.isRequired,
 };
 
 export default connect(
   (state, { instance }) => ({
-    licences: getLicencesOfInstance(instance.id)(state),
+    licenses: getLicencesOfInstance(instance.id)(state),
   }),
   dispatch => ({
     loadAsync: instanceId => dispatch(fetchInstanceLincences(instanceId)),
   })
-)(LicencesTableContainer);
+)(LicensesTableContainer);

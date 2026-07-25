@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Modal, Form, FormGroup, FormLabel, FormControl, Row, Col } from 'react-bootstrap';
 
 import { LoadingIcon, WarningIcon, SendIcon, DeleteIcon, CloseIcon } from '../../icons';
@@ -15,6 +15,7 @@ import Confirm from '../../forms/Confirm';
 import { uploadedFilesSelector } from '../../../redux/selectors/upload.js';
 import { hasEntryPoint } from '../../../redux/selectors/submission.js';
 import { getConfigVar } from '../../../helpers/config.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 const environmentsHelpUrl = getConfigVar('ENVIRONMENTS_INFO_URL');
 
@@ -119,8 +120,10 @@ class SubmitSolution extends Component {
   };
 
   _createSubmitButton = (btnProps = {}) => {
-    const { hasFailed } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      hasFailed,
+      intl: { formatMessage },
+    } = this.props;
     const canSubmit = this.canSubmit();
 
     return (
@@ -136,8 +139,12 @@ class SubmitSolution extends Component {
   };
 
   createSubmitButton = () => {
-    const { isReferenceSolution, note, submitSolution } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      isReferenceSolution,
+      note,
+      submitSolution,
+      intl: { formatMessage },
+    } = this.props;
 
     return isReferenceSolution && note.trim().length === 0 ? (
       <Confirm
@@ -195,8 +202,8 @@ class SubmitSolution extends Component {
       saveNote,
       isReferenceSolution,
       messages,
+      intl: { formatMessage },
     } = this.props;
-    const { formatMessage } = useIntl();
 
     return (
       <Modal show={isOpen} onHide={onClose} onEscapeKeyDown={onClose} size="xl">
@@ -317,7 +324,7 @@ class SubmitSolution extends Component {
           {hasFailed && <Callout variant="danger">{formatMessage(commonMessages.submissionRejected)}</Callout>}
         </Modal.Body>
         <Modal.Footer>
-          <div className="text-center m-3-bottomm">
+          <div className="text-center">
             <TheButtonGroup>
               {isSending && (
                 <Button type="submit" disabled={true} variant="success">
@@ -378,12 +385,15 @@ SubmitSolution.propTypes = {
   isReferenceSolution: PropTypes.bool,
   attachedFiles: PropTypes.array,
   messages: PropTypes.object.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  (state, { uploadId, isReferenceSolution = false }) => ({
-    attachedFiles: uploadedFilesSelector(state, uploadId),
-    messages: isReferenceSolution ? referenceSolutionMessages : submissionMessages,
-  }),
-  () => ({})
-)(SubmitSolution);
+export default withIntl(
+  connect(
+    (state, { uploadId, isReferenceSolution = false }) => ({
+      attachedFiles: uploadedFilesSelector(state, uploadId),
+      messages: isReferenceSolution ? referenceSolutionMessages : submissionMessages,
+    }),
+    () => ({})
+  )(SubmitSolution)
+);

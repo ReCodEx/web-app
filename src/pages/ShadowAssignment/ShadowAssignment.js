@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -19,6 +19,7 @@ import { ShadowAssignmentIcon } from '../../components/icons';
 
 import { getLocalizedName } from '../../helpers/localizedData.js';
 import { hasPermissions, EMPTY_OBJ } from '../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 const findPoints = lruMemoize((points, loggedUserId) => {
   return points.find(p => p.awardeeId === loggedUserId) || EMPTY_OBJ;
@@ -38,8 +39,11 @@ class ShadowAssignment extends Component {
   }
 
   render() {
-    const { shadowAssignment, loggedUserId } = this.props;
-    const { locale } = useIntl();
+    const {
+      shadowAssignment,
+      loggedUserId,
+      intl: { locale },
+    } = this.props;
 
     return (
       <Page
@@ -93,16 +97,19 @@ ShadowAssignment.propTypes = {
   loggedUserId: PropTypes.string,
   group: PropTypes.func,
   loadAsync: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  (state, { params: { shadowId } }) => {
-    return {
-      shadowAssignment: getShadowAssignment(state)(shadowId),
-      loggedUserId: loggedInUserIdSelector(state),
-    };
-  },
-  (dispatch, { params: { shadowId } }) => ({
-    loadAsync: () => ShadowAssignment.loadAsync({ shadowId }, dispatch),
-  })
-)(ShadowAssignment);
+export default withIntl(
+  connect(
+    (state, { params: { shadowId } }) => {
+      return {
+        shadowAssignment: getShadowAssignment(state)(shadowId),
+        loggedUserId: loggedInUserIdSelector(state),
+      };
+    },
+    (dispatch, { params: { shadowId } }) => ({
+      loadAsync: () => ShadowAssignment.loadAsync({ shadowId }, dispatch),
+    })
+  )(ShadowAssignment)
+);

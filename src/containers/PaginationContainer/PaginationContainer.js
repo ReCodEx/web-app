@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Container, Row, Col, Pagination } from 'react-bootstrap';
 import classnames from 'classnames';
 
@@ -25,7 +25,9 @@ import {
   setPaginationFilters,
   fetchPaginated,
 } from '../../redux/modules/pagination.js';
+
 import { identity, EMPTY_OBJ } from '../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 import * as styles from './PaginationContainer.less';
 
@@ -101,7 +103,9 @@ class PaginationContainer extends Component {
     }
 
     if (
-      (prevProps.id !== this.props.id || prevProps.endpoint !== this.props.endpoint) &&
+      (this.props.intl.locale !== prevProps.intl.locale ||
+        prevProps.id !== this.props.id ||
+        prevProps.endpoint !== this.props.endpoint) &&
       !this.props.hideAllItems &&
       !this.props.isPending
     ) {
@@ -121,8 +125,12 @@ class PaginationContainer extends Component {
    * Rendering function that creates one limit button for given limit (amount of rows).
    */
   createLimitButton = amount => {
-    const { offset, limit, setPage } = this.props;
-    const { locale } = useIntl();
+    const {
+      offset,
+      limit,
+      setPage,
+      intl: { locale },
+    } = this.props;
     return (
       <Pagination.Item
         key={amount}
@@ -153,8 +161,11 @@ class PaginationContainer extends Component {
    * Handling function for page selection event.
    */
   handlePagination = page => {
-    const { limit, setPage } = this.props;
-    const { locale } = useIntl();
+    const {
+      limit,
+      setPage,
+      intl: { locale },
+    } = this.props;
     return setPage(locale, (page - 1) * limit, limit);
   };
 
@@ -162,8 +173,10 @@ class PaginationContainer extends Component {
    * Handler passed to filters creator. It updates the pagination filters and reloads the page.
    */
   setFilters = filters => {
-    const { setPaginationFilters } = this.props;
-    const { locale } = useIntl();
+    const {
+      setPaginationFilters,
+      intl: { locale },
+    } = this.props;
     return setPaginationFilters(filters, locale);
   };
 
@@ -171,8 +184,10 @@ class PaginationContainer extends Component {
    * Method passed to children data rendering function, so it can use this for sorting icons in table heading.
    */
   setOrderBy = (orderBy, descending) => {
-    const { setPaginationOrderBy } = this.props;
-    const { locale } = useIntl();
+    const {
+      setPaginationOrderBy,
+      intl: { locale },
+    } = this.props;
     return setPaginationOrderBy(encodeOrderBy(orderBy, descending), locale);
   };
 
@@ -181,8 +196,12 @@ class PaginationContainer extends Component {
    * Reload is required when item is deleted for instance.
    */
   reload = () => {
-    const { id, endpoint, reload } = this.props;
-    const { locale } = useIntl();
+    const {
+      id,
+      endpoint,
+      reload,
+      intl: { locale },
+    } = this.props;
     return reload(id, endpoint, locale);
   };
 
@@ -309,36 +328,39 @@ PaginationContainer.propTypes = {
   setPaginationOrderBy: PropTypes.func.isRequired,
   setPaginationFilters: PropTypes.func.isRequired,
   fetchPaginated: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  (state, { id, endpoint }) => {
-    return {
-      offset: getPaginationOffset(id)(state) || 0,
-      limit: getPaginationLimit(id)(state) || 0,
-      orderBy: getPaginationOrderBy(id)(state),
-      filters: getPaginationFilters(id)(state) || EMPTY_OBJ,
-      totalCount: getPaginationTotalCount(id)(state),
-      isPending: getPaginationIsPending(id)(state),
-      data: getPaginationDataJS(id, endpoint)(state),
-    };
-  },
-  (dispatch, { id, endpoint }) => ({
-    register: initials => dispatch(registerPaginationComponent({ id, ...initials })),
-    reload: (_id, _endpoint, locale) => dispatch(fetchPaginated(_id, _endpoint)(locale, null, null, true)), // true = force invalidate
-    setPage: (locale, offset, limit) =>
-      dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)).then(() =>
-        // fetch the data first, then change the range properties (better visualization)
-        dispatch(setPaginationOffsetLimit(id)(offset, limit))
-      ),
-    setPaginationOrderBy: (orderBy, locale) => {
-      dispatch(setPaginationOrderBy(id)(orderBy));
-      return dispatch(fetchPaginated(id, endpoint)(locale));
+export default withIntl(
+  connect(
+    (state, { id, endpoint }) => {
+      return {
+        offset: getPaginationOffset(id)(state) || 0,
+        limit: getPaginationLimit(id)(state) || 0,
+        orderBy: getPaginationOrderBy(id)(state),
+        filters: getPaginationFilters(id)(state) || EMPTY_OBJ,
+        totalCount: getPaginationTotalCount(id)(state),
+        isPending: getPaginationIsPending(id)(state),
+        data: getPaginationDataJS(id, endpoint)(state),
+      };
     },
-    setPaginationFilters: (filters, locale) => {
-      dispatch(setPaginationFilters(id)(filters));
-      return dispatch(fetchPaginated(id, endpoint)(locale, 0)); // offset is 0, change of filters resets the position
-    },
-    fetchPaginated: (locale, offset, limit) => dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)),
-  })
-)(PaginationContainer);
+    (dispatch, { id, endpoint }) => ({
+      register: initials => dispatch(registerPaginationComponent({ id, ...initials })),
+      reload: (_id, _endpoint, locale) => dispatch(fetchPaginated(_id, _endpoint)(locale, null, null, true)), // true = force invalidate
+      setPage: (locale, offset, limit) =>
+        dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)).then(() =>
+          // fetch the data first, then change the range properties (better visualization)
+          dispatch(setPaginationOffsetLimit(id)(offset, limit))
+        ),
+      setPaginationOrderBy: (orderBy, locale) => {
+        dispatch(setPaginationOrderBy(id)(orderBy));
+        return dispatch(fetchPaginated(id, endpoint)(locale));
+      },
+      setPaginationFilters: (filters, locale) => {
+        dispatch(setPaginationFilters(id)(filters));
+        return dispatch(fetchPaginated(id, endpoint)(locale, 0)); // offset is 0, change of filters resets the position
+      },
+      fetchPaginated: (locale, offset, limit) => dispatch(fetchPaginated(id, endpoint)(locale, offset, limit)),
+    })
+  )(PaginationContainer)
+);

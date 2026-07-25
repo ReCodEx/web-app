@@ -371,7 +371,13 @@ class SolutionStatus extends Component {
                       </Explanation>
                     </th>
                     <td>
-                      <Points points={actualPoints} bonusPoints={bonusPoints} maxPoints={maxPoints} wideFormat />
+                      <Points
+                        points={actualPoints}
+                        bonusPoints={bonusPoints}
+                        maxPoints={maxPoints}
+                        wideFormat
+                        tooltipId={`points-${id}`}
+                      />
 
                       {accepted && (
                         <AcceptedIcon

@@ -47,8 +47,8 @@ const AssignmentDetails = ({
   className = '',
 }) => {
   const [open, setOpen] = useState(false);
+  const [currentTime] = useState(() => Math.floor(Date.now() / 1000));
 
-  const currentTime = Math.floor(Date.now() / 1000);
   const currentPointsLimit = getPointsAtTime(currentTime, {
     firstDeadline,
     secondDeadline,
@@ -104,7 +104,7 @@ const AssignmentDetails = ({
               </tr>
             )}
 
-            {permissionHints.update && isPublic && visibleFrom && visibleFrom * 1000 > Date.now() && (
+            {permissionHints.update && isPublic && visibleFrom && visibleFrom > currentTime && (
               <tr>
                 <td className="icon-col">
                   <Icon icon={['far', 'clock']} />

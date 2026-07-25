@@ -162,10 +162,11 @@ class Variable {
    * Retrieve initial values for redux-form from given exercise config.
    * @param {object} config The entire exercise configuration.
    * @param {string} testId ID of a test for which the value is being retrieved.
-   * @param {array} environmentsIds List of all enabled environmanets' IDs.
-   * @return {object} Properties (and values) used for redux-form initilization.
+   * @param {array} environmentsIds List of all enabled environments' IDs.
+   * @return {object} Properties (and values) used for redux-form initialization.
    */
   getInitial(config, testId, environmentsIds) {
+    /* eslint-disable no-useless-assignment */
     let result = null;
 
     if (this.allEnvs) {
@@ -215,9 +216,9 @@ class Variable {
 }
 
 /**
- * Special variable that in fact processes two entagled variables
+ * Special variable that in fact processes two entangled variables
  * -- file list and internal names for the files on the list.
- * These two variables must be represented by a signle (array) variable in redux-form.
+ * These two variables must be represented by a single (array) variable in redux-form.
  */
 class FileListVariable extends Variable {
   constructor(name, nameActuals) {
@@ -383,7 +384,7 @@ export const getSimpleConfigInitValues = lruMemoize((config, tests, exerciseEnvi
 const mergeVariables = (newVars, origVars) => {
   const vars = new Map();
   origVars.forEach(v => vars.set(v.name, v));
-  newVars.forEach(v => vars.set(v.name, v)); // override origs
+  newVars.forEach(v => vars.set(v.name, v)); // override originals
   return Array.from(vars.values());
 };
 
@@ -426,7 +427,7 @@ export const transformSimpleConfigValues = (formData, pipelines, environments, t
       const test = formData.config[encodeNumId(testName)];
 
       const pipelinesConfig = getRelevantPipelines(pipelines, envId, test.useOutFile).map(pipeline => {
-        // Load original variables from the pipeline conifg ...
+        // Load original variables from the pipeline config ...
         const originalVariables =
           safeGet(originalConfig, [
             config => config.name === envId,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import Button from '../../widgets/TheButton';
@@ -9,6 +9,7 @@ import Icon, { PipelineIcon } from '../../icons';
 import { SelectField, TextField, ExpandingTextField, ExpandingSelectField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import { encodeId, safeGet, unique } from '../../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 import * as styles from './EditExerciseAdvancedConfig.less';
 
@@ -32,8 +33,11 @@ const prepareFilesOptions = lruMemoize((exerciseFiles, locale) => {
 
 class EditExerciseAdvancedConfigTest extends Component {
   createField = (name, type) => {
-    const { exerciseFiles, readOnly = false } = this.props;
-    const { locale } = useIntl();
+    const {
+      exerciseFiles,
+      readOnly = false,
+      intl: { locale },
+    } = this.props;
     const isArray = type.endsWith('[]');
     const baseType = isArray ? type.substring(0, type.length - 2) : type;
 
@@ -170,6 +174,7 @@ EditExerciseAdvancedConfigTest.propTypes = {
   testErrors: PropTypes.array,
   rawFill: PropTypes.object,
   readOnly: PropTypes.bool,
+  intl: withIntlProps.intl,
 };
 
-export default EditExerciseAdvancedConfigTest;
+export default withIntl(EditExerciseAdvancedConfigTest);

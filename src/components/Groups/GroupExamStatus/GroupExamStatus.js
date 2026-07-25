@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Modal } from 'react-bootstrap';
 
 import ExamForm, {
@@ -18,6 +18,7 @@ import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
 import { isStudentRole } from '../../helpers/usersRoles.js';
 import { hasPermissions, shallowCompare } from '../../../helpers/common.js';
 import { LOCK_TYPE, LOCK_TITLE, LOCK_EXPLANATION, LOCKED_STUDENT_INFO } from '../helpers/groupExamMessages.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 const REFRESH_INTERVAL = 1; // [s]
 
@@ -58,8 +59,11 @@ class GroupExamStatus extends Component {
   };
 
   removeExam = () => {
-    const { removeExamPeriod, addNotification } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      removeExamPeriod,
+      addNotification,
+      intl: { formatMessage },
+    } = this.props;
 
     addNotification('kuk');
     removeExamPeriod().catch(err => {
@@ -68,8 +72,12 @@ class GroupExamStatus extends Component {
   };
 
   startNow = () => {
-    const { group, setExamPeriod, addNotification } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      group,
+      setExamPeriod,
+      addNotification,
+      intl: { formatMessage },
+    } = this.props;
 
     setExamPeriod(Math.round(Date.now() / 1000), group.privateData.examEnd).catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);
@@ -77,8 +85,11 @@ class GroupExamStatus extends Component {
   };
 
   terminateNow = () => {
-    const { setExamPeriod, addNotification } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      setExamPeriod,
+      addNotification,
+      intl: { formatMessage },
+    } = this.props;
 
     setExamPeriod(null, Math.round(Date.now() / 1000)).catch(err => {
       addNotification(getErrorMessage(formatMessage)(err), false);
@@ -383,6 +394,7 @@ GroupExamStatus.propTypes = {
   setExamPeriod: PropTypes.func.isRequired,
   removeExamPeriod: PropTypes.func.isRequired,
   addNotification: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default GroupExamStatus;
+export default withIntl(GroupExamStatus);

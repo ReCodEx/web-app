@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { reset, formValueSelector } from 'redux-form';
@@ -34,6 +34,7 @@ import { getLocalizedTextsInitialValues, transformLocalizedTextsFormData } from 
 
 import { hasPermissions, hasOneOfPermissions } from '../../helpers/common.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import { withRouterProps } from '../../helpers/withRouter.js';
 
 const canRelocate = group => hasPermissions(group, 'relocate') && !group.archived;
@@ -81,8 +82,8 @@ class EditGroup extends Component {
       instanceId,
       reload,
       links: { GROUP_INFO_URI_FACTORY, INSTANCE_URI_FACTORY, GROUP_EDIT_URI_FACTORY },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <Page
@@ -301,41 +302,44 @@ EditGroup.propTypes = {
   editGroup: PropTypes.func.isRequired,
   relocateGroup: PropTypes.func.isRequired,
   navigate: withRouterProps.navigate,
+  intl: withIntlProps.intl,
 };
 
 const editGroupFormSelector = formValueSelector('editGroup');
 
-export default withLinks(
-  connect(
-    (state, { params: { groupId } }) => ({
-      group: groupSelector(state, groupId),
-      groups: notArchivedGroupsSelector(state),
-      groupsAccessor: groupDataAccessorSelector(state),
-      userId: loggedInUserIdSelector(state),
-      hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
-      threshold: editGroupFormSelector(state, 'threshold'),
-      pointsLimit: editGroupFormSelector(state, 'pointsLimit'),
-      isSuperAdmin: isLoggedAsSuperAdmin(state),
-      canViewParentDetail: canViewParentDetailSelector(state, groupId),
-      instanceId: selectedInstanceId(state),
-    }),
-    (dispatch, { params: { groupId } }) => ({
-      reset: () => dispatch(reset('editGroup')),
-      loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
-      reload: () => dispatch(fetchGroup(groupId)),
-      editGroup: ({ localizedTexts, isPublic, publicStats, detaining, hasThreshold, threshold, pointsLimit }) =>
-        dispatch(
-          editGroup(groupId, {
-            localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-            externalId: '',
-            isPublic,
-            publicStats,
-            detaining,
-            threshold: (hasThreshold && Number(threshold)) || null,
-            pointsLimit: (hasThreshold && Number(pointsLimit)) || null,
-          })
-        ),
-      relocateGroup: ({ groupId: newParentId }) => dispatch(relocateGroup(groupId, newParentId)),
-    })
-  )(EditGroup)
+export default withIntl(
+  withLinks(
+    connect(
+      (state, { params: { groupId } }) => ({
+        group: groupSelector(state, groupId),
+        groups: notArchivedGroupsSelector(state),
+        groupsAccessor: groupDataAccessorSelector(state),
+        userId: loggedInUserIdSelector(state),
+        hasThreshold: editGroupFormSelector(state, 'hasThreshold'),
+        threshold: editGroupFormSelector(state, 'threshold'),
+        pointsLimit: editGroupFormSelector(state, 'pointsLimit'),
+        isSuperAdmin: isLoggedAsSuperAdmin(state),
+        canViewParentDetail: canViewParentDetailSelector(state, groupId),
+        instanceId: selectedInstanceId(state),
+      }),
+      (dispatch, { params: { groupId } }) => ({
+        reset: () => dispatch(reset('editGroup')),
+        loadAsync: () => dispatch(fetchGroupIfNeeded(groupId)),
+        reload: () => dispatch(fetchGroup(groupId)),
+        editGroup: ({ localizedTexts, isPublic, publicStats, detaining, hasThreshold, threshold, pointsLimit }) =>
+          dispatch(
+            editGroup(groupId, {
+              localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+              externalId: '',
+              isPublic,
+              publicStats,
+              detaining,
+              threshold: (hasThreshold && Number(threshold)) || null,
+              pointsLimit: (hasThreshold && Number(pointsLimit)) || null,
+            })
+          ),
+        relocateGroup: ({ groupId: newParentId }) => dispatch(relocateGroup(groupId, newParentId)),
+      })
+    )(EditGroup)
+  )
 );

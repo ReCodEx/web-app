@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Field, reduxForm } from 'redux-form';
 import { Container, Row, Col, Table, Modal } from 'react-bootstrap';
 
@@ -20,6 +20,7 @@ import Icon, { BanIcon, EditIcon, DeleteIcon, SquareIcon } from '../../icons';
 import { createUserNameComparator } from '../../helpers/users.js';
 import { arrayToObject, safeGet } from '../../../helpers/common.js';
 import withLinks from '../../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 class ShadowAssignmentPointsTable extends Component {
   state = { dialogStudentId: null, dialogPointsId: null, multiAwardMode: false };
@@ -66,8 +67,8 @@ class ShadowAssignmentPointsTable extends Component {
       invalid,
       warning,
       links: { GROUP_USER_SOLUTIONS_URI_FACTORY },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
     const studentPoints = arrayToObject(points, ({ awardeeId }) => awardeeId);
     const nameComparator = createUserNameComparator(locale);
 
@@ -292,6 +293,7 @@ ShadowAssignmentPointsTable.propTypes = {
   invalid: PropTypes.bool,
   warning: PropTypes.any,
   links: PropTypes.object,
+  intl: withIntlProps.intl,
 };
 
 const warn = ({ points }, { maxPoints }) => {
@@ -312,11 +314,13 @@ const warn = ({ points }, { maxPoints }) => {
   return warnings;
 };
 
-export default withLinks(
-  reduxForm({
-    form: 'multi-assign-form',
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    warn,
-  })(ShadowAssignmentPointsTable)
+export default withIntl(
+  withLinks(
+    reduxForm({
+      form: 'multi-assign-form',
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+      warn,
+    })(ShadowAssignmentPointsTable)
+  )
 );

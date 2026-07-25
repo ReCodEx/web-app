@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-const BonusPoints = ({ bonus }) =>
+const BonusPoints = ({ tooltipId, bonus }) =>
   bonus && (
     <OverlayTrigger
       placement="bottom"
       overlay={
-        <Tooltip id={Date.now()}>
+        <Tooltip id={tooltipId}>
           <FormattedMessage id="app.submission.evaluation.bonusPoints" defaultMessage="Bonus points:" />
         </Tooltip>
       }>
@@ -17,6 +17,7 @@ const BonusPoints = ({ bonus }) =>
   );
 
 BonusPoints.propTypes = {
+  tooltipId: PropTypes.string.isRequired,
   bonus: PropTypes.number,
 };
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -12,9 +12,11 @@ import Callout from '../../widgets/Callout';
 import Button, { TheButtonGroup } from '../../widgets/TheButton';
 import InsetPanel from '../../widgets/InsetPanel';
 import Icon, { RefreshIcon } from '../../icons';
+
 import { STANDALONE_ENVIRONMENTS } from '../../../helpers/exercise/environments.js';
 import { getConfigVar } from '../../../helpers/config.js';
 import { arrayToObject } from '../../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 const environmentsHelpUrl = getConfigVar('ENVIRONMENTS_INFO_URL');
 
@@ -52,8 +54,8 @@ class EditEnvironmentSimpleForm extends Component {
       error,
       runtimeEnvironments,
       readOnly = false,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     const selectedEnvs = getSelectedEnvs(initialValues, runtimeEnvironments, locale);
 
@@ -207,6 +209,7 @@ EditEnvironmentSimpleForm.propTypes = {
   initialValues: PropTypes.object,
   runtimeEnvironments: PropTypes.array,
   readOnly: PropTypes.bool,
+  intl: withIntlProps.intl,
 };
 
 const validate = (formData, { runtimeEnvironments }) => {
@@ -243,9 +246,11 @@ const validate = (formData, { runtimeEnvironments }) => {
   return errors;
 };
 
-export default reduxForm({
-  form: 'editEnvironmentSimple',
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: false,
-  validate,
-})(EditEnvironmentSimpleForm);
+export default withIntl(
+  reduxForm({
+    form: 'editEnvironmentSimple',
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+    validate,
+  })(EditEnvironmentSimpleForm)
+);
