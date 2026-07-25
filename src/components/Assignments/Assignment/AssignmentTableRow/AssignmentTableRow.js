@@ -113,7 +113,7 @@ const AssignmentTableRow = ({
       {runtimeEnvironments && (
         <td>
           <ResourceRenderer resource={runtimeEnvironments} returnAsArray>
-            {runtimes => <EnvironmentsList runtimeEnvironments={runtimes} />}
+            {runtimes => <EnvironmentsList runtimeEnvironments={runtimes} idPrefix={id} />}
           </ResourceRenderer>
         </td>
       )}

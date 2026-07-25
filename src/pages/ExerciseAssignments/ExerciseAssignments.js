@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { formValueSelector } from 'redux-form';
 import { lruMemoize } from 'reselect';
@@ -38,6 +38,7 @@ import { loggedUserCanAssignToGroupsSelector } from '../../redux/selectors/users
 import { assignmentEnvironmentsSelector, getExerciseAssignments } from '../../redux/selectors/assignments.js';
 
 import { hasPermissions } from '../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 const messages = defineMessages({
   groupsBoxTitle: {
@@ -130,8 +131,8 @@ class ExerciseAssignments extends Component {
       editAssignment,
       deleteAssignment,
       sendNotification,
+      intl: { formatMessage },
     } = this.props;
-    const { formatMessage } = useIntl();
 
     return (
       <Page
@@ -274,31 +275,34 @@ ExerciseAssignments.propTypes = {
   editAssignment: PropTypes.func.isRequired,
   deleteAssignment: PropTypes.func.isRequired,
   sendNotification: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
 const multiAssignFormSelector = formValueSelector('multiAssign');
 
-export default connect(
-  (state, { params: { exerciseId } }) => {
-    const userId = loggedInUserIdSelector(state);
-    return {
-      userId,
-      exercise: exerciseSelector(exerciseId)(state),
-      assignments: getExerciseAssignments(state, exerciseId),
-      assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-      assignableGroups: loggedUserCanAssignToGroupsSelector(state),
-      groupsAccessor: groupDataAccessorSelector(state),
-      deadlines: multiAssignFormSelector(state, 'deadlines'),
-      visibility: multiAssignFormSelector(state, 'visibility'),
-      canViewLimitRatios: multiAssignFormSelector(state, 'canViewLimitRatios'),
-    };
-  },
-  (dispatch, { params: { exerciseId } }) => ({
-    loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
-    assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
-    syncAssignment: (id, syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(id, syncOptions)),
-    editAssignment: (id, body) => dispatch(editAssignment(id, body)),
-    deleteAssignment: id => dispatch(deleteAssignment(id)),
-    sendNotification: message => dispatch(sendNotification(exerciseId, message)),
-  })
-)(ExerciseAssignments);
+export default withIntl(
+  connect(
+    (state, { params: { exerciseId } }) => {
+      const userId = loggedInUserIdSelector(state);
+      return {
+        userId,
+        exercise: exerciseSelector(exerciseId)(state),
+        assignments: getExerciseAssignments(state, exerciseId),
+        assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
+        assignableGroups: loggedUserCanAssignToGroupsSelector(state),
+        groupsAccessor: groupDataAccessorSelector(state),
+        deadlines: multiAssignFormSelector(state, 'deadlines'),
+        visibility: multiAssignFormSelector(state, 'visibility'),
+        canViewLimitRatios: multiAssignFormSelector(state, 'canViewLimitRatios'),
+      };
+    },
+    (dispatch, { params: { exerciseId } }) => ({
+      loadAsync: () => ExerciseAssignments.loadAsync({ exerciseId }, dispatch),
+      assignExercise: groupId => dispatch(assignExercise(groupId, exerciseId)),
+      syncAssignment: (id, syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(id, syncOptions)),
+      editAssignment: (id, body) => dispatch(editAssignment(id, body)),
+      deleteAssignment: id => dispatch(deleteAssignment(id)),
+      sendNotification: message => dispatch(sendNotification(exerciseId, message)),
+    })
+  )(ExerciseAssignments)
+);

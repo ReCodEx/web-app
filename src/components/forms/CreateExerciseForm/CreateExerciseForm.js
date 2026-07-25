@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { reduxForm, Field } from 'redux-form';
@@ -18,53 +18,50 @@ const messages = defineMessages({
   },
 });
 
-class CreateExerciseForm extends Component {
-  render() {
-    const { submitting, handleSubmit, submitFailed, submitSucceeded, invalid, groups } = this.props;
-    const { formatMessage } = useIntl();
-    return (
-      <FormBox
-        title={<FormattedMessage id="app.createExerciseForm.title" defaultMessage="Create New Exercise" />}
-        type={submitSucceeded ? 'success' : undefined}>
-        <>
-          <Field
-            name="groupId"
-            component={SelectField}
-            label=""
-            ignoreDirty
-            addEmptyOption
-            emptyOptionCaption={formatMessage(messages.emptyOption)}
-            options={groups}
-            append={
-              <SubmitButton
-                id="createExercise"
-                disabled={invalid}
-                submitting={submitting}
-                hasSucceeded={submitSucceeded}
-                hasFailed={submitFailed}
-                handleSubmit={handleSubmit}
-                noShadow
-                defaultIcon={<SendIcon gapRight={2} />}
-                messages={{
-                  submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
-                  submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
-                  success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
-                }}
-              />
-            }
-          />
+const CreateExerciseForm = ({ submitting, handleSubmit, submitFailed, submitSucceeded, invalid, groups }) => {
+  const { formatMessage } = useIntl();
+  return (
+    <FormBox
+      title={<FormattedMessage id="app.createExerciseForm.title" defaultMessage="Create New Exercise" />}
+      type={submitSucceeded ? 'success' : undefined}>
+      <>
+        <Field
+          name="groupId"
+          component={SelectField}
+          label=""
+          ignoreDirty
+          addEmptyOption
+          emptyOptionCaption={formatMessage(messages.emptyOption)}
+          options={groups}
+          append={
+            <SubmitButton
+              id="createExercise"
+              disabled={invalid}
+              submitting={submitting}
+              hasSucceeded={submitSucceeded}
+              hasFailed={submitFailed}
+              handleSubmit={handleSubmit}
+              noShadow
+              defaultIcon={<SendIcon gapRight={2} />}
+              messages={{
+                submit: <FormattedMessage id="generic.create" defaultMessage="Create" />,
+                submitting: <FormattedMessage id="generic.creating" defaultMessage="Creating..." />,
+                success: <FormattedMessage id="generic.created" defaultMessage="Created" />,
+              }}
+            />
+          }
+        />
 
-          {submitFailed && (
-            <Callout variant="danger">
-              <WarningIcon gapRight={2} />
-              <FormattedMessage id="generic.creationFailed" defaultMessage="Creation failed. Please try again later." />
-            </Callout>
-          )}
-        </>
-      </FormBox>
-    );
-  }
-}
+        {submitFailed && (
+          <Callout variant="danger">
+            <WarningIcon gapRight={2} />
+            <FormattedMessage id="generic.creationFailed" defaultMessage="Creation failed. Please try again later." />
+          </Callout>
+        )}
+      </>
+    </FormBox>
+  );
+};
 
 CreateExerciseForm.propTypes = {
   submitting: PropTypes.bool,

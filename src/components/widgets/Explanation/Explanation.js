@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import Icon from '../../icons';
 
-const Explanation = ({ id = null, title = null, children, placement = 'right', gapLeft = 2, gapRight = 2 }) => (
+const Explanation = ({ id, title = null, children, placement = 'right', gapLeft = 2, gapRight = 2 }) => (
   <OverlayTrigger
     placement={placement}
     overlay={
-      <Popover id={id || Date.now()}>
+      <Popover id={id}>
         {title && <Popover.Header>{title}</Popover.Header>}
         <Popover.Body className="small">{children}</Popover.Body>
       </Popover>
@@ -23,7 +23,7 @@ const Explanation = ({ id = null, title = null, children, placement = 'right', g
   </OverlayTrigger>
 );
 Explanation.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.string.isRequired,
   title: PropTypes.any,
   children: PropTypes.any.isRequired,
   placement: PropTypes.string,

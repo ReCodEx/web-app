@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, formValues } from 'redux-form';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 import moment from 'moment';
 import { lruMemoize } from 'reselect';
@@ -15,6 +15,7 @@ import AssignmentFormMultiassignSuccess from './AssignmentFormMultiassignSuccess
 import InterpolationDialog from './InterpolationDialog.js';
 import Explanation from '../../widgets/Explanation';
 import Callout from '../../widgets/Callout';
+
 import { validateDeadline, validateTwoDeadlines } from '../../helpers/validation.js';
 import {
   getGroupCanonicalLocalizedName,
@@ -23,6 +24,8 @@ import {
   replaceLinkKeysWithUrls,
 } from '../../../helpers/localizedData.js';
 import { safeGet, safeSet, EMPTY_ARRAY, hasPermissions, arrayToObject } from '../../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
+
 import DeadlinesGraphDialog from './DeadlinesGraphDialog.js';
 
 const localizedTextDefaults = {
@@ -303,8 +306,13 @@ class EditAssignmentForm extends Component {
   selectAllGroups = () => {
     this.clearAllGroups(); // clears really all
 
-    const { change, groups, userId, groupsAccessor } = this.props;
-    const { locale } = useIntl();
+    const {
+      change,
+      groups,
+      userId,
+      groupsAccessor,
+      intl: { locale },
+    } = this.props;
 
     // checks only those visible
     const visibleGroups = this.state.open
@@ -317,8 +325,12 @@ class EditAssignmentForm extends Component {
   };
 
   clearAllGroups = () => {
-    const { change, groups, groupsAccessor } = this.props;
-    const { locale } = useIntl();
+    const {
+      change,
+      groups,
+      groupsAccessor,
+      intl: { locale },
+    } = this.props;
     const visibleGroups = getAllGroups(groups, groupsAccessor, locale);
     visibleGroups.forEach(group => {
       change(`groups.id${group.id}`, false);
@@ -364,8 +376,8 @@ class EditAssignmentForm extends Component {
       showSendNotification,
       submitButtonMessages = SUBMIT_BUTTON_MESSAGES_DEFAULT,
       mergeJudgeLogs,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
     const DeadlinesGraphDialogWithValues = formValues({
       firstDeadline: 'firstDeadline',
       secondDeadline: 'secondDeadline',
@@ -947,6 +959,7 @@ EditAssignmentForm.propTypes = {
   showSendNotification: PropTypes.bool,
   submitButtonMessages: PropTypes.object,
   mergeJudgeLogs: PropTypes.bool.isRequired,
+  intl: withIntlProps.intl,
 };
 
 const validate = (
@@ -961,9 +974,8 @@ const validate = (
     visibleFrom,
     deadlines,
   },
-  { groupsAccessor }
+  { groupsAccessor, intl: { formatMessage } }
 ) => {
-  const { formatMessage } = useIntl();
   const errors = {};
 
   if (
@@ -1007,9 +1019,8 @@ const warn = (
     canViewJudgeStdout,
     canViewJudgeStderr,
   },
-  { groupsAccessor, alreadyAssignedGroups = [] }
+  { groupsAccessor, alreadyAssignedGroups = [], intl: { formatMessage } }
 ) => {
-  const { formatMessage } = useIntl();
   const warnings = {};
 
   if (deadlines !== 'single' && !validateDeadline({}, formatMessage, firstDeadline, 'firstDeadline', null)) {
@@ -1100,9 +1111,11 @@ const warn = (
   return warnings;
 };
 
-export default reduxForm({
-  validate,
-  warn,
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: false,
-})(EditAssignmentForm);
+export default withIntl(
+  reduxForm({
+    validate,
+    warn,
+    enableReinitialize: true,
+    keepDirtyOnReinitialize: false,
+  })(EditAssignmentForm)
+);

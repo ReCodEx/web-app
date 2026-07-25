@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col, Modal, DropdownButton, Dropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { useIntl, FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -71,6 +71,7 @@ import { isReady, getJsData, getId } from '../../redux/helpers/resourceManager';
 
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import { safeGet, identity, arrayToObject, toPlainAscii, hasPermissions, unique } from '../../helpers/common.js';
 
 // View mode keys, labels, and filtering functions
@@ -235,7 +236,12 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
         cellRenderer: (points, _1, _2, rowData) =>
           points.actualPoints !== null ? (
             <span className={`${rowData?.icon?.isBestSolution ? 'fw-bold' : ''}`}>
-              <Points points={points.actualPoints} bonusPoints={points.bonusPoints} maxPoints={points.maxPoints} />
+              <Points
+                points={points.actualPoints}
+                bonusPoints={points.bonusPoints}
+                maxPoints={points.maxPoints}
+                tooltipId={`points-${rowData?.icon?.id}`}
+              />
             </span>
           ) : (
             <span className="text-danger">&ndash;</span>
@@ -248,8 +254,12 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, assignmentId, gr
       <FormattedMessage id="app.solutionsTable.environment" defaultMessage="Target language" />,
       {
         className: 'text-center',
-        cellRenderer: runtimeEnvironment =>
-          runtimeEnvironment ? <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames /> : '-',
+        cellRenderer: (runtimeEnvironment, _1, _2, rowData) =>
+          runtimeEnvironment ? (
+            <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames idPrefix={rowData?.icon?.id} />
+          ) : (
+            '-'
+          ),
       }
     ),
 
@@ -381,8 +391,10 @@ class AssignmentSolutions extends Component {
   }
 
   getArchiveFileName = assignment => {
-    const { assignmentId } = this.props;
-    const { locale: pageLocale } = useIntl();
+    const {
+      assignmentId,
+      intl: { locale: pageLocale },
+    } = this.props;
     const name =
       assignment &&
       safeGet(assignment, ['localizedTexts', ({ locale }) => locale === pageLocale, 'name'], assignment.name);
@@ -425,8 +437,8 @@ class AssignmentSolutions extends Component {
       assignmentSolverSelector,
       assignmentSolvers,
       links,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     const pendingReviews = getPendingReviewSolutions(assignmentSolutions);
     const plagiarisms = getPlagiarisms(assignmentSolutions);
@@ -754,43 +766,47 @@ AssignmentSolutions.propTypes = {
   assignmentSolvers: ImmutablePropTypes.map,
   closeReview: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
+  intl: withIntlProps.intl,
 };
 
 export default withLinks(
-  connect(
-    (state, { params: { assignmentId } }) => {
-      const assignment = getAssignment(state, assignmentId);
-      const getStudentsIds = groupId => studentsIdsOfGroup(groupId)(state);
-      const readyUsers = usersSelector(state)
-        .toArray()
-        .map(([_, val]) => val) // users are map, get rid of keys
-        .filter(isReady);
+  withIntl(
+    connect(
+      (state, { params: { assignmentId } }) => {
+        const assignment = getAssignment(state, assignmentId);
+        const getStudentsIds = groupId => studentsIdsOfGroup(groupId)(state);
+        const readyUsers = usersSelector(state)
+          .toArray()
+          .map(([_, val]) => val) // users are map, get rid of keys
+          .filter(isReady);
 
-      return {
-        loggedUserId: loggedInUserIdSelector(state),
-        currentUser: loggedInUserSelector(state),
-        assignmentId,
-        assignment,
-        getStudentsIds,
-        getStudents: groupId => readyUsers.filter(user => getStudentsIds(groupId).includes(getId(user))).map(getJsData),
-        getUserSolutions: userId => getUserSolutionsSortedData(state)(userId, assignmentId),
-        assignmentSolutions: getAssignmentSolutions(state, assignmentId),
-        getGroup: id => groupSelector(state, id),
-        groupsAccessor: groupDataAccessorSelector(state),
-        runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
-        fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),
-        assignmentSolversLoading: isAssignmentSolversLoading(state),
-        assignmentSolverSelector: getAssignmentSolverSelector(state),
-        assignmentSolvers: getOneAssignmentSolvers(state, assignmentId),
-      };
-    },
-    (dispatch, { params: { assignmentId } }) => ({
-      loadAsync: () => AssignmentSolutions.loadAsync({ assignmentId }, dispatch),
-      downloadBestSolutionsArchive: name => ev => {
-        ev.preventDefault();
-        dispatch(downloadBestSolutionsArchive(assignmentId, name));
+        return {
+          loggedUserId: loggedInUserIdSelector(state),
+          currentUser: loggedInUserSelector(state),
+          assignmentId,
+          assignment,
+          getStudentsIds,
+          getStudents: groupId =>
+            readyUsers.filter(user => getStudentsIds(groupId).includes(getId(user))).map(getJsData),
+          getUserSolutions: userId => getUserSolutionsSortedData(state)(userId, assignmentId),
+          assignmentSolutions: getAssignmentSolutions(state, assignmentId),
+          getGroup: id => groupSelector(state, id),
+          groupsAccessor: groupDataAccessorSelector(state),
+          runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
+          fetchManyStatus: fetchManyAssignmentSolutionsStatus(assignmentId)(state),
+          assignmentSolversLoading: isAssignmentSolversLoading(state),
+          assignmentSolverSelector: getAssignmentSolverSelector(state),
+          assignmentSolvers: getOneAssignmentSolvers(state, assignmentId),
+        };
       },
-      closeReview: id => dispatch(setSolutionReviewState(id, true)),
-    })
-  )(AssignmentSolutions)
+      (dispatch, { params: { assignmentId } }) => ({
+        loadAsync: () => AssignmentSolutions.loadAsync({ assignmentId }, dispatch),
+        downloadBestSolutionsArchive: name => ev => {
+          ev.preventDefault();
+          dispatch(downloadBestSolutionsArchive(assignmentId, name));
+        },
+        closeReview: id => dispatch(setSolutionReviewState(id, true)),
+      })
+    )(AssignmentSolutions)
+  )
 );

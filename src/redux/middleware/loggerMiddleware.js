@@ -9,6 +9,7 @@ const middleware = (noDOM, verbose, fullException) => store => next => action =>
     logger(actionType);
   }
 
+  /* eslint-disable no-useless-assignment */
   let res = null;
   try {
     res = next(action);

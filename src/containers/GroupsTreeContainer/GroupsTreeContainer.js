@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Nav } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -15,6 +15,7 @@ import { LoadingIcon } from '../../components/icons';
 
 import { identity, hasPermissions, isRegularObject } from '../../helpers/common.js';
 import { getLocalizedName } from '../../helpers/localizedData.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 /**
  * Helper function that prepares augmented group object. Child groups are transformed as well recursively
@@ -110,9 +111,9 @@ class GroupsTreeContainer extends Component {
       instance,
       groups,
       users,
+      intl: { locale },
       ...props
     } = this.props;
-    const { locale } = useIntl();
     const rootGroupId = instance && instance.getIn(['data', 'rootGroupId'], null);
 
     if (!isReady(groups.get(selectedGroupId || rootGroupId))) {
@@ -157,10 +158,13 @@ GroupsTreeContainer.propTypes = {
   instance: ImmutablePropTypes.map,
   groups: ImmutablePropTypes.map,
   users: ImmutablePropTypes.map,
+  intl: withIntlProps.intl,
 };
 
-export default connect((state, { showArchived }) => ({
-  instance: selectedInstance(state),
-  groups: showArchived ? groupsSelector(state) : notArchivedGroupsSelector(state),
-  users: usersSelector(state),
-}))(GroupsTreeContainer);
+export default withIntl(
+  connect((state, { showArchived }) => ({
+    instance: selectedInstance(state),
+    groups: showArchived ? groupsSelector(state) : notArchivedGroupsSelector(state),
+    users: usersSelector(state),
+  }))(GroupsTreeContainer)
+);

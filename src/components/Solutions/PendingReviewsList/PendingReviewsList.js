@@ -178,6 +178,7 @@ class PendingReviewsList extends Component {
                                       points={solution.actualPoints}
                                       bonusPoints={solution.bonusPoints}
                                       maxPoints={solution.maxPoints}
+                                      tooltipId={`points-${solution.id}`}
                                     />
                                   </span>
                                 ) : (
@@ -190,6 +191,7 @@ class PendingReviewsList extends Component {
                                   runtimeEnvironment={runtimeEnvironments.find(
                                     ({ id }) => id === solution.runtimeEnvironmentId
                                   )}
+                                  idPrefix={solution.id}
                                 />
                               </td>
 

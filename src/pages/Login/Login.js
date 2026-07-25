@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { reset, SubmissionError } from 'redux-form';
@@ -25,6 +25,7 @@ import { getConfigVar, getConfigVarLocalized } from '../../helpers/config.js';
 import { getErrorMessage } from '../../locales/apiErrorMessages.js';
 
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import { withRouterProps } from '../../helpers/withRouter.js';
 
 const EXTERNAL_AUTH_URL = getConfigVar('EXTERNAL_AUTH_URL');
@@ -79,8 +80,10 @@ class Login extends Component {
    * Log the user in (by given credentials) and then perform the redirect.
    */
   loginAndRedirect = ({ short, ...credentials }) => {
-    const { login } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      login,
+      intl: { formatMessage },
+    } = this.props;
 
     return login(credentials, short && SHORT_SESSION ? SHORT_SESSION * 60 : null)
       .then(this.redirectAfterLogin)
@@ -104,14 +107,15 @@ class Login extends Component {
       logout,
       params: { redirect = null },
       links: { RESET_PASSWORD_URI },
+      intl: { locale, formatMessage },
     } = this.props;
-    const { locale, formatMessage } = useIntl();
 
     const external = EXTERNAL_AUTH_URL && EXTERNAL_AUTH_SERVICE_ID;
     const userError = getError(loggedInUser);
 
     return (
       <PageContent icon="sign-in-alt" title={<FormattedMessage id="app.login.title" defaultMessage="Sign In" />}>
+        <hr className="mt-0 mb-5" />
         <>
           {isLoggedIn ? (
             userError ? (
@@ -206,21 +210,24 @@ Login.propTypes = {
   reset: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   navigate: withRouterProps.navigate,
+  intl: withIntlProps.intl,
 };
 
-export default withLinks(
-  connect(
-    state => ({
-      isLoggedIn: isLoggedIn(state),
-      instanceId: selectedInstanceId(state),
-      loggedInUser: loggedInUserSelector(state),
-    }),
-    dispatch => ({
-      login: ({ email, password }, expiration) => dispatch(login(email, password, expiration)),
-      logout: () => dispatch(logout()),
-      reset: () => {
-        dispatch(reset('login'));
-      },
-    })
-  )(Login)
+export default withIntl(
+  withLinks(
+    connect(
+      state => ({
+        isLoggedIn: isLoggedIn(state),
+        instanceId: selectedInstanceId(state),
+        loggedInUser: loggedInUserSelector(state),
+      }),
+      dispatch => ({
+        login: ({ email, password }, expiration) => dispatch(login(email, password, expiration)),
+        logout: () => dispatch(logout()),
+        reset: () => {
+          dispatch(reset('login'));
+        },
+      })
+    )(Login)
+  )
 );

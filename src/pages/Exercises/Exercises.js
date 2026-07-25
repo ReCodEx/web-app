@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -19,6 +19,7 @@ import OnlyMounted from '../../components/widgets/OnlyMounted';
 import { getGroupCanonicalLocalizedName } from '../../helpers/localizedData.js';
 import { hasPermissions } from '../../helpers/common.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 
 const CREATE_EXERCISE_FORM_INITIAL_VALUES = {
@@ -35,8 +36,13 @@ const prepareGroupOptions = lruMemoize((groups, groupsAccessor, locale) =>
     .sort((a, b) => a.name.localeCompare(b.name, locale))
 );
 
-const Exercises = ({ groups, groupsAccessor, createGroupExercise, links: { EXERCISE_EDIT_URI_FACTORY } }) => {
-  const { locale } = useIntl();
+const Exercises = ({
+  groups,
+  groupsAccessor,
+  createGroupExercise,
+  links: { EXERCISE_EDIT_URI_FACTORY },
+  intl: { locale },
+}) => {
   const navigate = useNavigate();
   const createExercise = ({ groupId }) => {
     createGroupExercise(groupId).then(({ value: exercise }) => {
@@ -73,16 +79,19 @@ Exercises.propTypes = {
   groupsAccessor: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   createGroupExercise: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
 export default withLinks(
-  connect(
-    state => ({
-      groups: notArchivedGroupsSelector(state),
-      groupsAccessor: groupDataAccessorSelector(state),
-    }),
-    dispatch => ({
-      createGroupExercise: groupId => dispatch(createExercise({ groupId })),
-    })
-  )(Exercises)
+  withIntl(
+    connect(
+      state => ({
+        groups: notArchivedGroupsSelector(state),
+        groupsAccessor: groupDataAccessorSelector(state),
+      }),
+      dispatch => ({
+        createGroupExercise: groupId => dispatch(createExercise({ groupId })),
+      })
+    )(Exercises)
+  )
 );

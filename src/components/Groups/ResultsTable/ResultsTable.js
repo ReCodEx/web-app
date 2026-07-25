@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import { OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
 
@@ -25,6 +25,7 @@ import Button from '../../widgets/TheButton';
 import Icon, { AcceptedIcon, DownloadIcon, LoadingIcon, ReviewRequestIcon } from '../../icons';
 import { safeGet, EMPTY_ARRAY, EMPTY_OBJ, hasPermissions } from '../../../helpers/common.js';
 import withLinks from '../../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 import { storageGetItem, storageSetItem } from '../../../helpers/localStorage.js';
 
 import * as styles from './ResultsTable.less';
@@ -455,8 +456,8 @@ class ResultsTable extends Component {
       userSolutionsSelector,
       userSolutionsStatusSelector,
       runtimeEnvironments,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     const isAdmin = isSuperadmin || (group.privateData && group.privateData.admins.includes(loggedUser.id));
     const isSupervisor = group.privateData && group.privateData.supervisors.includes(loggedUser.id);
@@ -587,6 +588,7 @@ ResultsTable.propTypes = {
   setShadowPoints: PropTypes.func.isRequired,
   removeShadowPoints: PropTypes.func.isRequired,
   links: PropTypes.object,
+  intl: withIntlProps.intl,
 };
 
-export default withLinks(ResultsTable);
+export default withIntl(withLinks(ResultsTable));

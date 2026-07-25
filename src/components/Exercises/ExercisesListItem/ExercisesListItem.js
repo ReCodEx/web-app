@@ -77,7 +77,9 @@ const ExercisesListItem = ({
       <UsersNameContainer userId={authorId} link listItem />
     </td>
 
-    <td className="small">{runtimeEnvironments && <EnvironmentsList runtimeEnvironments={runtimeEnvironments} />}</td>
+    <td className="small">
+      {runtimeEnvironments && <EnvironmentsList runtimeEnvironments={runtimeEnvironments} idPrefix={id} />}
+    </td>
 
     <td className="small">
       {tags.sort().map(tag => (

@@ -8,7 +8,7 @@ const CLICK = 'click';
 const OptionalPopoverWrapper = ({
   title,
   contents,
-  popoverId = Date.now(),
+  popoverId,
   placement = 'bottom',
   hide = false,
   children,
@@ -28,7 +28,7 @@ const OptionalPopoverWrapper = ({
         onMouseEnter={hoverTrigger ? () => setShown(true) : undefined}
         onMouseLeave={hoverTrigger ? () => setShown(false) : undefined}>
         {children}
-        <Overlay show={Boolean(contents) && !hide && shown} target={ref.current} placement={placement}>
+        <Overlay show={Boolean(contents) && !hide && shown} target={ref} placement={placement}>
           <Popover id={popoverId}>
             <Popover.Header>{title}</Popover.Header>
             <Popover.Body>{contents}</Popover.Body>
@@ -42,7 +42,7 @@ const OptionalPopoverWrapper = ({
 OptionalPopoverWrapper.propTypes = {
   title: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   contents: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  popoverId: PropTypes.string,
+  popoverId: PropTypes.string.isRequired,
   placement: PropTypes.string,
   hide: PropTypes.bool,
   children: PropTypes.element.isRequired,

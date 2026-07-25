@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Table } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -31,6 +31,7 @@ import { isStudentRole } from '../../components/helpers/usersRoles.js';
 import { safeGet } from '../../helpers/common.js';
 import withLinks from '../../helpers/withLinks.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 class AcceptGroupInvitation extends Component {
   static loadAsync = ({ invitationId }, dispatch) => dispatch(fetchGroupInvitationIfNeeded(invitationId));
@@ -68,8 +69,8 @@ class AcceptGroupInvitation extends Component {
       loggedUserId,
       effectiveRole,
       links: { GROUP_INFO_URI_FACTORY, GROUP_ASSIGNMENTS_URI_FACTORY },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return isStudentRole(effectiveRole) ? (
       <Page
@@ -258,22 +259,25 @@ AcceptGroupInvitation.propTypes = {
   links: PropTypes.object,
   navigate: withRouterProps.navigate,
   params: PropTypes.shape({ invitationId: PropTypes.string }).isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default withRouter(
-  withLinks(
-    connect(
-      (state, { params: { invitationId } }) => ({
-        invitation: invitationSelector(state, invitationId),
-        acceptingStatus: getInvitationAcceptingStatus(state, invitationId),
-        groupAccessor: groupAccessorSelector(state),
-        loggedUserId: loggedInUserIdSelector(state),
-        effectiveRole: getLoggedInUserEffectiveRole(state),
-      }),
-      (dispatch, { params: { invitationId } }) => ({
-        loadAsync: () => AcceptGroupInvitation.loadAsync({ invitationId }, dispatch),
-        acceptInvitation: () => dispatch(acceptGroupInvitation(invitationId)),
-      })
-    )(AcceptGroupInvitation)
+export default withIntl(
+  withRouter(
+    withLinks(
+      connect(
+        (state, { params: { invitationId } }) => ({
+          invitation: invitationSelector(state, invitationId),
+          acceptingStatus: getInvitationAcceptingStatus(state, invitationId),
+          groupAccessor: groupAccessorSelector(state),
+          loggedUserId: loggedInUserIdSelector(state),
+          effectiveRole: getLoggedInUserEffectiveRole(state),
+        }),
+        (dispatch, { params: { invitationId } }) => ({
+          loadAsync: () => AcceptGroupInvitation.loadAsync({ invitationId }, dispatch),
+          acceptInvitation: () => dispatch(acceptGroupInvitation(invitationId)),
+        })
+      )(AcceptGroupInvitation)
+    )
   )
 );

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Table, FormSelect, FormLabel, InputGroup } from 'react-bootstrap';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Button from '../../widgets/TheButton';
 import PipelinesListItem from '../../Pipelines/PipelinesListItem';
 import { AddIcon, DeleteIcon, TransferIcon } from '../../icons';
 import { EMPTY_FNC } from '../../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 class EditExercisePipelinesTable extends Component {
   state = { selectedPipeline: null };
@@ -46,8 +47,12 @@ class EditExercisePipelinesTable extends Component {
   };
 
   render() {
-    const { fields, pipelines, readOnly = false } = this.props;
-    const { locale } = useIntl();
+    const {
+      fields,
+      pipelines,
+      readOnly = false,
+      intl: { locale },
+    } = this.props;
 
     return (
       <Table>
@@ -104,6 +109,7 @@ EditExercisePipelinesTable.propTypes = {
   readOnly: PropTypes.bool,
   fields: PropTypes.object.isRequired,
   pipelines: PropTypes.array,
+  intl: withIntlProps.isRequired,
 };
 
-export default EditExercisePipelinesTable;
+export default withIntl(EditExercisePipelinesTable);

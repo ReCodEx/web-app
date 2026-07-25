@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Modal, Table, Container, Row, Col } from 'react-bootstrap';
@@ -51,213 +51,210 @@ const messages = defineMessages({
   },
 });
 
-class BoxForm extends Component {
-  render() {
-    const {
-      show,
-      editing = null,
-      boxes,
-      boxTypes,
-      variables,
-      selectedType,
-      handleSubmit,
-      submitSucceeded = false,
-      invalid = false,
-      dirty = false,
-      submitting = false,
-      reset,
-      onHide,
-    } = this.props;
-    const { formatMessage } = useIntl();
+const BoxForm = ({
+  show,
+  editing = null,
+  boxes,
+  boxTypes,
+  variables,
+  selectedType,
+  handleSubmit,
+  submitSucceeded = false,
+  invalid = false,
+  dirty = false,
+  submitting = false,
+  reset,
+  onHide,
+}) => {
+  const { formatMessage } = useIntl();
 
-    const { portsIn, portsOut } = preparePortsOfSelectedBoxType(selectedType && boxTypes[selectedType]);
+  const { portsIn, portsOut } = preparePortsOfSelectedBoxType(selectedType && boxTypes[selectedType]);
 
-    return (
-      <Modal show={show} onHide={onHide} keyboard size="xl">
-        <Modal.Header closeButton>
-          <h5>
-            {editing ? (
-              <FormattedMessage
-                id="app.pipelines.boxForm.titleEditing"
-                defaultMessage="Editing Box <strong>{editing}</strong>"
-                values={{
-                  editing,
-                  strong: contents => (
-                    <strong key="strong" className="ms-1">
-                      {Array.isArray(contents)
-                        ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
-                        : contents}
-                    </strong>
-                  ),
+  return (
+    <Modal show={show} onHide={onHide} keyboard size="xl">
+      <Modal.Header closeButton>
+        <h5>
+          {editing ? (
+            <FormattedMessage
+              id="app.pipelines.boxForm.titleEditing"
+              defaultMessage="Editing Box <strong>{editing}</strong>"
+              values={{
+                editing,
+                strong: contents => (
+                  <strong key="strong" className="ms-1">
+                    {Array.isArray(contents)
+                      ? contents.map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)
+                      : contents}
+                  </strong>
+                ),
+              }}
+            />
+          ) : (
+            <FormattedMessage id="app.pipelines.boxForm.titleNew" defaultMessage="Add New Box" />
+          )}
+        </h5>
+      </Modal.Header>
+
+      <Modal.Body>
+        <datalist id="boxFormVariableNamesDatalist">
+          {variables.map(({ name }) => (
+            <option key={name}>{name}</option>
+          ))}
+        </datalist>
+
+        <datalist id="boxNameDatalist">
+          {selectedType && <option>{suggestedBoxName(selectedType, boxes)}</option>}
+          {editing && <option>{editing}</option>}
+        </datalist>
+
+        <Container fluid>
+          <Row>
+            <Col lg={6}>
+              <Field
+                name="name"
+                tabIndex={1}
+                component={TextField}
+                maxLength={255}
+                list="boxNameDatalist"
+                placeholder={suggestedBoxName(selectedType, boxes)}
+                label={
+                  <span>
+                    <FormattedMessage id="generic.name" defaultMessage="Name" />:
+                  </span>
+                }
+              />
+            </Col>
+
+            <Col lg={6}>
+              <Field
+                name="type"
+                tabIndex={2}
+                component={SelectField}
+                options={prepareBoxTypeOptions(boxTypes)}
+                addEmptyOption
+                label={<FormattedMessage id="app.pipelines.boxForm.type" defaultMessage="Type:" />}
+              />
+            </Col>
+          </Row>
+
+          {selectedType && getBoxTypeDescription(selectedType) && (
+            <Row>
+              <Col xl={12}>
+                <InsetPanel>{getBoxTypeDescription(selectedType)}</InsetPanel>
+              </Col>
+            </Row>
+          )}
+
+          {((portsIn && portsIn.length > 0) || (portsOut && portsOut.length > 0)) && <hr />}
+
+          <Row>
+            {portsIn && portsIn.length > 0 && (
+              <Col xl={portsOut && portsOut.length > 0 ? 6 : 12}>
+                <h5>
+                  <InputIcon gapRight={2} className="text-body-secondary" />
+                  <FormattedMessage id="app.pipelines.boxForm.inputPorts" defaultMessage="Input ports" />
+                </h5>
+                <Table borderless size="sm">
+                  <tbody>
+                    {portsIn.map(port => (
+                      <tr key={port.name}>
+                        <td className="text-nowrap pe-4 align-middle">
+                          <strong>{port.name}</strong>
+                        </td>
+                        <td className="text-nowrap pe-4 align-middle">
+                          <code>{port.type}</code>
+                        </td>
+                        <td className="w-100 align-middle">
+                          <Field
+                            name={`portsIn.${encodeId(port.name)}`}
+                            placeholder={formatMessage(messages.varPlaceholder)}
+                            component={TextField}
+                            maxLength={255}
+                            groupClassName="mb-0"
+                            list="boxFormVariableNamesDatalist"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </Col>
+            )}
+
+            {portsOut && portsOut.length > 0 && (
+              <Col xl={portsIn && portsIn.length > 0 ? 6 : 12}>
+                <h5>
+                  <OutputIcon gapRight={2} className="text-body-secondary" />
+                  <FormattedMessage id="app.pipelines.boxForm.outputPorts" defaultMessage="Output ports" />
+                </h5>
+                <Table size="sm">
+                  <tbody>
+                    {portsOut.map(port => (
+                      <tr key={port.name}>
+                        <td className="text-nowrap pe-4 align-middle">
+                          <strong>{port.name}</strong>
+                        </td>
+                        <td className="text-nowrap pe-4 align-middle">
+                          <code>{port.type}</code>
+                        </td>
+                        <td className="w-100 align-middle">
+                          <Field
+                            name={`portsOut.${encodeId(port.name)}`}
+                            placeholder={formatMessage(messages.varPlaceholder)}
+                            component={TextField}
+                            maxLength={255}
+                            groupClassName="mb-0"
+                            list="boxFormVariableNamesDatalist"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </Col>
+            )}
+          </Row>
+        </Container>
+      </Modal.Body>
+
+      <Modal.Footer>
+        <div className="text-center">
+          <TheButtonGroup>
+            {(dirty || editing) && (
+              <SubmitButton
+                id="boxForm"
+                handleSubmit={() => {
+                  handleSubmit();
+                  return Promise.resolve();
+                }}
+                submitting={submitting}
+                invalid={invalid}
+                dirty={dirty}
+                hasSucceeded={submitSucceeded}
+                reset={reset}
+                messages={{
+                  success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
+                  submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
+                  submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
                 }}
               />
-            ) : (
-              <FormattedMessage id="app.pipelines.boxForm.titleNew" defaultMessage="Add New Box" />
             )}
-          </h5>
-        </Modal.Header>
-
-        <Modal.Body>
-          <datalist id="boxFormVariableNamesDatalist">
-            {variables.map(({ name }) => (
-              <option key={name}>{name}</option>
-            ))}
-          </datalist>
-
-          <datalist id="boxNameDatalist">
-            {selectedType && <option>{suggestedBoxName(selectedType, boxes)}</option>}
-            {editing && <option>{editing}</option>}
-          </datalist>
-
-          <Container fluid>
-            <Row>
-              <Col lg={6}>
-                <Field
-                  name="name"
-                  tabIndex={1}
-                  component={TextField}
-                  maxLength={255}
-                  list="boxNameDatalist"
-                  placeholder={suggestedBoxName(selectedType, boxes)}
-                  label={
-                    <span>
-                      <FormattedMessage id="generic.name" defaultMessage="Name" />:
-                    </span>
-                  }
-                />
-              </Col>
-
-              <Col lg={6}>
-                <Field
-                  name="type"
-                  tabIndex={2}
-                  component={SelectField}
-                  options={prepareBoxTypeOptions(boxTypes)}
-                  addEmptyOption
-                  label={<FormattedMessage id="app.pipelines.boxForm.type" defaultMessage="Type:" />}
-                />
-              </Col>
-            </Row>
-
-            {selectedType && getBoxTypeDescription(selectedType) && (
-              <Row>
-                <Col xl={12}>
-                  <InsetPanel>{getBoxTypeDescription(selectedType)}</InsetPanel>
-                </Col>
-              </Row>
-            )}
-
-            {((portsIn && portsIn.length > 0) || (portsOut && portsOut.length > 0)) && <hr />}
-
-            <Row>
-              {portsIn && portsIn.length > 0 && (
-                <Col xl={portsOut && portsOut.length > 0 ? 6 : 12}>
-                  <h5>
-                    <InputIcon gapRight={2} className="text-body-secondary" />
-                    <FormattedMessage id="app.pipelines.boxForm.inputPorts" defaultMessage="Input ports" />
-                  </h5>
-                  <Table borderless size="sm">
-                    <tbody>
-                      {portsIn.map(port => (
-                        <tr key={port.name}>
-                          <td className="text-nowrap pe-4 align-middle">
-                            <strong>{port.name}</strong>
-                          </td>
-                          <td className="text-nowrap pe-4 align-middle">
-                            <code>{port.type}</code>
-                          </td>
-                          <td className="w-100 align-middle">
-                            <Field
-                              name={`portsIn.${encodeId(port.name)}`}
-                              placeholder={formatMessage(messages.varPlaceholder)}
-                              component={TextField}
-                              maxLength={255}
-                              groupClassName="mb-0"
-                              list="boxFormVariableNamesDatalist"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </Col>
-              )}
-
-              {portsOut && portsOut.length > 0 && (
-                <Col xl={portsIn && portsIn.length > 0 ? 6 : 12}>
-                  <h5>
-                    <OutputIcon gapRight={2} className="text-body-secondary" />
-                    <FormattedMessage id="app.pipelines.boxForm.outputPorts" defaultMessage="Output ports" />
-                  </h5>
-                  <Table size="sm">
-                    <tbody>
-                      {portsOut.map(port => (
-                        <tr key={port.name}>
-                          <td className="text-nowrap pe-4 align-middle">
-                            <strong>{port.name}</strong>
-                          </td>
-                          <td className="text-nowrap pe-4 align-middle">
-                            <code>{port.type}</code>
-                          </td>
-                          <td className="w-100 align-middle">
-                            <Field
-                              name={`portsOut.${encodeId(port.name)}`}
-                              placeholder={formatMessage(messages.varPlaceholder)}
-                              component={TextField}
-                              maxLength={255}
-                              groupClassName="mb-0"
-                              list="boxFormVariableNamesDatalist"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </Table>
-                </Col>
-              )}
-            </Row>
-          </Container>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <div className="text-center">
-            <TheButtonGroup>
-              {(dirty || editing) && (
-                <SubmitButton
-                  id="boxForm"
-                  handleSubmit={() => {
-                    handleSubmit();
-                    return Promise.resolve();
-                  }}
-                  submitting={submitting}
-                  invalid={invalid}
-                  dirty={dirty}
-                  hasSucceeded={submitSucceeded}
-                  reset={reset}
-                  messages={{
-                    success: <FormattedMessage id="generic.saved" defaultMessage="Saved" />,
-                    submit: <FormattedMessage id="generic.save" defaultMessage="Save" />,
-                    submitting: <FormattedMessage id="generic.saving" defaultMessage="Saving..." />,
-                  }}
-                />
-              )}
-              {dirty && (
-                <Button variant="danger" onClick={reset}>
-                  <RefreshIcon gapRight={2} />
-                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                </Button>
-              )}
-              <Button variant="secondary" onClick={onHide}>
-                <CloseIcon gapRight={2} />
-                <FormattedMessage id="generic.close" defaultMessage="Close" />
+            {dirty && (
+              <Button variant="danger" onClick={reset}>
+                <RefreshIcon gapRight={2} />
+                <FormattedMessage id="generic.reset" defaultMessage="Reset" />
               </Button>
-            </TheButtonGroup>
-          </div>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
-}
+            )}
+            <Button variant="secondary" onClick={onHide}>
+              <CloseIcon gapRight={2} />
+              <FormattedMessage id="generic.close" defaultMessage="Close" />
+            </Button>
+          </TheButtonGroup>
+        </div>
+      </Modal.Footer>
+    </Modal>
+  );
+};
 
 BoxForm.propTypes = {
   show: PropTypes.bool,

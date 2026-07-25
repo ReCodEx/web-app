@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import EvaluationProgress from '../../components/Assignments/EvaluationProgress';
 import {
   addMessage,
   completedTask,
@@ -13,7 +14,6 @@ import {
   finish as finishEvaluationProgress,
   dropObserver,
 } from '../../redux/modules/evaluationProgress.js';
-
 import {
   getExpectedTasksCount,
   getCompletedPercent,
@@ -22,10 +22,9 @@ import {
   getMessages,
   isFinished,
 } from '../../redux/selectors/evaluationProgress.js';
-
 import { finishProcessing as finishSubmissionProcessing } from '../../redux/modules/submission.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
-import EvaluationProgress from '../../components/Assignments/EvaluationProgress';
 import randomMessages, { extraMessages } from './randomMessages.js';
 
 class EvaluationProgressContainer extends Component {
@@ -73,8 +72,10 @@ class EvaluationProgressContainer extends Component {
   };
 
   onError = () => {
-    const { addMessage } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      addMessage,
+      intl: { formatMessage },
+    } = this.props;
 
     addMessage({
       wasSuccessful: false,
@@ -86,8 +87,10 @@ class EvaluationProgressContainer extends Component {
 
   onMessage = msg => {
     const data = JSON.parse(msg.data);
-    const { addMessage } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      addMessage,
+      intl: { formatMessage },
+    } = this.props;
 
     switch (data.command) {
       case 'TASK':
@@ -110,7 +113,7 @@ class EvaluationProgressContainer extends Component {
     task_state = 'OK', // eslint-disable-line camelcase
     text = null,
   }) => {
-    const { formatMessage } = useIntl();
+    const { formatMessage } = this.props.intl;
     return {
       wasSuccessful: command !== 'TASK' || task_state === 'COMPLETED', // eslint-disable-line camelcase
       text: text || formatMessage(this.getRandomMessage()),
@@ -242,26 +245,29 @@ EvaluationProgressContainer.propTypes = {
   dropObserver: PropTypes.func.isRequired,
   onUserClose: PropTypes.func,
   onFinish: PropTypes.func,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  state => ({
-    expectedTasksCount: getExpectedTasksCount(state),
-    progress: {
-      completed: getCompletedPercent(state),
-      skipped: getSkippedPercent(state),
-      failed: getFailedPercent(state),
-    },
-    isFinished: isFinished(state),
-    messages: getMessages(state),
-  }),
-  {
-    finishEvaluationProgress,
-    finishSubmissionProcessing,
-    completedTask,
-    skippedTask,
-    failedTask,
-    addMessage,
-    dropObserver,
-  }
-)(EvaluationProgressContainer);
+export default withIntl(
+  connect(
+    state => ({
+      expectedTasksCount: getExpectedTasksCount(state),
+      progress: {
+        completed: getCompletedPercent(state),
+        skipped: getSkippedPercent(state),
+        failed: getFailedPercent(state),
+      },
+      isFinished: isFinished(state),
+      messages: getMessages(state),
+    }),
+    {
+      finishEvaluationProgress,
+      finishSubmissionProcessing,
+      completedTask,
+      skippedTask,
+      failedTask,
+      addMessage,
+      dropObserver,
+    }
+  )(EvaluationProgressContainer)
+);

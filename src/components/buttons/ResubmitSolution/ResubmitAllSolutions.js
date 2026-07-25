@@ -37,7 +37,7 @@ const ResubmitAllSolutions = ({
   return (
     <OptionalPopoverWrapper
       container={this}
-      popoverId={`resubit-info-${assignmentId}`}
+      popoverId={`resubmit-info-${assignmentId}`}
       placement="bottom"
       hide={!pendingJob && !failedJob}
       title={

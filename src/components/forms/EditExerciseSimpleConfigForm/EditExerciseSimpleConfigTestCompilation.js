@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field, FieldArray } from 'redux-form';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import EnvironmentsListItem from '../../helpers/EnvironmentsList/EnvironmentsListItem.js';
 import { EMPTY_ARRAY } from '../../../helpers/common.js';
@@ -12,6 +12,7 @@ import Icon, { ExpandCollapseIcon, WarningIcon } from '../../icons';
 import { TextField, SelectField, ExpandingInputFilesField, ExpandingSelectField, ExpandingTextField } from '../Fields';
 import Confirm from '../../forms/Confirm';
 import Explanation from '../../widgets/Explanation';
+
 import {
   ENV_ARDUINO_ID,
   ENV_C_GCC_ID,
@@ -21,6 +22,7 @@ import {
   ENV_SYCL_ID,
 } from '../../../helpers/exercise/environments.js';
 import { validateExitCodes } from '../../../helpers/exercise/config.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 const COMPILER_ARGS_ENVS = [ENV_C_GCC_ID, ENV_CPP_GCC_ID, ENV_ARDUINO_ID, ENV_SYCL_ID];
 
@@ -49,8 +51,11 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
   };
 
   getPossibleEntryPoints = envId => {
-    const { extraFiles, environmentsWithEntryPoints } = this.props;
-    const { locale } = useIntl();
+    const {
+      extraFiles,
+      environmentsWithEntryPoints,
+      intl: { locale },
+    } = this.props;
     if (!environmentsWithEntryPoints.includes(envId)) {
       return EMPTY_ARRAY;
     }
@@ -75,8 +80,8 @@ class EditExerciseSimpleConfigTestCompilation extends Component {
       testErrors,
       readOnly = false,
       compilationInitiallyOpened = false,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <>
@@ -361,6 +366,7 @@ EditExerciseSimpleConfigTestCompilation.propTypes = {
   smartFillCompilation: PropTypes.func,
   change: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
+  intl: withIntlProps.intl,
 };
 
-export default EditExerciseSimpleConfigTestCompilation;
+export default withIntl(EditExerciseSimpleConfigTestCompilation);

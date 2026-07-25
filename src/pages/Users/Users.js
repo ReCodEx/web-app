@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
@@ -30,6 +30,7 @@ import { fetchPaginated } from '../../redux/modules/pagination.js';
 
 import { knownRoles, isSupervisorRole, isStudentRole, isSuperadminRole } from '../../components/helpers/usersRoles.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import { withRouterProps } from '../../helpers/withRouter.js';
 import { suspendAbortPendingRequestsOptimization } from '../../pages/routes.js';
 import { EMPTY_ARRAY } from '../../helpers/common.js';
@@ -142,8 +143,12 @@ class Users extends Component {
   });
 
   createNewUserAccount = data => {
-    const { instanceId, createUser, reloadPagination } = this.props;
-    const { locale } = useIntl();
+    const {
+      instanceId,
+      createUser,
+      reloadPagination,
+      intl: { locale },
+    } = this.props;
 
     return createUser(data, instanceId).then(({ value: { user, usersWithSameName = null } }) => {
       if (user) {
@@ -274,6 +279,7 @@ Users.propTypes = {
   reloadPagination: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   navigate: withRouterProps.navigate,
+  intl: withIntlProps.intl,
 };
 
 export default withLinks(
@@ -298,5 +304,5 @@ export default withLinks(
       reloadPagination: locale =>
         dispatch(fetchPaginated(PAGINATION_CONTAINER_ID, PAGINATION_CONTAINER_ENDPOINT)(locale, null, null, true)), // true = force invalidate
     })
-  )(Users)
+  )(withIntl(Users))
 );

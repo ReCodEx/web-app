@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Table, Modal } from 'react-bootstrap';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 import moment from 'moment';
 
@@ -18,6 +18,7 @@ import { EMPTY_LIST, EMPTY_OBJ, EMPTY_ARRAY } from '../../../../helpers/common.j
 import { prepareInitialValues, transformSubmittedData } from '../../../forms/EditAssignmentForm';
 
 import withRouter, { withRouterProps } from '../../../../helpers/withRouter.js';
+import withIntl, { withIntlProps } from '../../../../helpers/withIntl.js';
 
 const fetchAssignmentStatus = (statuses, assignmentId) => {
   const assignStatus =
@@ -184,8 +185,8 @@ class AssignmentsTable extends Component {
       editAssignment = null,
       deleteAssignment = null,
       navigate,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
     const someAssignmentsAreLoading = assignments.some(isLoading);
     const assignmentsPreprocessedAll = assignments
       .toArray()
@@ -500,6 +501,7 @@ AssignmentsTable.propTypes = {
   editAssignment: PropTypes.func,
   deleteAssignment: PropTypes.func,
   navigate: withRouterProps.navigate,
+  intl: withIntlProps.intl,
 };
 
-export default withRouter(AssignmentsTable);
+export default withIntl(withRouter(AssignmentsTable));

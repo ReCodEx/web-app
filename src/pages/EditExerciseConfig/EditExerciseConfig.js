@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { lruMemoize } from 'reselect';
@@ -88,6 +88,7 @@ import { isEmpoweredSupervisorRole } from '../../components/helpers/usersRoles.j
 import { hasPermissions, safeGet } from '../../helpers/common.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 class EditExerciseConfig extends Component {
   componentDidMount() {
@@ -251,7 +252,9 @@ class EditExerciseConfig extends Component {
   });
 
   renderTestsAndScoreBox(exercise, tests, scoreConfig) {
-    const { locale } = useIntl();
+    const {
+      intl: { locale },
+    } = this.props;
     return (
       <EditTestsForm
         calculator={scoreConfig && scoreConfig.calculator}
@@ -603,49 +606,52 @@ EditExerciseConfig.propTypes = {
   navigate: withRouterProps.navigate,
   location: withRouterProps.location,
   params: PropTypes.shape({ exerciseId: PropTypes.string }).isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default withRouter(
-  withLinks(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        return {
-          exercise: getExercise(exerciseId)(state),
-          effectiveRole: getLoggedInUserEffectiveRole(state),
-          runtimeEnvironments: runtimeEnvironmentsSelector(state),
-          exerciseConfig: exerciseConfigSelector(exerciseId)(state),
-          exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(exerciseId)(state),
-          exerciseScoreConfig: exerciseScoreConfigSelector(state, exerciseId),
-          exerciseTests: exerciseTestsSelector(exerciseId)(state),
-          pipelines: pipelinesSelector(state),
-          environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
-          pipelinesVariables: getExercisePipelinesVariablesJS(exerciseId)(state),
-          exerciseFiles: getFilesForExercise(exerciseId)(state),
-          exerciseFilesStatus: fetchFilesForExerciseStatus(state)(exerciseId),
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
-        fetchPipelinesVariables: (runtimeId, pipelinesIds) =>
-          dispatch(fetchExercisePipelinesVariables(exerciseId, runtimeId, pipelinesIds)),
-        setExerciseConfigType: (exercise, configurationType) =>
-          dispatch(editExercise(exercise.id, { ...exercise, configurationType })),
-        editEnvironmentConfigs: data => dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
-        editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
-        editTests: data => dispatch(setExerciseTests(exerciseId, data)),
-        fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
-        setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
-        reloadExercise: () => dispatch(fetchExercise(exerciseId)),
-        reloadConfig: () =>
-          dispatch(fetchExercise(exerciseId)).then(() =>
-            Promise.all([
-              dispatch(fetchExerciseConfig(exerciseId)),
-              dispatch(fetchExerciseEnvironmentConfig(exerciseId)),
-            ])
-          ),
-        invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
-        sendNotification: message => dispatch(sendNotification(exerciseId, message)),
-      })
-    )(EditExerciseConfig)
+export default withIntl(
+  withRouter(
+    withLinks(
+      connect(
+        (state, { params: { exerciseId } }) => {
+          return {
+            exercise: getExercise(exerciseId)(state),
+            effectiveRole: getLoggedInUserEffectiveRole(state),
+            runtimeEnvironments: runtimeEnvironmentsSelector(state),
+            exerciseConfig: exerciseConfigSelector(exerciseId)(state),
+            exerciseEnvironmentConfig: exerciseEnvironmentConfigSelector(exerciseId)(state),
+            exerciseScoreConfig: exerciseScoreConfigSelector(state, exerciseId),
+            exerciseTests: exerciseTestsSelector(exerciseId)(state),
+            pipelines: pipelinesSelector(state),
+            environmentsWithEntryPoints: getPipelinesEnvironmentsWhichHasEntryPoint(state),
+            pipelinesVariables: getExercisePipelinesVariablesJS(exerciseId)(state),
+            exerciseFiles: getFilesForExercise(exerciseId)(state),
+            exerciseFilesStatus: fetchFilesForExerciseStatus(state)(exerciseId),
+          };
+        },
+        (dispatch, { params: { exerciseId } }) => ({
+          loadAsync: () => EditExerciseConfig.loadAsync({ exerciseId }, dispatch),
+          fetchPipelinesVariables: (runtimeId, pipelinesIds) =>
+            dispatch(fetchExercisePipelinesVariables(exerciseId, runtimeId, pipelinesIds)),
+          setExerciseConfigType: (exercise, configurationType) =>
+            dispatch(editExercise(exercise.id, { ...exercise, configurationType })),
+          editEnvironmentConfigs: data => dispatch(setExerciseEnvironmentConfig(exerciseId, data)),
+          editScoreConfig: data => dispatch(setScoreConfig(exerciseId, data)),
+          editTests: data => dispatch(setExerciseTests(exerciseId, data)),
+          fetchConfig: () => dispatch(fetchExerciseConfig(exerciseId)),
+          setConfig: data => dispatch(setExerciseConfig(exerciseId, data)),
+          reloadExercise: () => dispatch(fetchExercise(exerciseId)),
+          reloadConfig: () =>
+            dispatch(fetchExercise(exerciseId)).then(() =>
+              Promise.all([
+                dispatch(fetchExerciseConfig(exerciseId)),
+                dispatch(fetchExerciseEnvironmentConfig(exerciseId)),
+              ])
+            ),
+          invalidateExercise: () => dispatch(invalidateExercise(exerciseId)),
+          sendNotification: message => dispatch(sendNotification(exerciseId, message)),
+        })
+      )(EditExerciseConfig)
+    )
   )
 );

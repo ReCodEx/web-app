@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 
 import {
@@ -54,6 +54,7 @@ import GroupArchivedWarning from '../../components/Groups/GroupArchivedWarning/G
 import GroupExamPending from '../../components/Groups/GroupExamPending';
 
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 class GroupInfo extends Component {
   static loadAsync = ({ groupId }, dispatch) =>
@@ -122,8 +123,8 @@ class GroupInfo extends Component {
       addObserver,
       removeMember,
       links: { GROUP_INFO_URI_FACTORY },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     const isAdminOrSuperadmin = isAdmin || isSuperAdmin;
 
@@ -319,6 +320,7 @@ GroupInfo.propTypes = {
   addObserver: PropTypes.func.isRequired,
   removeMember: PropTypes.func.isRequired,
   links: PropTypes.object,
+  intl: withIntlProps.intl,
 };
 
 const addSubgroupFormSelector = formValueSelector('addSubgroup');
@@ -374,4 +376,4 @@ const mapDispatchToProps = (dispatch, { params }) => ({
   removeMember: (userId, groupId) => dispatch(removeMember(userId, groupId)),
 });
 
-export default withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupInfo));
+export default withIntl(withLinks(connect(mapStateToProps, mapDispatchToProps)(GroupInfo)));

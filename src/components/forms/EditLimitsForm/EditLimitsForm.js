@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Table, Container, Row, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -16,159 +16,154 @@ import { validateLimitsTimeTotals } from '../../../helpers/exercise/limits.js';
 
 import * as styles from './styles.less';
 
-class EditLimitsForm extends Component {
-  render() {
-    const {
-      readOnly = false,
-      environments,
-      tests,
-      cloneHorizontally,
-      cloneVertically,
-      cloneAll,
-      reset,
-      handleSubmit,
-      dirty,
-      submitting,
-      submitFailed,
-      submitSucceeded,
-      invalid,
-      error,
-    } = this.props;
-    const { locale } = useIntl();
+const EditLimitsForm = ({
+  readOnly = false,
+  environments,
+  tests,
+  cloneHorizontally,
+  cloneVertically,
+  cloneAll,
+  reset,
+  handleSubmit,
+  dirty,
+  submitting,
+  submitFailed,
+  submitSucceeded,
+  invalid,
+  error,
+}) => {
+  const { locale } = useIntl();
 
-    return (
-      <FormBox
-        id="limits-form"
-        title={<FormattedMessage id="app.editLimitsBox.title" defaultMessage="Execution Limits" />}
-        unlimitedHeight
-        noPadding
-        success={submitSucceeded}
-        dirty={dirty}
-        footer={
-          !readOnly ? (
-            <div className="text-center">
-              <TheButtonGroup>
-                {dirty && (
-                  <Button type="reset" onClick={reset} variant="danger">
-                    <RefreshIcon gapRight={2} />
-                    <FormattedMessage id="generic.reset" defaultMessage="Reset" />
-                  </Button>
-                )}
-                <SubmitButton
-                  id="editLimits"
-                  invalid={invalid}
-                  submitting={submitting}
-                  dirty={dirty}
-                  hasSucceeded={submitSucceeded}
-                  hasFailed={submitFailed}
-                  handleSubmit={handleSubmit}
-                  messages={{
-                    submit: <FormattedMessage id="app.editLimitsForm.submit" defaultMessage="Save Limits" />,
-                    submitting: (
-                      <FormattedMessage id="app.editLimitsForm.submitting" defaultMessage="Saving Limits..." />
-                    ),
-                    success: <FormattedMessage id="app.editLimitsForm.success" defaultMessage="Limits Saved" />,
-                    validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
-                  }}
-                />
-              </TheButtonGroup>
-            </div>
-          ) : null
-        }>
-        <Container fluid>
-          <Row>
-            <Col lg={3}>
-              <div className={styles.preciseTime}>
-                <Field
-                  name="preciseTime"
-                  component={CheckboxField}
-                  onOff
-                  disabled={readOnly}
-                  label={
-                    <FormattedMessage id="app.editLimitsForm.preciseTime" defaultMessage="Precise Time Measurement" />
-                  }
-                />
-              </div>
-            </Col>
-            <Col lg={9}>
-              <div>
-                <p className={styles.preciseTimeTooltip}>
-                  <InfoIcon gapRight={2} />
-                  <FormattedMessage
-                    id="app.editLimitsForm.preciseTimeTooltip"
-                    defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
-                  />
-                </p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-
-        <hr />
-
-        <Table striped>
-          <thead>
-            <tr>
-              <th />
-              {environments.map(environment => (
-                <th key={`th-${environment.id}`} className={styles.limitsTableHeading}>
-                  {environment.name}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {tests
-              .sort((a, b) => a.name.localeCompare(b.name, locale))
-              .map(test => (
-                <tr key={test.name}>
-                  <th className={styles.limitsTableHeading}>{test.name}</th>
-
-                  {environments.map(environment => {
-                    const id = encodeNumId(test.id) + '.' + encodeId(environment.id);
-                    return (
-                      <td
-                        key={`td.${id}`}
-                        className={classnames({
-                          [styles.colSeparator]: environments.length > 1,
-                          [styles.limitsCell]: true,
-                        })}>
-                        <EditLimitsField
-                          prefix={`limits.${id}`}
-                          id={id}
-                          testsCount={tests.length}
-                          environmentsCount={environments.length}
-                          disabled={readOnly}
-                          cloneVertically={cloneVertically('editLimits', test.id, environment.id)}
-                          cloneHorizontally={cloneHorizontally('editLimits', test.id, environment.id)}
-                          cloneAll={cloneAll('editLimits', test.id, environment.id)}
-                        />
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-          </tbody>
-        </Table>
-
-        {submitFailed && (
-          <Callout variant="danger">
-            <FormattedMessage
-              id="app.editLimitsForm.failed"
-              defaultMessage="Cannot save the exercise limits. Please try again later."
-            />
-          </Callout>
-        )}
-
-        {error && (
-          <div className="px-3">
-            <Callout variant="danger">{error}</Callout>
+  return (
+    <FormBox
+      id="limits-form"
+      title={<FormattedMessage id="app.editLimitsBox.title" defaultMessage="Execution Limits" />}
+      unlimitedHeight
+      noPadding
+      success={submitSucceeded}
+      dirty={dirty}
+      footer={
+        !readOnly ? (
+          <div className="text-center">
+            <TheButtonGroup>
+              {dirty && (
+                <Button type="reset" onClick={reset} variant="danger">
+                  <RefreshIcon gapRight={2} />
+                  <FormattedMessage id="generic.reset" defaultMessage="Reset" />
+                </Button>
+              )}
+              <SubmitButton
+                id="editLimits"
+                invalid={invalid}
+                submitting={submitting}
+                dirty={dirty}
+                hasSucceeded={submitSucceeded}
+                hasFailed={submitFailed}
+                handleSubmit={handleSubmit}
+                messages={{
+                  submit: <FormattedMessage id="app.editLimitsForm.submit" defaultMessage="Save Limits" />,
+                  submitting: <FormattedMessage id="app.editLimitsForm.submitting" defaultMessage="Saving Limits..." />,
+                  success: <FormattedMessage id="app.editLimitsForm.success" defaultMessage="Limits Saved" />,
+                  validating: <FormattedMessage id="generic.validating" defaultMessage="Validating..." />,
+                }}
+              />
+            </TheButtonGroup>
           </div>
-        )}
-      </FormBox>
-    );
-  }
-}
+        ) : null
+      }>
+      <Container fluid>
+        <Row>
+          <Col lg={3}>
+            <div className={styles.preciseTime}>
+              <Field
+                name="preciseTime"
+                component={CheckboxField}
+                onOff
+                disabled={readOnly}
+                label={
+                  <FormattedMessage id="app.editLimitsForm.preciseTime" defaultMessage="Precise Time Measurement" />
+                }
+              />
+            </div>
+          </Col>
+          <Col lg={9}>
+            <div>
+              <p className={styles.preciseTimeTooltip}>
+                <InfoIcon gapRight={2} />
+                <FormattedMessage
+                  id="app.editLimitsForm.preciseTimeTooltip"
+                  defaultMessage="If precise time measurement is selected, ReCodEx will measure the consumed CPU time of tested solutions. Otherwise, the wall time will be measured. CPU is better in cases when serial time complexity of the solution is tested and tight time limits are set. Wall time is better in general cases as it better reflects the actual time consumed by the solution (including I/O), but it is more susceptible to errors of measurement."
+                />
+              </p>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+
+      <hr />
+
+      <Table striped>
+        <thead>
+          <tr>
+            <th />
+            {environments.map(environment => (
+              <th key={`th-${environment.id}`} className={styles.limitsTableHeading}>
+                {environment.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {tests
+            .sort((a, b) => a.name.localeCompare(b.name, locale))
+            .map(test => (
+              <tr key={test.name}>
+                <th className={styles.limitsTableHeading}>{test.name}</th>
+
+                {environments.map(environment => {
+                  const id = encodeNumId(test.id) + '.' + encodeId(environment.id);
+                  return (
+                    <td
+                      key={`td.${id}`}
+                      className={classnames({
+                        [styles.colSeparator]: environments.length > 1,
+                        [styles.limitsCell]: true,
+                      })}>
+                      <EditLimitsField
+                        prefix={`limits.${id}`}
+                        id={id}
+                        testsCount={tests.length}
+                        environmentsCount={environments.length}
+                        disabled={readOnly}
+                        cloneVertically={cloneVertically('editLimits', test.id, environment.id)}
+                        cloneHorizontally={cloneHorizontally('editLimits', test.id, environment.id)}
+                        cloneAll={cloneAll('editLimits', test.id, environment.id)}
+                      />
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+
+      {submitFailed && (
+        <Callout variant="danger">
+          <FormattedMessage
+            id="app.editLimitsForm.failed"
+            defaultMessage="Cannot save the exercise limits. Please try again later."
+          />
+        </Callout>
+      )}
+
+      {error && (
+        <div className="px-3">
+          <Callout variant="danger">{error}</Callout>
+        </div>
+      )}
+    </FormBox>
+  );
+};
 
 EditLimitsForm.propTypes = {
   readOnly: PropTypes.bool,

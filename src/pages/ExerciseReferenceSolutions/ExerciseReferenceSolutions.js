@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Row, Col, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
@@ -52,6 +52,7 @@ import { getReadyUserSelector } from '../../redux/selectors/users.js';
 import { storageGetItem, storageSetItem, storageRemoveItem } from '../../helpers/localStorage.js';
 import { hasPermissions, safeGet, objectFilter } from '../../helpers/common.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 
 const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, deleteReferenceSolution) => {
@@ -120,8 +121,12 @@ const prepareTableColumnDescriptors = lruMemoize((loggedUserId, locale, links, d
       <FormattedMessage id="generic.runtimeShortest" defaultMessage="Runtime" />,
       {
         className: 'text-center',
-        cellRenderer: runtimeEnvironment =>
-          runtimeEnvironment ? <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames /> : '-',
+        cellRenderer: (runtimeEnvironment, idx) =>
+          runtimeEnvironment ? (
+            <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames idPrefix={idx} />
+          ) : (
+            '-'
+          ),
       }
     ),
 
@@ -354,8 +359,8 @@ class ExerciseReferenceSolutions extends Component {
       deleteReferenceSolution,
       reload,
       links,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <Page
@@ -756,29 +761,32 @@ ExerciseReferenceSolutions.propTypes = {
   navigate: withRouterProps.navigate,
   location: withRouterProps.location,
   params: PropTypes.shape({ exerciseId: PropTypes.string }).isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default withRouter(
-  withLinks(
-    connect(
-      (state, { params: { exerciseId } }) => {
-        const userId = loggedInUserIdSelector(state);
-        return {
-          userId,
-          exercise: exerciseSelector(exerciseId)(state),
-          runtimeEnvironments: runtimeEnvironmentsSelector(state),
-          submitting: isSubmitting(state),
-          referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
-          userSelector: getReadyUserSelector(state),
-        };
-      },
-      (dispatch, { params: { exerciseId } }) => ({
-        loadAsync: userId => ExerciseReferenceSolutions.loadAsync({ exerciseId }, dispatch, { userId }),
-        reload: () => dispatch(reloadExercise(exerciseId)),
-        initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
-        deleteReferenceSolution: solutionId =>
-          dispatch(deleteReferenceSolution(solutionId)).then(() => dispatch(reloadExercise(exerciseId))),
-      })
-    )(ExerciseReferenceSolutions)
+export default withIntl(
+  withRouter(
+    withLinks(
+      connect(
+        (state, { params: { exerciseId } }) => {
+          const userId = loggedInUserIdSelector(state);
+          return {
+            userId,
+            exercise: exerciseSelector(exerciseId)(state),
+            runtimeEnvironments: runtimeEnvironmentsSelector(state),
+            submitting: isSubmitting(state),
+            referenceSolutions: referenceSolutionsSelector(exerciseId)(state),
+            userSelector: getReadyUserSelector(state),
+          };
+        },
+        (dispatch, { params: { exerciseId } }) => ({
+          loadAsync: userId => ExerciseReferenceSolutions.loadAsync({ exerciseId }, dispatch, { userId }),
+          reload: () => dispatch(reloadExercise(exerciseId)),
+          initCreateReferenceSolution: userId => dispatch(init(userId, exerciseId)),
+          deleteReferenceSolution: solutionId =>
+            dispatch(deleteReferenceSolution(solutionId)).then(() => dispatch(reloadExercise(exerciseId))),
+        })
+      )(ExerciseReferenceSolutions)
+    )
   )
 );

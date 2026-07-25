@@ -84,7 +84,7 @@ class ReviewCommentForm extends Component {
     }
   };
 
-  useSnippet = key => {
+  insertSnippet = key => {
     this.props.change('text', this.getSnippet(key) || '');
   };
 
@@ -287,7 +287,7 @@ class ReviewCommentForm extends Component {
             {...this.state}
             fileName={fileName}
             lineNumber={lineNumber}
-            useSnippet={this.useSnippet}
+            insertSnippet={this.insertSnippet}
             setSnippet={this.setSnippet}
           />
         </Modal>

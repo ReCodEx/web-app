@@ -19,6 +19,7 @@ const GroupInvitations = ({
   links: { ACCEPT_GROUP_INVITATION_URI_FACTORY },
 }) => {
   const [copiedInvitation, setCopiedInvitation] = useState(null);
+  const [now] = useState(() => Date.now() / 1000);
 
   return (
     <>
@@ -42,7 +43,7 @@ const GroupInvitations = ({
 
           {invitations.map(invitation => {
             const uri = `${window && window.location.origin}${ACCEPT_GROUP_INVITATION_URI_FACTORY(invitation.id)}`;
-            const hasExpired = invitation.expireAt && invitation.expireAt <= Date.now() / 1000;
+            const hasExpired = invitation.expireAt && invitation.expireAt <= now;
             return (
               <tbody
                 key={invitation.id}

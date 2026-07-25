@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
@@ -14,6 +14,7 @@ import Button, { TheButtonGroup } from '../../components/widgets/TheButton';
 import SubmitButton from '../../components/forms/SubmitButton';
 import Callout from '../../components/widgets/Callout';
 import Icon, { RefreshIcon, DownloadIcon, UploadIcon, SuccessIcon, UndoIcon, RedoIcon } from '../../components/icons';
+import InsetPanel from '../../components/widgets/InsetPanel';
 
 import {
   getVariablesUtilization,
@@ -32,8 +33,9 @@ import { getBoxTypes } from '../../redux/selectors/boxes.js';
 import { objectMap, arrayToObject, encodeId, identity } from '../../helpers/common.js';
 import { downloadString } from '../../redux/helpers/api/download.js';
 
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
+
 import * as styles from '../../components/Pipelines/styles.less';
-import InsetPanel from '../../components/widgets/InsetPanel';
 
 const getFormattedErrorAsKey = element => {
   const values = element.props.values ? { ...element.props.values } : {};
@@ -60,7 +62,7 @@ const _getSelectedVariableBoxes = (selectedVariable, boxes) =>
 
 const STATE_DEFAULTS = {
   boxFormOpen: false, // whether dialog is visible
-  boxEditName: null, // if dialog is used for editing, name of the editted box
+  boxEditName: null, // if dialog is used for editing, name of the edited box
   variableFormOpen: false, // analogical to boxForm...
   variableEditName: null,
   selectedBox: null,
@@ -441,7 +443,7 @@ class PipelineEditContainer extends Component {
     this.transformState(
       boxes => boxes.filter(box => box.name !== name),
       null,
-      this.state.selectedBox === name ? null : this.state.selectedBox // clear selection if box remmoved
+      this.state.selectedBox === name ? null : this.state.selectedBox // clear selection if box removed
     );
   };
 
@@ -516,7 +518,7 @@ class PipelineEditContainer extends Component {
    * Read a JSON file in hidden file-input, parse it, and load it as the pipeline (if it checks out).
    */
   import = () => {
-    const { formatMessage } = useIntl();
+    const { formatMessage } = this.props.intl;
     const files = this.inputFileRef.current.files;
     if (files.length === 1) {
       files[0].text().then(
@@ -576,7 +578,7 @@ class PipelineEditContainer extends Component {
     this.setState({
       version: this.props.pipeline.version,
       originalBoxes: this.props.pipeline.pipeline.boxes,
-      orignalVariables: this.props.pipeline.pipeline.variables,
+      originalVariables: this.props.pipeline.pipeline.variables,
     });
   };
 
@@ -590,7 +592,7 @@ class PipelineEditContainer extends Component {
       version: this.props.pipeline.version,
       originalBoxes: this.props.pipeline.pipeline.boxes,
       boxes: pipeline.boxes,
-      orignalVariables: this.props.pipeline.pipeline.variables,
+      originalVariables: this.props.pipeline.pipeline.variables,
       variables: pipeline.variables,
       pipelineStructureCoerced,
       history: [{ boxes: this.state.boxes, variables: this.state.variables }, ...this.state.history],
@@ -624,7 +626,7 @@ class PipelineEditContainer extends Component {
       },
       err => {
         if (err.code === '400-010') {
-          // special code dedicated to version mismatchs
+          // special code dedicated to version mismatch
           return this.props.reloadPipeline().then(() => {
             this.setState({ submitting: false });
             throw err;
@@ -977,25 +979,28 @@ PipelineEditContainer.propTypes = {
   boxTypes: PropTypes.object.isRequired,
   editPipeline: PropTypes.func.isRequired,
   reloadPipeline: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  state => {
-    return {
-      boxTypes: getBoxTypes(state),
-    };
-  },
-  (dispatch, { pipeline }) => ({
-    editPipeline: pipelineStructure =>
-      dispatch(
-        editPipeline(pipeline.id, {
-          name: pipeline.name,
-          description: pipeline.description,
-          version: pipeline.version,
-          global: pipeline.author === null,
-          pipeline: pipelineStructure,
-        })
-      ),
-    reloadPipeline: () => dispatch(reloadPipeline(pipeline.id)),
-  })
-)(PipelineEditContainer);
+export default withIntl(
+  connect(
+    state => {
+      return {
+        boxTypes: getBoxTypes(state),
+      };
+    },
+    (dispatch, { pipeline }) => ({
+      editPipeline: pipelineStructure =>
+        dispatch(
+          editPipeline(pipeline.id, {
+            name: pipeline.name,
+            description: pipeline.description,
+            version: pipeline.version,
+            global: pipeline.author === null,
+            pipeline: pipelineStructure,
+          })
+        ),
+      reloadPipeline: () => dispatch(reloadPipeline(pipeline.id)),
+    })
+  )(PipelineEditContainer)
+);

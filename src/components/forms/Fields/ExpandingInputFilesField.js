@@ -68,7 +68,7 @@ const ExpandingInputFilesField = ({
                     <OverlayTrigger
                       placement="top"
                       overlay={
-                        <Tooltip id={Date.now()}>
+                        <Tooltip id={`${field}-removeTooltip`}>
                           <FormattedMessage
                             id="app.expandingInputFilesField.tooltip.remove"
                             defaultMessage="Remove this file."
@@ -106,7 +106,7 @@ const ExpandingInputFilesField = ({
                 <OverlayTrigger
                   placement="right"
                   overlay={
-                    <Tooltip id={Date.now()}>
+                    <Tooltip id={`${fields.name}-appendTooltip`}>
                       <FormattedMessage
                         id="app.expandingInputFilesField.tooltip.add"
                         defaultMessage="Add another file."

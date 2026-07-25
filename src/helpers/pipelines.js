@@ -165,7 +165,7 @@ const _cmpArrays = (a1, a2) =>
 /**
  * Make sure a pipeline structure is ok. If not, a fix is attempted.
  * @param {Object} pipeline the pipeline structure to be verified
- * @returns {Object} the input pipeline object if it passes the checks, a newly constructed obejct with corrections otherwise
+ * @returns {Object} the input pipeline object if it passes the checks, a newly constructed object with corrections otherwise
  */
 export const checkPipelineStructure = pipeline => {
   const boxes = (Array.isArray(pipeline.boxes) ? pipeline.boxes : []).map(checkBoxStructure).filter(identity);
@@ -486,8 +486,8 @@ const buildGraph = boxes => {
       new Set(
         Object.values(box.portsOut)
           .map(({ value }) => value && variablesToBoxes[value])
-          .filter(dests => dests && dests.length > 0)
-          .reduce((acc, dests) => [...acc, ...dests], [])
+          .filter(destinations => destinations && destinations.length > 0)
+          .reduce((acc, destinations) => [...acc, ...destinations], [])
       )
   );
 };
@@ -525,7 +525,7 @@ const pipelineGraphHasLoops = boxes => {
   const open = {}; // vertices which have entered the processing
   const visited = {}; // vertices which are done being processed
 
-  let box = null;
+  let box;
   let res = false;
   while (!res && (box = Object.keys(graph).find(name => !visited[name]))) {
     res = _visitGraphVertex(graph, box, visited, open);
@@ -534,7 +534,7 @@ const pipelineGraphHasLoops = boxes => {
 };
 
 /**
- * Perform standard valiadtion of a pipeline.
+ * Perform standard validation of a pipeline.
  * - All box names and variable names are properly filled.
  * - All boxes, ports, and variables have valid types.
  * - Variables assigned to ports match the port type.
@@ -557,7 +557,7 @@ export const validatePipeline = (boxes, variables, boxTypes) => {
   validateVariables(variables, boxes, errors);
 
   if (errors.length === 0) {
-    // graph structure is only worth checking if everyting else is correct
+    // graph structure is only worth checking if everything else is correct
     if (pipelineGraphHasLoops(boxes)) {
       errors.push(
         <FormattedMessage id="app.pipelines.validation.loopDetected" defaultMessage="Loop detected in the pipeline." />

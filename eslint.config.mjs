@@ -1,6 +1,7 @@
 import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import react from 'eslint-plugin-react';
 import _import from 'eslint-plugin-import';
+import reactHooks from 'eslint-plugin-react-hooks';
 import babel from '@babel/eslint-plugin';
 import globals from 'globals';
 import babelParser from '@babel/eslint-parser';
@@ -24,6 +25,7 @@ export default [{
     ignores: ['node_modules/*', 'public/*'],
     plugins: {
         react: fixupPluginRules(react),
+        'react-hooks': reactHooks,
         import: fixupPluginRules(_import),
         babel,
     },
@@ -35,7 +37,7 @@ export default [{
           babelOptions: {
             babelrc: true,
             configFile: false,
-            presets: ["@babel/preset-react", "@babel/preset-env"]
+            presets: ['@babel/preset-react', '@babel/preset-env']
           }
         },
         globals: {
@@ -66,23 +68,40 @@ export default [{
     },
 
     rules: {
-        'import/default': 2,
-        'import/no-duplicates': 2,
-        'import/named': 2,
-        'import/namespace': 2,
-        'import/no-deprecated': 2,
-        'import/no-unresolved': 2,
-        'import/no-named-as-default': 2,
-        'react/no-did-update-set-state': 0,
-        'react/display-name': 0,
-        quotes: [2, 'single'],
-        'jsx-quotes': [2, 'prefer-double'],
-        'no-console': 1,
-        'no-unused-vars': 2,
-        'no-alert': 2,
-        'no-labels': 2,
-        '@/semi': [2, 'always'],
-        'standard/computed-property-even-spacing': 0,
-        'space-before-function-paren': 0,
+      'import/default': 2,
+      'import/no-duplicates': 2,
+      'import/named': 2,
+      'import/namespace': 2,
+      'import/no-deprecated': 2,
+      'import/no-unresolved': 2,
+      'import/no-named-as-default': 2,
+      'react/no-did-update-set-state': 0,
+      'react/display-name': 0,
+      quotes: [2, 'single'],
+      'jsx-quotes': [2, 'prefer-double'],
+      'no-console': 1,
+      'no-unused-vars': 2,
+      'no-alert': 2,
+      'no-labels': 2,
+      '@/semi': [2, 'always'],
+      'standard/computed-property-even-spacing': 0,
+      'space-before-function-paren': 0,
+
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react-hooks/config': 'error',
+      'react-hooks/error-boundaries': 'error',
+      'react-hooks/gating': 'error',
+      'react-hooks/globals': 'error',
+      'react-hooks/immutability': 'error',
+      'react-hooks/preserve-manual-memoization': 'error',
+      'react-hooks/purity': 'error',
+      'react-hooks/refs': 'error',
+      'react-hooks/set-state-in-effect': 'error',
+      'react-hooks/set-state-in-render': 'error',
+      'react-hooks/static-components': 'error',
+      'react-hooks/unsupported-syntax': 'warn',
+      'react-hooks/use-memo': 'error',
+      'react-hooks/incompatible-library': 'warn',
     },
 }];

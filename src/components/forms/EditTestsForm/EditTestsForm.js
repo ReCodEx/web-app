@@ -203,6 +203,7 @@ class EditTestsForm extends Component {
                               defaultMessage="The scoring algorithm may be changed only when there are no unsaved modifications in this form."
                             />
                           }
+                          tooltipId="changeCalculatorTooltip"
                           hide={!dirty}>
                           <Button onClick={this.openDialog} variant={dirty ? 'secondary' : 'primary'} disabled={dirty}>
                             <Icon icon="calculator" gapRight={2} />

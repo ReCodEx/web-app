@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'react-bootstrap';
 
 import Box from '../../components/widgets/Box';
@@ -60,6 +60,7 @@ import FailedLoadingSolutionsTable from '../../components/Assignments/SolutionsT
 import { isStudentLocked } from '../../components/helpers/exams.js';
 import { STUDENT_SOLUTIONS_RESTRICTIONS } from '../../components/Groups/helpers/groupExamMessages.js';
 import { hasPermissions } from '../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 const getReason = ({ lockedReason }, locale) =>
   typeof lockedReason === 'object'
@@ -115,8 +116,8 @@ class Assignment extends Component {
       assignmentSolversLoading,
       assignmentSolverSelector,
       getGroup,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <Page
@@ -340,32 +341,35 @@ Assignment.propTypes = {
   getGroup: PropTypes.func.isRequired,
   reloadCanSubmit: PropTypes.func.isRequired,
   reloadSolvers: PropTypes.func.isRequired,
+  intl: withIntlProps.intl,
 };
 
-export default connect(
-  (state, { params: { assignmentId, userId = null } }) => {
-    const loggedInUserId = loggedInUserIdSelector(state);
-    return {
-      assignment: getAssignment(state, assignmentId),
-      submitting: isSubmitting(state),
-      runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
-      userId,
-      loggedInUserId,
-      currentUser: loggedInUserSelector(state),
-      isStudentOf: loggedUserIsStudentOfSelector(state),
-      canSubmit: canSubmitSolution(assignmentId)(state),
-      solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
-      fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
-      assignmentSolversLoading: isAssignmentSolversLoading(state),
-      assignmentSolverSelector: getAssignmentSolverSelector(state),
-      getGroup: id => groupSelector(state, id),
-    };
-  },
-  (dispatch, { params: { assignmentId } }) => ({
-    init: userId => () => dispatch(init(userId, assignmentId)),
-    loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
-    exerciseSync: (syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(assignmentId, syncOptions)),
-    reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
-    reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
-  })
-)(Assignment);
+export default withIntl(
+  connect(
+    (state, { params: { assignmentId, userId = null } }) => {
+      const loggedInUserId = loggedInUserIdSelector(state);
+      return {
+        assignment: getAssignment(state, assignmentId),
+        submitting: isSubmitting(state),
+        runtimeEnvironments: getAssignmentEnvironments(state, assignmentId),
+        userId,
+        loggedInUserId,
+        currentUser: loggedInUserSelector(state),
+        isStudentOf: loggedUserIsStudentOfSelector(state),
+        canSubmit: canSubmitSolution(assignmentId)(state),
+        solutions: getUserSolutionsSortedData(state)(userId || loggedInUserId, assignmentId),
+        fetchManyStatus: fetchManyUserSolutionsStatus(state)(userId || loggedInUserId, assignmentId),
+        assignmentSolversLoading: isAssignmentSolversLoading(state),
+        assignmentSolverSelector: getAssignmentSolverSelector(state),
+        getGroup: id => groupSelector(state, id),
+      };
+    },
+    (dispatch, { params: { assignmentId } }) => ({
+      init: userId => () => dispatch(init(userId, assignmentId)),
+      loadAsync: userId => Assignment.loadAsync({ assignmentId }, dispatch, { userId }),
+      exerciseSync: (syncOptions = SYNC_OPTIONS_ALL) => dispatch(syncWithExercise(assignmentId, syncOptions)),
+      reloadCanSubmit: () => dispatch(canSubmit(assignmentId)),
+      reloadSolvers: (assignmentId, userId) => dispatch(fetchAssignmentSolvers({ assignmentId, userId })),
+    })
+  )(Assignment)
+);

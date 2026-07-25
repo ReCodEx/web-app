@@ -24,8 +24,14 @@ const SourceCodeHighlightingSelector = ({
   const [selectedMode, setSelectedMode] = useState(initialMode !== null ? initialMode : defaultMode);
 
   useEffect(() => {
-    setSelectedMode(initialMode !== null ? initialMode : defaultMode);
-  }, [initialMode, extension]);
+    const newMode = initialMode !== null ? initialMode : defaultMode;
+    if (newMode !== selectedMode) {
+      // this set state call is fine since in should not usually happen, only if the mounted component is reused
+      // (and the selectedMode initialization in useState is not called again)
+      /* eslint-disable-next-line react-hooks/set-state-in-effect */
+      setSelectedMode(newMode);
+    }
+  }, [initialMode, extension, defaultMode, selectedMode]);
 
   const clickHandler = ev => {
     ev.stopPropagation();
@@ -49,7 +55,7 @@ const SourceCodeHighlightingSelector = ({
         <Icon icon="highlighter" {...props} onClick={clickHandler} ref={target} />
       )}
 
-      <Overlay target={target.current} show={visible} placement="bottom">
+      <Overlay target={target} show={visible} placement="bottom">
         {props => (
           <Popover id={id} onClick={ev => ev.stopPropagation()} className="highlighting-selector" {...props}>
             <Popover.Header>

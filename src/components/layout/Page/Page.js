@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../PageContent';
 import ResourceRenderer from '../../helpers/ResourceRenderer';
 import Icon, { LoadingIcon, WarningIcon } from '../../icons';
 import Callout from '../../widgets/Callout';
 import { getErrorCodeStructured, getBaseErrorMessage, getErrorMessage } from '../../../locales/apiErrorMessages.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 const failedIcons = {
   400: <Icon icon={['far', 'circle-xmark']} />,
@@ -18,8 +19,12 @@ const failedIcons = {
 
 class Page extends Component {
   defaultFailedPage = errors => {
-    const { title = '', windowTitle = null, icon = null } = this.props;
-    const { formatMessage } = useIntl();
+    const {
+      title = '',
+      windowTitle = null,
+      icon = null,
+      intl: { formatMessage },
+    } = this.props;
 
     const error = errors[0] || null;
     const [major] = getErrorCodeStructured(error);
@@ -124,6 +129,7 @@ Page.propTypes = {
   windowTitle: PropTypes.oneOfType([PropTypes.func, PropTypes.string, PropTypes.element]),
   icon: PropTypes.oneOfType([PropTypes.element, PropTypes.func, PropTypes.string]),
   children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+  intl: withIntlProps.isRequired,
 };
 
-export default Page;
+export default withIntl(Page);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { formValueSelector } from 'redux-form';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
@@ -11,13 +11,14 @@ import Box from '../../components/widgets/Box';
 import GroupsTreeContainer from '../../containers/GroupsTreeContainer';
 import Button from '../../components/widgets/TheButton';
 import Page from '../../components/layout/Page';
-import LicencesTableContainer from '../../containers/LicencesTableContainer';
+import LicensesTableContainer from '../../containers/LicensesTableContainer';
 import AddLicenceFormContainer from '../../containers/AddLicenceFormContainer';
 import EditGroupForm, { EDIT_GROUP_FORM_EMPTY_INITIAL_VALUES } from '../../components/forms/EditGroupForm';
 import { EditIcon, InstanceIcon } from '../../components/icons';
 import FetchManyResourceRenderer from '../../components/helpers/FetchManyResourceRenderer';
 import ResourceRenderer from '../../components/helpers/ResourceRenderer';
 import NotVerifiedEmailCallout from '../../components/Users/NotVerifiedEmailCallout';
+import InstanceInfoTable from '../../components/Instances/InstanceDetail/InstanceInfoTable.js';
 
 import { fetchUser, fetchByIds } from '../../redux/modules/users.js';
 import { fetchInstanceIfNeeded } from '../../redux/modules/instances.js';
@@ -29,7 +30,7 @@ import { isLoggedAsSuperAdmin, getUser } from '../../redux/selectors/users.js';
 import { transformLocalizedTextsFormData, getLocalizedName } from '../../helpers/localizedData.js';
 
 import withLinks from '../../helpers/withLinks.js';
-import InstanceInfoTable from '../../components/Instances/InstanceDetail/InstanceInfoTable.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 
 class Instance extends Component {
   static customLoadGroups = true; // Marker for the App async load, that we will load groups ourselves.
@@ -69,8 +70,8 @@ class Instance extends Component {
       isOrganizational,
       isExam,
       links: { ADMIN_EDIT_INSTANCE_URI_FACTORY },
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     return (
       <Page
@@ -108,7 +109,7 @@ class Instance extends Component {
 
                 {(isSuperAdmin || isAdmin) && (
                   <>
-                    <LicencesTableContainer instance={data} />
+                    <LicensesTableContainer instance={data} />
                     <AddLicenceFormContainer instanceId={data.id} />
                   </>
                 )}
@@ -179,45 +180,48 @@ Instance.propTypes = {
   pointsLimit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isOrganizational: PropTypes.bool,
   isExam: PropTypes.bool,
+  intl: withIntlProps.intl,
 };
 
 const addGroupFormSelector = formValueSelector('addGroup');
 
-export default withLinks(
-  connect(
-    (state, { params: { instanceId } }) => {
-      const userId = loggedInUserIdSelector(state);
-      return {
-        userId,
-        user: getUser(userId)(state),
-        instance: instanceSelector(state, instanceId),
-        fetchGroupsStatus: fetchManyGroupsStatus(state),
-        isAdmin: isAdminOfInstance(userId, instanceId)(state),
-        isSuperAdmin: isLoggedAsSuperAdmin(state),
-        hasThreshold: addGroupFormSelector(state, 'hasThreshold'),
-        threshold: addGroupFormSelector(state, 'threshold'),
-        pointsLimit: addGroupFormSelector(state, 'pointsLimit'),
-        isOrganizational: addGroupFormSelector(state, 'isOrganizational'),
-        isExam: addGroupFormSelector(state, 'isExam'),
-      };
-    },
-    (dispatch, { params: { instanceId } }) => ({
-      createGroup:
-        userId =>
-        ({ localizedTexts, isOrganizational, hasThreshold, threshold, pointsLimit, makeMeAdmin, ...data }) =>
-          dispatch(
-            createGroup({
-              ...data,
-              isOrganizational,
-              threshold: (!isOrganizational && hasThreshold && Number(threshold)) || null,
-              pointsLimit: (!isOrganizational && hasThreshold && Number(pointsLimit)) || null,
-              localizedTexts: transformLocalizedTextsFormData(localizedTexts),
-              noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
-              instanceId,
-            })
-          ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
-      loadAsync: () => Instance.loadAsync({ instanceId }, dispatch),
-      refreshUser: userId => dispatch(fetchUser(userId)),
-    })
-  )(Instance)
+export default withIntl(
+  withLinks(
+    connect(
+      (state, { params: { instanceId } }) => {
+        const userId = loggedInUserIdSelector(state);
+        return {
+          userId,
+          user: getUser(userId)(state),
+          instance: instanceSelector(state, instanceId),
+          fetchGroupsStatus: fetchManyGroupsStatus(state),
+          isAdmin: isAdminOfInstance(userId, instanceId)(state),
+          isSuperAdmin: isLoggedAsSuperAdmin(state),
+          hasThreshold: addGroupFormSelector(state, 'hasThreshold'),
+          threshold: addGroupFormSelector(state, 'threshold'),
+          pointsLimit: addGroupFormSelector(state, 'pointsLimit'),
+          isOrganizational: addGroupFormSelector(state, 'isOrganizational'),
+          isExam: addGroupFormSelector(state, 'isExam'),
+        };
+      },
+      (dispatch, { params: { instanceId } }) => ({
+        createGroup:
+          userId =>
+          ({ localizedTexts, isOrganizational, hasThreshold, threshold, pointsLimit, makeMeAdmin, ...data }) =>
+            dispatch(
+              createGroup({
+                ...data,
+                isOrganizational,
+                threshold: (!isOrganizational && hasThreshold && Number(threshold)) || null,
+                pointsLimit: (!isOrganizational && hasThreshold && Number(pointsLimit)) || null,
+                localizedTexts: transformLocalizedTextsFormData(localizedTexts),
+                noAdmin: !makeMeAdmin, // inverted logic in API, user is added as admin by default
+                instanceId,
+              })
+            ).then(() => Promise.all([dispatch(fetchAllGroups()), dispatch(fetchUser(userId))])),
+        loadAsync: () => Instance.loadAsync({ instanceId }, dispatch),
+        refreshUser: userId => dispatch(fetchUser(userId)),
+      })
+    )(Instance)
+  )
 );

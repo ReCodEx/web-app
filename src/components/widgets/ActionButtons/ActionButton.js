@@ -18,7 +18,7 @@ const ActionButton = ({ id, variant = 'success', icon, label, confirm, pending, 
       {label}
     </Button>
   ) : (
-    <OptionalTooltipWrapper tooltip={tooltip} hide={!tooltip}>
+    <OptionalTooltipWrapper tooltip={tooltip} hide={!tooltip} tooltipId={id}>
       <Button variant={variant} size={size} onClick={onClick} disabled={pending}>
         {pending ? (
           <LoadingIcon gapRight={Boolean(label)} />

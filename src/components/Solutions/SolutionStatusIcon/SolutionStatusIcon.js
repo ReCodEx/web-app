@@ -26,7 +26,7 @@ import StatusIcon from '../../widgets/StatusIcon';
  * - accepted -> green checkmark bottom-right
  * - after deadline -> gray skull bottom-right
  * - between deadlines -> hourglass bottom-right
- * - overriden or bonus points -> chat-dollar sign top-right
+ * - overridden or bonus points -> chat-dollar sign top-right
  */
 const SolutionStatusIcon = ({
   id,
@@ -44,6 +44,7 @@ const SolutionStatusIcon = ({
   },
   ...props
 }) => {
+  /* eslint-disable no-useless-assignment */
   let icon = <EvaluationFailedIcon {...props} className="text-danger" />;
   let message = null;
 

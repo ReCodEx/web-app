@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, getFormValues } from 'redux-form';
 import { connect } from 'react-redux';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { lruMemoize } from 'reselect';
 
 import FormBox from '../../widgets/FormBox';
@@ -31,6 +31,7 @@ import {
 } from '../../../redux/modules/exerciseConfigs.js';
 import { exerciseConfigFormErrors } from '../../../redux/selectors/exerciseConfigs.js';
 import { encodeNumId, createIndex, safeSet, safeGet, deepReduce } from '../../../helpers/common.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 const filesOptions = lruMemoize((files, locale) =>
   files
@@ -202,8 +203,8 @@ class EditExerciseSimpleConfigForm extends Component {
       exerciseTests,
       smartFill,
       readOnly = false,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     const dataOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_DATA_ONLY_ID));
     const prologOnly = Boolean(exercise.runtimeEnvironments.find(env => env.id === ENV_PROLOG_ID));
@@ -338,6 +339,7 @@ EditExerciseSimpleConfigForm.propTypes = {
   environmentsWithEntryPoints: PropTypes.array.isRequired,
   smartFill: PropTypes.func.isRequired,
   readOnly: PropTypes.bool,
+  intl: withIntlProps.isRequired,
 };
 
 const validate = (formData, { exercise, exerciseFiles }) => {
@@ -497,32 +499,34 @@ const warn = formData => {
   return warnings;
 };
 
-export default connect(
-  state => {
-    return {
-      formValues: getFormValues(FORM_NAME)(state),
-      formErrors: exerciseConfigFormErrors(state, FORM_NAME),
-    };
-  },
-  dispatch => ({
-    smartFill: (testId, tests, files) => ({
-      all: () => dispatch(exerciseConfigFormSmartFillAll(FORM_NAME, testId, tests, files)),
-      input: () => dispatch(exerciseConfigFormSmartFillInput(FORM_NAME, testId, tests, files)),
-      args: () => dispatch(exerciseConfigFormSmartFillArgs(FORM_NAME, testId, tests, files)),
-      entryPoint: () => dispatch(exerciseConfigFormSmartFillEntryPoint(FORM_NAME, testId, tests, files)),
-      output: () => dispatch(exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)),
-      judge: () => dispatch(exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)),
-      compilation: () => dispatch(exerciseConfigFormSmartFillCompilation(FORM_NAME, testId, tests, files)),
-      extraFiles: () => dispatch(exerciseConfigFormSmartFillExtraFiles(FORM_NAME, testId, tests, files)),
-    }),
-  })
-)(
-  reduxForm({
-    form: FORM_NAME,
-    enableReinitialize: true,
-    keepDirtyOnReinitialize: false,
-    immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
-    validate,
-    warn,
-  })(EditExerciseSimpleConfigForm)
+export default withIntl(
+  connect(
+    state => {
+      return {
+        formValues: getFormValues(FORM_NAME)(state),
+        formErrors: exerciseConfigFormErrors(state, FORM_NAME),
+      };
+    },
+    dispatch => ({
+      smartFill: (testId, tests, files) => ({
+        all: () => dispatch(exerciseConfigFormSmartFillAll(FORM_NAME, testId, tests, files)),
+        input: () => dispatch(exerciseConfigFormSmartFillInput(FORM_NAME, testId, tests, files)),
+        args: () => dispatch(exerciseConfigFormSmartFillArgs(FORM_NAME, testId, tests, files)),
+        entryPoint: () => dispatch(exerciseConfigFormSmartFillEntryPoint(FORM_NAME, testId, tests, files)),
+        output: () => dispatch(exerciseConfigFormSmartFillOutput(FORM_NAME, testId, tests, files)),
+        judge: () => dispatch(exerciseConfigFormSmartFillJudge(FORM_NAME, testId, tests, files)),
+        compilation: () => dispatch(exerciseConfigFormSmartFillCompilation(FORM_NAME, testId, tests, files)),
+        extraFiles: () => dispatch(exerciseConfigFormSmartFillExtraFiles(FORM_NAME, testId, tests, files)),
+      }),
+    })
+  )(
+    reduxForm({
+      form: FORM_NAME,
+      enableReinitialize: true,
+      keepDirtyOnReinitialize: false,
+      immutableProps: ['formValues', 'exerciseFiles', 'exerciseTests', 'handleSubmit'],
+      validate,
+      warn,
+    })(EditExerciseSimpleConfigForm)
+  )
 );

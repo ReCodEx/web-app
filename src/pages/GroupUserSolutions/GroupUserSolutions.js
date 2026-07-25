@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { useIntl, FormattedMessage, FormattedNumber } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { lruMemoize } from 'reselect';
 
@@ -65,6 +65,7 @@ import { compareAssignmentsReverted } from '../../components/helpers/assignments
 import { storageGetItem, storageSetItem } from '../../helpers/localStorage.js';
 import { getLocalizedName } from '../../helpers/localizedData.js';
 import withLinks from '../../helpers/withLinks.js';
+import withIntl, { withIntlProps } from '../../helpers/withIntl.js';
 import withRouter, { withRouterProps } from '../../helpers/withRouter.js';
 import { safeGet, identity, hasPermissions, unique } from '../../helpers/common.js';
 
@@ -173,7 +174,12 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
         cellRenderer: (points, _1, _2, rowData) =>
           points.actualPoints !== null ? (
             <span className={`${rowData?.icon?.isBestSolution ? 'fw-bold' : ''}`}>
-              <Points points={points.actualPoints} bonusPoints={points.bonusPoints} maxPoints={points.maxPoints} />
+              <Points
+                points={points.actualPoints}
+                bonusPoints={points.bonusPoints}
+                maxPoints={points.maxPoints}
+                tooltipId={`points-${rowData?.icon?.id}`}
+              />
             </span>
           ) : (
             <span className="text-danger">&ndash;</span>
@@ -186,8 +192,12 @@ const prepareTableColumnDescriptors = lruMemoize((assignments, groupId, locale, 
       <FormattedMessage id="app.solutionsTable.environment" defaultMessage="Target language" />,
       {
         className: 'text-center',
-        cellRenderer: runtimeEnvironment =>
-          runtimeEnvironment ? <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames /> : '-',
+        cellRenderer: (runtimeEnvironment, _1, _2, rowData) =>
+          runtimeEnvironment ? (
+            <EnvironmentsListItem runtimeEnvironment={runtimeEnvironment} longNames idPrefix={rowData?.icon?.id} />
+          ) : (
+            '-'
+          ),
       }
     ),
 
@@ -391,8 +401,8 @@ class GroupUserSolutions extends Component {
       assignmentSolversLoading,
       assignmentSolverSelector,
       links,
+      intl: { locale },
     } = this.props;
-    const { locale } = useIntl();
 
     const pendingReviews = getPendingReviewSolutions(assignments, getAssignmentSolutions);
     const plagiarisms = getPlagiarisms(assignments, getAssignmentSolutions);
@@ -633,33 +643,36 @@ GroupUserSolutions.propTypes = {
   closeReview: PropTypes.func.isRequired,
   links: PropTypes.object.isRequired,
   navigate: withRouterProps.navigate,
+  intl: withIntlProps.intl,
 };
 
-export default withRouter(
-  withLinks(
-    connect(
-      (state, { params: { groupId, userId } }) => {
-        return {
-          groupId,
-          userId,
-          group: groupSelector(state, groupId),
-          currentUser: loggedInUserSelector(state),
-          groupsAccessor: groupDataAccessorSelector(state),
-          assignments: groupsAssignmentsSelector(state, groupId),
-          assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
-          fetchSolutionsStatus: fetchManyGroupStudentsSolutionsStatus(state)(groupId, userId),
-          fetchRuntimesStatus: fetchRuntimeEnvironmentsStatus(state),
-          getAssignmentSolutions: assignmentId => getUserSolutions(state)(userId, assignmentId),
-          getAssignmentSolutionsSorted: assignmentId => getUserSolutionsSortedData(state)(userId, assignmentId),
-          getRuntime: runtimeEnvironmentSelector(state),
-          assignmentSolversLoading: isAssignmentSolversLoading(state),
-          assignmentSolverSelector: getAssignmentSolverSelector(state),
-        };
-      },
-      (dispatch, { params: { groupId, userId }, navigate, links }) => ({
-        loadAsync: () => GroupUserSolutions.loadAsync({ groupId, userId }, dispatch, navigate, links),
-        closeReview: id => dispatch(setSolutionReviewState(id, true)),
-      })
-    )(GroupUserSolutions)
+export default withIntl(
+  withRouter(
+    withLinks(
+      connect(
+        (state, { params: { groupId, userId } }) => {
+          return {
+            groupId,
+            userId,
+            group: groupSelector(state, groupId),
+            currentUser: loggedInUserSelector(state),
+            groupsAccessor: groupDataAccessorSelector(state),
+            assignments: groupsAssignmentsSelector(state, groupId),
+            assignmentEnvironmentsSelector: assignmentEnvironmentsSelector(state),
+            fetchSolutionsStatus: fetchManyGroupStudentsSolutionsStatus(state)(groupId, userId),
+            fetchRuntimesStatus: fetchRuntimeEnvironmentsStatus(state),
+            getAssignmentSolutions: assignmentId => getUserSolutions(state)(userId, assignmentId),
+            getAssignmentSolutionsSorted: assignmentId => getUserSolutionsSortedData(state)(userId, assignmentId),
+            getRuntime: runtimeEnvironmentSelector(state),
+            assignmentSolversLoading: isAssignmentSolversLoading(state),
+            assignmentSolverSelector: getAssignmentSolverSelector(state),
+          };
+        },
+        (dispatch, { params: { groupId, userId }, navigate, links }) => ({
+          loadAsync: () => GroupUserSolutions.loadAsync({ groupId, userId }, dispatch, navigate, links),
+          closeReview: id => dispatch(setSolutionReviewState(id, true)),
+        })
+      )(GroupUserSolutions)
+    )
   )
 );

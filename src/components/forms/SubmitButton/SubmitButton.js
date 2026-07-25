@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import { lruMemoize } from 'reselect';
 
@@ -8,6 +8,7 @@ import Button from '../../widgets/TheButton';
 import { SaveIcon, LoadingIcon, SuccessIcon, WarningIcon } from '../../icons';
 import Confirm from '../Confirm';
 import { getErrorMessage } from '../../../locales/apiErrorMessages.js';
+import withIntl, { withIntlProps } from '../../../helpers/withIntl.js';
 
 const getIcons = lruMemoize(defaultIcon => ({
   submit: defaultIcon || <SaveIcon gapRight={2} />,
@@ -116,8 +117,8 @@ class SubmitButton extends Component {
       noShadow = false,
       size,
       messages = {},
+      intl: { formatMessage },
     } = this.props;
-    const { formatMessage } = useIntl();
 
     const buttonState = this.getButtonState();
     const icons = getIcons(defaultIcon);
@@ -187,6 +188,7 @@ SubmitButton.propTypes = {
   noShadow: PropTypes.bool,
   size: PropTypes.string,
   resetTimeout: PropTypes.number,
+  intl: withIntlProps.isRequired,
 };
 
-export default SubmitButton;
+export default withIntl(SubmitButton);
