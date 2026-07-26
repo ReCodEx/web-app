@@ -20,10 +20,10 @@
     "test": "mocha --recursive --timeout 2000 --require ./test/setup.js --require mock-local-storage",
     "test:mocha": "mocha --recursive --timeout 2000 --require @babel/register --require ./test/setup.js --require mock-local-storage",
     "test:watch": "mocha --recursive --timeout 2000 --require @babel/register --require ./test/setup.js --require mock-local-storage --watch --reporter nyan",
-    "dev": "babel-node bin/dev.js --v8-options=--max-old-space-size=4096",
+    "dev": "node -r @babel/register --max-old-space-size=4096 bin/dev.js",
     "start": "node bin/server.mjs",
     "deploy": "mkdir -p ./prod && mkdir -p ./prod/etc && cp -rf ./views ./prod && cp -rf ./bin ./prod && cp -n ./etc/env.json.example ./prod/etc/env.json && rm -rf ./prod/public && cp -rf ./public ./prod",
-    "manageTranslations": "babel-node bin/manageTranslations.js",
+    "manageTranslations": "node -r @babel/register bin/manageTranslations.js",
     "format": "prettier --config .prettierrc --write \"src/**/*.js\""
   },
   "dependencies": {
