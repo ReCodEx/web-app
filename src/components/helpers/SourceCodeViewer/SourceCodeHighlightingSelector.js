@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Overlay, Popover, FormSelect, ButtonGroup } from 'react-bootstrap';
@@ -23,15 +23,17 @@ const SourceCodeHighlightingSelector = ({
   const [visible, setVisible] = useState(false);
   const [selectedMode, setSelectedMode] = useState(initialMode !== null ? initialMode : defaultMode);
 
-  useEffect(() => {
-    const newMode = initialMode !== null ? initialMode : defaultMode;
-    if (newMode !== selectedMode) {
-      // this set state call is fine since in should not usually happen, only if the mounted component is reused
-      // (and the selectedMode initialization in useState is not called again)
-      /* eslint-disable-next-line react-hooks/set-state-in-effect */
-      setSelectedMode(newMode);
+  // remember the default and initial settings and update the selected mode if the user has not changed it yet
+  const [oldExtension, setOldExtension] = useState(extension);
+  const [oldInitialMode, setOldInitialMode] = useState(initialMode);
+  if (extension !== oldExtension || initialMode !== oldInitialMode) {
+    const oldMode = oldInitialMode !== null ? oldInitialMode : getPrismModeFromExtension(oldExtension);
+    if (selectedMode === oldMode) {
+      setSelectedMode(initialMode !== null ? initialMode : defaultMode);
     }
-  }, [initialMode, extension, defaultMode, selectedMode]);
+    setOldExtension(extension);
+    setOldInitialMode(initialMode);
+  }
 
   const clickHandler = ev => {
     ev.stopPropagation();
