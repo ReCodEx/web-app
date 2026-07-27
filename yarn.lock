@@ -6223,6 +6223,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie-es@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "cookie-es@npm:3.1.1"
+  checksum: 2b196bf591a177a3602c26eb5a7253b6e08176262158d02c7dedb30903b7ffda83943b9099c25c739acedfaed143add2a39209522712b59e5b447e28c7c21469
+  languageName: node
+  linkType: hard
+
 "cookie-parser@npm:^1.4.7":
   version: 1.4.7
   resolution: "cookie-parser@npm:1.4.7"
@@ -13445,19 +13452,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^7.15.1":
-  version: 7.15.1
-  resolution: "react-router@npm:7.15.1"
+"react-router@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "react-router@npm:8.3.0"
   dependencies:
-    cookie: ^1.0.1
-    set-cookie-parser: ^2.6.0
+    cookie-es: ^3.1.1
   peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
+    react: ">=19.2.7"
+    react-dom: ">=19.2.7"
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: b00a33bb4611279463a2e3801bc212e5a03694c52c6c5da8ac6ec13c59d6fa669faf4da2f6a0359301f84748276f48802ae5293eadf0b3381f63bd01855f85ec
+  checksum: 42a4f9d6db1cc420af125a142ebeed2f6083d49ed7366c1cd9dc0e62200b5a3dbd01f25298d4daff29771d11cda2308ffb99e5cd0be4261095b6f769edf78702
   languageName: node
   linkType: hard
 
@@ -13680,7 +13686,7 @@ __metadata:
     react-intl-translations-manager: ^5.0.3
     react-qr-code: ^2.0.18
     react-redux: ^9.2.0
-    react-router: ^7.15.1
+    react-router: ^8.3.0
     react-router-dom: ^7.13.1
     react-syntax-highlighter: ^16.1.1
     react-toggle: 4.1.3
