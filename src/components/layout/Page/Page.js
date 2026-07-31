@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 
 import PageContent from '../PageContent';
@@ -74,6 +75,7 @@ class Page extends Component {
       windowTitle = null,
       icon = null,
       resource,
+      resourceArray,
       forceLoading = false,
       loadingTitle = (
         <span>
@@ -95,6 +97,7 @@ class Page extends Component {
     return (
       <ResourceRenderer
         resource={resource}
+        resourceArray={resourceArray}
         forceLoading={forceLoading}
         loading={<PageContent title={loadingTitle} description={loadingDescription} />}
         failed={failedPage}>
@@ -121,6 +124,7 @@ const stringOrFormattedMessage = PropTypes.oneOfType([
 
 Page.propTypes = {
   resource: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  resourceArray: PropTypes.oneOfType([PropTypes.array, ImmutablePropTypes.list, ImmutablePropTypes.map]),
   forceLoading: PropTypes.bool,
   loadingTitle: stringOrFormattedMessage,
   loadingDescription: stringOrFormattedMessage,
