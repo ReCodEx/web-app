@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 import config from '../config/webpack.config-dev.js';
 import colors from 'colors';
 import fs from 'fs';
-import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -20,7 +19,6 @@ const urlPrefix = parsedConfig.URL_PATH_PREFIX || '';
 
 const app = new Express();
 app.set('view engine', 'ejs');
-app.use(cors());
 app.use(urlPrefix, Express.static(path.join(__dirname, '../public')));
 
 app.get('*splat', (req, res) => {
@@ -61,6 +59,7 @@ const server = new WebpackDevServer(
 
 (async () => {
   await server.start();
+  /* eslint-disable-next-line no-console */
   console.log(
     `${colors.yellow('WebpackDevServer')} is running on ${colors.underline(
       `http://localhost:${WEBPACK_DEV_SERVER_PORT}`
@@ -77,5 +76,6 @@ server.listen(WEBPACK_DEV_SERVER_PORT, 'localhost', () => {
 });
 */
 app.listen(PORT, () => {
+  /* eslint-disable-next-line no-console */
   console.log(`${colors.green('WebApp')} is running on ${colors.underline(`http://localhost:${PORT}`)}`);
 });
