@@ -45,7 +45,7 @@ const EvaluationTable = ({ evaluations, renderButtons, selectedRowId = '' }) => 
                   gapLeft={2}
                   className="text-danger"
                   tooltipId={`debug-mode-${e.id}`}
-                  tooltiPlacement="bottom"
+                  tooltipPlacement="bottom"
                   tooltip={
                     <FormattedMessage
                       id="app.evaluationTable.evaluationIsDebug"
