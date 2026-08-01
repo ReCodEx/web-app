@@ -157,5 +157,8 @@
     "webpack-dev-server": "^6.0.0",
     "webpack-isomorphic-tools": "^4.0.0"
   },
-  "packageManager": "yarn@4.17.1"
+  "packageManager": "yarn@4.17.1",
+  "resolutions": {
+    "postcss": "8.5.12"
+  }
 }
