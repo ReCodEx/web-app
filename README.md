@@ -68,6 +68,9 @@ LOGGER_MIDDLEWARE_VERBOSE=false
 LOGGER_MIDDLEWARE_EXCEPTIONS=true
 ```
 
+For production deployment, the `NODE_ENV` variable should be set to `production`.
+
+
 ## Configuration
 
 Compiled bundle properties can be modified by a runtime configuration file. The file is located at `etc/env.json` (`prod/etc/env.json` when deployed from source). New values of these properties are applied after the app is restarted. Note that all these values are directly accessible to JavaScript code in browsers, so it is not a suitable place to store secrets.
