@@ -211,21 +211,23 @@ class Solution extends Component {
                               )
                             }
                           </ResourceRenderer>
-
-                          <SubmitSolutionContainer
-                            userId={currentUser.id}
-                            id={assignment.id}
-                            onSubmit={submitSolution}
-                            presubmitValidation={presubmitSolution}
-                            afterEvaluationStarts={() => reloadAfterSubmit(currentUser.id)}
-                            onReset={initCanSubmit}
-                            isOpen={submitting}
-                            solutionFilesLimit={assignment.solutionFilesLimit}
-                            solutionSizeLimit={assignment.solutionSizeLimit}
-                          />
                         </>
                       )}
                     </TheButtonGroup>
+
+                    {isStudent && (
+                      <SubmitSolutionContainer
+                        userId={currentUser.id}
+                        id={assignment.id}
+                        onSubmit={submitSolution}
+                        presubmitValidation={presubmitSolution}
+                        afterEvaluationStarts={() => reloadAfterSubmit(currentUser.id)}
+                        onReset={initCanSubmit}
+                        isOpen={submitting}
+                        solutionFilesLimit={assignment.solutionFilesLimit}
+                        solutionSizeLimit={assignment.solutionSizeLimit}
+                      />
+                    )}
 
                     {hasPermissions(assignment, 'resubmitSubmissions') &&
                       !assignmentHasRuntime(assignment, solution.runtimeEnvironmentId) && (
