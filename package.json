@@ -159,6 +159,7 @@
   },
   "packageManager": "yarn@4.17.1",
   "resolutions": {
-    "postcss": "8.5.12"
+    "postcss": "8.5.12",
+    "proxy-addr": "2.0.8"
   }
 }
