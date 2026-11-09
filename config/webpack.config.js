@@ -43,6 +43,7 @@ export default {
     publicPath: '/public/',
   },
   mode: process.env.NODE_ENV,
+  devtool: false, // the default 'eval' wraps modules in a block, which breaks sloppy-mode CJS sources (e.g., statuscode)
   resolve: {
     alias: {
       moment: 'moment/moment.js',
@@ -97,6 +98,8 @@ export default {
       'process.env.LOGGER_MIDDLEWARE_EXCEPTIONS': JSON.stringify(process.env.LOGGER_MIDDLEWARE_EXCEPTIONS),
       'process.env.VERSION': getVersion(),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      // redux-actions dist uses import.meta.NODE_ENV, which is not valid outside ES modules
+      'import.meta.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
   ],
 };
