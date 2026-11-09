@@ -16,6 +16,7 @@ export default {
     filename: 'server.mjs',
     path: path.join(__dirname, '..', 'bin'),
     chunkFormat: 'module',
+    module: true,
   },
   experiments: {
     outputModule: true,
@@ -28,6 +29,9 @@ export default {
     fallback: { 'react-ace-bad': false },
   },
   target: 'node',
+  // the default 'eval' devtool (development mode) wraps modules in a block, which breaks sloppy-mode CJS sources
+  // that declare the same name as both a function and a var (e.g., statuscode)
+  devtool: false,
   mode: process.env.NODE_ENV,
   module: clientConfig.module,
   optimization: clientConfig.optimization,
