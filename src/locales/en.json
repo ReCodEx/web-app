@@ -2073,6 +2073,7 @@
   "app.uploadFiles.removedIconTooltip": "The file was uploaded but removed from the list. It will not be processed with other uploaded files.",
   "app.uploadFiles.restoreTooltip": "Restore previously removed file",
   "app.uploadFiles.retryTooltip": "Retry upload",
+  "app.uploadFiles.startingUploads": "Starting uploads...",
   "app.uploadFiles.successIconTooltip": "The file was uploaded to the server and is ready for subsequent processing.",
   "app.uploadFiles.uploadIconTooltip": "The file is being uploaded...",
   "app.uploadFiles.uploadingCancelTooltip": "Cancel upload",

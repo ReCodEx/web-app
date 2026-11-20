@@ -2073,6 +2073,7 @@
   "app.uploadFiles.removedIconTooltip": "Soubor byl nahrán, ale odstraněn ze seznamu, takže nebude zpracován s ostatními nahranými soubory.",
   "app.uploadFiles.restoreTooltip": "Obnovit odstraněný soubor",
   "app.uploadFiles.retryTooltip": "Znovu se pokusit nahrát",
+  "app.uploadFiles.startingUploads": "Zahajuji nahrávání souborů...",
   "app.uploadFiles.successIconTooltip": "Soubor byl úspěšně nahrán a je připraven pro následné zpracování.",
   "app.uploadFiles.uploadIconTooltip": "Soubor se nahrává...",
   "app.uploadFiles.uploadingCancelTooltip": "Zrušit nahrávání",
