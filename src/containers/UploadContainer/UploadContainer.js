@@ -27,6 +27,12 @@ import {
 } from '../../redux/modules/upload.js';
 
 class UploadContainer extends Component {
+  state = {
+    // these two state variables are used to show the progress bar in the UI
+    startingFiles: 0, // number of files that were dropped and need to start uploading
+    startedFiles: 0, // uploads that have already started
+  };
+
   componentDidMount() {
     this.props.init();
   }
@@ -132,9 +138,38 @@ class UploadContainer extends Component {
     }
   };
 
-  uploadFiles = files => {
-    const promise = Promise.all(files.map(this.uploadFile));
-    return this.props.onChange ? promise.then(this.props.onChange) : promise;
+  uploadFiles = async files => {
+    // make sure that the files are uploaded in parallel, but not more than MAX_UPLOADS at once
+    const MAX_UPLOADS = 5;
+    const activeUploads = new Set();
+    const results = new Array(files.length).fill(null);
+
+    // state is used to show the progress bar in the UI
+    this.setState({ startingFiles: files.length, startedFiles: 0 });
+
+    for (let i = 0; i < files.length; i++) {
+      if (activeUploads.size >= MAX_UPLOADS) {
+        // if there are already MAX_UPLOADS active uploads, wait for one of them to finish before starting a new one
+        await Promise.race(activeUploads);
+      }
+
+      // start another upload
+      const promise = this.uploadFile(files[i])
+        .then(result => {
+          results[i] = result;
+        })
+        .finally(() => {
+          activeUploads.delete(promise);
+        });
+      activeUploads.add(promise);
+
+      this.setState({ startedFiles: i + 1 }); // increment state (UI progress bar)
+    }
+
+    // wait for all remaining uploads to finish
+    await Promise.all(activeUploads);
+    this.setState({ startingFiles: 0, startedFiles: 0 });
+    return this.props.onChange ? this.props.onChange(results) : results;
   };
 
   render = () => {
@@ -153,6 +188,9 @@ class UploadContainer extends Component {
     return (
       <Upload
         existingFiles={existingFiles}
+        startingFiles={this.state.startingFiles}
+        startedFiles={this.state.startedFiles}
+
         uploadingFiles={uploadingFiles}
         uploadedFiles={uploadedFiles}
         failedFiles={failedFiles}

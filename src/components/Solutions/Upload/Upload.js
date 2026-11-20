@@ -5,6 +5,7 @@ import Dropzone from 'react-dropzone';
 import Button from '../../widgets/TheButton';
 import UploadsTable from '../UploadsTable';
 import { UploadIcon } from '../../icons';
+import { ProgressBar } from 'react-bootstrap';
 
 const dropZoneStyles = {
   borderWidth: 2,
@@ -18,6 +19,8 @@ const dropZoneStyles = {
 
 const Upload = ({
   existingFiles,
+  startingFiles,
+  startedFiles,
   uploadingFiles,
   uploadedFiles,
   failedFiles,
@@ -30,19 +33,41 @@ const Upload = ({
   doRetryUploadFile,
 }) => (
   <div>
-    <Dropzone onDrop={doUploadFiles}>
+    <Dropzone onDrop={doUploadFiles} disabled={startingFiles > startedFiles}>
       {({ getRootProps, getInputProps }) => (
         <div {...getRootProps()} style={dropZoneStyles}>
           <input {...getInputProps()} />
-          <div className="mt-4">
-            <Button variant="primary">
-              <UploadIcon gapRight={2} />
-              <FormattedMessage id="app.uploadFiles.addFileButton" defaultMessage="Select File(s) for Upload" />
-            </Button>
-          </div>
-          <div className="small text-body-secondary my-3">
-            <FormattedMessage id="app.uploadFiles.dragAndDrop" defaultMessage="Or simply drag and drop files here..." />
-          </div>
+
+          {startingFiles <= startedFiles ? (
+            <>
+              <div className="mt-4">
+                <Button variant="primary">
+                  <UploadIcon gapRight={2} />
+                  <FormattedMessage id="app.uploadFiles.addFileButton" defaultMessage="Select File(s) for Upload" />
+                </Button>
+              </div>
+              <div className="small text-body-secondary my-3">
+                <FormattedMessage
+                  id="app.uploadFiles.dragAndDrop"
+                  defaultMessage="Or simply drag and drop files here..."
+                />
+              </div>
+            </>
+          ) : (
+            <div className="m-5">
+              <div className="small text-body-secondary my-2">
+                <FormattedMessage id="app.uploadFiles.startingUploads" defaultMessage="Starting uploads..." />
+              </div>
+
+              <ProgressBar
+                now={startedFiles}
+                max={startingFiles}
+                label={`${startedFiles}/${startingFiles}`}
+                variant="success"
+                animated
+              />
+            </div>
+          )}
         </div>
       )}
     </Dropzone>
@@ -66,6 +91,8 @@ const Upload = ({
 
 Upload.propTypes = {
   existingFiles: PropTypes.instanceOf(Set),
+  startingFiles: PropTypes.number,
+  startedFiles: PropTypes.number,
   uploadingFiles: PropTypes.array.isRequired,
   uploadedFiles: PropTypes.array.isRequired,
   failedFiles: PropTypes.array.isRequired,
