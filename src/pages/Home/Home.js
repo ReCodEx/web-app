@@ -97,11 +97,15 @@ const Home = ({ effectiveRole, instance = null }) => {
                     <Markdown source={getLocalizedDescription(instance.rootGroup, locale)} />
 
                     <p>
-                      <FormattedMessage id="app.homepage.instance.administrator" defaultMessage="Administrator:" />{' '}
-                      <strong>
-                        <UsersNameContainer userId={instance.adminId} isSimple />,
-                      </strong>
-                      <a href={EXTERNAL_AUTH_HELPDESK_URL} className="ms-3">
+                      {instance.adminId && (
+                        <>
+                          <FormattedMessage id="app.homepage.instance.administrator" defaultMessage="Administrator:" />{' '}
+                          <strong className="me-3">
+                            <UsersNameContainer userId={instance.adminId} isSimple />,
+                          </strong>
+                        </>
+                      )}
+                      <a href={EXTERNAL_AUTH_HELPDESK_URL}>
                         <MailIcon gapRight={2} />
                         <FormattedMessage
                           id="app.homepage.instance.techSupport"
