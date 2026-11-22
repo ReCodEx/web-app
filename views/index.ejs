@@ -76,7 +76,7 @@ function recodexIsXmas() {
     </style>
   </head>
 
-  <body class="loading" style="height: auto" data-bs-theme="light">
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary loading" style="height: auto" data-bs-theme="light">
     <div id="loading-screen">
       <%= ((new Date()).getMonth() === 3 && (new Date()).getDate() === 1) ? 'Loudím' : 'Loading' %>...
     </div>
@@ -97,7 +97,7 @@ function recodexIsXmas() {
     <script src="<%= bundle %>"></script>
     <script>
       document.getElementById('loading-screen').remove();
-      document.body.className = "layout-fixed sidebar-expand-lg sidebar-mini";
+      document.body.classList.remove('loading');
     </script>
   </body>
 </html>

@@ -696,7 +696,6 @@
   "app.editUserUIData.lastNameFirst": "In listings, show last names of users first",
   "app.editUserUIData.openOnDoubleClick": "In listings, use double click to open item details",
   "app.editUserUIData.openOnDoubleClick.explain": "For the listing that show items with buttons or links leading to item details, a double click (anywhere on the listing row) will be used as a shortcut for that button or link.",
-  "app.editUserUIData.openedSidebar": "Sidebar is unfolded by default",
   "app.editUserUIData.title": "Visual Settings",
   "app.editUserUIData.useGravatar": "Use Gravatar service for fetching user avatars",
   "app.editUserUIData.vimMode": "Use Vim mode in source code editors",

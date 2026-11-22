@@ -16,13 +16,6 @@ import { getConfigVar } from '../../../helpers/config.js';
 const SKIN = getConfigVar('SKIN') || 'success';
 
 class Header extends Component {
-  toggleSidebar = e => {
-    e.preventDefault();
-    // flip AdminLTE body classes
-    window.document.body.classList.toggle('sidebar-collapse');
-    window.document.body.classList.toggle('sidebar-open');
-  };
-
   render() {
     const {
       isLoggedIn,
@@ -40,7 +33,7 @@ class Header extends Component {
           <ClientOnly>
             <ul className="navbar-nav w-100">
               <li className="nav-item">
-                <a className="nav-link" data-widget="pushmenu" href="#" onClick={this.toggleSidebar}>
+                <a className="nav-link" data-lte-toggle="sidebar" href="#">
                   <Icon icon="bars" />
                 </a>
               </li>

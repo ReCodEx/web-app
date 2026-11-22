@@ -11,7 +11,7 @@ import { getToken, getInstanceId } from './redux/middleware/authMiddleware.js';
 import { getLang } from './redux/middleware/langMiddleware.js';
 import App from './containers/App/index.js';
 
-import 'admin-lte/dist/js/adminlte.js';
+import 'admin-lte';
 
 // Patch for ACE editor (it has complex loading)
 import ace from 'ace-builds';

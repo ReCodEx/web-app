@@ -10,8 +10,6 @@ import withLinks from '../../../../helpers/withLinks.js';
 import { EditIcon, LogoutIcon } from '../../../icons';
 import { isSuperadminRole, UserRoleIcon, roleLabels } from '../../../helpers/usersRoles.js';
 
-import './userPanel.css';
-
 class UserPanel extends Component {
   state = { effectiveRoleDialogOpened: false, effectiveRoleUpdating: null };
 

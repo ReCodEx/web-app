@@ -48,17 +48,12 @@ class LayoutContainer extends Component {
     }
   }
 
-  setInitialSidebarState = open => {
-    const bootstrapCompactViewWidth = 991; // this may change with different versions of bootstrap
-    if (window && window.document.body.clientWidth > bootstrapCompactViewWidth) {
-      window.document.body.classList.remove(open === false ? 'sidebar-open' : 'sidebar-collapse');
-      window.document.body.classList.add(open === false ? 'sidebar-collapse' : 'sidebar-open');
-    }
-  };
-
   componentDidMount() {
     if (canUseDOM) {
-      this.setInitialSidebarState(this.props.userUIData.openedSidebar);
+      // AdminLTE initializes its plugins (PushMenu, TreeView, ...) on DOMContentLoaded, which fires before React
+      // renders the layout, so it finds no sidebar. Re-run the initialization now that the layout is in the DOM.
+      import('admin-lte').then(({ initialize }) => initialize());
+
       this.newPageLoading = true;
       this.pageHeight = -1;
       this._scrollTargetToView();
@@ -67,14 +62,6 @@ class LayoutContainer extends Component {
 
   componentDidUpdate(prevProps) {
     if (canUseDOM) {
-      if (
-        (prevProps.userUIData.openedSidebar === undefined && this.props.userUIData.openedSidebar !== undefined) ||
-        (prevProps.userUIData.openedSidebar !== undefined &&
-          prevProps.userUIData.openedSidebar !== this.props.userUIData.openedSidebar)
-      ) {
-        this.setInitialSidebarState(this.props.userUIData.openedSidebar);
-      }
-
       if (this.newPageLoading) {
         this._scrollTargetToView();
       }
@@ -86,7 +73,7 @@ class LayoutContainer extends Component {
   }
 
   /**
-   * Get messages for the given language or the deafult - English
+   * Get messages for the given language or the default - English
    */
 
   getDefaultLang = () => {

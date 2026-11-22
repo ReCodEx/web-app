@@ -133,15 +133,6 @@ const EditUserUIDataForm = ({
       />
 
       <Field
-        name="openedSidebar"
-        component={CheckboxField}
-        onOff
-        label={
-          <FormattedMessage id="app.editUserUIData.openedSidebar" defaultMessage="Sidebar is unfolded by default" />
-        }
-      />
-
-      <Field
         name="useGravatar"
         component={CheckboxField}
         onOff
