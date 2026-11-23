@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import Dropzone from 'react-dropzone';
+import { ProgressBar } from 'react-bootstrap';
+
 import Button from '../../widgets/TheButton';
 import UploadsTable from '../UploadsTable';
 import { UploadIcon } from '../../icons';
-import { ProgressBar } from 'react-bootstrap';
 
 const dropZoneStyles = {
   borderWidth: 2,
@@ -33,12 +34,12 @@ const Upload = ({
   doRetryUploadFile,
 }) => (
   <div>
-    <Dropzone onDrop={doUploadFiles} disabled={startingFiles > startedFiles}>
+    <Dropzone onDrop={doUploadFiles} disabled={startingFiles > 0}>
       {({ getRootProps, getInputProps }) => (
         <div {...getRootProps()} style={dropZoneStyles}>
           <input {...getInputProps()} />
 
-          {startingFiles <= startedFiles ? (
+          {startingFiles === 0 ? (
             <>
               <div className="mt-4">
                 <Button variant="primary">
