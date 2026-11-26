@@ -11,30 +11,40 @@ import { prettyPrintBytes } from '../../helpers/stringFormatters.js';
 import exitCodeMapping from '../../helpers/exitCodeMapping.js';
 import Icon, { SuccessOrFailureIcon } from '../../icons';
 
-const hasValue = value => value !== null;
-
 const tickOrCrossAndRatioOrValue = (isOK, ratio, value, pretty, multiplier) => (
   <span
     className={classnames({
       'text-center': true,
       'text-success': isOK,
       'text-danger': !isOK,
+      'fw-bold': ratio > 0.9,
     })}>
     <SuccessOrFailureIcon success={isOK} gapRight={1} />
     <small>
-      {hasValue(value) && '('}
-      {(ratio || ratio === 0) && (
-        <FormattedNumber value={ratio} style="percent" minimumFractionDigits={1} maximumFactionDigits={3} />
+      {Boolean(ratio) && (
+        <>
+          {value !== null && '('}
+          <FormattedNumber value={ratio} style="percent" minimumFractionDigits={1} maximumFactionDigits={3} />
+          {value !== null && ') '}
+        </>
       )}
-      {hasValue(value) && ') '}
-      {hasValue(value) && pretty(value * multiplier)}
+      {value !== null && pretty(value * multiplier)}
     </small>
   </span>
 );
 
-const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded) => {
-  const showWall = Boolean(wallTimeRatio) || (wallTimeExceeded && !cpuTimeExceeded);
-  const showCpu = Boolean(cpuTimeRatio) || cpuTimeExceeded || !showWall;
+const showTimeResults = (
+  wallTime,
+  wallTimeRatio,
+  wallTimeExceeded,
+  cpuTime,
+  cpuTimeRatio,
+  cpuTimeExceeded,
+  wallTimeLimit,
+  cpuTimeLimit
+) => {
+  const showCpu = cpuTimeLimit > 0; // || cpuTimeExceeded || !showWall;
+  const showWall = wallTimeLimit > 0 || (wallTimeExceeded && cpuTimeRatio < 1);
   return (
     <table className="d-inline-block">
       <tbody>
@@ -76,7 +86,13 @@ const showTimeResults = (wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpu
               />
             </td>
             <td className="text-start p-0 text-nowrap">
-              {tickOrCrossAndRatioOrValue(wallTimeExceeded === false, wallTimeRatio, wallTime, prettyMs, 1000)}
+              {tickOrCrossAndRatioOrValue(
+                wallTimeExceeded === false,
+                wallTimeLimit > 0 ? wallTimeRatio : undefined,
+                wallTime,
+                prettyMs,
+                1000
+              )}
             </td>
           </tr>
         )}
@@ -103,6 +119,8 @@ const TestResultsTableRow = ({
     memory,
     wallTime,
     cpuTime,
+    wallTimeLimit,
+    cpuTimeLimit,
     exitCode,
     exitCodeOk,
     exitCodeNative,
@@ -137,12 +155,22 @@ const TestResultsTableRow = ({
         )}
         {status === 'SKIPPED' && (
           <span className="text-warning">
-            <FormattedMessage id="app.submissions.testResultsTable.statusSkipped" defaultMessage="SKIPPED" />
+            <FormattedMessage id="app.submissions.testResultsTable.statusSkipped" defaultMessage="Skipped" />
           </span>
         )}
         {status === 'FAILED' && (
           <span className="text-danger">
-            <FormattedMessage id="app.submissions.testResultsTable.statusFailed" defaultMessage="FAILED" />
+            {memoryExceeded ? (
+              <FormattedMessage id="app.submissions.testResultsTable.statusMemoryExceeded" defaultMessage="OOM" />
+            ) : wallTimeExceeded || cpuTimeExceeded ? (
+              <FormattedMessage id="app.submissions.testResultsTable.statusTimeExceeded" defaultMessage="Timeout" />
+            ) : exitSignal ? (
+              <FormattedMessage id="app.submissions.testResultsTable.statusSignal" defaultMessage="Signal" />
+            ) : !exitCodeOk ? (
+              <FormattedMessage id="app.submissions.testResultsTable.statusExitCode" defaultMessage="Run. Error" />
+            ) : (
+              <FormattedMessage id="app.submissions.testResultsTable.statusFailed" defaultMessage="Failed" />
+            )}
           </span>
         )}
       </b>
@@ -152,7 +180,16 @@ const TestResultsTableRow = ({
       {tickOrCrossAndRatioOrValue(memoryExceeded === false, memoryRatio, memory, prettyPrintBytes, 1024)}
     </td>
     <td className="text-center">
-      {showTimeResults(wallTime, wallTimeRatio, wallTimeExceeded, cpuTime, cpuTimeRatio, cpuTimeExceeded)}
+      {showTimeResults(
+        wallTime,
+        wallTimeRatio,
+        wallTimeExceeded,
+        cpuTime,
+        cpuTimeRatio,
+        cpuTimeExceeded,
+        wallTimeLimit,
+        cpuTimeLimit
+      )}
     </td>
 
     <td className="text-center">
@@ -257,7 +294,9 @@ TestResultsTableRow.propTypes = {
     cpuTimeRatio: PropTypes.number,
     memory: PropTypes.number,
     wallTime: PropTypes.number,
+    wallTimeLimit: PropTypes.number,
     cpuTime: PropTypes.number,
+    cpuTimeLimit: PropTypes.number,
     exitCode: PropTypes.number,
     exitCodeOk: PropTypes.bool,
     exitCodeNative: PropTypes.bool,
